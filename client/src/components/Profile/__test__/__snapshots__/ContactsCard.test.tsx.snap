@@ -2,7 +2,6 @@
 
 exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
 <ContactsCard
-  connections={Object {}}
   data={
     Object {
       "email": "vasya@tut.by",
@@ -17,7 +16,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
   isEditingModeEnabled={false}
   onPermissionsSettingsChange={[MockFunction]}
   onProfileSettingsChange={[MockFunction]}
-  sendConfirmationEmail={[MockFunction]}
 >
   <CommonCard
     content={
@@ -511,71 +509,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           </Text>
                            
                           vasya@tut.by
-                          <EmailConfirmation
-                            sendConfirmationEmail={[MockFunction]}
-                          >
-                            <Alert
-                              message={
-                                <div>
-                                  Email is not verified.
-                                   
-                                  <span
-                                    onClick={[Function]}
-                                    style={
-                                      Object {
-                                        "cursor": "pointer",
-                                        "textDecoration": "underline",
-                                      }
-                                    }
-                                  >
-                                    Send confirmation email?
-                                  </span>
-                                </div>
-                              }
-                              type="error"
-                            >
-                              <CSSMotion
-                                motionAppear={false}
-                                motionEnter={false}
-                                motionName="ant-alert-motion"
-                                onLeaveStart={[Function]}
-                                visible={true}
-                              >
-                                <DomWrapper>
-                                  <div
-                                    className="ant-alert ant-alert-error ant-alert-no-icon"
-                                    data-show={true}
-                                    role="alert"
-                                    style={Object {}}
-                                  >
-                                    <div
-                                      className="ant-alert-content"
-                                    >
-                                      <div
-                                        className="ant-alert-message"
-                                      >
-                                        <div>
-                                          Email is not verified.
-                                           
-                                          <span
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "cursor": "pointer",
-                                                "textDecoration": "underline",
-                                              }
-                                            }
-                                          >
-                                            Send confirmation email?
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </DomWrapper>
-                              </CSSMotion>
-                            </Alert>
-                          </EmailConfirmation>
                         </li>
                       </Item>
                       <Item>
@@ -963,7 +896,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
 
 exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
 <ContactsCard
-  connections={Object {}}
   data={
     Object {
       "email": "vasya@tut.by",
@@ -978,7 +910,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
   isEditingModeEnabled={true}
   onPermissionsSettingsChange={[MockFunction]}
   onProfileSettingsChange={[MockFunction]}
-  sendConfirmationEmail={[MockFunction]}
 >
   <CommonCard
     content={
@@ -1449,71 +1380,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           </Text>
                            
                           vasya@tut.by
-                          <EmailConfirmation
-                            sendConfirmationEmail={[MockFunction]}
-                          >
-                            <Alert
-                              message={
-                                <div>
-                                  Email is not verified.
-                                   
-                                  <span
-                                    onClick={[Function]}
-                                    style={
-                                      Object {
-                                        "cursor": "pointer",
-                                        "textDecoration": "underline",
-                                      }
-                                    }
-                                  >
-                                    Send confirmation email?
-                                  </span>
-                                </div>
-                              }
-                              type="error"
-                            >
-                              <CSSMotion
-                                motionAppear={false}
-                                motionEnter={false}
-                                motionName="ant-alert-motion"
-                                onLeaveStart={[Function]}
-                                visible={true}
-                              >
-                                <DomWrapper>
-                                  <div
-                                    className="ant-alert ant-alert-error ant-alert-no-icon"
-                                    data-show={true}
-                                    role="alert"
-                                    style={Object {}}
-                                  >
-                                    <div
-                                      className="ant-alert-content"
-                                    >
-                                      <div
-                                        className="ant-alert-message"
-                                      >
-                                        <div>
-                                          Email is not verified.
-                                           
-                                          <span
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "cursor": "pointer",
-                                                "textDecoration": "underline",
-                                              }
-                                            }
-                                          >
-                                            Send confirmation email?
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </DomWrapper>
-                              </CSSMotion>
-                            </Alert>
-                          </EmailConfirmation>
                         </li>
                       </Item>
                       <Item>

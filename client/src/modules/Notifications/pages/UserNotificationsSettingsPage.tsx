@@ -11,7 +11,7 @@ import { useAsync } from 'react-use';
 import { Session } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
-import { Consents, Connection } from '../components/Consents';
+import { Consents } from '../components/Consents';
 import { UpdateNotificationUserSettingsDto } from 'api';
 
 type Props = { session: Session };
@@ -20,20 +20,19 @@ export function UserNotificationsPage(props: Props) {
   const [notifications, setNotifications] = useState<UserNotificationSettings[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
-  const [email, setEmail] = useState<Connection>();
-  const [telegram, setTelegram] = useState<Connection>();
+  const [hasEmail, setHasEmail] = useState(false);
+  const [hasTelegram, setHasTelegram] = useState(false);
   const [disabledChannels, setDisabledChannels] = useState<NotificationChannel[]>([]);
 
   const loadData = useCallback(
     withLoading(async () => {
-      const { connections, notifications } = await service.getUserNotificationSettings();
+      const { contacts, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
-
-      const { email, telegram } = connections as Record<NotificationChannel, Connection | undefined>;
-      setEmail(email);
-      setTelegram(telegram);
-      const hasEmail = !!email?.enabled;
-      const hasTelegram = !!telegram?.enabled;
+      const { email, telegram } = contacts as Record<NotificationChannel, string>;
+      const hasEmail = !!email;
+      const hasTelegram = !!telegram;
+      setHasEmail(hasEmail);
+      setHasTelegram(hasTelegram);
 
       const disabledChannels = [];
       if (!hasEmail) {
@@ -68,7 +67,7 @@ export function UserNotificationsPage(props: Props) {
   return (
     <PageLayout loading={loading} title="Notifications" githubId={props.session.githubId}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        {!loading && <Consents email={email} telegram={telegram} />}
+        {!loading && <Consents hasEmail={hasEmail} hasTelegram={hasTelegram} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
             Save

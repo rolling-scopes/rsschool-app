@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
+import { UsersModule } from 'src/users';
 import { ScheduleService } from './schedule.service';
 import { ScheduleController } from './schedule.controller';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 import { CoursesModule } from 'src/courses/courses.module';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
 
 @Module({
-  imports: [UsersNotificationsModule, CoursesModule],
+  imports: [UsersModule, CoursesModule, NotificationsModule],
   controllers: [ScheduleController],
   providers: [ScheduleService],
 })

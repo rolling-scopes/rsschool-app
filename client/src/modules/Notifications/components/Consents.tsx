@@ -1,32 +1,9 @@
-import { message, Alert, Space } from 'antd';
-import { EmailConfirmation } from 'components/Profile/EmailConfirmation';
-import { useCallback } from 'react';
-import { UserService } from 'services/user';
+import { Alert, Space } from 'antd';
 
 const rsschoolBotLink = 'https://t.me/rsschool_bot?start=connect';
 
-export type Connection = {
-  value: string;
-  enabled: boolean;
-  lastLinkSentAt?: string;
-};
-
-export function Consents({ email, telegram }: { email?: Connection; telegram?: Connection }) {
-  const hasEmail = !!email?.enabled;
-  const hasTelegram = !!telegram?.enabled;
-
+export function Consents({ hasEmail, hasTelegram }: { hasEmail: boolean; hasTelegram: boolean }) {
   if (hasEmail && hasTelegram) return null;
-
-  const emailAdded = email?.value;
-  const emailVerified = email?.enabled;
-
-  const sendEmailConfirmationLink = useCallback(async () => {
-    try {
-      await new UserService().sendEmailConfirmationLink();
-    } catch (e) {
-      message.error('Error has occured. Please try again later');
-    }
-  }, []);
 
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
@@ -41,7 +18,7 @@ export function Consents({ email, telegram }: { email?: Connection; telegram?: C
           type="info"
         />
       )}
-      {!emailAdded && (
+      {!hasEmail && (
         <Alert
           message={
             <div>
@@ -50,9 +27,6 @@ export function Consents({ email, telegram }: { email?: Connection; telegram?: C
           }
           type="info"
         />
-      )}
-      {emailAdded && !emailVerified && (
-        <EmailConfirmation connection={email} sendConfirmationEmail={sendEmailConfirmationLink} />
       )}
     </Space>
   );
