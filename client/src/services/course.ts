@@ -332,6 +332,14 @@ export class CourseService {
     return result;
   }
 
+  async setSelfStudy(githubId: string, comment: string = '') {
+    await this.axios.post<any>(`/student/${githubId}/status`, { comment, status: 'self-study' });
+  }
+
+  async selfSetSelfStudy(githubId: string, comment: string = '') {
+    await this.axios.post<any>(`/student/${githubId}/status-self`, { comment, status: 'self-study' });
+  }
+
   async expelStudents(
     criteria: { courseTaskIds?: number[]; minScore?: number },
     options: { keepWithMentor?: boolean },
