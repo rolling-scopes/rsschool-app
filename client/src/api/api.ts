@@ -75,7 +75,7 @@ export interface AlertDto {
      * @type {number}
      * @memberof AlertDto
      */
-    'courseId': number;
+    'courseId': number | null;
     /**
      * 
      * @type {string}
@@ -830,7 +830,32 @@ export interface DiscordServerDto {
      * @type {string}
      * @memberof DiscordServerDto
      */
-    'mentorsChatUrl': string;
+    'mentorsChatUrl': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Education
+ */
+export interface Education {
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'university': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'faculty': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Education
+     */
+    'graduationYear': number;
 }
 /**
  * 
@@ -980,10 +1005,10 @@ export interface GeneralInfo {
     'location': Location;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<Education>}
      * @memberof GeneralInfo
      */
-    'educationHistory'?: Array<string> | null;
+    'educationHistory'?: Array<Education> | null;
     /**
      * 
      * @type {string}
@@ -1077,13 +1102,13 @@ export interface MentorStudentDto {
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -1525,7 +1550,7 @@ export interface ResumeCourseDto {
      * @type {string}
      * @memberof ResumeCourseDto
      */
-    'certificateId': string;
+    'certificateId': string | null;
     /**
      * 
      * @type {boolean}
@@ -1911,13 +1936,13 @@ export interface StudentDto {
      * @type {string}
      * @memberof StudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof StudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -2022,7 +2047,7 @@ export interface StudentFeedbackDto {
      * @type {PersonDto}
      * @memberof StudentFeedbackDto
      */
-    'mentor': PersonDto;
+    'mentor': PersonDto | null;
     /**
      * 
      * @type {string}
@@ -2206,6 +2231,97 @@ export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
 /**
  * 
  * @export
+ * @interface UpdateUserDto
+ */
+export interface UpdateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'firstName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'lastName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'primaryEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'cityName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'countryName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsNotes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsPhone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEpamEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsSkype'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsTelegram'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsLinkedIn'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'notes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'aboutMyself'?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface UpdateUserGroupDto
  */
 export interface UpdateUserGroupDto {
@@ -2333,12 +2449,6 @@ export interface UserNotificationsDto {
      * @memberof UserNotificationsDto
      */
     'connections': object;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserNotificationsDto
-     */
-    'email': string | null;
 }
 /**
  * 
@@ -5145,6 +5255,41 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser: async (updateUserDto: UpdateUserDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserDto' is not null or undefined
+            assertParamExists('updateUser', 'updateUserDto', updateUserDto)
+            const localVarPath = `/profile/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -5175,6 +5320,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfileInfo(profileInfoDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(updateUserDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -5202,6 +5357,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          */
         updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: any): AxiosPromise<void> {
             return localVarFp.updateProfileInfo(profileInfoDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateUser(updateUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5233,6 +5397,17 @@ export class ProfileApi extends BaseAPI {
      */
     public updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).updateProfileInfo(profileInfoDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateUserDto} updateUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).updateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

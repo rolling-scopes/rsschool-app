@@ -19,8 +19,8 @@ export enum CourseRole {
 }
 
 export interface CourseInfo {
-  mentorId: number;
-  studentId: number;
+  mentorId: number | null;
+  studentId: number | null;
   roles: CourseRole[];
 }
 
@@ -100,8 +100,8 @@ export class AuthUser {
         if (!acc[item.courseId]) {
           acc[item.courseId] = { mentorId: null, studentId: null, roles: [] } as CourseInfo;
         }
-        if (!acc[item.courseId].roles.includes(item.role)) {
-          acc[item.courseId].roles.push(item.role);
+        if (!acc[item.courseId]?.roles.includes(item.role)) {
+          acc[item.courseId]?.roles.push(item.role);
         }
         return acc;
       }, courseInfo);
@@ -124,8 +124,8 @@ export class AuthUser {
         if (!acc[item.courseId]) {
           acc[item.courseId] = [];
         }
-        if (!acc[item.courseId].includes(item.role)) {
-          acc[item.courseId].push(item.role);
+        if (!acc[item.courseId]?.includes(item.role)) {
+          acc[item.courseId]?.push(item.role);
         }
         return acc;
       }, courseRoles);

@@ -46,7 +46,7 @@ export class CourseTasksService {
       .getMany();
   }
 
-  private getFindConditionForStatus(status: 'started' | 'inprogress' | 'finished'): FindCondition<CourseTask> {
+  private getFindConditionForStatus(status?: 'started' | 'inprogress' | 'finished'): FindCondition<CourseTask> {
     const now = new Date().toISOString();
     let where: FindCondition<CourseTask> = {};
 

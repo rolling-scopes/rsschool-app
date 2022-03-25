@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   public getUserByUserId(userId: number) {
-    return this.userRepository.findOne({
+    return this.userRepository.findOneOrFail({
       where: { id: userId },
     });
   }

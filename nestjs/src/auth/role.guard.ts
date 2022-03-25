@@ -37,7 +37,7 @@ export class RoleGuard implements CanActivate {
     }
 
     if (requiredCourseRoles.length) {
-      if (requireCourseMatch) {
+      if (requireCourseMatch && params.courseId) {
         return checkUserHasCourseRole(requiredCourseRoles, user, params.courseId);
       }
 

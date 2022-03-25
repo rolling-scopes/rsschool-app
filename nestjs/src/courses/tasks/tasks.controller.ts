@@ -1,6 +1,6 @@
 import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CourseGuard, DefaultGuard, RequiredRoles, Role } from '../../auth';
 import { CheckTasksDeadlineDto } from './dto/check-tasks-deadline';
 import { TasksService } from './tasks.service';

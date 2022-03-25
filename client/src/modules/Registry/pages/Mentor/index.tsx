@@ -1,6 +1,5 @@
 import { Form, message } from 'antd';
-import { CourseDto } from 'api';
-import axios from 'axios';
+import { CourseDto, ProfileApi } from 'api';
 import { Location } from 'common/models';
 import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
@@ -24,6 +23,8 @@ export type Props = {
 };
 
 const cdnService = new CdnService();
+const userService = new UserService();
+const profileApi = new ProfileApi();
 
 export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
@@ -41,7 +42,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
 
   useAsync(async () => {
     setLoading(true);
-    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), cdnService.getCourses()]);
+    const [profile, courses] = await Promise.all([userService.getMyProfile(), cdnService.getCourses()]);
     const activeCourses = getActiveCourses(courses, props.courseAlias);
     const checkedListCourse = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias).map(({ id }: Course) => id)
@@ -109,7 +110,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           aboutMyself: resume?.aboutMyself,
         };
 
-        const requests = [axios.post<any>('/api/profile/me', userModel), cdnService.registerMentor(registryModel)];
+        const requests = [profileApi.updateUser(userModel), cdnService.registerMentor(registryModel)];
 
         try {
           await Promise.all(requests);

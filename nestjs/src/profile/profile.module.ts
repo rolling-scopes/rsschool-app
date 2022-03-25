@@ -7,7 +7,7 @@ import { CoursesModule } from '../courses/courses.module';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { User } from '@entities/user';
 import { ProfilePermissions } from '@entities/profilePermissions';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
+import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 
 @Module({
   imports: [

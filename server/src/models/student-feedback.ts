@@ -71,10 +71,10 @@ export class StudentFeedback {
   public mentorId: number;
 
   @Column({ name: 'content', type: 'json' })
-  public content?: StudentFeedbackContent;
+  public content: StudentFeedbackContent;
 
   @Column({ name: 'recommendation', type: 'varchar', length: 64 })
-  public recommendation?: Recommendation;
+  public recommendation: Recommendation;
 
   @Column({ name: 'english_level', type: 'varchar', length: 8, nullable: true })
   public englishLevel?: LanguageLevel;

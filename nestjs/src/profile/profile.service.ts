@@ -1,13 +1,13 @@
 import { Course } from '@entities/course';
+import { NotificationUserConnection } from '@entities/notificationUserConnection';
+import { ProfilePermissions } from '@entities/profilePermissions';
+import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/auth';
 import { In, Repository, UpdateResult } from 'typeorm';
-import { User } from '@entities/user';
-import { NotificationUserConnection } from '@entities/notificationUserConnection';
-import { ProfilePermissions } from '@entities/profilePermissions';
-import { ProfileInfoDto } from './dto/update-profile.dto';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { UserNotificationsService } from '../users-notifications';
+import { ProfileInfoDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class ProfileService {
@@ -32,6 +32,42 @@ export class ProfileService {
         startDate: 'DESC',
       },
     });
+  }
+
+  public async updateUser(userId: number, userDto: UpdateUserDto) {
+    const {
+      firstName,
+      lastName,
+      countryName,
+      cityName,
+      contactsTelegram,
+      contactsPhone,
+      contactsEmail,
+      contactsNotes,
+      contactsSkype,
+      contactsLinkedIn,
+      contactsEpamEmail,
+    } = userDto;
+
+    await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        firstName,
+        lastName,
+        countryName,
+        cityName,
+        contactsTelegram,
+        contactsPhone,
+        contactsEmail,
+        contactsNotes,
+        contactsSkype,
+        contactsLinkedIn,
+        contactsEpamEmail,
+      })
+      .returning('*')
+      .where('id = :id', { id: userId })
+      .execute();
   }
 
   public async updateProfile(userId: number, profileInfo: ProfileInfoDto) {
@@ -68,7 +104,7 @@ export class ProfileService {
           lastName,
           countryName,
           cityName,
-          educationHistory,
+          educationHistory: educationHistory ?? [],
           discord,
           englishLevel: englishLevel || 'a0',
           aboutMyself: aboutMyself || '',

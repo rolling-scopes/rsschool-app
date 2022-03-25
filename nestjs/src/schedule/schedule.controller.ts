@@ -1,7 +1,7 @@
 import { Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')

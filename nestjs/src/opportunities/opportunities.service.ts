@@ -30,12 +30,12 @@ export class OpportunitiesService {
   ) {}
 
   public async getResumeByUuid(uuid: string): Promise<ResumeData | null> {
-    const resume = await this.resumeRepository.findOne({ where: { uuid } });
+    const resume = await this.resumeRepository.findOneOrFail({ where: { uuid } });
     return await this.getFullResume(resume);
   }
 
   public async getResumeByGithubId(githubId: string): Promise<ResumeData | null> {
-    const user = await this.userRepository.findOne({ where: { githubId } });
+    const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({ where: { userId: user.id } });
     if (resume == null) {
       return null;
@@ -54,7 +54,7 @@ export class OpportunitiesService {
 
   public async createConsent(githubId: string) {
     const value = true;
-    const user = await this.userRepository.findOne({ where: { githubId } });
+    const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     await this.userRepository.update(user.id, { opportunitiesConsent: value });
     const current = await this.resumeRepository.findOne({ githubId });
     await this.resumeRepository.save({ id: current?.id, githubId, userId: user.id });
@@ -63,7 +63,7 @@ export class OpportunitiesService {
 
   public async deleteConsent(githubId: string) {
     const value = false;
-    const user = await this.userRepository.findOne({ where: { githubId } });
+    const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     await this.userRepository.update(user.id, { opportunitiesConsent: value });
     await this.resumeRepository.delete({ githubId });
     return Boolean(value);

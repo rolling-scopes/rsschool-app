@@ -60,7 +60,9 @@ export class NotificationsService {
     const { userId, data, notificationId, channelId, channelValue } = notification;
     const channelSettings = await this.getChannelSettings(channelId, notificationId);
 
-    const message = this.buildChannelMessage({ ...channelSettings, externalId: channelValue }, data);
+    const message = channelSettings
+      ? this.buildChannelMessage({ ...channelSettings, externalId: channelValue }, data)
+      : null;
 
     if (!message) {
       this.logger.error({
