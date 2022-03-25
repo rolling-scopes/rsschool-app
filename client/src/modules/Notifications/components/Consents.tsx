@@ -8,7 +8,7 @@ const rsschoolBotLink = 'https://t.me/rsschool_bot?start=connect';
 export type Connection = {
   value: string;
   enabled: boolean;
-  lastLinkSentAt?: number;
+  lastLinkSentAt?: string;
 };
 
 export function Consents({ email, telegram }: { email?: Connection; telegram?: Connection }) {

@@ -89,10 +89,10 @@ export class ProfileService {
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {
-    const email = user.raw[0]?.contactsEmail;
+    const newEmail = user.raw[0]?.contactsEmail;
     const channelId = 'email';
 
-    if (!email) {
+    if (!newEmail) {
       await this.notificationConnectionsRepository.delete({
         channelId,
         userId,
@@ -104,16 +104,16 @@ export class ProfileService {
           userId,
         },
       });
-      const isConfirmed = connection?.enabled && connection?.externalId === user.raw[0].contactsEmail ? true : false;
-
-      if (!isConfirmed) {
-        await this.userNotificationsService.sendEmailConfirmation(userId);
+      const shouldSendEmailConfirmation = !connection || connection.externalId !== newEmail;
+      if (shouldSendEmailConfirmation) {
+        await this.userNotificationsService.sendEmailConfirmation(userId, false);
       }
 
+      const isConfirmed = connection?.enabled && connection?.externalId === newEmail ? true : false;
       await this.notificationConnectionsRepository.save({
         channelId,
         userId,
-        externalId: email,
+        externalId: newEmail,
         enabled: isConfirmed,
       });
     }

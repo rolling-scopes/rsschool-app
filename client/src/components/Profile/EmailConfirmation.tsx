@@ -1,12 +1,12 @@
 import { Alert } from 'antd';
 import { Timer } from 'components/Timer';
 import moment from 'moment';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type Connection = {
   value: string;
   enabled: boolean;
-  lastLinkSentAt?: number;
+  lastLinkSentAt?: string;
 };
 
 type Props = {
@@ -18,9 +18,13 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
   const [lastSent, setLastSent] = useState(connection?.lastLinkSentAt);
   const allowedToResend = !lastSent ? true : moment().diff(moment(lastSent), 'seconds') > 60;
 
+  useEffect(() => {
+    setLastSent(connection?.lastLinkSentAt);
+  }, [connection?.lastLinkSentAt]);
+
   const sendEmailConfirmationLink = useCallback(() => {
     sendConfirmationEmail();
-    setLastSent(Date.now());
+    setLastSent(new Date().toISOString());
   }, []);
 
   return (
@@ -40,7 +44,7 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
               <Timer
                 seconds={60 - moment().diff(moment(lastSent), 'seconds')}
                 onElapsed={() => {
-                  setLastSent(0);
+                  setLastSent(undefined);
                 }}
               />
             </span>

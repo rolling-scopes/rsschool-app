@@ -25,7 +25,7 @@ type Props = {
       | {
           value: string;
           enabled: boolean;
-          lastLinkSentAt?: number;
+          lastLinkSentAt?: string;
         }
       | undefined
     >

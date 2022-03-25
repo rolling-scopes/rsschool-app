@@ -164,10 +164,10 @@ export class UserNotificationsService {
     });
   }
 
-  public async sendEmailConfirmation(userId: number) {
+  public async sendEmailConfirmation(userId: number, checkTimeLimit = true) {
     const [user, lastLink, connections] = await Promise.all([
       this.userService.getUserByUserId(userId),
-      this.authService.getLoginStateByUserId(userId),
+      checkTimeLimit ? this.authService.getLoginStateByUserId(userId) : Promise.resolve(),
       this.getUserConnections(userId),
     ]);
     const email = user.contactsEmail;
@@ -175,7 +175,7 @@ export class UserNotificationsService {
 
     if (connections.find(connection => connection.channelId === 'email' && connection.enabled)) return;
 
-    if (lastLink && dayjs().diff(lastLink.createdDate) < 1000 * 60) {
+    if (checkTimeLimit && lastLink && dayjs().diff(lastLink.createdDate) < 1000 * 60) {
       throw new BadRequestException('Link was just sent. Please try later');
     }
 

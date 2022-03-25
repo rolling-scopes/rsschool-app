@@ -11,7 +11,7 @@ export class ConnectionDetails {
   enabled: boolean;
 
   @ApiProperty()
-  lastLinkSentAt: number;
+  lastLinkSentAt: string;
 }
 
 export class NotificationUserConnectionsDto {
