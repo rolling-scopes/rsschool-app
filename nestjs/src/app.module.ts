@@ -20,7 +20,8 @@ import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './userGroups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ActivityModule } from './activity/activity.module';
-import { UsersNotificationsModule } from './users-notifications/users-notifications.module';
+import { UsersNotificationsModule } from './users-notifications';
+import { GratitudesModule } from './gratitudes';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { UsersNotificationsModule } from './users-notifications/users-notificati
     UserGroupsModule,
     ScheduleModule,
     UsersNotificationsModule,
+    GratitudesModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

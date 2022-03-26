@@ -124,6 +124,41 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface BadgeDto
+ */
+export interface BadgeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeDto
+     */
+    'id': BadgeDtoIdEnum;
+}
+
+export const BadgeDtoIdEnum = {
+    Congratulations: 'Congratulations',
+    ExpertHelp: 'Expert_help',
+    GreatSpeaker: 'Great_speaker',
+    GoodJob: 'Good_job',
+    HelpingHand: 'Helping_hand',
+    Hero: 'Hero',
+    ThankYou: 'Thank_you',
+    OutstandingWork: 'Outstanding_work',
+    TopPerformer: 'Top_performer',
+    JobOffer: 'Job_Offer'
+} as const;
+
+export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
+
+/**
+ * 
+ * @export
  * @interface ChannelSettings
  */
 export interface ChannelSettings {
@@ -746,6 +781,37 @@ export interface CreateDiscordServerDto {
 /**
  * 
  * @export
+ * @interface CreateGratitudeDto
+ */
+export interface CreateGratitudeDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateGratitudeDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateGratitudeDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateGratitudeDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateGratitudeDto
+     */
+    'badgeId': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -1100,17 +1166,51 @@ export interface GeneralInfo {
 export interface GratitudeDto {
     /**
      * 
+     * @type {PersonDto}
+     * @memberof GratitudeDto
+     */
+    'user': PersonDto;
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeDto
+     */
+    'id': number;
+    /**
+     * 
      * @type {string}
      * @memberof GratitudeDto
      */
-    'date': string;
+    'badgeId': GratitudeDtoBadgeIdEnum;
     /**
      * 
      * @type {string}
      * @memberof GratitudeDto
      */
     'comment': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeDto
+     */
+    'courseId': number;
 }
+
+export const GratitudeDtoBadgeIdEnum = {
+    Congratulations: 'Congratulations',
+    ExpertHelp: 'Expert_help',
+    GreatSpeaker: 'Great_speaker',
+    GoodJob: 'Good_job',
+    HelpingHand: 'Helping_hand',
+    Hero: 'Hero',
+    ThankYou: 'Thank_you',
+    OutstandingWork: 'Outstanding_work',
+    TopPerformer: 'Top_performer',
+    JobOffer: 'Job_Offer'
+} as const;
+
+export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
+
 /**
  * 
  * @export
@@ -4590,6 +4690,172 @@ export class DiscordServersApi extends BaseAPI {
      */
     public updateDiscordServer(id: number, updateDiscordServerDto: UpdateDiscordServerDto, options?: AxiosRequestConfig) {
         return DiscordServersApiFp(this.configuration).updateDiscordServer(id, updateDiscordServerDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * GratitudesApi - axios parameter creator
+ * @export
+ */
+export const GratitudesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGratitude: async (createGratitudeDto: CreateGratitudeDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createGratitudeDto' is not null or undefined
+            assertParamExists('createGratitude', 'createGratitudeDto', createGratitudeDto)
+            const localVarPath = `/gratitudes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createGratitudeDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBadges: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getBadges', 'courseId', courseId)
+            const localVarPath = `/gratitudes/badges/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GratitudesApi - functional programming interface
+ * @export
+ */
+export const GratitudesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GratitudesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createGratitude(createGratitudeDto: CreateGratitudeDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GratitudeDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createGratitude(createGratitudeDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBadges(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BadgeDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBadges(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * GratitudesApi - factory interface
+ * @export
+ */
+export const GratitudesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GratitudesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGratitude(createGratitudeDto: CreateGratitudeDto, options?: any): AxiosPromise<GratitudeDto> {
+            return localVarFp.createGratitude(createGratitudeDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBadges(courseId: number, options?: any): AxiosPromise<Array<BadgeDto>> {
+            return localVarFp.getBadges(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GratitudesApi - object-oriented interface
+ * @export
+ * @class GratitudesApi
+ * @extends {BaseAPI}
+ */
+export class GratitudesApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateGratitudeDto} createGratitudeDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public createGratitude(createGratitudeDto: CreateGratitudeDto, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).createGratitude(createGratitudeDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getBadges(courseId: number, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getBadges(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
