@@ -20,7 +20,6 @@ import {
   ConfigurableProfilePermissions,
   Contacts,
   GeneralInfo,
-  Consent,
   Discord,
 } from 'common/models/profile';
 
@@ -251,12 +250,11 @@ export class ProfilePage extends React.Component<Props, State> {
 
     if (profile) {
       try {
-        const { permissionsSettings, generalInfo, contacts, consents, discord } = profile;
+        const { permissionsSettings, generalInfo, contacts, discord } = profile;
         await this.userService.saveProfileInfo({
           permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
           generalInfo: generalInfo as GeneralInfo,
           contacts: contacts as Contacts,
-          consents: consents as Consent[],
           discord: discord as Discord,
           isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
           isProfileSettingsChanged: isInitialProfileSettingsChanged,

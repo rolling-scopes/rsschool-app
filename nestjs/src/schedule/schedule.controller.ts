@@ -21,7 +21,7 @@ export class ScheduleController {
 
     for (const [userId, courses] of students) {
       try {
-        await this.notificationService.sendNotification({
+        await this.notificationService.sendEventNotification({
           data: { courses },
           notificationId: 'courseScheduleChange',
           userId,

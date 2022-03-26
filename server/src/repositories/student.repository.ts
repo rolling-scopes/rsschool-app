@@ -23,6 +23,18 @@ export class StudentRepository extends AbstractRepository<Student> {
     await repo.cancelByStudent(courseId, githubId);
   }
 
+  public async setSelfStudy(courseId: number, githubId: string, comment = '') {
+    const student = await this.findByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await getRepository(Student).update(student.id, {
+      mentorId: null,
+      mentoring: false,
+      expellingReason: comment || '',
+    });
+  }
+
   public async restore(courseId: number, githubId: string) {
     const student = await this.findByGithubId(courseId, githubId);
     if (student == null) {

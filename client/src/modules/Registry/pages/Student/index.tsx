@@ -1,22 +1,22 @@
-import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
-import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
+import { Location } from 'common/models';
 import { LocationSelect } from 'components/Forms';
-import { NoCourses } from 'components/Registry/NoCourses';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
-import { useCallback, useState, useEffect } from 'react';
+import { Info } from 'modules/Registry/components/Info';
+import { NoCourses } from 'modules/Registry/components/NoCourses';
+import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
 import { useUpdate } from 'react-use';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Location } from 'common/models';
-import { Info } from 'modules/Registry/components';
 import css from 'styled-jsx/css';
-import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
-import { useRouter } from 'next/router';
 import { CdnService } from 'services/cdn';
 import { SolidarityUkraine } from 'components/SolidarityUkraine';
 
@@ -38,8 +38,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
-  const [location, setLocation] = useState(null as Location | null);
-
+  const [location, setLocation] = useState<Location | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [student, studentLoading, registered] = useStudentCourseData(githubId, props.courseAlias);
@@ -52,10 +51,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   }, [registered]);
 
   useEffect(() => {
-    setLocation({
-      countryName: student?.profile.countryName,
-      cityName: student?.profile.cityName,
-    } as Location);
+    setLocation(student ? { countryName: student.profile.countryName, cityName: student.profile.cityName } : null);
   }, [student?.profile]);
 
   const handleSubmit = useCallback(
@@ -295,13 +291,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
 }
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
-  const location =
-    countryName &&
-    cityName &&
-    ({
-      countryName,
-      cityName,
-    } as Location | null);
+  const location: Location | null = countryName && cityName ? { countryName, cityName } : null;
   return {
     ...initialData,
     courseId: courses[0].id,

@@ -19,6 +19,7 @@ import { RepositoryEvent1645364514538 } from './1645364514538-RepositoryEvent';
 import { CrossCheckScheduling1647103154082 } from './1647103154082-CrossCheckScheduling';
 import { Opportunitites1645654601903 } from './1645654601903-Opportunitites';
 import { TaskSolutionConstraint1647175301446 } from './1647175301446-TaskSolutionConstraint';
+import { NotificationType1647550751147 } from './1647550751147-NotificationType';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -42,4 +43,5 @@ export const migrations = [
   CrossCheckScheduling1647103154082,
   Opportunitites1645654601903,
   TaskSolutionConstraint1647175301446,
+  NotificationType1647550751147,
 ];

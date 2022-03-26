@@ -32,7 +32,7 @@ export class AuthController {
       expires: new Date(Date.now() + twoDaysMs),
       httpOnly: true,
       secure: true,
-      domain: 'rs.school',
+      domain: isDev ? undefined : 'rs.school',
       sameSite: 'none',
     });
 
@@ -40,9 +40,10 @@ export class AuthController {
 
     if (loginState?.channelId) {
       await this.authService.onConnectionComplete(loginState, req.user.id);
+      res.redirect(`/profile/connection-confirmed?connectionType=${loginState.channelId}`);
+    } else {
+      res.redirect(this.authService.getRedirectUrl(loginState));
     }
-
-    res.redirect(this.authService.getRedirectUrl(loginState));
   }
 
   @Get('github/logout')

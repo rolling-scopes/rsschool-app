@@ -55,7 +55,7 @@ export class NotificationsController {
   @ApiOkResponse()
   @ApiForbiddenResponse()
   public async sendNotification(@Body() dto: SendNotificationDto) {
-    await this.notificationsService.sendNotification(dto);
+    await this.notificationsService.sendEventNotification(dto);
   }
 
   @Post('/send/bulk')

@@ -1,7 +1,7 @@
-import { Form, Input } from 'antd';
+import { Form, Input, Select } from 'antd';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import TextArea from 'antd/lib/input/TextArea';
-import { NotificationDto } from 'api';
+import { NotificationDto, NotificationType } from 'api';
 import { ModalForm } from 'components/Forms';
 import React from 'react';
 import { NotificationTemlate } from '../services/notifications';
@@ -43,6 +43,15 @@ export function NotificationSettingsModal(props: Props) {
             </Form.Item>
             <Form.Item name="enabled" valuePropName="checked">
               <Checkbox>Active</Checkbox>
+            </Form.Item>
+            <Form.Item name="type" rules={[{ required: true, message: 'Please select type' }]} label="Type">
+              <Select placeholder="Please select type">
+                {Object.values(NotificationType).map(type => (
+                  <Select.Option key={type} value={type}>
+                    {type}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </TabPane>
           {(channels.length ? channels : defaultChannels).map((channel, index) => (

@@ -23,7 +23,7 @@ export class RegistryController {
       this.mentorsService.buildMentorApprovalData(preselectedCourses),
     ]);
 
-    await this.notificationService.sendNotification({
+    await this.notificationService.sendEventNotification({
       data: notificationData,
       notificationId: 'mentorRegistrationApproval',
       userId: user.id,
