@@ -34,12 +34,10 @@ export class AuthUser {
 
   constructor(user: AuthDetails, courseTasks: CourseTask[] = [], admin: boolean = false) {
     const roles: { [key: string]: 'student' | 'mentor' } = {};
-    const courseRoles: CourseRoles = {};
     const courses: Record<number, CourseInfo> = {};
 
     user.students?.forEach(student => {
       roles[student.courseId] = 'student';
-      courseRoles[student.courseId] = [CourseRole.Student];
       const info = courses[student.courseId] ?? ({ mentorId: null, studentId: null, roles: [] } as CourseInfo);
       info.studentId = student.id;
       info.roles.push(CourseRole.Student);
@@ -47,8 +45,6 @@ export class AuthUser {
     });
     user.mentors?.forEach(mentor => {
       roles[mentor.courseId] = 'mentor';
-      courseRoles[mentor.courseId] = [CourseRole.Mentor];
-
       const info = courses[mentor.courseId] ?? ({ mentorId: null, studentId: null, roles: [] } as CourseInfo);
       info.mentorId = mentor.id;
       info.roles.push(CourseRole.Mentor);
