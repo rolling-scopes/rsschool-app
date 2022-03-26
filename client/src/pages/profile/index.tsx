@@ -398,6 +398,7 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
           connections={connections}
           sendConfirmationEmail={this.sendEmailConfirmationLink}
+          isDataPendingSave={isSaveButtonVisible}
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,

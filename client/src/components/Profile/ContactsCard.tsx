@@ -19,6 +19,7 @@ type Props = {
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: (event: any, path: string) => void;
+  isDataPendingSave: boolean;
   connections: Partial<
     Record<
       NotificationChannel,
@@ -75,7 +76,8 @@ class ContactsCard extends React.Component<Props> {
       !isEqual(nextProps.permissionsSettings?.isContactsNotesVisible, isContactsNotesVisible) ||
       !isEqual(nextProps.permissionsSettings?.isLinkedInVisible, isLinkedInVisible) ||
       !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
-      !isEqual(nextProps.connections, this.props.connections)
+      !isEqual(nextProps.connections, this.props.connections) ||
+      nextProps.isDataPendingSave !== this.props.isDataPendingSave
     );
   };
 
@@ -87,6 +89,7 @@ class ContactsCard extends React.Component<Props> {
       onProfileSettingsChange,
       connections,
       sendConfirmationEmail,
+      isDataPendingSave,
     } = this.props;
     const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = this.props.data;
     const contacts = [
@@ -140,7 +143,7 @@ class ContactsCard extends React.Component<Props> {
                   {key !== 'linkedIn' ? (
                     <>
                       {value}
-                      {key === 'email' && (!connections.email || !connections.email.enabled) ? (
+                      {key === 'email' && !isDataPendingSave && (!connections.email || !connections.email.enabled) ? (
                         <EmailConfirmation
                           connection={connections.email}
                           sendConfirmationEmail={sendConfirmationEmail}
