@@ -12,17 +12,12 @@ import { NotificationConnectionDto } from '../usersNotifications/dto/notificatio
 import { UserNotificationsService } from './users.notifications.service';
 import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
 import { NotificationUserConnectionsDto } from './dto/notification-user-connections.dto';
-import { UsersService } from 'src/users/users.service';
 
 @Controller('users/notifications')
 @ApiTags('users notifications')
 @UseGuards(DefaultGuard)
 export class UsersNotificationsController {
-  constructor(
-    private userNotificationsService: UserNotificationsService,
-    private authService: AuthService,
-    private userService: UsersService,
-  ) {}
+  constructor(private userNotificationsService: UserNotificationsService, private authService: AuthService) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getUserNotifications' })
@@ -31,16 +26,14 @@ export class UsersNotificationsController {
     const {
       user: { id },
     } = req;
-    const [notifications, connectionsResponse, profile] = await Promise.all([
+    const [notifications, connectionsResponse] = await Promise.all([
       this.userNotificationsService.getUserNotificationsSettings(id),
       this.getUserConnections(req),
-      this.userService.getUserByUserId(id),
     ]);
 
     return {
       notifications: notifications.map(notification => new NotificationUserSettingsDto(notification)),
       connections: connectionsResponse.connections,
-      email: profile.contactsEmail,
     };
   }
 

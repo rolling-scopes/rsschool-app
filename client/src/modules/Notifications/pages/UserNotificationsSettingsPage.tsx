@@ -26,11 +26,11 @@ export function UserNotificationsPage(props: Props) {
 
   const loadData = useCallback(
     withLoading(async () => {
-      const { connections, notifications, email: contactEmail } = await service.getUserNotificationSettings();
+      const { connections, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
 
       const { email, telegram } = connections as Record<NotificationChannel, Connection | undefined>;
-      setEmail(email || (contactEmail ? { value: contactEmail, enabled: false } : undefined));
+      setEmail(email);
       setTelegram(telegram);
       const hasEmail = !!email?.enabled;
       const hasTelegram = !!telegram?.enabled;
