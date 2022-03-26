@@ -544,25 +544,23 @@ export interface CourseTaskDto {
     'useJury': boolean;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CourseTaskDtoTypeEnum {
-    Jstask = 'jstask',
-    Kotlintask = 'kotlintask',
-    Objctask = 'objctask',
-    Htmltask = 'htmltask',
-    Ipynb = 'ipynb',
-    Selfeducation = 'selfeducation',
-    Codewars = 'codewars',
-    Test = 'test',
-    Codejam = 'codejam',
-    Interview = 'interview',
-    StageInterview = 'stage-interview',
-    Cvhtml = 'cv:html',
-    Cvmarkdown = 'cv:markdown'
-}
+export const CourseTaskDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskDtoTypeEnum = typeof CourseTaskDtoTypeEnum[keyof typeof CourseTaskDtoTypeEnum];
 
 /**
  * 
@@ -685,28 +683,24 @@ export interface CreateStudentFeedbackDto {
     'englishLevel': CreateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const CreateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type CreateStudentFeedbackDtoRecommendationEnum = typeof CreateStudentFeedbackDtoRecommendationEnum[keyof typeof CreateStudentFeedbackDtoRecommendationEnum];
+export const CreateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type CreateStudentFeedbackDtoEnglishLevelEnum = typeof CreateStudentFeedbackDtoEnglishLevelEnum[keyof typeof CreateStudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -951,27 +945,23 @@ export interface FeedbackSoftSkill {
     'id': FeedbackSoftSkillIdEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
+export const FeedbackSoftSkillValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
+
+export type FeedbackSoftSkillValueEnum = typeof FeedbackSoftSkillValueEnum[keyof typeof FeedbackSoftSkillValueEnum];
+export const FeedbackSoftSkillIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeof FeedbackSoftSkillIdEnum];
 
 /**
  * 
@@ -1227,10 +1217,13 @@ export interface NotificationDto {
  * @enum {string}
  */
 
-export enum NotificationType {
-    Event = 'event',
-    Message = 'message'
-}
+export const NotificationType = {
+    Event: 'event',
+    Message: 'message'
+} as const;
+
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+
 
 /**
  * 
@@ -1747,29 +1740,25 @@ export interface ResumeDto {
     'website': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoMilitaryServiceEnum {
-    Served = 'served',
-    Liable = 'liable',
-    NotLiable = 'notLiable'
-}
+export const ResumeDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type ResumeDtoEnglishLevelEnum = typeof ResumeDtoEnglishLevelEnum[keyof typeof ResumeDtoEnglishLevelEnum];
+export const ResumeDtoMilitaryServiceEnum = {
+    Served: 'served',
+    Liable: 'liable',
+    NotLiable: 'notLiable'
+} as const;
+
+export type ResumeDtoMilitaryServiceEnum = typeof ResumeDtoMilitaryServiceEnum[keyof typeof ResumeDtoMilitaryServiceEnum];
 
 /**
  * 
@@ -1885,27 +1874,23 @@ export interface SoftSkillEntry {
     'value': SoftSkillEntryValueEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
+export const SoftSkillEntryIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type SoftSkillEntryIdEnum = typeof SoftSkillEntryIdEnum[keyof typeof SoftSkillEntryIdEnum];
+export const SoftSkillEntryValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
+
+export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeof SoftSkillEntryValueEnum];
 
 /**
  * 
@@ -2056,28 +2041,24 @@ export interface StudentFeedbackDto {
     'englishLevel': StudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const StudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type StudentFeedbackDtoRecommendationEnum = typeof StudentFeedbackDtoRecommendationEnum[keyof typeof StudentFeedbackDtoRecommendationEnum];
+export const StudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -2205,28 +2186,24 @@ export interface UpdateStudentFeedbackDto {
     'englishLevel': UpdateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const UpdateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type UpdateStudentFeedbackDtoRecommendationEnum = typeof UpdateStudentFeedbackDtoRecommendationEnum[keyof typeof UpdateStudentFeedbackDtoRecommendationEnum];
+export const UpdateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type UpdateStudentFeedbackDtoEnglishLevelEnum = typeof UpdateStudentFeedbackDtoEnglishLevelEnum[keyof typeof UpdateStudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
