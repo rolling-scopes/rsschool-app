@@ -1,18 +1,17 @@
-import { useCallback } from 'react';
-import { useState } from 'react';
-import CommonCard from './CommonDashboardCard';
 import { AuditOutlined } from '@ant-design/icons';
-import { CourseTask } from 'services/course';
+import { CourseTaskDto } from 'api';
 import { StudentStats } from 'common/models';
-import { TasksStatsModal } from './TasksStatsModal';
 import dynamic from 'next/dynamic';
+import { useCallback, useState } from 'react';
+import CommonCard from './CommonDashboardCard';
+import { TasksStatsModal } from './TasksStatsModal';
 
 const TasksChart = dynamic(() => import('./TasksChart'), { ssr: false });
 
 export interface TasksStatistics {
-  completed: (CourseTask | StudentStats)[];
-  notDone: (CourseTask | StudentStats)[];
-  future: (CourseTask | StudentStats)[];
+  completed: (CourseTaskDto | StudentStats)[];
+  notDone: (CourseTaskDto | StudentStats)[];
+  future: (CourseTaskDto | StudentStats)[];
 }
 
 export interface ITooltipItem {
@@ -49,7 +48,7 @@ type Props = {
 export function TasksStatsCard(props: Props) {
   const [isTasksStatsModalVisible, setTasksStatsModalVisible] = useState(false);
   const [statisticsTableName, setStatisticsTableName] = useState('');
-  const [selectedGroupTasks, setCurrentTaskStatsModal] = useState([] as (CourseTask | StudentStats)[]);
+  const [selectedGroupTasks, setCurrentTaskStatsModal] = useState([] as (CourseTaskDto | StudentStats)[]);
 
   const {
     tasks: { completed, notDone, future },

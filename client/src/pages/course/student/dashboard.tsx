@@ -10,7 +10,7 @@ import { PageLayout } from 'components/PageLayout';
 
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services/course';
+import { CourseService, StudentSummary, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentTasksDetail } from 'common/models';
@@ -22,8 +22,11 @@ import {
   RepositoryCard,
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
 
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
+
+const coursesTasksApi = new CoursesTasksApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
@@ -34,7 +37,7 @@ function Page(props: CoursePageProps) {
 
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
-  const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
@@ -52,9 +55,9 @@ function Page(props: CoursePageProps) {
 
   useAsync(
     withLoading(async () => {
-      const [studentSummary, courseTasks, statisticsCourses, courseEvents] = await Promise.all([
+      const [studentSummary, { data: courseTasks }, statisticsCourses, courseEvents] = await Promise.all([
         courseService.getStudentSummary(githubId),
-        courseService.getCourseTasks(),
+        coursesTasksApi.getCourseTasks(props.course.id),
         userService.getProfileInfo(githubId),
         courseService.getCourseEvents(),
       ]);
@@ -196,8 +199,8 @@ const TaskTypes = {
 
 const checkTaskResults = (results: any[], taskId: number) => results.find((task: any) => task.courseTaskId === taskId);
 
-const tasksToEvents = (tasks: CourseTask[]) => {
-  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+const tasksToEvents = (tasks: CourseTaskDto[]) => {
+  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
     if (task.type !== TaskTypes.test) {
       acc.push(createCourseEventFromTask(task, task.type));
     }
@@ -206,7 +209,7 @@ const tasksToEvents = (tasks: CourseTask[]) => {
   }, []);
 };
 
-const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent => {
+const createCourseEventFromTask = (task: CourseTaskDto, type: string): CourseEvent => {
   return {
     id: task.id,
     dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',

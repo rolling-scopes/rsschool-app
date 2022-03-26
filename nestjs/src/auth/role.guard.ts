@@ -38,7 +38,7 @@ export class RoleGuard implements CanActivate {
 
     if (requiredCourseRoles.length) {
       if (requireCourseMatch && params.courseId) {
-        return checkUserHasCourseRole(requiredCourseRoles, user, params.courseId);
+        return checkUserHasCourseRole(requiredCourseRoles, user, Number(params.courseId));
       }
 
       return checkUserHasRoleInAnyCourse(requiredCourseRoles, user);
@@ -48,15 +48,17 @@ export class RoleGuard implements CanActivate {
   }
 }
 
-function checkUserHasCourseRole(requiredCourseRoles: CourseRole[], user: AuthUser, courseId: string) {
+function checkUserHasCourseRole(requiredCourseRoles: CourseRole[], user: AuthUser, courseId: number) {
   if (!courseId) {
     return false;
   }
-  return requiredCourseRoles.some(courseRole => user.coursesRoles[courseId]?.includes(courseRole));
+  return requiredCourseRoles.some(courseRole => user.courses[courseId]?.roles.includes(courseRole));
 }
 
 function checkUserHasRoleInAnyCourse(requiredCourseRoles: CourseRole[], user: AuthUser) {
-  const allCourseRoles = Object.values(user.coursesRoles);
-  const hasRole = requiredCourseRoles.some(requiredRole => allCourseRoles.some(roles => roles.includes(requiredRole)));
+  const allCourseRoles = Object.values(user.courses);
+  const hasRole = requiredCourseRoles.some(requiredRole =>
+    allCourseRoles.some(({ roles }) => roles.includes(requiredRole)),
+  );
   return hasRole;
 }

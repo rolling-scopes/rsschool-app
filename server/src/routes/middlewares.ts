@@ -1,10 +1,9 @@
 import Router from '@koa/router';
-import { BAD_REQUEST } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { createQueryBuilder, getRepository } from 'typeorm';
-import { uniq } from 'lodash';
 import { Next } from 'koa';
 import { setResponse } from './utils';
-import { IUserSession, CourseUser, CourseRoles, CourseRole, CourseTask, User } from '../models';
+import { IUserSession, CourseUser, CourseRole, CourseTask, User } from '../models';
 
 export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   if (!ctx.params.courseId) {
@@ -13,7 +12,7 @@ export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) =>
   }
   const courseId = Number(ctx.params.courseId);
   if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
+    setResponse(ctx, StatusCodes.BAD_REQUEST, 'Incorrect [Course Id]');
     return;
   }
   ctx.params.courseId = courseId;
@@ -31,7 +30,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
     return;
   }
 
-  const [authDetails, taskOwnerCourses] = await Promise.all([
+  const [authDetails] = await Promise.all([
     getAuthDetails(user.id),
     getRepository(CourseTask)
       .createQueryBuilder()
@@ -41,26 +40,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
       .getRawMany(),
   ]);
 
-  const courseRoles: CourseRoles = authDetails.courseUsers.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.courseId]: uniq(
-        (user.coursesRoles?.[item.courseId] ?? ([] as CourseRole[]))
-          .concat(item.isJuryActivist ? [CourseRole.JuryActivist] : [])
-          .concat(item.isManager ? [CourseRole.Manager] : [])
-          .concat(item.isSupervisor ? [CourseRole.Supervisor] : []),
-      ),
-    }),
-    {},
-  );
-  taskOwnerCourses.forEach(({ courseId }) => {
-    if (!courseRoles[courseId]) {
-      courseRoles[courseId] = [];
-    }
-    courseRoles[courseId]?.push(CourseRole.TaskOwner);
-  });
   authDetails.students.forEach(student => {
-    user.roles[student.courseId] = 'student';
     if (user.courses) {
       const current = user.courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [] };
       user.courses[student.courseId] = {
@@ -71,7 +51,6 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
     }
   });
   authDetails.mentors.forEach(mentor => {
-    user.roles[mentor.courseId] = 'mentor';
     if (user.courses) {
       const current = user.courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [] };
       user.courses[mentor.courseId] = {
@@ -81,7 +60,6 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
       };
     }
   });
-  user.coursesRoles = courseRoles;
   await next();
 };
 

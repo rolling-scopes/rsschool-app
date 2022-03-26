@@ -15,9 +15,11 @@ import {
   TaskChecker,
   TaskSolutionResult,
   IUserSession,
-  CourseRole,
   TaskResult,
   TaskInterviewResult,
+  isAdmin,
+  isManager,
+  isSupervisor,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
@@ -511,11 +513,7 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
-  return (
-    session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
-  );
+  return isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
 }
 
 export async function getEvent(eventId: number) {
@@ -563,7 +561,6 @@ export async function getUsers(courseId: number) {
     id: r.userId,
     name: createName(r.user),
     githubId: r.user.githubId,
-    isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
   }));

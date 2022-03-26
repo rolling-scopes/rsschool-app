@@ -21,13 +21,14 @@ type Props = CoursePageProps & {
   activeOnly: boolean;
 };
 
+const courseTasksApi = new CoursesTasksApi();
+
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { activeOnly } = props;
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
   const courseService = useMemo(() => new CourseService(props.course.id), []);
-  const courseTasksApi = useMemo(() => new CoursesTasksApi(), []);
 
   const [students, setStudents] = useState({
     content: [] as StudentScore[],

@@ -1,6 +1,18 @@
 import Router from '@koa/router';
 import { config } from '../config';
-import { IUserSession, CourseRole } from '../models';
+import {
+  IUserSession,
+  isAdmin,
+  isHirer,
+  isAnyManager,
+  isAnySupervisor,
+  isManager,
+  isMentor,
+  isAnyMentor,
+  isStudent,
+  isTaskOwner,
+  isSupervisor,
+} from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 export type RouterContext = Router.RouterContext<
@@ -15,21 +27,19 @@ export const basicAuthAws = auth({
 });
 
 export const userGuards = (user: IUserSession) => {
-  const courses = Object.keys(user.coursesRoles ?? {});
   const guards = {
-    isAdmin: () => user.isAdmin,
-    isHirer: () => user.isHirer,
-    hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
-    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.Manager)),
-    isAnySupervisor: () =>
-      courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)),
-    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ?? false,
-    isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
-    isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
-    isStudent: (courseId: number) => user.roles[courseId] === 'student',
-    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner) ?? false,
+    isAdmin: () => isAdmin(user),
+    isHirer: () => isHirer(user),
+    hasRole: (courseId: number) => !!user.courses[courseId],
+    isAnyManager: () => isAnyManager(user),
+    isAnySupervisor: () => isAnySupervisor(user),
+    isManager: (courseId: number) => isManager(user, courseId),
+    isMentor: (courseId: number) => isMentor(user, courseId),
+    isAnyMentor: () => isAnyMentor(user),
+    isStudent: (courseId: number) => isStudent(user, courseId),
+    isTaskOwner: (courseId: number) => isTaskOwner(user, courseId),
     isLoggedIn: (_: RouterContext) => user != null || config.isDevMode,
-    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor) ?? false,
+    isSupervisor: (courseId: number) => isSupervisor(user, courseId),
   };
   return {
     ...guards,

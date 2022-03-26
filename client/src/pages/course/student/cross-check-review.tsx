@@ -1,16 +1,16 @@
-import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
-import { Button, Col, Form, message, Row, Spin, Timeline, Typography, Checkbox } from 'antd';
-import { UserSearch } from 'components/UserSearch';
-import { PageLayout } from 'components/PageLayout';
+import { ClockCircleOutlined, EyeInvisibleTwoTone, EyeTwoTone, StarTwoTone } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
+import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { PageLayout } from 'components/PageLayout';
+import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTask } from 'services/course';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { useAsync } from 'react-use';
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
@@ -115,15 +115,11 @@ function Page(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
   const [githubId, setGithubId] = useState(null as string | null);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [assignments, setAssignments] = useState([] as Assignment[]);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
-  useAsync(async () => {
-    const data = await courseService.getCourseCrossCheckTasks();
-    setCourseTasks(data);
-  }, [courseService]);
+  const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
