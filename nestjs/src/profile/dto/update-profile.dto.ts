@@ -5,12 +5,12 @@ import { EnglishLevel } from '../../../../common/models';
 
 class Location {
   @IsString()
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   cityName: string | null;
 
   @IsString()
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   countryName: string | null;
 }
@@ -133,7 +133,7 @@ class GeneralInfo {
   @IsString()
   githubId: string;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   aboutMyself?: string | null;
 
@@ -142,50 +142,50 @@ class GeneralInfo {
   @ValidateNested()
   location: Location;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: [Education] })
   @IsOptional()
   @Type(() => Education)
   @IsArray()
   educationHistory?: Education[] | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   englishLevel?: EnglishLevel | null;
 }
 
 class Contacts {
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   phone: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   email: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   epamEmail: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   skype: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   telegram: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   notes: string | null;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   linkedIn: string | null;

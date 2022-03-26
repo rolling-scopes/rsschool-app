@@ -1,6 +1,6 @@
 import { CourseTask } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 const typeEnum = [
   'jstask',
@@ -33,7 +33,7 @@ export class CourseTaskDto {
 
     this.githubRepoName = courseTask.task.githubRepoName;
     this.sourceGithubRepoUrl = courseTask.task.sourceGithubRepoUrl;
-    this.taskOwnerId = courseTask.taskOwnerId;
+    this.taskOwnerId = courseTask.taskOwnerId ?? undefined;
     this.useJury = courseTask.task.useJury;
   }
 
@@ -65,9 +65,10 @@ export class CourseTaskDto {
   @ApiProperty()
   descriptionUrl: string;
 
-  @IsNumber()
   @ApiProperty()
-  taskOwnerId: number;
+  @IsNumber()
+  @IsOptional()
+  taskOwnerId?: number;
 
   @IsNotEmpty()
   @IsNumber()

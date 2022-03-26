@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '.';
 import { AuthService, CurrentRequest } from './auth.service';
 import { JWT_COOKIE_NAME } from './constants';
-import { AuthConnectionDto } from './dto/AuthConnectionDto';
+import { AuthConnectionDto } from './dto/auth-connection.dto';
 import { GithubStrategy } from './strategies/github.strategy';
 import * as dayjs from 'dayjs';
 

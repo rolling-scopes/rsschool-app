@@ -1,16 +1,13 @@
 import { Body, Controller, Get, HttpCode, NotFoundException, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard, AuthService } from 'src/auth';
-import { UpdateNotificationUserSettingsDto } from '../usersNotifications/dto/update-notification-user-settings.dto';
-import {
-  NotificationUserSettingsDto,
-  UserNotificationsDto,
-} from '../usersNotifications/dto/notification-user-settings.dto';
-import { NotificationConnectionExistsDto } from '../usersNotifications/dto/notification-connection-exists.dto';
-import { UpsertNotificationConnectionDto } from '../usersNotifications/dto/upsert-notification-connection.dto';
-import { NotificationConnectionDto } from '../usersNotifications/dto/notification-connection.dto';
+import { UpdateNotificationUserSettingsDto } from './dto/update-notification-user-settings.dto';
+import { NotificationUserSettingsDto, UserNotificationsDto } from './dto/notification-user-settings.dto';
+import { NotificationConnectionExistsDto } from './dto/notification-connection-exists.dto';
+import { UpsertNotificationConnectionDto } from './dto/upsert-notification-connection.dto';
+import { NotificationConnectionDto } from './dto/notification-connection.dto';
 import { UserNotificationsService } from './users.notifications.service';
-import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
+import { SendUserNotificationDto } from './dto/send-user-notification.dto';
 import { NotificationUserConnectionsDto } from './dto/notification-user-connections.dto';
 
 @Controller('users/notifications')

@@ -1,6 +1,5 @@
 import { WarningOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
-import axios from 'axios';
 import { Location } from 'common/models';
 import { LocationSelect } from 'components/Forms';
 import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
@@ -19,6 +18,7 @@ import css from 'styled-jsx/css';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
 import { CdnService } from 'services/cdn';
 import { SolidarityUkraine } from 'components/SolidarityUkraine';
+import { ProfileApi } from 'api';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -31,6 +31,7 @@ export type Props = {
 };
 
 const cdnService = new CdnService();
+const profileApi = new ProfileApi();
 
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const { githubId } = props.session;
@@ -104,14 +105,9 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
       async function confirmRegistration() {
         setLoading(true);
         try {
-          const userResponse = await axios.post<any>('/api/profile/me', userModel);
-          const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-          if (githubId) {
-            await cdnService.registerStudent(registryModel);
-            setSubmitted(true);
-          } else {
-            message.error('Invalid github id');
-          }
+          await profileApi.updateUser(userModel);
+          await cdnService.registerStudent(registryModel);
+          setSubmitted(true);
         } catch (e) {
           message.error('An error occured. Please try later.');
         } finally {

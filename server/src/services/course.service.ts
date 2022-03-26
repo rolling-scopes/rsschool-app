@@ -685,7 +685,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
         contactsPhone,
         contactsSkype,
         contactsTelegram,
-        cityName,
+        cityName: cityName ?? undefined,
       },
     };
   });

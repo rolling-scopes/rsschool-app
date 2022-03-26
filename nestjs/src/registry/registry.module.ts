@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesModule } from 'src/courses/courses.module';
 import { UsersModule } from 'src/users';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
+import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { RegistryController } from './registry.controller';
 import { RegistryService } from './registry.service';
 

@@ -75,7 +75,7 @@ export interface AlertDto {
      * @type {number}
      * @memberof AlertDto
      */
-    'courseId': number;
+    'courseId': number | null;
     /**
      * 
      * @type {string}
@@ -544,25 +544,23 @@ export interface CourseTaskDto {
     'useJury': boolean;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CourseTaskDtoTypeEnum {
-    Jstask = 'jstask',
-    Kotlintask = 'kotlintask',
-    Objctask = 'objctask',
-    Htmltask = 'htmltask',
-    Ipynb = 'ipynb',
-    Selfeducation = 'selfeducation',
-    Codewars = 'codewars',
-    Test = 'test',
-    Codejam = 'codejam',
-    Interview = 'interview',
-    StageInterview = 'stage-interview',
-    Cvhtml = 'cv:html',
-    Cvmarkdown = 'cv:markdown'
-}
+export const CourseTaskDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskDtoTypeEnum = typeof CourseTaskDtoTypeEnum[keyof typeof CourseTaskDtoTypeEnum];
 
 /**
  * 
@@ -685,28 +683,24 @@ export interface CreateStudentFeedbackDto {
     'englishLevel': CreateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const CreateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type CreateStudentFeedbackDtoRecommendationEnum = typeof CreateStudentFeedbackDtoRecommendationEnum[keyof typeof CreateStudentFeedbackDtoRecommendationEnum];
+export const CreateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type CreateStudentFeedbackDtoEnglishLevelEnum = typeof CreateStudentFeedbackDtoEnglishLevelEnum[keyof typeof CreateStudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -830,7 +824,32 @@ export interface DiscordServerDto {
      * @type {string}
      * @memberof DiscordServerDto
      */
-    'mentorsChatUrl': string;
+    'mentorsChatUrl': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Education
+ */
+export interface Education {
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'university': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'faculty': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Education
+     */
+    'graduationYear': number;
 }
 /**
  * 
@@ -926,27 +945,23 @@ export interface FeedbackSoftSkill {
     'id': FeedbackSoftSkillIdEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
+export const FeedbackSoftSkillValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
+
+export type FeedbackSoftSkillValueEnum = typeof FeedbackSoftSkillValueEnum[keyof typeof FeedbackSoftSkillValueEnum];
+export const FeedbackSoftSkillIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeof FeedbackSoftSkillIdEnum];
 
 /**
  * 
@@ -980,10 +995,10 @@ export interface GeneralInfo {
     'location': Location;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<Education>}
      * @memberof GeneralInfo
      */
-    'educationHistory'?: Array<string> | null;
+    'educationHistory'?: Array<Education> | null;
     /**
      * 
      * @type {string}
@@ -1077,13 +1092,13 @@ export interface MentorStudentDto {
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -1202,10 +1217,13 @@ export interface NotificationDto {
  * @enum {string}
  */
 
-export enum NotificationType {
-    Event = 'event',
-    Message = 'message'
-}
+export const NotificationType = {
+    Event: 'event',
+    Message: 'message'
+} as const;
+
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+
 
 /**
  * 
@@ -1525,7 +1543,7 @@ export interface ResumeCourseDto {
      * @type {string}
      * @memberof ResumeCourseDto
      */
-    'certificateId': string;
+    'certificateId': string | null;
     /**
      * 
      * @type {boolean}
@@ -1722,29 +1740,25 @@ export interface ResumeDto {
     'website': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoMilitaryServiceEnum {
-    Served = 'served',
-    Liable = 'liable',
-    NotLiable = 'notLiable'
-}
+export const ResumeDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type ResumeDtoEnglishLevelEnum = typeof ResumeDtoEnglishLevelEnum[keyof typeof ResumeDtoEnglishLevelEnum];
+export const ResumeDtoMilitaryServiceEnum = {
+    Served: 'served',
+    Liable: 'liable',
+    NotLiable: 'notLiable'
+} as const;
+
+export type ResumeDtoMilitaryServiceEnum = typeof ResumeDtoMilitaryServiceEnum[keyof typeof ResumeDtoMilitaryServiceEnum];
 
 /**
  * 
@@ -1860,27 +1874,23 @@ export interface SoftSkillEntry {
     'value': SoftSkillEntryValueEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
+export const SoftSkillEntryIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type SoftSkillEntryIdEnum = typeof SoftSkillEntryIdEnum[keyof typeof SoftSkillEntryIdEnum];
+export const SoftSkillEntryValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
+
+export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeof SoftSkillEntryValueEnum];
 
 /**
  * 
@@ -1911,13 +1921,13 @@ export interface StudentDto {
      * @type {string}
      * @memberof StudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof StudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -2022,7 +2032,7 @@ export interface StudentFeedbackDto {
      * @type {PersonDto}
      * @memberof StudentFeedbackDto
      */
-    'mentor': PersonDto;
+    'mentor': PersonDto | null;
     /**
      * 
      * @type {string}
@@ -2031,28 +2041,24 @@ export interface StudentFeedbackDto {
     'englishLevel': StudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const StudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type StudentFeedbackDtoRecommendationEnum = typeof StudentFeedbackDtoRecommendationEnum[keyof typeof StudentFeedbackDtoRecommendationEnum];
+export const StudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -2180,29 +2186,116 @@ export interface UpdateStudentFeedbackDto {
     'englishLevel': UpdateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const UpdateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
 
+export type UpdateStudentFeedbackDtoRecommendationEnum = typeof UpdateStudentFeedbackDtoRecommendationEnum[keyof typeof UpdateStudentFeedbackDtoRecommendationEnum];
+export const UpdateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type UpdateStudentFeedbackDtoEnglishLevelEnum = typeof UpdateStudentFeedbackDtoEnglishLevelEnum[keyof typeof UpdateStudentFeedbackDtoEnglishLevelEnum];
+
+/**
+ * 
+ * @export
+ * @interface UpdateUserDto
+ */
+export interface UpdateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'firstName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'lastName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'primaryEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'cityName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'countryName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsNotes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsPhone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEpamEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsSkype'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsTelegram'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsLinkedIn'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'notes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'aboutMyself'?: string | null;
+}
 /**
  * 
  * @export
@@ -2333,12 +2426,6 @@ export interface UserNotificationsDto {
      * @memberof UserNotificationsDto
      */
     'connections': object;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserNotificationsDto
-     */
-    'email': string | null;
 }
 /**
  * 
@@ -5145,6 +5232,41 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser: async (updateUserDto: UpdateUserDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserDto' is not null or undefined
+            assertParamExists('updateUser', 'updateUserDto', updateUserDto)
+            const localVarPath = `/profile/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -5175,6 +5297,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfileInfo(profileInfoDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(updateUserDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -5202,6 +5334,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          */
         updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: any): AxiosPromise<void> {
             return localVarFp.updateProfileInfo(profileInfoDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateUser(updateUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5233,6 +5374,17 @@ export class ProfileApi extends BaseAPI {
      */
     public updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).updateProfileInfo(profileInfoDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateUserDto} updateUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).updateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

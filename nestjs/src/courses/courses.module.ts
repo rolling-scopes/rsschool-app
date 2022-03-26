@@ -17,7 +17,7 @@ import { InterviewsController, InterviewsService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { UsersModule } from 'src/users';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
+import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 
 @Module({
   imports: [
@@ -57,6 +57,6 @@ import { UsersNotificationsModule } from 'src/usersNotifications/usersNotificati
     InterviewsService,
     TasksService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService],
+  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })
 export class CoursesModule {}

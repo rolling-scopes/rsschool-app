@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { RegistryService } from './registry.service';
 

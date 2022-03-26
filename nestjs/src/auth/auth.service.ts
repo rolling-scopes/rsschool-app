@@ -54,7 +54,8 @@ export class AuthService {
     const provider = profile.provider.toString();
     const result =
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
-      (await this.userService.getByGithubId(username));
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      (await this.userService.getByGithubId(username!));
 
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({
@@ -80,7 +81,8 @@ export class AuthService {
       await this.userService.saveUser(user);
     }
 
-    const authUser = await this.getAuthUser(username, admin);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const authUser = await this.getAuthUser(username!, admin);
     return authUser;
   }
 
@@ -149,6 +151,9 @@ export class AuthService {
 
   public async onConnectionComplete(loginData: LoginData, userId: number) {
     const { channelId, externalId } = loginData;
+    if (!channelId || !externalId) {
+      return;
+    }
 
     this.notificationUserConnectionRepository.save({
       channelId,

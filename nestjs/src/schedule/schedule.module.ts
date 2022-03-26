@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { ScheduleController } from './schedule.controller';
 import { CoursesModule } from 'src/courses/courses.module';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
+import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 
 @Module({
   imports: [UsersNotificationsModule, CoursesModule],
