@@ -21,7 +21,7 @@ export class CrossCheckService {
   ) {}
 
   @Cron('5 0 * * *', { timeZone: 'UTC' })
-  async makeCronJobs() {
+  async executeCronJobs() {
     const { tasksToStart, tasksToFinish } = await this.getCrossCheckTasks();
     await this.initCrossCheckAction(tasksToStart, 'distribution');
     await this.initCrossCheckAction(tasksToFinish, 'completion');
