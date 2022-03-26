@@ -26,4 +26,7 @@ export class GratitudeDto {
 
   @ApiProperty()
   public courseId: number;
+
+  @ApiProperty()
+  public date: string;
 }

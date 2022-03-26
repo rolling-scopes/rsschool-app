@@ -1194,6 +1194,12 @@ export interface GratitudeDto {
      * @memberof GratitudeDto
      */
     'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeDto
+     */
+    'date': string;
 }
 
 export const GratitudeDtoBadgeIdEnum = {
