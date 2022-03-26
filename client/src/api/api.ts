@@ -6190,39 +6190,6 @@ export const UsersNotificationsApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendEmailConfirmationLinkDebug: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('sendEmailConfirmationLinkDebug', 'id', id)
-            const localVarPath = `/users/notifications/confirmation/email/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {SendUserNotificationDto} sendUserNotificationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6400,16 +6367,6 @@ export const UsersNotificationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sendEmailConfirmationLinkDebug(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sendEmailConfirmationLinkDebug(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {SendUserNotificationDto} sendUserNotificationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6481,15 +6438,6 @@ export const UsersNotificationsApiFactory = function (configuration?: Configurat
          */
         sendEmailConfirmationLink(options?: any): AxiosPromise<void> {
             return localVarFp.sendEmailConfirmationLink(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendEmailConfirmationLinkDebug(id: number, options?: any): AxiosPromise<void> {
-            return localVarFp.sendEmailConfirmationLinkDebug(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6565,17 +6513,6 @@ export class UsersNotificationsApi extends BaseAPI {
      */
     public sendEmailConfirmationLink(options?: AxiosRequestConfig) {
         return UsersNotificationsApiFp(this.configuration).sendEmailConfirmationLink(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersNotificationsApi
-     */
-    public sendEmailConfirmationLinkDebug(id: number, options?: AxiosRequestConfig) {
-        return UsersNotificationsApiFp(this.configuration).sendEmailConfirmationLinkDebug(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
