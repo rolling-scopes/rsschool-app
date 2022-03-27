@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/axios';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '../config';
-import { getTaskFilters } from './utils/tasksFiltering';
+import { isTaskNeededToStart, isTaskNeededToFinish } from './utils/tasksFiltering';
 import { DEV_HOST, PROD_HOST } from './utils/constants';
 import { CourseTask } from '@entities/courseTask';
 import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
@@ -72,7 +72,6 @@ export class CrossCheckService {
 
   private async getCrossCheckTasks() {
     const allCrossCheckTasks = await this.courseTaskRepository.find({ where: { checker: 'crossCheck' } });
-    const { isTaskNeededToStart, isTaskNeededToFinish } = getTaskFilters();
 
     return {
       tasksToStart: allCrossCheckTasks.filter(isTaskNeededToStart),
