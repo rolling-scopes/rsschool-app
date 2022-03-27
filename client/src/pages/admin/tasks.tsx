@@ -8,28 +8,31 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
+import { DisciplineService } from '../../services/discipline';
+import { IDiscipline } from '../../modules/Discipline/model';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
 const service = new TaskService();
-const disciplines = PRIMARY_SKILLS;
+const disciplinesService = new DisciplineService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
+  const [disciplines, setDisciplines] = useState<IDiscipline[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
 
   const { loading } = useAsync(async () => {
-    const tasks = await service.getTasks();
+    const [tasks, disciplines] = await Promise.all([service.getTasks(), disciplinesService.getAllDisciplines()]);
     setData(tasks);
+    setDisciplines(disciplines);
   }, [modalData]);
 
   const handleAddItem = () => {
@@ -295,7 +298,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Task>) {
-  return modalData;
+  return {...modalData, discipline: modalData.discipline?.name};
 }
 
 export { getServerSideProps };
