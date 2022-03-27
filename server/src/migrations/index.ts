@@ -3,7 +3,6 @@ import { TaskResult1630341383942 } from './1630341383942-TaskResult';
 import { StudentMigration1630342025950 } from './1630342025950-StudentMigration';
 import { UserMigration1630342266002 } from './1630342266002-UserMigration';
 import { StudentMigration1630347897950 } from './1630347897950-StudentMigration';
-import { Discipline1631623461511 } from './1631623461511-Discipline';
 import { ResumeMigration1632333725126 } from './1632333725126-ResumeMigration';
 import { User1635365797478 } from './1635365797478-User';
 import { StageInterview1637591194886 } from './1637591194886-StageInterview';
@@ -19,6 +18,7 @@ import { NotificationConnection1644695410918 } from './1644695410918-Notificatio
 import { RepositoryEvent1645364514538 } from './1645364514538-RepositoryEvent';
 import { Opportunitites1645654601903 } from './1645654601903-Opportunitites';
 import { TaskSolutionConstraint1647175301446 } from './1647175301446-TaskSolutionConstraint';
+import { Disciplines1647779015475 } from './1647779015475-Disciplines';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -26,7 +26,6 @@ export const migrations = [
   StudentMigration1630342025950,
   UserMigration1630342266002,
   StudentMigration1630347897950,
-  Discipline1631623461511,
   ResumeMigration1632333725126,
   User1635365797478,
   StageInterview1637591194886,
@@ -42,4 +41,5 @@ export const migrations = [
   RepositoryEvent1645364514538,
   Opportunitites1645654601903,
   TaskSolutionConstraint1647175301446,
+  Disciplines1647779015475,
 ];

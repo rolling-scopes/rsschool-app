@@ -17,7 +17,6 @@ import {
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
-import Link from 'next/link';
 
 const { Sider } = Layout;
 
@@ -71,7 +70,7 @@ export function AdminSider(props: Props) {
           </Menu.Item>
         ) : null}
 
-        <Menu.Item key="10">
+        <Menu.Item key="12">
           <Link href="/admin/disciplines">
             <a>
               <TrophyOutlined />

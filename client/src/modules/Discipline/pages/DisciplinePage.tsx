@@ -1,7 +1,7 @@
 import { DisciplineProvider } from '../contexts/DisciplineContext';
 import { Disciplines } from '../components/Disciplines';
-import { Session } from '../../../components';
 import { IDiscipline } from '../model';
+import { Session } from '../../../components/withSession';
 
 type IDisciplinePage = { session: Session; disciplines?: IDiscipline[] };
 
