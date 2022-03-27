@@ -6,6 +6,7 @@ import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
 import { Resume } from './resume';
+import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
 import { UserGroup } from './userGroup';
 import { Event } from './event';

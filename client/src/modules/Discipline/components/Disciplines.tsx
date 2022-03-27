@@ -1,12 +1,14 @@
-import { AdminSider, Header, Session } from '../../../components';
-import { isAnyCoursePowerUserManager } from '../../../domain/user';
+import type { Session } from 'components/withSession';
+import { isAdmin } from '../../../domain/user';
 import { Button, Layout } from 'antd';
-import { DisciplineModal } from './DisciplineModal';
 import { useEffect, useState } from 'react';
 import { IDiscipline } from '../model';
 import { DisciplineTable } from './DisciplineTable';
 import { useDisciplineContext } from '../contexts/DisciplineContext';
 import { loadAllDisciplines } from '../reducers/actions';
+import { AdminSider } from '../../../components/AdminSider';
+import { Header } from '../../../components/Header';
+import { DisciplineModal } from './DisciplineModal';
 
 const { Content } = Layout;
 
@@ -26,7 +28,7 @@ export const Disciplines = ({ session, disciplines }: IDisciplines) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={session.isAdmin} isCoursePowerUser={isAnyCoursePowerUserManager(session)} />
+      <AdminSider isAdmin={session.isAdmin} isCoursePowerUser={isAdmin(session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Disciplines" username={session.githubId} />
         <Content style={{ margin: 8 }}>

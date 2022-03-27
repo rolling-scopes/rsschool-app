@@ -1,9 +1,11 @@
 import { GetServerSideProps } from 'next';
 import { DisciplineService } from '../../../services/discipline';
+import { getTokenFromContext } from '../../../utils/server';
 
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
-    const disciplines = await new DisciplineService(ctx).getAllDisciplines();
+    const token = getTokenFromContext(ctx);
+    const disciplines = await new DisciplineService(token).getAllDisciplines();
     return {
       props: { disciplines },
     };

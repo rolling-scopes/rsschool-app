@@ -1,29 +1,28 @@
-import globalAxios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { message } from 'antd';
-import { GetServerSidePropsContext, NextPageContext } from 'next';
-import { getServerAxiosProps } from '../utils/axios';
 import { IDiscipline } from '../modules/Discipline/model';
+import { getServerAxiosProps } from '../utils/axios';
 
 export class DisciplineService {
   private axios: AxiosInstance;
 
-  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
-    this.axios = globalAxios.create(getServerAxiosProps(ctx));
+  constructor(token?: string) {
+    this.axios = axios.create(getServerAxiosProps(token));
   }
 
   async getAllDisciplines() {
     try {
-      const result = await this.axios.get('/api/discipline');
-      return result.data.data;
+      const result = await this.axios.get('/api/v2/disciplines');
+      return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }
   }
 
-  async postDiscipline(data: IDiscipline) {
+  async postDiscipline(data: Partial<IDiscipline>) {
     try {
-      const result = await this.axios.post('/api/discipline', data);
-      return result.data.data;
+      const result = await this.axios.post('/api/v2/disciplines', data);
+      return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }
@@ -31,16 +30,16 @@ export class DisciplineService {
 
   async deleteDiscipline(id: number) {
     try {
-      const result = await this.axios.delete(`/api/discipline/${id}`);
-      return result.data.data;
+      const result = await this.axios.delete(`/api/v2/disciplines/${id}`);
+      return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }
   }
 
-  async updateDiscipline(id: number, data: IDiscipline) {
+  async updateDiscipline(id: number, data: Partial<IDiscipline>) {
     try {
-      const result = await this.axios.put(`/api/discipline/${id}`, data);
+      const result = await axios.put(`/api/v2/disciplines/${id}`, data);
       return result.data.data;
     } catch (e) {
       message.error('Something went wrong');
