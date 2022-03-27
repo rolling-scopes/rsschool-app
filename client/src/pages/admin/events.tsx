@@ -197,7 +197,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Event>) {
-  return modalData;
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export { getServerSideProps };
