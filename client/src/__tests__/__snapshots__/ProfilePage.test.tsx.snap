@@ -320,7 +320,9 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             }
           >
             <ContactsCard
+              connections={Object {}}
               data={Object {}}
+              isDataPendingSave={false}
               isEditingModeEnabled={false}
               onPermissionsSettingsChange={[Function]}
               onProfileSettingsChange={[Function]}
@@ -384,6 +386,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                   },
                 }
               }
+              sendConfirmationEmail={[Function]}
             />
           </div>
           <div

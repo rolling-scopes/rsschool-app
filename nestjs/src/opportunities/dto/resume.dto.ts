@@ -58,10 +58,10 @@ class FeedbackSoftSkill {
 
 class FeedbackDto {
   constructor(feedback: StudentFeedback) {
-    this.recommendation = feedback.recommendation;
+    this.recommendation = feedback.recommendation ?? '';
     this.recommendationComment = feedback.content?.recommendationComment ?? '';
     this.suggestions = feedback.content?.suggestions ?? '';
-    this.englishLevel = feedback.englishLevel;
+    this.englishLevel = feedback.englishLevel ?? LanguageLevel.Unkwown;
     this.mentor = new ResumeCourseMentor(feedback.mentor);
     this.course = new FeedbackCourseDto(feedback);
     this.softSkills = feedback.content?.softSkills.map(({ id, value }) => new FeedbackSoftSkill(id, value)) ?? [];
@@ -120,14 +120,14 @@ class ResumeCourseDto {
   @ApiProperty()
   public totalScore: number;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   public certificateId: string | null;
 
   @ApiProperty()
   public completed: boolean;
 
-  @ApiProperty({ nullable: true })
-  public mentor: ResumeCourseMentor;
+  @ApiProperty({ nullable: true, type: ResumeCourseMentor })
+  public mentor: ResumeCourseMentor | null;
 
   @ApiProperty()
   public locationName: string;

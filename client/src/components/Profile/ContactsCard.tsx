@@ -10,6 +10,8 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { Text } = Typography;
 
 import { ContactsOutlined } from '@ant-design/icons';
+import { NotificationChannel } from 'modules/Notifications/services/notifications';
+import { EmailConfirmation } from './EmailConfirmation';
 
 type Props = {
   data: Contacts;
@@ -17,6 +19,19 @@ type Props = {
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: (event: any, path: string) => void;
+  isDataPendingSave: boolean;
+  connections: Partial<
+    Record<
+      NotificationChannel,
+      | {
+          value: string;
+          enabled: boolean;
+          lastLinkSentAt?: string;
+        }
+      | undefined
+    >
+  >;
+  sendConfirmationEmail: () => void;
 };
 
 type Contact = { name: string; value: string | null; key: string };
@@ -60,13 +75,22 @@ class ContactsCard extends React.Component<Props> {
       !isEqual(nextProps.permissionsSettings?.isSkypeVisible, isSkypeVisible) ||
       !isEqual(nextProps.permissionsSettings?.isContactsNotesVisible, isContactsNotesVisible) ||
       !isEqual(nextProps.permissionsSettings?.isLinkedInVisible, isLinkedInVisible) ||
-      !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
+      !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+      !isEqual(nextProps.connections, this.props.connections) ||
+      nextProps.isDataPendingSave !== this.props.isDataPendingSave
     );
   };
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
-      this.props;
+    const {
+      isEditingModeEnabled,
+      permissionsSettings,
+      onPermissionsSettingsChange,
+      onProfileSettingsChange,
+      connections,
+      sendConfirmationEmail,
+      isDataPendingSave,
+    } = this.props;
     const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = this.props.data;
     const contacts = [
       { name: 'EPAM E-mail', value: epamEmail, key: 'epamEmail' },
@@ -117,7 +141,15 @@ class ContactsCard extends React.Component<Props> {
                 <List.Item>
                   <Text strong>{name}:</Text>{' '}
                   {key !== 'linkedIn' ? (
-                    value
+                    <>
+                      {value}
+                      {key === 'email' && !isDataPendingSave && (!connections.email || !connections.email.enabled) ? (
+                        <EmailConfirmation
+                          connection={connections.email}
+                          sendConfirmationEmail={sendConfirmationEmail}
+                        />
+                      ) : null}
+                    </>
                   ) : (
                     <a target="__blank" href={value!}>
                       {value}

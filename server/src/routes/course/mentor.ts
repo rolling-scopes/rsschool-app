@@ -7,7 +7,6 @@ import { Mentor, Student } from '../../models';
 import { StudentRepository } from '../../repositories/student.repository';
 import { courseService } from '../../services';
 import { getUserByGithubId } from '../../services/user.service';
-import { updateSession } from '../../session';
 import { setResponse } from '../utils';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
@@ -93,8 +92,6 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
     }
     await studentRepository.update(input.students, { mentorId });
   }
-
-  updateSession(ctx, { roles: { [courseId]: 'mentor' } });
 
   setResponse(ctx, OK);
 };

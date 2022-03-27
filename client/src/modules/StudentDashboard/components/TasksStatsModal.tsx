@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { StudentStats } from 'common/models/profile';
 import { Modal, Table, Typography } from 'antd';
-import { CourseTask } from 'services/course';
 import { dateTimeRenderer, dateRenderer } from 'components/Table';
+import { CourseTaskDto } from 'api';
 
 const { Text } = Typography;
 
 type Props = {
   courseName: string;
   tableName: string;
-  tasks: (CourseTask | StudentStats)[];
+  tasks: (CourseTaskDto | StudentStats)[];
   isVisible: boolean;
   onHide: () => void;
 };

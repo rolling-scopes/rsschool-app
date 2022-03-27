@@ -1,4 +1,4 @@
-type Roles = 'juryActivist' | 'manager' | 'supervisor';
+type Roles = 'manager' | 'supervisor';
 
 export interface UserGroup {
   id: number;

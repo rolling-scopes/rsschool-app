@@ -2,14 +2,19 @@ import { Body, Controller, Get, NotFoundException, Param, Post, Res, UseGuards }
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { NotificationsService } from 'src/notifications/notifications.service';
-import { CertifcationsService } from './certificates.service';
+import { StudentsService } from '../courses/students';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
+import { CertificationsService } from './certificates.service';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 
 @Controller('certificate')
 @ApiTags('certificate')
 export class CertificatesController {
-  constructor(private certificatesService: CertifcationsService, private notificationService: NotificationsService) {}
+  constructor(
+    private certificatesService: CertificationsService,
+    private notificationService: UserNotificationsService,
+    private studentsService: StudentsService,
+  ) {}
 
   @Get('/:publicId')
   @ApiOperation({ operationId: 'getCertificate' })
@@ -31,9 +36,11 @@ export class CertificatesController {
   @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'saveCertificate' })
   public async saveCertificate(@Body() dto: SaveCertificateDto) {
+    const student = await this.studentsService.getById(dto.studentId);
+
     const [notificationData] = await Promise.all([
-      this.certificatesService.buildNotificationData(dto),
-      this.certificatesService.saveCertificate(dto),
+      this.certificatesService.buildNotificationData(student, dto),
+      this.certificatesService.saveCertificate(student.id, dto),
     ]);
 
     const { userId, notification } = notificationData;

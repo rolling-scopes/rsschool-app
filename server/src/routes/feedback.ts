@@ -4,7 +4,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 import { DiscordService } from '../integrations';
 import { ILogger } from '../logger';
-import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
+import { Feedback, IUserSession, CourseRole, PrivateFeedback, User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { courseService } from '../services';
 import { guard } from './guards';
@@ -65,10 +65,10 @@ const postGratitudeFeedback = (logger: ILogger) => {
     { id: 'Job_Offer', name: 'Job Offer', isManagerOnly: true },
   ];
 
-  const rolesForSpecialBadges = ['manager', 'supervisor'];
+  const rolesForSpecialBadges = [CourseRole.Manager, CourseRole.Supervisor];
 
-  const getAvailableBadges = ({ coursesRoles }: IUserSession, id: number) => {
-    const userCourseRoles = coursesRoles ? coursesRoles[id] : [];
+  const getAvailableBadges = ({ courses }: IUserSession, id: number) => {
+    const userCourseRoles = courses ? courses[id].roles : [];
     const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
 
     return heroBadges.filter((badge: Badge) => (!badge.isManagerOnly ? true : isAvailableSpecialBadges ? true : false));

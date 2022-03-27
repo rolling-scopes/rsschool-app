@@ -3,8 +3,7 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileCourseDto } from './dto';
-import { ProfileInfoDto } from './dto/update-profile.dto';
+import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto } from './dto';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
@@ -30,6 +29,15 @@ export class ProfileController {
     }
     const data = await this.profileService.getCourses(user);
     return data.map(course => new ProfileCourseDto(course));
+  }
+
+  @Post('/user')
+  @ApiOperation({ operationId: 'updateUser' })
+  @ApiBody({ type: UpdateUserDto })
+  public async updateUser(@Req() req: CurrentRequest, @Body() dto: UpdateUserDto) {
+    const { user } = req;
+
+    await this.profileService.updateUser(user.id, dto);
   }
 
   @Post('/info')

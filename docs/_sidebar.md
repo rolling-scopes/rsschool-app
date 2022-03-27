@@ -12,3 +12,4 @@
   - [The allocation of students into teams](platform/team-allocation.md)
   - [Typical problems](platform/typical-problems.md)
   - [Adding tests into RS School App](platform/adding-tests.md)
+- [Code of conduct](code-of-conduct.md)

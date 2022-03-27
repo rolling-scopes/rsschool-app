@@ -49,14 +49,14 @@ export class ConfigService {
   constructor(conf: NestConfigService) {
     this.auth = {
       github: {
-        clientId: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID'),
-        clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
-        callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
+        clientId: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID') ?? '',
+        clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET') ?? '',
+        callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK') ?? '',
         scope: ['user:email'],
         activityWebhookSecret: conf.get('process.env.RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
       },
       dev: {
-        username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME'),
+        username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME') ?? '',
         admin: conf.get<string>('RSSCHOOL_AUTH_DEV_ADMIN')?.toLowerCase() === 'true',
       },
       jwt: {
@@ -74,8 +74,8 @@ export class ConfigService {
 
     this.users = {
       root: {
-        username: conf.get('RSSHCOOL_USERS_CLOUD_USERNAME'),
-        password: conf.get('RSSHCOOL_USERS_CLOUD_PASSWORD'),
+        username: conf.get('RSSHCOOL_USERS_CLOUD_USERNAME') ?? '',
+        password: conf.get('RSSHCOOL_USERS_CLOUD_PASSWORD') ?? '',
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],

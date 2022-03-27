@@ -1,10 +1,9 @@
 import Router from '@koa/router';
 import { AxiosError } from 'axios';
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
-import { CourseRole, IUserSession, TaskResult } from '../../../models';
-import { courseService, notificationService, taskResultsService, taskService } from '../../../services';
+import { isAdmin, isManager, isTaskOwner, IUserSession } from '../../../models';
+import { courseService, notificationService, taskService } from '../../../services';
 import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
 
@@ -16,7 +15,7 @@ type ScoreInput = {
 
 export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, courseTaskId, githubId } = ctx.params;
-  const { coursesRoles } = ctx.state!.user as IUserSession;
+  const session = ctx.state.user as IUserSession;
 
   const inputData: ScoreInput = ctx.request.body;
 
@@ -46,57 +45,10 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
     return;
   }
 
-  if (courseTask.checker === 'jury') {
-    if (!coursesRoles?.[courseId]?.includes(CourseRole.JuryActivist)) {
-      setResponse(ctx, BAD_REQUEST, { message: 'not jury activist' });
-      return;
-    }
-    if (!data.score) {
-      setResponse(ctx, BAD_REQUEST, { message: 'no score' });
-      return;
-    }
-
-    const current = await taskResultsService.getTaskResult(student.id, courseTask.id);
-    if (current == null) {
-      const taskResult = taskResultsService.createJuryTaskResult(authorId, {
-        ...data,
-        studentId: student.id,
-        courseTaskId: courseTask.id,
-      });
-      const addResult = await getRepository(TaskResult).save(taskResult);
-      setResponse(ctx, OK, addResult);
-      return;
-    }
-
-    const existingJuryScore = current.juryScores.find(score => score.authorId === authorId);
-    if (existingJuryScore) {
-      existingJuryScore.score = data.score;
-    } else {
-      current.juryScores.push({
-        authorId,
-        score: data.score,
-        dateTime: Date.now(),
-        comment: data.comment || '',
-      });
-    }
-    current.score = Math.round(
-      current.juryScores.reduce((acc, record) => acc + record.score, 0) / current.juryScores.length,
-    );
-    const updateResult = await getRepository(TaskResult).save(current);
-    setResponse(ctx, OK, updateResult);
-    return;
-  }
-
   const mentor = await courseService.getMentorByUserId(courseId, authorId);
-  const session = ctx.state.user as IUserSession;
 
-  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner);
-  if (
-    mentor == null &&
-    !session.isAdmin &&
-    !session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) &&
-    isNotTaskOwner
-  ) {
+  const isNotTaskOwner = !isTaskOwner(session, courseId);
+  if (mentor == null && !isAdmin(session) && !isManager(session, courseId) && isNotTaskOwner) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
