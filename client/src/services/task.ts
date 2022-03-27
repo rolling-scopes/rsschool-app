@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { CourseTaskDtoTypeEnum } from 'api';
+import {IDiscipline} from "../modules/Discipline/model";
 
 export type TaskType = CourseTaskDtoTypeEnum;
 
@@ -16,7 +17,7 @@ export interface Task {
   sourceGithubRepoUrl: string;
   tags: string[];
   skills: string[];
-  discipline: string;
+  discipline: IDiscipline;
   attributes: Record<string, any>;
 }
 

@@ -49,7 +49,7 @@ export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, dis
       onOk={submitForm}
     >
       <Form layout="vertical" form={form} initialValues={initialValues}>
-        <Form.Item key="name" name="name" label="Discipline">
+        <Form.Item key="name" name="name" label="Discipline" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
       </Form>
