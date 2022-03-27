@@ -35,12 +35,16 @@ type AWSServices = {
   accessKeyId: string;
 };
 
+const DEV_HOST = 'http://localhost:3000';
+const PROD_HOST = 'https://app.rs.school';
+
 @Injectable()
 export class ConfigService {
   public readonly auth: AuthConfig;
   public readonly users: UsersConfig;
   public readonly awsServices: AWSServices;
   public isDev = process.env.NODE_ENV !== 'production';
+  public host = process.env.RSSCHOOL_USE_PROD_HOST !== 'true' ? DEV_HOST : PROD_HOST;
 
   constructor(conf: NestConfigService) {
     this.auth = {

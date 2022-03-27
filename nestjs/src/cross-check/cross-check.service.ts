@@ -5,7 +5,6 @@ import { HttpService } from '@nestjs/axios';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '../config';
 import { isTaskNeededToStart, isTaskNeededToFinish } from './utils/tasksFiltering';
-import { DEV_HOST, PROD_HOST } from './utils/constants';
 import { CourseTask } from '@entities/courseTask';
 import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
 
@@ -31,7 +30,7 @@ export class CrossCheckService {
     const { username, password } = this.conf.users.root;
 
     const authHeader = `Basic ${Buffer.from(username + ':' + password).toString('base64')}`;
-    const host = this.conf.isDev ? DEV_HOST : PROD_HOST;
+    const host = this.conf.host;
 
     return {
       host,
