@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 
 const getEvents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courses = await getRepository(Event).find({});
+  const courses = await getRepository(Event).find({ relations: ['discipline'] });
   setResponse(ctx, OK, courses);
 };
 

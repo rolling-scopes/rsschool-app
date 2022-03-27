@@ -25,8 +25,8 @@ function Page(props: Props) {
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const [tasks, disciplines] = await Promise.all([service.getEvents(), disciplinesService.getAllDisciplines()]);
-    setData(tasks);
+    const [events, disciplines] = await Promise.all([service.getEvents(), disciplinesService.getAllDisciplines()]);
+    setData(events);
     setDisciplines(disciplines);
   };
 
@@ -207,7 +207,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Event>) {
-  return modalData;
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export default withSession(Page);
