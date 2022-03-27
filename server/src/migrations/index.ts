@@ -18,6 +18,8 @@ import { NotificationConnection1644695410918 } from './1644695410918-Notificatio
 import { RepositoryEvent1645364514538 } from './1645364514538-RepositoryEvent';
 import { Opportunitites1645654601903 } from './1645654601903-Opportunitites';
 import { TaskSolutionConstraint1647175301446 } from './1647175301446-TaskSolutionConstraint';
+import { NotificationType1647550751147 } from './1647550751147-NotificationType';
+import { LoginStateUserId1647885219936 } from './1647885219936-LoginStateUserId';
 import { Disciplines1647779015475 } from './1647779015475-Disciplines';
 
 export const migrations = [
@@ -42,4 +44,6 @@ export const migrations = [
   Opportunitites1645654601903,
   TaskSolutionConstraint1647175301446,
   Disciplines1647779015475,
+  NotificationType1647550751147,
+  LoginStateUserId1647885219936,
 ];

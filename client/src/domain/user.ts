@@ -57,10 +57,6 @@ export function isTaskOwner(session: Session, courseId: number) {
   return hasRole(session, courseId, CourseRole.TaskOwner);
 }
 
-export function isJuryActivist(session: Session, courseId: number) {
-  return hasRole(session, courseId, CourseRole.JuryActivist);
-}
-
 export function isHirer(session: Session) {
   return Boolean(session.isHirer);
 }

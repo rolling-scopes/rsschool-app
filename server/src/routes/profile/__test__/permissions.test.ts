@@ -1,5 +1,29 @@
-import { CourseRole } from '../../../models';
+import { CourseRole, IUserSession } from '../../../models';
 import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
+
+const mockSession = {
+  id: 1,
+  githubId: 'githubId',
+  isHirer: false,
+  isAdmin: false,
+  courses: {
+    '1': {
+      mentorId: 1,
+      studentId: 2,
+      roles: [],
+    },
+    '2': {
+      mentorId: 1,
+      studentId: 2,
+      roles: [],
+    },
+    '11': {
+      mentorId: 1,
+      studentId: 2,
+      roles: [],
+    },
+  },
+} as IUserSession;
 
 describe('getPermissions', () => {
   it('Should be an instance of Function', () => {
@@ -269,11 +293,7 @@ describe('defineRole', () => {
           },
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            1: 'student',
-            2: 'mentor',
-            11: 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'dima',
         }),
       ).toBe('student');
@@ -290,11 +310,7 @@ describe('defineRole', () => {
           },
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            1: 'student',
-            2: 'mentor',
-            11: 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'andrey',
         }),
       ).toBe('mentor');
@@ -311,11 +327,7 @@ describe('defineRole', () => {
           },
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            1: 'student',
-            2: 'mentor',
-            11: 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'max',
         }),
       ).toBe('mentor');
@@ -332,11 +344,7 @@ describe('defineRole', () => {
           },
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            1: 'student',
-            2: 'mentor',
-            11: 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'alex',
         }),
       ).toBe('mentor');
@@ -353,11 +361,7 @@ describe('defineRole', () => {
           },
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            1: 'student',
-            2: 'mentor',
-            11: 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'masha',
         }),
       ).toBe('mentor');
@@ -368,11 +372,7 @@ describe('defineRole', () => {
           relationsRoles: null,
           registryCourses: null,
           studentCourses: [{ courseId: 1 }, { courseId: 11 }],
-          roles: {
-            '1': 'student',
-            '2': 'mentor',
-            '11': 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'denis',
         }),
       ).toBe('coursementor');
@@ -383,10 +383,9 @@ describe('defineRole', () => {
           relationsRoles: null,
           registryCourses: [{ courseId: 1 }],
           studentCourses: null,
-          roles: {},
-          coursesRoles: {
-            1: [CourseRole.Manager],
-          },
+          session: {
+            courses: { 1: { roles: [CourseRole.Manager] } },
+          } as unknown as IUserSession,
           userGithubId: 'denis',
         }),
       ).toBe('coursemanager');
@@ -397,11 +396,7 @@ describe('defineRole', () => {
           relationsRoles: null,
           registryCourses: null,
           studentCourses: [{ courseId: 1 }],
-          roles: {
-            '1': 'student',
-            '2': 'mentor',
-            '11': 'mentor',
-          },
+          session: { ...mockSession, courses: { 1: { roles: [] } } },
           userGithubId: 'denis',
         }),
       ).toBe('all');
@@ -412,11 +407,7 @@ describe('defineRole', () => {
           relationsRoles: null,
           registryCourses: null,
           studentCourses: null,
-          roles: {
-            '1': 'student',
-            '2': 'mentor',
-            '11': 'mentor',
-          },
+          session: mockSession,
           userGithubId: 'denis',
         }),
       ).toBe('all');

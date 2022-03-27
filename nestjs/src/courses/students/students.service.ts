@@ -12,13 +12,11 @@ export class StudentsService {
   ) {}
 
   public getById(id: number) {
-    return this.studentRepository.findOne(id, {
-      relations: ['user'],
-    });
+    return this.studentRepository.findOneOrFail(id, { relations: ['user'] });
   }
 
   public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
-    const student = await this.getById(studentId);
+    const student = await this.studentRepository.findOne(studentId);
     if (student == null) {
       return false;
     }

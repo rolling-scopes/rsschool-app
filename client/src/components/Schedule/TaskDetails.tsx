@@ -172,14 +172,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
                 </Col>
               </Row>
             )}
-            {/* {publicAttributes && (
-              <Row justify="center" align="middle" gutter={[16, 16]}>
-                <Col>
-                  <Text>JSON Attributes: </Text>
-                  <Text strong>{JSON.stringify(publicAttributes, null, 2)} </Text>
-                </Col>
-              </Row>
-            )} */}
             <div className="button__edit">
               <Button icon={<EditOutlined />} onClick={() => onEdit && onEdit(true)} />
             </div>

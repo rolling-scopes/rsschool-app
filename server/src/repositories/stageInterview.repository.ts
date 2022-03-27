@@ -57,12 +57,12 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
           : InterviewStatus.NotCompleted,
         student: {
           totalScore: it.student.totalScore,
-          cityName: it.student.user.cityName,
+          cityName: it.student.user.cityName ?? undefined,
           githubId: it.student.user.githubId,
           name: userService.createName(it.student.user),
         },
         interviewer: {
-          cityName: it.mentor.user.cityName,
+          cityName: it.mentor.user.cityName ?? undefined,
           githubId: it.mentor.user.githubId,
           name: userService.createName(it.mentor.user),
           preference: it.mentor.studentsPreference ?? 'any',

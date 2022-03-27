@@ -5,7 +5,6 @@ import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
 import { IUserSession, CourseRole } from '../../models';
-import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
@@ -67,9 +66,9 @@ export function registryRouter(logger?: ILogger) {
     if (state.isAdmin) {
       mentorRegistries = await repository.findAll();
     } else {
-      const coursesRoles = state.coursesRoles ?? {};
-      const coursesIds = Object.entries(coursesRoles)
-        .filter(([_, value = []]) => value.includes(CourseRole.Manager) || value.includes(CourseRole.Supervisor))
+      const courses = state.courses ?? {};
+      const coursesIds = Object.entries(courses)
+        .filter(([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor))
         .map(([key]) => Number(key));
       mentorRegistries = await repository.findByCoursesIds(coursesIds);
     }
@@ -148,11 +147,6 @@ export function registryRouter(logger?: ILogger) {
           registryPayload.status = 'approved';
           await getRepository(Mentor).save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
         }
-      }
-
-      // update session
-      if (registryPayload.status === 'approved') {
-        updateSession(ctx, { roles: { [courseId]: type } });
       }
 
       const registry = await getRepository(Registry).save(registryPayload);

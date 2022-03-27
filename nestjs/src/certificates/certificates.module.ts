@@ -1,15 +1,22 @@
-import { Student } from '@entities/student';
 import { Certificate } from '@entities/certificate';
+import { Course } from '@entities/course';
+import { Student } from '@entities/student';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from 'src/config';
-import { NotificationsModule } from 'src/notifications/notifications.module';
+import { UsersNotificationsModule } from '../users-notifications';
+import { ConfigModule } from '../config';
+import { CoursesModule } from '../courses/courses.module';
 import { CertificatesController } from './certificates.controller';
-import { CertifcationsService } from './certificates.service';
+import { CertificationsService } from './certificates.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Certificate, Student]), ConfigModule, NotificationsModule],
+  imports: [
+    TypeOrmModule.forFeature([Certificate, Student, Course]),
+    ConfigModule,
+    UsersNotificationsModule,
+    CoursesModule,
+  ],
   controllers: [CertificatesController],
-  providers: [CertifcationsService],
+  providers: [CertificationsService],
 })
 export class CertificatesModule {}

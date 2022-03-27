@@ -24,7 +24,7 @@ export class TasksService {
       const taskSolutions = courseTasks.map(courseTask => ({
         course: courseInfo,
         task: courseTask.task,
-        studentHasSolution: new Set<number>(courseTask.taskSolutions.map(solution => solution.studentId)),
+        studentHasSolution: new Set<number>(courseTask.taskSolutions?.map(solution => solution.studentId) ?? []),
       }));
 
       for (const student of students) {

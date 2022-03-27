@@ -23,6 +23,18 @@ export class StudentRepository extends AbstractRepository<Student> {
     await repo.cancelByStudent(courseId, githubId);
   }
 
+  public async setSelfStudy(courseId: number, githubId: string, comment = '') {
+    const student = await this.findByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await getRepository(Student).update(student.id, {
+      mentorId: null,
+      mentoring: false,
+      expellingReason: comment || '',
+    });
+  }
+
   public async restore(courseId: number, githubId: string) {
     const student = await this.findByGithubId(courseId, githubId);
     if (student == null) {
@@ -428,8 +440,8 @@ function transformStudent(record: Student): StudentBasic {
           id: record.mentor.id,
           name: userService.createName(record.mentor.user),
           githubId: record.mentor.user.githubId,
-          cityName: record.mentor.user.cityName,
-          countryName: record.mentor.user.countryName,
+          cityName: record.mentor.user.cityName ?? undefined,
+          countryName: record.mentor.user.countryName ?? undefined,
           isActive: !record.mentor.isExpelled,
         }
       : null,

@@ -45,8 +45,8 @@ const getTasks = (_: ILogger) => async (ctx: RouterContext) => {
     relations: ['discipline'],
     order: {
       updatedDate: 'DESC',
-    }
-  })
+    },
+  });
   setResponse(ctx, OK, tasks);
 };
 

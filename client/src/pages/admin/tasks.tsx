@@ -302,7 +302,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Task>) {
-  return {...modalData, discipline: modalData.discipline?.name};
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export default withSession(Page);

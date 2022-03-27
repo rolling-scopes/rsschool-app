@@ -8,9 +8,10 @@ import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask, CrossCheckComment, CrossCheckReview, CrossCheckCriteria } from 'services/course';
+import { CourseService, CrossCheckComment, CrossCheckReview, CrossCheckCriteria } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { CrossCheckHistory } from 'components/CrossCheck/CrossCheckHistory';
+import { CourseTaskDto } from 'api';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -20,7 +21,7 @@ function Page(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
   const [githubId, setGithubId] = useState(null as string | null);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [assignments, setAssignments] = useState([] as AssignmentLink[]);
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
   const [comments, setComments] = useState([] as CrossCheckComment[]);

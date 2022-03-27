@@ -21,12 +21,12 @@ export class DisciplinesService {
 
   public async create(data: CreateDisciplineDto) {
     const { id } = await this.repository.save(data);
-    return this.getById(id);
+    return this.repository.findOneOrFail(id);
   }
 
   public async update(id: number, data: UpdateDisciplineDto) {
     await this.repository.update(id, data);
-    return this.getById(id);
+    return this.repository.findOneOrFail(id);
   }
 
   public async delete(id: number): Promise<void> {

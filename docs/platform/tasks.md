@@ -50,7 +50,7 @@ Your username on the Codewars website should be the same as the GitHub nickname 
 
 ## Cross-check
 
-Description in a separate <span style="color:green_apple">[file](https://docs.rs.school/#/cross-check-flow)</span>
+Description in a separate <span style="color:green_apple">[file](cross-check-flow.md)</span>
 
 ### CodeJam
 

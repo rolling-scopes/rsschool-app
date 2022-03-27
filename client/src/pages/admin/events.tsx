@@ -8,24 +8,26 @@ import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { isAnyCoursePowerUser } from '../../domain/user';
+import { DisciplineService } from '../../services/discipline';
+import { IDiscipline } from '../../modules/Discipline/model';
 
 const { Content } = Layout;
 
 type Props = { session: Session };
 const service = new EventService();
-
-const disciplines = PRIMARY_SKILLS;
+const disciplinesService = new DisciplineService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
+  const [disciplines, setDisciplines] = useState<IDiscipline[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const data = await service.getEvents();
-    setData(data);
+    const [tasks, disciplines] = await Promise.all([service.getEvents(), disciplinesService.getAllDisciplines()]);
+    setData(tasks);
+    setDisciplines(disciplines);
   };
 
   useAsync(loadData, []);

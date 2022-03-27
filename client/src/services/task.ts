@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CourseTaskDtoTypeEnum } from 'api';
-import {IDiscipline} from "../modules/Discipline/model";
+import { IDiscipline } from '../modules/Discipline/model';
 
 export type TaskType = CourseTaskDtoTypeEnum;
 
