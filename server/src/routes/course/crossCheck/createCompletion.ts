@@ -25,7 +25,7 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
     await scoreService.saveScore(studentScore.studentId, courseTaskId, data);
   }
 
-  await taskService.changeCourseTaskState(courseTask, 'completed');
+  await taskService.changeCourseTaskStatus(courseTask, 'completed');
 
   setResponse(ctx, OK);
 };

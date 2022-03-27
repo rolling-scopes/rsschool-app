@@ -11,7 +11,7 @@ import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 
 export type CourseTaskChecker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
 
-export type CrossCheckState = 'initial' | 'distributed' | 'completed';
+export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
 
 export interface CourseTask {
   id: number;
@@ -27,7 +27,7 @@ export interface CourseTask {
   studentStartDate: string | null;
   studentEndDate: string | null;
   crossCheckEndDate: string | null;
-  crossCheckState: CrossCheckState;
+  crossCheckStatus: CrossCheckStatus;
   useJury: boolean;
   checker: CourseTaskChecker;
   taskOwnerId: number | null;

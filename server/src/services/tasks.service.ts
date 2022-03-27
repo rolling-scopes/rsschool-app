@@ -1,4 +1,4 @@
-import { CourseTask, CrossCheckState } from '../models/courseTask';
+import { CourseTask, CrossCheckStatus } from '../models/courseTask';
 import { getRepository } from 'typeorm';
 
 export async function getCourseTask(courseTaskId: number) {
@@ -16,6 +16,6 @@ export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: num
     .getOne();
 }
 
-export async function changeCourseTaskState(courseTask: CourseTask, crossCheckState: CrossCheckState) {
-  await getRepository(CourseTask).save({ ...courseTask, crossCheckState });
+export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckStatus: CrossCheckStatus) {
+  await getRepository(CourseTask).save({ ...courseTask, crossCheckStatus });
 }

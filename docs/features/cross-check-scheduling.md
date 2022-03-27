@@ -18,7 +18,7 @@ Everyday Cross-Check functionality at the beginning of the day starts 2 jobs:
 
 To track the status of a task, the CourseTask entity has been extended with 2 new properties:
 
-- `crossCheckState` - displays the current status of the task. Includes the following options:
+- `crossCheckStatus` - displays the current status of the task. Includes the following options:
   - **initial** - task submission deadline has not yet ended and it has not been distributed
   - **distributed** - task has been distributed for Cross-Check, the Cross-Check deadline has not yet arrived
   - **completed** - Cross-Check deadline has ended, the cross-check of the task has been completed

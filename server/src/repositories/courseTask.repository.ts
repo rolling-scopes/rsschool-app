@@ -44,7 +44,7 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
         studentStartDate: item.studentStartDate,
         studentEndDate: item.studentEndDate,
         crossCheckEndDate: item.crossCheckEndDate,
-        crossCheckState: item.crossCheckState,
+        crossCheckStatus: item.crossCheckStatus,
         resultsCount: raw ? Number(raw.taskResultCount) || Number(raw.taskInterviewResultCount) : 0,
         allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
         useJury: (item.task as Task).useJury,

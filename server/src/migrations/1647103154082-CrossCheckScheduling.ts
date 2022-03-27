@@ -6,12 +6,12 @@ export class CrossCheckScheduling1647103154082 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "course_task" ADD "crossCheckEndDate" TIMESTAMP WITH TIME ZONE`);
     await queryRunner.query(
-      `ALTER TABLE "course_task" ADD "crossCheckState" character varying NOT NULL DEFAULT 'initial'`,
+      `ALTER TABLE "course_task" ADD "crossCheckStatus" character varying NOT NULL DEFAULT 'initial'`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "course_task" DROP COLUMN "crossCheckState"`);
+    await queryRunner.query(`ALTER TABLE "course_task" DROP COLUMN "crossCheckStatus"`);
     await queryRunner.query(`ALTER TABLE "course_task" DROP COLUMN "crossCheckEndDate"`);
   }
 }

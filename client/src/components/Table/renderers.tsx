@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
-import { CourseTaskChecker, CrossCheckState } from '../../services/course';
+import { CourseTaskChecker, CrossCheckStatus } from '../../services/course';
 
 const { Text } = Typography;
 
@@ -22,7 +22,7 @@ export function crossCheckDateRenderer(value: string | null, { checker }: { chec
   return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
-export function crossCheckStateRenderer(value: CrossCheckState, { checker }: { checker: CourseTaskChecker }) {
+export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: CourseTaskChecker }) {
   return checker !== 'crossCheck' ? (
     'NA'
   ) : value === 'initial' ? (

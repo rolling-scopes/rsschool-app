@@ -1,13 +1,13 @@
 import { CourseTask } from '@entities/courseTask';
 
-export const isTaskNeededToStart = ({ crossCheckState, studentEndDate }: CourseTask) => {
+export const isTaskNeededToStart = ({ crossCheckStatus, studentEndDate }: CourseTask) => {
   const currTimestampUTC = Date.now();
   const studentEndDateTimestampUTC = Date.parse(studentEndDate as string);
-  return crossCheckState === 'initial' && currTimestampUTC > studentEndDateTimestampUTC;
+  return crossCheckStatus === 'initial' && currTimestampUTC > studentEndDateTimestampUTC;
 };
 
-export const isTaskNeededToFinish = ({ crossCheckState, crossCheckEndDate }: CourseTask) => {
+export const isTaskNeededToFinish = ({ crossCheckStatus, crossCheckEndDate }: CourseTask) => {
   const currTimestampUTC = Date.now();
   const crossCheckEndDateTimestampUTC = Date.parse(crossCheckEndDate);
-  return crossCheckState === 'distributed' && currTimestampUTC > crossCheckEndDateTimestampUTC;
+  return crossCheckStatus === 'distributed' && currTimestampUTC > crossCheckEndDateTimestampUTC;
 };

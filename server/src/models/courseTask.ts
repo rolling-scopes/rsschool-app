@@ -24,7 +24,7 @@ export enum Checker {
   CrossCheck = 'crossCheck',
 }
 
-export type CrossCheckState = 'initial' | 'distributed' | 'completed';
+export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
 
 @Entity()
 export class CourseTask {
@@ -109,5 +109,5 @@ export class CourseTask {
   duration: number;
 
   @Column({ type: 'varchar', default: 'initial' })
-  crossCheckState: CrossCheckState;
+  crossCheckStatus: CrossCheckStatus;
 }

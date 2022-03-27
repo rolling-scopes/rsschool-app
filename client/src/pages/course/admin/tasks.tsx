@@ -10,7 +10,7 @@ import {
   idFromArrayRenderer,
   stringSorter,
   tagsRenderer,
-  crossCheckStateRenderer,
+  crossCheckStatusRenderer,
 } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -301,10 +301,10 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
       sorter: stringSorter('crossCheckEndDate'),
     },
     {
-      title: 'Cross-Check State',
-      dataIndex: 'crossCheckState',
-      render: crossCheckStateRenderer,
-      sorter: stringSorter('crossCheckState'),
+      title: 'Cross-Check Status',
+      dataIndex: 'crossCheckStatus',
+      render: crossCheckStatusRenderer,
+      sorter: stringSorter('crossCheckStatus'),
     },
     { title: 'Max Score', dataIndex: 'maxScore' },
     {
