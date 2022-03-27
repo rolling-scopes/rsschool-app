@@ -201,7 +201,6 @@ function Page(props: CoursePageProps) {
             <Option value="assigned">Cross-Mentor</Option>
             <Option value="taskOwner">Task Owner</Option>
             <Option value="crossCheck">Cross-Check</Option>
-            <Option value="jury">Jury</Option>
           </Select>
         </Form.Item>
         <Form.Item

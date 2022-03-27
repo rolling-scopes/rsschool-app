@@ -8,10 +8,10 @@ import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
-
-export type CourseTaskChecker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+import { CoursesTasksApi } from 'api';
 
 export type CrossCheckState = 'initial' | 'distributed' | 'completed';
+type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export interface CourseTask {
   id: number;
@@ -29,9 +29,8 @@ export interface CourseTask {
   crossCheckEndDate: string | null;
   crossCheckState: CrossCheckState;
   useJury: boolean;
-  checker: CourseTaskChecker;
+  checker: Checker;
   taskOwnerId: number | null;
-  publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
   special?: string;
   duration?: number;
@@ -122,7 +121,6 @@ export interface CourseUser {
   githubId: string;
   courseId: number;
   isManager: boolean;
-  isJuryActivist: boolean;
   isSupervisor: boolean;
 }
 
@@ -152,6 +150,8 @@ export type AllStudents = { students: StudentBasic[]; assignedStudents: Assigned
 
 export type SearchStudent = UserBasic & { mentor: UserBasic | null };
 
+const courseTasksApi = new CoursesTasksApi();
+
 export class CourseService {
   private axios: AxiosInstance;
 
@@ -165,14 +165,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseTasks(status?: 'started' | 'inprogress' | 'finished') {
-    type Response = { data: CourseTask[] };
-    const result = await this.axios.get<Response>('/tasks', { params: { status } });
-    return result.data.data;
-  }
-
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
-    const data = await this.getCourseTasks(status);
+    const { data } = await courseTasksApi.getCourseTasks(this.courseId, status);
     return data.filter(t => t.checker === 'crossCheck');
   }
 
@@ -576,11 +570,6 @@ export class CourseService {
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get<any>(`/student/${githubId}/interviews`);
     return result.data.data as InterviewDetails[];
-  }
-
-  async getStudentCrossMentors(githubId: string) {
-    const result = await this.axios.get<any>(`/student/${githubId}/tasks/cross-mentors`);
-    return result.data.data as { name: string; mentor: any }[];
   }
 
   async getCrossCheckPairs(

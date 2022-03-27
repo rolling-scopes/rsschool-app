@@ -20,7 +20,6 @@ export enum Checker {
   Assigned = 'assigned',
   Mentor = 'mentor',
   TaskOwner = 'taskOwner',
-  Jury = 'jury',
   CrossCheck = 'crossCheck',
 }
 

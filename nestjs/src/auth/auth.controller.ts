@@ -6,8 +6,9 @@ import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '.';
 import { AuthService, CurrentRequest } from './auth.service';
 import { JWT_COOKIE_NAME } from './constants';
-import { AuthConnectionDto } from './dto/AuthConnectionDto';
+import { AuthConnectionDto } from './dto/auth-connection.dto';
 import { GithubStrategy } from './strategies/github.strategy';
+import * as dayjs from 'dayjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const twoDaysMs = 1000 * 60 * 60 * 24 * 2;
@@ -57,7 +58,10 @@ export class AuthController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   async createConnectLinkViaGithub(@Body() dto: AuthConnectionDto) {
-    const link = await this.githubStrategy.getAuthorizeUrl(dto);
+    const link = await this.githubStrategy.getAuthorizeUrl({
+      data: dto,
+      expires: dayjs().add(1, 'hour').toISOString(),
+    });
     return {
       link,
     };

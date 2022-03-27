@@ -8,8 +8,8 @@ export class StudentDto extends PersonDto {
   constructor(student: Student) {
     super({ id: student.id, firstName: student.user.firstName, lastName: student.user.firstName });
     this.active = !student.isExpelled;
-    this.cityName = student.user.cityName;
-    this.countryName = student.user.countryName;
+    this.cityName = student.user.cityName ?? null;
+    this.countryName = student.user.countryName ?? null;
     this.githubId = student.user.githubId;
     this.rank = student.rank;
     this.totalScore = student.totalScore;
@@ -19,11 +19,11 @@ export class StudentDto extends PersonDto {
   @ApiProperty()
   active: boolean;
 
-  @ApiProperty()
-  cityName: string;
+  @ApiProperty({ type: String, nullable: true })
+  cityName: string | null;
 
-  @ApiProperty()
-  countryName: string;
+  @ApiProperty({ type: String, nullable: true })
+  countryName: string | null;
 
   @ApiProperty()
   githubId: string;

@@ -1,7 +1,7 @@
 import { Button, Drawer, Form, Input, InputNumber, Select, Alert, Checkbox } from 'antd';
-import { CourseTask, CourseService } from 'services/course';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
+import { CoursesTasksApi } from 'api';
 
 type Props = {
   courseId: number;
@@ -13,14 +13,16 @@ type Props = {
   onClose: () => void;
 };
 
+const courseTasksApi = new CoursesTasksApi();
+
 export function ExpelCriteria(props: Props) {
-  const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
   const [applyEnabled, setApplyEnabled] = useState(false);
 
-  useAsync(async () => {
-    const courseTasks = await new CourseService(props.courseId).getCourseTasks();
-    setCourseTasks(courseTasks);
+  const { value: courseTasks = [] } = useAsync(async () => {
+    const { data } = await courseTasksApi.getCourseTasks(props.courseId);
+    return data;
   }, []);
+
   const [form] = Form.useForm();
   return (
     <Drawer

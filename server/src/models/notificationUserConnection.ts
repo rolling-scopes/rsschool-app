@@ -1,8 +1,18 @@
-import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+  UpdateDateColumn,
+  Unique,
+} from 'typeorm';
 import { NotificationChannel, User } from '.';
 import { NotificationChannelId } from './notificationChannel';
 
 @Entity()
+@Unique(['userId', 'channelId', 'externalId'])
 export class NotificationUserConnection {
   @ManyToOne(() => User, user => user.notificationConnections, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn()
@@ -23,7 +33,7 @@ export class NotificationUserConnection {
   @PrimaryColumn()
   channelId: NotificationChannelId;
 
-  @PrimaryColumn()
+  @Column()
   externalId: string;
 
   @Column({ default: true })

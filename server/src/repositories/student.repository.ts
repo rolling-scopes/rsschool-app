@@ -440,8 +440,8 @@ function transformStudent(record: Student): StudentBasic {
           id: record.mentor.id,
           name: userService.createName(record.mentor.user),
           githubId: record.mentor.user.githubId,
-          cityName: record.mentor.user.cityName,
-          countryName: record.mentor.user.countryName,
+          cityName: record.mentor.user.cityName ?? undefined,
+          countryName: record.mentor.user.countryName ?? undefined,
           isActive: !record.mentor.isExpelled,
         }
       : null,

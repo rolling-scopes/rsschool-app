@@ -20,7 +20,7 @@ import {
 import { CourseGuard, DefaultGuard } from '../../auth';
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { CourseTasksService, Status } from './course-tasks.service';
-import { CourseTaskDto } from './dto';
+import { CourseTaskDto, CourseTaskDetailedDto } from './dto';
 
 @Controller('courses/:courseId/tasks')
 @ApiTags('courses tasks')
@@ -42,5 +42,18 @@ export class CourseTasksController {
   ): Promise<CourseTaskDto[]> {
     const data = await this.courseTasksService.getAll(courseId, status);
     return data.map(item => new CourseTaskDto(item));
+  }
+
+  @Get('/:courseTaskId')
+  @ApiOkResponse({ type: CourseTaskDetailedDto })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getCourseTask' })
+  public async getById(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ): Promise<CourseTaskDetailedDto> {
+    const data = await this.courseTasksService.getById(courseTaskId);
+    return new CourseTaskDetailedDto(data);
   }
 }

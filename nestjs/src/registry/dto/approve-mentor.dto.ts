@@ -4,5 +4,5 @@ import { IsArray } from 'class-validator';
 export class ApproveMentorDto {
   @ApiProperty()
   @IsArray()
-  preselectedCourses: string[];
+  preselectedCourses!: string[];
 }

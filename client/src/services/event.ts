@@ -27,7 +27,7 @@ export class EventService {
   }
 
   async createEvent(data: Partial<Event>) {
-    const result = await axios.post<{ data: Event }>(`/api/event/`, data);
+    const result = await axios.post<{ data: Event }>(`/api/event`, data);
     return result.data.data;
   }
 

@@ -21,7 +21,6 @@ const userGroupService = new UserGroupApi();
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
   manager: 'volcano',
-  juryActivist: 'gold',
 };
 
 function Page(props: Props) {
@@ -100,11 +99,6 @@ function Page(props: Props) {
           <Col span={8}>
             <Form.Item name="isSupervisor" valuePropName="checked">
               <Checkbox>Supervisor</Checkbox>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item name="isJuryActivist" valuePropName="checked">
-              <Checkbox>Jury Activist</Checkbox>
             </Form.Item>
           </Col>
         </Row>
@@ -222,11 +216,6 @@ function getColumns(handleEditItem: any) {
       render: boolIconRenderer,
     },
     {
-      title: 'Jury Activist',
-      dataIndex: 'isJuryActivist',
-      render: boolIconRenderer,
-    },
-    {
       title: 'Actions',
       dataIndex: 'actions',
       render: (_: any, record: CourseUser) => (
@@ -242,7 +231,6 @@ function createRecord(values: any) {
   const data = {
     githubId: values.githubId,
     isManager: values.isManager,
-    isJuryActivist: values.isJuryActivist,
     isSupervisor: values.isSupervisor,
   };
   return data;
@@ -253,11 +241,10 @@ function createRecords(groups: UserGroupDto[]) {
     group.users.forEach(({ id }) => {
       users[id] = users[id] ?? {};
       users[id].isManager = users[id].isManager || group.roles.includes('manager');
-      users[id].isJuryActivist = users[id].isJuryActivist || group.roles.includes('juryActivist');
       users[id].isSupervisor = users[id].isSupervisor || group.roles.includes('supervisor');
     });
     return users;
-  }, {} as Record<string, { isManager: boolean; isJuryActivist: boolean; isSupervisor: boolean }>);
+  }, {} as Record<string, { isManager: boolean; isSupervisor: boolean }>);
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
 
