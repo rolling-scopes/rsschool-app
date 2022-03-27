@@ -23,3 +23,5 @@ To track the status of a task, the CourseTask entity has been extended with 2 ne
   - **distributed** - task has been distributed for Cross-Check, the Cross-Check deadline has not yet arrived
   - **completed** - Cross-Check deadline has ended, the cross-check of the task has been completed
 - `crossCheckEndDate` - datestring with planned Cross-Check deadline date
+
+NB! For switching between dev and prod hosts there's `RSSCHOOL_USE_PROD_HOST` environment variable in `nestjs` `.env` file. Don't forget to set it `true` if you want to use this feature on production.
