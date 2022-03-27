@@ -39,7 +39,7 @@ export class DisciplineService {
 
   async updateDiscipline(id: number, data: Partial<IDiscipline>) {
     try {
-      const result = await axios.put(`/api/v2/disciplines/${id}`, data);
+      const result = await axios.patch(`/api/v2/disciplines/${id}`, data);
       return result.data.data;
     } catch (e) {
       message.error('Something went wrong');
