@@ -11,7 +11,7 @@ import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 import { CoursesTasksApi } from 'api';
 
 export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
-type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
+export type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export interface CourseTask {
   id: number;
