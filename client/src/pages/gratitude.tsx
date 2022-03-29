@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
+import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import withSession, { Session, CourseRole } from 'components/withSession';
-import { GratitudeService } from 'services/gratitude';
+import withSession, { Session } from 'components/withSession';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
@@ -17,48 +17,24 @@ interface IGratitude {
   [name: string]: string | number | number[];
 }
 
-type Badge = { id: string; name: string; isManagerOnly: boolean };
-
-const heroBadges: Badge[] = [
-  { id: 'Congratulations', name: 'Congratulations', isManagerOnly: false },
-  { id: 'Expert_help', name: 'Expert help', isManagerOnly: false },
-  { id: 'Great_speaker', name: 'Great speaker', isManagerOnly: false },
-  { id: 'Good_job', name: 'Good job', isManagerOnly: false },
-  { id: 'Helping_hand', name: 'Helping hand', isManagerOnly: false },
-  { id: 'Hero', name: 'Hero', isManagerOnly: false },
-  { id: 'Thank_you', name: 'Thank you', isManagerOnly: false },
-  { id: 'Outstanding_work', name: 'Outstanding work', isManagerOnly: true },
-  { id: 'Top_performer', name: 'Top performer', isManagerOnly: true },
-  { id: 'Job_Offer', name: 'Job Offer', isManagerOnly: true },
-];
-
-const rolesForSpecialBadges = [CourseRole.Manager, CourseRole.Supervisor];
-
-const getAvailableBadges = ({ courses }: Session, id: number) => {
-  const userCourseRoles = courses?.[id]?.roles ?? [];
-  const isAvailableSpecialBadges = [...userCourseRoles].some(role => rolesForSpecialBadges.includes(role));
-
-  return heroBadges.filter((badge: Badge) => (!badge.isManagerOnly ? true : isAvailableSpecialBadges ? true : false));
-};
+const gratitudesApi = new GratitudesApi();
+const userService = new UserService();
+const coursesService = new CoursesService();
 
 function Page(props: Props) {
-  const [badges, setBadges] = useState(
-    getAvailableBadges(props.session, Number(localStorage.getItem('activeCourseId'))) as Badge[],
-  );
+  const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [courses, setCourses] = useState([] as Course[]);
 
-  const userService = new UserService();
-  const gratitudeService = new GratitudeService();
-  const coursesService = new CoursesService();
-
-  const loadData = async () => {
+  useAsync(async () => {
     const courses = await coursesService.getCourses();
+    const savedCourseId = Number(localStorage.getItem('activeCourseId'));
+    const courseId = savedCourseId ? savedCourseId : courses[0].id;
+    const { data: badges } = await gratitudesApi.getBadges(courseId);
     setCourses(courses);
-  };
-
-  useAsync(loadData, []);
+    setBadges(badges);
+  }, []);
 
   const loadUsers = async (searchText: string) => {
     return userService.searchUser(searchText);
@@ -69,8 +45,8 @@ function Page(props: Props) {
       setLoading(true);
       await Promise.all(
         (values.userId as number[]).map((id: number) =>
-          gratitudeService.postGratitude({
-            toUserId: id,
+          gratitudesApi.createGratitude({
+            userId: id,
             comment: values.comment as string,
             badgeId: values.badgeId as string,
             courseId: values.courseId as number,
@@ -86,9 +62,9 @@ function Page(props: Props) {
     }
   };
 
-  const onCourseChange = (value: number) => {
-    const badges = getAvailableBadges(props.session, value);
-    setBadges(badges);
+  const onCourseChange = async (value: number) => {
+    const { data } = await gratitudesApi.getBadges(value);
+    setBadges(data);
   };
 
   return (
@@ -114,7 +90,7 @@ function Page(props: Props) {
           </Select>
         </Form.Item>
         <Form.Item
-          initialValue="Thank_you"
+          initialValue={BadgeDtoIdEnum.ThankYou}
           name="badgeId"
           label="Badge"
           rules={[

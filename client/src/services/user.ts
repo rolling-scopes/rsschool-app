@@ -80,13 +80,6 @@ export class UserService {
     }
   }
 
-  async submitPrivateFeedback(data: { toUserId: number; comment: string }) {
-    await this.axios.post<any>(`/api/feedback/private`, {
-      toUserId: Number(data.toUserId),
-      comment: data.comment,
-    });
-  }
-
   async getMyProfile() {
     const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
     return response.data.data;
