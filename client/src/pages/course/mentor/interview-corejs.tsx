@@ -10,6 +10,7 @@ import { CourseService } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CommentInput } from 'components/Forms';
 import { AxiosError } from 'axios';
+import { CoursesTasksApi } from 'api';
 
 interface Record {
   questionId: string;
@@ -60,6 +61,8 @@ const initialValues: any = {
   score: null,
 };
 
+const courseTasksApi = new CoursesTasksApi();
+
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
@@ -75,8 +78,8 @@ function Page(props: CoursePageProps) {
   }, [githubId]);
 
   useAsync(async () => {
-    const courseTasks = await courseService.getCourseTasks();
-    const courseTask = courseTasks.find(courseTask => courseTask.type === 'interview');
+    const { data } = await courseTasksApi.getCourseTasks(courseId);
+    const courseTask = data.find(courseTask => courseTask.type === 'interview');
     if (!courseTask) {
       return;
     }

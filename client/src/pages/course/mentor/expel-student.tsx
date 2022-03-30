@@ -10,7 +10,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
-type ActionOnStudent = 'expel' | 'unassign';
+type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -56,6 +56,11 @@ function Page(props: CoursePageProps) {
     await courseService.unassignStudentFromMentor(githubId, data);
   };
 
+  const setSelfStudy = async (githubId: string, comment: string) =>
+    githubId === userGithubId
+      ? await courseService.selfSetSelfStudy(githubId, comment)
+      : await courseService.setSelfStudy(githubId, comment);
+
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) return;
     try {
@@ -66,6 +71,9 @@ function Page(props: CoursePageProps) {
           break;
         case 'unassign':
           await unassignStudent(values.githubId, values.comment);
+          break;
+        case 'self-study':
+          await setSelfStudy(values.githubId, values.comment);
           break;
         default:
           throw new Error(`Wrong action on student type: ${action}`);
@@ -94,7 +102,13 @@ function Page(props: CoursePageProps) {
       success: 'The student has been expelled',
     },
     unassign: {
-      description: 'Selected student will no longer be your mentee',
+      description:
+        'Selected student will no longer be your mentee. They will be put to wait list, so another mentor could take them',
+      reasonPhrase: 'Reason for unassigning:',
+      success: 'The student has been unassigned',
+    },
+    'self-study': {
+      description: 'Selected student will no longer be your mentee and can continue course without a mentor',
       reasonPhrase: 'Reason for unassigning:',
       success: 'The student has been unassigned',
     },
@@ -112,6 +126,7 @@ function Page(props: CoursePageProps) {
           <Radio.Group onChange={e => setAction(e.target.value)}>
             <Radio value="expel">Expel</Radio>
             <Radio value="unassign">Unassign</Radio>
+            <Radio value="self-study">Self-study</Radio>
           </Radio.Group>
         </Form.Item>
         <Typography.Paragraph type="warning">{actionMessages[action].description}</Typography.Paragraph>

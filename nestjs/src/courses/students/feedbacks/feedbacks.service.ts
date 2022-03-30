@@ -23,8 +23,8 @@ export class FeedbacksService {
     feedback: CreateStudentFeedbackDto,
     authorId: number,
   ): Promise<StudentFeedback> {
-    const student = await this.studentsRepository.findOne(studentId);
-    const mentor = await this.mentorsRepository.findOne({ userId: authorId, courseId: student.courseId });
+    const student = await this.studentsRepository.findOneOrFail(studentId);
+    const mentor = await this.mentorsRepository.findOneOrFail({ userId: authorId, courseId: student.courseId });
     const current = await this.getByStudentAndMentor(student.id, mentor.id);
 
     if (current) {
@@ -58,11 +58,13 @@ export class FeedbacksService {
     return this.getStudentFeedbackQuery().where('f.id = :id', { id }).getOneOrFail();
   }
 
-  public async getByStudentAndMentor(studentId: number, mentorId: number): Promise<StudentFeedback> {
-    return this.getStudentFeedbackQuery()
-      .where('f.studentId = :studentId', { studentId })
-      .andWhere('f.mentorId = :mentorId', { mentorId })
-      .getOne();
+  public async getByStudentAndMentor(studentId: number, mentorId: number): Promise<StudentFeedback | null> {
+    return (
+      (await this.getStudentFeedbackQuery()
+        .where('f.studentId = :studentId', { studentId })
+        .andWhere('f.mentorId = :mentorId', { mentorId })
+        .getOne()) ?? null
+    );
   }
 
   private getStudentFeedbackQuery() {

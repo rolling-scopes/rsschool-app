@@ -24,6 +24,25 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface ActivityDto
+ */
+export interface ActivityDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ActivityDto
+     */
+    'lastActivityTime': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ActivityDto
+     */
+    'isActive': boolean;
+}
+/**
+ * 
+ * @export
  * @interface AlertDto
  */
 export interface AlertDto {
@@ -56,7 +75,7 @@ export interface AlertDto {
      * @type {number}
      * @memberof AlertDto
      */
-    'courseId': number;
+    'courseId': number | null;
     /**
      * 
      * @type {string}
@@ -105,6 +124,41 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface BadgeDto
+ */
+export interface BadgeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeDto
+     */
+    'id': BadgeDtoIdEnum;
+}
+
+export const BadgeDtoIdEnum = {
+    Congratulations: 'Congratulations',
+    ExpertHelp: 'Expert_help',
+    GreatSpeaker: 'Great_speaker',
+    GoodJob: 'Good_job',
+    HelpingHand: 'Helping_hand',
+    Hero: 'Hero',
+    ThankYou: 'Thank_you',
+    OutstandingWork: 'Outstanding_work',
+    TopPerformer: 'Top_performer',
+    JobOffer: 'Job_Offer'
+} as const;
+
+export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
+
+/**
+ * 
+ * @export
  * @interface ChannelSettings
  */
 export interface ChannelSettings {
@@ -124,6 +178,104 @@ export interface ChannelSettings {
 /**
  * 
  * @export
+ * @interface CheckTasksDeadlineDto
+ */
+export interface CheckTasksDeadlineDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CheckTasksDeadlineDto
+     */
+    'deadlineInHours': number;
+}
+/**
+ * 
+ * @export
+ * @interface ConfigurableProfilePermissions
+ */
+export interface ConfigurableProfilePermissions {
+    /**
+     * 
+     * @type {PublicVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isProfileVisible'?: PublicVisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isAboutVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEducationVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {PartialStudentVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEnglishVisible'?: PartialStudentVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEmailVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isTelegramVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isSkypeVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isPhoneVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isContactsNotesVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isLinkedInVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isPublicFeedbackVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isMentorStatsVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {PartialStudentVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isStudentStatsVisible'?: PartialStudentVisibilitySettings;
+}
+/**
+ * 
+ * @export
  * @interface ConsentDto
  */
 export interface ConsentDto {
@@ -133,6 +285,74 @@ export interface ConsentDto {
      * @memberof ConsentDto
      */
     'consent': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface Contacts
+ */
+export interface Contacts {
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'phone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'epamEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'skype'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'telegram'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'notes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contacts
+     */
+    'linkedIn'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface ContactsVisibilitySettings
+ */
+export interface ContactsVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ContactsVisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ContactsVisibilitySettings
+     */
+    'student': boolean;
 }
 /**
  * 
@@ -276,6 +496,110 @@ export interface CourseDto {
 /**
  * 
  * @export
+ * @interface CourseTaskDetailedDto
+ */
+export interface CourseTaskDetailedDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'type': CourseTaskDetailedDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'checker': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'studentStartDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'taskOwnerId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseTaskDetailedDto
+     */
+    'publicAttributes': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'githubRepoName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'sourceGithubRepoUrl': string;
+}
+
+export const CourseTaskDetailedDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskDetailedDtoTypeEnum = typeof CourseTaskDetailedDtoTypeEnum[keyof typeof CourseTaskDetailedDtoTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface CourseTaskDto
  */
 export interface CourseTaskDto {
@@ -308,13 +632,7 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
-    'githubRepoName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseTaskDto
-     */
-    'sourceGithubRepoUrl': string;
+    'studentStartDate': string;
     /**
      * 
      * @type {string}
@@ -345,40 +663,52 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'scoreWeight': number;
-    /**
-     * 
-     * @type {object}
-     * @memberof CourseTaskDto
-     */
-    'publicAttributes': object;
+}
+
+export const CourseTaskDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskDtoTypeEnum = typeof CourseTaskDtoTypeEnum[keyof typeof CourseTaskDtoTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface CreateActivityDto
+ */
+export interface CreateActivityDto {
     /**
      * 
      * @type {boolean}
-     * @memberof CourseTaskDto
+     * @memberof CreateActivityDto
      */
-    'useJury': boolean;
+    'isActive': boolean;
 }
-
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CourseTaskDtoTypeEnum {
-    Jstask = 'jstask',
-    Kotlintask = 'kotlintask',
-    Objctask = 'objctask',
-    Htmltask = 'htmltask',
-    Ipynb = 'ipynb',
-    Selfeducation = 'selfeducation',
-    Codewars = 'codewars',
-    Test = 'test',
-    Codejam = 'codejam',
-    Interview = 'interview',
-    StageInterview = 'stage-interview',
-    Cvhtml = 'cv:html',
-    Cvmarkdown = 'cv:markdown'
+ * 
+ * @export
+ * @interface CreateActivityWebhookDto
+ */
+export interface CreateActivityWebhookDto {
+    /**
+     * 
+     * @type {SenderDto}
+     * @memberof CreateActivityWebhookDto
+     */
+    'sender': SenderDto;
 }
-
 /**
  * 
  * @export
@@ -451,6 +781,37 @@ export interface CreateDiscordServerDto {
 /**
  * 
  * @export
+ * @interface CreateGratitudeDto
+ */
+export interface CreateGratitudeDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateGratitudeDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateGratitudeDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateGratitudeDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateGratitudeDto
+     */
+    'badgeId': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -474,28 +835,24 @@ export interface CreateStudentFeedbackDto {
     'englishLevel': CreateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const CreateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type CreateStudentFeedbackDtoRecommendationEnum = typeof CreateStudentFeedbackDtoRecommendationEnum[keyof typeof CreateStudentFeedbackDtoRecommendationEnum];
+export const CreateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type CreateStudentFeedbackDtoEnglishLevelEnum = typeof CreateStudentFeedbackDtoEnglishLevelEnum[keyof typeof CreateStudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -556,6 +913,31 @@ export interface DisciplineDto {
 /**
  * 
  * @export
+ * @interface Discord
+ */
+export interface Discord {
+    /**
+     * 
+     * @type {number}
+     * @memberof Discord
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Discord
+     */
+    'username': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Discord
+     */
+    'discriminator': number;
+}
+/**
+ * 
+ * @export
  * @interface DiscordServerDto
  */
 export interface DiscordServerDto {
@@ -594,7 +976,32 @@ export interface DiscordServerDto {
      * @type {string}
      * @memberof DiscordServerDto
      */
-    'mentorsChatUrl': string;
+    'mentorsChatUrl': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Education
+ */
+export interface Education {
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'university': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Education
+     */
+    'faculty': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Education
+     */
+    'graduationYear': number;
 }
 /**
  * 
@@ -690,28 +1097,67 @@ export interface FeedbackSoftSkill {
     'id': FeedbackSoftSkillIdEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FeedbackSoftSkillIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
+export const FeedbackSoftSkillValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
 
+export type FeedbackSoftSkillValueEnum = typeof FeedbackSoftSkillValueEnum[keyof typeof FeedbackSoftSkillValueEnum];
+export const FeedbackSoftSkillIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeof FeedbackSoftSkillIdEnum];
+
+/**
+ * 
+ * @export
+ * @interface GeneralInfo
+ */
+export interface GeneralInfo {
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfo
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfo
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfo
+     */
+    'aboutMyself'?: string | null;
+    /**
+     * 
+     * @type {Location}
+     * @memberof GeneralInfo
+     */
+    'location': Location;
+    /**
+     * 
+     * @type {Array<Education>}
+     * @memberof GeneralInfo
+     */
+    'educationHistory'?: Array<Education> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfo
+     */
+    'englishLevel'?: string | null;
+}
 /**
  * 
  * @export
@@ -720,17 +1166,57 @@ export enum FeedbackSoftSkillIdEnum {
 export interface GratitudeDto {
     /**
      * 
+     * @type {PersonDto}
+     * @memberof GratitudeDto
+     */
+    'user': PersonDto;
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeDto
+     */
+    'id': number;
+    /**
+     * 
      * @type {string}
      * @memberof GratitudeDto
      */
-    'date': string;
+    'badgeId': GratitudeDtoBadgeIdEnum;
     /**
      * 
      * @type {string}
      * @memberof GratitudeDto
      */
     'comment': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeDto
+     */
+    'date': string;
 }
+
+export const GratitudeDtoBadgeIdEnum = {
+    Congratulations: 'Congratulations',
+    ExpertHelp: 'Expert_help',
+    GreatSpeaker: 'Great_speaker',
+    GoodJob: 'Good_job',
+    HelpingHand: 'Helping_hand',
+    Hero: 'Hero',
+    ThankYou: 'Thank_you',
+    OutstandingWork: 'Outstanding_work',
+    TopPerformer: 'Top_performer',
+    JobOffer: 'Job_Offer'
+} as const;
+
+export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
+
 /**
  * 
  * @export
@@ -749,6 +1235,25 @@ export interface InterviewDto {
      * @memberof InterviewDto
      */
     'attributes': object;
+}
+/**
+ * 
+ * @export
+ * @interface Location
+ */
+export interface Location {
+    /**
+     * 
+     * @type {string}
+     * @memberof Location
+     */
+    'cityName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Location
+     */
+    'countryName'?: string | null;
 }
 /**
  * 
@@ -779,13 +1284,13 @@ export interface MentorStudentDto {
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof MentorStudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -887,10 +1392,10 @@ export interface NotificationDto {
     'enabled': boolean;
     /**
      * 
-     * @type {NotificationScope}
+     * @type {NotificationType}
      * @memberof NotificationDto
      */
-    'scope': NotificationScope;
+    'type': NotificationType;
     /**
      * 
      * @type {Array<ChannelSettings>}
@@ -904,12 +1409,27 @@ export interface NotificationDto {
  * @enum {string}
  */
 
-export enum NotificationScope {
-    General = 'general',
-    Mentor = 'mentor',
-    Student = 'student'
-}
+export const NotificationType = {
+    Event: 'event',
+    Message: 'message'
+} as const;
 
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+
+
+/**
+ * 
+ * @export
+ * @interface NotificationUserConnectionsDto
+ */
+export interface NotificationUserConnectionsDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof NotificationUserConnectionsDto
+     */
+    'connections': object;
+}
 /**
  * 
  * @export
@@ -940,6 +1460,25 @@ export interface NotificationUserSettingsDto {
      * @memberof NotificationUserSettingsDto
      */
     'settings': object;
+}
+/**
+ * 
+ * @export
+ * @interface PartialStudentVisibilitySettings
+ */
+export interface PartialStudentVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PartialStudentVisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PartialStudentVisibilitySettings
+     */
+    'student': boolean;
 }
 /**
  * 
@@ -1102,6 +1641,62 @@ export interface ProfileCourseDto {
 /**
  * 
  * @export
+ * @interface ProfileInfoDto
+ */
+export interface ProfileInfoDto {
+    /**
+     * 
+     * @type {ConfigurableProfilePermissions}
+     * @memberof ProfileInfoDto
+     */
+    'permissionsSettings': ConfigurableProfilePermissions;
+    /**
+     * 
+     * @type {GeneralInfo}
+     * @memberof ProfileInfoDto
+     */
+    'generalInfo': GeneralInfo;
+    /**
+     * 
+     * @type {Contacts}
+     * @memberof ProfileInfoDto
+     */
+    'contacts': Contacts;
+    /**
+     * 
+     * @type {Discord}
+     * @memberof ProfileInfoDto
+     */
+    'discord'?: Discord | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileInfoDto
+     */
+    'isPermissionsSettingsChanged': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileInfoDto
+     */
+    'isProfileSettingsChanged': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PublicVisibilitySettings
+ */
+export interface PublicVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PublicVisibilitySettings
+     */
+    'all': boolean;
+}
+/**
+ * 
+ * @export
  * @interface ResumeCourseDto
  */
 export interface ResumeCourseDto {
@@ -1140,7 +1735,7 @@ export interface ResumeCourseDto {
      * @type {string}
      * @memberof ResumeCourseDto
      */
-    'certificateId': string;
+    'certificateId': string | null;
     /**
      * 
      * @type {boolean}
@@ -1337,29 +1932,25 @@ export interface ResumeDto {
     'website': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ResumeDtoMilitaryServiceEnum {
-    Served = 'served',
-    Liable = 'liable',
-    NotLiable = 'notLiable'
-}
+export const ResumeDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type ResumeDtoEnglishLevelEnum = typeof ResumeDtoEnglishLevelEnum[keyof typeof ResumeDtoEnglishLevelEnum];
+export const ResumeDtoMilitaryServiceEnum = {
+    Served: 'served',
+    Liable: 'liable',
+    NotLiable: 'notLiable'
+} as const;
+
+export type ResumeDtoMilitaryServiceEnum = typeof ResumeDtoMilitaryServiceEnum[keyof typeof ResumeDtoMilitaryServiceEnum];
 
 /**
  * 
@@ -1401,33 +1992,59 @@ export interface SaveCertificateDto {
 /**
  * 
  * @export
- * @interface SendNotificationDto
+ * @interface SendUserNotificationDto
  */
-export interface SendNotificationDto {
+export interface SendUserNotificationDto {
     /**
      * 
      * @type {string}
-     * @memberof SendNotificationDto
+     * @memberof SendUserNotificationDto
      */
     'notificationId': string;
     /**
      * 
      * @type {number}
-     * @memberof SendNotificationDto
+     * @memberof SendUserNotificationDto
      */
     'userId': number;
     /**
      * 
      * @type {object}
-     * @memberof SendNotificationDto
+     * @memberof SendUserNotificationDto
      */
     'data': object;
     /**
      * 
      * @type {number}
-     * @memberof SendNotificationDto
+     * @memberof SendUserNotificationDto
      */
     'expireDate': number;
+}
+/**
+ * 
+ * @export
+ * @interface SenderDto
+ */
+export interface SenderDto {
+    /**
+     * 
+     * @type {SenderLoginDto}
+     * @memberof SenderDto
+     */
+    'login': SenderLoginDto;
+}
+/**
+ * 
+ * @export
+ * @interface SenderLoginDto
+ */
+export interface SenderLoginDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SenderLoginDto
+     */
+    'githubId': string;
 }
 /**
  * 
@@ -1449,27 +2066,23 @@ export interface SoftSkillEntry {
     'value': SoftSkillEntryValueEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryIdEnum {
-    Responsible = 'skill.soft.responsible',
-    TeamPlayer = 'skill.soft.team-player',
-    Communicable = 'skill.soft.communicable'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SoftSkillEntryValueEnum {
-    None = 'None',
-    Poor = 'Poor',
-    Fair = 'Fair',
-    Good = 'Good',
-    Great = 'Great',
-    Excellent = 'Excellent'
-}
+export const SoftSkillEntryIdEnum = {
+    Responsible: 'skill.soft.responsible',
+    TeamPlayer: 'skill.soft.team-player',
+    Communicable: 'skill.soft.communicable'
+} as const;
+
+export type SoftSkillEntryIdEnum = typeof SoftSkillEntryIdEnum[keyof typeof SoftSkillEntryIdEnum];
+export const SoftSkillEntryValueEnum = {
+    None: 'None',
+    Poor: 'Poor',
+    Fair: 'Fair',
+    Good: 'Good',
+    Great: 'Great',
+    Excellent: 'Excellent'
+} as const;
+
+export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeof SoftSkillEntryValueEnum];
 
 /**
  * 
@@ -1500,13 +2113,13 @@ export interface StudentDto {
      * @type {string}
      * @memberof StudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {string}
      * @memberof StudentDto
      */
-    'countryName': string;
+    'countryName': string | null;
     /**
      * 
      * @type {string}
@@ -1611,7 +2224,7 @@ export interface StudentFeedbackDto {
      * @type {PersonDto}
      * @memberof StudentFeedbackDto
      */
-    'mentor': PersonDto;
+    'mentor': PersonDto | null;
     /**
      * 
      * @type {string}
@@ -1620,28 +2233,24 @@ export interface StudentFeedbackDto {
     'englishLevel': StudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum StudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const StudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
+
+export type StudentFeedbackDtoRecommendationEnum = typeof StudentFeedbackDtoRecommendationEnum[keyof typeof StudentFeedbackDtoRecommendationEnum];
+export const StudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
 /**
  * 
@@ -1707,16 +2316,16 @@ export interface UpdateNotificationDto {
     'enabled': boolean;
     /**
      * 
-     * @type {NotificationScope}
-     * @memberof UpdateNotificationDto
-     */
-    'scope': NotificationScope;
-    /**
-     * 
      * @type {Array<ChannelSettings>}
      * @memberof UpdateNotificationDto
      */
     'channels': Array<ChannelSettings>;
+    /**
+     * 
+     * @type {NotificationType}
+     * @memberof UpdateNotificationDto
+     */
+    'type': NotificationType;
 }
 /**
  * 
@@ -1769,29 +2378,116 @@ export interface UpdateStudentFeedbackDto {
     'englishLevel': UpdateStudentFeedbackDtoEnglishLevelEnum;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoRecommendationEnum {
-    Hire = 'hire',
-    NotHire = 'not-hire'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
-    Unknown = 'unknown',
-    A0 = 'a0',
-    A1 = 'a1',
-    A2 = 'a2',
-    B1 = 'b1',
-    B2 = 'b2',
-    C1 = 'c1',
-    C2 = 'c2'
-}
+export const UpdateStudentFeedbackDtoRecommendationEnum = {
+    Hire: 'hire',
+    NotHire: 'not-hire'
+} as const;
 
+export type UpdateStudentFeedbackDtoRecommendationEnum = typeof UpdateStudentFeedbackDtoRecommendationEnum[keyof typeof UpdateStudentFeedbackDtoRecommendationEnum];
+export const UpdateStudentFeedbackDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type UpdateStudentFeedbackDtoEnglishLevelEnum = typeof UpdateStudentFeedbackDtoEnglishLevelEnum[keyof typeof UpdateStudentFeedbackDtoEnglishLevelEnum];
+
+/**
+ * 
+ * @export
+ * @interface UpdateUserDto
+ */
+export interface UpdateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'firstName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'lastName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'primaryEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'cityName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'countryName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsNotes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsPhone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsEpamEmail'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsSkype'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsTelegram'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'contactsLinkedIn'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'notes'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'aboutMyself'?: string | null;
+}
 /**
  * 
  * @export
@@ -1921,8 +2617,257 @@ export interface UserNotificationsDto {
      * @type {object}
      * @memberof UserNotificationsDto
      */
-    'contacts': object;
+    'connections': object;
 }
+/**
+ * 
+ * @export
+ * @interface VisibilitySettings
+ */
+export interface VisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'mentor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'student': boolean;
+}
+
+/**
+ * ActivityApi - axios parameter creator
+ * @export
+ */
+export const ActivityApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateActivityDto} createActivityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createActivity: async (createActivityDto: CreateActivityDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createActivityDto' is not null or undefined
+            assertParamExists('createActivity', 'createActivityDto', createActivityDto)
+            const localVarPath = `/activity`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createActivityDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {CreateActivityWebhookDto} createActivityWebhookDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createActivityWebhook: async (createActivityWebhookDto: CreateActivityWebhookDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createActivityWebhookDto' is not null or undefined
+            assertParamExists('createActivityWebhook', 'createActivityWebhookDto', createActivityWebhookDto)
+            const localVarPath = `/activity/webhook`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createActivityWebhookDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivity: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/activity`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ActivityApi - functional programming interface
+ * @export
+ */
+export const ActivityApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ActivityApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateActivityDto} createActivityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createActivity(createActivityDto: CreateActivityDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createActivity(createActivityDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {CreateActivityWebhookDto} createActivityWebhookDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createActivityWebhook(createActivityWebhookDto: CreateActivityWebhookDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createActivityWebhook(createActivityWebhookDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getActivity(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getActivity(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ActivityApi - factory interface
+ * @export
+ */
+export const ActivityApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ActivityApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateActivityDto} createActivityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createActivity(createActivityDto: CreateActivityDto, options?: any): AxiosPromise<ActivityDto> {
+            return localVarFp.createActivity(createActivityDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CreateActivityWebhookDto} createActivityWebhookDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createActivityWebhook(createActivityWebhookDto: CreateActivityWebhookDto, options?: any): AxiosPromise<ActivityDto> {
+            return localVarFp.createActivityWebhook(createActivityWebhookDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getActivity(options?: any): AxiosPromise<ActivityDto> {
+            return localVarFp.getActivity(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ActivityApi - object-oriented interface
+ * @export
+ * @class ActivityApi
+ * @extends {BaseAPI}
+ */
+export class ActivityApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateActivityDto} createActivityDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public createActivity(createActivityDto: CreateActivityDto, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).createActivity(createActivityDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CreateActivityWebhookDto} createActivityWebhookDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public createActivityWebhook(createActivityWebhookDto: CreateActivityWebhookDto, options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).createActivityWebhook(createActivityWebhookDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ActivityApi
+     */
+    public getActivity(options?: AxiosRequestConfig) {
+        return ActivityApiFp(this.configuration).getActivity(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 /**
  * AlertsApi - axios parameter creator
@@ -2932,6 +3877,43 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTask: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseTask', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('getCourseTask', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/tasks/{courseTaskId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2967,6 +3949,41 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notifyTasksDeadlines: async (checkTasksDeadlineDto: CheckTasksDeadlineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'checkTasksDeadlineDto' is not null or undefined
+            assertParamExists('notifyTasksDeadlines', 'checkTasksDeadlineDto', checkTasksDeadlineDto)
+            const localVarPath = `/tasks/notify/changes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(checkTasksDeadlineDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2980,12 +3997,33 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseTaskDetailedDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTask(courseId, courseTaskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasks(courseId, status, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async notifyTasksDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notifyTasksDeadlines(checkTasksDeadlineDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3001,12 +4039,31 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTask(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CourseTaskDetailedDto> {
+            return localVarFp.getCourseTask(courseId, courseTaskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: any): AxiosPromise<Array<CourseTaskDto>> {
             return localVarFp.getCourseTasks(courseId, status, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notifyTasksDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: any): AxiosPromise<void> {
+            return localVarFp.notifyTasksDeadlines(checkTasksDeadlineDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3021,6 +4078,18 @@ export class CoursesTasksApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCourseTask(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
      * @param {'started' | 'inprogress' | 'finished'} [status] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3028,6 +4097,17 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCourseTasks(courseId, status, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public notifyTasksDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).notifyTasksDeadlines(checkTasksDeadlineDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3621,6 +4701,172 @@ export class DiscordServersApi extends BaseAPI {
 
 
 /**
+ * GratitudesApi - axios parameter creator
+ * @export
+ */
+export const GratitudesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGratitude: async (createGratitudeDto: CreateGratitudeDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createGratitudeDto' is not null or undefined
+            assertParamExists('createGratitude', 'createGratitudeDto', createGratitudeDto)
+            const localVarPath = `/gratitudes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createGratitudeDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBadges: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getBadges', 'courseId', courseId)
+            const localVarPath = `/gratitudes/badges/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GratitudesApi - functional programming interface
+ * @export
+ */
+export const GratitudesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GratitudesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createGratitude(createGratitudeDto: CreateGratitudeDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GratitudeDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createGratitude(createGratitudeDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBadges(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BadgeDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBadges(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * GratitudesApi - factory interface
+ * @export
+ */
+export const GratitudesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GratitudesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateGratitudeDto} createGratitudeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGratitude(createGratitudeDto: CreateGratitudeDto, options?: any): AxiosPromise<GratitudeDto> {
+            return localVarFp.createGratitude(createGratitudeDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBadges(courseId: number, options?: any): AxiosPromise<Array<BadgeDto>> {
+            return localVarFp.getBadges(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GratitudesApi - object-oriented interface
+ * @export
+ * @class GratitudesApi
+ * @extends {BaseAPI}
+ */
+export class GratitudesApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateGratitudeDto} createGratitudeDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public createGratitude(createGratitudeDto: CreateGratitudeDto, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).createGratitude(createGratitudeDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getBadges(courseId: number, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getBadges(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * MentorsApi - axios parameter creator
  * @export
  */
@@ -3826,70 +5072,6 @@ export const NotificationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {SendNotificationDto} sendNotificationDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendNotification: async (sendNotificationDto: SendNotificationDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'sendNotificationDto' is not null or undefined
-            assertParamExists('sendNotification', 'sendNotificationDto', sendNotificationDto)
-            const localVarPath = `/notifications/send`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(sendNotificationDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendNotificationBulk: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/notifications/send/bulk`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {UpdateNotificationDto} updateNotificationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3964,25 +5146,6 @@ export const NotificationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {SendNotificationDto} sendNotificationDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sendNotification(sendNotificationDto: SendNotificationDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sendNotification(sendNotificationDto, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sendNotificationBulk(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sendNotificationBulk(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {UpdateNotificationDto} updateNotificationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4026,23 +5189,6 @@ export const NotificationsApiFactory = function (configuration?: Configuration, 
          */
         getNotifications(options?: any): AxiosPromise<Array<NotificationDto>> {
             return localVarFp.getNotifications(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {SendNotificationDto} sendNotificationDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendNotification(sendNotificationDto: SendNotificationDto, options?: any): AxiosPromise<void> {
-            return localVarFp.sendNotification(sendNotificationDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendNotificationBulk(options?: any): AxiosPromise<void> {
-            return localVarFp.sendNotificationBulk(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4093,27 +5239,6 @@ export class NotificationsApi extends BaseAPI {
      */
     public getNotifications(options?: AxiosRequestConfig) {
         return NotificationsApiFp(this.configuration).getNotifications(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {SendNotificationDto} sendNotificationDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof NotificationsApi
-     */
-    public sendNotification(sendNotificationDto: SendNotificationDto, options?: AxiosRequestConfig) {
-        return NotificationsApiFp(this.configuration).sendNotification(sendNotificationDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof NotificationsApi
-     */
-    public sendNotificationBulk(options?: AxiosRequestConfig) {
-        return NotificationsApiFp(this.configuration).sendNotificationBulk(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4500,6 +5625,76 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProfileInfo: async (profileInfoDto: ProfileInfoDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'profileInfoDto' is not null or undefined
+            assertParamExists('updateProfileInfo', 'profileInfoDto', profileInfoDto)
+            const localVarPath = `/profile/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(profileInfoDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser: async (updateUserDto: UpdateUserDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserDto' is not null or undefined
+            assertParamExists('updateUser', 'updateUserDto', updateUserDto)
+            const localVarPath = `/profile/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -4518,6 +5713,26 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          */
         async getUserCourses(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProfileCourseDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserCourses(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfileInfo(profileInfoDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(updateUserDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4539,6 +5754,24 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         getUserCourses(username: string, options?: any): AxiosPromise<Array<ProfileCourseDto>> {
             return localVarFp.getUserCourses(username, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateProfileInfo(profileInfoDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateUser(updateUserDto, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -4558,6 +5791,28 @@ export class ProfileApi extends BaseAPI {
      */
     public getUserCourses(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getUserCourses(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ProfileInfoDto} profileInfoDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).updateProfileInfo(profileInfoDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateUserDto} updateUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).updateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4668,6 +5923,100 @@ export class RegistryApi extends BaseAPI {
      */
     public approveMentor(githubId: string, approveMentorDto: ApproveMentorDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).approveMentor(githubId, approveMentorDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ScheduleApi - axios parameter creator
+ * @export
+ */
+export const ScheduleApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notifyScheduleChanges: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/schedule/notify/changes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ScheduleApi - functional programming interface
+ * @export
+ */
+export const ScheduleApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ScheduleApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async notifyScheduleChanges(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notifyScheduleChanges(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ScheduleApi - factory interface
+ * @export
+ */
+export const ScheduleApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ScheduleApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notifyScheduleChanges(options?: any): AxiosPromise<void> {
+            return localVarFp.notifyScheduleChanges(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ScheduleApi - object-oriented interface
+ * @export
+ * @class ScheduleApi
+ * @extends {BaseAPI}
+ */
+export class ScheduleApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScheduleApi
+     */
+    public notifyScheduleChanges(options?: AxiosRequestConfig) {
+        return ScheduleApiFp(this.configuration).notifyScheduleChanges(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5337,6 +6686,35 @@ export const UsersNotificationsApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getUserNotificationConnections: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/notifications/connections`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getUserNotifications: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/notifications`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5355,6 +6733,70 @@ export const UsersNotificationsApiAxiosParamCreator = function (configuration?: 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendEmailConfirmationLink: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/notifications/confirmation/email`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {SendUserNotificationDto} sendUserNotificationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendNotification: async (sendUserNotificationDto: SendUserNotificationDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendUserNotificationDto' is not null or undefined
+            assertParamExists('sendNotification', 'sendUserNotificationDto', sendUserNotificationDto)
+            const localVarPath = `/users/notifications/send`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendUserNotificationDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5433,39 +6875,6 @@ export const UsersNotificationsApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @param {string} channelId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersNotificationsControllerDeleteUserConnection: async (channelId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'channelId' is not null or undefined
-            assertParamExists('usersNotificationsControllerDeleteUserConnection', 'channelId', channelId)
-            const localVarPath = `/users/notifications/connection/{channelId}`
-                .replace(`{${"channelId"}}`, encodeURIComponent(String(channelId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {NotificationConnectionExistsDto} notificationConnectionExistsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5514,8 +6923,36 @@ export const UsersNotificationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getUserNotificationConnections(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NotificationUserConnectionsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserNotificationConnections(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getUserNotifications(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserNotificationsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserNotifications(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendEmailConfirmationLink(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendEmailConfirmationLink(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {SendUserNotificationDto} sendUserNotificationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendNotification(sendUserNotificationDto: SendUserNotificationDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendNotification(sendUserNotificationDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5536,16 +6973,6 @@ export const UsersNotificationsApiFp = function(configuration?: Configuration) {
          */
         async usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto: UpsertNotificationConnectionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NotificationConnectionDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} channelId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async usersNotificationsControllerDeleteUserConnection(channelId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersNotificationsControllerDeleteUserConnection(channelId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5573,8 +7000,33 @@ export const UsersNotificationsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getUserNotificationConnections(options?: any): AxiosPromise<NotificationUserConnectionsDto> {
+            return localVarFp.getUserNotificationConnections(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getUserNotifications(options?: any): AxiosPromise<UserNotificationsDto> {
             return localVarFp.getUserNotifications(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendEmailConfirmationLink(options?: any): AxiosPromise<void> {
+            return localVarFp.sendEmailConfirmationLink(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SendUserNotificationDto} sendUserNotificationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendNotification(sendUserNotificationDto: SendUserNotificationDto, options?: any): AxiosPromise<void> {
+            return localVarFp.sendNotification(sendUserNotificationDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5593,15 +7045,6 @@ export const UsersNotificationsApiFactory = function (configuration?: Configurat
          */
         usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto: UpsertNotificationConnectionDto, options?: any): AxiosPromise<NotificationConnectionDto> {
             return localVarFp.usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} channelId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersNotificationsControllerDeleteUserConnection(channelId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.usersNotificationsControllerDeleteUserConnection(channelId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5628,8 +7071,39 @@ export class UsersNotificationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersNotificationsApi
      */
+    public getUserNotificationConnections(options?: AxiosRequestConfig) {
+        return UsersNotificationsApiFp(this.configuration).getUserNotificationConnections(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersNotificationsApi
+     */
     public getUserNotifications(options?: AxiosRequestConfig) {
         return UsersNotificationsApiFp(this.configuration).getUserNotifications(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersNotificationsApi
+     */
+    public sendEmailConfirmationLink(options?: AxiosRequestConfig) {
+        return UsersNotificationsApiFp(this.configuration).sendEmailConfirmationLink(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SendUserNotificationDto} sendUserNotificationDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersNotificationsApi
+     */
+    public sendNotification(sendUserNotificationDto: SendUserNotificationDto, options?: AxiosRequestConfig) {
+        return UsersNotificationsApiFp(this.configuration).sendNotification(sendUserNotificationDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5652,17 +7126,6 @@ export class UsersNotificationsApi extends BaseAPI {
      */
     public usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto: UpsertNotificationConnectionDto, options?: AxiosRequestConfig) {
         return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} channelId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersNotificationsApi
-     */
-    public usersNotificationsControllerDeleteUserConnection(channelId: string, options?: AxiosRequestConfig) {
-        return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerDeleteUserConnection(channelId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

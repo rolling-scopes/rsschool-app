@@ -19,20 +19,22 @@ export class UserGroupsService {
     const usersIds: number[] = [...new Set(userGroups.reduce((acc, { users }) => [...acc, ...users], [] as number[]))];
     const users = await this.usersService.getUsersByUserIds(usersIds);
 
-    return this.formatGroup(userGroups, users);
+    return this.formatGroups(userGroups, users);
   }
 
   public async create(data: CreateUserGroupDto) {
-    const userGroup = await this.repository.save(data);
+    const userGroup = await this.repository.create(data);
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
-    const [group] = this.formatGroup([userGroup], users);
+    const group = this.formatGroup(userGroup, users);
     return group;
   }
 
   public async update(id: number, data: UpdateUserGroupDto) {
-    const userGroup = await this.repository.save({ id, ...data });
+    await this.repository.update(id, data);
+
+    const userGroup = await this.repository.findOneOrFail(id);
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
-    const [group] = this.formatGroup([userGroup], users);
+    const group = this.formatGroup(userGroup, users);
     return group;
   }
 
@@ -57,14 +59,18 @@ export class UserGroupsService {
     };
   }
 
-  private formatGroup(userGroups: UserGroup[], users: User[]) {
-    const usersGroups: UserGroupDto[] = userGroups
-      .map(userGroup => ({
-        id: userGroup.id,
-        name: userGroup.name,
-        roles: userGroup.roles,
-        users: userGroup.users.map(this.formatUser(users)),
-      }))
+  private formatGroup(userGroup: UserGroup, users: User[]): UserGroupDto {
+    return {
+      id: userGroup.id,
+      name: userGroup.name,
+      roles: userGroup.roles,
+      users: userGroup.users.map(this.formatUser(users)),
+    };
+  }
+
+  private formatGroups(userGroups: UserGroup[], users: User[]): UserGroupDto[] {
+    const usersGroups = userGroups
+      .map(userGroup => this.formatGroup(userGroup, users))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     return usersGroups;

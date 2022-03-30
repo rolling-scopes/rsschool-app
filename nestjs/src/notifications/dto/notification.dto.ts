@@ -1,6 +1,7 @@
-import { Notification } from '@entities/notification';
+import { Notification, NotificationType } from '@entities/notification';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum } from 'class-validator';
 
 export class TelegramTemplate {
   @ApiProperty()
@@ -26,6 +27,7 @@ export class NotificationDto {
     this.id = notification.id;
     this.name = notification.name;
     this.enabled = notification.enabled;
+    this.type = notification.type;
     this.channels = notification.channels.map(settings => ({
       template: settings.template,
       channelId: settings.channelId,
@@ -40,6 +42,10 @@ export class NotificationDto {
 
   @ApiProperty()
   enabled: boolean;
+
+  @ApiProperty({ enum: NotificationType, enumName: 'NotificationType' })
+  @IsEnum(NotificationType)
+  public type: NotificationType;
 
   @ApiProperty({ type: ChannelSettings, isArray: true })
   public channels: ChannelSettings[];

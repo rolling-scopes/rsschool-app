@@ -17,6 +17,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
 -- Name: user_english_level_enum; Type: TYPE; Schema: public; Owner: rs_master
 --
 
@@ -647,7 +661,9 @@ ALTER SEQUENCE public.interview_question_id_seq OWNED BY public.interview_questi
 CREATE TABLE public.login_state (
     id character varying NOT NULL,
     "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
-    data text NOT NULL
+    data text NOT NULL,
+    "userId" integer,
+    expires timestamp without time zone
 );
 
 
@@ -781,7 +797,7 @@ CREATE TABLE public.notification (
     name character varying NOT NULL,
     "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
     "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
-    scope character varying DEFAULT 'general'::character varying NOT NULL,
+    type character varying DEFAULT 'event'::character varying NOT NULL,
     enabled boolean DEFAULT false NOT NULL
 );
 
@@ -1021,27 +1037,29 @@ ALTER SEQUENCE public.repository_event_id_seq OWNED BY public.repository_event.i
 
 CREATE TABLE public.resume (
     id integer NOT NULL,
-    "githubId" text NOT NULL,
-    name text,
-    "selfIntroLink" text,
-    "startFrom" text,
+    "githubId" character varying(256) NOT NULL,
+    name character varying(256),
+    "selfIntroLink" character varying(256),
+    "startFrom" character varying(32),
     "fullTime" boolean DEFAULT false NOT NULL,
     expires numeric,
-    "militaryService" text,
-    "englishLevel" text,
-    "avatarLink" text,
-    "desiredPosition" text,
+    "militaryService" character varying(32),
+    "englishLevel" character varying(8),
+    "avatarLink" character varying(512),
+    "desiredPosition" character varying(256),
     notes text,
-    phone text,
-    email text,
-    skype text,
-    telegram text,
-    linkedin text,
-    locations text,
-    "githubUsername" text,
-    website text,
+    phone character varying(32),
+    email character varying(256),
+    skype character varying(128),
+    telegram character varying(128),
+    linkedin character varying(512),
+    locations character varying(512),
+    "githubUsername" character varying(256),
+    website character varying(512),
     "isHidden" boolean DEFAULT false NOT NULL,
-    "visibleCourses" integer[] DEFAULT '{}'::integer[] NOT NULL
+    "visibleCourses" integer[] DEFAULT '{}'::integer[] NOT NULL,
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    "userId" integer
 );
 
 
@@ -1741,6 +1759,22 @@ ALTER SEQUENCE public.task_verification_id_seq OWNED BY public.task_verification
 
 
 --
+-- Name: typeorm_metadata; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.typeorm_metadata (
+    type character varying NOT NULL,
+    database character varying,
+    schema character varying,
+    "table" character varying,
+    name character varying,
+    value text
+);
+
+
+ALTER TABLE public.typeorm_metadata OWNER TO rs_master;
+
+--
 -- Name: user; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -2407,6 +2441,7 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 979	2021-06-23 09:54:07.833539	2021-07-26 21:01:38.322408	\N	\N	715	697	1	taskOwner	2084	2021-06-30 00:00:00+00	2021-07-19 23:59:00+00	23	\N	jstask	f		\N
 980	2021-06-23 09:56:42.176771	2021-07-09 06:19:59.834533	\N	\N	205	698	1	crossCheck	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	4	jstask	f		\N
 981	2021-06-23 09:57:51.078547	2021-07-17 12:45:15.908329	\N	\N	355	696	1	mentor	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	\N	jstask	f		\N
+431	2022-03-27 11:50:14.908491	2022-03-27 11:50:14.908491	\N	\N	100	498	1	mentor	\N	2022-03-27 11:50:00+00	2022-03-31 11:50:00+00	23	\N	\N	f		\N
 \.
 
 
@@ -2603,6 +2638,8 @@ COPY public.event (id, "createdDate", "updatedDate", name, "descriptionUrl", des
 211	2021-07-13 18:54:42.565201	2021-07-16 13:18:08.778557	Git for beginners	\N	Introduction to Git	Online Lecture	javascript
 212	2021-07-16 11:12:11.167369	2021-07-16 11:12:44.404702	Cross-Check deadline: English for kids S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md	\N	Cross-Check deadline	\N
 213	2021-07-20 13:47:14.868153	2021-07-20 13:49:26.368869	Cross-check deadline: Chess S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md	\N	Cross-Check deadline	javascript
+135	2022-03-27 12:11:38.539172	2022-03-27 12:11:38.539172	11	https://hello.com	\N	Offline Lecture	\N
+203	2022-03-27 12:12:46.314579	2022-03-27 12:12:46.314579	11	https://hello.com	\N	Offline Lecture	\N
 \.
 
 
@@ -2642,7 +2679,7 @@ COPY public.interview_question_category (id, "createdDate", "updatedDate", name)
 -- Data for Name: login_state; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.login_state (id, "createdDate", data) FROM stdin;
+COPY public.login_state (id, "createdDate", data, "userId", expires) FROM stdin;
 \.
 
 
@@ -2693,6 +2730,10 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 16	1643926895264	Notifications1643926895264
 17	1644695410918	NotificationConnection1644695410918
 18	1645364514538	RepositoryEvent1645364514538
+19	1645654601903	Opportunitites1645654601903
+20	1647175301446	TaskSolutionConstraint1647175301446
+21	1647550751147	NotificationType1647550751147
+22	1647885219936	LoginStateUserId1647885219936
 \.
 
 
@@ -2700,7 +2741,7 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 -- Data for Name: notification; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.notification (id, name, "createdDate", "updatedDate", scope, enabled) FROM stdin;
+COPY public.notification (id, name, "createdDate", "updatedDate", type, enabled) FROM stdin;
 mentorRegistrationApproval	Mentor registration approval	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291	mentor	f
 taskGrade	Task grade received	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291	student	f
 \.
@@ -2779,7 +2820,7 @@ COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdD
 -- Data for Name: resume; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.resume (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", expires, "militaryService", "englishLevel", "avatarLink", "desiredPosition", notes, phone, email, skype, telegram, linkedin, locations, "githubUsername", website, "isHidden", "visibleCourses") FROM stdin;
+COPY public.resume (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", expires, "militaryService", "englishLevel", "avatarLink", "desiredPosition", notes, phone, email, skype, telegram, linkedin, locations, "githubUsername", website, "isHidden", "visibleCourses", uuid, "userId") FROM stdin;
 \.
 
 
@@ -3265,6 +3306,7 @@ COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", desc
 734	2021-07-22 17:10:39.403863	2021-07-22 17:41:32.343542	Whack-A-Mole	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-6.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	javascript	{}	
 735	2021-07-26 04:57:34.397304	2021-07-27 07:39:38.807563	Test JS Basics [RU]	https://ru.code-basics.com/languages/javascript	\N	manual	f	f	f	\N	\N	selfeducation	stage0	javascript	{}	
 736	2021-07-27 20:49:41.263593	2021-07-27 20:49:41.263593	rs.ios.crosscheck.task9	https://github.com/rolling-scopes-school/rs.ios.stage-task9	\N	manual	f	f	f	\N	\N	objctask	stage3	ios-obj-c	{}	
+498	2022-03-27 11:50:14.892444	2022-03-27 11:50:14.892444	test	https://example.com		\N	\N	f	f	\N	\N	Kotlin task		\N	{}	
 \.
 
 
@@ -3372,6 +3414,14 @@ COPY public.task_verification (id, "createdDate", "updatedDate", "studentId", "c
 
 
 --
+-- Data for Name: typeorm_metadata; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.typeorm_metadata (type, database, schema, "table", name, value) FROM stdin;
+\.
+
+
+--
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -3463,7 +3513,7 @@ SELECT pg_catalog.setval('public.course_manager_id_seq', 30, true);
 -- Name: course_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.course_task_id_seq', 430, true);
+SELECT pg_catalog.setval('public.course_task_id_seq', 431, true);
 
 
 --
@@ -3491,7 +3541,7 @@ SELECT pg_catalog.setval('public.discord_server_id_seq', 2, true);
 -- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.event_id_seq', 125, true);
+SELECT pg_catalog.setval('public.event_id_seq', 224, true);
 
 
 --
@@ -3533,7 +3583,7 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 18, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 22, true);
 
 
 --
@@ -3631,7 +3681,7 @@ SELECT pg_catalog.setval('public.task_checker_id_seq', 4148, true);
 -- Name: task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.task_id_seq', 497, true);
+SELECT pg_catalog.setval('public.task_id_seq', 498, true);
 
 
 --
@@ -3694,7 +3744,7 @@ SELECT pg_catalog.setval('public.user_group_id_seq', 1, false);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 11564, true);
+SELECT pg_catalog.setval('public.user_id_seq', 11566, true);
 
 
 --
@@ -4058,11 +4108,11 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
--- Name: notification_user_connection PK_e6e33c165209dbd9cd05f086b1c; Type: CONSTRAINT; Schema: public; Owner: rs_master
+-- Name: notification_user_connection PK_e7ab7a5154b15417e5ee0e31a3b; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
 ALTER TABLE ONLY public.notification_user_connection
-    ADD CONSTRAINT "PK_e6e33c165209dbd9cd05f086b1c" PRIMARY KEY ("userId", "channelId", "externalId");
+    ADD CONSTRAINT "PK_e7ab7a5154b15417e5ee0e31a3b" PRIMARY KEY ("userId", "channelId");
 
 
 --
@@ -4186,19 +4236,19 @@ ALTER TABLE ONLY public."user"
 
 
 --
+-- Name: notification_user_connection UQ_c1665f13b0eb372fcb8d48ccf6a; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.notification_user_connection
+    ADD CONSTRAINT "UQ_c1665f13b0eb372fcb8d48ccf6a" UNIQUE ("userId", "channelId", "externalId");
+
+
+--
 -- Name: task_solution_result UQ_cd11c253afeee499efe93f3e184; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
 ALTER TABLE ONLY public.task_solution_result
     ADD CONSTRAINT "UQ_cd11c253afeee499efe93f3e184" UNIQUE ("courseTaskId", "studentId", "checkerId");
-
-
---
--- Name: resume UQ_ee6434baa5d6a66edf5c8fa1229; Type: CONSTRAINT; Schema: public; Owner: rs_master
---
-
-ALTER TABLE ONLY public.resume
-    ADD CONSTRAINT "UQ_ee6434baa5d6a66edf5c8fa1229" UNIQUE ("githubId");
 
 
 --
@@ -4323,6 +4373,13 @@ CREATE INDEX "IDX_33cc2ea503287d1e19e696c028" ON public.task_interview_result US
 
 
 --
+-- Name: IDX_33f33cc8ef29d805a97ff4628b; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_33f33cc8ef29d805a97ff4628b" ON public.notification USING btree (type);
+
+
+--
 -- Name: IDX_3cf45a981cf54c2b3e10f677c9; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -4358,6 +4415,13 @@ CREATE INDEX "IDX_600ad506d38c98395590e76ea1" ON public.student_feedback USING b
 
 
 --
+-- Name: IDX_6543e24d4d8714017acd1a1b39; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_6543e24d4d8714017acd1a1b39" ON public.resume USING btree ("userId");
+
+
+--
 -- Name: IDX_70824fef35e6038e459e58e035; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -4372,10 +4436,10 @@ CREATE INDEX "IDX_773a8c01eb6d281590cdbcaabd" ON public.notification_channel_set
 
 
 --
--- Name: IDX_7d5f118233212829d30962ce3a; Type: INDEX; Schema: public; Owner: rs_master
+-- Name: IDX_79b102f1b191c731920e2ea486; Type: INDEX; Schema: public; Owner: rs_master
 --
 
-CREATE INDEX "IDX_7d5f118233212829d30962ce3a" ON public.notification USING btree (scope);
+CREATE INDEX "IDX_79b102f1b191c731920e2ea486" ON public.login_state USING btree ("userId");
 
 
 --
@@ -4470,6 +4534,13 @@ CREATE INDEX "IDX_d0b6bedfc9eb1243b01facefe1" ON public.notification_user_settin
 
 
 --
+-- Name: IDX_d2236f176c9281802d3ff00d3f; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_d2236f176c9281802d3ff00d3f" ON public.login_state USING btree (expires);
+
+
+--
 -- Name: IDX_d223b6ab8859d668ab080c3628; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -4523,6 +4594,13 @@ CREATE INDEX "IDX_e848fe0c47f23605364a5f163f" ON public.student USING btree ("is
 --
 
 CREATE INDEX "IDX_e8aaf4d079a719ade8ebc1397e" ON public.task_solution_result USING btree ("checkerId");
+
+
+--
+-- Name: IDX_ee6434baa5d6a66edf5c8fa122; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_ee6434baa5d6a66edf5c8fa122" ON public.resume USING btree ("githubId");
 
 
 --
@@ -4772,6 +4850,14 @@ ALTER TABLE ONLY public.stage_interview_student
 
 
 --
+-- Name: resume FK_6543e24d4d8714017acd1a1b392; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.resume
+    ADD CONSTRAINT "FK_6543e24d4d8714017acd1a1b392" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
 -- Name: notification_user_connection FK_686acb0bbf9634ef2497e87582f; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -5017,6 +5103,14 @@ ALTER TABLE ONLY public.mentor
 
 ALTER TABLE ONLY public.task_result
     ADD CONSTRAINT "FK_e0c522b2cdf095ad5c5f51c0ae0" FOREIGN KEY ("courseTaskId") REFERENCES public.course_task(id);
+
+
+--
+-- Name: task_solution FK_e2487265adac81bea6f085d2fa0; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.task_solution
+    ADD CONSTRAINT "FK_e2487265adac81bea6f085d2fa0" FOREIGN KEY ("courseTaskId") REFERENCES public.course_task(id);
 
 
 --

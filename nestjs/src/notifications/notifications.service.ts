@@ -1,15 +1,13 @@
 import { Notification, NotificationId } from '@entities/notification';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigService } from 'src/config';
+import { ConfigService } from '../config';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { HttpService } from '@nestjs/axios';
-import { SendNotificationDto } from './dto/send-notification.dto';
 import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@entities/notificationChannelSettings';
 import { compile } from 'handlebars';
 import { NotificationChannelId } from '@entities/notificationChannel';
-import { UserNotificationsService } from 'src/users/users.notifications.service';
 import { emailTemplate } from './email-template';
 import { lastValueFrom } from 'rxjs';
 
@@ -21,7 +19,8 @@ export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
     private notificationsRepository: Repository<Notification>,
-    private userNotificationsService: UserNotificationsService,
+    @InjectRepository(NotificationChannelSettings)
+    private channelSettingsRepository: Repository<NotificationChannelSettings>,
     private configService: ConfigService,
     private httpService: HttpService,
   ) {}
@@ -48,31 +47,53 @@ export class NotificationsService {
     return this.notificationsRepository.delete({ id });
   }
 
-  public async sendNotification(notification: SendNotificationDto) {
-    const { userId, data, notificationId, expireDate } = notification;
-    const channels = await this.userNotificationsService.getUserNotificationSettings(userId, notificationId);
+  /**
+   * Messages to users regarless on user subscription status to specific channel
+   */
+  public async sendMessage(notification: {
+    notificationId: NotificationId;
+    userId: number;
+    data: object;
+    channelId: NotificationChannelId;
+    channelValue: string;
+  }) {
+    const { userId, data, notificationId, channelId, channelValue } = notification;
+    const channelSettings = await this.getChannelSettings(channelId, notificationId);
 
-    const channelMap = new Map<NotificationChannelId, NotificationData>();
-    channels.forEach(channel => {
-      const message = this.buildChannelMessage(channel, data);
-      if (message) {
-        const { channelId, template, to } = message;
-        channelMap.set(channelId, { template, to });
-      }
-    });
+    const message = channelSettings
+      ? this.buildChannelMessage({ ...channelSettings, externalId: channelValue }, data)
+      : null;
 
-    if (channelMap.size === 0) return;
+    if (!message) {
+      this.logger.error({
+        message: `failed to build message fo notification ${notification.notificationId} and user ${notification.userId}`,
+      });
+      return;
+    }
 
     await this.publishNotification({
       notificationId,
-      channelId: Array.from(channelMap.keys()),
+      channelId: [channelId],
       userId,
-      expireDate,
-      data: Object.fromEntries(channelMap) as Record<NotificationChannelId, NotificationData>,
+      data: {
+        [channelId]: {
+          template: message.template,
+          to: message.to,
+        },
+      },
     });
   }
 
-  private buildChannelMessage(channel: NotificationChannelSettings & { externalId: string }, data: object) {
+  private getChannelSettings(channelId: NotificationChannelId, notificationId: NotificationId) {
+    return this.channelSettingsRepository.findOne({
+      where: {
+        notificationId,
+        channelId,
+      },
+    });
+  }
+
+  public buildChannelMessage(channel: NotificationChannelSettings & { externalId: string }, data: object) {
     const { channelId, externalId, template } = channel;
     if (!externalId || !template) return;
 
@@ -91,7 +112,7 @@ export class NotificationsService {
     return channelMessage;
   }
 
-  private async publishNotification(notification: NotificationPayload) {
+  public async publishNotification(notification: NotificationPayload) {
     if (this.configService.isDev) return;
 
     const { restApiKey, restApiUrl } = this.configService.awsServices;
@@ -110,10 +131,10 @@ type NotificationPayload = {
   channelId: NotificationChannelId[];
   userId: number;
   expireDate?: number;
-  data: Record<NotificationChannelId, NotificationData>;
+  data: Partial<Record<NotificationChannelId, NotificationData>>;
 };
 
-type NotificationData = {
+export type NotificationData = {
   to: string;
   template: EmailTemplate | TelegramTemplate;
 };

@@ -20,7 +20,6 @@ import {
   ConfigurableProfilePermissions,
   Contacts,
   GeneralInfo,
-  Consent,
   Discord,
 } from 'common/models/profile';
 
@@ -37,9 +36,8 @@ import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
-
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { checkIsProfileOwner } from 'utils/profile-check';
+import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 
 type Props = {
   router: NextRouter;
@@ -56,6 +54,16 @@ type State = {
   isEditingModeEnabled: boolean;
   isInitialPermissionsSettingsChanged: boolean;
   isInitialProfileSettingsChanged: boolean;
+  connections: Partial<
+    Record<
+      NotificationChannel,
+      | {
+          value: string;
+          enabled: boolean;
+        }
+      | undefined
+    >
+  >;
 };
 
 export type ChangedPermissionsSettings = {
@@ -73,6 +81,7 @@ export class ProfilePage extends React.Component<Props, State> {
     isEditingModeEnabled: false,
     isInitialPermissionsSettingsChanged: false,
     isInitialProfileSettingsChanged: false,
+    connections: {},
   };
 
   private onPermissionsSettingsChange = async (
@@ -157,6 +166,7 @@ export class ProfilePage extends React.Component<Props, State> {
   };
 
   private userService = new UserService();
+  private notificationsService = new NotificationsService();
   private coursesService = new CoursesService();
 
   private getCoursesInfo = async (profile: ProfileInfo) =>
@@ -192,7 +202,10 @@ export class ProfilePage extends React.Component<Props, State> {
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
-      const profile = await this.userService.getProfileInfo(githubId);
+      const [profile, connections] = await Promise.all([
+        this.userService.getProfileInfo(githubId),
+        this.notificationsService.getUserConnections().catch(() => []),
+      ]);
 
       const coursesInfo = await this.getCoursesInfo(profile);
 
@@ -221,6 +234,7 @@ export class ProfilePage extends React.Component<Props, State> {
         initialPermissionsSettings,
         isEditingModeEnabled,
         initialProfileSettings,
+        connections: connections as State['connections'],
       });
     } catch (e) {
       this.setState({
@@ -244,6 +258,14 @@ export class ProfilePage extends React.Component<Props, State> {
     message.error('Error has occured. Please check your connection and try again');
   }
 
+  private sendEmailConfirmationLink = async () => {
+    try {
+      await this.userService.sendEmailConfirmationLink();
+    } catch (e) {
+      message.error('Error has occured. Please try again later');
+    }
+  };
+
   private saveProfile = async () => {
     const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
 
@@ -251,16 +273,16 @@ export class ProfilePage extends React.Component<Props, State> {
 
     if (profile) {
       try {
-        const { permissionsSettings, generalInfo, contacts, consents, discord } = profile;
+        const { permissionsSettings, generalInfo, contacts, discord } = profile;
         await this.userService.saveProfileInfo({
           permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
           generalInfo: generalInfo as GeneralInfo,
           contacts: contacts as Contacts,
-          consents: consents as Consent[],
           discord: discord as Discord,
           isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
           isProfileSettingsChanged: isInitialProfileSettingsChanged,
         });
+        const connections = await this.notificationsService.getUserConnections().catch(() => []);
 
         const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
         const initialProfileSettings = profile ? cloneDeep(profile) : null;
@@ -270,6 +292,7 @@ export class ProfilePage extends React.Component<Props, State> {
           initialProfileSettings,
           isInitialPermissionsSettingsChanged: false,
           isInitialProfileSettingsChanged: false,
+          connections: connections as State['connections'],
         });
         this.onSaveSuccess();
       } catch (e) {
@@ -321,6 +344,7 @@ export class ProfilePage extends React.Component<Props, State> {
       isInitialPermissionsSettingsChanged,
       isInitialProfileSettingsChanged,
       isProfileOwner,
+      connections,
     } = this.state;
     const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
     const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
@@ -370,6 +394,9 @@ export class ProfilePage extends React.Component<Props, State> {
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
+          connections={connections}
+          sendConfirmationEmail={this.sendEmailConfirmationLink}
+          isDataPendingSave={isSaveButtonVisible}
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
@@ -460,5 +487,9 @@ export class ProfilePage extends React.Component<Props, State> {
     );
   }
 }
+
+const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
+  return githubId === requestedGithubId;
+};
 
 export default withGoogleMaps(withRouter(withSession(ProfilePage)));

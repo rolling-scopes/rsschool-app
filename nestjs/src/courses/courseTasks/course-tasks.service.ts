@@ -12,7 +12,7 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export enum Status {
   Started = 'started',
@@ -37,6 +37,12 @@ export class CourseTasksService {
     });
   }
 
+  public getById(courseTaskId: number) {
+    return this.courseTaskRepository.findOneOrFail(courseTaskId, {
+      relations: ['task'],
+    });
+  }
+
   public getByOwner(username: string) {
     return this.courseTaskRepository
       .createQueryBuilder('t')
@@ -46,7 +52,7 @@ export class CourseTasksService {
       .getMany();
   }
 
-  private getFindConditionForStatus(status: 'started' | 'inprogress' | 'finished'): FindCondition<CourseTask> {
+  private getFindConditionForStatus(status?: 'started' | 'inprogress' | 'finished'): FindCondition<CourseTask> {
     const now = new Date().toISOString();
     let where: FindCondition<CourseTask> = {};
 

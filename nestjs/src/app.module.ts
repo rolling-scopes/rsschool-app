@@ -19,6 +19,9 @@ import { DiscordServersModule } from './discord-servers/discord-servers.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './userGroups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { ActivityModule } from './activity/activity.module';
+import { UsersNotificationsModule } from './users-notifications';
+import { GratitudesModule } from './gratitudes';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { ScheduleModule } from './schedule/schedule.module';
       ...config,
       autoLoadEntities: true,
     }),
+    ActivityModule,
     ConfigModule,
     AlertsModule,
     UsersModule,
@@ -43,6 +47,8 @@ import { ScheduleModule } from './schedule/schedule.module';
     OpportunitiesModule,
     UserGroupsModule,
     ScheduleModule,
+    UsersNotificationsModule,
+    GratitudesModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

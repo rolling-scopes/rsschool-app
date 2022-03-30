@@ -1,1 +1,0 @@
-export { DiscordService } from './discord';

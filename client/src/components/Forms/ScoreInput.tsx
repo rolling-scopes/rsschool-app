@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InputNumber, Form } from 'antd';
 import { CourseTask } from 'services/course';
 
-type Props = { maxScore?: number; courseTask?: CourseTask };
+type Props = { maxScore?: number; courseTask?: Pick<CourseTask, 'id' | 'maxScore'> };
 
 export function ScoreInput({ maxScore, courseTask }: Props) {
   const maxScoreValue = maxScore || (courseTask ? courseTask.maxScore || 100 : undefined);
