@@ -26,14 +26,13 @@ type Props = {
 
 export function Header(props: Props) {
   const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible } = props;
-
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
     <Menu>
       <Menu.Item key="0" style={isProfileEditingModeEnabled ? undefined : menuActiveItemStyle}>
         <Button
           type="link"
-          href={isProfilePage ? '#view' : '/profile'}
+          href={isProfilePage ? '#view' : '/profile#view'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('view') : undefined}
           style={{ textAlign: 'left' }}
         >
@@ -43,7 +42,7 @@ export function Header(props: Props) {
       <Menu.Item key="1" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={props.isProfilePage ? '#edit' : '/profile#edit'}
+          href={isProfilePage ? '#edit' : '/profile#edit'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('edit') : undefined}
           style={{ textAlign: 'left' }}
         >

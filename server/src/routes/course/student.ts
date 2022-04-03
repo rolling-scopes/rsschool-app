@@ -64,7 +64,7 @@ export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) =>
     comment: data.comment,
     courseId,
     fromUser: id,
-    toUser: data.toUserId,
+    toUserId: data.toUserId,
   };
   const result = await getRepository(Feedback).save(feedback);
 
