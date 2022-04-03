@@ -1,27 +1,26 @@
-import axios, { AxiosInstance } from 'axios';
 import { message } from 'antd';
-import { IDiscipline } from '../modules/Discipline/model';
-import { getServerAxiosProps } from '../utils/axios';
+import { DisciplinesApi, CreateDisciplineDto, UpdateDisciplineDto } from 'api';
+import { getApiConfiguration } from '../utils/axios';
 
 export class DisciplineService {
-  private axios: AxiosInstance;
+  private readonly disciplineApi: DisciplinesApi;
 
   constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token));
+    this.disciplineApi = new DisciplinesApi(getApiConfiguration(token));
   }
 
   async getAllDisciplines() {
     try {
-      const result = await this.axios.get('/api/v2/disciplines');
+      const result = await this.disciplineApi.getDisciplines();
       return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }
   }
 
-  async postDiscipline(data: Partial<IDiscipline>) {
+  async postDiscipline(data: CreateDisciplineDto) {
     try {
-      const result = await this.axios.post('/api/v2/disciplines', data);
+      const result = await this.disciplineApi.createDiscipline(data);
       return result.data;
     } catch (e) {
       message.error('Something went wrong');
@@ -30,17 +29,17 @@ export class DisciplineService {
 
   async deleteDiscipline(id: number) {
     try {
-      const result = await this.axios.delete(`/api/v2/disciplines/${id}`);
+      const result = await this.disciplineApi.deleteDiscipline(id);
       return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }
   }
 
-  async updateDiscipline(id: number, data: Partial<IDiscipline>) {
+  async updateDiscipline(id: number, data: UpdateDisciplineDto) {
     try {
-      const result = await axios.patch(`/api/v2/disciplines/${id}`, data);
-      return result.data.data;
+      const result = await this.disciplineApi.updateDiscipline(id, data);
+      return result.data;
     } catch (e) {
       message.error('Something went wrong');
     }

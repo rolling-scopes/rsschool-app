@@ -1,8 +1,8 @@
 import type { Session } from 'components/withSession';
+import { DisciplineDto } from 'api';
 import { isAdmin } from '../../../domain/user';
 import { Button, Layout, message } from 'antd';
 import { useMemo, useState } from 'react';
-import { IDiscipline } from '../model';
 import { AdminSider } from '../../../components/AdminSider';
 import { Header } from '../../../components/Header';
 import { DisciplineService } from '../../../services/discipline';
@@ -11,12 +11,12 @@ import { DisciplineModal } from './DisciplineModal';
 
 const { Content } = Layout;
 
-type IDisciplines = { session: Session; disciplines?: IDiscipline[] };
+type IDisciplines = { session: Session; disciplines?: DisciplineDto[] };
 
 export const Disciplines = (props: IDisciplines) => {
   const { session } = props;
   const [disciplines, setDisciplines] = useState(props.disciplines);
-  const [discipline, setDiscipline] = useState<IDiscipline | null>(null);
+  const [discipline, setDiscipline] = useState<DisciplineDto | null>(null);
   const disciplineService = useMemo(() => new DisciplineService(), []);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -38,7 +38,7 @@ export const Disciplines = (props: IDisciplines) => {
     setIsModalVisible(true);
   };
 
-  const handleModalShowUpdate = (discipline: IDiscipline) => {
+  const handleModalShowUpdate = (discipline: DisciplineDto) => {
     setDiscipline(discipline);
     setIsModalVisible(true);
   };
