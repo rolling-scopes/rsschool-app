@@ -1,13 +1,13 @@
 import { Form, Input, message, Modal } from 'antd';
 import { useEffect, useMemo } from 'react';
+import { DisciplineDto } from 'api';
 import { DisciplineService } from '../../../services/discipline';
-import { IDiscipline } from '../model';
 
 interface IDisciplineModal {
   isModalVisible: boolean;
   onCancel: () => void;
   loadDisciplines: () => Promise<void>;
-  discipline: IDiscipline | null;
+  discipline: DisciplineDto | null;
 }
 
 export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, discipline }: IDisciplineModal) {

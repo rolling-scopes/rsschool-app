@@ -1,5 +1,5 @@
 import { Button, Modal, Space, Table } from 'antd';
-import { IDiscipline } from '../model';
+import { DisciplineDto } from 'api';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
 import { DisciplineService } from '../../../services/discipline';
@@ -9,15 +9,15 @@ const { Column } = Table;
 const { confirm } = Modal;
 
 interface IDisciplineTable {
-  disciplines: IDiscipline[];
+  disciplines: DisciplineDto[];
   loadDisciplines: () => Promise<void>;
-  handleUpdate: (record: IDiscipline) => void;
+  handleUpdate: (record: DisciplineDto) => void;
 }
 
 export const DisciplineTable = ({ disciplines, loadDisciplines, handleUpdate }: IDisciplineTable) => {
   const disciplineService = useMemo(() => new DisciplineService(), []);
 
-  const deleteDisciplineHandler = (record: IDiscipline) => {
+  const deleteDisciplineHandler = (record: DisciplineDto) => {
     confirm({
       title: 'Do you want to delete this discipline?',
       icon: <ExclamationCircleOutlined />,
@@ -29,7 +29,7 @@ export const DisciplineTable = ({ disciplines, loadDisciplines, handleUpdate }: 
     });
   };
 
-  const updateDisciplineHandler = (record: IDiscipline) => {
+  const updateDisciplineHandler = (record: DisciplineDto) => {
     handleUpdate(record);
   };
 
