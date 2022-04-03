@@ -1,9 +1,8 @@
 import { Disciplines } from '../components/Disciplines';
-import { IDiscipline } from '../model';
-import { Session } from '../../../components/withSession';
+import { DisciplineDto } from 'api';
 
-type IDisciplinePage = { session: Session; disciplines?: IDiscipline[] };
+export type IDisciplinePage = { disciplines?: DisciplineDto[] };
 
-export const DisciplinePage = ({ session, disciplines }: IDisciplinePage) => {
-  return <Disciplines session={session} disciplines={disciplines} />;
+export const DisciplinePage = ({ disciplines }: IDisciplinePage) => {
+  return <Disciplines disciplines={disciplines} />;
 };
