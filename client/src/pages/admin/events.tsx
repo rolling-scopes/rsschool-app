@@ -11,22 +11,27 @@ import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
+import { DisciplineService } from '../../services/discipline';
+import { DisciplineDto } from 'api';
 
 const { Content } = Layout;
 
 type Props = { session: Session; courses: Course[] };
 const eventService = new EventService();
+const disciplinesService = new DisciplineService();
 
 const disciplines = PRIMARY_SKILLS;
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const events = await eventService.getEvents();
+    const [events, disciplines] = await Promise.all([eventService.getEvents(), disciplinesService.getAllDisciplines()]);
     setData(events);
+    setDisciplines(disciplines || []);
   };
 
   const { loading } = useAsync(loadData, []);
