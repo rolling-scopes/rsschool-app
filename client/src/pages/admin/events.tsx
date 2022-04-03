@@ -10,7 +10,7 @@ import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { isAnyCoursePowerUser } from '../../domain/user';
 import { DisciplineService } from '../../services/discipline';
-import { IDiscipline } from '../../modules/Discipline/model';
+import { DisciplineDto } from 'api';
 
 const { Content } = Layout;
 
@@ -20,14 +20,14 @@ const disciplinesService = new DisciplineService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
-  const [disciplines, setDisciplines] = useState<IDiscipline[]>([]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
     const [events, disciplines] = await Promise.all([service.getEvents(), disciplinesService.getAllDisciplines()]);
     setData(events);
-    setDisciplines(disciplines);
+    setDisciplines(disciplines || []);
   };
 
   useAsync(loadData, []);

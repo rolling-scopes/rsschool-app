@@ -13,7 +13,7 @@ import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { DisciplineService } from '../../services/discipline';
 import { isAnyCoursePowerUser } from '../../domain/user';
-import { IDiscipline } from '../../modules/Discipline/model';
+import { DisciplineDto } from 'api';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -23,7 +23,7 @@ const disciplinesService = new DisciplineService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
-  const [disciplines, setDisciplines] = useState<IDiscipline[]>([]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
@@ -32,7 +32,7 @@ function Page(props: Props) {
   useAsync(async () => {
     const [tasks, disciplines] = await Promise.all([service.getTasks(), disciplinesService.getAllDisciplines()]);
     setData(tasks);
-    setDisciplines(disciplines);
+    setDisciplines(disciplines || []);
   }, [modalData]);
 
   const handleAddItem = () => {
