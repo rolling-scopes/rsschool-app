@@ -1,3 +1,5 @@
+import { useState, useMemo } from 'react';
+import { useAsync, useLocalStorage } from 'react-use';
 import { Col, Row, Select, Tooltip, Button, Form, Upload, message } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { RcFile } from 'antd/lib/upload';
@@ -14,17 +16,14 @@ import { withSession } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { TableView, CalendarView, ListView } from 'components/Schedule';
 import withCourseData from 'components/withCourseData';
-import { useState, useMemo } from 'react';
 import { CourseEvent, CourseService, CourseTask, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { TIMEZONES } from '../../configs/timezones';
-import { useAsync, useLocalStorage } from 'react-use';
-import { useLoading } from 'components/useLoading';
 import { isMobileOnly } from 'mobile-device-detect';
-import { ViewMode, SPECIAL_TASK_TYPES } from 'components/Schedule/model';
-import UserSettings from 'components/Schedule/UserSettings/UserSettings';
-import { DEFAULT_COLORS } from 'components/Schedule/UserSettings/userSettingsHandlers';
+import { ViewMode, SPECIAL_TASK_TYPES, Column, CONFIGURABLE_COLUMNS } from 'components/Schedule/model';
+import ScheduleSettings from 'components/Schedule/ScheduleSettings/ScheduleSettings';
+import { DEFAULT_COLORS } from 'components/Schedule/ScheduleSettings/scheduleSettingsHandlers';
 import ModalFormEntity from '../../components/Schedule/ModalFormEntity';
 import moment from 'moment-timezone';
 import { isUndefined } from 'lodash';
@@ -36,54 +35,63 @@ const TAG_COLORS = 'tagColors';
 const LOCAL_HIDE_OLD_EVENTS = 'scheduleHideOldEvents';
 const LOCAL_HIDE_DONE_TASKS = 'scheduleHideDoneTasks';
 const LIMIT_FOR_DONE_TASKS = 'scheduleLimitForDoneTask';
+const COLUMNS_SHOWN = 'scheduleColumnsShown';
+const EVENT_TYPES_SHOWN = 'eventTypesShown';
+const SPLITTED_BY_WEEK = 'scheduleSplitedByWeek';
 
 export function SchedulePage(props: CoursePageProps) {
   const [form] = Form.useForm();
-  const [loading, withLoading] = useLoading(false);
-  const [data, setData] = useState<CourseEvent[]>([]);
-  const [typesFromBase, setTypesFromBase] = useState<string[]>([]);
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [scheduleViewMode, setScheduleViewMode] = useLocalStorage<string>(LOCAL_VIEW_MODE, getDefaultViewMode());
-  const [storedTagColors, setStoredTagColors] = useLocalStorage<object>(TAG_COLORS, DEFAULT_COLORS);
   const [isOldEventsHidden, setOldEventsHidden] = useLocalStorage<boolean>(LOCAL_HIDE_OLD_EVENTS, false);
   const [isDoneTasksHidden, setDoneTasksHidden] = useLocalStorage<boolean>(LOCAL_HIDE_DONE_TASKS, false);
-  const [limitForDoneTask, setLimitForDoneTask] = useLocalStorage<number>(LIMIT_FOR_DONE_TASKS, 100);
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const isAdmin = useMemo(
-    () => isCourseManager(props.session, props.course.id),
-    [props.session, props.course.id],
-  ) as boolean;
-  const filteredData = useMemo(() => {
-    let filteredData = data.slice(0);
-    if (isOldEventsHidden) {
-      const yesterday = moment.utc().subtract(1, 'day');
-      filteredData = data.filter(({ dateTime }) => moment(dateTime).isAfter(yesterday, 'day'));
-    }
+  const isAdmin = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
 
-    if (isDoneTasksHidden && limitForDoneTask) {
-      filteredData = filteredData.filter(({ done }) => !done || done < limitForDoneTask);
-    }
-
-    return filteredData;
-  }, [data, isOldEventsHidden, isDoneTasksHidden]);
+  const [splittedByWeek = false, setSplittedByWeek] = useLocalStorage<boolean>(SPLITTED_BY_WEEK, false);
+  const [eventTypesHidden = [], setEventTypesHidden] = useLocalStorage<string[]>(EVENT_TYPES_SHOWN, []);
+  const [columnsShown = [], setColumnsShown] = useLocalStorage<string[]>(COLUMNS_SHOWN, CONFIGURABLE_COLUMNS);
+  const [eventTypeTagsColors = [], setEventTypeTagsColors] = useLocalStorage<object>(TAG_COLORS, DEFAULT_COLORS);
+  const [limitForDoneTask = 100, setLimitForDoneTask] = useLocalStorage<number>(LIMIT_FOR_DONE_TASKS, 100);
+  const settings = {
+    splittedByWeek,
+    setSplittedByWeek,
+    eventTypesHidden,
+    setEventTypesHidden,
+    columnsShown,
+    setColumnsShown,
+    eventTypeTagsColors,
+    setEventTypeTagsColors,
+    limitForDoneTask,
+    setLimitForDoneTask,
+  };
 
   const loadData = async () => {
-    const [events, tasks] = await Promise.all([
+    const [courseEvents, courseTasks] = await Promise.all([
       courseService.getCourseEvents(),
       courseService.getCourseTasksForSchedule(),
     ]);
-    const data = events.concat(tasksToEvents(tasks)).sort((a, b) => a.dateTime.localeCompare(b.dateTime));
-
-    setData(data);
-
-    const distinctTags = Array.from(new Set(data.map(element => element.event.type)));
-    setTypesFromBase(distinctTags);
+    const events = courseEvents.concat(tasksToEvents(courseTasks)).sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+    const eventTypes = Array.from(new Set(events.map(({ event }) => event.type)));
+    return { events, eventTypes };
   };
+  const { value: { events = [], eventTypes = [] } = {}, loading } = useAsync(loadData, [courseService]);
 
-  useAsync(withLoading(loadData), [courseService]);
+  const filteredEvents = useMemo(() => {
+    let filteredData = events.slice(0);
+    if (isOldEventsHidden) {
+      const yesterday = moment.utc().subtract(1, 'day');
+      filteredData = filteredData.filter(({ dateTime }) => moment(dateTime).isAfter(yesterday, 'day'));
+    }
+    if (isDoneTasksHidden && limitForDoneTask !== undefined) {
+      filteredData = filteredData.filter(({ done }) => !done || done < limitForDoneTask);
+    }
+    return filteredData;
+  }, [events, isOldEventsHidden, isDoneTasksHidden]);
 
   const mapScheduleViewToComponent = {
     [ViewMode.TABLE]: TableView,
@@ -226,24 +234,23 @@ export function SchedulePage(props: CoursePageProps) {
           </Tooltip>
         </Col>
         <Col>
-          <UserSettings
-            typesFromBase={typesFromBase}
-            onSaveTagColors={setStoredTagColors}
-            storedTagColors={storedTagColors}
-            onSaveLimitForDoneTask={setLimitForDoneTask}
-            limitForDoneTask={limitForDoneTask}
+          <ScheduleSettings
+            eventTypes={eventTypes}
+            settings={settings}
           />
         </Col>
       </Row>
       <ScheduleView
-        data={filteredData}
+        data={filteredEvents}
         timeZone={timeZone}
         isAdmin={isAdmin}
         courseId={props.course.id}
         refreshData={loadData}
-        storedTagColors={storedTagColors}
+        storedTagColors={eventTypeTagsColors}
         limitForDoneTask={limitForDoneTask}
         alias={props.course.alias}
+        columnsShown={columnsShown}
+        settings={settings}
       />
       {isModalOpen && (
         <ModalFormEntity

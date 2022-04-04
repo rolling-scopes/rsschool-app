@@ -6,7 +6,7 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
-import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { DEFAULT_COLORS } from './ScheduleSettings/scheduleSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
 import { CHECKER_TYPES } from './model';
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit }) => {
-  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
+  const [tagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
   const { Title, Text } = Typography;
 
   const {
@@ -72,7 +72,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
 
         {type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(type, storedTagColors)}</Col>
+            <Col>{renderTagWithStyle(type, tagColors)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}

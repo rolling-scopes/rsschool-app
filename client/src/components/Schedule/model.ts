@@ -3,6 +3,19 @@ export enum ViewMode {
   LIST = 'LIST',
   CALENDAR = 'CALENDAR',
 }
+
+export enum Column {
+  Date = 'Date',
+  Time = 'Time',
+  Type = 'Type',
+  Special = 'Special',
+  Name = 'Name',
+  Organizer = 'Organizer',
+  Score = 'Score',
+}
+
+export const CONFIGURABLE_COLUMNS = ['Type', 'Special', 'Organizer', 'Score'];
+
 export interface ScheduleRow {
   id: number;
   event: {
@@ -75,8 +88,6 @@ export const SPECIAL_ENTITY_TAGS = [
   'aws',
   'jupyter',
 ];
-
-export const COLUMNS_TYPES = ['Type', 'Special', 'Organizer', 'Score'];
 
 export const CHECKER_TYPES = {
   'auto-test': 'Auto-Test',

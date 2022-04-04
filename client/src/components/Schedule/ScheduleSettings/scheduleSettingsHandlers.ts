@@ -1,8 +1,8 @@
-import { ColorState as IColorState } from 'react-color';
+import union from 'lodash/union';
 import { CSSProperties } from 'react';
-import _ from 'lodash';
-import { EVENT_TYPES, TASK_TYPES } from '../model';
+import { ColorState as IColorState } from 'react-color';
 import { CourseTaskDtoTypeEnum } from 'api';
+import { EVENT_TYPES, TASK_TYPES } from '../model';
 
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';
@@ -58,7 +58,7 @@ export const DEFAULT_COLORS = {
 };
 
 export const getDefaultColors = () => {
-  const types = _.union(TASK_TYPES, EVENT_TYPES);
+  const types = union(TASK_TYPES, EVENT_TYPES);
   const colorsWithoutDeadlineColor = pickerColors.filter(color => color !== DEADLINE_COLOR);
   const diffColorCount = colorsWithoutDeadlineColor.length;
 
@@ -78,17 +78,17 @@ export const setTagColor = (
   e: IColorState,
   tagName: string,
   localStorageHook: (value: object) => void,
-  storedTagColors = {},
+  tagColors = {},
 ) => {
-  localStorageHook({ ...storedTagColors, [tagName]: e.hex });
+  localStorageHook({ ...tagColors, [tagName]: e.hex });
 };
 
-export const getTagColor = (tagName: string, storedTagColors: Record<string, string> = {}) => {
-  return storedTagColors[tagName] || DEFAULT_COLOR;
+export const getTagColor = (tagName: string, tagColors: Record<string, string> = {}) => {
+  return tagColors[tagName] || DEFAULT_COLOR;
 };
 
-export const getTagStyle = (tagName: string, storedTagColors = {}, styles?: CSSProperties) => {
-  const tagColor: string = getTagColor(tagName, storedTagColors);
+export const getTagStyle = (tagName: string, tagColors = {}, styles?: CSSProperties) => {
+  const tagColor: string = getTagColor(tagName, tagColors);
   return {
     ...styles,
     borderColor: tagColor,

@@ -1,8 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { SettingOutlined } from '@ant-design/icons';
-import { Popconfirm, Dropdown, Table, Typography, Space, Form, Button, message } from 'antd';
+import { Popconfirm, Table, Typography, Space, Form, Button, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import moment from 'moment-timezone';
 import mergeWith from 'lodash/mergeWith';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -15,13 +13,12 @@ import {
   scoreRenderer,
 } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
-import { ScheduleRow } from './model';
+import { ScheduleRow, Column, CONFIGURABLE_COLUMNS } from './model';
+import { Settings } from './types';
 import EditableCell from './EditableCell';
-import FilterComponent from '../Table/FilterComponent';
 import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
-import { useLocalStorage } from 'react-use';
-import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { DEFAULT_COLORS } from './ScheduleSettings/scheduleSettingsHandlers';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Text } = Typography;
@@ -35,64 +32,27 @@ type Props = {
   isAdmin: boolean;
   courseId: number;
   refreshData: Function;
-  storedTagColors?: object;
+  columnsShown: string[];
+  tagColors?: object;
   limitForDoneTask?: number;
   alias: string;
-};
-
-const styles = {
-  backgroundColor: '#fff',
-  boxShadow: '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
-  borderRadius: '2px',
-  padding: '15px',
+  settings: Settings;
 };
 
 const getColumns = ({
   timeZone,
-  hidenColumnsAndTypes = [],
-  handleFilter,
-  setHidenColumnsAndTypes,
-  storedTagColors,
-  distinctTags,
-  handleSplitByWeek,
-  isSplitedByWeek,
+  tagColors,
+  splittedByWeek,
 }: {
   timeZone: string;
-  handleFilter: (event: CheckboxChangeEvent) => void;
-  setHidenColumnsAndTypes: (e: Array<string>) => void;
-  storedTagColors: object;
-  distinctTags: Array<string>;
-  handleSplitByWeek: (event: CheckboxChangeEvent) => void;
-  isSplitedByWeek: boolean | undefined;
-  hidenColumnsAndTypes: string[] | undefined;
+  tagColors: object;
+  splittedByWeek?: boolean;
 }) => [
   {
-    title: (
-      <Dropdown
-        overlayStyle={styles}
-        overlay={() => (
-          <FilterComponent
-            eventTypes={distinctTags}
-            hidenColumnsAndTypes={hidenColumnsAndTypes}
-            handleFilter={handleFilter}
-            setHidenColumnsAndTypes={setHidenColumnsAndTypes}
-            handleSplitByWeek={handleSplitByWeek}
-            isSplitedByWeek={isSplitedByWeek}
-          />
-        )}
-        placement="bottomLeft"
-        trigger={['click']}
-      >
-        <SettingOutlined />
-      </Dropdown>
-    ),
-    dataIndex: '#',
-    render: (_text: string, _record: CourseEvent, index: number) => index + 1,
-  },
-  {
-    title: 'Date',
+    key: 'Date',
+    title: Column.Date,
     dataIndex: 'dateTime',
-    render: isSplitedByWeek
+    render: splittedByWeek
       ? dateWithTimeZoneRenderer(timeZone, 'ddd - MMM Do YYYY')
       : dateWithTimeZoneRenderer(timeZone, 'MMM Do YYYY'),
     sorter: dateSorter('dateTime'),
@@ -100,25 +60,30 @@ const getColumns = ({
     editable: true,
   },
   {
-    title: 'Time',
+    key: 'Time',
+    title: Column.Time,
     dataIndex: 'dateTime',
     render: dateWithTimeZoneRenderer(timeZone, 'HH:mm'),
     editable: true,
   },
   {
-    title: 'Type',
+    key: 'Type',
+    title: Column.Type,
     dataIndex: ['event', 'type'],
-    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors, TASK_TYPES_MAP),
+    render: (tagName: string) => renderTagWithStyle(tagName, tagColors, TASK_TYPES_MAP),
     editable: true,
+    visible: false,
   },
   {
-    title: 'Special',
+    key: 'Special',
+    title: Column.Special,
     dataIndex: ['special'],
     render: (tags: string) => !!tags && tagsRenderer(tags.split(',')),
     editable: true,
   },
   {
-    title: 'Name',
+    key: 'Name',
+    title: Column.Name,
     dataIndex: ['event', 'name'],
     render: (value: string, row: any) => {
       return (
@@ -137,14 +102,16 @@ const getColumns = ({
     editable: true,
   },
   {
-    title: 'Organizer',
+    key: 'Organizer',
+    title: Column.Organizer,
     dataIndex: ['organizer', 'githubId'],
     render: (value: string) => !!value && <GithubUserLink value={value} />,
     ...getColumnSearchProps('organizer.githubId'),
     editable: true,
   },
   {
-    title: 'Score',
+    key: 'Score',
+    title: Column.Score,
     dataIndex: 'score',
     render: scoreRenderer,
   },
@@ -156,15 +123,14 @@ export function TableView({
   isAdmin,
   courseId,
   refreshData,
-  storedTagColors = DEFAULT_COLORS,
   limitForDoneTask,
+  columnsShown,
+  settings,
+  tagColors = DEFAULT_COLORS,
 }: Props) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
-  const [hidenColumnsAndTypes, setHidenColumnsAndTypes] = useLocalStorage<string[]>('settingsTypesAndColumns', []);
-  const [isSplitedByWeek, setIsSplitedByWeek] = useLocalStorage<boolean>('scheduleSplitedByWeek', false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const distinctTags = Array.from(new Set(data.map(element => element.event.type)));
 
   const isEditing = (record: CourseEvent) => `${record.id}${record.event.type}${record.event.name}` === editingKey;
 
@@ -190,21 +156,6 @@ export function TableView({
     } catch {
       message.error(`Failed to delete ${isTask ? 'task' : 'event'}. Please try later.`);
     }
-  };
-
-  const handleFilter = (event: CheckboxChangeEvent) => {
-    const { value, checked } = event.target;
-    if (checked && hidenColumnsAndTypes && hidenColumnsAndTypes.includes(value)) {
-      const filteredTypesAndColumns = hidenColumnsAndTypes.filter(el => el !== value);
-      setHidenColumnsAndTypes(filteredTypesAndColumns);
-    }
-    if (!checked && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(value)) {
-      setHidenColumnsAndTypes([...hidenColumnsAndTypes, value]);
-    }
-  };
-
-  const handleSplitByWeek = ({ target: { checked } }: CheckboxChangeEvent) => {
-    setIsSplitedByWeek(checked);
   };
 
   const cancel = () => {
@@ -298,23 +249,9 @@ export function TableView({
     ];
   };
 
-  const filteredData = data.filter(
-    element =>
-      element?.event.type && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(element.event.type.toString()),
-  );
-  const sortedColumns = getColumns({
-    timeZone,
-    hidenColumnsAndTypes,
-    handleFilter,
-    setHidenColumnsAndTypes,
-    storedTagColors,
-    distinctTags,
-    handleSplitByWeek,
-    isSplitedByWeek,
-  }).filter(
-    element => element?.title && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(element.title.toString()),
-  );
-  const columns = [...sortedColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
+  const filteredData = data.filter(({ event }) => !settings.eventTypesHidden.includes(event.type));
+  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.splittedByWeek }).filter(column => CONFIGURABLE_COLUMNS.includes(column.key) ? columnsShown.includes(column.key) : true);
+  const columns = [...filteredColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
 
   const mergedColumns = columns.map((col: any) => {
     if (!col.editable) {
@@ -344,7 +281,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record => getTableRowClass(record, isSplitedByWeek, limitForDoneTask)}
+        rowClassName={record => getTableRowClass(record, settings.splittedByWeek, limitForDoneTask)}
       />
     </Form>
   );

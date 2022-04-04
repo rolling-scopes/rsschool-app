@@ -6,7 +6,7 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
-import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { DEFAULT_COLORS } from './ScheduleSettings/scheduleSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
