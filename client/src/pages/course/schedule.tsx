@@ -243,7 +243,7 @@ export function SchedulePage(props: CoursePageProps) {
         isAdmin={isAdmin}
         courseId={props.course.id}
         refreshData={loadData}
-        storedTagColors={eventTypeTagsColors}
+        tagColors={eventTypeTagsColors}
         limitForDoneTask={limitForDoneTask}
         alias={props.course.alias}
         columnsShown={columnsShown}
