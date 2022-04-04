@@ -10,16 +10,9 @@ type ChangeTagColorProps = {
   onSaveLimitForDoneTask: (value: number) => void;
 };
 
-const TaskLimits: React.FC<ChangeTagColorProps> = ({
-  limitForDoneTask,
-  onSaveLimitForDoneTask,
-}) => (
-  <SettingsItem
-    header="Task limits"
-    IconComponent={PercentageOutlined}
-  >
-    <Text>Show limit for done tasks, %</Text>
-    {' '}
+const TaskLimits: React.FC<ChangeTagColorProps> = ({ limitForDoneTask, onSaveLimitForDoneTask }) => (
+  <SettingsItem header="Task limits" IconComponent={PercentageOutlined}>
+    <Text>Show limit for done tasks, %</Text>{' '}
     <InputNumber min={0} max={100} defaultValue={limitForDoneTask} onChange={onSaveLimitForDoneTask} />
   </SettingsItem>
 );

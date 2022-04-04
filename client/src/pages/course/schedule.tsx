@@ -21,7 +21,7 @@ import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { TIMEZONES } from '../../configs/timezones';
 import { isMobileOnly } from 'mobile-device-detect';
-import { ViewMode, SPECIAL_TASK_TYPES, Column, CONFIGURABLE_COLUMNS } from 'components/Schedule/model';
+import { ViewMode, SPECIAL_TASK_TYPES, CONFIGURABLE_COLUMNS } from 'components/Schedule/model';
 import ScheduleSettings from 'components/Schedule/ScheduleSettings/ScheduleSettings';
 import { DEFAULT_COLORS } from 'components/Schedule/ScheduleSettings/scheduleSettingsHandlers';
 import ModalFormEntity from '../../components/Schedule/ModalFormEntity';
@@ -234,10 +234,7 @@ export function SchedulePage(props: CoursePageProps) {
           </Tooltip>
         </Col>
         <Col>
-          <ScheduleSettings
-            eventTypes={eventTypes}
-            settings={settings}
-          />
+          <ScheduleSettings eventTypes={eventTypes} settings={settings} />
         </Col>
       </Row>
       <ScheduleView

@@ -13,15 +13,8 @@ type ChangeTagColorProps = {
   onSaveTagColors: (value: object) => void;
 };
 
-const ChangeTagColor: React.FC<ChangeTagColorProps> = ({
-  tagColors,
-  onSaveTagColors,
-  tags,
-}) => (
-  <SettingsItem
-    header="Change tag color"
-    IconComponent={BgColorsOutlined}
-  >
+const ChangeTagColor: React.FC<ChangeTagColorProps> = ({ tagColors, onSaveTagColors, tags }) => (
+  <SettingsItem header="Change tag color" IconComponent={BgColorsOutlined}>
     <Collapse accordion ghost>
       {tags.map(tag => {
         return (

@@ -250,7 +250,9 @@ export function TableView({
   };
 
   const filteredData = data.filter(({ event }) => !settings.eventTypesHidden.includes(event.type));
-  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.splittedByWeek }).filter(column => CONFIGURABLE_COLUMNS.includes(column.key) ? columnsShown.includes(column.key) : true);
+  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.splittedByWeek }).filter(column =>
+    CONFIGURABLE_COLUMNS.includes(column.key) ? columnsShown.includes(column.key) : true,
+  );
   const columns = [...filteredColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
 
   const mergedColumns = columns.map((col: any) => {

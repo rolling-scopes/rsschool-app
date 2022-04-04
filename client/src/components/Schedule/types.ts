@@ -1,6 +1,6 @@
 export interface Settings {
-  eventTypesHidden: string[],
-  setEventTypesHidden: (value: string[]) => void,
+  eventTypesHidden: string[];
+  setEventTypesHidden: (value: string[]) => void;
   columnsShown: string[];
   setColumnsShown: (value: string[]) => void;
   eventTypeTagsColors: object;

@@ -10,13 +10,12 @@ interface SettingsItemProps {
   IconComponent: ForwardRefExoticComponent<any>;
 }
 
-const SettingsItem: React.FC<SettingsItemProps> = ({
-  children,
-  header,
-  IconComponent,
-}) => {
+const SettingsItem: React.FC<SettingsItemProps> = ({ children, header, IconComponent }) => {
   return (
-    <Collapse style={{ marginBottom: 10 }} expandIcon={() => <IconComponent style={{ fontSize: '20px', color: '#08c' }} />}>
+    <Collapse
+      style={{ marginBottom: 10 }}
+      expandIcon={() => <IconComponent style={{ fontSize: '20px', color: '#08c' }} />}
+    >
       <Panel header={<Text strong>{header}</Text>} key={header}>
         {children}
       </Panel>

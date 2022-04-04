@@ -36,7 +36,11 @@ const ScheduleSettings: React.FC<Props> = ({ settings, eventTypes }) => {
           limitForDoneTask={settings.limitForDoneTask}
           onSaveLimitForDoneTask={settings.setLimitForDoneTask}
         />
-        <Checkbox value="" checked={settings.splittedByWeek} onChange={({ target: { checked } }) => settings.setSplittedByWeek(checked)}>
+        <Checkbox
+          value=""
+          checked={settings.splittedByWeek}
+          onChange={({ target: { checked } }) => settings.setSplittedByWeek(checked)}
+        >
           Splitted by week
         </Checkbox>
       </Drawer>
