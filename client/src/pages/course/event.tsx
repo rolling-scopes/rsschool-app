@@ -11,11 +11,11 @@ import { isCourseManager } from 'domain/user';
 import { TaskDetails, EventDetails } from 'components/Schedule/EventDetails';
 import { AddEventModal } from 'components/Schedule/AddEventModal';
 
-export function EntityDetailsPage(props: CoursePageProps) {
+export function EventPage(props: CoursePageProps) {
   const { session, course } = props;
 
   const router = useRouter();
-  const { entityType, entityId } = router.query;
+  const { type, id } = router.query;
   const alias = Array.isArray(course) ? course[0].alias : course.alias;
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -25,12 +25,12 @@ export function EntityDetailsPage(props: CoursePageProps) {
   const isAdmin = useMemo(() => isCourseManager(session, course.id), [session, course]);
 
   const loadData = async () => {
-    if (entityType === 'task') {
-      const entity = await courseService.getCourseTask(entityId as string);
+    if (type === 'task') {
+      const entity = await courseService.getCourseTask(id as string);
       setEntityData(entity as CourseTaskDetails);
     }
-    if (entityType === 'event') {
-      const entity = await courseService.getEventById(entityId as string);
+    if (type === 'event') {
+      const entity = await courseService.getEventById(id as string);
       setEntityData(entity as CourseEvent);
     }
   };
@@ -55,8 +55,8 @@ export function EntityDetailsPage(props: CoursePageProps) {
 
   return (
     <>
-      <Header title={entityType === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
-      {entityType === 'task' && (
+      <Header title={type === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
+      {type === 'task' && (
         <TaskDetails
           taskData={entityData as CourseTaskDetails}
           alias={alias}
@@ -64,7 +64,7 @@ export function EntityDetailsPage(props: CoursePageProps) {
           isAdmin={isAdmin}
         />
       )}
-      {entityType === 'event' && (
+      {type === 'event' && (
         <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} />
       )}
       {isModalOpen && (
@@ -80,4 +80,4 @@ export function EntityDetailsPage(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(EntityDetailsPage));
+export default withCourseData(withSession(EventPage));

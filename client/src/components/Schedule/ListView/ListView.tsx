@@ -7,6 +7,7 @@ import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
+import { getEventLink } from 'components/Schedule/utils';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -152,7 +153,7 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
           <th style={{ width: '80%' }}>
             <Link
               prefetch={false}
-              href={`/course/entity-details?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
+              href={getEventLink(alias, id, isTask)}
             >
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>

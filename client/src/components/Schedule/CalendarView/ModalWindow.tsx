@@ -5,6 +5,7 @@ import moment from 'moment';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTagWithStyle, urlRenderer } from 'components/Table/renderers';
 import { CourseEvent } from 'services/course';
+import { getEventLink } from 'components/Schedule/utils';
 
 const { Title, Text } = Typography;
 
@@ -20,9 +21,7 @@ type Props = {
 const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, storedTagColors, alias }) => {
   const typeHeader = data.isTask ? 'Task:' : 'Event:';
   const title = (
-    <Link
-      href={`/course/entity-details?course=${alias}&entityType=${data.isTask ? 'task' : 'event'}&entityId=${data.id}`}
-    >
+    <Link href={getEventLink(alias, data.id, data.isTask)}>
       <a>
         <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
           {`${typeHeader} ${data.event.name}`}

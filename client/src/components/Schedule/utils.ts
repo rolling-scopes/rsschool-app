@@ -8,6 +8,8 @@ import { EVENT_TYPES, TASK_TYPES } from './model';
 import { PICKER_COLORS, DEFAULT_COLOR, DEADLINE_COLOR } from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
 
+export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) => `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
+
 export const getDefaultColors = () => {
   const types = union(TASK_TYPES, EVENT_TYPES);
   const colorsWithoutDeadlineColor = PICKER_COLORS.filter(color => color !== DEADLINE_COLOR);
