@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Badge, Typography, Tooltip } from 'antd';
-import { getMonthValue, getListData } from '../utils/filters';
+import { getMonthValue, getListData } from './utils';
 import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';

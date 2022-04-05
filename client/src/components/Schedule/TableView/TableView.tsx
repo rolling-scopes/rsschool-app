@@ -13,13 +13,13 @@ import {
   scoreRenderer,
 } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
-import { ScheduleRow, Column, CONFIGURABLE_COLUMNS } from './model';
-import { Settings } from './types';
+import { ScheduleRow, Column, CONFIGURABLE_COLUMNS } from '../model';
 import EditableCell from './EditableCell';
 import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
-import { DEFAULT_COLORS } from './ScheduleSettings/scheduleSettingsHandlers';
+import { DEFAULT_COLORS } from 'components/Schedule/constants';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
+import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
 
 const { Text } = Typography;
 
@@ -36,7 +36,7 @@ type Props = {
   tagColors?: object;
   limitForDoneTask?: number;
   alias: string;
-  settings: Settings;
+  settings: ScheduleSettings;
 };
 
 const getColumns = ({
@@ -250,8 +250,8 @@ export function TableView({
   };
 
   const filteredData = data.filter(({ event }) => !settings.eventTypesHidden.includes(event.type));
-  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.splittedByWeek }).filter(column =>
-    CONFIGURABLE_COLUMNS.includes(column.key) ? columnsShown.includes(column.key) : true,
+  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.isSplittedByWeek }).filter(column =>
+    CONFIGURABLE_COLUMNS.includes(column.key) ? !columnsShown.includes(column.key) : true,
   );
   const columns = [...filteredColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
 
@@ -283,7 +283,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record => getTableRowClass(record, settings.splittedByWeek, limitForDoneTask)}
+        rowClassName={record => getTableRowClass(record, settings.isSplittedByWeek, limitForDoneTask)}
       />
     </Form>
   );

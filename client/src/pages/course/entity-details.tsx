@@ -8,9 +8,8 @@ import { useLoading } from 'components/useLoading';
 import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
-import TaskDetails from 'components/Schedule/TaskDetails';
-import EventDetails from 'components/Schedule/EventDetails';
-import ModalFormEntity from 'components/Schedule/ModalFormEntity';
+import { TaskDetails, EventDetails } from 'components/Schedule/EventDetails';
+import { AddEventModal } from 'components/Schedule/AddEventModal';
 
 export function EntityDetailsPage(props: CoursePageProps) {
   const { session, course } = props;
@@ -69,7 +68,7 @@ export function EntityDetailsPage(props: CoursePageProps) {
         <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} />
       )}
       {isModalOpen && (
-        <ModalFormEntity
+        <AddEventModal
           visible={isModalOpen}
           editableRecord={editableRecord as CourseEvent}
           handleCancel={closeModal}

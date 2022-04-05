@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
 import FormEntity from './FormEntity';
-import useWindowDimensions from '../../utils/useWindowDimensions';
+import useWindowDimensions from '../../../utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
-import TaskDetails from './TaskDetails';
-import EventDetails from './EventDetails';
+import TaskDetails from '../EventDetails/TaskDetails';
+import EventDetails from '../EventDetails/EventDetails';
 
 const { TabPane } = Tabs;
 
@@ -18,7 +18,7 @@ type Props = {
   refreshData: Function;
 };
 
-const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
+const AddEventModal: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -127,4 +127,4 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
   };
 };
 
-export default ModalFormEntity;
+export default AddEventModal;

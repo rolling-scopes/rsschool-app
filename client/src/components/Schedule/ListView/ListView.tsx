@@ -152,7 +152,7 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
           <th style={{ width: '80%' }}>
             <Link
               prefetch={false}
-              href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
+              href={`/course/entity-details?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
             >
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>

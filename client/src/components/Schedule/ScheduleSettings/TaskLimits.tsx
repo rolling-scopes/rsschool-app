@@ -5,15 +5,15 @@ import SettingsItem from './SettingsItem';
 
 const { Text } = Typography;
 
-type ChangeTagColorProps = {
-  limitForDoneTask?: number;
-  onSaveLimitForDoneTask: (value: number) => void;
-};
+interface ChangeTagColorProps {
+  limitForDoneTask: number;
+  setLimitForDoneTask: (value: number) => void;
+}
 
-const TaskLimits: React.FC<ChangeTagColorProps> = ({ limitForDoneTask, onSaveLimitForDoneTask }) => (
+const TaskLimits: React.FC<ChangeTagColorProps> = ({ limitForDoneTask, setLimitForDoneTask }) => (
   <SettingsItem header="Task limits" IconComponent={PercentageOutlined}>
     <Text>Show limit for done tasks, %</Text>{' '}
-    <InputNumber min={0} max={100} defaultValue={limitForDoneTask} onChange={onSaveLimitForDoneTask} />
+    <InputNumber min={0} max={100} defaultValue={limitForDoneTask} onChange={setLimitForDoneTask} />
   </SettingsItem>
 );
 

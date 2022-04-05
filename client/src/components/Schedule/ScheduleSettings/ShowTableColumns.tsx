@@ -12,39 +12,36 @@ const COLUMNS = Object.entries(Column).filter(([key]) => CONFIGURABLE_COLUMNS.in
 
 interface ShowTableColumnsProps {
   eventTypes: string[];
-  columnsShown: string[];
-  setColumnsShown: (value: string[]) => void;
+  columnsHidden: string[];
+  setColumnsHidden: (value: string[]) => void;
   eventTypesHidden: string[];
   setEventTypesHidden: (value: string[]) => void;
 }
 
 const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
   eventTypes,
-  columnsShown,
-  setColumnsShown,
+  columnsHidden,
+  setColumnsHidden,
   eventTypesHidden,
   setEventTypesHidden,
 }) => {
-  const toggleColumnCheckbox = (event: CheckboxChangeEvent) => {
-    const selectedColumn = event.target.value;
-    if (event.target.checked) {
-      setColumnsShown([...columnsShown, selectedColumn]);
-    } else {
-      setColumnsShown(columnsShown.filter(column => column !== selectedColumn));
-    }
+  const toggleColumnCheckbox = ({ target: { checked, value: selectedColumn }}: CheckboxChangeEvent) =>
+    setColumnsHidden(
+      checked
+        ? columnsHidden.filter(column => column !== selectedColumn)
+        : [...columnsHidden, selectedColumn]
+    );
+
+  const toggleEventTypeCheckbox = ({ target: { checked, value: selectedEventType }}: CheckboxChangeEvent) => {
+    setEventTypesHidden(
+      checked
+        ? eventTypesHidden.filter(eventType => eventType !== selectedEventType)
+        : [...eventTypesHidden, selectedEventType]
+    );
   };
 
-  const toggleEventTypeCheckbox = (event: CheckboxChangeEvent) => {
-    const selectedEventType = event.target.value;
-    if (!event.target.checked) {
-      setEventTypesHidden([...eventTypesHidden, selectedEventType]);
-    } else {
-      setEventTypesHidden(eventTypesHidden.filter(eventType => eventType !== selectedEventType));
-    }
-  };
-
-  const resetCheckboxes = () => {
-    setColumnsShown(Object.keys(Column));
+  const reset = () => {
+    setColumnsHidden([]);
     setEventTypesHidden([]);
   };
 
@@ -55,7 +52,7 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
       </div>
       {COLUMNS.map(([key, name]) => (
         <div key={key} style={{ marginBottom: 10 }}>
-          <Checkbox value={key} checked={!!columnsShown.includes(key)} onChange={toggleColumnCheckbox}>
+          <Checkbox value={key} checked={!columnsHidden.includes(key)} onChange={toggleColumnCheckbox}>
             {name}
           </Checkbox>
         </div>
@@ -66,12 +63,12 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
       {eventTypes.map(key => (
         <div key={key} style={{ marginBottom: 10 }}>
           <Checkbox value={key} checked={!eventTypesHidden.includes(key)} onChange={toggleEventTypeCheckbox}>
-            {TASK_TYPES_MAP[key] ?? key}
+            {TASK_TYPES_MAP[key] ?? key ?? '[empty]'}
           </Checkbox>
         </div>
       ))}
       <Divider style={{ marginTop: 0, marginBottom: 10 }} />
-      <Button type="primary" onClick={resetCheckboxes}>
+      <Button type="primary" onClick={reset}>
         Reset
       </Button>
     </SettingsItem>

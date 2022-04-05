@@ -1,45 +1,50 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Tooltip, Checkbox } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import ChangeTagColor from './ChangeTagColor';
+import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
 import TaskLimits from './TaskLimits';
-import { Settings } from '../types';
+import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
-type Props = {
-  settings: Settings;
+interface ScheduleSettingsProps {
+  settings: ScheduleSettings;
   eventTypes: string[];
-};
+}
 
-const ScheduleSettings: React.FC<Props> = ({ settings, eventTypes }) => {
+const TITLE = 'Schedule settings';
+
+const ScheduleSettings: React.FC<ScheduleSettingsProps> = ({ settings, eventTypes }) => {
   const [opened, setOpened] = useState(false);
+
   const openDrawer = () => setOpened(true);
   const closeDrawer = () => setOpened(false);
+  const toggleSplittedByWeek = ({ target }: CheckboxChangeEvent) => settings.setIsSplittedByWeek(target.checked);
 
   return (
-    <Tooltip title="Schedule settings" mouseEnterDelay={1}>
-      <Button icon={<SettingOutlined />} title="Schedule settings" size="middle" type="primary" onClick={openDrawer} />
-      <Drawer title="Schedule Settings" placement="right" closable={false} onClose={closeDrawer} visible={opened}>
+    <Tooltip title={TITLE} mouseEnterDelay={1}>
+      <Button icon={<SettingOutlined />} title={TITLE} size="middle" type="primary" onClick={openDrawer} />
+      <Drawer title={TITLE} placement="right" closable={false} onClose={closeDrawer} visible={opened}>
         <ShowTableColumns
           eventTypes={eventTypes}
-          columnsShown={settings.columnsShown}
-          setColumnsShown={settings.setColumnsShown}
+          columnsHidden={settings.columnsHidden}
+          setColumnsHidden={settings.setColumnsHidden}
           eventTypesHidden={settings.eventTypesHidden}
           setEventTypesHidden={settings.setEventTypesHidden}
         />
-        <ChangeTagColor
+        <ChangeTagColors
           tags={eventTypes}
-          tagColors={settings.eventTypeTagsColors}
-          onSaveTagColors={settings.setEventTypeTagsColors}
+          tagColors={settings.tagColors}
+          setTagColors={settings.setTagColors}
         />
         <TaskLimits
           limitForDoneTask={settings.limitForDoneTask}
-          onSaveLimitForDoneTask={settings.setLimitForDoneTask}
+          setLimitForDoneTask={settings.setLimitForDoneTask}
         />
         <Checkbox
-          value=""
-          checked={settings.splittedByWeek}
-          onChange={({ target: { checked } }) => settings.setSplittedByWeek(checked)}
+          value
+          checked={settings.isSplittedByWeek}
+          onChange={toggleSplittedByWeek}
         >
           Splitted by week
         </Checkbox>

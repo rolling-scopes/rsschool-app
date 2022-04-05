@@ -1,7 +1,7 @@
 import React from 'react';
 import { ConfigProvider } from 'antd';
-import MobileCalendar from './components/MobileCalendar';
-import DesktopCalendar from './components/DesktopCalendar';
+import MobileCalendar from './MobileCalendar';
+import DesktopCalendar from './DesktopCalendar';
 import { CourseEvent } from 'services/course';
 import { isMobile } from 'mobile-device-detect';
 import en_GB from 'antd/lib/locale-provider/en_GB';

@@ -20,8 +20,8 @@ import {
   Checkbox,
 } from 'antd';
 import moment from 'moment-timezone';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
-import { TIMEZONES } from '../../configs/timezones';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../model';
+import { TIMEZONES } from '../../../configs/timezones';
 import { Event, EventService } from 'services/event';
 import { times } from 'lodash';
 import { githubRepoUrl, urlPattern } from 'services/validators';

@@ -6,10 +6,10 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
-import { DEFAULT_COLORS } from './ScheduleSettings/scheduleSettingsHandlers';
+import { DEFAULT_COLORS } from '../constants';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
-import { GithubUserLink } from '../GithubUserLink';
-import { CHECKER_TYPES } from './model';
+import { GithubUserLink } from '../../GithubUserLink';
+import { CHECKER_TYPES } from '../model';
 
 type Props = {
   taskData: CourseTaskDetails;
@@ -40,7 +40,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
     githubRepoName,
     sourceGithubRepoUrl,
     githubPrRequired,
-    // publicAttributes,
   } = taskData;
 
   return (
