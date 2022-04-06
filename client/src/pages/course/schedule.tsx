@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { useState, useMemo } from 'react';
-import { useAsync } from 'react-use';
+import { useAsyncRetry } from 'react-use';
 import { Col, Row, Select, Tooltip, Button, Form, Upload, message } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { RcFile } from 'antd/lib/upload';
@@ -48,7 +48,7 @@ export function SchedulePage(props: CoursePageProps) {
     const eventTypes = Array.from(new Set(events.map(({ event }) => event.type)));
     return { events, eventTypes };
   };
-  const { value: { events = [], eventTypes = [] } = {}, loading } = useAsync(loadData, [courseService]);
+  const { retry: refreshData, value: { events = [], eventTypes = [] } = {}, loading } = useAsyncRetry(loadData, [courseService]);
 
   const filteredEvents = useMemo(() => {
     let filteredData = events.slice(0);
@@ -94,7 +94,7 @@ export function SchedulePage(props: CoursePageProps) {
         message.error(submitResults);
       }
 
-      await loadData();
+      refreshData();
     } catch (err) {
       const error = err as Error;
       if (error.message.match(/^Incorrect data/)) {
@@ -107,7 +107,7 @@ export function SchedulePage(props: CoursePageProps) {
 
   const onRemove = (_: UploadFile<any>) => setFileList([]);
 
-  const beforeUpload = (file: RcFile) => Boolean(setFileList([...fileList, file]));
+  const beforeUpload = (file: RcFile) => setFileList([...fileList, file]);
 
   return (
     <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
@@ -199,7 +199,7 @@ export function SchedulePage(props: CoursePageProps) {
         timeZone={timeZone}
         isAdmin={isAdmin}
         courseId={props.course.id}
-        refreshData={loadData}
+        refreshData={refreshData}
         tagColors={settings.tagColors}
         limitForDoneTask={settings.limitForDoneTask}
         alias={props.course.alias}
@@ -212,7 +212,7 @@ export function SchedulePage(props: CoursePageProps) {
           editableRecord={editableRecord}
           handleCancel={closeModal}
           courseId={props.course.id}
-          refreshData={loadData}
+          refreshData={refreshData}
         />
       )}
     </PageLayout>
