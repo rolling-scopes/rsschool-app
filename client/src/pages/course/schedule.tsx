@@ -23,7 +23,7 @@ import { isCourseManager } from 'domain/user';
 import { TIMEZONES } from '../../configs/timezones';
 import { ViewMode } from 'components/Schedule/model';
 import { ScheduleSettings } from 'components/Schedule/ScheduleSettings';
-import { AddEventModal } from 'components/Schedule/AddEventModal';
+import { EventModalForm } from 'components/Schedule/EventModalForm';
 import { tasksToEvents, parseFiles, uploadResults } from 'components/Schedule/utils';
 import useScheduleSettings from 'components/Schedule/useScheduleSettings';
 
@@ -207,7 +207,7 @@ export function SchedulePage(props: CoursePageProps) {
         settings={settings}
       />
       {isModalOpen && (
-        <AddEventModal
+        <EventModalForm
           visible={isModalOpen}
           editableRecord={editableRecord}
           handleCancel={closeModal}

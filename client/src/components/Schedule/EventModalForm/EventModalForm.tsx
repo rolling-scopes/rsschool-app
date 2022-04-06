@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
-import FormEntity from './FormEntity';
+import FormEntity from './EventForm';
 import useWindowDimensions from '../../../utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -18,7 +18,7 @@ type Props = {
   refreshData: Function;
 };
 
-const AddEventModal: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
+const EventModalForm: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -127,4 +127,4 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
   };
 };
 
-export default AddEventModal;
+export default EventModalForm;
