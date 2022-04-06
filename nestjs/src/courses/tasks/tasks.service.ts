@@ -28,6 +28,7 @@ export class TasksService {
       }));
 
       for (const student of students) {
+        if (student.isExpelled) continue;
         for (const solutionInfo of taskSolutions) {
           const { studentHasSolution, ...rest } = solutionInfo;
           if (!studentHasSolution.has(student.id)) {
