@@ -63,16 +63,6 @@ export interface Discord {
   discriminator: number;
 }
 
-export interface Consent {
-  id?: number;
-  createdDate?: number;
-  updatedDate?: number;
-  channelValue: string;
-  channelType: string;
-  optIn: boolean;
-  username?: string;
-}
-
 export interface Student {
   githubId: string;
   name: string;
@@ -169,20 +159,9 @@ export interface ProfileInfo {
   permissionsSettings?: ConfigurableProfilePermissions;
   generalInfo?: GeneralInfo;
   contacts?: Contacts;
-  consents?: Consent[];
   mentorStats?: MentorStats[];
   studentStats?: StudentStats[];
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
-}
-
-export interface SaveProfileInfo {
-  permissionsSettings: ConfigurableProfilePermissions;
-  generalInfo: GeneralInfo;
-  contacts: Contacts;
-  consents: Consent[];
-  discord: Discord | null;
-  isPermissionsSettingsChanged: boolean;
-  isProfileSettingsChanged: boolean;
 }

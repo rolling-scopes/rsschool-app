@@ -21,13 +21,14 @@ type Props = CoursePageProps & {
   activeOnly: boolean;
 };
 
+const courseTasksApi = new CoursesTasksApi();
+
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { activeOnly } = props;
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
   const courseService = useMemo(() => new CourseService(props.course.id), []);
-  const courseTasksApi = useMemo(() => new CoursesTasksApi(), []);
 
   const [students, setStudents] = useState({
     content: [] as StudentScore[],
@@ -106,6 +107,8 @@ export function ScoreTable(props: Props) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
+  const [state, setState] = useState(['']);
+
   if (!loaded) {
     return null;
   }
@@ -122,6 +125,22 @@ export function ScoreTable(props: Props) {
         dataSource={students.content}
         onChange={getCourseScore as any}
         columns={getVisibleColumns(columns)}
+        rowSelection={{
+          selectedRowKeys: state,
+          onChange: (_, selectedRows) => {
+            setState(selectedRows.map(row => row.githubId));
+          },
+          type: 'radio',
+          columnWidth: 0,
+          renderCell: () => '',
+        }}
+        onRow={record => {
+          return {
+            onClick: () => {
+              setState([record.githubId]);
+            },
+          };
+        }}
       />
       <SettingsModal
         courseTasks={courseTasks}

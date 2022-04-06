@@ -45,7 +45,6 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
         studentEndDate: item.studentEndDate,
         resultsCount: raw ? Number(raw.taskResultCount) || Number(raw.taskInterviewResultCount) : 0,
         allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
-        useJury: (item.task as Task).useJury,
         checker: item.checker,
         taskOwner: item.taskOwner
           ? {
@@ -120,7 +119,6 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
         studentEndDate: item.studentEndDate,
         resultsCount: raw ? Number(raw.taskResultCount) : 0,
         allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
-        useJury: (item.task as Task).useJury,
         checker: item.checker,
         taskOwner: item.taskOwner
           ? {
@@ -177,7 +175,6 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       descriptionUrl: item.task.descriptionUrl,
       studentStartDate: item.studentStartDate,
       studentEndDate: item.studentEndDate,
-      useJury: item.task.useJury,
       checker: item.checker,
       taskOwnerId: item.taskOwnerId,
       githubRepoName: item.task.githubRepoName,

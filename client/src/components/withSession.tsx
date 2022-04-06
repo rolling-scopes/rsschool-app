@@ -6,7 +6,6 @@ import { LoadingScreen } from './LoadingScreen';
 
 export const enum CourseRole {
   TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
   Manager = 'manager',
   Supervisor = 'supervisor',
   Student = 'student',

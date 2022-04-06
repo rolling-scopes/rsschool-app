@@ -19,11 +19,10 @@ enum ModalAction {
   create = 'create',
 }
 
-const roles = ['juryActivist', 'manager', 'supervisor'];
+const roles = ['manager', 'supervisor'];
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
   manager: 'volcano',
-  juryActivist: 'gold',
 };
 
 function Page(props: Props) {

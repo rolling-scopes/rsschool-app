@@ -1,10 +1,9 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn, OneToMany, Index } from 'typeorm';
 import { NotificationChannelSettings } from '.';
 
-export enum NotificationScope {
-  general = 'general',
-  mentor = 'mentor',
-  student = 'student',
+export enum NotificationType {
+  event = 'event',
+  message = 'message',
 }
 
 export type NotificationId =
@@ -13,7 +12,8 @@ export type NotificationId =
   | 'courseCertificate'
   | 'courseScheduleChange'
   | 'taskDeadline'
-  | 'interviewerAssigned';
+  | 'interviewerAssigned'
+  | 'emailConfirmation';
 
 @Entity()
 export class Notification {
@@ -30,9 +30,9 @@ export class Notification {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @Column({ default: NotificationScope.general })
+  @Column({ default: NotificationType.event })
   @Index()
-  scope: NotificationScope;
+  type: NotificationType;
 
   @Column({ default: false })
   @Index()

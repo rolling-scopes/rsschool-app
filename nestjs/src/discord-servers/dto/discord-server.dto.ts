@@ -26,6 +26,6 @@ export class DiscordServerDto {
   @ApiProperty()
   gratitudeUrl: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   mentorsChatUrl: string | null;
 }

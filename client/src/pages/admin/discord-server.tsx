@@ -6,8 +6,7 @@ import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { DiscordServer } from 'services/models';
-import { DiscordServersApi, UpdateDiscordServerDto } from 'api';
+import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -18,8 +17,8 @@ enum ModalAction {
 }
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as DiscordServer[]);
-  const [modalData, setModalData] = useState(null as Partial<DiscordServer> | null);
+  const [data, setData] = useState([] as DiscordServerDto[]);
+  const [modalData, setModalData] = useState<Partial<DiscordServerDto> | null>(null);
   const [modalAction, setModalAction] = useState(ModalAction.update);
   const [modalLoading, setModalLoading] = useState(false);
   const discordServersService = new DiscordServersApi();
@@ -36,7 +35,7 @@ function Page(props: Props) {
     setModalAction(ModalAction.create);
   };
 
-  const handleEditItem = (record: DiscordServer) => {
+  const handleEditItem = (record: DiscordServerDto) => {
     setModalData(record);
     setModalAction(ModalAction.update);
   };
@@ -147,22 +146,22 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: stringSorter<DiscordServer>('name'),
+      sorter: stringSorter<DiscordServerDto>('name'),
     },
     {
       title: 'Gratitude URL',
       dataIndex: 'gratitudeUrl',
-      sorter: stringSorter<DiscordServer>('gratitudeUrl'),
+      sorter: stringSorter<DiscordServerDto>('gratitudeUrl'),
     },
     {
       title: 'Mentors chat URL',
       dataIndex: 'mentorsChatUrl',
-      sorter: stringSorter<DiscordServer>('mentorsChatUrl'),
+      sorter: stringSorter<DiscordServerDto>('mentorsChatUrl'),
     },
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_: any, record: DiscordServer) => (
+      render: (_: any, record: DiscordServerDto) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
@@ -181,7 +180,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
   ];
 }
 
-function getInitialValues(modalData: Partial<DiscordServer>) {
+function getInitialValues(modalData: Partial<DiscordServerDto>) {
   return modalData;
 }
 
