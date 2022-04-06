@@ -96,21 +96,19 @@ export function Header(props: Props) {
               <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
             </Button>
           )}
-          <Link href="https://docs.app.rs.school">
-            <a>
-              <Tooltip title="RS School App docs">
-                <Button
-                  type="primary"
-                  shape="round"
-                  size="large"
-                  icon={<QuestionCircleFilled />}
-                  style={{ marginRight: 16 }}
-                >
-                  Help
-                </Button>
-              </Tooltip>
-            </a>
-          </Link>
+          <a target="_blank" href="https://docs.app.rs.school">
+            <Tooltip title="RS School App docs">
+              <Button
+                type="primary"
+                shape="round"
+                size="large"
+                icon={<QuestionCircleFilled />}
+                style={{ marginRight: 16 }}
+              >
+                Help
+              </Button>
+            </Tooltip>
+          </a>
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="dashed" size="large">
               <GithubAvatar githubId={props.username} size={24} />
