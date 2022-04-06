@@ -21,7 +21,7 @@ import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { TIMEZONES } from '../../configs/timezones';
-import { ViewMode } from 'components/Schedule/model';
+import { ViewMode } from 'components/Schedule/constants';
 import { ScheduleSettings } from 'components/Schedule/ScheduleSettings';
 import { EventModalForm } from 'components/Schedule/EventModalForm';
 import { tasksToEvents, parseFiles, uploadResults } from 'components/Schedule/utils';
@@ -63,9 +63,9 @@ export function SchedulePage(props: CoursePageProps) {
   }, [events, settings.arePassedEventsHidden, settings.areDoneTasksHidden, settings.limitForDoneTask]);
 
   const mapScheduleViewToComponent = {
-    [ViewMode.TABLE]: TableView,
-    [ViewMode.LIST]: ListView,
-    [ViewMode.CALENDAR]: CalendarView,
+    [ViewMode.Table]: TableView,
+    [ViewMode.List]: ListView,
+    [ViewMode.Calendar]: CalendarView,
   };
 
   const ScheduleView = mapScheduleViewToComponent[settings.viewMode] ?? TableView;
@@ -114,9 +114,9 @@ export function SchedulePage(props: CoursePageProps) {
       <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
         <Col>
           <Select style={{ width: 100 }} defaultValue={settings.viewMode} onChange={settings.setViewMode}>
-            <Option value={ViewMode.TABLE}>Table</Option>
-            <Option value={ViewMode.LIST}>List</Option>
-            <Option value={ViewMode.CALENDAR}>Calendar</Option>
+            <Option value={ViewMode.Table}>Table</Option>
+            <Option value={ViewMode.List}>List</Option>
+            <Option value={ViewMode.Calendar}>Calendar</Option>
           </Select>
         </Col>
         <Col>

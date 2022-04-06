@@ -3,9 +3,7 @@ import union from 'lodash/union';
 import { CSSProperties } from 'react';
 import { ColorState } from 'react-color';
 import isUndefined from 'lodash/isUndefined';
-import { SPECIAL_TASK_TYPES } from 'components/Schedule/model';
-import { EVENT_TYPES, TASK_TYPES } from './model';
-import { PICKER_COLORS, DEFAULT_COLOR, DEADLINE_COLOR } from 'components/Schedule/constants';
+import { PICKER_COLORS, DEFAULT_COLOR, DEADLINE_COLOR, SPECIAL_TASK_TYPES, EVENT_TYPES, TASK_TYPES } from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
 
 export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) => `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;

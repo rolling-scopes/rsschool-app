@@ -1,11 +1,7 @@
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
-import { isMobileOnly } from 'mobile-device-detect';
-import { DEFAULT_COLORS } from 'components/Schedule/constants';
-import { ViewMode } from './model';
-import { LocalStorage } from './constants';
-
-const defaultViewMode = isMobileOnly ? ViewMode.LIST : ViewMode.TABLE;
+import { DEFAULT_COLORS, DEFAULT_VIEW_MODE } from 'components/Schedule/constants';
+import { LocalStorage, ViewMode } from './constants';
 
 export interface ScheduleSettings {
   viewMode: ViewMode,
@@ -27,7 +23,7 @@ export interface ScheduleSettings {
 }
 
 const useScheduleSettings = (): ScheduleSettings => {
-  const [viewMode = defaultViewMode, setViewMode] = useLocalStorage<ViewMode>(LocalStorage.ViewMode);
+  const [viewMode = DEFAULT_VIEW_MODE, setViewMode] = useLocalStorage<ViewMode>(LocalStorage.ViewMode);
   const [limitForDoneTask = 100, setLimitForDoneTask] = useLocalStorage<number>(LocalStorage.LimitForDoneTasks);
   const [isSplittedByWeek = false, setIsSplittedByWeek] = useLocalStorage<boolean>(LocalStorage.IsSplittedByWeek);
   const [arePassedEventsHidden = false, setArePassedEventsHidden] = useLocalStorage<boolean>(LocalStorage.ArePassedEventsHidden);

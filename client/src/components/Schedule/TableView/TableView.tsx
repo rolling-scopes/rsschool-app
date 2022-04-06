@@ -13,7 +13,7 @@ import {
   scoreRenderer,
 } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
-import { ScheduleRow, Column, CONFIGURABLE_COLUMNS } from '../model';
+import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import EditableCell from './EditableCell';
 import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
@@ -26,7 +26,23 @@ const { Text } = Typography;
 const eventService = new EventService();
 const taskService = new TaskService();
 
-type Props = {
+interface ScheduleRow {
+  id: number;
+  event: {
+    name: string;
+    descriptionUrl: string;
+    type: string;
+  };
+  dateTime: string;
+  place: string;
+  organizer: {
+    githubId: string;
+  } | null;
+  special?: [];
+  duration?: number;
+}
+
+interface TableViewProps {
   data: CourseEvent[];
   timeZone: string;
   isAdmin: boolean;
@@ -37,7 +53,7 @@ type Props = {
   limitForDoneTask?: number;
   alias: string;
   settings: ScheduleSettings;
-};
+}
 
 const getColumns = ({
   timeZone,
@@ -127,7 +143,7 @@ export function TableView({
   columnsShown,
   settings,
   tagColors = DEFAULT_COLORS,
-}: Props) {
+}: TableViewProps) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
