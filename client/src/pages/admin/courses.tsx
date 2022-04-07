@@ -8,8 +8,8 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServerService } from 'services/discordServer';
-import { Course, DiscordServer } from 'services/models';
+import { DiscordServersApi, DiscordServerDto } from 'api';
+import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 
 const { Content } = Layout;
@@ -17,18 +17,18 @@ type Props = { session: Session };
 
 function Page(props: Props) {
   const [courses, setCourses] = useState([] as Course[]);
-  const [discordServers, setDiscordServers] = useState([] as DiscordServer[]);
+  const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
-  const discordServerService = new DiscordServerService();
+  const discordServersService = new DiscordServersApi();
 
   const loadData = async () => {
-    const [courses, discordServers] = await Promise.all([
+    const [courses, { data: discordServers }] = await Promise.all([
       courseService.getCourses(),
-      discordServerService.getDiscordServers(),
+      discordServersService.getDiscordServers(),
     ]);
     setCourses(courses);
     setDiscordServers(discordServers);

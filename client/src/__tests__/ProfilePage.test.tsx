@@ -6,7 +6,13 @@ import { Session } from 'components/withSession';
 import { ProfilePage } from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
-jest.mock('api', () => ({}));
+jest.mock('api', () => ({
+  ProfileApi: jest.fn(),
+  UsersNotificationsApi: jest.fn(),
+  NotificationsApi: jest.fn(),
+  CoursesApi: jest.fn(),
+  CoursesTasksApi: jest.fn(),
+}));
 
 const profile = {
   permissionsSettings: {
@@ -349,6 +355,7 @@ describe('ProfilePage', () => {
               comment: 'Test',
               score: 9,
               interviewFormAnswers: {},
+              name: 'CoreJS Interview',
             },
             {},
           ],
@@ -359,15 +366,18 @@ describe('ProfilePage', () => {
         {
           courseFullName: 'test',
           courseName: 'test',
-          interview: {
-            answers: {},
-            interviewer: {
-              name: 'Dima Petrov',
-              githubId: 'dip',
+          interviews: [
+            {
+              answers: {},
+              interviewer: {
+                name: 'Dima Petrov',
+                githubId: 'dip',
+              },
+              comment: 'Test',
+              score: 9,
+              name: 'CoreJS Interview',
             },
-            comment: 'Test',
-            score: 9,
-          },
+          ],
           locationName: 'Minsk',
         },
       ]);

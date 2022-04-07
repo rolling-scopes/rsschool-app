@@ -1,28 +1,44 @@
-import { Button, Col, Table, Form, Input, message, Row, Typography, notification, Radio, Checkbox, Upload } from 'antd';
-import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
+import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import moment from 'moment';
-import { PageLayout } from 'components/PageLayout';
-import withSession from 'components/withSession';
+import { CoursesTasksApi, CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum, CourseTaskDto } from 'api';
+import { AxiosError } from 'axios';
 import { CourseTaskSelect } from 'components/Forms';
+import { PageLayout } from 'components/PageLayout';
+import { shortDateTimeRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
+import withSession from 'components/withSession';
+import shuffle from 'lodash/shuffle';
+import snakeCase from 'lodash/snakeCase';
+import moment from 'moment';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import {
   CourseService,
-  CourseTask,
+  SelfEducationPublicAttributes,
   SelfEducationQuestion,
   SelfEducationQuestionWithIndex,
   Verification,
 } from 'services/course';
+import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
 import { notUrlPattern } from 'services/validators';
-import { shortDateTimeRenderer } from 'components/Table';
-import { AxiosError } from 'axios';
-import shuffle from 'lodash/shuffle';
-import snakeCase from 'lodash/snakeCase';
-import { FilesService } from 'services/files';
-import { CourseTaskDtoTypeEnum } from 'api';
+
+const courseTasksApi = new CoursesTasksApi();
+
+const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
+  if (courseTask?.type === CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+    const pubAttrs = (courseTask.publicAttributes ?? {}) as Record<string, any>;
+    return {
+      ...courseTask,
+      publicAttributes: {
+        ...pubAttrs,
+        questions: getRandomQuestions(pubAttrs.questions || []).slice(0, pubAttrs.numberOfQuestions),
+      },
+    };
+  }
+  return courseTask;
+};
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -30,34 +46,16 @@ function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
+  const [courseTask, setCourseTask] = useState<CourseTaskDetailedDto | null>(null);
   const [verifications, setVerifications] = useState<Verification[]>([]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
-
-  const courseTask = useMemo(() => {
-    const courseTask = courseTasks.find(t => t.id === courseTaskId);
-
-    if (courseTask?.type === 'selfeducation') {
-      return {
-        ...courseTask,
-        publicAttributes: {
-          ...courseTask.publicAttributes!,
-          questions: getRandomQuestions(courseTask.publicAttributes?.questions || []).slice(
-            0,
-            courseTask?.publicAttributes?.numberOfQuestions,
-          ),
-        },
-      };
-    }
-
-    return courseTask;
-  }, [courseTaskId]);
 
   useAsync(async () => {
     try {
       setLoading(true);
       loadVerifications();
-      const tasks = await courseService.getCourseTasks('inprogress');
+      const { data: tasks } = await courseTasksApi.getCourseTasks(courseId, 'inprogress');
       const courseTasks = filterAutoTestTasks(tasks);
       setCourseTasks(courseTasks);
     } catch {
@@ -67,24 +65,29 @@ function Page(props: CoursePageProps) {
     }
   }, []);
 
+  useAsync(async () => {
+    const { data: couseTask } = courseTaskId
+      ? await courseTasksApi.getCourseTask(courseId, courseTaskId)
+      : { data: null };
+    setCourseTask(couseTask ? parseCourseTask(couseTask) : couseTask);
+  }, [courseTaskId]);
+
   const handleSubmit = async (values: any) => {
-    const { courseTaskId } = values;
-    const task = courseTasks.find(t => t.id === courseTaskId);
-    if (!task) {
+    if (!courseTask || !courseTaskId) {
       return;
     }
     try {
       let data: any = {};
-      if (task.type === 'ipynb') {
+      if (courseTask.type === CourseTaskDetailedDtoTypeEnum.Ipynb) {
         const filesService = new FilesService();
         const fileData = await readFile(values.upload.file);
         const { s3Key } = await filesService.uploadFile('', fileData);
         data = {
           s3Key,
-          taskName: snakeCase(task.name),
+          taskName: snakeCase(courseTask.name),
         };
       } else {
-        data = getSubmitData(task, values);
+        data = getSubmitData(courseTask, values);
         if (data == null) {
           return;
         }
@@ -120,11 +123,12 @@ function Page(props: CoursePageProps) {
         return;
       }
       if (error.response?.status === 403) {
-        const oneAttemptPerNumberOfHours = courseTask?.publicAttributes?.oneAttemptPerNumberOfHours;
+        const pubAtts = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
+        const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
         notification.error({
           message: (
             <>
-              You can submit this task only {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times.{' '}
+              You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
               {!!oneAttemptPerNumberOfHours &&
                 `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
                   oneAttemptPerNumberOfHours !== 1 && 's'
@@ -169,7 +173,7 @@ function Page(props: CoursePageProps) {
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect onChange={handleCourseTaskChange} groupBy="deadline" data={courseTasks} />
-            {renderTaskFields(props.session.githubId, courseTask, verifications)}
+            {courseTask ? renderTaskFields(props.session.githubId, courseTask, verifications) : null}
             <Row>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -278,28 +282,28 @@ function UploadJupyterNotebook() {
   );
 }
 
-function renderTaskFields(githubId: string, courseTask: CourseTask | undefined, verifications: Verification[]) {
+function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
-    case CourseTaskDtoTypeEnum.Jstask:
+    case CourseTaskDetailedDtoTypeEnum.Jstask:
       return renderJsTaskFields(repoUrl);
-    case CourseTaskDtoTypeEnum.Kotlintask:
-    case CourseTaskDtoTypeEnum.Objctask:
+    case CourseTaskDetailedDtoTypeEnum.Kotlintask:
+    case CourseTaskDetailedDtoTypeEnum.Objctask:
       return renderKotlinTaskFields(repoUrl);
-    case CourseTaskDtoTypeEnum.Ipynb:
+    case CourseTaskDetailedDtoTypeEnum.Ipynb:
       return (
         <Row>
           <UploadJupyterNotebook />
         </Row>
       );
-    case CourseTaskDtoTypeEnum.Selfeducation:
+    case CourseTaskDetailedDtoTypeEnum.Selfeducation:
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
           {renderSelfEducation(courseTask, verifications)}
         </>
       );
-    case CourseTaskDtoTypeEnum.Codewars: {
+    case CourseTaskDetailedDtoTypeEnum.Codewars: {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -343,14 +347,15 @@ function formatMiliseconds(ms: number) {
   return moment.utc(ms).format('HH:mm:ss');
 }
 
-function renderSelfEducation(courseTask: CourseTask, verifications: Verification[]) {
-  const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
+function renderSelfEducation(courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
+  const pubAtts = (courseTask?.publicAttributes ?? {}) as Record<string, any>;
+  const questions = (pubAtts.questions as SelfEducationQuestionWithIndex[]) || [];
   const {
     maxAttemptsNumber = 0,
     tresholdPercentage = 0,
     strictAttemptsMode = true,
     oneAttemptPerNumberOfHours = 0,
-  } = courseTask?.publicAttributes ?? {};
+  } = pubAtts as SelfEducationPublicAttributes;
 
   const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId);
   const attemptsLeft = maxAttemptsNumber - attempts.length;
@@ -475,7 +480,7 @@ function renderJsTaskFields(repoUrl: string) {
         </a>
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
-        IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
+        IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
       </Typography.Paragraph>
       {explanationsSubmissionTasks()}
     </Row>
@@ -513,7 +518,7 @@ function renderDescription(descriptionUrl: string | null | undefined) {
   );
 }
 
-function filterAutoTestTasks(tasks: CourseTask[]) {
+function filterAutoTestTasks(tasks: CourseTaskDto[]) {
   return tasks.filter(task => task.checker === 'auto-test' && task.type !== 'test');
 }
 
@@ -522,10 +527,10 @@ function getRandomQuestions(questions: SelfEducationQuestion[]) {
   return shuffle(questionsWithIndex);
 }
 
-function getSubmitData(task: CourseTask, values: any) {
+function getSubmitData(task: CourseTaskDetailedDto, values: any) {
   let data: object = {};
   switch (task.type) {
-    case CourseTaskDtoTypeEnum.Selfeducation:
+    case CourseTaskDetailedDtoTypeEnum.Selfeducation:
       data = Object.entries(values)
         .filter(([key]) => /answer/.test(key))
         .map(([key, value]) => {
@@ -533,7 +538,7 @@ function getSubmitData(task: CourseTask, values: any) {
           return { index: Number(index), value };
         });
       break;
-    case CourseTaskDtoTypeEnum.Codewars:
+    case CourseTaskDetailedDtoTypeEnum.Codewars:
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -545,17 +550,17 @@ function getSubmitData(task: CourseTask, values: any) {
       };
       break;
 
-    case CourseTaskDtoTypeEnum.Jstask:
-    case CourseTaskDtoTypeEnum.Kotlintask:
-    case CourseTaskDtoTypeEnum.Objctask:
+    case CourseTaskDetailedDtoTypeEnum.Jstask:
+    case CourseTaskDetailedDtoTypeEnum.Kotlintask:
+    case CourseTaskDetailedDtoTypeEnum.Objctask:
       data = {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
       };
       break;
 
-    case CourseTaskDtoTypeEnum.Cvmarkdown:
-    case CourseTaskDtoTypeEnum.Cvhtml:
+    case CourseTaskDetailedDtoTypeEnum.Cvmarkdown:
+    case CourseTaskDetailedDtoTypeEnum.Cvhtml:
     case null:
       data = {};
       break;

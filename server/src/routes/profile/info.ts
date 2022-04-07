@@ -1,6 +1,5 @@
 import { NOT_FOUND, OK, FORBIDDEN } from 'http-status-codes';
 import Router from '@koa/router';
-import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
@@ -21,10 +20,10 @@ import {
   RelationRole,
   Permissions,
 } from './permissions';
-import { ConsentRepository } from '../../repositories/consent.repository';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: userGithubId, roles, coursesRoles, isAdmin } = ctx.state!.user as IUserSession;
+  const session = ctx.state!.user as IUserSession;
+  const { githubId: userGithubId, isAdmin } = ctx.state!.user as IUserSession;
   const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
 
   if (!requestedGithubId) {
@@ -47,7 +46,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     const [studentCourses, registryCourses] = !relationsRoles
       ? await Promise.all([getStudentCourses(requestedGithubId), getMentorRegistryCourses(requestedGithubId)])
       : [null, null];
-    role = defineRole({ relationsRoles, studentCourses, registryCourses, roles, coursesRoles, userGithubId });
+    role = defineRole({ relationsRoles, studentCourses, registryCourses, session, userGithubId });
     permissions = getPermissions({ isAdmin, isProfileOwner, role, permissions: profilePermissions });
   }
 
@@ -57,7 +56,6 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     isMentorStatsVisible,
     isStudentStatsVisible,
     isStageInterviewFeedbackVisible,
-    isConsentsVisible,
   } = permissions;
 
   if (!isProfileVisible && !isProfileOwner) {
@@ -71,15 +69,11 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   const stageInterviewFeedback = isStageInterviewFeedbackVisible
     ? await getStageInterviewFeedback(requestedGithubId)
     : undefined;
-  const consents = isConsentsVisible
-    ? await getCustomRepository(ConsentRepository).findByGithubIds([requestedGithubId])
-    : undefined;
 
   const profileInfo: ProfileInfo = {
     permissionsSettings,
     generalInfo,
     contacts,
-    consents,
     discord,
     mentorStats,
     publicFeedback,

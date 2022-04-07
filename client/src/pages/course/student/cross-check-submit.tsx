@@ -1,32 +1,23 @@
-import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
+import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 import { CrossCheckComments } from 'components/CrossCheckComments';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
-
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { useMemo, useState } from 'react';
-import {
-  CourseService,
-  CourseTask,
-  TaskSolution,
-  CrossCheckCriteria,
-  CrossCheckComment,
-  CrossCheckReview,
-} from 'services/course';
+import { useAsync } from 'react-use';
+import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
-import { useAsync } from 'react-use';
-import { CourseTaskSelect, ScoreInput } from 'components/Forms';
-import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [feedback, setFeedback] = useState(null as any);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
@@ -39,10 +30,10 @@ function Page(props: CoursePageProps) {
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
-  useAsync(async () => {
-    const data = await courseService.getCourseCrossCheckTasks('started');
-    setCourseTasks(data);
-  }, [props.course.id]);
+  const { value: courseTasks = [] } = useAsync(
+    () => courseService.getCourseCrossCheckTasks('started'),
+    [props.course.id],
+  );
 
   const handleSubmit = async (values: any) => {
     if (!courseTaskId) {

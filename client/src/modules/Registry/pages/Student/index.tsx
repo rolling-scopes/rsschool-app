@@ -1,22 +1,24 @@
-import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
+import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
+import { Location } from 'common/models';
 import { LocationSelect } from 'components/Forms';
-import { NoCourses } from 'components/Registry/NoCourses';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
-import { useCallback, useState, useEffect } from 'react';
+import { Info } from 'modules/Registry/components/Info';
+import { NoCourses } from 'modules/Registry/components/NoCourses';
+import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
 import { useUpdate } from 'react-use';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Location } from 'common/models';
-import { Info } from 'modules/Registry/components';
 import css from 'styled-jsx/css';
-import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
-import { useRouter } from 'next/router';
+import { CdnService } from 'services/cdn';
+import { SolidarityUkraine } from 'components/SolidarityUkraine';
+import { ProfileApi } from 'api';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -28,14 +30,16 @@ export type Props = {
   session: Session;
 };
 
+const cdnService = new CdnService();
+const profileApi = new ProfileApi();
+
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const { githubId } = props.session;
   const [form] = Form.useForm();
   const update = useUpdate();
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
-  const [location, setLocation] = useState(null as Location | null);
-
+  const [location, setLocation] = useState<Location | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [student, studentLoading, registered] = useStudentCourseData(githubId, props.courseAlias);
@@ -48,10 +52,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   }, [registered]);
 
   useEffect(() => {
-    setLocation({
-      countryName: student?.profile.countryName,
-      cityName: student?.profile.cityName,
-    } as Location);
+    setLocation(student ? { countryName: student.profile.countryName, cityName: student.profile.cityName } : null);
   }, [student?.profile]);
 
   const handleSubmit = useCallback(
@@ -104,14 +105,9 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
       async function confirmRegistration() {
         setLoading(true);
         try {
-          const userResponse = await axios.post<any>('/api/profile/me', userModel);
-          const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-          if (githubId) {
-            await axios.post<any>('/api/registry', registryModel);
-            setSubmitted(true);
-          } else {
-            message.error('Invalid github id');
-          }
+          await profileApi.updateUser(userModel);
+          await cdnService.registerStudent(registryModel);
+          setSubmitted(true);
         } catch (e) {
           message.error('An error occured. Please try later.');
         } finally {
@@ -165,6 +161,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
           </div>
           <div className="student-registration-content">
             <Col>
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3} style={{ margin: '8px 0 40px' }}>
                   Welcome to RS School!
@@ -290,13 +287,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
 }
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
-  const location =
-    countryName &&
-    cityName &&
-    ({
-      countryName,
-      cityName,
-    } as Location | null);
+  const location: Location | null = countryName && cityName ? { countryName, cityName } : null;
   return {
     ...initialData,
     courseId: courses[0].id,

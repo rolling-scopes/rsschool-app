@@ -7,10 +7,10 @@ import { setResponse } from '../utils';
 const { OK } = StatusCodes;
 
 export const saveResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state.user;
+  const { githubId, id: userId } = ctx.state.user;
   const data = ctx.request.body;
 
   const resumeService = new ResumeService(githubId);
-  const result = await resumeService.saveData(data);
+  const result = await resumeService.saveData(userId, data);
   setResponse(ctx, OK, result);
 };

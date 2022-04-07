@@ -1,5 +1,5 @@
 import { MessageOutlined, MessageTwoTone, MinusCircleTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Row, Statistic } from 'antd';
+import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { getMentorId } from 'domain/user';
@@ -25,6 +25,8 @@ export function Students(props: CourseOnlyPageProps) {
           const [feedback] = student.feedbacks;
           return (
             <Card
+              style={{ marginBottom: 32 }}
+              headStyle={{ border: 'none' }}
               size="small"
               title={
                 <>
@@ -42,20 +44,36 @@ export function Students(props: CourseOnlyPageProps) {
                     </Button>
                   </Link>
                 ) : null,
-                <Link href={routes.getExpelRoute(alias)}>
-                  <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
-                    Expel
-                  </Button>
-                </Link>,
+                student.active ? (
+                  <Link href={routes.getExpelRoute(alias)}>
+                    <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
+                      Expel
+                    </Button>
+                  </Link>
+                ) : null,
               ].filter(Boolean)}
-              extra={`${student.cityName}, ${student.countryName}`}
+              extra={
+                <Typography.Text ellipsis style={{ maxWidth: 160 }}>
+                  {student.cityName}, {student.countryName}
+                </Typography.Text>
+              }
             >
               <Row gutter={16}>
                 <Col flex={8}>
-                  <Statistic title="Rank" value={student.rank} prefix={<TrophyOutlined />} />
+                  <Statistic
+                    valueStyle={{ fontSize: 16 }}
+                    title="Rank"
+                    value={student.rank}
+                    prefix={<TrophyOutlined />}
+                  />
                 </Col>
                 <Col flex={8}>
-                  <Statistic title="Score" value={student.totalScore} prefix={<StarOutlined />} />
+                  <Statistic
+                    valueStyle={{ fontSize: 16 }}
+                    title="Score"
+                    value={student.totalScore}
+                    prefix={<StarOutlined />}
+                  />
                 </Col>
               </Row>
             </Card>

@@ -14,6 +14,14 @@ import { NotificationsModule } from './notifications/notifications.module';
 import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
+import { CertificatesModule } from './certificates/certificates.module';
+import { DiscordServersModule } from './discord-servers/discord-servers.module';
+import { OpportunitiesModule } from './opportunities/opportunities.module';
+import { UserGroupsModule } from './userGroups/user-groups.module';
+import { ScheduleModule } from './schedule/schedule.module';
+import { ActivityModule } from './activity/activity.module';
+import { UsersNotificationsModule } from './users-notifications';
+import { GratitudesModule } from './gratitudes';
 
 @Module({
   imports: [
@@ -24,6 +32,7 @@ import { UsersModule } from './users';
       ...config,
       autoLoadEntities: true,
     }),
+    ActivityModule,
     ConfigModule,
     AlertsModule,
     UsersModule,
@@ -33,6 +42,13 @@ import { UsersModule } from './users';
     DisciplinesModule,
     NotificationsModule,
     RegistryModule,
+    CertificatesModule,
+    DiscordServersModule,
+    OpportunitiesModule,
+    UserGroupsModule,
+    ScheduleModule,
+    UsersNotificationsModule,
+    GratitudesModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

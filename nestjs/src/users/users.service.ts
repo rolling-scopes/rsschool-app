@@ -1,7 +1,7 @@
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -32,8 +32,14 @@ export class UsersService {
   }
 
   public getUserByUserId(userId: number) {
-    return this.userRepository.findOne({
+    return this.userRepository.findOneOrFail({
       where: { id: userId },
+    });
+  }
+
+  public getUsersByUserIds(userIds: number[]) {
+    return this.userRepository.find({
+      where: { id: In(userIds) },
     });
   }
 }

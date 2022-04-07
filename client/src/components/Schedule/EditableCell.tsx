@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, DatePicker, TimePicker, Select } from 'antd';
+import { Form, Input, DatePicker, TimePicker, Select } from 'antd';
 import { Rule } from 'antd/lib/form';
 import { UserSearch } from 'components/UserSearch';
 import { CourseEvent } from 'services/course';
@@ -65,10 +65,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
         </Select>
       );
       rules = { required: false };
-      break;
-    case 'Duration':
-      inputNode = <InputNumber style={{ width: 60 }} min={0} />;
-      rules = { type: 'number', required: false };
       break;
     case 'Organizer':
       inputNode = <UserSearch style={{ minWidth: 150 }} searchFn={loadUsers} />;

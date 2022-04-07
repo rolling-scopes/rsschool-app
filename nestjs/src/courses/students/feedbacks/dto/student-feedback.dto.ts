@@ -11,12 +11,12 @@ export class StudentFeedbackDto {
     this.recommendation = studentFeedback.recommendation;
     this.author = new PersonDto(studentFeedback.author);
     this.mentor = studentFeedback.mentor
-      ? new PersonDto({ id: studentFeedback.mentor.id, ...studentFeedback.mentor.user })
+      ? new PersonDto({ ...studentFeedback.mentor.user, id: studentFeedback.mentor.id })
       : null;
     this.id = studentFeedback.id;
     this.createdDate = studentFeedback.createdDate;
     this.updatedDate = studentFeedback.updatedDate;
-    this.englishLevel = studentFeedback.englishLevel;
+    this.englishLevel = studentFeedback.englishLevel ?? LanguageLevel.Unkwown;
   }
 
   @ApiProperty()
@@ -37,8 +37,8 @@ export class StudentFeedbackDto {
   @ApiProperty({ type: PersonDto })
   author: PersonDto;
 
-  @ApiProperty({ type: PersonDto })
-  mentor?: PersonDto;
+  @ApiProperty({ type: PersonDto, nullable: true })
+  mentor: PersonDto | null;
 
   @ApiProperty({ enum: LanguageLevel })
   englishLevel: LanguageLevel;

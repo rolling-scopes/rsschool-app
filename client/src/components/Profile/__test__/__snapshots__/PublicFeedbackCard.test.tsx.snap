@@ -92,7 +92,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
           >
             Total badges:
           </Text>
-           
+
           6
         </div>
         <div
@@ -248,7 +248,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
               title="2018-12-01 13:12:01"
             >
               <span>
-                3 years ago
+                fromNow
               </span>
             </Tooltip>
           }
@@ -355,7 +355,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
           >
             Total badges:
           </Text>
-           
+
           6
         </div>
         <div
@@ -511,7 +511,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
               title="2018-12-01 13:12:01"
             >
               <span>
-                3 years ago
+                fromNow
               </span>
             </Tooltip>
           }

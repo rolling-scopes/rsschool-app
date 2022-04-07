@@ -57,6 +57,7 @@ export interface IConfig {
   name: string;
   sessionAge: number;
   sessionKey: string;
+  host: string;
 }
 
 export const config: IConfig = {
@@ -120,4 +121,5 @@ export const config: IConfig = {
   },
   sessionAge: 1000 * 60 * 60 * 24 * 2,
   sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret',
+  host: process.env.RSSHCOOL_HOST || 'http://localhost:3000',
 };

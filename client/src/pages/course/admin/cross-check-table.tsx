@@ -146,7 +146,7 @@ function renderTable(
           fixed: 'left',
           dataIndex: ['task', 'name'],
           key: fields.task,
-          width: 50,
+          width: 100,
           sorter: true,
           ...omit(getColumnSearchProps(['task', 'name']), 'onFilter'),
         },

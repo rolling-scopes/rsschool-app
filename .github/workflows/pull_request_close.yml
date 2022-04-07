@@ -1,0 +1,51 @@
+name: Pull Request Delete
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+    paths-ignore:
+      - 'tools/bumblebee/**'
+
+jobs:
+  pr_delete:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        working-directory: setup/cdk
+        run: npm ci
+
+      - name: Delete Stack
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        working-directory: setup/cdk
+        run: |
+          npx cdk destroy --force --all -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
+
+      - name: Delete Deployment
+        uses: strumwolf/delete-deployment-environment@v2
+        with:
+          token: ${{ secrets.DELETE_ENV_TOKEN }}
+          environment: pr${{ github.event.pull_request.number }}

@@ -57,12 +57,12 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
           : InterviewStatus.NotCompleted,
         student: {
           totalScore: it.student.totalScore,
-          cityName: it.student.user.cityName,
+          cityName: it.student.user.cityName ?? undefined,
           githubId: it.student.user.githubId,
           name: userService.createName(it.student.user),
         },
         interviewer: {
-          cityName: it.mentor.user.cityName,
+          cityName: it.mentor.user.cityName ?? undefined,
           githubId: it.mentor.user.githubId,
           name: userService.createName(it.mentor.user),
           preference: it.mentor.studentsPreference ?? 'any',
@@ -154,15 +154,24 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     }
 
     const mentors = await courseService.getMentorsWithStudents(courseId);
+
     const students = noRegistration
       ? await courseService.getStudents(courseId, true)
       : await this.findStudents(courseId);
     const interviews = await this.findMany(courseId);
-    const result = createInterviews(mentors, students, interviews, keepReserve);
 
-    return getRepository(StageInterview).save(
-      result.map(r => ({ courseTaskId: courseTask?.id, courseId, mentorId: r.mentor.id, studentId: r.student.id })),
+    const distibution = createInterviews(mentors, students, interviews, keepReserve);
+
+    const result = await getRepository(StageInterview).save(
+      distibution.map(pair => ({
+        courseTaskId: courseTask?.id,
+        courseId,
+        mentorId: pair.mentor.id,
+        studentId: pair.student.id,
+      })),
     );
+
+    return result;
   }
 
   public async cancelByMentor(courseId: number, githubId: string) {

@@ -132,7 +132,7 @@ class StudentStatsCard extends React.Component<Props, State> {
 
   private selfExpelStudent = async (gitHubId: string, courseId: number) => {
     const courseService = new CourseService(courseId);
-    const result = await courseService.selfExpel(gitHubId, courseId.toString());
+    const result = await courseService.selfExpel(gitHubId, 'Self expelled from the course');
     if (result.status === 200) {
       window.location.reload();
     }

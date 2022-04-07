@@ -13,10 +13,6 @@ export const getResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   let data = null;
 
-  if (mod === 'view') {
-    data = await service.getViewData();
-  }
-
   if (mod === 'form') {
     data = await service.getFormData();
   }

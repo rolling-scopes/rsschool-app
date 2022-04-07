@@ -1,6 +1,6 @@
 import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import { Course } from 'common/models';
+import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { StudentSearch } from 'components/StudentSearch';
 import withSession, { Session } from 'components/withSession';

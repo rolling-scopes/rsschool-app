@@ -7,6 +7,7 @@ type AuthConfig = {
     clientSecret: string;
     callbackUrl: string;
     scope: string[];
+    activityWebhookSecret: string;
   };
   dev: {
     username: string;
@@ -29,6 +30,9 @@ type UsersConfig = {
 type AWSServices = {
   restApiUrl: string;
   restApiKey: string;
+  region: string;
+  secretAccessKey: string;
+  accessKeyId: string;
 };
 
 @Injectable()
@@ -41,13 +45,14 @@ export class ConfigService {
   constructor(conf: NestConfigService) {
     this.auth = {
       github: {
-        clientId: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID'),
-        clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
-        callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
+        clientId: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID') ?? '',
+        clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET') ?? '',
+        callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK') ?? '',
         scope: ['user:email'],
+        activityWebhookSecret: conf.get('process.env.RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
       },
       dev: {
-        username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME'),
+        username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME') ?? '',
         admin: conf.get<string>('RSSCHOOL_AUTH_DEV_ADMIN')?.toLowerCase() === 'true',
       },
       jwt: {
@@ -56,14 +61,17 @@ export class ConfigService {
     };
 
     this.awsServices = {
-      restApiUrl: process.env.RSSHCOOL_API_AWS_REST_API_URL || '',
-      restApiKey: process.env.RSSHCOOL_API_AWS_REST_API_KEY || '',
+      restApiUrl: process.env.RSSHCOOL_AWS_REST_API_URL || '',
+      restApiKey: process.env.RSSHCOOL_AWS_REST_API_KEY || '',
+      region: process.env.RSSHCOOL_AWS_REGION || '',
+      secretAccessKey: process.env.RSSHCOOL_AWS_SECRET_ACCESS_KEY || '',
+      accessKeyId: process.env.RSSHCOOL_AWS_ACCESS_KEY_ID || '',
     };
 
     this.users = {
       root: {
-        username: conf.get('RSSHCOOL_USERS_ROOT_USERNAME'),
-        password: conf.get('RSSHCOOL_USERS_ROOT_PASSWORD'),
+        username: conf.get('RSSHCOOL_USERS_CLOUD_USERNAME') ?? '',
+        password: conf.get('RSSHCOOL_USERS_CLOUD_PASSWORD') ?? '',
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],

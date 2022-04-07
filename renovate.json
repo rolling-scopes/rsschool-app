@@ -1,5 +1,6 @@
 {
   "extends": ["config:base"],
+  "ignorePaths": ["tools/**", "server/**"],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
   "lockFileMaintenance": { "enabled": true },
@@ -9,7 +10,7 @@
   "repositories": ["rolling-scopes/rsschool-app"],
   "packageRules": [
     {
-      "matchPackagePatterns": [ "react-" ],
+      "matchPackagePatterns": ["react-"],
       "groupName": "react libs"
     }
   ]

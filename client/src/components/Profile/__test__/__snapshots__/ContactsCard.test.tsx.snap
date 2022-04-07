@@ -2,6 +2,7 @@
 
 exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
 <ContactsCard
+  connections={Object {}}
   data={
     Object {
       "email": "vasya@tut.by",
@@ -16,6 +17,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
   isEditingModeEnabled={false}
   onPermissionsSettingsChange={[MockFunction]}
   onProfileSettingsChange={[MockFunction]}
+  sendConfirmationEmail={[MockFunction]}
 >
   <CommonCard
     content={
@@ -509,6 +511,71 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           </Text>
                            
                           vasya@tut.by
+                          <EmailConfirmation
+                            sendConfirmationEmail={[MockFunction]}
+                          >
+                            <Alert
+                              message={
+                                <div>
+                                  Email is not verified.
+                                   
+                                  <span
+                                    onClick={[Function]}
+                                    style={
+                                      Object {
+                                        "cursor": "pointer",
+                                        "textDecoration": "underline",
+                                      }
+                                    }
+                                  >
+                                    Send confirmation email?
+                                  </span>
+                                </div>
+                              }
+                              type="error"
+                            >
+                              <CSSMotion
+                                motionAppear={false}
+                                motionEnter={false}
+                                motionName="ant-alert-motion"
+                                onLeaveStart={[Function]}
+                                visible={true}
+                              >
+                                <DomWrapper>
+                                  <div
+                                    className="ant-alert ant-alert-error ant-alert-no-icon"
+                                    data-show={true}
+                                    role="alert"
+                                    style={Object {}}
+                                  >
+                                    <div
+                                      className="ant-alert-content"
+                                    >
+                                      <div
+                                        className="ant-alert-message"
+                                      >
+                                        <div>
+                                          Email is not verified.
+                                           
+                                          <span
+                                            onClick={[Function]}
+                                            style={
+                                              Object {
+                                                "cursor": "pointer",
+                                                "textDecoration": "underline",
+                                              }
+                                            }
+                                          >
+                                            Send confirmation email?
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </DomWrapper>
+                              </CSSMotion>
+                            </Alert>
+                          </EmailConfirmation>
                         </li>
                       </Item>
                       <Item>
@@ -896,6 +963,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
 
 exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
 <ContactsCard
+  connections={Object {}}
   data={
     Object {
       "email": "vasya@tut.by",
@@ -910,6 +978,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
   isEditingModeEnabled={true}
   onPermissionsSettingsChange={[MockFunction]}
   onProfileSettingsChange={[MockFunction]}
+  sendConfirmationEmail={[MockFunction]}
 >
   <CommonCard
     content={
@@ -1380,6 +1449,71 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           </Text>
                            
                           vasya@tut.by
+                          <EmailConfirmation
+                            sendConfirmationEmail={[MockFunction]}
+                          >
+                            <Alert
+                              message={
+                                <div>
+                                  Email is not verified.
+                                   
+                                  <span
+                                    onClick={[Function]}
+                                    style={
+                                      Object {
+                                        "cursor": "pointer",
+                                        "textDecoration": "underline",
+                                      }
+                                    }
+                                  >
+                                    Send confirmation email?
+                                  </span>
+                                </div>
+                              }
+                              type="error"
+                            >
+                              <CSSMotion
+                                motionAppear={false}
+                                motionEnter={false}
+                                motionName="ant-alert-motion"
+                                onLeaveStart={[Function]}
+                                visible={true}
+                              >
+                                <DomWrapper>
+                                  <div
+                                    className="ant-alert ant-alert-error ant-alert-no-icon"
+                                    data-show={true}
+                                    role="alert"
+                                    style={Object {}}
+                                  >
+                                    <div
+                                      className="ant-alert-content"
+                                    >
+                                      <div
+                                        className="ant-alert-message"
+                                      >
+                                        <div>
+                                          Email is not verified.
+                                           
+                                          <span
+                                            onClick={[Function]}
+                                            style={
+                                              Object {
+                                                "cursor": "pointer",
+                                                "textDecoration": "underline",
+                                              }
+                                            }
+                                          >
+                                            Send confirmation email?
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </DomWrapper>
+                              </CSSMotion>
+                            </Alert>
+                          </EmailConfirmation>
                         </li>
                       </Item>
                       <Item>
@@ -2294,19 +2428,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value="vasya@epam.com"
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value="vasya@epam.com"
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value="vasya@epam.com"
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value="vasya@epam.com"
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -2321,38 +2499,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value="vasya@epam.com"
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value="vasya@epam.com"
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value="vasya@epam.com"
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -2441,19 +2590,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value="vasya@tut.by"
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value="vasya@tut.by"
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value="vasya@tut.by"
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value="vasya@tut.by"
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -2468,38 +2661,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value="vasya@tut.by"
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value="vasya@tut.by"
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value="vasya@tut.by"
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -2588,19 +2752,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value=""
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value=""
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value=""
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value=""
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -2615,38 +2823,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value=""
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value=""
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value=""
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -2735,19 +2914,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value="1232422"
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value="1232422"
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value="1232422"
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value="1232422"
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -2762,38 +2985,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value="1232422"
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value="1232422"
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value="1232422"
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -2882,19 +3076,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value="skype_vasya"
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value="skype_vasya"
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value="skype_vasya"
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value="skype_vasya"
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -2909,38 +3147,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value="skype_vasya"
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value="skype_vasya"
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value="skype_vasya"
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -3029,19 +3238,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value=""
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value=""
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value=""
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value=""
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -3056,38 +3309,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value=""
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value=""
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value=""
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>
@@ -3176,19 +3400,63 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </ForwardRef>
                                                     </Text>
                                                   </p>
-                                                  <Input
+                                                  <ForwardRef
                                                     onChange={[Function]}
                                                     style={
                                                       Object {
                                                         "width": "100%",
                                                       }
                                                     }
-                                                    type="text"
                                                     value=""
                                                   >
-                                                    <ClearableLabeledInput
-                                                      bordered={true}
-                                                      element={
+                                                    <ForwardRef
+                                                      affixWrapperClassName=""
+                                                      groupClassName=""
+                                                      inputClassName=""
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      value=""
+                                                      wrapperClassName=""
+                                                    >
+                                                      <BaseInput
+                                                        affixWrapperClassName=""
+                                                        focused={false}
+                                                        groupClassName=""
+                                                        handleReset={[Function]}
+                                                        inputElement={
+                                                          <input
+                                                            className="ant-input"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            onFocus={[Function]}
+                                                            onKeyDown={[Function]}
+                                                            style={
+                                                              Object {
+                                                                "width": "100%",
+                                                              }
+                                                            }
+                                                            type="text"
+                                                            value=""
+                                                          />
+                                                        }
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        suffix={null}
+                                                        triggerFocus={[Function]}
+                                                        value=""
+                                                        wrapperClassName=""
+                                                      >
                                                         <input
                                                           className="ant-input"
                                                           onBlur={[Function]}
@@ -3203,38 +3471,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           type="text"
                                                           value=""
                                                         />
-                                                      }
-                                                      focused={false}
-                                                      handleReset={[Function]}
-                                                      inputType="input"
-                                                      onChange={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      suffix={null}
-                                                      triggerFocus={[Function]}
-                                                      type="text"
-                                                      value=""
-                                                    >
-                                                      <input
-                                                        className="ant-input"
-                                                        onBlur={[Function]}
-                                                        onChange={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        type="text"
-                                                        value=""
-                                                      />
-                                                    </ClearableLabeledInput>
-                                                  </Input>
+                                                      </BaseInput>
+                                                    </ForwardRef>
+                                                  </ForwardRef>
                                                 </div>
                                               </li>
                                             </Item>

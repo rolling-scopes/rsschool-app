@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { CoursesApi } from 'api';
-import { Course } from './models';
+import { CoursesApi, CourseDto as Course } from 'api';
 
 type CourseResponse = { data: Course };
-type CoursesResponse = { data: Course[] };
+export type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
   private coursesApi = new CoursesApi();

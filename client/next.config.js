@@ -1,30 +1,24 @@
 const webpack = require('webpack');
+const prodConfig = require('./next.config.prod');
+
 const isProd = process.env.NODE_ENV === 'production';
 
 const server = process.env.SERVER_HOST || 'http://localhost:3001';
 const nestjs = process.env.NESTJS_HOST || 'http://localhost:3002';
 
 const nextConfig = {
+  ...prodConfig,
   rewrites: () =>
     isProd
       ? []
       : [
-          { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
+          { source: '/certificate/:path*', destination: `${nestjs}/certificate/:path*` },
           { source: '/swagger', destination: `${nestjs}/swagger/` },
           { source: '/swagger-json', destination: `${nestjs}/swagger-json` },
           { source: '/swagger:path', destination: `${nestjs}/swagger/swagger:path` },
           { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
-  serverRuntimeConfig: {
-    rsHost: process.env.RS_HOST || 'http://localhost:3000',
-  },
-  assetPrefix: isProd ? 'https://cdn.rs.school' : '',
-  env: {
-    BUILD_VERSION: process.env.BUILD_VERSION || '0.0.0.0.0',
-    APP_VERSION: process.env.APP_VERSION,
-    RSSHCOOL_UI_GCP_MAPS_API_KEY: process.env.RSSHCOOL_UI_GCP_MAPS_API_KEY,
-  },
   webpack: config => {
     config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
     return config;
@@ -32,5 +26,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  swcMinify: false,
 };
 module.exports = nextConfig;

@@ -11,7 +11,7 @@ export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdi
     case 'noButGoodCandidate':
       return 'No, but good student';
     default:
-      return null;
+      return value;
   }
 }
 

@@ -10,16 +10,12 @@ export class CoursesService {
     private readonly repository: Repository<Course>,
   ) {}
 
-  public getByAlias(alias: string): Promise<Course> {
-    return this.repository.findOne({ where: { alias } });
-  }
-
   public async getAll() {
     return this.repository.find({ order: { startDate: 'DESC' } });
   }
 
   public async getById(id: number) {
-    return this.repository.findOne(id);
+    return this.repository.findOneOrFail(id);
   }
 
   public async getByIds(ids: number[]) {
@@ -27,6 +23,15 @@ export class CoursesService {
       where: {
         id: In(ids),
       },
+    });
+  }
+
+  public getActiveCourses(relations?: ('students' | 'mentors')[]) {
+    return this.repository.find({
+      where: {
+        completed: false,
+      },
+      relations,
     });
   }
 }

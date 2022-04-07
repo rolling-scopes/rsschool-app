@@ -15,7 +15,11 @@ import {
   TaskChecker,
   TaskSolutionResult,
   IUserSession,
-  CourseRole,
+  TaskResult,
+  TaskInterviewResult,
+  isAdmin,
+  isManager,
+  isSupervisor,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
@@ -240,20 +244,38 @@ export async function getStudentByGithubId(courseId: number, githubId: string): 
   return record;
 }
 
+export async function queryStudentById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
+  const record = await studentQuery()
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+    .where('student.id = :id', { id })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne();
+
+  if (record == null) {
+    return null;
+  }
+
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
+}
+
 export async function queryStudentByGithubId(
   courseId: number,
   githubId: string,
-): Promise<{ id: number; name: string; githubId: string } | null> {
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
   const record = await studentQuery()
     .innerJoin('student.user', 'user')
-    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
     .where('user.githubId = :githubId', { githubId })
     .andWhere('student.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
     return null;
   }
-  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
 }
 
 export async function queryMentorByGithubId(
@@ -264,6 +286,22 @@ export async function queryMentorByGithubId(
     .innerJoin('mentor.user', 'user')
     .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
     .where('user.githubId = :githubId', { githubId })
+    .andWhere('mentor.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function queryMentorById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('mentor.id = :id', { id })
     .andWhere('mentor.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
@@ -401,32 +439,33 @@ export async function getStudentScore(studentId: number) {
     .where('student.id = :studentId', { studentId })
     .getOne();
 
-  const taskResults =
-    student?.taskResults
-      ?.filter(({ courseTask: { disabled } }) => !disabled)
-      .map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+  if (!student) return null;
 
-  const preScreeningScore = Math.floor((getStageInterviewRating(student?.stageInterviews ?? []) ?? 0) * 10);
-  const preScreeningInterviews = student?.stageInterviews?.length
-    ? [{ score: preScreeningScore, courseTaskId: student?.stageInterviews[0].courseTaskId }]
-    : [];
+  const { taskResults, taskInterviewResults, stageInterviews } = student;
 
-  const interviewResults =
-    student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
-      courseTaskId,
-      score,
-    })) ?? [];
+  const toTaskScore = ({ courseTaskId, score = 0 }: TaskResult | TaskInterviewResult) => ({ courseTaskId, score });
 
-  let results = taskResults.concat(interviewResults);
+  const results = [];
+
+  if (taskResults?.length) {
+    results.push(...(taskResults.filter(taskResult => !taskResult.courseTask.disabled).map(toTaskScore) ?? []));
+  }
+
+  if (taskInterviewResults?.length) {
+    results.push(...taskInterviewResults.map(toTaskScore));
+  }
 
   // we have a case when technical screening score are set as task result.
-  results = taskResults.concat(
-    preScreeningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
-  );
+  if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+    results.push({
+      score: Math.floor((getStageInterviewRating(stageInterviews) ?? 0) * 10),
+      courseTaskId: stageInterviews[0].courseTaskId,
+    });
+  }
 
   return {
-    totalScore: student?.totalScore ?? 0,
-    rank: student?.rank ?? 999999,
+    totalScore: student.totalScore ?? 0,
+    rank: student.rank ?? 999999,
     results,
   };
 }
@@ -474,11 +513,7 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
-  return (
-    session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
-  );
+  return isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
 }
 
 export async function getEvent(eventId: number) {
@@ -526,7 +561,6 @@ export async function getUsers(courseId: number) {
     id: r.userId,
     name: createName(r.user),
     githubId: r.user.githubId,
-    isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
   }));
@@ -648,7 +682,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
         contactsPhone,
         contactsSkype,
         contactsTelegram,
-        cityName,
+        cityName: cityName ?? undefined,
       },
     };
   });

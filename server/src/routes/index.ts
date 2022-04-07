@@ -6,8 +6,6 @@ import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
-import { discordServerRoute } from './discordServer';
-import { userGroupRoute } from './userGroup';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
 import { filesRoute } from './file';
@@ -20,12 +18,8 @@ import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
-import { certificateRoute } from './certificate';
 import { lectureRoute } from './event';
 import { lecturesRoute } from './events';
-import { jwtRoute } from './jwt';
-import { userRoute } from './user';
-import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
 import { opportunitiesRoute } from './opportunities';
 import { interviewQuestionRoute } from './interviewQuestion';
@@ -49,7 +43,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   router.use(userRolesMiddleware, courseMiddleware);
 
   // public routes
-  applyRouter(router, certificateRoute(logger));
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
@@ -57,8 +50,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
-  applyRouter(router, discordServerRoute(logger));
-  applyRouter(router, userGroupRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, taskResultRoute(logger));
@@ -75,9 +66,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
-  applyRouter(router, jwtRoute(logger));
-  applyRouter(router, userRoute(logger));
-  applyRouter(router, consentRoute(logger));
   applyRouter(router, repositoryRoute(logger));
   applyRouter(router, opportunitiesRoute(logger));
 

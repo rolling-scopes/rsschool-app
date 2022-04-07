@@ -11,11 +11,12 @@ type Props = {
   title?: string;
   children?: any;
   noData?: boolean;
+  background?: string;
 };
 
 export function PageLayout(props: Props) {
   return (
-    <Layout style={{ background: 'transparent' }}>
+    <Layout style={{ background: props.background ?? 'transparent' }}>
       <Header title={props.title} username={props.githubId} courseName={props.courseName} />
       <Layout.Content style={{ margin: 16 }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
@@ -27,7 +28,7 @@ export function PageLayout(props: Props) {
 export function PageLayoutSimple(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header isProfilePage title={props.title} username={props.githubId} courseName={props.courseName} />
+      <Header title={props.title} username={props.githubId} courseName={props.courseName} />
       <Layout.Content>
         {props.noData ? (
           <div>no data</div>

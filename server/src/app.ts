@@ -4,7 +4,6 @@ import bodyParser from 'koa-bodyparser';
 import serve from 'koa-static';
 import koaJwt from 'koa-jwt';
 import { paginateMiddleware } from 'koa-typeorm-pagination';
-import { Server } from 'net';
 
 import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
@@ -15,9 +14,8 @@ import { startBackgroundJobs } from './schedule';
 import * as pgConfig from './ormconfig';
 
 export class App {
-  private koa = new Koa();
+  public koa = new Koa();
   private appLogger: ILogger;
-  private server: Server | undefined = undefined;
 
   constructor(logger: ILogger = createDefaultLogger()) {
     this.appLogger = logger;
@@ -26,7 +24,9 @@ export class App {
     this.koa.use(paginateMiddleware);
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
-    this.koa.use(cors());
+    if (process.env.NODE_ENV === 'production') {
+      this.koa.use(cors({ credentials: true, allowMethods: '*', origin: config.host }));
+    }
 
     this.koa.use(
       koaJwt({ key: 'user', cookie: 'auth-token', secret: config.sessionKey, debug: true, passthrough: true }),
@@ -35,7 +35,7 @@ export class App {
     process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
   }
 
-  public start(): Server {
+  public start(listen = false) {
     const routes = routesMiddleware(this.appLogger);
 
     this.koa.use(routes.publicRouter.routes());
@@ -44,9 +44,11 @@ export class App {
     this.koa.use(routeLoggerMiddleware);
     this.koa.use(serve('public'));
 
-    this.server = this.koa.listen(config.port);
-    this.appLogger.info(`Service is running on ${config.port} port`);
-    return this.server;
+    if (listen) {
+      this.koa.listen(config.port);
+      this.appLogger.info(`Service is running on ${config.port} port`);
+    }
+    return this.koa;
   }
 
   public async pgConnect(): Promise<boolean> {

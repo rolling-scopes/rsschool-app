@@ -98,7 +98,7 @@ export const emailTemplate = `<!DOCTYPE html>
   </head>
   <body
     style="
-      background-color: #f6f6f6;
+      background-color: #ffffff;
       font-family: sans-serif;
       -webkit-font-smoothing: antialiased;
       font-size: 14px;
@@ -119,11 +119,11 @@ export const emailTemplate = `<!DOCTYPE html>
         border-collapse: separate;
         mso-table-lspace: 0pt;
         mso-table-rspace: 0pt;
-        background-color: #f6f6f6;
+        background-color: #ffffff;
         width: 100%;
       "
       width="100%"
-      bgcolor="#f6f6f6"
+      bgcolor="#ffffff"
     >
       <tr>
         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top" valign="top">&nbsp;</td>
@@ -184,8 +184,9 @@ export const emailTemplate = `<!DOCTYPE html>
                     <tr>
                       <td style="font-family: sans-serif; font-size: 14px; vertical-align: top" valign="top">
                         <img
-                          height="100%"
-                          style="margin-bottom: 30px; max-width: 50%"
+                          height="108px"
+                          width="300px"
+                          style="margin-bottom: 30px;"
                           src="https://app.rs.school/static/images/logo-rsschool3.png"
                         />
 

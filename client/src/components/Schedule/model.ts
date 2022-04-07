@@ -76,7 +76,7 @@ export const SPECIAL_ENTITY_TAGS = [
   'jupyter',
 ];
 
-export const COLUMNS_TYPES = ['Type', 'Special', 'Duration', 'Organizer', 'Score'];
+export const COLUMNS_TYPES = ['Type', 'Special', 'Organizer', 'Score'];
 
 export const CHECKER_TYPES = {
   'auto-test': 'Auto-Test',
@@ -84,5 +84,4 @@ export const CHECKER_TYPES = {
   assigned: 'Cross-Mentor',
   taskOwner: 'Task Owner',
   crossCheck: 'Cross-Check',
-  jury: 'Jury',
 };

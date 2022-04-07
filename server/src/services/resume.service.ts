@@ -1,15 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
+import omit from 'lodash/omit';
 import { DateTime } from 'luxon';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models';
-import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
-import omit from 'lodash/omit';
 
 export class ResumeService {
   private resumeRepository = getCustomRepository(ResumeRepository);
-  private feedbackRespository = getCustomRepository(FeedbackRepository);
   private studentRepository = getCustomRepository(StudentRepository);
   private userRepository = getRepository(User);
 
@@ -25,11 +23,12 @@ export class ResumeService {
     return result;
   }
 
-  public async saveData(data: any) {
+  public async saveData(userId: number, data: any) {
     const cv = await this.resumeRepository.find(this.githubId);
     const result = await this.resumeRepository.save(this.githubId, {
       ...cv,
       ...data,
+      userId,
     });
 
     const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
@@ -37,33 +36,12 @@ export class ResumeService {
     return dataToSend;
   }
 
-  public async getViewData() {
-    const resume = await this.resumeRepository.find(this.githubId);
-
-    const [feedback, courses] = await Promise.all([
-      this.feedbackRespository.getResumeFeedback(this.githubId),
-      this.studentRepository.findAndIncludeStatsForResume(this.githubId),
-    ]);
-
-    const selectedCourses = courses
-      .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
-      .map(course => omit(course, ['courseId']));
-
-    const viewData = {
-      ...omit(resume, ['visibleCourses']),
-      feedback,
-      courses: selectedCourses,
-    };
-
-    return viewData;
-  }
-
   public async getFormData() {
     const resume = await this.resumeRepository.find(this.githubId);
 
     const courses = await this.studentRepository.findStudentCourses(this.githubId);
 
-    const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+    const realCourses = courses;
 
     const formData = {
       ...resume,
@@ -82,7 +60,7 @@ export class ResumeService {
     return value;
   }
 
-  public async updateConsent(consent: boolean) {
+  public async updateConsent(userId: number, consent: boolean) {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({ where: { githubId: this.githubId } });
     if (user == null) {
@@ -90,7 +68,7 @@ export class ResumeService {
     }
 
     if (consent) {
-      await this.createResume(this.githubId);
+      await this.createResume(this.githubId, userId);
       await this.userRepository.update({ githubId: this.githubId }, { opportunitiesConsent: true });
       return true;
     }
@@ -100,14 +78,14 @@ export class ResumeService {
     return false;
   }
 
-  private async createResume(githubId: string) {
+  private async createResume(githubId: string, userId: number) {
     const current = await this.resumeRepository.find(githubId);
 
     if (current != null) {
       throw StatusCodes.CONFLICT;
     }
 
-    return this.resumeRepository.create(githubId);
+    return this.resumeRepository.create(githubId, userId);
   }
 
   private async removeResume(githubId: string) {

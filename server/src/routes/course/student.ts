@@ -12,7 +12,7 @@ type FeedbackInput = { toUserId: number; comment: string };
 
 export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
-  const data: { comment?: string; status: 'expelled' | 'active' } = ctx.request.body;
+  const data: { comment?: string; status: 'expelled' | 'active' | 'self-study' } = ctx.request.body;
   const { allow, message = 'no access' } = await studentService.canChangeStatus(ctx.state.user, courseId, githubId);
 
   if (!allow) {
@@ -30,6 +30,10 @@ export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterCont
       await studentRepository.expel(courseId, githubId, data.comment);
       setResponse(ctx, OK);
       break;
+    case 'self-study':
+      await studentRepository.setSelfStudy(courseId, githubId, data.comment);
+      setResponse(ctx, OK);
+      break;
     default:
       setResponse(ctx, BAD_REQUEST, { message: 'not supported status' });
       break;
@@ -38,11 +42,13 @@ export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterCont
 
 export const selfUpdateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
-  const data: { comment?: string } = ctx.request.body;
+  const data: { status: 'expelled' | 'self-study'; comment?: string } = ctx.request.body;
 
   if (ctx.state.user.githubId === githubId) {
     const studentRepository = getCustomRepository(StudentRepository);
-    await studentRepository.expel(courseId, githubId, data.comment);
+    await (data.status === 'expelled'
+      ? studentRepository.expel(courseId, githubId, data.comment)
+      : studentRepository.setSelfStudy(courseId, githubId));
     setResponse(ctx, OK);
   } else {
     setResponse(ctx, BAD_REQUEST, { message: 'access denied' });
@@ -56,9 +62,9 @@ export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const feedback: Partial<Feedback> = {
     comment: data.comment,
-    course: courseId,
+    courseId,
     fromUser: id,
-    toUser: data.toUserId,
+    toUserId: data.toUserId,
   };
   const result = await getRepository(Feedback).save(feedback);
 

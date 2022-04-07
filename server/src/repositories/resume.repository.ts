@@ -19,8 +19,8 @@ export class ResumeRepository extends AbstractRepository<Resume> {
     });
   }
 
-  public async create(githubId: string) {
-    const created = this.repository.create({ githubId });
+  public async create(githubId: string, userId: number) {
+    const created = this.repository.create({ githubId, userId });
     return this.save(githubId, created);
   }
 

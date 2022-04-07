@@ -1,4 +1,5 @@
 import { Button, Col, Form, Input, Layout, message, Popconfirm, Row, Select, Table, Tag } from 'antd';
+import { UpdateUserGroupDto, UserGroupApi, UserGroupDto } from 'api';
 import { AdminSider } from 'components/AdminSider';
 import { ModalForm } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -8,9 +9,7 @@ import { UserSearch } from 'components/UserSearch';
 import { Session, withSession } from 'components/withSession';
 import React, { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { UserGroup } from 'services/models';
 import { UserService } from 'services/user';
-import { UserGroupService } from 'services/userGroup';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -20,24 +19,23 @@ enum ModalAction {
   create = 'create',
 }
 
-const roles = ['juryActivist', 'manager', 'supervisor'];
+const roles = ['manager', 'supervisor'];
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
   manager: 'volcano',
-  juryActivist: 'gold',
 };
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as UserGroup[]);
-  const [modalData, setModalData] = useState(null as Partial<UserGroup> | null);
+  const [data, setData] = useState([] as UserGroupDto[]);
+  const [modalData, setModalData] = useState(null as Partial<UserGroupDto & { id: number }> | null);
   const [modalAction, setModalAction] = useState(ModalAction.update);
   const [modalLoading, setModalLoading] = useState(false);
 
   const userService = new UserService();
-  const userGroupService = new UserGroupService();
+  const userGroupService = new UserGroupApi();
 
   const loadData = async () => {
-    const data = await userGroupService.getUserGroups();
+    const { data } = await userGroupService.getUserGroups();
     setData(data);
   };
 
@@ -52,7 +50,7 @@ function Page(props: Props) {
     setModalAction(ModalAction.create);
   };
 
-  const handleEditItem = (record: UserGroup) => {
+  const handleEditItem = (record: UserGroupDto) => {
     setModalData(record);
     setModalAction(ModalAction.update);
   };
@@ -60,7 +58,7 @@ function Page(props: Props) {
   const handleDeleteItem = async (id: number) => {
     try {
       await userGroupService.deleteUserGroup(id);
-      const data = await userGroupService.getUserGroups();
+      const { data } = await userGroupService.getUserGroups();
       setData(data);
     } catch {
       message.error('Failed to delete user group. Please try later.');
@@ -68,7 +66,7 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = useCallback(
-    async (values: any) => {
+    async (values: UpdateUserGroupDto) => {
       try {
         if (modalLoading) {
           return;
@@ -153,8 +151,8 @@ function Page(props: Props) {
   );
 }
 
-function createRecord(values: any) {
-  const record: Partial<UserGroup> = {
+function createRecord(values: UpdateUserGroupDto) {
+  const record: UpdateUserGroupDto = {
     name: values.name,
     users: values.users,
     roles: values.roles,
@@ -171,12 +169,12 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: stringSorter<UserGroup>('name'),
+      sorter: stringSorter<UserGroupDto>('name'),
     },
     {
       title: 'Users',
       dataIndex: 'users',
-      render: (_: any, record: UserGroup) => (
+      render: (_: any, record: UserGroupDto) => (
         <div>
           {record.users.map((user, index, array) => (
             <div key={user.id} style={{ display: 'flex', marginBottom: index < array.length - 1 ? 10 : 0 }}>
@@ -190,7 +188,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     {
       title: 'Roles',
       dataIndex: 'roles',
-      render: (_: any, record: UserGroup) => (
+      render: (_: any, record: UserGroupDto) => (
         <div>
           {record.roles.map(role => (
             <Tag color={rolesColors[role]} key={role}>
@@ -203,7 +201,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_: any, record: UserGroup) => (
+      render: (_: any, record: UserGroupDto) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
@@ -222,7 +220,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
   ];
 }
 
-function getInitialValues(modalData: Partial<UserGroup>) {
+function getInitialValues(modalData: Partial<UserGroupDto>) {
   return {
     ...modalData,
     users: modalData.users?.map(user => user.id) ?? [],

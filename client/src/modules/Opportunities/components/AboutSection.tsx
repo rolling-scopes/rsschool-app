@@ -15,15 +15,15 @@ function AboutSection(props: Props) {
     return null;
   }
 
-  const sectionContent = (
-    <Row>
-      <Col>
-        <Text style={{ fontSize: 16 }}>{notes}</Text>
-      </Col>
-    </Row>
+  return (
+    <Section title="About">
+      <Row>
+        <Col>
+          <Text style={{ fontSize: 16, whiteSpace: 'pre-line' }}>{notes}</Text>
+        </Col>
+      </Row>
+    </Section>
   );
-
-  return <Section content={sectionContent} title="About" />;
 }
 
 export default AboutSection;

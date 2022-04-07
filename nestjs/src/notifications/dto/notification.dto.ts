@@ -1,4 +1,4 @@
-import { Notification, NotificationScope } from '@entities/notification';
+import { Notification, NotificationType } from '@entities/notification';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
@@ -26,8 +26,8 @@ export class NotificationDto {
   constructor(notification: Notification) {
     this.id = notification.id;
     this.name = notification.name;
-    this.scope = notification.scope;
     this.enabled = notification.enabled;
+    this.type = notification.type;
     this.channels = notification.channels.map(settings => ({
       template: settings.template,
       channelId: settings.channelId,
@@ -43,9 +43,9 @@ export class NotificationDto {
   @ApiProperty()
   enabled: boolean;
 
-  @ApiProperty({ enum: NotificationScope, enumName: 'NotificationScope' })
-  @IsEnum(NotificationScope)
-  public scope: NotificationScope;
+  @ApiProperty({ enum: NotificationType, enumName: 'NotificationType' })
+  @IsEnum(NotificationType)
+  public type: NotificationType;
 
   @ApiProperty({ type: ChannelSettings, isArray: true })
   public channels: ChannelSettings[];

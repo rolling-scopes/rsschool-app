@@ -1,25 +1,30 @@
-import { Contacts, CVFeedback, CVStudentStats, UserData } from '../models';
+import { FeedbackDto, GratitudeDto, ResumeCourseDto, ResumeDto } from 'api';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { OpportunitiesService } from '../services/opportunities';
+import { Contacts, UserData } from '../models';
 
 type Props = {
-  githubId: string;
+  githubId?: string;
+  initialData?: ResumeDto;
 };
 
-const cvService = new OpportunitiesService();
-
-export function useViewData({ githubId }: Props) {
+export function useViewData({ initialData: resume }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [courses, setCourses] = useState<CVStudentStats[] | null>(null);
-  const [feedback, setFeedback] = useState<CVFeedback[] | null>(null);
+  const [courses, setCourses] = useState<ResumeCourseDto[]>([]);
+  const [gratitudes, setGratitudes] = useState<GratitudeDto[]>([]);
+  const [feedbacks, setFeedbacks] = useState<FeedbackDto[]>([]);
+  const [uuid, setUuid] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const cvData = await cvService.getFullResumeData(githubId);
+    const { data } = { data: resume };
+
+    if (!data) {
+      return;
+    }
 
     const {
       notes,
@@ -39,15 +44,17 @@ export function useViewData({ githubId }: Props) {
       telegram,
       website,
       fullTime,
-      feedback,
       courses,
-    } = cvData;
+      gratitudes,
+      feedbacks,
+      uuid,
+    } = data;
 
     const userData = {
       notes,
       name,
       selfIntroLink,
-      militaryService,
+      militaryService: militaryService as any,
       avatarLink,
       desiredPosition,
       englishLevel,
@@ -69,11 +76,13 @@ export function useViewData({ githubId }: Props) {
     setContacts(contactsList);
     setUserData(userData);
     setCourses(courses);
-    setFeedback(feedback);
+    setGratitudes(gratitudes);
+    setFeedbacks(feedbacks);
+    setUuid(uuid);
     setLoading(false);
   }, []);
 
-  useAsync(fetchData, [githubId]);
+  useAsync(fetchData, []);
 
-  return { userData, loading, contacts, courses, feedback };
+  return { userData, loading, contacts, courses, feedbacks, gratitudes, uuid };
 }

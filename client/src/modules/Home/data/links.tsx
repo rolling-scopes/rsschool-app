@@ -2,27 +2,18 @@ import {
   AudioTwoTone,
   CalendarTwoTone,
   CheckCircleTwoTone,
+  GoldTwoTone,
   CheckSquareTwoTone,
   CodeTwoTone,
-  CompassTwoTone,
   DashboardTwoTone,
   FireTwoTone,
-  LikeOutlined,
   PlayCircleTwoTone,
   StopTwoTone,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import {
-  isStudent,
-  isAdmin,
-  isTaskOwner,
-  isMentor,
-  isCourseManager,
-  isJuryActivist,
-  isCourseSupervisor,
-} from 'domain/user';
+import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isCourseSupervisor } from 'domain/user';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -74,17 +65,16 @@ const links: LinkData[] = [
     access: anyAccess,
   },
   {
+    name: 'My Students',
+    icon: <GoldTwoTone twoToneColor="#7f00ff" />,
+    getUrl: (course: Course) => `/course/mentor/students?course=${course.alias}`,
+    access: every(isMentor),
+  },
+  {
     name: 'Submit Review',
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: every(some(isMentor, isTaskOwner, isCourseManager)),
-    courseAccess: everyCourse(isCourseNotCompleted),
-  },
-  {
-    name: 'Submit Review By Jury',
-    icon: <CheckCircleTwoTone />,
-    getUrl: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
-    access: every(some(isAdmin, isJuryActivist)),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
@@ -93,13 +83,6 @@ const links: LinkData[] = [
     getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: every(some(isTaskOwner, isAdmin, isCourseManager)),
     courseAccess: everyCourse(isCourseNotCompleted),
-  },
-
-  {
-    name: 'Feedback on student',
-    icon: <LikeOutlined />,
-    getUrl: () => `/feedback`,
-    access: isMentor,
   },
   {
     name: 'Cross-Check: Submit',
@@ -127,13 +110,6 @@ const links: LinkData[] = [
     icon: <AudioTwoTone twoToneColor="orange" />,
     getUrl: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
     access: every(isMentor),
-    courseAccess: everyCourse(isCourseNotCompleted),
-  },
-  {
-    name: 'Cross Mentors',
-    icon: <CompassTwoTone twoToneColor="#52c41a" />,
-    getUrl: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
-    access: every(isStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {

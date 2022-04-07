@@ -27,7 +27,9 @@ export class MentorRegistryService {
   }
 
   public async updateMentor(githubId: string, data: any) {
-    const response = await this.axios.put<any>(`/mentor/${githubId}`, data);
+    const response = await this.axios.put<any>(`/mentor/${githubId}`, data, {
+      baseURL: `/api/v2/registry`,
+    });
     return response.data.data;
   }
 

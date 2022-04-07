@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { CurrentRequest } from '../auth.service';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '../../config';
 
@@ -12,7 +13,7 @@ export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
     super();
   }
 
-  public async validate(req: any): Promise<any> {
+  public async validate(req: CurrentRequest): Promise<any> {
     const profile = {
       provider: '',
       id: '',
@@ -22,8 +23,11 @@ export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
     const user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
     req.user = user;
     const token = this.authService.validateGithub(req);
-    req.res.writeHead(302, {
-      'Set-Cookie': `${JWT_COOKIE_NAME}=${encodeURI(token)}; HttpOnly; path=/`,
+    if (!token) {
+      throw new Error('Invalid token');
+    }
+    req.res?.writeHead(302, {
+      'Set-Cookie': `${JWT_COOKIE_NAME}=${encodeURI(token)}; HttpOnly; path=/;`,
       Location: '/',
     });
     return true;
