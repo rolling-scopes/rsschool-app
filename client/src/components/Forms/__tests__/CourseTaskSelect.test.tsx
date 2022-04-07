@@ -124,9 +124,9 @@ const onlyExpired = [
 ] as CourseTask[];
 
 describe('CourseTaskSelect', () => {
-  const outputFull = shallow(<CourseTaskSelect data={fullData} groupBy='deadline'></CourseTaskSelect>);
-  const outputOnlyExpired = shallow(<CourseTaskSelect data={onlyExpired} groupBy='deadline'></CourseTaskSelect>);
-  const outputEmpty = shallow(<CourseTaskSelect data={[]} groupBy='deadline'></CourseTaskSelect>);
+  const outputFull = shallow(<CourseTaskSelect data={fullData} groupBy="deadline"></CourseTaskSelect>);
+  const outputOnlyExpired = shallow(<CourseTaskSelect data={onlyExpired} groupBy="deadline"></CourseTaskSelect>);
+  const outputEmpty = shallow(<CourseTaskSelect data={[]} groupBy="deadline"></CourseTaskSelect>);
 
   it('should render with both groups', () => {
     expect(shallowToJson(outputFull)).toMatchSnapshot();
