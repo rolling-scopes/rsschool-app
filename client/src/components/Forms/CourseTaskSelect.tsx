@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Select, Form } from 'antd';
-
-import { CourseTask } from 'services/course';
+import { CourseTaskDto } from 'api';
 
 type Props = {
-  data: CourseTask[];
+  data: CourseTaskDto[];
   groupBy?: string;
   onChange?: (id: number) => void;
 };

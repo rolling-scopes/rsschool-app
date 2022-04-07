@@ -85,7 +85,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-12-01 13:12:01"
+            title="2018-12-01 12:12:01"
           >
             <span>
               3 years ago
@@ -161,7 +161,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01 12:12:01"
+            title="2018-11-01 11:12:01"
           >
             <span>
               3 years ago
@@ -237,7 +237,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-09-01 13:12:01"
+            title="2018-09-01 11:12:01"
           >
             <span>
               3 years ago
@@ -313,7 +313,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-10-01 13:12:01"
+            title="2018-10-01 11:12:01"
           >
             <span>
               3 years ago
@@ -389,7 +389,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01 13:12:01"
+            title="2018-11-01 12:12:01"
           >
             <span>
               3 years ago
@@ -465,7 +465,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2019-12-01 13:12:01"
+            title="2019-12-01 12:12:01"
           >
             <span>
               2 years ago
