@@ -94,4 +94,10 @@ export class Course {
 
   @Column({ default: true })
   personalMentoring: boolean;
+
+  @Column({ nullable: true })
+  courseActiveLogoUrl: string;
+
+  @Column({ nullable: true })
+  courseArchivedLogoUrl: string;
 }

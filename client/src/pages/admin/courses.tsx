@@ -1,4 +1,18 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Layout, message, Radio, Row, Select, Table } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Layout,
+  message,
+  Radio,
+  Row,
+  Select,
+  Table,
+} from 'antd';
 import { Header } from 'components/Header';
 import { AdminSider } from 'components/AdminSider';
 import withSession, { Session } from 'components/withSession';
@@ -189,6 +203,25 @@ function Page(props: Props) {
           </Col>
         </Row>
 
+        <Form.Item name="courseActiveLogoUrl" label="Active Logo">
+          <Select placeholder="Please select logo">
+            {DEFAULT_COURSE_ICONS.map(course => (
+              <Select.Option key={course.label} value={course.active}>
+                {course.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="courseArchivedLogoUrl" label="Archived Logo">
+          <Select placeholder="Please select logo">
+            {DEFAULT_COURSE_ICONS.map(course => (
+              <Select.Option key={course.label} value={course.archived}>
+                {course.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
         <Form.Item name="state" label="State">
           <Radio.Group>
             <Radio value={null}>Active</Radio>
@@ -255,6 +288,8 @@ function createRecord(values: any) {
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
+    courseActiveLogoUrl: values.courseActiveLogoUrl,
+    courseArchivedLogoUrl: values.courseArchivedLogoUrl,
   };
   return record;
 }
@@ -264,6 +299,11 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Id',
       dataIndex: 'id',
+    },
+    {
+      title: 'Logo',
+      dataIndex: 'courseActiveLogoUrl',
+      render: (url: string) => <Image width={25} preview={false} src={url} />,
     },
     {
       title: 'Name',
@@ -323,6 +363,51 @@ function getColumns(handleEditItem: any) {
     },
   ];
 }
+
+const DEFAULT_COURSE_ICONS = [
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/javascript.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/javascript-archived.svg',
+    label: 'Javascript',
+  },
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/angular.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/angular-archived.svg',
+    label: 'Angular',
+  },
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/reactjs.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/reactjs-archived.svg',
+    label: 'Reactjs',
+  },
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/android.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/android-archived.svg',
+    label: 'Android',
+  },
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/ios.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/ios-archived.svg',
+    label: 'iOS',
+  },
+
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/nodejs.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/nodejs-archived.svg',
+    label: 'Nodejs',
+  },
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/machine-learning.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/machine-learning-archived.svg',
+    label: 'Machine learning',
+  },
+
+  {
+    active: 'https://app.rs.school/static/svg/disciplines/nodejs-aws.svg',
+    archived: 'https://app.rs.school/static/svg/disciplines/nodejs-aws-archived.svg',
+    label: 'Nodejs In AWS',
+  },
+];
 
 function getInitialValues(modalData: Partial<Course>) {
   return {

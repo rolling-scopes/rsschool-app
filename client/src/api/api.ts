@@ -492,6 +492,18 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'personalMentoring': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
+    'courseActiveLogoUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
+    'courseArchivedLogoUrl': string;
 }
 /**
  * 
@@ -1637,6 +1649,18 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'personalMentoring': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'courseActiveLogoUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'courseArchivedLogoUrl': string;
 }
 /**
  * 
