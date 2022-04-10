@@ -19,7 +19,14 @@ interface ManageEventModalFormProps {
   settings: ScheduleSettings;
 }
 
-const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({ visible, handleCancel, courseId, editableRecord, refreshData, settings }) => {
+const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
+  visible,
+  handleCancel,
+  courseId,
+  editableRecord,
+  refreshData,
+  settings,
+}) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;

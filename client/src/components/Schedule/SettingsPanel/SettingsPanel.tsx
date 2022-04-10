@@ -41,16 +41,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <>
       <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
         <Col>
-          <ViewModeSelect
-            viewMode={settings.viewMode}
-            setViewMode={settings.setViewMode}
-          />
+          <ViewModeSelect viewMode={settings.viewMode} setViewMode={settings.setViewMode} />
         </Col>
         <Col>
-          <TimezoneSelect
-            timezone={settings.timezone}
-            setTimezone={settings.setTimezone}
-          />
+          <TimezoneSelect timezone={settings.timezone} setTimezone={settings.setTimezone} />
         </Col>
         {isAdmin && (
           <>

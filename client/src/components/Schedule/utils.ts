@@ -1,16 +1,13 @@
 import csv from 'csvtojson';
 import { CSSProperties } from 'react';
 import isUndefined from 'lodash/isUndefined';
-import {
-  DEFAULT_COLOR,
-  SPECIAL_TASK_TYPES,
-} from 'components/Schedule/constants';
+import { DEFAULT_COLOR, SPECIAL_TASK_TYPES } from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
 
 export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) =>
   `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
 
-export const getTagStyle = (tagName: string,  tagColors: Record<string, string> = {}, styles?: CSSProperties) => {
+export const getTagStyle = (tagName: string, tagColors: Record<string, string> = {}, styles?: CSSProperties) => {
   const tagColor = tagColors[tagName] || DEFAULT_COLOR;
   return {
     ...styles,

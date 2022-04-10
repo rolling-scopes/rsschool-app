@@ -9,16 +9,8 @@ interface TimezoneSelectProps {
   setTimezone: (value: string) => void;
 }
 
-const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
-  timezone,
-  setTimezone,
-}) => (
-  <Select
-    style={{ width: 200 }}
-    placeholder="Please select a timezone"
-    defaultValue={timezone}
-    onChange={setTimezone}
-  >
+const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ timezone, setTimezone }) => (
+  <Select style={{ width: 200 }} placeholder="Please select a timezone" defaultValue={timezone} onChange={setTimezone}>
     {TIMEZONES.map(timezone => (
       <Option key={timezone} value={timezone}>
         {/* there is no 'Europe / Kyiv' timezone at the moment */}
@@ -26,7 +18,6 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       </Option>
     ))}
   </Select>
-
 );
 
 export default TimezoneSelect;

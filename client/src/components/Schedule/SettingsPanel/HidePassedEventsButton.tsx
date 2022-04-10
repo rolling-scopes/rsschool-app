@@ -1,9 +1,6 @@
 import React from 'react';
 import { Button, Tooltip } from 'antd';
-import {
-  EyeOutlined,
-  EyeInvisibleOutlined,
-} from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 interface HidePassedEventsButtonProps {
   arePassedEventsHidden: boolean;

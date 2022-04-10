@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Row, Col, Tooltip, Button, Form, message } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
-import {
-  DownloadOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { CourseService } from 'services/course';
 import { parseFiles, uploadResults } from '../utils';
 
@@ -16,12 +13,7 @@ interface ManageCsvButtonsProps {
   refreshData: () => void;
 }
 
-const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({
-  courseId,
-  courseService,
-  timezone,
-  refreshData,
-}) => {
+const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, courseService, timezone, refreshData }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<RcFile[]>([]);
 

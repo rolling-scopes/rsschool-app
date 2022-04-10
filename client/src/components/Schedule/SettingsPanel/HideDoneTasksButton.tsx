@@ -1,19 +1,13 @@
 import React from 'react';
 import { Button, Tooltip } from 'antd';
-import {
-  BorderOutlined,
-  CheckSquareOutlined,
-} from '@ant-design/icons';
+import { BorderOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
 interface HidePassedEventsButtonProps {
   areDoneTasksHidden: boolean;
   setAreDoneTasksHidden: (value: boolean) => void;
 }
 
-const HideDoneTasksButton: React.FC<HidePassedEventsButtonProps> = ({
-  areDoneTasksHidden,
-  setAreDoneTasksHidden,
-}) => {
+const HideDoneTasksButton: React.FC<HidePassedEventsButtonProps> = ({ areDoneTasksHidden, setAreDoneTasksHidden }) => {
   const toggleDoneTasksVisibility = () => setAreDoneTasksHidden(!areDoneTasksHidden);
 
   return (

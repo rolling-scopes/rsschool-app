@@ -66,7 +66,13 @@ export function EventPage(props: CoursePageProps) {
         />
       )}
       {type === 'event' && (
-        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} settings={settings} />
+        <EventDetails
+          eventData={entityData as CourseEvent}
+          alias={alias}
+          onEdit={handleFullEdit}
+          isAdmin={isAdmin}
+          settings={settings}
+        />
       )}
       {isModalOpen && (
         <ManageEventModalForm

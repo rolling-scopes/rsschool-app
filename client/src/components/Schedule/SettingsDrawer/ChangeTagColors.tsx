@@ -15,7 +15,7 @@ interface ChangeTagColorProps {
 }
 
 const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColors, tags }) => {
-  const changeColor = (colorState: ColorState, tag: string) => setTagColors({ ...tagColors, [tag]: colorState.hex })
+  const changeColor = (colorState: ColorState, tag: string) => setTagColors({ ...tagColors, [tag]: colorState.hex });
 
   return (
     <SettingsItem header="Change tag colors" IconComponent={BgColorsOutlined}>

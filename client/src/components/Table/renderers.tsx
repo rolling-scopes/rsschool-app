@@ -71,7 +71,11 @@ export function renderTag(value: number | string, color?: string) {
   );
 }
 
-export function renderTagWithStyle(tagName: string, tagColors?: Record<string, string>, tagMap?: Record<string, string>) {
+export function renderTagWithStyle(
+  tagName: string,
+  tagColors?: Record<string, string>,
+  tagMap?: Record<string, string>,
+) {
   return (
     <Tag style={getTagStyle(tagName, tagColors)} key={tagName}>
       {tagMap?.[tagName] || tagName}

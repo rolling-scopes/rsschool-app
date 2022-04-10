@@ -6,9 +6,7 @@ interface AddEventButtonProps {
   openManageEventModal: () => void;
 }
 
-const AddEventButton: React.FC<AddEventButtonProps> = ({
-  openManageEventModal
-}) => (
+const AddEventButton: React.FC<AddEventButtonProps> = ({ openManageEventModal }) => (
   <Tooltip title="Add new" mouseEnterDelay={1}>
     <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal} />
   </Tooltip>
