@@ -7,14 +7,14 @@ import TaskLimits from './TaskLimits';
 import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
-interface ScheduleSettingsProps {
+interface SettingsDrawerProps {
   settings: ScheduleSettings;
   eventTypes: string[];
 }
 
 const TITLE = 'Schedule settings';
 
-const ScheduleSettings: React.FC<ScheduleSettingsProps> = ({ settings, eventTypes }) => {
+const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes }) => {
   const [opened, setOpened] = useState(false);
 
   const openDrawer = () => setOpened(true);
@@ -42,4 +42,4 @@ const ScheduleSettings: React.FC<ScheduleSettingsProps> = ({ settings, eventType
   );
 };
 
-export default ScheduleSettings;
+export default SettingsDrawer;
