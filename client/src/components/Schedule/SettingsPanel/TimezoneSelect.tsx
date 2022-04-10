@@ -19,10 +19,10 @@ const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
     defaultValue={timezone}
     onChange={setTimezone}
   >
-    {TIMEZONES.map(tz => (
-      <Option key={tz} value={tz}>
-        {/* there is no 'Europe / Kyiv' time zone at the moment */}
-        {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
+    {TIMEZONES.map(timezone => (
+      <Option key={timezone} value={timezone}>
+        {/* there is no 'Europe / Kyiv' timezone at the moment */}
+        {timezone === 'Europe/Kiev' ? 'Europe/Kyiv' : timezone}
       </Option>
     ))}
   </Select>
