@@ -13,12 +13,12 @@ type Props = {
   isOpen: boolean;
   data: CourseEvent;
   handleOnClose: Function;
-  timeZone: string;
-  storedTagColors?: Record<string, string>;
+  timezone: string;
+  tagColors: Record<string, string>;
   alias: string;
 };
 
-const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, storedTagColors, alias }) => {
+const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timezone, tagColors, alias }) => {
   const typeHeader = data.isTask ? 'Task:' : 'Event:';
   const title = (
     <Link href={getEventLink(alias, data.id, data.isTask)}>
@@ -40,7 +40,7 @@ const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, s
         onCancel={() => handleOnClose()}
         visible={isOpen}
       >
-        <Title level={5}>{moment(data.dateTime).tz(timeZone).format('MMM Do YYYY HH:mm')}</Title>
+        <Title level={5}>{moment(data.dateTime).tz(timezone).format('MMM Do YYYY HH:mm')}</Title>
         {data.event.description && <div>{data.event.description}</div>}
         {data.organizer && data.organizer.githubId && (
           <div>
@@ -49,7 +49,7 @@ const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, s
         )}
         <Space>
           {data.event.descriptionUrl && <div>Url: {urlRenderer(data.event.descriptionUrl)}</div>}
-          <div>{renderTagWithStyle(data.event.type, storedTagColors)}</div>
+          <div>{renderTagWithStyle(data.event.type, tagColors)}</div>
         </Space>
         <style jsx>{`
           div {

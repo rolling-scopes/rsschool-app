@@ -9,12 +9,12 @@ const { Title } = Typography;
 
 type Props = {
   data: CourseEvent[];
-  timeZone: string;
-  storedTagColors?: Record<string, string>;
+  timezone: string;
+  tagColors: Record<string, string>;
   alias: string;
 };
 
-const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
+const DesktopCalendar: React.FC<Props> = ({ data, timezone, tagColors, alias }) => {
   const [modalWindowData, setModalWindowData] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
 
@@ -33,7 +33,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
     return (
       <div>
         <ul style={{ padding: '5px' }}>
-          {getListData(date as unknown as Moment, data, timeZone, storedTagColors).map(coloredEvent => {
+          {getListData(date as unknown as Moment, data, timezone, tagColors).map(coloredEvent => {
             return (
               <Tooltip title={coloredEvent.time}>
                 <li
@@ -60,7 +60,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
   };
 
   const monthCellRender = (date: unknown | Moment) => {
-    const num = getMonthValue(date as unknown as Moment, data, timeZone);
+    const num = getMonthValue(date as unknown as Moment, data, timezone);
 
     return !!num && <Title level={5} style={{ textAlign: 'center' }}>{`Events & tasks: ${num}.`}</Title>;
   };
@@ -72,8 +72,8 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
           isOpen={showWindow}
           data={modalWindowData}
           handleOnClose={handleOnClose}
-          timeZone={timeZone}
-          storedTagColors={storedTagColors}
+          timezone={timezone}
+          tagColors={tagColors}
           alias={alias}
         />
       )}

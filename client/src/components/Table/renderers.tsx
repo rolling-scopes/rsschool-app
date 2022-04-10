@@ -8,7 +8,7 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
-import { getTagStyle } from 'components/Schedule/utils';
+import { getTagStyle } from 'components/Schedule';
 
 const { Text } = Typography;
 

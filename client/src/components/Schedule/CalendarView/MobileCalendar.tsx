@@ -25,12 +25,12 @@ const numberEventsStyle = css`
 
 type Props = {
   data: CourseEvent[];
-  timeZone: string;
-  storedTagColors?: Record<string, string>;
+  timezone: string;
+  tagColors: Record<string, string>;
   alias: string;
 };
 
-const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
+const MobileCalendar: React.FC<Props> = ({ data, timezone, tagColors, alias }) => {
   const [modalWindowData, setModalWindowData] = useState<
     { color: string; name: string; key: number; time: string; type: string }[] | undefined
   >();
@@ -51,7 +51,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
 
   function onSelect(date: unknown | Moment) {
     if (calendarMode === 'month') {
-      setModalWindowData(getListData(date as unknown as Moment, data, timeZone, storedTagColors));
+      setModalWindowData(getListData(date as unknown as Moment, data, timezone, tagColors));
     }
   }
 
@@ -61,7 +61,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
   }
 
   function dateCellRender(date: unknown | Moment) {
-    const numberEvents = getListData(date as unknown as Moment, data, timeZone, storedTagColors).length;
+    const numberEvents = getListData(date as unknown as Moment, data, timezone, tagColors).length;
     return (
       !!(numberEvents > 0) && (
         <>
@@ -73,7 +73,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
   }
 
   const monthCellRender = (date: unknown | Moment) => {
-    const numberEvents = getMonthValue(date as unknown as Moment, data, timeZone);
+    const numberEvents = getMonthValue(date as unknown as Moment, data, timezone);
     return (
       !!numberEvents && (
         <>
@@ -108,9 +108,9 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
             >
               <Col>
                 <Text style={{ marginRight: '8px' }} strong>
-                  {dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}
+                  {dateWithTimeZoneRenderer(timezone, 'HH:mm')(dateTime)}
                 </Text>
-                {renderTagWithStyle(item.type, storedTagColors)}
+                {renderTagWithStyle(item.type, tagColors)}
                 <Text strong>{item.name}</Text>
               </Col>
             </List.Item>
@@ -122,8 +122,8 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
           isOpen={showWindow}
           data={currentItem}
           handleOnClose={handleOnClose}
-          timeZone={timeZone}
-          storedTagColors={storedTagColors}
+          timezone={timezone}
+          tagColors={tagColors}
           alias={alias}
         />
       )}

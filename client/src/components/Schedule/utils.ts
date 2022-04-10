@@ -17,8 +17,8 @@ export const getTagStyle = (tagName: string, tagColors: Record<string, string> =
   };
 };
 
-const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent => {
-  return {
+const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent =>
+  ({
     id: task.id,
     dateTime: (type === SPECIAL_TASK_TYPES.deadline ? task.studentEndDate : task.studentStartDate) || '',
     event: {
@@ -35,8 +35,7 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
     duration: task.duration,
     score: `${task.score ?? 0}/${task.maxScore}`,
     done: task.score && task.maxScore ? Math.round((task.score / task.maxScore) * 100) : 0,
-  } as CourseEvent;
-};
+  } as CourseEvent);
 
 export const transformTasksToEvents = (tasks: CourseTaskDetails[]) =>
   tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
@@ -92,7 +91,7 @@ export const parseFiles = async (incomingFiles: any) => {
   return entities;
 };
 
-export const uploadResults = async (
+export const uploadResults = (
   courseService: CourseService,
   data: {
     entityType: string;
@@ -107,8 +106,4 @@ export const uploadResults = async (
     place: string;
   }[],
   timeZone: string,
-) => {
-  const resultsNewTasks = await courseService.postMultipleEntities(data as Partial<CourseEvent & CourseTask>, timeZone);
-
-  return resultsNewTasks;
-};
+) => courseService.postMultipleEntities(data as Partial<CourseEvent & CourseTask>, timeZone);

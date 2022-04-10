@@ -11,17 +11,12 @@ export const CalendarView: React.FC<ScheduleViewProps> = ({ data, courseAlias, s
     <>
       <ConfigProvider locale={en_GB}>
         {isMobile ? (
-          <MobileCalendar
-            data={data}
-            timeZone={settings.timezone}
-            storedTagColors={settings.tagColors}
-            alias={courseAlias}
-          />
+          <MobileCalendar data={data} timezone={settings.timezone} tagColors={settings.tagColors} alias={courseAlias} />
         ) : (
           <DesktopCalendar
             data={data}
-            timeZone={settings.timezone}
-            storedTagColors={settings.tagColors}
+            timezone={settings.timezone}
+            tagColors={settings.tagColors}
             alias={courseAlias}
           />
         )}
