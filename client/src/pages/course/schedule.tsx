@@ -1,16 +1,13 @@
 import moment from 'moment-timezone';
 import { useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
-import { withSession } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
-import withCourseData from 'components/withCourseData';
 import { CourseEvent, CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
-import { transformTasksToEvents } from 'components/Schedule/utils';
-import useScheduleSettings from 'components/Schedule/useScheduleSettings';
-import { SettingsPanel } from 'components/Schedule/SettingsPanel';
-import { ScheduleView } from 'components/Schedule/ScheduleView';
+import { withSession } from 'components/withSession';
+import { PageLayout } from 'components/PageLayout';
+import withCourseData from 'components/withCourseData';
+import { SettingsPanel, ScheduleView, useScheduleSettings, transformTasksToEvents } from 'components/Schedule';
 
 const byTime = (a: CourseEvent, b: CourseEvent) => a.dateTime.localeCompare(b.dateTime);
 const getEventTypes = (events: CourseEvent[]) => Array.from(new Set(events.map(({ event }) => event.type)));

@@ -2,9 +2,9 @@ import React from 'react';
 import { Collapse, Tag } from 'antd';
 import { GithubPicker, ColorState } from 'react-color';
 import { BgColorsOutlined } from '@ant-design/icons';
+import { PICKER_COLORS } from '../constants';
+import { getTagStyle } from '../utils';
 import SettingsItem from './SettingsItem';
-import { PICKER_COLORS } from 'components/Schedule/constants';
-import { getTagStyle } from 'components/Schedule/utils';
 
 const { Panel } = Collapse;
 

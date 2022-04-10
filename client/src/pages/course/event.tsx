@@ -5,12 +5,10 @@ import { useAsync } from 'react-use';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
 import { useLoading } from 'components/useLoading';
-import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
+import { CourseService, CourseTaskDetails, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
-import { TaskDetails, EventDetails } from 'components/Schedule/EventDetails';
-import { EventModalForm } from 'components/Schedule/EventModalForm';
-import { useScheduleSettings } from 'components/Schedule';
+import { useScheduleSettings, ManageEventModalForm, TaskDetails, EventDetails } from 'components/Schedule';
 
 export function EventPage(props: CoursePageProps) {
   const { session, course } = props;
@@ -71,12 +69,13 @@ export function EventPage(props: CoursePageProps) {
         <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} settings={settings} />
       )}
       {isModalOpen && (
-        <EventModalForm
+        <ManageEventModalForm
           visible={isModalOpen}
           editableRecord={editableRecord as CourseEvent}
           handleCancel={closeModal}
           courseId={props.course.id}
           refreshData={loadData}
+          settings={settings}
         />
       )}
     </>

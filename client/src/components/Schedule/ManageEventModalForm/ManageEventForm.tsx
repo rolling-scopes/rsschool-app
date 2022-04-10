@@ -1,10 +1,6 @@
+import times from 'lodash/times';
+import moment from 'moment-timezone';
 import React, { useState } from 'react';
-import { Task, TaskService } from 'services/task';
-import { CourseEvent, CourseService } from 'services/course';
-import { withSession } from 'components/withSession';
-import { UserSearch } from 'components/UserSearch';
-import { UserService } from 'services/user';
-import { formatTimezoneToUTC } from 'services/formatter';
 import {
   Form,
   Input,
@@ -19,12 +15,16 @@ import {
   Collapse,
   Checkbox,
 } from 'antd';
-import moment from 'moment-timezone';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../constants';
-import { TIMEZONES } from '../../../configs/timezones';
+import { Task, TaskService } from 'services/task';
+import { CourseEvent, CourseService } from 'services/course';
+import { withSession } from 'components/withSession';
+import { UserSearch } from 'components/UserSearch';
+import { UserService } from 'services/user';
+import { formatTimezoneToUTC } from 'services/formatter';
 import { Event, EventService } from 'services/event';
-import { times } from 'lodash';
 import { githubRepoUrl, urlPattern } from 'services/validators';
+import { TIMEZONES } from 'configs/timezones';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../constants';
 
 const { Option } = Select;
 const { TextArea } = Input;

@@ -1,8 +1,7 @@
-export { ListView } from './ListView';
-export { TableView } from './TableView';
-export { CalendarView } from './CalendarView';
-export { EventModalForm } from './EventModalForm';
-export { EventDetails, TaskDetails } from './EventDetails';
-export { SettingsDrawer} from './SettingsDrawer';
+export { ScheduleView } from './ScheduleView';
+export { SettingsPanel } from './SettingsPanel';
+export { ManageEventModalForm } from './ManageEventModalForm';
+export { TaskDetails, EventDetails } from './EventDetails';
+export { transformTasksToEvents } from './utils';
 export { default as useScheduleSettings } from './useScheduleSettings';
 export type { ScheduleSettings } from './useScheduleSettings';

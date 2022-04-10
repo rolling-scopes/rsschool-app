@@ -1,14 +1,14 @@
-import React from 'react';
-import Link from 'next/link';
-import { Row, Col, Typography, Tooltip, Button } from 'antd';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
-import { CourseEvent } from 'services/course';
+import Link from 'next/link';
+import React from 'react';
+import { Row, Col, Typography, Tooltip, Button } from 'antd';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
-import { GithubUserLink } from '../../GithubUserLink';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { ScheduleSettings } from 'components/Schedule';
+import { CourseEvent } from 'services/course';
+import { GithubUserLink } from '../../GithubUserLink';
+import { ScheduleSettings } from '../useScheduleSettings';
 
 const { Title, Text } = Typography;
 

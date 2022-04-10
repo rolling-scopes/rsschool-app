@@ -1,11 +1,11 @@
+import { Moment } from 'moment';
+import css from 'styled-jsx/css';
 import React, { useState } from 'react';
 import { Calendar, List, Typography, Col, Button } from 'antd';
+import { CourseEvent } from 'services/course';
+import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import { getMonthValue, getListData } from './utils';
 import ModalWindow from './ModalWindow';
-import { CourseEvent } from 'services/course';
-import { Moment } from 'moment';
-import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
-import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 
@@ -26,7 +26,7 @@ const numberEventsStyle = css`
 type Props = {
   data: CourseEvent[];
   timeZone: string;
-  storedTagColors?: object;
+  storedTagColors?: Record<string, string>;
   alias: string;
 };
 

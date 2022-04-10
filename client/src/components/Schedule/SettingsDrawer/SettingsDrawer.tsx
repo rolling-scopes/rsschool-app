@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Tooltip, Checkbox } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { ScheduleSettings } from '../useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
 import TaskLimits from './TaskLimits';
-import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface SettingsDrawerProps {
   settings: ScheduleSettings;

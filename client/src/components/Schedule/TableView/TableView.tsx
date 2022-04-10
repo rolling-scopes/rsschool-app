@@ -1,8 +1,12 @@
+import moment from 'moment-timezone';
+import mergeWith from 'lodash/mergeWith';
 import React, { useMemo, useState } from 'react';
 import { Popconfirm, Table, Typography, Space, Form, Button, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import moment from 'moment-timezone';
-import mergeWith from 'lodash/mergeWith';
+import { CourseEvent, CourseService } from 'services/course';
+import { EventService } from 'services/event';
+import { Task, TaskService } from 'services/task';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 import { GithubUserLink } from 'components/GithubUserLink';
 import {
   dateSorter,
@@ -12,13 +16,9 @@ import {
   renderTagWithStyle,
   scoreRenderer,
 } from 'components/Table';
-import { CourseEvent, CourseService } from 'services/course';
 import { Column, CONFIGURABLE_COLUMNS } from '../constants';
+import { ScheduleViewProps } from '../ScheduleView';
 import EditableCell from './EditableCell';
-import { EventService } from 'services/event';
-import { Task, TaskService } from 'services/task';
-import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { ScheduleViewProps } from 'components/Schedule/ScheduleView';
 
 const { Text } = Typography;
 
@@ -47,7 +47,7 @@ const getColumns = ({
   splittedByWeek,
 }: {
   timezone: string;
-  tagColors: object;
+  tagColors: Record<string, string>;
   splittedByWeek?: boolean;
 }) => [
   {

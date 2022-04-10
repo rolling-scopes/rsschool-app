@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
-import { ViewMode } from 'components/Schedule/constants';
+import { ViewMode } from '../constants';
 
 const { Option } = Select;
 

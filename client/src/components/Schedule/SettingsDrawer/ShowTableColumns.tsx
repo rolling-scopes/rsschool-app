@@ -3,7 +3,7 @@ import { Button, Divider, Typography, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FilterOutlined } from '@ant-design/icons';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { Column, CONFIGURABLE_COLUMNS } from 'components/Schedule/constants';
+import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import SettingsItem from './SettingsItem';
 
 const { Text } = Typography;

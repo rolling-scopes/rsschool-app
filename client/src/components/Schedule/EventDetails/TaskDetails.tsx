@@ -1,14 +1,14 @@
-import React from 'react';
-import Link from 'next/link';
-import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
-import { CourseTaskDetails } from 'services/course';
-import { CHECKER_TYPES } from '../constants';
+import Link from 'next/link';
+import React from 'react';
+import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
+import { CourseTaskDetails } from 'services/course';
 import { GithubUserLink } from '../../GithubUserLink';
-import { ScheduleSettings } from 'components/Schedule';
+import { ScheduleSettings } from '../useScheduleSettings';
+import { CHECKER_TYPES } from '../constants';
 
 type Props = {
   taskData: CourseTaskDetails;

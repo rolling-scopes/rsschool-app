@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
 import { CourseService } from 'services/course';
-import { EventModalForm } from 'components/Schedule/EventModalForm';
-import { SettingsDrawer } from 'components/Schedule/SettingsDrawer';
-import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
+import { ManageEventModalForm } from '../ManageEventModalForm';
+import { SettingsDrawer } from '../SettingsDrawer';
+import { ScheduleSettings } from '../useScheduleSettings';
 import ViewModeSelect from './ViewModeSelect';
 import TimezoneSelect from './TimezoneSelect';
 import ManageCsvButtons from './ManageCsvButtons';
@@ -84,12 +84,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </Col>
       </Row>
       {isManageEventModalOpen && (
-        <EventModalForm
+        <ManageEventModalForm
           courseId={courseId}
           visible={isManageEventModalOpen}
           editableRecord={editableRecord}
           handleCancel={closeManageEventModal}
           refreshData={refreshData}
+          settings={settings}
         />
       )}
     </>

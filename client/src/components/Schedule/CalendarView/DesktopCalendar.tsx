@@ -1,16 +1,16 @@
+import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { Calendar, Badge, Typography, Tooltip } from 'antd';
+import { CourseEvent } from 'services/course';
 import { getMonthValue, getListData } from './utils';
 import ModalWindow from './ModalWindow';
-import { CourseEvent } from 'services/course';
-import { Moment } from 'moment';
 
 const { Title } = Typography;
 
 type Props = {
   data: CourseEvent[];
   timeZone: string;
-  storedTagColors?: object;
+  storedTagColors?: Record<string, string>;
   alias: string;
 };
 

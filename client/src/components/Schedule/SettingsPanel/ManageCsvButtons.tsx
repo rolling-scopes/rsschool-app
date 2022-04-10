@@ -7,7 +7,7 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import { CourseService } from 'services/course';
-import { parseFiles, uploadResults } from 'components/Schedule/utils';
+import { parseFiles, uploadResults } from '../utils';
 
 interface ManageCsvButtonsProps {
   courseId: number;

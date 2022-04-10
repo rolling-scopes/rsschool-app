@@ -7,8 +7,8 @@ import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { getEventLink } from 'components/Schedule/utils';
-import { ScheduleViewProps } from 'components/Schedule/ScheduleView';
+import { getEventLink } from '../utils';
+import { ScheduleViewProps } from '../ScheduleView';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -136,7 +136,7 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   return weekMap;
 };
 
-const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, storedTagColors?: object) => {
+const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, tagColors?: Record<string, string>) => {
   return events.map((data: CourseEvent) => {
     const { id, event, dateTime, isTask } = data;
     const { type, name } = event;
@@ -145,7 +145,7 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
       <tbody key={id}>
         <tr>
           <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
-          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors, TASK_TYPES_MAP)}</th>
+          <th style={{ width: '10%' }}>{renderTagWithStyle(type, tagColors, TASK_TYPES_MAP)}</th>
           <th style={{ width: '80%' }}>
             <Link prefetch={false} href={getEventLink(alias, id, isTask)}>
               <a>
@@ -167,7 +167,7 @@ const getWeekElements = (
   selectedWeek: number,
   timeZone: string,
   alias: string,
-  storedTagColors?: object,
+  tagColors?: Record<string, string>,
 ) => {
   const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
@@ -192,7 +192,7 @@ const getWeekElements = (
       return (
         <Panel style={style} header={eventCountElem} key={key}>
           <table className="ListTable">
-            {getDayEvents(eventsPerDay, timeZone, alias, storedTagColors)}
+            {getDayEvents(eventsPerDay, timeZone, alias, tagColors)}
             <style jsx>{tableStyles}</style>
           </table>
         </Panel>

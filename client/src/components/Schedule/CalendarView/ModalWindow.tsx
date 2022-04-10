@@ -1,11 +1,11 @@
-import React from 'react';
-import Link from 'next/link';
-import { Modal, Space, Typography } from 'antd';
 import moment from 'moment';
+import Link from 'next/link';
+import React from 'react';
+import { Modal, Space, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTagWithStyle, urlRenderer } from 'components/Table/renderers';
 import { CourseEvent } from 'services/course';
-import { getEventLink } from 'components/Schedule/utils';
+import { getEventLink } from '../utils';
 
 const { Title, Text } = Typography;
 
@@ -14,7 +14,7 @@ type Props = {
   data: CourseEvent;
   handleOnClose: Function;
   timeZone: string;
-  storedTagColors?: object;
+  storedTagColors?: Record<string, string>;
   alias: string;
 };
 

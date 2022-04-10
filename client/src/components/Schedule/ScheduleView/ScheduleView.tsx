@@ -1,8 +1,10 @@
 import React from 'react';
 import { CourseEvent } from 'services/course';
-import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
-import { TableView, CalendarView, ListView } from 'components/Schedule';
-import { ViewMode } from 'components/Schedule/constants';
+import { TableView } from '../TableView';
+import { ListView } from '../ListView';
+import { CalendarView } from '../CalendarView';
+import { ScheduleSettings } from '../useScheduleSettings';
+import { ViewMode } from '../constants';
 
 const DEFAULT_SCHEDULE_VIEW = TableView;
 const SCHEDULE_VIEWS = {
