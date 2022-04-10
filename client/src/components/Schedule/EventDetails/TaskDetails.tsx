@@ -1,14 +1,14 @@
 import React from 'react';
-import { useLocalStorage } from 'react-use';
 import Link from 'next/link';
 import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
-import { DEFAULT_COLORS, CHECKER_TYPES } from '../constants';
+import { CHECKER_TYPES } from '../constants';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
 import { GithubUserLink } from '../../GithubUserLink';
+import { ScheduleSettings } from 'components/Schedule';
 
 type Props = {
   taskData: CourseTaskDetails;
@@ -16,10 +16,10 @@ type Props = {
   isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
+  settings: ScheduleSettings;
 };
 
-const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit }) => {
-  const [tagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
+const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit, settings }) => {
   const { Title, Text } = Typography;
 
   const {
@@ -70,7 +70,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
 
         {type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(type, tagColors)}</Col>
+            <Col>{renderTagWithStyle(type, settings.tagColors)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}

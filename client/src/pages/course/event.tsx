@@ -10,6 +10,7 @@ import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { TaskDetails, EventDetails } from 'components/Schedule/EventDetails';
 import { EventModalForm } from 'components/Schedule/EventModalForm';
+import { useScheduleSettings } from 'components/Schedule';
 
 export function EventPage(props: CoursePageProps) {
   const { session, course } = props;
@@ -23,6 +24,7 @@ export function EventPage(props: CoursePageProps) {
   const [, withLoading] = useLoading(false);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const isAdmin = useMemo(() => isCourseManager(session, course.id), [session, course]);
+  const settings = useScheduleSettings();
 
   const loadData = async () => {
     if (type === 'task') {
@@ -62,10 +64,11 @@ export function EventPage(props: CoursePageProps) {
           alias={alias}
           onEdit={handleFullEdit}
           isAdmin={isAdmin}
+          settings={settings}
         />
       )}
       {type === 'event' && (
-        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} />
+        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} settings={settings} />
       )}
       {isModalOpen && (
         <EventModalForm

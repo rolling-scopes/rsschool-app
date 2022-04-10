@@ -1,28 +1,27 @@
 import React from 'react';
-import { useLocalStorage } from 'react-use';
 import Link from 'next/link';
 import { Row, Col, Typography, Tooltip, Button } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
-import { DEFAULT_COLORS } from '../constants';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../../GithubUserLink';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
+import { ScheduleSettings } from 'components/Schedule';
 
 const { Title, Text } = Typography;
 
-type Props = {
+interface EventDetailsProps {
   eventData: CourseEvent;
   alias: string;
   isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
-};
+  settings: ScheduleSettings;
+}
 
-const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, onEdit }) => {
-  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
+const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, isPreview, onEdit, settings }) => {
   const { event, dateTime, place, organizer, special, duration } = eventData;
 
   return (
@@ -44,7 +43,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, o
 
         {event.type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(event.type, storedTagColors, TASK_TYPES_MAP)}</Col>
+            <Col>{renderTagWithStyle(event.type, settings.tagColors, TASK_TYPES_MAP)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}
