@@ -4,7 +4,7 @@ import { GithubPicker, ColorState } from 'react-color';
 import { BgColorsOutlined } from '@ant-design/icons';
 import SettingsItem from './SettingsItem';
 import { PICKER_COLORS } from 'components/Schedule/constants';
-import { setTagColor, getTagStyle } from 'components/Schedule/utils';
+import { getTagStyle } from 'components/Schedule/utils';
 
 const { Panel } = Collapse;
 
@@ -15,7 +15,7 @@ interface ChangeTagColorProps {
 }
 
 const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColors, tags }) => {
-  const changeColor = (colorState: ColorState, tag: string) => setTagColor(colorState, tag, setTagColors, tagColors);
+  const changeColor = (colorState: ColorState, tag: string) => setTagColors({ ...tagColors, [tag]: colorState.hex })
 
   return (
     <SettingsItem header="Change tag colors" IconComponent={BgColorsOutlined}>

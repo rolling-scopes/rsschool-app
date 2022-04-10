@@ -1,53 +1,17 @@
 import csv from 'csvtojson';
-import union from 'lodash/union';
 import { CSSProperties } from 'react';
-import { ColorState } from 'react-color';
 import isUndefined from 'lodash/isUndefined';
 import {
-  PICKER_COLORS,
   DEFAULT_COLOR,
-  DEADLINE_COLOR,
   SPECIAL_TASK_TYPES,
-  EVENT_TYPES,
-  TASK_TYPES,
 } from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
 
 export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) =>
   `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
 
-export const getDefaultColors = () => {
-  const types = union(TASK_TYPES, EVENT_TYPES);
-  const colorsWithoutDeadlineColor = PICKER_COLORS.filter(color => color !== DEADLINE_COLOR);
-  const diffColorCount = colorsWithoutDeadlineColor.length;
-
-  const defColors = {};
-
-  types.forEach((type, index) => {
-    Object.defineProperty(defColors, type, { value: colorsWithoutDeadlineColor[index % diffColorCount] });
-  });
-
-  Object.defineProperty(defColors, 'default', { value: DEFAULT_COLOR });
-  Object.defineProperty(defColors, 'deadline', { value: DEADLINE_COLOR });
-
-  return defColors;
-};
-
-export const setTagColor = (
-  colorState: ColorState,
-  tagName: string,
-  localStorageHook: (value: Record<string, string>) => void,
-  tagColors = {},
-) => {
-  localStorageHook({ ...tagColors, [tagName]: colorState.hex });
-};
-
-export const getTagColor = (tagName: string, tagColors: Record<string, string> = {}) => {
-  return tagColors[tagName] || DEFAULT_COLOR;
-};
-
-export const getTagStyle = (tagName: string, tagColors = {}, styles?: CSSProperties) => {
-  const tagColor: string = getTagColor(tagName, tagColors);
+export const getTagStyle = (tagName: string,  tagColors: Record<string, string> = {}, styles?: CSSProperties) => {
+  const tagColor = tagColors[tagName] || DEFAULT_COLOR;
   return {
     ...styles,
     borderColor: tagColor,
