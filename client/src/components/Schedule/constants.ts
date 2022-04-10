@@ -21,17 +21,6 @@ export enum Column {
 
 export const CONFIGURABLE_COLUMNS = ['Type', 'Special', 'Organizer', 'Score'];
 
-export enum LocalStorage {
-  ViewMode = 'scheduleViewMode',
-  LimitForDoneTasks = 'scheduleLimitForDoneTask',
-  IsSplittedByWeek = 'scheduleIsSplitedByWeek',
-  ArePassedEventsHidden = 'scheduleArePassedEventsHidden',
-  AreDoneTasksHidden = 'scheduleAreDoneTasksHidden',
-  TagColors = 'scheduleTagColors',
-  ColumnsHidden = 'scheduleColumnsHidden',
-  EventTypesHidden = 'scheduleEventTypesHidden',
-}
-
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';
 

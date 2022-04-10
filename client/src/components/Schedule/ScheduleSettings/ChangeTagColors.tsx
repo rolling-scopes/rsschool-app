@@ -30,7 +30,7 @@ const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColor
               colors={PICKER_COLORS}
               triangle="hide"
               width="138px"
-              onChange={(colorState) => changeColor(colorState, tag)}
+              onChange={colorState => changeColor(colorState, tag)}
             />
           </Panel>
         ))}

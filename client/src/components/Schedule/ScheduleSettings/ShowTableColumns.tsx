@@ -25,18 +25,16 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
   eventTypesHidden,
   setEventTypesHidden,
 }) => {
-  const toggleColumnCheckbox = ({ target: { checked, value: selectedColumn }}: CheckboxChangeEvent) =>
+  const toggleColumnCheckbox = ({ target: { checked, value: selectedColumn } }: CheckboxChangeEvent) =>
     setColumnsHidden(
-      checked
-        ? columnsHidden.filter(column => column !== selectedColumn)
-        : [...columnsHidden, selectedColumn]
+      checked ? columnsHidden.filter(column => column !== selectedColumn) : [...columnsHidden, selectedColumn],
     );
 
-  const toggleEventTypeCheckbox = ({ target: { checked, value: selectedEventType }}: CheckboxChangeEvent) => {
+  const toggleEventTypeCheckbox = ({ target: { checked, value: selectedEventType } }: CheckboxChangeEvent) => {
     setEventTypesHidden(
       checked
         ? eventTypesHidden.filter(eventType => eventType !== selectedEventType)
-        : [...eventTypesHidden, selectedEventType]
+        : [...eventTypesHidden, selectedEventType],
     );
   };
 

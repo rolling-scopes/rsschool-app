@@ -17,9 +17,8 @@ import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import EditableCell from './EditableCell';
 import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
-import { DEFAULT_COLORS } from 'components/Schedule/constants';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { ScheduleSettings } from 'components/Schedule/useScheduleSettings';
+import { ScheduleViewProps } from 'components/Schedule/ScheduleView';
 
 const { Text } = Typography;
 
@@ -42,25 +41,12 @@ interface ScheduleRow {
   duration?: number;
 }
 
-interface TableViewProps {
-  data: CourseEvent[];
-  timeZone: string;
-  isAdmin: boolean;
-  courseId: number;
-  refreshData: Function;
-  columnsShown: string[];
-  tagColors?: object;
-  limitForDoneTask?: number;
-  alias: string;
-  settings: ScheduleSettings;
-}
-
 const getColumns = ({
-  timeZone,
+  timezone,
   tagColors,
   splittedByWeek,
 }: {
-  timeZone: string;
+  timezone: string;
   tagColors: object;
   splittedByWeek?: boolean;
 }) => [
@@ -69,8 +55,8 @@ const getColumns = ({
     title: Column.Date,
     dataIndex: 'dateTime',
     render: splittedByWeek
-      ? dateWithTimeZoneRenderer(timeZone, 'ddd - MMM Do YYYY')
-      : dateWithTimeZoneRenderer(timeZone, 'MMM Do YYYY'),
+      ? dateWithTimeZoneRenderer(timezone, 'ddd - MMM Do YYYY')
+      : dateWithTimeZoneRenderer(timezone, 'MMM Do YYYY'),
     sorter: dateSorter('dateTime'),
     sortDirections: ['descend', 'ascend'],
     editable: true,
@@ -79,7 +65,7 @@ const getColumns = ({
     key: 'Time',
     title: Column.Time,
     dataIndex: 'dateTime',
-    render: dateWithTimeZoneRenderer(timeZone, 'HH:mm'),
+    render: dateWithTimeZoneRenderer(timezone, 'HH:mm'),
     editable: true,
   },
   {
@@ -133,17 +119,7 @@ const getColumns = ({
   },
 ];
 
-export function TableView({
-  data,
-  timeZone,
-  isAdmin,
-  courseId,
-  refreshData,
-  limitForDoneTask,
-  columnsShown,
-  settings,
-  tagColors = DEFAULT_COLORS,
-}: TableViewProps) {
+export function TableView({ data, isAdmin, courseId, refreshData, settings }: ScheduleViewProps) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -168,7 +144,7 @@ export function TableView({
         await courseService.deleteCourseEvent(id);
       }
 
-      await refreshData();
+      refreshData();
     } catch {
       message.error(`Failed to delete ${isTask ? 'task' : 'event'}. Please try later.`);
     }
@@ -198,7 +174,7 @@ export function TableView({
           await eventService.updateEvent(editableEntity.event.id, getNewDataForUpdate(editableEntity));
           await courseService.updateCourseEvent(editableEntity.id, getCourseEventDataForUpdate(editableEntity));
         }
-        await refreshData();
+        refreshData();
       } catch {
         message.error('An error occurred. Please try later.');
       }
@@ -266,8 +242,12 @@ export function TableView({
   };
 
   const filteredData = data.filter(({ event }) => !settings.eventTypesHidden.includes(event.type));
-  const filteredColumns = getColumns({ timeZone, tagColors, splittedByWeek: settings.isSplittedByWeek }).filter(column =>
-    CONFIGURABLE_COLUMNS.includes(column.key) ? !columnsShown.includes(column.key) : true,
+  const filteredColumns = getColumns({
+    tagColors: settings.tagColors,
+    timezone: settings.timezone,
+    splittedByWeek: settings.isSplittedByWeek,
+  }).filter(column =>
+    CONFIGURABLE_COLUMNS.includes(column.key) ? !settings.columnsHidden.includes(column.key) : true,
   );
   const columns = [...filteredColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
 
@@ -299,7 +279,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record => getTableRowClass(record, settings.isSplittedByWeek, limitForDoneTask)}
+        rowClassName={record => getTableRowClass(record, settings.isSplittedByWeek, settings.limitForDoneTask)}
       />
     </Form>
   );

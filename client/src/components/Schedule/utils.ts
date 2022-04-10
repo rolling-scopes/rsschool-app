@@ -3,10 +3,18 @@ import union from 'lodash/union';
 import { CSSProperties } from 'react';
 import { ColorState } from 'react-color';
 import isUndefined from 'lodash/isUndefined';
-import { PICKER_COLORS, DEFAULT_COLOR, DEADLINE_COLOR, SPECIAL_TASK_TYPES, EVENT_TYPES, TASK_TYPES } from 'components/Schedule/constants';
+import {
+  PICKER_COLORS,
+  DEFAULT_COLOR,
+  DEADLINE_COLOR,
+  SPECIAL_TASK_TYPES,
+  EVENT_TYPES,
+  TASK_TYPES,
+} from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
 
-export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) => `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
+export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) =>
+  `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
 
 export const getDefaultColors = () => {
   const types = union(TASK_TYPES, EVENT_TYPES);
@@ -69,8 +77,8 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
   } as CourseEvent;
 };
 
-export const tasksToEvents = (tasks: CourseTaskDetails[]) => {
-  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
+export const transformTasksToEvents = (tasks: CourseTaskDetails[]) =>
+  tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
     if (task.type !== SPECIAL_TASK_TYPES.test) {
       acc.push(createCourseEventFromTask(task, task.type));
     }
@@ -82,7 +90,6 @@ export const tasksToEvents = (tasks: CourseTaskDetails[]) => {
     );
     return acc;
   }, []);
-};
 
 export const parseFiles = async (incomingFiles: any) => {
   const files = incomingFiles.fileList;

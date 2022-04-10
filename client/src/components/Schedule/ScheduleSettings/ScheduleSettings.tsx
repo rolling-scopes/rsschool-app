@@ -32,20 +32,9 @@ const ScheduleSettings: React.FC<ScheduleSettingsProps> = ({ settings, eventType
           eventTypesHidden={settings.eventTypesHidden}
           setEventTypesHidden={settings.setEventTypesHidden}
         />
-        <ChangeTagColors
-          tags={eventTypes}
-          tagColors={settings.tagColors}
-          setTagColors={settings.setTagColors}
-        />
-        <TaskLimits
-          limitForDoneTask={settings.limitForDoneTask}
-          setLimitForDoneTask={settings.setLimitForDoneTask}
-        />
-        <Checkbox
-          value
-          checked={settings.isSplittedByWeek}
-          onChange={toggleSplittedByWeek}
-        >
+        <ChangeTagColors tags={eventTypes} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
+        <TaskLimits limitForDoneTask={settings.limitForDoneTask} setLimitForDoneTask={settings.setLimitForDoneTask} />
+        <Checkbox value checked={settings.isSplittedByWeek} onChange={toggleSplittedByWeek}>
           Splitted by week
         </Checkbox>
       </Drawer>
