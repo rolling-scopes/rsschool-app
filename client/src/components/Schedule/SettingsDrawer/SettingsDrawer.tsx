@@ -23,7 +23,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes })
 
   return (
     <Tooltip title={TITLE} mouseEnterDelay={1}>
-      <Button icon={<SettingOutlined />} title={TITLE} size="middle" type="primary" onClick={openDrawer} />
+      <Button icon={<SettingOutlined />} size="middle" type="primary" onClick={openDrawer} />
       <Drawer title={TITLE} placement="right" closable={false} onClose={closeDrawer} visible={opened}>
         <ShowTableColumns
           eventTypes={eventTypes}
