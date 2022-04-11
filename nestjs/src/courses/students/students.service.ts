@@ -15,6 +15,12 @@ export class StudentsService {
     return this.studentRepository.findOneOrFail(id, { relations: ['user'] });
   }
 
+  public getActiveByCourseId(courseId: number) {
+    return this.studentRepository.find({
+      where: { courseId, isExpelled: false },
+    });
+  }
+
   public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
     const student = await this.studentRepository.findOne(studentId);
     if (student == null) {

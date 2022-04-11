@@ -33,6 +33,12 @@ export class MentorsService {
     });
   }
 
+  public getActiveByCourseId(courseId: number) {
+    return this.mentorsRepository.find({
+      where: { courseId, isExpelled: false },
+    });
+  }
+
   public async canAccessMentor(user: AuthUser, mentorId: number): Promise<boolean> {
     const mentor = await this.getById(mentorId);
     if (mentor == null) {
