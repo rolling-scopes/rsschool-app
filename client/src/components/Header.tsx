@@ -26,14 +26,13 @@ type Props = {
 
 export function Header(props: Props) {
   const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible } = props;
-
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
     <Menu>
       <Menu.Item key="0" style={isProfileEditingModeEnabled ? undefined : menuActiveItemStyle}>
         <Button
           type="link"
-          href={isProfilePage ? '#view' : '/profile'}
+          href={isProfilePage ? '#view' : '/profile#view'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('view') : undefined}
           style={{ textAlign: 'left' }}
         >
@@ -43,7 +42,7 @@ export function Header(props: Props) {
       <Menu.Item key="1" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={props.isProfilePage ? '#edit' : '/profile#edit'}
+          href={isProfilePage ? '#edit' : '/profile#edit'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('edit') : undefined}
           style={{ textAlign: 'left' }}
         >
@@ -97,21 +96,19 @@ export function Header(props: Props) {
               <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
             </Button>
           )}
-          <Link href="https://docs.app.rs.school">
-            <a>
-              <Tooltip title="RS School App docs">
-                <Button
-                  type="primary"
-                  shape="round"
-                  size="large"
-                  icon={<QuestionCircleFilled />}
-                  style={{ marginRight: 16 }}
-                >
-                  Help
-                </Button>
-              </Tooltip>
-            </a>
-          </Link>
+          <a target="_blank" href="https://docs.app.rs.school">
+            <Tooltip title="RS School App docs">
+              <Button
+                type="primary"
+                shape="round"
+                size="large"
+                icon={<QuestionCircleFilled />}
+                style={{ marginRight: 16 }}
+              >
+                Help
+              </Button>
+            </Tooltip>
+          </a>
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="dashed" size="large">
               <GithubAvatar githubId={props.username} size={24} />

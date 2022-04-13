@@ -23,7 +23,7 @@ export class ScheduleService {
         updatedCourseSchedule.push({
           alias: course.alias,
           name: course.name,
-          students: course.students,
+          students: course.students.filter(student => !student.isExpelled),
         });
       }
     }
