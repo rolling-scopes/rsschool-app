@@ -25,6 +25,7 @@ import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto } from 'api';
 import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
+import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -203,19 +204,10 @@ function Page(props: Props) {
           </Col>
         </Row>
 
-        <Form.Item name="courseActiveLogoUrl" label="Active Logo">
+        <Form.Item name="logo" label="Course Logo">
           <Select placeholder="Please select logo">
-            {DEFAULT_COURSE_ICONS.map(course => (
-              <Select.Option key={course.label} value={course.active}>
-                {course.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="courseArchivedLogoUrl" label="Archived Logo">
-          <Select placeholder="Please select logo">
-            {DEFAULT_COURSE_ICONS.map(course => (
-              <Select.Option key={course.label} value={course.archived}>
+            {courseIcons.map(course => (
+              <Select.Option key={course.id} value={course.id}>
                 {course.label}
               </Select.Option>
             ))}
@@ -288,11 +280,12 @@ function createRecord(values: any) {
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
-    courseActiveLogoUrl: values.courseActiveLogoUrl,
-    courseArchivedLogoUrl: values.courseArchivedLogoUrl,
+    logo: values.logo,
   };
   return record;
 }
+
+const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 function getColumns(handleEditItem: any) {
   return [
@@ -302,8 +295,8 @@ function getColumns(handleEditItem: any) {
     },
     {
       title: 'Logo',
-      dataIndex: 'courseActiveLogoUrl',
-      render: (url: string) => <Image width={25} preview={false} src={url} />,
+      dataIndex: 'logo',
+      render: (logo: string) => <Image width={25} preview={false} src={DEFAULT_COURSE_ICONS[logo]?.active} />,
     },
     {
       title: 'Name',
@@ -363,51 +356,6 @@ function getColumns(handleEditItem: any) {
     },
   ];
 }
-
-const DEFAULT_COURSE_ICONS = [
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/javascript.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/javascript-archived.svg',
-    label: 'Javascript',
-  },
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/angular.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/angular-archived.svg',
-    label: 'Angular',
-  },
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/reactjs.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/reactjs-archived.svg',
-    label: 'Reactjs',
-  },
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/android.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/android-archived.svg',
-    label: 'Android',
-  },
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/ios.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/ios-archived.svg',
-    label: 'iOS',
-  },
-
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/nodejs.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/nodejs-archived.svg',
-    label: 'Nodejs',
-  },
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/machine-learning.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/machine-learning-archived.svg',
-    label: 'Machine learning',
-  },
-
-  {
-    active: 'https://app.rs.school/static/svg/disciplines/nodejs-aws.svg',
-    archived: 'https://app.rs.school/static/svg/disciplines/nodejs-aws-archived.svg',
-    label: 'Nodejs In AWS',
-  },
-];
 
 function getInitialValues(modalData: Partial<Course>) {
   return {
