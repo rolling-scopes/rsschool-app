@@ -1,5 +1,6 @@
 import csv from 'csvtojson';
 import { CSSProperties } from 'react';
+import { UploadChangeParam } from 'antd/lib/upload';
 import isUndefined from 'lodash/isUndefined';
 import { DEFAULT_COLOR, SPECIAL_TASK_TYPES } from 'components/Schedule/constants';
 import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
@@ -51,15 +52,32 @@ export const transformTasksToEvents = (tasks: CourseTaskDetails[]) =>
     return acc;
   }, []);
 
-export const parseFiles = async (incomingFiles: any) => {
-  const files = incomingFiles.fileList;
+interface CsvItem {
+  id: string;
+  entityType: string;
+  templateId: string;
+  startDate: string;
+  endDate: string;
+  type: string;
+  special: string;
+  name: string;
+  descriptionUrl: string;
+  githubId: string;
+  place: string;
+  checker: string;
+  pairsCount: string;
+}
+
+export const parseFiles = async ({ fileList }: UploadChangeParam) => {
   const filesContent: string[] = await Promise.all(
-    files.map(
-      (file: any) =>
-        new Promise((res, rej) => {
+    fileList.map(
+      file =>
+        new Promise((res: (value: string) => void, rej) => {
           const reader = new FileReader();
-          reader.readAsText(file.originFileObj, 'utf-8');
-          reader.onload = ({ target }) => res(target ? target.result : '');
+          reader.readAsText(file.originFileObj as Blob, 'utf-8');
+          reader.onload = ({ target }) => {
+            res(target?.result?.toString() ?? '');
+          };
           reader.onerror = e => rej(e);
         }),
     ),
@@ -67,25 +85,11 @@ export const parseFiles = async (incomingFiles: any) => {
 
   const entities = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
     .reduce((acc, cur) => acc.concat(cur), [])
-    .map((item: any) => {
+    .map((item: CsvItem) => {
       if (isUndefined(item.entityType)) {
         throw new Error('Incorrect data: CSV file should content the headers named "entityType"');
       }
-      return {
-        entityType: item.entityType as string,
-        templateId: item.templateId as string,
-        id: item.id as string,
-        startDate: item.startDate as string,
-        endDate: item.endDate as string,
-        type: item.type as string,
-        special: item.special as string,
-        name: item.name as string,
-        descriptionUrl: item.descriptionUrl as string,
-        githubId: item.githubId as string,
-        place: item.place as string,
-        checker: item.checker as string,
-        pairsCount: item.pairsCount as string,
-      };
+      return item;
     });
 
   return entities;

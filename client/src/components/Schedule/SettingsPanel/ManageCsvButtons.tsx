@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Row, Col, Tooltip, Button, Form, message } from 'antd';
 import { RcFile } from 'antd/lib/upload';
-import { UploadFile } from 'antd/lib/upload/interface';
+import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { CourseService } from 'services/course';
 import { parseFiles, uploadResults } from '../utils';
@@ -22,7 +22,7 @@ const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, courseSer
   const exportToCsvFile = () => {
     window.location.href = `/api/course/${courseId}/schedule/csv/${timezone.replace('/', '_')}`;
   };
-  const importCsvFile = async (values: any) => {
+  const importCsvFile = async (values: { files: UploadChangeParam }) => {
     try {
       const results = await parseFiles(values.files);
       const submitResults = await uploadResults(courseService, results, timezone);
