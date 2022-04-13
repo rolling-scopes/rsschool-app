@@ -12,6 +12,18 @@ import { CoursesTasksApi } from 'api';
 
 type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
+export type Feedback = {
+  url?: string;
+  comments?: {
+    comment: string;
+    author: {
+      name: string;
+      githubId: string;
+    } | null;
+    score: number;
+  }[];
+};
+
 export interface CourseTask {
   id: number;
   taskId: number;
@@ -514,8 +526,10 @@ export class CourseService {
   }
 
   async getCrossCheckFeedback(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<any>(`/student/${githubId}/task/${courseTaskId}/cross-check/feedback`);
-    return result.data.data as { url?: string; comments?: { comment: string }[] };
+    const result = await this.axios.get<{ data: Feedback }>(
+      `/student/${githubId}/task/${courseTaskId}/cross-check/feedback`,
+    );
+    return result.data.data;
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {

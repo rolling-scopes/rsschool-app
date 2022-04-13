@@ -8,7 +8,14 @@ import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
+import {
+  CourseService,
+  CrossCheckComment,
+  CrossCheckCriteria,
+  CrossCheckReview,
+  Feedback,
+  TaskSolution,
+} from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 
@@ -17,7 +24,7 @@ const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const [feedback, setFeedback] = useState(null as any);
+  const [feedback, setFeedback] = useState<Feedback>();
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
@@ -29,12 +36,12 @@ export function CrossCheckSubmit(props: CoursePageProps) {
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
-  const { value: courseTasks = [] } = useAsync(
+  const { value: courseTasks = [], loading } = useAsync(
     () => courseService.getCourseCrossCheckTasks('started'),
     [props.course.id],
   );
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: { url: string; review: CrossCheckReview[] }) => {
     if (!courseTaskId) {
       return;
     }
@@ -86,7 +93,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   const cancellationChange = (e: CheckboxChangeEvent) => setButtonDisabled(!e.target.checked);
 
   const handleTaskChange = async (value: number) => {
-    setFeedback(null);
+    setFeedback(undefined);
     const courseTaskId = Number(value);
     const courseTask = courseTasks.find(t => t.id === courseTaskId);
     if (courseTask == null) {
@@ -129,7 +136,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
 
   return (
     <PageLayout
-      loading={false}
+      loading={loading}
       title="Cross-Check Submit"
       githubId={props.session.githubId}
       courseName={props.course.name}
@@ -137,10 +144,10 @@ export function CrossCheckSubmit(props: CoursePageProps) {
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            {courseTasks.length > 0 ? (
+            {courseTasks.length > 0 && (
               <CourseTaskSelect data={courseTasks} groupBy="deadline" onChange={handleTaskChange} />
-            ) : null}
-            {courseTasks.length === 0 ? <NoSubmissionAvailable courseAlias={props.course.alias} /> : null}
+            )}
+            {courseTasks.length === 0 && <NoSubmissionAvailable courseAlias={props.course.alias} />}
             <SubmittedStatus
               taskExists={taskExists}
               solution={submittedSolution}
@@ -210,8 +217,11 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   );
 }
 
-function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
-  return review?.reduce((acc, r) => {
+function calculateFinalScore(
+  review: { percentage: number; criteriaId: string }[],
+  criteria: CrossCheckCriteria[] = [],
+) {
+  return review.reduce((acc, r) => {
     const max = criteria.find(c => c.criteriaId === r.criteriaId)?.max ?? 0;
     return acc + Math.round(max * r.percentage);
   }, 0);
