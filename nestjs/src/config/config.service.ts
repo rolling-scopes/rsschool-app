@@ -35,16 +35,17 @@ type AWSServices = {
   accessKeyId: string;
 };
 
-const DEV_HOST = 'http://localhost:3000';
-const PROD_HOST = 'https://app.rs.school';
+type CrossCheckSchedulingConfig = {
+  host: string;
+};
 
 @Injectable()
 export class ConfigService {
   public readonly auth: AuthConfig;
   public readonly users: UsersConfig;
   public readonly awsServices: AWSServices;
+  public readonly crossCheckScheduling: CrossCheckSchedulingConfig;
   public isDev = process.env.NODE_ENV !== 'production';
-  public host = process.env.RSSCHOOL_USE_PROD_HOST !== 'true' ? DEV_HOST : PROD_HOST;
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -79,6 +80,13 @@ export class ConfigService {
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
+    };
+
+    const DEV_HOST = conf.get('RSSCHOOL_CROSS_CHECK_SCHEDULING_DEV_HOST') ?? '';
+    const PROD_HOST = conf.get('RSSCHOOL_CROSS_CHECK_SCHEDULING_PROD_HOST') ?? '';
+
+    this.crossCheckScheduling = {
+      host: this.isDev ? DEV_HOST : PROD_HOST,
     };
   }
 }

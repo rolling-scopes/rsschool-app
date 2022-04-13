@@ -30,7 +30,7 @@ export class CrossCheckService {
     const { username, password } = this.conf.users.root;
 
     const authHeader = `Basic ${Buffer.from(username + ':' + password).toString('base64')}`;
-    const host = this.conf.host;
+    const host = this.conf.crossCheckScheduling.host;
 
     return {
       host,

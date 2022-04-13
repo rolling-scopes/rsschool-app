@@ -93,7 +93,9 @@ export const mockConfigService = {
       password: 'TEST_PASSWORD',
     },
   },
-  host: MOCK_HOST,
+  crossCheckScheduling: {
+    host: MOCK_HOST,
+  },
 };
 
 const expectedTasksAfterFiltering = {
