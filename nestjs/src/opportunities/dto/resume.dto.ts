@@ -10,7 +10,7 @@ import { PersonDto } from '../../core/dto';
 class GratitudeDto {
   constructor(gratitude: Feedback) {
     this.date = gratitude.createdDate;
-    this.comment = gratitude.comment;
+    this.comment = gratitude.comment ?? '';
   }
 
   @ApiProperty()
