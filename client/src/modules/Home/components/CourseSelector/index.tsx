@@ -34,10 +34,27 @@ export function CourseSelector(props: Props) {
 
 const getStatusIcon = (course: Course) => {
   if (course.completed) {
-    return <CheckCircleTwoTone twoToneColor="#aaa" />;
+    return course.courseArchivedLogoUrl ? (
+      <Logo url={course.courseArchivedLogoUrl} />
+    ) : (
+      <CheckCircleTwoTone twoToneColor="#aaa" />
+    );
   }
-  return <PlayCircleTwoTone />;
+  return course.courseActiveLogoUrl ? <Logo url={course.courseActiveLogoUrl} /> : <PlayCircleTwoTone />;
 };
+
+function Logo({ url }: { url: string }) {
+  return (
+    <>
+      <img width={14} height={14} src={url} className="img" />
+      <style jsx>{`
+        .img {
+          vertical-align: -0.125em;
+        }
+      `}</style>
+    </>
+  );
+}
 
 const getStatus = (course: Course) => {
   if (course.completed) {
