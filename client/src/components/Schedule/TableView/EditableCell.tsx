@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form, Input, DatePicker, TimePicker, Select } from 'antd';
 import { Rule } from 'antd/lib/form';
-import { UserSearch } from 'components/UserSearch';
 import { CourseEvent } from 'services/course';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
 import { UserService } from 'services/user';
+import { UserSearch } from 'components/UserSearch';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../constants';
 
 const { Option } = Select;
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
