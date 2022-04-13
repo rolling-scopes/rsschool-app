@@ -1,5 +1,5 @@
 // Date is equal to 2022-03-22 00:05 UTC
-export const MOCK_CURRENT_TIMESTAMP = 1647907500000;
+export const MOCK_CURRENT_TIMESTAMP = new Date('2022-03-22 00:05 UTC').getTime();
 
 const MOCK_HOST = 'https://testhost';
 
