@@ -81,4 +81,5 @@ const gratitudeBadge: GratitudeBadge[] = [
   { id: Badge.OutstandingWork, name: 'Outstanding work', roles: [CourseRole.Manager, CourseRole.Supervisor] },
   { id: Badge.TopPerformer, name: 'Top performer', roles: [CourseRole.Manager, CourseRole.Supervisor] },
   { id: Badge.JobOffer, name: 'Job Offer', roles: [CourseRole.Manager, CourseRole.Supervisor] },
+  { id: Badge.RSActivist, name: 'RS activist', roles: [CourseRole.Manager, CourseRole.Supervisor] },
 ];
