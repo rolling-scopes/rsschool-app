@@ -18,13 +18,13 @@ export function dateRenderer(value: string | null) {
 }
 
 export function crossCheckDateRenderer(value: string | null, { checker }: { checker: Checker }) {
-  if (checker !== 'crossCheck') return 'NA';
+  if (checker !== 'crossCheck') return 'N/A';
   return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
 export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: Checker }) {
   return checker !== 'crossCheck' ? (
-    'NA'
+    'N/A'
   ) : value === 'initial' ? (
     'Not distributed'
   ) : (
