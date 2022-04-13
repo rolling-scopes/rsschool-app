@@ -7,6 +7,8 @@ import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
+import { getEventLink } from '../utils';
+import { ScheduleViewProps } from '../ScheduleView';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -18,33 +20,28 @@ const nextDaysColor = '#d9f7be';
 const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const weekLength = WEEK.length;
 
-type Props = {
-  data: CourseEvent[];
-  timeZone: string;
-  storedTagColors?: object;
-  alias: string;
-};
-
-export const ListView: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
+export const ListView: React.FC<ScheduleViewProps> = ({ data, courseAlias, settings }) => {
   const [currentWeek, setCurrentWeek] = useState(0);
 
   const currentDayKey = useMemo(() => {
     const day = moment().day();
     const currentDay = day ? day - 1 : LAST_WEEK_DAY;
     const date = moment().format('YYYYMMDD');
-    const todaysEvents = data.filter(({ dateTime }) => date === moment(dateTime).tz(timeZone).format('YYYYMMDD'));
+    const todaysEvents = data.filter(
+      ({ dateTime }) => date === moment(dateTime).tz(settings.timezone).format('YYYYMMDD'),
+    );
 
     if (todaysEvents.length === 0) {
       return [];
     }
 
     return `${WEEK[currentDay]}0`;
-  }, [data, timeZone]);
+  }, [data, settings.timezone]);
 
   const startEndWeekLabel = useMemo(() => {
-    const startAndEnd = getStartAndEndWeekTime(currentWeek, timeZone);
+    const startAndEnd = getStartAndEndWeekTime(currentWeek, settings.timezone);
     return `${startAndEnd[0].format('D MMM')} - ${startAndEnd[1].format('D MMM')}`;
-  }, [currentWeek, timeZone]);
+  }, [currentWeek, settings.timezone]);
 
   const handleClickBack = () => {
     setCurrentWeek(currentWeek - 1);
@@ -72,7 +69,7 @@ export const ListView: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
         </Col>
       </Row>
       <Collapse defaultActiveKey={currentDayKey}>
-        {getWeekElements(data, currentWeek, timeZone, alias, storedTagColors)}
+        {getWeekElements(data, currentWeek, settings.timezone, courseAlias, settings.tagColors)}
       </Collapse>
       <style jsx>{listStyles}</style>
     </div>
@@ -139,7 +136,7 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   return weekMap;
 };
 
-const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, storedTagColors?: object) => {
+const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, tagColors?: Record<string, string>) => {
   return events.map((data: CourseEvent) => {
     const { id, event, dateTime, isTask } = data;
     const { type, name } = event;
@@ -148,12 +145,9 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
       <tbody key={id}>
         <tr>
           <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
-          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors, TASK_TYPES_MAP)}</th>
+          <th style={{ width: '10%' }}>{renderTagWithStyle(type, tagColors, TASK_TYPES_MAP)}</th>
           <th style={{ width: '80%' }}>
-            <Link
-              prefetch={false}
-              href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
-            >
+            <Link prefetch={false} href={getEventLink(alias, id, isTask)}>
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
                   {name}
@@ -173,7 +167,7 @@ const getWeekElements = (
   selectedWeek: number,
   timeZone: string,
   alias: string,
-  storedTagColors?: object,
+  tagColors?: Record<string, string>,
 ) => {
   const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
@@ -198,7 +192,7 @@ const getWeekElements = (
       return (
         <Panel style={style} header={eventCountElem} key={key}>
           <table className="ListTable">
-            {getDayEvents(eventsPerDay, timeZone, alias, storedTagColors)}
+            {getDayEvents(eventsPerDay, timeZone, alias, tagColors)}
             <style jsx>{tableStyles}</style>
           </table>
         </Panel>

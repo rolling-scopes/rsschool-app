@@ -5,18 +5,16 @@ import { useAsync } from 'react-use';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
 import { useLoading } from 'components/useLoading';
-import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
+import { CourseService, CourseTaskDetails, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
-import TaskDetails from 'components/Schedule/TaskDetails';
-import EventDetails from 'components/Schedule/EventDetails';
-import ModalFormEntity from 'components/Schedule/ModalFormEntity';
+import { useScheduleSettings, ManageEventModalForm, TaskDetails, EventDetails } from 'components/Schedule';
 
-export function EntityDetailsPage(props: CoursePageProps) {
+export function EventPage(props: CoursePageProps) {
   const { session, course } = props;
 
   const router = useRouter();
-  const { entityType, entityId } = router.query;
+  const { type, id } = router.query;
   const alias = Array.isArray(course) ? course[0].alias : course.alias;
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -24,14 +22,15 @@ export function EntityDetailsPage(props: CoursePageProps) {
   const [, withLoading] = useLoading(false);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const isAdmin = useMemo(() => isCourseManager(session, course.id), [session, course]);
+  const settings = useScheduleSettings();
 
   const loadData = async () => {
-    if (entityType === 'task') {
-      const entity = await courseService.getCourseTask(entityId as string);
+    if (type === 'task') {
+      const entity = await courseService.getCourseTask(id as string);
       setEntityData(entity as CourseTaskDetails);
     }
-    if (entityType === 'event') {
-      const entity = await courseService.getEventById(entityId as string);
+    if (type === 'event') {
+      const entity = await courseService.getEventById(id as string);
       setEntityData(entity as CourseEvent);
     }
   };
@@ -56,29 +55,37 @@ export function EntityDetailsPage(props: CoursePageProps) {
 
   return (
     <>
-      <Header title={entityType === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
-      {entityType === 'task' && (
+      <Header title={type === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
+      {type === 'task' && (
         <TaskDetails
           taskData={entityData as CourseTaskDetails}
           alias={alias}
           onEdit={handleFullEdit}
           isAdmin={isAdmin}
+          settings={settings}
         />
       )}
-      {entityType === 'event' && (
-        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} />
+      {type === 'event' && (
+        <EventDetails
+          eventData={entityData as CourseEvent}
+          alias={alias}
+          onEdit={handleFullEdit}
+          isAdmin={isAdmin}
+          settings={settings}
+        />
       )}
       {isModalOpen && (
-        <ModalFormEntity
+        <ManageEventModalForm
           visible={isModalOpen}
           editableRecord={editableRecord as CourseEvent}
           handleCancel={closeModal}
           courseId={props.course.id}
           refreshData={loadData}
+          settings={settings}
         />
       )}
     </>
   );
 }
 
-export default withCourseData(withSession(EntityDetailsPage));
+export default withCourseData(withSession(EventPage));

@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
-import FormEntity from './FormEntity';
-import useWindowDimensions from '../../utils/useWindowDimensions';
+import useWindowDimensions from 'utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
-import TaskDetails from './TaskDetails';
-import EventDetails from './EventDetails';
+import { ScheduleSettings } from '../useScheduleSettings';
+import { TaskDetails, EventDetails } from '../EventDetails';
+import ManageEventForm from './ManageEventForm';
 
 const { TabPane } = Tabs;
 
-type Props = {
+interface ManageEventModalFormProps {
   visible: boolean;
   handleCancel: () => void;
   courseId: number;
   editableRecord?: CourseEvent | null;
   refreshData: Function;
-};
+  settings: ScheduleSettings;
+}
 
-const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
+const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
+  visible,
+  handleCancel,
+  courseId,
+  editableRecord,
+  refreshData,
+  settings,
+}) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -47,7 +55,7 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
       title={
         <Tabs defaultActiveKey="1">
           <TabPane tab="New entity" key="1">
-            <FormEntity
+            <ManageEventForm
               handleCancel={handleCancel}
               onFieldsChange={onFieldsChange}
               courseId={courseId}
@@ -61,6 +69,7 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
             {entityType === 'task' && entityData && (
               <TaskDetails
                 taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails}
+                settings={settings}
                 alias={alias}
                 isPreview
                 isAdmin
@@ -69,6 +78,7 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
             {entityType === 'event' && entityData && (
               <EventDetails
                 eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
+                settings={settings}
                 alias={alias}
                 isPreview
                 isAdmin
@@ -106,7 +116,6 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       githubPrRequired: entityData.githubPrRequired,
       sourceGithubRepoUrl: entityData.sourceGithubRepoUrl,
       githubRepoName: entityData.githubRepoName,
-      // attributes: JSON.parse(entityData.attributes ?? '{}'),
       checker: entityData.checker,
       pairsCount: entityData.pairsCount,
     };
@@ -127,4 +136,4 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
   };
 };
 
-export default ModalFormEntity;
+export default ManageEventModalForm;

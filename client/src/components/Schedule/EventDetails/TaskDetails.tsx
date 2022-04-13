@@ -1,15 +1,14 @@
-import React from 'react';
-import { useLocalStorage } from 'react-use';
-import Link from 'next/link';
-import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
-import { CourseTaskDetails } from 'services/course';
-import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import Link from 'next/link';
+import React from 'react';
+import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
-import { GithubUserLink } from '../GithubUserLink';
-import { CHECKER_TYPES } from './model';
+import { CourseTaskDetails } from 'services/course';
+import { GithubUserLink } from '../../GithubUserLink';
+import { ScheduleSettings } from '../useScheduleSettings';
+import { CHECKER_TYPES } from '../constants';
 
 type Props = {
   taskData: CourseTaskDetails;
@@ -17,10 +16,10 @@ type Props = {
   isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
+  settings: ScheduleSettings;
 };
 
-const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit }) => {
-  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
+const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit, settings }) => {
   const { Title, Text } = Typography;
 
   const {
@@ -40,7 +39,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
     githubRepoName,
     sourceGithubRepoUrl,
     githubPrRequired,
-    // publicAttributes,
   } = taskData;
 
   return (
@@ -72,7 +70,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
 
         {type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(type, storedTagColors)}</Col>
+            <Col>{renderTagWithStyle(type, settings.tagColors)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}
