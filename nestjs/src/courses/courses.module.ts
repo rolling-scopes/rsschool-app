@@ -57,6 +57,6 @@ import { UsersNotificationsModule } from 'src/users-notifications/users-notifica
     InterviewsService,
     TasksService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, MentorsService],
+  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })
 export class CoursesModule {}
