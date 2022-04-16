@@ -49,4 +49,9 @@ export default {
     pictureId: 35,
     url: 'JobOffer.svg',
   },
+  RS_activist: {
+    name: 'RS activist',
+    pictureId: 36,
+    url: 'RSActivist.svg',
+  },
 };

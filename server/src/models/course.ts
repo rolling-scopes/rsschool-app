@@ -94,4 +94,7 @@ export class Course {
 
   @Column({ default: true })
   personalMentoring: boolean;
+
+  @Column({ nullable: true })
+  logo: string;
 }
