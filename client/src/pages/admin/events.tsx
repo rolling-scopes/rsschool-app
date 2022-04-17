@@ -117,7 +117,7 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <AdminPageLayout session={props.session}>
+    <AdminPageLayout session={props.session} title="Manage Events">
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Event

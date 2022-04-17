@@ -127,7 +127,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session}>
+    <AdminPageLayout session={props.session} title="Manage User Groups">
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add User Group

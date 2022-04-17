@@ -131,7 +131,7 @@ function Page(props: Props) {
   const rowSelection = { onChange: changeSelection };
 
   return (
-    <AdminPageLayout session={props.session}>
+    <AdminPageLayout title="Registrations" session={props.session}>
       <Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
           <Col>

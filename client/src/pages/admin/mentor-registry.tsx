@@ -106,7 +106,7 @@ function Page(props: Props) {
   }
 
   return (
-    <AdminPageLayout session={props.session}>
+    <AdminPageLayout session={props.session} title="Mentor Registry">
       <Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
           <Col>

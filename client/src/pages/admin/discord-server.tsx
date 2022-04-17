@@ -113,7 +113,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session}>
+    <AdminPageLayout session={props.session} title="Manage Discord Servers">
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Discord Server
