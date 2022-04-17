@@ -1,9 +1,8 @@
 import { Button, Col, Form, Input, Layout, message, Popconfirm, Row, Select, Table, Tag } from 'antd';
 import { UpdateUserGroupDto, UserGroupApi, UserGroupDto } from 'api';
-import { AdminSider } from 'components/AdminSider';
 import { ModalForm } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { Header } from 'components/Header';
+import { AdminPageLayout } from 'components/PageLayout';
 import { stringSorter } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import { Session, withSession } from 'components/withSession';
@@ -128,26 +127,22 @@ function Page(props: Props) {
   );
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage User Groups" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add User Group
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={data}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem, handleDeleteItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session}>
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add User Group
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={data}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem, handleDeleteItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 

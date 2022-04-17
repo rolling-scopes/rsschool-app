@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react';
 import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { Header } from 'components/Header';
-import { AdminSider } from 'components/AdminSider';
 import { Session, withSession } from 'components/withSession';
 import { UserService, UserFull } from 'services/user';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -22,60 +21,56 @@ function Page(props: Props) {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Users" username={props.session.githubId} />
-        <Content>
-          <div className="mt-4">
-            <Form layout="horizontal" onFinish={handleSearch}>
-              <Row gutter={24}>
-                <Col offset={1} xs={16} sm={12} md={8} lg={6}>
-                  <Form.Item name="searchText">
-                    <Input width={200} placeholder="Search by github or name" />
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Search
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-            {users && (
-              <Row>
-                <Col offset={2} xs={20} sm={16} md={10} lg={8}>
-                  <List
-                    rowKey="id"
-                    locale={{ emptyText: 'No results' }}
-                    dataSource={users}
-                    renderItem={(user: UserFull) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={<GithubAvatar size={48} githubId={user.githubId} />}
-                          title={<a href={`/profile?githubId=${user.githubId}`}>{user.githubId}</a>}
-                          description={
-                            <div>
-                              <div>{user.name}</div>
-                              <div>{`Primary email: ${user.primaryEmail || ''}`}</div>
-                              <div>{`EPAM email: ${user.contactsEpamEmail || ''}`}</div>
-                              <div>{`Skype: ${user.contactsSkype || ''}`}</div>
-                              <div>{`Telegram: ${user.contactsTelegram || ''}`}</div>
-                            </div>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </Col>
-              </Row>
-            )}
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+    <AdminPageLayout session={props.session}>
+      <Content>
+        <div className="mt-4">
+          <Form layout="horizontal" onFinish={handleSearch}>
+            <Row gutter={12}>
+              <Col span={6}>
+                <Form.Item name="searchText">
+                  <Input width={200} placeholder="Search by github or name" />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Search
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+          {users && (
+            <Row>
+              <Col offset={2} xs={20} sm={16} md={10} lg={8}>
+                <List
+                  rowKey="id"
+                  locale={{ emptyText: 'No results' }}
+                  dataSource={users}
+                  renderItem={(user: UserFull) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<GithubAvatar size={48} githubId={user.githubId} />}
+                        title={<a href={`/profile?githubId=${user.githubId}`}>{user.githubId}</a>}
+                        description={
+                          <div>
+                            <div>{user.name}</div>
+                            <div>{`Primary email: ${user.primaryEmail || ''}`}</div>
+                            <div>{`EPAM email: ${user.contactsEpamEmail || ''}`}</div>
+                            <div>{`Skype: ${user.contactsSkype || ''}`}</div>
+                            <div>{`Telegram: ${user.contactsTelegram || ''}`}</div>
+                          </div>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+          )}
+        </div>
+      </Content>
+    </AdminPageLayout>
   );
 }
 

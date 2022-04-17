@@ -1,6 +1,4 @@
 import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table } from 'antd';
-import { AdminSider } from 'components/AdminSider';
-import { Header } from 'components/Header';
 import withSession, { Session } from 'components/withSession';
 import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
@@ -12,8 +10,7 @@ import { ModalForm } from 'components/Forms';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
-
-import { isAnyCoursePowerUser } from '../../domain/user';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -189,26 +186,22 @@ function Page(props: Props) {
   }, [modalData, modalValues, modalLoading, handleModalSubmit]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUser(props.session)} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Tasks" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add Task
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={data}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session}>
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Task
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={data}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 

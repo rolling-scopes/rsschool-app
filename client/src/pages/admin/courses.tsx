@@ -13,8 +13,6 @@ import {
   Select,
   Table,
 } from 'antd';
-import { Header } from 'components/Header';
-import { AdminSider } from 'components/AdminSider';
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
@@ -26,6 +24,7 @@ import { DiscordServersApi, DiscordServerDto } from 'api';
 import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -238,26 +237,22 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Courses" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add Course
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={courses}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session}>
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Course
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={courses}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 
