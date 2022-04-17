@@ -2,8 +2,7 @@ import { Header } from './Header';
 import { Spin, Row, Col, Layout } from 'antd';
 import { PropsWithChildren } from 'react';
 import { Session } from './withSession';
-import { AdminSider } from './AdminSider';
-import { isAnyCoursePowerUser } from 'domain/user';
+import { AdminSider } from './Sider/AdminSider';
 
 type Props = {
   loading: boolean;
@@ -53,10 +52,10 @@ export function PageLayoutSimple(props: Props) {
 export function AdminPageLayout({ session, title, children }: PropsWithChildren<{ session: Session; title?: string }>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={session.isAdmin} isCoursePowerUser={isAnyCoursePowerUser(session)} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title={title} username={session.githubId} />
-        <Layout.Content style={{ margin: 8 }}>{children}</Layout.Content>
+      <Header title={title} username={session.githubId} />
+      <Layout style={{ background: '#e5e5e5' }}>
+        <AdminSider session={session} />
+        <Layout.Content style={{ background: '#fff', margin: 16, padding: 16 }}>{children}</Layout.Content>
       </Layout>
     </Layout>
   );
