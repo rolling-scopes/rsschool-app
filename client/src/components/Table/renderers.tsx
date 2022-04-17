@@ -8,8 +8,8 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
-import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
 import { Checker, CrossCheckStatus } from '../../services/course';
+import { getTagStyle } from 'components/Schedule';
 
 const { Text } = Typography;
 
@@ -87,9 +87,13 @@ export function renderTag(value: number | string, color?: string) {
   );
 }
 
-export function renderTagWithStyle(tagName: string, storedTagColors?: object, tagMap?: Record<string, string>) {
+export function renderTagWithStyle(
+  tagName: string,
+  tagColors?: Record<string, string>,
+  tagMap?: Record<string, string>,
+) {
   return (
-    <Tag style={getTagStyle(tagName, storedTagColors)} key={tagName}>
+    <Tag style={getTagStyle(tagName, tagColors)} key={tagName}>
       {tagMap?.[tagName] || tagName}
     </Tag>
   );

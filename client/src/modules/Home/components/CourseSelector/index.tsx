@@ -2,6 +2,7 @@ import { Select } from 'antd';
 import { PlayCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import React, { CSSProperties } from 'react';
 import { Course } from 'services/models';
+import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 
 type Props = {
   course: Course | null;
@@ -34,10 +35,31 @@ export function CourseSelector(props: Props) {
 
 const getStatusIcon = (course: Course) => {
   if (course.completed) {
-    return <CheckCircleTwoTone twoToneColor="#aaa" />;
+    return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
+      <Logo url={DEFAULT_COURSE_ICONS[course.logo].archived} />
+    ) : (
+      <CheckCircleTwoTone twoToneColor="#aaa" />
+    );
   }
-  return <PlayCircleTwoTone />;
+  return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
+    <Logo url={DEFAULT_COURSE_ICONS[course.logo].active} />
+  ) : (
+    <PlayCircleTwoTone />
+  );
 };
+
+function Logo({ url }: { url: string }) {
+  return (
+    <>
+      <img width={16} height={16} src={url} className="img" />
+      <style jsx>{`
+        .img {
+          vertical-align: -0.125em;
+        }
+      `}</style>
+    </>
+  );
+}
 
 const getStatus = (course: Course) => {
   if (course.completed) {
