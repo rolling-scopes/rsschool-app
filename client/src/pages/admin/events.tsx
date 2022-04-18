@@ -4,7 +4,7 @@ import { Session, withSession } from 'components/withSession';
 import { AdminSider } from 'components/AdminSider';
 import { Header } from 'components/Header';
 import { ModalForm } from 'components/Forms';
-import { stringSorter, stringTrimRenderer } from 'components/Table';
+import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
@@ -165,6 +165,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Name',
       dataIndex: 'name',
       sorter: stringSorter<Event>('name'),
+      ...getColumnSearchProps('name'),
     },
     {
       title: 'Discipline',

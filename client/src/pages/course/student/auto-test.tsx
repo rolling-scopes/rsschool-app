@@ -172,7 +172,7 @@ function Page(props: CoursePageProps) {
       <Row gutter={24}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect onChange={handleCourseTaskChange} data={courseTasks} />
+            <CourseTaskSelect onChange={handleCourseTaskChange} groupBy="deadline" data={courseTasks} />
             {courseTask ? renderTaskFields(props.session.githubId, courseTask, verifications) : null}
             <Row>
               <Button size="large" type="primary" htmlType="submit">

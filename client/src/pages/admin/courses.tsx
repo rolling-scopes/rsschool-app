@@ -1,4 +1,18 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Layout, message, Radio, Row, Select, Table } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Layout,
+  message,
+  Radio,
+  Row,
+  Select,
+  Table,
+} from 'antd';
 import { Header } from 'components/Header';
 import { AdminSider } from 'components/AdminSider';
 import withSession, { Session } from 'components/withSession';
@@ -11,6 +25,7 @@ import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto } from 'api';
 import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
+import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -189,6 +204,16 @@ function Page(props: Props) {
           </Col>
         </Row>
 
+        <Form.Item name="logo" label="Course Logo">
+          <Select placeholder="Please select logo">
+            {courseIcons.map(course => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
         <Form.Item name="state" label="State">
           <Radio.Group>
             <Radio value={null}>Active</Radio>
@@ -255,15 +280,23 @@ function createRecord(values: any) {
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
+    logo: values.logo,
   };
   return record;
 }
+
+const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 function getColumns(handleEditItem: any) {
   return [
     {
       title: 'Id',
       dataIndex: 'id',
+    },
+    {
+      title: 'Logo',
+      dataIndex: 'logo',
+      render: (logo: string) => <Image width={25} preview={false} src={DEFAULT_COURSE_ICONS[logo]?.active} />,
     },
     {
       title: 'Name',

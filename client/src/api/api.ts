@@ -151,7 +151,8 @@ export const BadgeDtoIdEnum = {
     ThankYou: 'Thank_you',
     OutstandingWork: 'Outstanding_work',
     TopPerformer: 'Top_performer',
-    JobOffer: 'Job_Offer'
+    JobOffer: 'Job_Offer',
+    RsActivist: 'RS_activist'
 } as const;
 
 export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
@@ -492,6 +493,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'personalMentoring': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
+    'logo': string;
 }
 /**
  * 
@@ -1212,7 +1219,8 @@ export const GratitudeDtoBadgeIdEnum = {
     ThankYou: 'Thank_you',
     OutstandingWork: 'Outstanding_work',
     TopPerformer: 'Top_performer',
-    JobOffer: 'Job_Offer'
+    JobOffer: 'Job_Offer',
+    RsActivist: 'RS_activist'
 } as const;
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
@@ -1637,6 +1645,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'personalMentoring': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'logo': string;
 }
 /**
  * 
