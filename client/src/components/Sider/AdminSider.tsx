@@ -1,6 +1,5 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined, SearchOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import SubMenu from 'antd/lib/menu/SubMenu';
 import { Session } from 'components/withSession';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -23,9 +22,8 @@ export function AdminSider(props: Props) {
     <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
       {collapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
       <Menu mode="inline">
-        {adminMenuItems.length ? (
-          <SubMenu key="adminArea" icon={<SearchOutlined />} title="Admin area">
-            {adminMenuItems.map(item => (
+        {adminMenuItems.length
+          ? adminMenuItems.map(item => (
               <Menu.Item key={item.key}>
                 <Link prefetch={false} href={item.href}>
                   <a>
@@ -34,9 +32,8 @@ export function AdminSider(props: Props) {
                   </a>
                 </Link>
               </Menu.Item>
-            ))}
-          </SubMenu>
-        ) : null}
+            ))
+          : null}
       </Menu>
     </Sider>
   );
