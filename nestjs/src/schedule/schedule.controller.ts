@@ -17,9 +17,9 @@ export class ScheduleController {
   @ApiOperation({ operationId: 'notifyScheduleChanges' })
   @ApiForbiddenResponse()
   public async notifyScheduleChanges() {
-    const students = await this.scheduleService.getChangedStudentsCourses();
+    const recipients = await this.scheduleService.getChangedCoursesRecipients();
 
-    for (const [userId, courses] of students) {
+    for (const [userId, courses] of recipients) {
       try {
         await this.notificationService.sendEventNotification({
           data: { courses },
