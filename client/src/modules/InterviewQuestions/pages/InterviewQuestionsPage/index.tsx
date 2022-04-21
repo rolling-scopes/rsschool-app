@@ -1,6 +1,5 @@
 import { Col, Layout, message, Row, Spin, Tabs } from 'antd';
-import { AdminSider } from 'components/AdminSider';
-import { Header } from 'components/Header';
+import { AdminPageLayout } from 'components/PageLayout';
 import { Session } from 'components/withSession';
 import { AddCategoryButton } from 'modules/InterviewQuestions/components/Buttons/AddCategoryButton';
 import { AddQuestionButton } from 'modules/InterviewQuestions/components/Buttons/AddQuestionButton';
@@ -73,36 +72,32 @@ export function InterviewQuestionsPage(props: Props) {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Questions" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Row gutter={16} justify="start">
-            <Col>
-              <AddQuestionButton onClick={handleAddQuestion} />
-            </Col>
-            <Col>
-              <AddCategoryButton onClick={handleAddCategory} />
-            </Col>
-          </Row>
-          <Spin spinning={loading}>
-            <Tabs defaultActiveKey="QuestionsTable">
-              <TabPane tab="Questions Table" key="QuestionsTable">
-                <QuestionsTable
-                  data={questions}
-                  handleEditQuestion={handleEditQuestion}
-                  loadData={loadData}
-                  categories={categories}
-                />
-              </TabPane>
-              <TabPane tab="Categories Table" key="CategoriesTable">
-                <CategoriesTable data={categories} handleEditCategory={handleEditCategory} loadData={loadData} />
-              </TabPane>
-            </Tabs>
-          </Spin>
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session} title="Manage Questions">
+      <Content style={{ margin: 8 }}>
+        <Row gutter={16} justify="start">
+          <Col>
+            <AddQuestionButton onClick={handleAddQuestion} />
+          </Col>
+          <Col>
+            <AddCategoryButton onClick={handleAddCategory} />
+          </Col>
+        </Row>
+        <Spin spinning={loading}>
+          <Tabs defaultActiveKey="QuestionsTable">
+            <TabPane tab="Questions Table" key="QuestionsTable">
+              <QuestionsTable
+                data={questions}
+                handleEditQuestion={handleEditQuestion}
+                loadData={loadData}
+                categories={categories}
+              />
+            </TabPane>
+            <TabPane tab="Categories Table" key="CategoriesTable">
+              <CategoriesTable data={categories} handleEditCategory={handleEditCategory} loadData={loadData} />
+            </TabPane>
+          </Tabs>
+        </Spin>
+      </Content>
       <QuestionsModalForm
         categories={categories}
         question={modalQuestionData}
@@ -117,6 +112,6 @@ export function InterviewQuestionsPage(props: Props) {
         category={modalCategoryData}
         onCancel={handleModalCategoryCancel}
       />
-    </Layout>
+    </AdminPageLayout>
   );
 }

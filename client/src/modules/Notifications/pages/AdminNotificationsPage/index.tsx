@@ -9,7 +9,7 @@ type Props = { session: Session };
 
 export function AdminPage({ session }: Props) {
   return (
-    <AdminPageLayout session={session}>
+    <AdminPageLayout session={session} title="Notifications">
       <Tabs type="card">
         <Tabs.TabPane tab="Settings" key="1">
           <AdminNotificationsPage />
