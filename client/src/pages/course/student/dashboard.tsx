@@ -2,7 +2,7 @@ import { Result } from 'antd';
 import moment from 'moment';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { useMemo, useState } from 'react';
 
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -32,6 +32,10 @@ function Page(props: CoursePageProps) {
   const { githubId } = props.session;
   const { fullName, usePrivateRepositories } = props.course;
 
+  const [storageValue, setStorageValue] = useLocalStorage(STORAGE_KEY);
+
+  const showCountEventsOnStudentsDashboard = () => Number(storageValue ? storageValue : 1);
+
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
 
@@ -49,7 +53,7 @@ function Page(props: CoursePageProps) {
   };
 
   const changeCountEvents = (value: number) => {
-    localStorage.setItem(STORAGE_KEY, String(value));
+    setStorageValue(String(value));
     setCountEvents(value);
   };
 
@@ -220,8 +224,5 @@ const createCourseEventFromTask = (task: CourseTaskDto, type: string): CourseEve
     },
   } as CourseEvent;
 };
-
-const showCountEventsOnStudentsDashboard = () =>
-  Number(localStorage.getItem(STORAGE_KEY) ? localStorage.getItem(STORAGE_KEY) : 1);
 
 export default withCourseData(withSession(Page));
