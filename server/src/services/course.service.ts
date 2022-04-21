@@ -15,9 +15,11 @@ import {
   TaskChecker,
   TaskSolutionResult,
   IUserSession,
-  CourseRole,
   TaskResult,
   TaskInterviewResult,
+  isAdmin,
+  isManager,
+  isSupervisor,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
@@ -242,6 +244,24 @@ export async function getStudentByGithubId(courseId: number, githubId: string): 
   return record;
 }
 
+export async function queryStudentById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
+  const record = await studentQuery()
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+    .where('student.id = :id', { id })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne();
+
+  if (record == null) {
+    return null;
+  }
+
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
+}
+
 export async function queryStudentByGithubId(
   courseId: number,
   githubId: string,
@@ -266,6 +286,22 @@ export async function queryMentorByGithubId(
     .innerJoin('mentor.user', 'user')
     .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
     .where('user.githubId = :githubId', { githubId })
+    .andWhere('mentor.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function queryMentorById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('mentor.id = :id', { id })
     .andWhere('mentor.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
@@ -477,11 +513,7 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
-  return (
-    session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
-  );
+  return isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
 }
 
 export async function getEvent(eventId: number) {
@@ -529,7 +561,6 @@ export async function getUsers(courseId: number) {
     id: r.userId,
     name: createName(r.user),
     githubId: r.user.githubId,
-    isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
   }));
@@ -651,7 +682,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
         contactsPhone,
         contactsSkype,
         contactsTelegram,
-        cityName,
+        cityName: cityName ?? undefined,
       },
     };
   });

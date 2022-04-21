@@ -2,7 +2,7 @@ import { Result } from 'antd';
 import moment from 'moment';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { useMemo, useState } from 'react';
 
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -10,7 +10,7 @@ import { PageLayout } from 'components/PageLayout';
 
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services/course';
+import { CourseService, StudentSummary, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentTasksDetail } from 'common/models';
@@ -22,19 +22,26 @@ import {
   RepositoryCard,
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
 
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
+
+const coursesTasksApi = new CoursesTasksApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
   const { fullName, usePrivateRepositories } = props.course;
+
+  const [storageValue, setStorageValue] = useLocalStorage(STORAGE_KEY);
+
+  const showCountEventsOnStudentsDashboard = () => Number(storageValue ? storageValue : 1);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
 
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
-  const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
@@ -46,15 +53,15 @@ function Page(props: CoursePageProps) {
   };
 
   const changeCountEvents = (value: number) => {
-    localStorage.setItem(STORAGE_KEY, String(value));
+    setStorageValue(String(value));
     setCountEvents(value);
   };
 
   useAsync(
     withLoading(async () => {
-      const [studentSummary, courseTasks, statisticsCourses, courseEvents] = await Promise.all([
+      const [studentSummary, { data: courseTasks }, statisticsCourses, courseEvents] = await Promise.all([
         courseService.getStudentSummary(githubId),
-        courseService.getCourseTasks(),
+        coursesTasksApi.getCourseTasks(props.course.id),
         userService.getProfileInfo(githubId),
         courseService.getCourseEvents(),
       ]);
@@ -196,8 +203,8 @@ const TaskTypes = {
 
 const checkTaskResults = (results: any[], taskId: number) => results.find((task: any) => task.courseTaskId === taskId);
 
-const tasksToEvents = (tasks: CourseTask[]) => {
-  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+const tasksToEvents = (tasks: CourseTaskDto[]) => {
+  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
     if (task.type !== TaskTypes.test) {
       acc.push(createCourseEventFromTask(task, task.type));
     }
@@ -206,7 +213,7 @@ const tasksToEvents = (tasks: CourseTask[]) => {
   }, []);
 };
 
-const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent => {
+const createCourseEventFromTask = (task: CourseTaskDto, type: string): CourseEvent => {
   return {
     id: task.id,
     dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',
@@ -217,8 +224,5 @@ const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent 
     },
   } as CourseEvent;
 };
-
-const showCountEventsOnStudentsDashboard = () =>
-  Number(localStorage.getItem(STORAGE_KEY) ? localStorage.getItem(STORAGE_KEY) : 1);
 
 export default withCourseData(withSession(Page));

@@ -13,22 +13,22 @@ export class Feedback {
   courseId: number;
 
   @ManyToOne(_ => User)
-  fromUser: User | number;
+  fromUser: User;
+
+  @Column()
+  fromUserId: number;
 
   @ManyToOne(_ => User)
-  toUser: User | number;
+  toUser: User;
 
-  @Column({ nullable: true })
+  @Column()
   toUserId: number;
 
-  @Column({ nullable: true })
-  comment: string;
+  @Column({ nullable: true, type: 'varchar' })
+  comment: string | null;
 
   @Column({ nullable: true, default: 'Thank_you' })
   badgeId: string;
-
-  @Column({ nullable: true })
-  heroesUrl: string;
 
   @CreateDateColumn()
   createdDate: string;

@@ -26,6 +26,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  swcMinify: true,
+  swcMinify: false,
 };
 module.exports = nextConfig;

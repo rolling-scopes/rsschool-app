@@ -1,6 +1,18 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Layout, message, Radio, Row, Select, Table } from 'antd';
-import { Header } from 'components/Header';
-import { AdminSider } from 'components/AdminSider';
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Layout,
+  message,
+  Radio,
+  Row,
+  Select,
+  Table,
+} from 'antd';
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
@@ -8,16 +20,18 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServersApi } from 'api';
-import { Course, DiscordServer } from 'services/models';
+import { DiscordServersApi, DiscordServerDto } from 'api';
+import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
+import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 type Props = { session: Session };
 
 function Page(props: Props) {
   const [courses, setCourses] = useState([] as Course[]);
-  const [discordServers, setDiscordServers] = useState([] as DiscordServer[]);
+  const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
@@ -189,6 +203,16 @@ function Page(props: Props) {
           </Col>
         </Row>
 
+        <Form.Item name="logo" label="Course Logo">
+          <Select placeholder="Please select logo">
+            {courseIcons.map(course => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
         <Form.Item name="state" label="State">
           <Radio.Group>
             <Radio value={null}>Active</Radio>
@@ -213,26 +237,22 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Courses" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add Course
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={courses}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session} title="Manage Courses">
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Course
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={courses}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 
@@ -255,15 +275,23 @@ function createRecord(values: any) {
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
+    logo: values.logo,
   };
   return record;
 }
+
+const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 function getColumns(handleEditItem: any) {
   return [
     {
       title: 'Id',
       dataIndex: 'id',
+    },
+    {
+      title: 'Logo',
+      dataIndex: 'logo',
+      render: (logo: string) => <Image width={25} preview={false} src={DEFAULT_COURSE_ICONS[logo]?.active} />,
     },
     {
       title: 'Name',

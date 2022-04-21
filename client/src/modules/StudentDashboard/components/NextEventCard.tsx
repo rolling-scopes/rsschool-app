@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useLocalStorage } from 'react-use';
 import CommonCard from './CommonDashboardCard';
 import { ScheduleOutlined, YoutubeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { CourseEvent } from 'services/course';
@@ -46,14 +47,13 @@ const EventTypeToName: Record<string, string> = {
   ...TASK_TYPES.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {} as Record<string, string>),
 };
 
+const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
+
 export function NextEventCard(props: Props) {
   const { nextEvents, showCountEvents, setShowCountEvents } = props;
+  const [storageValue] = useLocalStorage(STORAGE_KEY);
 
-  const showCountEventsOnStudentsDashboard = Number(
-    localStorage.getItem('showCountEventsOnStudentsDashboard')
-      ? localStorage.getItem('showCountEventsOnStudentsDashboard')
-      : 1,
-  );
+  const showCountEventsOnStudentsDashboard = Number(storageValue ? storageValue : 1);
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const listEvents = getListEvents(nextEvents, showCountEvents, timeZone);

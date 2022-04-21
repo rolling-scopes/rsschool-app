@@ -6,9 +6,12 @@ import { CommentInput, CourseTaskSelect, GithubPrInput, ScoreInput } from 'compo
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask, AllStudents, AssignedStudent } from 'services/course';
+import { CourseService, AllStudents, AssignedStudent } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { isMentor, isCourseManager, isCourseSupervisor, isPowerUser } from 'domain/user';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
+
+const courseTasksApi = new CoursesTasksApi();
 
 function Page({ session, course }: CoursePageProps) {
   const courseId = course.id;
@@ -21,11 +24,11 @@ function Page({ session, course }: CoursePageProps) {
   const [students, setStudents] = useState([] as (StudentBasic | AssignedStudent)[]);
   const [allStudents, setAllStudents] = useState(null as AllStudents | null);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
 
   useAsync(async () => {
-    const [tasks, allStudents] = await Promise.all([
-      courseService.getCourseTasks(),
+    const [{ data: tasks }, allStudents] = await Promise.all([
+      courseTasksApi.getCourseTasks(courseId),
       courseService.getAllMentorStudents().catch(() => ({ students: [], assignedStudents: [] })),
     ]);
 
@@ -99,33 +102,31 @@ function Page({ session, course }: CoursePageProps) {
 
 export default withCourseData(withSession(Page));
 
-const isCheckedByMentor = (task: CourseTask) => task.checker === 'mentor';
-const isCheckedByAssigned = (task: CourseTask) => task.checker === 'assigned';
-const isNotAutoChecked = (task: CourseTask) => task.checker !== 'auto-test';
-const isCheckedByTaskOwner = (task: CourseTask) => task.checker === 'taskOwner';
-const hasStudentEndDate = (task: CourseTask) => Boolean(task.studentEndDate);
-const isNotUseJury = (task: CourseTask) => !task.useJury;
-const isNotInterview = (task: CourseTask) => task.type !== 'interview';
+const isCheckedByMentor = (task: CourseTaskDto) => task.checker === 'mentor';
+const isCheckedByAssigned = (task: CourseTaskDto) => task.checker === 'assigned';
+const isNotAutoChecked = (task: CourseTaskDto) => task.checker !== 'auto-test';
+const isCheckedByTaskOwner = (task: CourseTaskDto) => task.checker === 'taskOwner';
+const hasStudentEndDate = (task: CourseTaskDto) => Boolean(task.studentEndDate);
+const isNotInterview = (task: CourseTaskDto) => task.type !== 'interview';
 
-const isTaskOwner = (userId: number) => (task?: CourseTask) => {
+const isTaskOwner = (userId: number) => (task?: CourseTaskDto) => {
   return task?.taskOwnerId === userId;
 };
 
-const isSubmittedByTaskOwner = (userId: number) => (task: CourseTask) =>
+const isSubmittedByTaskOwner = (userId: number) => (task: CourseTaskDto) =>
   isTaskOwner(userId)(task) && isCheckedByTaskOwner(task);
 
-const isSubmittedByMentor = (session: Session, courseId: number) => (task: CourseTask) => {
+const isSubmittedByMentor = (session: Session, courseId: number) => (task: CourseTaskDto) => {
   return (
     hasStudentEndDate(task) &&
     isNotAutoChecked(task) &&
-    isNotUseJury(task) &&
     isNotInterview(task) &&
     (isCheckedByMentor(task) || isCheckedByAssigned(task)) &&
     (isMentor(session, courseId) || isPowerUser(session, courseId))
   );
 };
 
-const isSubmittedByPowerAdmin = (session: Session, courseId: number) => (task: CourseTask) => {
+const isSubmittedByPowerAdmin = (session: Session, courseId: number) => (task: CourseTaskDto) => {
   const { isAdmin } = session;
   const isPowerMentor = isAdmin || isCourseManager(session, courseId) || isCourseSupervisor(session, courseId);
   return isPowerMentor && (isCheckedByTaskOwner(task) || isSubmittedByMentor(session, courseId)(task));

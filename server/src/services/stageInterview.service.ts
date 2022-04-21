@@ -24,7 +24,6 @@ export async function getAvailableStudents(courseId: number) {
         `student.courseId = :courseId`,
         `student.isFailed = false`,
         `student.isExpelled = false`,
-        `student.totalScore > 0`,
         `student.mentorId IS NULL`,
         `student.mentoring <> false`,
       ].join(' AND '),

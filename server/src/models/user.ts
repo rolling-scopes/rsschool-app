@@ -143,11 +143,11 @@ export class User {
   @Column({ type: 'json', nullable: true })
   discord: Discord | null;
 
-  @Column({ nullable: true })
-  countryName?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  countryName: string | null;
 
-  @Column({ nullable: true })
-  cityName?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  cityName: string | null;
 
   @Column({ nullable: true })
   contactsSkype?: string;

@@ -1,15 +1,13 @@
 import { useState, useCallback } from 'react';
 import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 'antd';
 import { Session, withSession } from 'components/withSession';
-import { AdminSider } from 'components/AdminSider';
-import { Header } from 'components/Header';
 import { ModalForm } from 'components/Forms';
-import { stringSorter, stringTrimRenderer } from 'components/Table';
+import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
-import { isAnyCoursePowerUser } from '../../domain/user';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 
@@ -119,26 +117,22 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUser(props.session)} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Events" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add Event
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={data}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem, handleDeleteItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session} title="Manage Events">
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Event
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={data}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem, handleDeleteItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 
@@ -163,6 +157,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Name',
       dataIndex: 'name',
       sorter: stringSorter<Event>('name'),
+      ...getColumnSearchProps('name'),
     },
     {
       title: 'Discipline',

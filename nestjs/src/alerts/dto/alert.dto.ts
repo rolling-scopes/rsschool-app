@@ -20,7 +20,7 @@ export class AlertDto {
   text: string;
   @ApiProperty()
   enabled: boolean;
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   courseId: number | null;
   @ApiProperty()
   updatedDate: string;

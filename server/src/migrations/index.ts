@@ -17,6 +17,11 @@ import { Notifications1643926895264 } from './1643926895264-Notifications';
 import { NotificationConnection1644695410918 } from './1644695410918-NotificationConnection';
 import { RepositoryEvent1645364514538 } from './1645364514538-RepositoryEvent';
 import { Opportunitites1645654601903 } from './1645654601903-Opportunitites';
+import { TaskSolutionConstraint1647175301446 } from './1647175301446-TaskSolutionConstraint';
+import { NotificationType1647550751147 } from './1647550751147-NotificationType';
+import { LoginStateUserId1647885219936 } from './1647885219936-LoginStateUserId';
+import { CourseLogo1649505252996 } from './1649505252996-CourseLogo';
+import { CourseLogo1649868994688 } from './1649868994688-CourseLogo';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -38,4 +43,9 @@ export const migrations = [
   NotificationConnection1644695410918,
   RepositoryEvent1645364514538,
   Opportunitites1645654601903,
+  TaskSolutionConstraint1647175301446,
+  NotificationType1647550751147,
+  LoginStateUserId1647885219936,
+  CourseLogo1649505252996,
+  CourseLogo1649868994688,
 ];

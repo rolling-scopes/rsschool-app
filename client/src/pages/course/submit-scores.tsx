@@ -9,10 +9,11 @@ import csv from 'csvtojson';
 import { isUndefined } from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask } from 'services/course';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
 
 interface SubmitResult {
   status: string;
@@ -20,17 +21,19 @@ interface SubmitResult {
   messages?: string[];
 }
 
+const courseTasksApi = new CoursesTasksApi();
+
 export function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseId = props.course.id;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loading, setLoading] = useState(false);
   const [submitResults, setSubmitResults] = useState([] as SubmitResult[]);
   const [selectedFileList, setSelectedFileList] = useState(new Map() as Map<string, UploadFile>);
 
   useAsync(async () => {
-    const data = await courseService.getCourseTasks();
+    const { data } = await courseTasksApi.getCourseTasks(courseId);
     setCourseTasks(
       data.filter(item => item.taskOwnerId === props.session.id || isCourseManager(props.session, courseId)),
     );

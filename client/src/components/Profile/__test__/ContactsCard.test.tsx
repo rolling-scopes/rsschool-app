@@ -21,6 +21,8 @@ describe('ContactsCard', () => {
           isEditingModeEnabled={false}
           onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
+          sendConfirmationEmail={jest.fn()}
+          connections={{}}
         />,
       );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
@@ -40,6 +42,8 @@ describe('ContactsCard', () => {
           isEditingModeEnabled={true}
           onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
+          sendConfirmationEmail={jest.fn()}
+          connections={{}}
         />,
       );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
