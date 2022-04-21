@@ -1,11 +1,11 @@
 import { ToolTwoTone } from '@ant-design/icons';
 import { Alert, Button, Col, Layout, List, Row, Typography } from 'antd';
 import type { AlertDto } from 'api';
-import { AdminSider } from 'components/AdminSider';
+import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
 import { Session } from 'components/withSession';
-import { isAdmin, isAnyCoursePowerUser, isAnyMentor, isHirer } from 'domain/user';
+import { isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { CourseSelector } from 'modules/Home/components/CourseSelector';
@@ -37,9 +37,7 @@ export function HomePage(props: Props) {
   const hasRegistryBanner =
     wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.courses[course.id] == null);
 
-  const isAdminUser = isAdmin(props.session);
   const isPowerUser = isAnyCoursePowerUser(props.session);
-  const isHirerUser = isHirer(props.session);
 
   const courses = props.courses ?? [];
   const [activeCourse, saveActiveCouseId] = useActiveCourse(courses);
@@ -69,7 +67,7 @@ export function HomePage(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isPowerUser} isHirer={isHirerUser} />}
+      {isPowerUser && <AdminSider session={props.session} />}
 
       <Layout style={{ background: '#fff' }}>
         <Header username={props.session.githubId} />

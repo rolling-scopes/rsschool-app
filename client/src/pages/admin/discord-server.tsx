@@ -1,12 +1,11 @@
 import { Button, Col, Form, Input, Layout, message, Row, Table, Popconfirm } from 'antd';
-import { AdminSider } from 'components/AdminSider';
-import { Header } from 'components/Header';
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -114,26 +113,22 @@ function Page(props: Props) {
   );
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Manage Discord Servers" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Button type="primary" onClick={handleAddItem}>
-            Add Discord Server
-          </Button>
-          <Table
-            size="small"
-            style={{ marginTop: 8 }}
-            dataSource={data}
-            pagination={{ pageSize: 100 }}
-            rowKey="id"
-            columns={getColumns(handleEditItem, handleDeleteItem)}
-          />
-        </Content>
-      </Layout>
+    <AdminPageLayout session={props.session} title="Manage Discord Servers">
+      <Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Discord Server
+        </Button>
+        <Table
+          size="small"
+          style={{ marginTop: 8 }}
+          dataSource={data}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={getColumns(handleEditItem, handleDeleteItem)}
+        />
+      </Content>
       {renderModal()}
-    </Layout>
+    </AdminPageLayout>
   );
 }
 

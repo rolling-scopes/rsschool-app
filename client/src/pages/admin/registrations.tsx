@@ -1,8 +1,6 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Layout, Row, Select, Spin, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
-import { AdminSider } from 'components/AdminSider';
-import { Header } from 'components/Header';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { stringSorter } from 'components/Table';
 import withCourses from 'components/withCourses';
@@ -10,6 +8,7 @@ import withSession, { Session } from 'components/withSession';
 import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
+import { AdminPageLayout } from 'components/PageLayout';
 
 const { Content } = Layout;
 const defaultRowGutter = 24;
@@ -132,116 +131,112 @@ function Page(props: Props) {
   const rowSelection = { onChange: changeSelection };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Registrations" username={props.session.githubId} />
-        <Content style={{ margin: 8 }}>
-          <Spin spinning={loading}>
-            <Col>
+    <AdminPageLayout title="Registrations" session={props.session}>
+      <Content style={{ margin: 8 }}>
+        <Spin spinning={loading}>
+          <Col>
+            <Row gutter={defaultRowGutter}>
+              <Col>
+                <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
+                  {courses.map(course => (
+                    <Select.Option key={course.id} value={course.id}>
+                      {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                    </Select.Option>
+                  ))}
+                </Select>
+                <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+              </Col>
+            </Row>
+            {courseId && (
               <Row gutter={defaultRowGutter}>
-                <Col>
-                  <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
-                    {courses.map(course => (
-                      <Select.Option key={course.id} value={course.id}>
-                        {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
-                      </Select.Option>
-                    ))}
-                  </Select>
-                  <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+                <Col span={12}>
+                  <Button type="primary" onClick={handleApprove}>
+                    Approve
+                  </Button>
+                  <span>&nbsp;</span>
+                  <Button danger onClick={handleReject}>
+                    Reject
+                  </Button>
+                </Col>
+                <Col span={4}>
+                  <Statistic
+                    title="Approved"
+                    value={stats.approved}
+                    valueStyle={{ color: '#3f8600' }}
+                    prefix={<LikeOutlined />}
+                  />
+                </Col>
+                <Col span={4}>
+                  <Statistic
+                    title="Rejected"
+                    value={stats.rejected}
+                    valueStyle={{ color: '#cf1322' }}
+                    prefix={<DislikeOutlined />}
+                  />
+                </Col>
+                <Col span={4}>
+                  <Statistic title="Pending" value={stats.pending} prefix={<HourglassOutlined />} />
                 </Col>
               </Row>
-              {courseId && (
-                <Row gutter={defaultRowGutter}>
-                  <Col span={12}>
-                    <Button type="primary" onClick={handleApprove}>
-                      Approve
-                    </Button>
-                    <span>&nbsp;</span>
-                    <Button danger onClick={handleReject}>
-                      Reject
-                    </Button>
-                  </Col>
-                  <Col span={4}>
-                    <Statistic
-                      title="Approved"
-                      value={stats.approved}
-                      valueStyle={{ color: '#3f8600' }}
-                      prefix={<LikeOutlined />}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Statistic
-                      title="Rejected"
-                      value={stats.rejected}
-                      valueStyle={{ color: '#cf1322' }}
-                      prefix={<DislikeOutlined />}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Statistic title="Pending" value={stats.pending} prefix={<HourglassOutlined />} />
-                  </Col>
-                </Row>
-              )}
-              {courseId && (
-                <Table<Registration>
-                  bordered
-                  pagination={{ pageSize: PAGINATION }}
-                  size="small"
-                  rowKey="id"
-                  dataSource={data}
-                  rowSelection={rowSelection}
-                  columns={[
-                    {
-                      title: 'Name',
-                      dataIndex: 'lastName',
-                      key: 'lastName',
-                      width: 150,
-                      sorter: stringSorter('lastName'),
-                      render: (_: any, record: Registration) => <a href={record.user.profileUrl}>{record.user.name}</a>,
-                    },
-                    {
-                      title: 'Github',
-                      dataIndex: 'githubId',
-                      key: 'githubId',
-                      width: 100,
-                      sorter: stringSorter('githubId'),
-                      render: (value: string) => <GithubUserLink value={value} />,
-                    },
-                    {
-                      title: 'Status',
-                      dataIndex: 'status',
-                      key: 'status',
-                      sorter: stringSorter('status'),
-                      width: 50,
-                    },
-                    {
-                      title: 'City',
-                      dataIndex: 'city',
-                      key: 'city',
-                      width: 50,
-                    },
-                    {
-                      title: 'Max students amount',
-                      dataIndex: 'maxStudentsLimit',
-                      key: 'maxStudentsLimit',
-                      width: 100,
-                    },
-                    {
-                      title: 'From EPAM',
-                      dataIndex: 'isFromEpam',
-                      key: 'isFromEpam',
-                      width: 30,
-                      render: (value: boolean) => (value ? 'Y' : 'N'),
-                    },
-                  ]}
-                />
-              )}
-            </Col>
-          </Spin>
-        </Content>
-      </Layout>
-    </Layout>
+            )}
+            {courseId && (
+              <Table<Registration>
+                bordered
+                pagination={{ pageSize: PAGINATION }}
+                size="small"
+                rowKey="id"
+                dataSource={data}
+                rowSelection={rowSelection}
+                columns={[
+                  {
+                    title: 'Name',
+                    dataIndex: 'lastName',
+                    key: 'lastName',
+                    width: 150,
+                    sorter: stringSorter('lastName'),
+                    render: (_: any, record: Registration) => <a href={record.user.profileUrl}>{record.user.name}</a>,
+                  },
+                  {
+                    title: 'Github',
+                    dataIndex: 'githubId',
+                    key: 'githubId',
+                    width: 100,
+                    sorter: stringSorter('githubId'),
+                    render: (value: string) => <GithubUserLink value={value} />,
+                  },
+                  {
+                    title: 'Status',
+                    dataIndex: 'status',
+                    key: 'status',
+                    sorter: stringSorter('status'),
+                    width: 50,
+                  },
+                  {
+                    title: 'City',
+                    dataIndex: 'city',
+                    key: 'city',
+                    width: 50,
+                  },
+                  {
+                    title: 'Max students amount',
+                    dataIndex: 'maxStudentsLimit',
+                    key: 'maxStudentsLimit',
+                    width: 100,
+                  },
+                  {
+                    title: 'From EPAM',
+                    dataIndex: 'isFromEpam',
+                    key: 'isFromEpam',
+                    width: 30,
+                    render: (value: boolean) => (value ? 'Y' : 'N'),
+                  },
+                ]}
+              />
+            )}
+          </Col>
+        </Spin>
+      </Content>
+    </AdminPageLayout>
   );
 }
 
