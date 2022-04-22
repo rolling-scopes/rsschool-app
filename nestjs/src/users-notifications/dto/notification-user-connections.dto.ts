@@ -10,8 +10,8 @@ export class ConnectionDetails {
   @IsBoolean()
   enabled: boolean;
 
-  @ApiProperty()
-  lastLinkSentAt: string;
+  @ApiProperty({ required: false })
+  lastLinkSentAt?: string;
 }
 
 export class NotificationUserConnectionsDto {

@@ -22,6 +22,7 @@ export function UserNotificationsPage(props: Props) {
   const service = useMemo(() => new NotificationsService(), []);
   const [email, setEmail] = useState<Connection>();
   const [telegram, setTelegram] = useState<Connection>();
+  const [discord, setDiscord] = useState<Connection>();
   const [disabledChannels, setDisabledChannels] = useState<NotificationChannel[]>([]);
 
   const loadData = useCallback(
@@ -29,11 +30,13 @@ export function UserNotificationsPage(props: Props) {
       const { connections, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
 
-      const { email, telegram } = connections as Record<NotificationChannel, Connection | undefined>;
+      const { email, telegram, discord } = connections as Record<NotificationChannel, Connection | undefined>;
       setEmail(email);
       setTelegram(telegram);
+      setDiscord(discord);
       const hasEmail = !!email?.enabled;
       const hasTelegram = !!telegram?.enabled;
+      const hasDiscord = !!discord?.enabled;
 
       const disabledChannels = [];
       if (!hasEmail) {
@@ -41,6 +44,9 @@ export function UserNotificationsPage(props: Props) {
       }
       if (!hasTelegram) {
         disabledChannels.push(NotificationChannel.telegram);
+      }
+      if (!hasDiscord) {
+        disabledChannels.push(NotificationChannel.discord);
       }
       setDisabledChannels(disabledChannels);
     }),
@@ -68,7 +74,7 @@ export function UserNotificationsPage(props: Props) {
   return (
     <PageLayout loading={loading} title="Notifications" githubId={props.session.githubId}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        {!loading && <Consents email={email} telegram={telegram} />}
+        {!loading && <Consents email={email} telegram={telegram} discord={discord} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
             Save

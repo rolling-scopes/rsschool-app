@@ -64,6 +64,7 @@ export type UserNotificationSettings = NotificationUserSettingsDto;
 export enum NotificationChannel {
   email = 'email',
   telegram = 'telegram',
+  discord = 'discord',
 }
 
 export type MessagePayload = EmailPayload | TelegramPayload;
@@ -79,7 +80,7 @@ export type TelegramPayload = {
   body: string;
 };
 
-export type NotificationTemlate = TelegramTemplate | EmailTemplate;
+export type NotificationTemlate = TelegramTemplate | EmailTemplate | DiscordTemplate;
 
 type TelegramTemplate = {
   body: string;
@@ -87,5 +88,9 @@ type TelegramTemplate = {
 
 type EmailTemplate = {
   subject: string;
+  body: string;
+};
+
+type DiscordTemplate = {
   body: string;
 };
