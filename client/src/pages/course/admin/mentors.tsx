@@ -1,6 +1,6 @@
 import { Button, Divider, message, Row, Statistic, Table, Popconfirm } from 'antd';
 import { withSession } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -101,12 +101,7 @@ function Page(props: CoursePageProps) {
   const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Course Mentors"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <AdminPageLayout loading={loading} title="Course Mentors" session={props.session} courseName={props.course.name}>
       <div style={{ display: 'flex' }}>
         <div
           style={{
@@ -258,7 +253,7 @@ function Page(props: CoursePageProps) {
           },
         ]}
       />
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 

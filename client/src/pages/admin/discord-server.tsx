@@ -27,7 +27,7 @@ function Page(props: Props) {
     setData(data);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -113,7 +113,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Discord Servers">
+    <AdminPageLayout session={props.session} title="Manage Discord Servers" loading={loading}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Discord Server

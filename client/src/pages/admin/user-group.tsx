@@ -38,7 +38,7 @@ function Page(props: Props) {
     setData(data);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const loadUsers = async (searchText: string) => {
     return userService.searchUser(searchText);
@@ -127,7 +127,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage User Groups">
+    <AdminPageLayout session={props.session} title="Manage User Groups" loading={loading}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add User Group

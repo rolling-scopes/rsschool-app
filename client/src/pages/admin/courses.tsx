@@ -48,7 +48,7 @@ function Page(props: Props) {
     setDiscordServers(discordServers);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -237,7 +237,7 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Courses">
+    <AdminPageLayout session={props.session} title="Manage Courses" loading={loading}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Course

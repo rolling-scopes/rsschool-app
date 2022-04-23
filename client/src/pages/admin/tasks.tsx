@@ -25,7 +25,7 @@ function Page(props: Props) {
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
 
-  useAsync(async () => {
+  const { loading } = useAsync(async () => {
     const tasks = await service.getTasks();
     setData(tasks);
   }, [modalData]);
@@ -186,7 +186,7 @@ function Page(props: Props) {
   }, [modalData, modalValues, modalLoading, handleModalSubmit]);
 
   return (
-    <AdminPageLayout title="Manage Tasks" session={props.session}>
+    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Task

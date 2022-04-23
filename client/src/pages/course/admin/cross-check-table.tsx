@@ -1,9 +1,9 @@
-import { Button, Layout, Modal, Spin, Table, Typography } from 'antd';
+import { Button, Modal, Table, Typography } from 'antd';
 import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { Header } from 'components/Header';
+import { AdminPageLayout } from 'components/PageLayout';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
@@ -94,29 +94,24 @@ export function Page(props: CoursePageProps) {
   }, []);
 
   return (
-    <>
-      <Header title="Cross-Check" username={props.session.githubId} courseName={props.course.name} />
+    <AdminPageLayout session={props.session} loading={loading} title="Cross-Check" courseName={props.course.name}>
       {contextHolder}
-      <Layout.Content style={{ margin: 8 }}>
-        <Spin spinning={loading}>
-          <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
-          {renderTable(
-            loaded,
-            crossCheckList.content,
-            crossCheckList.pagination,
-            getCourseScore,
-            ({ comment, checkerStudent }) => {
-              modal.info({
-                width: 600,
-                title: `Comment from ${checkerStudent.githubId}`,
-                content: comment.split('\n').map(text => <p>{text}</p>),
-              });
-            },
-          )}
-        </Spin>
-      </Layout.Content>
+      <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
+      {renderTable(
+        loaded,
+        crossCheckList.content,
+        crossCheckList.pagination,
+        getCourseScore,
+        ({ comment, checkerStudent }) => {
+          modal.info({
+            width: 600,
+            title: `Comment from ${checkerStudent.githubId}`,
+            content: comment.split('\n').map(text => <p>{text}</p>),
+          });
+        },
+      )}
       <style jsx>{styles}</style>
-    </>
+    </AdminPageLayout>
   );
 }
 

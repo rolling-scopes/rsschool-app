@@ -26,7 +26,7 @@ function Page(props: Props) {
     setData(data);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -117,7 +117,7 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Events">
+    <AdminPageLayout session={props.session} title="Manage Events" loading={loading}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Event

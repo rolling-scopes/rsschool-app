@@ -21,7 +21,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Users">
+    <AdminPageLayout session={props.session} title="Users" loading={false}>
       <Content>
         <div className="mt-4">
           <Form layout="horizontal" onFinish={handleSearch}>

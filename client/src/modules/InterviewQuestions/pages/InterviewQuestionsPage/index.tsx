@@ -72,7 +72,7 @@ export function InterviewQuestionsPage(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Questions">
+    <AdminPageLayout session={props.session} title="Manage Questions" loading={loading}>
       <Content style={{ margin: 8 }}>
         <Row gutter={16} justify="start">
           <Col>

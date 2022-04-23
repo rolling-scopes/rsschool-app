@@ -49,13 +49,21 @@ export function PageLayoutSimple(props: Props) {
   );
 }
 
-export function AdminPageLayout({ session, title, children }: PropsWithChildren<{ session: Session; title?: string }>) {
+export function AdminPageLayout({
+  session,
+  title,
+  courseName,
+  loading,
+  children,
+}: PropsWithChildren<{ session: Session; title?: string; courseName?: string; loading: boolean }>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header title={title} username={session.githubId} />
+      <Header title={title} username={session.githubId} courseName={courseName} />
       <Layout style={{ background: '#e5e5e5' }}>
         <AdminSider session={session} />
-        <Layout.Content style={{ background: '#fff', margin: 16, padding: 16 }}>{children}</Layout.Content>
+        <Layout.Content style={{ background: '#fff', margin: 16, padding: 16 }}>
+          <Spin spinning={loading}>{children}</Spin>
+        </Layout.Content>
       </Layout>
     </Layout>
   );
