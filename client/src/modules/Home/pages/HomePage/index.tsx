@@ -40,7 +40,7 @@ export function HomePage(props: Props) {
   const isPowerUser = isAnyCoursePowerUser(props.session);
 
   const courses = props.courses ?? [];
-  const [activeCourse, saveActiveCouseId] = useActiveCourse(courses);
+  const [activeCourse, saveActiveCourseId] = useActiveCourse(courses);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [preselectedCourses, setPreselectedCourses] = useState<Course[]>([]);
   const [alerts, setAlerts] = useState<AlertDto[]>([]);
@@ -66,11 +66,10 @@ export function HomePage(props: Props) {
   const { courseTasks, studentSummary } = useStudentSummary(props.session, activeCourse);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      {isPowerUser && <AdminSider session={props.session} />}
-
+    <Layout style={{ minHeight: '100vh', background: '#fff' }}>
+      <Header username={props.session.githubId} />
       <Layout style={{ background: '#fff' }}>
-        <Header username={props.session.githubId} />
+        {isPowerUser && <AdminSider session={props.session} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
           {!activeCourse && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
 
@@ -93,7 +92,7 @@ export function HomePage(props: Props) {
 
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
-          <CourseSelector course={activeCourse} onChangeCourse={saveActiveCouseId} courses={courses} />
+          <CourseSelector course={activeCourse} onChangeCourse={saveActiveCourseId} courses={courses} />
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
@@ -142,8 +141,8 @@ export function HomePage(props: Props) {
             </Col>
           </Row>
         </Content>
-        <FooterLayout />
       </Layout>
+      <FooterLayout />
     </Layout>
   );
 }
