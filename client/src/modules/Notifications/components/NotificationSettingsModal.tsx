@@ -23,9 +23,16 @@ export function NotificationSettingsModal(props: Props) {
     onCancel,
     onOk,
   } = props;
+
   const initialValue = {
     ...notification,
-    channels: notification.channels?.length ? notification.channels : defaultChannels,
+    channels: defaultChannels.map(channel => {
+      const existing = notification.channels?.find(existing => channel.channelId === existing.channelId);
+      return {
+        ...channel,
+        ...existing,
+      };
+    }),
   };
   const { channels } = initialValue;
 
@@ -54,7 +61,7 @@ export function NotificationSettingsModal(props: Props) {
               </Select>
             </Form.Item>
           </TabPane>
-          {(channels.length ? channels : defaultChannels).map((channel, index) => (
+          {channels.map((channel, index) => (
             <TabPane tab={channel.channelId} key={channel.channelId} forceRender>
               <Form.Item hidden label={channel.channelId} name={['channels', index, 'channelId']}>
                 <Input></Input>
@@ -83,7 +90,7 @@ export function NotificationSettingsModal(props: Props) {
     onOk(notification);
   }
 }
-const defaultChannels = [{ channelId: 'email' }, { channelId: 'telegram' }] as {
+const defaultChannels = [{ channelId: 'email' }, { channelId: 'telegram' }, { channelId: 'discord' }] as {
   channelId: string;
   template?: NotificationTemlate;
 }[];
