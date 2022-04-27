@@ -35,7 +35,7 @@ export function PageLayoutSimple(props: Props) {
         ) : (
           <Spin spinning={props.loading}>
             <Row style={{ marginTop: 16 }}></Row>
-            <Row gutter={24}>
+            <Row>
               <Col flex={1} />
               <Col xs={20} sm={16} md={16} lg={12} xl={12}>
                 {props.children}
