@@ -60,19 +60,17 @@ function buildColumns(
   ];
 
   return columns.concat(
-    Object.keys(NotificationChannel)
-      .filter(d => d !== 'discord')
-      .map<ColumnType<UserNotificationSettings>>(channel => {
-        const dataIndex = ['settings', channel];
-        return {
-          align: 'center',
-          className: `${columnClassName} ${
-            disabledChannels.includes(channel as NotificationChannel) ? disabledClassName : ''
-          }`,
-          title: channel,
-          dataIndex,
-          render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck),
-        };
-      }),
+    Object.keys(NotificationChannel).map<ColumnType<UserNotificationSettings>>(channel => {
+      const dataIndex = ['settings', channel];
+      return {
+        align: 'center',
+        className: `${columnClassName} ${
+          disabledChannels.includes(channel as NotificationChannel) ? disabledClassName : ''
+        }`,
+        title: channel,
+        dataIndex,
+        render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck),
+      };
+    }),
   );
 }
