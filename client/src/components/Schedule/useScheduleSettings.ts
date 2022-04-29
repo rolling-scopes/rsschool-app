@@ -6,6 +6,7 @@ import { ViewMode } from './constants';
 enum LocalStorage {
   ViewMode = 'scheduleViewMode',
   Timezone = 'scheduleTimezone',
+  FirstDayOfTheWeek = 'scheduleFirstDayOfTheWeek',
   LimitForDoneTasks = 'scheduleLimitForDoneTask',
   IsSplittedByWeek = 'scheduleIsSplitedByWeek',
   ArePassedEventsHidden = 'scheduleArePassedEventsHidden',
@@ -20,6 +21,8 @@ export interface ScheduleSettings {
   setViewMode: (value: ViewMode) => void;
   timezone: string;
   setTimezone: (value: string) => void;
+  firstDayOfTheWeek: number;
+  setFirstDayOfTheWeek: (value: number) => void;
   limitForDoneTask: number;
   setLimitForDoneTask: (value: number) => void;
   isSplittedByWeek: boolean;
@@ -50,6 +53,7 @@ const useScheduleSettings = (): ScheduleSettings => {
   const [timezone = Intl.DateTimeFormat().resolvedOptions().timeZone, setTimezone] = useLocalStorage<string>(
     LocalStorage.Timezone,
   );
+  const [firstDayOfTheWeek = 0, setFirstDayOfTheWeek] = useLocalStorage<number>(LocalStorage.FirstDayOfTheWeek);
 
   return useMemo(
     () => ({
@@ -57,6 +61,8 @@ const useScheduleSettings = (): ScheduleSettings => {
       setViewMode,
       timezone,
       setTimezone,
+      firstDayOfTheWeek,
+      setFirstDayOfTheWeek,
       limitForDoneTask,
       setLimitForDoneTask,
       isSplittedByWeek,
@@ -75,6 +81,7 @@ const useScheduleSettings = (): ScheduleSettings => {
     [
       viewMode,
       timezone,
+      firstDayOfTheWeek,
       limitForDoneTask,
       isSplittedByWeek,
       arePassedEventsHidden,
