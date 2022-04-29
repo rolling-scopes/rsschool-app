@@ -279,9 +279,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record =>
-          getTableRowClass(record, settings.isSplittedByWeek, settings.limitForDoneTask, settings.firstDayOfTheWeek)
-        }
+        rowClassName={record => getTableRowClass(record, settings.isSplittedByWeek, settings.limitForDoneTask)}
       />
     </Form>
   );
@@ -325,12 +323,7 @@ const getNewDataForUpdate = (entity: CourseEvent) => {
   return dataForUpdate;
 };
 
-const getTableRowClass = (
-  record: CourseEvent,
-  isSplitedByWeek?: boolean,
-  limitForDoneTask?: number,
-  firstDayOfTheWeek = 0,
-): string => {
+const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitForDoneTask?: number): string => {
   if (limitForDoneTask && record.done && record.done >= limitForDoneTask) {
     return 'table-row-done';
   }
@@ -346,9 +339,6 @@ const getTableRowClass = (
   if (!isSplitedByWeek) {
     return '';
   }
-
-  // TODO: split by week using firstDayOfTheWeek
-  global.console.log(firstDayOfTheWeek);
 
   return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-odd';
 };
