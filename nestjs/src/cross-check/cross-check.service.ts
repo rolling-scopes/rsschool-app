@@ -8,6 +8,8 @@ import { isTaskNeededToStart, isTaskNeededToFinish } from './utils/tasks-filteri
 import { CourseTask } from '@entities/courseTask';
 import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
 
+const ONCE_A_DAY_AT_00_05 = '5 0 * * *';
+
 @Injectable()
 export class CrossCheckService {
   private readonly logger = new Logger('CrossCheckService');
@@ -19,7 +21,7 @@ export class CrossCheckService {
     private readonly conf: ConfigService,
   ) {}
 
-  @Cron('5 0 * * *', { timeZone: 'UTC' })
+  @Cron(ONCE_A_DAY_AT_00_05, { timeZone: 'UTC' })
   async executeCronJobs() {
     const { tasksToStart, tasksToFinish } = await this.getCrossCheckTasks();
     await this.initCrossCheckAction(tasksToStart, 'distribution');
