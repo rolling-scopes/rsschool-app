@@ -89,49 +89,60 @@ export class UserNotificationsService {
     return this.notificationUserConnectionRepository.delete(connection);
   }
 
-  public async getUserNotificationSettings(userId: number, notificationId: string) {
-    const notificationChannels = (await this.userNotificationsRepository
-      .createQueryBuilder('userNotifications')
-      .where({
-        notificationId,
-        enabled: true,
-        userId,
-      })
-      .innerJoin(
-        'userNotifications.notification',
-        'notification',
-        'notification.type = :type and notification.enabled = true',
-        {
-          type: NotificationType.event,
-        },
-      )
-      .leftJoinAndMapOne(
-        'userNotifications.connection',
-        NotificationUserConnection,
-        'connection',
-        `userNotifications.userId = connection.userId and
+  private async getUserNotificationSettings(userId: number, notificationId: string) {
+    const [notificationChannels, profile] = await Promise.all([
+      this.userNotificationsRepository
+        .createQueryBuilder('userNotifications')
+        .where({
+          notificationId,
+          enabled: true,
+          userId,
+        })
+        .innerJoin(
+          'userNotifications.notification',
+          'notification',
+          'notification.type = :type and notification.enabled = true',
+          {
+            type: NotificationType.event,
+          },
+        )
+        .leftJoinAndMapOne(
+          'userNotifications.connection',
+          NotificationUserConnection,
+          'connection',
+          `userNotifications.userId = connection.userId and
            userNotifications.channelId = connection.channelId and
            connection.enabled = true
         `,
-      )
-      .innerJoinAndMapOne(
-        'userNotifications.settings',
-        NotificationChannelSettings,
-        'channelSettings',
-        'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
-      )
-      .getMany()) as unknown as {
-      id: string;
-      channelId: NotificationChannelId;
-      settings: NotificationChannelSettings;
-      connection: NotificationUserConnection;
-    }[];
+        )
+        .innerJoinAndMapOne(
+          'userNotifications.settings',
+          NotificationChannelSettings,
+          'channelSettings',
+          'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
+        )
+        .getMany() as unknown as Promise<
+        {
+          id: string;
+          channelId: NotificationChannelId;
+          settings: NotificationChannelSettings;
+          connection: NotificationUserConnection;
+        }[]
+      >,
+      this.userService.getUserByUserId(userId),
+    ]);
+
     return notificationChannels
       .flatMap(notification => {
         const { connection, settings } = notification;
+
+        const externalId =
+          notification.channelId === 'discord' && profile.discord?.id
+            ? `${profile.discord.id}`
+            : connection?.externalId;
         return {
           ...settings,
-          externalId: connection?.externalId,
+          externalId,
         };
       })
       .filter(notification => !!notification.externalId);

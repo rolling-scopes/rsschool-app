@@ -8,13 +8,18 @@ import { UpsertNotificationConnectionDto } from './dto/upsert-notification-conne
 import { NotificationConnectionDto } from './dto/notification-connection.dto';
 import { UserNotificationsService } from './users.notifications.service';
 import { SendUserNotificationDto } from './dto/send-user-notification.dto';
-import { NotificationUserConnectionsDto } from './dto/notification-user-connections.dto';
+import { ConnectionDetails, NotificationUserConnectionsDto } from './dto/notification-user-connections.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('users/notifications')
 @ApiTags('users notifications')
 @UseGuards(DefaultGuard)
 export class UsersNotificationsController {
-  constructor(private userNotificationsService: UserNotificationsService, private authService: AuthService) {}
+  constructor(
+    private userNotificationsService: UserNotificationsService,
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getUserNotifications' })
@@ -41,22 +46,33 @@ export class UsersNotificationsController {
     const {
       user: { id },
     } = req;
-    const [connections, lastLink] = await Promise.all([
+    const [connections, lastLink, profile] = await Promise.all([
       this.userNotificationsService.getUserConnections(id),
       this.authService.getLoginStateByUserId(id),
+      this.usersService.getUserByUserId(id),
     ]);
 
-    return {
-      connections: Object.fromEntries([
-        ...connections.map(connection => [
-          connection.channelId,
-          {
-            value: connection.externalId,
-            enabled: connection.enabled,
-            lastLinkSentAt: lastLink?.data.channelId === connection.channelId ? lastLink.createdDate : undefined,
-          },
-        ]),
+    const dtoConnections = Object.fromEntries(
+      connections.map(connection => [
+        connection.channelId,
+        {
+          value: connection.externalId,
+          enabled: connection.enabled,
+          lastLinkSentAt: lastLink?.data.channelId === connection.channelId ? lastLink.createdDate : undefined,
+        } as ConnectionDetails,
       ]),
+    );
+
+    if (profile.discord) {
+      dtoConnections.discord = {
+        value: `${profile.discord.id}`,
+        // there is no way to get connections status for discord. User may block us, but we never know.
+        enabled: true,
+      };
+    }
+
+    return {
+      connections: dtoConnections,
     };
   }
 

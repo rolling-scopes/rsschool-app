@@ -2,7 +2,7 @@ import { Header } from './Header';
 import { Spin, Row, Col, Layout } from 'antd';
 import { PropsWithChildren } from 'react';
 import { Session } from './withSession';
-import { AdminSider } from './AdminSider';
+import { AdminSider } from './Sider/AdminSider';
 
 type Props = {
   loading: boolean;
@@ -35,7 +35,7 @@ export function PageLayoutSimple(props: Props) {
         ) : (
           <Spin spinning={props.loading}>
             <Row style={{ marginTop: 16 }}></Row>
-            <Row gutter={24}>
+            <Row>
               <Col flex={1} />
               <Col xs={20} sm={16} md={16} lg={12} xl={12}>
                 {props.children}
@@ -49,13 +49,13 @@ export function PageLayoutSimple(props: Props) {
   );
 }
 
-export function AdminPageLayout({ session, children }: PropsWithChildren<{ session: Session }>) {
+export function AdminPageLayout({ session, title, children }: PropsWithChildren<{ session: Session; title?: string }>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={session.isAdmin} />
-      <Layout style={{ background: '#fff' }}>
-        <Header title="Notifications" username={session.githubId} />
-        <Layout.Content style={{ margin: 8 }}>{children}</Layout.Content>
+      <Header title={title} username={session.githubId} />
+      <Layout style={{ background: '#e5e5e5' }}>
+        <AdminSider session={session} />
+        <Layout.Content style={{ background: '#fff', margin: 16, padding: 16 }}>{children}</Layout.Content>
       </Layout>
     </Layout>
   );

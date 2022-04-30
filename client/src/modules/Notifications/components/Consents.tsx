@@ -1,5 +1,6 @@
 import { message, Alert, Space } from 'antd';
 import { EmailConfirmation } from 'components/Profile/EmailConfirmation';
+import discordIntegration from 'configs/discord-integration';
 import { useCallback } from 'react';
 import { UserService } from 'services/user';
 
@@ -11,11 +12,20 @@ export type Connection = {
   lastLinkSentAt?: string;
 };
 
-export function Consents({ email, telegram }: { email?: Connection; telegram?: Connection }) {
+export function Consents({
+  email,
+  telegram,
+  discord,
+}: {
+  email?: Connection;
+  telegram?: Connection;
+  discord?: Connection;
+}) {
   const hasEmail = !!email?.enabled;
   const hasTelegram = !!telegram?.enabled;
+  const hasDiscord = !!discord?.enabled;
 
-  if (hasEmail && hasTelegram) return null;
+  if (hasEmail && hasTelegram && hasDiscord) return null;
 
   const emailAdded = email?.value;
   const emailVerified = email?.enabled;
@@ -36,6 +46,17 @@ export function Consents({ email, telegram }: { email?: Connection; telegram?: C
             <div>
               Note: To enable telegram notifications please open the <a href={rsschoolBotLink}>@rsschool_bot</a> and
               click the <b>Start</b> button to set it up
+            </div>
+          }
+          type="info"
+        />
+      )}
+
+      {!hasDiscord && (
+        <Alert
+          message={
+            <div>
+              Note: To enable discord notifications please <a href={discordIntegration.api.auth}>authorize</a> first
             </div>
           }
           type="info"

@@ -5,7 +5,12 @@ import { ConfigService } from '../config';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { HttpService } from '@nestjs/axios';
-import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@entities/notificationChannelSettings';
+import {
+  DiscordTemplate,
+  EmailTemplate,
+  NotificationChannelSettings,
+  TelegramTemplate,
+} from '@entities/notificationChannelSettings';
 import { compile } from 'handlebars';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { emailTemplate } from './email-template';
@@ -136,5 +141,5 @@ type NotificationPayload = {
 
 export type NotificationData = {
   to: string;
-  template: EmailTemplate | TelegramTemplate;
+  template: EmailTemplate | TelegramTemplate | DiscordTemplate;
 };

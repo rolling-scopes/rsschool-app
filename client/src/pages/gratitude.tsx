@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
 import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
@@ -26,10 +26,11 @@ function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [courses, setCourses] = useState([] as Course[]);
+  const [storageValue] = useLocalStorage('activeCourseId');
 
   useAsync(async () => {
     const courses = await coursesService.getCourses();
-    const savedCourseId = Number(localStorage.getItem('activeCourseId'));
+    const savedCourseId = Number(storageValue);
     const courseId = savedCourseId ? savedCourseId : courses[0].id;
     const { data: badges } = await gratitudesApi.getBadges(courseId);
     setCourses(courses);
@@ -78,7 +79,7 @@ function Page(props: Props) {
         <Form.Item
           name="courseId"
           label="Course"
-          initialValue={Number(localStorage.getItem('activeCourseId'))}
+          initialValue={Number(storageValue)}
           rules={[{ required: true, message: 'Please select a course' }]}
         >
           <Select placeholder="Select a course" onChange={onCourseChange}>

@@ -23,6 +23,7 @@ import { NotificationType1647550751147 } from './1647550751147-NotificationType'
 import { LoginStateUserId1647885219936 } from './1647885219936-LoginStateUserId';
 import { CourseLogo1649505252996 } from './1649505252996-CourseLogo';
 import { CourseLogo1649868994688 } from './1649868994688-CourseLogo';
+import { DiscordChannel1650652882300 } from './1650652882300-DiscordChannel';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -50,4 +51,5 @@ export const migrations = [
   LoginStateUserId1647885219936,
   CourseLogo1649505252996,
   CourseLogo1649868994688,
+  DiscordChannel1650652882300,
 ];
