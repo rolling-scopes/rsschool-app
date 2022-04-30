@@ -9,21 +9,25 @@ const MOCK_CURRENT_TIMESTAMP = new Date('2022-03-22 00:05 UTC').getTime();
 
 const MOCK_HOST = 'https://testhost';
 
+const MOCK_ADMIN_USERNAME = 'TEST_USERNAME';
+const MOCK_ADMIN_PASSWORD = 'TEST_PASSWORD';
+
 const mockConfigService = {
   users: {
     root: {
-      username: 'TEST_USERNAME',
-      password: 'TEST_PASSWORD',
+      username: MOCK_ADMIN_USERNAME,
+      password: MOCK_ADMIN_PASSWORD,
     },
   },
-  crossCheckScheduling: {
-    host: MOCK_HOST,
-  },
+  host: MOCK_HOST,
 };
 
-const expectedAuthHeader = `Basic ${Buffer.from(
-  mockConfigService.users.root.username + ':' + mockConfigService.users.root.password,
-).toString('base64')}`;
+const expectedAxiosRequestConfig = {
+  auth: {
+    username: MOCK_ADMIN_USERNAME,
+    password: MOCK_ADMIN_PASSWORD,
+  },
+};
 
 enum MockDates {
   DateBefore = '2022-03-21T00:00:00.000Z',
@@ -96,29 +100,13 @@ const tasks = [
 ];
 
 const expectedDistributionCalls = [
-  [
-    `${MOCK_HOST}/api/course/2/task/2/cross-check/distribution`,
-    null,
-    { headers: { Authorization: expectedAuthHeader } },
-  ],
-  [
-    `${MOCK_HOST}/api/course/3/task/3/cross-check/distribution`,
-    null,
-    { headers: { Authorization: expectedAuthHeader } },
-  ],
+  [`${MOCK_HOST}/api/course/2/task/2/cross-check/distribution`, null, expectedAxiosRequestConfig],
+  [`${MOCK_HOST}/api/course/3/task/3/cross-check/distribution`, null, expectedAxiosRequestConfig],
 ];
 
 const expectedCompletionCalls = [
-  [
-    `${MOCK_HOST}/api/course/22/task/22/cross-check/completion`,
-    null,
-    { headers: { Authorization: expectedAuthHeader } },
-  ],
-  [
-    `${MOCK_HOST}/api/course/33/task/33/cross-check/completion`,
-    null,
-    { headers: { Authorization: expectedAuthHeader } },
-  ],
+  [`${MOCK_HOST}/api/course/22/task/22/cross-check/completion`, null, expectedAxiosRequestConfig],
+  [`${MOCK_HOST}/api/course/33/task/33/cross-check/completion`, null, expectedAxiosRequestConfig],
 ];
 
 const mockPost = jest.fn((url, data, config) => ({
