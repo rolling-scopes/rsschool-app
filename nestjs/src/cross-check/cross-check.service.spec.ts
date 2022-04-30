@@ -99,16 +99,6 @@ const tasks = [
   },
 ];
 
-const expectedDistributionCalls = [
-  [`${MOCK_HOST}/api/course/2/task/2/cross-check/distribution`, null, expectedAxiosRequestConfig],
-  [`${MOCK_HOST}/api/course/3/task/3/cross-check/distribution`, null, expectedAxiosRequestConfig],
-];
-
-const expectedCompletionCalls = [
-  [`${MOCK_HOST}/api/course/22/task/22/cross-check/completion`, null, expectedAxiosRequestConfig],
-  [`${MOCK_HOST}/api/course/33/task/33/cross-check/completion`, null, expectedAxiosRequestConfig],
-];
-
 const mockPost = jest.fn((url, data, config) => ({
   pipe: jest.fn((...callbacks) => []),
 }));
@@ -161,17 +151,37 @@ describe('CrossCheckService', () => {
     });
 
     it('httpService.post should be called right amout of times', () => {
-      const expectedHttpServiceCallsAmount = expectedDistributionCalls.length + expectedCompletionCalls.length;
-
-      expect(mockPost).toBeCalledTimes(expectedHttpServiceCallsAmount);
+      expect(mockPost).toBeCalledTimes(4);
     });
 
     it('tasks with submission deadline passed should be distributed', () => {
-      expectedDistributionCalls.forEach(call => expect(mockPost.mock.calls).toContainEqual(call));
+      expect(mockPost).toHaveBeenNthCalledWith(
+        1,
+        `${MOCK_HOST}/api/course/2/task/2/cross-check/distribution`,
+        null,
+        expectedAxiosRequestConfig,
+      );
+      expect(mockPost).toHaveBeenNthCalledWith(
+        2,
+        `${MOCK_HOST}/api/course/3/task/3/cross-check/distribution`,
+        null,
+        expectedAxiosRequestConfig,
+      );
     });
 
     it('tasks with cross-check deadline passed should be completed', () => {
-      expectedDistributionCalls.forEach(call => expect(mockPost.mock.calls).toContainEqual(call));
+      expect(mockPost).toHaveBeenNthCalledWith(
+        3,
+        `${MOCK_HOST}/api/course/22/task/22/cross-check/completion`,
+        null,
+        expectedAxiosRequestConfig,
+      );
+      expect(mockPost).toHaveBeenNthCalledWith(
+        4,
+        `${MOCK_HOST}/api/course/33/task/33/cross-check/completion`,
+        null,
+        expectedAxiosRequestConfig,
+      );
     });
   });
 });
