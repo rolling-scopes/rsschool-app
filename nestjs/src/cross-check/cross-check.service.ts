@@ -30,32 +30,31 @@ export class CrossCheckService {
 
   private getInitalDataForRequest() {
     const { username, password } = this.conf.users.root;
-
-    const authHeader = `Basic ${Buffer.from(username + ':' + password).toString('base64')}`;
     const host = this.conf.host;
 
     return {
       host,
-      authHeader,
+      auth: {
+        username,
+        password,
+      },
     };
   }
 
-  private makeCrossCheckRequest(url: string, authHeader: string) {
+  private makeCrossCheckRequest(url: string, auth: { username: string; password: string }) {
     return this.httpService.post(url, null, {
-      headers: {
-        Authorization: authHeader,
-      },
+      auth,
     });
   }
 
   private async initCrossCheckAction(courseTasks: CourseTask[], action: 'distribution' | 'completion') {
-    const { host, authHeader } = this.getInitalDataForRequest();
+    const { host, auth } = this.getInitalDataForRequest();
     const baseurl = `${host}/api/course`;
 
     const courseTaskRequests$ = from(courseTasks).pipe(
       mergeMap(({ id, courseId }) => {
         const requestUrl = `${baseurl}/${courseId}/task/${id}/cross-check/${action}`;
-        return this.makeCrossCheckRequest(requestUrl, authHeader).pipe(
+        return this.makeCrossCheckRequest(requestUrl, auth).pipe(
           catchError(err => {
             this.logger.error({
               message: `Cross-Check ${action} failed for task with id ${id}!`,
