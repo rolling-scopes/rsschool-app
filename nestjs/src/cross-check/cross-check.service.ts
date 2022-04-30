@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/axios';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '../config';
-import { isTaskNeededToStart, isTaskNeededToFinish } from './utils/tasks-filtering';
+import { isTaskNeededToStart, isTaskNeededToFinish } from './tasks-filtering';
 import { CourseTask } from '@entities/courseTask';
 import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
 
