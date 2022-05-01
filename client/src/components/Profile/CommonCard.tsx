@@ -21,6 +21,7 @@ type Props = {
   content: any;
   actions?: any;
   onPermissionsSettingsChange?: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
+  detachSettingsOnVisibilityChange?: boolean;
 };
 
 type State = {
@@ -61,9 +62,11 @@ class CommonCard extends React.Component<Props, State> {
       settingsTitle,
       onPermissionsSettingsChange,
       actions,
+      detachSettingsOnVisibilityChange = false,
     } = this.props;
     const { isVisibilitySettingsVisible, isProfileSettingsVisible } = this.state;
 
+    const renderSettingsDrawer = detachSettingsOnVisibilityChange ? isProfileSettingsVisible : true;
     return (
       <Card
         title={
@@ -93,7 +96,7 @@ class CommonCard extends React.Component<Props, State> {
               permissionsSettings={permissionsSettings}
               onPermissionsSettingsChange={onPermissionsSettingsChange}
             />
-            {profileSettingsContent && (
+            {profileSettingsContent && renderSettingsDrawer && (
               <ProfileSettingsDrawer
                 isSettingsVisible={isProfileSettingsVisible}
                 hideSettings={this.hideProfileSettings}

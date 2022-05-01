@@ -2,12 +2,13 @@ import { Course } from '@entities/course';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { ProfilePermissions } from '@entities/profilePermissions';
 import { User } from '@entities/user';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/auth';
 import { In, Repository, UpdateResult } from 'typeorm';
 import { UserNotificationsService } from '../users-notifications';
 import { ProfileInfoDto, UpdateUserDto } from './dto';
+import { isEmail } from 'class-validator';
 
 @Injectable()
 export class ProfileService {
@@ -95,6 +96,12 @@ export class ProfileService {
       const { location, aboutMyself, educationHistory, englishLevel } = generalInfo;
       const { skype, phone, email, epamEmail, telegram, notes, linkedIn } = contacts;
       const { countryName, cityName } = location;
+      if (email && !isEmail(email)) {
+        throw new BadRequestException('Email is invalid.');
+      }
+      if (epamEmail && !isEmail(epamEmail)) {
+        throw new BadRequestException('Epam email is invalid.');
+      }
 
       const user = await this.userRepository
         .createQueryBuilder()
