@@ -115,6 +115,7 @@ export class UsersNotificationsController {
   }
 
   @Post('/send')
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'sendNotification' })
   @ApiOkResponse()
   @ApiForbiddenResponse()
