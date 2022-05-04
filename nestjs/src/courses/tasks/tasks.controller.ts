@@ -20,16 +20,23 @@ export class TasksController {
   public async notifyTasksDeadlines(@Body() dto: CheckTasksDeadlineDto) {
     const students = await this.tasksService.getPendingTasksDeadline(dto.deadlineInHours);
 
-    for (const [userId, tasks] of students) {
-      try {
-        await this.notificationService.sendEventNotification({
-          data: { tasks },
-          notificationId: 'taskDeadline',
-          userId,
-        });
-      } catch (e) {
-        this.logger.log({ message: (e as Error).message, userId });
-      }
-    }
+    Promise.resolve().then(
+      () =>
+        new Promise(async () => {
+          this.logger.log({ message: 'processing students notifications...' });
+
+          for (const [userId, tasks] of students) {
+            try {
+              await this.notificationService.sendEventNotification({
+                data: { tasks },
+                notificationId: 'taskDeadline',
+                userId,
+              });
+            } catch (e) {
+              this.logger.log({ message: (e as Error).message, userId });
+            }
+          }
+        }),
+    );
   }
 }
