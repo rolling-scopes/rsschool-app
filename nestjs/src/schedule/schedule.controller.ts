@@ -18,17 +18,23 @@ export class ScheduleController {
   @ApiForbiddenResponse()
   public async notifyScheduleChanges() {
     const recipients = await this.scheduleService.getChangedCoursesRecipients();
+    Promise.resolve().then(
+      () =>
+        new Promise(async () => {
+          this.logger.log({ message: 'processing recipients notifications...' });
 
-    for (const [userId, courses] of recipients) {
-      try {
-        await this.notificationService.sendEventNotification({
-          data: { courses },
-          notificationId: 'courseScheduleChange',
-          userId,
-        });
-      } catch (e) {
-        this.logger.log({ message: (e as Error).message, userId });
-      }
-    }
+          for (const [userId, courses] of recipients) {
+            try {
+              await this.notificationService.sendEventNotification({
+                data: { courses },
+                notificationId: 'courseScheduleChange',
+                userId,
+              });
+            } catch (e) {
+              this.logger.log({ message: (e as Error).message, userId });
+            }
+          }
+        }),
+    );
   }
 }
