@@ -5,7 +5,6 @@ import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { ScheduleSettings } from '../useScheduleSettings';
 import ViewModeSelect from './ViewModeSelect';
-import TimezoneSelect from './TimezoneSelect';
 import ManageCsvButtons from './ManageCsvButtons';
 import AddEventButton from './AddEventButton';
 import HidePassedEventsButton from './HidePassedEventsButton';
@@ -42,9 +41,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
         <Col>
           <ViewModeSelect viewMode={settings.viewMode} setViewMode={settings.setViewMode} />
-        </Col>
-        <Col>
-          <TimezoneSelect timezone={settings.timezone} setTimezone={settings.setTimezone} />
         </Col>
         {isAdmin && (
           <>
