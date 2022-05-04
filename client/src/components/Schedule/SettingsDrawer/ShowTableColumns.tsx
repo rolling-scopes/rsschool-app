@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button, Divider, Typography, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FilterOutlined } from '@ant-design/icons';
@@ -31,9 +31,12 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
   const [columnsHidden, setColumnsHidden] = useState<string[]>(initialColumnsHidden);
   const [eventTypesHidden, setEventTypesHidden] = useState<string[]>(initialEventTypesHidden);
 
-  const isResetButtonDisabled =
-    isEqual([...columnsHidden].sort(), [...initialColumnsHidden].sort()) &&
-    isEqual([...eventTypesHidden].sort(), [...initialEventTypesHidden].sort());
+  const isResetButtonDisabled = useMemo(
+    () =>
+      isEqual([...columnsHidden].sort(), [...initialColumnsHidden].sort()) &&
+      isEqual([...eventTypesHidden].sort(), [...initialEventTypesHidden].sort()),
+    [columnsHidden, eventTypesHidden, initialColumnsHidden, initialEventTypesHidden],
+  );
 
   const toggleColumnCheckbox = ({ target: { checked, value: selectedColumn } }: CheckboxChangeEvent) =>
     setColumnsHidden(
