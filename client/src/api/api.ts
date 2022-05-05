@@ -503,6 +503,25 @@ export interface CourseDto {
 /**
  * 
  * @export
+ * @interface CourseStatsDto
+ */
+export interface CourseStatsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'studentsActiveCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'studentsTotalCount': number;
+}
+/**
+ * 
+ * @export
  * @interface CourseTaskDetailedDto
  */
 export interface CourseTaskDetailedDto {
@@ -3620,6 +3639,107 @@ export class CertificateApi extends BaseAPI {
      */
     public saveCertificate(saveCertificateDto: SaveCertificateDto, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).saveCertificate(saveCertificateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CourseStatsApi - axios parameter creator
+ * @export
+ */
+export const CourseStatsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseStats: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseStats', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/stats`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CourseStatsApi - functional programming interface
+ * @export
+ */
+export const CourseStatsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CourseStatsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseStats(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseStatsDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseStats(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CourseStatsApi - factory interface
+ * @export
+ */
+export const CourseStatsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CourseStatsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseStats(courseId: number, options?: any): AxiosPromise<Array<CourseStatsDto>> {
+            return localVarFp.getCourseStats(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CourseStatsApi - object-oriented interface
+ * @export
+ * @class CourseStatsApi
+ * @extends {BaseAPI}
+ */
+export class CourseStatsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseStatsApi
+     */
+    public getCourseStats(courseId: number, options?: AxiosRequestConfig) {
+        return CourseStatsApiFp(this.configuration).getCourseStats(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
