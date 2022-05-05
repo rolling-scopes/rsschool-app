@@ -3698,7 +3698,7 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCourseStats(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseStatsDto>>> {
+        async getCourseStats(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseStatsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseStats(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3718,7 +3718,7 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourseStats(courseId: number, options?: any): AxiosPromise<Array<CourseStatsDto>> {
+        getCourseStats(courseId: number, options?: any): AxiosPromise<CourseStatsDto> {
             return localVarFp.getCourseStats(courseId, options).then((request) => request(axios, basePath));
         },
     };

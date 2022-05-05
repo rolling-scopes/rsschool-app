@@ -27,7 +27,7 @@ export class CourseStatsController {
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({ operationId: 'getCourseStats' })
-  @ApiOkResponse({ type: [CourseStatsDto] })
+  @ApiOkResponse({ type: CourseStatsDto })
   public async getCourses(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
     if (!this.courseAccessService.canAccessCourse(req.user, courseId)) {
       throw new ForbiddenException();
