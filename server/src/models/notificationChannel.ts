@@ -12,4 +12,4 @@ export class NotificationChannel {
   updatedDate: number;
 }
 
-export type NotificationChannelId = 'telegram' | 'email';
+export type NotificationChannelId = 'telegram' | 'email' | 'discord';

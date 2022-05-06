@@ -27,7 +27,7 @@ export class NotificationChannelSettings {
   @Index()
   channelId: NotificationChannelId;
   @Column({ type: 'simple-json', nullable: true })
-  template: EmailTemplate | TelegramTemplate;
+  template: EmailTemplate | TelegramTemplate | DiscordTemplate;
 }
 
 export type EmailTemplate = {
@@ -36,5 +36,9 @@ export type EmailTemplate = {
 };
 
 export type TelegramTemplate = {
+  body: string;
+};
+
+export type DiscordTemplate = {
   body: string;
 };

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Course } from '@entities/course';
 import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
+import { CourseUser } from '@entities/courseUser';
 
 type UserCourses = [number, Course[]];
 type Recipients = UserCourses[];
@@ -20,7 +21,7 @@ export class ScheduleService {
   ) {}
 
   public async getChangedCoursesRecipients(): Promise<Recipients> {
-    const updatedCourses = await this.courseService.getCoursesWithUpdateScheduleWithin(3);
+    const updatedCourses = await this.courseService.getCoursesWithUpdateScheduleWithin(1);
     const aliasMap = new Map(updatedCourses.map(course => [course.alias, course]));
 
     this.logger.log({ message: `updated courses: ${updatedCourses.map(course => course.name)} ` });
@@ -49,7 +50,19 @@ export class ScheduleService {
           courseIds: updatedCourses.map(c => c.id),
         },
       )
-      .innerJoin(Course, 'course', '(mentor.courseId = course.id or student.courseId = course.id)')
+      .leftJoin(
+        CourseUser,
+        'courseUser',
+        'user.id = courseUser.userId and courseUser.courseId In (:...courseIds) and courseUser.isManager = true',
+        {
+          courseIds: updatedCourses.map(c => c.id),
+        },
+      )
+      .innerJoin(
+        Course,
+        'course',
+        '(mentor.courseId = course.id or student.courseId = course.id or courseUser.courseId = course.id)',
+      )
 
       .groupBy('user.id')
       .getRawMany();
