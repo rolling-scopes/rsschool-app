@@ -3,10 +3,10 @@ import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
-import { ScoreTableFilters } from 'common/types/score';
-import { IPaginationInfo, Pagination } from 'common/types/pagination';
-import { onlyDefined } from '../utils/onlyDefined';
+import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
+
 import { ColumnType } from 'antd/lib/table';
 import {
   CoursesTasksApi,
@@ -15,6 +15,7 @@ import {
   UpdateCourseTaskDto,
   UpdateCourseEventDto,
   CreateCourseEventDto,
+  StudentsScoreApi,
 } from 'api';
 
 export enum CrossCheckStatus {
@@ -161,6 +162,7 @@ export type SearchStudent = UserBasic & { mentor: UserBasic | null };
 
 const courseTasksApi = new CoursesTasksApi();
 const courseEventsApi = new CoursesEventsApi();
+const studentsScoreApi = new StudentsScoreApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -301,17 +303,17 @@ export class CourseService {
   async getCourseScore(
     pagination: IPaginationInfo,
     filter: ScoreTableFilters = { activeOnly: false },
-    orderBy = { field: 'totalScore', direction: 'desc' },
+    orderBy: ScoreOrder = { field: 'totalScore', order: 'descend' },
   ) {
-    const params = new URLSearchParams({
-      current: String(pagination.current),
-      pageSize: String(pagination.pageSize),
-      orderBy: String(orderBy.field),
-      orderDirection: String(orderBy.direction),
-      ...(onlyDefined(filter) as object),
-    });
-    const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
-    return result.data.data;
+    const result = await studentsScoreApi.getScore(
+      orderBy.field,
+      orderBy.order === 'descend' ? 'desc' : 'asc',
+      String(filter.activeOnly),
+      String(pagination.current),
+      String(pagination.pageSize),
+      this.courseId,
+    );
+    return result.data;
   }
 
   async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
@@ -687,7 +689,6 @@ export interface StudentScore extends StudentBasic {
     score: number;
   }[];
   rank: number;
-  cityName: string;
   totalScore: number;
   totalScoreChangeDate: string;
   repositoryLastActivityDate: string;

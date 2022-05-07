@@ -13,10 +13,18 @@ export interface MentorBasic extends UserBasic {
 
 export interface StudentBasic extends UserBasic {
   isActive: boolean;
-  cityName?: string;
-  countryName?: string;
-  mentor: MentorBasic | { id: number } | null;
-  discord: string;
+  cityName?: string | null;
+  countryName?: string | null;
+  mentor:
+    | MentorBasic
+    | { id: number }
+    | {
+        id: number;
+        githubId: string;
+        name: string;
+      }
+    | null;
+  discord?: string;
   totalScore: number;
   rank?: number;
 }
