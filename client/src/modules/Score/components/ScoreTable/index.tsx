@@ -21,6 +21,13 @@ type Props = CoursePageProps & {
   activeOnly: boolean;
 };
 
+type StudentsState = {
+  content: StudentScore[];
+  pagination: IPaginationInfo;
+  filter: ScoreTableFilters;
+  order: ScoreOrder;
+};
+
 const courseTasksApi = new CoursesTasksApi();
 
 export function ScoreTable(props: Props) {
@@ -30,11 +37,11 @@ export function ScoreTable(props: Props) {
 
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
-  const [students, setStudents] = useState({
-    content: [] as StudentScore[],
-    pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
-    filter: { activeOnly: true } as ScoreTableFilters,
-    orderBy: { field: 'rank', direction: 'asc' },
+  const [students, setStudents] = useState<StudentsState>({
+    content: [],
+    pagination: { current: 1, pageSize: 100 },
+    filter: { activeOnly: true },
+    order: { field: 'rank', order: 'ascend' },
   });
 
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
@@ -65,7 +72,7 @@ export function ScoreTable(props: Props) {
       }
 
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(students.pagination, filters, students.orderBy),
+        courseService.getCourseScore(students.pagination, filters, students.order),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
       const sortedTasks = courseTasks.data
@@ -74,7 +81,7 @@ export function ScoreTable(props: Props) {
           ...task,
           isVisible: !notVisibleColumns?.includes(task.name),
         }));
-      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
+      setStudents({ ...students, content: courseScore.content as StudentScore[], pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
 
       setLoaded(true);
