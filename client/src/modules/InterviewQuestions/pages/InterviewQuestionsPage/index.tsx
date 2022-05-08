@@ -9,11 +9,16 @@ import { CategoriesTable } from 'modules/InterviewQuestions/components/Tables/Ca
 import { QuestionsTable } from 'modules/InterviewQuestions/components/Tables/QuestionsTable';
 import { useState } from 'react';
 import { InterviewQuestionCategoryService, InterviewQuestionService } from 'services/interviewQuestion';
-import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
+import { Course, InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
-type Props = { session: Session; questions: InterviewQuestion[]; categories: InterviewQuestionCategory[] };
+type Props = {
+  session: Session;
+  questions: InterviewQuestion[];
+  categories: InterviewQuestionCategory[];
+  courses: Course[];
+};
 
 export function InterviewQuestionsPage(props: Props) {
   const [questions, setQuestions] = useState(props.questions);
@@ -72,7 +77,7 @@ export function InterviewQuestionsPage(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Questions" loading={loading}>
+    <AdminPageLayout session={props.session} title="Manage Questions" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Row gutter={16} justify="start">
           <Col>

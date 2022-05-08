@@ -130,7 +130,7 @@ function Page(props: Props) {
   const rowSelection = { onChange: changeSelection };
 
   return (
-    <AdminPageLayout title="Registrations" session={props.session} loading={loading}>
+    <AdminPageLayout title="Registrations" session={props.session} loading={loading} courses={courses}>
       <Col>
         <Row gutter={defaultRowGutter}>
           <Col>

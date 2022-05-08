@@ -167,7 +167,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading}>
+    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
       {props.session.isAdmin && (
         <Button type="primary" onClick={handleAddGroup}>
           Add Group

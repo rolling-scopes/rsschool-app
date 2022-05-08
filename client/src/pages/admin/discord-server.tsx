@@ -4,11 +4,13 @@ import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
+import { Course } from 'services/models';
 
 const { Content } = Layout;
-type Props = { session: Session };
+type Props = { session: Session; courses: Course[] };
 
 enum ModalAction {
   update = 'update',
@@ -16,7 +18,7 @@ enum ModalAction {
 }
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as DiscordServerDto[]);
+  const [data, setData] = useState<DiscordServerDto[]>([]);
   const [modalData, setModalData] = useState<Partial<DiscordServerDto> | null>(null);
   const [modalAction, setModalAction] = useState(ModalAction.update);
   const [modalLoading, setModalLoading] = useState(false);
@@ -113,7 +115,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Discord Servers" loading={loading}>
+    <AdminPageLayout session={props.session} title="Manage Discord Servers" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Discord Server
@@ -178,5 +180,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
 function getInitialValues(modalData: Partial<DiscordServerDto>) {
   return modalData;
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);

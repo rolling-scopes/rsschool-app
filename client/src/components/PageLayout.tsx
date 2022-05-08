@@ -3,6 +3,7 @@ import { Spin, Row, Col, Layout } from 'antd';
 import { PropsWithChildren } from 'react';
 import { Session } from './withSession';
 import { AdminSider } from './Sider/AdminSider';
+import { Course } from 'services/models';
 
 type Props = {
   loading: boolean;
@@ -55,12 +56,13 @@ export function AdminPageLayout({
   courseName,
   loading,
   children,
-}: PropsWithChildren<{ session: Session; title?: string; courseName?: string; loading: boolean }>) {
+  courses,
+}: PropsWithChildren<{ session: Session; title?: string; courseName?: string; loading: boolean; courses: Course[] }>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header title={title} username={session.githubId} courseName={courseName} />
       <Layout style={{ background: '#e5e5e5' }}>
-        <AdminSider session={session} />
+        <AdminSider session={session} courses={courses} />
         <Layout.Content style={{ background: '#fff', margin: 16, padding: 16 }}>
           <Spin spinning={loading}>{children}</Spin>
         </Layout.Content>

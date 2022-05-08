@@ -1,5 +1,4 @@
-import { ToolTwoTone } from '@ant-design/icons';
-import { Alert, Button, Col, Layout, List, Row, Typography } from 'antd';
+import { Alert, Button, Col, Layout, List, Row } from 'antd';
 import type { AlertDto } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
@@ -11,7 +10,7 @@ import { NoCourse } from 'modules/Home/components/NoCourse';
 import { CourseSelector } from 'modules/Home/components/CourseSelector';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
 import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
-import { getAdminLinks, getCourseLinks } from 'modules/Home/data/links';
+import { getCourseLinks } from 'modules/Home/data/links';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
 import Link from 'next/link';
@@ -46,8 +45,6 @@ export function HomePage(props: Props) {
   const [alerts, setAlerts] = useState<AlertDto[]>([]);
 
   const courseLinks = useMemo(() => getCourseLinks(props.session, activeCourse), [activeCourse]);
-  const adminLinks = useMemo(() => getAdminLinks(props.session, activeCourse), [activeCourse]);
-
   const [approvedCourse] = preselectedCourses.filter(course => !props.session.courses?.[course.id]);
 
   useAsync(async () => setAlerts(await new AlertsService().getAll()));
@@ -69,7 +66,7 @@ export function HomePage(props: Props) {
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
       <Header username={props.session.githubId} />
       <Layout style={{ background: '#fff' }}>
-        {isPowerUser && <AdminSider session={props.session} />}
+        {isPowerUser && <AdminSider session={props.session} courses={courses} activeCourse={activeCourse} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
           {!activeCourse && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
 
@@ -101,29 +98,6 @@ export function HomePage(props: Props) {
                   size="small"
                   bordered
                   dataSource={courseLinks}
-                  renderItem={linkInfo => (
-                    <List.Item key={linkInfo.url}>
-                      <Link prefetch={false} href={linkInfo.url}>
-                        <a>
-                          {linkInfo.icon} {linkInfo.name}
-                        </a>
-                      </Link>
-                    </List.Item>
-                  )}
-                />
-              ) : null}
-
-              {adminLinks.length ? (
-                <List
-                  size="small"
-                  style={{ marginTop: 16 }}
-                  header={
-                    <Typography.Text strong>
-                      <ToolTwoTone twoToneColor="#000000" /> Course Management
-                    </Typography.Text>
-                  }
-                  bordered
-                  dataSource={adminLinks}
                   renderItem={linkInfo => (
                     <List.Item key={linkInfo.url}>
                       <Link prefetch={false} href={linkInfo.url}>

@@ -101,7 +101,13 @@ function Page(props: CoursePageProps) {
   const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
 
   return (
-    <AdminPageLayout loading={loading} title="Course Mentors" session={props.session} courseName={props.course.name}>
+    <AdminPageLayout
+      loading={loading}
+      title="Course Mentors"
+      session={props.session}
+      courseName={props.course.name}
+      courses={[props.course]}
+    >
       <div style={{ display: 'flex' }}>
         <div
           style={{

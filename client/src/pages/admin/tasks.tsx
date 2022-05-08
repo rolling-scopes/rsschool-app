@@ -4,6 +4,7 @@ import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } fr
 import { union } from 'lodash';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
@@ -11,9 +12,10 @@ import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
+import { Course } from 'services/models';
 
 const { Content } = Layout;
-type Props = { session: Session };
+type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
 const service = new TaskService();
 const disciplines = PRIMARY_SKILLS;
@@ -186,7 +188,7 @@ function Page(props: Props) {
   }, [modalData, modalValues, modalLoading, handleModalSubmit]);
 
   return (
-    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading}>
+    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Task
@@ -295,5 +297,7 @@ function getColumns(handleEditItem: any) {
 function getInitialValues(modalData: Partial<Task>) {
   return modalData;
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);

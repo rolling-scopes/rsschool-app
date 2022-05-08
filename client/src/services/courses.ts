@@ -1,11 +1,17 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { CoursesApi, CourseDto as Course } from 'api';
+import { getServerAxiosProps } from 'utils/axios';
 
 type CourseResponse = { data: Course };
 export type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
   private coursesApi = new CoursesApi();
+  private axios: AxiosInstance;
+
+  constructor(token?: string) {
+    this.axios = axios.create(getServerAxiosProps(token));
+  }
 
   async updateCourse(id: number, data: Partial<Course>) {
     const result = await axios.put<CourseResponse>(`/api/course/${id}`, data);
@@ -23,7 +29,7 @@ export class CoursesService {
   }
 
   async getCourses() {
-    const result = await axios.get<CoursesResponse>(`/api/courses`);
+    const result = await this.axios.get<CoursesResponse>(`/api/courses`);
     return result.data.data;
   }
 

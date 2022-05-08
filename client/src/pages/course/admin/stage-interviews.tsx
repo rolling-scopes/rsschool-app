@@ -55,6 +55,7 @@ function Page(props: CoursePageProps) {
       title="Technical Screening"
       session={props.session}
       courseName={props.course.name}
+      courses={[props.course]}
     >
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Button type="primary" onClick={() => setModal(true)}>

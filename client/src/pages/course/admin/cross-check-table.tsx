@@ -94,7 +94,13 @@ export function Page(props: CoursePageProps) {
   }, []);
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} title="Cross-Check" courseName={props.course.name}>
+    <AdminPageLayout
+      session={props.session}
+      loading={loading}
+      title="Cross-Check"
+      courseName={props.course.name}
+      courses={[props.course]}
+    >
       {contextHolder}
       <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
       {renderTable(

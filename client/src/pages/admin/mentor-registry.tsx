@@ -1,6 +1,7 @@
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Table } from 'antd';
 import { ModalForm } from 'components/Forms';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer } from 'components/Table';
 import { useLoading } from 'components/useLoading';
@@ -106,7 +107,7 @@ function Page(props: Props) {
   }
 
   return (
-    <AdminPageLayout session={props.session} title="Mentor Registry" loading={loading}>
+    <AdminPageLayout session={props.session} title="Mentor Registry" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Col>
           <Row justify="space-between">
@@ -261,6 +262,8 @@ function renderPreselectedCourses(courses: Course[]) {
     );
   };
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);
 

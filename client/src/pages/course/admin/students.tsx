@@ -110,7 +110,7 @@ function Page(props: Props) {
 
   function render() {
     return (
-      <AdminPageLayout loading={loading} session={props.session}>
+      <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
         <Statistic
           title="Active Students"
           value={stats?.activeStudentsCount ?? 0}

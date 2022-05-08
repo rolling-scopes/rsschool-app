@@ -151,7 +151,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading}>
+    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
       <Button type="primary" onClick={handleAddItem}>
         Add Event
       </Button>

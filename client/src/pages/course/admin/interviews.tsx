@@ -47,7 +47,13 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <AdminPageLayout loading={loading} title="Interviews" session={props.session} courseName={props.course.name}>
+    <AdminPageLayout
+      loading={loading}
+      title="Interviews"
+      session={props.session}
+      courseName={props.course.name}
+      courses={[props.course]}
+    >
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
           {interviews.map(interview => (
