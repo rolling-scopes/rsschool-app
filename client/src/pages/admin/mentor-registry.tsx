@@ -1,6 +1,7 @@
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Spin, Table } from 'antd';
+import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Table } from 'antd';
 import { ModalForm } from 'components/Forms';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer } from 'components/Table';
 import { useLoading } from 'components/useLoading';
@@ -106,110 +107,108 @@ function Page(props: Props) {
   }
 
   return (
-    <AdminPageLayout session={props.session} title="Mentor Registry">
+    <AdminPageLayout session={props.session} title="Mentor Registry" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
-        <Spin spinning={loading}>
-          <Col>
-            <Row justify="space-between">
-              <Form.Item>
-                <Checkbox
-                  onChange={e => {
-                    const value = e.target.checked;
-                    updateData(value, allData);
-                  }}
-                >
-                  Show All
-                </Checkbox>
-              </Form.Item>
-              <Button onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>Export CSV</Button>
-            </Row>
-          </Col>
-          <Col style={{ marginBottom: 8 }}> Total mentors: {data.length} </Col>
-          <Col style={{ marginBottom: 8 }}> Total max students: {maxStudents} </Col>
-          <Col>
-            <Table<MentorRegistry>
-              bordered
-              pagination={{ pageSize: PAGINATION }}
-              size="small"
-              rowKey="id"
-              dataSource={data}
-              scroll={{ x: 1600 }}
-              columns={[
-                {
-                  fixed: 'left',
-                  width: 200,
-                  title: 'Github',
-                  dataIndex: 'githubId',
-                  sorter: stringSorter('githubId'),
-                  render: (value: string, { name }) => {
-                    return (
-                      <>
-                        <GithubUserLink value={value} />
-                        <div>{name}</div>
-                      </>
-                    );
-                  },
-                  ...getColumnSearchProps(['githubId', 'name']),
-                },
-                {
-                  title: 'City',
-                  dataIndex: 'cityName',
-                  width: 120,
-                  sorter: stringSorter('cityName'),
-                  ...getColumnSearchProps('cityName'),
-                },
-                {
-                  title: 'Preferred',
-                  dataIndex: 'preferedCourses',
-                  render: (values: number[]) => tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
-                },
-                {
-                  title: 'Pre-Selected',
-                  dataIndex: 'preselectedCourses',
-                  render: renderPreselectedCourses(courses),
-                },
-                {
-                  title: 'Max students',
-                  width: 80,
-                  dataIndex: 'maxStudentsLimit',
-                },
-                {
-                  title: 'Students Location',
-                  width: 100,
-                  dataIndex: 'preferedStudentsLocation',
-                  sorter: stringSorter('githubId'),
-                },
-                {
-                  title: 'Technical Mentoring',
-                  dataIndex: 'technicalMentoring',
-                  render: tagsRenderer,
-                },
-                {
-                  title: 'Info',
-                  dataIndex: 'info',
-                  render: renderInfo,
-                  width: 120,
-                },
-                {
-                  title: 'Comment',
-                  dataIndex: 'comment',
-                },
-                {
-                  fixed: 'right',
-                  width: 80,
-                  title: 'Actions',
-                  dataIndex: 'actions',
-                  render: (_: any, record: any) => (
+        <Col>
+          <Row justify="space-between">
+            <Form.Item>
+              <Checkbox
+                onChange={e => {
+                  const value = e.target.checked;
+                  updateData(value, allData);
+                }}
+              >
+                Show All
+              </Checkbox>
+            </Form.Item>
+            <Button onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>Export CSV</Button>
+          </Row>
+        </Col>
+        <Col style={{ marginBottom: 8 }}> Total mentors: {data.length} </Col>
+        <Col style={{ marginBottom: 8 }}> Total max students: {maxStudents} </Col>
+        <Col>
+          <Table<MentorRegistry>
+            bordered
+            pagination={{ pageSize: PAGINATION }}
+            size="small"
+            rowKey="id"
+            dataSource={data}
+            scroll={{ x: 1600 }}
+            columns={[
+              {
+                fixed: 'left',
+                width: 200,
+                title: 'Github',
+                dataIndex: 'githubId',
+                sorter: stringSorter('githubId'),
+                render: (value: string, { name }) => {
+                  return (
                     <>
-                      <a onClick={() => setModalData(record)}>Edit</a> <br />
-                      <a onClick={() => cancelMentor(record.githubId)}>Cancel</a>
+                      <GithubUserLink value={value} />
+                      <div>{name}</div>
                     </>
-                  ),
+                  );
                 },
-              ]}
-            />
-          </Col>
-        </Spin>
+                ...getColumnSearchProps(['githubId', 'name']),
+              },
+              {
+                title: 'City',
+                dataIndex: 'cityName',
+                width: 120,
+                sorter: stringSorter('cityName'),
+                ...getColumnSearchProps('cityName'),
+              },
+              {
+                title: 'Preferred',
+                dataIndex: 'preferedCourses',
+                render: (values: number[]) => tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
+              },
+              {
+                title: 'Pre-Selected',
+                dataIndex: 'preselectedCourses',
+                render: renderPreselectedCourses(courses),
+              },
+              {
+                title: 'Max students',
+                width: 80,
+                dataIndex: 'maxStudentsLimit',
+              },
+              {
+                title: 'Students Location',
+                width: 100,
+                dataIndex: 'preferedStudentsLocation',
+                sorter: stringSorter('githubId'),
+              },
+              {
+                title: 'Technical Mentoring',
+                dataIndex: 'technicalMentoring',
+                render: tagsRenderer,
+              },
+              {
+                title: 'Info',
+                dataIndex: 'info',
+                render: renderInfo,
+                width: 120,
+              },
+              {
+                title: 'Comment',
+                dataIndex: 'comment',
+              },
+              {
+                fixed: 'right',
+                width: 80,
+                title: 'Actions',
+                dataIndex: 'actions',
+                render: (_: any, record: any) => (
+                  <>
+                    <a onClick={() => setModalData(record)}>Edit</a> <br />
+                    <a onClick={() => cancelMentor(record.githubId)}>Cancel</a>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </Col>
       </Content>
       {renderModal()}
     </AdminPageLayout>
@@ -263,6 +262,8 @@ function renderPreselectedCourses(courses: Course[]) {
     );
   };
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);
 

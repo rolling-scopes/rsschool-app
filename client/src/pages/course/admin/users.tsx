@@ -1,7 +1,5 @@
-import { Layout, Button, Checkbox, Spin, Col, Form, Row, Table, Tag, Modal } from 'antd';
+import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal } from 'antd';
 import withSession from 'components/withSession';
-import { Header } from 'components/Header';
-
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
@@ -13,6 +11,7 @@ import { CourseService, CourseUser } from 'services/course';
 import { CoursePageProps, UserGroup } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
+import { AdminPageLayout } from 'components/PageLayout';
 
 type Props = CoursePageProps;
 
@@ -168,30 +167,25 @@ function Page(props: Props) {
   };
 
   return (
-    <div>
-      <Header username={props.session.githubId} />
-      <Layout.Content style={{ margin: 8 }}>
-        <Spin spinning={loading}>
-          {props.session.isAdmin && (
-            <Button type="primary" onClick={handleAddGroup}>
-              Add Group
-            </Button>
-          )}
-          <Button type="link" onClick={handleAddUser}>
-            Add User
-          </Button>
-          <Table
-            rowKey="id"
-            pagination={{ pageSize: 100 }}
-            size="small"
-            dataSource={courseUsers}
-            columns={getColumns(handleEditItem)}
-          />
-        </Spin>
-        {renderUserModal(userModalData!)}
-        {renderGroupModal(groupModalData!)}
-      </Layout.Content>
-    </div>
+    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
+      {props.session.isAdmin && (
+        <Button type="primary" onClick={handleAddGroup}>
+          Add Group
+        </Button>
+      )}
+      <Button type="link" onClick={handleAddUser}>
+        Add User
+      </Button>
+      <Table
+        rowKey="id"
+        pagination={{ pageSize: 100 }}
+        size="small"
+        dataSource={courseUsers}
+        columns={getColumns(handleEditItem)}
+      />
+      {renderUserModal(userModalData!)}
+      {renderGroupModal(groupModalData!)}
+    </AdminPageLayout>
   );
 }
 
