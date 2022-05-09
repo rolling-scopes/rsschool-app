@@ -12,17 +12,38 @@ import {
   NotificationFilled,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
-import { isAdmin, isAnyCoursePowerUser, isHirer } from 'domain/user';
+import { isAdmin, isAnyCoursePowerUser, isCourseManager, isCourseSupervisor, isHirer } from 'domain/user';
+import { Course } from 'services/models';
 
 export interface MenuItemsData {
   name: string;
   key: string;
   icon?: JSX.Element;
-  href: string;
-  access: (session: Session) => boolean;
 }
 
-const adminMenuItems: MenuItemsData[] = [
+interface AdminMenuItemsData extends MenuItemsData {
+  access: (session: Session) => boolean;
+  href: string;
+}
+
+interface CourseManagementMenuItemsData extends MenuItemsData {
+  getUrl: (course: Course) => string;
+  courseAccess: (session: Session, courseId: number) => boolean;
+}
+
+export interface MenuItemsRenderData {
+  name: string;
+  key: string;
+  icon?: JSX.Element;
+  href: string;
+}
+
+const some =
+  (...checks: ((session: Session, courseId: number) => boolean)[]) =>
+  (session: Session, courseId: number) =>
+    checks.some(check => check(session, courseId));
+
+const adminMenuItems: AdminMenuItemsData[] = [
   {
     name: 'Main',
     key: 'main',
@@ -102,6 +123,65 @@ const adminMenuItems: MenuItemsData[] = [
   },
 ];
 
-export function getAdminMenuItems(session: Session): MenuItemsData[] {
+export function getAdminMenuItems(session: Session): MenuItemsRenderData[] {
   return adminMenuItems.filter(item => item.access(session));
+}
+
+const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
+  {
+    name: 'Course Events',
+    key: 'courseEvents',
+    getUrl: (course: Course) => `/course/admin/events?course=${course.alias}`,
+    courseAccess: isCourseManager,
+  },
+  {
+    name: 'Course Tasks',
+    key: 'courseTasks',
+    getUrl: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
+    courseAccess: isCourseManager,
+  },
+  {
+    name: 'Course Students',
+    key: 'courseStudents',
+    getUrl: (course: Course) => `/course/admin/students?course=${course.alias}`,
+    courseAccess: some(isCourseManager, isCourseSupervisor),
+  },
+  {
+    name: 'Course Mentors',
+    key: 'courseMentors',
+    getUrl: (course: Course) => `/course/admin/mentors?course=${course.alias}`,
+    courseAccess: some(isCourseManager, isCourseSupervisor),
+  },
+  {
+    name: 'Course Users',
+    key: 'courseUsers',
+    getUrl: (course: Course) => `/course/admin/users?course=${course.alias}`,
+    courseAccess: isAdmin,
+  },
+  {
+    name: 'Cross-Сheck Table',
+    key: 'Cross-Сheck Table',
+    getUrl: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
+    courseAccess: isCourseManager,
+  },
+  {
+    name: 'Technical Screening',
+    key: 'technicalScreening',
+    getUrl: (course: Course) => `/course/admin/stage-interviews?course=${course.alias}`,
+    courseAccess: some(isCourseManager, isCourseSupervisor),
+  },
+  {
+    name: 'CoreJs Interviews',
+    key: 'coreJsInterviews',
+    getUrl: (course: Course) => `/course/admin/interviews?course=${course.alias}`,
+    courseAccess: isCourseManager,
+  },
+];
+
+export function getCourseManagementMenuItems(session: Session, activeCourse: Course | null): MenuItemsRenderData[] {
+  return activeCourse
+    ? courseManagementMenuItems
+        .filter(route => isAdmin(session) || (route.courseAccess(session, activeCourse.id) ?? true))
+        .map(({ name, key, icon, getUrl }) => ({ name, icon, key, href: getUrl(activeCourse) }))
+    : [];
 }

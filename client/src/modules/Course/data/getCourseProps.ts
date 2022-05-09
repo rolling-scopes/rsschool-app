@@ -1,7 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { UserService } from 'services/user';
 import { getTokenFromContext } from 'utils/server';
-import type { ProfileCourseDto } from 'api';
+import type { CourseDto, ProfileCourseDto } from 'api';
+import { CoursesService } from 'services/courses';
 
 export const noAccessResponse: GetServerSidePropsResult<any> = {
   redirect: {
@@ -33,6 +34,24 @@ export const getCourseProps: GetServerSideProps<{ course: ProfileCourseDto }> = 
     }
     return {
       props: { course },
+    };
+  } catch (e) {
+    return noAccessResponse;
+  }
+};
+
+export const getCoursesProps: GetServerSideProps<{ courses: CourseDto[] }> = async ctx => {
+  try {
+    const token = getTokenFromContext(ctx);
+    if (token == null) {
+      return noAccessResponse;
+    }
+    const courses = await new CoursesService(token).getCourses();
+    if (courses === null) {
+      return notAuthorizedResponse;
+    }
+    return {
+      props: { courses },
     };
   } catch (e) {
     return noAccessResponse;

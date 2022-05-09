@@ -4,9 +4,11 @@ import { GithubAvatar } from 'components/GithubAvatar';
 import { Session, withSession } from 'components/withSession';
 import { UserService, UserFull } from 'services/user';
 import { AdminPageLayout } from 'components/PageLayout';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import { Course } from 'services/models';
 
 const { Content } = Layout;
-type Props = { session: Session };
+type Props = { session: Session; courses: Course[] };
 
 function Page(props: Props) {
   const [users, setUsers] = useState(null as any[] | null);
@@ -21,7 +23,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Users">
+    <AdminPageLayout session={props.session} title="Users" loading={false} courses={props.courses}>
       <Content>
         <div className="mt-4">
           <Form layout="horizontal" onFinish={handleSearch}>
@@ -73,5 +75,7 @@ function Page(props: Props) {
     </AdminPageLayout>
   );
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);
