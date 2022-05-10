@@ -143,7 +143,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
         score: taskScores[idx],
         comment: taskComments[idx],
         interviewFormAnswers: (taskInterviewFormAnswers && taskInterviewFormAnswers[idx]) || undefined,
-        interviewDate: taskInterviewDate[idx] ? String(taskInterviewDate[idx]) : undefined,
+        interviewDate: taskInterviewDate && taskInterviewDate[idx] ? String(taskInterviewDate[idx]) : undefined,
         interviewer:
           interviewerGithubId && interviewerGithubId[idx]
             ? {
