@@ -3,10 +3,10 @@ import isEqual from 'lodash/isEqual';
 import { Typography, List, Button } from 'antd';
 import CommonCard from './CommonCard';
 import CoreJsIviewsModal from './CoreJsIviewsModal';
+import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { formatDate } from 'services/formatter';
 
 const { Text } = Typography;
-
-import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 export interface CoreJsInterviewsData {
   courseFullName: string;
@@ -25,6 +25,7 @@ export interface CoreJsInterviewsData {
     comment: string;
     score: number;
     name: string;
+    interviewDate?: string;
   }[];
 }
 
@@ -77,7 +78,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
               itemLayout="horizontal"
               dataSource={stats}
               renderItem={({ courseName, locationName, interviews }, idx) =>
-                interviews.map(({ score, interviewer, name }, interviewIndex) => (
+                interviews.map(({ score, interviewer, name, interviewDate }, interviewIndex) => (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={interviewIndex}>
                     <div style={{ flexGrow: 2 }}>
                       <p style={{ marginBottom: 5 }}>
@@ -92,6 +93,9 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                           Score: <Text mark>{score}</Text>
                         </p>
                       }
+                      {interviewDate && (
+                        <p style={{ fontSize: 12, marginBottom: 5 }}>Date: {formatDate(interviewDate)}</p>
+                      )}
                       {
                         <p style={{ fontSize: 12, marginBottom: 5 }}>
                           Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>

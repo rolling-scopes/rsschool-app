@@ -53,6 +53,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
     query
       .addSelect('ARRAY_AGG (COALESCE("taskResult"."comment", "taskInterview"."comment")) AS "taskComments"')
       .addSelect('ARRAY_AGG ("taskInterview"."formAnswers") AS "taskInterviewFormAnswers"')
+      .addSelect('ARRAY_AGG ("taskInterview"."createdDate") AS "taskInterviewDate"')
       .addSelect('ARRAY_AGG ("interviewer"."githubId") AS "interviewerGithubId"')
       .addSelect('ARRAY_AGG ("interviewer"."firstName") AS "interviewerFirstName"')
       .addSelect('ARRAY_AGG ("interviewer"."lastName") AS "interviewerLastName"');
@@ -125,6 +126,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       taskScores,
       taskComments,
       taskInterviewFormAnswers,
+      taskInterviewDate,
       interviewerGithubId,
       interviewerFirstName,
       interviewerLastName,
@@ -141,6 +143,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
         score: taskScores[idx],
         comment: taskComments[idx],
         interviewFormAnswers: (taskInterviewFormAnswers && taskInterviewFormAnswers[idx]) || undefined,
+        interviewDate: taskInterviewDate[idx] ? String(taskInterviewDate[idx]) : undefined,
         interviewer:
           interviewerGithubId && interviewerGithubId[idx]
             ? {
