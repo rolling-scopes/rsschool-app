@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { List, Typography, Input } from 'antd';
+import { List, Typography, Input, Form } from 'antd';
 import CommonCard from './CommonCard';
 import { Contacts } from 'common/models/profile';
 import { ConfigurableProfilePermissions } from 'common/models/profile';
@@ -12,13 +12,17 @@ const { Text } = Typography;
 import { ContactsOutlined } from '@ant-design/icons';
 import { NotificationChannel } from 'modules/Notifications/services/notifications';
 import { EmailConfirmation } from './EmailConfirmation';
+import { Rule } from 'antd/lib/form';
+
+type ProfileEntryChangeCallback = (event: { target: { value: string } }, path: string) => void;
 
 type Props = {
   data: Contacts;
+  initialContacts?: Contacts;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
-  onProfileSettingsChange: (event: any, path: string) => void;
+  onProfileSettingsChange: ProfileEntryChangeCallback;
   isDataPendingSave: boolean;
   connections: Partial<
     Record<
@@ -34,7 +38,7 @@ type Props = {
   sendConfirmationEmail: () => void;
 };
 
-type Contact = { name: string; value: string | null; key: string };
+type Contact = { name: string; value: string | null; key: string; rules?: Rule[] };
 
 class ContactsCard extends React.Component<Props> {
   state = {
@@ -90,14 +94,21 @@ class ContactsCard extends React.Component<Props> {
       connections,
       sendConfirmationEmail,
       isDataPendingSave,
+      initialContacts,
     } = this.props;
     const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = this.props.data;
-    const contacts = [
-      { name: 'EPAM E-mail', value: epamEmail, key: 'epamEmail' },
+    const contacts: Contact[] = [
+      {
+        name: 'EPAM E-mail',
+        value: epamEmail,
+        key: 'epamEmail',
+        rules: [{ type: 'email', message: 'Email is not valid' }],
+      },
       {
         name: 'E-mail',
         value: email,
         key: 'email',
+        rules: [{ type: 'email', message: 'Email is not valid' }],
       },
       {
         name: 'Telegram',
@@ -164,24 +175,12 @@ class ContactsCard extends React.Component<Props> {
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
         onPermissionsSettingsChange={onPermissionsSettingsChange}
+        detachSettingsOnVisibilityChange
         profileSettingsContent={
-          <List
-            itemLayout="horizontal"
-            dataSource={contacts}
-            renderItem={({ name, value, key }: Contact) => (
-              <List.Item>
-                <div style={{ width: '100%' }}>
-                  <p style={{ fontSize: 18, marginBottom: 5 }}>
-                    <Text strong>{name}:</Text>
-                  </p>
-                  <Input
-                    value={value || ''}
-                    style={{ width: '100%' }}
-                    onChange={(event: any) => onProfileSettingsChange(event, `contacts.${key}`)}
-                  />
-                </div>
-              </List.Item>
-            )}
+          <EditForm
+            contacts={contacts}
+            onProfileSettingsChange={onProfileSettingsChange}
+            initialContacts={initialContacts}
           />
         }
       />
@@ -190,3 +189,57 @@ class ContactsCard extends React.Component<Props> {
 }
 
 export default ContactsCard;
+
+function EditForm({
+  contacts,
+  onProfileSettingsChange,
+  initialContacts,
+}: {
+  contacts: Contact[];
+  initialContacts?: Contacts;
+  onProfileSettingsChange: ProfileEntryChangeCallback;
+}) {
+  const [form] = Form.useForm();
+  return (
+    <Form
+      form={form}
+      onValuesChange={(changedValues: Record<string, string>) => {
+        function notifyChanges(errors?: { errorFields: { errors: string[]; name: string[] }[] }) {
+          Object.entries(changedValues).forEach(([key, value]: [string, string]) => {
+            const path = `contacts.${key}`;
+            if (!errors || errors.errorFields.every(field => !field.name.includes(key))) {
+              onProfileSettingsChange({ target: { value } }, path);
+            } else if (initialContacts) {
+              onProfileSettingsChange(
+                { target: { value: (initialContacts as unknown as Record<string, string>)[key] ?? '' } },
+                path,
+              );
+            }
+          });
+        }
+        form
+          .validateFields()
+          .then(() => notifyChanges())
+          .catch(errors => notifyChanges(errors));
+      }}
+      initialValues={Object.fromEntries(contacts.map(c => [c.key, c.value]))}
+    >
+      <List<Contact>
+        itemLayout="horizontal"
+        dataSource={contacts}
+        renderItem={({ name, key, rules }: Contact) => (
+          <List.Item>
+            <div style={{ width: '100%' }}>
+              <p style={{ fontSize: 18, marginBottom: 5 }}>
+                <Text strong>{name}:</Text>
+              </p>
+              <Form.Item rules={rules} name={key}>
+                <Input style={{ width: '100%' }} />
+              </Form.Item>
+            </div>
+          </List.Item>
+        )}
+      />
+    </Form>
+  );
+}

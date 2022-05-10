@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { DashboardDetails, ExpelCriteria, CertificateCriteria } from 'components/Student';
 import {
@@ -110,7 +110,7 @@ function Page(props: Props) {
 
   function render() {
     return (
-      <PageLayout loading={loading} githubId={props.session.githubId}>
+      <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
         <Statistic
           title="Active Students"
           value={stats?.activeStudentsCount ?? 0}
@@ -144,7 +144,7 @@ function Page(props: Props) {
         {certificateModel ? (
           <CertificateCriteria courseId={props.course.id} onClose={setCertificateMode} onApply={certificateStudents} />
         ) : null}
-      </PageLayout>
+      </AdminPageLayout>
     );
   }
 

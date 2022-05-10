@@ -392,6 +392,7 @@ export class ProfilePage extends React.Component<Props, State> {
       profile?.contacts !== undefined && (
         <ContactsCard
           data={profile.contacts}
+          initialContacts={this.state.initialProfileSettings?.contacts}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}

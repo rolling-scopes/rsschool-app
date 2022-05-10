@@ -27,11 +27,23 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
             Object {
               "key": "epamEmail",
               "name": "EPAM E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@epam.com",
             },
             Object {
               "key": "email",
               "name": "E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@tut.by",
             },
             Object {
@@ -65,22 +77,35 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
         renderItem={[Function]}
       />
     }
+    detachSettingsOnVisibilityChange={true}
     icon={<ForwardRef(ContactsOutlined) />}
     isEditingModeEnabled={false}
     noDataDescrption="Contacts aren't filled in"
     onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
-      <List
-        dataSource={
+      <EditForm
+        contacts={
           Array [
             Object {
               "key": "epamEmail",
               "name": "EPAM E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@epam.com",
             },
             Object {
               "key": "email",
               "name": "E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@tut.by",
             },
             Object {
@@ -110,8 +135,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
             },
           ]
         }
-        itemLayout="horizontal"
-        renderItem={[Function]}
+        onProfileSettingsChange={[MockFunction]}
       />
     }
     title="Contacts"
@@ -312,11 +336,23 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 Object {
                   "key": "epamEmail",
                   "name": "EPAM E-mail",
+                  "rules": Array [
+                    Object {
+                      "message": "Email is not valid",
+                      "type": "email",
+                    },
+                  ],
                   "value": "vasya@epam.com",
                 },
                 Object {
                   "key": "email",
                   "name": "E-mail",
+                  "rules": Array [
+                    Object {
+                      "message": "Email is not valid",
+                      "type": "email",
+                    },
+                  ],
                   "value": "vasya@tut.by",
                 },
                 Object {
@@ -988,11 +1024,23 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             Object {
               "key": "epamEmail",
               "name": "EPAM E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@epam.com",
             },
             Object {
               "key": "email",
               "name": "E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@tut.by",
             },
             Object {
@@ -1011,22 +1059,35 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
         renderItem={[Function]}
       />
     }
+    detachSettingsOnVisibilityChange={true}
     icon={<ForwardRef(ContactsOutlined) />}
     isEditingModeEnabled={true}
     noDataDescrption="Contacts aren't filled in"
     onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
-      <List
-        dataSource={
+      <EditForm
+        contacts={
           Array [
             Object {
               "key": "epamEmail",
               "name": "EPAM E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@epam.com",
             },
             Object {
               "key": "email",
               "name": "E-mail",
+              "rules": Array [
+                Object {
+                  "message": "Email is not valid",
+                  "type": "email",
+                },
+              ],
               "value": "vasya@tut.by",
             },
             Object {
@@ -1056,8 +1117,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             },
           ]
         }
-        itemLayout="horizontal"
-        renderItem={[Function]}
+        onProfileSettingsChange={[MockFunction]}
       />
     }
     title="Contacts"
@@ -1265,11 +1325,23 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 Object {
                   "key": "epamEmail",
                   "name": "EPAM E-mail",
+                  "rules": Array [
+                    Object {
+                      "message": "Email is not valid",
+                      "type": "email",
+                    },
+                  ],
                   "value": "vasya@epam.com",
                 },
                 Object {
                   "key": "email",
                   "name": "E-mail",
+                  "rules": Array [
+                    Object {
+                      "message": "Email is not valid",
+                      "type": "email",
+                    },
+                  ],
                   "value": "vasya@tut.by",
                 },
                 Object {
@@ -2010,1508 +2082,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       
             </style>
           </PermissionsSettingsDrawer>
-          <ProfileSettingsDrawer
-            content={
-              <List
-                dataSource={
-                  Array [
-                    Object {
-                      "key": "epamEmail",
-                      "name": "EPAM E-mail",
-                      "value": "vasya@epam.com",
-                    },
-                    Object {
-                      "key": "email",
-                      "name": "E-mail",
-                      "value": "vasya@tut.by",
-                    },
-                    Object {
-                      "key": "telegram",
-                      "name": "Telegram",
-                      "value": null,
-                    },
-                    Object {
-                      "key": "phone",
-                      "name": "Phone",
-                      "value": "1232422",
-                    },
-                    Object {
-                      "key": "skype",
-                      "name": "Skype",
-                      "value": "skype_vasya",
-                    },
-                    Object {
-                      "key": "notes",
-                      "name": "Notes",
-                      "value": null,
-                    },
-                    Object {
-                      "key": "linkedIn",
-                      "name": "LinkedIn",
-                      "value": null,
-                    },
-                  ]
-                }
-                itemLayout="horizontal"
-                renderItem={[Function]}
-              />
-            }
-            hideSettings={[Function]}
-            isSettingsVisible={false}
-          >
-            <DrawerWrapper
-              closable={true}
-              getContainer={false}
-              onClose={[Function]}
-              placement="top"
-              style={
-                Object {
-                  "display": "none",
-                  "position": "absolute",
-                }
-              }
-              title="Profile settings"
-              visible={false}
-            >
-              <Drawer
-                closable={true}
-                getContainer={false}
-                onClose={[Function]}
-                placement="top"
-                prefixCls="ant-drawer"
-                style={
-                  Object {
-                    "display": "none",
-                    "position": "absolute",
-                  }
-                }
-                title="Profile settings"
-                visible={false}
-              >
-                <DrawerWrapper
-                  afterVisibleChange={[Function]}
-                  autoFocus={true}
-                  className=""
-                  defaultOpen={false}
-                  duration=".3s"
-                  ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
-                  forceRender={false}
-                  getContainer={false}
-                  handler={false}
-                  height={378}
-                  keyboard={true}
-                  level={null}
-                  maskClosable={true}
-                  maskStyle={Object {}}
-                  onChange={[Function]}
-                  onClose={[Function]}
-                  open={false}
-                  placement="top"
-                  prefixCls="ant-drawer"
-                  showMask={true}
-                  style={
-                    Object {
-                      "display": "none",
-                      "position": "absolute",
-                      "transform": undefined,
-                      "zIndex": undefined,
-                    }
-                  }
-                  wrapperClassName=""
-                >
-                  <div
-                    className=""
-                  >
-                    <DrawerChild
-                      afterVisibleChange={[Function]}
-                      autoFocus={true}
-                      className=""
-                      duration=".3s"
-                      ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
-                      getContainer={[Function]}
-                      handler={false}
-                      height={378}
-                      keyboard={true}
-                      level={null}
-                      maskClosable={true}
-                      maskStyle={Object {}}
-                      onChange={[Function]}
-                      onClose={[Function]}
-                      onHandleClick={[Function]}
-                      open={false}
-                      placement="top"
-                      prefixCls="ant-drawer"
-                      showMask={true}
-                      style={
-                        Object {
-                          "display": "none",
-                          "position": "absolute",
-                          "transform": undefined,
-                          "zIndex": undefined,
-                        }
-                      }
-                    >
-                      <div
-                        className="ant-drawer ant-drawer-top"
-                        onTransitionEnd={[Function]}
-                        style={
-                          Object {
-                            "display": "none",
-                            "position": "absolute",
-                            "transform": undefined,
-                            "zIndex": undefined,
-                          }
-                        }
-                        tabIndex={-1}
-                      >
-                        <div
-                          className="ant-drawer-mask"
-                          onClick={[Function]}
-                          style={Object {}}
-                        />
-                        <div
-                          className="ant-drawer-content-wrapper"
-                          style={
-                            Object {
-                              "height": "378px",
-                              "msTransform": "translateY(-100%)",
-                              "transform": "translateY(-100%)",
-                              "width": undefined,
-                            }
-                          }
-                        >
-                          <div
-                            className="ant-drawer-content"
-                          >
-                            <div
-                              className="ant-drawer-wrapper-body"
-                              onTransitionEnd={[Function]}
-                              style={Object {}}
-                            >
-                              <div
-                                className="ant-drawer-header"
-                              >
-                                <div
-                                  className="ant-drawer-header-title"
-                                >
-                                  <button
-                                    aria-label="Close"
-                                    className="ant-drawer-close"
-                                    onClick={[Function]}
-                                    type="button"
-                                  >
-                                    <ForwardRef(CloseOutlined)>
-                                      <AntdIcon
-                                        icon={
-                                          Object {
-                                            "icon": Object {
-                                              "attrs": Object {
-                                                "focusable": "false",
-                                                "viewBox": "64 64 896 896",
-                                              },
-                                              "children": Array [
-                                                Object {
-                                                  "attrs": Object {
-                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                  },
-                                                  "tag": "path",
-                                                },
-                                              ],
-                                              "tag": "svg",
-                                            },
-                                            "name": "close",
-                                            "theme": "outlined",
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          aria-label="close"
-                                          className="anticon anticon-close"
-                                          role="img"
-                                        >
-                                          <IconReact
-                                            icon={
-                                              Object {
-                                                "icon": Object {
-                                                  "attrs": Object {
-                                                    "focusable": "false",
-                                                    "viewBox": "64 64 896 896",
-                                                  },
-                                                  "children": Array [
-                                                    Object {
-                                                      "attrs": Object {
-                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                      },
-                                                      "tag": "path",
-                                                    },
-                                                  ],
-                                                  "tag": "svg",
-                                                },
-                                                "name": "close",
-                                                "theme": "outlined",
-                                              }
-                                            }
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              data-icon="close"
-                                              fill="currentColor"
-                                              focusable="false"
-                                              height="1em"
-                                              key="svg-close"
-                                              viewBox="64 64 896 896"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                                key="svg-close-svg-0"
-                                              />
-                                            </svg>
-                                          </IconReact>
-                                        </span>
-                                      </AntdIcon>
-                                    </ForwardRef(CloseOutlined)>
-                                  </button>
-                                  <div
-                                    className="ant-drawer-title"
-                                  >
-                                    Profile settings
-                                  </div>
-                                </div>
-                              </div>
-                              <div
-                                className="ant-drawer-body"
-                              >
-                                <List
-                                  dataSource={
-                                    Array [
-                                      Object {
-                                        "key": "epamEmail",
-                                        "name": "EPAM E-mail",
-                                        "value": "vasya@epam.com",
-                                      },
-                                      Object {
-                                        "key": "email",
-                                        "name": "E-mail",
-                                        "value": "vasya@tut.by",
-                                      },
-                                      Object {
-                                        "key": "telegram",
-                                        "name": "Telegram",
-                                        "value": null,
-                                      },
-                                      Object {
-                                        "key": "phone",
-                                        "name": "Phone",
-                                        "value": "1232422",
-                                      },
-                                      Object {
-                                        "key": "skype",
-                                        "name": "Skype",
-                                        "value": "skype_vasya",
-                                      },
-                                      Object {
-                                        "key": "notes",
-                                        "name": "Notes",
-                                        "value": null,
-                                      },
-                                      Object {
-                                        "key": "linkedIn",
-                                        "name": "LinkedIn",
-                                        "value": null,
-                                      },
-                                    ]
-                                  }
-                                  itemLayout="horizontal"
-                                  renderItem={[Function]}
-                                >
-                                  <div
-                                    className="ant-list ant-list-split"
-                                  >
-                                    <Spin
-                                      size="default"
-                                      spinning={false}
-                                      wrapperClassName=""
-                                    >
-                                      <div
-                                        className="ant-spin-nested-loading"
-                                      >
-                                        <div
-                                          className="ant-spin-container"
-                                          key="container"
-                                        >
-                                          <ul
-                                            className="ant-list-items"
-                                          >
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "EPAM E-mail",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        EPAM E-mail
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value="vasya@epam.com"
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value="vasya@epam.com"
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value="vasya@epam.com"
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value="vasya@epam.com"
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="vasya@epam.com"
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "E-mail",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        E-mail
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value="vasya@tut.by"
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value="vasya@tut.by"
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value="vasya@tut.by"
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value="vasya@tut.by"
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="vasya@tut.by"
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "Telegram",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        Telegram
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value=""
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value=""
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value=""
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value=""
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "Phone",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        Phone
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value="1232422"
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value="1232422"
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value="1232422"
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value="1232422"
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="1232422"
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "Skype",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        Skype
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value="skype_vasya"
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value="skype_vasya"
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value="skype_vasya"
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value="skype_vasya"
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="skype_vasya"
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "Notes",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        Notes
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value=""
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value=""
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value=""
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value=""
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                            <Item>
-                                              <li
-                                                className="ant-list-item"
-                                              >
-                                                <div
-                                                  style={
-                                                    Object {
-                                                      "width": "100%",
-                                                    }
-                                                  }
-                                                >
-                                                  <p
-                                                    style={
-                                                      Object {
-                                                        "fontSize": 18,
-                                                        "marginBottom": 5,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      strong={true}
-                                                    >
-                                                      <ForwardRef
-                                                        component="span"
-                                                        strong={true}
-                                                      >
-                                                        <ResizeObserver
-                                                          disabled={true}
-                                                          onResize={[Function]}
-                                                        >
-                                                          <SingleObserver
-                                                            disabled={true}
-                                                            key="rc-observer-key-0"
-                                                            onResize={[Function]}
-                                                          >
-                                                            <DomWrapper>
-                                                              <EllipsisTooltip
-                                                                enabledEllipsis={false}
-                                                                isEllipsis={false}
-                                                              >
-                                                                <Typography
-                                                                  className=""
-                                                                  component="span"
-                                                                  onClick={null}
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": undefined,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <span
-                                                                    className="ant-typography"
-                                                                    onClick={null}
-                                                                    style={
-                                                                      Object {
-                                                                        "WebkitLineClamp": undefined,
-                                                                      }
-                                                                    }
-                                                                  >
-                                                                    <Ellipsis
-                                                                      enabledMeasure={false}
-                                                                      onEllipsis={[Function]}
-                                                                      rows={1}
-                                                                      text={
-                                                                        Array [
-                                                                          "LinkedIn",
-                                                                          ":",
-                                                                        ]
-                                                                      }
-                                                                      width={0}
-                                                                    >
-                                                                      <strong>
-                                                                        LinkedIn
-                                                                        :
-                                                                      </strong>
-                                                                    </Ellipsis>
-                                                                  </span>
-                                                                </Typography>
-                                                              </EllipsisTooltip>
-                                                            </DomWrapper>
-                                                          </SingleObserver>
-                                                        </ResizeObserver>
-                                                      </ForwardRef>
-                                                    </Text>
-                                                  </p>
-                                                  <ForwardRef
-                                                    onChange={[Function]}
-                                                    style={
-                                                      Object {
-                                                        "width": "100%",
-                                                      }
-                                                    }
-                                                    value=""
-                                                  >
-                                                    <ForwardRef
-                                                      affixWrapperClassName=""
-                                                      groupClassName=""
-                                                      inputClassName=""
-                                                      onBlur={[Function]}
-                                                      onChange={[Function]}
-                                                      onFocus={[Function]}
-                                                      prefixCls="ant-input"
-                                                      style={
-                                                        Object {
-                                                          "width": "100%",
-                                                        }
-                                                      }
-                                                      value=""
-                                                      wrapperClassName=""
-                                                    >
-                                                      <BaseInput
-                                                        affixWrapperClassName=""
-                                                        focused={false}
-                                                        groupClassName=""
-                                                        handleReset={[Function]}
-                                                        inputElement={
-                                                          <input
-                                                            className="ant-input"
-                                                            onBlur={[Function]}
-                                                            onChange={[Function]}
-                                                            onFocus={[Function]}
-                                                            onKeyDown={[Function]}
-                                                            style={
-                                                              Object {
-                                                                "width": "100%",
-                                                              }
-                                                            }
-                                                            type="text"
-                                                            value=""
-                                                          />
-                                                        }
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        value=""
-                                                        wrapperClassName=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </BaseInput>
-                                                    </ForwardRef>
-                                                  </ForwardRef>
-                                                </div>
-                                              </li>
-                                            </Item>
-                                          </ul>
-                                        </div>
-                                      </div>
-                                    </Spin>
-                                  </div>
-                                </List>
-                                <style
-                                  jsx={true}
-                                >
-                                  
-              :global(.ant-drawer-content-wrapper) {
-                height: inherit !important;
-              }
-
-              :global(.ant-drawer-wrapper-body) {
-                overflow: hidden;
-              }
-
-              :global(.ant-drawer-body) {
-                height: calc(100% - 55px);
-                overflow: auto;
-              }
-            
-                                </style>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </DrawerChild>
-                  </div>
-                </DrawerWrapper>
-              </Drawer>
-            </DrawerWrapper>
-          </ProfileSettingsDrawer>
         </div>
         <ul
           className="ant-card-actions"

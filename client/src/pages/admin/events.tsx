@@ -3,16 +3,18 @@ import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 
 import { Session, withSession } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { AdminPageLayout } from 'components/PageLayout';
+import { Course } from 'services/models';
 
 const { Content } = Layout;
 
-type Props = { session: Session };
-const service = new EventService();
+type Props = { session: Session; courses: Course[] };
+const eventService = new EventService();
 
 const disciplines = PRIMARY_SKILLS;
 
@@ -22,11 +24,11 @@ function Page(props: Props) {
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const data = await service.getEvents();
-    setData(data);
+    const events = await eventService.getEvents();
+    setData(events);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -40,8 +42,8 @@ function Page(props: Props) {
 
   const handleDeleteItem = async (id: number) => {
     try {
-      await service.deleteEvent(id);
-      const data = await service.getEvents();
+      await eventService.deleteEvent(id);
+      const data = await eventService.getEvents();
       setData(data);
     } catch {
       message.error('Failed to delete item. Please try later.');
@@ -53,9 +55,9 @@ function Page(props: Props) {
       try {
         const record = createRecord(values);
         if (modalAction === 'update') {
-          await service.updateEvent(modalData!.id!, record);
+          await eventService.updateEvent(modalData!.id!, record);
         } else {
-          await service.createEvent(record);
+          await eventService.createEvent(record);
         }
         setModalData(null);
         await loadData();
@@ -117,7 +119,7 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Events">
+    <AdminPageLayout session={props.session} title="Manage Events" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Event
@@ -203,4 +205,5 @@ function getInitialValues(modalData: Partial<Event>) {
   return modalData;
 }
 
+export { getServerSideProps };
 export default withSession(Page);

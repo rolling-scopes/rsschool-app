@@ -25,12 +25,13 @@ import { Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 
 const { Content } = Layout;
-type Props = { session: Session };
+type Props = { session: Session; courses: Course[] };
 
 function Page(props: Props) {
-  const [courses, setCourses] = useState([] as Course[]);
+  const [courses, setCourses] = useState<Course[]>(props.courses);
   const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
@@ -48,7 +49,7 @@ function Page(props: Props) {
     setDiscordServers(discordServers);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -237,7 +238,7 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Courses">
+    <AdminPageLayout session={props.session} title="Manage Courses" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Course
@@ -367,5 +368,7 @@ function getInitialValues(modalData: Partial<Course>) {
         : null,
   };
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);
