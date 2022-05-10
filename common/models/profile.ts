@@ -103,6 +103,7 @@ export interface StudentTasksDetail {
   taskGithubPrUris: string;
   score: number;
   comment: string;
+  interviewDate?: string;
   interviewer?: {
     name: string;
     githubId: string;
