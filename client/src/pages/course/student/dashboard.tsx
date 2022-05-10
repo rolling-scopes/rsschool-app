@@ -22,11 +22,12 @@ import {
   RepositoryCard,
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
-import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { CoursesTasksApi, CourseTaskDto, CourseStatsApi } from 'api';
 
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
 
 const coursesTasksApi = new CoursesTasksApi();
+const coursesStatsApi = new CourseStatsApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
@@ -45,6 +46,7 @@ function Page(props: CoursePageProps) {
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
+  const [totalStudentsCount, setTotalStudentsCount] = useState(0);
   const [loading, withLoading] = useLoading(false);
 
   const updateUrl = async () => {
@@ -59,11 +61,12 @@ function Page(props: CoursePageProps) {
 
   useAsync(
     withLoading(async () => {
-      const [studentSummary, { data: courseTasks }, statisticsCourses, courseEvents] = await Promise.all([
+      const [studentSummary, { data: courseTasks }, statisticsCourses, courseEvents, courseStats] = await Promise.all([
         courseService.getStudentSummary(githubId),
         coursesTasksApi.getCourseTasks(props.course.id),
         userService.getProfileInfo(githubId),
         courseService.getCourseEvents(),
+        coursesStatsApi.getCourseStats(props.course.id),
       ]);
 
       const startOfToday = moment().startOf('day');
@@ -81,6 +84,7 @@ function Page(props: CoursePageProps) {
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
+      setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
     }),
     [props.course.id],
   );
@@ -125,6 +129,7 @@ function Page(props: CoursePageProps) {
         totalScore={totalScore}
         position={studentPosition}
         maxCourseScore={maxCourseScore}
+        totalStudentsCount={totalStudentsCount}
       />
     ),
     usePrivateRepositories && (
@@ -154,8 +159,8 @@ function Page(props: CoursePageProps) {
               breakpointCols={{
                 default: 4,
                 1100: 3,
-                700: 2,
-                500: 1,
+                800: 2,
+                560: 1,
               }}
               className={masonryClassName}
               columnClassName={masonryColumnClassName}
