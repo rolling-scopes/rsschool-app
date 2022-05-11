@@ -908,6 +908,86 @@ export interface CreateUserGroupDto {
 /**
  * 
  * @export
+ * @interface CrossCheckPairDto
+ */
+export interface CrossCheckPairDto {
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CrossCheckPairDto
+     */
+    'student': PersonDto;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CrossCheckPairDto
+     */
+    'checker': PersonDto;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof CrossCheckPairDto
+     */
+    'task': IdNameDto;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckPairDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckPairDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckPairDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckPairDto
+     */
+    'url': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckPairDto
+     */
+    'reviewedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckPairDto
+     */
+    'submittedDate': string;
+}
+/**
+ * 
+ * @export
+ * @interface CrossCheckPairResponseDto
+ */
+export interface CrossCheckPairResponseDto {
+    /**
+     * 
+     * @type {Array<CrossCheckPairDto>}
+     * @memberof CrossCheckPairResponseDto
+     */
+    'items': Array<CrossCheckPairDto>;
+    /**
+     * 
+     * @type {PaginationDto}
+     * @memberof CrossCheckPairResponseDto
+     */
+    'pagination': PaginationDto;
+}
+/**
+ * 
+ * @export
  * @interface DisciplineDto
  */
 export interface DisciplineDto {
@@ -1247,6 +1327,25 @@ export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface IdNameDto
+ */
+export interface IdNameDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof IdNameDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof IdNameDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
  * @interface InterviewDto
  */
 export interface InterviewDto {
@@ -1296,6 +1395,12 @@ export interface MentorStudentDto {
     'name': string;
     /**
      * 
+     * @type {string}
+     * @memberof MentorStudentDto
+     */
+    'githubId': string;
+    /**
+     * 
      * @type {number}
      * @memberof MentorStudentDto
      */
@@ -1318,12 +1423,6 @@ export interface MentorStudentDto {
      * @memberof MentorStudentDto
      */
     'countryName': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorStudentDto
-     */
-    'githubId': string;
     /**
      * 
      * @type {number}
@@ -1491,6 +1590,37 @@ export interface NotificationUserSettingsDto {
 /**
  * 
  * @export
+ * @interface PaginationDto
+ */
+export interface PaginationDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationDto
+     */
+    'pageSize': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationDto
+     */
+    'current': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationDto
+     */
+    'total': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationDto
+     */
+    'totalPages': number;
+}
+/**
+ * 
+ * @export
  * @interface PartialStudentVisibilitySettings
  */
 export interface PartialStudentVisibilitySettings {
@@ -1519,6 +1649,12 @@ export interface PersonDto {
      * @memberof PersonDto
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonDto
+     */
+    'githubId': string;
     /**
      * 
      * @type {number}
@@ -1802,16 +1938,16 @@ export interface ResumeCourseMentor {
     'name': string;
     /**
      * 
-     * @type {number}
-     * @memberof ResumeCourseMentor
-     */
-    'id': number;
-    /**
-     * 
      * @type {string}
      * @memberof ResumeCourseMentor
      */
     'githubId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeCourseMentor
+     */
+    'id': number;
 }
 /**
  * 
@@ -2131,6 +2267,12 @@ export interface StudentDto {
     'name': string;
     /**
      * 
+     * @type {string}
+     * @memberof StudentDto
+     */
+    'githubId': string;
+    /**
+     * 
      * @type {number}
      * @memberof StudentDto
      */
@@ -2153,12 +2295,6 @@ export interface StudentDto {
      * @memberof StudentDto
      */
     'countryName': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof StudentDto
-     */
-    'githubId': string;
     /**
      * 
      * @type {number}
@@ -4085,6 +4221,83 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @param {number} courseId 
+         * @param {number} pageSize 
+         * @param {number} current 
+         * @param {string} [orderBy] 
+         * @param {string} [orderDirection] 
+         * @param {string} [checker] 
+         * @param {string} [student] 
+         * @param {string} [url] 
+         * @param {string} [task] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCrossCheckPairs: async (courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCrossCheckPairs', 'courseId', courseId)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('getCrossCheckPairs', 'pageSize', pageSize)
+            // verify required parameter 'current' is not null or undefined
+            assertParamExists('getCrossCheckPairs', 'current', current)
+            const localVarPath = `/courses/{courseId}/cross-checks/pairs`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (orderBy !== undefined) {
+                localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (orderDirection !== undefined) {
+                localVarQueryParameter['orderDirection'] = orderDirection;
+            }
+
+            if (checker !== undefined) {
+                localVarQueryParameter['checker'] = checker;
+            }
+
+            if (student !== undefined) {
+                localVarQueryParameter['student'] = student;
+            }
+
+            if (url !== undefined) {
+                localVarQueryParameter['url'] = url;
+            }
+
+            if (task !== undefined) {
+                localVarQueryParameter['task'] = task;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4152,6 +4365,24 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} courseId 
+         * @param {number} pageSize 
+         * @param {number} current 
+         * @param {string} [orderBy] 
+         * @param {string} [orderDirection] 
+         * @param {string} [checker] 
+         * @param {string} [student] 
+         * @param {string} [url] 
+         * @param {string} [task] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckPairResponseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4189,6 +4420,23 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: any): AxiosPromise<Array<CourseTaskDto>> {
             return localVarFp.getCourseTasks(courseId, status, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} pageSize 
+         * @param {number} current 
+         * @param {string} [orderBy] 
+         * @param {string} [orderDirection] 
+         * @param {string} [checker] 
+         * @param {string} [student] 
+         * @param {string} [url] 
+         * @param {string} [task] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: any): AxiosPromise<CrossCheckPairResponseDto> {
+            return localVarFp.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4231,6 +4479,25 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCourseTasks(courseId, status, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} pageSize 
+     * @param {number} current 
+     * @param {string} [orderBy] 
+     * @param {string} [orderDirection] 
+     * @param {string} [checker] 
+     * @param {string} [student] 
+     * @param {string} [url] 
+     * @param {string} [task] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
