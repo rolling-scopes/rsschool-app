@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from "next/router";
 import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import {
   EditOutlined,
@@ -27,34 +28,36 @@ type Props = {
 export function Header(props: Props) {
   const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible } = props;
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
+  const { asPath: currentRoute } = useRouter();
+
   const menu = (
     <Menu>
-      <Menu.Item key="0" style={isProfileEditingModeEnabled ? undefined : menuActiveItemStyle}>
+      <Menu.Item key="0" style={isProfilePage && !isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={isProfilePage ? '#view' : '/profile#view'}
+          href={'/profile#view'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('view') : undefined}
           style={{ textAlign: 'left' }}
         >
           <EyeOutlined /> View
         </Button>
       </Menu.Item>
-      <Menu.Item key="1" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+      <Menu.Item key="1" style={isProfilePage && isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={isProfilePage ? '#edit' : '/profile#edit'}
+          href={'/profile#edit'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('edit') : undefined}
           style={{ textAlign: 'left' }}
         >
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+      <Menu.Item key="2" style={currentRoute === '/profile/notifications' ? menuActiveItemStyle : undefined}>
         <Button type="link" href={'/profile/notifications'} style={{ textAlign: 'left' }}>
           <NotificationOutlined /> Notifications
         </Button>
       </Menu.Item>
-      <Menu.Item key="3">
+      <Menu.Item key="3" style={currentRoute === '/cv/edit' ? menuActiveItemStyle : undefined}>
         <Button type="link" href={`/cv/edit`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
         </Button>
