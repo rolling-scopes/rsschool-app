@@ -6,7 +6,8 @@ import { CrossCheckComments } from 'components/CrossCheckComments';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import {
   CourseService,
@@ -18,6 +19,7 @@ import {
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
+import { getQueryString } from 'utils/queryParams-utils';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -26,7 +28,9 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const [feedback, setFeedback] = useState<Feedback>();
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
-  const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+  const router = useRouter();
+  const queryTaskId = router.query.taskId ? +router.query.taskId : null;
+  const [courseTaskId, setCourseTaskId] = useState(queryTaskId);
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
   const [comments, setComments] = useState([] as CrossCheckComment[]);
   const [newComments, setNewComments] = useState([] as CrossCheckComment[]);
@@ -40,6 +44,14 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     () => courseService.getCourseCrossCheckTasks('started'),
     [props.course.id],
   );
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (queryTaskId) {
+      handleTaskChange(queryTaskId);
+    }
+  }, [loading, queryTaskId]);
 
   const handleSubmit = async (values: { url: string; review: CrossCheckReview[] }) => {
     if (!courseTaskId) {
@@ -92,6 +104,12 @@ export function CrossCheckSubmit(props: CoursePageProps) {
 
   const cancellationChange = (e: CheckboxChangeEvent) => setButtonDisabled(!e.target.checked);
 
+  function selectTask(value: number) {
+    const query = { ...router.query, taskId: value };
+    const url = `${router.route}${getQueryString(query)}`;
+    router.replace(url);
+  }
+
   const handleTaskChange = async (value: number) => {
     setFeedback(undefined);
     const courseTaskId = Number(value);
@@ -99,6 +117,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     if (courseTask == null) {
       return;
     }
+
     const [feedback, submittedSolution, taskDetails] = await Promise.all([
       courseService.getCrossCheckFeedback(props.session.githubId, courseTask.id),
       courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
@@ -145,9 +164,14 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             {courseTasks.length > 0 && (
-              <CourseTaskSelect data={courseTasks} groupBy="deadline" onChange={handleTaskChange} />
+              <CourseTaskSelect
+                data={courseTasks}
+                groupBy="deadline"
+                onChange={selectTask}
+                defaultValue={courseTaskId}
+              />
             )}
-            {courseTasks.length === 0 && <NoSubmissionAvailable courseAlias={props.course.alias} />}
+            {courseTasks.length === 0 && !loading && <NoSubmissionAvailable courseAlias={props.course.alias} />}
             <SubmittedStatus
               taskExists={taskExists}
               solution={submittedSolution}
