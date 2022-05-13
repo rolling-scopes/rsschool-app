@@ -1,21 +1,21 @@
 import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { Calendar, Badge, Typography, Tooltip } from 'antd';
-import { CourseEvent } from 'services/course';
 import { getMonthValue, getListData } from './utils';
 import ModalWindow from './ModalWindow';
+import { ScheduleEvent } from '../model';
 
 const { Title } = Typography;
 
 type Props = {
-  data: CourseEvent[];
+  data: ScheduleEvent[];
   timezone: string;
   tagColors: Record<string, string>;
   alias: string;
 };
 
 const DesktopCalendar: React.FC<Props> = ({ data, timezone, tagColors, alias }) => {
-  const [modalWindowData, setModalWindowData] = useState<CourseEvent | null>(null);
+  const [modalWindowData, setModalWindowData] = useState<ScheduleEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
 
   const handleOnClose = () => {

@@ -9,6 +9,8 @@ import {
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from 'components/Schedule';
+import { BaseType } from 'antd/lib/typography/Base';
+import { ScheduleEvent } from 'components/Schedule/model';
 
 const { Text } = Typography;
 
@@ -30,6 +32,27 @@ export function shortDateTimeRenderer(value: string) {
 
 export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (value: string) =>
   value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format(format) : '';
+
+export const coloredDateRenderer =
+  (timeZone: string, format: string, date: 'start' | 'end') =>
+  (value: string, { startDate, endDate, score }: ScheduleEvent) => {
+    let color: BaseType | undefined = undefined;
+    const now = moment();
+    const start = moment(startDate);
+    const end = moment(endDate);
+
+    const isDeadlineSoon = now <= end && moment(end).subtract(48, 'hours') <= now && !score?.total;
+    const isCurrent = now >= start && now < end && !score?.total;
+    const isDeadlineMissed = now >= end && moment(end).add(24, 'hours') >= now && !score?.total;
+    const isPast = now > end || score?.total;
+
+    if (isDeadlineSoon && date === 'end') color = 'warning';
+    else if (isCurrent && date === 'start') color = 'success';
+    else if (isDeadlineMissed && date === 'end') color = 'danger';
+    else if (isPast) color = 'secondary';
+
+    return <Text type={color}>{dateWithTimeZoneRenderer(timeZone, format)(value)}</Text>;
+  };
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
@@ -120,22 +143,16 @@ export const urlRenderer = (url: string) =>
     </Tooltip>
   );
 
-export const scoreRenderer = (score: string) => {
-  if (!score) {
-    return;
-  }
+export const scoreRenderer = (score: { total: number; max: number; donePercent: number } | null) => {
+  if (!score) return null;
 
-  const [num, total] = score.split('/');
-
-  if (!num || !total) {
-    return;
-  }
-
-  const done = ((+num / +total) * 100).toFixed();
+  const { total, max, donePercent } = score;
 
   return (
-    <Tooltip placement="topLeft" title={`Done: ${done} %.`}>
-      <Text strong>{score}</Text>
+    <Tooltip placement="topLeft" title={`Done: ${donePercent}%`}>
+      <Text strong>
+        {total}/{max}
+      </Text>
     </Tooltip>
   );
 };

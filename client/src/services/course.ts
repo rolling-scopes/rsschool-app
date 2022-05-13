@@ -112,7 +112,7 @@ export interface CourseEvent {
   owner: string;
   coordinator: string;
   organizerId: number;
-  organizer: UserBasic;
+  organizer: UserBasic | null;
   detailsUrl: string;
   broadcastUrl: string;
   special?: string;
