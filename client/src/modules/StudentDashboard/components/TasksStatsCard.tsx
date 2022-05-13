@@ -2,7 +2,9 @@ import { AuditOutlined } from '@ant-design/icons';
 import { CourseTaskDto } from 'api';
 import { StudentStats } from 'common/models';
 import dynamic from 'next/dynamic';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { getQueryString } from 'utils/queryParams-utils';
 import CommonCard from './CommonDashboardCard';
 import { TasksStatsModal } from './TasksStatsModal';
 
@@ -35,9 +37,9 @@ interface IChartsConfigDataDatasets {
 }
 
 enum GroupTaskName {
-  Completed = 'Completed',
-  NotCompleted = 'Not completed',
-  Future = 'Future',
+  Completed = 'completed',
+  NotCompleted = 'notCompleted',
+  Future = 'future',
 }
 
 type Props = {
@@ -54,6 +56,26 @@ export function TasksStatsCard(props: Props) {
     tasks: { completed, notDone, future },
     courseName,
   } = props;
+
+  const router = useRouter();
+  const queryStatType = router.query.statType ? (router.query.statType as string) : null;
+
+  useEffect(() => {
+    if (queryStatType) {
+      showTasksStatsModal(queryStatType);
+    }
+  }, [queryStatType]);
+
+  function updateUrl(statType?: string) {
+    const query = { ...router.query };
+    if (statType) {
+      query.statType = statType;
+    } else {
+      delete query.statType;
+    }
+    const url = `${router.route}${getQueryString(query)}`;
+    router.replace(url);
+  }
 
   const showTasksStatsModal = useCallback((chartLabel: string) => {
     switch (chartLabel) {
@@ -75,6 +97,7 @@ export function TasksStatsCard(props: Props) {
 
   const hideTasksStatsModal = () => {
     setTasksStatsModalVisible(false);
+    updateUrl();
   };
 
   const data = [
@@ -103,7 +126,7 @@ export function TasksStatsCard(props: Props) {
         icon={<AuditOutlined />}
         content={
           <div style={{ minWidth: 200, maxWidth: 200, margin: 'auto' }}>
-            <TasksChart data={data} colors={colors} onItemSelected={data => showTasksStatsModal(data.type)} />
+            <TasksChart data={data} colors={colors} onItemSelected={data => updateUrl(data.type)} />
           </div>
         }
       />
