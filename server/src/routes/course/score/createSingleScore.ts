@@ -54,7 +54,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
     return;
   }
 
-  const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
+  const result = await scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
 
   try {
