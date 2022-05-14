@@ -1,7 +1,7 @@
 import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -28,19 +28,16 @@ function Page(props: Props) {
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseEvent[]);
   const [events, setEvents] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
 
-  useAsync(async () => {
-    setLoading(true);
+  const { loading } = useAsync(async () => {
     const [data, events] = await Promise.all([service.getCourseEvents(), new EventService().getEvents()]);
     setData(data);
     setEvents(events);
-    setLoading(false);
   }, [courseId]);
 
   const handleTimeZoneChange = (timeZone: string) => {
@@ -154,7 +151,7 @@ function Page(props: Props) {
   };
 
   return (
-    <PageLayout loading={loading} githubId={props.session.githubId}>
+    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
       <Button type="primary" onClick={handleAddItem}>
         Add Event
       </Button>
@@ -180,7 +177,7 @@ function Page(props: Props) {
         columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events })}
       />
       {renderModal(modalData!)}
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 

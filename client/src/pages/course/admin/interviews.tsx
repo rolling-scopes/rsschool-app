@@ -1,7 +1,7 @@
 import { Button, Row, Select, Table } from 'antd';
 import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
@@ -47,7 +47,13 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
+    <AdminPageLayout
+      loading={loading}
+      title="Interviews"
+      session={props.session}
+      courseName={props.course.name}
+      courses={[props.course]}
+    >
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
           {interviews.map(interview => (
@@ -122,7 +128,7 @@ function Page(props: CoursePageProps) {
         visible={modal}
         courseId={props.course.id}
       />
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 

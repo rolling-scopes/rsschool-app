@@ -13,7 +13,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isCourseSupervisor } from 'domain/user';
+import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager } from 'domain/user';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -128,64 +128,9 @@ const links: LinkData[] = [
   },
 ];
 
-const courseManagementLinks: LinkData[] = [
-  {
-    name: 'Course Events',
-    getUrl: (course: Course) => `/course/admin/events?course=${course.alias}`,
-    access: isCourseManager,
-  },
-  {
-    name: `Course Tasks`,
-    getUrl: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
-    access: isCourseManager,
-  },
-  {
-    name: `Course Students`,
-    getUrl: (course: Course) => `/course/admin/students?course=${course.alias}`,
-    access: some(isCourseManager, isCourseSupervisor),
-  },
-  {
-    name: `Course Mentors`,
-    getUrl: (course: Course) => `/course/admin/mentors?course=${course.alias}`,
-    access: some(isCourseManager, isCourseSupervisor),
-  },
-  {
-    name: `Course Users`,
-    getUrl: (course: Course) => `/course/admin/users?course=${course.alias}`,
-    access: isAdmin,
-  },
-  {
-    name: `Cross-Сheck Table`,
-    getUrl: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
-    access: isCourseManager,
-  },
-  {
-    name: `Technical Screening`,
-    getUrl: (course: Course) => `/course/admin/stage-interviews?course=${course.alias}`,
-    access: some(isCourseManager, isCourseSupervisor),
-  },
-  {
-    name: `CoreJs Interviews`,
-    getUrl: (course: Course) => `/course/admin/interviews?course=${course.alias}`,
-    access: isCourseManager,
-  },
-];
-
 export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {
   return activeCourse
     ? links
-        .filter(
-          route =>
-            isAdmin(session) ||
-            (route.access(session, activeCourse.id) && (route.courseAccess?.(session, activeCourse) ?? true)),
-        )
-        .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
-    : [];
-}
-
-export function getAdminLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {
-  return activeCourse
-    ? courseManagementLinks
         .filter(
           route =>
             isAdmin(session) ||

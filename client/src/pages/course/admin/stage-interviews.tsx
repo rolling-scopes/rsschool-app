@@ -1,5 +1,5 @@
 import { Button, Row, Table, Modal, Checkbox } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
@@ -50,11 +50,12 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <PageLayout
+    <AdminPageLayout
       loading={loading}
       title="Technical Screening"
-      githubId={props.session.githubId}
+      session={props.session}
       courseName={props.course.name}
+      courses={[props.course]}
     >
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Button type="primary" onClick={() => setModal(true)}>
@@ -139,7 +140,7 @@ function Page(props: CoursePageProps) {
         visible={modal}
         courseId={props.course.id}
       />
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 

@@ -186,12 +186,13 @@ export class ProfilePage extends React.Component<Props, State> {
         locationName,
         interviews: tasks
           .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer, name }) => ({
+          .map(({ interviewFormAnswers, score, comment, interviewer, name, interviewDate }) => ({
             score,
             comment,
             interviewer,
             answers: interviewFormAnswers,
             name,
+            interviewDate,
           })),
       })) as CoreJsInterviewsData[];
 
@@ -346,6 +347,7 @@ export class ProfilePage extends React.Component<Props, State> {
       isProfileOwner,
       connections,
     } = this.state;
+
     const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
     const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
 
@@ -390,6 +392,7 @@ export class ProfilePage extends React.Component<Props, State> {
       profile?.contacts !== undefined && (
         <ContactsCard
           data={profile.contacts}
+          initialContacts={this.state.initialProfileSettings?.contacts}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}

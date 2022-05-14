@@ -27,7 +27,7 @@
     "csvtojson": "2.0.10",
     "lodash": "4.17.21",
     "mobile-device-detect": "0.4.3",
-    "moment": "2.29.1",
+    "moment": "2.29.2",
     "moment-timezone": "0.5.34",
     "next": "12.1.1",
     "react": "17.0.2",

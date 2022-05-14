@@ -1,37 +1,72 @@
 import React from 'react';
 import { Datum, Gauge, GaugeConfig } from '@ant-design/charts';
 
-const PerformanceChart: React.FC<{ percent: number; text: string }> = ({ percent, text }) => {
-  const ticks = [0, 1];
-  const color = ['#F4664A', '#FAAD14', '#30BF78'];
+const PerformanceChart: React.FC<{ percent: number; text?: string }> = ({ percent, text = '' }) => {
+  const COLORS = {
+    primaryColor: '#1890FFD9',
+    secondaryColor: '#1890FF',
+    titleColor: 'rgba(0, 0, 0, 0.85)',
+    contentColor: 'rgba(0, 0, 0, 0.45)',
+  };
+
   const config: GaugeConfig = {
     style: {
       height: 200,
       width: 200,
     },
-    percent,
-    innerRadius: 0.75,
-    type: 'meter',
+    // when percent = 0 range looks the same as when percent = 100 (colorful), therefore added that patch
+    percent: percent === 0 ? 0.001 : percent,
     range: {
-      ticks,
-      color: ['l(0) 0:#F4664A 0.5:#FAAD14 1:#30BF78'],
+      color: COLORS.primaryColor,
+      width: 12.6,
     },
     indicator: {
-      pointer: { style: { stroke: '#D0D0D0' } },
-      pin: { style: { stroke: '#D0D0D0' } },
+      pointer: {
+        style: {
+          stroke: COLORS.secondaryColor,
+        },
+      },
+      pin: {
+        style: {
+          stroke: COLORS.secondaryColor,
+        },
+      },
+    },
+    axis: {
+      tickLine: {
+        style: {
+          stroke: COLORS.secondaryColor,
+          lineWidth: 2,
+        },
+        length: -8,
+      },
+      subTickLine: {
+        count: 0,
+      },
+      tickInterval: 0.333,
+      label: {
+        style: {
+          opacity: 0,
+        },
+      },
     },
     statistic: {
       title: {
         formatter: ({ percent }: Datum = { percent: 0 }) => `${Math.round(percent * 100)}%`,
-        style: ({ percent }: Datum = { percent: 0 }) => ({
-          fontSize: '14px',
-          lineHeight: 1,
-          color: percent < ticks[1] ? color[0] : percent < ticks[2] ? color[1] : color[2],
-        }),
+        offsetY: 10,
+        style: {
+          fontSize: '24px',
+          lineHeight: '32px',
+          color: COLORS.titleColor,
+        },
       },
       content: {
-        offsetY: 36,
-        style: { fontSize: '18px', color: '#4B535E' },
+        offsetY: 50,
+        style: {
+          fontSize: '14px',
+          lineHeight: '22px',
+          color: COLORS.contentColor,
+        },
         formatter: () => text,
       },
     },

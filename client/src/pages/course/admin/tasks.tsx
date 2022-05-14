@@ -1,7 +1,7 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import {
@@ -260,7 +260,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout loading={loading} githubId={props.session.githubId}>
+    <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
       <Button type="primary" onClick={handleAddItem}>
         Add Task
       </Button>
@@ -273,7 +273,7 @@ function Page(props: CoursePageProps) {
         columns={getColumns(getDropdownMenu, { tasks })}
       />
       {renderModal(modalData)}
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 

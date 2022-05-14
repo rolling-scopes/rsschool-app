@@ -86,7 +86,7 @@ Messages in the channel #cross-check must be directed towards the discussion of 
 ## Appeal
 
 - takes place if there are any activists, who want to drive the process.
-- takes place if you changed your work after the deadline.
+- takes place if you DIDN'T make changes to your work after the deadline.
 - takes place after all checks of your work and step #4 completion (see above).
 - takes place if your expected score and obtained average score (step #4) differ by 10 or more percent.
 - the score can be increased as well as reduced without any further discussion.

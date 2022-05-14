@@ -1,17 +1,19 @@
 import { Button, Col, Form, Input, Layout, message, Popconfirm, Row, Select, Table, Tag } from 'antd';
 import { UpdateUserGroupDto, UserGroupApi, UserGroupDto } from 'api';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { ModalForm } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { AdminPageLayout } from 'components/PageLayout';
 import { stringSorter } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import { Session, withSession } from 'components/withSession';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
+import { Course } from 'services/models';
 import { UserService } from 'services/user';
 
 const { Content } = Layout;
-type Props = { session: Session };
+type Props = { session: Session; courses: Course[] };
 
 enum ModalAction {
   update = 'update',
@@ -38,7 +40,7 @@ function Page(props: Props) {
     setData(data);
   };
 
-  useAsync(loadData, []);
+  const { loading } = useAsync(loadData, []);
 
   const loadUsers = async (searchText: string) => {
     return userService.searchUser(searchText);
@@ -127,7 +129,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage User Groups">
+    <AdminPageLayout session={props.session} title="Manage User Groups" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add User Group
@@ -221,5 +223,7 @@ function getInitialValues(modalData: Partial<UserGroupDto>) {
     users: modalData.users?.map(user => user.id) ?? [],
   };
 }
+
+export { getServerSideProps };
 
 export default withSession(Page);
