@@ -1,6 +1,6 @@
 import { HeartTwoTone } from '@ant-design/icons';
 import { Button, Col, Result, Row } from 'antd';
-import { RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
+import Link from 'next/link';
 
 export function MentorStepSuccess() {
   const titleCmp = (
@@ -8,8 +8,9 @@ export function MentorStepSuccess() {
       <Col xs={18} sm={16} md={12}>
         <p>Your application has been saved!</p>
         <p>
-          Subscribe to our <a href={RSSCHOOL_BOT_LINK}>Telegram-bot</a>. Before the start of the course, it will send
-          you the message to confirm your participation in the course and provide the next steps.
+          Subscribe to our <Link href="/profile/notifications">notifications</Link>. Before the start of the course, we
+          will send you the message to confirm your participation in the course and provide the next steps via
+          subscribed channel.
         </p>
         <p>
           Thanks a lot for your interest! <HeartTwoTone twoToneColor="#eb2f96" />
