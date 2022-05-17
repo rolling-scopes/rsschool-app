@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react';
 import moment from 'moment-timezone';
 import {
   CheckCircleFilled,
@@ -37,10 +36,18 @@ export function boolRenderer(value: string) {
 
 export function buildCheckBoxRenderer<T>(
   dataIndex: string[],
-  onChange: (id: string[], record: T, event: ChangeEvent<HTMLInputElement>) => void,
+  onChange: (id: string[], record: T, checked: boolean) => void,
+  undefinedAsTrue?: boolean,
 ) {
-  return function (value: boolean = false, record: T) {
-    return <input type="checkbox" checked={value} onChange={event => onChange(dataIndex, record, event)} />;
+  return function (value: boolean, record: T) {
+    const defaultValue = value ?? false;
+    return (
+      <input
+        type="checkbox"
+        checked={undefinedAsTrue ? value === undefined || defaultValue : defaultValue}
+        onChange={event => onChange(dataIndex, record, event.target.checked)}
+      />
+    );
   };
 }
 
