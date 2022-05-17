@@ -98,7 +98,7 @@ export class NotificationsService {
     });
   }
 
-  public buildChannelMessage(channel: NotificationChannelSettings & { externalId: string }, data: object) {
+  public buildChannelMessage(channel: NotificationChannelSettings & { externalId?: string }, data: object) {
     const { channelId, externalId, template } = channel;
     if (!externalId || !template) return;
 
