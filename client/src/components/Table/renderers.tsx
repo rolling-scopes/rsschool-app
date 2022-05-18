@@ -8,6 +8,7 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
+import { Checker, CrossCheckStatus } from '../../services/course';
 import { getTagStyle } from 'components/Schedule';
 import { BaseType } from 'antd/lib/typography/Base';
 import { ScheduleEvent } from 'components/Schedule/model';
@@ -16,6 +17,21 @@ const { Text } = Typography;
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
+}
+
+export function crossCheckDateRenderer(value: string | null, { checker }: { checker: Checker }) {
+  if (checker !== 'crossCheck') return 'N/A';
+  return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
+}
+
+export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: Checker }) {
+  return checker !== 'crossCheck' ? (
+    'N/A'
+  ) : value === 'initial' ? (
+    'Not distributed'
+  ) : (
+    <span style={{ textTransform: 'capitalize' }}>{value}</span>
+  );
 }
 
 export function timeRenderer(value: string) {

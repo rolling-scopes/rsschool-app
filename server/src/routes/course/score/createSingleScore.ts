@@ -1,6 +1,7 @@
 import Router from '@koa/router';
 import { AxiosError } from 'axios';
 import { BAD_REQUEST, OK } from 'http-status-codes';
+import { config } from '../../../config';
 import { ILogger } from '../../../logger';
 import { isAdmin, isManager, isTaskOwner, IUserSession } from '../../../models';
 import { courseService, notificationService, taskService } from '../../../services';
@@ -39,7 +40,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   logger.info(data);
 
   const authorId = ctx.state.user.id;
-  const courseTask = await taskService.getCourseTask(courseTaskId);
+  const courseTask = await taskService.getCourseTask(courseTaskId, true);
   if (courseTask == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
     return;
@@ -53,7 +54,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
     return;
   }
 
-  const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
+  const result = await scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
 
   try {
@@ -64,6 +65,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
         courseTask,
         score: data.score,
         comment: data.comment,
+        resultLink: `${config.host}/course/student/dashboard?course=${courseTask.course.alias}&statType=completed`,
       },
     });
   } catch (e) {
