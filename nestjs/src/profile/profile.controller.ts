@@ -1,9 +1,10 @@
 import { Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
 import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto } from './dto';
+import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
@@ -49,5 +50,18 @@ export class ProfileController {
     } = req;
 
     await this.profileService.updateProfile(id, dto);
+  }
+
+  @Get(':username')
+  @ApiOperation({ operationId: 'getProfile' })
+  @ApiResponse({ type: ProfileDto })
+  public async getProfileInfo(@Req() req: CurrentRequest, @Param('username') _: string) {
+    const {
+      user: { id },
+    } = req;
+
+    const profile = await this.profileService.getProfile(id);
+
+    return new ProfileDto(profile);
   }
 }

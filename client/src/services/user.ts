@@ -1,9 +1,18 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileInfo } from 'common/models/profile';
-import { ProfileApi, ProfileInfoDto, UsersNotificationsApi } from 'api';
+import { ProfileApi, ProfileDto, ProfileInfoDto, UsersNotificationsApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
+import type {
+  ConfigurableProfilePermissions,
+  Contacts,
+  Discord,
+  GeneralInfo,
+  MentorStats,
+  PublicFeedback,
+  StageInterviewDetailedFeedback,
+  StudentStats,
+} from 'common/models/profile';
 
 export interface UserBasic {
   name: string;
@@ -202,3 +211,14 @@ export interface ProfileResponse {
   students: (ResponseStudent & { course: ResponseCourse })[];
   mentors: (ResponseMentor & { course: ResponseCourse })[];
 }
+
+export type ProfileInfo = {
+  permissionsSettings?: ConfigurableProfilePermissions;
+  generalInfo?: GeneralInfo;
+  contacts?: Contacts;
+  mentorStats?: MentorStats[];
+  studentStats?: StudentStats[];
+  publicFeedback?: PublicFeedback[];
+  stageInterviewFeedback?: StageInterviewDetailedFeedback[];
+  discord: Discord | null;
+} & ProfileDto;

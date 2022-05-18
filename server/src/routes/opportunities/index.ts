@@ -1,7 +1,6 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { guard } from '../guards';
-import { getApplicants } from './getApplicants';
 import { getResume } from './getResume';
 import { saveResume } from './saveResume';
 import { updateStatus } from './updateStatus';
@@ -16,8 +15,6 @@ export function opportunitiesRoute(logger: ILogger) {
   router.post('/resume', guard, saveResume(logger));
 
   router.post('/visibility', guard, updateVisibility(logger));
-
-  router.get('/applicants', guard, getApplicants(logger));
 
   return router;
 }

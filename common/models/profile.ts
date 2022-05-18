@@ -157,13 +157,4 @@ export interface UserInfo {
   discord: Discord | null;
 }
 
-export interface ProfileInfo {
-  permissionsSettings?: ConfigurableProfilePermissions;
-  generalInfo?: GeneralInfo;
-  contacts?: Contacts;
-  mentorStats?: MentorStats[];
-  studentStats?: StudentStats[];
-  publicFeedback?: PublicFeedback[];
-  stageInterviewFeedback?: StageInterviewDetailedFeedback[];
-  discord: Discord | null;
-}
+

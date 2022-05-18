@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, Generated } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Index,
+  ManyToOne,
+  Generated,
+  UpdateDateColumn,
+  JoinColumn,
+} from 'typeorm';
 import { LanguageLevel } from './data';
 import { User } from './user';
 
@@ -7,11 +16,15 @@ export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @UpdateDateColumn()
+  updatedDate: number;
+
   @Generated('uuid')
   @Column({ nullable: true })
   uuid: string;
 
   @ManyToOne(_ => User)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column({ nullable: true })

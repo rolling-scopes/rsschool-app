@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
-import { ProfileInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { getMentorStats } from './mentor-stats';
 import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
@@ -70,7 +70,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     ? await getStageInterviewFeedback(requestedGithubId)
     : undefined;
 
-  const profileInfo: ProfileInfo = {
+  const profileInfo = {
     permissionsSettings,
     generalInfo,
     contacts,

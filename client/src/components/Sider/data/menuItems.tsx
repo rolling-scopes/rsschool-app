@@ -108,10 +108,10 @@ const adminMenuItems: AdminMenuItemsData[] = [
     access: session => isAdmin(session),
   },
   {
-    name: 'Employer Page',
-    key: 'employerPage',
+    name: 'Applicants',
+    key: 'applicants',
     icon: <ProfileFilled />,
-    href: '/employer',
+    href: '/applicants',
     access: session => isAdmin(session) || isHirer(session),
   },
   {

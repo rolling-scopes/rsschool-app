@@ -43,6 +43,18 @@ export class OpportunitiesService {
     return await this.getFullResume(resume);
   }
 
+  public async getApplicantResumes(): Promise<Resume[]> {
+    const resume = await this.resumeRepository
+      .createQueryBuilder('r')
+      .innerJoin('r.user', 'u')
+      .where('u."opportunitiesConsent" = true')
+      .andWhere('r.name IS NOT NULL')
+      .addSelect(['u.id', 'u.githubId'])
+      .getMany();
+
+    return resume;
+  }
+
   public async getConsent(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
     if (user == null) {
