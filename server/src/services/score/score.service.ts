@@ -248,7 +248,11 @@ export class ScoreService {
     });
   }
 
-  public async saveScore(studentId: number, courseTaskId: number, data: TaskResultData): Promise<boolean> {
+  public async saveScore(
+    studentId: number,
+    courseTaskId: number,
+    data: TaskResultData,
+  ): Promise<[boolean, TaskResult | undefined] | [boolean]> {
     const { authorId = 0, githubPrUrl = null } = data;
 
     const comment = this.trimComment(data.comment ?? '');
@@ -266,21 +270,27 @@ export class ScoreService {
         authorId,
       });
       await this.taskResultRepository.insert(taskResult);
-      return true;
+      return [true];
     }
 
     if (current.githubRepoUrl === githubPrUrl && current.comment === comment && current.score === score) {
-      return true;
+      return [true];
+    }
+
+    let previousScore: TaskResult | undefined = undefined;
+    if (current.comment !== comment || current.score !== score) {
+      previousScore = { ...current };
+      current.historicalScores.push(this.createHistoricalRecord(data));
     }
 
     if (githubPrUrl) {
       current.githubPrUrl = githubPrUrl;
     }
+
     if (comment) {
       current.comment = comment;
     }
     if (score !== current.score) {
-      current.historicalScores.push(this.createHistoricalRecord(data));
       if (authorId > 0) {
         current.lastCheckerId = authorId;
       }
@@ -294,7 +304,7 @@ export class ScoreService {
       historicalScores: current.historicalScores,
       lastCheckerId: current.lastCheckerId,
     });
-    return false;
+    return [false, previousScore];
   }
 
   private getTaskResult(studentId: number, courseTaskId: number) {

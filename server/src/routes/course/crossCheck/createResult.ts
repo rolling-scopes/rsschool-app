@@ -59,7 +59,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     return;
   }
 
-  await crossCheckService.saveResult(taskChecker.studentId, taskChecker.checkerId, data, {
+  const previousScore = await crossCheckService.saveResult(taskChecker.studentId, taskChecker.checkerId, data, {
     userId: user.id,
   });
 
@@ -74,6 +74,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     userId: student.userId,
     notificationId: 'taskGrade',
     data: {
+      previousScore,
       courseTask,
       score: data.score,
       comment: data.comment,
