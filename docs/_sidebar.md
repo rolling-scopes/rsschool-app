@@ -1,15 +1,16 @@
 - ## [Main docs page](README.md)
-- Features
-  - [CV](features/cv.md)
-  - [Choose kata languages](features/choose-kata-languages.md)
-  - [Cross-Check Scheduling](features/cross-check-scheduling.md)
-- RS School App Platform
+
+- RS School App Basics
   - [About](platform/about.md)
   - [Schedule](platform/shedule.md)
   - [Submission of tasks in the RS School App](platform/tasks.md)
   - [Cross-check](platform/cross-check-flow.md)
   - [Notifications](platform/notifications.md)
   - [The allocation of students into teams](platform/team-allocation.md)
+  - [CV](platform/cv.md)
   - [Typical problems](platform/typical-problems.md)
-  - [Adding tests into RS School App](platform/adding-tests.md)
 - [Code of conduct](code-of-conduct.md)
+- RS School App Admin
+  - [Adding tests into RS School App](platform/adding-tests.md)
+  - [Choose kata languages](platform/choose-kata-languages.md)
+  - [Cross-Check Scheduling](platform/cross-check-scheduling.md)
