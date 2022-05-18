@@ -10,16 +10,16 @@ export enum ViewMode {
 export const DEFAULT_VIEW_MODE = isMobileOnly ? ViewMode.List : ViewMode.Table;
 
 export enum Column {
-  Date = 'Date',
+  StartDate = 'Start Date',
+  EndDate = 'End Date',
   Time = 'Time',
   Type = 'Type',
-  Special = 'Special',
   Name = 'Name',
   Organizer = 'Organizer',
   Score = 'Score',
 }
 
-export const CONFIGURABLE_COLUMNS = ['Type', 'Special', 'Organizer', 'Score'];
+export const CONFIGURABLE_COLUMNS = ['StartDate', 'EndDate', 'Type', 'Organizer', 'Score'];
 
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';
