@@ -123,8 +123,12 @@ export class CrossCheckService {
 
     if (existing != null) {
       const { historicalScores } = existing;
+      const previousScore = { ...existing };
       historicalScores.push(historicalResult);
       await repository.update(existing.id, { ...data, historicalScores });
+      if (previousScore.comment !== data.comment || previousScore.score !== data.score) {
+        return previousScore;
+      }
     } else {
       await repository.insert({
         studentId: studentId,
