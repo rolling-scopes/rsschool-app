@@ -8,6 +8,7 @@ You can read about `RS School App` features by clicking to links in menu below o
 
 - [CV](./features/cv.md)
 - [Choose kata languages](./features/choose-kata-languages.md)
+- [Cross-Check Scheduling](./features/cross-check-scheduling.md)
 
 ## RS School App Platform
 

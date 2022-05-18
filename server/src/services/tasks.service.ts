@@ -1,4 +1,4 @@
-import { CourseTask } from '../models';
+import { CourseTask, CrossCheckStatus } from '../models/courseTask';
 import { getRepository } from 'typeorm';
 
 export async function getCourseTask(courseTaskId: number, selectCourse = false) {
@@ -17,4 +17,8 @@ export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: num
     .createQueryBuilder('courseTask')
     .where('courseTask.id = :courseTaskId', { courseTaskId: Number(courseTaskId) })
     .getOne();
+}
+
+export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckStatus: CrossCheckStatus) {
+  await getRepository(CourseTask).save({ ...courseTask, crossCheckStatus });
 }
