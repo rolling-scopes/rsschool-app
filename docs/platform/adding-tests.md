@@ -1,10 +1,10 @@
 ## Adding tests into the RS School App (for trainers and admins only)
 
 1. To add tests, enter the "Manage Tasks" page:
-   ![Manage Tasks Page](./img/adding-tests-1.png)
+   </br>![Manage Tasks Page](./img/adding-tests-1.png)
 
 2. Then click the "Add Task" button:
-   ![Add Task Button1](./img/adding-tests-2.png)
+   </br>![Add Task Button1](./img/adding-tests-2.png)
 
 3. Fill in the form and save it:
 
@@ -15,13 +15,13 @@
    - "Description URL" - link to the task description;
    - "JSON Attributes" - copy the JSON file's content with test settings, questions and possible answers (<span style="color:green_apple">[see below](https://docs.app.rs.school/#/adding-tests?id=json-attributes)</span>).
 
-   ![RS School App Test Form](./img/adding-tests-3.png)
+   </br>![RS School App Test Form](./img/adding-tests-3.png)
 
 4. In the course menu, select "Course Tasks":
-   ![Course Tasks](./img/adding-tests-4.png)
+   </br>![Course Tasks](./img/adding-tests-4.png)
 
 5. Click the "Add Task" button too:
-   ![Add Task Button2](./img/adding-tests-5.png)
+   </br>![Add Task Button2](./img/adding-tests-5.png)
 
 6. Fill in the form again and save it:
 
@@ -32,12 +32,12 @@
    - "Start Date - End Date" - set a date of issuing the task and the deadline;
    - "Score" - set a maximum score a student can get for this task;
    - "Score Weight" - task weight (1 by default). It is necessary for the manager of the course to correct it later, so do not change it.
-     ![Adding Task Details](./img/adding-tests-6.png)
+     </br>![Adding Task Details](./img/adding-tests-6.png)
 
 7. The task is added! Go back to the course menu and select "Auto-Test" in order to check if the task has been added or not.
-   ![Auto-Test Menu](./img/adding-tests-7.png)
+   </br>![Auto-Test Menu](./img/adding-tests-7.png)
 8. Select the test you have created in the drop-down list and check if anything is wrong:
-   ![Auto-Test Test Course](./img/adding-tests-8.png)
+   </br>![Auto-Test Test Course](./img/adding-tests-8.png)
 
 ### JSON Attributes
 

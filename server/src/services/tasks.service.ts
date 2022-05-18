@@ -1,12 +1,15 @@
 import { CourseTask, CrossCheckStatus } from '../models/courseTask';
 import { getRepository } from 'typeorm';
 
-export async function getCourseTask(courseTaskId: number) {
-  return getRepository(CourseTask)
+export async function getCourseTask(courseTaskId: number, selectCourse = false) {
+  const query = getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
-    .where('courseTask.id = :courseTaskId', { courseTaskId })
-    .getOne();
+    .where('courseTask.id = :courseTaskId', { courseTaskId });
+  if (selectCourse) {
+    query.innerJoinAndSelect('courseTask.course', 'course');
+  }
+  return query.getOne();
 }
 
 export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: number } | undefined> {

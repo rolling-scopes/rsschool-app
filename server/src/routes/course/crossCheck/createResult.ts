@@ -1,5 +1,6 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK } from 'http-status-codes';
+import { config } from '../../../config';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../../../models/taskSolution';
@@ -17,11 +18,10 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
   const { githubId, courseId, courseTaskId } = ctx.params;
   const { user } = ctx.state as { user: IUserSession };
   const crossCheckService = new CrossCheckService(courseTaskId);
-
   const [student, checker, courseTask] = await Promise.all([
     courseService.queryStudentByGithubId(courseId, githubId),
     courseService.queryStudentByGithubId(courseId, user.githubId),
-    taskService.getCourseTask(courseTaskId),
+    taskService.getCourseTask(courseTaskId, true),
   ]);
 
   if (student == null || courseTask == null || checker == null) {
@@ -77,6 +77,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
       courseTask,
       score: data.score,
       comment: data.comment,
+      resultLink: `${config.host}/course/student/cross-check-submit?course=${courseTask.course.alias}&taskId=${courseTaskId}`,
     },
   });
 
