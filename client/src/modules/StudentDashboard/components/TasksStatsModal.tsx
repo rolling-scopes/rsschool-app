@@ -93,7 +93,7 @@ export function TasksStatsModal(props: Props) {
           {
             title: 'Comment',
             dataIndex: 'comment',
-            ellipsis: true,
+            ellipsis: false,
           },
           {
             title: 'Github PR Uri',

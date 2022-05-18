@@ -1,20 +1,22 @@
 import moment from 'moment-timezone';
 import { useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { withSession } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import withCourseData from 'components/withCourseData';
-import { SettingsPanel, ScheduleView, useScheduleSettings, transformTasksToEvents } from 'components/Schedule';
+import { SettingsPanel, ScheduleView, useScheduleSettings } from 'components/Schedule';
+import { ScheduleEvent, courseEventToScheduleEvent, courseTaskToScheduleEvent } from 'components/Schedule/model';
 
-const byTime = (a: CourseEvent, b: CourseEvent) => a.dateTime.localeCompare(b.dateTime);
-const getEventTypes = (events: CourseEvent[]) => Array.from(new Set(events.map(({ event }) => event.type)));
+const byTime = (a: ScheduleEvent, b: ScheduleEvent) => a.startDate.localeCompare(b.startDate);
+const getEventTypes = (events: ScheduleEvent[]) => Array.from(new Set(events.map(event => event.type)));
 const getYesterday = () => moment.utc().subtract(1, 'day');
-const omitDoneTasks = (events: CourseEvent[], limit: number) => events.filter(({ done }) => !done || done < limit);
-const omitPassedEvents = (events: CourseEvent[]) =>
-  events.filter(({ dateTime }) => moment(dateTime).isAfter(getYesterday(), 'day'));
+const omitDoneTasks = (events: ScheduleEvent[], limit: number) =>
+  events.filter(({ score }) => !score?.donePercent || score.donePercent < limit);
+const omitPassedEvents = (events: ScheduleEvent[]) =>
+  events.filter(({ startDate }) => moment(startDate).isAfter(getYesterday(), 'day'));
 
 export function SchedulePage(props: CoursePageProps) {
   const isAdmin = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
@@ -26,7 +28,10 @@ export function SchedulePage(props: CoursePageProps) {
       courseService.getCourseEvents(),
       courseService.getCourseTasksForSchedule(),
     ]);
-    const events = [...courseEvents, ...transformTasksToEvents(courseTasks)].sort(byTime);
+    const events = [
+      ...courseEvents.map(courseEventToScheduleEvent),
+      ...courseTasks.map(courseTaskToScheduleEvent),
+    ].sort(byTime);
     const eventTypes = getEventTypes(events);
     return { events, eventTypes };
   };
@@ -34,6 +39,7 @@ export function SchedulePage(props: CoursePageProps) {
     retry: refreshData,
     value: { events = [], eventTypes = [] } = {},
     loading,
+    error,
   } = useAsyncRetry(loadData, [courseService]);
 
   const filteredEvents = useMemo(() => {
@@ -44,7 +50,7 @@ export function SchedulePage(props: CoursePageProps) {
   }, [events, settings.arePassedEventsHidden, settings.areDoneTasksHidden, settings.limitForDoneTask]);
 
   return (
-    <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
+    <PageLayout loading={loading} error={error} title="Schedule" githubId={props.session.githubId}>
       <SettingsPanel
         isAdmin={isAdmin}
         courseId={props.course.id}

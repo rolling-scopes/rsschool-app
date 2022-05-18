@@ -2,10 +2,10 @@ import { Moment } from 'moment';
 import css from 'styled-jsx/css';
 import React, { useState } from 'react';
 import { Calendar, List, Typography, Col, Button } from 'antd';
-import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import { getMonthValue, getListData } from './utils';
 import ModalWindow from './ModalWindow';
+import { ScheduleEvent } from '../model';
 
 const { Text } = Typography;
 
@@ -24,7 +24,7 @@ const numberEventsStyle = css`
 `;
 
 type Props = {
-  data: CourseEvent[];
+  data: ScheduleEvent[];
   timezone: string;
   tagColors: Record<string, string>;
   alias: string;
@@ -34,7 +34,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timezone, tagColors, alias }) =
   const [modalWindowData, setModalWindowData] = useState<
     { color: string; name: string; key: number; time: string; type: string }[] | undefined
   >();
-  const [currentItem, setCurrentItem] = useState<CourseEvent | null>(null);
+  const [currentItem, setCurrentItem] = useState<ScheduleEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
   const [calendarMode, setCalendarMode] = useState<string>('month');
 
@@ -97,7 +97,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timezone, tagColors, alias }) =
         dataSource={modalWindowData}
         renderItem={item => {
           if (!data.length) return null;
-          const dateTime = data.filter(event => event.id === item.key)[0].dateTime;
+          const dateTime = data.filter(event => event.id === item.key)[0].startDate;
           return (
             <List.Item
               actions={[

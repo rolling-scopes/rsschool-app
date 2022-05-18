@@ -1,5 +1,6 @@
 import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 
 import { AlertsModule } from './alerts/alerts.module';
@@ -16,6 +17,7 @@ import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 import { CertificatesModule } from './certificates/certificates.module';
 import { DiscordServersModule } from './discord-servers/discord-servers.module';
+import { CrossCheckModule } from './cross-check/cross-check.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './userGroups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
@@ -32,6 +34,7 @@ import { GratitudesModule } from './gratitudes';
       ...config,
       autoLoadEntities: true,
     }),
+    NestScheduleModule.forRoot(),
     ActivityModule,
     ConfigModule,
     AlertsModule,
@@ -44,6 +47,7 @@ import { GratitudesModule } from './gratitudes';
     RegistryModule,
     CertificatesModule,
     DiscordServersModule,
+    CrossCheckModule,
     OpportunitiesModule,
     UserGroupsModule,
     ScheduleModule,

@@ -1,10 +1,10 @@
 import React from 'react';
-import { CourseEvent } from 'services/course';
 import { TableView } from '../TableView';
 import { ListView } from '../ListView';
 import { CalendarView } from '../CalendarView';
 import { ScheduleSettings } from '../useScheduleSettings';
 import { ViewMode } from '../constants';
+import { ScheduleEvent } from '../model';
 
 const DEFAULT_SCHEDULE_VIEW = TableView;
 const SCHEDULE_VIEWS = {
@@ -18,7 +18,7 @@ export interface ScheduleViewProps {
   courseId: number;
   courseAlias: string;
   settings: ScheduleSettings;
-  data: CourseEvent[];
+  data: ScheduleEvent[];
   refreshData: () => void;
 }
 
