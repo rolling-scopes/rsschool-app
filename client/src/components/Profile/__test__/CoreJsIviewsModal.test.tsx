@@ -14,7 +14,8 @@ describe('CoreJsIviewsModal', () => {
           interviews: [
             {
               score: 9,
-              comment: 'Very good understanding of core features. Minus one point for being not confident in some tasks(variable scope, closure), also for not solving coding task completely',
+              comment:
+                'Very good understanding of core features. Minus one point for being not confident in some tasks(variable scope, closure), also for not solving coding task completely',
               interviewer: {
                 name: 'test name',
                 githubId: 'testId',
