@@ -8,29 +8,47 @@ describe('CoreJsIviewsModal', () => {
     const wrapper = shallow(
       <CoreJsIviewsModal
         stats={{
-          courseFullName: 'rs-2019',
-          courseName: 'rs-2019',
-          locationName: 'minsk',
+          courseFullName: 'TEST COURSE',
+          courseName: 'TEST COURSE',
+          locationName: null,
           interviews: [
             {
+              score: 9,
+              comment: 'dasbfjvf dfjvdxfjbv fdlxcbckbgcfgbgfnb n  mgfnm',
+              interviewer: {
+                name: 'anik188',
+                githubId: 'anik188',
+              },
               answers: [
                 {
-                  answer: 'true',
-                  questionText: 'test',
-                  questionId: 'test',
+                  questionId: '1001',
+                  questionText: 'What is JSX?',
                 },
                 {
-                  answer: 'false',
-                  questionText: 'test',
-                  questionId: 'test',
+                  answer: true,
+                  questionId: '1002',
+                  questionText: 'Is it possible to use React without JSX?',
+                },
+                {
+                  answer: true,
+                  questionId: '1011',
+                  questionText: 'What is the virtual DOM? How does react use the virtual DOM to render the UI?',
+                },
+                {
+                  questionId: '1012',
+                  questionText: 'Is the virtual DOM the same as the shadow DOM?',
+                },
+                {
+                  questionId: '1082',
+                  questionText: 'What are the limitations of React?',
+                },
+                {
+                  questionId: '1083',
+                  questionText: 'What is a higher order component?',
                 },
               ],
-              interviewer: {
-                name: 'Dzmitry Petrov',
-                githubId: 'dima',
-              },
-              comment: 'test',
-              score: 4,
+              name: 'int',
+              interviewDate: 'Thu May 19 2022 08:58:04 GMT+0000 (GMT)',
             },
           ],
         }}

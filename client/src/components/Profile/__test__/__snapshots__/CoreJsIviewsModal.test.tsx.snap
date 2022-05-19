@@ -6,7 +6,7 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
   footer={null}
   okType="primary"
   onCancel={[MockFunction]}
-  title="rs-2019 CoreJS Interview Feedback"
+  title="TEST COURSE CoreJS Interview Feedback"
   visible={true}
   width="80%"
 >
@@ -21,7 +21,7 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
     <Text
       mark={true}
     >
-      4
+      9
     </Text>
   </p>
   <p
@@ -33,9 +33,9 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
   >
     Interviewer: 
     <a
-      href="/profile?githubId=dima"
+      href="/profile?githubId=anik188"
     >
-      Dzmitry Petrov
+      anik188
     </a>
   </p>
   <p
@@ -50,7 +50,7 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
     >
       Comment: 
     </Text>
-    test
+    dasbfjvf dfjvdxfjbv fdlxcbckbgcfgbgfnb n  mgfnm
   </p>
   <ForwardRef(InternalTable)
     columns={
@@ -68,14 +68,30 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
     dataSource={
       Array [
         Object {
-          "answer": "true",
-          "questionId": "test",
-          "questionText": "test",
+          "questionId": "1001",
+          "questionText": "What is JSX?",
         },
         Object {
-          "answer": "false",
-          "questionId": "test",
-          "questionText": "test",
+          "answer": true,
+          "questionId": "1002",
+          "questionText": "Is it possible to use React without JSX?",
+        },
+        Object {
+          "answer": true,
+          "questionId": "1011",
+          "questionText": "What is the virtual DOM? How does react use the virtual DOM to render the UI?",
+        },
+        Object {
+          "questionId": "1012",
+          "questionText": "Is the virtual DOM the same as the shadow DOM?",
+        },
+        Object {
+          "questionId": "1082",
+          "questionText": "What are the limitations of React?",
+        },
+        Object {
+          "questionId": "1083",
+          "questionText": "What is a higher order component?",
         },
       ]
     }

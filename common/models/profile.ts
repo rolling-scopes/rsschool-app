@@ -109,8 +109,9 @@ export interface StudentTasksDetail {
     githubId: string;
   };
   interviewFormAnswers?: {
+    questionId: string;
     questionText: string;
-    answer: string;
+    answer?: boolean;
   }[];
 }
 
