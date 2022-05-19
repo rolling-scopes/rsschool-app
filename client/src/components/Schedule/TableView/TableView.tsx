@@ -1,97 +1,54 @@
 import moment from 'moment-timezone';
-import mergeWith from 'lodash/mergeWith';
 import React, { useMemo, useState } from 'react';
-import { Popconfirm, Table, Typography, Space, Form, Button, message } from 'antd';
+import { Popconfirm, Table, Typography, Space, Form, Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { EventService } from 'services/event';
-import { Task, TaskService } from 'services/task';
+import { TaskService, Task } from 'services/task';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
 import { GithubUserLink } from 'components/GithubUserLink';
 import {
   dateSorter,
   getColumnSearchProps,
-  tagsRenderer,
-  dateWithTimeZoneRenderer,
+  coloredDateRenderer,
   renderTagWithStyle,
   scoreRenderer,
 } from 'components/Table';
 import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import { ScheduleViewProps } from '../ScheduleView';
 import EditableCell from './EditableCell';
+import { ScheduleEvent } from '../model';
 
 const { Text } = Typography;
 
 const eventService = new EventService();
 const taskService = new TaskService();
 
-interface ScheduleRow {
-  id: number;
-  event: {
-    name: string;
-    descriptionUrl: string;
-    type: string;
-  };
-  dateTime: string;
-  place: string;
-  organizer: {
-    githubId: string;
-  } | null;
-  special?: [];
-  duration?: number;
-}
-
 const getColumns = ({
   timezone,
   tagColors,
-  splittedByWeek,
 }: {
   timezone: string;
   tagColors: Record<string, string>;
   splittedByWeek?: boolean;
 }) => [
   {
-    key: 'Date',
-    title: Column.Date,
-    dataIndex: 'dateTime',
-    render: splittedByWeek
-      ? dateWithTimeZoneRenderer(timezone, 'ddd - MMM Do YYYY')
-      : dateWithTimeZoneRenderer(timezone, 'MMM Do YYYY'),
-    sorter: dateSorter('dateTime'),
-    sortDirections: ['descend', 'ascend'],
-    editable: true,
-  },
-  {
-    key: 'Time',
-    title: Column.Time,
-    dataIndex: 'dateTime',
-    render: dateWithTimeZoneRenderer(timezone, 'HH:mm'),
-    editable: true,
-  },
-  {
     key: 'Type',
     title: Column.Type,
-    dataIndex: ['event', 'type'],
+    dataIndex: 'type',
     render: (tagName: string) => renderTagWithStyle(tagName, tagColors, TASK_TYPES_MAP),
     editable: true,
     visible: false,
   },
   {
-    key: 'Special',
-    title: Column.Special,
-    dataIndex: ['special'],
-    render: (tags: string) => !!tags && tagsRenderer(tags.split(',')),
-    editable: true,
-  },
-  {
     key: 'Name',
     title: Column.Name,
-    dataIndex: ['event', 'name'],
+    dataIndex: 'name',
     render: (value: string, row: any) => {
       return (
         <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
-          {row?.event?.descriptionUrl ? (
-            <a target="_blank" href={row.event.descriptionUrl}>
+          {row.descriptionUrl ? (
+            <a target="_blank" href={row.descriptionUrl}>
               {value}
             </a>
           ) : (
@@ -100,7 +57,33 @@ const getColumns = ({
         </Text>
       );
     },
-    ...getColumnSearchProps('event.name'),
+    ...getColumnSearchProps('name'),
+    editable: true,
+  },
+  {
+    key: 'StartDate',
+    title: (
+      <Tooltip title="Run a task in your time zone" overlayStyle={{ maxWidth: 132 }}>
+        <div>{Column.StartDate}</div>
+      </Tooltip>
+    ),
+    dataIndex: 'startDate',
+    render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'start'),
+    sorter: dateSorter('startDate'),
+    sortDirections: ['descend', 'ascend'],
+    editable: true,
+  },
+  {
+    key: 'EndDate',
+    title: (
+      <Tooltip title="Task's deadline in your time zone" overlayStyle={{ maxWidth: 132 }}>
+        <div>{Column.EndDate}</div>
+      </Tooltip>
+    ),
+    dataIndex: 'endDate',
+    render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'end'),
+    sorter: dateSorter('endDate'),
+    sortDirections: ['descend', 'ascend'],
     editable: true,
   },
   {
@@ -124,16 +107,11 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const isEditing = (record: CourseEvent) => `${record.id}${record.event.type}${record.event.name}` === editingKey;
+  const isEditing = (record: ScheduleEvent) => `${record.id}${record.type}${record.name}` === editingKey;
 
-  const edit = (record: CourseEvent) => {
-    form.setFieldsValue({
-      ...record,
-      dateTime: moment(record.dateTime),
-      time: moment(record.dateTime),
-      special: record.special ? record.special.split(',') : [],
-    });
-    setEditingKey(`${record.id}${record.event.type}${record.event.name}`);
+  const edit = (record: ScheduleEvent) => {
+    form.setFieldsValue(record);
+    setEditingKey(`${record.id}${record.type}${record.name}`);
   };
 
   const handleDelete = async (id: number, isTask?: boolean) => {
@@ -154,25 +132,28 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
     setEditingKey('');
   };
 
-  const save = async (id: number, isTask?: boolean) => {
-    const updatedRow = (await form.validateFields()) as ScheduleRow;
-    const index = data.findIndex(item => id === item.id);
+  const save = async (id: number, isTask: boolean) => {
+    const updatedRow = await form.validateFields();
+    const item = data.find(item => id === item.id);
 
-    updatedRow.organizer = updatedRow.organizer && updatedRow.organizer.githubId ? updatedRow.organizer : null;
-
-    if (index > -1) {
-      const editableEntity = data[index];
-
-      mergeWith(editableEntity, updatedRow);
-      editableEntity.special = updatedRow.special ? updatedRow.special.join(',') : '';
+    if (item) {
+      const { githubId } = updatedRow.organizer;
+      // TODO: it's temporary fix, need to rewrite / reconsider all the editing approach according to new design.
+      const id = typeof githubId === 'number' ? githubId : null;
+      updatedRow.organizer = {
+        id: typeof githubId === 'string' ? item.organizer.id : id,
+      };
 
       try {
         if (isTask) {
-          await taskService.updateTask(editableEntity.event.id, getNewDataForUpdate(editableEntity) as Partial<Task>);
-          await courseService.updateCourseTask(editableEntity.id, getCourseTaskDataForUpdate(editableEntity));
+          await taskService.updateTask(
+            (item.entity as CourseTaskDetails).taskId,
+            getNewDataForUpdate(updatedRow) as Partial<Task>,
+          );
+          await courseService.updateCourseTask(item.id, getCourseTaskDataForUpdate(updatedRow));
         } else {
-          await eventService.updateEvent(editableEntity.event.id, getNewDataForUpdate(editableEntity));
-          await courseService.updateCourseEvent(editableEntity.id, getCourseEventDataForUpdate(editableEntity));
+          await eventService.updateEvent((item.entity as CourseEvent).eventId, getNewDataForUpdate(updatedRow));
+          await courseService.updateCourseEvent(item.id, getCourseEventDataForUpdate(updatedRow));
         }
         refreshData();
       } catch {
@@ -192,7 +173,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
       {
         title: 'Action',
         key: 'action',
-        render: (_: any, record: CourseEvent) => {
+        render: (_: any, record: ScheduleEvent) => {
           const editable = isEditing(record);
 
           return editable ? (
@@ -200,7 +181,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
               <a
                 onClick={event => {
                   event.stopPropagation();
-                  save(record.id, record.isTask);
+                  save(record.id, record.category === 'task');
                 }}
                 style={{ marginRight: 8 }}
               >
@@ -227,7 +208,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
               <Popconfirm
                 title="Sure to delete?"
                 onConfirm={() => {
-                  handleDelete(record.id, record.isTask);
+                  handleDelete(record.id, record.category === 'task');
                 }}
               >
                 <Button type="link" style={{ padding: 0 }} disabled={editingKey !== ''}>
@@ -241,7 +222,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
     ];
   };
 
-  const filteredData = data.filter(({ event }) => !settings.eventTypesHidden.includes(event.type));
+  const filteredData = data.filter(event => !settings.eventTypesHidden.includes(event.type));
   const filteredColumns = getColumns({
     tagColors: settings.tagColors,
     timezone: settings.timezone,
@@ -257,7 +238,7 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
     }
     return {
       ...col,
-      onCell: (record: CourseEvent) => ({
+      onCell: (record: ScheduleEvent) => ({
         record,
         dataIndex: col.dataIndex,
         title: col.title,
@@ -269,12 +250,18 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
   return (
     <Form form={form} component={false}>
       <Table
+        locale={{
+          // disable default tooltips on sortable columns
+          triggerDesc: undefined,
+          triggerAsc: undefined,
+          cancelSort: undefined,
+        }}
         components={{
           body: {
             cell: EditableCell,
           },
         }}
-        rowKey={({ event, id }) => `${id}${event.type}`}
+        rowKey={({ category, id }) => `${category}${id}`}
         pagination={false}
         dataSource={filteredData}
         size="middle"
@@ -285,51 +272,33 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
   );
 }
 
-const getCourseEventDataForUpdate = (entity: CourseEvent) => {
-  return {
-    dateTime: entity.dateTime,
-    organizerId: entity.organizer ? entity.organizer.githubId : null,
-    place: entity.place || '',
-    special: entity.special || '',
-  };
-};
+const getCourseEventDataForUpdate = (entity: ScheduleEvent) => ({
+  dateTime: entity.startDate,
+  organizerId: entity.organizer.id,
+});
 
-const getCourseTaskDataForUpdate = (entity: CourseEvent) => {
-  const taskDate = entity.event.type !== 'deadline' ? 'studentStartDate' : 'studentEndDate';
+const getCourseTaskDataForUpdate = (entity: ScheduleEvent) => ({
+  studentStartDate: entity.startDate,
+  studentEndDate: entity.endDate,
+  taskOwnerId: entity.organizer.id,
+  type: entity.type,
+});
 
-  const dataForUpdate = {
-    [taskDate]: entity.dateTime,
-    taskOwnerId: entity.organizer ? entity.organizer.githubId : null,
-    special: entity.special || '',
-  };
+const getNewDataForUpdate = (entity: ScheduleEvent) => ({
+  name: entity.name,
+  type: entity.type,
+});
 
-  if (entity.event.type !== 'deadline') {
-    return { ...dataForUpdate, type: entity.event.type };
-  }
-
-  return dataForUpdate;
-};
-
-const getNewDataForUpdate = (entity: CourseEvent) => {
-  const dataForUpdate = {
-    name: entity.event.name,
-    descriptionUrl: entity.event.descriptionUrl || '',
-  };
-
-  if (entity.event.type !== 'deadline') {
-    return { ...dataForUpdate, type: entity.event.type };
-  }
-
-  return dataForUpdate;
-};
-
-const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitForDoneTask?: number): string => {
-  if (limitForDoneTask && record.done && record.done >= limitForDoneTask) {
+const getTableRowClass = (record: ScheduleEvent, isSplitedByWeek?: boolean, limitForDoneTask?: number): string => {
+  if (limitForDoneTask && record.score?.donePercent && record.score.donePercent >= limitForDoneTask) {
     return 'table-row-done';
   }
 
-  if (moment(record.dateTime).year() === moment().year() && moment(record.dateTime).isoWeek() === moment().isoWeek()) {
-    if (moment(record.dateTime).isoWeekday() === moment().isoWeekday()) {
+  if (
+    moment(record.startDate).year() === moment().year() &&
+    moment(record.startDate).isoWeek() === moment().isoWeek()
+  ) {
+    if (moment(record.startDate).isoWeekday() === moment().isoWeekday()) {
       return 'table-row-current-day';
     } else {
       return 'table-row-current';
@@ -340,7 +309,7 @@ const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitF
     return '';
   }
 
-  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-odd';
+  return moment(record.startDate).week() % 2 === 0 ? '' : 'table-row-odd';
 };
 
 export default TableView;

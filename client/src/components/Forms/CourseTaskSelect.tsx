@@ -6,12 +6,14 @@ type Props = {
   data: CourseTaskDto[];
   groupBy?: string;
   onChange?: (id: number) => void;
+  defaultValue?: number | null;
 };
 
 const MAX_DATE = '+275760-09-13T00:00:00.000Z';
 
 export function CourseTaskSelect(props: Props) {
-  const { data, groupBy, onChange, ...options } = props;
+  const { data, groupBy, onChange, defaultValue, ...options } = props;
+
   const sortedData = data.sort((firstTask, secondTask) =>
     (secondTask.studentEndDate ?? MAX_DATE).localeCompare(firstTask.studentEndDate ?? MAX_DATE),
   );
@@ -33,6 +35,7 @@ export function CourseTaskSelect(props: Props) {
       {...options}
       name="courseTaskId"
       label="Task"
+      initialValue={defaultValue}
       rules={[{ required: true, message: 'Please select a task' }]}
     >
       <Select placeholder="Select task" {...selectProps}>
