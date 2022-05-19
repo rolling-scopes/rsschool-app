@@ -11,10 +11,10 @@ const { Text } = Typography;
 export interface CoreJsInterviewsData {
   courseFullName: string;
   courseName: string;
-  locationName: string;
+  locationName: string | null;
   interviews: {
     answers: {
-      answer: string;
+      answer?: boolean;
       questionText: string;
       questionId: string;
     }[];
