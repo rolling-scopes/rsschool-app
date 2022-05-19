@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button, Dropdown, Menu, Tooltip } from 'antd';
+import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
 import {
   EditOutlined,
   EyeOutlined,
@@ -72,11 +72,17 @@ export function Header(props: Props) {
     <>
       <nav
         className="no-print"
-        style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
+        style={{
+          background: '#fff',
+          padding: '8px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}
       >
-        <div className="logo">
+        <Space style={{ alignItems: 'flex-start' }}>
           <Link href="/">
-            <a>
+            <a style={{ height: '100%' }}>
               <img
                 style={{ height: 30 }}
                 className="header-logo"
@@ -85,7 +91,8 @@ export function Header(props: Props) {
               />
             </a>
           </Link>
-        </div>
+          <SolidarityUkraine />
+        </Space>
         <div className="title">
           <b>{props.title}</b> {props.courseName}
         </div>
@@ -130,7 +137,6 @@ export function Header(props: Props) {
           }
         `}</style>
       </nav>
-      <SolidarityUkraine />
     </>
   );
 }

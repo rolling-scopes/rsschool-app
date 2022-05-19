@@ -26,10 +26,7 @@ type Props = {
   setLocation: Dispatch<SetStateAction<Location | null>>;
 };
 
-export function MentorRegistrationGeneral({ courses, checkedList, location, data, setLocation }: Props) {
-  const isAvailable =
-    data != null && ((data.contactsSkype?.length ?? 0) > 1 || (data.contactsTelegram?.length ?? 0) > 1);
-
+export function MentorRegistrationGeneral({ courses, checkedList, location, setLocation }: Props) {
   return (
     <>
       <Row>
@@ -162,7 +159,7 @@ export function MentorRegistrationGeneral({ courses, checkedList, location, data
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item name="contactsTelegram" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+              <Form.Item name="contactsTelegram" style={{ marginBottom: '0' }}>
                 <Input addonBefore="@" placeholder="durov" />
               </Form.Item>
               <Typography.Paragraph style={{ margin: '12px 0 0 0' }}>
@@ -188,7 +185,7 @@ export function MentorRegistrationGeneral({ courses, checkedList, location, data
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }}>
                 <Input placeholder="johnsmith" />
               </Form.Item>
             </Col>
