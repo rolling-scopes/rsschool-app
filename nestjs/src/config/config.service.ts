@@ -40,7 +40,8 @@ export class ConfigService {
   public readonly auth: AuthConfig;
   public readonly users: UsersConfig;
   public readonly awsServices: AWSServices;
-  public isDev = process.env.NODE_ENV !== 'production';
+  public readonly host: string;
+  public readonly isDev = process.env.NODE_ENV !== 'production';
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -76,5 +77,7 @@ export class ConfigService {
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
     };
+
+    this.host = conf.get('RSSCHOOL_HOST') ?? '';
   }
 }

@@ -3,12 +3,12 @@ import { Collapse, Badge, Button, Row, Typography, Col, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
-import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
 import { getEventLink } from '../utils';
 import { ScheduleViewProps } from '../ScheduleView';
+import { ScheduleEvent } from '../model';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -28,7 +28,7 @@ export const ListView: React.FC<ScheduleViewProps> = ({ data, courseAlias, setti
     const currentDay = day ? day - 1 : LAST_WEEK_DAY;
     const date = moment().format('YYYYMMDD');
     const todaysEvents = data.filter(
-      ({ dateTime }) => date === moment(dateTime).tz(settings.timezone).format('YYYYMMDD'),
+      ({ startDate }) => date === moment(startDate).tz(settings.timezone).format('YYYYMMDD'),
     );
 
     if (todaysEvents.length === 0) {
@@ -111,11 +111,11 @@ const panelClassName = (dayOfWeek: number, currentWeek: number) => {
   return {};
 };
 
-const mapToWeek = (events: CourseEvent[], timeZone: string) => {
+const mapToWeek = (events: ScheduleEvent[], timeZone: string) => {
   const weekMap = new Array(weekLength).fill([]);
 
-  events.forEach((event: CourseEvent) => {
-    let eventDay = moment(event.dateTime).tz(timeZone).day();
+  events.forEach((event: ScheduleEvent) => {
+    let eventDay = moment(event.startDate).tz(timeZone).day();
 
     if (eventDay === 0) {
       eventDay = LAST_WEEK_DAY;
@@ -136,18 +136,17 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   return weekMap;
 };
 
-const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, tagColors?: Record<string, string>) => {
-  return events.map((data: CourseEvent) => {
-    const { id, event, dateTime, isTask } = data;
-    const { type, name } = event;
+const getDayEvents = (events: ScheduleEvent[], timeZone: string, alias: string, tagColors?: Record<string, string>) => {
+  return events.map((data: ScheduleEvent) => {
+    const { id, category, type, name, startDate } = data;
 
     return (
       <tbody key={id}>
         <tr>
-          <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
+          <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(startDate)}</th>
           <th style={{ width: '10%' }}>{renderTagWithStyle(type, tagColors, TASK_TYPES_MAP)}</th>
           <th style={{ width: '80%' }}>
-            <Link prefetch={false} href={getEventLink(alias, id, isTask)}>
+            <Link prefetch={false} href={getEventLink(alias, id, category === 'task')}>
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
                   {name}
@@ -163,20 +162,20 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, ta
 };
 
 const getWeekElements = (
-  events: CourseEvent[],
+  events: ScheduleEvent[],
   selectedWeek: number,
   timeZone: string,
   alias: string,
   tagColors?: Record<string, string>,
 ) => {
-  const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
+  const currentWeek = events.filter((event: ScheduleEvent) => isCurrentWeek(event.startDate, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
   const dayOfSelectedWeek = moment()
     .tz(timeZone)
     .add(selectedWeek * weekLength, 'days');
   const firstDayofSelectedWeek = dayOfSelectedWeek.clone().startOf('isoWeek');
 
-  return weekMap.map((eventsPerDay: CourseEvent[], index: number) => {
+  return weekMap.map((eventsPerDay: ScheduleEvent[], index: number) => {
     const eventCount = eventsPerDay.length;
     const dayDate = firstDayofSelectedWeek.clone().add(index, 'day').format('Do MMMM');
 

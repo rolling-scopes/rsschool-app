@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form, Input, DatePicker, TimePicker, Select } from 'antd';
 import { Rule } from 'antd/lib/form';
-import { CourseEvent } from 'services/course';
 import { UserService } from 'services/user';
 import { UserSearch } from 'components/UserSearch';
 import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../constants';
+import { ScheduleEvent } from '../model';
 
 const { Option } = Select;
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -12,7 +12,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   dataIndex: string;
   title: any;
   inputType: 'number' | 'text';
-  record: CourseEvent;
+  record: ScheduleEvent;
   index: number;
   children: React.ReactNode;
 }
@@ -29,7 +29,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   let inputNode;
   let rules: Rule = { type: 'string', required: false };
 
-  const typesList = record && record.isTask ? TASK_TYPES : EVENT_TYPES;
+  const typesList = record && record.category === 'task' ? TASK_TYPES : EVENT_TYPES;
   const types = typesList.map((tag: string) => {
     return (
       <Option key={tag} value={tag}>
@@ -49,7 +49,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       break;
     case 'Type':
       inputNode = (
-        <Select style={{ minWidth: 120 }} disabled={record.event.type === 'deadline'}>
+        <Select style={{ minWidth: 120 }} disabled={record.type === 'deadline'}>
           {types}
         </Select>
       );
@@ -71,7 +71,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       rules = { required: false, message: 'Please select an organizer' };
       break;
     case 'Place':
-      inputNode = <Input style={{ minWidth: 150 }} disabled={record.isTask} />;
+      inputNode = <Input style={{ minWidth: 150 }} disabled={record.category === 'task'} />;
       rules = { type: 'string', required: false };
       break;
     default:
