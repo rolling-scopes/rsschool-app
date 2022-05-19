@@ -14,10 +14,10 @@ describe('CoreJsIviewsModal', () => {
           interviews: [
             {
               score: 9,
-              comment: 'dasbfjvf dfjvdxfjbv fdlxcbckbgcfgbgfnb n  mgfnm',
+              comment: 'Very good understanding of core features. Minus one point for being not confident in some tasks(variable scope, closure), also for not solving coding task completely',
               interviewer: {
-                name: 'anik188',
-                githubId: 'anik188',
+                name: 'test name',
+                githubId: 'testId',
               },
               answers: [
                 {

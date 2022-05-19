@@ -33,9 +33,9 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
   >
     Interviewer: 
     <a
-      href="/profile?githubId=anik188"
+      href="/profile?githubId=testId"
     >
-      anik188
+      test name
     </a>
   </p>
   <p
@@ -50,7 +50,7 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
     >
       Comment: 
     </Text>
-    dasbfjvf dfjvdxfjbv fdlxcbckbgcfgbgfnb n  mgfnm
+    Very good understanding of core features. Minus one point for being not confident in some tasks(variable scope, closure), also for not solving coding task completely
   </p>
   <ForwardRef(InternalTable)
     columns={
