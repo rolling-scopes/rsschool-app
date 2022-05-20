@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import css from 'styled-jsx/css';
 import { Table } from 'antd';
 import { ColumnType } from 'antd/lib/table';
@@ -12,7 +12,7 @@ export function NotificationsTable({
 }: {
   notifications: UserNotificationSettings[];
   disabledChannels?: NotificationChannel[];
-  onCheck: (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => void;
+  onCheck: (dataIndex: string[], record: UserNotificationSettings, event: ChangeEvent<HTMLInputElement>) => void;
 }) {
   const columns = useMemo(() => buildColumns(onCheck, disabledChannels), [onCheck, disabledChannels]);
 
@@ -49,7 +49,7 @@ const { className: disabledClassName, styles: disabledStyles } = css.resolve`
 `;
 
 function buildColumns(
-  onCheck: (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => void,
+  onCheck: (dataIndex: string[], record: UserNotificationSettings, event: ChangeEvent<HTMLInputElement>) => void,
   disabledChannels: NotificationChannel[] = [],
 ) {
   const columns: ColumnType<UserNotificationSettings>[] = [
@@ -69,7 +69,7 @@ function buildColumns(
         }`,
         title: channel,
         dataIndex,
-        render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck, true),
+        render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck),
       };
     }),
   );
