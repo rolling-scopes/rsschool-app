@@ -51,13 +51,7 @@ class CoreJsIviewsModal extends React.PureComponent<Props> {
             {
               dataIndex: 'answer',
               render: answer =>
-                answer === 'true' ? (
-                  <Tag color="green">Yes</Tag>
-                ) : answer === 'false' ? (
-                  <Tag color="red">No</Tag>
-                ) : (
-                  answer
-                ),
+                answer === true ? <Tag color="green">Yes</Tag> : answer === false ? <Tag color="red">No</Tag> : answer,
             },
           ]}
         />

@@ -56,7 +56,7 @@ export const createMultipleScores = (logger: ILogger) => async (ctx: Router.Rout
       const user = ctx.state.user as IUserSession | null;
       const authorId = user?.id ?? 0;
 
-      const isNew = await scoreService.saveScore(Number(student.id), Number(courseTaskId), {
+      const [isNew] = await scoreService.saveScore(Number(student.id), Number(courseTaskId), {
         authorId,
         comment: data.comment,
         score: data.score,

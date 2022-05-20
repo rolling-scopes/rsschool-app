@@ -2,8 +2,8 @@ import csv from 'csvtojson';
 import { CSSProperties } from 'react';
 import { UploadChangeParam } from 'antd/lib/upload';
 import isUndefined from 'lodash/isUndefined';
-import { DEFAULT_COLOR, SPECIAL_TASK_TYPES } from 'components/Schedule/constants';
-import { CourseService, CourseEvent, CourseTaskDetails, CourseTask } from 'services/course';
+import { DEFAULT_COLOR } from 'components/Schedule/constants';
+import { CourseService, CourseEvent, CourseTask } from 'services/course';
 
 export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) =>
   `/course/event?course=${courseAlias}&type=${isTask ? 'task' : 'event'}&id=${eventId}`;
@@ -17,40 +17,6 @@ export const getTagStyle = (tagName: string, tagColors: Record<string, string> =
     backgroundColor: `${tagColor}10`,
   };
 };
-
-const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent =>
-  ({
-    id: task.id,
-    dateTime: (type === SPECIAL_TASK_TYPES.deadline ? task.studentEndDate : task.studentStartDate) || '',
-    event: {
-      type: type,
-      name: task.name,
-      descriptionUrl: task.descriptionUrl,
-      id: task.taskId,
-    },
-    organizer: {
-      githubId: task.taskOwner ? task.taskOwner.githubId : '',
-    },
-    isTask: true,
-    special: task.special,
-    duration: task.duration,
-    score: `${task.score ?? 0}/${task.maxScore}`,
-    done: task.score && task.maxScore ? Math.round((task.score / task.maxScore) * 100) : 0,
-  } as CourseEvent);
-
-export const transformTasksToEvents = (tasks: CourseTaskDetails[]) =>
-  tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
-    if (task.type !== SPECIAL_TASK_TYPES.test) {
-      acc.push(createCourseEventFromTask(task, task.type));
-    }
-    acc.push(
-      createCourseEventFromTask(
-        task,
-        task.type === SPECIAL_TASK_TYPES.test ? SPECIAL_TASK_TYPES.test : SPECIAL_TASK_TYPES.deadline,
-      ),
-    );
-    return acc;
-  }, []);
 
 interface CsvItem {
   id: string;

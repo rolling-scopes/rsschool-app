@@ -1,12 +1,13 @@
-import { Header } from './Header';
-import { Spin, Row, Col, Layout } from 'antd';
 import { PropsWithChildren } from 'react';
+import { Header } from './Header';
+import { Spin, Row, Col, Layout, Result, Button } from 'antd';
 import { Session } from './withSession';
 import { AdminSider } from './Sider/AdminSider';
 import { Course } from 'services/models';
 
 type Props = {
   loading: boolean;
+  error?: Error;
   githubId: string;
   courseName?: string;
   title?: string;
@@ -16,12 +17,27 @@ type Props = {
 };
 
 export function PageLayout(props: Props) {
+  if (process.env.NODE_ENV !== 'production' && props.error) console.error(props.error);
+
   return (
     <Layout style={{ background: props.background ?? 'transparent' }}>
       <Header title={props.title} username={props.githubId} courseName={props.courseName} />
-      <Layout.Content style={{ margin: 16 }}>
-        <Spin spinning={props.loading}>{props.children}</Spin>
-      </Layout.Content>
+      {props.error ? (
+        <Result
+          status="500"
+          title="500"
+          subTitle="Sorry, something went wrong."
+          extra={
+            <Button type="primary" href="/">
+              Back Home
+            </Button>
+          }
+        />
+      ) : (
+        <Layout.Content style={{ margin: 16 }}>
+          <Spin spinning={props.loading}>{props.children}</Spin>
+        </Layout.Content>
+      )}
     </Layout>
   );
 }
