@@ -91,52 +91,61 @@ export class UserNotificationsService {
 
   private async getUserNotificationSettings(userId: number, notificationId: string) {
     const [notificationChannels, profile] = await Promise.all([
-      this.notificationUserConnectionRepository
-        .createQueryBuilder('connection')
+      this.userNotificationsRepository
+        .createQueryBuilder('userNotifications')
+        .where({
+          notificationId,
+          enabled: true,
+          userId,
+        })
         .innerJoin(
+          'userNotifications.notification',
           'notification',
-          'notification',
-          'notification.id = :notificationId and notification.enabled = true and notification.type = :type ',
-          { notificationId, type: NotificationType.event },
+          'notification.type = :type and notification.enabled = true',
+          {
+            type: NotificationType.event,
+          },
         )
         .leftJoinAndMapOne(
-          'connection.notification',
-          NotificationUserSettings,
-          'userSettings',
-          'userSettings.notificationId = :notificationId and userSettings.userId = :userId and userSettings.channelId = connection.channelId',
-          { userId, notificationId },
+          'userNotifications.connection',
+          NotificationUserConnection,
+          'connection',
+          `userNotifications.userId = connection.userId and
+           userNotifications.channelId = connection.channelId and
+           connection.enabled = true
+        `,
         )
         .innerJoinAndMapOne(
-          'connection.settings',
+          'userNotifications.settings',
           NotificationChannelSettings,
           'channelSettings',
-          'channelSettings.notificationId = :notificationId and channelSettings.channelId = connection.channelId',
+          'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
         )
-        .where({ enabled: true, userId: userId })
-        .orderBy('name')
-        .getMany() as Promise<
-        (NotificationUserConnection & {
-          notification: NotificationUserSettings;
+        .getMany() as unknown as Promise<
+        {
+          id: string;
+          channelId: NotificationChannelId;
           settings: NotificationChannelSettings;
-        })[]
+          connection: NotificationUserConnection;
+        }[]
       >,
       this.userService.getUserByUserId(userId),
     ]);
 
     return notificationChannels
-      .map(channel => {
-        const { notification, settings } = channel;
+      .flatMap(notification => {
+        const { connection, settings } = notification;
 
         const externalId =
-          channel.channelId === 'discord' && profile.discord?.id ? `${profile.discord.id}` : channel?.externalId;
+          notification.channelId === 'discord' && profile.discord?.id
+            ? `${profile.discord.id}`
+            : connection?.externalId;
         return {
           ...settings,
-          template: settings.template,
-          enabled: notification?.enabled,
           externalId,
         };
       })
-      .filter(channel => !!channel.externalId && channel.enabled !== false);
+      .filter(notification => !!notification.externalId);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, ChangeEvent, useCallback } from 'react';
 import { Button, message, Space } from 'antd';
 import {
   NotificationsService,
@@ -56,13 +56,13 @@ export function UserNotificationsPage(props: Props) {
   useAsync(loadData, []);
 
   const onCheck = useCallback(
-    async (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => {
+    async (dataIndex: string[], record: UserNotificationSettings, event: ChangeEvent<HTMLInputElement>) => {
       const newData = [...notifications];
       const index = notifications.findIndex(item => record.id === item.id);
       newData[index] = { ...newData[index] };
       const notification = newData[index];
 
-      set(notification, dataIndex, checked);
+      set(notification, dataIndex, event.target.checked);
 
       setNotifications(newData);
     },
