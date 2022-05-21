@@ -54,7 +54,7 @@ export const courseTaskToScheduleEvent = (courseTask: CourseTaskDetails): Schedu
   score: {
     total: courseTask.score ?? 0,
     max: courseTask.maxScore ?? 0,
-    weight: courseTask.scoreWeight ?? 2,
+    weight: courseTask.scoreWeight ?? 1,
     donePercent:
       courseTask.score && courseTask.maxScore ? Math.floor((courseTask.score / courseTask.maxScore) * 100) : 0,
   },
