@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { CourseTask } from '@entities/courseTask';
+import { CourseEvent } from '@entities/courseEvent';
 
 @Injectable()
 export class CoursesService {
@@ -37,15 +38,32 @@ export class CoursesService {
     });
   }
 
-  public getCoursesWithUpdateScheduleWithin(lastHours: number) {
+  public async getCoursesWithUpdateScheduleWithin(lastHours: number) {
     const date = dayjs().subtract(lastHours, 'hours');
 
-    return this.repository
+    const courses = await (this.repository
       .createQueryBuilder('course')
-      .innerJoin(CourseTask, 'courseTask', 'course.id = courseTask.courseId and courseTask.updatedDate >= :date', {
-        date: date.toISOString(),
-      })
+      .leftJoinAndMapOne(
+        'course.task',
+        CourseTask,
+        'courseTask',
+        'course.id = courseTask.courseId and courseTask.updatedDate >= :date',
+        {
+          date: date.toISOString(),
+        },
+      )
+      .leftJoinAndMapOne(
+        'course.event',
+        CourseEvent,
+        'courseEvent',
+        'course.id = courseEvent.courseId and courseEvent.updatedDate >= :date',
+        {
+          date: date.toISOString(),
+        },
+      )
       .where('course.completed = false')
-      .getMany();
+      .getMany() as Promise<(Course & { task?: CourseTask; event?: CourseEvent })[]>);
+
+    return courses.filter(course => !!course.task || !!course.event);
   }
 }
