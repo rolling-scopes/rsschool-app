@@ -2,22 +2,28 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import MainCard from '../MainCard';
+import { ProfileInfo } from 'services/user';
 
 // TODO: Known Issue: https://stackoverflow.com/questions/59942808/how-can-i-use-jest-coverage-in-next-js-styled-jsx
+
+const mockData = {
+  generalInfo: {
+    name: 'John Doe',
+    githubId: 'john-doe',
+    location: {
+      countryName: 'Belarus',
+      cityName: 'Minsk',
+    },
+  },
+  publicCvUrl: 'public-url',
+} as ProfileInfo;
 
 describe('MainCard', () => {
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
       const output = shallow(
         <MainCard
-          data={{
-            name: 'Petr Pervyi',
-            githubId: 'piter',
-            location: {
-              countryName: 'Belarus',
-              cityName: 'Minsk',
-            },
-          }}
+          data={mockData}
           isEditingModeEnabled={false}
           onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
@@ -28,14 +34,7 @@ describe('MainCard', () => {
     it('if is editing mode enabled', () => {
       const output = shallow(
         <MainCard
-          data={{
-            name: 'Petr Pervyi',
-            githubId: 'piter',
-            location: {
-              countryName: 'Belarus',
-              cityName: 'Minsk',
-            },
-          }}
+          data={mockData}
           isEditingModeEnabled={true}
           onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
@@ -47,14 +46,7 @@ describe('MainCard', () => {
 
   const wrapper = shallow<MainCard>(
     <MainCard
-      data={{
-        name: 'Petr Pervyi',
-        githubId: 'piter',
-        location: {
-          countryName: 'Belarus',
-          cityName: 'Minsk',
-        },
-      }}
+      data={mockData}
       isEditingModeEnabled={false}
       onPermissionsSettingsChange={jest.fn()}
       onProfileSettingsChange={jest.fn()}

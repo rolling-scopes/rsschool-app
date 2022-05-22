@@ -49,19 +49,101 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             <MainCard
               data={
                 Object {
-                  "aboutMyself": "Test",
-                  "educationHistory": Array [
+                  "contacts": Object {},
+                  "generalInfo": Object {
+                    "aboutMyself": "Test",
+                    "educationHistory": Array [
+                      Object {
+                        "faculty": "TT",
+                        "graduationYear": "2019",
+                        "university": "Test",
+                      },
+                    ],
+                    "englishLevel": "a2+",
+                    "location": Object {
+                      "cityName": "Minsk",
+                      "countryName": "Belarus",
+                    },
+                  },
+                  "mentorStats": Array [
+                    Object {},
+                  ],
+                  "permissionsSettings": Object {
+                    "isAboutVisible": Object {
+                      "all": false,
+                      "mentor": true,
+                      "student": false,
+                    },
+                    "isContactsNotesVisible": Object {
+                      "all": false,
+                      "student": true,
+                    },
+                    "isEducationVisible": Object {
+                      "all": false,
+                      "mentor": true,
+                      "student": false,
+                    },
+                    "isEmailVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                    "isEnglishVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                    "isLinkedInVisible": Object {
+                      "all": false,
+                      "mentor": true,
+                      "student": false,
+                    },
+                    "isMentorStatsVisible": Object {
+                      "all": false,
+                      "mentor": true,
+                      "student": true,
+                    },
+                    "isPhoneVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                    "isProfileVisible": Object {
+                      "all": true,
+                    },
+                    "isPublicFeedbackVisible": Object {
+                      "all": false,
+                      "mentor": true,
+                      "student": true,
+                    },
+                    "isSkypeVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                    "isStudentStatsVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                    "isTelegramVisible": Object {
+                      "all": false,
+                      "student": false,
+                    },
+                  },
+                  "publicFeedback": Array [
+                    Object {},
+                  ],
+                  "stageInterviewFeedback": Array [
+                    Object {},
+                  ],
+                  "studentStats": Array [
                     Object {
-                      "faculty": "TT",
-                      "graduationYear": "2019",
-                      "university": "Test",
+                      "courseFullName": "test",
+                      "courseName": "test",
+                      "locationName": "Minsk",
+                      "tasks": Array [
+                        Object {
+                          "interviewFormAnswers": Object {},
+                        },
+                      ],
                     },
                   ],
-                  "englishLevel": "a2+",
-                  "location": Object {
-                    "cityName": "Minsk",
-                    "countryName": "Belarus",
-                  },
                 }
               }
               isEditingModeEnabled={false}
