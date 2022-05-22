@@ -2,9 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class PersonDto {
-  constructor(person: { firstName?: string; lastName?: string; id: number }) {
+  constructor(person: { firstName?: string; lastName?: string; githubId?: string; id: number }) {
     this.id = person?.id;
     this.name = [person?.firstName || '', person?.lastName || ''].join(' ').trim() || '(Empty)';
+    this.githubId = person?.githubId || '';
   }
 
   @IsNotEmpty()
@@ -13,12 +14,17 @@ export class PersonDto {
   name: string;
 
   @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  githubId: string;
+
+  @IsNotEmpty()
   @IsNumber()
   @ApiProperty()
   id: number;
 
   public static getQueryFields(base = '') {
     const prefix = base ? `${base}.` : '';
-    return ['id', 'firstName', 'lastName'].map(i => `${prefix}${i}`);
+    return ['id', 'firstName', 'lastName', 'githubId'].map(i => `${prefix}${i}`);
   }
 }

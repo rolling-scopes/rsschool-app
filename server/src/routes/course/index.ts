@@ -96,7 +96,6 @@ export function courseRoute(logger: ILogger) {
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
   addCourseUserApi(router, logger);
-  addCrossCheckApi(router, logger);
   addScheduleApi(router, logger);
   return router;
 }
@@ -147,10 +146,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
   );
   router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));
   router.post('/task/:courseTaskId/cross-check/completion', courseManagerGuard, crossCheck.createCompletion(logger));
-}
-
-function addCrossCheckApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/cross-check/pairs', courseManagerGuard, crossCheck.getCrossCheckPairs(logger));
 }
 
 function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {

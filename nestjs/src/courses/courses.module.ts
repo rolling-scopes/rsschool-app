@@ -5,7 +5,16 @@ import { Course } from '@entities/course';
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
 import { Task } from '@entities/task';
-import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInterviewFeedback } from '@entities/index';
+import {
+  Student,
+  Mentor,
+  TaskChecker,
+  StudentFeedback,
+  StageInterview,
+  StageInterviewFeedback,
+  TaskSolutionChecker,
+  TaskSolutionResult,
+} from '@entities/index';
 import { FeedbacksService, FeedbacksController } from './students/feedbacks';
 import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
@@ -19,6 +28,7 @@ import { TasksService } from './tasks/tasks.service';
 import { UsersModule } from 'src/users';
 import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { CourseStatsController, CourseStatsService } from './stats';
+import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
 
 @Module({
   imports: [
@@ -34,6 +44,8 @@ import { CourseStatsController, CourseStatsService } from './stats';
       CourseUser,
       TaskChecker,
       StudentFeedback,
+      TaskSolutionChecker,
+      TaskSolutionResult,
     ]),
     UsersModule,
     UsersNotificationsModule,
@@ -47,6 +59,7 @@ import { CourseStatsController, CourseStatsService } from './stats';
     InterviewsController,
     TasksController,
     CourseStatsController,
+    CrossCheckController,
   ],
   providers: [
     CourseTasksService,
@@ -59,6 +72,7 @@ import { CourseStatsController, CourseStatsService } from './stats';
     InterviewsService,
     TasksService,
     CourseStatsService,
+    CrossCheckPairsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

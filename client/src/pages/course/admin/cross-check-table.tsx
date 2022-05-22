@@ -1,6 +1,6 @@
 import { Button, Modal, Table, Typography } from 'antd';
 import { IPaginationInfo } from 'common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { ScoreOrder } from 'common/types/score';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -12,6 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
+import { CoursesTasksApi } from 'api';
 
 const { Text } = Typography;
 
@@ -25,7 +26,7 @@ export type CrossCheckFieldsTypes = {
 
 export const fields = {
   task: 'task',
-  checkerStudent: 'checkerStudent',
+  checker: 'checker',
   student: 'student',
   url: 'url',
   score: 'score',
@@ -33,29 +34,46 @@ export const fields = {
   reviewedDate: 'reviewedDate',
 };
 
+enum OrderDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+const DEFAULT_ORDER_BY = 'task';
+const DEFAULT_ORDER_DIRECTION = OrderDirection.ASC;
+
+const api = new CoursesTasksApi();
+
 export function Page(props: CoursePageProps) {
   const [modal, contextHolder] = Modal.useModal();
-  const courseService = useMemo(() => new CourseService(props.course?.id), [props.course]);
+  const courseId = props.course.id;
+  const courseService = useMemo(() => new CourseService(courseId), [props.course]);
 
   const [loading, setLoading] = useState(false);
   const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairs[],
     pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
-    orderBy: { field: 'task,name', order: 'asc' },
+    orderBy: { field: DEFAULT_ORDER_BY, order: DEFAULT_ORDER_DIRECTION },
   });
   const [loaded, setLoaded] = useState(false);
 
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-      const [crossCheckData, tasksFromReq] = await Promise.all([
-        courseService.getCrossCheckPairs(crossCheckList.pagination, {}, crossCheckList.orderBy),
+      const [{ data: crossCheckData }, tasksFromReq] = await Promise.all([
+        api.getCrossCheckPairs(
+          courseId,
+          crossCheckList.pagination.pageSize,
+          crossCheckList.pagination.current,
+          crossCheckList.orderBy.field,
+          crossCheckList.orderBy.order,
+        ),
         courseService.getCourseTasksDetails(),
       ]);
       setCourseTasks(tasksFromReq.filter(task => task.pairsCount));
       setCrossCheckList({
-        content: crossCheckData.content,
+        content: crossCheckData.items,
         pagination: crossCheckData.pagination,
         orderBy: crossCheckList.orderBy,
       });
@@ -66,17 +84,27 @@ export function Page(props: CoursePageProps) {
   }, []);
 
   const getCourseScore = useCallback(
-    async (pagination: IPaginationInfo, filters: any, order: ScoreOrder) => {
+    async (pagination: IPaginationInfo, filters: typeof fields, order: ScoreOrder) => {
       const orderBy = {
-        field: order.field,
-        order: order.order === 'ascend' ? 'ASC' : 'DESC',
+        field: order.field ?? DEFAULT_ORDER_BY,
+        order: order.order === 'ascend' ? OrderDirection.ASC : OrderDirection.DESC,
       };
       setLoading(true);
       try {
-        const crossCheckData = await courseService.getCrossCheckPairs(pagination, filters, orderBy);
+        const { data } = await api.getCrossCheckPairs(
+          courseId,
+          pagination.pageSize,
+          pagination.current,
+          orderBy.field,
+          orderBy.order,
+          filters.checker ?? '',
+          filters.student ?? '',
+          filters.url ?? '',
+          filters.task ?? '',
+        );
         setCrossCheckList({
-          content: crossCheckData.content,
-          pagination: crossCheckData.pagination,
+          content: data.items,
+          pagination: data.pagination,
           orderBy: {
             field: orderBy.field,
             order: orderBy.order,
@@ -108,10 +136,10 @@ export function Page(props: CoursePageProps) {
         crossCheckList.content,
         crossCheckList.pagination,
         getCourseScore,
-        ({ comment, checkerStudent }) => {
+        ({ comment, checker }) => {
           modal.info({
             width: 600,
-            title: `Comment from ${checkerStudent.githubId}`,
+            title: `Comment from ${checker.githubId}`,
             content: comment.split('\n').map(text => <p>{text}</p>),
           });
         },
@@ -125,7 +153,7 @@ function renderTable(
   loaded: boolean,
   crossCheckPairs: CrossCheckPairs[],
   pagination: IPaginationInfo,
-  handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
+  handleChange: (pagination: IPaginationInfo, filters: typeof fields, order: ScoreOrder) => void,
   viewComment: (value: CrossCheckPairs) => void,
 ) {
   if (!loaded) {
@@ -141,6 +169,7 @@ function renderTable(
       pagination={pagination}
       dataSource={crossCheckPairs}
       onChange={handleChange as any}
+      key="id"
       columns={[
         {
           title: 'Task',
@@ -154,8 +183,8 @@ function renderTable(
         {
           title: 'Checker',
           fixed: 'left',
-          key: fields.checkerStudent,
-          dataIndex: ['checkerStudent', 'githubId'],
+          key: fields.checker,
+          dataIndex: ['checker', 'githubId'],
           sorter: true,
           width: 150,
           render: (value: string) => (
@@ -208,7 +237,7 @@ function renderTable(
           key: fields.score,
           width: 80,
           sorter: true,
-          render: value => <Text strong>{value}</Text>,
+          render: value => <Text strong>{value ?? '(Empty)'}</Text>,
         },
         {
           title: 'Submitted Date',

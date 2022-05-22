@@ -4,7 +4,6 @@ export * from './createResult';
 export * from './createSolution';
 export * from './deleteSolution';
 export * from './getAssignments';
-export * from './getCrossCheckPairs';
 export * from './getFeedback';
 export * from './getResult';
 export * from './getSolution';

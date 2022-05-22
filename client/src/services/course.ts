@@ -7,7 +7,6 @@ import { ScoreTableFilters } from 'common/types/score';
 import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
-import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 import { CoursesTasksApi } from 'api';
 
 export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
@@ -586,22 +585,6 @@ export class CourseService {
     return result.data.data as InterviewDetails[];
   }
 
-  async getCrossCheckPairs(
-    pagination: IPaginationInfo,
-    filter: Partial<Record<keyof CrossCheckFieldsTypes, string>>,
-    orderBy = { field: 'student,githubId', order: 'desc' },
-  ) {
-    const params = new URLSearchParams({
-      current: String(pagination.current),
-      pageSize: String(pagination.pageSize),
-      orderBy: String(orderBy.field),
-      orderDirection: String(orderBy.order),
-      ...(onlyDefined(filter) as object),
-    });
-    const result = await this.axios.get<any>(`/cross-check/pairs?${params.toString()}`);
-    return result.data.data as { content: CrossCheckPairs[]; pagination: IPaginationInfo };
-  }
-
   async createCertificate(githubId: string) {
     const result = await this.axios.post<any>(`/student/${githubId}/certificate`);
     return result.data.data;
@@ -760,15 +743,7 @@ export interface TaskSolution {
 }
 
 export interface CrossCheckPairs {
-  checkerStudent: {
-    githubId: string;
-    id: number;
-  };
-  courseTask: {
-    courseId: number;
-    id: number;
-  };
-  student: {
+  checker: {
     githubId: string;
     id: number;
   };
@@ -776,8 +751,12 @@ export interface CrossCheckPairs {
     name: string;
     id: number;
   };
+  student: {
+    githubId: string;
+    id: number;
+  };
   url: string;
   comment: string;
   score: number;
-  key: string;
+  id: number;
 }
