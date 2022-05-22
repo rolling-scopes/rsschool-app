@@ -351,7 +351,7 @@ export class ProfilePage extends React.Component<Props, State> {
     const cards = [
       profile?.generalInfo && (
         <MainCard
-          data={profile.generalInfo}
+          data={profile}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
