@@ -156,5 +156,3 @@ export interface UserInfo {
   contacts?: Contacts;
   discord: Discord | null;
 }
-
-
