@@ -1,5 +1,4 @@
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
   CacheInterceptor,
   CacheTTL,
@@ -11,9 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
-
-import { Student } from '@entities/student';
 
 import { CourseGuard, DefaultGuard } from 'src/auth';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
@@ -25,7 +21,7 @@ import { ScoreDto } from './dto/Score.dto';
 @Controller('course/:courseId/students/score')
 @ApiTags('students score')
 export class ScoreController {
-  constructor(@InjectRepository(Student) readonly studentRepository: Repository<Student>) {}
+  constructor(private scoreService: ScoreService) {}
 
   @Get('/')
   @UseGuards(DefaultGuard, CourseGuard)
@@ -44,8 +40,7 @@ export class ScoreController {
       activeOnly: query.activeOnly === 'true',
     };
 
-    const scoreService = new ScoreService(this.studentRepository);
-    const score = await scoreService.getScore({
+    const score = await this.scoreService.getScore({
       courseId,
       filter,
       orderBy: { field: orderBy, direction: orderDirection },

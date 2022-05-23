@@ -34,7 +34,7 @@ import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
 import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
-import { ScoreController } from './score/score.controller';
+import { ScoreController, ScoreService } from './score';
 
 @Module({
   imports: [
@@ -83,6 +83,7 @@ import { ScoreController } from './score/score.controller';
     TasksService,
     CourseStatsService,
     CrossCheckPairsService,
+    ScoreService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 
 import { Student } from '@entities/student';
@@ -26,13 +27,12 @@ const defaultOrder: { field: OrderField; direction: OrderDirection } = {
   direction: 'ASC',
 };
 
-type ScoreOptions = {
-  includeContacts?: boolean;
-};
-
 @Injectable()
 export class ScoreService {
-  constructor(private readonly studentRepository: Repository<Student>, private options: ScoreOptions = {}) {}
+  constructor(
+    @InjectRepository(Student)
+    readonly studentRepository: Repository<Student>,
+  ) {}
 
   public async getScore({
     filter = defaultFilter,
@@ -81,15 +81,7 @@ export class ScoreService {
       }
 
       const mentor = student.mentor ? MentorsService.convertMentorToMentorBasic(student.mentor) : undefined;
-      const contacts = this.options.includeContacts
-        ? {
-            epamEmail: user.contactsEpamEmail,
-            email: user.primaryEmail || user.contactsEmail,
-            linkedIn: user.contactsLinkedIn,
-            telegram: user.contactsTelegram,
-          }
-        : undefined;
-      return new ScoreStudentDto(student, user, mentor, taskResults, contacts);
+      return new ScoreStudentDto(student, user, mentor, taskResults, undefined);
     });
 
     return new ScoreDto(students, paginationMeta);
@@ -107,7 +99,7 @@ export class ScoreService {
     let query = this.studentRepository
       .createQueryBuilder('student')
       .innerJoin('student.user', 'user')
-      .addSelect(this.getPrimaryUserFields().concat(this.options.includeContacts ? this.getContactsUserFields() : []))
+      .addSelect(this.getPrimaryUserFields())
       .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
       .addSelect(['mentor.id', 'mentor.userId'])
       .leftJoin('student.taskResults', 'tr')
@@ -162,14 +154,5 @@ export class ScoreService {
     `${modelName}.cityName`,
     `${modelName}.countryName`,
     `${modelName}.discord`,
-  ];
-
-  private getContactsUserFields = (modelName = 'user') => [
-    `${modelName}.primaryEmail`,
-    `${modelName}.contactsPhone`,
-    `${modelName}.contactsEmail`,
-    `${modelName}.contactsTelegram`,
-    `${modelName}.contactsLinkedIn`,
-    `${modelName}.contactsSkype`,
   ];
 }
