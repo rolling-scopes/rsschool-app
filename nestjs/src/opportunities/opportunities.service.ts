@@ -90,7 +90,9 @@ export class OpportunitiesService {
           courseId: In(resume.visibleCourses ?? []),
         },
       }),
-      this.feedbackRepository.find({ where: { toUserId: resume.userId }, order: { createdDate: 'DESC' } }),
+      resume.userId
+        ? this.feedbackRepository.find({ where: { toUserId: resume.userId }, order: { createdDate: 'DESC' } })
+        : Promise.resolve([]),
     ]);
 
     const feedbacks = await this.studentFeedbackRepository.find({

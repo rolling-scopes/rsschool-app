@@ -5,7 +5,7 @@ import { User } from '@entities/user';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/auth';
-import { In, Repository, UpdateResult } from 'typeorm';
+import { In, IsNull, Not, Repository, UpdateResult } from 'typeorm';
 import { UserNotificationsService } from '../users-notifications';
 import { ProfileInfoDto, UpdateUserDto } from './dto';
 import { isEmail } from 'class-validator';
@@ -134,12 +134,13 @@ export class ProfileService {
     }
   }
 
-  public async getProfile(userId: number) {
+  public async getProfile(githubId: string) {
+    const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({
-      where: { userId },
+      where: { userId: user.id, name: Not(IsNull()) },
     });
 
-    return { resume };
+    return { resume: resume ?? null };
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

@@ -29,7 +29,7 @@ export class Resume {
 
   @Column({ nullable: true })
   @Index()
-  userId: number;
+  userId: number | null;
 
   @Column({ type: 'varchar', length: 256 })
   @Index()
