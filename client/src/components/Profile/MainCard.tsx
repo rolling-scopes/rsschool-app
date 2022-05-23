@@ -95,11 +95,13 @@ class MainCard extends React.Component<Props, State> {
               <EnvironmentFilled /> {`${location?.cityName}, ${location?.countryName}`}
             </span>
           </Paragraph>
-          <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
-            <a target="_blank" href={`${publicCvUrl}`}>
-              Public CV
-            </a>
-          </Paragraph>
+          {publicCvUrl ? (
+            <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
+              <a target="_blank" href={publicCvUrl}>
+                Public CV
+              </a>
+            </Paragraph>
+          ) : null}
           {isEditingModeEnabled && (
             <>
               <PermissionsSettingsDrawer
