@@ -55,12 +55,8 @@ export class ProfileController {
   @Get(':username')
   @ApiOperation({ operationId: 'getProfile' })
   @ApiResponse({ type: ProfileDto })
-  public async getProfileInfo(@Req() req: CurrentRequest, @Param('username') _: string) {
-    const {
-      user: { id },
-    } = req;
-
-    const profile = await this.profileService.getProfile(id);
+  public async getProfileInfo(@Param('username') githubId: string) {
+    const profile = await this.profileService.getProfile(githubId);
 
     return new ProfileDto(profile);
   }
