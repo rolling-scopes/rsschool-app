@@ -1,8 +1,8 @@
 import {
   Controller,
   Delete,
-  Get,
   ForbiddenException,
+  Get,
   NotFoundException,
   Param,
   ParseUUIDPipe,
@@ -18,7 +18,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from 'src/auth';
+import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { ApplicantResumeDto } from './dto/applicant-resume.dto';
 import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
 import { OpportunitiesService } from './opportunities.service';
@@ -91,5 +92,15 @@ export class OpportunitiesController {
     }
     const { resume, students, gratitudes, feedbacks } = data;
     return new ResumeDto(resume, students, gratitudes, feedbacks);
+  }
+
+  @Get('/applicants')
+  @ApiOperation({ operationId: 'getApplicants' })
+  @ApiOkResponse({ type: [ApplicantResumeDto] })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  public async getApplicants() {
+    const data = await this.opportunitiesService.getApplicantResumes();
+    return data.map(item => new ApplicantResumeDto(item));
   }
 }

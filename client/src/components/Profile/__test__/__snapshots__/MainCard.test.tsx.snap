@@ -4,7 +4,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
 <Fragment>
   <ForwardRef>
     <GithubAvatar
-      githubId="piter"
+      githubId="john-doe"
       size={96}
       style={
         Object {
@@ -23,7 +23,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
         }
       }
     >
-      Petr Pervyi
+      John Doe
     </Title>
     <Paragraph
       style={
@@ -34,7 +34,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
       }
     >
       <a
-        href="https://github.com/piter"
+        href="https://github.com/john-doe"
         style={
           Object {
             "fontSize": 16,
@@ -45,7 +45,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
       >
         <ForwardRef(GithubFilled) />
          
-        piter
+        john-doe
       </a>
     </Paragraph>
     <Paragraph
@@ -67,6 +67,21 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
          
         Minsk, Belarus
       </span>
+    </Paragraph>
+    <Paragraph
+      style={
+        Object {
+          "marginTop": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      <a
+        href="public-url"
+        target="_blank"
+      >
+        Public CV
+      </a>
     </Paragraph>
   </ForwardRef>
 </Fragment>
@@ -87,7 +102,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
     }
   >
     <GithubAvatar
-      githubId="piter"
+      githubId="john-doe"
       size={96}
       style={
         Object {
@@ -106,7 +121,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
         }
       }
     >
-      Petr Pervyi
+      John Doe
     </Title>
     <Paragraph
       style={
@@ -117,7 +132,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
       }
     >
       <a
-        href="https://github.com/piter"
+        href="https://github.com/john-doe"
         style={
           Object {
             "fontSize": 16,
@@ -128,7 +143,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
       >
         <ForwardRef(GithubFilled) />
          
-        piter
+        john-doe
       </a>
     </Paragraph>
     <Paragraph
@@ -150,6 +165,21 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
          
         Minsk, Belarus
       </span>
+    </Paragraph>
+    <Paragraph
+      style={
+        Object {
+          "marginTop": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      <a
+        href="public-url"
+        target="_blank"
+      >
+        Public CV
+      </a>
     </Paragraph>
     <PermissionsSettingsDrawer
       hideSettings={[Function]}
@@ -177,7 +207,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
               <ForwardRef
                 onChange={[Function]}
                 placeholder="Firstname Lastname"
-                value="Petr Pervyi"
+                value="John Doe"
               />
             </Row>
             <Row

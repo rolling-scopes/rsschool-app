@@ -9,6 +9,7 @@ import { In, Repository, UpdateResult } from 'typeorm';
 import { UserNotificationsService } from '../users-notifications';
 import { ProfileInfoDto, UpdateUserDto } from './dto';
 import { isEmail } from 'class-validator';
+import { Resume } from '@entities/resume';
 
 @Injectable()
 export class ProfileService {
@@ -19,6 +20,8 @@ export class ProfileService {
     private notificationConnectionsRepository: Repository<NotificationUserConnection>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Resume)
+    private resumeRepository: Repository<Resume>,
     @InjectRepository(ProfilePermissions)
     private profilePermissionsRepository: Repository<ProfilePermissions>,
     private userNotificationsService: UserNotificationsService,
@@ -129,6 +132,14 @@ export class ProfileService {
 
       await this.updateEmailChannel(userId, user);
     }
+  }
+
+  public async getProfile(userId: number) {
+    const resume = await this.resumeRepository.findOne({
+      where: { userId },
+    });
+
+    return { resume };
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

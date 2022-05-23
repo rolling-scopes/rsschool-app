@@ -12,21 +12,12 @@ import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
-import { UserService } from 'services/user';
+import { ProfileInfo, UserService } from 'services/user';
 import { CoursesService } from 'services/courses';
-import {
-  ProfileInfo,
-  StudentStats,
-  ConfigurableProfilePermissions,
-  Contacts,
-  GeneralInfo,
-  Discord,
-} from 'common/models/profile';
-
+import { StudentStats, ConfigurableProfilePermissions, Contacts, GeneralInfo, Discord } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
-// import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
@@ -38,6 +29,7 @@ import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
+import { ProfileApi } from 'api';
 
 type Props = {
   router: NextRouter;
@@ -70,6 +62,8 @@ export type ChangedPermissionsSettings = {
   permissionName: string;
   role: string;
 };
+
+const profileApi = new ProfileApi();
 export class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
@@ -199,13 +193,14 @@ export class ProfilePage extends React.Component<Props, State> {
   private fetchData = async () => {
     this.setState({ isLoading: true });
 
-    const { router } = this.props;
+    const { router, session } = this.props;
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
-      const [profile, connections] = await Promise.all([
+      const [profile, connections, { data }] = await Promise.all([
         this.userService.getProfileInfo(githubId),
         this.notificationsService.getUserConnections().catch(() => []),
+        profileApi.getProfile(githubId ?? session.githubId),
       ]);
 
       const coursesInfo = await this.getCoursesInfo(profile);
@@ -216,6 +211,7 @@ export class ProfilePage extends React.Component<Props, State> {
           ...stats,
           isCourseCompleted: coursesInfo.find(course => course.id === stats.courseId)?.completed ?? false,
         })),
+        ...data,
       };
 
       let isProfileOwner = false;
@@ -304,7 +300,7 @@ export class ProfilePage extends React.Component<Props, State> {
   };
 
   authorizeDiscord = async () => {
-    await this.setState({ isLoading: true });
+    this.setState({ isLoading: true });
 
     const discord = await this.userService.getDiscordIds();
 
@@ -313,6 +309,7 @@ export class ProfilePage extends React.Component<Props, State> {
         ...state,
         profile: {
           ...profile,
+          publicCvUrl: profile?.publicCvUrl ?? null,
           discord,
         },
         isInitialProfileSettingsChanged: true,
@@ -322,7 +319,7 @@ export class ProfilePage extends React.Component<Props, State> {
       this.props.router.replace('/profile');
     }
 
-    await this.setState({ isLoading: false });
+    this.setState({ isLoading: false });
   };
 
   componentDidMount() {
@@ -354,7 +351,7 @@ export class ProfilePage extends React.Component<Props, State> {
     const cards = [
       profile?.generalInfo && (
         <MainCard
-          data={profile.generalInfo}
+          data={profile}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
@@ -370,16 +367,6 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
-      // TODO: Temporary disabled
-      // profile?.generalInfo?.englishLevel !== undefined && (
-      //   <EnglishCard
-      //     data={profile.generalInfo}
-      //     isEditingModeEnabled={isEditingModeVisible}
-      //     permissionsSettings={profile.permissionsSettings}
-      //     onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-      //     onProfileSettingsChange={this.onProfileSettingsChange}
-      //   />
-      // ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { Card, Typography, Input, Row, Col } from 'antd';
-import { GeneralInfo, ConfigurableProfilePermissions } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { LocationSelect } from 'components/Forms';
@@ -12,9 +12,10 @@ import ProfileSettingsDrawer from './ProfileSettingsDrawer';
 const { Title, Paragraph, Text } = Typography;
 
 import { GithubFilled, EnvironmentFilled, EditOutlined, SettingOutlined } from '@ant-design/icons';
+import { ProfileInfo } from 'services/user';
 
 type Props = {
-  data: GeneralInfo;
+  data: ProfileInfo;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
@@ -33,9 +34,9 @@ class MainCard extends React.Component<Props, State> {
   };
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.data.location.cityName, this.props.data.location.cityName) ||
-    !isEqual(nextProps.data.location.countryName, this.props.data.location.countryName) ||
-    !isEqual(nextProps.data.name, this.props.data.name) ||
+    !isEqual(nextProps.data.generalInfo?.location.cityName, this.props.data.generalInfo?.location.cityName) ||
+    !isEqual(nextProps.data.generalInfo?.location.countryName, this.props.data.generalInfo?.location.countryName) ||
+    !isEqual(nextProps.data.generalInfo?.name, this.props.data.generalInfo?.name) ||
     !isEqual(nextProps.permissionsSettings?.isProfileVisible, this.props.permissionsSettings?.isProfileVisible) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
     !isEqual(nextState, this.state);
@@ -62,7 +63,8 @@ class MainCard extends React.Component<Props, State> {
   render() {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
       this.props;
-    const { githubId, name, location } = this.props.data;
+    const { githubId, name, location } = this.props.data.generalInfo ?? {};
+    const publicCvUrl = this.props.data.publicCvUrl;
     const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
 
     return (
@@ -81,15 +83,22 @@ class MainCard extends React.Component<Props, State> {
           <Title level={1} style={{ fontSize: 24, textAlign: 'center', margin: 0 }}>
             {name}
           </Title>
+
           <Paragraph style={{ textAlign: 'center', marginBottom: 20 }}>
             <a target="_blank" href={`https://github.com/${githubId}`} style={{ marginLeft: '-14px', fontSize: 16 }}>
               <GithubFilled /> {githubId}
             </a>
           </Paragraph>
+
           <Paragraph style={{ textAlign: 'center', margin: 0 }}>
             <span style={{ marginLeft: '-14px' }}>
-              <EnvironmentFilled /> {`${location.cityName}, ${location.countryName}`}
+              <EnvironmentFilled /> {`${location?.cityName}, ${location?.countryName}`}
             </span>
+          </Paragraph>
+          <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
+            <a target="_blank" href={`${publicCvUrl}`}>
+              Public CV
+            </a>
           </Paragraph>
           {isEditingModeEnabled && (
             <>
@@ -123,7 +132,7 @@ class MainCard extends React.Component<Props, State> {
                         <LocationSelect
                           style={{ flex: 1 }}
                           onChange={location => onProfileSettingsChange(location, 'generalInfo.location')}
-                          location={location}
+                          location={location ?? null}
                         />
                       </Row>
                     </Col>
