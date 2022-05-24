@@ -10,6 +10,7 @@ import { UserNotificationsService } from '../users-notifications';
 import { ProfileInfoDto, UpdateUserDto } from './dto';
 import { isEmail } from 'class-validator';
 import { Resume } from '@entities/resume';
+import { Discord } from '../../../common/models';
 
 @Injectable()
 export class ProfileService {
@@ -130,7 +131,7 @@ export class ProfileService {
         .where('id = :id', { id: userId })
         .execute();
 
-      await this.updateEmailChannel(userId, user);
+      await Promise.all([this.updateEmailChannel(userId, user), this.updateDiscordChannel(userId, user)]);
     }
   }
 
@@ -171,6 +172,33 @@ export class ProfileService {
         externalId: newEmail,
         enabled: isConfirmed,
       });
+    }
+  }
+
+  private async updateDiscordChannel(userId: number, user: UpdateResult) {
+    const newDiscord: Discord = user.raw[0]?.discord;
+    const channelId = 'discord';
+    if (!newDiscord) {
+      await this.notificationConnectionsRepository.delete({
+        channelId,
+        userId,
+      });
+    } else {
+      const connection = await this.notificationConnectionsRepository.findOne({
+        where: {
+          channelId,
+          userId,
+        },
+      });
+
+      if (!connection || connection.externalId !== `${newDiscord.id}`) {
+        await this.notificationConnectionsRepository.save({
+          channelId,
+          userId,
+          externalId: `${newDiscord.id}`,
+          enabled: true,
+        });
+      }
     }
   }
 }

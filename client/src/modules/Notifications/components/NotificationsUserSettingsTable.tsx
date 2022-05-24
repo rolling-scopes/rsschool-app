@@ -69,7 +69,7 @@ function buildColumns(
         }`,
         title: channel,
         dataIndex,
-        render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck, true),
+        render: buildCheckBoxRenderer<UserNotificationSettings>(dataIndex, onCheck, channel !== 'discord'),
       };
     }),
   );
