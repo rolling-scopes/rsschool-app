@@ -1,13 +1,19 @@
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class NotificationConnectionExistsDto {
   @ApiProperty()
   @IsString()
   public channelId: NotificationChannelId;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  public externalId: string;
+  @IsOptional()
+  public externalId?: string;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  public userId?: number;
 }
