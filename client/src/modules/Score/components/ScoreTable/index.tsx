@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Popover, Table } from 'antd';
+import { Popover, Table, Tooltip } from 'antd';
 import { dateTimeRenderer } from 'components/Table';
 import { isUndefined } from 'lodash';
 import { getColumns } from 'modules/Score/data/getColumns';
@@ -195,7 +195,13 @@ function getTaskColumns(courseTasks: CourseTaskDto[]): IColumn[] {
     className: 'align-right',
     render: (_: any, d: StudentScore) => {
       const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
-      return currentTask ? <div>{currentTask.score}</div> : 0;
+      return currentTask ? (
+        <Tooltip title={`Score: ${currentTask.score} / ${courseTask.maxScore}. Coefficient: ${courseTask.scoreWeight}`}>
+          <div>{currentTask.score * courseTask.scoreWeight}</div>
+        </Tooltip>
+      ) : (
+        0
+      );
     },
     name: courseTask.name,
   }));
