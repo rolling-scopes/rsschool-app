@@ -13,6 +13,7 @@ import {
   coloredDateRenderer,
   renderTagWithStyle,
   scoreRenderer,
+  weightRenderer,
 } from 'components/Table';
 import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import { ScheduleViewProps } from '../ScheduleView';
@@ -33,14 +34,6 @@ const getColumns = ({
   splittedByWeek?: boolean;
 }) => [
   {
-    key: 'Type',
-    title: Column.Type,
-    dataIndex: 'type',
-    render: (tagName: string) => renderTagWithStyle(tagName, tagColors, TASK_TYPES_MAP),
-    editable: true,
-    visible: false,
-  },
-  {
     key: 'Name',
     title: Column.Name,
     dataIndex: 'name',
@@ -59,6 +52,14 @@ const getColumns = ({
     },
     ...getColumnSearchProps('name'),
     editable: true,
+  },
+  {
+    key: 'Type',
+    title: Column.Type,
+    dataIndex: 'type',
+    render: (tagName: string) => renderTagWithStyle(tagName, tagColors, TASK_TYPES_MAP),
+    editable: true,
+    visible: false,
   },
   {
     key: 'StartDate',
@@ -95,10 +96,18 @@ const getColumns = ({
     editable: true,
   },
   {
+    key: 'Weight',
+    title: Column.Weight,
+    dataIndex: ['score', 'weight'],
+    render: weightRenderer,
+    align: 'right',
+  },
+  {
     key: 'Score',
     title: Column.Score,
     dataIndex: 'score',
     render: scoreRenderer,
+    align: 'right',
   },
 ];
 
