@@ -86,11 +86,12 @@ export function Header(props: Props) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'space-between',
+          boxShadow: '0px 2px 8px #F0F1F2',
         }}
       >
-        <Space style={{ alignItems: 'flex-start' }}>
+        <Space size={24}>
           <Link href="/">
-            <a style={{ height: '100%' }}>
+            <a>
               <img
                 style={{ height: 30 }}
                 className="header-logo"
