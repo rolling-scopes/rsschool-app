@@ -1,5 +1,5 @@
 const isDevMode = process.env.NODE_ENV !== 'production';
-const clientId = isDevMode ? '625945676009963521' : '762932438828974157';
+const clientId = isDevMode ? '625945676009963521' : '978920245743976448';
 const redirectUrl = isDevMode ? 'http://localhost:3000/profile' : 'https://app.rs.school/profile';
 
 export default {
