@@ -23,7 +23,7 @@ describe('paginate', () => {
     expect(skipSpy).toHaveBeenCalledWith(0);
   });
 
-  it('calls sjip() with correct offset for 1 + n page', async () => {
+  it('calls skip() with correct offset for 1 + n page', async () => {
     const mockQuery = mockRepository().createQueryBuilder();
 
     await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 3, limit: 10 });
