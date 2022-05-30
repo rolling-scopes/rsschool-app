@@ -24,7 +24,7 @@ const defaultFilter: ScoreTableFilters = {
 
 const defaultOrder: { field: OrderField; direction: OrderDirection } = {
   field: 'rank',
-  direction: 'ASC',
+  direction: 'asc',
 };
 
 @Injectable()
@@ -143,7 +143,10 @@ export class ScoreService {
       });
     }
 
-    return query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction);
+    return query.orderBy(
+      orderByFieldMapping[orderBy.field],
+      orderBy.direction.toUpperCase() as Uppercase<OrderDirection>,
+    );
   }
 
   private getPrimaryUserFields = (modelName = 'user') => [

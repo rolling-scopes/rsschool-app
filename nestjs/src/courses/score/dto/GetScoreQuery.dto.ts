@@ -13,7 +13,7 @@ export const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
-export type OrderDirection = 'ASC' | 'DESC';
+export type OrderDirection = 'asc' | 'desc';
 
 export type OrderField = keyof typeof orderByFieldMapping;
 
@@ -24,7 +24,7 @@ export class GetScoreQueryDto {
 
   @ApiProperty({ enum: ['asc', , 'desc'] })
   @IsString()
-  public orderDirection?: 'asc' | 'desc';
+  public orderDirection?: OrderDirection;
 
   @ApiProperty()
   @IsString()
