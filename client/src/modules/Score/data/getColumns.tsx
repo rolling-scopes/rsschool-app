@@ -1,5 +1,6 @@
 import { SettingFilled } from '@ant-design/icons';
 import { Typography } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
 import { isArray } from 'lodash';
@@ -20,7 +21,7 @@ const getSearchProps = (key: string) => ({
   onFilter: undefined,
 });
 
-export function getColumns(props: Props) {
+export function getColumns(props: Props): ColumnsType<StudentScore> {
   const { cityName, mentor, handleSettings, taskColumns } = props;
   return [
     {
@@ -55,7 +56,7 @@ export function getColumns(props: Props) {
       dataIndex: 'name',
       width: 150,
       sorter: 'name',
-      render: (value: any, record: StudentScore) => (
+      render: (value: string, record) => (
         <Link prefetch={false} href={`/profile?githubId=${record.githubId}`}>
           <a>{value}</a>
         </Link>

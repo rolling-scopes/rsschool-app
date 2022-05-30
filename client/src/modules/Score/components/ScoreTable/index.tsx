@@ -15,6 +15,7 @@ import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
+import useWindowDimensions from 'utils/useWindowDimensions';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
@@ -25,6 +26,7 @@ const courseTasksApi = new CoursesTasksApi();
 
 export function ScoreTable(props: Props) {
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const { activeOnly } = props;
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
@@ -37,6 +39,7 @@ export function ScoreTable(props: Props) {
     orderBy: { field: 'rank', direction: 'asc' },
   });
 
+  const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loaded, setLoaded] = useState(false);
 
@@ -83,16 +86,15 @@ export function ScoreTable(props: Props) {
     }
   }, [activeOnly]);
 
-  useEffect(() => loadInitialData() as any, [activeOnly]);
-
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
-
-  const columns = getColumns({
-    cityName,
-    mentor,
-    handleSettings: () => setIsVisibleSettings(true),
-    taskColumns: getTaskColumns(courseTasks),
-  });
+  const [columns, setColumns] = useState(
+    getColumns({
+      cityName,
+      mentor,
+      handleSettings: () => setIsVisibleSettings(true),
+      taskColumns: getTaskColumns(courseTasks),
+    }),
+  );
 
   const getVisibleColumns = (columns: any[]) => columns.filter(column => !notVisibleColumns?.includes(column.name));
 
@@ -109,6 +111,30 @@ export function ScoreTable(props: Props) {
 
   const [state, setState] = useState(['']);
 
+  useEffect(() => {
+    loadInitialData();
+  }, [activeOnly]);
+
+  useEffect(() => {
+    if (width < 400) {
+      setFixedColumn(false);
+      return;
+    }
+
+    setFixedColumn(true);
+  }, [width]);
+
+  useEffect(() => {
+    setColumns(prevColumns => {
+      const githubColumn = prevColumns.find(el => el.key === 'githubId');
+      if (githubColumn) {
+        githubColumn.fixed = fixedColumn ? 'left' : false;
+      }
+
+      return prevColumns;
+    });
+  }, [fixedColumn]);
+
   if (!loaded) {
     return null;
   }
@@ -118,7 +144,7 @@ export function ScoreTable(props: Props) {
       <Table<StudentScore>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(100vh - 250px)' }}
+        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(100vh - 300px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
@@ -212,5 +238,8 @@ const styles = css`
   }
   :global(.table-score td a) {
     line-height: 24px;
+  }
+  :global(.table-score .ant-table-body) {
+    min-height: 200px;
   }
 `;
