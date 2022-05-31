@@ -78,6 +78,6 @@ export class ConfigService {
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
     };
 
-    this.host = conf.get('RSSCHOOL_HOST') ?? '';
+    this.host = conf.get('RSSHCOOL_HOST') ?? '';
   }
 }
