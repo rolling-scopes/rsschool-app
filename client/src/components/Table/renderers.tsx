@@ -166,21 +166,21 @@ export const urlRenderer = (url: string) =>
     </Tooltip>
   );
 
-export const scoreRenderer = (score: { total: number; max: number; donePercent: number; weight: number } | null) => {
+export const weightRenderer = (weight: number | null) => {
+  if (weight === null) return null;
+
+  return <Text>×{+weight.toFixed(2)}</Text>;
+};
+
+export const scoreRenderer = (score: { total: number; max: number; donePercent: number } | null) => {
   if (!score) return null;
 
-  const { total, max, donePercent, weight } = score;
-  const formateWeight = Math.round(weight * 100) / 100;
+  const { total, max, donePercent } = score;
 
   return (
     <Tooltip placement="topLeft" title={`Done: ${donePercent}%`}>
-      <Text strong>
-        {total}/{max}{' '}
-        {formateWeight !== 1 ? (
-          <span style={{ color: 'gray', fontSize: '0.6rem', fontWeight: 'normal' }}>x{formateWeight}</span>
-        ) : (
-          ''
-        )}
+      <Text>
+        {total}/{max}
       </Text>
     </Tooltip>
   );
