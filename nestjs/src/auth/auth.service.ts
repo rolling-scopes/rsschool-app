@@ -33,6 +33,7 @@ export type LoginStateParams = {
 @Injectable()
 export class AuthService {
   private readonly admins: string[] = [];
+  private readonly hirers: string[] = [];
 
   constructor(
     private readonly jwtService: JwtService,
@@ -46,6 +47,7 @@ export class AuthService {
     private httpService: HttpService,
   ) {
     this.admins = configService.users.admins;
+    this.hirers = configService.users.hirers;
   }
 
   public async createAuthUser(profile: Profile, admin = false): Promise<AuthUser> {
@@ -92,7 +94,8 @@ export class AuthService {
       this.courseTaskService.getByOwner(username),
     ]);
     const isAdmin = this.admins.includes(username) || admin;
-    return new AuthUser(authInfo, courseTasks, isAdmin);
+    const isHirer = this.hirers.includes(username);
+    return new AuthUser(authInfo, courseTasks, isAdmin, isHirer);
   }
 
   public validateGithub(req: CurrentRequest) {
