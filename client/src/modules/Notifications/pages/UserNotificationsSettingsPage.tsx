@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Alert, Button, message, Space } from 'antd';
+import { Button, message, Space } from 'antd';
 import {
   NotificationsService,
   NotificationChannel,
@@ -74,7 +74,6 @@ export function UserNotificationsPage(props: Props) {
   return (
     <PageLayout loading={loading} title="Notifications" githubId={props.session.githubId}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Alert message="Discord notifications are temporarily unavailable due to technical issues" type="warning" />
         {!loading && <Consents email={email} telegram={telegram} discord={discord} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
