@@ -10,6 +10,10 @@ concurrency:
   group: pr_${{ github.head_ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   pr_lint:
     name: Lint and Format
