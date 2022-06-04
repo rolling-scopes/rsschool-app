@@ -1,13 +1,16 @@
 import { ClockCircleOutlined, EyeInvisibleTwoTone, EyeTwoTone, StarTwoTone } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import MarkdownInput from 'components/Forms/MarkdownInput';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useAsync } from 'react-use';
+import remarkGfm from 'remark-gfm';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
@@ -70,7 +73,9 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
             <div>
               <Typography.Text>
                 {historyItem.comment.split('\n').map((item, i) => (
-                  <div key={i}>{item}</div>
+                  <div key={i}>
+                    <ReactMarkdown rehypePlugins={[remarkGfm]}>{item}</ReactMarkdown>
+                  </div>
                 ))}
               </Typography.Text>
             </div>
@@ -181,7 +186,7 @@ function Page(props: CoursePageProps) {
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
-            <CommentInput />
+            <MarkdownInput />
             <Form.Item valuePropName="checked" name="visibleName">
               <Checkbox>Make my name visible in feedback</Checkbox>
             </Form.Item>
