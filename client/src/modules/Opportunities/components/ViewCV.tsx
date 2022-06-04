@@ -1,9 +1,7 @@
-import { Col, Row, Button, notification, Alert } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { Col, Row } from 'antd';
 import { ResumeDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import React, { useEffect, useState } from 'react';
-import { useCopyToClipboard } from 'react-use';
 import { useViewData } from '../hooks/useViewData';
 import AboutSection from './AboutSection';
 import { ContactsSection } from './ContactsSection';
@@ -12,6 +10,7 @@ import { FeedbackSection } from './FeedbackSection';
 import { GratitudeSection } from './GratitudeSection';
 import { NameTitle } from './NameTitle';
 import { PersonalSection } from './PersonalSection';
+import { PublicLink } from './PublicLink';
 
 type Props = {
   initialData: ResumeDto;
@@ -20,7 +19,6 @@ type Props = {
 
 function ViewCV({ initialData, publicMode }: Props) {
   const { loading, uuid, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ initialData });
-  const [, copyToClipboard] = useCopyToClipboard();
   const [url, setUrl] = useState('');
 
   useEffect(() => {
@@ -31,28 +29,7 @@ function ViewCV({ initialData, publicMode }: Props) {
 
   return (
     <LoadingScreen show={loading}>
-      {url ? (
-        <Alert
-          message={
-            <>
-              Public Link{' '}
-              <Button type="link" href={url}>
-                {url}
-              </Button>
-              <Button
-                onClick={() => {
-                  copyToClipboard(url ?? '');
-                  notification.success({ message: 'Copied to clipboard' });
-                }}
-                size="small"
-                type="text"
-                icon={<CopyOutlined />}
-              />
-            </>
-          }
-          type="info"
-        ></Alert>
-      ) : null}
+      <PublicLink url={url} />
       {userData && (
         <Row className="print-no-padding" style={{ minHeight: '100vh', padding: 10 }}>
           <Col xl={8} lg={8} md={10} sm={24} xs={24} className="cv-sidebar">
@@ -70,7 +47,7 @@ function ViewCV({ initialData, publicMode }: Props) {
           </Col>
           <Col xl={16} lg={16} md={14} sm={24} xs={24}>
             <AboutSection notes={userData.notes} />
-            <CoursesSection courses={courses ?? []} />
+            <CoursesSection visibleCourses={initialData.visibleCourses} courses={courses ?? []} />
             <FeedbackSection data={feedbacks} />
             <GratitudeSection data={gratitudes} />
           </Col>

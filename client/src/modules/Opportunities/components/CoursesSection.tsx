@@ -4,25 +4,29 @@ import Section from 'modules/Opportunities/components/Section';
 import * as React from 'react';
 import css from 'styled-jsx/css';
 import { StudentStatus } from './StudentStatus';
-import { ResumeCourseDto } from 'api';
+import { ResumeCourseDto, ResumeDto } from 'api';
 import { DataTextValue } from './DataTextValue';
 
 const { Text } = Typography;
 const { Item } = List;
 
 type Props = {
-  courses: ResumeCourseDto[];
+  courses: ResumeDto['courses'];
+  visibleCourses: ResumeDto['visibleCourses'];
 };
 
-export function CoursesSection({ courses }: Props) {
+export function CoursesSection({ courses, visibleCourses }: Props) {
   if (courses.length === 0) {
     return null;
   }
 
+  const coursesToRender =
+    visibleCourses.length > 0 ? courses.filter(course => visibleCourses.includes(course.id)) : courses;
+
   return (
     <Section title="RS School Courses">
       <List
-        dataSource={courses}
+        dataSource={coursesToRender}
         size="small"
         style={{ fontSize: '15px' }}
         renderItem={(record: ResumeCourseDto) => {
