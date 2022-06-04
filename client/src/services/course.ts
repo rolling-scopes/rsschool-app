@@ -9,7 +9,12 @@ import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CoursesTasksApi } from 'api';
 
-export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
+export enum CrossCheckStatus {
+  Initial = 'initial',
+  Distributed = 'distributed',
+  Completed = 'completed',
+}
+
 export type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export type Feedback = {

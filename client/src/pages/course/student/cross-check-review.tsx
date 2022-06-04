@@ -11,6 +11,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
+import { CrossCheckStatus } from 'services/course';
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
@@ -112,10 +113,11 @@ function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignment }) {
 function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
 
-  const [loading, setLoading] = useState(false);
-  const [courseTaskId, setCourseTaskId] = useState(null as number | null);
-  const [githubId, setGithubId] = useState(null as string | null);
-  const [assignments, setAssignments] = useState([] as Assignment[]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [courseTaskId, setCourseTaskId] = useState<number | null>(null);
+  const [githubId, setGithubId] = useState<string | null>(null);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
@@ -151,8 +153,10 @@ function Page(props: CoursePageProps) {
       return;
     }
     const assignments = await courseService.getCrossCheckAssignments(props.session.githubId, courseTask.id);
+    const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatus.Distributed;
     setAssignments(assignments);
     setCourseTaskId(courseTask.id);
+    setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
     form.resetFields(['githubId']);
   };
@@ -185,7 +189,7 @@ function Page(props: CoursePageProps) {
             <Form.Item valuePropName="checked" name="visibleName">
               <Checkbox>Make my name visible in feedback</Checkbox>
             </Form.Item>
-            <Button size="large" type="primary" htmlType="submit">
+            <Button size="large" type="primary" htmlType="submit" disabled={submissionDisabled}>
               Submit
             </Button>
           </Form>

@@ -7,7 +7,7 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
-import { Checker, CrossCheckStatus } from '../../services/course';
+import { Checker, CrossCheckStatus } from 'services/course';
 import { getTagStyle } from 'components/Schedule';
 import { BaseType } from 'antd/lib/typography/Base';
 import { ScheduleEvent } from 'components/Schedule/model';
@@ -26,7 +26,7 @@ export function crossCheckDateRenderer(value: string | null, { checker }: { chec
 export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: Checker }) {
   return checker !== 'crossCheck' ? (
     'N/A'
-  ) : value === 'initial' ? (
+  ) : value === CrossCheckStatus.Initial ? (
     'Not distributed'
   ) : (
     <span style={{ textTransform: 'capitalize' }}>{value}</span>
