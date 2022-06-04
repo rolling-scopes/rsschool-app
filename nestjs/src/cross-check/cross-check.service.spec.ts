@@ -145,7 +145,7 @@ describe('CrossCheckService', () => {
   });
 
   describe('executeCronJobs should work correctly', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       jest.spyOn(Date, 'now').mockImplementation(() => MOCK_CURRENT_TIMESTAMP);
       await service.executeCronJobs();
     });

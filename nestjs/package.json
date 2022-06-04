@@ -101,10 +101,7 @@
       "ts"
     ],
     "rootDir": "src",
-    "testRegex": [
-      ".*\\.spec\\.ts$",
-      "test\\.ts"
-    ],
+    "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
@@ -115,8 +112,7 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^@entities(.*)$": "<rootDir>/../../server/src/models/$1"
-    },
-    "clearMocks": true
+    }
   },
   "jest-junit": {
     "outputDirectory": "../reports",

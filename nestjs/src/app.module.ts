@@ -1,7 +1,6 @@
 import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
-
 import { LoggerModule } from 'nestjs-pino';
 
 import { AlertsModule } from './alerts/alerts.module';

@@ -6,19 +6,8 @@ export type ScoreTableFilters = {
   activeOnly: boolean;
 };
 
-export type ScoreOrderField =
-  | 'rank'
-  | 'totalScore'
-  | 'crossCheckScore'
-  | 'githubId'
-  | 'name'
-  | 'cityName'
-  | 'mentor'
-  | 'totalScoreChangeDate'
-  | 'repositoryLastActivityDate';
-
 export type ScoreOrder = {
-  field: ScoreOrderField;
+  field: string;
   order: 'ascend' | 'descend';
-  column?: { sorter: ScoreOrderField };
+  column?: { sorter: string };
 };

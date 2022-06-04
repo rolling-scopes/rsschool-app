@@ -444,57 +444,51 @@ export interface ConsentDto {
 /**
  * 
  * @export
- * @interface ContactsDto
+ * @interface Contacts
  */
-export interface ContactsDto {
+export interface Contacts {
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'phone'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'email'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'epamEmail'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'skype'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'telegram'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'notes'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ContactsDto
+     * @memberof Contacts
      */
     'linkedIn'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContactsDto
-     */
-    'discord'?: string | null;
 }
 /**
  * 
@@ -1544,31 +1538,6 @@ export interface Location {
 /**
  * 
  * @export
- * @interface MentorDto
- */
-export interface MentorDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof MentorDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDto
-     */
-    'githubId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDto
-     */
-    'name': string;
-}
-/**
- * 
- * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -1806,43 +1775,6 @@ export interface PaginationDto {
 /**
  * 
  * @export
- * @interface PaginationMetaDto
- */
-export interface PaginationMetaDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof PaginationMetaDto
-     */
-    'itemCount': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PaginationMetaDto
-     */
-    'total': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PaginationMetaDto
-     */
-    'current': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PaginationMetaDto
-     */
-    'pageSize': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PaginationMetaDto
-     */
-    'totalPages': number;
-}
-/**
- * 
- * @export
  * @interface PartialStudentVisibilitySettings
  */
 export interface PartialStudentVisibilitySettings {
@@ -2062,10 +1994,10 @@ export interface ProfileInfoDto {
     'generalInfo': GeneralInfo;
     /**
      * 
-     * @type {ContactsDto}
+     * @type {Contacts}
      * @memberof ProfileInfoDto
      */
-    'contacts': ContactsDto;
+    'contacts': Contacts;
     /**
      * 
      * @type {Discord}
@@ -2396,122 +2328,6 @@ export interface SaveCertificateDto {
 /**
  * 
  * @export
- * @interface ScoreDto
- */
-export interface ScoreDto {
-    /**
-     * 
-     * @type {Array<ScoreStudentDto>}
-     * @memberof ScoreDto
-     */
-    'content': Array<ScoreStudentDto>;
-    /**
-     * 
-     * @type {PaginationMetaDto}
-     * @memberof ScoreDto
-     */
-    'pagination': PaginationMetaDto;
-}
-/**
- * 
- * @export
- * @interface ScoreStudentDto
- */
-export interface ScoreStudentDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'githubId': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ScoreStudentDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ScoreStudentDto
-     */
-    'active': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'cityName': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'countryName': string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof ScoreStudentDto
-     */
-    'totalScore': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ScoreStudentDto
-     */
-    'rank': number;
-    /**
-     * 
-     * @type {MentorDto}
-     * @memberof ScoreStudentDto
-     */
-    'mentor': MentorDto | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'totalScoreChangeDate': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ScoreStudentDto
-     */
-    'crossCheckScore': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ScoreStudentDto
-     */
-    'repositoryLastActivityDate': string;
-    /**
-     * 
-     * @type {Array<TaskResultsDto>}
-     * @memberof ScoreStudentDto
-     */
-    'taskResults': Array<TaskResultsDto>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ScoreStudentDto
-     */
-    'isActive': boolean;
-    /**
-     * 
-     * @type {ContactsDto}
-     * @memberof ScoreStudentDto
-     */
-    'contacts': ContactsDto;
-}
-/**
- * 
- * @export
  * @interface SendUserNotificationDto
  */
 export interface SendUserNotificationDto {
@@ -2772,25 +2588,6 @@ export const StudentFeedbackDtoEnglishLevelEnum = {
 
 export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
-/**
- * 
- * @export
- * @interface TaskResultsDto
- */
-export interface TaskResultsDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskResultsDto
-     */
-    'courseTaskId': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskResultsDto
-     */
-    'score': number;
-}
 /**
  * 
  * @export
@@ -7267,157 +7064,6 @@ export class StudentsFeedbacksApi extends BaseAPI {
      */
     public updateStudentFeedback(studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options?: AxiosRequestConfig) {
         return StudentsFeedbacksApiFp(this.configuration).updateStudentFeedback(studentId, id, updateStudentFeedbackDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * StudentsScoreApi - axios parameter creator
- * @export
- */
-export const StudentsScoreApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
-         * @param {string} activeOnly 
-         * @param {string} current 
-         * @param {string} pageSize 
-         * @param {number} courseId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getScore: async (orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', activeOnly: string, current: string, pageSize: string, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'orderBy' is not null or undefined
-            assertParamExists('getScore', 'orderBy', orderBy)
-            // verify required parameter 'orderDirection' is not null or undefined
-            assertParamExists('getScore', 'orderDirection', orderDirection)
-            // verify required parameter 'activeOnly' is not null or undefined
-            assertParamExists('getScore', 'activeOnly', activeOnly)
-            // verify required parameter 'current' is not null or undefined
-            assertParamExists('getScore', 'current', current)
-            // verify required parameter 'pageSize' is not null or undefined
-            assertParamExists('getScore', 'pageSize', pageSize)
-            // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('getScore', 'courseId', courseId)
-            const localVarPath = `/course/{courseId}/students/score`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (orderBy !== undefined) {
-                localVarQueryParameter['orderBy'] = orderBy;
-            }
-
-            if (orderDirection !== undefined) {
-                localVarQueryParameter['orderDirection'] = orderDirection;
-            }
-
-            if (activeOnly !== undefined) {
-                localVarQueryParameter['activeOnly'] = activeOnly;
-            }
-
-            if (current !== undefined) {
-                localVarQueryParameter['current'] = current;
-            }
-
-            if (pageSize !== undefined) {
-                localVarQueryParameter['pageSize'] = pageSize;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * StudentsScoreApi - functional programming interface
- * @export
- */
-export const StudentsScoreApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StudentsScoreApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
-         * @param {string} activeOnly 
-         * @param {string} current 
-         * @param {string} pageSize 
-         * @param {number} courseId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getScore(orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', activeOnly: string, current: string, pageSize: string, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getScore(orderBy, orderDirection, activeOnly, current, pageSize, courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * StudentsScoreApi - factory interface
- * @export
- */
-export const StudentsScoreApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StudentsScoreApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
-         * @param {string} activeOnly 
-         * @param {string} current 
-         * @param {string} pageSize 
-         * @param {number} courseId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getScore(orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', activeOnly: string, current: string, pageSize: string, courseId: number, options?: any): AxiosPromise<ScoreDto> {
-            return localVarFp.getScore(orderBy, orderDirection, activeOnly, current, pageSize, courseId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * StudentsScoreApi - object-oriented interface
- * @export
- * @class StudentsScoreApi
- * @extends {BaseAPI}
- */
-export class StudentsScoreApi extends BaseAPI {
-    /**
-     * 
-     * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-     * @param {'asc' | 'null' | 'desc'} orderDirection 
-     * @param {string} activeOnly 
-     * @param {string} current 
-     * @param {string} pageSize 
-     * @param {number} courseId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StudentsScoreApi
-     */
-    public getScore(orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', activeOnly: string, current: string, pageSize: string, courseId: number, options?: AxiosRequestConfig) {
-        return StudentsScoreApiFp(this.configuration).getScore(orderBy, orderDirection, activeOnly, current, pageSize, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

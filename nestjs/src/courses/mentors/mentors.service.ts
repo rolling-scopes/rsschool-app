@@ -1,14 +1,9 @@
+import { Mentor } from '@entities/mentor';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
-import { Mentor } from '@entities/mentor';
-import { Student } from '@entities/student';
-
-import { MentorBasic } from '@common/models';
-
 import { AuthUser, Role, CourseRole } from '../../auth';
-import { PersonDto } from 'src/core/dto';
+import { Repository } from 'typeorm';
+import { Student } from '@entities/student';
 
 @Injectable()
 export class MentorsService {
@@ -18,19 +13,6 @@ export class MentorsService {
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
   ) {}
-
-  public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
-    const user = mentor.user;
-    return {
-      isActive: !mentor.isExpelled,
-      name: PersonDto.getName(user),
-      id: mentor.id,
-      githubId: user.githubId,
-      students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
-      cityName: user.cityName ?? '',
-      countryName: user.countryName ?? '',
-    };
-  }
 
   public getById(mentorId: number) {
     return this.mentorsRepository.findOne({

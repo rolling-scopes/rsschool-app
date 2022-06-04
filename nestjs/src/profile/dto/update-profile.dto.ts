@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { Contacts, EnglishLevel } from '@common/models';
+import { EnglishLevel } from '../../../../common/models';
 
 class Location {
   @IsString()
@@ -154,16 +154,7 @@ class GeneralInfo {
   englishLevel?: EnglishLevel | null;
 }
 
-export class ContactsDto implements Contacts {
-  constructor(contacts: Partial<Contacts>) {
-    this.phone = contacts.phone || null;
-    this.email = contacts.email || null;
-    this.skype = contacts.skype || null;
-    this.telegram = contacts.telegram || null;
-    this.notes = contacts.notes || null;
-    this.linkedIn = contacts.linkedIn || null;
-  }
-
+class Contacts {
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
@@ -198,11 +189,6 @@ export class ContactsDto implements Contacts {
   @IsOptional()
   @IsString()
   linkedIn: string | null;
-
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
-  @IsString()
-  discord: string | null;
 }
 
 class Discord {
@@ -230,10 +216,10 @@ export class ProfileInfoDto {
   @Type(() => GeneralInfo)
   generalInfo: GeneralInfo;
 
-  @ApiProperty({ type: ContactsDto })
+  @ApiProperty({ type: Contacts })
   @ValidateNested()
-  @Type(() => ContactsDto)
-  contacts: ContactsDto;
+  @Type(() => Contacts)
+  contacts: Contacts;
 
   @ApiProperty({ required: false, nullable: true, type: Discord })
   @Type(() => Discord)

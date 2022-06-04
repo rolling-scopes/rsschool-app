@@ -4,7 +4,6 @@ import { CurrentRequest, DefaultGuard } from '../auth';
 import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto } from './dto';
-
 @Controller('courses')
 @ApiTags('courses')
 @UseGuards(DefaultGuard)
