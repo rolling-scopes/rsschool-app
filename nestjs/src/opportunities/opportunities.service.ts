@@ -4,7 +4,7 @@ import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Student } from '@entities/student';
 
 type ResumeData = {
