@@ -10,11 +10,11 @@ type Props = {
 };
 
 const PreparedComment: FC<Props> = ({ text }) => {
-  const [state, setState] = useState(text);
+  const [state, setState] = useState(text ?? '');
   const [isMD, setIsMD] = useState(false);
 
   useEffect(() => {
-    if (text.indexOf(markdownLabel) === 0) {
+    if (text && text.indexOf(markdownLabel) === 0) {
       setIsMD(true);
       setState(text.slice(markdownLabel.length));
     }

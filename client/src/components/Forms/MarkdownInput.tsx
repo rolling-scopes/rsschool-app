@@ -31,11 +31,7 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
           {...otherProps}
           name="comment"
           label="Comment (markdown syntax is supported)"
-          rules={
-            notRequired
-              ? []
-              : [{ required: true, message: 'Please leave a detailed comment. Markdown syntax is allowed.', min: 30 }]
-          }
+          rules={notRequired ? [] : [{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
         >
           <Input.TextArea value={text} onChange={e => setText(e.currentTarget.value)} rows={5} />
         </Form.Item>
