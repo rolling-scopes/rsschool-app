@@ -87,9 +87,6 @@ export class OpportunitiesService {
         relations: ['course', 'certificate', 'mentor', 'mentor.user'],
         where: {
           userId: resume.userId,
-          course: {
-            name: Not('TEST COURSE'),
-          },
           // if visibleCourses is not defined, then we show info from all courses
           ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
         },
