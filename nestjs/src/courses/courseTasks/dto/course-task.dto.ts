@@ -30,6 +30,7 @@ export class CourseTaskDto {
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.checker = courseTask.checker;
+    this.crossCheckStatus = courseTask.crossCheckStatus;
 
     this.taskOwnerId = courseTask.taskOwnerId ?? undefined;
   }
@@ -73,4 +74,8 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  crossCheckStatus: string;
 }
