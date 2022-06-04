@@ -26,7 +26,7 @@ export class GratitudesService {
       throw new BadRequestException('Badge not allowed');
     }
 
-    Promise.all(
+    await Promise.all(
       data.userIds.map(async toUserId => {
         const feedback = await this.saveFeedback({
           toUserId,
