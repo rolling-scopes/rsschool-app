@@ -88,7 +88,7 @@ export class OpportunitiesService {
         where: {
           userId: resume.userId,
           // if visibleCourses is not defined, then we show info from all courses
-          ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In([resume.visibleCourses]) } : {}),
+          ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
         },
       }),
       resume.userId
