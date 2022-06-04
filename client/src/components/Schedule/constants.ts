@@ -14,12 +14,13 @@ export enum Column {
   EndDate = 'End Date',
   Time = 'Time',
   Type = 'Type',
-  Name = 'Name',
+  Name = 'Task / Event',
   Organizer = 'Organizer',
-  Score = 'Score',
+  Score = 'Score / Max',
+  Weight = 'Weight',
 }
 
-export const CONFIGURABLE_COLUMNS = ['StartDate', 'EndDate', 'Type', 'Organizer', 'Score'];
+export const CONFIGURABLE_COLUMNS = ['StartDate', 'EndDate', 'Type', 'Organizer', 'Score', 'Weight'];
 
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';

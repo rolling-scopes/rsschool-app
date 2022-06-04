@@ -1,12 +1,12 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Popover, Table } from 'antd';
-import { dateTimeRenderer } from 'components/Table';
+import { Table } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
 import { isUndefined } from 'lodash';
 import { getColumns } from 'modules/Score/data/getColumns';
+import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, IColumn, StudentScore } from 'services/course';
+import { CourseService, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -15,6 +15,7 @@ import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
+import useWindowDimensions from 'utils/useWindowDimensions';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
@@ -32,11 +33,16 @@ const courseTasksApi = new CoursesTasksApi();
 
 export function ScoreTable(props: Props) {
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const { activeOnly } = props;
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
-  const courseService = useMemo(() => new CourseService(props.course.id), []);
-
+  const [isVisibleSetting, setIsVisibleSettings] = useState(false);
+  const [columns, setColumns] = useState<ColumnsType<StudentScore>>([]);
+  const [fixedColumn, setFixedColumn] = useState<boolean>(true);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
+  const [loaded, setLoaded] = useState(false);
+  const [state, setState] = useState(['']);
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 100 },
@@ -44,9 +50,8 @@ export function ScoreTable(props: Props) {
     order: { field: 'rank', order: 'ascend' },
   });
 
-  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
-  const [loaded, setLoaded] = useState(false);
-
+  const [notVisibleColumns, setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns', []);
+  const courseService = useMemo(() => new CourseService(props.course.id), []);
   const [getPagedData] = useScorePaging(router, courseService, activeOnly);
 
   const getCourseScore = async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
@@ -83,6 +88,14 @@ export function ScoreTable(props: Props) {
         }));
       setStudents({ ...students, content: courseScore.content as StudentScore[], pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
+      setColumns(
+        getColumns({
+          cityName,
+          mentor,
+          handleSettings: () => setIsVisibleSettings(true),
+          taskColumns: getTaskColumns(sortedTasks),
+        }),
+      );
 
       setLoaded(true);
     } finally {
@@ -90,20 +103,7 @@ export function ScoreTable(props: Props) {
     }
   }, [activeOnly]);
 
-  useEffect(() => loadInitialData() as any, [activeOnly]);
-
-  const [isVisibleSetting, setIsVisibleSettings] = useState(false);
-
-  const columns = getColumns({
-    cityName,
-    mentor,
-    handleSettings: () => setIsVisibleSettings(true),
-    taskColumns: getTaskColumns(courseTasks),
-  });
-
   const getVisibleColumns = (columns: any[]) => columns.filter(column => !notVisibleColumns?.includes(column.name));
-
-  const [notVisibleColumns, setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns', []);
 
   const handleModalCancel = () => {
     setIsVisibleSettings(!isVisibleSetting);
@@ -114,7 +114,29 @@ export function ScoreTable(props: Props) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
-  const [state, setState] = useState(['']);
+  useEffect(() => {
+    loadInitialData();
+  }, [activeOnly]);
+
+  useEffect(() => {
+    if (width < 400) {
+      setFixedColumn(false);
+      return;
+    }
+
+    setFixedColumn(true);
+  }, [width]);
+
+  useEffect(() => {
+    setColumns(prevColumns => {
+      const githubColumn = prevColumns.find(el => el.key === 'githubId');
+      if (githubColumn) {
+        githubColumn.fixed = fixedColumn ? 'left' : false;
+      }
+
+      return prevColumns;
+    });
+  }, [fixedColumn, loaded]);
 
   if (!loaded) {
     return null;
@@ -125,7 +147,7 @@ export function ScoreTable(props: Props) {
       <Table<StudentScore>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(100vh - 250px)' }}
+        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 290px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
@@ -167,48 +189,6 @@ function getTableWidth(columnsCount: number) {
   return tableWidth;
 }
 
-function getTaskColumns(courseTasks: CourseTaskDto[]): IColumn[] {
-  const columns = courseTasks.map(courseTask => ({
-    dataIndex: courseTask.id.toString(),
-    title: () => {
-      const icon = (
-        <Popover
-          content={
-            <ul>
-              <li>Coefficient: {courseTask.scoreWeight}</li>
-              <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
-              <li>Max. score: {courseTask.maxScore}</li>
-            </ul>
-          }
-          trigger="click"
-        >
-          <QuestionCircleOutlined title="Click for details" />
-        </Popover>
-      );
-      return courseTask.descriptionUrl ? (
-        <>
-          <a className="table-header-link" target="_blank" href={courseTask.descriptionUrl}>
-            {courseTask.name}
-          </a>{' '}
-          {icon}
-        </>
-      ) : (
-        <div>
-          {courseTask.name} {icon}
-        </div>
-      );
-    },
-    width: 100,
-    className: 'align-right',
-    render: (_: any, d: StudentScore) => {
-      const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
-      return currentTask ? <div>{currentTask.score}</div> : 0;
-    },
-    name: courseTask.name,
-  }));
-  return columns;
-}
-
 const styles = css`
   :global(.rs-table-row-disabled) {
     opacity: 0.25;
@@ -219,5 +199,8 @@ const styles = css`
   }
   :global(.table-score td a) {
     line-height: 24px;
+  }
+  :global(.table-score .ant-table-body) {
+    min-height: 200px;
   }
 `;

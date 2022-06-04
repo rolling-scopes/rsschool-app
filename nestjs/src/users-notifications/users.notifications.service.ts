@@ -155,7 +155,6 @@ export class UserNotificationsService {
 
     const channelMap = new Map<NotificationChannelId, NotificationData>();
     channels.forEach(channel => {
-      if (channel.channelId === 'discord') return;
       const message = this.notificationsService.buildChannelMessage(channel, data);
       if (message) {
         const { channelId, template, to } = message;
