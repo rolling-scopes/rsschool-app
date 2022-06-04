@@ -3,6 +3,7 @@ import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography }
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
+import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -71,13 +72,7 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
               <Typography.Text>{}</Typography.Text>
             </div>
             <div>
-              <Typography.Text>
-                {historyItem.comment.split('\n').map((item, i) => (
-                  <div key={i}>
-                    <ReactMarkdown rehypePlugins={[remarkGfm]}>{item}</ReactMarkdown>
-                  </div>
-                ))}
-              </Typography.Text>
+              <PreparedComment text={historyItem.comment} />
             </div>
           </Timeline.Item>
         ))}
@@ -135,7 +130,7 @@ function Page(props: CoursePageProps) {
       setLoading(true);
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
         score: values.score,
-        comment: values.comment,
+        comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
         review: [],
