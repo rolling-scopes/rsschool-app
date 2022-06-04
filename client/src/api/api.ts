@@ -978,10 +978,10 @@ export interface CreateDiscordServerDto {
 export interface CreateGratitudeDto {
     /**
      * 
-     * @type {number}
+     * @type {Array<number>}
      * @memberof CreateGratitudeDto
      */
-    'userId': number;
+    'userIds': Array<number>;
     /**
      * 
      * @type {number}

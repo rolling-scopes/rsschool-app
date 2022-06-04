@@ -14,7 +14,10 @@ type Props = {
 };
 
 interface IGratitude {
-  [name: string]: string | number | number[];
+  userIds: number[];
+  courseId: number;
+  badgeId: BadgeDtoIdEnum;
+  comment: string;
 }
 
 const gratitudesApi = new GratitudesApi();
@@ -44,16 +47,7 @@ function Page(props: Props) {
   const handleSubmit = async (values: IGratitude) => {
     try {
       setLoading(true);
-      await Promise.all(
-        (values.userId as number[]).map((id: number) =>
-          gratitudesApi.createGratitude({
-            userId: id,
-            comment: values.comment as string,
-            badgeId: values.badgeId as string,
-            courseId: values.courseId as number,
-          }),
-        ),
-      );
+      await gratitudesApi.createGratitude(values);
       form.resetFields();
       message.success('Your feedback has been submitted.');
     } catch (e) {
@@ -73,7 +67,21 @@ function Page(props: Props) {
       <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
-        <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
+        <Form.Item
+          name="userIds"
+          label="Person"
+          rules={[
+            {
+              required: true,
+              message: 'Please select a person',
+            },
+            {
+              type: 'array',
+              max: 5,
+              message: 'Please select no more than 5 people',
+            },
+          ]}
+        >
           <UserSearch mode="multiple" searchFn={loadUsers} />
         </Form.Item>
         <Form.Item
