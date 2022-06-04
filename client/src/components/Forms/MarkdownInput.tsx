@@ -13,6 +13,14 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
     setPreviewVisible(!previewVisible);
   };
 
+  const link = (
+    <span style={{ marginLeft: '20px' }}>
+      <a target="_blank" href="https://remarkjs.github.io/react-markdown/">
+        What is it?
+      </a>
+    </span>
+  );
+
   return (
     <div style={{ marginBottom: '20px' }}>
       <div style={{ display: previewVisible ? 'none' : 'block' }}>
@@ -28,7 +36,7 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
         >
           <Input.TextArea value={text} onChange={e => setText(e.currentTarget.value)} rows={5} />
         </Form.Item>
-        <Button onClick={toogleView}>Preview</Button>
+        <Button onClick={toogleView}>Preview</Button> {link}
       </div>
       {previewVisible ? (
         <div>
@@ -37,7 +45,7 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
               <ReactMarkdown rehypePlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </Typography.Text>
           </div>
-          <Button onClick={toogleView}>Write</Button>
+          <Button onClick={toogleView}>Write</Button> {link}
         </div>
       ) : (
         ''

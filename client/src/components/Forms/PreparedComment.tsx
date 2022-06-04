@@ -21,7 +21,7 @@ const PreparedComment: FC<Props> = ({ text }) => {
   }, []);
 
   /**
-   * Для того, чтобы не повлиять на предыдущие сохраненные комментарии, для markdown синтаксиса используем специальную метку.
+   * In order to not affect the comments created in previosly versions of RS App, this component use a special mark for the markdown syntax.
    */
   return (
     <>
