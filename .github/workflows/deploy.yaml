@@ -6,6 +6,10 @@ on:
     paths-ignore:
       - 'tools/bumblebee/**'
 
+permissions:
+  id-token: write
+  contents: read
+
 concurrency:
   group: deploy
   cancel-in-progress: true
