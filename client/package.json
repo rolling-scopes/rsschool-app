@@ -45,12 +45,11 @@
     "use-places-autocomplete": "3.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.22.0",
-    "@testing-library/jest-dom": "5.16.4",
-    "@testing-library/react": "12.1.5",
+    "@playwright/test": "1.22.2",
+    "@testing-library/react": "^12.1.5",
     "@types/aws-lambda": "8.10.98",
     "@types/cookie": "0.5.1",
-    "@types/enzyme": "3.10.11",
+    "@types/enzyme": "3.10.12",
     "@types/jest": "28.1.0",
     "@types/lodash": "4.14.182",
     "@types/node": "16.11.25",
@@ -59,15 +58,11 @@
     "@types/react-dom": "17.0.13",
     "@typescript-eslint/eslint-plugin": "5.27.0",
     "@typescript-eslint/parser": "5.27.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "0.6.6",
     "dotenv": "16.0.1",
-    "enzyme": "3.11.0",
-    "enzyme-to-json": "3.6.2",
     "eslint": "8.9.0",
     "jest": "28.1.0",
     "jest-environment-jsdom": "28.1.0",
     "jest-junit": "13.2.0",
-    "ts-jest": "28.0.5",
     "typescript": "4.7.4"
   },
   "nextBundleAnalysis": {

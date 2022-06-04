@@ -1,11 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import CoreJsIviewsModal from '../CoreJsIviewsModal';
 
 describe('CoreJsIviewsModal', () => {
   it('Should render correctly', () => {
-    const wrapper = shallow(
+    const wrapper = render(
       <CoreJsIviewsModal
         stats={{
           courseFullName: 'TEST COURSE',
@@ -58,6 +57,6 @@ describe('CoreJsIviewsModal', () => {
         interviewIndex={0}
       />,
     );
-    expect(shallowToJson(wrapper)).toMatchSnapshot();
+    expect(wrapper.container).toMatchSnapshot();
   });
 });

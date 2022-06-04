@@ -1,2072 +1,471 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
-<ContactsCard
-  connections={Object {}}
-  data={
-    Object {
-      "email": "vasya@tut.by",
-      "epamEmail": "vasya@epam.com",
-      "linkedIn": "http://linkedin_test.com/vasya",
-      "notes": "vasya",
-      "phone": "1232422",
-      "skype": "skype_vasya",
-      "telegram": "televasya",
-    }
-  }
-  isEditingModeEnabled={false}
-  onPermissionsSettingsChange={[MockFunction]}
-  onProfileSettingsChange={[MockFunction]}
-  sendConfirmationEmail={[MockFunction]}
->
-  <CommonCard
-    content={
-      <List
-        dataSource={
-          Array [
-            Object {
-              "key": "epamEmail",
-              "name": "EPAM E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@epam.com",
-            },
-            Object {
-              "key": "email",
-              "name": "E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@tut.by",
-            },
-            Object {
-              "key": "telegram",
-              "name": "Telegram",
-              "value": "televasya",
-            },
-            Object {
-              "key": "phone",
-              "name": "Phone",
-              "value": "1232422",
-            },
-            Object {
-              "key": "skype",
-              "name": "Skype",
-              "value": "skype_vasya",
-            },
-            Object {
-              "key": "notes",
-              "name": "Notes",
-              "value": "vasya",
-            },
-            Object {
-              "key": "linkedIn",
-              "name": "LinkedIn",
-              "value": "http://linkedin_test.com/vasya",
-            },
-          ]
-        }
-        itemLayout="horizontal"
-        renderItem={[Function]}
-      />
-    }
-    detachSettingsOnVisibilityChange={true}
-    icon={<ForwardRef(ContactsOutlined) />}
-    isEditingModeEnabled={false}
-    noDataDescrption="Contacts aren't filled in"
-    onPermissionsSettingsChange={[MockFunction]}
-    profileSettingsContent={
-      <EditForm
-        contacts={
-          Array [
-            Object {
-              "key": "epamEmail",
-              "name": "EPAM E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@epam.com",
-            },
-            Object {
-              "key": "email",
-              "name": "E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@tut.by",
-            },
-            Object {
-              "key": "telegram",
-              "name": "Telegram",
-              "value": "televasya",
-            },
-            Object {
-              "key": "phone",
-              "name": "Phone",
-              "value": "1232422",
-            },
-            Object {
-              "key": "skype",
-              "name": "Skype",
-              "value": "skype_vasya",
-            },
-            Object {
-              "key": "notes",
-              "name": "Notes",
-              "value": "vasya",
-            },
-            Object {
-              "key": "linkedIn",
-              "name": "LinkedIn",
-              "value": "http://linkedin_test.com/vasya",
-            },
-          ]
-        }
-        onProfileSettingsChange={[MockFunction]}
-      />
-    }
-    title="Contacts"
+<div>
+  <div
+    class="ant-card ant-card-bordered"
   >
-    <ForwardRef
-      title={
-        <Title
-          ellipsis={true}
-          level={2}
-          style={
-            Object {
-              "fontSize": 16,
-              "marginBottom": 0,
-            }
-          }
-        >
-          <ForwardRef(ContactsOutlined) />
-           
-          Contacts
-        </Title>
-      }
+    <div
+      class="ant-card-head"
     >
       <div
-        className="ant-card ant-card-bordered"
+        class="ant-card-head-wrapper"
       >
         <div
-          className="ant-card-head"
-          style={Object {}}
+          class="ant-card-head-title"
         >
-          <div
-            className="ant-card-head-wrapper"
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
           >
-            <div
-              className="ant-card-head-title"
+            <span
+              aria-label="contacts"
+              class="anticon anticon-contacts"
+              role="img"
             >
-              <Title
-                ellipsis={true}
-                level={2}
-                style={
-                  Object {
-                    "fontSize": 16,
-                    "marginBottom": 0,
-                  }
-                }
+              <svg
+                aria-hidden="true"
+                data-icon="contacts"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
               >
-                <ForwardRef
-                  component="h2"
-                  ellipsis={true}
-                  style={
-                    Object {
-                      "fontSize": 16,
-                      "marginBottom": 0,
-                    }
-                  }
-                >
-                  <ResizeObserver
-                    disabled={true}
-                    onResize={[Function]}
-                  >
-                    <SingleObserver
-                      disabled={true}
-                      key="rc-observer-key-0"
-                      onResize={[Function]}
-                    >
-                      <DomWrapper>
-                        <EllipsisTooltip
-                          enabledEllipsis={true}
-                          isEllipsis={false}
-                        >
-                          <Typography
-                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                            component="h2"
-                            onClick={null}
-                            style={
-                              Object {
-                                "WebkitLineClamp": undefined,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <h2
-                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={null}
-                              style={
-                                Object {
-                                  "WebkitLineClamp": undefined,
-                                  "fontSize": 16,
-                                  "marginBottom": 0,
-                                }
-                              }
-                            >
-                              <Ellipsis
-                                enabledMeasure={false}
-                                onEllipsis={[Function]}
-                                rows={1}
-                                text={
-                                  Array [
-                                    <ForwardRef(ContactsOutlined) />,
-                                    " ",
-                                    "Contacts",
-                                  ]
-                                }
-                                width={0}
-                              >
-                                <ForwardRef(ContactsOutlined)>
-                                  <AntdIcon
-                                    icon={
-                                      Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
-                                        },
-                                        "name": "contacts",
-                                        "theme": "outlined",
-                                      }
-                                    }
-                                  >
-                                    <span
-                                      aria-label="contacts"
-                                      className="anticon anticon-contacts"
-                                      role="img"
-                                    >
-                                      <IconReact
-                                        icon={
-                                          Object {
-                                            "icon": Object {
-                                              "attrs": Object {
-                                                "focusable": "false",
-                                                "viewBox": "64 64 896 896",
-                                              },
-                                              "children": Array [
-                                                Object {
-                                                  "attrs": Object {
-                                                    "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                                  },
-                                                  "tag": "path",
-                                                },
-                                              ],
-                                              "tag": "svg",
-                                            },
-                                            "name": "contacts",
-                                            "theme": "outlined",
-                                          }
-                                        }
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          data-icon="contacts"
-                                          fill="currentColor"
-                                          focusable="false"
-                                          height="1em"
-                                          key="svg-contacts"
-                                          viewBox="64 64 896 896"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                            key="svg-contacts-svg-0"
-                                          />
-                                        </svg>
-                                      </IconReact>
-                                    </span>
-                                  </AntdIcon>
-                                </ForwardRef(ContactsOutlined)>
-                                 
-                                Contacts
-                              </Ellipsis>
-                            </h2>
-                          </Typography>
-                        </EllipsisTooltip>
-                      </DomWrapper>
-                    </SingleObserver>
-                  </ResizeObserver>
-                </ForwardRef>
-              </Title>
-            </div>
-          </div>
-        </div>
-        <div
-          className="ant-card-body"
-          style={Object {}}
-        >
-          <List
-            dataSource={
-              Array [
-                Object {
-                  "key": "epamEmail",
-                  "name": "EPAM E-mail",
-                  "rules": Array [
-                    Object {
-                      "message": "Email is not valid",
-                      "type": "email",
-                    },
-                  ],
-                  "value": "vasya@epam.com",
-                },
-                Object {
-                  "key": "email",
-                  "name": "E-mail",
-                  "rules": Array [
-                    Object {
-                      "message": "Email is not valid",
-                      "type": "email",
-                    },
-                  ],
-                  "value": "vasya@tut.by",
-                },
-                Object {
-                  "key": "telegram",
-                  "name": "Telegram",
-                  "value": "televasya",
-                },
-                Object {
-                  "key": "phone",
-                  "name": "Phone",
-                  "value": "1232422",
-                },
-                Object {
-                  "key": "skype",
-                  "name": "Skype",
-                  "value": "skype_vasya",
-                },
-                Object {
-                  "key": "notes",
-                  "name": "Notes",
-                  "value": "vasya",
-                },
-                Object {
-                  "key": "linkedIn",
-                  "name": "LinkedIn",
-                  "value": "http://linkedin_test.com/vasya",
-                },
-              ]
-            }
-            itemLayout="horizontal"
-            renderItem={[Function]}
-          >
-            <div
-              className="ant-list ant-list-split"
-            >
-              <Spin
-                size="default"
-                spinning={false}
-                wrapperClassName=""
-              >
-                <div
-                  className="ant-spin-nested-loading"
-                >
-                  <div
-                    className="ant-spin-container"
-                    key="container"
-                  >
-                    <ul
-                      className="ant-list-items"
-                    >
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "EPAM E-mail",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              EPAM E-mail
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          vasya@epam.com
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "E-mail",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              E-mail
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          vasya@tut.by
-                          <EmailConfirmation
-                            sendConfirmationEmail={[MockFunction]}
-                          >
-                            <Alert
-                              message={
-                                <div>
-                                  Email is not verified.
-                                   
-                                  <span
-                                    onClick={[Function]}
-                                    style={
-                                      Object {
-                                        "cursor": "pointer",
-                                        "textDecoration": "underline",
-                                      }
-                                    }
-                                  >
-                                    Send confirmation email?
-                                  </span>
-                                </div>
-                              }
-                              type="error"
-                            >
-                              <CSSMotion
-                                motionAppear={false}
-                                motionEnter={false}
-                                motionName="ant-alert-motion"
-                                onLeaveStart={[Function]}
-                                visible={true}
-                              >
-                                <DomWrapper>
-                                  <div
-                                    className="ant-alert ant-alert-error ant-alert-no-icon"
-                                    data-show={true}
-                                    role="alert"
-                                    style={Object {}}
-                                  >
-                                    <div
-                                      className="ant-alert-content"
-                                    >
-                                      <div
-                                        className="ant-alert-message"
-                                      >
-                                        <div>
-                                          Email is not verified.
-                                           
-                                          <span
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "cursor": "pointer",
-                                                "textDecoration": "underline",
-                                              }
-                                            }
-                                          >
-                                            Send confirmation email?
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </DomWrapper>
-                              </CSSMotion>
-                            </Alert>
-                          </EmailConfirmation>
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Telegram",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Telegram
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          televasya
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Phone",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Phone
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          1232422
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Skype",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Skype
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          skype_vasya
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Notes",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Notes
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          vasya
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "LinkedIn",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              LinkedIn
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          <a
-                            href="http://linkedin_test.com/vasya"
-                            target="__blank"
-                          >
-                            http://linkedin_test.com/vasya
-                          </a>
-                        </li>
-                      </Item>
-                    </ul>
-                  </div>
-                </div>
-              </Spin>
-            </div>
-          </List>
+                <path
+                  d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                />
+              </svg>
+            </span>
+             
+            Contacts
+          </h2>
         </div>
       </div>
-    </ForwardRef>
-  </CommonCard>
-</ContactsCard>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        class="ant-list ant-list-split"
+      >
+        <div
+          class="ant-spin-nested-loading"
+        >
+          <div
+            class="ant-spin-container"
+          >
+            <ul
+              class="ant-list-items"
+            >
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    EPAM E-mail
+                    :
+                  </strong>
+                </span>
+                 
+                vasya@epam.com
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    E-mail
+                    :
+                  </strong>
+                </span>
+                 
+                vasya@tut.by
+                <div
+                  class="ant-alert ant-alert-error ant-alert-no-icon"
+                  data-show="true"
+                  role="alert"
+                >
+                  <div
+                    class="ant-alert-content"
+                  >
+                    <div
+                      class="ant-alert-message"
+                    >
+                      <div>
+                        Email is not verified.
+                         
+                        <span
+                          style="text-decoration: underline; cursor: pointer;"
+                        >
+                          Send confirmation email?
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Telegram
+                    :
+                  </strong>
+                </span>
+                 
+                televasya
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Phone
+                    :
+                  </strong>
+                </span>
+                 
+                1232422
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Skype
+                    :
+                  </strong>
+                </span>
+                 
+                skype_vasya
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Notes
+                    :
+                  </strong>
+                </span>
+                 
+                vasya
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    LinkedIn
+                    :
+                  </strong>
+                </span>
+                 
+                <a
+                  href="http://linkedin_test.com/vasya"
+                  target="__blank"
+                >
+                  http://linkedin_test.com/vasya
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
-<ContactsCard
-  connections={Object {}}
-  data={
-    Object {
-      "email": "vasya@tut.by",
-      "epamEmail": "vasya@epam.com",
-      "linkedIn": null,
-      "notes": null,
-      "phone": "1232422",
-      "skype": "skype_vasya",
-      "telegram": null,
-    }
-  }
-  isEditingModeEnabled={true}
-  onPermissionsSettingsChange={[MockFunction]}
-  onProfileSettingsChange={[MockFunction]}
-  sendConfirmationEmail={[MockFunction]}
->
-  <CommonCard
-    content={
-      <List
-        dataSource={
-          Array [
-            Object {
-              "key": "epamEmail",
-              "name": "EPAM E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@epam.com",
-            },
-            Object {
-              "key": "email",
-              "name": "E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@tut.by",
-            },
-            Object {
-              "key": "phone",
-              "name": "Phone",
-              "value": "1232422",
-            },
-            Object {
-              "key": "skype",
-              "name": "Skype",
-              "value": "skype_vasya",
-            },
-          ]
-        }
-        itemLayout="horizontal"
-        renderItem={[Function]}
-      />
-    }
-    detachSettingsOnVisibilityChange={true}
-    icon={<ForwardRef(ContactsOutlined) />}
-    isEditingModeEnabled={true}
-    noDataDescrption="Contacts aren't filled in"
-    onPermissionsSettingsChange={[MockFunction]}
-    profileSettingsContent={
-      <EditForm
-        contacts={
-          Array [
-            Object {
-              "key": "epamEmail",
-              "name": "EPAM E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@epam.com",
-            },
-            Object {
-              "key": "email",
-              "name": "E-mail",
-              "rules": Array [
-                Object {
-                  "message": "Email is not valid",
-                  "type": "email",
-                },
-              ],
-              "value": "vasya@tut.by",
-            },
-            Object {
-              "key": "telegram",
-              "name": "Telegram",
-              "value": null,
-            },
-            Object {
-              "key": "phone",
-              "name": "Phone",
-              "value": "1232422",
-            },
-            Object {
-              "key": "skype",
-              "name": "Skype",
-              "value": "skype_vasya",
-            },
-            Object {
-              "key": "notes",
-              "name": "Notes",
-              "value": null,
-            },
-            Object {
-              "key": "linkedIn",
-              "name": "LinkedIn",
-              "value": null,
-            },
-          ]
-        }
-        onProfileSettingsChange={[MockFunction]}
-      />
-    }
-    title="Contacts"
+<div>
+  <div
+    class="ant-card ant-card-bordered"
   >
-    <ForwardRef
-      actions={
-        Array [
-          <ForwardRef(EditOutlined)
-            onClick={[Function]}
-          />,
-        ]
-      }
-      title={
-        <Title
-          ellipsis={true}
-          level={2}
-          style={
-            Object {
-              "fontSize": 16,
-              "marginBottom": 0,
-            }
-          }
-        >
-          <ForwardRef(ContactsOutlined) />
-           
-          Contacts
-        </Title>
-      }
+    <div
+      class="ant-card-head"
     >
       <div
-        className="ant-card ant-card-bordered"
+        class="ant-card-head-wrapper"
       >
         <div
-          className="ant-card-head"
-          style={Object {}}
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <span
+              aria-label="contacts"
+              class="anticon anticon-contacts"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="contacts"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                />
+              </svg>
+            </span>
+             
+            Contacts
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        class="ant-list ant-list-split"
+      >
+        <div
+          class="ant-spin-nested-loading"
         >
           <div
-            className="ant-card-head-wrapper"
+            class="ant-spin-container"
           >
-            <div
-              className="ant-card-head-title"
+            <ul
+              class="ant-list-items"
             >
-              <Title
-                ellipsis={true}
-                level={2}
-                style={
-                  Object {
-                    "fontSize": 16,
-                    "marginBottom": 0,
-                  }
-                }
+              <li
+                class="ant-list-item ant-list-item-no-flex"
               >
-                <ForwardRef
-                  component="h2"
-                  ellipsis={true}
-                  style={
-                    Object {
-                      "fontSize": 16,
-                      "marginBottom": 0,
-                    }
-                  }
+                <span
+                  class="ant-typography"
                 >
-                  <ResizeObserver
-                    disabled={true}
-                    onResize={[Function]}
-                  >
-                    <SingleObserver
-                      disabled={true}
-                      key="rc-observer-key-0"
-                      onResize={[Function]}
-                    >
-                      <DomWrapper>
-                        <EllipsisTooltip
-                          enabledEllipsis={true}
-                          isEllipsis={false}
-                        >
-                          <Typography
-                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                            component="h2"
-                            onClick={null}
-                            style={
-                              Object {
-                                "WebkitLineClamp": undefined,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <h2
-                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={null}
-                              style={
-                                Object {
-                                  "WebkitLineClamp": undefined,
-                                  "fontSize": 16,
-                                  "marginBottom": 0,
-                                }
-                              }
-                            >
-                              <Ellipsis
-                                enabledMeasure={false}
-                                onEllipsis={[Function]}
-                                rows={1}
-                                text={
-                                  Array [
-                                    <ForwardRef(ContactsOutlined) />,
-                                    " ",
-                                    "Contacts",
-                                  ]
-                                }
-                                width={0}
-                              >
-                                <ForwardRef(ContactsOutlined)>
-                                  <AntdIcon
-                                    icon={
-                                      Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
-                                        },
-                                        "name": "contacts",
-                                        "theme": "outlined",
-                                      }
-                                    }
-                                  >
-                                    <span
-                                      aria-label="contacts"
-                                      className="anticon anticon-contacts"
-                                      role="img"
-                                    >
-                                      <IconReact
-                                        icon={
-                                          Object {
-                                            "icon": Object {
-                                              "attrs": Object {
-                                                "focusable": "false",
-                                                "viewBox": "64 64 896 896",
-                                              },
-                                              "children": Array [
-                                                Object {
-                                                  "attrs": Object {
-                                                    "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                                  },
-                                                  "tag": "path",
-                                                },
-                                              ],
-                                              "tag": "svg",
-                                            },
-                                            "name": "contacts",
-                                            "theme": "outlined",
-                                          }
-                                        }
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          data-icon="contacts"
-                                          fill="currentColor"
-                                          focusable="false"
-                                          height="1em"
-                                          key="svg-contacts"
-                                          viewBox="64 64 896 896"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                            key="svg-contacts-svg-0"
-                                          />
-                                        </svg>
-                                      </IconReact>
-                                    </span>
-                                  </AntdIcon>
-                                </ForwardRef(ContactsOutlined)>
-                                 
-                                Contacts
-                              </Ellipsis>
-                            </h2>
-                          </Typography>
-                        </EllipsisTooltip>
-                      </DomWrapper>
-                    </SingleObserver>
-                  </ResizeObserver>
-                </ForwardRef>
-              </Title>
-            </div>
-          </div>
-        </div>
-        <div
-          className="ant-card-body"
-          style={Object {}}
-        >
-          <List
-            dataSource={
-              Array [
-                Object {
-                  "key": "epamEmail",
-                  "name": "EPAM E-mail",
-                  "rules": Array [
-                    Object {
-                      "message": "Email is not valid",
-                      "type": "email",
-                    },
-                  ],
-                  "value": "vasya@epam.com",
-                },
-                Object {
-                  "key": "email",
-                  "name": "E-mail",
-                  "rules": Array [
-                    Object {
-                      "message": "Email is not valid",
-                      "type": "email",
-                    },
-                  ],
-                  "value": "vasya@tut.by",
-                },
-                Object {
-                  "key": "phone",
-                  "name": "Phone",
-                  "value": "1232422",
-                },
-                Object {
-                  "key": "skype",
-                  "name": "Skype",
-                  "value": "skype_vasya",
-                },
-              ]
-            }
-            itemLayout="horizontal"
-            renderItem={[Function]}
-          >
-            <div
-              className="ant-list ant-list-split"
-            >
-              <Spin
-                size="default"
-                spinning={false}
-                wrapperClassName=""
+                  <strong>
+                    EPAM E-mail
+                    :
+                  </strong>
+                </span>
+                 
+                vasya@epam.com
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
               >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    E-mail
+                    :
+                  </strong>
+                </span>
+                 
+                vasya@tut.by
                 <div
-                  className="ant-spin-nested-loading"
+                  class="ant-alert ant-alert-error ant-alert-no-icon"
+                  data-show="true"
+                  role="alert"
                 >
                   <div
-                    className="ant-spin-container"
-                    key="container"
+                    class="ant-alert-content"
                   >
-                    <ul
-                      className="ant-list-items"
+                    <div
+                      class="ant-alert-message"
                     >
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
+                      <div>
+                        Email is not verified.
+                         
+                        <span
+                          style="text-decoration: underline; cursor: pointer;"
                         >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "EPAM E-mail",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              EPAM E-mail
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          vasya@epam.com
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "E-mail",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              E-mail
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          vasya@tut.by
-                          <EmailConfirmation
-                            sendConfirmationEmail={[MockFunction]}
-                          >
-                            <Alert
-                              message={
-                                <div>
-                                  Email is not verified.
-                                   
-                                  <span
-                                    onClick={[Function]}
-                                    style={
-                                      Object {
-                                        "cursor": "pointer",
-                                        "textDecoration": "underline",
-                                      }
-                                    }
-                                  >
-                                    Send confirmation email?
-                                  </span>
-                                </div>
-                              }
-                              type="error"
-                            >
-                              <CSSMotion
-                                motionAppear={false}
-                                motionEnter={false}
-                                motionName="ant-alert-motion"
-                                onLeaveStart={[Function]}
-                                visible={true}
-                              >
-                                <DomWrapper>
-                                  <div
-                                    className="ant-alert ant-alert-error ant-alert-no-icon"
-                                    data-show={true}
-                                    role="alert"
-                                    style={Object {}}
-                                  >
-                                    <div
-                                      className="ant-alert-content"
-                                    >
-                                      <div
-                                        className="ant-alert-message"
-                                      >
-                                        <div>
-                                          Email is not verified.
-                                           
-                                          <span
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "cursor": "pointer",
-                                                "textDecoration": "underline",
-                                              }
-                                            }
-                                          >
-                                            Send confirmation email?
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </DomWrapper>
-                              </CSSMotion>
-                            </Alert>
-                          </EmailConfirmation>
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Phone",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Phone
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          1232422
-                        </li>
-                      </Item>
-                      <Item>
-                        <li
-                          className="ant-list-item ant-list-item-no-flex"
-                        >
-                          <Text
-                            strong={true}
-                          >
-                            <ForwardRef
-                              component="span"
-                              strong={true}
-                            >
-                              <ResizeObserver
-                                disabled={true}
-                                onResize={[Function]}
-                              >
-                                <SingleObserver
-                                  disabled={true}
-                                  key="rc-observer-key-0"
-                                  onResize={[Function]}
-                                >
-                                  <DomWrapper>
-                                    <EllipsisTooltip
-                                      enabledEllipsis={false}
-                                      isEllipsis={false}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        onClick={null}
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          onClick={null}
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <Ellipsis
-                                            enabledMeasure={false}
-                                            onEllipsis={[Function]}
-                                            rows={1}
-                                            text={
-                                              Array [
-                                                "Skype",
-                                                ":",
-                                              ]
-                                            }
-                                            width={0}
-                                          >
-                                            <strong>
-                                              Skype
-                                              :
-                                            </strong>
-                                          </Ellipsis>
-                                        </span>
-                                      </Typography>
-                                    </EllipsisTooltip>
-                                  </DomWrapper>
-                                </SingleObserver>
-                              </ResizeObserver>
-                            </ForwardRef>
-                          </Text>
-                           
-                          skype_vasya
-                        </li>
-                      </Item>
-                    </ul>
+                          Send confirmation email?
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </Spin>
-            </div>
-          </List>
-          <PermissionsSettingsDrawer
-            hideSettings={[Function]}
-            isSettingsVisible={false}
-            onPermissionsSettingsChange={[MockFunction]}
-          >
-            <DrawerWrapper
-              closable={true}
-              getContainer={false}
-              onClose={[Function]}
-              placement="top"
-              style={
-                Object {
-                  "display": "none",
-                  "position": "absolute",
-                }
-              }
-              title="Visibility settings"
-              visible={false}
-            >
-              <Drawer
-                closable={true}
-                getContainer={false}
-                onClose={[Function]}
-                placement="top"
-                prefixCls="ant-drawer"
-                style={
-                  Object {
-                    "display": "none",
-                    "position": "absolute",
-                  }
-                }
-                title="Visibility settings"
-                visible={false}
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
               >
-                <DrawerWrapper
-                  afterVisibleChange={[Function]}
-                  autoFocus={true}
-                  className=""
-                  defaultOpen={false}
-                  duration=".3s"
-                  ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
-                  forceRender={false}
-                  getContainer={false}
-                  handler={false}
-                  height={378}
-                  keyboard={true}
-                  level={null}
-                  maskClosable={true}
-                  maskStyle={Object {}}
-                  onChange={[Function]}
-                  onClose={[Function]}
-                  open={false}
-                  placement="top"
-                  prefixCls="ant-drawer"
-                  showMask={true}
-                  style={
-                    Object {
-                      "display": "none",
-                      "position": "absolute",
-                      "transform": undefined,
-                      "zIndex": undefined,
-                    }
-                  }
-                  wrapperClassName=""
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Phone
+                    :
+                  </strong>
+                </span>
+                 
+                1232422
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  <strong>
+                    Skype
+                    :
+                  </strong>
+                </span>
+                 
+                skype_vasya
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
                 >
                   <div
-                    className=""
+                    class="ant-drawer-header-title"
                   >
-                    <DrawerChild
-                      afterVisibleChange={[Function]}
-                      autoFocus={true}
-                      className=""
-                      duration=".3s"
-                      ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
-                      getContainer={[Function]}
-                      handler={false}
-                      height={378}
-                      keyboard={true}
-                      level={null}
-                      maskClosable={true}
-                      maskStyle={Object {}}
-                      onChange={[Function]}
-                      onClose={[Function]}
-                      onHandleClick={[Function]}
-                      open={false}
-                      placement="top"
-                      prefixCls="ant-drawer"
-                      showMask={true}
-                      style={
-                        Object {
-                          "display": "none",
-                          "position": "absolute",
-                          "transform": undefined,
-                          "zIndex": undefined,
-                        }
-                      }
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Visibility settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-list ant-list-split"
+                  >
+                    <div
+                      class="ant-spin-nested-loading"
                     >
                       <div
-                        className="ant-drawer ant-drawer-top"
-                        onTransitionEnd={[Function]}
-                        style={
-                          Object {
-                            "display": "none",
-                            "position": "absolute",
-                            "transform": undefined,
-                            "zIndex": undefined,
-                          }
-                        }
-                        tabIndex={-1}
+                        class="ant-spin-container"
                       >
                         <div
-                          className="ant-drawer-mask"
-                          onClick={[Function]}
-                          style={Object {}}
-                        />
-                        <div
-                          className="ant-drawer-content-wrapper"
-                          style={
-                            Object {
-                              "height": "378px",
-                              "msTransform": "translateY(-100%)",
-                              "transform": "translateY(-100%)",
-                              "width": undefined,
-                            }
-                          }
+                          class="ant-list-empty-text"
                         >
                           <div
-                            className="ant-drawer-content"
+                            class="ant-empty ant-empty-normal"
                           >
                             <div
-                              className="ant-drawer-wrapper-body"
-                              onTransitionEnd={[Function]}
-                              style={Object {}}
+                              class="ant-empty-image"
                             >
-                              <div
-                                className="ant-drawer-header"
+                              <svg
+                                class="ant-empty-img-simple"
+                                height="41"
+                                viewBox="0 0 64 41"
+                                width="64"
+                                xmlns="http://www.w3.org/2000/svg"
                               >
-                                <div
-                                  className="ant-drawer-header-title"
+                                <g
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                  transform="translate(0 1)"
                                 >
-                                  <button
-                                    aria-label="Close"
-                                    className="ant-drawer-close"
-                                    onClick={[Function]}
-                                    type="button"
+                                  <ellipse
+                                    class="ant-empty-img-simple-ellipse"
+                                    cx="32"
+                                    cy="33"
+                                    rx="32"
+                                    ry="7"
+                                  />
+                                  <g
+                                    class="ant-empty-img-simple-g"
+                                    fill-rule="nonzero"
                                   >
-                                    <ForwardRef(CloseOutlined)>
-                                      <AntdIcon
-                                        icon={
-                                          Object {
-                                            "icon": Object {
-                                              "attrs": Object {
-                                                "focusable": "false",
-                                                "viewBox": "64 64 896 896",
-                                              },
-                                              "children": Array [
-                                                Object {
-                                                  "attrs": Object {
-                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                  },
-                                                  "tag": "path",
-                                                },
-                                              ],
-                                              "tag": "svg",
-                                            },
-                                            "name": "close",
-                                            "theme": "outlined",
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          aria-label="close"
-                                          className="anticon anticon-close"
-                                          role="img"
-                                        >
-                                          <IconReact
-                                            icon={
-                                              Object {
-                                                "icon": Object {
-                                                  "attrs": Object {
-                                                    "focusable": "false",
-                                                    "viewBox": "64 64 896 896",
-                                                  },
-                                                  "children": Array [
-                                                    Object {
-                                                      "attrs": Object {
-                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                      },
-                                                      "tag": "path",
-                                                    },
-                                                  ],
-                                                  "tag": "svg",
-                                                },
-                                                "name": "close",
-                                                "theme": "outlined",
-                                              }
-                                            }
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              data-icon="close"
-                                              fill="currentColor"
-                                              focusable="false"
-                                              height="1em"
-                                              key="svg-close"
-                                              viewBox="64 64 896 896"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                                key="svg-close-svg-0"
-                                              />
-                                            </svg>
-                                          </IconReact>
-                                        </span>
-                                      </AntdIcon>
-                                    </ForwardRef(CloseOutlined)>
-                                  </button>
-                                  <div
-                                    className="ant-drawer-title"
-                                  >
-                                    Visibility settings
-                                  </div>
-                                </div>
-                              </div>
-                              <div
-                                className="ant-drawer-body"
-                              >
-                                <List
-                                  dataSource={Array []}
-                                  itemLayout="horizontal"
-                                  renderItem={[Function]}
-                                >
-                                  <div
-                                    className="ant-list ant-list-split"
-                                  >
-                                    <Spin
-                                      size="default"
-                                      spinning={false}
-                                      wrapperClassName=""
-                                    >
-                                      <div
-                                        className="ant-spin-nested-loading"
-                                      >
-                                        <div
-                                          className="ant-spin-container"
-                                          key="container"
-                                        >
-                                          <div
-                                            className="ant-list-empty-text"
-                                          >
-                                            <Empty
-                                              image={<Simple />}
-                                            >
-                                              <LocaleReceiver
-                                                componentName="Empty"
-                                              >
-                                                <div
-                                                  className="ant-empty ant-empty-normal"
-                                                >
-                                                  <div
-                                                    className="ant-empty-image"
-                                                  >
-                                                    <Simple>
-                                                      <svg
-                                                        className="ant-empty-img-simple"
-                                                        height="41"
-                                                        viewBox="0 0 64 41"
-                                                        width="64"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                      >
-                                                        <g
-                                                          fill="none"
-                                                          fillRule="evenodd"
-                                                          transform="translate(0 1)"
-                                                        >
-                                                          <ellipse
-                                                            className="ant-empty-img-simple-ellipse"
-                                                            cx="32"
-                                                            cy="33"
-                                                            rx="32"
-                                                            ry="7"
-                                                          />
-                                                          <g
-                                                            className="ant-empty-img-simple-g"
-                                                            fillRule="nonzero"
-                                                          >
-                                                            <path
-                                                              d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
-                                                            />
-                                                            <path
-                                                              className="ant-empty-img-simple-path"
-                                                              d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
-                                                            />
-                                                          </g>
-                                                        </g>
-                                                      </svg>
-                                                    </Simple>
-                                                  </div>
-                                                  <div
-                                                    className="ant-empty-description"
-                                                  >
-                                                    No Data
-                                                  </div>
-                                                </div>
-                                              </LocaleReceiver>
-                                            </Empty>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </Spin>
-                                  </div>
-                                </List>
-                              </div>
+                                    <path
+                                      d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                    />
+                                    <path
+                                      class="ant-empty-img-simple-path"
+                                      d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                    />
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                            <div
+                              class="ant-empty-description"
+                            >
+                              No Data
                             </div>
                           </div>
                         </div>
                       </div>
-                    </DrawerChild>
+                    </div>
                   </div>
-                </DrawerWrapper>
-              </Drawer>
-            </DrawerWrapper>
-            <style
-              jsx={true}
-            >
-              
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        
         :global(.ant-drawer-content-wrapper) {
           height: inherit !important;
         }
@@ -2080,103 +479,38 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           overflow: auto;
         }
       
-            </style>
-          </PermissionsSettingsDrawer>
-        </div>
-        <ul
-          className="ant-card-actions"
-        >
-          <li
-            key="action-0"
-            style={
-              Object {
-                "width": "100%",
-              }
-            }
+      </style>
+    </div>
+    <ul
+      class="ant-card-actions"
+    >
+      <li
+        style="width: 100%;"
+      >
+        <span>
+          <span
+            aria-label="edit"
+            class="anticon anticon-edit"
+            role="img"
+            tabindex="-1"
           >
-            <span>
-              <ForwardRef(EditOutlined)
-                key="main-card-actions-edit"
-                onClick={[Function]}
-              >
-                <AntdIcon
-                  icon={
-                    Object {
-                      "icon": Object {
-                        "attrs": Object {
-                          "focusable": "false",
-                          "viewBox": "64 64 896 896",
-                        },
-                        "children": Array [
-                          Object {
-                            "attrs": Object {
-                              "d": "M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z",
-                            },
-                            "tag": "path",
-                          },
-                        ],
-                        "tag": "svg",
-                      },
-                      "name": "edit",
-                      "theme": "outlined",
-                    }
-                  }
-                  onClick={[Function]}
-                >
-                  <span
-                    aria-label="edit"
-                    className="anticon anticon-edit"
-                    onClick={[Function]}
-                    role="img"
-                    tabIndex={-1}
-                  >
-                    <IconReact
-                      icon={
-                        Object {
-                          "icon": Object {
-                            "attrs": Object {
-                              "focusable": "false",
-                              "viewBox": "64 64 896 896",
-                            },
-                            "children": Array [
-                              Object {
-                                "attrs": Object {
-                                  "d": "M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z",
-                                },
-                                "tag": "path",
-                              },
-                            ],
-                            "tag": "svg",
-                          },
-                          "name": "edit",
-                          "theme": "outlined",
-                        }
-                      }
-                    >
-                      <svg
-                        aria-hidden="true"
-                        data-icon="edit"
-                        fill="currentColor"
-                        focusable="false"
-                        height="1em"
-                        key="svg-edit"
-                        viewBox="64 64 896 896"
-                        width="1em"
-                      >
-                        <path
-                          d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
-                          key="svg-edit-svg-0"
-                        />
-                      </svg>
-                    </IconReact>
-                  </span>
-                </AntdIcon>
-              </ForwardRef(EditOutlined)>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </ForwardRef>
-  </CommonCard>
-</ContactsCard>
+            <svg
+              aria-hidden="true"
+              data-icon="edit"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+              />
+            </svg>
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
 `;

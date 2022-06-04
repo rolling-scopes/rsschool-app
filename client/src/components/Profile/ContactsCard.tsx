@@ -40,26 +40,28 @@ type Props = {
 
 type Contact = { name: string; value: string | null; key: string; rules?: Rule[] };
 
+export const filterPermissions = ({
+  isEmailVisible,
+  isTelegramVisible,
+  isPhoneVisible,
+  isSkypeVisible,
+  isContactsNotesVisible,
+  isLinkedInVisible,
+}: Partial<ConfigurableProfilePermissions>) => ({
+  isEmailVisible,
+  isTelegramVisible,
+  isPhoneVisible,
+  isSkypeVisible,
+  isContactsNotesVisible,
+  isLinkedInVisible,
+});
+
 class ContactsCard extends React.Component<Props> {
   state = {
     data: null,
   };
 
-  private filterPermissions = ({
-    isEmailVisible,
-    isTelegramVisible,
-    isPhoneVisible,
-    isSkypeVisible,
-    isContactsNotesVisible,
-    isLinkedInVisible,
-  }: Partial<ConfigurableProfilePermissions>) => ({
-    isEmailVisible,
-    isTelegramVisible,
-    isPhoneVisible,
-    isSkypeVisible,
-    isContactsNotesVisible,
-    isLinkedInVisible,
-  });
+
 
   shouldComponentUpdate = (nextProps: Props) => {
     const {
@@ -172,7 +174,7 @@ class ContactsCard extends React.Component<Props> {
           ) : undefined
         }
         noDataDescrption="Contacts aren't filled in"
-        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
         onPermissionsSettingsChange={onPermissionsSettingsChange}
         detachSettingsOnVisibilityChange

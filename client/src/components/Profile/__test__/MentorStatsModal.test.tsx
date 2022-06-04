@@ -1,11 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import MentorStatsModal from '../MentorStatsModal';
 
 describe('MentorStatsModal', () => {
   it('Should render correctly', () => {
-    const output = shallow(
+    const output = render(
       <MentorStatsModal
         stats={{
           courseLocationName: 'Minsk',
@@ -30,6 +29,6 @@ describe('MentorStatsModal', () => {
         onHide={jest.fn()}
       />,
     );
-    expect(shallowToJson(output)).toMatchSnapshot();
+    expect(output.container).toMatchSnapshot();
   });
 });
