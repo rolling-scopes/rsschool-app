@@ -15,8 +15,11 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
 
   const link = (
     <span style={{ marginLeft: '20px' }}>
-      <a target="_blank" href="https://remarkjs.github.io/react-markdown/">
-        What is it?
+      <a
+        target="_blank"
+        href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
+      >
+        About markdown
       </a>
     </span>
   );
