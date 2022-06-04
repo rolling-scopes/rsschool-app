@@ -4,7 +4,7 @@ import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Student } from '@entities/student';
 
 type ResumeData = {
@@ -40,7 +40,7 @@ export class OpportunitiesService {
     if (resume == null) {
       return null;
     }
-    return await this.getFullResume(resume);
+    return await this.getFullResume(resume, false);
   }
 
   public async getApplicantResumes(): Promise<Resume[]> {
@@ -81,13 +81,17 @@ export class OpportunitiesService {
     return Boolean(value);
   }
 
-  private async getFullResume(resume: Resume) {
+  private async getFullResume(resume: Resume, visibleCourseOnly = true): Promise<ResumeData> {
     const [students, gratitudes] = await Promise.all([
       this.studentRepository.find({
         relations: ['course', 'certificate', 'mentor', 'mentor.user'],
         where: {
           userId: resume.userId,
-          courseId: In(resume.visibleCourses ?? []),
+          course: {
+            name: Not('TEST COURSE'),
+          },
+          // if visibleCourses is not defined, then we show info from all courses
+          ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
         },
       }),
       resume.userId
