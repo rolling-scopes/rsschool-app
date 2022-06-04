@@ -19,7 +19,7 @@ export function PublicLink({ url }: Props) {
       message={
         <>
           Public Link{' '}
-          <Button type="link" href={url}>
+          <Button target="_blank" type="link" href={url}>
             {url}
           </Button>
           <Button
