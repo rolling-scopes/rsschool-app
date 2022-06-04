@@ -30,7 +30,7 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
         <Form.Item
           {...otherProps}
           name="comment"
-          label="Comment"
+          label="Comment (markdown syntax is supported)"
           rules={
             notRequired
               ? []
