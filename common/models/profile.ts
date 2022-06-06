@@ -83,6 +83,7 @@ export interface StudentStats {
   locationName: string;
   courseFullName: string;
   isExpelled: boolean;
+  isSelfExpelled: boolean;
   expellingReason?: string;
   certificateId: string | null;
   isCourseCompleted: boolean;

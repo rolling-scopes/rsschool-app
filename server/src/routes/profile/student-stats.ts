@@ -17,6 +17,9 @@ import {
 import { Permissions } from './permissions';
 import omit from 'lodash/omit';
 
+// use this as a mark for identifying self-expelled students.
+const SELF_EXPELLED_MARK = 'Self expelled from the course';
+
 const getStudentStatsWithPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
   const { isCoreJsFeedbackVisible, isExpellingReasonVisible } = permissions;
 
@@ -45,9 +48,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       ("stageInterviewFeedback"."json"::json -> 'resume' ->> 'score')::int
     )) AS "taskScores"`);
 
-  if (isExpellingReasonVisible) {
-    query.addSelect('"student"."expellingReason" AS "expellingReason"');
-  }
+  query.addSelect('"student"."expellingReason" AS "expellingReason"');
 
   if (isCoreJsFeedbackVisible) {
     query
@@ -161,7 +162,8 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
         locationName,
         courseFullName,
         isExpelled,
-        expellingReason,
+        expellingReason: isExpellingReasonVisible ? expellingReason : undefined,
+        isSelfExpelled: (expellingReason as string)?.startsWith(SELF_EXPELLED_MARK),
         isCourseCompleted,
         totalScore,
         tasks: orderedTasks,
