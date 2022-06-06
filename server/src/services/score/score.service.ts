@@ -56,6 +56,7 @@ const KB = 1024;
 
 type ScoreOptions = {
   includeContacts?: boolean;
+  includeCertificate?: boolean;
 };
 
 export class ScoreService {
@@ -142,6 +143,9 @@ export class ScoreService {
       .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
       .where('student."courseId" = :courseId', { courseId: this.courseId });
 
+    if (this.options.includeCertificate) {
+      query = query.leftJoin('student.certificate', 'certificate').addSelect('certificate.id');
+    }
     if (filter.activeOnly) {
       query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
     }
@@ -220,6 +224,7 @@ export class ScoreService {
               telegram: user.contactsTelegram,
             }
           : null,
+        hasCertificate: this.options.includeCertificate ? !!student.certificate?.id : undefined,
       };
     });
 
@@ -243,6 +248,7 @@ export class ScoreService {
         totalScore: student.totalScore,
         isActive: student.isActive,
         contacts: student.contacts,
+        hasCertificate: student.hasCertificate,
         ...this.getTasksResults(student.taskResults, courseTasks),
       };
     });
