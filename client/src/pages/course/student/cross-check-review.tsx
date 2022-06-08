@@ -1,7 +1,9 @@
 import { ClockCircleOutlined, EyeInvisibleTwoTone, EyeTwoTone, StarTwoTone } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import MarkdownInput from 'components/Forms/MarkdownInput';
+import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -68,11 +70,7 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
               <Typography.Text>{}</Typography.Text>
             </div>
             <div>
-              <Typography.Text>
-                {historyItem.comment.split('\n').map((item, i) => (
-                  <div key={i}>{item}</div>
-                ))}
-              </Typography.Text>
+              <PreparedComment text={historyItem.comment} />
             </div>
           </Timeline.Item>
         ))}
@@ -130,7 +128,7 @@ function Page(props: CoursePageProps) {
       setLoading(true);
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
         score: values.score,
-        comment: values.comment,
+        comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
         review: [],
@@ -181,7 +179,7 @@ function Page(props: CoursePageProps) {
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
-            <CommentInput />
+            <MarkdownInput />
             <Form.Item valuePropName="checked" name="visibleName">
               <Checkbox>Make my name visible in feedback</Checkbox>
             </Form.Item>

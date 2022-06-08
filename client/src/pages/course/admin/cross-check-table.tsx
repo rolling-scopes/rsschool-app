@@ -13,6 +13,7 @@ import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/cour
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { CoursesTasksApi } from 'api';
+import PreparedComment from 'components/Forms/PreparedComment';
 
 const { Text } = Typography;
 
@@ -140,7 +141,7 @@ export function Page(props: CoursePageProps) {
           modal.info({
             width: 600,
             title: `Comment from ${checker.githubId}`,
-            content: comment.split('\n').map(text => <p>{text}</p>),
+            content: <PreparedComment text={comment}></PreparedComment>,
           });
         },
       )}
