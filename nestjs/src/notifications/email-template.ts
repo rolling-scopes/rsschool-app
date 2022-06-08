@@ -182,15 +182,28 @@ export const emailTemplate = `<!DOCTYPE html>
                     width="100%"
                   >
                     <tr>
-                      <td style="font-family: sans-serif; font-size: 14px; vertical-align: top" valign="top">
+                      <td
+                        style="
+                          font-family: sans-serif;
+                          font-size: 14px;
+                          vertical-align: top;
+                          padding-bottom: 30px;
+                          text-align: center;
+                        "
+                        valign="top"
+                      >
                         <img
-                          height="108px"
-                          width="300px"
-                          style="margin-bottom: 30px;"
-                          src="https://app.rs.school/static/images/logo-rsschool3.png"
+                          style="margin-right: 30px"
+                          height="37px"
+                          width="32px"
+                          src="https://rollingscopes.com/images/logo_rs2.svg"
                         />
-
-                        {{emailBody}}
+                        <img height="37px" width="90px" src="https://app.rs.school/static/images/logo-rsschool3.png" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                      {{emailBody}}
                       </td>
                     </tr>
                   </table>
@@ -226,13 +239,12 @@ export const emailTemplate = `<!DOCTYPE html>
                     valign="top"
                     align="center"
                   >
-                    <br />
-                    Don't like these emails?
+                    <p>© The Rolling Scopes 2022</p>
                     <a
                       href="https://app.rs.school/profile/notifications"
                       style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center"
-                      >Unsubscribe</a
-                    >.
+                      >Unsubscribe from our emails</a
+                    >
                   </td>
                 </tr>
               </table>
