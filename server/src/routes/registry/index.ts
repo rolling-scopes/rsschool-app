@@ -9,6 +9,7 @@ import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
+import { sendNotification } from '../../services/notification.service';
 
 export function registryRouter(logger?: ILogger) {
   const router = new Router<any, any>({ prefix: '/registry' });
@@ -33,8 +34,12 @@ export function registryRouter(logger?: ILogger) {
   });
 
   router.post('/mentor', async (ctx: Router.RouterContext) => {
-    const { githubId } = ctx.state!.user as IUserSession;
+    const { githubId, id } = ctx.state!.user as IUserSession;
     await repository.register(githubId, ctx.request.body);
+    await sendNotification({
+      notificationId: 'mentorRegistrationApproval:submit',
+      userId: id,
+    });
     setResponse(ctx, OK);
   });
 
