@@ -874,65 +874,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={32}
-                                                width={0}
-                                              >
-                                                <strong>
-                                                  32
-                                                </strong>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              32
                             </p>
                             <p
                               style={
@@ -943,65 +885,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               Score: 
-                              <Text
-                                mark={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  mark={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={1201}
-                                                width={0}
-                                              >
-                                                <mark>
-                                                  1201
-                                                </mark>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              1201
                             </p>
                           </div>
                           <Button
@@ -1362,65 +1246,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={32}
-                                                width={0}
-                                              >
-                                                <strong>
-                                                  32
-                                                </strong>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              32
                             </p>
                             <p
                               style={
@@ -1431,65 +1257,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               Score: 
-                              <Text
-                                mark={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  mark={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={101}
-                                                width={0}
-                                              >
-                                                <mark>
-                                                  101
-                                                </mark>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              101
                             </p>
                           </div>
                           <Button
@@ -2489,65 +2257,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={32}
-                                                width={0}
-                                              >
-                                                <strong>
-                                                  32
-                                                </strong>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              32
                             </p>
                             <p
                               style={
@@ -2558,65 +2268,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               Score: 
-                              <Text
-                                mark={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  mark={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={1201}
-                                                width={0}
-                                              >
-                                                <mark>
-                                                  1201
-                                                </mark>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              1201
                             </p>
                           </div>
                           <Button
@@ -2977,65 +2629,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={32}
-                                                width={0}
-                                              >
-                                                <strong>
-                                                  32
-                                                </strong>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              32
                             </p>
                             <p
                               style={
@@ -3046,65 +2640,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               Score: 
-                              <Text
-                                mark={true}
-                              >
-                                <ForwardRef
-                                  component="span"
-                                  mark={true}
-                                >
-                                  <ResizeObserver
-                                    disabled={true}
-                                    onResize={[Function]}
-                                  >
-                                    <SingleObserver
-                                      disabled={true}
-                                      key="rc-observer-key-0"
-                                      onResize={[Function]}
-                                    >
-                                      <DomWrapper>
-                                        <EllipsisTooltip
-                                          enabledEllipsis={false}
-                                          isEllipsis={false}
-                                        >
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={null}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
-                                            }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={null}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <Ellipsis
-                                                enabledMeasure={false}
-                                                onEllipsis={[Function]}
-                                                rows={1}
-                                                text={101}
-                                                width={0}
-                                              >
-                                                <mark>
-                                                  101
-                                                </mark>
-                                              </Ellipsis>
-                                            </span>
-                                          </Typography>
-                                        </EllipsisTooltip>
-                                      </DomWrapper>
-                                    </SingleObserver>
-                                  </ResizeObserver>
-                                </ForwardRef>
-                              </Text>
+                              101
                             </p>
                           </div>
                           <Button

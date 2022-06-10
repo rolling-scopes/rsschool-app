@@ -9,10 +9,17 @@ import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
+import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Notification, NotificationUserSettings, NotificationUserConnection]),
+    TypeOrmModule.forFeature([
+      User,
+      Notification,
+      NotificationUserSettings,
+      NotificationUserConnection,
+      NotificationChannelSettings,
+    ]),
     NotificationsModule,
     UsersModule,
     forwardRef(() => AuthModule),
