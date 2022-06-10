@@ -11,8 +11,8 @@ import withSession from 'components/withSession';
 import shuffle from 'lodash/shuffle';
 import snakeCase from 'lodash/snakeCase';
 import moment from 'moment';
-import { useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useAsync, useBeforeUnload } from 'react-use';
 import {
   CourseService,
   SelfEducationPublicAttributes,
@@ -53,19 +53,7 @@ function Page(props: CoursePageProps) {
 
   const [isModified, setIsModified] = useState(false);
 
-  const handleClosePage = (e: BeforeUnloadEvent) => {
-    e.preventDefault();
-    e.returnValue = 'Your answers will be lost! Do you really want to exit this page?';
-  };
-
-  useEffect(() => {
-    if (isModified) {
-      window.addEventListener('beforeunload', handleClosePage);
-      return () => {
-        window.removeEventListener('beforeunload', handleClosePage);
-      };
-    }
-  }, [isModified]);
+  useBeforeUnload(isModified, 'You have unsaved changes in test!');
 
   useAsync(async () => {
     try {
