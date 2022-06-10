@@ -11,7 +11,7 @@ import withSession from 'components/withSession';
 import shuffle from 'lodash/shuffle';
 import snakeCase from 'lodash/snakeCase';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAsync, useBeforeUnload } from 'react-use';
 import {
   CourseService,
@@ -53,7 +53,7 @@ function Page(props: CoursePageProps) {
 
   const [isModified, setIsModified] = useState(false);
 
-  useBeforeUnload(isModified, 'You have unsaved changes in test!');
+  useBeforeUnload(isModified, 'You have changes in test! Do you realy want to close this page?');
 
   useAsync(async () => {
     try {
