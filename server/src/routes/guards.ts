@@ -42,7 +42,7 @@ export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<vo
       return;
     }
 
-    setErrorResponse(ctx, StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
+    setErrorResponse(ctx, StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
   } else {
     const authHeader = ctx.request.header.authorization as string | undefined;
 
@@ -65,7 +65,7 @@ export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<vo
         return;
       }
 
-      setErrorResponse(ctx, StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
+      setErrorResponse(ctx, StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
     }
   }
 };
