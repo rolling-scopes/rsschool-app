@@ -19,7 +19,7 @@ export function CrossCheckComments(props: Props) {
   if (!comments || comments.length === 0) {
     return null;
   }
-  const style = { margin: 16, fontStyle: 'italic' };
+  const style = { margin: 16 };
   return (
     <Col>
       {comments.map(({ comment, author, score }, i) => (

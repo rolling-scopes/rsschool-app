@@ -17,14 +17,13 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -45,14 +44,13 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -73,14 +71,13 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -106,14 +103,13 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -134,14 +130,13 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -166,14 +161,13 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               100
             </b>
           </p>
-          <p>
-            Great job, you better quit cross stitching and start programming.
-          </p>
+          <PreparedComment
+            text="Great job, you better quit cross stitching and start programming."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -198,14 +192,13 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               100
             </b>
           </p>
-          <p>
-            Great job, you better quit cross stitching and start programming.
-          </p>
+          <PreparedComment
+            text="Great job, you better quit cross stitching and start programming."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -226,14 +219,13 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               5
             </b>
           </p>
-          <p>
-            Awful job, you better quit programming and learn to cross stitch.
-          </p>
+          <PreparedComment
+            text="Awful job, you better quit programming and learn to cross stitch."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -263,14 +255,13 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               100
             </b>
           </p>
-          <p>
-            Great job, you better quit cross stitching and start programming.
-          </p>
+          <PreparedComment
+            text="Great job, you better quit cross stitching and start programming."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -295,14 +286,13 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               100
             </b>
           </p>
-          <p>
-            Great job, you better quit cross stitching and start programming.
-          </p>
+          <PreparedComment
+            text="Great job, you better quit cross stitching and start programming."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
@@ -327,14 +317,13 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               100
             </b>
           </p>
-          <p>
-            Great job, you better quit cross stitching and start programming.
-          </p>
+          <PreparedComment
+            text="Great job, you better quit cross stitching and start programming."
+          />
         </React.Fragment>
       }
       style={
         Object {
-          "fontStyle": "italic",
           "margin": 16,
         }
       }
