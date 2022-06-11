@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
+import { NotificationId } from '../models/notification';
 
 export async function sendNotification(notification: NotificationV2) {
   const { password, username } = config.users.cloud;
@@ -13,7 +14,7 @@ export async function sendNotification(notification: NotificationV2) {
 }
 
 type NotificationV2 = {
-  notificationId: 'mentorRegistrationApproval' | 'taskGrade' | 'interviewerAssigned';
+  notificationId: NotificationId;
   userId: number;
-  data: object;
+  data?: object;
 };

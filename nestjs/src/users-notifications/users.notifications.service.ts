@@ -25,6 +25,8 @@ export class UserNotificationsService {
     private userNotificationsRepository: Repository<NotificationUserSettings>,
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
+    @InjectRepository(NotificationChannelSettings)
+    private channelsSettingsRepository: Repository<NotificationChannelSettings>,
     private notificationsService: NotificationsService,
     private authService: AuthService,
     private userService: UsersService,
@@ -146,15 +148,53 @@ export class UserNotificationsService {
     );
   }
 
+  private async getUserConnectionsSettings(userId: number, notificationId: string) {
+    const channels = (await this.channelsSettingsRepository
+      .createQueryBuilder('channel')
+      .innerJoinAndMapOne(
+        'channel.connection',
+        NotificationUserConnection,
+        'connection',
+        'connection.channelId = channel.channelId and connection.userId = :userId',
+        { userId },
+      )
+      .where({
+        notificationId,
+      })
+      .getMany()) as (NotificationChannelSettings & { connection: NotificationUserConnection })[];
+
+    return (
+      channels
+        .map(channel => {
+          const { channelId, connection } = channel;
+          const { externalId, enabled } = connection;
+
+          return {
+            ...channel,
+            // we have to account on the flag for other channels, email can be send with no constrains
+            enabled: enabled || channelId === 'email',
+            externalId,
+          };
+        })
+        .filter(channel => !!channel.externalId && channel.enabled) ?? []
+    );
+  }
+
   /**
    * Automatic user notification based on triggers. sent to subscribed channels based on subscription
    */
-  public async sendEventNotification(notification: SendUserNotificationDto) {
-    const { userId, data, notificationId, expireDate } = notification;
-    const channels = await this.getUserNotificationSettings(userId, notificationId);
+  public async sendEventNotification(notificationDto: SendUserNotificationDto) {
+    const { userId, data, notificationId, expireDate } = notificationDto;
+    const notification = await this.notificationsService.getNotification(notificationId);
+    if (!notification || !notification.enabled) return;
+
+    const channels = await (notification.type == NotificationType.event
+      ? this.getUserNotificationSettings(userId, notificationId)
+      : this.getUserConnectionsSettings(userId, notificationId));
 
     const channelMap = new Map<NotificationChannelId, NotificationData>();
     channels.forEach(channel => {
+      if (channel.channelId === 'discord') return;
       const message = this.notificationsService.buildChannelMessage(channel, data);
       if (message) {
         const { channelId, template, to } = message;

@@ -23,7 +23,7 @@ export function Consents({
 }) {
   const hasEmail = !!email?.enabled;
   const hasTelegram = !!telegram?.enabled;
-  const hasDiscord = !!discord?.enabled;
+  const hasDiscord = !!discord?.enabled || true;
 
   if (hasEmail && hasTelegram && hasDiscord) return null;
 

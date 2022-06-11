@@ -1,5 +1,5 @@
 import { Button, Form, Input, message, Radio, Typography } from 'antd';
-import { MentorsApi, MentorStudentDto } from 'api';
+import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -11,6 +11,8 @@ import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
+
+const coursesApi = new CoursesApi();
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -48,7 +50,7 @@ function Page(props: CoursePageProps) {
 
   const expelStudent = async (githubId: string, comment: string) =>
     githubId === userGithubId
-      ? await courseService.selfExpel(githubId, comment)
+      ? await coursesApi.leaveCourse(courseId, { comment })
       : await courseService.expelStudent(githubId, comment);
 
   const unassignStudent = async (githubId: string, comment: string) => {
