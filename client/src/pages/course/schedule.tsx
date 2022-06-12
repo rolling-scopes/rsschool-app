@@ -16,7 +16,7 @@ const getYesterday = () => moment.utc().subtract(1, 'day');
 const omitDoneTasks = (events: ScheduleEvent[], limit: number) =>
   events.filter(({ score }) => !score?.donePercent || score.donePercent < limit);
 const omitPassedEvents = (events: ScheduleEvent[]) =>
-  events.filter(({ startDate }) => moment(startDate).isAfter(getYesterday(), 'day'));
+  events.filter(({ endDate }) => moment(endDate).isAfter(getYesterday(), 'day'));
 
 export function SchedulePage(props: CoursePageProps) {
   const isAdmin = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
