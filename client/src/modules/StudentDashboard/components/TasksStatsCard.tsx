@@ -1,4 +1,3 @@
-import { AuditOutlined } from '@ant-design/icons';
 import { CourseTaskDto } from 'api';
 import { StudentStats } from 'common/models';
 import dynamic from 'next/dynamic';
@@ -123,7 +122,6 @@ export function TasksStatsCard(props: Props) {
       />
       <CommonCard
         title="Tasks statistics"
-        icon={<AuditOutlined />}
         content={
           <div style={{ minWidth: 200, maxWidth: 200, margin: 'auto' }}>
             <TasksChart data={data} colors={colors} onItemSelected={data => updateUrl(data.type)} />
