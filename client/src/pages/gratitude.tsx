@@ -8,6 +8,7 @@ import withSession, { Session } from 'components/withSession';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
+import { AxiosError } from 'axios';
 
 type Props = {
   session: Session;
@@ -51,7 +52,10 @@ function Page(props: Props) {
       form.resetFields();
       message.success('Your feedback has been submitted.');
     } catch (e) {
-      message.error('An error occurred. Please try later.');
+      const error = e as AxiosError<any>;
+      const response = error.response;
+      const errorMessage = response?.data?.message ?? 'An error occurred. Please try later.';
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
