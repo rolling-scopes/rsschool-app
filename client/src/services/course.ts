@@ -8,6 +8,7 @@ import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CoursesTasksApi } from 'api';
+import { ColumnType } from 'antd/lib/table';
 
 export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
 export type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
@@ -64,15 +65,6 @@ export interface Verification {
   score: number;
   status: string;
   studentId: number;
-}
-
-export interface IColumn {
-  dataIndex: string;
-  title: () => JSX.Element;
-  width: number;
-  className: string;
-  render: (_: any, d: StudentScore) => JSX.Element | 0;
-  name: string;
 }
 
 export interface SelfEducationPublicAttributes {
@@ -680,6 +672,14 @@ export interface StudentScore extends StudentBasic {
   totalScore: number;
   totalScoreChangeDate: string;
   repositoryLastActivityDate: string;
+}
+
+export interface ColumnTypeWithName<RecordType> extends ColumnType<RecordType> {
+  name?: string;
+}
+
+export interface StudentScoreWithCrossCheckScore extends StudentScore {
+  crossCheckScore?: number;
 }
 
 export interface StudentDetails extends StudentBasic {

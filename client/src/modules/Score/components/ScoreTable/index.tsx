@@ -1,12 +1,11 @@
-import { Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import { Table, TablePaginationConfig } from 'antd';
 import { isUndefined } from 'lodash';
 import { getColumns } from 'modules/Score/data/getColumns';
 import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, StudentScore } from 'services/course';
+import { ColumnTypeWithName, CourseService, StudentScore, StudentScoreWithCrossCheckScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -16,11 +15,18 @@ import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import useWindowDimensions from 'utils/useWindowDimensions';
+import { SorterResult } from 'antd/lib/table/interface';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
 };
+
+type TableScoreOrder = SorterResult<StudentScore> | SorterResult<StudentScore>[];
+
+interface ScoreTableFiltersModified extends Omit<ScoreTableFilters, 'activeOnly'> {
+  activeOnly?: boolean;
+}
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -31,7 +37,7 @@ export function ScoreTable(props: Props) {
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
-  const [columns, setColumns] = useState<ColumnsType<StudentScore>>([]);
+  const [columns, setColumns] = useState<ColumnTypeWithName<StudentScoreWithCrossCheckScore>[]>([]);
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loaded, setLoaded] = useState(false);
@@ -47,10 +53,14 @@ export function ScoreTable(props: Props) {
   const courseService = useMemo(() => new CourseService(props.course.id), []);
   const [getPagedData] = useScorePaging(router, courseService, activeOnly);
 
-  const getCourseScore = async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
+  const getCourseScore = async (
+    pagination: TablePaginationConfig,
+    filters: ScoreTableFiltersModified,
+    order: TableScoreOrder,
+  ) => {
     try {
       props.onLoading(true);
-      const data = await getPagedData(pagination, filters, order);
+      const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
       setStudents({ ...students, content: data.content, pagination: data.pagination });
     } finally {
       props.onLoading(false);
@@ -96,7 +106,8 @@ export function ScoreTable(props: Props) {
     }
   }, [activeOnly]);
 
-  const getVisibleColumns = (columns: any[]) => columns.filter(column => !notVisibleColumns?.includes(column.name));
+  const getVisibleColumns = (columns: ColumnTypeWithName<StudentScoreWithCrossCheckScore>[]) =>
+    columns.filter(column => (column.name ? !notVisibleColumns?.includes(column.name) : true));
 
   const handleModalCancel = () => {
     setIsVisibleSettings(!isVisibleSetting);
@@ -145,7 +156,7 @@ export function ScoreTable(props: Props) {
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
-        onChange={getCourseScore as any}
+        onChange={getCourseScore}
         columns={getVisibleColumns(columns)}
         rowSelection={{
           selectedRowKeys: state,

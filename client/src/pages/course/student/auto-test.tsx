@@ -11,8 +11,8 @@ import withSession from 'components/withSession';
 import shuffle from 'lodash/shuffle';
 import snakeCase from 'lodash/snakeCase';
 import moment from 'moment';
-import { useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import React, { useMemo, useState } from 'react';
+import { useAsync, useBeforeUnload } from 'react-use';
 import {
   CourseService,
   SelfEducationPublicAttributes,
@@ -51,6 +51,10 @@ function Page(props: CoursePageProps) {
   const [verifications, setVerifications] = useState<Verification[]>([]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
+  const [isModified, setIsModified] = useState(false);
+
+  useBeforeUnload(isModified, 'You have changes in test! Do you realy want to close this page?');
+
   useAsync(async () => {
     try {
       setLoading(true);
@@ -62,6 +66,7 @@ function Page(props: CoursePageProps) {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
+      setIsModified(false);
     }
   }, []);
 
@@ -94,6 +99,7 @@ function Page(props: CoursePageProps) {
       }
 
       setLoading(true);
+
       const {
         courseTask: { type },
       } = await courseService.postTaskVerification(courseTaskId, data);
@@ -105,6 +111,7 @@ function Page(props: CoursePageProps) {
         message.success('The task has been submitted for verification and it will be checked soon.');
       }
 
+      setIsModified(false);
       form.resetFields();
     } catch (e) {
       const error = e as AxiosError<any>;
@@ -162,6 +169,7 @@ function Page(props: CoursePageProps) {
       form.resetFields();
     }
 
+    setIsModified(false);
     setCourseTaskId(courseTaskId);
     form.setFieldsValue({ courseTaskId });
     loadVerifications();
@@ -171,7 +179,7 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
       <Row gutter={24}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
-          <Form form={form} onFinish={handleSubmit} layout="vertical">
+          <Form form={form} onFinish={handleSubmit} layout="vertical" onChange={() => setIsModified(true)}>
             <CourseTaskSelect onChange={handleCourseTaskChange} groupBy="deadline" data={courseTasks} />
             {courseTask ? renderTaskFields(props.session.githubId, courseTask, verifications) : null}
             <Row>
