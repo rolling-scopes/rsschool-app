@@ -41,7 +41,6 @@ export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<vo
       await next();
       return;
     }
-
   }
   await basicAuthAws(ctx, next);
 };
