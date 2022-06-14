@@ -43,31 +43,8 @@ export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<vo
     }
 
     setErrorResponse(ctx, StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
-  } else {
-    const authHeader = ctx.request.header.authorization as string | undefined;
-
-    if (authHeader) {
-      const [authType, credStringEncoded] = authHeader.split(' ');
-
-      if (authType !== 'Basic') {
-        setErrorResponse(ctx, StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
-        return;
-      }
-
-      const credStringDecoded = Buffer.from(credStringEncoded, 'base64').toString();
-      const [name, pass] = credStringDecoded.split(':');
-
-      const isAdmin = name === config.admin.username && pass === config.admin.password;
-      const isCloudUser = name === config.users.cloud.username && pass === config.users.cloud.password;
-
-      if (isAdmin || isCloudUser) {
-        await next();
-        return;
-      }
-
-      setErrorResponse(ctx, StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
-    }
   }
+  await basicAuthAdmin(ctx, next);
 };
 
 export const userGuards = (user: IUserSession) => {
