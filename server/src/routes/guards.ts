@@ -1,5 +1,4 @@
 import Router from '@koa/router';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { config } from '../config';
 import {
   IUserSession,
@@ -14,7 +13,6 @@ import {
   isTaskOwner,
   isSupervisor,
 } from '../models';
-import { setErrorResponse } from './utils';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 export type RouterContext = Router.RouterContext<
