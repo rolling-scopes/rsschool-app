@@ -9,6 +9,8 @@
   - [The allocation of students into teams](platform/team-allocation.md)
   - [CV](platform/cv.md)
   - [Typical problems](platform/typical-problems.md)
+- Mentoring
+  - [Pull Request Review Process](platform/pull-request-review-process.md)
 - [Code of conduct](code-of-conduct.md)
 - RS School App Admin
   - [Adding tests into RS School App](platform/adding-tests.md)
