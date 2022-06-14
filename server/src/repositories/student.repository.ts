@@ -67,10 +67,14 @@ export class StudentRepository extends AbstractRepository<Student> {
     await getRepository(Student).save(records);
   }
 
-  public async search(courseId: number, searchText: string): Promise<UserBasic[]> {
+  public async search(
+    courseId: number,
+    searchText: string,
+    onlyStudentsWithoutMentorShown: boolean,
+  ): Promise<(UserBasic & { mentor: UserBasic | null })[]> {
     const searchQuery = `${searchText}%`;
 
-    const entities = await getRepository(Student)
+    const query = getRepository(Student)
       .createQueryBuilder('student')
       .select([`student.id`, 'mentor.id'])
       .addSelect(this.getBasicUserFields('user'))
@@ -87,9 +91,13 @@ export class StudentRepository extends AbstractRepository<Student> {
           user.lastName ILIKE :searchQuery
         )`,
         { courseId, searchQuery },
-      )
-      .limit(20)
-      .getMany();
+      );
+
+    if (onlyStudentsWithoutMentorShown) {
+      query.andWhere('mentor.id IS NULL');
+    }
+
+    const entities = await query.limit(20).getMany();
 
     return entities.map(entity => ({
       id: entity.id,

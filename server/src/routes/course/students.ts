@@ -46,9 +46,10 @@ export const getStudentsWithDetails = (_: ILogger) => async (ctx: Router.RouterC
 
 export const searchStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, searchText } = ctx.params;
+  const { onlyStudentsWithoutMentorShown } = ctx.query;
 
   const repository = getCustomRepository(StudentRepository);
-  const result = await repository.search(Number(courseId), searchText);
+  const result = await repository.search(Number(courseId), searchText, onlyStudentsWithoutMentorShown === 'true');
 
   setResponse(ctx, OK, result);
 };
