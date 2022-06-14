@@ -4,7 +4,7 @@ import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Student } from '@entities/student';
 
 type ResumeData = {
@@ -87,9 +87,6 @@ export class OpportunitiesService {
         relations: ['course', 'certificate', 'mentor', 'mentor.user'],
         where: {
           userId: resume.userId,
-          course: {
-            name: Not('TEST COURSE'),
-          },
           // if visibleCourses is not defined, then we show info from all courses
           ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
         },

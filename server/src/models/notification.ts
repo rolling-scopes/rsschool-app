@@ -8,6 +8,7 @@ export enum NotificationType {
 
 export type NotificationId =
   | 'mentorRegistrationApproval'
+  | 'mentorRegistrationApproval:submit'
   | 'taskGrade'
   | 'courseCertificate'
   | 'courseScheduleChange'

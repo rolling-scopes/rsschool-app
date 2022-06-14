@@ -30,6 +30,10 @@ export class NotificationsService {
     private httpService: HttpService,
   ) {}
 
+  public getNotification(id: NotificationId) {
+    return this.notificationsRepository.findOne(id);
+  }
+
   public getNotifications() {
     return this.notificationsRepository.find({ relations: ['channels'], order: { name: 'ASC' } });
   }

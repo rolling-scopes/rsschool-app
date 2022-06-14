@@ -1,7 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import random from 'lodash/random';
-import { Typography, List, Button, Progress, Modal, Input, Divider } from 'antd';
+import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from 'common/models/profile';
@@ -9,9 +8,8 @@ import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
-import { CourseService } from '../../services/course';
-import { WarningTwoTone } from '@ant-design/icons';
-import { CSSProperties } from 'react';
+import { CoursesApi } from 'api';
+import { WarningTwoTone, ReloadOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const { Text, Paragraph } = Typography;
 
@@ -31,6 +29,12 @@ type State = {
   isStudentStatsModalVisible: boolean;
   isExpelConfirmationModalVisible: boolean;
 };
+
+const coursesService = new CoursesApi();
+
+const messages = ['Are you sure you want to leave the course?', 'Your learning will be stopped.'];
+
+const messagesRu = ['Вы уверены, что хотите покинуть курс?', 'Ваше обучение будет прекращено.'];
 
 class StudentStatsCard extends React.Component<Props, State> {
   state = {
@@ -58,67 +62,32 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
   };
 
-  private showExpelConfirmationModal = (gitHubId: string, courseId: number) => {
+  private showExpelConfirmationModal = (courseId: number) => {
     const { isExpelConfirmationModalVisible } = this.state;
-
-    const keyLength = 8;
-
-    let key = '';
-
-    for (let i = 0; i < keyLength; i++) key += random(0, 9);
-
-    const title = (
-      <Typography.Title level={3} style={{ textAlign: 'center' }}>
-        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
-        <WarningTwoTone twoToneColor="#fcbe03" />
-      </Typography.Title>
-    );
-
-    const checkKeyMatch = (e: any) => {
-      if (e.target.value === key) {
-        modal.update({
-          okButtonProps: { disabled: false },
-        });
-      } else {
-        modal.update({
-          okButtonProps: { disabled: true },
-        });
-      }
-    };
-
-    const message =
-      "Are you sure you want to leave the course? Your learning will be finished. You won't be able to return to the course on your own.";
-    const messageRu =
-      'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено. Вы не сможете вернуться на курс самостоятельно.';
-
-    const textStyle: CSSProperties = { textAlign: 'center' };
 
     const content = (
       <>
-        <Paragraph style={textStyle} underline strong>
-          {message}
-        </Paragraph>
-        <Paragraph style={textStyle} underline strong>
-          {messageRu}
-        </Paragraph>
-        <Divider plain style={{ whiteSpace: 'normal' }}>
-          Enter following number to confirm action: <Text strong>{key}</Text>
-        </Divider>
-        <Input placeholder="Enter the number" type="text" onChange={checkKeyMatch} />
+        <Divider />
+        {messages.map((text, i) => (
+          <Paragraph key={i}>{text}</Paragraph>
+        ))}
+        <Divider />
+        {messagesRu.map((text, i) => (
+          <Paragraph key={i}>{text}</Paragraph>
+        ))}
       </>
     );
 
-    const modal = Modal.confirm({
-      maskStyle: { backgroundColor: 'red' },
-      icon: null,
-      title: title,
+    Modal.confirm({
+      icon: <WarningTwoTone twoToneColor="red" />,
+      title: 'Leaving Course ?',
       content: content,
-      centered: true,
-      onOk: () => this.selfExpelStudent(gitHubId, courseId),
+      onOk: () => this.selfExpelStudent(courseId),
       visible: isExpelConfirmationModalVisible,
       onCancel: () => this.hideExpelConfirmationModal(),
-      okButtonProps: { disabled: true },
-      maskClosable: true,
+      okButtonProps: { danger: true },
+      okText: 'Leave Course',
+      cancelText: 'Continue studying',
     });
   };
 
@@ -130,12 +99,14 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isExpelConfirmationModalVisible: false });
   };
 
-  private selfExpelStudent = async (gitHubId: string, courseId: number) => {
-    const courseService = new CourseService(courseId);
-    const result = await courseService.selfExpel(gitHubId, 'Self expelled from the course');
-    if (result.status === 200) {
-      window.location.reload();
-    }
+  private selfExpelStudent = async (courseId: number) => {
+    await coursesService.leaveCourse(courseId);
+    window.location.reload();
+  };
+
+  private rejoinAsStudent = async (courseId: number) => {
+    await coursesService.rejoinCourse(courseId);
+    window.location.reload();
   };
 
   private countScoredTasks = (tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length;
@@ -152,7 +123,6 @@ class StudentStatsCard extends React.Component<Props, State> {
   render() {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
     const stats = this.props.data;
-    const gitHubId: string = this.props.username;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
       <>
@@ -179,12 +149,12 @@ class StudentStatsCard extends React.Component<Props, State> {
                   isExpelled,
                   rank,
                   isCourseCompleted,
+                  isSelfExpelled,
                   certificateId,
                   courseId,
                 },
                 idx,
               ) => {
-                const isActive = !(isExpelled || isCourseCompleted);
                 return (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ flexGrow: 2 }}>
@@ -214,19 +184,31 @@ class StudentStatsCard extends React.Component<Props, State> {
                           Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
                         </p>
                       )}
-                      {rank && (
-                        <p style={{ fontSize: 12, marginBottom: 5 }}>
-                          Position: <Text strong>{rank}</Text>
-                        </p>
-                      )}
-                      <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Score: <Text mark>{totalScore}</Text>
-                      </p>
+                      {rank && <p style={{ fontSize: 12, marginBottom: 5 }}>Position: {rank}</p>}
+                      <p style={{ fontSize: 12, marginBottom: 5 }}>Score: {totalScore}</p>
 
-                      {isActive && isProfileOwner ? (
-                        <Button danger size="small" onClick={() => this.showExpelConfirmationModal(gitHubId, courseId)}>
-                          Leave course
-                        </Button>
+                      {isProfileOwner && !isCourseCompleted ? (
+                        !isExpelled ? (
+                          <Button
+                            icon={<LogoutOutlined />}
+                            danger
+                            size="small"
+                            onClick={() => this.showExpelConfirmationModal(courseId)}
+                          >
+                            Leave course
+                          </Button>
+                        ) : isSelfExpelled ? (
+                          <Button
+                            icon={<ReloadOutlined />}
+                            danger
+                            size="small"
+                            onClick={() => this.rejoinAsStudent(courseId)}
+                          >
+                            Back to Course
+                          </Button>
+                        ) : (
+                          <Text mark>You expelled by Course Manager or Mentor</Text>
+                        )
                       ) : (
                         ''
                       )}
