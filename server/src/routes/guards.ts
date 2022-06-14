@@ -42,9 +42,8 @@ export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<vo
       return;
     }
 
-    setErrorResponse(ctx, StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
   }
-  await basicAuthAdmin(ctx, next);
+  await basicAuthAws(ctx, next);
 };
 
 export const userGuards = (user: IUserSession) => {
