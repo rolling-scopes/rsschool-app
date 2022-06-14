@@ -32,7 +32,7 @@ export class AuthUser {
   public readonly githubId: string;
   public readonly courses: Record<number, CourseInfo>;
 
-  constructor(user: AuthDetails, courseTasks: CourseTask[] = [], admin: boolean = false) {
+  constructor(user: AuthDetails, courseTasks: CourseTask[] = [], admin: boolean = false, hirer: boolean = false) {
     const roles: { [key: string]: 'student' | 'mentor' } = {};
     const courses: Record<number, CourseInfo> = {};
 
@@ -57,6 +57,7 @@ export class AuthUser {
 
     this.id = userId;
     this.isAdmin = admin;
+    this.isHirer = hirer;
     this.githubId = user.githubId;
     this.appRoles = [admin ? Role.Admin : Role.User];
     this.roles = roles;
