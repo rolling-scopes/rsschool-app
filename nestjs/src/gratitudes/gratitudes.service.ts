@@ -27,18 +27,16 @@ export class GratitudesService {
     }
 
     await Promise.all(
-      data.userIds.map(async toUserId => {
-        const feedback = await this.saveFeedback({
-          toUserId,
-          fromUserId: authUser.id,
-          comment: data.comment,
-          badgeId: data.badgeId,
-          courseId: data.courseId,
-        } as Feedback);
-
-        await this.postToDiscord(feedback);
-        return feedback;
-      }),
+      data.userIds.map(
+        async userId =>
+          await this.postUserFeedback({
+            toUserId: userId,
+            fromUserId: authUser.id,
+            comment: data.comment,
+            badgeId: data.badgeId,
+            courseId: data.courseId,
+          } as Feedback),
+      ),
     );
   }
 
@@ -54,7 +52,12 @@ export class GratitudesService {
     });
   }
 
-  private async saveFeedback(feedback: Feedback) {
+  private async postUserFeedback(data: Feedback) {
+    const feedback = await this.createFeedback(data);
+    await this.postToDiscord(feedback);
+  }
+
+  private async createFeedback(feedback: Feedback) {
     const { id } = await this.repository.save({
       fromUserId: feedback.fromUserId,
       toUserId: feedback.toUserId,
