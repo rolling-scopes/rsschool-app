@@ -84,7 +84,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'users',
     icon: <UserOutlined />,
     href: '/admin/users',
-    access: session => isAdmin(session),
+    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
   },
   {
     name: 'Mentor Registry',
