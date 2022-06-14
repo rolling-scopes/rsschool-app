@@ -1,6 +1,7 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Col, Comment, Divider, Row } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
+import PreparedComment from './Forms/PreparedComment';
 
 type Props = {
   comments: {
@@ -18,7 +19,7 @@ export function CrossCheckComments(props: Props) {
   if (!comments || comments.length === 0) {
     return null;
   }
-  const style = { margin: 16, fontStyle: 'italic' };
+  const style = { margin: 16 };
   return (
     <Col>
       {comments.map(({ comment, author, score }, i) => (
@@ -35,9 +36,7 @@ export function CrossCheckComments(props: Props) {
                     <b>Score: {score}</b>
                   </p>
                 ) : null}
-                {comment.split('\n').map((text, k) => (
-                  <p key={k}>{text}</p>
-                ))}
+                <PreparedComment text={comment} />
               </>
             }
           />
