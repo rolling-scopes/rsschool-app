@@ -4580,8 +4580,8 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
                 localVarQueryParameter['current'] = current;
             }
 
-            if (orderBy !== undefined) {
-                localVarQueryParameter['orderBy'] = orderBy;
+            if (orderBy !== undefined) {        
+                Array.isArray(orderBy)?localVarQueryParameter['orderBy'] = orderBy[0]:localVarQueryParameter['orderBy'] = orderBy;                
             }
 
             if (orderDirection !== undefined) {
