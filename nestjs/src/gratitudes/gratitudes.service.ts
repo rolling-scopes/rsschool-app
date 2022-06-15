@@ -28,8 +28,7 @@ export class GratitudesService {
 
     await Promise.all(
       data.userIds.map(
-        async userId =>
-          await this.postUserFeedback({
+        userId => this.postUserFeedback({
             toUserId: userId,
             fromUserId: authUser.id,
             comment: data.comment,
