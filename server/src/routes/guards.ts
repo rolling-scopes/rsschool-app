@@ -21,10 +21,27 @@ export type RouterContext = Router.RouterContext<
 >;
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
+
 export const basicAuthAws = auth({
   name: config.users.cloud.username,
   pass: config.users.cloud.password,
 });
+
+export const crossCheckGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+  const user = ctx.state.user;
+  ctx.params.courseId = Number(ctx.params.courseId);
+
+  if (user) {
+    const guards = userGuards(user);
+    const { courseId } = ctx.params;
+
+    if (guards.isLoggedIn(ctx) && guards.isPowerUser(courseId)) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAws(ctx, next);
+};
 
 export const userGuards = (user: IUserSession) => {
   const guards = {
