@@ -232,12 +232,14 @@ export class CourseService {
     return result.data.data;
   }
 
-  async searchStudents(query: string | null) {
+  async searchStudents(query: string | null, onlyStudentsWithoutMentorShown = false) {
     try {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`);
+      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`, {
+        params: { onlyStudentsWithoutMentorShown },
+      });
       return response.data.data;
     } catch (e) {
       return [];

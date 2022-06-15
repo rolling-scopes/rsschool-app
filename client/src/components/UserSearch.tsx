@@ -8,15 +8,23 @@ import type { SearchStudent } from 'services/course';
 type Person = { id: number; githubId: string; name: string } | SearchStudent;
 
 export type UserProps = SelectProps<string> & {
-  searchFn?: (value: string) => Promise<Person[]>;
+  searchFn?: (value: string, onlyStudentsWithoutMentorShown?: boolean) => Promise<Person[]>;
   defaultValues?: Person[];
   keyField?: 'id' | 'githubId';
   showMentor?: boolean;
+  onlyStudentsWithoutMentorShown?: boolean;
 };
 
 export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
-  const { searchFn = defaultSearch, defaultValues, keyField, showMentor, ...otherProps } = props;
+  const {
+    searchFn = defaultSearch,
+    defaultValues,
+    keyField,
+    showMentor,
+    onlyStudentsWithoutMentorShown,
+    ...otherProps
+  } = props;
 
   useEffect(() => {
     setData(defaultValues ?? []);
@@ -24,7 +32,7 @@ export function UserSearch(props: UserProps) {
 
   const handleSearch = async (value: string) => {
     if (value) {
-      const data = await searchFn(value);
+      const data = await searchFn(value, onlyStudentsWithoutMentorShown);
       setData(data);
     } else {
       setData(props.defaultValues ?? []);

@@ -4,12 +4,17 @@ import { CourseService } from 'services/course';
 
 type Props = UserProps & {
   courseId: number;
+  onlyStudentsWithoutMentorShown?: boolean;
 };
 
 export function StudentSearch(props: Props) {
   const { courseId, ...otherProps } = props;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const handleSearch = useCallback(async (value: string) => courseService.searchStudents(value), [courseService]);
+  const handleSearch = useCallback(
+    async (value: string, onlyStudentsWithoutMentorShown: boolean = false) =>
+      courseService.searchStudents(value, onlyStudentsWithoutMentorShown),
+    [courseService],
+  );
 
   return <UserSearch {...otherProps} searchFn={handleSearch} />;
 }
