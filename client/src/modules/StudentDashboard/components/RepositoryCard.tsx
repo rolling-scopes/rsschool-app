@@ -59,7 +59,6 @@ export function RepositoryCard(props: Props) {
     <Spin spinning={loading}>
       <CommonCard
         title="Your repository"
-        icon={<GithubFilled />}
         content={
           <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', alignItems: 'center' }}>
             <Row>

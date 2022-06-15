@@ -9,7 +9,6 @@ type Props = {
   isMoreContent?: boolean | undefined;
   noDataDescription?: string | undefined;
   title: string;
-  icon: any;
   content: any;
 };
 
@@ -24,13 +23,13 @@ class CommonCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { title, icon, content, isMoreContent, noDataDescription } = this.props;
+    const { title, content, isMoreContent, noDataDescription } = this.props;
 
     return (
       <Card
         title={
           <Title level={2} ellipsis={true} style={{ fontSize: 16, marginBottom: 0 }}>
-            {icon} {title}
+            {title}
           </Title>
         }
         actions={isMoreContent ? [<FullscreenOutlined key="main-card-actions-more" />].filter(Boolean) : []}

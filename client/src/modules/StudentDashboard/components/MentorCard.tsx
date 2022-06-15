@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography, List } from 'antd';
 import CommonCard from './CommonDashboardCard';
-import { TeamOutlined, GithubFilled, EnvironmentFilled } from '@ant-design/icons';
+import { GithubFilled, EnvironmentFilled } from '@ant-design/icons';
 import { MentorBasic } from 'common/models';
 import { GithubAvatar } from 'components/GithubAvatar';
 
@@ -60,7 +60,6 @@ export function MentorCard(props: Props) {
   return (
     <CommonCard
       title="Mentor"
-      icon={<TeamOutlined />}
       content={
         props.mentor ? (
           <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>

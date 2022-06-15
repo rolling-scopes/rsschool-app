@@ -33,10 +33,10 @@
     "react": "17.0.2",
     "react-color": "2.19.3",
     "react-dom": "17.0.2",
-    "react-markdown": "8.0.3",
+    "react-markdown": "6.0.2",
     "react-masonry-css": "1.0.16",
     "react-use": "17.3.2",
-    "remark-gfm": "3.0.1",
+    "remark-gfm": "1.0.0",
     "styled-jsx": "5.0.1",
     "use-places-autocomplete": "1.11.0"
   },
