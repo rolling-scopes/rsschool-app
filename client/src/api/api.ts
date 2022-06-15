@@ -4581,7 +4581,7 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
             }
 
             if (orderBy !== undefined) {        
-                Array.isArray(orderBy)?localVarQueryParameter['orderBy'] = orderBy[0]:localVarQueryParameter['orderBy'] = orderBy;                
+                localVarQueryParameter['orderBy'] = Array.isArray(orderBy) ? orderBy[0]: orderBy;                
             }
 
             if (orderDirection !== undefined) {
