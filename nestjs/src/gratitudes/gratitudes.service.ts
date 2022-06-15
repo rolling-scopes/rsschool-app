@@ -27,14 +27,14 @@ export class GratitudesService {
     }
 
     await Promise.all(
-      data.userIds.map(
-        userId => this.postUserFeedback({
-            toUserId: userId,
-            fromUserId: authUser.id,
-            comment: data.comment,
-            badgeId: data.badgeId,
-            courseId: data.courseId,
-          } as Feedback),
+      data.userIds.map(userId =>
+        this.postUserFeedback({
+          toUserId: userId,
+          fromUserId: authUser.id,
+          comment: data.comment,
+          badgeId: data.badgeId,
+          courseId: data.courseId,
+        } as Feedback),
       ),
     );
   }
