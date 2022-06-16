@@ -72,10 +72,10 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (values: any) => {
+  const handleModalSubmit = async (values: FormData) => {
     try {
       setModalLoading(true);
-      const data = createRecord(values, courseId);
+      const data = createRecord(values);
       modalAction === 'update'
         ? await service.updateCourseEvent(modalData!.id!, data)
         : await service.createCourseEvent(data);
@@ -224,16 +224,15 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
   ];
 }
 
-function createRecord(values: any, courseId: number) {
+function createRecord(values: FormData) {
   const data = {
-    courseId,
     place: values.place,
     dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     eventId: values.eventId,
     comment: values.comment,
 
     coordinator: values.coordinator,
-    organizerId: values.organizerId || null,
+    organizerId: values.organizerId || undefined,
     broadcastUrl: values.broadcastUrl,
   };
   return data;
@@ -247,3 +246,5 @@ function getInitialValues(modalData: Partial<CourseEvent>) {
     dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
   };
 }
+
+type FormData = CourseEvent & { timeZone: string };

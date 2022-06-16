@@ -2,8 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { Next } from 'koa';
 import { ILogger } from '../../logger';
-import { Course, CourseTask, CourseEvent } from '../../models';
-import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute, createDisableRoute } from '../common';
+import { Course } from '../../models';
+import { createGetRoute, createPostRoute, createPutRoute } from '../common';
 import {
   adminGuard,
   guard,
@@ -120,9 +120,6 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
   router.get('/event/:id', courseGuard, getCourseEvent(logger));
-  router.put('/event/:id', courseManagerGuard, createPutRoute(CourseEvent, logger));
-  router.post('/event', courseManagerGuard, createPostRoute(CourseEvent, logger));
-  router.delete('/event/:id', courseManagerGuard, createDeleteRoute(CourseEvent, logger));
 
   router.get('/events', courseGuard, getCourseEvents(logger));
   router.get('/events/ical', courseGuard, getCourseEventsCalendar(logger));
@@ -130,9 +127,6 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.get('/task/:id', courseGuard, tasks.getCourseTask(logger));
-  router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
-  router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
 
   router.get('/tasks/details', courseGuard, tasks.getCourseTasksDetails(logger));
   router.get('/tasks/schedule', courseGuard, tasks.getCourseTasksDetailsForSchedule(logger));
