@@ -1,7 +1,8 @@
-import { Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
+import { CheckScheduleChangesDto } from './dto/check-schedule-changes';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
@@ -16,8 +17,8 @@ export class ScheduleController {
   @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyScheduleChanges' })
   @ApiForbiddenResponse()
-  public async notifyScheduleChanges() {
-    const recipients = await this.scheduleService.getChangedCoursesRecipients();
+  public async notifyScheduleChanges(@Body() dto: CheckScheduleChangesDto) {
+    const recipients = await this.scheduleService.getChangedCoursesRecipients(dto.lastHours);
     Promise.resolve().then(
       () =>
         new Promise(async () => {

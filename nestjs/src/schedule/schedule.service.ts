@@ -20,8 +20,8 @@ export class ScheduleService {
     readonly userRepository: Repository<User>,
   ) {}
 
-  public async getChangedCoursesRecipients(): Promise<Recipients> {
-    const updatedCourses = await this.courseService.getCoursesWithUpdateScheduleWithin(2);
+  public async getChangedCoursesRecipients(lastHours: number = 2): Promise<Recipients> {
+    const updatedCourses = await this.courseService.getCoursesWithUpdateScheduleWithin(lastHours);
     const aliasMap = new Map(updatedCourses.map(course => [course.alias, course]));
 
     this.logger.log({ message: `updated courses: ${updatedCourses.map(course => course.name)} ` });
