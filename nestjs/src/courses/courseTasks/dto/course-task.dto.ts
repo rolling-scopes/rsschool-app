@@ -1,4 +1,4 @@
-import { CourseTask } from '@entities/courseTask';
+import { CourseTask, Checker, CrossCheckStatus } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
@@ -49,7 +49,7 @@ export class CourseTaskDto {
   name: string;
 
   @ApiProperty()
-  checker: string;
+  checker: Checker;
 
   @ApiProperty()
   studentStartDate: string;
@@ -77,5 +77,5 @@ export class CourseTaskDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  crossCheckStatus: string;
+  crossCheckStatus: CrossCheckStatus;
 }
