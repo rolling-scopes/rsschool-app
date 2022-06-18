@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLocalStorage } from 'react-use';
 import CommonCard from './CommonDashboardCard';
-import { ScheduleOutlined, YoutubeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { YoutubeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { CourseEvent } from 'services/course';
 import { Row, Col, Tag, Typography, Tooltip, Select } from 'antd';
 import { dateTimeTimeZoneRenderer } from './renderers';
@@ -61,7 +61,6 @@ export function NextEventCard(props: Props) {
   return (
     <CommonCard
       title="Next event"
-      icon={<ScheduleOutlined />}
       content={
         nextEvents.length ? (
           <div style={{ display: 'flex', justifyContent: 'space-around', flexDirection: 'column' }}>

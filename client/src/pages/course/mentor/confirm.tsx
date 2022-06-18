@@ -12,10 +12,9 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 
 const mentorRegistry = new MentorRegistryService();
-function Page(props: { session: Session }) {
-  const router = useRouter();
-
+function Page(props: { session: Session; courseAlias?: string }) {
   const [form] = Form.useForm();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -32,15 +31,19 @@ function Page(props: { session: Session }) {
   useAsync(async () => {
     try {
       setLoading(true);
-      const courseAlias = router.query['course'];
+      const courseAlias = router.query?.course;
+      if (!courseAlias) {
+        return;
+      }
       const courses = await new CoursesService().getCourses();
       const course = courses.find(c => c.alias === courseAlias) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
-
       if (!mentor.preselectedCourses?.includes(course?.id ?? 0)) {
         setNoAccess(true);
         return;
+      } else {
+        setNoAccess(false);
       }
 
       setMentorData(mentor);
@@ -50,7 +53,7 @@ function Page(props: { session: Session }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router.query.course]);
 
   const handleSubmit = async (values: any) => {
     if (loading) {
@@ -122,8 +125,6 @@ const SuccessComponent = () => {
   return <Result status="success" title={titleCmp} />;
 };
 
-export default withSession(Page);
-
 function renderForm(form: FormInstance, mentorData: any, handleSubmit: (values: any) => Promise<void>, course: Course) {
   return (
     <>
@@ -168,7 +169,7 @@ function renderForm(form: FormInstance, mentorData: any, handleSubmit: (values: 
           name="students"
           label="Predefined students (if any)"
         >
-          <StudentSearch labelInValue courseId={course.id} mode="multiple" />
+          <StudentSearch onlyStudentsWithoutMentorShown={true} labelInValue courseId={course.id} mode="multiple" />
         </Form.Item>
 
         <Button style={{ marginTop: 32 }} size="large" type="primary" htmlType="submit">
@@ -178,3 +179,5 @@ function renderForm(form: FormInstance, mentorData: any, handleSubmit: (values: 
     </>
   );
 }
+
+export default withSession(Page);

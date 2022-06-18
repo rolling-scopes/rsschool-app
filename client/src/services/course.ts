@@ -8,6 +8,7 @@ import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CoursesTasksApi } from 'api';
+import { ColumnType } from 'antd/lib/table';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -69,15 +70,6 @@ export interface Verification {
   score: number;
   status: string;
   studentId: number;
-}
-
-export interface IColumn {
-  dataIndex: string;
-  title: () => JSX.Element;
-  width: number;
-  className: string;
-  render: (_: any, d: StudentScore) => JSX.Element | 0;
-  name: string;
 }
 
 export interface SelfEducationPublicAttributes {
@@ -245,12 +237,14 @@ export class CourseService {
     return result.data.data;
   }
 
-  async searchStudents(query: string | null) {
+  async searchStudents(query: string | null, onlyStudentsWithoutMentorShown = false) {
     try {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`);
+      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`, {
+        params: { onlyStudentsWithoutMentorShown },
+      });
       return response.data.data;
     } catch (e) {
       return [];
@@ -685,6 +679,14 @@ export interface StudentScore extends StudentBasic {
   totalScore: number;
   totalScoreChangeDate: string;
   repositoryLastActivityDate: string;
+}
+
+export interface ColumnTypeWithName<RecordType> extends ColumnType<RecordType> {
+  name?: string;
+}
+
+export interface StudentScoreWithCrossCheckScore extends StudentScore {
+  crossCheckScore?: number;
 }
 
 export interface StudentDetails extends StudentBasic {
