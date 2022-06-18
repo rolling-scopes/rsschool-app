@@ -1,6 +1,7 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { ILogger } from '../../../logger';
+import { CrossCheckStatus } from '../../../models/courseTask';
 import { courseService, taskService } from '../../../services';
 import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
@@ -25,7 +26,7 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
     await scoreService.saveScore(studentScore.studentId, courseTaskId, data);
   }
 
-  await taskService.changeCourseTaskStatus(courseTask, 'completed');
+  await taskService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Completed);
 
   setResponse(ctx, OK);
 };

@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { TaskSolutionChecker } from '../../../models';
+import { CrossCheckStatus } from '../../../models/courseTask';
 import { CrossCheckDistributionService } from '../../../services/distribution';
 import { courseService, taskService } from '../../../services';
 import { setResponse } from '../../utils';
@@ -42,7 +43,7 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
 
   await getRepository(TaskSolutionChecker).save(crossCheckPairs);
 
-  await taskService.changeCourseTaskStatus(courseTask, 'distributed');
+  await taskService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Distributed);
 
   setResponse(ctx, StatusCodes.OK, { crossCheckPairs });
 };

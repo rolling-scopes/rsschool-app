@@ -10,7 +10,12 @@ import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CoursesTasksApi } from 'api';
 import { ColumnType } from 'antd/lib/table';
 
-export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
+export enum CrossCheckStatus {
+  Initial = 'initial',
+  Distributed = 'distributed',
+  Completed = 'completed',
+}
+
 export type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export type Feedback = {

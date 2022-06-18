@@ -4,6 +4,7 @@ import { config } from '../../../config';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../../../models/taskSolution';
+import { CrossCheckStatus } from '../../../models/courseTask';
 
 import {
   courseService,
@@ -23,6 +24,11 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     courseService.queryStudentByGithubId(courseId, user.githubId),
     taskService.getCourseTask(courseTaskId, true),
   ]);
+
+  if (courseTask?.crossCheckStatus !== CrossCheckStatus.Distributed) {
+    setErrorResponse(ctx, BAD_REQUEST, "task review can't be submitted");
+    return;
+  }
 
   if (student == null || courseTask == null || checker == null) {
     setErrorResponse(ctx, BAD_REQUEST, 'not valid student or course task');

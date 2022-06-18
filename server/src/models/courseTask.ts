@@ -23,7 +23,11 @@ export enum Checker {
   CrossCheck = 'crossCheck',
 }
 
-export type CrossCheckStatus = 'initial' | 'distributed' | 'completed';
+export enum CrossCheckStatus {
+  Initial = 'initial',
+  Distributed = 'distributed',
+  Completed = 'completed',
+}
 
 @Entity()
 export class CourseTask {

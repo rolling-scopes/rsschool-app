@@ -741,6 +741,12 @@ export interface CourseTaskDetailedDto {
     'scoreWeight': number;
     /**
      * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'crossCheckStatus': string;
+    /**
+     * 
      * @type {object}
      * @memberof CourseTaskDetailedDto
      */
@@ -843,6 +849,12 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'scoreWeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'crossCheckStatus': string;
 }
 
 export const CourseTaskDtoTypeEnum = {

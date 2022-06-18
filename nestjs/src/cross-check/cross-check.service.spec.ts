@@ -29,12 +29,12 @@ const expectedAxiosRequestConfig = {
   },
 };
 
-enum MockDates {
+enum MockDate {
   DateBefore = '2022-03-21T00:00:00.000Z',
   DateAfter = '2022-03-23T00:00:00.000Z',
 }
 
-enum CrossCheckStatuses {
+enum CrossCheckStatus {
   Initial = 'initial',
   Distributed = 'distributed',
   Completed = 'completed',
@@ -44,58 +44,58 @@ const tasks = [
   {
     id: 1,
     courseId: 1,
-    crossCheckStatus: CrossCheckStatuses.Initial,
-    studentEndDate: MockDates.DateAfter,
-    crossCheckEndDate: MockDates.DateBefore,
+    crossCheckStatus: CrossCheckStatus.Initial,
+    studentEndDate: MockDate.DateAfter,
+    crossCheckEndDate: MockDate.DateBefore,
   },
   {
     id: 2,
     courseId: 2,
-    crossCheckStatus: CrossCheckStatuses.Initial,
-    studentEndDate: MockDates.DateBefore,
-    crossCheckEndDate: MockDates.DateAfter,
+    crossCheckStatus: CrossCheckStatus.Initial,
+    studentEndDate: MockDate.DateBefore,
+    crossCheckEndDate: MockDate.DateAfter,
   },
   {
     id: 3,
     courseId: 3,
-    crossCheckStatus: CrossCheckStatuses.Initial,
-    studentEndDate: MockDates.DateBefore,
-    crossCheckEndDate: MockDates.DateBefore,
+    crossCheckStatus: CrossCheckStatus.Initial,
+    studentEndDate: MockDate.DateBefore,
+    crossCheckEndDate: MockDate.DateBefore,
   },
   {
     id: 4,
     courseId: 4,
-    crossCheckStatus: CrossCheckStatuses.Initial,
-    studentEndDate: MockDates.DateAfter,
-    crossCheckEndDate: MockDates.DateAfter,
+    crossCheckStatus: CrossCheckStatus.Initial,
+    studentEndDate: MockDate.DateAfter,
+    crossCheckEndDate: MockDate.DateAfter,
   },
   {
     id: 11,
     courseId: 11,
-    crossCheckStatus: CrossCheckStatuses.Distributed,
-    studentEndDate: MockDates.DateBefore,
-    crossCheckEndDate: MockDates.DateAfter,
+    crossCheckStatus: CrossCheckStatus.Distributed,
+    studentEndDate: MockDate.DateBefore,
+    crossCheckEndDate: MockDate.DateAfter,
   },
   {
     id: 22,
     courseId: 22,
-    crossCheckStatus: CrossCheckStatuses.Distributed,
-    studentEndDate: MockDates.DateBefore,
-    crossCheckEndDate: MockDates.DateBefore,
+    crossCheckStatus: CrossCheckStatus.Distributed,
+    studentEndDate: MockDate.DateBefore,
+    crossCheckEndDate: MockDate.DateBefore,
   },
   {
     id: 33,
     courseId: 33,
-    crossCheckStatus: CrossCheckStatuses.Distributed,
-    studentEndDate: MockDates.DateAfter,
-    crossCheckEndDate: MockDates.DateBefore,
+    crossCheckStatus: CrossCheckStatus.Distributed,
+    studentEndDate: MockDate.DateAfter,
+    crossCheckEndDate: MockDate.DateBefore,
   },
   {
     id: 44,
     courseId: 44,
-    crossCheckStatus: CrossCheckStatuses.Distributed,
-    studentEndDate: MockDates.DateBefore,
-    crossCheckEndDate: MockDates.DateAfter,
+    crossCheckStatus: CrossCheckStatus.Distributed,
+    studentEndDate: MockDate.DateBefore,
+    crossCheckEndDate: MockDate.DateAfter,
   },
 ];
 

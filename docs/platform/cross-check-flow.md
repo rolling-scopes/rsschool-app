@@ -14,7 +14,9 @@ After the assignment's deadline, peers for cross-checking are generated. Every s
 
 ### Step #3 Checking others' work
 
-All who send their assignment for cross-checking check each others' work. To do so, enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the link <span style="color:orange">`Cross-Check: Review`</span>. How to check:
+All who send their assignment for cross-checking check each others' work. To do so, enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the link <span style="color:orange">`Cross-Check: Review`</span>.  
+**NB!** You won't be able to submit a review after the cross-check is completed, keep an eye on the deadlines!  
+How to check:
 
 1. Select the task (For example, Portfolio).
 2. Select the student.

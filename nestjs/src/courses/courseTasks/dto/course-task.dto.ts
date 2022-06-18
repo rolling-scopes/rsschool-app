@@ -1,4 +1,4 @@
-import { CourseTask } from '@entities/courseTask';
+import { CourseTask, Checker, CrossCheckStatus } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
@@ -30,6 +30,7 @@ export class CourseTaskDto {
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.checker = courseTask.checker;
+    this.crossCheckStatus = courseTask.crossCheckStatus;
 
     this.taskOwnerId = courseTask.taskOwnerId ?? undefined;
   }
@@ -48,7 +49,7 @@ export class CourseTaskDto {
   name: string;
 
   @ApiProperty()
-  checker: string;
+  checker: Checker;
 
   @ApiProperty()
   studentStartDate: string;
@@ -73,4 +74,8 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  crossCheckStatus: CrossCheckStatus;
 }
