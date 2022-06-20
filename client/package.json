@@ -41,7 +41,7 @@
     "use-places-autocomplete": "1.11.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.19.2",
+    "@playwright/test": "1.22.0",
     "@types/aws-lambda": "8.10.92",
     "@types/cookie": "0.4.1",
     "@types/enzyme": "3.10.11",
