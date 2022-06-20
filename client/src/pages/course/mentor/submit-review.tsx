@@ -2,7 +2,7 @@ import { Button, Form, message } from 'antd';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { withSession, Session } from 'components/withSession';
-import { CommentInput, CourseTaskSelect, GithubPrInput, ScoreInput } from 'components/Forms';
+import { CourseTaskSelect, GithubPrInput, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -91,7 +91,6 @@ function Page({ session, course }: CoursePageProps) {
         </Form.Item>
         <GithubPrInput />
         <ScoreInput courseTask={courseTask} />
-        <CommentInput />
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
