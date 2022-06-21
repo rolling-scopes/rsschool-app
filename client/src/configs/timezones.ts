@@ -1,3 +1,7 @@
+import moment from 'moment-timezone';
+
+export const ALL_TIMEZONES = moment.tz.names();
+
 export const TIMEZONES = [
   'UTC',
   'Europe/London',

@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Divider, Select } from 'antd';
 import { PercentageOutlined } from '@ant-design/icons';
 import SettingsItem from './SettingsItem';
-import { TIMEZONES } from 'configs/timezones';
+import { ALL_TIMEZONES } from 'configs/timezones';
 
 const { Paragraph, Title } = Typography;
 const { Option } = Select;
@@ -25,8 +25,9 @@ const TimeZone: React.FC<TimeZoneProps> = ({ timezone, setTimezone, firstDayOfTh
       placeholder="Please select a timezone"
       defaultValue={timezone}
       onChange={setTimezone}
+      showSearch
     >
-      {TIMEZONES.map(timezone => (
+      {ALL_TIMEZONES.map(timezone => (
         <Option key={timezone} value={timezone}>
           {/* there is no 'Europe / Kyiv' timezone at the moment */}
           {timezone === 'Europe/Kiev' ? 'Europe/Kyiv' : timezone}
