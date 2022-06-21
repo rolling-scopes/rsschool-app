@@ -28,13 +28,13 @@ export class CourseTasksService {
   ) {}
 
   public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished') {
-    return this.courseTaskRepository.find({
-      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status) },
-      relations: ['task'],
-      order: {
-        studentEndDate: 'ASC',
-      },
-    });
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where({ courseId, disabled: false, ...this.getFindConditionForStatus(status) })
+      .orderBy('courseTask.studentEndDate', 'ASC')
+      .addOrderBy('task.name', 'ASC')
+      .getMany();
   }
 
   public getById(courseTaskId: number) {
