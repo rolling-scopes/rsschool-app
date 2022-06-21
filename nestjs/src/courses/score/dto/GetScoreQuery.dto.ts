@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional } from 'class-validator';
 
 export const orderByFieldMapping = {
   rank: 'student.rank',
@@ -18,17 +18,17 @@ export type OrderDirection = 'asc' | 'desc';
 export type OrderField = keyof typeof orderByFieldMapping;
 
 export class GetScoreQueryDto {
+  @ApiProperty()
+  @IsString()
+  public activeOnly: 'true' | 'false';
+
   @ApiProperty({ enum: Object.keys(orderByFieldMapping) })
   @IsString()
-  public orderBy?: OrderField;
+  public orderBy: OrderField;
 
   @ApiProperty({ enum: ['asc', , 'desc'] })
   @IsString()
-  public orderDirection?: OrderDirection;
-
-  @ApiProperty()
-  @IsString()
-  public activeOnly?: 'true' | 'false';
+  public orderDirection: OrderDirection;
 
   @ApiProperty()
   @IsString()
@@ -37,4 +37,24 @@ export class GetScoreQueryDto {
   @ApiProperty()
   @IsString()
   public pageSize: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  githubId?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  'mentor.githubId'?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  cityName?: string;
 }

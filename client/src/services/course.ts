@@ -17,6 +17,7 @@ import {
   CreateCourseEventDto,
   StudentsScoreApi,
 } from 'api';
+import { optionalQueryString } from 'utils/optionalQueryString';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -306,12 +307,16 @@ export class CourseService {
     orderBy: ScoreOrder = { field: 'totalScore', order: 'descend' },
   ) {
     const result = await studentsScoreApi.getScore(
+      String(filter.activeOnly),
       orderBy.field,
       orderBy.order === 'descend' ? 'desc' : 'asc',
-      String(filter.activeOnly),
       String(pagination.current),
       String(pagination.pageSize),
       this.courseId,
+      optionalQueryString(filter.githubId),
+      optionalQueryString(filter.name),
+      optionalQueryString(filter['mentor.githubId']),
+      optionalQueryString(filter.cityName),
     );
     return result.data;
   }
