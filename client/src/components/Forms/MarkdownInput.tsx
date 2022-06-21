@@ -1,11 +1,14 @@
-import * as React from 'react';
+import { FC } from 'react';
 import { Input, Form, Button, Typography } from 'antd';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function MarkdownInput(props: { [key: string]: any; notRequired?: boolean }) {
-  const { notRequired, ...otherProps } = props;
+type Props = {
+  notRequired?: boolean;
+};
+
+const MarkdownInput: FC<Props> = ({ notRequired = false }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [text, setText] = useState('');
 
@@ -28,7 +31,10 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
     <div style={{ marginBottom: '20px' }}>
       <div style={{ display: previewVisible ? 'none' : 'block' }}>
         <Form.Item
-          {...otherProps}
+          onReset={() => {
+            setText('');
+            setPreviewVisible(false);
+          }}
           name="comment"
           label="Comment (markdown syntax is supported)"
           rules={notRequired ? [] : [{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
@@ -51,4 +57,6 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
       )}
     </div>
   );
-}
+};
+
+export default MarkdownInput;
