@@ -9,11 +9,15 @@ import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
+
+enum LocalStorage {
+  IsUsernameVisible = 'crossCheckIsUsernameVisible',
+}
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
@@ -116,6 +120,7 @@ function Page(props: CoursePageProps) {
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
+  const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
@@ -164,6 +169,10 @@ function Page(props: CoursePageProps) {
     form.setFieldsValue({ githubId });
   };
 
+  const handleUsernameVisibilityChange = () => {
+    setIsUsernameVisible(!isUsernameVisible);
+  };
+
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
@@ -184,8 +193,8 @@ function Page(props: CoursePageProps) {
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
             <MarkdownInput />
-            <Form.Item valuePropName="checked" name="visibleName">
-              <Checkbox>Make my name visible in feedback</Checkbox>
+            <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
+              <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
             </Form.Item>
             <Button size="large" type="primary" htmlType="submit" disabled={submissionDisabled}>
               Submit
