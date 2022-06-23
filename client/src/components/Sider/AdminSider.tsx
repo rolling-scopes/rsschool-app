@@ -4,15 +4,20 @@ import SubMenu from 'antd/lib/menu/SubMenu';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useLocalStorage } from 'react-use';
 import { Course } from 'services/models';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 const { Sider } = Layout;
 
 type Props = { session: Session; courses: Course[]; activeCourse?: Course | null };
 
+enum LocalStorage {
+  IsSiderCollapsed = 'isSiderCollapsed',
+}
+
 export function AdminSider(props: Props) {
-  const [collapsed, setCollapsed] = useState(true);
+  const [isSiderCollapsed = true, setIsSiderCollapsed] = useLocalStorage<boolean>(LocalStorage.IsSiderCollapsed);
   const [activeCourse] = useActiveCourse(props.courses);
   const adminMenuItems = getAdminMenuItems(props.session);
   const courseManagementMenuItems = useMemo(
@@ -22,14 +27,14 @@ export function AdminSider(props: Props) {
 
   const menuIconProps = {
     onClick: () => {
-      setCollapsed(!collapsed);
+      setIsSiderCollapsed(!isSiderCollapsed);
     },
     style: { fontSize: '20px', display: 'block', lineHeight: '30px', padding: '20px 32px' },
   };
 
   return (
-    <Sider trigger={null} collapsible collapsed={collapsed} theme="light" width={220}>
-      {collapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
+    <Sider trigger={null} collapsible collapsed={isSiderCollapsed} theme="light" width={220}>
+      {isSiderCollapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
       <Menu mode="inline">
         {adminMenuItems.length ? (
           <SubMenu key="adminArea" icon={<SearchOutlined />} title="Admin area">
