@@ -148,7 +148,10 @@ const createSelfeducationVerification = async ({
 
   const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
   let score = rightAnswersPercent < tresholdPercentage ? 0 : Math.floor(maxScore * rightAnswersPercent * 0.01);
-  let details = `Accuracy: ${rightAnswersPercent}%`;
+  let details =
+    rightAnswersPercent < tresholdPercentage
+      ? `Your accuracy: ${rightAnswersPercent}%. The minimum accuracy for obtaining a score on this test is ${tresholdPercentage}%.`
+      : `Accuracy: ${rightAnswersPercent}%`;
 
   if (verificationsNumber >= maxAttemptsNumber) {
     score = Math.floor(score / 2);
