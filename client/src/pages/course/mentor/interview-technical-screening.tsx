@@ -310,7 +310,9 @@ function Page(props: CoursePageProps) {
     const interview = interviews.find(i => i.student.githubId === githubId);
     if (interview != null) {
       const feedback = await courseService.getStageInterviewFeedback(interview.id);
-      form.setFieldsValue(deserializeFromJson(feedback));
+      const deserializeFeedback = deserializeFromJson(feedback);
+      setResume(deserializeFeedback);
+      form.setFieldsValue(deserializeFeedback);
     }
   };
 
