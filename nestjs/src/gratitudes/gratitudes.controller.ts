@@ -14,8 +14,7 @@ export class GratitudesController {
   @ApiOperation({ operationId: 'createGratitude' })
   @ApiOkResponse({ type: GratitudeDto })
   public async create(@Req() req: CurrentRequest, @Body() dto: CreateGratitudeDto) {
-    const data = await this.service.create(req.user, dto);
-    return new GratitudeDto(data);
+    await this.service.create(req.user, dto);
   }
 
   @Get('/badges/:courseId')

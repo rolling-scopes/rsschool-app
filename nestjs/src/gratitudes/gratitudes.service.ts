@@ -17,7 +17,7 @@ export class GratitudesService {
   ) {}
 
   public async create(authUser: AuthUser, data: CreateGratitudeDto) {
-    if (authUser.id === data.userId) {
+    if (data.userIds.includes(authUser.id)) {
       throw new BadRequestException('You cannot give feedback to yourself');
     }
     const badges = this.getBadges(authUser, data.courseId);
@@ -26,19 +26,17 @@ export class GratitudesService {
       throw new BadRequestException('Badge not allowed');
     }
 
-    const { id } = await this.repository.save({
-      fromUserId: authUser.id,
-      toUserId: data.userId,
-      comment: data.comment,
-      badgeId: data.badgeId,
-      courseId: data.courseId,
-    });
-    const result = await this.repository.findOneOrFail(id, {
-      relations: ['fromUser', 'toUser', 'course', 'course.discordServer'],
-    });
-
-    await this.postToDiscord(result);
-    return result;
+    await Promise.all(
+      data.userIds.map(userId =>
+        this.postUserFeedback({
+          toUserId: userId,
+          fromUserId: authUser.id,
+          comment: data.comment,
+          badgeId: data.badgeId,
+          courseId: data.courseId,
+        } as Feedback),
+      ),
+    );
   }
 
   public getBadges({ courses, isAdmin }: AuthUser, courseId: number) {
@@ -51,6 +49,27 @@ export class GratitudesService {
       const allowed = badge.roles?.some(role => userCourseRoles.includes(role)) ?? true;
       return allowed;
     });
+  }
+
+  private async postUserFeedback(data: Feedback) {
+    const feedback = await this.createFeedback(data);
+    await this.postToDiscord(feedback);
+  }
+
+  private async createFeedback(feedback: Feedback) {
+    const { id } = await this.repository.save({
+      fromUserId: feedback.fromUserId,
+      toUserId: feedback.toUserId,
+      comment: feedback.comment,
+      badgeId: feedback.badgeId,
+      courseId: feedback.courseId,
+    });
+
+    const result = await this.repository.findOneOrFail(id, {
+      relations: ['fromUser', 'toUser', 'course', 'course.discordServer'],
+    });
+
+    return result;
   }
 
   private postToDiscord(feedback: Feedback) {
