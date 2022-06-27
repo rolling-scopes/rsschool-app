@@ -25,6 +25,6 @@ export class CourseEventsService {
   }
 
   delete(id: number) {
-    return this.courseEventRepository.delete(id);
+    return this.courseEventRepository.remove({ id } as CourseEvent);
   }
 }
