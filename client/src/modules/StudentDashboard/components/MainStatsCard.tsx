@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 
 const PerformanceChart = dynamic(() => import('./PerformanceChart'), { ssr: false });
 
+const DEFAULT_POSITION = 999999;
+
 const { Title, Text } = Typography;
 
 type Props = {
@@ -21,7 +23,8 @@ interface IStyle {
 
 export function MainStatsCard({ totalScore, position, maxCourseScore, totalStudentsCount }: Props) {
   const percentageTasksCompleted = maxCourseScore ? Number((totalScore / maxCourseScore).toFixed(2)) : 0;
-  const positionText = `${position}${totalStudentsCount ? ` / ${totalStudentsCount}` : ''}`;
+  const currentPositionText = `${position}${totalStudentsCount ? ` / ${totalStudentsCount}` : ''}`;
+  const positionText = position >= DEFAULT_POSITION ? 'New' : currentPositionText;
   const totalScoreText = `${totalScore}${maxCourseScore ? ` / ${maxCourseScore}` : ''}`;
   const { gridStyle, contentColStyle, contentDivStyle, contentPStyle, iconStyle, textStyle } = STYLE;
 
