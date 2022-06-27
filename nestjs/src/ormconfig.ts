@@ -1,4 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
+import * as path from 'path';
 import { models } from '@entities/index';
 import { migrations } from './migrations';
 
@@ -13,6 +14,7 @@ const config: ConnectionOptions = {
   migrations,
   synchronize: false,
   migrationsRun: false,
+  subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
   cli: {
     migrationsDir: 'src/migrations',
   },
