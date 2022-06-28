@@ -212,12 +212,14 @@ export interface InterviewInfo extends InterviewPair {
   name: string;
   completed: boolean;
   interviewer: {
+    id: number;
     name: string;
     cityName?: string;
     githubId: string;
     preference: string;
   };
   student: {
+    id: number;
     name: string;
     totalScore: number;
     githubId: string;

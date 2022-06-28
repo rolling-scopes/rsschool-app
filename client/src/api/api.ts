@@ -333,6 +333,19 @@ export interface ChannelSettings {
 /**
  * 
  * @export
+ * @interface CheckScheduleChangesDto
+ */
+export interface CheckScheduleChangesDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CheckScheduleChangesDto
+     */
+    'lastHours': number;
+}
+/**
+ * 
+ * @export
  * @interface CheckTasksDeadlineDto
  */
 export interface CheckTasksDeadlineDto {
@@ -978,10 +991,10 @@ export interface CreateDiscordServerDto {
 export interface CreateGratitudeDto {
     /**
      * 
-     * @type {number}
+     * @type {Array<number>}
      * @memberof CreateGratitudeDto
      */
-    'userId': number;
+    'userIds': Array<number>;
     /**
      * 
      * @type {number}
@@ -6786,10 +6799,13 @@ export const ScheduleApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
+         * @param {CheckScheduleChangesDto} checkScheduleChangesDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        notifyScheduleChanges: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        notifyScheduleChanges: async (checkScheduleChangesDto: CheckScheduleChangesDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'checkScheduleChangesDto' is not null or undefined
+            assertParamExists('notifyScheduleChanges', 'checkScheduleChangesDto', checkScheduleChangesDto)
             const localVarPath = `/schedule/notify/changes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6804,9 +6820,12 @@ export const ScheduleApiAxiosParamCreator = function (configuration?: Configurat
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(checkScheduleChangesDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6825,11 +6844,12 @@ export const ScheduleApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {CheckScheduleChangesDto} checkScheduleChangesDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async notifyScheduleChanges(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.notifyScheduleChanges(options);
+        async notifyScheduleChanges(checkScheduleChangesDto: CheckScheduleChangesDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notifyScheduleChanges(checkScheduleChangesDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -6844,11 +6864,12 @@ export const ScheduleApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
+         * @param {CheckScheduleChangesDto} checkScheduleChangesDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        notifyScheduleChanges(options?: any): AxiosPromise<void> {
-            return localVarFp.notifyScheduleChanges(options).then((request) => request(axios, basePath));
+        notifyScheduleChanges(checkScheduleChangesDto: CheckScheduleChangesDto, options?: any): AxiosPromise<void> {
+            return localVarFp.notifyScheduleChanges(checkScheduleChangesDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6862,12 +6883,13 @@ export const ScheduleApiFactory = function (configuration?: Configuration, baseP
 export class ScheduleApi extends BaseAPI {
     /**
      * 
+     * @param {CheckScheduleChangesDto} checkScheduleChangesDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ScheduleApi
      */
-    public notifyScheduleChanges(options?: AxiosRequestConfig) {
-        return ScheduleApiFp(this.configuration).notifyScheduleChanges(options).then((request) => request(this.axios, this.basePath));
+    public notifyScheduleChanges(checkScheduleChangesDto: CheckScheduleChangesDto, options?: AxiosRequestConfig) {
+        return ScheduleApiFp(this.configuration).notifyScheduleChanges(checkScheduleChangesDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

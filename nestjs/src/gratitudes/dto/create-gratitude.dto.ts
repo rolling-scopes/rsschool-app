@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 import { Badge } from './badge.dto';
 
 export class CreateGratitudeDto {
   @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty()
-  userId: number;
+  @IsArray()
+  @ApiProperty({ type: [Number] })
+  userIds: number[];
 
   @IsNotEmpty()
   @IsNumber()
