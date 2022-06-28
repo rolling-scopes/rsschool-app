@@ -1,4 +1,11 @@
-import { ClockCircleOutlined, EyeInvisibleTwoTone, EyeTwoTone, StarTwoTone } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  EyeInvisibleTwoTone,
+  EyeInvisibleFilled,
+  EyeTwoTone,
+  EyeFilled,
+  StarTwoTone,
+} from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
@@ -196,9 +203,21 @@ function Page(props: CoursePageProps) {
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
             </Form.Item>
-            <Button size="large" type="primary" htmlType="submit" disabled={submissionDisabled}>
-              Submit
-            </Button>
+            {isUsernameVisible ? (
+              <Button size="large" type="primary" htmlType="submit" icon={<EyeFilled />} disabled={submissionDisabled}>
+                Submit review as {props.session.githubId}
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                icon={<EyeInvisibleFilled />}
+                disabled={submissionDisabled}
+              >
+                Submit review as Student1
+              </Button>
+            )}
           </Form>
         </Col>
         <Col {...colSizes}>
