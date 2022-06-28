@@ -17,7 +17,7 @@ export type OrderDirection = 'asc' | 'desc';
 
 export type OrderField = keyof typeof orderByFieldMapping;
 
-export class GetScoreQueryDto {
+export class ScoreQueryDto {
   @ApiProperty()
   @IsString()
   public activeOnly: 'true' | 'false';

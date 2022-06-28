@@ -14,9 +14,9 @@ import {
 import { CourseGuard, DefaultGuard } from 'src/auth';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
 
-import { GetScoreQueryDto, OrderDirection, OrderField } from './dto/GetScoreQuery.dto';
+import { ScoreQueryDto, OrderDirection, OrderField } from './dto/score-query.dto';
 import { ScoreService } from './score.service';
-import { ScoreDto } from './dto/Score.dto';
+import { ScoreDto } from './dto/score.dto';
 
 @Controller('course/:courseId/students/score')
 @ApiTags('students score')
@@ -29,7 +29,7 @@ export class ScoreController {
   @ApiOkResponse({ type: ScoreDto })
   @CacheTTL(DEFAULT_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
-  public async getScore(@Query() query: GetScoreQueryDto, @Param('courseId', ParseIntPipe) courseId: number) {
+  public async getScore(@Query() query: ScoreQueryDto, @Param('courseId', ParseIntPipe) courseId: number) {
     const orderBy: OrderField = query.orderBy ?? 'totalScore';
     const orderDirection: OrderDirection = (query.orderDirection?.toUpperCase() as OrderDirection) ?? 'DESC';
     const page = parseInt(query.current);

@@ -10,9 +10,9 @@ import { ScoreTableFilters } from '@common/types/score';
 import { paginate } from 'src/lib/paginate';
 import { MentorsService } from 'src/courses/mentors';
 
-import { orderByFieldMapping, OrderDirection, OrderField } from './dto/GetScoreQuery.dto';
+import { orderByFieldMapping, OrderDirection, OrderField } from './dto/score-query.dto';
 import { InterviewsService } from '../interviews';
-import { ScoreDto, ScoreStudentDto } from './dto/Score.dto';
+import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 
 const defaultFilter: ScoreTableFilters = {
   activeOnly: false,
