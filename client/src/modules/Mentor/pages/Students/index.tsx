@@ -1,6 +1,5 @@
 import { MessageOutlined, MessageTwoTone, MinusCircleTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { getMentorId } from 'domain/user';
