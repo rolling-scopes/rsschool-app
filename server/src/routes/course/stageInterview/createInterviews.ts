@@ -7,16 +7,15 @@ import { setResponse } from '../../utils';
 import { sendInteviewerAssignedNotification } from '../interviews';
 
 type BodyParams = {
-  keepReserve: boolean;
   noRegistration: boolean;
 };
 
 export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
   try {
-    const { keepReserve = true, noRegistration = false } = ctx.request.body as BodyParams;
+    const { noRegistration = false } = ctx.request.body as BodyParams;
     const repository = getCustomRepository(StageInterviewRepository);
-    const result = await repository.createAutomatically(courseId, keepReserve, noRegistration);
+    const result = await repository.createAutomatically(courseId, noRegistration);
 
     await Promise.all(
       result.map(

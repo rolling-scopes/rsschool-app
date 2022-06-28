@@ -56,12 +56,14 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
           ? InterviewStatus.Canceled
           : InterviewStatus.NotCompleted,
         student: {
+          id: it.student.id,
           totalScore: it.student.totalScore,
           cityName: it.student.user.cityName ?? undefined,
           githubId: it.student.user.githubId,
           name: userService.createName(it.student.user),
         },
         interviewer: {
+          id: it.mentor.id,
           cityName: it.mentor.user.cityName ?? undefined,
           githubId: it.mentor.user.githubId,
           name: userService.createName(it.mentor.user),
@@ -147,7 +149,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     }));
   }
 
-  public async createAutomatically(courseId: number, keepReserve = true, noRegistration: boolean = false) {
+  public async createAutomatically(courseId: number, noRegistration: boolean = false) {
     const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: 'stage-interview' } })!;
     if (courseTask == null) {
       return [];
@@ -160,7 +162,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
       : await this.findStudents(courseId);
     const interviews = await this.findMany(courseId);
 
-    const distibution = createInterviews(mentors, students, interviews, keepReserve);
+    const distibution = createInterviews(mentors, students, interviews);
 
     const result = await getRepository(StageInterview).save(
       distibution.map(pair => ({
