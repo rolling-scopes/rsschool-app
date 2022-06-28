@@ -4,13 +4,17 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function MarkdownInput(props: { [key: string]: any; notRequired?: boolean }) {
-  const { notRequired, ...otherProps } = props;
+export default function MarkdownInput() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [text, setText] = useState('');
 
-  const toogleView = () => {
+  const toggleView = () => {
     setPreviewVisible(!previewVisible);
+  };
+
+  const resetText = () => {
+    setPreviewVisible(false);
+    setText('');
   };
 
   const link = (
@@ -28,14 +32,14 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
     <div style={{ marginBottom: '20px' }}>
       <div style={{ display: previewVisible ? 'none' : 'block' }}>
         <Form.Item
-          {...otherProps}
           name="comment"
           label="Comment (markdown syntax is supported)"
-          rules={notRequired ? [] : [{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
+          rules={[{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
+          onReset={resetText}
         >
-          <Input.TextArea value={text} onChange={e => setText(e.currentTarget.value)} rows={5} />
+          <Input.TextArea value={text} onChange={({ currentTarget: { value } }) => setText(value)} rows={5} />
         </Form.Item>
-        <Button onClick={toogleView}>Preview</Button> {link}
+        <Button onClick={toggleView}>Preview</Button> {link}
       </div>
       {previewVisible ? (
         <div>
@@ -44,7 +48,7 @@ export default function MarkdownInput(props: { [key: string]: any; notRequired?:
               <ReactMarkdown rehypePlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </Typography.Text>
           </div>
-          <Button onClick={toogleView}>Write</Button> {link}
+          <Button onClick={toggleView}>Write</Button> {link}
         </div>
       ) : (
         ''

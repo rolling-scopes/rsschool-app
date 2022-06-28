@@ -1,4 +1,4 @@
-import { groupBy, sumBy, shuffle, sum, pick, random, filter, sortBy, drop, entries } from 'lodash';
+import { groupBy, sumBy, shuffle, sum, pick, random, filter, sortBy, entries } from 'lodash';
 import { MentorDetails } from '../services/course.service';
 import { InterviewInfo } from '../repositories/interview.repository';
 
@@ -20,35 +20,36 @@ type Student = {
   totalScore: number;
 };
 
+type DistibutionPair = {
+  student: {
+    id: number;
+  };
+  mentor: {
+    id: number;
+  };
+};
+
 const MIN_INTERVIEW_COUNT = 4;
 
-export function createInterviews(
-  allMentors: MentorDetails[],
-  allStudents: Student[],
-  interviews: InterviewInfo[],
-  keepReserve: boolean = true,
-) {
+export function createInterviews(allMentors: MentorDetails[], allStudents: Student[], interviews: InterviewInfo[]) {
   // filter students who has interview already
   const availableStudents = allStudents.filter(s => !interviews.find(i => i.student.githubId === s.githubId));
 
   // create pairs if student already has mentor
-  let distibution = allMentors
-    .filter(m => m.students.length && !interviews.find(i => i.interviewer.githubId === m.githubId))
-    .map(m => m.students.map((s: any) => ({ student: { id: s.id }, mentor: { id: m.id } })))
-    .flat();
+  let distibution: DistibutionPair[] = allMentors
+    // filter mentors who has students
+    .filter(m => m.students.length)
+    // create pairs
+    .map(m => m.students.map((s: { id: number }) => ({ student: { id: s.id }, mentor: { id: m.id } })))
+    .flat()
+    // filter students who has interview already
+    .filter(pair => !interviews.find(i => i.interviewer.id === pair.mentor.id && i.student.id === pair.student.id));
 
-  const filterFreeStudents = (students: Student[]) =>
-    students.filter(s => !distibution.find(d => d.student.id === s.id));
-
-  const freeStudents = filterFreeStudents(availableStudents);
+  const freeStudents = filterFreeStudents(distibution, availableStudents);
 
   const cityMentors = groupBy(extractMentors(allMentors, interviews, 'city'), 'cityName');
   const countryMentors = groupBy(extractMentors(allMentors, interviews, 'country'), 'countryName');
-  let anyMentors = sortBy(filterMentors(filter(allMentors, { studentsPreference: 'any' }), interviews), ['id']);
-
-  // reserver 20% mentors
-  const reserveCount = keepReserve ? Math.max(1, Math.round(anyMentors.length * 0.2)) : 0;
-  anyMentors = drop(anyMentors, reserveCount);
+  const anyMentors = sortBy(filterMentors(filter(allMentors, { studentsPreference: 'any' }), interviews), ['id']);
 
   let students: typeof freeStudents = [];
   for (const [cityName, mentors] of entries(cityMentors)) {
@@ -60,16 +61,20 @@ export function createInterviews(
   students = findStudents(anyMentors, freeStudents, students);
 
   for (const [cityName, mentors] of entries(cityMentors)) {
-    const result = assignStudents(mentors, filterFreeStudents(students), cityPredicate(cityName));
+    const result = assignStudents(mentors, filterFreeStudents(distibution, students), cityPredicate(cityName));
     distibution = distibution.concat(result);
   }
   for (const [countryName, mentors] of entries(countryMentors)) {
-    const result = assignStudents(mentors, filterFreeStudents(students), countryPredicate(countryName));
+    const result = assignStudents(mentors, filterFreeStudents(distibution, students), countryPredicate(countryName));
     distibution = distibution.concat(result);
   }
-  const result = assignStudents(anyMentors, filterFreeStudents(students));
+  const result = assignStudents(anyMentors, filterFreeStudents(distibution, students));
   distibution = distibution.concat(result);
   return distibution;
+}
+
+function filterFreeStudents(distibution: DistibutionPair[], students: Student[]) {
+  return students.filter(s => !distibution.find(d => d.student.id === s.id));
 }
 
 function assignStudents(mentors: Mentor[], students: Student[], predicate = (_: Student) => true) {

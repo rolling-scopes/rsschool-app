@@ -1,4 +1,4 @@
-import { Button, Row, Table, Modal, Checkbox } from 'antd';
+import { Button, Row, Table, Checkbox } from 'antd';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
@@ -25,21 +25,9 @@ function Page(props: CoursePageProps) {
 
   const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
 
-  const createInterviews = () => {
-    Modal.confirm({
-      title: 'Keep some mentors free from interviews?',
-      content: 'Algorithm could automatically reserve some mentors and you could assign interviews to them manually',
-      okText: 'Keep',
-      cancelText: 'Assign',
-      onOk: withLoading(async () => {
-        await courseService.createStageInterviews({ keepReserve: true, noRegistration });
-        await loadInterviews();
-      }),
-      onCancel: withLoading(async () => {
-        await courseService.createStageInterviews({ keepReserve: false, noRegistration });
-        await loadInterviews();
-      }),
-    });
+  const createInterviews = async () => {
+    await courseService.createStageInterviews({ noRegistration });
+    await loadInterviews();
   };
 
   const deleteInterview = withLoading(async (record: any) => {
