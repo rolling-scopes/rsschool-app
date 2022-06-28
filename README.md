@@ -60,7 +60,12 @@ See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CO
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/rolling-scopes/rsschool-app/graphs/contributors"><img src="https://opencollective.com/rsschool/contributors.svg?width=890&button=false" /></a>
+
+<a href="https://github.com/rolling-scopes/rsschool-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rolling-scopes/rsschool-app" />
+</a>
+
+_Made with [contrib.rocks](https://contrib.rocks)_
 
 ### Financial Contributors
 
