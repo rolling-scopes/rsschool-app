@@ -9,7 +9,7 @@ export class StudentDto extends PersonDto {
     super({
       id: student.id,
       firstName: student.user.firstName,
-      lastName: student.user.firstName,
+      lastName: student.user.lastName,
       githubId: student.user.githubId,
     });
     this.active = !student.isExpelled;
