@@ -1,6 +1,7 @@
 import { MessageOutlined, MessageTwoTone, MinusCircleTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { getMentorId } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
@@ -30,10 +31,12 @@ export function Students(props: CourseOnlyPageProps) {
               size="small"
               title={
                 <>
-                  <GithubAvatar size={24} githubId={student.githubId} />
-                  <span style={{ marginLeft: 16 }}>
-                    {student.name} ({student.githubId})
-                  </span>
+                  <div>
+                    <GithubUserLink value={student.githubId} />
+                  </div>
+                  <Link href={`/profile?githubId=${student.githubId}`}>
+                    <a>{student.name}</a>
+                  </Link>
                 </>
               }
               actions={[
