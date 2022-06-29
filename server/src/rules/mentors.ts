@@ -21,7 +21,7 @@ export function createMentorStudentPairs(allMentors: MentorInput[], allStudents:
   // create pairs if student already has mentor
   let distibution = allMentors
     .filter(m => m.students.length)
-    .map(m => m.students.map((s: any) => ({ student: { id: s.id }, mentor: { id: m.id } })))
+    .map(m => m.students.map(s => ({ student: { id: s.id }, mentor: { id: m.id } })))
     .flat();
 
   const filterFreeStudents = (students: Student[]) =>

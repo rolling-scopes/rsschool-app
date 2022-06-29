@@ -7,6 +7,7 @@ import { OperationResult } from './operationResult';
 import { Mentor } from '../models';
 import { ILogger } from '../logger';
 import { MentorDetails } from './course.service';
+import { sendNotification } from './notification.service';
 
 export class MentorService {
   private studentRepository = getCustomRepository(StudentRepository);
@@ -17,11 +18,22 @@ export class MentorService {
   public async assignStudentsRandomly() {
     const students = await this.studentRepository.findActiveByCourseId(this.courseId);
     const mentors = await this.mentorRepository.findActiveWithStudentsLimit(this.courseId);
+    const mentorsMap = new Map(mentors.map(mentor => [mentor.id, mentor]));
     const pairs = createMentorStudentPairs(mentors, students);
 
     this.logger.info(`Students: ${students.length}; Mentors: ${mentors.length}; Pairs: ${pairs.length}`);
 
     await this.studentRepository.setMentorsBatch(pairs);
+
+    for (const pair of pairs) {
+      await sendNotification({
+        notificationId: 'mentor:assigned',
+        userId: pair.student.id,
+        data: {
+          mentor: mentorsMap.get(pair.mentor.id),
+        },
+      });
+    }
   }
 
   public async createMentors(data: { githubId: string; maxStudentsLimit: number }[]): Promise<OperationResult[]> {

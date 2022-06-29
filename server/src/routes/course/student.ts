@@ -7,6 +7,7 @@ import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
 import { userGuards } from '../guards';
+import { sendNotification } from '../../services/notification.service';
 
 type FeedbackInput = { toUserId: number; comment: string };
 
@@ -123,7 +124,21 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
     }
   }
   const studentRepository = getCustomRepository(StudentRepository);
-  await studentRepository.setMentor(courseId, githubId, data.mentorGithuId);
+
+  if (!data.mentorGithuId) return;
+  const mentor = await courseService.getMentorByGithubId(courseId, data.mentorGithuId);
+  if (!mentor) return;
+
+  await studentRepository.setMentor(courseId, githubId, mentor.id);
+
+  await sendNotification({
+    notificationId: 'mentor:assigned',
+    userId: student.id,
+    data: {
+      mentor,
+    },
+  });
+
   const updatedStudent = await studentRepository.findAndIncludeMentor(courseId, githubId);
 
   setResponse(ctx, OK, updatedStudent);
