@@ -1,6 +1,6 @@
 ---
-name: Data issue report
-about: Create a report to fix data
+name: 🗃 Data issue
+about: Create a issue to fix data
 title: ''
 labels: data issue
 ---

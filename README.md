@@ -4,7 +4,7 @@
 
 # RS School App
 
-The [app.rs.school](https://app.rs.school) is a tool for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
+The [app.rs.school](https://app.rs.school) is an application for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
 
 <img src="https://user-images.githubusercontent.com/618807/138608245-f00471ce-f982-4901-a32e-7246720ed13b.png" width="600px"/>
 
@@ -60,7 +60,12 @@ See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CO
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/rolling-scopes/rsschool-app/graphs/contributors"><img src="https://opencollective.com/rsschool/contributors.svg?width=890&button=false" /></a>
+
+<a href="https://github.com/rolling-scopes/rsschool-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rolling-scopes/rsschool-app" />
+</a>
+
+_Made with [contrib.rocks](https://contrib.rocks)_
 
 ### Financial Contributors
 
