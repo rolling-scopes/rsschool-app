@@ -10,7 +10,7 @@ import {
 import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseEventsService } from './course-events.service';
 import { CreateCourseEventDto } from './dto/create-course-event.dto';
-import { UpdateCourseEventDto } from './dto/udate-course-event.dto';
+import { UpdateCourseEventDto } from './dto/update-course-event.dto';
 
 @Controller('courses/:courseId/events')
 @ApiTags('courses events')
