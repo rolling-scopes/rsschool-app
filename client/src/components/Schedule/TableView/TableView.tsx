@@ -19,6 +19,7 @@ import { Column, CONFIGURABLE_COLUMNS } from '../constants';
 import { ScheduleViewProps } from '../ScheduleView';
 import EditableCell from './EditableCell';
 import { ScheduleEvent } from '../model';
+import { UpdateCourseTaskDtoTypeEnum } from 'api';
 
 const { Text } = Typography;
 
@@ -283,14 +284,14 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Sc
 
 const getCourseEventDataForUpdate = (entity: ScheduleEvent) => ({
   dateTime: entity.startDate,
-  organizerId: entity.organizer.id,
+  organizerId: entity.organizer.id ?? undefined,
 });
 
 const getCourseTaskDataForUpdate = (entity: ScheduleEvent) => ({
   studentStartDate: entity.startDate,
   studentEndDate: entity.endDate,
-  taskOwnerId: entity.organizer.id,
-  type: entity.type,
+  taskOwnerId: entity.organizer.id ?? undefined,
+  type: entity.type as UpdateCourseTaskDtoTypeEnum,
 });
 
 const getNewDataForUpdate = (entity: ScheduleEvent) => ({

@@ -80,7 +80,8 @@ function Page(props: CoursePageProps) {
     if (modalAction === 'update') {
       await service.updateCourseTask(modalData!.id!, record);
     } else {
-      await service.createCourseTask(record);
+      const { courseId, ...rest } = record;
+      await service.createCourseTask(rest);
     }
     await loadData();
 
@@ -332,15 +333,15 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
 }
 
 function createRecord(values: any, courseId: number) {
-  const [startDate, endDate] = values.range || [null, null];
+  const [startDate, endDate] = values.range;
 
   const data = {
     courseId,
-    studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
-    studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
+    studentStartDate: formatTimezoneToUTC(startDate, values.timeZone),
+    studentEndDate: formatTimezoneToUTC(endDate, values.timeZone),
     crossCheckEndDate: values.crossCheckEndDate
       ? formatTimezoneToUTC(values.crossCheckEndDate.set({ hour: 23, minute: 59 }), values.timeZone)
-      : null,
+      : undefined,
     taskId: values.taskId,
     taskOwnerId: values.taskOwnerId,
     checker: values.checker,

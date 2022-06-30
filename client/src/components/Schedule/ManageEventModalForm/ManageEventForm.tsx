@@ -371,7 +371,6 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
 
   const [startDate, endDate] = values.range || [null, null];
   values = {
-    courseId,
     taskId: taskTemplateId,
     special: values.special ? values.special.join(',') : '',
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
@@ -419,7 +418,6 @@ const createEvent = async (
   }
 
   values = {
-    courseId,
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
     dateTime: values.dateTime || null,
