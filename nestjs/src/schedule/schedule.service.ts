@@ -274,12 +274,12 @@ export class ScheduleService {
     }
     if (task.studentEndDate !== previousTask.studentEndDate) {
       fields.studentEndDate = task.studentEndDate;
-      fields.studentEndDateOld = previousTask.studentStartDate;
+      fields.studentEndDateOld = previousTask.studentEndDate;
     }
 
     if (task.crossCheckEndDate != previousTask.crossCheckEndDate) {
       fields.crossCheckEndDate = task.crossCheckEndDate;
-      fields.crossCheckEndDateOld = previousTask.studentStartDate;
+      fields.crossCheckEndDateOld = previousTask.crossCheckEndDate;
     }
 
     return fields;

@@ -112,6 +112,7 @@ export class CourseTasksService {
 
   public disable(id: number) {
     return this.courseTaskRepository.update(id, {
+      id, // required to get right update in subscription
       disabled: true,
     });
   }
