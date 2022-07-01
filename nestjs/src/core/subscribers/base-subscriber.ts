@@ -18,10 +18,12 @@ export class BaseSubscriber implements EntitySubscriberInterface {
   }
 
   async beforeUpdate?(event: UpdateEvent<{ id: number }>): Promise<void> {
-    if (!event.entity) return;
+    if (!event.entity || !event.entity.id) {
+      console.warn('subscriber missing entity id');
+      return;
+    }
 
     const old = await event.manager.findOne(event.metadata.target, event.entity.id);
-
     await event.manager.save(
       History,
       {
@@ -37,9 +39,16 @@ export class BaseSubscriber implements EntitySubscriberInterface {
     );
   }
 
-  async afterRemove?(event: RemoveEvent<{ id: number }>): Promise<void> {
+  async beforeRemove?(event: RemoveEvent<{ id: number }>): Promise<void> {
     if (!event.entity) return;
-    const old = await event.manager.findOne<{ id: number }>(event.metadata.target, event.entity.id);
+
+    const entityId = event.entity.id ?? event.entityId;
+    if (!entityId) {
+      console.warn('subscriber missing entity id');
+      return;
+    }
+
+    const old = await event.manager.findOne<{ id: number }>(event.metadata.target, entityId);
 
     await event.manager.save(
       History,
