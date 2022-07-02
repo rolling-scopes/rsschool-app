@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: 🚀 Feature request
 about: Request a feature to implement
 title: ''
 labels: feature

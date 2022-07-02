@@ -1,6 +1,6 @@
 import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
 import { Course, Mentor, Student, User, Certificate } from '../models';
-import { userService, courseService } from '../services';
+import { userService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
 import { getFullName } from '../rules';
@@ -47,19 +47,13 @@ export class StudentRepository extends AbstractRepository<Student> {
     });
   }
 
-  public async setMentor(courseId: number, studentGithubId: string, mentorGithubId: string | null) {
+  public async setMentor(courseId: number, studentGithubId: string, mentorId: number) {
     const student = await this.findByGithubId(courseId, studentGithubId);
     if (student == null) {
       return;
     }
-    let mentor: any = null;
-    if (mentorGithubId) {
-      mentor = await courseService.getMentorByGithubId(courseId, mentorGithubId);
-      if (mentor == null) {
-        return;
-      }
-    }
-    await getRepository(Student).update(student.id, { mentorId: mentor ? mentor.id : null });
+
+    await getRepository(Student).update(student.id, { mentorId });
   }
 
   public async setMentorsBatch(pairs: { mentor: { id: number }; student: { id: number } }[]) {

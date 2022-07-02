@@ -195,7 +195,7 @@ export const emailTemplate = `<!DOCTYPE html>
                         <img
                           style="margin-right: 30px"
                           height="37px"
-                          width="32px"
+                          width="45px"
                           src="https://rollingscopes.com/images/logo_rs2.svg"
                         />
                         <img height="37px" width="90px" src="https://app.rs.school/static/images/logo-rsschool3.png" />

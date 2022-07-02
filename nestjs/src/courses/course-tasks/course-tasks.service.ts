@@ -101,4 +101,19 @@ export class CourseTasksService {
       },
     });
   }
+
+  public createCourseTask(courseEvent: Partial<CourseTask>) {
+    return this.courseTaskRepository.insert(courseEvent);
+  }
+
+  public updateCourseTask(id: number, courseEvent: Partial<CourseTask>) {
+    return this.courseTaskRepository.update(id, courseEvent);
+  }
+
+  public disable(id: number) {
+    return this.courseTaskRepository.update(id, {
+      id, // required to get right update in subscription
+      disabled: true,
+    });
+  }
 }

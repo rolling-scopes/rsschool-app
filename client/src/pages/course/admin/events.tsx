@@ -1,4 +1,8 @@
 import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
+import moment from 'moment';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { omit } from 'lodash';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -6,9 +10,7 @@ import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import moment from 'moment';
-import { useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -72,12 +74,12 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (values: any) => {
+  const handleModalSubmit = async (values: FormData) => {
     try {
       setModalLoading(true);
-      const data = createRecord(values, courseId);
+      const data = createRecord(values);
       modalAction === 'update'
-        ? await service.updateCourseEvent(modalData!.id!, data)
+        ? await service.updateCourseEvent(modalData!.id!, omit(data, 'eventId'))
         : await service.createCourseEvent(data);
 
       await refreshData();
@@ -224,16 +226,15 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
   ];
 }
 
-function createRecord(values: any, courseId: number) {
+function createRecord(values: FormData) {
   const data = {
-    courseId,
     place: values.place,
     dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     eventId: values.eventId,
     comment: values.comment,
 
     coordinator: values.coordinator,
-    organizerId: values.organizerId || null,
+    organizerId: values.organizerId || undefined,
     broadcastUrl: values.broadcastUrl,
   };
   return data;
@@ -247,3 +248,5 @@ function getInitialValues(modalData: Partial<CourseEvent>) {
     dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
   };
 }
+
+type FormData = CourseEvent & { timeZone: string };

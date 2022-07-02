@@ -14,6 +14,7 @@ import {
   StageInterviewFeedback,
   TaskSolutionChecker,
   TaskSolutionResult,
+  CourseEvent,
 } from '@entities/index';
 import { FeedbacksService, FeedbacksController } from './students/feedbacks';
 import { CoursesController } from './courses.controller';
@@ -21,7 +22,7 @@ import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
 import { MentorsService, MentorsController } from './mentors';
 import { CourseAccessService } from './course-access.service';
-import { CourseTasksController, CourseTasksService } from './courseTasks';
+import { CourseTasksController, CourseTasksService } from './course-tasks';
 import { InterviewsController, InterviewsService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
@@ -29,6 +30,7 @@ import { UsersModule } from 'src/users';
 import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { CourseStatsController, CourseStatsService } from './stats';
 import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
+import { CourseEventsController, CourseEventsService } from './course-events';
 
 @Module({
   imports: [
@@ -46,6 +48,7 @@ import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
       StudentFeedback,
       TaskSolutionChecker,
       TaskSolutionResult,
+      CourseEvent,
     ]),
     UsersModule,
     UsersNotificationsModule,
@@ -56,6 +59,7 @@ import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
     StudentsController,
     MentorsController,
     CourseTasksController,
+    CourseEventsController,
     InterviewsController,
     TasksController,
     CourseStatsController,
@@ -63,6 +67,7 @@ import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
   ],
   providers: [
     CourseTasksService,
+    CourseEventsService,
     CourseUsersService,
     FeedbacksService,
     CoursesService,
