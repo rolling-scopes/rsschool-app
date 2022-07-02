@@ -1,4 +1,11 @@
-import { ClockCircleOutlined, EyeInvisibleTwoTone, EyeTwoTone, StarTwoTone } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  EyeInvisibleTwoTone,
+  EyeInvisibleFilled,
+  EyeTwoTone,
+  EyeFilled,
+  StarTwoTone,
+} from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
@@ -9,11 +16,15 @@ import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
+
+enum LocalStorage {
+  IsUsernameVisible = 'crossCheckIsUsernameVisible',
+}
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
@@ -116,6 +127,7 @@ function Page(props: CoursePageProps) {
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
+  const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
@@ -164,6 +176,10 @@ function Page(props: CoursePageProps) {
     form.setFieldsValue({ githubId });
   };
 
+  const handleUsernameVisibilityChange = () => {
+    setIsUsernameVisible(!isUsernameVisible);
+  };
+
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
@@ -184,12 +200,24 @@ function Page(props: CoursePageProps) {
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
             <MarkdownInput />
-            <Form.Item valuePropName="checked" name="visibleName">
-              <Checkbox>Make my name visible in feedback</Checkbox>
+            <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
+              <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
             </Form.Item>
-            <Button size="large" type="primary" htmlType="submit" disabled={submissionDisabled}>
-              Submit
-            </Button>
+            {isUsernameVisible ? (
+              <Button size="large" type="primary" htmlType="submit" icon={<EyeFilled />} disabled={submissionDisabled}>
+                Submit review as {props.session.githubId}
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                icon={<EyeInvisibleFilled />}
+                disabled={submissionDisabled}
+              >
+                Submit review as Student1
+              </Button>
+            )}
           </Form>
         </Col>
         <Col {...colSizes}>
