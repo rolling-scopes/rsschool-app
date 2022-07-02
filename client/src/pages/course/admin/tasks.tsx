@@ -75,12 +75,12 @@ function Page(props: CoursePageProps) {
   };
 
   const handleModalSubmit = async (values: any) => {
-    const record = createRecord(values, props.course.id);
+    const record = createRecord(values);
 
     if (modalAction === 'update') {
       await service.updateCourseTask(modalData!.id!, record);
     } else {
-      const { courseId, ...rest } = record;
+      const { ...rest } = record;
       await service.createCourseTask(rest);
     }
     await loadData();
@@ -332,11 +332,10 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
   ];
 }
 
-function createRecord(values: any, courseId: number) {
+function createRecord(values: any) {
   const [startDate, endDate] = values.range;
 
   const data = {
-    courseId,
     studentStartDate: formatTimezoneToUTC(startDate, values.timeZone),
     studentEndDate: formatTimezoneToUTC(endDate, values.timeZone),
     crossCheckEndDate: values.crossCheckEndDate

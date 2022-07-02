@@ -1,4 +1,8 @@
 import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
+import moment from 'moment';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { omit } from 'lodash';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -6,9 +10,7 @@ import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import moment from 'moment';
-import { useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -77,7 +79,7 @@ function Page(props: Props) {
       setModalLoading(true);
       const data = createRecord(values);
       modalAction === 'update'
-        ? await service.updateCourseEvent(modalData!.id!, data)
+        ? await service.updateCourseEvent(modalData!.id!, omit(data, 'eventId'))
         : await service.createCourseEvent(data);
 
       await refreshData();
