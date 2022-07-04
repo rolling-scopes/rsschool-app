@@ -180,7 +180,7 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
   router.get('/mentors/search/:searchText', courseGuard, mentors.searchMentors(mentorsLogger));
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
-  router.post('/mentor/:githubId', guard, ...validators, courseManagerGuard, postMentor(mentorLogger));
+  router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
   router.post('/repositories/mentor/:githubId', courseManagerGuard, ...validators, inviteMentorToTeam(mentorLogger));
   router.post('/repositories/mentors', courseManagerGuard, inviteAllMentorsToTeam(mentorLogger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
