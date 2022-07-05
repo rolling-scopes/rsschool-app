@@ -1,12 +1,13 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
+import { BAD_REQUEST, NOT_FOUND, OK, StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
 import { ILogger } from '../../logger';
-import { Mentor, Student } from '../../models';
+import { Mentor, MentorRegistry, Student } from '../../models';
 import { StudentRepository } from '../../repositories/student.repository';
 import { courseService } from '../../services';
 import { getUserByGithubId } from '../../services/user.service';
+import { userGuards } from '../guards';
 import { setResponse } from '../utils';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
@@ -73,6 +74,17 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const exist = await mentorRepository.findOne({ where: { courseId, userId: user.id } });
   let mentorId = exist?.id;
   if (mentorId == null) {
+    const mentorRegistrationInfo = await getRepository(MentorRegistry).findOne({ where: { userId: user.id } });
+
+    const guard = userGuards(ctx.state.user);
+    const isMentorApproved = (mentorRegistrationInfo?.preselectedCourses ?? []).some(
+      approvedCourseId => courseId === +approvedCourseId,
+    );
+
+    if (!isMentorApproved && !(guard.isPowerUser(courseId) || guard.isSupervisor(courseId))) {
+      setResponse(ctx, StatusCodes.FORBIDDEN);
+      return;
+    }
     const {
       identifiers: [identifier],
     } = await mentorRepository.insert({
