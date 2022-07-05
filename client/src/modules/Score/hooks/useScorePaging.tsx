@@ -17,17 +17,15 @@ export function useScorePaging(router: NextRouter, courseService: CourseService,
   );
 
   const getCourseScore = useCallback(
-    async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
+    async (pagination: IPaginationInfo, filters: ScoreTableFilters, scoreOrder: ScoreOrder) => {
       const { cityName, ['mentor.githubId']: mentor } = filters;
       const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor }, currentQuery);
       setQueryParams(newQueryParams);
-      const field = order.column?.sorter || 'rank';
-      const direction =
-        field === 'rank' ? (order.order === 'descend' ? 'desc' : 'asc') : order.order === 'ascend' ? 'asc' : 'desc';
+      const field = scoreOrder.column?.sorter || 'rank';
       const courseScore = await courseService.getCourseScore(
         pagination,
         { ...filters, activeOnly },
-        { field, direction },
+        { field, order: scoreOrder.order },
       );
       return { content: courseScore.content, pagination: courseScore.pagination };
     },
