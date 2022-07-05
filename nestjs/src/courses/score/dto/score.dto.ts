@@ -7,7 +7,7 @@ import { StudentDto } from 'src/courses/students/dto';
 import { PaginationMetaDto } from 'src/lib/paginate/dto/Paginate.dto';
 import { PaginationMeta } from 'src/lib/paginate';
 import { Contacts } from '@common/models';
-import { ContactsDto } from 'src/profile/dto';
+import { IsOptional, IsString } from 'class-validator';
 
 class MentorDto {
   constructor(mentor: { id: number; githubId: string; name: string }) {
@@ -37,6 +37,57 @@ class TaskResultsDto {
 
   @ApiProperty()
   score: number;
+}
+
+export class ContactsDto implements Contacts {
+  constructor(contacts: Partial<Contacts>) {
+    this.phone = contacts.phone || null;
+    this.email = contacts.email || null;
+    this.skype = contacts.skype || null;
+    this.telegram = contacts.telegram || null;
+    this.notes = contacts.notes || null;
+    this.linkedIn = contacts.linkedIn || null;
+  }
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  phone: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  email: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  epamEmail: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  skype: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  telegram: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  notes: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  linkedIn: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  discord: string | null;
 }
 
 export class ScoreStudentDto extends StudentDto {
