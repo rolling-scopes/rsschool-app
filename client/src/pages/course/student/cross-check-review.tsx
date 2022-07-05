@@ -158,7 +158,10 @@ function Page(props: CoursePageProps) {
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   useEffect(() => {
-    form.setFieldsValue({ comment: historicalCommentSelected });
+    if (historicalCommentSelected !== '') {
+      form.setFieldsValue({ comment: historicalCommentSelected });
+      setHistoricalCommentSelected('');
+    }
   }, [historicalCommentSelected]);
 
   const handleSubmit = async (values: any) => {

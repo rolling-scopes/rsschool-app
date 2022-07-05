@@ -13,7 +13,9 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    setText(historicalCommentSelected);
+    if (historicalCommentSelected !== '') {
+      setText(historicalCommentSelected);
+    }
   }, [historicalCommentSelected]);
 
   const toggleView = () => {
