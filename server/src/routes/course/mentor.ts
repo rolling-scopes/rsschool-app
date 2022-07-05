@@ -77,7 +77,9 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
     const mentorRegistrationInfo = await getRepository(MentorRegistry).findOne({ where: { userId: user.id } });
 
     const guard = userGuards(ctx.state.user);
-    const isMentorApproved = mentorRegistrationInfo && mentorRegistrationInfo.preselectedCourses.length > 0;
+    const isMentorApproved = (mentorRegistrationInfo?.preselectedCourses ?? []).some(
+      approvedCourseId => courseId === +approvedCourseId,
+    );
 
     if (!isMentorApproved && !(guard.isPowerUser(courseId) || guard.isSupervisor(courseId))) {
       setResponse(ctx, StatusCodes.FORBIDDEN);
