@@ -1,5 +1,9 @@
-import { MoreOutlined } from '@ant-design/icons';
+import { useCallback, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import moment from 'moment-timezone';
+import { times } from 'lodash';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
@@ -14,18 +18,15 @@ import {
 } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import moment from 'moment-timezone';
-import { useCallback, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
-import { CourseService, CourseTaskDetails } from 'services/course';
+import { CourseService, CourseTaskDetails, CrossCheckStatus } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
-import { times } from 'lodash';
 import { TASK_TYPES } from 'data/taskTypes';
 
-const Option = Select.Option;
+const { Option } = Select;
+const { Item, Divider } = Menu;
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -115,23 +116,33 @@ function Page(props: CoursePageProps) {
     const hasInterviewDistibute = record.type === 'interview';
     const hasTaskDistibute = record.checker === 'assigned';
     const hasCrossCheck = record.checker === 'crossCheck';
+
+    const currentTimestamp = new Date().getTime();
+    const submitDeadlineTimestamp = new Date(record.studentEndDate as string).getTime();
+    const isSubmitDeadlinePassed = currentTimestamp > submitDeadlineTimestamp;
+
     return (
       <Dropdown
         trigger={['click']}
         overlay={
           <Menu style={{ width: 200 }}>
-            <Menu.Item onClick={() => handleEditItem(record)}>Edit</Menu.Item>
-            <Menu.Item onClick={() => handleDeleteItem(record.id)}>Delete</Menu.Item>
-            {hasTaskDistibute && <Menu.Item onClick={() => handleTaskDistribute(record)}>Distribute</Menu.Item>}
-            {hasInterviewDistibute && (
-              <Menu.Item onClick={() => handleInterviewDistribute(record)}>Distribute</Menu.Item>
-            )}
-            {hasCrossCheck && <Menu.Divider />}
+            <Item onClick={() => handleEditItem(record)}>Edit</Item>
+            <Item onClick={() => handleDeleteItem(record.id)}>Delete</Item>
+            {hasTaskDistibute && <Item onClick={() => handleTaskDistribute(record)}>Distribute</Item>}
+            {hasInterviewDistibute && <Item onClick={() => handleInterviewDistribute(record)}>Distribute</Item>}
+            {hasCrossCheck && <Divider />}
             {hasCrossCheck && (
-              <Menu.Item onClick={() => handleCrossCheckDistribution(record)}>Cross-Check: Distribute</Menu.Item>
+              <Item disabled={!isSubmitDeadlinePassed} onClick={() => handleCrossCheckDistribution(record)}>
+                Cross-Check: Distribute
+              </Item>
             )}
             {hasCrossCheck && (
-              <Menu.Item onClick={() => handleCrossCheckCompletion(record)}>Cross-Check: Complete</Menu.Item>
+              <Item
+                disabled={!isSubmitDeadlinePassed || record.crossCheckStatus === CrossCheckStatus.Initial}
+                onClick={() => handleCrossCheckCompletion(record)}
+              >
+                Cross-Check: Complete
+              </Item>
             )}
           </Menu>
         }
@@ -145,10 +156,14 @@ function Page(props: CoursePageProps) {
 
   const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
     try {
+      setLoading(true);
       await service.createCrossCheckDistribution(record.id);
       message.success('Cross-Check distrubtion has been created');
     } catch (e) {
       message.error('An error occurred.');
+    } finally {
+      setLoading(false);
+      await loadData();
     }
   };
 
@@ -162,6 +177,7 @@ function Page(props: CoursePageProps) {
       message.error('An error occurred.');
     } finally {
       setLoading(false);
+      await loadData();
     }
   };
 
