@@ -53,7 +53,7 @@ export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterConte
 };
 
 export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
+  const courseId: number = +ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
 
   const input: { maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation; students: number[] } =
