@@ -109,10 +109,8 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
   username="test"
 >
   <StudentStatsModal
-    courseProgress={100}
     isVisible={false}
     onHide={[Function]}
-    scoredTasks={3}
     stats={
       Object {
         "courseFullName": "Rolling Scopes School 2018 Q1",
@@ -1491,10 +1489,8 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
   username="test"
 >
   <StudentStatsModal
-    courseProgress={100}
     isVisible={false}
     onHide={[Function]}
-    scoredTasks={3}
     stats={
       Object {
         "courseFullName": "Rolling Scopes School 2018 Q1",

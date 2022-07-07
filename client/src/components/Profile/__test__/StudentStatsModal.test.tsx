@@ -2,10 +2,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import StudentStatsModal from '../StudentStatsModal';
+import { StudentStats } from 'common/models/profile';
 
 describe('StudentStatsModal', () => {
   it('Should render correctly', () => {
-    const stats = {
+    const stats: StudentStats = {
       courseId: 1,
       courseName: 'rs-2018-q1',
       locationName: 'Minsk',
@@ -13,6 +14,7 @@ describe('StudentStatsModal', () => {
       isExpelled: false,
       expellingReason: '',
       isCourseCompleted: true,
+      isSelfExpelled: false,
       totalScore: 1201,
       certificateId: 'asd',
       rank: 32,
@@ -51,9 +53,7 @@ describe('StudentStatsModal', () => {
       ],
     };
 
-    const output = shallow(
-      <StudentStatsModal stats={stats} courseProgress={71} scoredTasks={4} isVisible={true} onHide={jest.fn()} />,
-    );
+    const output = shallow(<StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />);
     expect(shallowToJson(output)).toMatchSnapshot();
   });
 });

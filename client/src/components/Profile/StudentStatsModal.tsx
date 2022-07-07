@@ -1,21 +1,19 @@
 import * as React from 'react';
 import { StudentStats } from 'common/models/profile';
-import { Modal, Table, Typography, Progress, Row, Col } from 'antd';
+import { Modal, Table, Typography, Row, Col } from 'antd';
 
 const { Text } = Typography;
 
 type Props = {
   stats: StudentStats;
-  courseProgress: number;
-  scoredTasks: number;
   isVisible: boolean;
   onHide: () => void;
 };
 
 class StudentStatsModal extends React.PureComponent<Props> {
   render() {
-    const { stats, courseProgress, scoredTasks } = this.props;
-    const { tasks, courseFullName, mentor, totalScore, isExpelled, expellingReason, rank, isCourseCompleted } = stats;
+    const { stats } = this.props;
+    const { tasks, courseFullName, mentor, totalScore, isExpelled, expellingReason, rank } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore)
       ? tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur)
@@ -30,15 +28,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
         width={'80%'}
       >
         <Row>
-          <Col style={{ marginBottom: 5, marginRight: 20 }}>
-            <Progress
-              percent={courseProgress}
-              status={isExpelled ? 'exception' : isCourseCompleted ? 'success' : undefined}
-              type="circle"
-              width={80}
-            />
-          </Col>
-          <Col>
+          <Col style={{ marginBottom: 20 }}>
             {mentor.githubId && (
               <p style={{ marginBottom: 5 }}>
                 Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
@@ -54,9 +44,6 @@ class StudentStatsModal extends React.PureComponent<Props> {
               {maxCourseScore && ` / ${maxCourseScore.toFixed(1)}`}
             </p>
             {isExpelled && expellingReason && <p style={{ marginBottom: 5 }}>Expelling reason: {expellingReason}</p>}
-            <p style={{ marginBottom: 30 }}>
-              Course progress: {`${scoredTasks} / ${tasks.length} tasks were scored (${courseProgress}%)`}
-            </p>
           </Col>
         </Row>
         <Table
@@ -68,7 +55,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
             {
               title: 'Task',
               dataIndex: 'name',
-              render: (task: string, { descriptionUri }: any) =>
+              render: (task: string, { descriptionUri }) =>
                 descriptionUri ? (
                   <a href={descriptionUri} target="_blank">
                     {task}
@@ -80,7 +67,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
             {
               title: 'Score / Max',
               dataIndex: 'score',
-              render: (score: string, { maxScore }: any) => (
+              render: (score: string, { maxScore }) => (
                 <>
                   <Text strong>{score !== null ? score : '-'}</Text> / {maxScore ? maxScore : '-'}
                 </>
@@ -89,7 +76,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
             {
               title: '*Weight',
               dataIndex: 'scoreWeight',
-              render: (scoreWeight: number, { score }: any) => (
+              render: (scoreWeight: number, { score }) => (
                 <Text>
                   *{scoreWeight}
                   {score ? (

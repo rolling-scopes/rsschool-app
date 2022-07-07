@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { TrophyOutlined, FireOutlined } from '@ant-design/icons';
 import { Card, Typography } from 'antd';
-import dynamic from 'next/dynamic';
-
-const PerformanceChart = dynamic(() => import('./PerformanceChart'), { ssr: false });
 
 const DEFAULT_POSITION = 999999;
 
@@ -22,7 +19,6 @@ interface IStyle {
 }
 
 export function MainStatsCard({ totalScore, position, maxCourseScore, totalStudentsCount }: Props) {
-  const percentageTasksCompleted = maxCourseScore ? Number((totalScore / maxCourseScore).toFixed(2)) : 0;
   const currentPositionText = `${position}${totalStudentsCount ? ` / ${totalStudentsCount}` : ''}`;
   const positionText = position >= DEFAULT_POSITION ? 'New' : currentPositionText;
   const totalScoreText = `${totalScore}${maxCourseScore ? ` / ${maxCourseScore}` : ''}`;
@@ -37,9 +33,6 @@ export function MainStatsCard({ totalScore, position, maxCourseScore, totalStude
       }
       bodyStyle={{ padding: 0 }}
     >
-      <Card.Grid hoverable={false} style={{ ...gridStyle, paddingTop: 0 }}>
-        <PerformanceChart percent={percentageTasksCompleted} />
-      </Card.Grid>
       <Card.Grid hoverable={false} style={gridStyle}>
         <div style={contentColStyle}>
           <div style={contentDivStyle}>
