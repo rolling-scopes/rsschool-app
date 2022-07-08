@@ -117,8 +117,8 @@ function Page(props: CoursePageProps) {
     const hasTaskDistibute = record.checker === 'assigned';
     const hasCrossCheck = record.checker === 'crossCheck';
 
-    const currentTimestamp = new Date().getTime();
-    const submitDeadlineTimestamp = new Date(record.studentEndDate as string).getTime();
+    const currentTimestamp = Date.now();
+    const submitDeadlineTimestamp = new Date(record.studentEndDate).getTime();
     const isSubmitDeadlinePassed = currentTimestamp > submitDeadlineTimestamp;
 
     return (
