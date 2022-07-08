@@ -5,7 +5,6 @@ import { CrossCheckStatus } from '../../../models/courseTask';
 import { courseService, taskService } from '../../../services';
 import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
-import { isSubmissionDeadlinePassed } from './isSubmissionDeadlinePassed';
 
 const DEFAULT_PAIRS_COUNT = 4;
 
@@ -19,10 +18,7 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
     return;
   }
 
-  if (
-    !isSubmissionDeadlinePassed(courseTask.studentEndDate as string) ||
-    courseTask.crossCheckStatus === CrossCheckStatus.Initial
-  ) {
+  if (!taskService.isSubmissionDeadlinePassed(courseTask) || courseTask.crossCheckStatus === CrossCheckStatus.Initial) {
     setResponse(ctx, StatusCodes.BAD_REQUEST);
     return;
   }

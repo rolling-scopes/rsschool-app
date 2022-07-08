@@ -7,7 +7,6 @@ import { CrossCheckStatus } from '../../../models/courseTask';
 import { CrossCheckDistributionService } from '../../../services/distribution';
 import { courseService, taskService } from '../../../services';
 import { setResponse } from '../../utils';
-import { isSubmissionDeadlinePassed } from './isSubmissionDeadlinePassed';
 
 const crossCheckDistributionService = new CrossCheckDistributionService();
 
@@ -21,7 +20,7 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
     return;
   }
 
-  if (!isSubmissionDeadlinePassed(courseTask.studentEndDate as string)) {
+  if (!taskService.isSubmissionDeadlinePassed(courseTask)) {
     setResponse(ctx, StatusCodes.BAD_REQUEST);
     return;
   }

@@ -162,8 +162,8 @@ function Page(props: CoursePageProps) {
     } catch (e) {
       message.error('An error occurred.');
     } finally {
-      setLoading(false);
       await loadData();
+      setLoading(false);
     }
   };
 
@@ -176,8 +176,8 @@ function Page(props: CoursePageProps) {
     } catch {
       message.error('An error occurred.');
     } finally {
-      setLoading(false);
       await loadData();
+      setLoading(false);
     }
   };
 
