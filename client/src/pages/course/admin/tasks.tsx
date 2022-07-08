@@ -156,20 +156,23 @@ function Page(props: CoursePageProps) {
 
   const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
     try {
-      setLoading(true);
-      await service.createCrossCheckDistribution(record.id);
-      message.success('Cross-Check distrubtion has been created');
+      const {
+        data: { crossCheckPairs },
+      } = await service.createCrossCheckDistribution(record.id);
+      if (crossCheckPairs.length) {
+        message.success('Cross-Check distrubtion has been created');
+      } else {
+        message.warn('Unable to create Cross-Check distribution: no solutions submitted');
+      }
     } catch (e) {
       message.error('An error occurred.');
     } finally {
       await loadData();
-      setLoading(false);
     }
   };
 
   const handleCrossCheckCompletion = async (record: CourseTaskDetails) => {
     try {
-      setLoading(true);
       await service.createCrossCheckCompletion(record.id);
 
       message.success('Cross-Check completed has been created');
@@ -177,7 +180,6 @@ function Page(props: CoursePageProps) {
       message.error('An error occurred.');
     } finally {
       await loadData();
-      setLoading(false);
     }
   };
 
