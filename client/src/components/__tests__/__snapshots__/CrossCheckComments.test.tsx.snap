@@ -11,12 +11,12 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -38,12 +38,12 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -65,12 +65,12 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -97,12 +97,12 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -124,12 +124,12 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -155,12 +155,12 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              100
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            100
+          </Paragraph>
           <PreparedComment
             text="Great job, you better quit cross stitching and start programming."
           />
@@ -186,12 +186,12 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              100
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            100
+          </Paragraph>
           <PreparedComment
             text="Great job, you better quit cross stitching and start programming."
           />
@@ -213,12 +213,12 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              5
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            5
+          </Paragraph>
           <PreparedComment
             text="Awful job, you better quit programming and learn to cross stitch."
           />
@@ -249,12 +249,12 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              100
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            100
+          </Paragraph>
           <PreparedComment
             text="Great job, you better quit cross stitching and start programming."
           />
@@ -280,12 +280,12 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              100
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            100
+          </Paragraph>
           <PreparedComment
             text="Great job, you better quit cross stitching and start programming."
           />
@@ -311,12 +311,12 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       avatar={<ForwardRef(UserOutlined) />}
       content={
         <React.Fragment>
-          <p>
-            <b>
-              Score: 
-              100
-            </b>
-          </p>
+          <Paragraph
+            strong={true}
+          >
+            Score: 
+            100
+          </Paragraph>
           <PreparedComment
             text="Great job, you better quit cross stitching and start programming."
           />
