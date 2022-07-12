@@ -7,7 +7,7 @@ import { isCourseManager } from 'domain/user';
 import { withSession } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import withCourseData from 'components/withCourseData';
-import { SettingsPanel, ScheduleView, useScheduleSettings } from 'components/Schedule';
+import { SettingsPanel, TableView, useScheduleSettings } from 'components/Schedule';
 import { ScheduleEvent, courseEventToScheduleEvent, courseTaskToScheduleEvent } from 'components/Schedule/model';
 
 const byTime = (a: ScheduleEvent, b: ScheduleEvent) => a.startDate.localeCompare(b.startDate);
@@ -59,7 +59,7 @@ export function SchedulePage(props: CoursePageProps) {
         eventTypes={eventTypes}
         refreshData={refreshData}
       />
-      <ScheduleView
+      <TableView
         isAdmin={isAdmin}
         courseId={props.course.id}
         courseAlias={props.course.alias}
