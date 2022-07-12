@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Col, Comment, Divider, Row } from 'antd';
+import { Col, Comment, Divider, Row, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import PreparedComment from './Forms/PreparedComment';
 
@@ -31,11 +31,7 @@ export function CrossCheckComments(props: Props) {
             avatar={<UserOutlined />}
             content={
               <>
-                {score ? (
-                  <p>
-                    <b>Score: {score}</b>
-                  </p>
-                ) : null}
+                <Typography.Paragraph strong>Score: {score}</Typography.Paragraph>
                 <PreparedComment text={comment} />
               </>
             }
