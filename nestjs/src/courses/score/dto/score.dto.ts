@@ -4,8 +4,8 @@ import { Student } from '@entities/student';
 import { User } from '@entities/user';
 
 import { StudentDto } from 'src/courses/students/dto';
-import { PaginationMetaDto } from 'src/lib/paginate/dto/Paginate.dto';
-import { PaginationMeta } from 'src/lib/paginate';
+import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
+import { PaginationMeta } from 'src/core/paginate';
 import { Contacts } from '@common/models';
 import { IsOptional, IsString } from 'class-validator';
 
