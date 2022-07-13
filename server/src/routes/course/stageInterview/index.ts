@@ -2,7 +2,7 @@ export { createFeedback } from './createFeedback';
 export { createInterview } from './createInterview';
 export { createInterviews } from './createInterviews';
 export { createInterviewStudent } from './createInterviewStudent';
-export { deleteInterview } from './deleteInterview';
+export { cancelInterview } from './cancelInterview';
 export { getAvailableStudents } from './getAvailableStudents';
 export { getFeedback } from './getFeedback';
 export { getInterviewStudent } from './getInterviewStudent';

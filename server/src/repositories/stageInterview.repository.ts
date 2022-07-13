@@ -109,7 +109,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async addStudent(courseId: number, studentId: number) {
-    const repository = await getRepository(StageInterviewStudent);
+    const repository = getRepository(StageInterviewStudent);
     let record = await repository.findOne({ where: { courseId, studentId } });
     if (record == null) {
       record = await repository.save({ courseId, studentId });
@@ -118,13 +118,13 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async findStudent(courseId: number, studentId: number) {
-    const repository = await getRepository(StageInterviewStudent);
+    const repository = getRepository(StageInterviewStudent);
     const record = await repository.findOne({ where: { courseId, studentId } });
     return record ? { id: record.id } : null;
   }
 
   public async findStudents(courseId: number) {
-    const repository = await getRepository(StageInterviewStudent);
+    const repository = getRepository(StageInterviewStudent);
     const records = await repository
       .createQueryBuilder('sis')
       .innerJoin('sis.student', 'student')
