@@ -14,23 +14,10 @@ exports[`StudentStatsModal Should render correctly 1`] = `
     <Col
       style={
         Object {
-          "marginBottom": 5,
-          "marginRight": 20,
+          "marginBottom": 20,
         }
       }
     >
-      <Progress
-        percent={71}
-        showInfo={true}
-        size="default"
-        status="success"
-        strokeLinecap="round"
-        trailColor={null}
-        type="circle"
-        width={80}
-      />
-    </Col>
-    <Col>
       <p
         style={
           Object {
@@ -73,16 +60,6 @@ exports[`StudentStatsModal Should render correctly 1`] = `
           1201
         </Text>
          / 340.0
-      </p>
-      <p
-        style={
-          Object {
-            "marginBottom": 30,
-          }
-        }
-      >
-        Course progress: 
-        4 / 3 tasks were scored (71%)
       </p>
     </Col>
   </Row>

@@ -123,13 +123,11 @@ class StudentStatsCard extends React.Component<Props, State> {
   render() {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
     const stats = this.props.data;
-    const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
+    const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
     return (
       <>
         <StudentStatsModal
           stats={stats[courseIndex]}
-          courseProgress={coursesProgress[courseIndex]}
-          scoredTasks={scoredTasks[courseIndex]}
           isVisible={isStudentStatsModalVisible}
           onHide={this.hideStudentStatsModal}
         />
