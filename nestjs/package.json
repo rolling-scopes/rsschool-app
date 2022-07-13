@@ -49,7 +49,7 @@
     "lodash": "4.17.21",
     "nanoid": "3.3.1",
     "nestjs-pino": "2.5.0",
-    "passport": "0.5.2",
+    "passport": "0.6.0",
     "passport-custom": "1.1.1",
     "passport-github2": "0.1.12",
     "passport-http": "0.3.0",
