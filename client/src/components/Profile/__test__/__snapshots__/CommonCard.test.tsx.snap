@@ -1,102 +1,421 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CommonCard Should render correctly if is editing mode enabled 1`] = `
-<ForwardRef
-  actions={
-    Array [
-      <ForwardRef(EditOutlined)
-        onClick={[Function]}
-      />,
-    ]
-  }
-  title={
-    <Title
-      ellipsis={true}
-      level={2}
-      style={
-        Object {
-          "fontSize": 16,
-          "marginBottom": 0,
-        }
-      }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
     >
-      <i>
-        Icon
-      </i>
-       
-      Test
-    </Title>
-  }
->
-  <p>
-    Card body
-  </p>
-  <PermissionsSettingsDrawer
-    hideSettings={[Function]}
-    isSettingsVisible={false}
-  />
-  <ProfileSettingsDrawer
-    content={
+      <div
+        class="ant-card-head-wrapper"
+      >
+        <div
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <i>
+              Icon
+            </i>
+             
+            Test
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
       <p>
-        Settings
+        Card body
       </p>
-    }
-    hideSettings={[Function]}
-    isSettingsVisible={false}
-  />
-</ForwardRef>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Visibility settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-list ant-list-split"
+                  >
+                    <div
+                      class="ant-spin-nested-loading"
+                    >
+                      <div
+                        class="ant-spin-container"
+                      >
+                        <div
+                          class="ant-list-empty-text"
+                        >
+                          <div
+                            class="ant-empty ant-empty-normal"
+                          >
+                            <div
+                              class="ant-empty-image"
+                            >
+                              <svg
+                                class="ant-empty-img-simple"
+                                height="41"
+                                viewBox="0 0 64 41"
+                                width="64"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                  transform="translate(0 1)"
+                                >
+                                  <ellipse
+                                    class="ant-empty-img-simple-ellipse"
+                                    cx="32"
+                                    cy="33"
+                                    rx="32"
+                                    ry="7"
+                                  />
+                                  <g
+                                    class="ant-empty-img-simple-g"
+                                    fill-rule="nonzero"
+                                  >
+                                    <path
+                                      d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                    />
+                                    <path
+                                      class="ant-empty-img-simple-path"
+                                      d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                    />
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                            <div
+                              class="ant-empty-description"
+                            >
+                              No Data
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+      </style>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Profile settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <p>
+                    Settings
+                  </p>
+                  <style>
+                    
+              :global(.ant-drawer-content-wrapper) {
+                height: inherit !important;
+              }
+
+              :global(.ant-drawer-wrapper-body) {
+                overflow: hidden;
+              }
+
+              :global(.ant-drawer-body) {
+                height: calc(100% - 55px);
+                overflow: auto;
+              }
+            
+                  </style>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul
+      class="ant-card-actions"
+    >
+      <li
+        style="width: 100%;"
+      >
+        <span>
+          <span
+            aria-label="edit"
+            class="anticon anticon-edit"
+            role="img"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="edit"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+              />
+            </svg>
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
 `;
 
 exports[`CommonCard Should render correctly if is null content passed 1`] = `
-<ForwardRef
-  title={
-    <Title
-      ellipsis={true}
-      level={2}
-      style={
-        Object {
-          "fontSize": 16,
-          "marginBottom": 0,
-        }
-      }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
     >
-      <i>
-        Icon
-      </i>
-       
-      Test
-    </Title>
-  }
->
-  <Empty
-    image={<Simple />}
-  />
-</ForwardRef>
+      <div
+        class="ant-card-head-wrapper"
+      >
+        <div
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <i>
+              Icon
+            </i>
+             
+            Test
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        class="ant-empty ant-empty-normal"
+      >
+        <div
+          class="ant-empty-image"
+        >
+          <svg
+            class="ant-empty-img-simple"
+            height="41"
+            viewBox="0 0 64 41"
+            width="64"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              fill="none"
+              fill-rule="evenodd"
+              transform="translate(0 1)"
+            >
+              <ellipse
+                class="ant-empty-img-simple-ellipse"
+                cx="32"
+                cy="33"
+                rx="32"
+                ry="7"
+              />
+              <g
+                class="ant-empty-img-simple-g"
+                fill-rule="nonzero"
+              >
+                <path
+                  d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                />
+                <path
+                  class="ant-empty-img-simple-path"
+                  d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div
+          class="ant-empty-description"
+        >
+          No Data
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`CommonCard Should render correctly if just basic props is present 1`] = `
-<ForwardRef
-  title={
-    <Title
-      ellipsis={true}
-      level={2}
-      style={
-        Object {
-          "fontSize": 16,
-          "marginBottom": 0,
-        }
-      }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
     >
-      <i>
-        Icon
-      </i>
-       
-      Test
-    </Title>
-  }
->
-  <p>
-    Card body
-  </p>
-</ForwardRef>
+      <div
+        class="ant-card-head-wrapper"
+      >
+        <div
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <i>
+              Icon
+            </i>
+             
+            Test
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <p>
+        Card body
+      </p>
+    </div>
+  </div>
+</div>
 `;

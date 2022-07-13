@@ -1,527 +1,701 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 1`] = `
-<Fragment>
-  <PublicFeedbackModal
-    data={
-      Array [
-        Object {
-          "badgeId": "Congratulations",
-          "comment": "Test",
-          "feedbackDate": "2018-12-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "apetr",
-            "name": "Anton Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-11-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-09-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-10-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Thank_you",
-          "comment": "Test",
-          "feedbackDate": "2018-11-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "vasssa",
-            "name": "Anton Vasilyev",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Thank_you",
-          "comment": "Test",
-          "feedbackDate": "2019-12-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "demaa",
-            "name": "Dima Alexandrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-      ]
-    }
-    isVisible={false}
-    onHide={[Function]}
-  />
-  <CommonCard
-    actions={
-      Array [
-        <ForwardRef(FullscreenOutlined)
-          onClick={[Function]}
-        />,
-      ]
-    }
-    content={
-      <React.Fragment>
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
+    >
+      <div
+        class="ant-card-head-wrapper"
+      >
         <div
-          style={
-            Object {
-              "marginBottom": 20,
-            }
-          }
+          class="ant-card-head-title"
         >
-          <Text
-            strong={true}
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
           >
+            <span
+              aria-label="message"
+              class="anticon anticon-message"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="message"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M464 512a48 48 0 1096 0 48 48 0 10-96 0zm200 0a48 48 0 1096 0 48 48 0 10-96 0zm-400 0a48 48 0 1096 0 48 48 0 10-96 0zm661.2-173.6c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 00-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 00-142 96.5c-40.9 41.3-73 89.3-95.2 142.8-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 00112 714v152a46 46 0 0046 46h152.1A449.4 449.4 0 00510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 00142.8-95.2c41.3-40.9 73.8-88.7 96.5-142 23.6-55.2 35.6-113.9 35.9-174.5.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8 69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9 44.6 18.7 84.6 45.6 119 80 34.3 34.3 61.3 74.4 80 119 19.4 46.2 29.1 95.2 28.9 145.8-.6 99.6-39.7 192.9-110.1 262.7z"
+                />
+              </svg>
+            </span>
+             
+            Public Feedback
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        style="margin-bottom: 20px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          <strong>
             Total badges:
-          </Text>
-           
-          6
+          </strong>
+        </span>
+         
+        6
+      </div>
+      <div
+        style="margin-bottom: 30px;"
+      >
+        <div
+          style="margin: 5px; display: inline-block;"
+        >
+          <span
+            class="ant-badge"
+          >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+            >
+              <img
+                alt="Congratulations badge"
+                src="/static/svg/badges/Congratulations.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="1"
+            >
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
+              >
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  1
+                </span>
+              </span>
+            </sup>
+          </span>
         </div>
         <div
-          style={
-            Object {
-              "marginBottom": 30,
-            }
-          }
+          style="margin: 5px; display: inline-block;"
         >
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
+          <span
+            class="ant-badge"
           >
-            <Badge
-              count={1}
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Congratulations"
-              >
-                <Avatar
-                  alt="Congratulations badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/Congratulations.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
-          >
-            <Badge
-              count={3}
+              <img
+                alt="Great_speaker badge"
+                src="/static/svg/badges/GreatSpeaker.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="3"
             >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Great speaker"
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
               >
-                <Avatar
-                  alt="Great_speaker badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/GreatSpeaker.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
-          >
-            <Badge
-              count={2}
-            >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Thank you"
-              >
-                <Avatar
-                  alt="Thank_you badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/ThankYou.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  3
+                </span>
+              </span>
+            </sup>
+          </span>
         </div>
         <div
-          style={
-            Object {
-              "marginBottom": 0,
-            }
-          }
+          style="margin: 5px; display: inline-block;"
         >
-          <Text
-            strong={true}
+          <span
+            class="ant-badge"
           >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+            >
+              <img
+                alt="Thank_you badge"
+                src="/static/svg/badges/ThankYou.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="2"
+            >
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
+              >
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  2
+                </span>
+              </span>
+            </sup>
+          </span>
+        </div>
+      </div>
+      <div
+        style="margin-bottom: 0px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          <strong>
             Last feedback:
-          </Text>
-        </div>
-        <Comment
-          author={
-            <a
-              href="/profile?githubId=apetr"
+          </strong>
+        </span>
+      </div>
+      <div
+        class="ant-comment"
+      >
+        <div
+          class="ant-comment-inner"
+        >
+          <div
+            class="ant-comment-avatar"
+          >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
-              Anton Petrov
-            </a>
-          }
-          avatar={
-            <GithubAvatar
-              githubId="apetr"
-              size={48}
-            />
-          }
-          content={
-            <React.Fragment>
-              <Text
-                strong={true}
-                style={
-                  Object {
-                    "fontSize": 12,
-                  }
-                }
+              <img
+                src="https://cdn.rs.school/apetr.png?size=96"
+              />
+            </span>
+          </div>
+          <div
+            class="ant-comment-content"
+          >
+            <div
+              class="ant-comment-content-author"
+            >
+              <span
+                class="ant-comment-content-author-name"
               >
-                Congratulations
-              </Text>
-              <Paragraph
-                ellipsis={
-                  Object {
-                    "expandable": true,
-                    "rows": 3,
-                  }
-                }
+                <a
+                  href="/profile?githubId=apetr"
+                >
+                  Anton Petrov
+                </a>
+              </span>
+              <span
+                class="ant-comment-content-author-time"
+              >
+                <span>
+                  fromNow
+                </span>
+              </span>
+            </div>
+            <div
+              class="ant-comment-content-detail"
+            >
+              <span
+                class="ant-typography"
+                style="font-size: 12px;"
+              >
+                <strong>
+                  Congratulations
+                </strong>
+              </span>
+              <div
+                aria-label="Test"
+                class="ant-typography ant-typography-ellipsis"
               >
                 Test
-              </Paragraph>
-            </React.Fragment>
-          }
-          datetime={
-            <Tooltip
-              arrowPointAtCenter={false}
-              autoAdjustOverflow={true}
-              mouseEnterDelay={0.1}
-              mouseLeaveDelay={0.1}
-              placement="top"
-              title="2018-12-01T12:12:01.000Z"
+                <span
+                  aria-hidden="true"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; word-break: keep-all; white-space: nowrap;"
+                >
+                  lg
+                </span>
+                <span
+                  aria-hidden="true"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
+                >
+                  <span
+                    aria-hidden="true"
+                  >
+                    ...
+                  </span>
+                  <a
+                    aria-label="Expand"
+                    class="ant-typography-expand"
+                  >
+                    Expand
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul
+      class="ant-card-actions"
+    >
+      <li
+        style="width: 100%;"
+      >
+        <span>
+          <span
+            aria-label="fullscreen"
+            class="anticon anticon-fullscreen"
+            role="img"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="fullscreen"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
             >
-              <span>
-                fromNow
-              </span>
-            </Tooltip>
-          }
-        />
-      </React.Fragment>
-    }
-    icon={<ForwardRef(MessageOutlined) />}
-    isEditingModeEnabled={false}
-    onPermissionsSettingsChange={[MockFunction]}
-    title="Public Feedback"
-  />
-</Fragment>
+              <path
+                d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+              />
+            </svg>
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
 `;
 
 exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1`] = `
-<Fragment>
-  <PublicFeedbackModal
-    data={
-      Array [
-        Object {
-          "badgeId": "Congratulations",
-          "comment": "Test",
-          "feedbackDate": "2018-12-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "apetr",
-            "name": "Anton Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-11-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-09-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Great_speaker",
-          "comment": "Test",
-          "feedbackDate": "2018-10-01T11:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "temap",
-            "name": "Artem Petrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Thank_you",
-          "comment": "Test",
-          "feedbackDate": "2018-11-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "vasssa",
-            "name": "Anton Vasilyev",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-        Object {
-          "badgeId": "Thank_you",
-          "comment": "Test",
-          "feedbackDate": "2019-12-01T12:12:01.000Z",
-          "fromUser": Object {
-            "githubId": "demaa",
-            "name": "Dima Alexandrov",
-          },
-          "heroesUri": "https://heroes.by/",
-        },
-      ]
-    }
-    isVisible={false}
-    onHide={[Function]}
-  />
-  <CommonCard
-    actions={
-      Array [
-        <ForwardRef(FullscreenOutlined)
-          onClick={[Function]}
-        />,
-      ]
-    }
-    content={
-      <React.Fragment>
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
+    >
+      <div
+        class="ant-card-head-wrapper"
+      >
         <div
-          style={
-            Object {
-              "marginBottom": 20,
-            }
-          }
+          class="ant-card-head-title"
         >
-          <Text
-            strong={true}
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
           >
+            <span
+              aria-label="message"
+              class="anticon anticon-message"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="message"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M464 512a48 48 0 1096 0 48 48 0 10-96 0zm200 0a48 48 0 1096 0 48 48 0 10-96 0zm-400 0a48 48 0 1096 0 48 48 0 10-96 0zm661.2-173.6c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 00-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 00-142 96.5c-40.9 41.3-73 89.3-95.2 142.8-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 00112 714v152a46 46 0 0046 46h152.1A449.4 449.4 0 00510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 00142.8-95.2c41.3-40.9 73.8-88.7 96.5-142 23.6-55.2 35.6-113.9 35.9-174.5.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8 69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9 44.6 18.7 84.6 45.6 119 80 34.3 34.3 61.3 74.4 80 119 19.4 46.2 29.1 95.2 28.9 145.8-.6 99.6-39.7 192.9-110.1 262.7z"
+                />
+              </svg>
+            </span>
+             
+            Public Feedback
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        style="margin-bottom: 20px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          <strong>
             Total badges:
-          </Text>
-           
-          6
+          </strong>
+        </span>
+         
+        6
+      </div>
+      <div
+        style="margin-bottom: 30px;"
+      >
+        <div
+          style="margin: 5px; display: inline-block;"
+        >
+          <span
+            class="ant-badge"
+          >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+            >
+              <img
+                alt="Congratulations badge"
+                src="/static/svg/badges/Congratulations.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="1"
+            >
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
+              >
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  1
+                </span>
+              </span>
+            </sup>
+          </span>
         </div>
         <div
-          style={
-            Object {
-              "marginBottom": 30,
-            }
-          }
+          style="margin: 5px; display: inline-block;"
         >
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
+          <span
+            class="ant-badge"
           >
-            <Badge
-              count={1}
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Congratulations"
-              >
-                <Avatar
-                  alt="Congratulations badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/Congratulations.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
-          >
-            <Badge
-              count={3}
+              <img
+                alt="Great_speaker badge"
+                src="/static/svg/badges/GreatSpeaker.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="3"
             >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Great speaker"
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
               >
-                <Avatar
-                  alt="Great_speaker badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/GreatSpeaker.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "margin": 5,
-              }
-            }
-          >
-            <Badge
-              count={2}
-            >
-              <Tooltip
-                arrowPointAtCenter={false}
-                autoAdjustOverflow={true}
-                mouseEnterDelay={0.1}
-                mouseLeaveDelay={0.1}
-                placement="top"
-                title="Thank you"
-              >
-                <Avatar
-                  alt="Thank_you badge"
-                  shape="circle"
-                  size={48}
-                  src="/static/svg/badges/ThankYou.svg"
-                />
-              </Tooltip>
-            </Badge>
-          </div>
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  3
+                </span>
+              </span>
+            </sup>
+          </span>
         </div>
         <div
-          style={
-            Object {
-              "marginBottom": 0,
-            }
-          }
+          style="margin: 5px; display: inline-block;"
         >
-          <Text
-            strong={true}
+          <span
+            class="ant-badge"
           >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+            >
+              <img
+                alt="Thank_you badge"
+                src="/static/svg/badges/ThankYou.svg"
+              />
+            </span>
+            <sup
+              class="ant-scroll-number ant-badge-count"
+              data-show="true"
+              title="2"
+            >
+              <span
+                class="ant-scroll-number-only"
+                style="transition: none;"
+              >
+                <span
+                  class="ant-scroll-number-only-unit current"
+                >
+                  2
+                </span>
+              </span>
+            </sup>
+          </span>
+        </div>
+      </div>
+      <div
+        style="margin-bottom: 0px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          <strong>
             Last feedback:
-          </Text>
-        </div>
-        <Comment
-          author={
-            <a
-              href="/profile?githubId=apetr"
+          </strong>
+        </span>
+      </div>
+      <div
+        class="ant-comment"
+      >
+        <div
+          class="ant-comment-inner"
+        >
+          <div
+            class="ant-comment-avatar"
+          >
+            <span
+              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
-              Anton Petrov
-            </a>
-          }
-          avatar={
-            <GithubAvatar
-              githubId="apetr"
-              size={48}
-            />
-          }
-          content={
-            <React.Fragment>
-              <Text
-                strong={true}
-                style={
-                  Object {
-                    "fontSize": 12,
-                  }
-                }
+              <img
+                src="https://cdn.rs.school/apetr.png?size=96"
+              />
+            </span>
+          </div>
+          <div
+            class="ant-comment-content"
+          >
+            <div
+              class="ant-comment-content-author"
+            >
+              <span
+                class="ant-comment-content-author-name"
               >
-                Congratulations
-              </Text>
-              <Paragraph
-                ellipsis={
-                  Object {
-                    "expandable": true,
-                    "rows": 3,
-                  }
-                }
+                <a
+                  href="/profile?githubId=apetr"
+                >
+                  Anton Petrov
+                </a>
+              </span>
+              <span
+                class="ant-comment-content-author-time"
+              >
+                <span>
+                  fromNow
+                </span>
+              </span>
+            </div>
+            <div
+              class="ant-comment-content-detail"
+            >
+              <span
+                class="ant-typography"
+                style="font-size: 12px;"
+              >
+                <strong>
+                  Congratulations
+                </strong>
+              </span>
+              <div
+                aria-label="Test"
+                class="ant-typography ant-typography-ellipsis"
               >
                 Test
-              </Paragraph>
-            </React.Fragment>
-          }
-          datetime={
-            <Tooltip
-              arrowPointAtCenter={false}
-              autoAdjustOverflow={true}
-              mouseEnterDelay={0.1}
-              mouseLeaveDelay={0.1}
-              placement="top"
-              title="2018-12-01T12:12:01.000Z"
+                <span
+                  aria-hidden="true"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; word-break: keep-all; white-space: nowrap;"
+                >
+                  lg
+                </span>
+                <span
+                  aria-hidden="true"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
+                >
+                  <span
+                    aria-hidden="true"
+                  >
+                    ...
+                  </span>
+                  <a
+                    aria-label="Expand"
+                    class="ant-typography-expand"
+                  >
+                    Expand
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
             >
-              <span>
-                fromNow
-              </span>
-            </Tooltip>
-          }
-        />
-      </React.Fragment>
-    }
-    icon={<ForwardRef(MessageOutlined) />}
-    isEditingModeEnabled={true}
-    onPermissionsSettingsChange={[MockFunction]}
-    title="Public Feedback"
-  />
-</Fragment>
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Visibility settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-list ant-list-split"
+                  >
+                    <div
+                      class="ant-spin-nested-loading"
+                    >
+                      <div
+                        class="ant-spin-container"
+                      >
+                        <div
+                          class="ant-list-empty-text"
+                        >
+                          <div
+                            class="ant-empty ant-empty-normal"
+                          >
+                            <div
+                              class="ant-empty-image"
+                            >
+                              <svg
+                                class="ant-empty-img-simple"
+                                height="41"
+                                viewBox="0 0 64 41"
+                                width="64"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                  transform="translate(0 1)"
+                                >
+                                  <ellipse
+                                    class="ant-empty-img-simple-ellipse"
+                                    cx="32"
+                                    cy="33"
+                                    rx="32"
+                                    ry="7"
+                                  />
+                                  <g
+                                    class="ant-empty-img-simple-g"
+                                    fill-rule="nonzero"
+                                  >
+                                    <path
+                                      d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                    />
+                                    <path
+                                      class="ant-empty-img-simple-path"
+                                      d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                    />
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                            <div
+                              class="ant-empty-description"
+                            >
+                              No Data
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+      </style>
+    </div>
+  </div>
+</div>
 `;
