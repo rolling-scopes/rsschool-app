@@ -7,8 +7,8 @@ import { Student } from '@entities/student';
 
 import { ScoreTableFilters } from '@common/types/score';
 
-import { paginate } from 'src/lib/paginate';
-import { MentorsService } from 'src/courses/mentors';
+import { paginate } from '../../core/paginate';
+import { MentorsService } from '../../courses/mentors';
 
 import { orderByFieldMapping, OrderDirection, OrderField } from './dto/score-query.dto';
 import { InterviewsService } from '../interviews';
