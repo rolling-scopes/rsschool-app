@@ -1,4 +1,4 @@
-export { ScheduleView } from './ScheduleView';
+export { TableView } from './TableView';
 export { SettingsPanel } from './SettingsPanel';
 export { ManageEventModalForm } from './ManageEventModalForm';
 export { TaskDetails, EventDetails } from './EventDetails';

@@ -4,7 +4,6 @@ import { CourseService } from 'services/course';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { ScheduleSettings } from '../useScheduleSettings';
-import ViewModeSelect from './ViewModeSelect';
 import ManageCsvButtons from './ManageCsvButtons';
 import AddEventButton from './AddEventButton';
 import HidePassedEventsButton from './HidePassedEventsButton';
@@ -39,9 +38,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <>
       <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-        <Col>
-          <ViewModeSelect viewMode={settings.viewMode} setViewMode={settings.setViewMode} />
-        </Col>
         {isAdmin && (
           <>
             <Col>
