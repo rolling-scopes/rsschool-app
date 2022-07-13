@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { ILogger } from '../../../logger';
 import { CrossCheckStatus } from '../../../models/courseTask';
 import { courseService, taskService } from '../../../services';
@@ -12,10 +12,17 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
   const { courseTaskId, courseId } = ctx.params;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
+
   if (courseTask == null) {
-    setResponse(ctx, BAD_REQUEST);
+    setResponse(ctx, StatusCodes.BAD_REQUEST);
     return;
   }
+
+  if (!taskService.isSubmissionDeadlinePassed(courseTask) || courseTask.crossCheckStatus === CrossCheckStatus.Initial) {
+    setResponse(ctx, StatusCodes.BAD_REQUEST);
+    return;
+  }
+
   const scoreService = new ScoreService(Number(courseId));
 
   const pairsCount = Math.max((courseTask.pairsCount ?? DEFAULT_PAIRS_COUNT) - 1, 1);
@@ -28,5 +35,5 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
 
   await taskService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Completed);
 
-  setResponse(ctx, OK);
+  setResponse(ctx, StatusCodes.OK);
 };

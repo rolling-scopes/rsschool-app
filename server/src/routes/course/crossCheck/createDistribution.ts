@@ -14,7 +14,13 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
   const { courseTaskId } = ctx.params;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
+
   if (courseTask == null) {
+    setResponse(ctx, StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  if (!taskService.isSubmissionDeadlinePassed(courseTask)) {
     setResponse(ctx, StatusCodes.BAD_REQUEST);
     return;
   }

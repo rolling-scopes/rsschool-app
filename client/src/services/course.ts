@@ -50,8 +50,8 @@ export interface CourseTask {
   sourceGithubRepoUrl: string;
   githubPrRequired: boolean;
   descriptionUrl: string | null;
-  studentStartDate: string | null;
-  studentEndDate: string | null;
+  studentStartDate: string;
+  studentEndDate: string;
   crossCheckEndDate: string | null;
   crossCheckStatus: CrossCheckStatus;
   useJury: boolean;
