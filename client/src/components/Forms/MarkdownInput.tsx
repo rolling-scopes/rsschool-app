@@ -1,12 +1,22 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import { Input, Form, Button, Typography } from 'antd';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function MarkdownInput() {
+type Props = {
+  historicalCommentSelected: string;
+};
+
+export default function MarkdownInput({ historicalCommentSelected }: Props) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [text, setText] = useState('');
+
+  useEffect(() => {
+    if (historicalCommentSelected !== '') {
+      setText(historicalCommentSelected);
+    }
+  }, [historicalCommentSelected]);
 
   const toggleView = () => {
     setPreviewVisible(!previewVisible);
@@ -37,7 +47,7 @@ export default function MarkdownInput() {
           rules={[{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
           onReset={resetText}
         >
-          <Input.TextArea value={text} onChange={({ currentTarget: { value } }) => setText(value)} rows={5} />
+          <Input.TextArea onChange={({ currentTarget: { value } }) => setText(value)} rows={5} />
         </Form.Item>
         <Button onClick={toggleView}>Preview</Button> {link}
       </div>

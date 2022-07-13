@@ -5,6 +5,8 @@ import {
   EyeTwoTone,
   EyeFilled,
   StarTwoTone,
+  EditOutlined,
+  EditFilled,
 } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
@@ -15,7 +17,7 @@ import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
@@ -30,7 +32,12 @@ type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
-function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
+function CrossCheckHistory(props: {
+  githubId: string | null;
+  courseId: number;
+  courseTaskId: number | null;
+  setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
+}) {
   if (props.githubId == null || props.courseTaskId == null) {
     return null;
   }
@@ -49,6 +56,11 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
   useEffect(() => {
     loadStudentScoreHistory(githubId);
   }, [githubId]);
+
+  const handleClickAmendButton = (historicalComment: string) => {
+    const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
+    props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
+  };
 
   return (
     <Spin spinning={state.loading}>
@@ -83,6 +95,17 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
             </div>
             <div>
               <PreparedComment text={historyItem.comment} />
+            </div>
+            <div>
+              <Button
+                size="middle"
+                type={i === 0 ? 'primary' : 'default'}
+                htmlType="button"
+                icon={i === 0 ? <EditFilled /> : <EditOutlined />}
+                onClick={() => handleClickAmendButton(historyItem.comment)}
+              >
+                Amend
+              </Button>
             </div>
           </Timeline.Item>
         ))}
@@ -127,11 +150,19 @@ function Page(props: CoursePageProps) {
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
+  const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
+
+  useEffect(() => {
+    if (historicalCommentSelected !== '') {
+      form.setFieldsValue({ comment: historicalCommentSelected });
+      setHistoricalCommentSelected('');
+    }
+  }, [historicalCommentSelected]);
 
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
@@ -199,7 +230,7 @@ function Page(props: CoursePageProps) {
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
-            <MarkdownInput />
+            <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
             </Form.Item>
@@ -221,7 +252,12 @@ function Page(props: CoursePageProps) {
           </Form>
         </Col>
         <Col {...colSizes}>
-          <CrossCheckHistory githubId={githubId} courseId={props.course.id} courseTaskId={courseTaskId} />
+          <CrossCheckHistory
+            githubId={githubId}
+            courseId={props.course.id}
+            courseTaskId={courseTaskId}
+            setHistoricalCommentSelected={setHistoricalCommentSelected}
+          />
         </Col>
       </Row>
     </PageLayout>
