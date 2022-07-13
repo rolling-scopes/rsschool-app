@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
-import { DEFAULT_COLORS, DEFAULT_VIEW_MODE } from 'components/Schedule/constants';
-import { ViewMode } from './constants';
+import { DEFAULT_COLORS } from 'components/Schedule/constants';
 
 enum LocalStorage {
   ViewMode = 'scheduleViewMode',
@@ -16,8 +15,6 @@ enum LocalStorage {
 }
 
 export interface ScheduleSettings {
-  viewMode: ViewMode;
-  setViewMode: (value: ViewMode) => void;
   timezone: string;
   setTimezone: (value: string) => void;
   limitForDoneTask: number;
@@ -37,7 +34,6 @@ export interface ScheduleSettings {
 }
 
 const useScheduleSettings = (): ScheduleSettings => {
-  const [viewMode = DEFAULT_VIEW_MODE, setViewMode] = useLocalStorage<ViewMode>(LocalStorage.ViewMode);
   const [limitForDoneTask = 100, setLimitForDoneTask] = useLocalStorage<number>(LocalStorage.LimitForDoneTasks);
   const [isSplittedByWeek = false, setIsSplittedByWeek] = useLocalStorage<boolean>(LocalStorage.IsSplittedByWeek);
   const [arePassedEventsHidden = false, setArePassedEventsHidden] = useLocalStorage<boolean>(
@@ -53,8 +49,6 @@ const useScheduleSettings = (): ScheduleSettings => {
 
   return useMemo(
     () => ({
-      viewMode,
-      setViewMode,
       timezone,
       setTimezone,
       limitForDoneTask,
@@ -73,7 +67,6 @@ const useScheduleSettings = (): ScheduleSettings => {
       setEventTypesHidden,
     }),
     [
-      viewMode,
       timezone,
       limitForDoneTask,
       isSplittedByWeek,

@@ -1,13 +1,4 @@
-import { isMobileOnly } from 'mobile-device-detect';
 import { CourseTaskDtoTypeEnum } from 'api';
-
-export enum ViewMode {
-  Table = 'Table',
-  List = 'List',
-  Calendar = 'Calendar',
-}
-
-export const DEFAULT_VIEW_MODE = isMobileOnly ? ViewMode.List : ViewMode.Table;
 
 export enum Column {
   StartDate = 'Start Date',

@@ -15,8 +15,8 @@ import {
   scoreRenderer,
   weightRenderer,
 } from 'components/Table';
+import { ScheduleSettings } from '../useScheduleSettings';
 import { Column, CONFIGURABLE_COLUMNS } from '../constants';
-import { ScheduleViewProps } from '../ScheduleView';
 import EditableCell from './EditableCell';
 import { ScheduleEvent } from '../model';
 import { UpdateCourseTaskDtoTypeEnum } from 'api';
@@ -112,7 +112,16 @@ const getColumns = ({
   },
 ];
 
-export function TableView({ data, isAdmin, courseId, refreshData, settings }: ScheduleViewProps) {
+interface TableViewProps {
+  isAdmin: boolean;
+  courseId: number;
+  courseAlias: string;
+  settings: ScheduleSettings;
+  data: ScheduleEvent[];
+  refreshData: () => void;
+}
+
+export function TableView({ data, isAdmin, courseId, refreshData, settings }: TableViewProps) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
