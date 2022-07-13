@@ -5,10 +5,10 @@ import { ILogger } from '../../../logger';
 import { StageInterview } from '../../../models';
 import { setResponse } from '../../utils';
 
-export const deleteInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const cancelInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const interviewId = Number(ctx.params.interviewId);
   try {
-    const interview = await getRepository(StageInterview).delete(interviewId);
+    const interview = await getRepository(StageInterview).update(interviewId, { isCanceled: true });
     setResponse(ctx, StatusCodes.OK, interview);
   } catch (e) {
     setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
