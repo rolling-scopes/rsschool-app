@@ -47,7 +47,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     });
   }
 
-  public async setMentor(courseId: number, studentGithubId: string, mentorId: number) {
+  public async setMentor(courseId: number, studentGithubId: string, mentorId?: number) {
     const student = await this.findByGithubId(courseId, studentGithubId);
     if (student == null) {
       return;

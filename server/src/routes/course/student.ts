@@ -1,4 +1,4 @@
-import { BAD_REQUEST, OK, FORBIDDEN } from 'http-status-codes';
+import { BAD_REQUEST, OK, FORBIDDEN, StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
@@ -8,6 +8,7 @@ import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
 import { userGuards } from '../guards';
 import { sendNotification } from '../../services/notification.service';
+import { MentorBasic } from '../../../../common/models';
 
 type FeedbackInput = { toUserId: number; comment: string };
 
@@ -124,20 +125,25 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
     }
   }
   const studentRepository = getCustomRepository(StudentRepository);
+  let mentor: MentorBasic | null = null;
+  if (data.mentorGithuId) {
+    mentor = await courseService.getMentorByGithubId(courseId, data.mentorGithuId);
+    if (!mentor) {
+      setResponse(ctx, StatusCodes.BAD_REQUEST);
+      return;
+    }
+  }
+  await studentRepository.setMentor(courseId, githubId, mentor?.id);
 
-  if (!data.mentorGithuId) return;
-  const mentor = await courseService.getMentorByGithubId(courseId, data.mentorGithuId);
-  if (!mentor) return;
-
-  await studentRepository.setMentor(courseId, githubId, mentor.id);
-
-  await sendNotification({
-    notificationId: 'mentor:assigned',
-    userId: student.id,
-    data: {
-      mentor,
-    },
-  });
+  if (mentor) {
+    await sendNotification({
+      notificationId: 'mentor:assigned',
+      userId: student.id,
+      data: {
+        mentor,
+      },
+    });
+  }
 
   const updatedStudent = await studentRepository.findAndIncludeMentor(courseId, githubId);
 
