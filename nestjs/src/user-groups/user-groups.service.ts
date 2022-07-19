@@ -23,7 +23,7 @@ export class UserGroupsService {
   }
 
   public async create(data: CreateUserGroupDto) {
-    const userGroup = await this.repository.create(data);
+    const userGroup = await this.repository.save(this.repository.create(data));
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
     const group = this.formatGroup(userGroup, users);
     return group;
