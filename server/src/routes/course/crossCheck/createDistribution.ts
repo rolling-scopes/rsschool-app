@@ -27,6 +27,9 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
 
   const solutions = await courseService.getTaskSolutionsWithoutChecker(courseTaskId);
   const solutionsMap = new Map<number, number>();
+
+  await taskService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Distributed);
+
   for (const solution of solutions) {
     solutionsMap.set(solution.studentId, solution.id);
   }
@@ -48,8 +51,6 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
     }));
 
   await getRepository(TaskSolutionChecker).save(crossCheckPairs);
-
-  await taskService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Distributed);
 
   setResponse(ctx, StatusCodes.OK, { crossCheckPairs });
 };
