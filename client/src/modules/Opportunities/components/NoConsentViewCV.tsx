@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
-const { Paragraph, Title } = Typography;
+const { Paragraph, Title, Text } = Typography;
 const { Item } = List;
 
 type Props = {
@@ -69,16 +69,17 @@ function NoConsentViewCV(props: Props) {
 
   return isOwner ? (
     <Result
-      status="info"
-      title={
-        <>
-          CV is public page. <br />
-          We need your consent to use and process your personal data and make it public.
-        </>
-      }
+      icon={<span></span>}
+      title={<Title>You don't have a CV yet.</Title>}
+      subTitle={<Text style={{ fontSize: '24px' }}>You can create a public CV that can be shared with employers.</Text>}
       extra={
-        <Button type="primary" htmlType="button" onClick={showConfirmationModal}>
-          Give consent
+        <Button
+          style={{ width: '140px', height: '44px' }}
+          type="primary"
+          htmlType="button"
+          onClick={showConfirmationModal}
+        >
+          <PlusOutlined /> Create CV
         </Button>
       }
     />
