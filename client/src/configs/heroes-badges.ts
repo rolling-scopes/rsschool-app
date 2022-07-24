@@ -22,7 +22,7 @@ export default {
   Helping_hand: {
     name: 'Helping hand',
     pictureId: 14,
-    url: 'HelpingHand.svg',
+    url: 'HelpingHandSloth.svg',
   },
   Hero: {
     name: 'Hero',
