@@ -488,7 +488,7 @@ function renderJsTaskFields(repoUrl: string) {
         </a>
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
-        IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
+        IMPORTANT: Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16.
       </Typography.Paragraph>
       {explanationsSubmissionTasks()}
     </Row>
