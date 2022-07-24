@@ -72,7 +72,7 @@ export class ProfilePage extends React.Component<Props, State> {
     isProfileOwner: false,
     isLoading: true,
     isSaving: false,
-    isEditingModeEnabled: false,
+    isEditingModeEnabled: true,
     isInitialPermissionsSettingsChanged: false,
     isInitialProfileSettingsChanged: false,
     connections: {},
@@ -222,7 +222,8 @@ export class ProfilePage extends React.Component<Props, State> {
       }
       const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
-      const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
+      // TODO: Get rid of edit mode everywhere?
+      const isEditingModeEnabled = true; // Boolean(router.asPath.match(/#edit/));
 
       this.setState({
         isLoading: false,
@@ -241,10 +242,6 @@ export class ProfilePage extends React.Component<Props, State> {
         initialProfileSettings: null,
       });
     }
-  };
-
-  private changeProfilePageMode = (mode: 'edit' | 'view') => {
-    this.setState({ isEditingModeEnabled: mode === 'edit' ? true : false });
   };
 
   private onSaveSuccess() {
@@ -337,7 +334,6 @@ export class ProfilePage extends React.Component<Props, State> {
   render() {
     const {
       profile,
-      isEditingModeEnabled,
       initialPermissionsSettings,
       isInitialPermissionsSettingsChanged,
       isInitialProfileSettingsChanged,
@@ -345,7 +341,7 @@ export class ProfilePage extends React.Component<Props, State> {
       connections,
     } = this.state;
 
-    const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
+    const isEditingModeVisible = !!initialPermissionsSettings;
     const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
 
     const cards = [
@@ -427,9 +423,6 @@ export class ProfilePage extends React.Component<Props, State> {
         <LoadingScreen show={this.state.isLoading}>
           <Header
             username={this.props.session.githubId}
-            onChangeProfilePageMode={this.changeProfilePageMode}
-            isProfilePage={initialPermissionsSettings ? true : false}
-            isProfileEditingModeEnabled={isEditingModeVisible}
             isSaveButtonVisible={isSaveButtonVisible}
             onSaveClick={this.saveProfile}
           />

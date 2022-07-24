@@ -35,14 +35,14 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
       </div>
     </div>
     <style>
-      
+
         .loading-screen {
           z-index: 1;
           top: 0;
           left: 0;
           background-color: #fff;
         }
-      
+
     </style>
   </div>
 </div>
