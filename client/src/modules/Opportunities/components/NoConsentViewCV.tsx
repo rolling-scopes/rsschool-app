@@ -15,20 +15,20 @@ function NoConsentViewCV(props: Props) {
 
   const confirmationModalInfo = {
     en: {
-      header: 'Are you sure? The following information will be public:',
+      header: 'Attention! The following information will be public:',
       availableDataList: [
-        'Personal information (Name, Desired Position, English level, Military Service, Avatar, Link to a presentation, Self-Description, etc.);',
-        'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, Github username, Website Link);',
+        'Personal information (Name, Desired Position, English level, Military Service, Avatar, Link to a presentation, Self-Description, etc.)',
+        'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, Github username, Website Link)',
         'Information about passed school courses (Courses Info, Mentor, Course Status, Score, Position);',
         'Public feedback information (Gratitudes)',
       ],
     },
     ru: {
-      header: 'Вы уверены? Следующая информация будет доступна рекрутерам:',
+      header: 'Внимание! Следующая информация будет публичной:',
       availableDataList: [
-        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военной службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.);',
-        'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, Github, ссылка на веб-сайт);',
-        'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре);',
+        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военной службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.)',
+        'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, Github, ссылка на веб-сайт)',
+        'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре)',
         'Информация о публичной обратной связи (отзывы в RS School App)',
       ],
     },
@@ -64,6 +64,7 @@ function NoConsentViewCV(props: Props) {
       onOk() {
         giveConsent!();
       },
+      okText: 'I consent',
     });
   };
 
