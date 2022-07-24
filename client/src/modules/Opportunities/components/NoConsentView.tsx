@@ -40,7 +40,7 @@ export const NoConsentView = (props: Props) => {
         <Title level={4} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {confirmationModalInfo.en.header}
           <Tooltip placement="topLeft" title={confirmationModalInfo.ru.header}>
-            <QuestionCircleOutlined />
+            <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.header} />
           </Tooltip>
         </Title>
       }
@@ -49,7 +49,7 @@ export const NoConsentView = (props: Props) => {
         <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Paragraph>{text}</Paragraph>
           <Tooltip placement="topLeft" title={confirmationModalInfo.ru.availableDataList[idx]}>
-            <QuestionCircleOutlined />
+            <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.availableDataList[idx]} />
           </Tooltip>
         </Item>
       )}
