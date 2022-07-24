@@ -1,7 +1,7 @@
 import { Divider, Switch, Typography } from 'antd';
 import { ResumeDto } from 'api';
 import EditCV from './EditCV';
-import NoConsentViewCV from './NoConsentViewCV';
+import { NoConsentView } from './NoConsentView';
 import ViewCV from './ViewCV';
 
 const { Text } = Typography;
@@ -22,7 +22,7 @@ export function EditViewResume(props: ResumeProps) {
   const { githubId, data, consent, editMode, switchView, onUpdateResume, onRemoveConsent, onCreateConsent } = props;
 
   if (!consent) {
-    return <NoConsentViewCV isOwner={true} giveConsent={onCreateConsent} />;
+    return <NoConsentView isOwner={true} giveConsent={onCreateConsent} />;
   }
 
   const editing = editMode || data == null;
