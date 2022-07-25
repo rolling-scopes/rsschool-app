@@ -1,7 +1,9 @@
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react';
 import { NoConsentView, confirmationModalInfo } from '../NoConsentView';
 
 describe('NoConsentView', () => {
+  afterEach(cleanup);
+
   it('should render 403 correctly', () => {
     render(<NoConsentView giveConsent={jest.fn()} />);
 
@@ -11,8 +13,9 @@ describe('NoConsentView', () => {
   it('should render initial owner view correctly', () => {
     render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
 
-    const title = screen.getByText("You don't have a CV yet.");
-    const createCvButton = screen.getByText('Create CV');
+    const title = screen.getByRole('heading', { name: "You don't have a CV yet." });
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+
     expect(title).toBeInTheDocument();
     expect(createCvButton).toBeInTheDocument();
   });
@@ -20,24 +23,20 @@ describe('NoConsentView', () => {
   it('should show confirmation modal correctly', async () => {
     render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
 
-    const createCvButton = screen.getByText('Create CV');
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
     fireEvent.click(createCvButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-      expect(screen.getByTitle(confirmationModalInfo.en.header)).toBeInTheDocument();
-      confirmationModalInfo.en.availableDataList.forEach(text => expect(screen.getByText(text)).toBeInTheDocument());
-    });
-  });
+    const modal = await screen.findByRole('dialog');
+    const modalTitle = await screen.findByText(confirmationModalInfo.en.header);
 
-  it('should show tooltips correctly', async () => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    expect(modal).toBeInTheDocument();
 
-    const createCvButton = screen.getByText('Create CV');
+    // Check that we have all visible texts
+    expect(modalTitle).toBeInTheDocument();
+    confirmationModalInfo.en.availableDataList.forEach(text => expect(screen.getByText(text)).toBeInTheDocument());
 
-    fireEvent.click(createCvButton);
-
+    // Check that title tooltip works correctly
     const titleTooltipIcon = await screen.findByTestId(confirmationModalInfo.ru.header);
 
     expect(titleTooltipIcon).toBeInTheDocument();
@@ -48,6 +47,7 @@ describe('NoConsentView', () => {
 
     expect(titleTooltipText).toBeInTheDocument();
 
+    // Check that list items tooltips works correctly
     for (const text of confirmationModalInfo.ru.availableDataList) {
       const tooltipIcon = await screen.findByTestId(text);
 
@@ -59,5 +59,47 @@ describe('NoConsentView', () => {
 
       expect(tooltipText).toBeInTheDocument();
     }
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+  });
+
+  it('should handle cancel correctly', async () => {
+    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+
+    await waitFor(() => fireEvent.click(createCvButton));
+
+    const modal = await screen.findByRole('dialog');
+
+    expect(modal).toBeInTheDocument();
+
+    const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+
+    fireEvent.click(cancelButton);
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle consent correctly', async () => {
+    const mockGiveConsent = jest.fn();
+
+    render(<NoConsentView isOwner={true} giveConsent={mockGiveConsent} />);
+
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+
+    await waitFor(() => fireEvent.click(createCvButton));
+
+    const consentButton = await screen.findByRole('button', { name: 'I consent' });
+
+    fireEvent.click(consentButton);
+
+    expect(mockGiveConsent).toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
   });
 });
