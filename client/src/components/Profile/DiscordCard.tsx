@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { Typography } from 'antd';
-import CommonCard from './CommonCard';
-import { Discord } from 'common/models/profile';
 import { CheckSquareTwoTone, WarningTwoTone } from '@ant-design/icons';
+import { Discord } from 'common/models/profile';
 import discordIntegration from '../../configs/discord-integration';
 import CopyToClipboardButton from '../CopyToClipboardButton';
+import { DiscordFilled } from 'components/Icons/DiscordFilled';
+import CommonCard from './CommonCard';
 
 const { Paragraph, Text } = Typography;
-
-import { DiscordFilled } from 'components/Icons/DiscordFilled';
 
 type Props = {
   data: Discord | null;

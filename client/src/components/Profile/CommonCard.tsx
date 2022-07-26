@@ -1,87 +1,44 @@
-import * as React from 'react';
+import { ReactNode } from 'react';
 import { Card, Typography, Empty } from 'antd';
-import ProfileSettingsDrawer from './ProfileSettingsDrawer';
+import { EditOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-import { EditOutlined } from '@ant-design/icons';
-
 type Props = {
-  profileSettingsContent?: JSX.Element;
-  isEditingModeEnabled?: boolean;
-  noDataDescrption?: string;
-  settingsTitle?: string;
+  noDataDescription?: string;
   title: string;
-  icon: any;
-  content: any;
-  actions?: any;
-  detachSettingsOnVisibilityChange?: boolean;
+  icon: JSX.Element;
+  content: JSX.Element | null;
+  actions?: ReactNode[];
+  handleEdit?: () => void;
 };
 
-type State = {
-  isProfileSettingsVisible: boolean;
-};
-class CommonCard extends React.Component<Props, State> {
-  state = {
-    isProfileSettingsVisible: false,
-  };
-
-  private showProfileSettings = () => {
-    this.setState({ isProfileSettingsVisible: true });
-  };
-
-  private hideProfileSettings = () => {
-    this.setState({ isProfileSettingsVisible: false });
-  };
-
-  render() {
-    const {
-      title,
-      icon,
-      content,
-      profileSettingsContent,
-      isEditingModeEnabled,
-      noDataDescrption,
-      settingsTitle,
-      actions,
-      detachSettingsOnVisibilityChange = false,
-    } = this.props;
-    const { isProfileSettingsVisible } = this.state;
-
-    const renderSettingsDrawer = detachSettingsOnVisibilityChange ? isProfileSettingsVisible : true;
-    return (
-      <Card
-        title={
-          <Title level={2} ellipsis={true} style={{ fontSize: 16, marginBottom: 0 }}>
+const CommonCard = ({ title, icon, content, noDataDescription, actions, handleEdit }: Props) => {
+  return (
+    <Card
+      title={
+        <Title
+          level={2}
+          ellipsis={true}
+          style={{
+            fontSize: 16,
+            marginBottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span>
             {icon} {title}
-          </Title>
-        }
-        actions={
-          isEditingModeEnabled
-            ? [
-                profileSettingsContent && (
-                  <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />
-                ),
-              ].filter(Boolean)
-            : actions
-        }
-      >
-        {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescrption} />}
-        {isEditingModeEnabled !== undefined && isEditingModeEnabled && (
-          <>
-            {profileSettingsContent && renderSettingsDrawer && (
-              <ProfileSettingsDrawer
-                isSettingsVisible={isProfileSettingsVisible}
-                hideSettings={this.hideProfileSettings}
-                settingsTitle={settingsTitle}
-                content={profileSettingsContent}
-              />
-            )}
-          </>
-        )}
-      </Card>
-    );
-  }
-}
+          </span>
+          {handleEdit ? <EditOutlined key="main-card-actions-edit" onClick={handleEdit} /> : null}
+        </Title>
+      }
+      actions={actions}
+    >
+      {content ?? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescription} />}
+    </Card>
+  );
+};
 
 export default CommonCard;

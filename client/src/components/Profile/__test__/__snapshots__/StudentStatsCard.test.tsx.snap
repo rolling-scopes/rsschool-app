@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` Should render correctly if is editing mode disabled 1`] = `
+exports[` should render correctly 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"
@@ -16,29 +16,31 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
         >
           <h2
             class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
+            style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
-            <span
-              aria-label="book"
-              class="anticon anticon-book"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="book"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
+            <span>
+              <span
+                aria-label="book"
+                class="anticon anticon-book"
+                role="img"
               >
-                <path
-                  d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                />
-              </svg>
+                <svg
+                  aria-hidden="true"
+                  data-icon="book"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                  />
+                </svg>
+              </span>
+               
+              Student Statistics
             </span>
-
-            Student Statistics
           </h2>
         </div>
       </div>
@@ -123,7 +125,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor:
+                    Mentor: 
                     <a
                       href="/profile?githubId=andrew123"
                     >
@@ -133,16 +135,16 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position:
+                    Position: 
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score:
+                    Score: 
                     1201
                   </p>
-
+                  
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -234,7 +236,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor:
+                    Mentor: 
                     <a
                       href="/profile?githubId=dimon12"
                     >
@@ -244,16 +246,16 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position:
+                    Position: 
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score:
+                    Score: 
                     101
                   </p>
-
+                  
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -284,329 +286,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[` Should render correctly if is editing mode enabled 1`] = `
-<div>
-  <div
-    class="ant-card ant-card-bordered"
-  >
-    <div
-      class="ant-card-head"
-    >
-      <div
-        class="ant-card-head-wrapper"
-      >
-        <div
-          class="ant-card-head-title"
-        >
-          <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
-          >
-            <span
-              aria-label="book"
-              class="anticon anticon-book"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="book"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                />
-              </svg>
-            </span>
-
-            Student Statistics
-          </h2>
-        </div>
-      </div>
-    </div>
-    <div
-      class="ant-card-body"
-    >
-      <div
-        class="ant-list ant-list-split"
-      >
-        <div
-          class="ant-spin-nested-loading"
-        >
-          <div
-            class="ant-spin-container"
-          >
-            <ul
-              class="ant-list-items"
-            >
-              <li
-                class="ant-list-item"
-                style="display: flex; justify-content: space-between;"
-              >
-                <div
-                  style="flex-grow: 2;"
-                >
-                  <p
-                    style="margin-bottom: 0px;"
-                  >
-                    <span
-                      class="ant-typography"
-                    >
-                      <strong>
-                        rs-2018-q1
-                         / Minsk
-                      </strong>
-                    </span>
-                  </p>
-                  <div
-                    style="width: 80%; margin-bottom: 5px;"
-                  >
-                    <div
-                      class="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small"
-                    >
-                      <div
-                        class="ant-progress-outer"
-                      >
-                        <div
-                          class="ant-progress-inner"
-                        >
-                          <div
-                            class="ant-progress-bg"
-                            style="width: 100%; height: 6px;"
-                          />
-                        </div>
-                      </div>
-                      <span
-                        class="ant-progress-text"
-                      >
-                        <span
-                          aria-label="check-circle"
-                          class="anticon anticon-check-circle"
-                          role="img"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            data-icon="check-circle"
-                            fill="currentColor"
-                            focusable="false"
-                            height="1em"
-                            viewBox="64 64 896 896"
-                            width="1em"
-                          >
-                            <path
-                              d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
-                            />
-                          </svg>
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Mentor:
-                    <a
-                      href="/profile?githubId=andrew123"
-                    >
-                      Andrey Andreev
-                    </a>
-                  </p>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Position:
-                    32
-                  </p>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Score:
-                    1201
-                  </p>
-
-                </div>
-                <button
-                  class="ant-btn ant-btn-dashed"
-                  type="button"
-                >
-                  <span
-                    aria-label="fullscreen"
-                    class="anticon anticon-fullscreen"
-                    role="img"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      data-icon="fullscreen"
-                      fill="currentColor"
-                      focusable="false"
-                      height="1em"
-                      viewBox="64 64 896 896"
-                      width="1em"
-                    >
-                      <path
-                        d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </li>
-              <li
-                class="ant-list-item"
-                style="display: flex; justify-content: space-between;"
-              >
-                <div
-                  style="flex-grow: 2;"
-                >
-                  <p
-                    style="margin-bottom: 0px;"
-                  >
-                    <span
-                      class="ant-typography"
-                    >
-                      <strong>
-                        rs-2019-q1
-                         / Minsk
-                      </strong>
-                    </span>
-                  </p>
-                  <div
-                    style="width: 80%; margin-bottom: 5px;"
-                  >
-                    <div
-                      class="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small"
-                    >
-                      <div
-                        class="ant-progress-outer"
-                      >
-                        <div
-                          class="ant-progress-inner"
-                        >
-                          <div
-                            class="ant-progress-bg"
-                            style="width: 50%; height: 6px;"
-                          />
-                        </div>
-                      </div>
-                      <span
-                        class="ant-progress-text"
-                      >
-                        <span
-                          aria-label="close-circle"
-                          class="anticon anticon-close-circle"
-                          role="img"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            data-icon="close-circle"
-                            fill="currentColor"
-                            focusable="false"
-                            height="1em"
-                            viewBox="64 64 896 896"
-                            width="1em"
-                          >
-                            <path
-                              d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
-                            />
-                          </svg>
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Mentor:
-                    <a
-                      href="/profile?githubId=dimon12"
-                    >
-                      Dima Testovich
-                    </a>
-                  </p>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Position:
-                    32
-                  </p>
-                  <p
-                    style="font-size: 12px; margin-bottom: 5px;"
-                  >
-                    Score:
-                    101
-                  </p>
-
-                </div>
-                <button
-                  class="ant-btn ant-btn-dashed"
-                  type="button"
-                >
-                  <span
-                    aria-label="fullscreen"
-                    class="anticon anticon-fullscreen"
-                    role="img"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      data-icon="fullscreen"
-                      fill="currentColor"
-                      focusable="false"
-                      height="1em"
-                      viewBox="64 64 896 896"
-                      width="1em"
-                    >
-                      <path
-                        d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div
-        class="ant-drawer ant-drawer-top ant-drawer-inline"
-        style="position: absolute; display: none;"
-        tabindex="-1"
-      >
-        <div
-          aria-hidden="true"
-          data-sentinel="start"
-          style="width: 0px; height: 0px; overflow: hidden; outline: none; position: absolute;"
-          tabindex="0"
-        />
-        <div
-          aria-hidden="true"
-          data-sentinel="end"
-          style="width: 0px; height: 0px; overflow: hidden; outline: none; position: absolute;"
-          tabindex="0"
-        />
-      </div>
-      <style>
-
-        :global(.ant-drawer-content-wrapper) {
-          height: inherit !important;
-        }
-
-        :global(.ant-drawer-wrapper-body) {
-          overflow: hidden;
-        }
-
-        :global(.ant-drawer-body) {
-          height: calc(100% - 55px);
-          overflow: auto;
-        }
-
-      </style>
     </div>
   </div>
 </div>

@@ -12,7 +12,6 @@ const { Text, Paragraph } = Typography;
 
 type Props = {
   data: StudentStats[];
-  isEditingModeEnabled: boolean;
   isProfileOwner: boolean;
   username: string;
 };
@@ -40,8 +39,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     isExpelConfirmationModalVisible: false,
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
     !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
@@ -108,7 +106,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, isProfileOwner } = this.props;
+    const { isProfileOwner } = this.props;
     const stats = this.props.data;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
     return (
@@ -206,7 +204,6 @@ class StudentStatsCard extends React.Component<Props, State> {
               }}
             />
           }
-          isEditingModeEnabled={isEditingModeEnabled}
         />
       </>
     );

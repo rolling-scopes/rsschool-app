@@ -1,17 +1,12 @@
 import * as React from 'react';
-import get from 'lodash/get';
-import set from 'lodash/set';
-import isEqual from 'lodash/isEqual';
-import cloneDeep from 'lodash/cloneDeep';
-import pullAt from 'lodash/pullAt';
-import { Result, Spin, message } from 'antd';
 import Masonry from 'react-masonry-css';
-import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
+import { Result, Spin, message } from 'antd';
+import cloneDeep from 'lodash/cloneDeep';
+import { ProfileApi } from 'api';
+import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
-import { ProfileInfo, UserService } from 'services/user';
-import { CoursesService } from 'services/courses';
 import { StudentStats, ConfigurableProfilePermissions, Contacts, GeneralInfo, Discord } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
@@ -26,7 +21,9 @@ import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
-import { ProfileApi } from 'api';
+import { CoursesService } from 'services/courses';
+import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
+import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
 
 type Props = {
   router: NextRouter;
@@ -71,55 +68,6 @@ export class ProfilePage extends React.Component<Props, State> {
     isInitialPermissionsSettingsChanged: false,
     isInitialProfileSettingsChanged: false,
     connections: {},
-  };
-
-  private onProfileSettingsChange = async (event: any = {}, path: string) => {
-    const { profile, initialProfileSettings } = this.state;
-
-    if (profile) {
-      const newProfile = cloneDeep(profile);
-
-      let isInitialProfileSettingsChanged;
-      switch (path) {
-        case 'generalInfo.location': {
-          const countryName = (event && event.countryName) || profile?.generalInfo?.location.countryName;
-          const cityName = (event && event.cityName) || profile?.generalInfo?.location.cityName;
-          set(newProfile, `${path}.countryName`, countryName);
-          set(newProfile, `${path}.cityName`, cityName);
-          isInitialProfileSettingsChanged =
-            initialProfileSettings?.generalInfo?.location?.cityName !== cityName ||
-            initialProfileSettings?.generalInfo?.location?.countryName !== countryName;
-          break;
-        }
-        case 'generalInfo.englishLevel': {
-          set(newProfile, path, event);
-          isInitialProfileSettingsChanged = initialProfileSettings?.generalInfo?.englishLevel !== event;
-          break;
-        }
-        case 'generalInfo.educationHistory': {
-          if (event.type === 'add') {
-            newProfile.generalInfo?.educationHistory.push({
-              graduationYear: null,
-              faculty: null,
-              university: null,
-            });
-          } else if (event.type === 'delete') {
-            pullAt(newProfile.generalInfo?.educationHistory, [event.index]);
-          }
-          isInitialProfileSettingsChanged = !isEqual(
-            initialProfileSettings?.generalInfo?.educationHistory,
-            newProfile.generalInfo?.educationHistory,
-          );
-          break;
-        }
-        default: {
-          set(newProfile, path, event.target.value);
-          isInitialProfileSettingsChanged = get(newProfile, path) !== get(initialProfileSettings, path);
-        }
-      }
-
-      await this.setState({ profile: newProfile, isInitialProfileSettingsChanged });
-    }
   };
 
   private userService = new UserService();
@@ -204,19 +152,11 @@ export class ProfilePage extends React.Component<Props, State> {
     }
   };
 
-  private onSaveSuccess() {
-    message.success('Profile was successesfully saved');
-  }
-
-  private onSaveError() {
-    message.error('Error has occured. Please check your connection and try again');
-  }
-
   private sendEmailConfirmationLink = async () => {
     try {
       await this.userService.sendEmailConfirmationLink();
     } catch (e) {
-      message.error('Error has occured. Please try again later');
+      message.error('Error has occurred. Please try again later');
     }
   };
 
@@ -248,10 +188,10 @@ export class ProfilePage extends React.Component<Props, State> {
           isInitialProfileSettingsChanged: false,
           connections: connections as State['connections'],
         });
-        this.onSaveSuccess();
+        onSaveSuccess();
       } catch (e) {
         this.setState({ isSaving: false });
-        this.onSaveError();
+        onSaveError();
       }
     }
   };
@@ -292,66 +232,40 @@ export class ProfilePage extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      profile,
-      initialPermissionsSettings,
-      isInitialPermissionsSettingsChanged,
-      isInitialProfileSettingsChanged,
-      isProfileOwner,
-      connections,
-    } = this.state;
+    const { profile, isProfileOwner, connections } = this.state;
 
-    const isEditingModeVisible = !!initialPermissionsSettings;
-    const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
+    const mainInfo: ProfileMainCardData = {
+      location: profile?.generalInfo?.location ?? null,
+      name: profile?.generalInfo?.name ?? '',
+      githubId: profile?.generalInfo?.githubId ?? null,
+      publicCvUrl: profile?.publicCvUrl ?? null,
+    };
+    const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
 
     const cards = [
-      profile?.generalInfo && (
-        <MainCard
-          data={profile}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
-      profile?.generalInfo?.aboutMyself !== undefined && (
-        <AboutCard
-          data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
+      profile?.generalInfo && <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} />,
+      <AboutCard data={aboutMyself} isEditingModeEnabled={isProfileOwner} />,
       profile?.generalInfo?.educationHistory !== undefined && (
-        <EducationCard
-          data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
+        <EducationCard data={profile.generalInfo?.educationHistory || []} isEditingModeEnabled={isProfileOwner} />
       ),
       profile?.contacts !== undefined && (
         <ContactsCard
           data={profile.contacts}
-          initialContacts={this.state.initialProfileSettings?.contacts}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
+          isEditingModeEnabled={isProfileOwner}
           connections={connections}
           sendConfirmationEmail={this.sendEmailConfirmationLink}
-          isDataPendingSave={isSaveButtonVisible}
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      profile?.publicFeedback?.length && (
-        <PublicFeedbackCard data={profile.publicFeedback} isEditingModeEnabled={isEditingModeVisible} />
-      ),
+      profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
       profile?.studentStats?.length && (
         <StudentStatsCard
           username={this.props.session.githubId}
           data={profile.studentStats}
           isProfileOwner={isProfileOwner}
-          isEditingModeEnabled={isEditingModeVisible}
         />
       ),
-      profile?.mentorStats?.length && (
-        <MentorStatsCard data={profile.mentorStats} isEditingModeEnabled={isEditingModeVisible} />
-      ),
+      profile?.mentorStats?.length && <MentorStatsCard data={profile.mentorStats} />,
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />
       ),
@@ -361,11 +275,7 @@ export class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
-          <Header
-            username={this.props.session.githubId}
-            isSaveButtonVisible={isSaveButtonVisible}
-            onSaveClick={this.saveProfile}
-          />
+          <Header username={this.props.session.githubId} />
           <Spin spinning={this.state.isSaving} delay={200}>
             {this.state.profile ? (
               <div style={{ padding: 10 }}>

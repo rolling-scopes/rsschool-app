@@ -105,28 +105,8 @@ describe('', () => {
     },
   ] as StudentStats[];
 
-  describe('Should render correctly', () => {
-    it('if is editing mode disabled', () => {
-      const output = render(
-        <StudentStatsCard
-          isProfileOwner={false}
-          data={data}
-          isEditingModeEnabled={false}
-          username={githubId}
-        />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
-    it('if is editing mode enabled', () => {
-      const output = render(
-        <StudentStatsCard
-          isProfileOwner={false}
-          data={data}
-          isEditingModeEnabled={true}
-          username={githubId}
-        />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
+  it('should render correctly', () => {
+    const output = render(<StudentStatsCard isProfileOwner={false} data={data} username={githubId} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

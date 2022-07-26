@@ -1,205 +1,159 @@
-import * as React from 'react';
-import isEqual from 'lodash/isEqual';
-import { List, Typography, Input, Form } from 'antd';
-import CommonCard from './CommonCard';
+import React, { useEffect, useMemo, useState } from 'react';
+import { List, Typography } from 'antd';
+import { ContactsOutlined } from '@ant-design/icons';
+import { isEqual } from 'lodash';
+import { ProfileApi, UpdateProfileInfoDto } from 'api';
 import { Contacts } from 'common/models/profile';
+import { NotificationChannel } from 'modules/Notifications/services/notifications';
+import { EmailConfirmation } from './EmailConfirmation';
+import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
+import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
+import { Contact, ContactsKeys } from 'services/user';
+import ContactsCardForm from './ContactsCardForm';
 
 const { Text } = Typography;
 
-import { ContactsOutlined } from '@ant-design/icons';
-import { NotificationChannel } from 'modules/Notifications/services/notifications';
-import { EmailConfirmation } from './EmailConfirmation';
-import { Rule } from 'antd/lib/form';
-
-type ProfileEntryChangeCallback = (event: { target: { value: string } }, path: string) => void;
+type Connections = Partial<
+  Record<
+    NotificationChannel,
+    | {
+        value: string;
+        enabled: boolean;
+        lastLinkSentAt?: string;
+      }
+    | undefined
+  >
+>;
 
 type Props = {
   data: Contacts;
-  initialContacts?: Contacts;
   isEditingModeEnabled: boolean;
-  onProfileSettingsChange: ProfileEntryChangeCallback;
-  isDataPendingSave?: boolean;
-  connections: Partial<
-    Record<
-      NotificationChannel,
-      | {
-          value: string;
-          enabled: boolean;
-          lastLinkSentAt?: string;
-        }
-      | undefined
-    >
-  >;
+  connections: Connections;
   sendConfirmationEmail: () => void;
 };
+const profileApi = new ProfileApi();
 
-type Contact = { name: string; value: string | null; key: string; rules?: Rule[] };
+const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmationEmail }: Props) => {
+  const [displayValues, setDisplayValues] = useState(data);
+  const [values, setValues] = useState(displayValues);
+  const [hasError, setHasError] = useState(false);
+  const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = displayValues;
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
-class ContactsCard extends React.Component<Props> {
-  state = {
-    data: null,
-  };
-
-  shouldComponentUpdate = (nextProps: Props) => {
-    return (
-      !isEqual(nextProps.data, this.props.data) ||
-      !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
-      !isEqual(nextProps.connections, this.props.connections) ||
-      nextProps.isDataPendingSave !== this.props.isDataPendingSave
-    );
-  };
-
-  render() {
-    const {
-      isEditingModeEnabled,
-      onProfileSettingsChange,
-      connections,
-      sendConfirmationEmail,
-      isDataPendingSave,
-      initialContacts,
-    } = this.props;
-    const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = this.props.data;
-    const contacts: Contact[] = [
+  const contacts: Contact[] = useMemo(
+    () => [
       {
         name: 'EPAM E-mail',
         value: epamEmail,
-        key: 'epamEmail',
+        key: ContactsKeys.epamEmail,
         rules: [{ type: 'email', message: 'Email is not valid' }],
       },
       {
         name: 'E-mail',
         value: email,
-        key: 'email',
+        key: ContactsKeys.email,
         rules: [{ type: 'email', message: 'Email is not valid' }],
       },
       {
         name: 'Telegram',
         value: telegram,
-        key: 'telegram',
+        key: ContactsKeys.telegram,
       },
       {
         name: 'Phone',
         value: phone,
-        key: 'phone',
+        key: ContactsKeys.phone,
       },
       {
         name: 'Skype',
         value: skype,
-        key: 'skype',
+        key: ContactsKeys.skype,
       },
       {
         name: 'Notes',
         value: notes,
-        key: 'notes',
+        key: ContactsKeys.notes,
       },
       {
         name: 'LinkedIn',
         value: linkedIn,
-        key: 'linkedIn',
+        key: ContactsKeys.linkedIn,
       },
-    ];
+    ],
+    [displayValues],
+  );
 
-    const filledContacts = contacts.filter(({ value }: Contact) => value);
+  const filledContacts = contacts.filter(({ value }: Contact) => value);
 
-    return (
-      <CommonCard
-        title="Contacts"
-        icon={<ContactsOutlined />}
-        content={
-          filledContacts.length ? (
-            <List
-              itemLayout="horizontal"
-              dataSource={filledContacts}
-              renderItem={({ name, value, key }: Contact) => (
-                <List.Item>
-                  <Text strong>{name}:</Text>{' '}
-                  {key !== 'linkedIn' ? (
-                    <>
-                      {value}
-                      {key === 'email' && !isDataPendingSave && (!connections.email || !connections.email.enabled) ? (
-                        <EmailConfirmation
-                          connection={connections.email}
-                          sendConfirmationEmail={sendConfirmationEmail}
-                        />
-                      ) : null}
-                    </>
-                  ) : (
-                    <a target="__blank" href={value!}>
-                      {value}
-                    </a>
-                  )}
-                </List.Item>
-              )}
-            />
-          ) : undefined
-        }
-        noDataDescrption="Contacts aren't filled in"
-        isEditingModeEnabled={isEditingModeEnabled}
-        detachSettingsOnVisibilityChange
-        profileSettingsContent={
-          <EditForm
-            contacts={contacts}
-            onProfileSettingsChange={onProfileSettingsChange}
-            initialContacts={initialContacts}
-          />
-        }
-      />
-    );
-  }
-}
+  const handleSave = async () => {
+    try {
+      const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = values;
+      const updatedContacts: UpdateProfileInfoDto = {
+        contactsEpamEmail: epamEmail,
+        contactsEmail: email,
+        contactsTelegram: telegram,
+        contactsPhone: phone,
+        contactsSkype: skype,
+        contactsNotes: notes,
+        contactsLinkedIn: linkedIn,
+      };
+      await profileApi.updateProfileInfoFlat(updatedContacts);
+      setDisplayValues(values);
+      onSaveSuccess();
+    } catch (error) {
+      onSaveError();
+    }
+  };
+
+  const handleCancel = () => {
+    setValues(displayValues);
+    setHasError(false);
+  };
+
+  const content = filledContacts.length ? (
+    <List
+      itemLayout="horizontal"
+      dataSource={filledContacts}
+      renderItem={({ name, value, key }: Contact) => (
+        <List.Item>
+          <Text strong>{name}:</Text>{' '}
+          {key !== ContactsKeys.linkedIn ? (
+            <>
+              {value}
+              {key === ContactsKeys.email &&
+              (!connections.email || !connections.email.enabled) &&
+              isEditingModeEnabled ? (
+                <EmailConfirmation connection={connections.email} sendConfirmationEmail={sendConfirmationEmail} />
+              ) : null}
+            </>
+          ) : value ? (
+            <a target="__blank" href={value}>
+              {value}
+            </a>
+          ) : null}
+        </List.Item>
+      )}
+    />
+  ) : null;
+
+  useEffect(() => {
+    const readyToUpdate = !isEqual(displayValues, values) && !hasError;
+    setIsSaveDisabled(!readyToUpdate);
+  }, [hasError, values, displayValues]);
+
+  return (
+    <CommonCardWithSettingsModal
+      title="Contacts"
+      icon={<ContactsOutlined />}
+      content={content}
+      noDataDescription="Contacts aren't filled in"
+      isEditingModeEnabled={isEditingModeEnabled}
+      saveProfile={handleSave}
+      cancelChanges={handleCancel}
+      isSaveDisabled={isSaveDisabled}
+      profileSettingsContent={<ContactsCardForm contacts={contacts} setValues={setValues} setHasError={setHasError} />}
+    />
+  );
+};
 
 export default ContactsCard;
-
-function EditForm({
-  contacts,
-  onProfileSettingsChange,
-  initialContacts,
-}: {
-  contacts: Contact[];
-  initialContacts?: Contacts;
-  onProfileSettingsChange: ProfileEntryChangeCallback;
-}) {
-  const [form] = Form.useForm();
-  return (
-    <Form
-      form={form}
-      onValuesChange={(changedValues: Record<string, string>) => {
-        function notifyChanges(errors?: { errorFields: { errors: string[]; name: string[] }[] }) {
-          Object.entries(changedValues).forEach(([key, value]: [string, string]) => {
-            const path = `contacts.${key}`;
-            if (!errors || errors.errorFields.every(field => !field.name.includes(key))) {
-              onProfileSettingsChange({ target: { value } }, path);
-            } else if (initialContacts) {
-              onProfileSettingsChange(
-                { target: { value: (initialContacts as unknown as Record<string, string>)[key] ?? '' } },
-                path,
-              );
-            }
-          });
-        }
-        form
-          .validateFields()
-          .then(() => notifyChanges())
-          .catch(errors => notifyChanges(errors));
-      }}
-      initialValues={Object.fromEntries(contacts.map(c => [c.key, c.value]))}
-    >
-      <List<Contact>
-        itemLayout="horizontal"
-        dataSource={contacts}
-        renderItem={({ name, key, rules }: Contact) => (
-          <List.Item>
-            <div style={{ width: '100%' }}>
-              <p style={{ fontSize: 18, marginBottom: 5 }}>
-                <Text strong>{name}:</Text>
-              </p>
-              <Form.Item rules={rules} name={key}>
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
-            </div>
-          </List.Item>
-        )}
-      />
-    </Form>
-  );
-}

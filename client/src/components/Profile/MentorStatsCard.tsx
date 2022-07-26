@@ -10,7 +10,6 @@ const { Text } = Typography;
 
 type Props = {
   data: MentorStats[];
-  isEditingModeEnabled: boolean;
 };
 
 type State = {
@@ -36,12 +35,10 @@ class MentorStatsCard extends React.Component<Props, State> {
     data.reduce((acc: Student[], cur: MentorStats) => (cur?.students?.length ? acc.concat(cur.students) : acc), [])
       .length;
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isMentorStatsModalVisible, this.state.isMentorStatsModalVisible);
 
   render() {
-    const { isEditingModeEnabled } = this.props;
     const stats = this.props.data;
     const { courseIndex, isMentorStatsModalVisible } = this.state;
 
@@ -128,7 +125,6 @@ class MentorStatsCard extends React.Component<Props, State> {
               />
             </>
           }
-          isEditingModeEnabled={isEditingModeEnabled}
         />
       </>
     );

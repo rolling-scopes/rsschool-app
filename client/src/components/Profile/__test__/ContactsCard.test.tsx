@@ -17,10 +17,8 @@ describe('ContactsCard', () => {
             linkedIn: 'http://linkedin_test.com/vasya',
           }}
           isEditingModeEnabled={false}
-          onProfileSettingsChange={jest.fn()}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
-          isDataPendingSave={false}
         />,
       );
       expect(wrapper.container).toMatchSnapshot();
@@ -38,7 +36,6 @@ describe('ContactsCard', () => {
             linkedIn: null,
           }}
           isEditingModeEnabled={true}
-          onProfileSettingsChange={jest.fn()}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
         />,

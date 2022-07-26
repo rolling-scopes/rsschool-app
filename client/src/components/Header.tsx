@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
@@ -6,7 +5,6 @@ import {
   EyeOutlined,
   LogoutOutlined,
   QuestionCircleFilled,
-  SaveTwoTone,
   SolutionOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
@@ -17,44 +15,42 @@ type Props = {
   username: string;
   courseName?: string;
   title?: string;
-  isSaveButtonVisible?: boolean;
-  onSaveClick?: () => void;
 };
 
 const MENU_ITEMS = [
   {
-    LINK: '/profile',
-    ICON: <EyeOutlined />,
-    TITLE: 'View',
+    link: '/profile',
+    icon: <EyeOutlined />,
+    title: 'View',
   },
   {
-    LINK: '/profile/notifications',
-    ICON: <NotificationOutlined />,
-    TITLE: 'Notifications',
+    link: '/profile/notifications',
+    icon: <NotificationOutlined />,
+    title: 'Notifications',
   },
 
   {
-    LINK: '/cv/edit',
-    ICON: <SolutionOutlined />,
-    TITLE: 'My CV',
+    link: '/cv/edit',
+    icon: <SolutionOutlined />,
+    title: 'My CV',
   },
   {
-    LINK: '/api/v2/auth/github/logout',
-    ICON: <LogoutOutlined />,
-    TITLE: 'Logout',
+    link: '/api/v2/auth/github/logout',
+    icon: <LogoutOutlined />,
+    title: 'Logout',
   },
 ];
 
-export function Header({ isSaveButtonVisible, title, courseName, username, onSaveClick }: Props) {
+export function Header({ title, courseName, username }: Props) {
   const { asPath: currentRoute } = useRouter();
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
 
   const menu = (
     <Menu>
-      {MENU_ITEMS.map(({ LINK, ICON, TITLE }, id) => (
-        <Menu.Item key={id} style={currentRoute === LINK ? menuActiveItemStyle : undefined}>
-          <Button type="link" href={LINK} style={{ textAlign: 'left', width: '100%' }}>
-            {ICON} {TITLE}
+      {MENU_ITEMS.map(({ link, icon, title }, id) => (
+        <Menu.Item key={id} style={currentRoute === link ? menuActiveItemStyle : undefined}>
+          <Button type="link" href={link} style={{ textAlign: 'left', width: '100%' }}>
+            {icon} {title}
           </Button>
         </Menu.Item>
       ))}
@@ -91,12 +87,6 @@ export function Header({ isSaveButtonVisible, title, courseName, username, onSav
           <b>{title}</b> {courseName}
         </div>
         <div className="profile">
-          {isSaveButtonVisible && (
-            <Button danger ghost size="large" style={{ marginRight: 16, height: 38 }} onClick={onSaveClick}>
-              <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
-              <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
-            </Button>
-          )}
           <a target="_blank" href="https://docs.app.rs.school">
             <Tooltip title="RS School App docs">
               <Button type="primary" ghost size="large" icon={<QuestionCircleFilled />} style={{ marginRight: 16 }}>

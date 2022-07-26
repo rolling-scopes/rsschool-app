@@ -14,7 +14,6 @@ import { MessageOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 type Props = {
   data: PublicFeedback[];
-  isEditingModeEnabled: boolean;
 };
 
 interface State {
@@ -51,8 +50,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
     return badgesCount;
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !(nextState.isPublicFeedbackModalVisible === this.state.isPublicFeedbackModalVisible) ||
     !isEqual(nextState.badgesCount, this.state.badgesCount);
 
@@ -62,7 +60,6 @@ class PublicFeedbackCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled } = this.props;
     const badges = this.props.data;
     const { badgesCount } = this.state;
 
@@ -128,7 +125,6 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               ))}
             </>
           }
-          isEditingModeEnabled={isEditingModeEnabled}
         />
       </>
     );
