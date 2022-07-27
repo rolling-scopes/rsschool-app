@@ -6,11 +6,11 @@ import {
   BellOutlined,
   UserOutlined,
   IdcardFilled,
-  RobotFilled,
   TeamOutlined,
   ProfileFilled,
   NotificationFilled,
 } from '@ant-design/icons';
+import { DiscordFilled } from 'components/Icons/DiscordFilled';
 import { Session } from 'components/withSession';
 import { isAdmin, isAnyCoursePowerUser, isCourseManager, isCourseSupervisor, isHirer } from 'domain/user';
 import { Course } from 'services/models';
@@ -96,7 +96,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
   {
     name: 'Discord Servers',
     key: 'discordServers',
-    icon: <RobotFilled />,
+    icon: <DiscordFilled />,
     href: '/admin/discord-server',
     access: session => isAdmin(session),
   },
