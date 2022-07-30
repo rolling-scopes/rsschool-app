@@ -8,7 +8,7 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
   if (!assignment) {
     return null;
   }
-  const discordUsername = `@${assignment.student.discord}`;
+  const discordUsername = `@${assignment.student.discord?.username}#${assignment.student.discord?.discriminator}`;
   return (
     <div style={{ marginTop: 16 }}>
       <Typography.Paragraph>

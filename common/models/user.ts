@@ -1,3 +1,5 @@
+import { Discord } from './profile';
+
 export interface UserBasic {
   id: number;
   githubId: string;
@@ -24,7 +26,7 @@ export interface StudentBasic extends UserBasic {
         name: string;
       }
     | null;
-  discord?: string;
+  discord?: Discord | null;
   totalScore: number;
   rank?: number;
 }
