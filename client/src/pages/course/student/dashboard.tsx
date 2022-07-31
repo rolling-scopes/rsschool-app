@@ -154,7 +154,7 @@ function Page(props: CoursePageProps) {
     >
       <LoadingScreen show={loading}>
         {studentSummary ? (
-          <div style={{ padding: 10 }}>
+          <div>
             <Masonry
               breakpointCols={{
                 default: 4,
