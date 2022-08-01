@@ -10,7 +10,15 @@ const mentors: CrossMentor[] = [
   { id: 7, students: null } as any,
 ];
 
-describe('cross check distribution', () => {
+const tooManyMentors = [
+  { id: 1, students: [{ id: 99 }, { id: 94 }] },
+  { id: 2, students: [{ id: 98 }, { id: 95 }] },
+  { id: 3, students: [{ id: 97 }, { id: 96 }] },
+  { id: 4, students: [] },
+  { id: 5, students: [{ id: 93 }] },
+];
+
+describe('cross mentor distribution', () => {
   let service: CrossMentorDistributionService;
 
   beforeEach(() => {
@@ -37,5 +45,26 @@ describe('cross check distribution', () => {
       .filter(m => m.students?.length ?? 0)
       .some(mentor => (result.mentors.find(m => m.id === mentor.id)?.students?.length ?? 0) > 0);
     expect(hasMentorsWithoutStudents).toBeTruthy();
+  });
+
+  describe('should distribute students among all mentors', () => {
+    let mentors: CrossMentor[] = [];
+    beforeAll(() => {
+      service = new CrossMentorDistributionService();
+      const result = service.distribute(tooManyMentors, [], [99, 98, 97, 96]);
+      mentors = result.mentors;
+    });
+
+    const cases = [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+      [3, 0],
+      [4, 1],
+    ];
+
+    it.each(cases)('mentor index %s', (index, studentsCount) => {
+      expect(mentors[index].students?.length).toEqual(studentsCount);
+    });
   });
 });

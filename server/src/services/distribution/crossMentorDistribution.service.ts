@@ -35,12 +35,35 @@ export class CrossMentorDistributionService {
 
     const randomStudents = students.length > 1 ? shuffleRec(students) : students;
 
-    for (const mentor of mentors) {
-      const { maxStudents } = maxStudentsPerMentor.find(str => str.id === mentor.id) ?? {
-        maxStudents: this.defaultMaxStudents,
-      };
-      const students = randomStudents.splice(0, maxStudents);
-      mentor.students = students;
+    // distribute students to mentors by round robin
+    const maxStudentsMap = maxStudentsPerMentor.reduce((acc, m) => {
+      acc[m.id] = m.maxStudents;
+      return acc;
+    }, {} as Record<number, number>);
+
+    if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
+      // nullify students for mentors
+      for (const mentor of mentors) {
+        mentor.students = [];
+      }
+
+      randomStudents.forEach((student, i) => {
+        const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
+        const mentor = filteredMentors[i % filteredMentors.length];
+        const cycle = Math.floor(i / filteredMentors.length);
+        const { maxStudents } = maxStudentsPerMentor.find(str => str.id === mentor.id) ?? {
+          maxStudents: this.defaultMaxStudents,
+        };
+        if (cycle < maxStudents) {
+          mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
+        }
+      });
+    } else {
+      for (const mentor of mentors) {
+        const maxStudents = maxStudentsMap[mentor.id] ?? this.defaultMaxStudents;
+        const students = randomStudents.splice(0, maxStudents);
+        mentor.students = students;
+      }
     }
 
     return {
