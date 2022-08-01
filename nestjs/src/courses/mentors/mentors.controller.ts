@@ -20,6 +20,7 @@ export class MentorsController {
       throw new ForbiddenException();
     }
     const items = await this.mentorsService.getStudents(mentorId);
-    return items.map(item => new MentorStudentDto(item));
+    const courseName = await this.mentorsService.getCourseName(mentorId);
+    return items.map(item => new MentorStudentDto(item, courseName));
   }
 }
