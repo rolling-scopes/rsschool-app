@@ -48,7 +48,7 @@ Please install the following software before starting development:
 
 ### Running docs locally
 
-- Install docsify globally: `npm i -g docsify`
+- Install docsify globally: `npm i -g docsify-cli`
 - Run `docsify serve -p 4000 docs`
 
 ## Contributing
