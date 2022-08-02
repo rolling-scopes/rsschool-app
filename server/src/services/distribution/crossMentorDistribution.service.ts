@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-import { uniq, max } from 'lodash';
+import { max } from 'lodash';
+import { ILogger } from '../../logger';
 import { shuffleRec } from './shuffle';
 
 export type CrossMentor = { id: number; students: { id: number }[] | null };
 
 export class CrossMentorDistributionService {
-  constructor(private defaultMaxStudents = 1) {}
+  constructor(private defaultMaxStudents = 1, private logger?: ILogger) {}
 
   public distribute(
     mentors: CrossMentor[],
@@ -18,8 +19,7 @@ export class CrossMentorDistributionService {
       .filter(v => !existingPairs.find(p => p.studentId === v.id))
       .filter(v => registeredStudentsIds?.includes(v.id) ?? true);
 
-    // eslint-disable-next-line no-console
-    console.info(`Initial students: ${students.length}`);
+    this.logger?.info(`Initial students: ${students.length}`);
 
     const maxStudentsPerMentor = mentors.map(({ id, students }) => {
       const assignedCount = existingPairs.filter(p => p.mentorId === id).length;
@@ -46,10 +46,9 @@ export class CrossMentorDistributionService {
       return acc;
     }, {} as Record<number, number>);
 
-    console.info(
-      `Registered ${registeredStudentsIds?.length}. Students: ${randomStudents.length}. Max total: ${maxStudentsTotal}`,
-    );
-    console.info(`Mentors: ${mentors.length}`);
+    this.logger?.info(`Registered Students ${registeredStudentsIds?.length}. Max Students: ${maxStudentsTotal}`);
+    this.logger?.info(`Selected Students: ${randomStudents.length}`);
+    this.logger?.info(`Mentors Count: ${mentors.length}`);
 
     if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
       const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
@@ -85,14 +84,11 @@ export class CrossMentorDistributionService {
 
     const distributedStudents = mentors.reduce((acc, m) => acc.concat(m.students ?? []), [] as { id: number }[]);
     const mentorsWithStudents = mentors.filter(m => (m.students?.length ?? 0) > 0);
-    const unique = uniq(distributedStudents.map(s => s.id));
-
-    console.info(`Distributed students: ${distributedStudents.length}`);
-    console.info(`Unique students: ${unique.length}`);
-    console.info(`Mentors with students: ${mentorsWithStudents.length}`);
+    this.logger?.info(`Distributed students: ${distributedStudents.length}`);
+    this.logger?.info(`Mentors with students: ${mentorsWithStudents.length}`);
 
     return {
-      mentors: [] as CrossMentor[], // mentors as CrossMentor[],
+      mentors,
       unassignedStudents: randomStudents,
     };
   }

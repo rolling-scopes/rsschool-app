@@ -3,13 +3,15 @@ import { CourseTask, TaskChecker } from '../models';
 import { MentorRepository } from '../repositories/mentor.repository';
 import { CrossMentorDistributionService } from '../services/distribution';
 import { InterviewRepository } from '../repositories/interview.repository';
-
-const crossMentorService = new CrossMentorDistributionService();
+import { ILogger } from '../logger';
 
 export class InterviewService {
   private interviewRepository = getCustomRepository(InterviewRepository);
+  private crossMentorService: CrossMentorDistributionService;
 
-  constructor(private courseId: number) {}
+  constructor(private courseId: number, logger?: ILogger) {
+    this.crossMentorService = new CrossMentorDistributionService(undefined, logger);
+  }
 
   public async createInterviewsAutomatically(
     courseTaskId: number,
@@ -42,7 +44,7 @@ export class InterviewService {
 
     const existingPairs = await checkerRepository.find({ courseTaskId });
 
-    const { mentors: crossMentors } = crossMentorService.distribute(mentors, existingPairs, registeredStudentsIds);
+    const { mentors: crossMentors } = this.crossMentorService.distribute(mentors, existingPairs, registeredStudentsIds);
 
     const taskCheckPairs = crossMentors
       .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
