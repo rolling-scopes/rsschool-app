@@ -16,6 +16,9 @@ export class CrossMentorDistributionService {
       .filter(v => !existingPairs.find(p => p.studentId === v.id))
       .filter(v => registeredStudentsIds?.includes(v.id) ?? true);
 
+    // eslint-disable-next-line no-console
+    console.info({ initialStudentsCount: students.length });
+
     const maxStudentsPerMentor = mentors.map(({ id, students }) => {
       const assignedCount = existingPairs.filter(p => p.mentorId === id).length;
       const maxStudentsCount = Math.max((students?.length ?? 0) - assignedCount, 0);
@@ -41,6 +44,12 @@ export class CrossMentorDistributionService {
       return acc;
     }, {} as Record<number, number>);
 
+    // eslint-disable-next-line no-console
+    console.info({
+      registeredCount: registeredStudentsIds?.length,
+      randomStudentsCount: randomStudents.length,
+      maxStudentsTotal: maxStudentsTotal,
+    });
     if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
       // nullify students for mentors
       for (const mentor of mentors) {
@@ -67,7 +76,7 @@ export class CrossMentorDistributionService {
     }
 
     return {
-      mentors: mentors as CrossMentor[],
+      mentors: [] as CrossMentor[], // mentors as CrossMentor[],
       unassignedStudents: randomStudents,
     };
   }
