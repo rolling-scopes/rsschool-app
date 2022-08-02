@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { uniq } from 'lodash';
+import { uniq, max } from 'lodash';
 import { shuffleRec } from './shuffle';
 
 export type CrossMentor = { id: number; students: { id: number }[] | null };
@@ -52,21 +52,28 @@ export class CrossMentorDistributionService {
     console.info(`Mentors: ${mentors.length}`);
 
     if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
+      const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
+      const maxStudentsPerMentor = max(filteredMentors.map(m => maxStudentsMap[m.id] ?? 0)) ?? 0;
+      const mentorsQueue: number[] = [];
+      for (let i = 0; i < maxStudentsPerMentor; i++) {
+        filteredMentors.forEach((mentor, idx) => {
+          const student = mentor.students?.[i];
+          if (student) {
+            mentorsQueue.push(idx);
+          }
+        });
+      }
+      mentorsQueue.reverse();
+
       // nullify students for mentors
       for (const mentor of mentors) {
         mentor.students = [];
       }
-
-      const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
-      randomStudents.forEach((student, i) => {
-        const mentor = filteredMentors[i % filteredMentors.length];
-        const cycle = Math.floor(i / filteredMentors.length);
-        const { maxStudents } = maxStudentsPerMentor.find(str => str.id === mentor.id) ?? {
-          maxStudents: this.defaultMaxStudents,
-        };
-        if (cycle < maxStudents) {
-          mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
-        }
+      randomStudents.forEach(student => {
+        const mentorIdx = mentorsQueue.pop();
+        if (mentorIdx == null) return;
+        const mentor = filteredMentors[mentorIdx];
+        mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
       });
     } else {
       for (const mentor of mentors) {

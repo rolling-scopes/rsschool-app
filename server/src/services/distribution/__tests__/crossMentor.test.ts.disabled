@@ -12,10 +12,10 @@ const mentors: CrossMentor[] = [
 
 const tooManyMentors = [
   { id: 1, students: [{ id: 99 }, { id: 94 }] },
-  { id: 2, students: [{ id: 98 }, { id: 95 }] },
+  { id: 2, students: [{ id: 98 }] },
   { id: 3, students: [{ id: 97 }, { id: 96 }] },
   { id: 4, students: [] },
-  { id: 5, students: [{ id: 93 }] },
+  { id: 5, students: [{ id: 93 }, { id: 95 }] },
 ];
 
 describe('cross mentor distribution', () => {
@@ -51,14 +51,14 @@ describe('cross mentor distribution', () => {
     let mentors: CrossMentor[] = [];
     beforeAll(() => {
       service = new CrossMentorDistributionService();
-      const result = service.distribute(tooManyMentors, [], [99, 98, 97, 96]);
+      const result = service.distribute(tooManyMentors, [], [99, 98, 97, 96, 95, 94]);
       mentors = result.mentors;
     });
 
     const cases = [
-      [0, 1],
+      [0, 2],
       [1, 1],
-      [2, 1],
+      [2, 2],
       [3, 0],
       [4, 1],
     ];
