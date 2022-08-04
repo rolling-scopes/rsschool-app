@@ -216,7 +216,7 @@ function Page(props: CoursePageProps) {
 
   return (
     <PageLayout loading={loading} title="Cross-Check" githubId={props.session.githubId} courseName={props.course.name}>
-      <Row gutter={24} style={{ margin: 16 }}>
+      <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} groupBy="deadline" onChange={handleTaskChange} />
