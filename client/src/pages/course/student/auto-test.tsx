@@ -1,8 +1,10 @@
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, notification, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { CoursesTasksApi, CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum, CourseTaskDto } from 'api';
 import { AxiosError } from 'axios';
+import { CheckboxHighlighted } from 'components/AutoTest/CheckboxHighlighted';
+import { RadioHighlighted } from 'components/AutoTest/RadioHighlighted';
 import { CourseTaskSelect } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { shortDateTimeRenderer } from 'components/Table';
@@ -424,50 +426,12 @@ function renderSelfEducation(courseTask: CourseTaskDetailedDto, verifications: V
               <Checkbox.Group>
                 {answers.map((answer, index) => (
                   <Row key={index}>
-                    <Checkbox value={index}>
-                      {answersType === 'image' ? (
-                        <>
-                          ({index + 1}){' '}
-                          <img
-                            src={answer}
-                            style={{
-                              width: '100%',
-                              maxWidth: '400px',
-                              marginBottom: '10px',
-                            }}
-                          />
-                        </>
-                      ) : (
-                        answer
-                      )}
-                    </Checkbox>
+                    <CheckboxHighlighted answer={answer} index={index} answersType={answersType} />
                   </Row>
                 ))}
               </Checkbox.Group>
             ) : (
-              <Radio.Group>
-                {answers.map((answer, index) => (
-                  <Row key={index}>
-                    <Radio value={index}>
-                      {answersType === 'image' ? (
-                        <>
-                          ({index + 1}){' '}
-                          <img
-                            src={answer}
-                            style={{
-                              width: '100%',
-                              maxWidth: '400px',
-                              marginBottom: '10px',
-                            }}
-                          />
-                        </>
-                      ) : (
-                        answer
-                      )}
-                    </Radio>
-                  </Row>
-                ))}
-              </Radio.Group>
+              <RadioHighlighted answers={answers} answersType={answersType} />
             )}
           </Form.Item>
         );
