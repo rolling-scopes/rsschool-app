@@ -14,7 +14,7 @@ const publicRoutes = [
   {
     icon: <BugTwoTone twoToneColor="#d60000" />,
     name: 'Report a bug',
-    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
+    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug-report.md`,
     newTab: true,
   },
   {
