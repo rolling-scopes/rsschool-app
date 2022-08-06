@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { Row, Col, Space } from 'antd';
-import { YoutubeFilled, GithubFilled, MessageFilled, LinkedinOutlined } from '@ant-design/icons';
+import { YoutubeFilled, GithubFilled, LinkedinOutlined } from '@ant-design/icons';
+import { DiscordFilled } from 'components/Icons/DiscordFilled';
 
 const iconStyle = { fontSize: 24, color: '#000' };
 
 const socialLinks = [
   {
     icon: <GithubFilled style={iconStyle} />,
-    name: 'Github',
+    name: 'GitHub',
     link: `https://github.com/rolling-scopes/rsschool-app`,
     newTab: true,
   },
@@ -18,14 +19,14 @@ const socialLinks = [
     newTab: true,
   },
   {
-    icon: <MessageFilled style={iconStyle} />,
+    icon: <DiscordFilled style={iconStyle} />,
     name: 'Discord',
     link: `https://discord.gg/PRADsJB`,
     newTab: true,
   },
   {
     icon: <LinkedinOutlined style={iconStyle} />,
-    name: 'Linkedin',
+    name: 'LinkedIn',
     link: `https://www.linkedin.com/company/the-rolling-scopes-school/`,
     newTab: true,
   },

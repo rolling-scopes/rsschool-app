@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Row, Col, Tooltip, Button, Form, message } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { ImportOutlined, ExportOutlined } from '@ant-design/icons';
 import { CourseService } from 'services/course';
 import { parseFiles, uploadResults } from '../utils';
 
@@ -40,7 +40,7 @@ const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, courseSer
       if (error.message.match(/^Incorrect data/)) {
         message.error(error.message);
       } else {
-        message.error('An error occured. Please try later.');
+        message.error('An error occurred. Please try later.');
       }
     }
   };
@@ -48,16 +48,16 @@ const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, courseSer
   return (
     <Row justify="start" gutter={[16, 16]}>
       <Col>
-        <Tooltip title="Export schedule" mouseEnterDelay={1}>
-          <Button onClick={exportToCsvFile} icon={<DownloadOutlined />} />
+        <Tooltip title="Export schedule" placement="topRight">
+          <Button onClick={exportToCsvFile} icon={<ExportOutlined />} />
         </Tooltip>
       </Col>
       <Col>
         <Form form={form} onFinish={importCsvFile} layout="inline">
           <Form.Item label="" name="files" rules={[{ required: true, message: 'Please select csv-file' }]}>
             <Upload onRemove={onRemoveCsvFile} beforeUpload={beforeCsvFileUpload} fileList={fileList}>
-              <Tooltip title="Import schedule" mouseEnterDelay={1}>
-                <Button icon={<UploadOutlined />} />
+              <Tooltip title="Import schedule" placement="topRight">
+                <Button icon={<ImportOutlined />} />
               </Tooltip>
             </Upload>
           </Form.Item>

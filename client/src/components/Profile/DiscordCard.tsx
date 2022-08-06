@@ -8,7 +8,7 @@ import CopyToClipboardButton from '../CopyToClipboardButton';
 
 const { Paragraph, Text } = Typography;
 
-import { RobotFilled } from '@ant-design/icons';
+import { DiscordFilled } from 'components/Icons/DiscordFilled';
 
 type Props = {
   data: Discord | null;
@@ -20,20 +20,20 @@ class DiscordCard extends React.Component<Props> {
     const { data, isProfileOwner } = this.props;
     const { id, username, discriminator } = data ?? {};
 
-    const authorizedAsMessage = isProfileOwner ? 'You authorized as' : 'User authorized as';
-    const notAuthorizedMessage = isProfileOwner ? `You were'nt authorized yet` : `User was'nt authorized yet`;
+    const authorizedAsMessage = isProfileOwner ? 'You are authorized as' : 'The user is authorized as';
+    const notAuthorizedMessage = isProfileOwner ? `You haven't authorized yet` : `The user hasn't authorized yet`;
     const discordUsername = `@${username}#${discriminator}`;
 
     return (
       <CommonCard
         title="Discord Integration"
-        icon={<RobotFilled />}
+        icon={<DiscordFilled />}
         content={
           <>
             <Paragraph>
               {id ? (
                 <>
-                  {authorizedAsMessage}
+                  {authorizedAsMessage}:
                   <br />
                   <CheckSquareTwoTone twoToneColor="#52c41a" /> <Text strong>{discordUsername}</Text>{' '}
                   <CopyToClipboardButton value={discordUsername} />
@@ -46,7 +46,7 @@ class DiscordCard extends React.Component<Props> {
             </Paragraph>
             {isProfileOwner && (
               <Paragraph>
-                {id && 'Is this the wrong profile?'}
+                {id && 'Switch to another Discord account:'}
                 <br />
                 <a href={discordIntegration.api.auth}>{id ? 'Reauthorize' : 'Authorize'}</a>
               </Paragraph>
