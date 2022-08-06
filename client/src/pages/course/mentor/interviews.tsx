@@ -89,8 +89,12 @@ function renderItem(course: Course, interview: { template: string | null }, show
             ) : null
           }
         />
-        {item.completed && isTechnicalScreening(item) && (
-          <Button href={getURL(item, course)} type="link" size="small">
+        {item.completed && (
+          <Button
+            href={getURL(item, course, isTechnicalScreening(item) ? null : interview.template)}
+            type="link"
+            size="small"
+          >
             Edit Feedback
           </Button>
         )}
