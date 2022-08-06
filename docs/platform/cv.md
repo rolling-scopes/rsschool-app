@@ -7,11 +7,11 @@ CV is a 2-part functionality:
 
 ## Part 1: CV
 
-User can get access to the CV from the dropdown menu in the header, or by following the link `app.rs.school/cv/<github id of the CV owner>`
+User can get access to the CV from the dropdown menu in the header
 
 <kbd>![CV link in Header](./img/cv/header-dropdown.JPG)</kbd>
 
-To start work with CV, user needs to log in and follow the link `app.rs.school/cv/<github id of the CV owner>`
+After this user needs to click on button "Create CV"
 
 <kbd>![No consent view](./img/cv/no-consent.JPG)</kbd>
 
