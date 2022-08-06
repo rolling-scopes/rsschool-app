@@ -21,7 +21,6 @@
   "dependencies": {
     "@ant-design/charts": "1.2.14",
     "@apalchys/next-aws-lambda": "3.6.7",
-    "@testing-library/react": "^12.1.4",
     "antd": "4.19.3",
     "axios": "0.26.1",
     "cookie": "0.4.2",
@@ -43,7 +42,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.22.0",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/jest-dom": "5.16.4",
+    "@testing-library/react": "12.1.5",
     "@types/aws-lambda": "8.10.92",
     "@types/cookie": "0.4.1",
     "@types/enzyme": "3.10.11",
