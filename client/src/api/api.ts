@@ -739,6 +739,12 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
+    'crossCheckEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
     'descriptionUrl': string;
     /**
      * 
@@ -844,6 +850,12 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'crossCheckEndDate': string;
     /**
      * 
      * @type {string}

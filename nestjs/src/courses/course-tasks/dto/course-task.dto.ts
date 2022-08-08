@@ -26,6 +26,7 @@ export class CourseTaskDto {
     this.name = courseTask.task.name;
     this.studentStartDate = (courseTask.studentStartDate as Date)?.toISOString();
     this.studentEndDate = (courseTask.studentEndDate as Date)?.toISOString();
+    this.crossCheckEndDate = (courseTask.crossCheckEndDate as Date)?.toISOString();
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
@@ -56,6 +57,9 @@ export class CourseTaskDto {
 
   @ApiProperty()
   studentEndDate: string;
+
+  @ApiProperty()
+  crossCheckEndDate: string;
 
   @ApiProperty()
   descriptionUrl: string;

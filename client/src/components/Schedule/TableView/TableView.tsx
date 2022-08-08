@@ -193,6 +193,10 @@ export function TableView({ data, isAdmin, courseId, refreshData, settings }: Ta
         title: 'Action',
         key: 'action',
         render: (_: any, record: ScheduleEvent) => {
+          if (record.type === 'Cross-Check deadline') {
+            return null;
+          }
+
           const editable = isEditing(record);
 
           return editable ? (

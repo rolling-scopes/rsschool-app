@@ -30,7 +30,7 @@ export function SchedulePage(props: CoursePageProps) {
     ]);
     const events = [
       ...courseEvents.map(courseEventToScheduleEvent),
-      ...courseTasks.map(courseTaskToScheduleEvent),
+      ...courseTasks.map(courseTaskToScheduleEvent).flat(),
     ].sort(byTime);
     const eventTypes = getEventTypes(events);
     return { events, eventTypes };

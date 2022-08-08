@@ -38,24 +38,47 @@ export const courseEventToScheduleEvent = (courseEvent: CourseEvent): ScheduleEv
   score: null,
 });
 
-export const courseTaskToScheduleEvent = (courseTask: CourseTaskDetails): ScheduleEvent => ({
-  id: courseTask.id,
-  category: 'task',
-  entity: courseTask,
-  name: courseTask.name,
-  type: courseTask.type,
-  startDate: courseTask.studentStartDate ?? '',
-  endDate: courseTask.studentEndDate ?? '',
-  descriptionUrl: courseTask.descriptionUrl ?? null,
-  organizer: {
-    id: courseTask.taskOwner?.id ?? null,
-    githubId: courseTask.taskOwner?.githubId ?? null,
-  },
-  score: {
-    total: courseTask.score ?? 0,
-    max: courseTask.maxScore ?? 0,
-    weight: courseTask.scoreWeight ?? 1,
-    donePercent:
-      courseTask.score && courseTask.maxScore ? Math.floor((courseTask.score / courseTask.maxScore) * 100) : 0,
-  },
-});
+export const courseTaskToScheduleEvent = (courseTask: CourseTaskDetails): ScheduleEvent[] => {
+  const arrayOfScheduleEvents: ScheduleEvent[] = [];
+
+  const scheduleEvent: ScheduleEvent = {
+    id: courseTask.id,
+    category: 'task',
+    entity: courseTask,
+    name: courseTask.name,
+    type: courseTask.type,
+    startDate: courseTask.studentStartDate ?? '',
+    endDate: courseTask.studentEndDate ?? '',
+    descriptionUrl: courseTask.descriptionUrl ?? null,
+    organizer: {
+      id: courseTask.taskOwner?.id ?? null,
+      githubId: courseTask.taskOwner?.githubId ?? null,
+    },
+    score: {
+      total: courseTask.score ?? 0,
+      max: courseTask.maxScore ?? 0,
+      weight: courseTask.scoreWeight ?? 1,
+      donePercent:
+        courseTask.score && courseTask.maxScore ? Math.floor((courseTask.score / courseTask.maxScore) * 100) : 0,
+    },
+  };
+
+  arrayOfScheduleEvents.push(scheduleEvent);
+
+  if (courseTask.crossCheckEndDate) {
+    const crossCheckDeadlineEvent: ScheduleEvent = {
+      ...scheduleEvent,
+      id: courseTask.id + 0.5,
+      category: 'event',
+      name: `Cross-Check deadline: ${courseTask.name}`,
+      type: 'Cross-Check deadline',
+      startDate: courseTask.crossCheckEndDate,
+      endDate: courseTask.crossCheckEndDate,
+      score: null,
+    };
+
+    arrayOfScheduleEvents.push(crossCheckDeadlineEvent);
+  }
+
+  return arrayOfScheduleEvents;
+};

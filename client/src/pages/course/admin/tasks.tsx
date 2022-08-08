@@ -242,7 +242,7 @@ function Page(props: CoursePageProps) {
           <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
         </Form.Item>
         {modalData?.checker === 'crossCheck' ? (
-          <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
+          <Form.Item name="crossCheckEndDate" label="Cross-Check End Date" rules={[{ required: true }]}>
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
         ) : null}

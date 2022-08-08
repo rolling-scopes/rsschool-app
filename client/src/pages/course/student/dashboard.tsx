@@ -204,6 +204,7 @@ const TaskTypes = {
   test: 'test',
   newtask: 'newtask',
   lecture: 'lecture',
+  CrossCheckDeadline: 'Cross-Check deadline',
 };
 
 const checkTaskResults = (results: any[], taskId: number) => results.find((task: any) => task.courseTaskId === taskId);
@@ -212,7 +213,20 @@ const tasksToEvents = (tasks: CourseTaskDto[]) => {
   return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
     if (task.type !== TaskTypes.test) {
       acc.push(createCourseEventFromTask(task, task.type));
+
+      if (task.crossCheckEndDate) {
+        const crossCheckDeadlineEvent: CourseTaskDto = {
+          ...task,
+          id: task.id + 0.5,
+          name: `${TaskTypes.CrossCheckDeadline}: ${task.name}`,
+          studentStartDate: task.crossCheckEndDate,
+          studentEndDate: task.crossCheckEndDate,
+        };
+
+        acc.push(createCourseEventFromTask(crossCheckDeadlineEvent, TaskTypes.CrossCheckDeadline));
+      }
     }
+
     acc.push(createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline));
     return acc;
   }, []);

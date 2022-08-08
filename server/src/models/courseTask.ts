@@ -69,7 +69,7 @@ export class CourseTask {
   studentEndDate: Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
-  crossCheckEndDate: string;
+  crossCheckEndDate: Date | string;
 
   @Column({ type: 'timestamp', nullable: true })
   mentorStartDate: string;
