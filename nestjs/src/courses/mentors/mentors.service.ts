@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
-import { Course } from '@entities/course';
 
 import { MentorBasic } from '@common/models';
 
@@ -75,21 +74,5 @@ export class MentorsService {
     }
 
     return mentorId === currentMentorId;
-  }
-
-  public async getCourseName(mentorId: number): Promise<string> {
-    const mentor = await this.getById(mentorId);
-    if (mentor == null) {
-      return '';
-    }
-
-    const { courseId } = mentor;
-    const course = await getRepository(Course).findOne(courseId);
-    if (course == null) {
-      return '';
-    }
-    const { name: courseName } = course;
-
-    return courseName;
   }
 }

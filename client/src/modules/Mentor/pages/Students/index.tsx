@@ -43,12 +43,14 @@ export function Students(props: CourseOnlyPageProps) {
                   <Link href={`/profile?githubId=${student.githubId}`}>
                     <a>{student.name}</a>
                   </Link>
-                  <div>
-                    <LockFilled />{' '}
-                    <a href={student.repoUrl} target="_blank">
-                      {student.repoUrl.split('/').pop()}
-                    </a>
-                  </div>
+                  {student.repoUrl && (
+                    <div>
+                      <LockFilled />{' '}
+                      <a href={student.repoUrl} target="_blank">
+                        {student.repoUrl.split('/').pop()}
+                      </a>
+                    </div>
+                  )}
                 </>
               }
               actions={[
