@@ -780,4 +780,6 @@ export interface CrossCheckPairs {
   comment: string;
   score: number;
   id: number;
+  submittedDate: string;
+  reviewedDate: string;
 }
