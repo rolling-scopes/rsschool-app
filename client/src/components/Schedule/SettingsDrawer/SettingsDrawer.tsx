@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Drawer, Tooltip, Checkbox } from 'antd';
+import { Button, Drawer, Tooltip } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { ScheduleSettings } from '../useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
-import TaskLimits from './TaskLimits';
 import TimeZone from './TimeZone';
 
 interface SettingsDrawerProps {
@@ -20,7 +18,6 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes })
 
   const openDrawer = () => setOpened(true);
   const closeDrawer = () => setOpened(false);
-  const toggleSplittedByWeek = ({ target }: CheckboxChangeEvent) => settings.setIsSplittedByWeek(target.checked);
 
   return (
     <Tooltip title={TITLE} mouseEnterDelay={1}>
@@ -28,18 +25,14 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes })
       <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns
-          eventTypes={eventTypes}
+          eventTags={eventTypes}
           columnsHidden={settings.columnsHidden}
           setColumnsHidden={settings.setColumnsHidden}
-          eventTypesHidden={settings.eventTypesHidden}
-          setEventTypesHidden={settings.setEventTypesHidden}
+          eventTagsHidden={settings.eventTypesHidden}
+          setEventTagsHidden={settings.setEventTypesHidden}
           closeDrawer={closeDrawer}
         />
         <ChangeTagColors tags={eventTypes} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
-        <TaskLimits limitForDoneTask={settings.limitForDoneTask} setLimitForDoneTask={settings.setLimitForDoneTask} />
-        <Checkbox value checked={settings.isSplittedByWeek} onChange={toggleSplittedByWeek}>
-          Splitted by week
-        </Checkbox>
       </Drawer>
     </Tooltip>
   );

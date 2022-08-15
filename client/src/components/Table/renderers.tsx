@@ -5,12 +5,13 @@ import {
   YoutubeOutlined,
   ChromeOutlined,
   GithubOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { Checker, CrossCheckStatus } from 'services/course';
 import { getTagStyle } from 'components/Schedule';
 import { BaseType } from 'antd/lib/typography/Base';
-import { ScheduleEvent } from 'components/Schedule/model';
+import { CourseEventDtoTypeEnum, CourseScheduleItemDto, CourseTaskDtoTypeEnum } from 'api';
 
 const { Text } = Typography;
 
@@ -48,26 +49,38 @@ export function shortDateTimeRenderer(value: string) {
 export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (value: string) =>
   value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format(format) : '';
 
-export const coloredDateRenderer =
-  (timeZone: string, format: string, date: 'start' | 'end') =>
-  (value: string, { startDate, endDate, score }: ScheduleEvent) => {
+export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
+  const now = moment();
+  return (value: string, { studentStartDate, studentEndDate, currentScore, tags }: CourseScheduleItemDto) => {
     let color: BaseType | undefined = undefined;
-    const now = moment();
-    const start = moment(startDate);
-    const end = moment(endDate);
+    const start = moment(studentStartDate);
+    const end = moment(studentEndDate);
 
-    const isDeadlineSoon = now <= end && moment(end).subtract(48, 'hours') <= now && !score?.total;
-    const isCurrent = now >= start && now < end && !score?.total;
-    const isDeadlineMissed = now >= end && moment(end).add(24, 'hours') >= now && !score?.total;
-    const isPast = now > end || score?.total;
+    const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !currentScore;
+    const isCurrent = now >= start && now < end && !currentScore;
+    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !currentScore;
+    const isPast = now > end || currentScore;
 
     if (isDeadlineSoon && date === 'end') color = 'warning';
     else if (isCurrent && date === 'start') color = 'success';
     else if (isDeadlineMissed && date === 'end') color = 'danger';
     else if (isPast) color = 'secondary';
 
-    return <Text type={color}>{dateWithTimeZoneRenderer(timeZone, format)(value)}</Text>;
+    const text = dateWithTimeZoneRenderer(timeZone, format)(value);
+
+    if (tags.includes(CourseEventDtoTypeEnum.LectureSelfStudy) || tags.includes(CourseTaskDtoTypeEnum.Selfeducation)) {
+      return (
+        <Text type={color}>
+          {text}
+          <Tooltip placement="topLeft" title={infoText}>
+            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+          </Tooltip>
+        </Text>
+      );
+    }
+    return <Text type={color}>{text}</Text>;
   };
+};
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
@@ -172,16 +185,13 @@ export const weightRenderer = (weight: number | null) => {
   return <Text>×{+weight.toFixed(2)}</Text>;
 };
 
-export const scoreRenderer = (score: { total: number; max: number; donePercent: number } | null) => {
-  if (!score) return null;
-
-  const { total, max, donePercent } = score;
+export const scoreRenderer = (item: CourseScheduleItemDto) => {
+  const { maxScore, currentScore } = item;
+  if (maxScore == null) return null;
 
   return (
-    <Tooltip placement="topLeft" title={`Done: ${donePercent}%`}>
-      <Text>
-        {total}/{max}
-      </Text>
-    </Tooltip>
+    <Text>
+      {currentScore ?? 0} / {maxScore}
+    </Text>
   );
 };

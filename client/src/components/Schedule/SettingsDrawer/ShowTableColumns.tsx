@@ -3,39 +3,41 @@ import React, { useState, useMemo } from 'react';
 import { Button, Divider, Typography, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FilterOutlined } from '@ant-design/icons';
-import { TASK_TYPES_MAP } from 'data/taskTypes';
-import { Column, CONFIGURABLE_COLUMNS } from '../constants';
+import { COLUMNS, CONFIGURABLE_COLUMNS } from '../constants';
 import SettingsItem from './SettingsItem';
+import { TASK_EVENT_TYPES_MAP } from 'data';
 
 const { Text } = Typography;
 
-const COLUMNS = Object.entries(Column).filter(([key]) => CONFIGURABLE_COLUMNS.includes(key));
+const TAG_NAMES_MAP = TASK_EVENT_TYPES_MAP;
+
+const AVAILABLE_COLUMNS = COLUMNS.filter(column => CONFIGURABLE_COLUMNS.includes(column.key));
 
 interface ShowTableColumnsProps {
-  eventTypes: string[];
+  eventTags: string[];
   columnsHidden: string[];
   setColumnsHidden: (value: string[]) => void;
-  eventTypesHidden: string[];
-  setEventTypesHidden: (value: string[]) => void;
+  eventTagsHidden: string[];
+  setEventTagsHidden: (value: string[]) => void;
   closeDrawer: () => void;
 }
 
 const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
-  eventTypes,
+  eventTags,
   closeDrawer,
   columnsHidden: initialColumnsHidden,
   setColumnsHidden: setInitialColumnsHidden,
-  eventTypesHidden: initialEventTypesHidden,
-  setEventTypesHidden: setInitialEventTypesHidden,
+  eventTagsHidden: initialEventTypesHidden,
+  setEventTagsHidden: setInitialEventTypesHidden,
 }) => {
   const [columnsHidden, setColumnsHidden] = useState<string[]>(initialColumnsHidden);
-  const [eventTypesHidden, setEventTypesHidden] = useState<string[]>(initialEventTypesHidden);
+  const [eventTagsHidden, setEventTagsHidden] = useState<string[]>(initialEventTypesHidden);
 
   const isResetButtonDisabled = useMemo(
     () =>
       isEqual([...columnsHidden].sort(), [...initialColumnsHidden].sort()) &&
-      isEqual([...eventTypesHidden].sort(), [...initialEventTypesHidden].sort()),
-    [columnsHidden, eventTypesHidden, initialColumnsHidden, initialEventTypesHidden],
+      isEqual([...eventTagsHidden].sort(), [...initialEventTypesHidden].sort()),
+    [columnsHidden, eventTagsHidden, initialColumnsHidden, initialEventTypesHidden],
   );
 
   const toggleColumnCheckbox = ({ target: { checked, value: selectedColumn } }: CheckboxChangeEvent) =>
@@ -44,21 +46,21 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
     );
 
   const toggleEventTypeCheckbox = ({ target: { checked, value: selectedEventType } }: CheckboxChangeEvent) => {
-    setEventTypesHidden(
+    setEventTagsHidden(
       checked
-        ? eventTypesHidden.filter(eventType => eventType !== selectedEventType)
-        : [...eventTypesHidden, selectedEventType],
+        ? eventTagsHidden.filter(eventType => eventType !== selectedEventType)
+        : [...eventTagsHidden, selectedEventType],
     );
   };
 
   const reset = () => {
     setColumnsHidden(initialColumnsHidden);
-    setEventTypesHidden(initialEventTypesHidden);
+    setEventTagsHidden(initialEventTypesHidden);
   };
 
   const apply = () => {
     setInitialColumnsHidden(columnsHidden);
-    setInitialEventTypesHidden(eventTypesHidden);
+    setInitialEventTypesHidden(eventTagsHidden);
     closeDrawer();
   };
 
@@ -67,7 +69,7 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
       <div style={{ marginBottom: 10 }}>
         <Text>Show columns</Text>
       </div>
-      {COLUMNS.map(([key, name]) => (
+      {AVAILABLE_COLUMNS.map(({ key, name }) => (
         <div key={key} style={{ marginBottom: 10 }}>
           <Checkbox value={key} checked={!columnsHidden.includes(key)} onChange={toggleColumnCheckbox}>
             {name}
@@ -77,10 +79,10 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
       <div style={{ marginBottom: 10 }}>
         <Text>Show event types</Text>
       </div>
-      {eventTypes.map(key => (
+      {eventTags.map(key => (
         <div key={key} style={{ marginBottom: 10 }}>
-          <Checkbox value={key} checked={!eventTypesHidden.includes(key)} onChange={toggleEventTypeCheckbox}>
-            {TASK_TYPES_MAP[key] ?? key ?? '[empty]'}
+          <Checkbox value={key} checked={!eventTagsHidden.includes(key)} onChange={toggleEventTypeCheckbox}>
+            {TAG_NAMES_MAP[key] ?? key ?? '[empty]'}
           </Checkbox>
         </div>
       ))}

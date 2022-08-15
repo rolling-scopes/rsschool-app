@@ -1,22 +1,16 @@
-import moment from 'moment-timezone';
+import { CoursesScheduleApi } from 'api';
+import { PageLayout } from 'components/PageLayout';
+import { SettingsPanel, TableView, useScheduleSettings } from 'components/Schedule';
+import withCourseData from 'components/withCourseData';
+import { withSession } from 'components/withSession';
+import { isCourseManager } from 'domain/user';
+import uniq from 'lodash/uniq';
 import { useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { isCourseManager } from 'domain/user';
-import { withSession } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
-import withCourseData from 'components/withCourseData';
-import { SettingsPanel, TableView, useScheduleSettings } from 'components/Schedule';
-import { ScheduleEvent, courseEventToScheduleEvent, courseTaskToScheduleEvent } from 'components/Schedule/model';
 
-const byTime = (a: ScheduleEvent, b: ScheduleEvent) => a.startDate.localeCompare(b.startDate);
-const getEventTypes = (events: ScheduleEvent[]) => Array.from(new Set(events.map(event => event.type)));
-const getYesterday = () => moment.utc().subtract(1, 'day');
-const omitDoneTasks = (events: ScheduleEvent[], limit: number) =>
-  events.filter(({ score }) => !score?.donePercent || score.donePercent < limit);
-const omitPassedEvents = (events: ScheduleEvent[]) =>
-  events.filter(({ endDate }) => moment(endDate).isAfter(getYesterday(), 'day'));
+const courseScheduleApi = new CoursesScheduleApi();
 
 export function SchedulePage(props: CoursePageProps) {
   const isAdmin = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
@@ -24,30 +18,16 @@ export function SchedulePage(props: CoursePageProps) {
   const settings = useScheduleSettings();
 
   const loadData = async () => {
-    const [courseEvents, courseTasks] = await Promise.all([
-      courseService.getCourseEvents(),
-      courseService.getCourseTasksForSchedule(),
-    ]);
-    const events = [
-      ...courseEvents.map(courseEventToScheduleEvent),
-      ...courseTasks.map(courseTaskToScheduleEvent),
-    ].sort(byTime);
-    const eventTypes = getEventTypes(events);
-    return { events, eventTypes };
+    const courseSchedule = await courseScheduleApi.getSchedule(props.course.id);
+    return courseSchedule;
   };
-  const {
-    retry: refreshData,
-    value: { events = [], eventTypes = [] } = {},
-    loading,
-    error,
-  } = useAsyncRetry(loadData, [courseService]);
 
+  const { retry: refreshData, value: { data = [] } = {}, loading, error } = useAsyncRetry(loadData, [props.course.id]);
+
+  const eventTypes = useMemo(() => uniq(data.map(item => item.tags).flat()), [data]);
   const filteredEvents = useMemo(() => {
-    let filteredEvents = events;
-    if (settings.arePassedEventsHidden) filteredEvents = omitPassedEvents(filteredEvents);
-    if (settings.areDoneTasksHidden) filteredEvents = omitDoneTasks(filteredEvents, settings.limitForDoneTask);
-    return filteredEvents;
-  }, [events, settings.arePassedEventsHidden, settings.areDoneTasksHidden, settings.limitForDoneTask]);
+    return data;
+  }, [data]);
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={props.session.githubId}>

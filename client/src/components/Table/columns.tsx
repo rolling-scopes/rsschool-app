@@ -13,7 +13,9 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
           onKeyDown={e => (e.keyCode === 13 ? confirm() : undefined)}
           placeholder={`Search ${label || dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e => setSelectedKeys([e.target.value])}
+          onChange={e => {
+            setSelectedKeys([e.target.value]);
+          }}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
         <Button
@@ -43,9 +45,11 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
         return false;
       }
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
-      return fields.some(field =>
+
+      const val = fields.some(field =>
         (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),
       );
+      return val;
     },
     onFilterDropdownVisibleChange: (visible: boolean) => {
       if (visible && searchInput) {

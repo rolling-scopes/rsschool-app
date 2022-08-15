@@ -5,6 +5,7 @@ import { BgColorsOutlined } from '@ant-design/icons';
 import { PICKER_COLORS } from '../constants';
 import { getTagStyle } from '../utils';
 import SettingsItem from './SettingsItem';
+import { TASK_EVENT_TYPES_MAP } from 'data';
 
 const { Panel } = Collapse;
 
@@ -18,12 +19,14 @@ const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColor
   const changeColor = (colorState: ColorState, tag: string) => setTagColors({ ...tagColors, [tag]: colorState.hex });
 
   return (
-    <SettingsItem header="Change tag colors" IconComponent={BgColorsOutlined}>
+    <SettingsItem header="Change Tag Colors" IconComponent={BgColorsOutlined}>
       <Collapse accordion ghost>
         {tags.map(tag => (
           <Panel
             key={tag}
-            header={<Tag style={getTagStyle(tag, tagColors, { cursor: 'pointer' })}>{tag}</Tag>}
+            header={
+              <Tag style={getTagStyle(tag, tagColors, { cursor: 'pointer' })}>{TASK_EVENT_TYPES_MAP[tag] ?? tag}</Tag>
+            }
             style={{ backgroundColor: '#fafafa' }}
           >
             <GithubPicker

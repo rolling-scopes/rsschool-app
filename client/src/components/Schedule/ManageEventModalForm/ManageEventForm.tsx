@@ -24,7 +24,9 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { Event, EventService } from 'services/event';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { TIMEZONES } from 'configs/timezones';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from '../constants';
+import { SPECIAL_ENTITY_TAGS } from '../constants';
+import { TASK_TYPES } from 'data/taskTypes';
+import { EVENT_TYPES } from 'data/eventTypes';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -96,8 +98,8 @@ const FormEntity: React.FC<Props> = ({
   const typesList = entityType === 'task' ? TASK_TYPES : EVENT_TYPES;
   const entityTypes = typesList.map(tag => {
     return (
-      <Option key={tag} value={tag}>
-        {tag}
+      <Option key={tag.id} value={tag.id}>
+        {tag.name}
       </Option>
     );
   });

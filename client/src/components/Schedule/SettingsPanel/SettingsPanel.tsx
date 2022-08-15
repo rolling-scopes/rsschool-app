@@ -6,8 +6,6 @@ import { SettingsDrawer } from '../SettingsDrawer';
 import { ScheduleSettings } from '../useScheduleSettings';
 import ManageCsvButtons from './ManageCsvButtons';
 import AddEventButton from './AddEventButton';
-import HidePassedEventsButton from './HidePassedEventsButton';
-import HideDoneTasksButton from './HideDoneTasksButton';
 
 interface SettingsPanelProps {
   isAdmin: boolean;
@@ -53,18 +51,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </Col>
           </>
         )}
-        <Col>
-          <HidePassedEventsButton
-            arePassedEventsHidden={settings.arePassedEventsHidden}
-            setArePassedEventsHidden={settings.setArePassedEventsHidden}
-          />
-        </Col>
-        <Col>
-          <HideDoneTasksButton
-            areDoneTasksHidden={settings.areDoneTasksHidden}
-            setAreDoneTasksHidden={settings.setAreDoneTasksHidden}
-          />
-        </Col>
         <Col>
           <SettingsDrawer eventTypes={eventTypes} settings={settings} />
         </Col>

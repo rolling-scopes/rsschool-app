@@ -676,6 +676,169 @@ export interface CourseDto {
 /**
  *
  * @export
+ * @interface CourseEventDto
+ */
+export interface CourseEventDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseEventDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'type': CourseEventDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'dateTime': string;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CourseEventDto
+     */
+    'organizer': PersonDto;
+}
+
+export const CourseEventDtoTypeEnum = {
+    LectureOnline: 'lecture_online',
+    LectureOffline: 'lecture_offline',
+    LectureMixed: 'lecture_mixed',
+    LectureSelfStudy: 'lecture_self_study',
+    Warmup: 'warmup',
+    Info: 'info',
+    Workshop: 'workshop',
+    Meetup: 'meetup',
+    CrossCheckDeadline: 'cross_check_deadline',
+    Webinar: 'webinar',
+    Special: 'special'
+} as const;
+
+export type CourseEventDtoTypeEnum = typeof CourseEventDtoTypeEnum[keyof typeof CourseEventDtoTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface CourseScheduleItemDto
+ */
+export interface CourseScheduleItemDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseScheduleItemDto
+     */
+    'dataSourceId': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'currentScore': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'status': CourseScheduleItemDtoStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'studentStartDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'studentEndDate': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'organizer': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'maxScore': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'scoreWeight': object | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'descriptionUrl': string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CourseScheduleItemDto
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'dataSource': CourseScheduleItemDtoDataSourceEnum;
+}
+
+export const CourseScheduleItemDtoStatusEnum = {
+    Done: 'done',
+    Available: 'available',
+    Archived: 'archived',
+    Future: 'future',
+    Missed: 'missed',
+    Review: 'review'
+} as const;
+
+export type CourseScheduleItemDtoStatusEnum = typeof CourseScheduleItemDtoStatusEnum[keyof typeof CourseScheduleItemDtoStatusEnum];
+export const CourseScheduleItemDtoDataSourceEnum = {
+    CourseTask: 'courseTask',
+    CourseEvent: 'courseEvent'
+} as const;
+
+export type CourseScheduleItemDtoDataSourceEnum = typeof CourseScheduleItemDtoDataSourceEnum[keyof typeof CourseScheduleItemDtoDataSourceEnum];
+
+/**
+ * 
+ * @export
  * @interface CourseStatsDto
  */
 export interface CourseStatsDto {
@@ -5119,7 +5282,7 @@ export const CoursesEventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseEventDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createCourseEvent(courseId, createCourseEventDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5163,7 +5326,7 @@ export const CoursesEventsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: any): AxiosPromise<void> {
+        createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: any): AxiosPromise<Array<CourseEventDto>> {
             return localVarFp.createCourseEvent(courseId, createCourseEventDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5333,6 +5496,107 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public getInterviews(courseId: number, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesScheduleApi - axios parameter creator
+ * @export
+ */
+export const CoursesScheduleApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchedule: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getSchedule', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/schedule`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesScheduleApi - functional programming interface
+ * @export
+ */
+export const CoursesScheduleApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesScheduleApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSchedule(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseScheduleItemDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSchedule(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesScheduleApi - factory interface
+ * @export
+ */
+export const CoursesScheduleApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesScheduleApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchedule(courseId: number, options?: any): AxiosPromise<Array<CourseScheduleItemDto>> {
+            return localVarFp.getSchedule(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesScheduleApi - object-oriented interface
+ * @export
+ * @class CoursesScheduleApi
+ * @extends {BaseAPI}
+ */
+export class CoursesScheduleApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesScheduleApi
+     */
+    public getSchedule(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesScheduleApiFp(this.configuration).getSchedule(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

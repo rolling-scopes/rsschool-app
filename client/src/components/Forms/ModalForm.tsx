@@ -24,7 +24,7 @@ export function ModalForm(props: Props) {
       style={{ top: 20 }}
       visible={true}
       title={props.title}
-      okText={props.okText ?? "Save"}
+      okText={props.okText ?? 'Save'}
       onOk={async e => {
         e.preventDefault();
         const values = await form.validateFields().catch(() => null);
