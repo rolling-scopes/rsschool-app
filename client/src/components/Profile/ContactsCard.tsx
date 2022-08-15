@@ -61,8 +61,6 @@ class ContactsCard extends React.Component<Props> {
     data: null,
   };
 
-
-
   shouldComponentUpdate = (nextProps: Props) => {
     const {
       isEmailVisible,

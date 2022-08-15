@@ -52,9 +52,7 @@ describe('StudentStatsModal', () => {
       ],
     };
 
-    const output = render(
-      <StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />,
-    );
+    const output = render(<StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />);
     expect(output.container).toMatchSnapshot();
   });
 });

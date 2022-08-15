@@ -102,7 +102,11 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                         </p>
                       }
                     </div>
-                    <Button data-testid="profile-corejs-iview-button" type="dashed" onClick={this.showCoreJsIviewModal.bind(null, idx, interviewIndex)}>
+                    <Button
+                      data-testid="profile-corejs-iview-button"
+                      type="dashed"
+                      onClick={this.showCoreJsIviewModal.bind(null, idx, interviewIndex)}
+                    >
                       <FullscreenOutlined />
                     </Button>
                   </List.Item>
