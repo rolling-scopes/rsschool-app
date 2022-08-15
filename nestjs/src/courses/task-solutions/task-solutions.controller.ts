@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Param, ParseIntPipe, Post, Req, 
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { TaskSolutionsService } from './task-solutions.service';
-import { CreateTaskSolutionDto, TaskSolutionDto } from './dto';
+import { SaveTaskSolutionDto, TaskSolutionDto } from './dto';
 
 @Controller('courses/:courseId/tasks/:courseTaskId/solutions')
 @ApiTags('courses task solutions')
@@ -20,13 +20,13 @@ export class TaskSolutionsController {
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
-    @Body() dto: CreateTaskSolutionDto,
+    @Body() dto: SaveTaskSolutionDto,
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) {
       throw new BadRequestException('You are not a student in this course');
     }
-    const result = await this.taskSolutionsService.createTaskSolution(courseTaskId, studentId, dto);
+    const result = await this.taskSolutionsService.saveTaskSolution(courseTaskId, studentId, dto);
 
     return new TaskSolutionDto(result);
   }

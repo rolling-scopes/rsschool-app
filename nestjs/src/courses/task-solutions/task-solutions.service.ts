@@ -13,8 +13,10 @@ export class TaskSolutionsService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
-  public async createTaskSolution(courseTaskId: number, studentId: number, data: { url: string }) {
+  public async saveTaskSolution(courseTaskId: number, studentId: number, data: { url: string }) {
+    const solution = await this.taskSolutionRepository.findOne({ where: { courseTaskId, studentId } });
     const { id } = await this.taskSolutionRepository.save({
+      id: solution?.id ?? undefined,
       courseTaskId: courseTaskId,
       studentId: studentId,
       url: data.url,

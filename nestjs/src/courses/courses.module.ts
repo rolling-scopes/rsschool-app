@@ -16,6 +16,7 @@ import {
   TaskSolutionChecker,
   TaskSolutionResult,
   CourseEvent,
+  TaskSolution,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -35,6 +36,7 @@ import { CourseStatsController, CourseStatsService } from './stats';
 import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
 import { ScoreController, ScoreService } from './score';
+import { TaskSolutionsController, TaskSolutionsService } from './task-solutions';
 
 @Module({
   imports: [
@@ -53,6 +55,7 @@ import { ScoreController, ScoreService } from './score';
       TaskSolutionChecker,
       TaskSolutionResult,
       CourseEvent,
+      TaskSolution,
     ]),
     UsersModule,
     UsersNotificationsModule,
@@ -69,6 +72,7 @@ import { ScoreController, ScoreService } from './score';
     CourseStatsController,
     CrossCheckController,
     ScoreController,
+    TaskSolutionsController,
   ],
   providers: [
     CourseTasksService,
@@ -84,6 +88,7 @@ import { ScoreController, ScoreService } from './score';
     CourseStatsService,
     CrossCheckPairsService,
     ScoreService,
+    TaskSolutionsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

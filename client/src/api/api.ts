@@ -2624,6 +2624,19 @@ export interface SaveCertificateDto {
 /**
  *
  * @export
+ * @interface SaveTaskSolutionDto
+ */
+export interface SaveTaskSolutionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveTaskSolutionDto
+     */
+    'url': string;
+}
+/**
+ * 
+ * @export
  * @interface ScoreDto
  */
 export interface ScoreDto {
@@ -3021,6 +3034,31 @@ export interface TaskResultsDto {
 }
 /**
  *
+ * @export
+ * @interface TaskSolutionDto
+ */
+export interface TaskSolutionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskSolutionDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskSolutionDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskSolutionDto
+     */
+    'url': string;
+}
+/**
+ * 
  * @export
  * @interface UpdateCourseEventDto
  */
@@ -5295,6 +5333,123 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public getInterviews(courseId: number, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesTaskSolutionsApi - axios parameter creator
+ * @export
+ */
+export const CoursesTaskSolutionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskSolution: async (courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTaskSolution', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createTaskSolution', 'courseTaskId', courseTaskId)
+            // verify required parameter 'saveTaskSolutionDto' is not null or undefined
+            assertParamExists('createTaskSolution', 'saveTaskSolutionDto', saveTaskSolutionDto)
+            const localVarPath = `/courses/{courseId}/tasks/{courseTaskId}/solutions`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(saveTaskSolutionDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesTaskSolutionsApi - functional programming interface
+ * @export
+ */
+export const CoursesTaskSolutionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesTaskSolutionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskSolutionDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesTaskSolutionsApi - factory interface
+ * @export
+ */
+export const CoursesTaskSolutionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesTaskSolutionsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: any): AxiosPromise<TaskSolutionDto> {
+            return localVarFp.createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesTaskSolutionsApi - object-oriented interface
+ * @export
+ * @class CoursesTaskSolutionsApi
+ * @extends {BaseAPI}
+ */
+export class CoursesTaskSolutionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTaskSolutionsApi
+     */
+    public createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: AxiosRequestConfig) {
+        return CoursesTaskSolutionsApiFp(this.configuration).createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

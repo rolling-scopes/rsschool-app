@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsUrl } from 'class-validator';
 
-export class CreateTaskSolutionDto {
+export class SaveTaskSolutionDto {
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsUrl()
   url: string;
 }
