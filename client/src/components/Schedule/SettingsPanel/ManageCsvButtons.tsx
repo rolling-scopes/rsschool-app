@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Upload, Row, Col, Tooltip, Button, Form, message } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
@@ -8,14 +8,14 @@ import { parseFiles, uploadResults } from '../utils';
 
 interface ManageCsvButtonsProps {
   courseId: number;
-  courseService: CourseService;
   timezone: string;
   refreshData: () => void;
 }
 
-const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, courseService, timezone, refreshData }) => {
+const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, timezone, refreshData }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<RcFile[]>([]);
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   const onRemoveCsvFile = (_: UploadFile<any>) => setFileList([]);
   const beforeCsvFileUpload = (file: RcFile) => setFileList([...fileList, file]);

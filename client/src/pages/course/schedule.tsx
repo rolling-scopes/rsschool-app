@@ -7,46 +7,32 @@ import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
 import { useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
-import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
 const courseScheduleApi = new CoursesScheduleApi();
 
 export function SchedulePage(props: CoursePageProps) {
-  const isAdmin = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const isManager = useMemo(() => isCourseManager(props.session, props.course.id), [props.session, props.course.id]);
   const settings = useScheduleSettings();
 
   const loadData = async () => {
-    const courseSchedule = await courseScheduleApi.getSchedule(props.course.id);
-    return courseSchedule;
+    const response = await courseScheduleApi.getSchedule(props.course.id);
+    return response;
   };
 
   const { retry: refreshData, value: { data = [] } = {}, loading, error } = useAsyncRetry(loadData, [props.course.id]);
-
-  const eventTypes = useMemo(() => uniq(data.map(item => item.tags).flat()), [data]);
-  const filteredEvents = useMemo(() => {
-    return data;
-  }, [data]);
+  const eventTags = useMemo(() => uniq(data.map(item => item.tags).flat()), [data]);
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={props.session.githubId}>
       <SettingsPanel
-        isAdmin={isAdmin}
+        isCourseManager={isManager}
         courseId={props.course.id}
         settings={settings}
-        courseService={courseService}
-        eventTypes={eventTypes}
+        eventTypes={eventTags}
         refreshData={refreshData}
       />
-      <TableView
-        isAdmin={isAdmin}
-        courseId={props.course.id}
-        courseAlias={props.course.alias}
-        settings={settings}
-        data={filteredEvents}
-        refreshData={refreshData}
-      />
+      <TableView settings={settings} data={data} />
     </PageLayout>
   );
 }

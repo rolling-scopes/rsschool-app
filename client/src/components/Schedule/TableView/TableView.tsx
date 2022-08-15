@@ -101,12 +101,8 @@ const getColumns = ({
 ];
 
 interface TableViewProps {
-  isAdmin: boolean;
-  courseId: number;
-  courseAlias: string;
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
-  refreshData: () => void;
 }
 
 export function TableView({ data, settings }: TableViewProps) {

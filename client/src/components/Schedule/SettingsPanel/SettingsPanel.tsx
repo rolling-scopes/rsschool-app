@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
-import { CourseService } from 'services/course';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { ScheduleSettings } from '../useScheduleSettings';
@@ -8,22 +7,14 @@ import ManageCsvButtons from './ManageCsvButtons';
 import AddEventButton from './AddEventButton';
 
 interface SettingsPanelProps {
-  isAdmin: boolean;
+  isCourseManager: boolean;
   courseId: number;
   settings: ScheduleSettings;
   eventTypes: string[];
-  courseService: CourseService;
   refreshData: () => void;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({
-  isAdmin,
-  courseId,
-  settings,
-  eventTypes,
-  courseService,
-  refreshData,
-}) => {
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId, settings, eventTypes, refreshData }) => {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
 
@@ -36,15 +27,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <>
       <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-        {isAdmin && (
+        {isCourseManager && (
           <>
             <Col>
-              <ManageCsvButtons
-                courseId={courseId}
-                courseService={courseService}
-                timezone={settings.timezone}
-                refreshData={refreshData}
-              />
+              <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
             </Col>
             <Col>
               <AddEventButton openManageEventModal={openManageEventModal} />
