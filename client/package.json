@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.25.0",
+    "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@types/aws-lambda": "8.10.102",
     "@types/cookie": "0.5.1",
