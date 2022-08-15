@@ -1,256 +1,592 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
-<Fragment>
-  <ForwardRef>
-    <GithubAvatar
-      githubId="john-doe"
-      size={96}
-      style={
-        Object {
-          "display": "block",
-          "margin": "0 auto 10px",
-        }
-      }
-    />
-    <Title
-      level={1}
-      style={
-        Object {
-          "fontSize": 24,
-          "margin": 0,
-          "textAlign": "center",
-        }
-      }
-    >
-      John Doe
-    </Title>
-    <Paragraph
-      style={
-        Object {
-          "marginBottom": 20,
-          "textAlign": "center",
-        }
-      }
-    >
-      <a
-        href="https://github.com/john-doe"
-        style={
-          Object {
-            "fontSize": 16,
-            "marginLeft": "-14px",
-          }
-        }
-        target="_blank"
-      >
-        <ForwardRef(GithubFilled) />
-         
-        john-doe
-      </a>
-    </Paragraph>
-    <Paragraph
-      style={
-        Object {
-          "margin": 0,
-          "textAlign": "center",
-        }
-      }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-body"
     >
       <span
-        style={
-          Object {
-            "marginLeft": "-14px",
-          }
-        }
+        class="ant-avatar ant-avatar-circle ant-avatar-image"
+        style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
-        <ForwardRef(EnvironmentFilled) />
-         
-        Minsk, Belarus
+        <img
+          src="https://cdn.rs.school/john-doe.png?size=192"
+        />
       </span>
-    </Paragraph>
-    <Paragraph
-      style={
-        Object {
-          "marginTop": 20,
-          "textAlign": "center",
-        }
-      }
-    >
-      <a
-        href="public-url"
-        target="_blank"
+      <h1
+        class="ant-typography"
+        style="font-size: 24px; text-align: center; margin: 0px;"
       >
-        Public CV
-      </a>
-    </Paragraph>
-  </ForwardRef>
-</Fragment>
+        John Doe
+      </h1>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin-bottom: 20px;"
+      >
+        <a
+          href="https://github.com/john-doe"
+          style="margin-left: -14px; font-size: 16px;"
+          target="_blank"
+        >
+          <span
+            aria-label="github"
+            class="anticon anticon-github"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="github"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9a127.5 127.5 0 0138.1 91v112.5c.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
+              />
+            </svg>
+          </span>
+           
+          john-doe
+        </a>
+      </div>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin: 0px;"
+      >
+        <span
+          style="margin-left: -14px;"
+        >
+          <span
+            aria-label="environment"
+            class="anticon anticon-environment"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="environment"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M512 327c-29.9 0-58 11.6-79.2 32.8A111.6 111.6 0 00400 439c0 29.9 11.7 58 32.8 79.2A111.6 111.6 0 00512 551c29.9 0 58-11.7 79.2-32.8C612.4 497 624 468.9 624 439c0-29.9-11.6-58-32.8-79.2S541.9 327 512 327zm342.6-37.9a362.49 362.49 0 00-79.9-115.7 370.83 370.83 0 00-118.2-77.8C610.7 76.6 562.1 67 512 67c-50.1 0-98.7 9.6-144.5 28.5-44.3 18.3-84 44.5-118.2 77.8A363.6 363.6 0 00169.4 289c-19.5 45-29.4 92.8-29.4 142 0 70.6 16.9 140.9 50.1 208.7 26.7 54.5 64 107.6 111 158.1 80.3 86.2 164.5 138.9 188.4 153a43.9 43.9 0 0022.4 6.1c7.8 0 15.5-2 22.4-6.1 23.9-14.1 108.1-66.8 188.4-153 47-50.4 84.3-103.6 111-158.1C867.1 572 884 501.8 884 431.1c0-49.2-9.9-97-29.4-142zM512 615c-97.2 0-176-78.8-176-176s78.8-176 176-176 176 78.8 176 176-78.8 176-176 176z"
+              />
+            </svg>
+          </span>
+           
+          Minsk, Belarus
+        </span>
+      </div>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin-top: 20px;"
+      >
+        <a
+          href="public-url"
+          target="_blank"
+        >
+          Public CV
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
-<Fragment>
-  <ForwardRef
-    actions={
-      Array [
-        <ForwardRef(EditOutlined)
-          onClick={[Function]}
-        />,
-        <ForwardRef(SettingOutlined)
-          onClick={[Function]}
-        />,
-      ]
-    }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
   >
-    <GithubAvatar
-      githubId="john-doe"
-      size={96}
-      style={
-        Object {
-          "display": "block",
-          "margin": "0 auto 10px",
-        }
-      }
-    />
-    <Title
-      level={1}
-      style={
-        Object {
-          "fontSize": 24,
-          "margin": 0,
-          "textAlign": "center",
-        }
-      }
-    >
-      John Doe
-    </Title>
-    <Paragraph
-      style={
-        Object {
-          "marginBottom": 20,
-          "textAlign": "center",
-        }
-      }
-    >
-      <a
-        href="https://github.com/john-doe"
-        style={
-          Object {
-            "fontSize": 16,
-            "marginLeft": "-14px",
-          }
-        }
-        target="_blank"
-      >
-        <ForwardRef(GithubFilled) />
-         
-        john-doe
-      </a>
-    </Paragraph>
-    <Paragraph
-      style={
-        Object {
-          "margin": 0,
-          "textAlign": "center",
-        }
-      }
+    <div
+      class="ant-card-body"
     >
       <span
-        style={
-          Object {
-            "marginLeft": "-14px",
-          }
-        }
+        class="ant-avatar ant-avatar-circle ant-avatar-image"
+        style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
-        <ForwardRef(EnvironmentFilled) />
-         
-        Minsk, Belarus
+        <img
+          src="https://cdn.rs.school/john-doe.png?size=192"
+        />
       </span>
-    </Paragraph>
-    <Paragraph
-      style={
-        Object {
-          "marginTop": 20,
-          "textAlign": "center",
-        }
-      }
-    >
-      <a
-        href="public-url"
-        target="_blank"
+      <h1
+        class="ant-typography"
+        style="font-size: 24px; text-align: center; margin: 0px;"
       >
-        Public CV
-      </a>
-    </Paragraph>
-    <PermissionsSettingsDrawer
-      hideSettings={[Function]}
-      isSettingsVisible={false}
-      onPermissionsSettingsChange={[MockFunction]}
-    />
-    <ProfileSettingsDrawer
-      content={
-        <Row>
-          <Col>
-            <Row>
-              <Text
-                strong={true}
-              >
-                Name
-              </Text>
-            </Row>
-            <Row
-              style={
-                Object {
-                  "marginTop": 4,
-                }
-              }
+        John Doe
+      </h1>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin-bottom: 20px;"
+      >
+        <a
+          href="https://github.com/john-doe"
+          style="margin-left: -14px; font-size: 16px;"
+          target="_blank"
+        >
+          <span
+            aria-label="github"
+            class="anticon anticon-github"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="github"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
             >
-              <ForwardRef
-                onChange={[Function]}
-                placeholder="Firstname Lastname"
-                value="John Doe"
+              <path
+                d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9a127.5 127.5 0 0138.1 91v112.5c.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
               />
-            </Row>
-            <Row
-              style={
-                Object {
-                  "marginTop": 24,
-                }
-              }
+            </svg>
+          </span>
+           
+          john-doe
+        </a>
+      </div>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin: 0px;"
+      >
+        <span
+          style="margin-left: -14px;"
+        >
+          <span
+            aria-label="environment"
+            class="anticon anticon-environment"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="environment"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
             >
-              <Text
-                strong={true}
-              >
-                Location
-              </Text>
-            </Row>
-            <Row
-              style={
-                Object {
-                  "marginTop": 4,
-                }
-              }
-            >
-              <LocationSelect
-                location={
-                  Object {
-                    "cityName": "Minsk",
-                    "countryName": "Belarus",
-                  }
-                }
-                onChange={[Function]}
-                style={
-                  Object {
-                    "flex": 1,
-                  }
-                }
+              <path
+                d="M512 327c-29.9 0-58 11.6-79.2 32.8A111.6 111.6 0 00400 439c0 29.9 11.7 58 32.8 79.2A111.6 111.6 0 00512 551c29.9 0 58-11.7 79.2-32.8C612.4 497 624 468.9 624 439c0-29.9-11.6-58-32.8-79.2S541.9 327 512 327zm342.6-37.9a362.49 362.49 0 00-79.9-115.7 370.83 370.83 0 00-118.2-77.8C610.7 76.6 562.1 67 512 67c-50.1 0-98.7 9.6-144.5 28.5-44.3 18.3-84 44.5-118.2 77.8A363.6 363.6 0 00169.4 289c-19.5 45-29.4 92.8-29.4 142 0 70.6 16.9 140.9 50.1 208.7 26.7 54.5 64 107.6 111 158.1 80.3 86.2 164.5 138.9 188.4 153a43.9 43.9 0 0022.4 6.1c7.8 0 15.5-2 22.4-6.1 23.9-14.1 108.1-66.8 188.4-153 47-50.4 84.3-103.6 111-158.1C867.1 572 884 501.8 884 431.1c0-49.2-9.9-97-29.4-142zM512 615c-97.2 0-176-78.8-176-176s78.8-176 176-176 176 78.8 176 176-78.8 176-176 176z"
               />
-            </Row>
-          </Col>
-        </Row>
-      }
-      hideSettings={[Function]}
-      isSettingsVisible={false}
-    />
-  </ForwardRef>
-</Fragment>
+            </svg>
+          </span>
+           
+          Minsk, Belarus
+        </span>
+      </div>
+      <div
+        class="ant-typography"
+        style="text-align: center; margin-top: 20px;"
+      >
+        <a
+          href="public-url"
+          target="_blank"
+        >
+          Public CV
+        </a>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Visibility settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-list ant-list-split"
+                  >
+                    <div
+                      class="ant-spin-nested-loading"
+                    >
+                      <div
+                        class="ant-spin-container"
+                      >
+                        <div
+                          class="ant-list-empty-text"
+                        >
+                          <div
+                            class="ant-empty ant-empty-normal"
+                          >
+                            <div
+                              class="ant-empty-image"
+                            >
+                              <svg
+                                class="ant-empty-img-simple"
+                                height="41"
+                                viewBox="0 0 64 41"
+                                width="64"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                  transform="translate(0 1)"
+                                >
+                                  <ellipse
+                                    class="ant-empty-img-simple-ellipse"
+                                    cx="32"
+                                    cy="33"
+                                    rx="32"
+                                    ry="7"
+                                  />
+                                  <g
+                                    class="ant-empty-img-simple-g"
+                                    fill-rule="nonzero"
+                                  >
+                                    <path
+                                      d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                    />
+                                    <path
+                                      class="ant-empty-img-simple-path"
+                                      d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                    />
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                            <div
+                              class="ant-empty-description"
+                            >
+                              No Data
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+      </style>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Profile settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-row"
+                  >
+                    <div
+                      class="ant-col"
+                    >
+                      <div
+                        class="ant-row"
+                      >
+                        <span
+                          class="ant-typography"
+                        >
+                          <strong>
+                            Name
+                          </strong>
+                        </span>
+                      </div>
+                      <div
+                        class="ant-row"
+                        style="margin-top: 4px;"
+                      >
+                        <input
+                          class="ant-input"
+                          placeholder="Firstname Lastname"
+                          type="text"
+                          value="John Doe"
+                        />
+                      </div>
+                      <div
+                        class="ant-row"
+                        style="margin-top: 24px;"
+                      >
+                        <span
+                          class="ant-typography"
+                        >
+                          <strong>
+                            Location
+                          </strong>
+                        </span>
+                      </div>
+                      <div
+                        class="ant-row"
+                        style="margin-top: 4px;"
+                      >
+                        <div
+                          class="ant-select ant-select-single ant-select-show-arrow ant-select-show-search"
+                          style="flex: 1;"
+                        >
+                          <div
+                            class="ant-select-selector"
+                          >
+                            <span
+                              class="ant-select-selection-search"
+                            >
+                              <input
+                                aria-activedescendant="rc_select_TEST_OR_SSR_list_0"
+                                aria-autocomplete="list"
+                                aria-controls="rc_select_TEST_OR_SSR_list"
+                                aria-haspopup="listbox"
+                                aria-owns="rc_select_TEST_OR_SSR_list"
+                                autocomplete="off"
+                                class="ant-select-selection-search-input"
+                                id="rc_select_TEST_OR_SSR"
+                                role="combobox"
+                                type="search"
+                                value=""
+                              />
+                            </span>
+                            <span
+                              class="ant-select-selection-item"
+                              title="Minsk, Belarus"
+                            >
+                              Minsk, Belarus
+                            </span>
+                          </div>
+                          <span
+                            aria-hidden="true"
+                            class="ant-select-arrow"
+                            style="user-select: none;"
+                            unselectable="on"
+                          >
+                            <span
+                              aria-label="down"
+                              class="anticon anticon-down ant-select-suffix"
+                              role="img"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                data-icon="down"
+                                fill="currentColor"
+                                focusable="false"
+                                height="1em"
+                                viewBox="64 64 896 896"
+                                width="1em"
+                              >
+                                <path
+                                  d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                                />
+                              </svg>
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <style>
+                    
+              :global(.ant-drawer-content-wrapper) {
+                height: inherit !important;
+              }
+
+              :global(.ant-drawer-wrapper-body) {
+                overflow: hidden;
+              }
+
+              :global(.ant-drawer-body) {
+                height: calc(100% - 55px);
+                overflow: auto;
+              }
+            
+                  </style>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul
+      class="ant-card-actions"
+    >
+      <li
+        style="width: 50%;"
+      >
+        <span>
+          <span
+            aria-label="edit"
+            class="anticon anticon-edit"
+            role="img"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="edit"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+              />
+            </svg>
+          </span>
+        </span>
+      </li>
+      <li
+        style="width: 50%;"
+      >
+        <span>
+          <span
+            aria-label="setting"
+            class="anticon anticon-setting"
+            role="img"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="setting"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z"
+              />
+            </svg>
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
 `;

@@ -44,9 +44,6 @@ jobs:
             client/node_modules
             server/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
 
       - name: Install dependencies
         run: npm install

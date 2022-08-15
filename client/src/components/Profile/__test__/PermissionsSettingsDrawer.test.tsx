@@ -1,6 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { mountToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import PermissionsSettingsDrawer from '../PermissionsSettingsDrawer';
 
 describe('PermissionsSettingsDrawer', () => {
@@ -20,7 +19,7 @@ describe('PermissionsSettingsDrawer', () => {
       isMentorStatsVisible: { all: true, mentor: true, student: true },
       isStudentStatsVisible: { all: true, student: true },
     };
-    const output = mount(
+    const output = render(
       <PermissionsSettingsDrawer
         isSettingsVisible={true}
         hideSettings={jest.fn()}
@@ -28,6 +27,6 @@ describe('PermissionsSettingsDrawer', () => {
         onPermissionsSettingsChange={jest.fn()}
       />,
     );
-    expect(mountToJson(output)).toMatchSnapshot();
+    expect(output.container).toMatchSnapshot();
   });
 });

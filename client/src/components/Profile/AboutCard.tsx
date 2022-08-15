@@ -20,11 +20,10 @@ type Props = {
   onProfileSettingsChange: (event: any, path: string) => void;
 };
 
+export const filterPermissions = ({ isAboutVisible }: Partial<ConfigurableProfilePermissions>) => ({
+  isAboutVisible,
+});
 class AboutCard extends React.Component<Props> {
-  private filterPermissions = ({ isAboutVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isAboutVisible,
-  });
-
   shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.aboutMyself, this.props.data.aboutMyself) ||
     !isEqual(nextProps.permissionsSettings?.isAboutVisible, this.props.permissionsSettings?.isAboutVisible) ||
@@ -41,7 +40,7 @@ class AboutCard extends React.Component<Props> {
         icon={<InfoCircleOutlined />}
         content={aboutMyself ? <Paragraph ellipsis={{ rows: 2, expandable: true }}>{aboutMyself}</Paragraph> : null}
         noDataDescrption="About info isn't written"
-        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
         onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
