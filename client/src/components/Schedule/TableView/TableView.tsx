@@ -56,7 +56,8 @@ const getColumns = ({
     key: ColumnKey.Tags,
     title: ColumnName.Tags,
     dataIndex: 'tags',
-    render: (tagNames: string[]) => tagNames?.map(tagName => renderTagWithStyle(tagName, tagColors, TAG_NAMES_MAP)),
+    render: (tagNames: string[]) =>
+      tagNames?.filter(Boolean).map(tagName => renderTagWithStyle(tagName, tagColors, TAG_NAMES_MAP)),
   },
   {
     key: ColumnKey.StartDate,

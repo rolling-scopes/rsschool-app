@@ -68,7 +68,7 @@ export const coloredDateRenderer = (timeZone: string, format: string, date: 'sta
 
     const text = dateWithTimeZoneRenderer(timeZone, format)(value);
 
-    if (tags.includes(CourseEventDtoTypeEnum.LectureSelfStudy) || tags.includes(CourseTaskDtoTypeEnum.Selfeducation)) {
+    if (tags.includes(CourseEventDtoTypeEnum.LectureSelfStudy)) {
       return (
         <Text type={color}>
           {text}

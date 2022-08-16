@@ -87,6 +87,7 @@ export class CourseScheduleService {
         const submitted =
           taskSolutions.some(({ courseTaskId }) => courseTaskId === id) ||
           taskCheckers.some(({ courseTaskId }) => courseTaskId === id);
+        const type = courseTask.type || courseTask.task.type;
         return {
           id,
           name,
@@ -98,7 +99,7 @@ export class CourseScheduleService {
           currentScore,
           status: studentId ? this.getCourseTaskStatus(courseTask, currentScore, submitted) : undefined,
           dataSource: CourseScheduleDataSource.CourseTask,
-          tags: [courseTask.type || courseTask.task.type],
+          tags: type ? [type] : [],
           descriptionUrl: courseTask.task.descriptionUrl,
         } as CourseScheduleItem;
       })
@@ -114,7 +115,7 @@ export class CourseScheduleService {
             studentEndDate: dateTime,
             status: this.getEventStatus(courseEvent),
             dataSource: CourseScheduleDataSource.CourseEvent,
-            tags: [courseEvent.event.type],
+            tags: courseEvent.event.type ? [courseEvent.event.type] : [],
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
           } as CourseScheduleItem;
