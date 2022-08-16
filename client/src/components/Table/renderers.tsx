@@ -11,7 +11,7 @@ import { Tag, Tooltip, Typography } from 'antd';
 import { Checker, CrossCheckStatus } from 'services/course';
 import { getTagStyle } from 'components/Schedule';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseEventDtoTypeEnum, CourseScheduleItemDto, CourseTaskDtoTypeEnum } from 'api';
+import { CourseEventDtoTypeEnum, CourseScheduleItemDto } from 'api';
 
 const { Text } = Typography;
 
