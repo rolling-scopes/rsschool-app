@@ -75,7 +75,7 @@ export function MentorCard(props: Props) {
       default:
         return state;
     }
-  }, {} as ModalState);
+  }, null);
 
   const handleModalShow = async () => {
     dispatch({ type: 'loading' });
