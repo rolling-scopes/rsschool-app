@@ -83,7 +83,7 @@ export class CourseScheduleService {
               ?.stageInterviewFeedbacks.map(feedback => JSON.parse(feedback.json))
               .map(json => json?.resume?.score ?? 0) ?? []),
           );
-        const currentScore = isFinite(scoreRaw) ? scoreRaw : undefined;
+        const currentScore = isFinite(scoreRaw) ? scoreRaw : null;
         const submitted =
           taskSolutions.some(({ courseTaskId }) => courseTaskId === id) ||
           taskCheckers.some(({ courseTaskId }) => courseTaskId === id);
@@ -97,7 +97,9 @@ export class CourseScheduleService {
           maxScore,
           scoreWeight,
           currentScore,
-          status: studentId ? this.getCourseTaskStatus(courseTask, currentScore, submitted) : undefined,
+          status: studentId
+            ? this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined)
+            : undefined,
           dataSource: CourseScheduleDataSource.CourseTask,
           tags: type ? [type] : [],
           descriptionUrl: courseTask.task.descriptionUrl,
@@ -204,24 +206,26 @@ export class CourseScheduleService {
     return CourseScheduleItemStatus.Future;
   }
 
-  private getCourseTaskStatus(courseTask: CourseTask, score?: number, submitted?: boolean) {
+  private getCourseTaskStatus(
+    courseTask: CourseTask,
+    studentData?: { currentScore: number | null; submitted: boolean },
+  ) {
     const startTime = new Date(courseTask.studentStartDate).getTime();
     const endTime = new Date(courseTask.studentEndDate).getTime();
-    if (startTime > Date.now()) {
+    const { currentScore = null, submitted = false } = studentData ?? {};
+    const now = Date.now();
+    if (startTime > now) {
       return CourseScheduleItemStatus.Future;
     }
-    if (score != null) {
+    if (currentScore != null) {
       return CourseScheduleItemStatus.Done;
     }
-    if (score == null && submitted) {
+    if (submitted) {
       return CourseScheduleItemStatus.Review;
     }
-    if (score != null) {
-      return CourseScheduleItemStatus.Done;
-    }
-    if (startTime < Date.now() && endTime > Date.now()) {
+    if (startTime <= now && endTime >= now) {
       return CourseScheduleItemStatus.Available;
     }
-    return CourseScheduleItemStatus.Missed;
+    return studentData ? CourseScheduleItemStatus.Missed : CourseScheduleItemStatus.Archived;
   }
 }
