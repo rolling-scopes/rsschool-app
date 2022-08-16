@@ -73,7 +73,7 @@ export const coloredDateRenderer = (timeZone: string, format: string, date: 'sta
         <Text type={color}>
           {text}
           <Tooltip placement="topLeft" title={infoText}>
-            <InfoCircleOutlined style={{ marginLeft: 8 }} />
+            <InfoCircleOutlined className="ant-typography ant-typography-secondary" style={{ marginLeft: 8 }} />
           </Tooltip>
         </Text>
       );
