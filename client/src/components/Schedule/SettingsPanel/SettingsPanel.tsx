@@ -14,7 +14,13 @@ interface SettingsPanelProps {
   refreshData: () => void;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId, settings, eventTypes, refreshData }) => {
+const SettingsPanel: React.FC<SettingsPanelProps> = ({
+  isCourseManager,
+  courseId,
+  settings,
+  eventTypes,
+  refreshData,
+}) => {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
 
