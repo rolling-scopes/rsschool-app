@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { mountToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import PreScreeningIviewCard from '../PreScreeningIviewCard';
 import { StageInterviewDetailedFeedback } from 'common/models/profile';
 
@@ -59,27 +58,7 @@ describe('PreScreeningIviewCard', () => {
   ] as StageInterviewDetailedFeedback[];
 
   it('Should render correctly', () => {
-    const output = mount(<PreScreeningIviewCard data={data} />);
-    expect(mountToJson(output)).toMatchSnapshot();
-  });
-
-  const wrapper = shallow(<PreScreeningIviewCard data={data} />);
-  const instance: any = wrapper.instance();
-  describe('showPreScreeningIviewModal', () => {
-    it('should set "state.isPreScreeningIviewModalVisible" as "true", "state.courseIndex" as index was passed', () => {
-      expect(instance.state.isPreScreeningIviewModalVisible).toBe(false);
-      expect(instance.state.courseIndex).toBe(0);
-      instance.showPreScreeningIviewModal(1);
-      expect(instance.state.isPreScreeningIviewModalVisible).toBe(true);
-      expect(instance.state.courseIndex).toBe(1);
-    });
-  });
-  describe('hideVisibilitySettings', () => {
-    it('should set "state.isPreScreeningIviewModalVisible" as "false"', () => {
-      instance.state.isPreScreeningIviewModalVisible = true;
-      expect(instance.state.isPreScreeningIviewModalVisible).toBe(true);
-      instance.hidePreScreeningIviewModal();
-      expect(instance.state.isPreScreeningIviewModalVisible).toBe(false);
-    });
+    const output = render(<PreScreeningIviewCard data={data} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

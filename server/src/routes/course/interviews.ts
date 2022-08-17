@@ -57,10 +57,10 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
   setResponse(ctx, StatusCodes.OK, result);
 };
 
-export const getInterviewPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getInterviewPairs = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   const courseTaskId: number = Number(ctx.params.courseTaskId);
-  const service = new InterviewService(courseId);
+  const service = new InterviewService(courseId, logger);
   const data = await service.getInterviewPairs(courseTaskId);
   setResponse(ctx, StatusCodes.OK, data);
 };
@@ -99,7 +99,7 @@ export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterCont
 
 export const createInterview = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
-  const interviewService = new InterviewService(courseId);
+  const interviewService = new InterviewService(courseId, logger);
   const result = await interviewService.createInterview(courseTaskId, interviewerGithubId, studentGithubId);
 
   await sendInteviewerAssignedNotification(logger, courseId, { interviewerGithubId, studentGithubId });
@@ -160,7 +160,7 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
       clean: boolean;
       registrationEnabled: boolean;
     };
-    const interviewService = new InterviewService(courseId);
+    const interviewService = new InterviewService(courseId, logger);
     const result = await interviewService.createInterviewsAutomatically(courseTaskId, {
       clean,
       registrationEnabled,
@@ -185,12 +185,12 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
   }
 };
 
-export const cancelInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const cancelInterview = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   const pairId: number = Number(ctx.params.id);
 
   try {
-    const interviewService = new InterviewService(courseId);
+    const interviewService = new InterviewService(courseId, logger);
     await interviewService.cancelInterviewPair(pairId);
     setResponse(ctx, StatusCodes.OK, {});
   } catch (e) {

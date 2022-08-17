@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import { CrossCheckComments } from '../CrossCheckComments';
 
 describe('CrossCheckComments', () => {
@@ -29,20 +28,20 @@ describe('CrossCheckComments', () => {
     const mixedComments = [anonComment, anonComment, signedComment, signedComment, anonComment];
 
     it("if there's no comments", () => {
-      const output = shallow(<CrossCheckComments comments={emptyComments} />);
-      expect(shallowToJson(output)).toMatchSnapshot();
+      const output = render(<CrossCheckComments comments={emptyComments} />);
+      expect(output.container).toMatchSnapshot();
     });
     it('if there are anonymous comments', () => {
-      const output = shallow(<CrossCheckComments comments={anonComments} />);
-      expect(shallowToJson(output)).toMatchSnapshot();
+      const output = render(<CrossCheckComments comments={anonComments} />);
+      expect(output.container).toMatchSnapshot();
     });
     it('if there are signed comments', () => {
-      const output = shallow(<CrossCheckComments comments={signedComments} />);
-      expect(shallowToJson(output)).toMatchSnapshot();
+      const output = render(<CrossCheckComments comments={signedComments} />);
+      expect(output.container).toMatchSnapshot();
     });
     it('if there are both types of comments', () => {
-      const output = shallow(<CrossCheckComments comments={mixedComments} />);
-      expect(shallowToJson(output)).toMatchSnapshot();
+      const output = render(<CrossCheckComments comments={mixedComments} />);
+      expect(output.container).toMatchSnapshot();
     });
   });
 });

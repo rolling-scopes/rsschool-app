@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import PublicFeedbackModal from '../PublicFeedbackModal';
 
 describe('PublicFeedbackModal', () => {
@@ -72,7 +71,7 @@ describe('PublicFeedbackModal', () => {
   });
 
   it('Should render correctly', () => {
-    const output = shallow(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
-    expect(shallowToJson(output)).toMatchSnapshot();
+    const output = render(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

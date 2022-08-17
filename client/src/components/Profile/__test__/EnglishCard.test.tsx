@@ -1,13 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
-import EnglishCard from '../EnglishCard';
+import { render } from '@testing-library/react';
+import EnglishCard, { filterPermissions } from '../EnglishCard';
 import { GeneralInfo } from 'common/models/profile';
 
 describe('EnglishCard', () => {
   describe('Should render correctly', () => {
     it('if "englishLevel" is present', () => {
-      const output = shallow(
+      const output = render(
         <EnglishCard
           data={
             {
@@ -19,10 +18,10 @@ describe('EnglishCard', () => {
           onProfileSettingsChange={jest.fn()}
         />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(output.container).toMatchSnapshot();
     });
     it('if "aboutMyself" is not present', () => {
-      const output = shallow(
+      const output = render(
         <EnglishCard
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
@@ -30,7 +29,7 @@ describe('EnglishCard', () => {
           onProfileSettingsChange={jest.fn()}
         />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(output.container).toMatchSnapshot();
     });
   });
   describe('filterPermissions', () => {
@@ -50,17 +49,7 @@ describe('EnglishCard', () => {
         isMentorStatsVisible: { all: true, mentor: true, student: true },
         isStudentStatsVisible: { all: true, student: true },
       };
-      const wrapper = shallow(
-        <EnglishCard
-          data={{} as GeneralInfo}
-          isEditingModeEnabled={false}
-          permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
-      const instance: any = wrapper.instance();
-      const result = instance.filterPermissions(permissionsSettings);
+      const result = filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isEnglishVisible: { all: false, student: false },
       });

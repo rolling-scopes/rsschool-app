@@ -1,225 +1,155 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`] = `
-<CommonCard
-  icon={<ForwardRef(TagOutlined) />}
-  isEditingModeEnabled={false}
-  noDataDescrption="English level isn't choosen"
-  onPermissionsSettingsChange={[MockFunction]}
-  profileSettingsContent={
-    <div>
-      <p
-        style={
-          Object {
-            "fontSize": 18,
-            "marginBottom": 5,
-          }
-        }
-      >
-        <Text
-          strong={true}
-        >
-          English level:
-        </Text>
-      </p>
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
+    >
       <div
-        style={
-          Object {
-            "marginBottom": 20,
-          }
-        }
+        class="ant-card-head-wrapper"
       >
-        <ForwardRef(InternalSelect)
-          defaultValue="a0"
-          onChange={[Function]}
-          style={
-            Object {
-              "width": "100%",
-            }
-          }
+        <div
+          class="ant-card-head-title"
         >
-          <Option
-            value="a0"
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
           >
-            A0
-          </Option>
-          <Option
-            value="a1"
-          >
-            A1
-          </Option>
-          <Option
-            value="a1+"
-          >
-            A1+
-          </Option>
-          <Option
-            value="a2"
-          >
-            A2
-          </Option>
-          <Option
-            value="a2+"
-          >
-            A2+
-          </Option>
-          <Option
-            value="b1"
-          >
-            B1
-          </Option>
-          <Option
-            value="b1+"
-          >
-            B1+
-          </Option>
-          <Option
-            value="b2"
-          >
-            B2
-          </Option>
-          <Option
-            value="b2+"
-          >
-            B2+
-          </Option>
-          <Option
-            value="c1"
-          >
-            C1
-          </Option>
-          <Option
-            value="c1+"
-          >
-            C1+
-          </Option>
-          <Option
-            value="c2"
-          >
-            C2
-          </Option>
-        </ForwardRef(InternalSelect)>
+            <span
+              aria-label="tag"
+              class="anticon anticon-tag"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="tag"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M938 458.8l-29.6-312.6c-1.5-16.2-14.4-29-30.6-30.6L565.2 86h-.4c-3.2 0-5.7 1-7.6 2.9L88.9 557.2a9.96 9.96 0 000 14.1l363.8 363.8c1.9 1.9 4.4 2.9 7.1 2.9s5.2-1 7.1-2.9l468.3-468.3c2-2.1 3-5 2.8-8zM459.7 834.7L189.3 564.3 589 164.6 836 188l23.4 247-399.7 399.7zM680 256c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm0 120c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"
+                />
+              </svg>
+            </span>
+             
+            Estimated English level
+          </h2>
+        </div>
       </div>
     </div>
-  }
-  title="Estimated English level"
-/>
+    <div
+      class="ant-card-body"
+    >
+      <div
+        class="ant-empty ant-empty-normal"
+      >
+        <div
+          class="ant-empty-image"
+        >
+          <svg
+            class="ant-empty-img-simple"
+            height="41"
+            viewBox="0 0 64 41"
+            width="64"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              fill="none"
+              fill-rule="evenodd"
+              transform="translate(0 1)"
+            >
+              <ellipse
+                class="ant-empty-img-simple-ellipse"
+                cx="32"
+                cy="33"
+                rx="32"
+                ry="7"
+              />
+              <g
+                class="ant-empty-img-simple-g"
+                fill-rule="nonzero"
+              >
+                <path
+                  d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                />
+                <path
+                  class="ant-empty-img-simple-path"
+                  d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div
+          class="ant-empty-description"
+        >
+          English level isn't choosen
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = `
-<CommonCard
-  content={
-    <Text
-      style={
-        Object {
-          "fontSize": "48px",
-          "textTransform": "capitalize",
-        }
-      }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
     >
-      a2
-    </Text>
-  }
-  icon={<ForwardRef(TagOutlined) />}
-  isEditingModeEnabled={false}
-  noDataDescrption="English level isn't choosen"
-  onPermissionsSettingsChange={[MockFunction]}
-  profileSettingsContent={
-    <div>
-      <p
-        style={
-          Object {
-            "fontSize": 18,
-            "marginBottom": 5,
-          }
-        }
-      >
-        <Text
-          strong={true}
-        >
-          English level:
-        </Text>
-      </p>
       <div
-        style={
-          Object {
-            "marginBottom": 20,
-          }
-        }
+        class="ant-card-head-wrapper"
       >
-        <ForwardRef(InternalSelect)
-          defaultValue="a2"
-          onChange={[Function]}
-          style={
-            Object {
-              "width": "100%",
-            }
-          }
+        <div
+          class="ant-card-head-title"
         >
-          <Option
-            value="a0"
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
           >
-            A0
-          </Option>
-          <Option
-            value="a1"
-          >
-            A1
-          </Option>
-          <Option
-            value="a1+"
-          >
-            A1+
-          </Option>
-          <Option
-            value="a2"
-          >
-            A2
-          </Option>
-          <Option
-            value="a2+"
-          >
-            A2+
-          </Option>
-          <Option
-            value="b1"
-          >
-            B1
-          </Option>
-          <Option
-            value="b1+"
-          >
-            B1+
-          </Option>
-          <Option
-            value="b2"
-          >
-            B2
-          </Option>
-          <Option
-            value="b2+"
-          >
-            B2+
-          </Option>
-          <Option
-            value="c1"
-          >
-            C1
-          </Option>
-          <Option
-            value="c1+"
-          >
-            C1+
-          </Option>
-          <Option
-            value="c2"
-          >
-            C2
-          </Option>
-        </ForwardRef(InternalSelect)>
+            <span
+              aria-label="tag"
+              class="anticon anticon-tag"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="tag"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M938 458.8l-29.6-312.6c-1.5-16.2-14.4-29-30.6-30.6L565.2 86h-.4c-3.2 0-5.7 1-7.6 2.9L88.9 557.2a9.96 9.96 0 000 14.1l363.8 363.8c1.9 1.9 4.4 2.9 7.1 2.9s5.2-1 7.1-2.9l468.3-468.3c2-2.1 3-5 2.8-8zM459.7 834.7L189.3 564.3 589 164.6 836 188l23.4 247-399.7 399.7zM680 256c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm0 120c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"
+                />
+              </svg>
+            </span>
+             
+            Estimated English level
+          </h2>
+        </div>
       </div>
     </div>
-  }
-  title="Estimated English level"
-/>
+    <div
+      class="ant-card-body"
+    >
+      <span
+        class="ant-typography"
+        style="text-transform: capitalize; font-size: 48px;"
+      >
+        a2
+      </span>
+    </div>
+  </div>
+</div>
 `;

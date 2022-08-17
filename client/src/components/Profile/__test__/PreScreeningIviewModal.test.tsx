@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import PreScreeningIviewModal from '../PreScreeningIviewModal';
 import { StageInterviewDetailedFeedback } from 'common/models/profile';
 
@@ -32,7 +31,7 @@ describe('PreScreeningIviewModal', () => {
       },
     } as StageInterviewDetailedFeedback;
 
-    const output = shallow(<PreScreeningIviewModal feedback={feedback} isVisible={true} onHide={jest.fn()} />);
-    expect(shallowToJson(output)).toMatchSnapshot();
+    const output = render(<PreScreeningIviewModal feedback={feedback} isVisible={true} onHide={jest.fn()} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

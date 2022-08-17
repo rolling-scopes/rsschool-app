@@ -1,61 +1,49 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
-import CoreJsIviewsCard from '../CoreJsIviewsCard';
+import { render, screen } from '@testing-library/react';
+import CoreJsIviewsCard, { CoreJsInterviewsData } from '../CoreJsIviewsCard';
 
 describe('CoreJSIviewsCard', () => {
-  const wrapper = mount<CoreJsIviewsCard>(
-    <CoreJsIviewsCard
-      data={[
+  const data = [
+    {
+      courseFullName: 'rs-2019',
+      courseName: 'rs-2019',
+      locationName: 'minsk',
+      interviews: [
         {
-          courseFullName: 'rs-2019',
-          courseName: 'rs-2019',
-          locationName: 'minsk',
-          interviews: [
+          answers: [
             {
-              answers: [
-                {
-                  answer: 'yes',
-                  questionText: 'test',
-                  questionId: 'test',
-                },
-                {
-                  answer: 'no',
-                  questionText: 'test',
-                  questionId: 'test',
-                },
-              ],
-              interviewer: {
-                name: 'Dzmitry Petrov',
-                githubId: 'dima',
-              },
-              comment: 'test',
-              score: 4,
-              name: 'CoreJS Interview',
+              answer: true,
+              questionText: 'test',
+              questionId: 'test',
+            },
+            {
+              answer: false,
+              questionText: 'test',
+              questionId: 'test',
             },
           ],
+          interviewer: {
+            name: 'Dzmitry Petrov',
+            githubId: 'dima',
+          },
+          comment: 'test',
+          score: 4,
+          name: 'CoreJS Interview',
         },
-      ]}
-    />,
-  );
-  it('Should render correctly', () => {
-    expect(shallowToJson(wrapper as any)).toMatchSnapshot();
+      ],
+    },
+  ] as CoreJsInterviewsData[];
+
+  it('should render correctly', () => {
+    const wrapper = render(<CoreJsIviewsCard data={data} />);
+    expect(wrapper.container).toMatchSnapshot();
   });
-  describe('showCoreJsIviewModal', () => {
-    it('should set "state.isCoreJsIviewModalVisible" as "true", "state.courseIndex" as passed', () => {
-      const instance: any = wrapper.instance();
-      expect(instance.state.isCoreJsIviewModalVisible).toBe(false);
-      instance.showCoreJsIviewModal(0, 0);
-      expect(instance.state.isCoreJsIviewModalVisible).toBe(true);
-    });
-  });
-  describe('hideCoreJsIviewModal', () => {
-    it('should set "state.isCoreJsIviewModalVisible" as "false"', () => {
-      const instance = wrapper.instance();
-      instance.state.isCoreJsIviewModalVisible = true;
-      expect(instance.state.isCoreJsIviewModalVisible).toBe(true);
-      (instance as any).hideCoreJsIviewModal();
-      expect(instance.state.isCoreJsIviewModalVisible).toBe(false);
-    });
+
+  it('should show modal', async () => {
+    render(<CoreJsIviewsCard data={data} />);
+    const btn = await screen.findByTestId('profile-corejs-iview-button');
+    btn.click();
+    const modal = screen.queryByTestId('profile-corejs-iviews-modal-table');
+    expect(modal).toBeDefined();
   });
 });

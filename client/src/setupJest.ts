@@ -1,7 +1,4 @@
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-
-Enzyme.configure({ adapter: new Adapter() });
+import '@testing-library/jest-dom/extend-expect';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -16,3 +13,5 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+export {};

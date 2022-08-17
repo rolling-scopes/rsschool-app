@@ -10,12 +10,12 @@
   "author": "Dzmitry Tsebruk <mikhama@tut.by>",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "dotenv": "^8.0.0",
-    "forever": "^4.0.3",
-    "moment-timezone": "^0.5.26",
-    "node-telegram-bot-api": "^0.30.0",
-    "punycode": "^2.1.1"
+    "discord.js": "11.5.1",
+    "dotenv": "8.0.0",
+    "forever": "4.0.3",
+    "moment-timezone": "0.5.26",
+    "node-telegram-bot-api": "0.30.0",
+    "punycode": "2.1.1"
   },
   "devDependencies": {
     "eslint": "5.16.0",
