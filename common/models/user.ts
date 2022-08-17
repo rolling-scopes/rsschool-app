@@ -26,7 +26,7 @@ export interface StudentBasic extends UserBasic {
         name: string;
       }
     | null;
-  discord?: Discord | null;
+  discord: Discord | null;
   totalScore: number;
   rank?: number;
 }

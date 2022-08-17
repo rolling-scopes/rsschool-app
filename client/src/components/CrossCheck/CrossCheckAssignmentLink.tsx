@@ -8,12 +8,19 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
   if (!assignment) {
     return null;
   }
-  const discordUsername = `@${assignment.student.discord?.username}#${assignment.student.discord?.discriminator}`;
+
+  const {
+    student: { discord },
+    url: solutionUrl,
+  } = assignment;
+
+  const discordUsername = discord ? `@${discord.username}#${discord.discriminator}` : null;
+
   return (
     <div style={{ marginTop: 16 }}>
       <Typography.Paragraph>
         Student Discord:{' '}
-        {assignment.student.discord ? (
+        {discordUsername ? (
           <>
             <Typography.Text strong>{discordUsername}</Typography.Text>{' '}
             <CopyToClipboardButton value={discordUsername} />
@@ -23,7 +30,7 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
         )}
       </Typography.Paragraph>
       <Typography.Paragraph>
-        Solution: <a href={assignment.url}>{assignment.url}</a>
+        Solution: <a href={solutionUrl}>{solutionUrl}</a>
       </Typography.Paragraph>
     </div>
   );
