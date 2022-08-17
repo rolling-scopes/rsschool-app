@@ -1834,7 +1834,7 @@ export interface MentorStudentDto {
      * @type {string}
      * @memberof MentorStudentDto
      */
-       'repoUrl': string;
+       'repoUrl': string | null;
 }
 /**
  *
