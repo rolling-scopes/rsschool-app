@@ -9,10 +9,10 @@ import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
 import { isArray, omit } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/course';
+import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import { CoursesTasksApi } from 'api';
+import { CoursesTasksApi, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
 
 const { Text } = Typography;
@@ -57,7 +57,7 @@ export function Page(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
   const [crossCheckList, setCrossCheckList] = useState({
-    content: [] as CrossCheckPairs[],
+    content: [] as CrossCheckPairDto[],
     pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
     orderBy: { field: DEFAULT_ORDER_BY, order: DEFAULT_ORDER_DIRECTION },
   });
@@ -92,7 +92,7 @@ export function Page(props: CoursePageProps) {
     async (
       pagination: TablePaginationConfig,
       filters: Record<keyof Filters, FilterValue | null>,
-      sorter: Sorter<CrossCheckPairs>,
+      sorter: Sorter<CrossCheckPairDto>,
     ) => {
       if (isArray(sorter)) {
         return;
@@ -109,7 +109,7 @@ export function Page(props: CoursePageProps) {
           courseId,
           pagination.pageSize as IPaginationInfo['pageSize'],
           pagination.current as IPaginationInfo['current'],
-          orderBy.field.toString(),
+          orderBy.field,
           orderBy.order,
           filters.checker?.toString(),
           filters.student?.toString(),
@@ -120,7 +120,7 @@ export function Page(props: CoursePageProps) {
           content: data.items,
           pagination: data.pagination,
           orderBy: {
-            field: orderBy.field.toString(),
+            field: orderBy.field,
             order: orderBy.order,
           },
         });
@@ -163,7 +163,7 @@ export function Page(props: CoursePageProps) {
   );
 }
 
-const getColumns = (viewComment: (value: CrossCheckPairs) => void): CustomColumnType<CrossCheckPairs>[] => [
+const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColumnType<CrossCheckPairDto>[] => [
   {
     title: 'Task',
     fixed: 'left',
@@ -270,14 +270,14 @@ const getColumns = (viewComment: (value: CrossCheckPairs) => void): CustomColumn
 
 function renderTable(
   loaded: boolean,
-  crossCheckPairs: CrossCheckPairs[],
+  crossCheckPairs: CrossCheckPairDto[],
   pagination: TablePaginationConfig,
   handleChange: (
     pagination: TablePaginationConfig,
     filters: Record<keyof Filters, FilterValue | null>,
-    sorter: Sorter<CrossCheckPairs>,
+    sorter: Sorter<CrossCheckPairDto>,
   ) => void,
-  viewComment: (value: CrossCheckPairs) => void,
+  viewComment: (value: CrossCheckPairDto) => void,
 ) {
   if (!loaded) {
     return null;
@@ -285,7 +285,7 @@ function renderTable(
   // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
   const tableWidth = 800;
   return (
-    <Table<CrossCheckPairs>
+    <Table<CrossCheckPairDto>
       className="table-score"
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
