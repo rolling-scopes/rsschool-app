@@ -1,12 +1,12 @@
+import { ColumnType } from 'antd/lib/table';
 import { Popover } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { CourseTaskDto } from 'api';
+import { CourseTaskDto, ScoreStudentDto } from 'api';
 import { dateTimeRenderer } from 'components/Table';
-import { ColumnTypeWithName, StudentScore } from 'services/course';
 
 export function getTaskColumns(courseTasks: CourseTaskDto[]) {
   const columns = courseTasks.map(courseTask => {
-    const column: ColumnTypeWithName<StudentScore> = {
+    const column: ColumnType<ScoreStudentDto> = {
       dataIndex: courseTask.id.toString(),
       title: () => {
         const icon = (
@@ -42,7 +42,6 @@ export function getTaskColumns(courseTasks: CourseTaskDto[]) {
         const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
         return currentTask ? <div>{currentTask.score}</div> : 0;
       },
-      name: courseTask.name,
     };
     return column;
   });
