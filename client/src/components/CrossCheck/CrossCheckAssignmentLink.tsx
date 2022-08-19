@@ -30,7 +30,10 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
         )}
       </Typography.Paragraph>
       <Typography.Paragraph>
-        Solution: <a href={solutionUrl}>{solutionUrl}</a>
+        Solution:{' '}
+        <a target="_blank" href={solutionUrl}>
+          {solutionUrl}
+        </a>
       </Typography.Paragraph>
     </div>
   );
