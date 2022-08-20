@@ -252,7 +252,7 @@ export class ScheduleService {
       }
       if (event.dateTime !== previousEvent.dateTime) {
         fields.dateTime = event.dateTime;
-        fields.dateTimeOld = previousEvent.dateTime;
+        fields.dateTimeOld = previousEvent.dateTime as string;
       }
 
       return Object.keys(fields).length > 0 ? fields : undefined;

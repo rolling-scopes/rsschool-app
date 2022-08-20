@@ -676,6 +676,161 @@ export interface CourseDto {
 /**
  *
  * @export
+ * @interface CourseEventDto
+ */
+export interface CourseEventDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseEventDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'type': CourseEventDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'dateTime': string;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CourseEventDto
+     */
+    'organizer': PersonDto;
+}
+
+export const CourseEventDtoTypeEnum = {
+    LectureOnline: 'lecture_online',
+    LectureOffline: 'lecture_offline',
+    LectureMixed: 'lecture_mixed',
+    LectureSelfStudy: 'lecture_self_study',
+    Warmup: 'warmup',
+    Info: 'info',
+    Workshop: 'workshop',
+    Meetup: 'meetup',
+    CrossCheckDeadline: 'cross_check_deadline',
+    Webinar: 'webinar',
+    Special: 'special'
+} as const;
+
+export type CourseEventDtoTypeEnum = typeof CourseEventDtoTypeEnum[keyof typeof CourseEventDtoTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface CourseScheduleItemDto
+ */
+export interface CourseScheduleItemDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'score': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'status': CourseScheduleItemDtoStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'organizer': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'maxScore': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseScheduleItemDto
+     */
+    'scoreWeight': object | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'descriptionUrl': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'tag': CourseScheduleItemDtoTagEnum;
+}
+
+export const CourseScheduleItemDtoStatusEnum = {
+    Done: 'done',
+    Available: 'available',
+    Archived: 'archived',
+    Future: 'future',
+    Missed: 'missed',
+    Review: 'review'
+} as const;
+
+export type CourseScheduleItemDtoStatusEnum = typeof CourseScheduleItemDtoStatusEnum[keyof typeof CourseScheduleItemDtoStatusEnum];
+export const CourseScheduleItemDtoTagEnum = {
+    Lecture: 'lecture',
+    Coding: 'coding',
+    SelfStudy: 'self-study',
+    Interview: 'interview',
+    CrossCheck: 'cross-check',
+    Test: 'test'
+} as const;
+
+export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[keyof typeof CourseScheduleItemDtoTagEnum];
+
+/**
+ * 
+ * @export
  * @interface CourseStatsDto
  */
 export interface CourseStatsDto {
@@ -2624,6 +2779,19 @@ export interface SaveCertificateDto {
 /**
  *
  * @export
+ * @interface SaveTaskSolutionDto
+ */
+export interface SaveTaskSolutionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveTaskSolutionDto
+     */
+    'url': string;
+}
+/**
+ * 
+ * @export
  * @interface ScoreDto
  */
 export interface ScoreDto {
@@ -3021,6 +3189,31 @@ export interface TaskResultsDto {
 }
 /**
  *
+ * @export
+ * @interface TaskSolutionDto
+ */
+export interface TaskSolutionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskSolutionDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskSolutionDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskSolutionDto
+     */
+    'url': string;
+}
+/**
+ * 
  * @export
  * @interface UpdateCourseEventDto
  */
@@ -5081,7 +5274,7 @@ export const CoursesEventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseEventDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createCourseEvent(courseId, createCourseEventDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5125,7 +5318,7 @@ export const CoursesEventsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: any): AxiosPromise<void> {
+        createCourseEvent(courseId: number, createCourseEventDto: CreateCourseEventDto, options?: any): AxiosPromise<Array<CourseEventDto>> {
             return localVarFp.createCourseEvent(courseId, createCourseEventDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5295,6 +5488,224 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public getInterviews(courseId: number, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesScheduleApi - axios parameter creator
+ * @export
+ */
+export const CoursesScheduleApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchedule: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getSchedule', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/schedule`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesScheduleApi - functional programming interface
+ * @export
+ */
+export const CoursesScheduleApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesScheduleApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSchedule(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseScheduleItemDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSchedule(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesScheduleApi - factory interface
+ * @export
+ */
+export const CoursesScheduleApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesScheduleApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchedule(courseId: number, options?: any): AxiosPromise<Array<CourseScheduleItemDto>> {
+            return localVarFp.getSchedule(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesScheduleApi - object-oriented interface
+ * @export
+ * @class CoursesScheduleApi
+ * @extends {BaseAPI}
+ */
+export class CoursesScheduleApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesScheduleApi
+     */
+    public getSchedule(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesScheduleApiFp(this.configuration).getSchedule(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesTaskSolutionsApi - axios parameter creator
+ * @export
+ */
+export const CoursesTaskSolutionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskSolution: async (courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTaskSolution', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createTaskSolution', 'courseTaskId', courseTaskId)
+            // verify required parameter 'saveTaskSolutionDto' is not null or undefined
+            assertParamExists('createTaskSolution', 'saveTaskSolutionDto', saveTaskSolutionDto)
+            const localVarPath = `/courses/{courseId}/tasks/{courseTaskId}/solutions`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(saveTaskSolutionDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesTaskSolutionsApi - functional programming interface
+ * @export
+ */
+export const CoursesTaskSolutionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesTaskSolutionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskSolutionDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesTaskSolutionsApi - factory interface
+ * @export
+ */
+export const CoursesTaskSolutionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesTaskSolutionsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: any): AxiosPromise<TaskSolutionDto> {
+            return localVarFp.createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesTaskSolutionsApi - object-oriented interface
+ * @export
+ * @class CoursesTaskSolutionsApi
+ * @extends {BaseAPI}
+ */
+export class CoursesTaskSolutionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {SaveTaskSolutionDto} saveTaskSolutionDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTaskSolutionsApi
+     */
+    public createTaskSolution(courseId: number, courseTaskId: number, saveTaskSolutionDto: SaveTaskSolutionDto, options?: AxiosRequestConfig) {
+        return CoursesTaskSolutionsApiFp(this.configuration).createTaskSolution(courseId, courseTaskId, saveTaskSolutionDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

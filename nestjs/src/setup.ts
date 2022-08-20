@@ -8,7 +8,6 @@ export function setupApp(app: INestApplication) {
   app.enableCors();
   app.useLogger(app.get(Logger));
   app.use(cookieParser());
-  app.useGlobalFilters(new ValidationFilter());
   app.useGlobalFilters(new EntityNotFoundFilter());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -22,4 +21,5 @@ export function setupApp(app: INestApplication) {
       },
     }),
   );
+  app.useGlobalFilters(new ValidationFilter());
 }

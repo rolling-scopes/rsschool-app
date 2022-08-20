@@ -23,10 +23,6 @@ export interface IConfig {
     restApiUrl: string;
     restApiKey: string;
   };
-  dev: {
-    username: string;
-    adminEnabled: boolean;
-  };
   admin: {
     username: string;
     password: string;
@@ -77,10 +73,6 @@ export const config: IConfig = {
     successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3000',
     activityWebhookSecret: process.env.ACTIVITY_WEBHOOK_SECRET || 'activity-webhook',
     consentSecret: process.env.CONSENT_SECRET || 'consent-secret',
-  },
-  dev: {
-    username: process.env.RSSHCOOL_DEV_USERNAME || '',
-    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN === 'true' || ''),
   },
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',
