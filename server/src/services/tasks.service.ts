@@ -12,7 +12,7 @@ export async function getCourseTask(courseTaskId: number, selectCourse = false) 
   return query.getOne();
 }
 
-export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: number } | undefined> {
+export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: number } | null> {
   return getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .where('courseTask.id = :courseTaskId', { courseTaskId: Number(courseTaskId) })

@@ -1,9 +1,9 @@
-import { ConnectionOptions } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
 import * as path from 'path';
 import { models } from '@entities/index';
 import { migrations } from './migrations';
 
-const config: ConnectionOptions = {
+const config: DataSourceOptions = {
   type: 'postgres',
   host: process.env.RSSHCOOL_PG_HOST,
   port: 5432,
@@ -15,9 +15,6 @@ const config: ConnectionOptions = {
   synchronize: false,
   migrationsRun: false,
   subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
-  cli: {
-    migrationsDir: 'src/migrations',
-  },
   logging: ['migration', 'error', 'warn'],
 };
 

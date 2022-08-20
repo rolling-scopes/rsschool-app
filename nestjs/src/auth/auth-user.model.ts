@@ -1,6 +1,6 @@
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
-import { AuthDetails } from './auth.repository';
+import type { AuthDetails } from './auth.service';
 
 export enum Role {
   Admin = 'admin',

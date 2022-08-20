@@ -23,7 +23,10 @@ export class BaseSubscriber implements EntitySubscriberInterface {
       return;
     }
 
-    const old = await event.manager.findOne(event.metadata.target, event.entity.id);
+    const old = await event.manager.findOneBy(event.metadata.target, { id: event.entity.id });
+    if (!old) {
+      return;
+    }
     await event.manager.save(
       History,
       {
@@ -48,7 +51,7 @@ export class BaseSubscriber implements EntitySubscriberInterface {
       return;
     }
 
-    const old = await event.manager.findOne<{ id: number }>(event.metadata.target, entityId);
+    const old = await event.manager.findOneBy<{ id: number }>(event.metadata.target, { id: entityId });
 
     await event.manager.save(
       History,

@@ -27,8 +27,8 @@ export class CourseAccessService {
 
   public async leaveAsStudent(courseId: number, studentId: number, comment?: string): Promise<void> {
     const [student, course] = await Promise.all([
-      this.studentRepository.findOneOrFail(studentId),
-      this.courseRepository.findOneOrFail(courseId),
+      this.studentRepository.findOneByOrFail({ id: studentId }),
+      this.courseRepository.findOneByOrFail({ id: courseId }),
     ]);
 
     if (course.completed) throw new BadRequestException('Course is already completed');
@@ -44,8 +44,8 @@ export class CourseAccessService {
 
   public async rejoinAsStudent(courseId: number, studentId: number): Promise<void> {
     const [student, course] = await Promise.all([
-      this.studentRepository.findOneOrFail(studentId),
-      this.courseRepository.findOneOrFail(courseId),
+      this.studentRepository.findOneByOrFail({ id: studentId }),
+      this.courseRepository.findOneByOrFail({ id: courseId }),
     ]);
 
     if (course.completed) throw new BadRequestException('Course is already completed');

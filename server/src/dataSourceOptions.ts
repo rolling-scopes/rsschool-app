@@ -1,8 +1,8 @@
-import { ConnectionOptions } from 'typeorm';
 import { models } from './models';
 import { migrations } from './migrations';
+import { DataSourceOptions } from 'typeorm';
 
-const config: ConnectionOptions = {
+export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env.RSSHCOOL_API_PG_HOST,
   port: 5432,
@@ -11,10 +11,5 @@ const config: ConnectionOptions = {
   database: process.env.RSSHCOOL_API_PG_DATABASE,
   entities: models,
   migrations,
-  cli: {
-    migrationsDir: 'src/migrations',
-  },
   logging: ['migration', 'error', 'warn'],
 };
-
-export = config;

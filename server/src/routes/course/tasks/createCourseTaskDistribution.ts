@@ -35,7 +35,7 @@ export const createCourseTaskDistribution = (logger: ILogger) => async (ctx: Rou
     await checkerRepository.delete({ courseTaskId });
   }
 
-  const existingPairs = await checkerRepository.find({ courseTaskId });
+  const existingPairs = await checkerRepository.findBy({ courseTaskId });
 
   const { mentors: crossMentors } = crossMentorDistributionService.distribute(mentors, existingPairs);
 

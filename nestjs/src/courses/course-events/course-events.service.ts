@@ -18,7 +18,7 @@ export class CourseEventsService {
 
   public async createCourseEvent(courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>) {
     const { id } = await this.courseEventRepository.save(courseEvent);
-    return this.courseEventRepository.findOneOrFail(id, { relations: ['organizer', 'event'] });
+    return this.courseEventRepository.findOneOrFail({ where: { id }, relations: ['organizer', 'event'] });
   }
 
   public async updateCourseEvent(
@@ -26,11 +26,11 @@ export class CourseEventsService {
     courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>,
   ) {
     await this.courseEventRepository.update(id, courseEvent);
-    return this.courseEventRepository.findOneOrFail(id);
+    return this.courseEventRepository.findOneByOrFail({ id });
   }
 
   public async deleteCourseEvent(id: number) {
-    const entity = await this.courseEventRepository.findOneOrFail(id);
+    const entity = await this.courseEventRepository.findOneByOrFail({ id });
     return this.courseEventRepository.remove(entity);
   }
 }

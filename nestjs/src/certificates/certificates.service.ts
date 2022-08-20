@@ -54,7 +54,7 @@ export class CertificationsService {
   }
 
   public async buildNotificationData(student: Student, data: SaveCertificateDto) {
-    const course = await this.courseRepository.findOneOrFail(student.courseId);
+    const course = await this.courseRepository.findOneByOrFail({ id: student.courseId });
     return {
       userId: student.userId,
       notification: {

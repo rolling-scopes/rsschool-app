@@ -25,7 +25,7 @@ export class AlertsService {
       courseId,
       enabled,
     });
-    return this.alertsRepository.findOneOrFail(id);
+    return this.alertsRepository.findOneByOrFail({ id });
   }
 
   public async findAll({ enabled }: { enabled: boolean }): Promise<Alert[]> {
@@ -47,7 +47,7 @@ export class AlertsService {
         enabled,
       }),
     );
-    return this.alertsRepository.findOneOrFail(id);
+    return this.alertsRepository.findOneByOrFail({ id });
   }
 
   public async remove(id: number) {

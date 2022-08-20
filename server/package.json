@@ -10,7 +10,8 @@
     "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
     "test-watch": "jest --watch",
     "coverage": "jest --coverage",
-    "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts"
+    "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js",
+    "typeorm:migration:generate": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate -d src/dataSource.ts"
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.8.0",
@@ -31,7 +32,6 @@
     "koa-passport": "4.1.3",
     "koa-session": "5.13.1",
     "koa-static": "5.0.0",
-    "koa-typeorm-pagination": "1.0.1",
     "lodash": "4.17.21",
     "luxon": "2.3.0",
     "moment-timezone": "0.5.33",
@@ -43,7 +43,7 @@
     "pg": "8.7.3",
     "pino-multi-stream": "4.2.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.2.43"
+    "typeorm": "0.3.7"
   },
   "devDependencies": {
     "@types/jest": "27.4.0",
@@ -72,7 +72,8 @@
     "jest-junit": "13.0.0",
     "pino-pretty": "7.5.1",
     "ts-jest": "27.1.3",
-    "ts-node-dev": "1.1.8",
+    "ts-node-dev": "2.0.0",
+    "ts-node": "10.9.1",
     "tsconfig-paths": "3.11.0",
     "typescript": "4.3.5"
   },

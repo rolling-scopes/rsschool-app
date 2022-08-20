@@ -2,16 +2,7 @@ import { Checker, CourseTask } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Between,
-  FindCondition,
-  FindConditions,
-  LessThan,
-  LessThanOrEqual,
-  MoreThan,
-  MoreThanOrEqual,
-  Repository,
-} from 'typeorm';
+import { Between, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository, FindOptionsWhere } from 'typeorm';
 import * as dayjs from 'dayjs';
 
 export enum Status {
@@ -38,7 +29,8 @@ export class CourseTasksService {
   }
 
   public getById(courseTaskId: number) {
-    return this.courseTaskRepository.findOneOrFail(courseTaskId, {
+    return this.courseTaskRepository.findOneOrFail({
+      where: { id: courseTaskId },
       relations: ['task'],
     });
   }
@@ -52,9 +44,9 @@ export class CourseTasksService {
       .getMany();
   }
 
-  private getFindConditionForStatus(status?: 'started' | 'inprogress' | 'finished'): FindCondition<CourseTask> {
+  private getFindConditionForStatus(status?: 'started' | 'inprogress' | 'finished'): FindOptionsWhere<CourseTask> {
     const now = new Date().toISOString();
-    let where: FindCondition<CourseTask> = {};
+    let where: FindOptionsWhere<CourseTask> = {};
 
     switch (status) {
       case 'started':
@@ -86,7 +78,7 @@ export class CourseTasksService {
     const now = dayjs().toISOString();
     const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
 
-    const where: FindConditions<CourseTask> = {
+    const where: FindOptionsWhere<CourseTask> = {
       courseId,
       disabled: false,
       studentStartDate: LessThanOrEqual(now),

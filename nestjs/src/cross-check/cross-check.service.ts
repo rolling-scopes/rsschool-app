@@ -5,7 +5,7 @@ import { HttpService } from '@nestjs/axios';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '../config';
 import { isTaskNeededToStart, isTaskNeededToFinish } from './tasks-filtering';
-import { CourseTask } from '@entities/courseTask';
+import { Checker, CourseTask } from '@entities/courseTask';
 import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
 
 const ONCE_A_DAY_AT_00_05 = '5 0 * * *';
@@ -71,7 +71,7 @@ export class CrossCheckService {
   }
 
   private async getCrossCheckTasks() {
-    const allCrossCheckTasks = await this.courseTaskRepository.find({ where: { checker: 'crossCheck' } });
+    const allCrossCheckTasks = await this.courseTaskRepository.find({ where: { checker: Checker.CrossCheck } });
 
     return {
       tasksToStart: allCrossCheckTasks.filter(isTaskNeededToStart),

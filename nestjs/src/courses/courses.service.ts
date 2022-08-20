@@ -15,7 +15,7 @@ export class CoursesService {
   }
 
   public async getById(id: number) {
-    return this.repository.findOneOrFail(id);
+    return this.repository.findOneByOrFail({ id });
   }
 
   public async getByIds(ids: number[]) {

@@ -3,15 +3,14 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import serve from 'koa-static';
 import koaJwt from 'koa-jwt';
-import { paginateMiddleware } from 'koa-typeorm-pagination';
 
 import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
-import { createConnection } from 'typeorm';
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { startBackgroundJobs } from './schedule';
-import * as pgConfig from './ormconfig';
+import { dataSourceOptions } from './dataSourceOptions';
+import { createConnection } from 'typeorm';
 
 export class App {
   public koa = new Koa();
@@ -21,7 +20,6 @@ export class App {
     this.appLogger = logger;
 
     this.koa.use(loggerMiddleware(this.appLogger));
-    this.koa.use(paginateMiddleware);
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     if (process.env.NODE_ENV === 'production') {
@@ -53,7 +51,7 @@ export class App {
 
   public async pgConnect(): Promise<boolean> {
     const logger = this.appLogger.child({ module: 'db' });
-    const connection = await createConnection(pgConfig);
+    const connection = await createConnection(dataSourceOptions);
     logger.info('Connected to Postgres');
 
     logger.info('Executing migrations...');

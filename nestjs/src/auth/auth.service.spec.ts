@@ -5,10 +5,10 @@ import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { ConfigService } from '../config';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AuthRepository } from './auth.repository';
 import { HttpService } from '@nestjs/axios';
 import { UserNotificationsService } from '../users-notifications/users.notifications.service';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
+import { LoginState } from '@entities/loginState';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -25,7 +25,7 @@ describe('AuthService', () => {
           provide: ConfigService,
           useValue: { users: { admins: [] } },
         },
-        { provide: getRepositoryToken(AuthRepository), useValue: {} },
+        { provide: getRepositoryToken(LoginState), useValue: {} },
         { provide: UserNotificationsService, useValue: {} },
         { provide: HttpService, useValue: {} },
         { provide: getRepositoryToken(NotificationUserConnection), useValue: {} },
