@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Drawer, Tooltip } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { ScheduleSettings } from '../useScheduleSettings';
+import { Button, Drawer, Tooltip } from 'antd';
+import React, { useState } from 'react';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
 import TimeZone from './TimeZone';

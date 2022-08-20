@@ -4,7 +4,7 @@ import { Modal, Tabs } from 'antd';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
-import { ScheduleSettings } from '../useScheduleSettings';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { TaskDetails, EventDetails } from '../EventDetails';
 import ManageEventForm from './ManageEventForm';
 

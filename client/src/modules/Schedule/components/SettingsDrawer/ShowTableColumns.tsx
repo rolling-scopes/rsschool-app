@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Button, Divider, Typography, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FilterOutlined } from '@ant-design/icons';
-import { COLUMNS, CONFIGURABLE_COLUMNS } from '../constants';
+import { COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants';
 import SettingsItem from './SettingsItem';
 import { TASK_EVENT_TYPES_MAP } from 'data';
 
@@ -22,14 +22,14 @@ interface ShowTableColumnsProps {
   closeDrawer: () => void;
 }
 
-const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
+export function ShowTableColumns({
   eventTags,
   closeDrawer,
   columnsHidden: initialColumnsHidden,
   setColumnsHidden: setInitialColumnsHidden,
   eventTagsHidden: initialEventTypesHidden,
   setEventTagsHidden: setInitialEventTypesHidden,
-}) => {
+}: ShowTableColumnsProps) {
   const [columnsHidden, setColumnsHidden] = useState<string[]>(initialColumnsHidden);
   const [eventTagsHidden, setEventTagsHidden] = useState<string[]>(initialEventTypesHidden);
 
@@ -65,9 +65,9 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
   };
 
   return (
-    <SettingsItem header="Show table columns" IconComponent={FilterOutlined}>
+    <SettingsItem header="Table columns" IconComponent={FilterOutlined}>
       <div style={{ marginBottom: 10 }}>
-        <Text>Show columns</Text>
+        <Text>Visible Columns</Text>
       </div>
       {AVAILABLE_COLUMNS.map(({ key, name }) => (
         <div key={key} style={{ marginBottom: 10 }}>
@@ -77,7 +77,7 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
         </div>
       ))}
       <div style={{ marginBottom: 10 }}>
-        <Text>Show event types</Text>
+        <Text>Visible Tags</Text>
       </div>
       {eventTags.map(key => (
         <div key={key} style={{ marginBottom: 10 }}>
@@ -97,6 +97,6 @@ const ShowTableColumns: React.FC<ShowTableColumnsProps> = ({
       </div>
     </SettingsItem>
   );
-};
+}
 
 export default ShowTableColumns;

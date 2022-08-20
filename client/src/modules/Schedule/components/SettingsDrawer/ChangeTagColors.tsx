@@ -1,11 +1,11 @@
-import React from 'react';
-import { Collapse, Tag } from 'antd';
-import { GithubPicker, ColorState } from 'react-color';
 import { BgColorsOutlined } from '@ant-design/icons';
-import { PICKER_COLORS } from '../constants';
-import { getTagStyle } from '../utils';
-import SettingsItem from './SettingsItem';
+import { Collapse, Tag } from 'antd';
 import { TASK_EVENT_TYPES_MAP } from 'data';
+import { PICKER_COLORS } from 'modules/Schedule/constants';
+import { getTagStyle } from 'modules/Schedule/utils';
+import React from 'react';
+import { ColorState, GithubPicker } from 'react-color';
+import SettingsItem from './SettingsItem';
 
 const { Panel } = Collapse;
 

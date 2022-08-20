@@ -1,10 +1,10 @@
+import { Col, Row } from 'antd';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
-import { Row, Col } from 'antd';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import { ScheduleSettings } from '../useScheduleSettings';
-import ManageCsvButtons from './ManageCsvButtons';
 import AddEventButton from './AddEventButton';
+import ManageCsvButtons from './ManageCsvButtons';
 
 interface SettingsPanelProps {
   isCourseManager: boolean;

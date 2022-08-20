@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
-import { DEFAULT_COLORS, LocalStorageKeys } from 'components/Schedule/constants';
+import { DEFAULT_COLORS, LocalStorageKeys } from 'modules/Schedule/constants';
 
 export interface ScheduleSettings {
   timezone: string;
@@ -13,7 +13,7 @@ export interface ScheduleSettings {
   setEventTypesHidden: (value: string[]) => void;
 }
 
-const useScheduleSettings = (): ScheduleSettings => {
+export const useScheduleSettings = (): ScheduleSettings => {
   const [tagColors = DEFAULT_COLORS, setTagColors] = useLocalStorage<Record<string, string>>(
     LocalStorageKeys.TagColors,
   );
@@ -37,5 +37,3 @@ const useScheduleSettings = (): ScheduleSettings => {
     [timezone, tagColors, columnsHidden, eventTypesHidden],
   );
 };
-
-export default useScheduleSettings;

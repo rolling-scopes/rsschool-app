@@ -24,7 +24,7 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { Event, EventService } from 'services/event';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { TIMEZONES } from 'configs/timezones';
-import { SPECIAL_ENTITY_TAGS } from '../constants';
+import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
 import { TASK_TYPES } from 'data/taskTypes';
 import { EVENT_TYPES } from 'data/eventTypes';
 

@@ -7,8 +7,8 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
 import { CourseEvent } from 'services/course';
-import { GithubUserLink } from '../../GithubUserLink';
-import { ScheduleSettings } from '../useScheduleSettings';
+import { GithubUserLink } from 'components/GithubUserLink';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
 const { Title, Text } = Typography;
 

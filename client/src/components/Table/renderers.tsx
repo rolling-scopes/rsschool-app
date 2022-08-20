@@ -9,7 +9,6 @@ import {
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { Checker, CrossCheckStatus } from 'services/course';
-import { getTagStyle } from 'components/Schedule';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseEventDtoTypeEnum, CourseScheduleItemDto } from 'api';
 
@@ -126,18 +125,6 @@ export function renderTag(value: number | string, color?: string) {
   return (
     <Tag color={color} key={value}>
       {value}
-    </Tag>
-  );
-}
-
-export function renderTagWithStyle(
-  tagName: string,
-  tagColors?: Record<string, string>,
-  tagMap?: Record<string, string>,
-) {
-  return (
-    <Tag style={getTagStyle(tagName, tagColors)} key={tagName}>
-      {tagMap?.[tagName] || tagName}
     </Tag>
   );
 }

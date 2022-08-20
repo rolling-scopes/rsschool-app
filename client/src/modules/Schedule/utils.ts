@@ -2,7 +2,7 @@ import csv from 'csvtojson';
 import { CSSProperties } from 'react';
 import { UploadChangeParam } from 'antd/lib/upload';
 import isUndefined from 'lodash/isUndefined';
-import { DEFAULT_COLOR } from 'components/Schedule/constants';
+import { DEFAULT_COLOR } from 'modules/Schedule/constants';
 import { CourseService, CourseEvent, CourseTask } from 'services/course';
 
 export const getEventLink = (courseAlias: string, eventId: number, isTask?: boolean) =>

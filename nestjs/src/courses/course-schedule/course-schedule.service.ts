@@ -97,9 +97,7 @@ export class CourseScheduleService {
           maxScore,
           scoreWeight,
           currentScore,
-          status: studentId
-            ? this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined)
-            : undefined,
+          status: this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined),
           dataSource: CourseScheduleDataSource.CourseTask,
           tags: type ? [type] : [],
           descriptionUrl: courseTask.task.descriptionUrl,

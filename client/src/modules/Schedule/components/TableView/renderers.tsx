@@ -1,5 +1,6 @@
-import { Badge } from 'antd';
+import { Badge, Tag } from 'antd';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
+import { getTagStyle } from 'modules/Schedule/utils';
 import capitalize from 'lodash/capitalize';
 
 export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
@@ -20,4 +21,16 @@ export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
     default:
       return <Badge status="default" text={label} />;
   }
+}
+
+export function renderTagWithStyle(
+  tagName: string,
+  tagColors?: Record<string, string>,
+  tagMap?: Record<string, string>,
+) {
+  return (
+    <Tag style={getTagStyle(tagName, tagColors)} key={tagName}>
+      {tagMap?.[tagName] || tagName}
+    </Tag>
+  );
 }
