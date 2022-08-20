@@ -1,5 +1,5 @@
-import { ExportOutlined } from '@ant-design/icons';
-import { Button, Col, Row, Tooltip } from 'antd';
+import { FileExcelOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import React from 'react';
 
 interface ManageCsvButtonsProps {
@@ -14,13 +14,9 @@ const ManageCsvButtons: React.FC<ManageCsvButtonsProps> = ({ courseId, timezone 
   };
 
   return (
-    <Row justify="start" gutter={[16, 16]}>
-      <Col>
-        <Tooltip title="Export schedule" placement="topRight">
-          <Button onClick={exportToCsvFile} icon={<ExportOutlined />} />
-        </Tooltip>
-      </Col>
-    </Row>
+    <Button onClick={exportToCsvFile} icon={<FileExcelOutlined />}>
+      Export
+    </Button>
   );
 };
 

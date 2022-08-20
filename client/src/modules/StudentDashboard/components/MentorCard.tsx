@@ -82,7 +82,11 @@ export function MentorCard(props: Props) {
     const coursesTasksApi = new CoursesTasksApi();
     const { data } = await coursesTasksApi.getCourseTasks(props.courseId);
     const courseTasks = data.filter(
-      item => item.checker === 'mentor' && item.type != 'stage-interview' && item.type != 'interview',
+      item =>
+        item.checker === 'mentor' &&
+        item.type != 'selfeducation' &&
+        item.type != 'stage-interview' &&
+        item.type != 'interview',
     );
     dispatch({ type: 'open', state: { data: { courseTasks } } });
   };

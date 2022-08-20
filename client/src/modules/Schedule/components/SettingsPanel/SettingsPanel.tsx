@@ -4,7 +4,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import AddEventButton from './AddEventButton';
+import { AddEventButton } from './AddEventButton';
 import ManageCsvButtons from './ManageCsvButtons';
 
 interface SettingsPanelProps {
@@ -27,20 +27,20 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId
 
   return (
     <>
-      <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-        {isCourseManager && (
-          <>
-            <Col>
-              <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
-            </Col>
-            <Col>
-              <AddEventButton openManageEventModal={openManageEventModal} />
-            </Col>
-          </>
-        )}
+      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 16 }}>
         <Col>
           <SettingsDrawer tags={tags} settings={settings} />
         </Col>
+        {isCourseManager ? (
+          <Col>
+            <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
+          </Col>
+        ) : null}
+        {isCourseManager ? (
+          <Col>
+            <AddEventButton onClick={openManageEventModal} />
+          </Col>
+        ) : null}
       </Row>
       {isManageEventModalOpen && (
         <ManageEventModalForm

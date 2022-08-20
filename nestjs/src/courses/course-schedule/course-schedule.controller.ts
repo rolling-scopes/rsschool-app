@@ -1,19 +1,8 @@
-import {
-  CacheInterceptor,
-  CacheTTL,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Req,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
-import { DEFAULT_CACHE_TTL } from '../../constants';
-import { CourseScheduleItemDto } from './dto';
 import { CourseScheduleService } from './course-schedule.service';
+import { CourseScheduleItemDto } from './dto';
 
 @Controller('courses/:courseId/schedule')
 @ApiTags('courses schedule')
@@ -21,8 +10,6 @@ export class CourseScheduleController {
   constructor(private courseTasksService: CourseScheduleService) {}
 
   @Get()
-  @CacheTTL(DEFAULT_CACHE_TTL)
-  @UseInterceptors(CacheInterceptor)
   @ApiOkResponse({ type: [CourseScheduleItemDto] })
   @ApiOperation({ operationId: 'getSchedule' })
   @UseGuards(DefaultGuard, CourseGuard)

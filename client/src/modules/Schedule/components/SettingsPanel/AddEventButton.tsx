@@ -1,15 +1,14 @@
-import React from 'react';
-import { Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 interface AddEventButtonProps {
-  openManageEventModal: () => void;
+  onClick: () => void;
 }
 
-const AddEventButton: React.FC<AddEventButtonProps> = ({ openManageEventModal }) => (
-  <Tooltip title="Add new" mouseEnterDelay={1}>
-    <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal} />
-  </Tooltip>
-);
-
-export default AddEventButton;
+export function AddEventButton({ onClick }: AddEventButtonProps) {
+  return (
+    <Button type="primary" icon={<PlusOutlined />} onClick={onClick}>
+      Add New
+    </Button>
+  );
+}

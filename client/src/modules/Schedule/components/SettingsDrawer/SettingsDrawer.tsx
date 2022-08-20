@@ -22,7 +22,7 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
 
   return (
     <Tooltip title={TITLE} mouseEnterDelay={1}>
-      <Button icon={<SettingOutlined />} size="middle" type="primary" onClick={openDrawer} />
+      <Button icon={<SettingOutlined />} onClick={openDrawer} />
       <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns

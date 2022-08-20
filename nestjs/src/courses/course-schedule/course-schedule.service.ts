@@ -67,8 +67,8 @@ export class CourseScheduleService {
 
   public async getAll(courseId: number, studentId?: number): Promise<CourseScheduleItem[]> {
     const [courseTasks, courseEvents] = await Promise.all([
-      this.getActiveCourseTasks(courseId),
-      this.getCourseEvents(courseId),
+      this.getActiveCourseTasks(courseId, studentId),
+      this.getCourseEvents(courseId, studentId),
     ]);
     const [taskResults, interviewResults, technicalScreeningResults, taskSolutions, taskCheckers] = await Promise.all([
       this.getTaskResults(studentId),
@@ -195,19 +195,19 @@ export class CourseScheduleService {
     });
   }
 
-  private async getActiveCourseTasks(courseId: number) {
+  private async getActiveCourseTasks(courseId: number, studentId?: number): Promise<CourseTask[]> {
     return this.courseTaskRepository.find({
       where: { courseId, disabled: false },
       relations: ['task'],
-      cache: 60 * 1000,
+      cache: studentId ? 90 * 1000 : undefined,
     });
   }
 
-  private async getCourseEvents(courseId: number) {
+  private async getCourseEvents(courseId: number, studentId?: number): Promise<CourseEvent[]> {
     return this.courseEventRepository.find({
       where: { courseId },
       relations: ['event', 'organizer'],
-      cache: 60 * 1000,
+      cache: studentId ? 90 * 1000 : undefined,
     });
   }
 
