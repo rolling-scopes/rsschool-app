@@ -7,7 +7,6 @@ import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
-import { ColumnType } from 'antd/lib/table';
 import {
   CoursesTasksApi,
   CoursesEventsApi,
@@ -686,25 +685,6 @@ export interface StudentProfile {
 
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number;
-}
-
-export interface StudentScore extends StudentBasic {
-  taskResults: {
-    courseTaskId: number;
-    score: number;
-  }[];
-  rank: number;
-  totalScore: number;
-  totalScoreChangeDate: string;
-  repositoryLastActivityDate: string;
-}
-
-export interface ColumnTypeWithName<RecordType> extends ColumnType<RecordType> {
-  name?: string;
-}
-
-export interface StudentScoreWithCrossCheckScore extends StudentScore {
-  crossCheckScore?: number;
 }
 
 export interface StudentDetails extends StudentBasic {

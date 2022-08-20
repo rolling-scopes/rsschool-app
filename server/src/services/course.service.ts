@@ -126,7 +126,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
-    discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : '',
+    discord: user.discord,
     totalScore: student.totalScore,
   };
 }

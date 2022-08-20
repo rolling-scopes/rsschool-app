@@ -1,3 +1,4 @@
+import { ColumnType } from 'antd/lib/table';
 import { Table, TablePaginationConfig } from 'antd';
 import { isUndefined } from 'lodash';
 import { getColumns } from 'modules/Score/data/getColumns';
@@ -5,7 +6,7 @@ import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ColumnTypeWithName, CourseService, StudentScore, StudentScoreWithCrossCheckScore } from 'services/course';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -13,7 +14,7 @@ import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
-import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { SorterResult } from 'antd/lib/table/interface';
 
@@ -22,13 +23,13 @@ type Props = CoursePageProps & {
   activeOnly: boolean;
 };
 
-type TableScoreOrder = SorterResult<StudentScore> | SorterResult<StudentScore>[];
+type TableScoreOrder = SorterResult<ScoreStudentDto> | SorterResult<ScoreStudentDto>[];
 
 interface ScoreTableFiltersModified extends Omit<ScoreTableFilters, 'activeOnly'> {
   activeOnly?: boolean;
 }
 type StudentsState = {
-  content: StudentScore[];
+  content: ScoreStudentDto[];
   pagination: IPaginationInfo;
   filter: ScoreTableFilters;
   order: ScoreOrder;
@@ -43,7 +44,7 @@ export function ScoreTable(props: Props) {
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
-  const [columns, setColumns] = useState<ColumnTypeWithName<StudentScoreWithCrossCheckScore>[]>([]);
+  const [columns, setColumns] = useState<ColumnType<ScoreStudentDto>[]>([]);
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loaded, setLoaded] = useState(false);
@@ -55,7 +56,7 @@ export function ScoreTable(props: Props) {
     order: { field: 'rank', order: 'ascend' },
   });
 
-  const [notVisibleColumns, setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns', []);
+  const [notVisibleColumns = [], setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns');
   const courseService = useMemo(() => new CourseService(props.course.id), []);
   const [getPagedData] = useScorePaging(router, courseService, activeOnly);
 
@@ -93,9 +94,9 @@ export function ScoreTable(props: Props) {
         .filter(task => !!task.studentEndDate || props.course.completed)
         .map(task => ({
           ...task,
-          isVisible: !notVisibleColumns?.includes(task.name),
+          isVisible: !notVisibleColumns.includes(String(task.id)),
         }));
-      setStudents({ ...students, content: courseScore.content as StudentScore[], pagination: courseScore.pagination });
+      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
       setColumns(
         getColumns({
@@ -112,8 +113,8 @@ export function ScoreTable(props: Props) {
     }
   }, [activeOnly]);
 
-  const getVisibleColumns = (columns: ColumnTypeWithName<StudentScoreWithCrossCheckScore>[]) =>
-    columns.filter(column => (column.name ? !notVisibleColumns?.includes(column.name) : true));
+  const getVisibleColumns = (columns: ColumnType<ScoreStudentDto>[]) =>
+    columns.filter(column => (column.dataIndex ? !notVisibleColumns.includes(String(column.dataIndex)) : true));
 
   const handleModalCancel = () => {
     setIsVisibleSettings(!isVisibleSetting);
@@ -154,7 +155,7 @@ export function ScoreTable(props: Props) {
 
   return (
     <>
-      <Table<StudentScore>
+      <Table<ScoreStudentDto>
         className="table-score"
         showHeader
         scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 290px)' }}

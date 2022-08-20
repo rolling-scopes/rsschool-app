@@ -1,7 +1,7 @@
 import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
 import { Course, Mentor, Student, User, Certificate } from '../models';
 import { userService } from '../services';
-import { Discord, StudentBasic, UserBasic } from '../../../common/models';
+import { StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
 import { getFullName } from '../rules';
 
@@ -423,10 +423,6 @@ export class StudentRepository extends AbstractRepository<Student> {
   }
 }
 
-function getDiscordUsername(discord: Discord | null) {
-  return discord ? `${discord?.username}#${discord?.discriminator}` : '';
-}
-
 function transformStudent(record: Student): StudentBasic {
   return {
     id: record.id,
@@ -435,7 +431,7 @@ function transformStudent(record: Student): StudentBasic {
     cityName: record.user.cityName ?? 'Unknown',
     countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled && !record.isFailed,
-    discord: getDiscordUsername(record.user.discord),
+    discord: record.user.discord,
     totalScore: record.totalScore,
     mentor: record.mentor
       ? {
