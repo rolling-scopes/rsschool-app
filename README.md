@@ -8,6 +8,10 @@ The [app.rs.school](https://app.rs.school) is an application for the [RS School]
 
 <img src="https://user-images.githubusercontent.com/618807/138608245-f00471ce-f982-4901-a32e-7246720ed13b.png" width="600px"/>
 
+## Monitoring
+
+https://status.app.rs.school/
+
 ## Technology Overview
 
 ### Stack
