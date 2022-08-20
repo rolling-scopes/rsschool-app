@@ -97,7 +97,7 @@ $ git push origin feature-x
 If you made changes to DB models, you need to create a DB migration. Here are steps how to do it
 
 1. Go to `/server`
-2. Run `npm run typeorm -- migration:generate -n {MigrationName}` where `{MigrationName}` is your migration name.
+2. Run `npm run typeorm:migration:generate src/migrations/{MigrationName}` where `{MigrationName}` is your migration name.
 3. Import your migration to `migrations` array at `./server/src/migrations/index.ts`
 4. Commit and push your changes
 

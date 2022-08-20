@@ -65,7 +65,8 @@ export class GratitudesService {
       courseId: feedback.courseId,
     });
 
-    const result = await this.repository.findOneOrFail(id, {
+    const result = await this.repository.findOneOrFail({
+      where: { id },
       relations: ['fromUser', 'toUser', 'course', 'course.discordServer'],
     });
 

@@ -1,4 +1,3 @@
-import { IPaginationOptions, paginate } from 'koa-typeorm-pagination';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { ScoreTableFilters } from '../../../../common/types/score';
@@ -28,11 +27,6 @@ const defaultFilter: ScoreTableFilters = {
   name: '',
   'mentor.githubId': '',
   cityName: '',
-};
-
-const defaultPagination: IPaginationOptions = {
-  current: 1,
-  pageSize: 1e9,
 };
 
 const defaultOrder: { field: keyof typeof orderByFieldMapping; direction: 'ASC' | 'DESC' } = {
@@ -81,7 +75,7 @@ export class ScoreService {
 
       const calculateScore = (t: { courseTaskId: number; score: number }) => t.score * (weightMap[t.courseTaskId] ?? 1);
 
-      const sortedScores = students.content
+      const sortedScores = students
         .map<ScoreRecord>(({ id, rank, taskResults, totalScore, crossCheckScore, totalScoreChangeDate }) => {
           const score = sum(taskResults.map(calculateScore));
 
@@ -123,7 +117,7 @@ export class ScoreService {
     }
   }
 
-  public async getStudentsScore(paginateOptions = defaultPagination, filter = defaultFilter, orderBy = defaultOrder) {
+  public async getStudentsScore(filter = defaultFilter, orderBy = defaultOrder) {
     let query = getRepository(Student)
       .createQueryBuilder('student')
       .innerJoin('student.user', 'user')
@@ -174,12 +168,9 @@ export class ScoreService {
       });
     }
 
-    const pagination = await paginate(
-      query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction),
-      paginateOptions,
-    );
+    const content = await query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction).getMany();
 
-    const students = pagination.content.map(student => {
+    const students = content.map(student => {
       const preScreeningScore = Math.floor((getStageInterviewRating(student.stageInterviews ?? []) ?? 0) * 10);
       const preScreningInterviews = student.stageInterviews?.length
         ? [{ score: preScreeningScore, courseTaskId: student.stageInterviews[0].courseTaskId }]
@@ -228,17 +219,14 @@ export class ScoreService {
       };
     });
 
-    return {
-      ...pagination,
-      content: students,
-    };
+    return students;
   }
 
   public async getStudentsScoreForExport(filters: ScoreTableFilters) {
-    const students = await this.getStudentsScore(undefined, filters);
+    const students = await this.getStudentsScore(filters);
     const courseTasks = await getCourseTasks(this.courseId);
 
-    return students.content.map(student => {
+    return students.map(student => {
       return {
         githubId: student.githubId,
         name: student.name,

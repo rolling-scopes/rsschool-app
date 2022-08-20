@@ -1,7 +1,7 @@
 import { CourseUser } from '@entities/courseUser';
 import { CourseRole } from '@entities/session';
 import { AuthUser } from './auth-user.model';
-import { AuthDetails } from './auth.repository';
+import type { AuthDetails } from './auth.service';
 
 describe('AuthUser', () => {
   it('creates user with supervisor role', () => {

@@ -8,7 +8,8 @@ export const createGetRoute =
   <T extends ObjectType<T>>(entity: T, _?: ILogger, relations?: string[]) =>
   async (ctx: Router.RouterContext) => {
     const id = ctx.params.id;
-    const user = await getManager().findOne(entity, Number(id), {
+    const user = await getManager().findOne(entity, {
+      where: { id: Number(id) } as any,
       relations,
     });
     if (user === undefined) {

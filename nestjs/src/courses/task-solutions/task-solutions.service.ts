@@ -21,6 +21,6 @@ export class TaskSolutionsService {
       studentId: studentId,
       url: data.url,
     });
-    return this.taskSolutionRepository.findOneOrFail(id);
+    return this.taskSolutionRepository.findOneByOrFail({ id });
   }
 }

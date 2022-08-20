@@ -31,7 +31,7 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
     const score = Math.round(Number(data.score));
     await getRepository(TaskVerification).save({ ...data, score, id });
 
-    const result = (await getRepository(TaskVerification).findOne(id))!;
+    const result = (await getRepository(TaskVerification).findOneBy({ id }))!;
 
     const service = new ScoreService(0);
     await service.saveScore(result.studentId, result.courseTaskId, {
@@ -40,11 +40,11 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
     });
 
     setResponse(ctx, OK, result);
-  } catch (e) {
+  } catch (err) {
     if (logger) {
-      logger.error(e.message);
+      logger.error((err as Error).message);
     }
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, BAD_REQUEST, { message: (err as Error).message });
   }
 };
 

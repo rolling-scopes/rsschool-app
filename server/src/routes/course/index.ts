@@ -261,7 +261,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/students/status', courseManagerGuard, updateStatuses(logger));
   router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/details', courseSupervisorGuard, getStudentsWithDetails(logger));
-  router.get('/students/score', courseGuard, score.getScore(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
 
   router.get('/students/search/:searchText', guard, searchStudent(logger));

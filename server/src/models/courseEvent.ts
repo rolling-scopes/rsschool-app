@@ -11,7 +11,7 @@ export class CourseEvent {
   createdDate: number;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @ManyToOne(_ => Event, (lecture: Event) => lecture.courseEvents)
   event: Event;

@@ -16,17 +16,17 @@ export class DisciplinesService {
   }
 
   public async getById(id: number) {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 
   public async create(data: CreateDisciplineDto) {
     const { id } = await this.repository.save(data);
-    return this.repository.findOneOrFail(id);
+    return this.repository.findOneByOrFail({ id });
   }
 
   public async update(id: number, data: UpdateDisciplineDto) {
     await this.repository.update(id, data);
-    return this.repository.findOneOrFail(id);
+    return this.repository.findOneByOrFail({ id });
   }
 
   public async delete(id: number): Promise<void> {

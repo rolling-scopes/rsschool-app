@@ -31,7 +31,7 @@ export class NotificationsService {
   ) {}
 
   public getNotification(id: NotificationId) {
-    return this.notificationsRepository.findOne(id);
+    return this.notificationsRepository.findOneBy({ id });
   }
 
   public getNotifications() {

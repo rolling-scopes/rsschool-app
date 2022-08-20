@@ -15,7 +15,7 @@ export class RepositoryService {
 
   public async createMany() {
     const result = [];
-    const course = await getRepository(Course).findOne(this.courseId);
+    const course = await getRepository(Course).findOneBy({ id: this.courseId });
 
     if (course == null || !course.usePrivateRepositories) {
       return;
@@ -45,7 +45,7 @@ export class RepositoryService {
   }
 
   public async createSingle(githubId: string) {
-    const course = await getRepository(Course).findOne(this.courseId);
+    const course = await getRepository(Course).findOneBy({ id: this.courseId });
     if (course == null) {
       return null;
     }
@@ -63,7 +63,7 @@ export class RepositoryService {
   }
 
   public async updateRepositories() {
-    const course = await getRepository(Course).findOne(this.courseId);
+    const course = await getRepository(Course).findOneBy({ id: this.courseId });
     if (!course) {
       return;
     }
@@ -123,17 +123,15 @@ export class RepositoryService {
   }
 
   public async inviteMentor(githubId: string, course?: Course) {
-    if (!course) {
-      course = await getRepository(Course).findOne(this.courseId);
-      if (course == null) {
-        return;
-      }
+    const mentorCourse = course ?? (await getRepository(Course).findOneBy({ id: this.courseId }));
+    if (!mentorCourse) {
+      return;
     }
-    await this.addMentorToTeam(this.github, course, githubId);
+    await this.addMentorToTeam(this.github, mentorCourse, githubId);
   }
 
   public async inviteAllMentors() {
-    const course = await getRepository(Course).findOne(this.courseId);
+    const course = await getRepository(Course).findOneBy({ id: this.courseId });
     if (course == null) {
       return;
     }

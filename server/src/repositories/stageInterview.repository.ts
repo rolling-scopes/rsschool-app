@@ -99,7 +99,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async updateInterviewer(id: number, githubId: string) {
-    const interview = await getRepository(StageInterview).findOne(id);
+    const interview = await getRepository(StageInterview).findOneBy({ id });
     if (interview) {
       const mentor = await courseService.queryMentorByGithubId(interview?.courseId, githubId);
       if (mentor) {
