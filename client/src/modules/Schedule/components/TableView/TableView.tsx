@@ -68,9 +68,9 @@ const getColumns = ({
           {ColumnName.StartDate} {timezoneOffset}
         </span>
       ),
-      dataIndex: 'studentStartDate',
+      dataIndex: 'startDate',
       render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'start', 'Recommended date for studying'),
-      sorter: dateSorter('studentStartDate'),
+      sorter: dateSorter('startDate'),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -80,9 +80,9 @@ const getColumns = ({
           {ColumnName.EndDate} {timezoneOffset}
         </span>
       ),
-      dataIndex: 'studentEndDate',
+      dataIndex: 'endDate',
       render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'end', 'Recommended deadline'),
-      sorter: dateSorter('studentEndDate'),
+      sorter: dateSorter('endDate'),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -147,7 +147,6 @@ export function TableView({ data, settings }: TableViewProps) {
         onChange={(_, filters) => {
           setStatusFilter((filters?.status as string[]) ?? []);
         }}
-        rowKey={({ dataSource, dataSourceId }) => `${dataSource}${dataSourceId}`}
         pagination={false}
         dataSource={filteredData}
         size="middle"

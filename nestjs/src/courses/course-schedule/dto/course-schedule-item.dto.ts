@@ -1,29 +1,24 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { PersonDto } from 'src/core/dto';
-import { CourseScheduleDataSource, CourseScheduleItem, CourseScheduleItemStatus } from '../course-schedule.service';
+import { CourseScheduleItem, CourseScheduleItemStatus } from '../course-schedule.service';
 
 @ApiResponse({})
 export class CourseScheduleItemDto {
   constructor(item: CourseScheduleItem) {
     this.name = item.name;
-    this.studentStartDate = (item.studentStartDate as Date)?.toISOString();
-    this.studentEndDate = (item.studentEndDate as Date)?.toISOString();
+    this.startDate = (item.startDate as Date)?.toISOString();
+    this.endDate = (item.endDate as Date)?.toISOString();
     this.maxScore = item.maxScore ?? null;
     this.scoreWeight = item.scoreWeight ?? null;
     this.organizer = item.organizer ?? null;
     this.status = item.status;
-    this.dataSourceId = item.id;
-    this.dataSource = item.dataSource;
-    this.currentScore = item.currentScore ?? null;
+    this.score = item.score ?? null;
     this.tags = item.tags ?? [];
     this.descriptionUrl = item.descriptionUrl ?? null;
   }
 
   @ApiProperty()
-  dataSourceId: number;
-
-  @ApiProperty()
-  currentScore: number | null;
+  score: number | null;
 
   @ApiProperty()
   name: string;
@@ -32,10 +27,10 @@ export class CourseScheduleItemDto {
   status: CourseScheduleItemStatus;
 
   @ApiProperty()
-  studentStartDate: string;
+  startDate: string;
 
   @ApiProperty()
-  studentEndDate: string;
+  endDate: string;
 
   @ApiProperty({ nullable: true })
   organizer: PersonDto | null;
@@ -51,7 +46,4 @@ export class CourseScheduleItemDto {
 
   @ApiProperty()
   tags: string[];
-
-  @ApiProperty({ enum: CourseScheduleDataSource })
-  dataSource: CourseScheduleDataSource;
 }

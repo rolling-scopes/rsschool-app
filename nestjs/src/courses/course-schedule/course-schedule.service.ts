@@ -12,13 +12,12 @@ import { Repository } from 'typeorm';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
-    studentStartDate: Date;
-    studentEndDate: Date;
+    startDate: Date;
+    endDate: Date;
     name: string;
     organizer?: PersonDto;
-    currentScore?: number;
+    score?: number;
     status: CourseScheduleItemStatus;
-    dataSource: CourseScheduleDataSource;
     tags: string[];
     descriptionUrl?: string;
   };
@@ -74,31 +73,22 @@ export class CourseScheduleService {
         const { id, courseId, studentStartDate, studentEndDate, maxScore, scoreWeight } = courseTask;
         const { name } = courseTask.task;
 
-        const scoreRaw =
-          taskResults.find(({ courseTaskId }) => courseTaskId === id)?.score ??
-          interviewResults.find(({ courseTaskId }) => courseTaskId === id)?.score ??
-          Math.max(
-            ...(technicalScreeningResults
-              .find(({ courseTaskId }) => courseTaskId === id)
-              ?.stageInterviewFeedbacks.map(feedback => JSON.parse(feedback.json))
-              .map(json => json?.resume?.score ?? 0) ?? []),
-          );
-        const currentScore = isFinite(scoreRaw) ? scoreRaw : null;
+        const currentScore = this.getCurrentTaskScore(id, taskResults, interviewResults, technicalScreeningResults);
         const submitted =
           taskSolutions.some(({ courseTaskId }) => courseTaskId === id) ||
           taskCheckers.some(({ courseTaskId }) => courseTaskId === id);
         const type = courseTask.type || courseTask.task.type;
+        const status = this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined);
         return {
           id,
           name,
           courseId,
-          studentStartDate,
-          studentEndDate,
+          startDate: studentStartDate,
+          endDate: studentEndDate,
           maxScore,
           scoreWeight,
-          currentScore,
-          status: this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined),
-          dataSource: CourseScheduleDataSource.CourseTask,
+          score: currentScore,
+          status,
           tags: type ? [type] : [],
           descriptionUrl: courseTask.task.descriptionUrl,
         } as CourseScheduleItem;
@@ -111,19 +101,37 @@ export class CourseScheduleService {
             id,
             name,
             courseId,
-            studentStartDate: dateTime,
-            studentEndDate: dateTime,
+            startDate: dateTime,
+            endDate: dateTime,
             status: this.getEventStatus(courseEvent),
-            dataSource: CourseScheduleDataSource.CourseEvent,
             tags: courseEvent.event.type ? [courseEvent.event.type] : [],
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
           } as CourseScheduleItem;
         }),
       )
-      .sort((a, b) => a.studentStartDate.getTime() - b.studentStartDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     return schedule;
+  }
+
+  private getCurrentTaskScore(
+    courseTaskId: number,
+    taskResults: TaskResult[],
+    interviewResults: TaskInterviewResult[],
+    technicalScreeningResults: StageInterview[],
+  ) {
+    const scoreRaw =
+      taskResults.find(task => task.courseTaskId === courseTaskId)?.score ??
+      interviewResults.find(task => task.courseTaskId === courseTaskId)?.score ??
+      Math.max(
+        ...(technicalScreeningResults
+          .find(task => task.courseTaskId === courseTaskId)
+          ?.stageInterviewFeedbacks.map(feedback => JSON.parse(feedback.json))
+          .map(json => json?.resume?.score ?? 0) ?? []),
+      );
+    const currentScore = isFinite(scoreRaw) ? scoreRaw : null;
+    return currentScore;
   }
 
   private async getTaskSolutions(studentId: number | undefined): Promise<TaskSolution[]> {

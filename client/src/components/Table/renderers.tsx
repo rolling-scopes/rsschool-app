@@ -50,15 +50,15 @@ export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (v
 
 export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
   const now = moment();
-  return (value: string, { studentStartDate, studentEndDate, currentScore, tags }: CourseScheduleItemDto) => {
+  return (value: string, { startDate, endDate, score, tags }: CourseScheduleItemDto) => {
     let color: BaseType | undefined = undefined;
-    const start = moment(studentStartDate);
-    const end = moment(studentEndDate);
+    const start = moment(startDate);
+    const end = moment(endDate);
 
-    const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !currentScore;
-    const isCurrent = now >= start && now < end && !currentScore;
-    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !currentScore;
-    const isPast = now > end || currentScore;
+    const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
+    const isCurrent = now >= start && now < end && !score;
+    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !score;
+    const isPast = now > end || score;
 
     if (isDeadlineSoon && date === 'end') color = 'warning';
     else if (isCurrent && date === 'start') color = 'success';
@@ -173,12 +173,12 @@ export const weightRenderer = (weight: number | null) => {
 };
 
 export const scoreRenderer = (item: CourseScheduleItemDto) => {
-  const { maxScore, currentScore } = item;
+  const { maxScore, score } = item;
   if (maxScore == null) return null;
 
   return (
     <Text>
-      {currentScore ?? 0} / {maxScore}
+      {score ?? 0} / {maxScore}
     </Text>
   );
 };

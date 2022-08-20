@@ -747,16 +747,10 @@ export type CourseEventDtoTypeEnum = typeof CourseEventDtoTypeEnum[keyof typeof 
 export interface CourseScheduleItemDto {
     /**
      * 
-     * @type {number}
-     * @memberof CourseScheduleItemDto
-     */
-    'dataSourceId': number;
-    /**
-     * 
      * @type {object}
      * @memberof CourseScheduleItemDto
      */
-    'currentScore': object;
+    'score': object;
     /**
      * 
      * @type {string}
@@ -774,13 +768,13 @@ export interface CourseScheduleItemDto {
      * @type {string}
      * @memberof CourseScheduleItemDto
      */
-    'studentStartDate': string;
+    'startDate': string;
     /**
      * 
      * @type {string}
      * @memberof CourseScheduleItemDto
      */
-    'studentEndDate': string;
+    'endDate': string;
     /**
      * 
      * @type {object}
@@ -811,12 +805,6 @@ export interface CourseScheduleItemDto {
      * @memberof CourseScheduleItemDto
      */
     'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseScheduleItemDto
-     */
-    'dataSource': CourseScheduleItemDtoDataSourceEnum;
 }
 
 export const CourseScheduleItemDtoStatusEnum = {
@@ -829,12 +817,6 @@ export const CourseScheduleItemDtoStatusEnum = {
 } as const;
 
 export type CourseScheduleItemDtoStatusEnum = typeof CourseScheduleItemDtoStatusEnum[keyof typeof CourseScheduleItemDtoStatusEnum];
-export const CourseScheduleItemDtoDataSourceEnum = {
-    CourseTask: 'courseTask',
-    CourseEvent: 'courseEvent'
-} as const;
-
-export type CourseScheduleItemDtoDataSourceEnum = typeof CourseScheduleItemDtoDataSourceEnum[keyof typeof CourseScheduleItemDtoDataSourceEnum];
 
 /**
  * 
