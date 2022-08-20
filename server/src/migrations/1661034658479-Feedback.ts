@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Feedback1648320921100 implements MigrationInterface {
-  name = 'Feedback1648320921100';
+export class Feedback1661034658479 implements MigrationInterface {
+  name = 'Feedback1661034658479';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "feedback" DROP COLUMN "heroesUrl"`);
