@@ -1,14 +1,13 @@
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Tooltip, Typography } from 'antd';
+import { GithubUserLink } from 'components/GithubUserLink';
+import { renderTag, tagsRenderer } from 'components/Table';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import moment from 'moment-timezone';
-import css from 'styled-jsx/css';
 import Link from 'next/link';
 import React from 'react';
-import { Row, Col, Typography, Tooltip, Button } from 'antd';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
-import { renderTagWithStyle, tagsRenderer } from 'components/Table';
-import { TASK_TYPES_MAP } from 'data/taskTypes';
 import { CourseEvent } from 'services/course';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
+import css from 'styled-jsx/css';
 
 const { Title, Text } = Typography;
 
@@ -21,7 +20,7 @@ interface EventDetailsProps {
   settings: ScheduleSettings;
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, isPreview, onEdit, settings }) => {
+const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, isPreview, onEdit }) => {
   const { event, dateTime, place, organizer, special, duration } = eventData;
 
   return (
@@ -43,7 +42,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, 
 
         {event.type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(event.type, settings.tagColors, TASK_TYPES_MAP)}</Col>
+            <Col>{renderTag(event.type)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}
