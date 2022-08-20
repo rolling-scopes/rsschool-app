@@ -1,16 +1,14 @@
-import moment from 'moment-timezone';
 import {
   CheckCircleFilled,
-  MinusCircleOutlined,
-  YoutubeOutlined,
   ChromeOutlined,
   GithubOutlined,
-  InfoCircleOutlined,
+  MinusCircleOutlined,
+  YoutubeOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
+import { CourseScheduleItemDto } from 'api';
+import moment from 'moment-timezone';
 import { Checker, CrossCheckStatus } from 'services/course';
-import { BaseType } from 'antd/lib/typography/Base';
-import { CourseEventDtoTypeEnum, CourseScheduleItemDto } from 'api';
 
 const { Text } = Typography;
 
@@ -47,39 +45,6 @@ export function shortDateTimeRenderer(value: string) {
 
 export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (value: string) =>
   value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format(format) : '';
-
-export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
-  const now = moment();
-  return (value: string, { startDate, endDate, score, tags }: CourseScheduleItemDto) => {
-    let color: BaseType | undefined = undefined;
-    const start = moment(startDate);
-    const end = moment(endDate);
-
-    const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
-    const isCurrent = now >= start && now < end && !score;
-    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !score;
-    const isPast = now > end || score;
-
-    if (isDeadlineSoon && date === 'end') color = 'warning';
-    else if (isCurrent && date === 'start') color = 'success';
-    else if (isDeadlineMissed && date === 'end') color = 'danger';
-    else if (isPast) color = 'secondary';
-
-    const text = dateWithTimeZoneRenderer(timeZone, format)(value);
-
-    if (tags.includes(CourseEventDtoTypeEnum.LectureSelfStudy)) {
-      return (
-        <Text type={color}>
-          {text}
-          <Tooltip placement="topLeft" title={infoText}>
-            <InfoCircleOutlined className="ant-typography ant-typography-secondary" style={{ marginLeft: 8 }} />
-          </Tooltip>
-        </Text>
-      );
-    }
-    return <Text type={color}>{text}</Text>;
-  };
-};
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';

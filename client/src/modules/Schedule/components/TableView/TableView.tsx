@@ -2,29 +2,29 @@ import { Form, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { coloredDateRenderer, dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
-import { TASK_EVENT_TYPES_MAP } from 'data';
+import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
 import {
   ColumnKey,
   ColumnName,
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
   SCHEDULE_STATUSES,
+  TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
-import { statusRenderer, renderTagWithStyle } from './renderers';
-
-const TAG_NAMES_MAP = TASK_EVENT_TYPES_MAP;
+import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
 
 const getColumns = ({
   timezone,
   tagColors,
   statusFilter,
+  tagFilter,
 }: {
   statusFilter: string[];
+  tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
 }): ColumnsType<CourseScheduleItemDto> => {
@@ -55,11 +55,13 @@ const getColumns = ({
       ...getColumnSearchProps('name'),
     },
     {
-      key: ColumnKey.Tags,
-      title: ColumnName.Tags,
-      dataIndex: 'tags',
-      render: (tagNames: string[]) =>
-        tagNames?.filter(Boolean).map(tagName => renderTagWithStyle(tagName, tagColors, TAG_NAMES_MAP)),
+      key: ColumnKey.Tag,
+      title: ColumnName.Tag,
+      dataIndex: 'tag',
+      render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag, tagColors),
+      filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
+      defaultFilteredValue: tagFilter,
+      filtered: tagFilter.length > 0,
     },
     {
       key: ColumnKey.StartDate,
@@ -115,11 +117,12 @@ interface TableViewProps {
 
 export function TableView({ data, settings }: TableViewProps) {
   const [form] = Form.useForm();
-  const [statusFilter = [], setStatusFilter] = useLocalStorage<string[]>(LocalStorageKeys.EventTypesHidden);
+  const [statusFilter = [], setStatusFilter] = useLocalStorage<string[]>(LocalStorageKeys.StatusFilter);
+  const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
 
-  const filteredData = data.filter(event => {
-    return statusFilter?.length > 0 ? statusFilter.includes(event.status) : event;
-  });
+  const filteredData = data
+    .filter(item => (statusFilter?.length > 0 ? statusFilter.includes(item.status) : item))
+    .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event));
 
   const filteredColumns = useMemo(
     () =>
@@ -127,11 +130,12 @@ export function TableView({ data, settings }: TableViewProps) {
         tagColors: settings.tagColors,
         timezone: settings.timezone,
         statusFilter,
+        tagFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
       }),
-    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter],
+    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter, tagFilter],
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
@@ -146,6 +150,7 @@ export function TableView({ data, settings }: TableViewProps) {
         }}
         onChange={(_, filters) => {
           setStatusFilter((filters?.status as string[]) ?? []);
+          setTagFilter((filters?.tag as string[]) ?? []);
         }}
         pagination={false}
         dataSource={filteredData}

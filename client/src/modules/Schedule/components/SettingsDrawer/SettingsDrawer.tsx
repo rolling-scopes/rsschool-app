@@ -5,15 +5,16 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
 import TimeZone from './TimeZone';
+import { CourseScheduleItemDtoTagEnum } from 'api';
 
 interface SettingsDrawerProps {
   settings: ScheduleSettings;
-  eventTypes: string[];
+  tags: CourseScheduleItemDtoTagEnum[];
 }
 
 const TITLE = 'Schedule settings';
 
-const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes }) => {
+export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
   const [opened, setOpened] = useState(false);
 
   const openDrawer = () => setOpened(true);
@@ -25,17 +26,17 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ settings, eventTypes })
       <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns
-          eventTags={eventTypes}
+          tags={tags}
           columnsHidden={settings.columnsHidden}
           setColumnsHidden={settings.setColumnsHidden}
-          eventTagsHidden={settings.eventTypesHidden}
-          setEventTagsHidden={settings.setEventTypesHidden}
+          eventTagsHidden={settings.tagsHidden}
+          setTagsHidden={settings.setTagsHidden}
           closeDrawer={closeDrawer}
         />
-        <ChangeTagColors tags={eventTypes} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
+        <ChangeTagColors tags={tags} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
       </Drawer>
     </Tooltip>
   );
-};
+}
 
 export default SettingsDrawer;

@@ -801,10 +801,10 @@ export interface CourseScheduleItemDto {
     'descriptionUrl': string | null;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof CourseScheduleItemDto
      */
-    'tags': Array<string>;
+    'tag': CourseScheduleItemDtoTagEnum;
 }
 
 export const CourseScheduleItemDtoStatusEnum = {
@@ -817,6 +817,16 @@ export const CourseScheduleItemDtoStatusEnum = {
 } as const;
 
 export type CourseScheduleItemDtoStatusEnum = typeof CourseScheduleItemDtoStatusEnum[keyof typeof CourseScheduleItemDtoStatusEnum];
+export const CourseScheduleItemDtoTagEnum = {
+    Lecture: 'lecture',
+    Coding: 'coding',
+    SelfStudy: 'self-study',
+    Interview: 'interview',
+    CrossCheck: 'cross-check',
+    Test: 'test'
+} as const;
+
+export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[keyof typeof CourseScheduleItemDtoTagEnum];
 
 /**
  * 

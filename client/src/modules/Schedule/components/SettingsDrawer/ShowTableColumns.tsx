@@ -14,21 +14,21 @@ const TAG_NAMES_MAP = TASK_EVENT_TYPES_MAP;
 const AVAILABLE_COLUMNS = COLUMNS.filter(column => CONFIGURABLE_COLUMNS.includes(column.key));
 
 interface ShowTableColumnsProps {
-  eventTags: string[];
+  tags: string[];
   columnsHidden: string[];
   setColumnsHidden: (value: string[]) => void;
   eventTagsHidden: string[];
-  setEventTagsHidden: (value: string[]) => void;
+  setTagsHidden: (value: string[]) => void;
   closeDrawer: () => void;
 }
 
 export function ShowTableColumns({
-  eventTags,
+  tags: eventTags,
   closeDrawer,
   columnsHidden: initialColumnsHidden,
   setColumnsHidden: setInitialColumnsHidden,
   eventTagsHidden: initialEventTypesHidden,
-  setEventTagsHidden: setInitialEventTypesHidden,
+  setTagsHidden: setInitialEventTypesHidden,
 }: ShowTableColumnsProps) {
   const [columnsHidden, setColumnsHidden] = useState<string[]>(initialColumnsHidden);
   const [eventTagsHidden, setEventTagsHidden] = useState<string[]>(initialEventTypesHidden);

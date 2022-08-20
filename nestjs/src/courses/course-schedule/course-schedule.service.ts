@@ -1,6 +1,6 @@
 import { TaskChecker } from '@entities/taskChecker';
 import { CourseEvent } from '@entities/courseEvent';
-import { CourseTask } from '@entities/courseTask';
+import { Checker, CourseTask } from '@entities/courseTask';
 import { StageInterview } from '@entities/stageInterview';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskResult } from '@entities/taskResult';
@@ -9,6 +9,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonDto } from 'src/core/dto';
 import { Repository } from 'typeorm';
+import { EventType } from '../course-events/dto/course-event.dto';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -18,13 +19,22 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     organizer?: PersonDto;
     score?: number;
     status: CourseScheduleItemStatus;
-    tags: string[];
+    tag: CourseScheduleItemTag;
     descriptionUrl?: string;
   };
 
 export enum CourseScheduleDataSource {
   CourseTask = 'courseTask',
   CourseEvent = 'courseEvent',
+}
+
+export enum CourseScheduleItemTag {
+  Lecture = 'lecture',
+  Coding = 'coding',
+  SelfStudy = 'self-study',
+  Interview = 'interview',
+  CrossCheck = 'cross-check',
+  Test = 'test',
 }
 
 export enum CourseScheduleItemStatus {
@@ -77,8 +87,8 @@ export class CourseScheduleService {
         const submitted =
           taskSolutions.some(({ courseTaskId }) => courseTaskId === id) ||
           taskCheckers.some(({ courseTaskId }) => courseTaskId === id);
-        const type = courseTask.type || courseTask.task.type;
         const status = this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined);
+        const tag = this.getCourseTaskTag(courseTask);
         return {
           id,
           name,
@@ -89,7 +99,7 @@ export class CourseScheduleService {
           scoreWeight,
           score: currentScore,
           status,
-          tags: type ? [type] : [],
+          tag,
           descriptionUrl: courseTask.task.descriptionUrl,
         } as CourseScheduleItem;
       })
@@ -97,6 +107,7 @@ export class CourseScheduleService {
         courseEvents.map(courseEvent => {
           const { courseId, dateTime, id } = courseEvent;
           const { name } = courseEvent.event;
+          const tag = this.getCourseEventTag(courseEvent);
           return {
             id,
             name,
@@ -104,7 +115,7 @@ export class CourseScheduleService {
             startDate: dateTime,
             endDate: dateTime,
             status: this.getEventStatus(courseEvent),
-            tags: courseEvent.event.type ? [courseEvent.event.type] : [],
+            tag,
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
           } as CourseScheduleItem;
@@ -233,5 +244,30 @@ export class CourseScheduleService {
       return CourseScheduleItemStatus.Available;
     }
     return studentData ? CourseScheduleItemStatus.Missed : CourseScheduleItemStatus.Archived;
+  }
+
+  private getCourseTaskTag(courseTask: CourseTask): CourseScheduleItemTag {
+    const taskType = courseTask.type || courseTask.task.type;
+
+    if (courseTask.checker == Checker.CrossCheck) {
+      return CourseScheduleItemTag.CrossCheck;
+    }
+    if (taskType === 'selfeducation' || taskType === 'test') {
+      return CourseScheduleItemTag.Test;
+    }
+    if (taskType === 'interview' || taskType == 'stage-interview') {
+      return CourseScheduleItemTag.Interview;
+    }
+    return CourseScheduleItemTag.Coding;
+  }
+
+  private getCourseEventTag(courseEvent: CourseEvent): CourseScheduleItemTag {
+    const type = courseEvent.event.type as EventType;
+    switch (type) {
+      case EventType.SelfStudy:
+        return CourseScheduleItemTag.SelfStudy;
+      default:
+        return CourseScheduleItemTag.Lecture;
+    }
   }
 }

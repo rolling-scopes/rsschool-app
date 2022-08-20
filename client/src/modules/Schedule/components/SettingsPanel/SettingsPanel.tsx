@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
@@ -10,17 +11,11 @@ interface SettingsPanelProps {
   isCourseManager: boolean;
   courseId: number;
   settings: ScheduleSettings;
-  eventTypes: string[];
+  tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({
-  isCourseManager,
-  courseId,
-  settings,
-  eventTypes,
-  refreshData,
-}) => {
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId, settings, tags, refreshData }) => {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
 
@@ -44,7 +39,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </>
         )}
         <Col>
-          <SettingsDrawer eventTypes={eventTypes} settings={settings} />
+          <SettingsDrawer tags={tags} settings={settings} />
         </Col>
       </Row>
       {isManageEventModalOpen && (

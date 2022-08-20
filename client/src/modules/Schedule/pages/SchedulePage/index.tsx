@@ -26,7 +26,7 @@ export function SchedulePage(props: PageProps) {
     const response = await courseScheduleApi.getSchedule(props.course.id);
     return response.data ?? [];
   }, [props.course.id]);
-  const eventTags = useMemo(() => uniq(data.map(item => item.tags).flat()), [data]);
+  const eventTags = useMemo(() => uniq(data.map(item => item.tag)), [data]);
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
@@ -34,7 +34,7 @@ export function SchedulePage(props: PageProps) {
         isCourseManager={isManager}
         courseId={props.course.id}
         settings={settings}
-        eventTypes={eventTags}
+        tags={eventTags}
         refreshData={refreshData}
       />
       <TableView settings={settings} data={data} />

@@ -1,11 +1,11 @@
-import { CourseTaskDtoTypeEnum, CourseScheduleItemDtoStatusEnum, CourseEventDtoTypeEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
 
 export enum ColumnName {
   Status = 'Status',
   StartDate = 'Start Date',
   EndDate = 'End Date',
   Time = 'Time',
-  Tags = 'Tags',
+  Tag = 'Tag',
   Name = 'Task / Event',
   Organizer = 'Organizer',
   Score = 'Score / Max',
@@ -16,7 +16,7 @@ export enum ColumnKey {
   Status = 'status',
   StartDate = 'studentStartDate',
   EndDate = 'studentEndDate',
-  Tags = 'tags',
+  Tag = 'tag',
   Name = 'name',
   Organizer = 'organizer',
   Score = 'score',
@@ -28,7 +28,7 @@ export const COLUMNS: { key: ColumnKey; name: ColumnName }[] = [
   { key: ColumnKey.Name, name: ColumnName.Name },
   { key: ColumnKey.StartDate, name: ColumnName.StartDate },
   { key: ColumnKey.EndDate, name: ColumnName.EndDate },
-  { key: ColumnKey.Tags, name: ColumnName.Tags },
+  { key: ColumnKey.Tag, name: ColumnName.Tag },
   { key: ColumnKey.Organizer, name: ColumnName.Organizer },
   { key: ColumnKey.Weight, name: ColumnName.Weight },
   { key: ColumnKey.Score, name: ColumnName.Score },
@@ -38,21 +38,36 @@ export enum LocalStorageKeys {
   ViewMode = 'scheduleViewMode',
   Timezone = 'scheduleTimezone',
   IsSplittedByWeek = 'scheduleIsSplitedByWeek',
-  TagColors = 'scheduleTagColors',
+  TagColors = 'scheduleTagsColors',
   ColumnsHidden = 'scheduleColumnsHidden',
   EventTypesHidden = 'scheduleEventTypesHidden',
   StatusFilter = 'scheduleStatusFilter',
+  TagFilter = 'scheduleTagFilter',
 }
+
+export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
+  coding: 'Coding',
+  interview: 'Interview',
+  test: 'Test',
+  'cross-check': 'Cross-Check',
+  'self-study': 'Self-study',
+  lecture: 'Lecture',
+};
 
 export const SCHEDULE_STATUSES = Object.keys(CourseScheduleItemDtoStatusEnum).map(key => ({
   value: (CourseScheduleItemDtoStatusEnum as any)[key] as CourseScheduleItemDtoStatusEnum,
   text: key,
 }));
 
+export const TAGS = Object.values(CourseScheduleItemDtoTagEnum).map((value: CourseScheduleItemDtoTagEnum) => ({
+  value: value,
+  text: TAG_NAME_MAP[value],
+}));
+
 export const CONFIGURABLE_COLUMNS = [
   ColumnKey.StartDate,
   ColumnKey.EndDate,
-  ColumnKey.Tags,
+  ColumnKey.Tag,
   ColumnKey.Organizer,
   ColumnKey.Score,
   ColumnKey.Weight,
@@ -61,49 +76,34 @@ export const CONFIGURABLE_COLUMNS = [
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';
 
-export const DEFAULT_COLORS = {
-  [CourseTaskDtoTypeEnum.Cvhtml]: '#004dcf',
-  [CourseTaskDtoTypeEnum.Cvmarkdown]: '#2db7f5',
-  [CourseTaskDtoTypeEnum.Codejam]: '#fa28ff',
-  [CourseTaskDtoTypeEnum.Codewars]: '#b04df0',
-  [CourseTaskDtoTypeEnum.Htmltask]: DEFAULT_COLOR,
-  [CourseEventDtoTypeEnum.Info]: '#13c2c2',
-  [CourseTaskDtoTypeEnum.Interview]: '#13c2c2',
-  [CourseTaskDtoTypeEnum.Jstask]: '#4b5a59',
-  [CourseTaskDtoTypeEnum.Kotlintask]: '#ffa940',
-  [CourseEventDtoTypeEnum.Meetup]: '#2db7f5',
-  [CourseTaskDtoTypeEnum.Objctask]: '#13c2c2',
-  [CourseEventDtoTypeEnum.LectureOffline]: '#fa28ff',
-  [CourseEventDtoTypeEnum.LectureOnline]: '#b04df0',
-  [CourseEventDtoTypeEnum.LectureMixed]: '#959e3c',
-  [CourseTaskDtoTypeEnum.Selfeducation]: '#959e3c',
-  [CourseEventDtoTypeEnum.LectureSelfStudy]: '#4b5a59',
-  [CourseEventDtoTypeEnum.Special]: DEFAULT_COLOR,
-  [CourseTaskDtoTypeEnum.StageInterview]: '#ffa940',
-  [CourseTaskDtoTypeEnum.Test]: '#4b5a59',
-  [CourseEventDtoTypeEnum.Warmup]: '#ffa940',
-  [CourseEventDtoTypeEnum.Webinar]: '#004dcf',
-  [CourseEventDtoTypeEnum.Workshop]: DEFAULT_COLOR,
-  [CourseTaskDtoTypeEnum.Ipynb]: '#fa28ff',
-  default: DEFAULT_COLOR,
-  deadline: DEADLINE_COLOR,
-  [CourseEventDtoTypeEnum.CrossCheckDeadline]: DEADLINE_COLOR,
+export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string> = {
+  coding: '#722ed1',
+  interview: '#1890ff',
+  test: '#faad14',
+  'cross-check': '#13c2c2',
+  'self-study': '#595959',
+  lecture: '#eb2f96',
 };
 
 export const PICKER_COLORS = [
-  '#4b5a59',
-  '#ffa940',
   '#13c2c2',
-  '#2db7f5',
-  '#004dcf',
-  '#b04df0',
-  '#fa28ff',
+  '#1890ff',
+  '#595959',
+  '#722ed1',
+  '#9321a2',
   '#959e3c',
   '#9ce20d',
-  '#24db00',
-  '#ff7a45',
   '#ae8989',
-  '#9321a2',
+  '#b04df0',
+  '#d3adf7',
+  '#d9d9d9',
+  '#eb2f96',
+  '#fa28ff',
+  '#faad14',
+  '#ff7a45',
+  '#ffa940',
+  '#ffadd2',
+  '#ffe58f',
   DEADLINE_COLOR,
   DEFAULT_COLOR,
 ];

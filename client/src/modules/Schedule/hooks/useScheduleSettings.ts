@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
-import { DEFAULT_COLORS, LocalStorageKeys } from 'modules/Schedule/constants';
+import { DEFAULT_TAG_COLOR_MAP, LocalStorageKeys } from 'modules/Schedule/constants';
 
 export interface ScheduleSettings {
   timezone: string;
@@ -9,16 +9,16 @@ export interface ScheduleSettings {
   setTagColors: (value: Record<string, string>) => void;
   columnsHidden: string[];
   setColumnsHidden: (value: string[]) => void;
-  eventTypesHidden: string[];
-  setEventTypesHidden: (value: string[]) => void;
+  tagsHidden: string[];
+  setTagsHidden: (value: string[]) => void;
 }
 
 export const useScheduleSettings = (): ScheduleSettings => {
-  const [tagColors = DEFAULT_COLORS, setTagColors] = useLocalStorage<Record<string, string>>(
+  const [tagColors = DEFAULT_TAG_COLOR_MAP, setTagColors] = useLocalStorage<Record<string, string>>(
     LocalStorageKeys.TagColors,
   );
   const [columnsHidden = [], setColumnsHidden] = useLocalStorage<string[]>(LocalStorageKeys.ColumnsHidden);
-  const [eventTypesHidden = [], setEventTypesHidden] = useLocalStorage<string[]>(LocalStorageKeys.EventTypesHidden);
+  const [tagsHidden = [], setTagsHidden] = useLocalStorage<string[]>(LocalStorageKeys.EventTypesHidden);
   const [timezone = Intl.DateTimeFormat().resolvedOptions().timeZone, setTimezone] = useLocalStorage<string>(
     LocalStorageKeys.Timezone,
   );
@@ -31,9 +31,9 @@ export const useScheduleSettings = (): ScheduleSettings => {
       setTagColors,
       columnsHidden,
       setColumnsHidden,
-      eventTypesHidden,
-      setEventTypesHidden,
+      tagsHidden: tagsHidden,
+      setTagsHidden: setTagsHidden,
     }),
-    [timezone, tagColors, columnsHidden, eventTypesHidden],
+    [timezone, tagColors, columnsHidden, tagsHidden],
   );
 };
