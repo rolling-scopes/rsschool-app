@@ -1,1 +1,1 @@
-export { default as ManageEventModalForm } from './ManageEventModalForm';
+export { ManageEventModalForm } from './ManageEventModalForm';

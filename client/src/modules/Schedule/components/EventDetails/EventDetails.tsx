@@ -2,7 +2,6 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTag, tagsRenderer } from 'components/Table';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import moment from 'moment-timezone';
 import Link from 'next/link';
 import React from 'react';
@@ -17,10 +16,9 @@ interface EventDetailsProps {
   isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
-  settings: ScheduleSettings;
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, isPreview, onEdit }) => {
+export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: EventDetailsProps) {
   const { event, dateTime, place, organizer, special, duration } = eventData;
 
   return (
@@ -112,7 +110,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventData, alias, isAdmin, 
       <style jsx>{styles}</style>
     </>
   );
-};
+}
 
 const styles = css`
   .container {
@@ -132,5 +130,3 @@ const styles = css`
     top: 0;
   }
 `;
-
-export default EventDetails;

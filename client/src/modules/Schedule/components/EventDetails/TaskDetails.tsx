@@ -1,9 +1,8 @@
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Divider, Row, Tooltip, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
+import { renderTag, tagsRenderer, urlRenderer } from 'components/Table';
 import { CHECKER_TYPES } from 'modules/Schedule/constants';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import moment from 'moment-timezone';
 import Link from 'next/link';
 import React from 'react';
@@ -16,10 +15,9 @@ type Props = {
   isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
-  settings: ScheduleSettings;
 };
 
-const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit, settings }) => {
+export function TaskDetails({ taskData, alias, isAdmin, isPreview, onEdit }: Props) {
   const { Title, Text } = Typography;
 
   const {
@@ -70,7 +68,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
 
         {type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(type, settings.tagColors)}</Col>
+            <Col>{renderTag(type)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}
@@ -189,7 +187,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
       <style jsx>{styles}</style>
     </>
   );
-};
+}
 
 const styles = css`
   .container {

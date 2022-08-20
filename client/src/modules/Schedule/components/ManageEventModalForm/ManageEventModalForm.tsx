@@ -19,14 +19,13 @@ interface ManageEventModalFormProps {
   settings: ScheduleSettings;
 }
 
-const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
+export function ManageEventModalForm({
   visible,
   handleCancel,
   courseId,
   editableRecord,
   refreshData,
-  settings,
-}) => {
+}: ManageEventModalFormProps) {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -69,7 +68,6 @@ const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
             {entityType === 'task' && entityData && (
               <TaskDetails
                 taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails}
-                settings={settings}
                 alias={alias}
                 isPreview
                 isAdmin
@@ -78,7 +76,6 @@ const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
             {entityType === 'event' && entityData && (
               <EventDetails
                 eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
-                settings={settings}
                 alias={alias}
                 isPreview
                 isAdmin
@@ -91,7 +88,7 @@ const ManageEventModalForm: React.FC<ManageEventModalFormProps> = ({
       footer={false}
     />
   );
-};
+}
 
 const getEntityDataForPreview = (entityType: string, entityData: any) => {
   if (!entityData) {
