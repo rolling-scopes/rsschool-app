@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { Next } from 'koa';
-import { ILogger } from '../logger';
+import { ILogger, sendError } from '../logger';
 
 export const routeLoggerMiddleware: Router.Middleware = async (ctx: Router.RouterContext<any, any>, next: Next) => {
   const oldLogger = ctx.logger;
@@ -14,14 +14,16 @@ export const errorHandlerMiddleware = (logger: ILogger) => async (ctx: Router.Ro
   try {
     await next();
   } catch (err) {
-    if (err?.message === 'Unauthorized') {
+    const error = err as Error & { status?: number };
+    await sendError(error);
+    if (error?.message === 'Unauthorized') {
       logger.info('Unauthorized request');
     } else {
-      logger.error(err);
+      logger.error(error);
     }
-    ctx.status = err.status || 500;
+    ctx.status = error.status || 500;
     ctx.body = JSON.stringify({
-      message: err.message,
+      message: error.message,
     });
   }
 };
