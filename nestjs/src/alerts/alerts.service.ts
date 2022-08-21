@@ -32,6 +32,7 @@ export class AlertsService {
     const items = await this.alertsRepository.find({
       where: { enabled },
       select: fields,
+      cache: 5 * 60 * 1000,
     });
     return items;
   }
