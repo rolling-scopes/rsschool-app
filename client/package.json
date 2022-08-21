@@ -50,7 +50,7 @@
     "@testing-library/react": "12.1.5",
     "@types/aws-lambda": "8.10.102",
     "@types/cookie": "0.5.1",
-    "@types/jest": "28.1.6",
+    "@types/jest": "28.1.7",
     "@types/lodash": "4.14.182",
     "@types/node": "16",
     "@types/react": "17.0.39",
