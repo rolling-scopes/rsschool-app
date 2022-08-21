@@ -34,6 +34,7 @@ export class ProfileService {
     const courseIds = Object.keys(authUser.courses).map(Number);
 
     return this.courseRepository.find({
+      cache: 120 * 1000,
       where: { id: In(courseIds) },
       order: {
         startDate: 'DESC',

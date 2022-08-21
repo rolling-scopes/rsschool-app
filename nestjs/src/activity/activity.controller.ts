@@ -48,7 +48,7 @@ export class ActivityController {
     const user = await this.userService.getUserByUserId(id);
     const { isActive } = body;
     const now = Date.now();
-    await this.userService.saveUser({ ...user, lastActivityTime: now, isActive });
+    await this.userService.updateUser(user.id, { lastActivityTime: now, isActive });
     return { isActive, lastActivityTime: now };
   }
 
@@ -84,7 +84,7 @@ export class ActivityController {
 
     const now = Date.now();
     const isActive = true;
-    await this.userService.saveUser({ ...user, lastActivityTime: now, isActive });
+    await this.userService.updateUser(user.id, { lastActivityTime: now, isActive });
     return { isActive, lastActivityTime: now };
   }
 }
