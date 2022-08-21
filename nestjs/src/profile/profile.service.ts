@@ -7,10 +7,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/auth';
 import { In, IsNull, Not, Repository, UpdateResult } from 'typeorm';
 import { UserNotificationsService } from '../users-notifications';
-import { ProfileInfoDto, UpdateUserDto } from './dto';
+import { ProfileInfoDto, UpdateProfileInfoDto, UpdateUserDto } from './dto';
 import { isEmail } from 'class-validator';
 import { Resume } from '@entities/resume';
 import { Discord } from '../../../common/models';
+import { omitBy, isUndefined } from 'lodash';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class ProfileService {
@@ -133,6 +135,52 @@ export class ProfileService {
 
       await Promise.all([this.updateEmailChannel(userId, user), this.updateDiscordChannel(userId, user)]);
     }
+  }
+
+  public async updateProfileFlat(userId: number, profileInfo: UpdateProfileInfoDto) {
+    const {
+      name,
+      countryName,
+      cityName,
+      educationHistory,
+      discord,
+      englishLevel,
+      aboutMyself,
+      contactsTelegram,
+      contactsPhone,
+      contactsEmail,
+      contactsNotes,
+      contactsSkype,
+      contactsLinkedIn,
+      contactsEpamEmail,
+    } = profileInfo;
+
+    const [firstName, lastName] = name?.split(' ') ?? [];
+    const user = await this.userRepository.update(
+      { id: userId },
+      omitBy<QueryDeepPartialEntity<User>>(
+        {
+          firstName,
+          lastName: firstName ? lastName ?? '' : undefined,
+          countryName,
+          cityName,
+          educationHistory,
+          discord,
+          englishLevel,
+          aboutMyself,
+          contactsTelegram,
+          contactsPhone,
+          contactsEmail,
+          contactsNotes,
+          contactsSkype,
+          contactsLinkedIn,
+          contactsEpamEmail,
+        },
+        isUndefined,
+      ),
+    );
+
+    await Promise.all([this.updateEmailChannel(userId, user), this.updateDiscordChannel(userId, user)]);
   }
 
   public async getProfile(githubId: string) {
