@@ -1,5 +1,6 @@
 import { Student } from '@entities/student';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 import { StudentDto } from '../../students/dto';
 
 class StudentFeedback {
@@ -17,6 +18,7 @@ export class MentorStudentDto extends StudentDto {
   @ApiProperty({ type: [StudentFeedback] })
   feedbacks: { id: number }[];
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
+  @IsString()
   repoUrl: string | null;
 }

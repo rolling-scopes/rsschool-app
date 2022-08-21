@@ -1986,10 +1986,10 @@ export interface MentorStudentDto {
     'feedbacks': Array<StudentFeedback>;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof MentorStudentDto
      */
-    'repoUrl': object;
+    'repoUrl': string | null;
 }
 /**
  * 
