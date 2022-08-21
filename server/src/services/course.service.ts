@@ -384,6 +384,7 @@ export async function getMentorWithContacts(mentorId: number): Promise<MentorWit
     contactsSkype: user.contactsSkype,
     contactsTelegram: user.contactsTelegram,
     contactsNotes: user.contactsNotes,
+    contactsPhone: null,
   };
   return mentorWithContacts;
 }
@@ -629,11 +630,11 @@ export type StudentCrossMentor = {
   mentor: {
     githubId: string;
     cityName?: string;
-    contactsPhone?: string;
-    contactsTelegram?: string;
-    contactsSkype?: string;
-    contactsNotes?: string;
-    contactsEmail?: string;
+    contactsPhone?: string | null;
+    contactsTelegram?: string | null;
+    contactsSkype?: string | null;
+    contactsNotes?: string | null;
+    contactsEmail?: string | null;
   };
 };
 
@@ -670,7 +671,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
     return [];
   }
 
-  const students = taskCheckers.map(record => {
+  const students = taskCheckers.map<StudentCrossMentor>(record => {
     const { githubId, primaryEmail, contactsNotes, contactsPhone, contactsSkype, contactsTelegram, cityName } =
       record.mentor.user;
     return {

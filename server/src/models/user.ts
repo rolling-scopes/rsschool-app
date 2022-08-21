@@ -107,8 +107,8 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   militaryService?: string | null;
 
-  @Column({ nullable: true })
-  englishLevel?: EnglishLevel;
+  @Column({ type: String, nullable: true })
+  englishLevel: EnglishLevel | null;
 
   @Column({
     type: 'json',
@@ -122,23 +122,23 @@ export class User {
   })
   employmentHistory: EmploymentRecord[] = [];
 
-  @Column({ nullable: true })
-  epamApplicantId?: string;
+  @Column({ type: String, nullable: true })
+  epamApplicantId: string | null;
 
-  @Column({ nullable: true })
-  contactsEpamEmail?: string;
+  @Column({ type: String, nullable: true })
+  contactsEpamEmail: string | null;
 
-  @Column({ nullable: true })
-  contactsPhone?: string;
+  @Column({ type: String, nullable: true })
+  contactsPhone: string | null;
 
-  @Column({ nullable: true })
-  contactsEmail?: string;
+  @Column({ type: String, nullable: true })
+  contactsEmail: string | null;
 
-  @Column({ nullable: true })
-  contactsTelegram?: string;
+  @Column({ type: String, nullable: true })
+  contactsTelegram: string | null;
 
-  @Column({ nullable: true })
-  contactsNotes?: string;
+  @Column({ type: String, nullable: true })
+  contactsNotes: string | null;
 
   @Column({ type: 'json', nullable: true })
   discord: Discord | null;
@@ -149,14 +149,14 @@ export class User {
   @Column({ nullable: true, type: 'varchar' })
   cityName: string | null;
 
-  @Column({ nullable: true })
-  contactsSkype?: string;
+  @Column({ type: String, nullable: true })
+  contactsSkype: string | null;
 
-  @Column({ nullable: true })
-  contactsLinkedIn?: string;
+  @Column({ type: String, nullable: true })
+  contactsLinkedIn: string | null;
 
-  @Column({ nullable: true })
-  aboutMyself?: string;
+  @Column({ type: String, nullable: true })
+  aboutMyself: string | null;
 
   @Column({
     type: 'json',
@@ -179,8 +179,8 @@ export class User {
   @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
   registries: Registry[] | null;
 
-  @Column({ nullable: true })
-  activist: boolean;
+  @Column({ type: Boolean, nullable: true })
+  activist: boolean | null;
 
   @Column({ default: 0, type: 'bigint' })
   lastActivityTime: number;
