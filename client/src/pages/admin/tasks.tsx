@@ -12,15 +12,13 @@ import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
-import { DisciplineService } from '../../services/discipline';
-import { isAnyCoursePowerUser } from '../../domain/user';
-import { DisciplineDto } from 'api';
+import { DisciplineDto, DisciplinesApi } from 'api';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
 const service = new TaskService();
-const disciplinesService = new DisciplineService();
+const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
@@ -31,7 +29,7 @@ function Page(props: Props) {
   const [modalValues, setModalValues] = useState<any>({});
 
   const { loading } = useAsync(async () => {
-    const [tasks, disciplines] = await Promise.all([service.getTasks(), disciplinesService.getAllDisciplines()]);
+    const [tasks, { data: disciplines }] = await Promise.all([service.getTasks(), disciplinesApi.getDisciplines()]);
     setData(tasks);
     setDisciplines(disciplines || []);
   }, [modalData]);
@@ -108,7 +106,7 @@ function Page(props: Props) {
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="discipline" label="Discipline">
+            <Form.Item required name="disciplineId" label="Discipline">
               <Select>
                 {disciplines.map(({ id, name }) => (
                   <Select.Option key={id} value={id}>
@@ -221,7 +219,7 @@ function createRecord(values: any) {
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
-    discipline: values.discipline,
+    disciplineId: values.disciplineId,
     attributes: JSON.parse(values.attributes ?? '{}'),
   };
   return data;
@@ -251,7 +249,7 @@ function getColumns(handleEditItem: any) {
     },
     {
       title: 'Discipline',
-      dataIndex: 'discipline',
+      dataIndex: ['discipline', 'name'],
       sorter: stringSorter<Task>('discipline'),
     },
     {
@@ -299,7 +297,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Task>) {
-  return {...modalData, discipline: modalData.discipline?.name};
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export { getServerSideProps };

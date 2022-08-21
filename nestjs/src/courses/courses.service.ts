@@ -11,11 +11,11 @@ export class CoursesService {
   ) {}
 
   public async getAll() {
-    return this.repository.find({ order: { startDate: 'DESC' } });
+    return this.repository.find({ order: { startDate: 'DESC' }, relations: ['discipline'] });
   }
 
   public async getById(id: number) {
-    return this.repository.findOneByOrFail({ id });
+    return this.repository.findOneOrFail({ where: { id }, relations: ['discipline'] });
   }
 
   public async getByIds(ids: number[]) {

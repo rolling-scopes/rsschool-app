@@ -1,14 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Disciplines1647779015475 implements MigrationInterface {
-  name = 'Disciplines1647779015475';
+export class Disciplines1661106736439 implements MigrationInterface {
+  name = 'Disciplines1661106736439';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "task" RENAME COLUMN "discipline" TO "disciplineId"`);
     await queryRunner.query(`ALTER TABLE "event" RENAME COLUMN "discipline" TO "disciplineId"`);
-    await queryRunner.query(
-      `CREATE TABLE "discipline" ("id" SERIAL NOT NULL, "created_date" TIMESTAMP NOT NULL DEFAULT now(), "updated_date" TIMESTAMP NOT NULL DEFAULT now(), "deleted_date" TIMESTAMP, "name" character varying NOT NULL, CONSTRAINT "PK_139512aefbb11a5b2fa92696828" PRIMARY KEY ("id"))`,
-    );
     await queryRunner.query(`ALTER TABLE "task" DROP COLUMN "disciplineId"`);
     await queryRunner.query(`ALTER TABLE "task" ADD "disciplineId" integer`);
     await queryRunner.query(`ALTER TABLE "event" DROP COLUMN "disciplineId"`);
@@ -28,7 +25,6 @@ export class Disciplines1647779015475 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "event" ADD "disciplineId" character varying`);
     await queryRunner.query(`ALTER TABLE "task" DROP COLUMN "disciplineId"`);
     await queryRunner.query(`ALTER TABLE "task" ADD "disciplineId" character varying`);
-    await queryRunner.query(`DROP TABLE "discipline"`);
     await queryRunner.query(`ALTER TABLE "event" RENAME COLUMN "disciplineId" TO "discipline"`);
     await queryRunner.query(`ALTER TABLE "task" RENAME COLUMN "disciplineId" TO "discipline"`);
   }

@@ -1,9 +1,15 @@
-import { getServerSideProps } from '../../modules/Discipline/data/getServerSideProps';
+import { DisciplinePage } from 'modules/Discipline/pages/DisciplinePage';
+import { getServerSideProps } from 'modules/Home/data/getServerSideProps';
 import { SessionProvider } from 'modules/Course/contexts';
-import { DisciplinePage, IDisciplinePage } from '../../modules/Discipline/pages/DisciplinePage';
+import { ProfileCourseDto } from 'api';
 
 export { getServerSideProps };
-export default function (props: IDisciplinePage) {
+
+type Props = {
+  courses: ProfileCourseDto[];
+};
+
+export default function (props: Props) {
   return (
     <SessionProvider>
       <DisciplinePage {...props} />

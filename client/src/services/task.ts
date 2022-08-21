@@ -18,6 +18,7 @@ export interface Task {
   tags: string[];
   skills: string[];
   discipline: DisciplineDto;
+  disciplineId: number;
   attributes: Record<string, any>;
 }
 

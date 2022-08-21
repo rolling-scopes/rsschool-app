@@ -75,9 +75,12 @@ export class Task {
   @Column({ type: 'simple-array', default: '' })
   skills: string[];
 
-  @ManyToOne(() => Discipline, { onDelete: 'SET NULL' })
-  @JoinColumn()
-  discipline: Discipline;
+  @ManyToOne(() => Discipline, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'disciplineId' })
+  discipline: Discipline | null;
+
+  @Column({ nullable: true })
+  disciplineId: number | null;
 
   @Column({ type: 'json', default: {} })
   attributes: Record<string, any>;

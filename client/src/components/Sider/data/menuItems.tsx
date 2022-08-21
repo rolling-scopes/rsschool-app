@@ -1,7 +1,7 @@
 import {
   HomeOutlined,
   GlobalOutlined,
-  QuestionOutlined,
+  AppstoreAddOutlined,
   AlertOutlined,
   BellOutlined,
   UserOutlined,
@@ -52,19 +52,26 @@ const adminMenuItems: AdminMenuItemsData[] = [
     access: session => isAdmin(session) || isAnyCoursePowerUser(session),
   },
   {
+    name: 'Disciplines',
+    key: 'disciplines',
+    icon: <AppstoreAddOutlined />,
+    href: '/admin/disciplines',
+    access: session => isAdmin(session),
+  },
+  {
     name: 'Courses',
     key: 'courses',
     icon: <GlobalOutlined />,
     href: '/admin/courses',
     access: session => isAdmin(session),
   },
-  {
-    name: 'Interview questions',
-    key: 'interviewQuestions',
-    icon: <QuestionOutlined />,
-    href: '/admin/interview-questions',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
-  },
+  // {
+  //   name: 'Interview questions',
+  //   key: 'interviewQuestions',
+  //   icon: <QuestionOutlined />,
+  //   href: '/admin/interview-questions',
+  //   access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+  // },
   {
     name: 'Tasks',
     key: 'tasks',

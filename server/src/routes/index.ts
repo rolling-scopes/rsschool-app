@@ -1,4 +1,3 @@
-import { disciplineRoute } from './discipline';
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';

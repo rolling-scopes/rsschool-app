@@ -36,7 +36,10 @@ export class Event {
   @OneToMany(_ => CourseEvent, (courseLecture: CourseEvent) => courseLecture.event, { nullable: true })
   courseEvents: CourseEvent[] | null;
 
-  @ManyToOne(() => Discipline, { onDelete: 'SET NULL' })
-  @JoinColumn()
-  discipline: Discipline;
+  @ManyToOne(() => Discipline, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'disciplineId' })
+  discipline: Discipline | null;
+
+  @Column({ nullable: true })
+  disciplineId: number | null;
 }

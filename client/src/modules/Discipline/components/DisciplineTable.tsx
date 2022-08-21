@@ -1,30 +1,23 @@
 import { Button, Modal, Space, Table } from 'antd';
 import { DisciplineDto } from 'api';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { useMemo } from 'react';
-import { DisciplineService } from '../../../services/discipline';
 
 const { Column } = Table;
-
 const { confirm } = Modal;
-
 interface IDisciplineTable {
   disciplines: DisciplineDto[];
-  loadDisciplines: () => Promise<void>;
   handleUpdate: (record: DisciplineDto) => void;
+  handleDelete: (record: DisciplineDto) => Promise<void>;
 }
 
-export const DisciplineTable = ({ disciplines, loadDisciplines, handleUpdate }: IDisciplineTable) => {
-  const disciplineService = useMemo(() => new DisciplineService(), []);
-
+export const DisciplineTable = ({ disciplines, handleDelete, handleUpdate }: IDisciplineTable) => {
   const deleteDisciplineHandler = (record: DisciplineDto) => {
     confirm({
       title: 'Do you want to delete this discipline?',
       icon: <ExclamationCircleOutlined />,
       content: 'Some descriptions',
       async onOk() {
-        await disciplineService.deleteDiscipline(record.id);
-        await loadDisciplines();
+        await handleDelete(record);
       },
     });
   };
@@ -40,6 +33,7 @@ export const DisciplineTable = ({ disciplines, loadDisciplines, handleUpdate }: 
         <Column
           title="Actions"
           key="action"
+          width={100}
           render={record => (
             <Space size="middle">
               <Button key={'edit'} onClick={() => updateDisciplineHandler(record)} size="small">

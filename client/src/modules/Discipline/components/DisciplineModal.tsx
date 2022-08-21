@@ -1,7 +1,6 @@
 import { Form, Input, message, Modal } from 'antd';
-import { useEffect, useMemo } from 'react';
-import { DisciplineDto } from 'api';
-import { DisciplineService } from '../../../services/discipline';
+import { useEffect } from 'react';
+import { DisciplineDto, DisciplinesApi } from 'api';
 
 interface IDisciplineModal {
   isModalVisible: boolean;
@@ -9,16 +8,12 @@ interface IDisciplineModal {
   loadDisciplines: () => Promise<void>;
   discipline: DisciplineDto | null;
 }
+const disciplineService = new DisciplinesApi();
 
 export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, discipline }: IDisciplineModal) {
-  const disciplineService = useMemo(() => new DisciplineService(), []);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
-  }, [isModalVisible]);
+  useEffect(() => form.resetFields, [isModalVisible]);
 
   const initialValues = {
     name: discipline?.name,
@@ -31,7 +26,7 @@ export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, dis
       if (discipline) {
         await disciplineService.updateDiscipline(discipline.id, value);
       } else {
-        await disciplineService.postDiscipline(value);
+        await disciplineService.createDiscipline(value);
       }
 
       await loadDisciplines();

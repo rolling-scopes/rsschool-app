@@ -5,21 +5,27 @@ import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
-import { Resume } from './resume';
 import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
-import { UserGroup } from './userGroup';
 import { Event } from './event';
 import { ExternalAccount, User } from './user';
 import { Feedback } from './feedback';
+import { History } from './history';
 import { InterviewQuestion } from './interviewQuestion';
 import { InterviewQuestionCategory } from './interviewQuestionCategory';
+import { LoginState } from './loginState';
 import { Mentor } from './mentor';
 import { MentorRegistry } from './mentorRegistry';
+import { Notification } from './notification';
+import { NotificationChannel } from './notificationChannel';
+import { NotificationChannelSettings } from './notificationChannelSettings';
+import { NotificationUserConnection } from './notificationUserConnection';
+import { NotificationUserSettings } from './notificationUserSettings';
 import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Registry } from './registry';
 import { RepositoryEvent } from './repositoryEvent';
+import { Resume } from './resume';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { StageInterviewStudent } from './stageInterviewStudent';
@@ -35,14 +41,7 @@ import { TaskSolution } from './taskSolution';
 import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
-import { LoginState } from './loginState';
-import { NotificationUserSettings } from './notificationUserSettings';
-import { NotificationChannel } from './notificationChannel';
-import { Notification } from './notification';
-import { NotificationChannelSettings } from './notificationChannelSettings';
-import { NotificationUserConnection } from './notificationUserConnection';
-import { History } from './history';
-import { Discipline } from './discipline';
+import { UserGroup } from './userGroup';
 
 export * from './session';
 export {
@@ -56,7 +55,6 @@ export {
   CourseUser,
   Discipline,
   DiscordServer,
-  UserGroup,
   Event,
   ExternalAccount,
   Feedback,
@@ -65,10 +63,16 @@ export {
   LoginState,
   Mentor,
   MentorRegistry,
+  Notification,
+  NotificationChannel,
+  NotificationChannelSettings,
+  NotificationUserConnection,
+  NotificationUserSettings,
   PrivateFeedback,
   ProfilePermissions,
   Registry,
   RepositoryEvent,
+  Resume,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,
@@ -85,13 +89,7 @@ export {
   TaskSolutionResult,
   TaskVerification,
   User,
-  Resume,
-  NotificationUserSettings,
-  NotificationChannel,
-  Notification,
-  NotificationChannelSettings,
-  NotificationUserConnection,
-  Discipline,
+  UserGroup,
 };
 
 export const models = [
@@ -104,14 +102,19 @@ export const models = [
   CourseUser,
   Discipline,
   DiscordServer,
-  UserGroup,
   Event,
   Feedback,
+  History,
   InterviewQuestion,
   InterviewQuestionCategory,
   LoginState,
   Mentor,
   MentorRegistry,
+  Notification,
+  NotificationChannel,
+  NotificationChannelSettings,
+  NotificationUserConnection,
+  NotificationUserSettings,
   PrivateFeedback,
   ProfilePermissions,
   Registry,
@@ -132,13 +135,7 @@ export const models = [
   TaskSolutionResult,
   TaskVerification,
   User,
-  NotificationUserSettings,
-  NotificationChannel,
-  Notification,
-  NotificationChannelSettings,
-  NotificationUserConnection,
-  History,
-  Discipline,
+  UserGroup,
 ];
 
 export interface IApiResponse<T> {

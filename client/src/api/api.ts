@@ -672,6 +672,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'logo': string;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof CourseDto
+     */
+    'discipline': IdNameDto | null;
 }
 /**
  * 
@@ -2411,6 +2417,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'logo': string;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof ProfileCourseDto
+     */
+    'discipline': IdNameDto | null;
 }
 /**
  * 

@@ -10,6 +10,7 @@ export interface Event {
   description: string;
   type: string;
   discipline: DisciplineDto;
+  disciplineId: number;
 }
 export class EventService {
   async getEvents() {
