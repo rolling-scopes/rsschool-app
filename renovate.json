@@ -10,11 +10,11 @@
   "repositories": ["rolling-scopes/rsschool-app"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["react-dom", "@types/react", "react"],
+      "matchPackageNames": ["react-dom", "@types/react", "react"],
       "groupName": "react"
     },
     {
-      "matchPackagePatterns": ["jest", "@types/jest"],
+      "matchPackageNames": ["jest", "@types/jest"],
       "groupName": "jest"
     },
     {
