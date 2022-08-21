@@ -1,6 +1,6 @@
 import { Course } from '@entities/course';
 import { ApiProperty } from '@nestjs/swagger';
-import { IdNameDto } from 'src/core/dto';
+import { IdNameDto } from '../../core/dto';
 
 export class CourseDto {
   constructor(course: Course) {

@@ -10,6 +10,7 @@ import { useAsync } from 'react-use';
 type Props = {
   courses: ProfileCourseDto[];
 };
+
 const disciplinesApi = new DisciplinesApi();
 
 export const DisciplinePage = ({ courses }: Props) => {
