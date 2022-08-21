@@ -20,7 +20,7 @@ const postActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
 const getActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const userId = ctx.state.user.id as number;
-  const { lastActivityTime, isActive } = (await getRepository(User).findOneByOrFail({ id: Number(userId) }));
+  const { lastActivityTime, isActive } = await getRepository(User).findOneByOrFail({ id: Number(userId) });
   setResponse(ctx, OK, { lastActivityTime: Number(lastActivityTime), isActive });
 };
 
