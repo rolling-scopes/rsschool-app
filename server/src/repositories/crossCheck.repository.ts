@@ -7,7 +7,7 @@ export class CrossCheckRepository extends AbstractRepository<TaskSolution> {
     courseTaskId: number,
     studentId: number,
     checkerId: number,
-  ): Promise<TaskSolutionResult | undefined> {
+  ): Promise<TaskSolutionResult | null> {
     const item = await getRepository(TaskSolutionResult)
       .createQueryBuilder('result')
       .where('result."studentId" = :studentId', { studentId })
@@ -17,7 +17,7 @@ export class CrossCheckRepository extends AbstractRepository<TaskSolution> {
     return item;
   }
 
-  public async findSolution(courseTaskId: number, studentId: number): Promise<TaskSolution | undefined> {
+  public async findSolution(courseTaskId: number, studentId: number): Promise<TaskSolution | null> {
     const item = await getRepository(TaskSolution)
       .createQueryBuilder('solution')
       .where('solution."studentId" = :studentId', { studentId })

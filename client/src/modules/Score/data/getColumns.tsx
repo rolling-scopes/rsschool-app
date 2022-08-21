@@ -1,10 +1,11 @@
+import { ColumnType } from 'antd/lib/table';
 import { SettingFilled } from '@ant-design/icons';
 import { Typography } from 'antd';
+import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
 import { isArray } from 'lodash';
 import Link from 'next/link';
-import { ColumnTypeWithName, StudentScoreWithCrossCheckScore } from 'services/course';
 
 const { Text } = Typography;
 
@@ -20,7 +21,7 @@ const getSearchProps = (key: string) => ({
   onFilter: undefined,
 });
 
-export function getColumns(props: Props): ColumnTypeWithName<StudentScoreWithCrossCheckScore>[] {
+export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
   const { cityName, mentor, handleSettings, taskColumns } = props;
 
   return [

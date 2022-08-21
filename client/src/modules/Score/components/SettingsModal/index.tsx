@@ -22,14 +22,14 @@ export function SettingsModal(props: Props) {
   };
 
   const initialValues = courseTasks.reduce((acc, curr) => {
-    acc[curr.name] = curr.isVisible;
+    acc[curr.id] = curr.isVisible;
     return acc;
   }, {} as Record<string, boolean | undefined>);
 
   const fillAllFields = (value: boolean) => {
     const newValues: Record<string, boolean | undefined> = {};
     courseTasks.reduce((acc, curr) => {
-      acc[curr.name] = value;
+      acc[curr.id] = value;
       return acc;
     }, newValues);
     form.setFieldsValue(newValues);
@@ -73,7 +73,7 @@ export function SettingsModal(props: Props) {
         {courseTasks.map(el => (
           <Form.Item
             key={el.id}
-            name={el.name}
+            name={el.id}
             label={el.name}
             labelAlign="left"
             style={{ marginBottom: '0', overflow: 'hidden' }}

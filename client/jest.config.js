@@ -5,8 +5,8 @@ process.env.TZ = 'UTC';
 const createJestConfig = nextJest({ dir: './' });
 
 module.exports = createJestConfig({
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jsdom',
   rootDir: 'src',
-  setupFilesAfterEnv: ['<rootDir>/__mocks__/setupJest.ts'],
+  setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
   moduleDirectories: ['node_modules', '<rootDir>/'],
 });

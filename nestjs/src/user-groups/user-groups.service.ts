@@ -32,7 +32,7 @@ export class UserGroupsService {
   public async update(id: number, data: UpdateUserGroupDto) {
     await this.repository.update(id, data);
 
-    const userGroup = await this.repository.findOneOrFail(id);
+    const userGroup = await this.repository.findOneByOrFail({ id });
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
     const group = this.formatGroup(userGroup, users);
     return group;

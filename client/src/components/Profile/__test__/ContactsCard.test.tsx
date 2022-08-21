@@ -1,13 +1,11 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
-import ContactsCard from '../ContactsCard';
-import { Contacts } from 'common/models/profile';
+import { render } from '@testing-library/react';
+import ContactsCard, { filterPermissions } from '../ContactsCard';
 
 describe('ContactsCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper: any = mount(
+      const wrapper = render(
         <ContactsCard
           data={{
             epamEmail: 'vasya@epam.com',
@@ -23,12 +21,13 @@ describe('ContactsCard', () => {
           onProfileSettingsChange={jest.fn()}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
+          isDataPendingSave={false}
         />,
       );
-      expect(shallowToJson(wrapper)).toMatchSnapshot();
+      expect(wrapper.container).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper: any = mount(
+      const wrapper = render(
         <ContactsCard
           data={{
             epamEmail: 'vasya@epam.com',
@@ -44,9 +43,10 @@ describe('ContactsCard', () => {
           onProfileSettingsChange={jest.fn()}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
+          isDataPendingSave={false}
         />,
       );
-      expect(shallowToJson(wrapper)).toMatchSnapshot();
+      expect(wrapper.container).toMatchSnapshot();
     });
   });
 
@@ -67,17 +67,7 @@ describe('ContactsCard', () => {
         isMentorStatsVisible: { all: true, mentor: true, student: true },
         isStudentStatsVisible: { all: true, student: true },
       };
-      const wrapper = shallow(
-        <ContactsCard
-          data={{} as Contacts}
-          isEditingModeEnabled={false}
-          permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
-      const instance: any = wrapper.instance();
-      const result = instance.filterPermissions(permissionsSettings);
+      const result = filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isEmailVisible: { all: true, student: true },
         isTelegramVisible: { all: false, student: false },

@@ -1,6 +1,6 @@
 import { CourseTaskDtoTypeEnum } from '../api';
 
-export const TASK_TYPES = [
+export const TASK_TYPES: { id: CourseTaskDtoTypeEnum; name: string }[] = [
   { id: CourseTaskDtoTypeEnum.Jstask, name: 'JS task' },
   { id: CourseTaskDtoTypeEnum.Kotlintask, name: 'Kotlin task' },
   { id: CourseTaskDtoTypeEnum.Objctask, name: 'Objective-C task' },

@@ -37,7 +37,7 @@ export class CourseTask {
   createdDate: number;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @ManyToOne(_ => Task, (task: Task) => task.courseTasks)
   task: Task;

@@ -7,6 +7,7 @@ import { Row, Col, Tag, Typography, Tooltip, Select } from 'antd';
 import { dateTimeTimeZoneRenderer } from './renderers';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { TASK_TYPES } from 'data/taskTypes';
+import { EVENT_TYPES } from 'data/eventTypes';
 
 type Props = {
   nextEvents: CourseEvent[];
@@ -39,11 +40,7 @@ const EventTypeColor: Record<string, string> = {
 };
 
 const EventTypeToName: Record<string, string> = {
-  lecture_online: 'online lecture',
-  lecture_offline: 'offline lecture',
-  lecture_mixed: 'mixed lecture',
-  lecture_self_study: 'self study',
-  warmup: 'warm-up',
+  ...EVENT_TYPES.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {} as Record<string, string>),
   ...TASK_TYPES.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {} as Record<string, string>),
 };
 

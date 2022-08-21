@@ -26,7 +26,7 @@ export function publicMeRouter(_: ILogger) {
       setResponse(ctx, NOT_FOUND);
       return;
     }
-    const user = await getRepository(User).findOne(id);
+    const user = await getRepository(User).findOneBy({ id });
     if (user === undefined) {
       setResponse(ctx, NOT_FOUND);
       return;

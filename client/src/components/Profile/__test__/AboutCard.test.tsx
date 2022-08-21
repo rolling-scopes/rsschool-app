@@ -1,13 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
-import AboutCard from '../AboutCard';
+import { render } from '@testing-library/react';
+import AboutCard, { filterPermissions } from '../AboutCard';
 import { GeneralInfo } from 'common/models/profile';
 
 describe('AboutCard', () => {
   describe('Should render correctly', () => {
     it('if "aboutMyself" is present', () => {
-      const output = shallow<AboutCard>(
+      const output = render(
         <AboutCard
           data={
             {
@@ -19,10 +18,10 @@ describe('AboutCard', () => {
           onProfileSettingsChange={jest.fn()}
         />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(output.container).toMatchSnapshot();
     });
     it('if "aboutMyself" is not present', () => {
-      const output = shallow(
+      const output = render(
         <AboutCard
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
@@ -30,7 +29,7 @@ describe('AboutCard', () => {
           onProfileSettingsChange={jest.fn()}
         />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(output.container).toMatchSnapshot();
     });
   });
   describe('filterPermissions', () => {
@@ -50,17 +49,7 @@ describe('AboutCard', () => {
         isMentorStatsVisible: { all: true, mentor: true, student: true },
         isStudentStatsVisible: { all: true, student: true },
       };
-      const wrapper = shallow<AboutCard>(
-        <AboutCard
-          data={{} as GeneralInfo}
-          isEditingModeEnabled={false}
-          permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
-      const instance = wrapper.instance();
-      const result = (instance as any).filterPermissions(permissionsSettings);
+      const result = filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isAboutVisible: {
           all: true,

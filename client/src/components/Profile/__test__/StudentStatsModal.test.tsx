@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import StudentStatsModal from '../StudentStatsModal';
 import { StudentStats } from 'common/models/profile';
 
@@ -12,9 +11,9 @@ describe('StudentStatsModal', () => {
       locationName: 'Minsk',
       courseFullName: 'Rolling Scopes School 2018 Q1',
       isExpelled: false,
+      isSelfExpelled: false,
       expellingReason: '',
       isCourseCompleted: true,
-      isSelfExpelled: false,
       totalScore: 1201,
       certificateId: 'asd',
       rank: 32,
@@ -53,7 +52,7 @@ describe('StudentStatsModal', () => {
       ],
     };
 
-    const output = shallow(<StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />);
-    expect(shallowToJson(output)).toMatchSnapshot();
+    const output = render(<StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

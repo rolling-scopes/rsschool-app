@@ -23,8 +23,8 @@ export class FeedbacksService {
     feedback: CreateStudentFeedbackDto,
     authorId: number,
   ): Promise<StudentFeedback> {
-    const student = await this.studentsRepository.findOneOrFail(studentId);
-    const mentor = await this.mentorsRepository.findOneOrFail({ userId: authorId, courseId: student.courseId });
+    const student = await this.studentsRepository.findOneByOrFail({ id: studentId });
+    const mentor = await this.mentorsRepository.findOneByOrFail({ userId: authorId, courseId: student.courseId });
     const current = await this.getByStudentAndMentor(student.id, mentor.id);
 
     if (current) {

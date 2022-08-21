@@ -1,4 +1,4 @@
-import { LoginData } from '@entities/loginState';
+import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
@@ -11,11 +11,11 @@ import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
-import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
 import { lastValueFrom } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
+import { CourseUser } from '@entities/courseUser';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -30,6 +30,14 @@ export type LoginStateParams = {
   data: LoginData;
 };
 
+export type AuthDetails = {
+  id: number;
+  githubId: string;
+  students: { courseId: number; id: number }[];
+  mentors: { courseId: number; id: number }[];
+  courseUsers: CourseUser[];
+};
+
 @Injectable()
 export class AuthService {
   private readonly admins: string[] = [];
@@ -40,8 +48,8 @@ export class AuthService {
     readonly courseTaskService: CourseTasksService,
     readonly userService: UsersService,
     readonly configService: ConfigService,
-    @InjectRepository(AuthRepository)
-    private readonly authRepository: AuthRepository,
+    @InjectRepository(LoginState)
+    private readonly loginStateRepository: Repository<LoginState>,
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private httpService: HttpService,
@@ -90,7 +98,7 @@ export class AuthService {
 
   public async getAuthUser(username: string, admin = false) {
     const [authInfo, courseTasks] = await Promise.all([
-      this.authRepository.getAuthDetails(username),
+      this.getAuthDetails(username),
       this.courseTaskService.getByOwner(username),
     ]);
     const isAdmin = this.admins.includes(username) || admin;
@@ -110,7 +118,7 @@ export class AuthService {
     const id = await nanoid();
     const { data, expires, userId } = params;
 
-    await this.authRepository.save({
+    await this.loginStateRepository.save({
       id,
       data,
       userId,
@@ -121,7 +129,7 @@ export class AuthService {
   }
 
   public getLoginStateById(id: string) {
-    return this.authRepository.findOne({
+    return this.loginStateRepository.findOne({
       where: {
         id,
         expires: MoreThanOrEqual(dayjs().toISOString()),
@@ -133,7 +141,7 @@ export class AuthService {
   }
 
   public getLoginStateByUserId(id: number) {
-    return this.authRepository.findOne({
+    return this.loginStateRepository.findOne({
       where: {
         userId: id,
         expires: MoreThanOrEqual(dayjs().toISOString()),
@@ -145,7 +153,7 @@ export class AuthService {
   }
 
   public deleteLoginState(id: string) {
-    return this.authRepository.delete(id);
+    return this.loginStateRepository.delete(id);
   }
 
   public getRedirectUrl(loginData?: LoginData) {
@@ -181,5 +189,44 @@ export class AuthService {
         ),
       );
     }
+  }
+
+  public async getAuthDetails(githubId: string): Promise<AuthDetails> {
+    const query = this.loginStateRepository.manager
+      .createQueryBuilder(User, 'user')
+      .select('user.id', 'id')
+      .addSelect('user.githubId', 'githubId')
+      .addSelect(
+        qb =>
+          qb
+            .select(`jsonb_agg(json_build_object('id', mentor.id, 'courseId', mentor."courseId"))`)
+            .from('mentor', 'mentor')
+            .where('mentor.userId = user.id'),
+        'mentors',
+      )
+      .addSelect(
+        qb =>
+          qb
+            .select(`jsonb_agg(json_build_object('id', student.id, 'courseId', student."courseId"))`)
+            .from('student', 'student')
+            .where('student.userId = user.id'),
+        'students',
+      )
+      .addSelect(
+        qb => qb.select('jsonb_agg("courseUser")').from(CourseUser, 'courseUser').where('courseUser.userId = user.id'),
+        'courseUsers',
+      )
+      .where({
+        githubId,
+      });
+
+    const result = await query.getRawOne();
+    return {
+      id: result.id,
+      githubId: result.githubId,
+      students: result.students ?? [],
+      mentors: result.mentors ?? [],
+      courseUsers: result.courseUsers ?? [],
+    };
   }
 }

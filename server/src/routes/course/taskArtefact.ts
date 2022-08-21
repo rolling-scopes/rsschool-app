@@ -33,7 +33,7 @@ export const postTaskArtefact = (_: ILogger) => async (ctx: Router.RouterContext
     presentationUrl: inputData.presentationUrl,
   };
 
-  const student = await getRepository(Student).findOne(data.studentId, { relations: ['user'] });
+  const student = await getRepository(Student).findOne({ where: { id: data.studentId }, relations: ['user'] });
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;

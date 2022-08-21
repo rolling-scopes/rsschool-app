@@ -45,7 +45,7 @@ export const getContactsUserFields = (modelName = 'user') => [
   `${modelName}.contactsSkype`,
 ];
 
-export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
+export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | null> {
   return await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .where('mentor."courseId" = :courseId AND mentor."userId" = :userId', { userId, courseId })
@@ -126,7 +126,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
-    discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : '',
+    discord: user.discord,
     totalScore: student.totalScore,
   };
 }
@@ -713,7 +713,7 @@ function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
 }
 
 export async function createCourseFromCopy(courseId: number, details: any) {
-  const courseToCopy = await getRepository(Course).findOne(courseId);
+  const courseToCopy = await getRepository(Course).findOneBy({ id: courseId });
 
   if (courseToCopy && courseToCopy.id) {
     const events: any = await getEvents(courseId);

@@ -22,11 +22,11 @@ type Props = {
   onProfileSettingsChange: (event: any, path: string) => void;
 };
 
-class EnglishCard extends React.Component<Props> {
-  private filterPermissions = ({ isEnglishVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isEnglishVisible,
-  });
+export const filterPermissions = ({ isEnglishVisible }: Partial<ConfigurableProfilePermissions>) => ({
+  isEnglishVisible,
+});
 
+class EnglishCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.englishLevel, this.props.data.englishLevel) ||
     !isEqual(nextProps.permissionsSettings?.isEnglishVisible, this.props.permissionsSettings?.isEnglishVisible) ||
@@ -46,7 +46,7 @@ class EnglishCard extends React.Component<Props> {
           ) : undefined
         }
         noDataDescrption="English level isn't choosen"
-        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
         onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={

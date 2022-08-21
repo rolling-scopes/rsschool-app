@@ -9,10 +9,10 @@ import {
   EditFilled,
 } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
+import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
@@ -21,14 +21,13 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { CoursePageProps, StudentBasic } from 'services/models';
+import { CoursePageProps } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
-type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -114,41 +113,13 @@ function CrossCheckHistory(props: {
   );
 }
 
-function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignment }) {
-  if (!assignment) {
-    return null;
-  }
-  const discordUsername = `@${assignment.student.discord}`;
-  return (
-    <div style={{ marginTop: 16 }}>
-      <Typography.Paragraph>
-        Student Discord:{' '}
-        {assignment.student.discord ? (
-          <>
-            <Typography.Text strong>{discordUsername}</Typography.Text>{' '}
-            <CopyToClipboardButton value={discordUsername} />
-          </>
-        ) : (
-          'unknown'
-        )}
-      </Typography.Paragraph>
-      <Typography.Paragraph>
-        Solution:{' '}
-        <a target="_blank" href={assignment.url}>
-          {assignment.url}
-        </a>
-      </Typography.Paragraph>
-    </div>
-  );
-}
-
 function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [courseTaskId, setCourseTaskId] = useState<number | null>(null);
   const [githubId, setGithubId] = useState<string | null>(null);
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
   const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);

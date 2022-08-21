@@ -1,4 +1,11 @@
-import { MessageOutlined, MessageTwoTone, MinusCircleTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
+import {
+  MessageOutlined,
+  MessageTwoTone,
+  MinusCircleTwoTone,
+  StarOutlined,
+  LockFilled,
+  TrophyOutlined,
+} from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayoutSimple } from 'components/PageLayout';
@@ -36,6 +43,14 @@ export function Students(props: CourseOnlyPageProps) {
                   <Link href={`/profile?githubId=${student.githubId}`}>
                     <a>{student.name}</a>
                   </Link>
+                  {student.repoUrl && (
+                    <div>
+                      <LockFilled />{' '}
+                      <a href={student.repoUrl} target="_blank">
+                        {student.repoUrl.split('/').pop()}
+                      </a>
+                    </div>
+                  )}
                 </>
               }
               actions={[

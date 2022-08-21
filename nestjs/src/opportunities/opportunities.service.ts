@@ -68,7 +68,7 @@ export class OpportunitiesService {
     const value = true;
     const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     await this.userRepository.update(user.id, { opportunitiesConsent: value });
-    const current = await this.resumeRepository.findOne({ githubId });
+    const current = await this.resumeRepository.findOneBy({ githubId });
     await this.resumeRepository.save({ id: current?.id, githubId, userId: user.id });
     return Boolean(value);
   }
@@ -83,14 +83,16 @@ export class OpportunitiesService {
 
   private async getFullResume(resume: Resume, visibleCourseOnly = true): Promise<ResumeData> {
     const [students, gratitudes] = await Promise.all([
-      this.studentRepository.find({
-        relations: ['course', 'certificate', 'mentor', 'mentor.user'],
-        where: {
-          userId: resume.userId,
-          // if visibleCourses is not defined, then we show info from all courses
-          ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
-        },
-      }),
+      resume.userId
+        ? this.studentRepository.find({
+            relations: ['course', 'certificate', 'mentor', 'mentor.user'],
+            where: {
+              userId: resume.userId,
+              // if visibleCourses is not defined, then we show info from all courses
+              ...(visibleCourseOnly && resume.visibleCourses.length ? { courseId: In(resume.visibleCourses) } : {}),
+            },
+          })
+        : Promise.resolve([]),
       resume.userId
         ? this.feedbackRepository.find({ where: { toUserId: resume.userId }, order: { createdDate: 'DESC' } })
         : Promise.resolve([]),

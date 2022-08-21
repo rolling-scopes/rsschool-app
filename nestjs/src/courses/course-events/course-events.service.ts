@@ -16,15 +16,21 @@ export class CourseEventsService {
     readonly courseEventRepository: Repository<CourseEvent>,
   ) {}
 
-  createCourseEvent(courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>) {
-    return this.courseEventRepository.insert(courseEvent);
+  public async createCourseEvent(courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>) {
+    const { id } = await this.courseEventRepository.save(courseEvent);
+    return this.courseEventRepository.findOneOrFail({ where: { id }, relations: ['organizer', 'event'] });
   }
 
-  updateCourseEvent(id: number, courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>) {
-    return this.courseEventRepository.update(id, courseEvent);
+  public async updateCourseEvent(
+    id: number,
+    courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>,
+  ) {
+    await this.courseEventRepository.update(id, courseEvent);
+    return this.courseEventRepository.findOneByOrFail({ id });
   }
 
-  delete(id: number) {
-    return this.courseEventRepository.remove({ id } as CourseEvent);
+  public async deleteCourseEvent(id: number) {
+    const entity = await this.courseEventRepository.findOneByOrFail({ id });
+    return this.courseEventRepository.remove(entity);
   }
 }

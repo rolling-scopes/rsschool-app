@@ -1,175 +1,473 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`] = `
-<Fragment>
-  <MentorStatsModal
-    isVisible={false}
-    onHide={[Function]}
-    stats={
-      Object {
-        "courseLocationName": "Minsk",
-        "courseName": "rs-2020-q1",
-      }
-    }
-  />
-  <CommonCard
-    content={
-      <React.Fragment>
-        <div>
-          <p>
-            Mentored Students:
-             
-            <Text
-              strong={true}
-              style={
-                Object {
-                  "fontSize": 18,
-                }
-              }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
+    >
+      <div
+        class="ant-card-head-wrapper"
+      >
+        <div
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <span
+              aria-label="team"
+              class="anticon anticon-team"
+              role="img"
             >
-              2
-            </Text>
-          </p>
-          <p>
-            Courses as Mentor:
+              <svg
+                aria-hidden="true"
+                data-icon="team"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M824.2 699.9a301.55 301.55 0 00-86.4-60.4C783.1 602.8 812 546.8 812 484c0-110.8-92.4-201.7-203.2-200-109.1 1.7-197 90.6-197 200 0 62.8 29 118.8 74.2 155.5a300.95 300.95 0 00-86.4 60.4C345 754.6 314 826.8 312 903.8a8 8 0 008 8.2h56c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5A226.62 226.62 0 01612 684c60.9 0 118.2 23.7 161.3 66.8C814.5 792 838 846.3 840 904.3c.1 4.3 3.7 7.7 8 7.7h56a8 8 0 008-8.2c-2-77-33-149.2-87.8-203.9zM612 612c-34.2 0-66.4-13.3-90.5-37.5a126.86 126.86 0 01-37.5-91.8c.3-32.8 13.4-64.5 36.3-88 24-24.6 56.1-38.3 90.4-38.7 33.9-.3 66.8 12.9 91 36.6 24.8 24.3 38.4 56.8 38.4 91.4 0 34.2-13.3 66.3-37.5 90.5A127.3 127.3 0 01612 612zM361.5 510.4c-.9-8.7-1.4-17.5-1.4-26.4 0-15.9 1.5-31.4 4.3-46.5.7-3.6-1.2-7.3-4.5-8.8-13.6-6.1-26.1-14.5-36.9-25.1a127.54 127.54 0 01-38.7-95.4c.9-32.1 13.8-62.6 36.3-85.6 24.7-25.3 57.9-39.1 93.2-38.7 31.9.3 62.7 12.6 86 34.4 7.9 7.4 14.7 15.6 20.4 24.4 2 3.1 5.9 4.4 9.3 3.2 17.6-6.1 36.2-10.4 55.3-12.4 5.6-.6 8.8-6.6 6.3-11.6-32.5-64.3-98.9-108.7-175.7-109.9-110.9-1.7-203.3 89.2-203.3 199.9 0 62.8 28.9 118.8 74.2 155.5-31.8 14.7-61.1 35-86.5 60.4-54.8 54.7-85.8 126.9-87.8 204a8 8 0 008 8.2h56.1c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5 29.4-29.4 65.4-49.8 104.7-59.7 3.9-1 6.5-4.7 6-8.7z"
+                />
+              </svg>
+            </span>
              
-            <Text
-              strong={true}
-              style={
-                Object {
-                  "fontSize": 18,
-                }
-              }
-            >
-              2
-            </Text>
-          </p>
+            Mentor Statistics
+          </h2>
         </div>
-        <List
-          dataSource={
-            Array [
-              Object {
-                "courseLocationName": "Minsk",
-                "courseName": "rs-2020-q1",
-              },
-              Object {
-                "courseLocationName": "Minsk",
-                "courseName": "rs-2018-q1",
-                "students": Array [
-                  Object {
-                    "githubId": "alex",
-                    "isExpelled": false,
-                    "name": "Alex Petrov",
-                    "repoUrl": "https://github.com/rolling-scopes-school/alex-RS2018Q1",
-                    "totalScore": 3453,
-                  },
-                  Object {
-                    "githubId": "vasya",
-                    "isExpelled": true,
-                    "name": "Vasiliy Alexandrov",
-                    "repoUrl": "https://github.com/rolling-scopes-school/vasya-RS2018Q1",
-                    "totalScore": 120,
-                  },
-                ],
-              },
-            ]
-          }
-          itemLayout="horizontal"
-          renderItem={[Function]}
-        />
-      </React.Fragment>
-    }
-    icon={<ForwardRef(TeamOutlined) />}
-    isEditingModeEnabled={false}
-    onPermissionsSettingsChange={[MockFunction]}
-    title="Mentor Statistics"
-  />
-</Fragment>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div>
+        <p>
+          Mentored Students:
+           
+          <span
+            class="ant-typography"
+            style="font-size: 18px;"
+          >
+            <strong>
+              2
+            </strong>
+          </span>
+        </p>
+        <p>
+          Courses as Mentor:
+           
+          <span
+            class="ant-typography"
+            style="font-size: 18px;"
+          >
+            <strong>
+              2
+            </strong>
+          </span>
+        </p>
+      </div>
+      <div
+        class="ant-list ant-list-split"
+      >
+        <div
+          class="ant-spin-nested-loading"
+        >
+          <div
+            class="ant-spin-container"
+          >
+            <ul
+              class="ant-list-items"
+            >
+              <li
+                class="ant-list-item"
+                style="display: flex; justify-content: space-between;"
+              >
+                <div
+                  style="flex-grow: 2;"
+                >
+                  <p
+                    style="font-size: 20px; margin-bottom: 5px;"
+                  >
+                    <span
+                      class="ant-typography"
+                    >
+                      <strong>
+                        rs-2020-q1
+                         / Minsk
+                      </strong>
+                    </span>
+                  </p>
+                  <p>
+                    Does not have students at this course yet
+                  </p>
+                </div>
+              </li>
+              <li
+                class="ant-list-item"
+                style="display: flex; justify-content: space-between;"
+              >
+                <div
+                  style="flex-grow: 2;"
+                >
+                  <p
+                    style="margin-bottom: 5px;"
+                  >
+                    <span
+                      class="ant-typography"
+                    >
+                      <strong>
+                        rs-2018-q1
+                         / Minsk
+                      </strong>
+                    </span>
+                  </p>
+                </div>
+                <button
+                  class="ant-btn ant-btn-dashed"
+                  style="margin-left: 16px;"
+                  type="button"
+                >
+                  <span
+                    aria-label="fullscreen"
+                    class="anticon anticon-fullscreen"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="fullscreen"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] = `
-<Fragment>
-  <MentorStatsModal
-    isVisible={false}
-    onHide={[Function]}
-    stats={
-      Object {
-        "courseLocationName": "Minsk",
-        "courseName": "rs-2020-q1",
-      }
-    }
-  />
-  <CommonCard
-    content={
-      <React.Fragment>
-        <div>
-          <p>
-            Mentored Students:
-             
-            <Text
-              strong={true}
-              style={
-                Object {
-                  "fontSize": 18,
-                }
-              }
+<div>
+  <div
+    class="ant-card ant-card-bordered"
+  >
+    <div
+      class="ant-card-head"
+    >
+      <div
+        class="ant-card-head-wrapper"
+      >
+        <div
+          class="ant-card-head-title"
+        >
+          <h2
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            style="font-size: 16px; margin-bottom: 0px;"
+          >
+            <span
+              aria-label="team"
+              class="anticon anticon-team"
+              role="img"
             >
-              2
-            </Text>
-          </p>
-          <p>
-            Courses as Mentor:
+              <svg
+                aria-hidden="true"
+                data-icon="team"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M824.2 699.9a301.55 301.55 0 00-86.4-60.4C783.1 602.8 812 546.8 812 484c0-110.8-92.4-201.7-203.2-200-109.1 1.7-197 90.6-197 200 0 62.8 29 118.8 74.2 155.5a300.95 300.95 0 00-86.4 60.4C345 754.6 314 826.8 312 903.8a8 8 0 008 8.2h56c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5A226.62 226.62 0 01612 684c60.9 0 118.2 23.7 161.3 66.8C814.5 792 838 846.3 840 904.3c.1 4.3 3.7 7.7 8 7.7h56a8 8 0 008-8.2c-2-77-33-149.2-87.8-203.9zM612 612c-34.2 0-66.4-13.3-90.5-37.5a126.86 126.86 0 01-37.5-91.8c.3-32.8 13.4-64.5 36.3-88 24-24.6 56.1-38.3 90.4-38.7 33.9-.3 66.8 12.9 91 36.6 24.8 24.3 38.4 56.8 38.4 91.4 0 34.2-13.3 66.3-37.5 90.5A127.3 127.3 0 01612 612zM361.5 510.4c-.9-8.7-1.4-17.5-1.4-26.4 0-15.9 1.5-31.4 4.3-46.5.7-3.6-1.2-7.3-4.5-8.8-13.6-6.1-26.1-14.5-36.9-25.1a127.54 127.54 0 01-38.7-95.4c.9-32.1 13.8-62.6 36.3-85.6 24.7-25.3 57.9-39.1 93.2-38.7 31.9.3 62.7 12.6 86 34.4 7.9 7.4 14.7 15.6 20.4 24.4 2 3.1 5.9 4.4 9.3 3.2 17.6-6.1 36.2-10.4 55.3-12.4 5.6-.6 8.8-6.6 6.3-11.6-32.5-64.3-98.9-108.7-175.7-109.9-110.9-1.7-203.3 89.2-203.3 199.9 0 62.8 28.9 118.8 74.2 155.5-31.8 14.7-61.1 35-86.5 60.4-54.8 54.7-85.8 126.9-87.8 204a8 8 0 008 8.2h56.1c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5 29.4-29.4 65.4-49.8 104.7-59.7 3.9-1 6.5-4.7 6-8.7z"
+                />
+              </svg>
+            </span>
              
-            <Text
-              strong={true}
-              style={
-                Object {
-                  "fontSize": 18,
-                }
-              }
-            >
-              2
-            </Text>
-          </p>
+            Mentor Statistics
+          </h2>
         </div>
-        <List
-          dataSource={
-            Array [
-              Object {
-                "courseLocationName": "Minsk",
-                "courseName": "rs-2020-q1",
-              },
-              Object {
-                "courseLocationName": "Minsk",
-                "courseName": "rs-2018-q1",
-                "students": Array [
-                  Object {
-                    "githubId": "alex",
-                    "isExpelled": false,
-                    "name": "Alex Petrov",
-                    "repoUrl": "https://github.com/rolling-scopes-school/alex-RS2018Q1",
-                    "totalScore": 3453,
-                  },
-                  Object {
-                    "githubId": "vasya",
-                    "isExpelled": true,
-                    "name": "Vasiliy Alexandrov",
-                    "repoUrl": "https://github.com/rolling-scopes-school/vasya-RS2018Q1",
-                    "totalScore": 120,
-                  },
-                ],
-              },
-            ]
-          }
-          itemLayout="horizontal"
-          renderItem={[Function]}
-        />
-      </React.Fragment>
-    }
-    icon={<ForwardRef(TeamOutlined) />}
-    isEditingModeEnabled={true}
-    onPermissionsSettingsChange={[MockFunction]}
-    title="Mentor Statistics"
-  />
-</Fragment>
+      </div>
+    </div>
+    <div
+      class="ant-card-body"
+    >
+      <div>
+        <p>
+          Mentored Students:
+           
+          <span
+            class="ant-typography"
+            style="font-size: 18px;"
+          >
+            <strong>
+              2
+            </strong>
+          </span>
+        </p>
+        <p>
+          Courses as Mentor:
+           
+          <span
+            class="ant-typography"
+            style="font-size: 18px;"
+          >
+            <strong>
+              2
+            </strong>
+          </span>
+        </p>
+      </div>
+      <div
+        class="ant-list ant-list-split"
+      >
+        <div
+          class="ant-spin-nested-loading"
+        >
+          <div
+            class="ant-spin-container"
+          >
+            <ul
+              class="ant-list-items"
+            >
+              <li
+                class="ant-list-item"
+                style="display: flex; justify-content: space-between;"
+              >
+                <div
+                  style="flex-grow: 2;"
+                >
+                  <p
+                    style="font-size: 20px; margin-bottom: 5px;"
+                  >
+                    <span
+                      class="ant-typography"
+                    >
+                      <strong>
+                        rs-2020-q1
+                         / Minsk
+                      </strong>
+                    </span>
+                  </p>
+                  <p>
+                    Does not have students at this course yet
+                  </p>
+                </div>
+              </li>
+              <li
+                class="ant-list-item"
+                style="display: flex; justify-content: space-between;"
+              >
+                <div
+                  style="flex-grow: 2;"
+                >
+                  <p
+                    style="margin-bottom: 5px;"
+                  >
+                    <span
+                      class="ant-typography"
+                    >
+                      <strong>
+                        rs-2018-q1
+                         / Minsk
+                      </strong>
+                    </span>
+                  </p>
+                </div>
+                <button
+                  class="ant-btn ant-btn-dashed"
+                  style="margin-left: 16px;"
+                  type="button"
+                >
+                  <span
+                    aria-label="fullscreen"
+                    class="anticon anticon-fullscreen"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="fullscreen"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          class="ant-drawer ant-drawer-top"
+          style="position: absolute; display: none;"
+          tabindex="-1"
+        >
+          <div
+            class="ant-drawer-mask"
+          />
+          <div
+            class="ant-drawer-content-wrapper"
+            style="transform: translateY(-100%); height: 378px;"
+          >
+            <div
+              class="ant-drawer-content"
+            >
+              <div
+                class="ant-drawer-wrapper-body"
+              >
+                <div
+                  class="ant-drawer-header"
+                >
+                  <div
+                    class="ant-drawer-header-title"
+                  >
+                    <button
+                      aria-label="Close"
+                      class="ant-drawer-close"
+                      type="button"
+                    >
+                      <span
+                        aria-label="close"
+                        class="anticon anticon-close"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-icon="close"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      class="ant-drawer-title"
+                    >
+                      Visibility settings
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="ant-drawer-body"
+                >
+                  <div
+                    class="ant-list ant-list-split"
+                  >
+                    <div
+                      class="ant-spin-nested-loading"
+                    >
+                      <div
+                        class="ant-spin-container"
+                      >
+                        <div
+                          class="ant-list-empty-text"
+                        >
+                          <div
+                            class="ant-empty ant-empty-normal"
+                          >
+                            <div
+                              class="ant-empty-image"
+                            >
+                              <svg
+                                class="ant-empty-img-simple"
+                                height="41"
+                                viewBox="0 0 64 41"
+                                width="64"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                  transform="translate(0 1)"
+                                >
+                                  <ellipse
+                                    class="ant-empty-img-simple-ellipse"
+                                    cx="32"
+                                    cy="33"
+                                    rx="32"
+                                    ry="7"
+                                  />
+                                  <g
+                                    class="ant-empty-img-simple-g"
+                                    fill-rule="nonzero"
+                                  >
+                                    <path
+                                      d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                    />
+                                    <path
+                                      class="ant-empty-img-simple-path"
+                                      d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                    />
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                            <div
+                              class="ant-empty-description"
+                            >
+                              No Data
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+      </style>
+    </div>
+  </div>
+</div>
 `;

@@ -42,7 +42,7 @@ export class InterviewService {
       registeredStudentsIds = student.map(student => student.id);
     }
 
-    const existingPairs = await checkerRepository.find({ courseTaskId });
+    const existingPairs = await checkerRepository.findBy({ courseTaskId });
 
     const { mentors: crossMentors } = this.crossMentorService.distribute(mentors, existingPairs, registeredStudentsIds);
 

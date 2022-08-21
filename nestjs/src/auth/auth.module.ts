@@ -8,7 +8,6 @@ import { ConfigModule } from '../config/config.module';
 import { CoursesModule } from '../courses/courses.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
-import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { BasicStrategy } from './strategies/basic.strategy';
@@ -23,7 +22,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     CoursesModule,
     ConfigModule,
     HttpModule,
-    TypeOrmModule.forFeature([LoginState, AuthRepository, NotificationUserConnection]),
+    TypeOrmModule.forFeature([LoginState, NotificationUserConnection]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy],

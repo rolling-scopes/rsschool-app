@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseEventsService } from './course-events.service';
+import { CourseEventDto } from './dto/course-event.dto';
 import { CreateCourseEventDto } from './dto/create-course-event.dto';
 import { UpdateCourseEventDto } from './dto/update-course-event.dto';
 
@@ -19,16 +20,18 @@ export class CourseEventsController {
   constructor(private courseEventsService: CourseEventsService) {}
 
   @Post('/')
-  @ApiOkResponse()
+  @ApiOkResponse({ type: [CourseEventDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'createCourseEvent' })
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   public async createCourseTask(@Param('courseId', ParseIntPipe) courseId: number, @Body() dto: CreateCourseEventDto) {
-    await this.courseEventsService.createCourseEvent({
+    const result = await this.courseEventsService.createCourseEvent({
       courseId,
       ...dto,
     });
+
+    return new CourseEventDto(result);
   }
 
   @Put('/:courseEventId')
@@ -57,6 +60,6 @@ export class CourseEventsController {
   @ApiOperation({ operationId: 'deleteCourseEvent' })
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   public async deleteCourseEvent(@Param('courseEventId', ParseIntPipe) courseEventId: number) {
-    await this.courseEventsService.delete(courseEventId);
+    await this.courseEventsService.deleteCourseEvent(courseEventId);
   }
 }

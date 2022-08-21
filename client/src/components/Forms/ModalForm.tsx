@@ -10,6 +10,7 @@ type Props = {
   getInitialValues?: (arg: any) => any;
   children: any;
   loading?: boolean;
+  okText?: string;
 };
 
 export function ModalForm(props: Props) {
@@ -23,7 +24,7 @@ export function ModalForm(props: Props) {
       style={{ top: 20 }}
       visible={true}
       title={props.title}
-      okText="Save"
+      okText={props.okText ?? 'Save'}
       onOk={async e => {
         e.preventDefault();
         const values = await form.validateFields().catch(() => null);

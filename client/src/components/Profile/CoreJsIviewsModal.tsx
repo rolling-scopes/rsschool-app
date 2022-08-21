@@ -39,6 +39,7 @@ class CoreJsIviewsModal extends React.PureComponent<Props> {
           </p>
         )}
         <Table
+          data-testid="profile-corejs-iviews-modal-table"
           dataSource={answers}
           size="small"
           rowKey="questionId"

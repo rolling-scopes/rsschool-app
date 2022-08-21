@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { render } from '@testing-library/react';
 import PublicFeedbackCard from '../PublicFeedbackCard';
 
 jest.mock('moment', () => (value: any) => ({
@@ -78,70 +77,16 @@ describe('PublicFeedbackCard', () => {
 
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
-      const output = shallow(
+      const output = render(
         <PublicFeedbackCard data={data} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(output.container).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
-      const output = shallow(
+      const output = render(
         <PublicFeedbackCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
-    });
-  });
-
-  const wrapper = shallow(
-    <PublicFeedbackCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
-  );
-  const instance: any = wrapper.instance();
-  describe('showPublicFeedbackModal', () => {
-    it('should set "state.isPublicFeedbackModalVisible" as "true"', () => {
-      expect(instance.state.isPublicFeedbackModalVisible).toBe(false);
-      instance.showPublicFeedbackModal();
-      expect(instance.state.isPublicFeedbackModalVisible).toBe(true);
-    });
-  });
-  describe('hidePublicFeedbackModal', () => {
-    it('should set "state.isVisibilitySettingsVisible" as "false"', () => {
-      instance.state.isPublicFeedbackModalVisible = true;
-      expect(instance.state.isPublicFeedbackModalVisible).toBe(true);
-      instance.hidePublicFeedbackModal();
-      expect(instance.state.isPublicFeedbackModalVisible).toBe(false);
-    });
-  });
-  describe('filterPermissions', () => {
-    it('should left only "isProfileVisible" in "permissionsSettings" object', () => {
-      const permissionsSettings = {
-        isProfileVisible: { all: true },
-        isAboutVisible: { all: true, mentor: true, student: true },
-        isEducationVisible: { all: true, mentor: true, student: true },
-        isEnglishVisible: { all: false, student: false },
-        isEmailVisible: { all: true, student: true },
-        isTelegramVisible: { all: false, student: false },
-        isSkypeVisible: { all: true, student: true },
-        isPhoneVisible: { all: false, student: false },
-        isContactsNotesVisible: { all: true, student: true },
-        isLinkedInVisible: { all: false, mentor: false, student: false },
-        isPublicFeedbackVisible: { all: true, mentor: true, student: true },
-        isMentorStatsVisible: { all: true, mentor: true, student: true },
-        isStudentStatsVisible: { all: true, student: true },
-      };
-      const result = instance.filterPermissions(permissionsSettings);
-      expect(result).toEqual({
-        isPublicFeedbackVisible: { all: true, mentor: true, student: true },
-      });
-    });
-  });
-  describe('countBadges', () => {
-    it('should return object with number of badges for each type', () => {
-      const result = instance.countBadges();
-
-      expect(result).toEqual({
-        Congratulations: 1,
-        Great_speaker: 3,
-        Thank_you: 2,
-      });
+      expect(output.container).toMatchSnapshot();
     });
   });
 });
