@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import pinoLogger from 'pino-multi-stream';
 import { ParsedUrlQuery } from 'querystring';
 import { config } from './config';
+import axios from 'axios';
 const cloudwatch = require('@apalchys/pino-cloudwatch'); //tslint:disable-line
 
 export interface ILog {
@@ -30,6 +31,19 @@ export interface ILogger {
   child(options: { module: string; userId?: string }): ILogger;
 }
 
+export async function sendError(err: any): Promise<void> {
+  if (process.env.NODE_ENV !== 'production') {
+    return;
+  }
+  const error = {
+    message: err.message ?? '',
+    cause: err ?? '',
+  };
+  await axios
+    .post(`${config.aws.restApiUrl}/errors`, error, { headers: { 'x-api-key': config.aws.restApiKey } })
+    .catch(() => null);
+}
+
 export const loggerMiddleware =
   (externalLogger: ILogger) =>
   async (ctx: Router.RouterContext<any, { logger: ILogger }>, next: () => Promise<any>) => {
@@ -53,8 +67,10 @@ export const loggerMiddleware =
           data: error.response?.data,
           status: error.response?.status,
         });
+        await sendError({ message: error.message, data: error.response?.data, status: error.response?.status });
       } else {
         logger.error(e as any);
+        await sendError(e);
       }
       data.status = (e as any).status;
     }

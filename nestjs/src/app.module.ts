@@ -25,6 +25,7 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { ActivityModule } from './activity/activity.module';
 import { UsersNotificationsModule } from './users-notifications';
 import { GratitudesModule } from './gratitudes';
+import { CloudApiModule } from './cloud-api/cloud-api.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { GratitudesModule } from './gratitudes';
     ScheduleModule,
     UsersNotificationsModule,
     GratitudesModule,
+    CloudApiModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
