@@ -51,7 +51,7 @@
     "@types/aws-lambda": "8.10.102",
     "@types/cookie": "0.5.1",
     "@types/jest": "28.1.7",
-    "@types/lodash": "4.14.182",
+    "@types/lodash": "4.14.184",
     "@types/node": "16.11.52",
     "@types/react": "17.0.39",
     "@types/react-color": "2.17.6",
