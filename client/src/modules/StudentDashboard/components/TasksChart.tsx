@@ -1,10 +1,7 @@
-import { Pie, PieConfig } from '@ant-design/charts';
+import { Pie, PieConfig } from '@ant-design/plots';
 import React from 'react';
 
-type Item = {
-  type: string;
-  value: number;
-};
+type Item = { type: string; value: number };
 
 type Props = {
   data: Item[];
@@ -12,7 +9,7 @@ type Props = {
   onItemSelected: (item: Item) => void;
 };
 
-const TasksChart: React.FC<Props> = ({ data, colors, onItemSelected }) => {
+export function TasksChart({ data, colors, onItemSelected }: Props) {
   const config: PieConfig = {
     appendPadding: 1,
     data,
@@ -40,11 +37,11 @@ const TasksChart: React.FC<Props> = ({ data, colors, onItemSelected }) => {
       title: false,
     },
     onReady: plot =>
-      plot.chart.on('element:click', (evt: any) => {
+      plot.chart.on('element:click', (evt: { data: { data: Item } }) => {
         onItemSelected(evt.data.data);
       }),
   };
   return <Pie {...config} />;
-};
+}
 
 export default TasksChart;
