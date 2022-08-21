@@ -10,8 +10,16 @@
   "repositories": ["rolling-scopes/rsschool-app"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["react-"],
-      "groupName": "react libs"
+      "matchPackagePatterns": ["react-dom", "@types/react", "react"],
+      "groupName": "react"
+    },
+    {
+      "matchPackagePatterns": ["jest", "@types/jest"],
+      "groupName": "jest"
+    },
+    {
+      "matchPackagePatterns": ["actions/"],
+      "groupName": "actions"
     }
   ]
 }
