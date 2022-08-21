@@ -168,7 +168,7 @@ const createSelfeducationVerification = async ({
     status: 'completed',
   });
 
-  const result = (await getRepository(TaskVerification).findOne(identifier.id))!;
+  const result = (await getRepository(TaskVerification).findOneBy({ id: identifier.id }))!;
 
   const service = new ScoreService(courseId);
   await service.saveScore(result.studentId, result.courseTaskId, {
