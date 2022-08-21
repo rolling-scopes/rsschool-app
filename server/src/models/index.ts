@@ -41,6 +41,7 @@ import { Notification } from './notification';
 import { NotificationChannelSettings } from './notificationChannelSettings';
 import { NotificationUserConnection } from './notificationUserConnection';
 import { History } from './history';
+import { Discipline } from './discipline';
 
 export * from './session';
 export {
@@ -88,6 +89,7 @@ export {
   Notification,
   NotificationChannelSettings,
   NotificationUserConnection,
+  Discipline,
 };
 
 export const models = [
@@ -134,6 +136,7 @@ export const models = [
   NotificationChannelSettings,
   NotificationUserConnection,
   History,
+  Discipline,
 ];
 
 export interface IApiResponse<T> {
