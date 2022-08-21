@@ -742,22 +742,3 @@ export interface TaskSolution {
   comments?: CrossCheckComment[];
   studentId: number;
 }
-
-export interface CrossCheckPairs {
-  checker: {
-    githubId: string;
-    id: number;
-  };
-  task: {
-    name: string;
-    id: number;
-  };
-  student: {
-    githubId: string;
-    id: number;
-  };
-  url: string;
-  comment: string;
-  score: number;
-  id: number;
-}
