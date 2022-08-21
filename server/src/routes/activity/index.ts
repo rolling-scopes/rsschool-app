@@ -8,8 +8,8 @@ import { guard } from '../guards';
 import { config } from '../../config';
 
 const postActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state.user.id;
-  const user = await getRepository(User).findOne(userId);
+  const userId = ctx.state.user.id as number;
+  const user = await getRepository(User).findOneBy({ id: Number(userId) });
   const input: { isActive: boolean } = ctx.request.body;
   const now = Date.now();
   user!.lastActivityTime = now;
@@ -19,8 +19,8 @@ const postActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const getActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state.user.id;
-  const { lastActivityTime, isActive } = (await getRepository(User).findOne(userId))!;
+  const userId = ctx.state.user.id as number;
+  const { lastActivityTime, isActive } = (await getRepository(User).findOneByOrFail({ id: Number(userId) }));
   setResponse(ctx, OK, { lastActivityTime: Number(lastActivityTime), isActive });
 };
 
