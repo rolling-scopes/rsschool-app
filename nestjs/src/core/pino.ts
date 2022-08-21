@@ -12,7 +12,6 @@ export function getPinoHttp(): Params['pinoHttp'] {
     base: {},
     autoLogging: false,
     quietReqLogger: true,
-    prettyPrint: devMode ? { ignore: 'time,remoteAddress,req,reqId' } : false,
   };
 
   if (!devMode && awsAccessKeyId && awsSecretAccessKey) {

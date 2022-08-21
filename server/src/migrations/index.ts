@@ -27,6 +27,7 @@ import { DiscordChannel1650652882300 } from './1650652882300-DiscordChannel';
 import { Resume1652870756742 } from './1652870756742-Resume';
 import { History1656326258991 } from './1656326258991-History';
 import { Feedback1661034658479 } from './1661034658479-Feedback';
+import { Discipline1661087975938 } from './1661087975938-Discipline';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -58,4 +59,5 @@ export const migrations = [
   Resume1652870756742,
   History1656326258991,
   Feedback1661034658479,
+  Discipline1661087975938,
 ];
