@@ -1,5 +1,15 @@
-import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { CourseTask } from './courseTask';
+import { Discipline } from './discipline';
 
 export type TaskType =
   | 'jstask'
@@ -65,8 +75,12 @@ export class Task {
   @Column({ type: 'simple-array', default: '' })
   skills: string[];
 
+  @ManyToOne(() => Discipline, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'disciplineId' })
+  discipline: Discipline | null;
+
   @Column({ nullable: true })
-  discipline: string;
+  disciplineId: number | null;
 
   @Column({ type: 'json', default: {} })
   attributes: Record<string, any>;

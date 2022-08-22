@@ -1,16 +1,15 @@
-import axios, { AxiosInstance } from 'axios';
-import { CoursesApi, CourseDto as Course } from 'api';
-import { getServerAxiosProps } from 'utils/axios';
+import { CourseDto as Course, CoursesApi } from 'api';
+import axios from 'axios';
+import { getApiConfiguration } from 'utils/axios';
 
 type CourseResponse = { data: Course };
 export type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
-  private coursesApi = new CoursesApi();
-  private axios: AxiosInstance;
+  private coursesApi: CoursesApi;
 
-  constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token));
+  constructor(private token?: string) {
+    this.coursesApi = new CoursesApi(getApiConfiguration(this.token));
   }
 
   async updateCourse(id: number, data: Partial<Course>) {
@@ -29,8 +28,8 @@ export class CoursesService {
   }
 
   async getCourses() {
-    const result = await this.axios.get<CoursesResponse>(`/api/courses`);
-    return result.data.data;
+    const result = await this.coursesApi.getCourses();
+    return result.data;
   }
 
   async getCourse(id: number) {

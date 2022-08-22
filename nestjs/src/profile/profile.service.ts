@@ -39,6 +39,7 @@ export class ProfileService {
       order: {
         startDate: 'DESC',
       },
+      relations: ['discipline'],
     });
   }
 

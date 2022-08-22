@@ -8,11 +8,13 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   Index,
+  JoinColumn,
 } from 'typeorm';
 import { DiscordServer } from './discordServer';
 import { Student } from './student';
 import { Mentor } from './mentor';
 import { Registry } from './registry';
+import { Discipline } from './discipline';
 
 @Entity()
 @Unique(['name', 'alias'])
@@ -97,4 +99,11 @@ export class Course {
 
   @Column({ nullable: true })
   logo: string;
+
+  @ManyToOne(() => Discipline, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'disciplineId' })
+  discipline: Discipline | null;
+
+  @Column({ nullable: true })
+  disciplineId: number | null;
 }

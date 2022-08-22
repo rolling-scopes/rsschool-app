@@ -1,10 +1,8 @@
-export * from './logging';
-
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseRoute, courseCrudRoute } from './course';
+import { courseCrudRoute, courseRoute } from './course';
 import { coursesRoute } from './courses';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
@@ -25,9 +23,11 @@ import { opportunitiesRoute } from './opportunities';
 import { interviewQuestionRoute } from './interviewQuestion';
 
 import { ILogger } from '../logger';
-import { userRolesMiddleware, courseMiddleware } from './middlewares';
+import { courseMiddleware, userRolesMiddleware } from './middlewares';
 import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
 import { checksRoute } from './checks';
+
+export * from './logging';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 

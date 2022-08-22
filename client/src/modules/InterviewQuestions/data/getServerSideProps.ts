@@ -8,7 +8,7 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
     const token = getTokenFromContext(ctx);
     const interviewQuestionService = new InterviewQuestionService(token);
     const interviewQuestionCategoryService = new InterviewQuestionCategoryService(token);
-    const courseService = new CoursesService(token);
+    const courseService = new CoursesService();
     const [questions, categories, courses] = await Promise.all([
       interviewQuestionService.getInterviewQuestions(),
       interviewQuestionCategoryService.getInterviewQuestionCategories(),

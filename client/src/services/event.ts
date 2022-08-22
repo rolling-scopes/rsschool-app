@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DisciplineDto } from 'api';
 
 export interface Event {
   id: number;
@@ -8,7 +9,8 @@ export interface Event {
   descriptionUrl: string;
   description: string;
   type: string;
-  discipline: string;
+  discipline: DisciplineDto;
+  disciplineId: number;
 }
 export class EventService {
   async getEvents() {

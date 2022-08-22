@@ -20,8 +20,8 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServersApi, DiscordServerDto } from 'api';
-import { Course } from 'services/models';
+import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto } from 'api';
+import { Course, UpdateCourse } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -30,23 +30,28 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
 
+const disciplinesApi = new DisciplinesApi();
+const courseService = new CoursesService();
+const discordServersService = new DiscordServersApi();
+
 function Page(props: Props) {
   const [courses, setCourses] = useState<Course[]>(props.courses);
   const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
-  const courseService = new CoursesService();
-  const discordServersService = new DiscordServersApi();
 
   const loadData = async () => {
-    const [courses, { data: discordServers }] = await Promise.all([
+    const [courses, { data: discordServers }, { data: disciplines }] = await Promise.all([
       courseService.getCourses(),
       discordServersService.getDiscordServers(),
+      disciplinesApi.getDisciplines(),
     ]);
     setCourses(courses);
     setDiscordServers(discordServers);
+    setDisciplines(disciplines);
   };
 
   const { loading } = useAsync(loadData, []);
@@ -174,14 +179,14 @@ function Page(props: Props) {
           </Col>
         </Row>
         <Form.Item
-          name="primarySkillId"
-          label="Primary Skill"
-          rules={[{ required: true, message: 'Please select a primary skill' }]}
+          name={['discipline', 'id']}
+          label="Disciplines"
+          rules={[{ required: true, message: 'Please select a discipline' }]}
         >
-          <Select placeholder="Please select a primary skill">
-            {PRIMARY_SKILLS.map(skill => (
-              <Select.Option key={skill.id} value={skill.id}>
-                {skill.name}
+          <Select placeholder="Please select a discipline">
+            {disciplines.map(discipline => (
+              <Select.Option key={discipline.id} value={discipline.id}>
+                {discipline.name}
               </Select.Option>
             ))}
           </Select>
@@ -259,7 +264,7 @@ function Page(props: Props) {
 
 function createRecord(values: any) {
   const [startDate, endDate] = values.range || [null, null];
-  const record: Partial<Course> = {
+  const record: Partial<UpdateCourse> = {
     name: values.name,
     fullName: values.fullName,
     alias: values.alias,
@@ -270,6 +275,7 @@ function createRecord(values: any) {
     planned: values.state === 'planned',
     inviteOnly: values.inviteOnly,
     description: values.description,
+    disciplineId: values.discipline?.id,
     primarySkillId: values.primarySkillId,
     primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
     certificateIssuer: values.certificateIssuer,
@@ -327,8 +333,8 @@ function getColumns(handleEditItem: any) {
       render: dateRenderer,
     },
     {
-      title: 'Primary Skill',
-      dataIndex: 'primarySkillName',
+      title: 'Discipline',
+      dataIndex: ['discipline', 'name'],
     },
     {
       title: 'Completed',

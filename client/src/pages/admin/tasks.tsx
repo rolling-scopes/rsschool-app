@@ -8,28 +8,30 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
+import { DisciplineDto, DisciplinesApi } from 'api';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
 const service = new TaskService();
-const disciplines = PRIMARY_SKILLS;
+const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
 
   const { loading } = useAsync(async () => {
-    const tasks = await service.getTasks();
+    const [tasks, { data: disciplines }] = await Promise.all([service.getTasks(), disciplinesApi.getDisciplines()]);
     setData(tasks);
+    setDisciplines(disciplines || []);
   }, [modalData]);
 
   const handleAddItem = () => {
@@ -104,7 +106,7 @@ function Page(props: Props) {
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="discipline" label="Discipline">
+            <Form.Item required name="disciplineId" label="Discipline">
               <Select>
                 {disciplines.map(({ id, name }) => (
                   <Select.Option key={id} value={id}>
@@ -217,7 +219,7 @@ function createRecord(values: any) {
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
-    discipline: values.discipline,
+    disciplineId: values.disciplineId,
     attributes: JSON.parse(values.attributes ?? '{}'),
   };
   return data;
@@ -247,7 +249,7 @@ function getColumns(handleEditItem: any) {
     },
     {
       title: 'Discipline',
-      dataIndex: 'discipline',
+      dataIndex: ['discipline', 'name'],
       sorter: stringSorter<Task>('discipline'),
     },
     {
@@ -295,7 +297,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Task>) {
-  return modalData;
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export { getServerSideProps };

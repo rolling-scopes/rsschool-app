@@ -1,5 +1,15 @@
-import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { CourseEvent } from './courseEvent';
+import { Discipline } from './discipline';
 
 @Entity()
 export class Event {
@@ -26,6 +36,10 @@ export class Event {
   @OneToMany(_ => CourseEvent, (courseLecture: CourseEvent) => courseLecture.event, { nullable: true })
   courseEvents: CourseEvent[] | null;
 
+  @ManyToOne(() => Discipline, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'disciplineId' })
+  discipline: Discipline | null;
+
   @Column({ nullable: true })
-  discipline: string;
+  disciplineId: number | null;
 }

@@ -7,26 +7,31 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
+// import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
+import { DisciplineDto, DisciplinesApi } from 'api';
 
 const { Content } = Layout;
 
 type Props = { session: Session; courses: Course[] };
 const eventService = new EventService();
-
-const disciplines = PRIMARY_SKILLS;
+const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const events = await eventService.getEvents();
+    const [events, { data: disciplines }] = await Promise.all([
+      eventService.getEvents(),
+      disciplinesApi.getDisciplines(),
+    ]);
     setData(events);
+    setDisciplines(disciplines || []);
   };
 
   const { loading } = useAsync(loadData, []);
@@ -89,7 +94,7 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="discipline" label="Discipline">
+        <Form.Item required name="disciplineId" label="Discipline">
           <Select>
             {disciplines.map(({ id, name }) => (
               <Select.Option key={id} value={id}>
@@ -139,7 +144,7 @@ function createRecord(values: any) {
     description: values.description,
     descriptionUrl: values.descriptionUrl,
     type: values.type,
-    discipline: values.discipline,
+    disciplineId: values.disciplineId,
   };
   return data;
 }
@@ -158,7 +163,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     },
     {
       title: 'Discipline',
-      dataIndex: 'discipline',
+      dataIndex: ['discipline', 'name'],
     },
     {
       title: 'Description URL',
@@ -197,7 +202,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Event>) {
-  return modalData;
+  return { ...modalData, discipline: modalData.discipline?.name };
 }
 
 export { getServerSideProps };

@@ -28,6 +28,8 @@ import { Resume1652870756742 } from './1652870756742-Resume';
 import { History1656326258991 } from './1656326258991-History';
 import { Feedback1661034658479 } from './1661034658479-Feedback';
 import { Discipline1661087975938 } from './1661087975938-Discipline';
+import { Disciplines1661106736439 } from './1661106736439-Disciplines';
+import { Disciplines1661107174477 } from './1661107174477-Disciplines';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -60,4 +62,6 @@ export const migrations = [
   History1656326258991,
   Feedback1661034658479,
   Discipline1661087975938,
+  Disciplines1661106736439,
+  Disciplines1661107174477,
 ];

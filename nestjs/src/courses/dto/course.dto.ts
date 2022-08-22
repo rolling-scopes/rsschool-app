@@ -1,5 +1,6 @@
 import { Course } from '@entities/course';
 import { ApiProperty } from '@nestjs/swagger';
+import { IdNameDto } from '../../core/dto';
 
 export class CourseDto {
   constructor(course: Course) {
@@ -23,6 +24,7 @@ export class CourseDto {
     this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
     this.personalMentoring = course.personalMentoring;
     this.logo = course.logo;
+    this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
   }
 
   @ApiProperty()
@@ -93,4 +95,7 @@ export class CourseDto {
 
   @ApiProperty()
   logo: string;
+
+  @ApiProperty({ nullable: true, type: IdNameDto })
+  discipline: IdNameDto | null;
 }
