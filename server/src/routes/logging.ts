@@ -15,11 +15,11 @@ export const errorHandlerMiddleware = (logger: ILogger) => async (ctx: Router.Ro
     await next();
   } catch (err) {
     const error = err as Error & { status?: number };
-    await sendError(error);
     if (error?.message === 'Unauthorized') {
       logger.info('Unauthorized request');
     } else {
       logger.error(error);
+      await sendError(error);
     }
     ctx.status = error.status || 500;
     ctx.body = JSON.stringify({
