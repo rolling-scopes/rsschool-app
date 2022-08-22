@@ -22,7 +22,9 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
         Student Discord:{' '}
         {discordUsername ? (
           <>
-            <Typography.Text strong>{discordUsername}</Typography.Text>{' '}
+            <Typography.Link target="_blank" href={`https://discordapp.com/users/${discord?.id}`}>
+              {discordUsername}
+            </Typography.Link>{' '}
             <CopyToClipboardButton value={discordUsername} />
           </>
         ) : (
@@ -31,9 +33,9 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
       </Typography.Paragraph>
       <Typography.Paragraph>
         Solution:{' '}
-        <a target="_blank" href={solutionUrl}>
+        <Typography.Link target="_blank" href={solutionUrl}>
           {solutionUrl}
-        </a>
+        </Typography.Link>
       </Typography.Paragraph>
     </div>
   );
