@@ -119,6 +119,7 @@ export const models = [
   ProfilePermissions,
   Registry,
   RepositoryEvent,
+  Resume,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,

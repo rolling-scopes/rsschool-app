@@ -63,6 +63,10 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
 
   const rawUser = await query.where('"user"."githubId" = :githubId', { githubId }).getRawOne();
 
+  if (rawUser == null) {
+    throw new Error(`User with githubId ${githubId} not found`);
+  }
+
   const isContactsVisible =
     isPhoneVisible || isEmailVisible || isTelegramVisible || isSkypeVisible || isContactsNotesVisible;
 

@@ -25,7 +25,7 @@ export class UnhandledExceptionsFilter implements ExceptionFilter {
     const status = normalizedException.getStatus();
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR || status === HttpStatus.BAD_REQUEST) {
-      this.sendError({ message: (exception as any)?.message, course: exception });
+      this.sendError({ message: (exception as any)?.message, cause: exception });
     }
 
     httpAdapter.reply(ctx.getResponse(), normalizedException.getResponse(), normalizedException.getStatus());
@@ -35,10 +35,13 @@ export class UnhandledExceptionsFilter implements ExceptionFilter {
    * Sends errors to a remote queue for futher analysis
    * @param data error
    */
-  private async sendError(data: any) {
-    if (this.configService.isDev) {
+  private async sendError(data: { message: string; cause: unknown }) {
+    if (this.configService.isDev || messagesToIgnore.includes(data.message)) {
       return;
     }
-    await this.cloudApiService.logErrors([data]);
+    const stack = (data.cause as Error)?.stack ?? '';
+    await this.cloudApiService.logErrors([{ ...data, stack }]);
   }
 }
+
+const messagesToIgnore = ['Failed to obtain access token', 'Failed to fetch user emails'];
