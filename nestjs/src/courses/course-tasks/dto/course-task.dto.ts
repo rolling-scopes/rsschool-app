@@ -48,7 +48,7 @@ export class CourseTaskDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Checker })
   checker: Checker;
 
   @ApiProperty()

@@ -17,6 +17,7 @@ import { Course } from './course';
 import { TaskSolution } from './taskSolution';
 
 export enum Checker {
+  AutoTest = 'auto-test',
   Assigned = 'assigned',
   Mentor = 'mentor',
   TaskOwner = 'taskOwner',

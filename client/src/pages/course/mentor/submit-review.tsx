@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import { CourseService, AllStudents, AssignedStudent } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { isMentor, isCourseManager, isCourseSupervisor, isPowerUser } from 'domain/user';
-import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { CoursesTasksApi, CourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -101,10 +101,10 @@ function Page({ session, course }: CoursePageProps) {
 
 export default withCourseData(withSession(Page));
 
-const isCheckedByMentor = (task: CourseTaskDto) => task.checker === 'mentor';
-const isCheckedByAssigned = (task: CourseTaskDto) => task.checker === 'assigned';
-const isNotAutoChecked = (task: CourseTaskDto) => task.checker !== 'auto-test';
-const isCheckedByTaskOwner = (task: CourseTaskDto) => task.checker === 'taskOwner';
+const isCheckedByMentor = (task: CourseTaskDto) => task.checker === CreateCourseTaskDtoCheckerEnum.Mentor;
+const isCheckedByAssigned = (task: CourseTaskDto) => task.checker === CreateCourseTaskDtoCheckerEnum.Assigned;
+const isNotAutoChecked = (task: CourseTaskDto) => task.checker !== CreateCourseTaskDtoCheckerEnum.AutoTest;
+const isCheckedByTaskOwner = (task: CourseTaskDto) => task.checker === CreateCourseTaskDtoCheckerEnum.TaskOwner;
 const hasStudentEndDate = (task: CourseTaskDto) => Boolean(task.studentEndDate);
 const isNotInterview = (task: CourseTaskDto) => task.type !== 'interview';
 

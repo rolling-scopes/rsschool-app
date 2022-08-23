@@ -8,6 +8,7 @@ import { ILogger } from '../../logger';
 import { getCourseTasksWithOwner, getEvents } from '../../services/course.service';
 import { getUserByGithubId } from '../../services/user.service';
 import { setCsvResponse, setResponse, dateFormatter } from '../utils';
+import { Checker } from '../../models/courseTask';
 
 const DEFAULT_TIMEZONE = 'Europe/Minsk';
 
@@ -23,7 +24,7 @@ type EntityFromCSV = {
   descriptionUrl: string;
   githubId: string | null;
   place: string | null;
-  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | null;
+  checker: Checker | null;
   pairsCount: number | null;
 };
 

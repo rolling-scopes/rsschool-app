@@ -882,7 +882,7 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
-    'checker': string;
+    'checker': CourseTaskDetailedDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -962,6 +962,15 @@ export const CourseTaskDetailedDtoTypeEnum = {
 } as const;
 
 export type CourseTaskDetailedDtoTypeEnum = typeof CourseTaskDetailedDtoTypeEnum[keyof typeof CourseTaskDetailedDtoTypeEnum];
+export const CourseTaskDetailedDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseTaskDetailedDtoCheckerEnum = typeof CourseTaskDetailedDtoCheckerEnum[keyof typeof CourseTaskDetailedDtoCheckerEnum];
 
 /**
  * 
@@ -992,7 +1001,7 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
-    'checker': string;
+    'checker': CourseTaskDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -1054,6 +1063,15 @@ export const CourseTaskDtoTypeEnum = {
 } as const;
 
 export type CourseTaskDtoTypeEnum = typeof CourseTaskDtoTypeEnum[keyof typeof CourseTaskDtoTypeEnum];
+export const CourseTaskDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseTaskDtoCheckerEnum = typeof CourseTaskDtoCheckerEnum[keyof typeof CourseTaskDtoCheckerEnum];
 
 /**
  * 
@@ -1208,7 +1226,7 @@ export interface CreateCourseTaskDto {
      * @type {string}
      * @memberof CreateCourseTaskDto
      */
-    'checker': string;
+    'checker': CreateCourseTaskDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -1259,6 +1277,15 @@ export interface CreateCourseTaskDto {
     'duration'?: number;
 }
 
+export const CreateCourseTaskDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CreateCourseTaskDtoCheckerEnum = typeof CreateCourseTaskDtoCheckerEnum[keyof typeof CreateCourseTaskDtoCheckerEnum];
 export const CreateCourseTaskDtoTypeEnum = {
     Jstask: 'jstask',
     Kotlintask: 'kotlintask',

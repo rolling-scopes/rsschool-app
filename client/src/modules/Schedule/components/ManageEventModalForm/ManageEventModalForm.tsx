@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
-import useWindowDimensions from 'utils/useWindowDimensions';
-import { CourseEvent, CourseTaskDetails } from 'services/course';
-import { formatTimezoneToUTC } from 'services/formatter';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import { TaskDetails, EventDetails } from '../EventDetails';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { CourseEvent } from 'services/course';
+import { formatTimezoneToUTC } from 'services/formatter';
+import useWindowDimensions from 'utils/useWindowDimensions';
+import { EventDetails } from '../EventDetails';
 import ManageEventForm from './ManageEventForm';
 
 const { TabPane } = Tabs;
@@ -30,7 +30,7 @@ export function ManageEventModalForm({
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
 
-  const initialEntityType = (editableRecord && (editableRecord.isTask ? 'task' : 'event')) || 'task';
+  const initialEntityType = 'event';
   const [entityType, setEntityType] = useState(initialEntityType);
   const [entityData, setEntityData] = useState(null);
   const { width } = useWindowDimensions();
@@ -65,22 +65,12 @@ export function ManageEventModalForm({
             />
           </TabPane>
           <TabPane tab="Preview" key="2">
-            {entityType === 'task' && entityData && (
-              <TaskDetails
-                taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails}
-                alias={alias}
-                isPreview
-                isAdmin
-              />
-            )}
-            {entityType === 'event' && entityData && (
-              <EventDetails
-                eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
-                alias={alias}
-                isPreview
-                isAdmin
-              />
-            )}
+            <EventDetails
+              eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
+              alias={alias}
+              isPreview
+              isAdmin
+            />
           </TabPane>
         </Tabs>
       }
