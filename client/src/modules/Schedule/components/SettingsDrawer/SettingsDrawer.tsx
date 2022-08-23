@@ -21,9 +21,9 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
   const closeDrawer = () => setOpened(false);
 
   return (
-    <Tooltip title={TITLE} mouseEnterDelay={1}>
+    <Tooltip title={TITLE} mouseEnterDelay={1} trigger={['hover', 'focus']}>
       <Button icon={<SettingOutlined />} onClick={openDrawer} />
-      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
+      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened} zIndex={1080}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns
           tags={tags}
