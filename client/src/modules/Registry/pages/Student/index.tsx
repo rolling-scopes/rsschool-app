@@ -18,6 +18,7 @@ import css from 'styled-jsx/css';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
 import { CdnService } from 'services/cdn';
 import { SolidarityUkraine } from 'components/SolidarityUkraine';
+import { CourseIcon } from 'components/Icons/CourseIcon';
 import { ProfileApi } from 'api';
 
 export const TYPES = {
@@ -176,7 +177,8 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                     <Select placeholder="Select course...">
                       {student?.courses.map(course => (
                         <Select.Option key={course.id} value={course.id}>
-                          {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                          <CourseIcon course={course} /> {course.name} ({course.primarySkillName},{' '}
+                          {formatMonthFriendly(course.startDate)})
                         </Select.Option>
                       ))}
                     </Select>
