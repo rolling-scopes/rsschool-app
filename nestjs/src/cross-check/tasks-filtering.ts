@@ -8,6 +8,8 @@ export const isTaskNeededToStart = ({ crossCheckStatus, studentEndDate }: Course
 
 export const isTaskNeededToFinish = ({ crossCheckStatus, crossCheckEndDate }: CourseTask) => {
   const currTimestampUTC = Date.now();
-  const crossCheckEndDateTimestampUTC = Date.parse(crossCheckEndDate);
+  if (!crossCheckEndDate) return false;
+  const crossCheckEndDateTimestampUTC =
+    typeof crossCheckEndDate === 'string' ? Date.parse(crossCheckEndDate) : crossCheckEndDate;
   return crossCheckStatus === CrossCheckStatus.Distributed && currTimestampUTC > crossCheckEndDateTimestampUTC;
 };

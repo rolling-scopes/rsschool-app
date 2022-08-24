@@ -96,12 +96,12 @@ export function CourseTaskModal(props: Props) {
           <Option value={CreateCourseTaskDtoCheckerEnum.CrossCheck}>Cross-Check</Option>
         </Select>
       </Form.Item>
-      <Form.Item
-        name="taskOwnerId"
-        label="Task Owner"
-        rules={[{ required: false, message: 'Please select a task owner' }]}
-      >
-        <UserSearch defaultValues={data?.taskOwner ? [data.taskOwner] : []} searchFn={loadUsers} />
+      <Form.Item name="taskOwnerId" label="Task Owner">
+        <UserSearch
+          placeholder="Please select a task owner"
+          defaultValues={data?.taskOwner ? [data.taskOwner] : []}
+          searchFn={loadUsers}
+        />
       </Form.Item>
       <Form.Item name="timeZone" label="TimeZone">
         <Select defaultValue="UTC" placeholder="Please select a timezone">

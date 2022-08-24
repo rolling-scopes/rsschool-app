@@ -1,5 +1,5 @@
 import { Button, Col, Row } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
@@ -14,11 +14,13 @@ interface SettingsPanelProps {
   tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
   onCreateCourseTask: () => void;
+  onCopyFromCourse: () => void;
 }
 
 export function SettingsPanel({
   isCourseManager,
   onCreateCourseTask,
+  onCopyFromCourse,
   courseId,
   settings,
   tags,
@@ -42,6 +44,13 @@ export function SettingsPanel({
         {isCourseManager ? (
           <Col>
             <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
+          </Col>
+        ) : null}
+        {isCourseManager ? (
+          <Col>
+            <Button icon={<CopyOutlined />} onClick={onCopyFromCourse}>
+              Copy From
+            </Button>
           </Col>
         ) : null}
         {isCourseManager ? (

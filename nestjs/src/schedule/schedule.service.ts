@@ -270,16 +270,16 @@ export class ScheduleService {
 
     if (task.studentStartDate !== previousTask.studentStartDate) {
       fields.studentStartDate = task.studentStartDate;
-      fields.studentStartDateOld = previousTask.studentStartDate;
+      fields.studentStartDateOld = previousTask.studentStartDate ?? undefined;
     }
     if (task.studentEndDate !== previousTask.studentEndDate) {
       fields.studentEndDate = task.studentEndDate;
-      fields.studentEndDateOld = previousTask.studentEndDate;
+      fields.studentEndDateOld = previousTask.studentEndDate ?? undefined;
     }
 
     if (task.crossCheckEndDate != previousTask.crossCheckEndDate) {
       fields.crossCheckEndDate = task.crossCheckEndDate;
-      fields.crossCheckEndDateOld = previousTask.crossCheckEndDate;
+      fields.crossCheckEndDateOld = previousTask.crossCheckEndDate ?? undefined;
     }
 
     return fields;

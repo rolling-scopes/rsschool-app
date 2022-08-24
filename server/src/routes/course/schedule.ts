@@ -53,7 +53,7 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
     entityType: 'event',
     templateId: item.eventId,
     id: item.id,
-    startDate: dateFormatter(item.dateTime.toString(), timeZone, 'YYYY-MM-DD HH:mm'),
+    startDate: item.dateTime ? dateFormatter(item.dateTime.toString(), timeZone, 'YYYY-MM-DD HH:mm') : '',
     type: item.event.type,
     special: item.special,
     name: item.event.name,
