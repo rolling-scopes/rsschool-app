@@ -3,9 +3,6 @@ import isEqual from 'lodash/isEqual';
 import { Typography, Input } from 'antd';
 import CommonCard from './CommonCard';
 import { GeneralInfo } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Paragraph, Text } = Typography;
 const { TextArea } = Input;
@@ -15,23 +12,16 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: (event: any, path: string) => void;
 };
 
-export const filterPermissions = ({ isAboutVisible }: Partial<ConfigurableProfilePermissions>) => ({
-  isAboutVisible,
-});
 class AboutCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.aboutMyself, this.props.data.aboutMyself) ||
-    !isEqual(nextProps.permissionsSettings?.isAboutVisible, this.props.permissionsSettings?.isAboutVisible) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
-      this.props;
+    const { isEditingModeEnabled, onProfileSettingsChange } = this.props;
     const { aboutMyself } = this.props.data;
 
     return (
@@ -40,9 +30,7 @@ class AboutCard extends React.Component<Props> {
         icon={<InfoCircleOutlined />}
         content={aboutMyself ? <Paragraph ellipsis={{ rows: 2, expandable: true }}>{aboutMyself}</Paragraph> : null}
         noDataDescrption="About info isn't written"
-        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
-        onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
           <div>
             <p style={{ fontSize: 18, marginBottom: 5 }}>

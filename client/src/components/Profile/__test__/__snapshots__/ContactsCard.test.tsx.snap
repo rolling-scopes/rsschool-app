@@ -37,7 +37,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 />
               </svg>
             </span>
-             
+
             Contacts
           </h2>
         </div>
@@ -69,7 +69,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 vasya@epam.com
               </li>
               <li
@@ -83,7 +83,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 vasya@tut.by
                 <div
                   class="ant-alert ant-alert-error ant-alert-no-icon"
@@ -98,7 +98,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     >
                       <div>
                         Email is not verified.
-                         
+
                         <span
                           style="text-decoration: underline; cursor: pointer;"
                         >
@@ -120,7 +120,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 televasya
               </li>
               <li
@@ -134,7 +134,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 1232422
               </li>
               <li
@@ -148,7 +148,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 skype_vasya
               </li>
               <li
@@ -162,7 +162,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 vasya
               </li>
               <li
@@ -176,7 +176,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     :
                   </strong>
                 </span>
-                 
+
                 <a
                   href="http://linkedin_test.com/vasya"
                   target="__blank"
@@ -230,7 +230,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 />
               </svg>
             </span>
-             
+
             Contacts
           </h2>
         </div>
@@ -262,7 +262,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     :
                   </strong>
                 </span>
-                 
+
                 vasya@epam.com
               </li>
               <li
@@ -276,7 +276,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     :
                   </strong>
                 </span>
-                 
+
                 vasya@tut.by
                 <div
                   class="ant-alert ant-alert-error ant-alert-no-icon"
@@ -291,7 +291,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     >
                       <div>
                         Email is not verified.
-                         
+
                         <span
                           style="text-decoration: underline; cursor: pointer;"
                         >
@@ -313,7 +313,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     :
                   </strong>
                 </span>
-                 
+
                 1232422
               </li>
               <li
@@ -327,7 +327,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     :
                   </strong>
                 </span>
-                 
+
                 skype_vasya
               </li>
             </ul>
@@ -353,7 +353,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
         />
       </div>
       <style>
-        
+
         :global(.ant-drawer-content-wrapper) {
           height: inherit !important;
         }
@@ -366,7 +366,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           height: calc(100% - 55px);
           overflow: auto;
         }
-      
+
       </style>
     </div>
     <ul

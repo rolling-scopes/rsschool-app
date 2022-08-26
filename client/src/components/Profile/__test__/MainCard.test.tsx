@@ -24,7 +24,6 @@ describe('MainCard', () => {
         <MainCard
           data={mockData}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );
@@ -35,7 +34,6 @@ describe('MainCard', () => {
         <MainCard
           data={mockData}
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );

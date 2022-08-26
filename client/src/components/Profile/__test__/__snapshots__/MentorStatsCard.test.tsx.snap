@@ -37,7 +37,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
                 />
               </svg>
             </span>
-             
+
             Mentor Statistics
           </h2>
         </div>
@@ -49,7 +49,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
       <div>
         <p>
           Mentored Students:
-           
+
           <span
             class="ant-typography"
             style="font-size: 18px;"
@@ -61,7 +61,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
         </p>
         <p>
           Courses as Mentor:
-           
+
           <span
             class="ant-typography"
             style="font-size: 18px;"
@@ -200,7 +200,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
                 />
               </svg>
             </span>
-             
+
             Mentor Statistics
           </h2>
         </div>
@@ -212,7 +212,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
       <div>
         <p>
           Mentored Students:
-           
+
           <span
             class="ant-typography"
             style="font-size: 18px;"
@@ -224,7 +224,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
         </p>
         <p>
           Courses as Mentor:
-           
+
           <span
             class="ant-typography"
             style="font-size: 18px;"
@@ -340,7 +340,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
         />
       </div>
       <style>
-        
+
         :global(.ant-drawer-content-wrapper) {
           height: inherit !important;
         }
@@ -353,7 +353,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
           height: calc(100% - 55px);
           overflow: auto;
         }
-      
+
       </style>
     </div>
   </div>

@@ -37,7 +37,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
                 />
               </svg>
             </span>
-             
+
             Public Feedback
           </h2>
         </div>
@@ -56,7 +56,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
             Total badges:
           </strong>
         </span>
-         
+
         6
       </div>
       <div
@@ -329,7 +329,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
                 />
               </svg>
             </span>
-             
+
             Public Feedback
           </h2>
         </div>
@@ -348,7 +348,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
             Total badges:
           </strong>
         </span>
-         
+
         6
       </div>
       <div
@@ -568,7 +568,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
         />
       </div>
       <style>
-        
+
         :global(.ant-drawer-content-wrapper) {
           height: inherit !important;
         }
@@ -581,7 +581,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
           height: calc(100% - 55px);
           overflow: auto;
         }
-      
+
       </style>
     </div>
   </div>

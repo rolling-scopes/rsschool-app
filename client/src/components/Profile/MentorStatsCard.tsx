@@ -4,9 +4,6 @@ import { List, Typography, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats, Student } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { TeamOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
@@ -14,8 +11,6 @@ const { Text } = Typography;
 type Props = {
   data: MentorStats[];
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
 };
 
 type State = {
@@ -28,10 +23,6 @@ class MentorStatsCard extends React.Component<Props, State> {
     courseIndex: 0,
     isMentorStatsModalVisible: false,
   };
-
-  private filterPermissions = ({ isMentorStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isMentorStatsVisible,
-  });
 
   private showMentorStatsModal = (courseIndex: number) => {
     this.setState({ courseIndex, isMentorStatsModalVisible: true });
@@ -46,15 +37,11 @@ class MentorStatsCard extends React.Component<Props, State> {
       .length;
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(
-      nextProps.permissionsSettings?.isMentorStatsVisible,
-      this.props.permissionsSettings?.isMentorStatsVisible,
-    ) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
     !isEqual(nextState.isMentorStatsModalVisible, this.state.isMentorStatsModalVisible);
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const { isEditingModeEnabled } = this.props;
     const stats = this.props.data;
     const { courseIndex, isMentorStatsModalVisible } = this.state;
 
@@ -141,9 +128,7 @@ class MentorStatsCard extends React.Component<Props, State> {
               />
             </>
           }
-          permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
           isEditingModeEnabled={isEditingModeEnabled}
-          onPermissionsSettingsChange={onPermissionsSettingsChange}
         />
       </>
     );

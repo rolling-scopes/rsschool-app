@@ -14,7 +14,6 @@ describe('EducationCard', () => {
         <EducationCard
           data={mockData}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );
@@ -26,7 +25,6 @@ describe('EducationCard', () => {
         <EducationCard
           data={mockData}
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );
@@ -42,7 +40,6 @@ describe('EducationCard', () => {
             } as GeneralInfo
           }
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );
@@ -54,7 +51,6 @@ describe('EducationCard', () => {
         <EducationCard
           data={{ educationHistory: [] } as GeneralInfo}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
           onProfileSettingsChange={jest.fn()}
         />,
       );

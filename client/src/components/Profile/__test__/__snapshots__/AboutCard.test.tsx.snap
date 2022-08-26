@@ -40,7 +40,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] =
                 />
               </svg>
             </span>
-             
+
             About
           </h2>
         </div>
@@ -140,7 +140,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
                 />
               </svg>
             </span>
-             
+
             About
           </h2>
         </div>

@@ -112,7 +112,6 @@ describe('', () => {
           isProfileOwner={false}
           data={data}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
           username={githubId}
         />,
       );
@@ -124,7 +123,6 @@ describe('', () => {
           isProfileOwner={false}
           data={data}
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
           username={githubId}
         />,
       );

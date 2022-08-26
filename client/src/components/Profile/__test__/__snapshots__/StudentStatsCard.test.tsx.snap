@@ -37,7 +37,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                 />
               </svg>
             </span>
-             
+
             Student Statistics
           </h2>
         </div>
@@ -123,7 +123,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor: 
+                    Mentor:
                     <a
                       href="/profile?githubId=andrew123"
                     >
@@ -133,16 +133,16 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position: 
+                    Position:
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score: 
+                    Score:
                     1201
                   </p>
-                  
+
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -234,7 +234,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor: 
+                    Mentor:
                     <a
                       href="/profile?githubId=dimon12"
                     >
@@ -244,16 +244,16 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position: 
+                    Position:
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score: 
+                    Score:
                     101
                   </p>
-                  
+
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -326,7 +326,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 />
               </svg>
             </span>
-             
+
             Student Statistics
           </h2>
         </div>
@@ -412,7 +412,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor: 
+                    Mentor:
                     <a
                       href="/profile?githubId=andrew123"
                     >
@@ -422,16 +422,16 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position: 
+                    Position:
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score: 
+                    Score:
                     1201
                   </p>
-                  
+
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -523,7 +523,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Mentor: 
+                    Mentor:
                     <a
                       href="/profile?githubId=dimon12"
                     >
@@ -533,16 +533,16 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Position: 
+                    Position:
                     32
                   </p>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
                   >
-                    Score: 
+                    Score:
                     101
                   </p>
-                  
+
                 </div>
                 <button
                   class="ant-btn ant-btn-dashed"
@@ -592,7 +592,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
         />
       </div>
       <style>
-        
+
         :global(.ant-drawer-content-wrapper) {
           height: inherit !important;
         }
@@ -605,7 +605,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           height: calc(100% - 55px);
           overflow: auto;
         }
-      
+
       </style>
     </div>
   </div>

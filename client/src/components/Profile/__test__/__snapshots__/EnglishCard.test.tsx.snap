@@ -37,7 +37,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
                 />
               </svg>
             </span>
-             
+
             Estimated English level
           </h2>
         </div>
@@ -134,7 +134,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
                 />
               </svg>
             </span>
-             
+
             Estimated English level
           </h2>
         </div>

@@ -3,8 +3,6 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import mapValues from 'lodash/mapValues';
-import clone from 'lodash/clone';
 import pullAt from 'lodash/pullAt';
 import { Result, Spin, message } from 'antd';
 import Masonry from 'react-masonry-css';
@@ -27,7 +25,6 @@ import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileApi } from 'api';
 
@@ -43,7 +40,6 @@ type State = {
   isProfileOwner: boolean;
   isLoading: boolean;
   isSaving: boolean;
-  isEditingModeEnabled: boolean;
   isInitialPermissionsSettingsChanged: boolean;
   isInitialProfileSettingsChanged: boolean;
   connections: Partial<
@@ -72,42 +68,9 @@ export class ProfilePage extends React.Component<Props, State> {
     isProfileOwner: false,
     isLoading: true,
     isSaving: false,
-    isEditingModeEnabled: true,
     isInitialPermissionsSettingsChanged: false,
     isInitialProfileSettingsChanged: false,
     connections: {},
-  };
-
-  private onPermissionsSettingsChange = async (
-    event: CheckboxChangeEvent,
-    { permissionName, role }: ChangedPermissionsSettings,
-  ) => {
-    const { profile, initialPermissionsSettings } = this.state;
-    const { checked } = event.target;
-
-    if (profile?.permissionsSettings) {
-      let changed = clone(get(profile.permissionsSettings, permissionName));
-
-      if (role === 'all') {
-        changed = mapValues(changed, () => checked);
-      } else {
-        changed[role] = checked;
-      }
-
-      const newPermissionsSettings = {
-        ...profile.permissionsSettings,
-        [permissionName]: changed,
-      };
-      const isInitialPermissionsSettingsChanged = !isEqual(newPermissionsSettings, initialPermissionsSettings);
-
-      await this.setState({
-        profile: {
-          ...profile,
-          permissionsSettings: newPermissionsSettings,
-        },
-        isInitialPermissionsSettingsChanged,
-      });
-    }
   };
 
   private onProfileSettingsChange = async (event: any = {}, path: string) => {
@@ -222,15 +185,12 @@ export class ProfilePage extends React.Component<Props, State> {
       }
       const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
-      // TODO: Get rid of edit mode everywhere?
-      const isEditingModeEnabled = true; // Boolean(router.asPath.match(/#edit/));
 
       this.setState({
         isLoading: false,
         profile: updateProfile,
         isProfileOwner,
         initialPermissionsSettings,
-        isEditingModeEnabled,
         initialProfileSettings,
         connections: connections as State['connections'],
       });
@@ -349,8 +309,6 @@ export class ProfilePage extends React.Component<Props, State> {
         <MainCard
           data={profile}
           isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
@@ -358,8 +316,6 @@ export class ProfilePage extends React.Component<Props, State> {
         <AboutCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
@@ -367,8 +323,6 @@ export class ProfilePage extends React.Component<Props, State> {
         <EducationCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
@@ -377,8 +331,6 @@ export class ProfilePage extends React.Component<Props, State> {
           data={profile.contacts}
           initialContacts={this.state.initialProfileSettings?.contacts}
           isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
           connections={connections}
           sendConfirmationEmail={this.sendEmailConfirmationLink}
@@ -387,12 +339,7 @@ export class ProfilePage extends React.Component<Props, State> {
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
       profile?.publicFeedback?.length && (
-        <PublicFeedbackCard
-          data={profile.publicFeedback}
-          isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-        />
+        <PublicFeedbackCard data={profile.publicFeedback} isEditingModeEnabled={isEditingModeVisible} />
       ),
       profile?.studentStats?.length && (
         <StudentStatsCard
@@ -400,17 +347,10 @@ export class ProfilePage extends React.Component<Props, State> {
           data={profile.studentStats}
           isProfileOwner={isProfileOwner}
           isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
         />
       ),
       profile?.mentorStats?.length && (
-        <MentorStatsCard
-          data={profile.mentorStats}
-          isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-        />
+        <MentorStatsCard data={profile.mentorStats} isEditingModeEnabled={isEditingModeVisible} />
       ),
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />

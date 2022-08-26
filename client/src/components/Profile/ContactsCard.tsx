@@ -3,9 +3,6 @@ import isEqual from 'lodash/isEqual';
 import { List, Typography, Input, Form } from 'antd';
 import CommonCard from './CommonCard';
 import { Contacts } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -20,10 +17,8 @@ type Props = {
   data: Contacts;
   initialContacts?: Contacts;
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: ProfileEntryChangeCallback;
-  isDataPendingSave: boolean;
+  isDataPendingSave?: boolean;
   connections: Partial<
     Record<
       NotificationChannel,
@@ -40,45 +35,14 @@ type Props = {
 
 type Contact = { name: string; value: string | null; key: string; rules?: Rule[] };
 
-export const filterPermissions = ({
-  isEmailVisible,
-  isTelegramVisible,
-  isPhoneVisible,
-  isSkypeVisible,
-  isContactsNotesVisible,
-  isLinkedInVisible,
-}: Partial<ConfigurableProfilePermissions>) => ({
-  isEmailVisible,
-  isTelegramVisible,
-  isPhoneVisible,
-  isSkypeVisible,
-  isContactsNotesVisible,
-  isLinkedInVisible,
-});
-
 class ContactsCard extends React.Component<Props> {
   state = {
     data: null,
   };
 
   shouldComponentUpdate = (nextProps: Props) => {
-    const {
-      isEmailVisible,
-      isTelegramVisible,
-      isPhoneVisible,
-      isSkypeVisible,
-      isContactsNotesVisible,
-      isLinkedInVisible,
-    } = this.props.permissionsSettings!;
-
     return (
       !isEqual(nextProps.data, this.props.data) ||
-      !isEqual(nextProps.permissionsSettings?.isEmailVisible, isEmailVisible) ||
-      !isEqual(nextProps.permissionsSettings?.isTelegramVisible, isTelegramVisible) ||
-      !isEqual(nextProps.permissionsSettings?.isPhoneVisible, isPhoneVisible) ||
-      !isEqual(nextProps.permissionsSettings?.isSkypeVisible, isSkypeVisible) ||
-      !isEqual(nextProps.permissionsSettings?.isContactsNotesVisible, isContactsNotesVisible) ||
-      !isEqual(nextProps.permissionsSettings?.isLinkedInVisible, isLinkedInVisible) ||
       !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
       !isEqual(nextProps.connections, this.props.connections) ||
       nextProps.isDataPendingSave !== this.props.isDataPendingSave
@@ -88,8 +52,6 @@ class ContactsCard extends React.Component<Props> {
   render() {
     const {
       isEditingModeEnabled,
-      permissionsSettings,
-      onPermissionsSettingsChange,
       onProfileSettingsChange,
       connections,
       sendConfirmationEmail,
@@ -172,9 +134,7 @@ class ContactsCard extends React.Component<Props> {
           ) : undefined
         }
         noDataDescrption="Contacts aren't filled in"
-        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
-        onPermissionsSettingsChange={onPermissionsSettingsChange}
         detachSettingsOnVisibilityChange
         profileSettingsContent={
           <EditForm

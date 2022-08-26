@@ -2,10 +2,8 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, Select } from 'antd';
 import CommonCard from './CommonCard';
-import { GeneralInfo, ConfigurableProfilePermissions } from 'common/models/profile';
+import { GeneralInfo } from 'common/models/profile';
 import { EnglishLevel } from 'common/models/index';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -17,24 +15,16 @@ const ENGLISH_LEVELS: EnglishLevel[] = ['a0', 'a1', 'a1+', 'a2', 'a2+', 'b1', 'b
 type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: (event: any, path: string) => void;
 };
-
-export const filterPermissions = ({ isEnglishVisible }: Partial<ConfigurableProfilePermissions>) => ({
-  isEnglishVisible,
-});
 
 class EnglishCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.englishLevel, this.props.data.englishLevel) ||
-    !isEqual(nextProps.permissionsSettings?.isEnglishVisible, this.props.permissionsSettings?.isEnglishVisible) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
-      this.props;
+    const { isEditingModeEnabled, onProfileSettingsChange } = this.props;
     const { englishLevel } = this.props.data;
     return (
       <CommonCard
@@ -46,9 +36,7 @@ class EnglishCard extends React.Component<Props> {
           ) : undefined
         }
         noDataDescrption="English level isn't choosen"
-        permissionsSettings={permissionsSettings ? filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
-        onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
           <div>
             <p style={{ fontSize: 18, marginBottom: 5 }}>

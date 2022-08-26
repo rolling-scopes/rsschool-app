@@ -3,9 +3,6 @@ import isEqual from 'lodash/isEqual';
 import { Typography, List, Input, Button } from 'antd';
 import CommonCard from './CommonCard';
 import { GeneralInfo } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -14,24 +11,16 @@ import { ReadOutlined, FileAddOutlined, DeleteOutlined } from '@ant-design/icons
 type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   onProfileSettingsChange: (event: any, path: string) => void;
 };
 
 class EducationCard extends React.Component<Props> {
-  private filterPermissions = ({ isEducationVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isEducationVisible,
-  });
-
   shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.educationHistory, this.props.data.educationHistory) ||
-    !isEqual(nextProps.permissionsSettings?.isEducationVisible, this.props.permissionsSettings?.isEducationVisible) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
-      this.props;
+    const { isEditingModeEnabled, onProfileSettingsChange } = this.props;
     const { educationHistory } = this.props.data;
     return (
       <CommonCard
@@ -67,9 +56,7 @@ class EducationCard extends React.Component<Props> {
           ) : undefined
         }
         noDataDescrption="Education history isn't filled in"
-        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
-        onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
           <>
             <List

@@ -1,17 +1,12 @@
 import * as React from 'react';
 import { Card, Typography, Empty } from 'antd';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Title } = Typography;
 
-import { EditOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 
 type Props = {
-  permissionsSettings?: Partial<ConfigurableProfilePermissions>;
   profileSettingsContent?: JSX.Element;
   isEditingModeEnabled?: boolean;
   noDataDescrption?: string;
@@ -20,26 +15,15 @@ type Props = {
   icon: any;
   content: any;
   actions?: any;
-  onPermissionsSettingsChange?: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   detachSettingsOnVisibilityChange?: boolean;
 };
 
 type State = {
-  isVisibilitySettingsVisible: boolean;
   isProfileSettingsVisible: boolean;
 };
 class CommonCard extends React.Component<Props, State> {
   state = {
-    isVisibilitySettingsVisible: false,
     isProfileSettingsVisible: false,
-  };
-
-  private showVisibilitySettings = () => {
-    this.setState({ isVisibilitySettingsVisible: true });
-  };
-
-  private hideVisibilitySettings = () => {
-    this.setState({ isVisibilitySettingsVisible: false });
   };
 
   private showProfileSettings = () => {
@@ -57,14 +41,12 @@ class CommonCard extends React.Component<Props, State> {
       content,
       profileSettingsContent,
       isEditingModeEnabled,
-      permissionsSettings,
       noDataDescrption,
       settingsTitle,
-      onPermissionsSettingsChange,
       actions,
       detachSettingsOnVisibilityChange = false,
     } = this.props;
-    const { isVisibilitySettingsVisible, isProfileSettingsVisible } = this.state;
+    const { isProfileSettingsVisible } = this.state;
 
     const renderSettingsDrawer = detachSettingsOnVisibilityChange ? isProfileSettingsVisible : true;
     return (
@@ -80,9 +62,6 @@ class CommonCard extends React.Component<Props, State> {
                 profileSettingsContent && (
                   <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />
                 ),
-                permissionsSettings && (
-                  <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />
-                ),
               ].filter(Boolean)
             : actions
         }
@@ -90,12 +69,6 @@ class CommonCard extends React.Component<Props, State> {
         {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescrption} />}
         {isEditingModeEnabled !== undefined && isEditingModeEnabled && (
           <>
-            <PermissionsSettingsDrawer
-              isSettingsVisible={isVisibilitySettingsVisible}
-              hideSettings={this.hideVisibilitySettings}
-              permissionsSettings={permissionsSettings}
-              onPermissionsSettingsChange={onPermissionsSettingsChange}
-            />
             {profileSettingsContent && renderSettingsDrawer && (
               <ProfileSettingsDrawer
                 isSettingsVisible={isProfileSettingsVisible}
