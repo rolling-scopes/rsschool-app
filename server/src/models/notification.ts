@@ -1,4 +1,14 @@
-import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn, OneToMany, Index } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  PrimaryColumn,
+  UpdateDateColumn,
+  OneToMany,
+  Index,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { NotificationChannelSettings } from '.';
 
 export enum NotificationType {
@@ -44,4 +54,8 @@ export class Notification {
     cascade: true,
   })
   channels: NotificationChannelSettings[];
+
+  @ManyToOne(_ => Notification, { nullable: true })
+  @JoinColumn({ name: 'parentId' })
+  parent?: Notification | null;
 }
