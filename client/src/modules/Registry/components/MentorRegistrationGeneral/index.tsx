@@ -17,6 +17,7 @@ import { Location } from 'common/models';
 import type { Course } from 'services/models';
 import { Info } from 'modules/Registry/components/Info';
 import { FormData } from '../../pages/Mentor/formData';
+import { CourseIcon } from 'components/Icons/CourseIcon';
 
 type Props = {
   courses: Course[];
@@ -47,7 +48,7 @@ export function MentorRegistrationGeneral({ courses, checkedList, location, setL
               options={courses.map(c => ({
                 label: (
                   <>
-                    {`${c.name} (Start: ${formatMonthFriendly(c.startDate)})`}{' '}
+                    <CourseIcon course={c} /> {`${c.name} (Start: ${formatMonthFriendly(c.startDate)})`}{' '}
                     {c.planned ? <Tag color="orange">Planned</Tag> : <Tag color="green">In Progress</Tag>}
                   </>
                 ),
