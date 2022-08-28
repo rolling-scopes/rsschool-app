@@ -1,6 +1,7 @@
 import { LanguageLevel } from '@entities/data';
 import { Resume } from '@entities/resume';
 import { ApiProperty } from '@nestjs/swagger';
+import { isExpired } from '../computed/isResumeExpired';
 
 export class ApplicantResumeDto {
   constructor(resume: Resume) {
@@ -21,7 +22,8 @@ export class ApplicantResumeDto {
     this.startFrom = resume.startFrom;
     this.telegram = resume.telegram;
     this.website = resume.website;
-    this.expires = Number(resume.expires);
+    this.expired = isExpired(resume.updatedDate);
+    this.updatedDate = resume.updatedDate;
   }
   @ApiProperty()
   public uuid: string;
@@ -29,7 +31,6 @@ export class ApplicantResumeDto {
   public avatarLink: string;
   @ApiProperty({ type: [Number] })
   public visibleCourses: number[];
-
   @ApiProperty()
   public desiredPosition: string;
   @ApiProperty()
@@ -37,7 +38,7 @@ export class ApplicantResumeDto {
   @ApiProperty({ enum: LanguageLevel })
   public englishLevel: LanguageLevel;
   @ApiProperty()
-  public expires: number;
+  public expired: boolean;
   @ApiProperty()
   public fullTime: boolean;
   @ApiProperty()
@@ -64,6 +65,8 @@ export class ApplicantResumeDto {
   public startFrom: string;
   @ApiProperty()
   public telegram: string;
+  @ApiProperty()
+  public updatedDate: string;
   @ApiProperty()
   public website: string;
 }

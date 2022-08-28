@@ -17,7 +17,7 @@ export class Resume {
   id: number;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @Generated('uuid')
   @Column({ nullable: true })
@@ -46,9 +46,6 @@ export class Resume {
 
   @Column({ default: false })
   fullTime: boolean;
-
-  @Column({ nullable: true, type: 'numeric' })
-  expires: number;
 
   @Column({ nullable: true, type: 'varchar', length: 32 })
   militaryService: string;

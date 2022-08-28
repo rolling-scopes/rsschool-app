@@ -30,6 +30,7 @@ import { Feedback1661034658479 } from './1661034658479-Feedback';
 import { Discipline1661087975938 } from './1661087975938-Discipline';
 import { Disciplines1661106736439 } from './1661106736439-Disciplines';
 import { Disciplines1661107174477 } from './1661107174477-Disciplines';
+import { ResumeUpdatedAt1661699918902 } from './1661699918902-ResumeUpdatedAt';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -64,4 +65,5 @@ export const migrations = [
   Discipline1661087975938,
   Disciplines1661106736439,
   Disciplines1661107174477,
+  ResumeUpdatedAt1661699918902,
 ];

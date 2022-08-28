@@ -6,6 +6,7 @@ import { Rate, SoftSkill, StudentFeedback } from '@entities/student-feedback';
 import { LanguageLevel } from '@entities/data';
 import { ApiProperty } from '@nestjs/swagger';
 import { PersonDto } from '../../core/dto';
+import { isExpired } from '../computed/isResumeExpired';
 
 class GratitudeDto {
   constructor(gratitude: Feedback) {
@@ -140,7 +141,8 @@ export class ResumeDto {
     this.desiredPosition = resume.desiredPosition;
     this.email = resume.email;
     this.englishLevel = resume.englishLevel;
-    this.expires = resume.expires;
+    this.updatedDate = resume.updatedDate;
+    this.expired = isExpired(this.updatedDate);
     this.fullTime = resume.fullTime;
     this.githubUsername = resume.githubUsername;
     this.linkedin = resume.linkedin;
@@ -174,7 +176,7 @@ export class ResumeDto {
   @ApiProperty({ enum: LanguageLevel })
   public englishLevel: LanguageLevel;
   @ApiProperty()
-  public expires: number;
+  public expired: boolean;
   @ApiProperty({ type: [GratitudeDto] })
   public gratitudes: GratitudeDto[];
   @ApiProperty({ type: [FeedbackDto] })
@@ -205,6 +207,8 @@ export class ResumeDto {
   public startFrom: string;
   @ApiProperty()
   public telegram: string;
+  @ApiProperty()
+  public updatedDate: string;
   @ApiProperty()
   public website: string;
 }

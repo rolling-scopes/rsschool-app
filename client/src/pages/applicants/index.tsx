@@ -77,12 +77,12 @@ function Page(props: Props) {
       ...getColumnSearchProps('startFrom'),
     },
     {
-      title: 'CV expires',
-      dataIndex: 'expires',
-      key: 'expires',
-      sorter: stringSorter('expires'),
+      title: 'Last updated at',
+      dataIndex: 'updatedDate',
+      key: 'updatedDate',
+      sorter: stringSorter('updatedDate'),
       render: dateRenderer,
-      ...getColumnSearchProps('expires'),
+      ...getColumnSearchProps('updatedDate'),
     },
   ];
 

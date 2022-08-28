@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
 import omit from 'lodash/omit';
-import { DateTime } from 'luxon';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models';
 import { ResumeRepository } from '../repositories/resume.repository';
@@ -12,16 +11,6 @@ export class ResumeService {
   private userRepository = getRepository(User);
 
   constructor(private githubId: string) {}
-
-  public async updateStatus() {
-    const resume = await this.resumeRepository.find(this.githubId);
-
-    const EXPIRATION_DAYS_PROLONGATION = 14;
-
-    const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
-    const result = await this.resumeRepository.save(this.githubId, { ...resume, expires: expirationTimestamp });
-    return result;
-  }
 
   public async saveData(userId: number, data: any) {
     const cv = await this.resumeRepository.find(this.githubId);

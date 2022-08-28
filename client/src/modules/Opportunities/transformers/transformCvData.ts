@@ -19,7 +19,7 @@ export const transformCvData = (data: ResumeDto | null) => {
     website,
     startFrom,
     fullTime,
-    expires,
+    updatedDate,
     courses = [],
     visibleCourses = [],
   } = data ?? {};
@@ -50,7 +50,7 @@ export const transformCvData = (data: ResumeDto | null) => {
   return {
     contacts,
     userData,
-    expires: expires ? Number(expires) : null,
+    updatedDate: updatedDate ?? null,
     visibleCourses,
     courses,
   };

@@ -133,10 +133,10 @@ export interface ApplicantResumeDto {
     'englishLevel': ApplicantResumeDtoEnglishLevelEnum;
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof ApplicantResumeDto
      */
-    'expires': number;
+    'expired': boolean;
     /**
      * 
      * @type {boolean}
@@ -215,6 +215,12 @@ export interface ApplicantResumeDto {
      * @memberof ApplicantResumeDto
      */
     'telegram': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicantResumeDto
+     */
+    'updatedDate': string;
     /**
      * 
      * @type {string}
@@ -2629,10 +2635,10 @@ export interface ResumeDto {
     'englishLevel': ResumeDtoEnglishLevelEnum;
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof ResumeDto
      */
-    'expires': number;
+    'expired': boolean;
     /**
      * 
      * @type {Array<GratitudeDto>}
@@ -2723,6 +2729,12 @@ export interface ResumeDto {
      * @memberof ResumeDto
      */
     'telegram': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'updatedDate': string;
     /**
      * 
      * @type {string}

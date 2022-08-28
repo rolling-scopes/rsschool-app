@@ -26,7 +26,7 @@ export function EditViewResume(props: ResumeProps) {
     return <NoConsentView isOwner={true} giveConsent={onCreateConsent} />;
   }
 
-  const { userData, contacts, expires, visibleCourses, courses } = transformCvData(data);
+  const { userData, contacts, updatedDate, visibleCourses, courses } = transformCvData(data);
 
   const editing = editMode || data == null;
 
@@ -47,7 +47,7 @@ export function EditViewResume(props: ResumeProps) {
           courses={courses}
           userData={userData}
           contacts={contacts}
-          expires={expires}
+          updatedAt={updatedDate}
           visibleCourses={visibleCourses}
           onUpdateResume={onUpdateResume}
           githubId={githubId}
