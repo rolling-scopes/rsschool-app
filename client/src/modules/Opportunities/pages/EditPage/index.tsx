@@ -25,7 +25,7 @@ export function EditPage() {
     getData();
   }, [editMode]);
 
-  const getData = async () => {
+  const getData = withLoading(async () => {
     const { data } = await service.getConsent();
     if (data.consent) {
       try {
@@ -41,7 +41,7 @@ export function EditPage() {
       }
     }
     setConsent(data.consent);
-  };
+  });
 
   const handleConsentUpdate = withLoading(async (value: boolean) => {
     value ? await service.createConsent() : await service.deleteConsent();
