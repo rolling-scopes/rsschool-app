@@ -1,4 +1,4 @@
-import { Col, Row, Typography, Modal, Button } from 'antd';
+import { Col, Row, Typography, Modal, Button, notification } from 'antd';
 import React, { useEffect, useCallback, useState, CSSProperties } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { ExclamationCircleTwoTone, DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
@@ -72,7 +72,12 @@ const ActionButtons = ({ onRemoveConsent, switchView, url }: ActionButtonsProps)
       <Button
         style={buttonStyle}
         htmlType="button"
-        onClick={() => url && copyToClipboard(url)}
+        onClick={() => {
+          if (url) {
+            copyToClipboard(url);
+            notification.success({ message: 'Copied to clipboard' });
+          }
+        }}
         icon={<ShareAltOutlined />}
       >
         Share
