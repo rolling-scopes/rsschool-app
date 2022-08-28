@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, ReactNode } from 'react';
+import { useState, useCallback, useEffect, createRef, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -50,9 +50,9 @@ function EditCV(props: Props) {
   const [visibleCourses, setVisibleCourses] = useState<number[] | null>(null);
   const [allCourses, setAllCourses] = useState<ResumeCourseDto[] | null>(null);
 
-  const userFormRef: RefObject<FormInstance> = React.createRef();
-  const contactsFormRef: RefObject<FormInstance> = React.createRef();
-  const visibleCoursesFormRef: RefObject<FormInstance> = React.createRef();
+  const userFormRef: RefObject<FormInstance> = createRef();
+  const contactsFormRef: RefObject<FormInstance> = createRef();
+  const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
 
   const showDeletionConfirmationModal = useCallback(() => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -299,10 +299,10 @@ function EditCV(props: Props) {
     !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
 
   const areRequiredFieldsEmpty = () => {
-    if (!userData || !contacts) return true;
+    if (!(userData && contacts)) return true;
     const { name, desiredPosition, englishLevel, startFrom } = userData;
     const { locations } = contacts;
-    return !name || !desiredPosition || !englishLevel || !startFrom || !locations;
+    return !(name && desiredPosition && englishLevel && startFrom && locations);
   };
 
   const getDataFromForms = () => {
@@ -310,7 +310,7 @@ function EditCV(props: Props) {
     const contactsFormData: Contacts = contactsFormRef.current?.getFieldsValue();
     const visibleCoursesFormData: VisibleCoursesFormData = visibleCoursesFormRef.current?.getFieldsValue() ?? {};
 
-    const visibleCourses = Object.entries(visibleCoursesFormData).reduce((acc: VisibleCourses, [id, isVisible]) => {
+    const visibleCourses = Object.entries(visibleCoursesFormData).reduce<VisibleCourses>((acc, [id, isVisible]) => {
       if (isVisible) acc.push(Number(id));
       return acc;
     }, []);
@@ -324,11 +324,10 @@ function EditCV(props: Props) {
 
   const handleSave = async () => {
     if (hasInvalidFields(userFormRef.current) || hasInvalidFields(contactsFormRef.current)) {
-      showWarningModal({
+      return showWarningModal({
         title: 'Some form fields do not meet validation criteria',
         content: 'Please fill it correctly and try again',
       });
-      return;
     }
 
     const values = getDataFromForms();
