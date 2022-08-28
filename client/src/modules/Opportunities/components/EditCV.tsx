@@ -53,7 +53,7 @@ function EditCV(props: Props) {
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
   const visibleCoursesFormRef: RefObject<FormInstance> = React.createRef();
 
-  const showDeletionConfirmationModal = () => {
+  const showDeletionConfirmationModal = useCallback(() => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
     const title = (
@@ -82,15 +82,15 @@ function EditCV(props: Props) {
       okText: 'Delete my CV',
       onOk: () => props.onRemoveConsent(),
     });
-  };
+  }, [props.onRemoveConsent]);
 
-  const showWarningModal = ({ title, content }: { title: string; content: ReactNode }) => {
+  const showWarningModal = useCallback(({ title, content }: { title: string; content: ReactNode }) => {
     Modal.warn({
       title,
       content,
       maskClosable: true,
     });
-  };
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
