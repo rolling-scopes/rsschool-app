@@ -269,7 +269,7 @@ function EditCV(props: Props) {
                   Save CV
                 </Button>
                 <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
-                  Cancel
+                  Go to View
                 </Button>
               </Row>
               <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
