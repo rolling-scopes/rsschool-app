@@ -1,11 +1,8 @@
-import { Divider, Switch, Typography } from 'antd';
 import { ResumeDto } from 'api';
 import { transformCvData } from '../transformers/transformCvData';
 import EditCV from './EditCV';
 import { NoConsentView } from './NoConsentView';
 import ViewCV from './ViewCV';
-
-const { Text } = Typography;
 
 type ResumeProps = {
   githubId: string;
@@ -32,16 +29,6 @@ export function EditViewResume(props: ResumeProps) {
 
   return (
     <>
-      <Divider className="no-print" plain>
-        <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
-        <Switch
-          style={{ marginLeft: '5px' }}
-          defaultChecked={!editMode}
-          onChange={switchView}
-          checkedChildren="CV view"
-          unCheckedChildren="Edit view"
-        />
-      </Divider>
       {editing ? (
         <EditCV
           courses={courses}
@@ -55,7 +42,7 @@ export function EditViewResume(props: ResumeProps) {
           switchView={switchView}
         />
       ) : (
-        <ViewCV initialData={data} />
+        <ViewCV onRemoveConsent={onRemoveConsent} switchView={switchView} initialData={data} />
       )}
     </>
   );

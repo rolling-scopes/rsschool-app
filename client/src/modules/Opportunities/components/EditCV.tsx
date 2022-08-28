@@ -1,6 +1,9 @@
-import { useState, useCallback, createRef, ReactNode } from 'react';
+import { useState, useCallback, createRef, ReactNode, CSSProperties, RefObject } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
+import { ExclamationCircleTwoTone, SaveOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FormInstance } from 'antd/lib/form';
+import { ResumeCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm, VisibleCoursesForm } from './forms';
 import {
@@ -13,10 +16,6 @@ import {
   VisibleCourses,
 } from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
-import { CSSProperties, RefObject } from 'react';
-import { ExclamationCircleTwoTone, SaveOutlined, DeleteOutlined } from '@ant-design/icons';
-import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto } from 'api';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -213,13 +212,6 @@ function EditCV(props: Props) {
 
   const hasInvalidFields = (form: FormInstance | null) =>
     !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
-
-  /*   const areRequiredFieldsEmpty = () => {
-    if (!(userData && contacts)) return true;
-    const { name, desiredPosition, englishLevel, startFrom } = userData;
-    const { locations } = contacts;
-    return !(name && desiredPosition && englishLevel && startFrom && locations);
-  }; */
 
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
