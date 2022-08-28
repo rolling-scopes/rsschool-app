@@ -25,6 +25,7 @@ import {
 } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto, ResumeDto } from 'api';
+import { transformProfileData } from '../transformers/transformProfileData';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -43,7 +44,7 @@ const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 function EditCV(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [contactsList, setContactsList] = useState<Contacts | null>(null);
+  const [contacts, setContacts] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
   const [visibleCourses, setVisibleCourses] = useState<number[] | null>(null);
@@ -143,7 +144,7 @@ function EditCV(props: Props) {
       website: website ?? null,
     };
 
-    setContactsList(contactsList);
+    setContacts(contactsList);
     setUserData(userData);
     setExpiration(Number(expires));
     setVisibleCourses(visibleCourses);
@@ -248,7 +249,7 @@ function EditCV(props: Props) {
     };
 
     setUserData(newUserData);
-    setContactsList(newContacts);
+    setContacts(newContacts);
     setVisibleCourses(newVisibleCourses);
 
     setLoading(false);
@@ -298,9 +299,9 @@ function EditCV(props: Props) {
     !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
 
   const areRequiredFieldsEmpty = () => {
-    if (!userData || !contactsList) return true;
+    if (!userData || !contacts) return true;
     const { name, desiredPosition, englishLevel, startFrom } = userData;
-    const { locations } = contactsList;
+    const { locations } = contacts;
     return !name || !desiredPosition || !englishLevel || !startFrom || !locations;
   };
 
@@ -348,41 +349,27 @@ function EditCV(props: Props) {
 
     const id = props.githubId;
 
-    const profile = await userService.getProfileInfo(id);
-
-    const name = profile.generalInfo?.name ?? null;
-    const notes = profile.generalInfo?.aboutMyself ?? null;
-    const location = profile.generalInfo?.location
-      ? `${profile.generalInfo.location.cityName}, ${profile.generalInfo.location.countryName}`
-      : null;
-
-    const phone = profile.contacts?.phone ?? null;
-    const email = profile.contacts?.email ?? null;
-    const skype = profile.contacts?.skype ?? null;
-    const telegram = profile.contacts?.telegram ?? null;
-    const linkedin = profile.contacts?.linkedIn ?? null;
-
-    const prevUserData = userData as UserData;
-    const prevContacts = contactsList as Contacts;
+    const rawProfileData = await userService.getProfileInfo(id);
+    const transformedProfileData = transformProfileData(rawProfileData);
 
     const newUserData = {
-      ...prevUserData,
-      name,
-      notes,
+      ...(userData as UserData),
+      name: transformedProfileData.name,
+      notes: transformedProfileData.notes,
     };
 
     const newContacts = {
-      ...prevContacts,
-      phone,
-      email,
-      skype,
-      telegram,
-      linkedin,
-      location,
+      ...(contacts as Contacts),
+      phone: transformedProfileData.phone,
+      email: transformedProfileData.email,
+      skype: transformedProfileData.skype,
+      telegram: transformedProfileData.telegram,
+      linkedin: transformedProfileData.linkedin,
+      location: transformedProfileData.location,
     };
 
     setUserData(newUserData);
-    setContactsList(newContacts);
+    setContacts(newContacts);
 
     setLoading(false);
   };
@@ -434,7 +421,7 @@ function EditCV(props: Props) {
                 </Row>
               </Col>
               <Col>
-                <Row>{contactsList && <ContactsForm ref={contactsFormRef} contactsList={contactsList} />}</Row>
+                <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
                 <Row>
                   <Card size="small" style={{ width: '100%' }}>
                     {formatDate(expires)}
