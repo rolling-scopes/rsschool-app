@@ -1,7 +1,7 @@
-import { useState, useCallback, createRef, ReactNode, CSSProperties, RefObject } from 'react';
+import { useState, useCallback, createRef, ReactNode, RefObject } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
-import { ExclamationCircleTwoTone, SaveOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -18,7 +18,7 @@ import {
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 
 const { Content } = Layout;
-const { Paragraph, Text, Title } = Typography;
+const { Text } = Typography;
 
 type Props = {
   githubId: string;
@@ -45,37 +45,6 @@ function EditCV(props: Props) {
   const userFormRef: RefObject<FormInstance> = createRef();
   const contactsFormRef: RefObject<FormInstance> = createRef();
   const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
-
-  const showDeletionConfirmationModal = useCallback(() => {
-    const textStyle: CSSProperties = { textAlign: 'center' };
-
-    const title = (
-      <Title level={3} style={{ textAlign: 'center' }}>
-        <ExclamationCircleTwoTone twoToneColor="#d60000" /> <Text strong>Deleting CV</Text>
-      </Title>
-    );
-
-    const message =
-      'Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.';
-    const messageRu =
-      'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
-    const confirmationModalContent = (
-      <>
-        <Paragraph style={textStyle}>{message}</Paragraph>
-        <Paragraph style={textStyle}>{messageRu}</Paragraph>
-      </>
-    );
-
-    Modal.confirm({
-      icon: null,
-      title,
-      content: confirmationModalContent,
-      centered: true,
-      maskClosable: true,
-      okText: 'Delete my CV',
-      onOk: () => props.onRemoveConsent(),
-    });
-  }, [props.onRemoveConsent]);
 
   const showWarningModal = useCallback(({ title, content }: { title: string; content: ReactNode }) => {
     Modal.warn({
@@ -273,6 +242,7 @@ function EditCV(props: Props) {
                 </Button>
               </Row>
               <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
+              <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
               <Row>
                 {visibleCourses && (
                   <VisibleCoursesForm
@@ -282,7 +252,6 @@ function EditCV(props: Props) {
                   />
                 )}
               </Row>
-              <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
               <Row>
                 {props.updatedAt && (
                   <Card size="small" style={{ width: '100%' }}>
@@ -294,18 +263,6 @@ function EditCV(props: Props) {
               </Row>
             </Col>
           </Space>
-          <Row justify="center" style={{ paddingTop: '10px' }}>
-            <Button
-              style={buttonStyle}
-              type="primary"
-              danger
-              htmlType="button"
-              onClick={showDeletionConfirmationModal}
-              icon={<DeleteOutlined />}
-            >
-              Delete my CV
-            </Button>
-          </Row>
         </Content>
       </Layout>
     </LoadingScreen>

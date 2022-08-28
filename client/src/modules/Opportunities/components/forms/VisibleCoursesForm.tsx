@@ -3,6 +3,7 @@ import { ResumeCourseDto } from 'api';
 import { ForwardedRef, forwardRef } from 'react';
 
 const { Item } = Form;
+const { Text } = Typography;
 
 type Props = {
   courses: ResumeCourseDto[] | null;
@@ -22,34 +23,22 @@ const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInsta
   }, {});
 
   return (
-    <Card title="Visible courses">
+    <Card title={<Text strong>Show RS Courses</Text>} style={{ width: '70vw' }}>
       <Form
+        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}
         ref={ref}
         initialValues={data}
-        size="middle"
-        layout="inline"
         form={form}
-        colon={false}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          overflowY: 'auto',
-          maxHeight: '15vh',
-          gap: '10px',
-          maxWidth: '314px',
-        }}
+        labelCol={{ span: 9, offset: 4 }}
+        wrapperCol={{ span: 10 }}
       >
         {courses.map(({ id, fullName }) => (
           <Item
             key={id}
             name={id}
-            label={<span style={{ lineHeight: 'normal', whiteSpace: 'normal', textAlign: 'left' }}>{fullName}</span>}
-            colon={false}
-            labelAlign="right"
+            label={fullName}
             style={{ marginBottom: '0', overflow: 'hidden' }}
             valuePropName="checked"
-            labelCol={{ span: 22 }}
-            wrapperCol={{ span: 1 }}
           >
             <Checkbox />
           </Item>

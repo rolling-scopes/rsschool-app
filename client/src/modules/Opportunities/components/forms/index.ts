@@ -1,5 +1,5 @@
 import ContactsForm from './ContactsForm';
-import UserDataForm from './UserDataForm';
+import UserDataForm from './GeneralInfoForm';
 import VisibleCoursesForm from './VisibleCoursesForm';
 
 export { ContactsForm, UserDataForm, VisibleCoursesForm };
