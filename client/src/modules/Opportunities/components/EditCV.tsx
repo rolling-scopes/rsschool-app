@@ -1,6 +1,6 @@
 import { useState, useCallback, createRef, ReactNode } from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
+import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm, VisibleCoursesForm } from './forms';
 import {
@@ -13,18 +13,10 @@ import {
   VisibleCourses,
 } from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
-import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
-import {
-  ExclamationCircleTwoTone,
-  SaveOutlined,
-  DeleteOutlined,
-  FieldTimeOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
+import { ExclamationCircleTwoTone, SaveOutlined, DeleteOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto } from 'api';
-import { transformProfileData } from '../transformers/transformProfileData';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -42,7 +34,6 @@ type Props = {
 };
 
 const cvService = new OpportunitiesService();
-const userService = new UserService();
 
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
@@ -278,36 +269,6 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
-  const fillFromProfile = async () => {
-    setLoading(true);
-
-    const id = props.githubId;
-
-    const rawProfileData = await userService.getProfileInfo(id);
-    const transformedProfileData = transformProfileData(rawProfileData);
-
-    const newUserData = {
-      ...(userData as UserData),
-      name: transformedProfileData.name,
-      notes: transformedProfileData.notes,
-    };
-
-    const newContacts = {
-      ...(contacts as Contacts),
-      phone: transformedProfileData.phone,
-      email: transformedProfileData.email,
-      skype: transformedProfileData.skype,
-      telegram: transformedProfileData.telegram,
-      linkedin: transformedProfileData.linkedin,
-      location: transformedProfileData.location,
-    };
-
-    setUserData(newUserData);
-    setContacts(newContacts);
-
-    setLoading(false);
-  };
-
   const extendCV = async () => {
     if (areRequiredFieldsEmpty()) {
       showWarningModal({
@@ -388,16 +349,6 @@ function EditCV(props: Props) {
             </Button>
           </Row>
           <Row justify="center" style={{ paddingTop: '10px' }}>
-            <Popconfirm
-              title="Are you sure? Unsaved fields data will be reaplced with profile data."
-              onConfirm={fillFromProfile}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button style={buttonStyle} type="default" htmlType="button" icon={<CopyOutlined />}>
-                Get data from profile
-              </Button>
-            </Popconfirm>
             <Button
               style={buttonStyle}
               type="default"
