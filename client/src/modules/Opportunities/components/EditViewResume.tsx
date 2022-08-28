@@ -1,5 +1,6 @@
 import { Divider, Switch, Typography } from 'antd';
 import { ResumeDto } from 'api';
+import { transformCvData } from '../transformers/transformCvData';
 import EditCV from './EditCV';
 import { NoConsentView } from './NoConsentView';
 import ViewCV from './ViewCV';
@@ -25,6 +26,8 @@ export function EditViewResume(props: ResumeProps) {
     return <NoConsentView isOwner={true} giveConsent={onCreateConsent} />;
   }
 
+  const { userData, contacts, expires, visibleCourses, courses } = transformCvData(data);
+
   const editing = editMode || data == null;
 
   return (
@@ -40,7 +43,16 @@ export function EditViewResume(props: ResumeProps) {
         />
       </Divider>
       {editing ? (
-        <EditCV data={data} onUpdateResume={onUpdateResume} githubId={githubId} onRemoveConsent={onRemoveConsent} />
+        <EditCV
+          courses={courses}
+          userData={userData}
+          contacts={contacts}
+          expires={expires}
+          visibleCourses={visibleCourses}
+          onUpdateResume={onUpdateResume}
+          githubId={githubId}
+          onRemoveConsent={onRemoveConsent}
+        />
       ) : (
         <ViewCV initialData={data} />
       )}

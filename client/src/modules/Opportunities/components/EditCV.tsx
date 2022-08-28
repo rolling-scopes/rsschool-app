@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, createRef, ReactNode } from 'react';
+import { useState, useCallback, createRef, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -18,13 +18,12 @@ import { CSSProperties, RefObject } from 'react';
 import {
   ExclamationCircleTwoTone,
   SaveOutlined,
-  ClearOutlined,
   DeleteOutlined,
   FieldTimeOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto, ResumeDto } from 'api';
+import { ResumeCourseDto } from 'api';
 import { transformProfileData } from '../transformers/transformProfileData';
 
 const { Content } = Layout;
@@ -32,7 +31,11 @@ const { Paragraph, Text, Title } = Typography;
 
 type Props = {
   githubId: string;
-  data: ResumeDto | null;
+  contacts: Contacts | null;
+  userData: UserData | null;
+  expires: number | null;
+  visibleCourses: number[];
+  courses: ResumeCourseDto[] | null;
   onRemoveConsent: () => void;
   onUpdateResume?: () => void;
 };
@@ -44,11 +47,10 @@ const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 function EditCV(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [contacts, setContacts] = useState<Contacts | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [expires, setExpiration] = useState<number | null>(null);
-  const [visibleCourses, setVisibleCourses] = useState<number[] | null>(null);
-  const [allCourses, setAllCourses] = useState<ResumeCourseDto[] | null>(null);
+  const [contacts, setContacts] = useState<Contacts | null>(props.contacts);
+  const [userData, setUserData] = useState<UserData | null>(props.userData);
+  const [expires, setExpiration] = useState<number | null>(props.expires);
+  const [visibleCourses, setVisibleCourses] = useState<number[] | null>(props.visibleCourses);
 
   const userFormRef: RefObject<FormInstance> = createRef();
   const contactsFormRef: RefObject<FormInstance> = createRef();
@@ -91,66 +93,6 @@ function EditCV(props: Props) {
       content,
       maskClosable: true,
     });
-  }, []);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-
-    const cvData = props.data;
-
-    const {
-      notes,
-      name,
-      selfIntroLink,
-      militaryService,
-      avatarLink,
-      desiredPosition,
-      englishLevel,
-      email,
-      githubUsername,
-      linkedin,
-      locations,
-      phone,
-      skype,
-      telegram,
-      website,
-      startFrom,
-      fullTime,
-      expires,
-      courses = [],
-      visibleCourses = [],
-    } = cvData ?? {};
-
-    const userData = {
-      notes: notes ?? null,
-      name: name ?? null,
-      selfIntroLink: selfIntroLink ?? null,
-      militaryService: militaryService ?? null,
-      avatarLink: avatarLink ?? null,
-      desiredPosition: desiredPosition ?? null,
-      englishLevel: englishLevel ?? null,
-      startFrom: startFrom ?? null,
-      fullTime: !!fullTime,
-    };
-
-    const contactsList = {
-      email: email ?? null,
-      github: githubUsername ?? null,
-      linkedin: linkedin ?? null,
-      locations: locations ?? null,
-      phone: phone ?? null,
-      skype: skype ?? null,
-      telegram: telegram ?? null,
-      website: website ?? null,
-    };
-
-    setContacts(contactsList);
-    setUserData(userData);
-    setExpiration(Number(expires));
-    setVisibleCourses(visibleCourses);
-    setAllCourses(courses);
-
-    setLoading(false);
   }, []);
 
   const submitData = async (data: AllDataToSubmit) => {
@@ -256,10 +198,6 @@ function EditCV(props: Props) {
     props.onUpdateResume?.();
   };
 
-  const resetFields = async () => {
-    await fetchData();
-  };
-
   const saveData = async (data: AllDataToSubmit) => {
     await submitData(data);
   };
@@ -339,10 +277,6 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fillFromProfile = async () => {
     setLoading(true);
 
@@ -413,7 +347,7 @@ function EditCV(props: Props) {
                   {visibleCourses && (
                     <VisibleCoursesForm
                       ref={visibleCoursesFormRef}
-                      courses={allCourses}
+                      courses={props.courses}
                       visibleCourses={visibleCourses}
                     />
                   )}
@@ -449,16 +383,6 @@ function EditCV(props: Props) {
               >
                 <Button style={buttonStyle} type="default" htmlType="button" icon={<CopyOutlined />}>
                   Get data from profile
-                </Button>
-              </Popconfirm>
-              <Popconfirm
-                title="Are you sure you want to reset fields?"
-                onConfirm={resetFields}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button style={buttonStyle} type="default" htmlType="button" icon={<ClearOutlined />}>
-                  Reset fields
                 </Button>
               </Popconfirm>
               <Button
