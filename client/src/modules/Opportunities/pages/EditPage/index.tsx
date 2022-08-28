@@ -15,8 +15,8 @@ const service = new OpportunitiesApi();
 export function EditPage() {
   const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
-  const [editMode, setEditMode] = useState(false);
-  const [consent, setConsent] = useState(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
 
   const switchView = async (checked: boolean) => setEditMode(!checked);
@@ -48,11 +48,10 @@ export function EditPage() {
     await getData();
   });
 
-  // const loadData = withLoading(getData);
-
-  // useEffect(() => {
-  //   loadData();
-  // }, [githubId]);
+  const createConsent = async () => {
+    await handleConsentUpdate(true);
+    setEditMode(true);
+  };
 
   return (
     <>
@@ -70,7 +69,7 @@ export function EditPage() {
               editMode={editMode || resume == null}
               switchView={switchView}
               onRemoveConsent={() => handleConsentUpdate(false)}
-              onCreateConsent={() => handleConsentUpdate(true)}
+              onCreateConsent={createConsent}
               onUpdateResume={() => getData()}
             />
           </Content>
