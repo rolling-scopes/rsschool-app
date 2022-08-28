@@ -336,18 +336,6 @@ function EditCV(props: Props) {
               </Row>
             </Col>
           </Space>
-          <Row justify="center" style={{ paddingTop: '15px' }}>
-            <Button
-              size="large"
-              style={{ ...buttonStyle, minWidth: '300px' }}
-              type="primary"
-              htmlType="button"
-              onClick={() => handleSave()}
-              icon={<SaveOutlined />}
-            >
-              Save
-            </Button>
-          </Row>
           <Row justify="center" style={{ paddingTop: '10px' }}>
             <Button
               style={buttonStyle}
