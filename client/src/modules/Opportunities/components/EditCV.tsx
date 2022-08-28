@@ -36,6 +36,7 @@ type Props = {
   expires: number | null;
   visibleCourses: number[];
   courses: ResumeCourseDto[] | null;
+  switchView: () => void;
   onRemoveConsent: () => void;
   onUpdateResume?: () => void;
 };
@@ -335,77 +336,88 @@ function EditCV(props: Props) {
     <LoadingScreen show={loading}>
       <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
         <Content>
-          <Card>
-            <Space
-              direction="horizontal"
-              align="start"
-              style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
-            >
-              <Col>
-                <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
-                <Row>
-                  {visibleCourses && (
-                    <VisibleCoursesForm
-                      ref={visibleCoursesFormRef}
-                      courses={props.courses}
-                      visibleCourses={visibleCourses}
-                    />
-                  )}
-                </Row>
-              </Col>
-              <Col>
-                <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
-                <Row>
-                  <Card size="small" style={{ width: '100%' }}>
-                    {formatDate(expires)}
-                  </Card>
-                </Row>
-              </Col>
-            </Space>
-            <Row justify="center" style={{ paddingTop: '15px' }}>
-              <Button
-                size="large"
-                style={{ ...buttonStyle, minWidth: '300px' }}
-                type="primary"
-                htmlType="button"
-                onClick={() => handleSave()}
-                icon={<SaveOutlined />}
-              >
-                Save
-              </Button>
-            </Row>
-            <Row justify="center" style={{ paddingTop: '10px' }}>
-              <Popconfirm
-                title="Are you sure? Unsaved fields data will be reaplced with profile data."
-                onConfirm={fillFromProfile}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button style={buttonStyle} type="default" htmlType="button" icon={<CopyOutlined />}>
-                  Get data from profile
+          <Space
+            direction="horizontal"
+            align="start"
+            style={{ width: '100%', display: 'flex', backgroundColor: '#FFF', justifyContent: 'space-around' }}
+          >
+            <Col>
+              <Row justify="center" style={{ marginBottom: '15px' }}>
+                <Button
+                  style={{ ...buttonStyle, backgroundColor: '#52C41A', borderColor: '#52C41A' }}
+                  type="primary"
+                  color="green"
+                  htmlType="button"
+                  onClick={() => handleSave()}
+                  icon={<SaveOutlined />}
+                >
+                  Save CV
                 </Button>
-              </Popconfirm>
-              <Button
-                style={buttonStyle}
-                type="default"
-                htmlType="button"
-                onClick={extendCV}
-                icon={<FieldTimeOutlined />}
-              >
-                Extend CV
+                <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
+                  Cancel
+                </Button>
+              </Row>
+              <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
+              <Row>
+                {visibleCourses && (
+                  <VisibleCoursesForm
+                    ref={visibleCoursesFormRef}
+                    courses={props.courses}
+                    visibleCourses={visibleCourses}
+                  />
+                )}
+              </Row>
+              <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
+              <Row>
+                <Card size="small" style={{ width: '100%' }}>
+                  {formatDate(expires)}
+                </Card>
+              </Row>
+            </Col>
+          </Space>
+          <Row justify="center" style={{ paddingTop: '15px' }}>
+            <Button
+              size="large"
+              style={{ ...buttonStyle, minWidth: '300px' }}
+              type="primary"
+              htmlType="button"
+              onClick={() => handleSave()}
+              icon={<SaveOutlined />}
+            >
+              Save
+            </Button>
+          </Row>
+          <Row justify="center" style={{ paddingTop: '10px' }}>
+            <Popconfirm
+              title="Are you sure? Unsaved fields data will be reaplced with profile data."
+              onConfirm={fillFromProfile}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button style={buttonStyle} type="default" htmlType="button" icon={<CopyOutlined />}>
+                Get data from profile
               </Button>
-              <Button
-                style={buttonStyle}
-                type="primary"
-                danger
-                htmlType="button"
-                onClick={showDeletionConfirmationModal}
-                icon={<DeleteOutlined />}
-              >
-                Delete my CV
-              </Button>
-            </Row>
-          </Card>
+            </Popconfirm>
+            <Button
+              style={buttonStyle}
+              type="default"
+              htmlType="button"
+              onClick={extendCV}
+              icon={<FieldTimeOutlined />}
+            >
+              Extend CV
+            </Button>
+            <Button
+              style={buttonStyle}
+              type="primary"
+              danger
+              htmlType="button"
+              onClick={showDeletionConfirmationModal}
+              icon={<DeleteOutlined />}
+            >
+              Delete my CV
+            </Button>
+          </Row>
         </Content>
       </Layout>
     </LoadingScreen>

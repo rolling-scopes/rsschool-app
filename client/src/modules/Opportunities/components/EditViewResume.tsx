@@ -13,7 +13,7 @@ type ResumeProps = {
   error?: Error;
   data: ResumeDto | null;
   editMode: boolean;
-  switchView: (checked: boolean) => Promise<void>;
+  switchView: () => void;
   onRemoveConsent: () => void;
   onCreateConsent: () => void;
   onUpdateResume?: () => void;
@@ -52,6 +52,7 @@ export function EditViewResume(props: ResumeProps) {
           onUpdateResume={onUpdateResume}
           githubId={githubId}
           onRemoveConsent={onRemoveConsent}
+          switchView={switchView}
         />
       ) : (
         <ViewCV initialData={data} />

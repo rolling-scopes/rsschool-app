@@ -19,7 +19,7 @@ export function EditPage() {
   const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
 
-  const switchView = async (checked: boolean) => setEditMode(!checked);
+  const switchView = () => setEditMode(!editMode);
 
   useEffect(() => {
     getData();
