@@ -19,6 +19,7 @@ describe('ContactsCard', () => {
           isEditingModeEnabled={false}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
+          updateProfile={jest.fn()}
         />,
       );
       expect(wrapper.container).toMatchSnapshot();
@@ -38,6 +39,7 @@ describe('ContactsCard', () => {
           isEditingModeEnabled={true}
           sendConfirmationEmail={jest.fn()}
           connections={{}}
+          updateProfile={jest.fn()}
         />,
       );
       expect(wrapper.container).toMatchSnapshot();

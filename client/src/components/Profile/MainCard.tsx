@@ -6,8 +6,7 @@ import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
 import { Location } from 'common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
-import { ProfileApi, UpdateProfileInfoDto } from 'api';
-import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
+import { UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';
 
 const { Title, Paragraph, Text } = Typography;
@@ -15,11 +14,10 @@ const { Title, Paragraph, Text } = Typography;
 type Props = {
   data: ProfileMainCardData;
   isEditingModeEnabled: boolean;
+  updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const profileApi = new ProfileApi();
-
-const MainCard = ({ data, isEditingModeEnabled }: Props) => {
+const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
   const { githubId, name, location, publicCvUrl } = data;
   const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -58,13 +56,11 @@ const MainCard = ({ data, isEditingModeEnabled }: Props) => {
       updateProfileDto.countryName = locationSelectValue?.countryName ?? null;
     }
 
-    try {
-      await profileApi.updateProfileInfoFlat(updateProfileDto);
+    const isUpdated = await updateProfile(updateProfileDto);
+
+    if (isUpdated) {
       setDisplayName(nameInputValue);
       setDisplayLocation(locationSelectValue);
-      onSaveSuccess();
-    } catch (error) {
-      onSaveError();
     }
 
     hideProfileSettings();

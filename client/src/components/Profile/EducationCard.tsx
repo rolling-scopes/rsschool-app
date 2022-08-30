@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import { Typography, List, Input, Button } from 'antd';
 import { ReadOutlined, FileAddOutlined, DeleteOutlined } from '@ant-design/icons';
+import { isEqual } from 'lodash';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
-import { Education, ProfileApi } from 'api';
-import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
+import { Education, UpdateProfileInfoDto } from 'api';
 
 const { Text } = Typography;
 
@@ -16,18 +16,19 @@ type UniversityProps = {
 type Props = {
   data: UniversityProps[];
   isEditingModeEnabled: boolean;
+  updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const profileApi = new ProfileApi();
+const hasEmptyFields = (universities: UniversityProps[]) =>
+  universities.some(({ university, faculty, graduationYear }) => !university || !faculty || !graduationYear);
 
-const EducationCard = ({ isEditingModeEnabled, data }: Props) => {
+const EducationCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
   const [displayUniversities, setDisplayUniversities] = useState(data);
   const [universities, setUniversities] = useState(displayUniversities);
-  const isDisabled = useMemo(
-    () =>
-      !!universities.length &&
-      universities.some(({ university, faculty, graduationYear }) => !university || !faculty || !graduationYear),
-    [universities],
+  const isAddDisabled = useMemo(() => !!universities.length && hasEmptyFields(universities), [universities]);
+  const isSaveDisabled = useMemo(
+    () => isEqual(displayUniversities, universities) || hasEmptyFields(universities),
+    [displayUniversities, universities],
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof UniversityProps, index: number) => {
@@ -42,13 +43,13 @@ const EducationCard = ({ isEditingModeEnabled, data }: Props) => {
 
   const handleSave = async () => {
     const educationHistory = universities as Education[];
-    try {
-      await profileApi.updateProfileInfoFlat({ educationHistory });
-      setDisplayUniversities(universities);
-      onSaveSuccess();
-    } catch (error) {
-      onSaveError();
+    const isUpdated = await updateProfile({ educationHistory });
+
+    if (!isUpdated) {
+      return;
     }
+
+    setDisplayUniversities(universities);
   };
 
   const handleCancel = () => {
@@ -140,7 +141,7 @@ const EducationCard = ({ isEditingModeEnabled, data }: Props) => {
       isEditingModeEnabled={isEditingModeEnabled}
       saveProfile={handleSave}
       cancelChanges={handleCancel}
-      isSaveDisabled={isDisabled}
+      isSaveDisabled={isSaveDisabled}
       content={
         displayUniversities.length ? (
           <List itemLayout="horizontal" dataSource={displayUniversities} renderItem={renderContentItem} />
@@ -149,7 +150,7 @@ const EducationCard = ({ isEditingModeEnabled, data }: Props) => {
       profileSettingsContent={
         <>
           <List itemLayout="horizontal" dataSource={universities} renderItem={renderSettingsItem} />
-          <Button type="dashed" style={{ width: '100%' }} onClick={addUniversity} disabled={isDisabled}>
+          <Button type="dashed" style={{ width: '100%' }} onClick={addUniversity} disabled={isAddDisabled}>
             <FileAddOutlined /> Add new university
           </Button>
         </>

@@ -2,12 +2,11 @@ import * as React from 'react';
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
-import cloneDeep from 'lodash/cloneDeep';
-import { ProfileApi } from 'api';
+import { ProfileApi, UpdateProfileInfoDto } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
-import { StudentStats, ConfigurableProfilePermissions, Contacts, GeneralInfo, Discord } from 'common/models/profile';
+import { StudentStats } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
@@ -23,7 +22,6 @@ import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { CoursesService } from 'services/courses';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
-import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
 
 type Props = {
   router: NextRouter;
@@ -32,13 +30,9 @@ type Props = {
 
 type State = {
   profile: ProfileInfo | null;
-  initialPermissionsSettings: ConfigurableProfilePermissions | null;
-  initialProfileSettings: ProfileInfo | null;
   isProfileOwner: boolean;
   isLoading: boolean;
   isSaving: boolean;
-  isInitialPermissionsSettingsChanged: boolean;
-  isInitialProfileSettingsChanged: boolean;
   connections: Partial<
     Record<
       NotificationChannel,
@@ -60,13 +54,9 @@ const profileApi = new ProfileApi();
 export class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
-    initialPermissionsSettings: null,
-    initialProfileSettings: null,
     isProfileOwner: false,
     isLoading: true,
     isSaving: false,
-    isInitialPermissionsSettingsChanged: false,
-    isInitialProfileSettingsChanged: false,
     connections: {},
   };
 
@@ -131,23 +121,17 @@ export class ProfilePage extends React.Component<Props, State> {
         const profileId = profile.generalInfo!.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
       }
-      const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
-      const initialProfileSettings = profile ? cloneDeep(profile) : null;
 
       this.setState({
         isLoading: false,
         profile: updateProfile,
         isProfileOwner,
-        initialPermissionsSettings,
-        initialProfileSettings,
         connections: connections as State['connections'],
       });
     } catch (e) {
       this.setState({
         isLoading: false,
         profile: null,
-        initialPermissionsSettings: null,
-        initialProfileSettings: null,
       });
     }
   };
@@ -160,40 +144,21 @@ export class ProfilePage extends React.Component<Props, State> {
     }
   };
 
-  private saveProfile = async () => {
-    const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
-
+  private updateProfile = async (data: UpdateProfileInfoDto) => {
     this.setState({ isSaving: true });
-
-    if (profile) {
-      try {
-        const { permissionsSettings, generalInfo, contacts, discord } = profile;
-        await this.userService.saveProfileInfo({
-          permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
-          generalInfo: generalInfo as GeneralInfo,
-          contacts: contacts as Contacts,
-          discord: discord as Discord,
-          isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
-          isProfileSettingsChanged: isInitialProfileSettingsChanged,
-        });
-        const connections = await this.notificationsService.getUserConnections().catch(() => []);
-
-        const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
-        const initialProfileSettings = profile ? cloneDeep(profile) : null;
-        this.setState({
-          isSaving: false,
-          initialPermissionsSettings,
-          initialProfileSettings,
-          isInitialPermissionsSettingsChanged: false,
-          isInitialProfileSettingsChanged: false,
-          connections: connections as State['connections'],
-        });
-        onSaveSuccess();
-      } catch (e) {
-        this.setState({ isSaving: false });
-        onSaveError();
-      }
+    let isUpdated = false;
+    try {
+      await profileApi.updateProfileInfoFlat(data);
+      this.setState({ isSaving: false });
+      message.success('Profile was successfully saved');
+      isUpdated = true;
+    } catch (error) {
+      this.setState({ isSaving: false });
+      message.error('Error has occurred. Please check your connection and try again');
+      isUpdated = false;
     }
+
+    return isUpdated;
   };
 
   authorizeDiscord = async () => {
@@ -209,10 +174,9 @@ export class ProfilePage extends React.Component<Props, State> {
           publicCvUrl: profile?.publicCvUrl ?? null,
           discord,
         },
-        isInitialProfileSettingsChanged: true,
       }));
 
-      await this.saveProfile();
+      await this.updateProfile({ discord });
       this.props.router.replace('/profile');
     }
 
@@ -243,10 +207,16 @@ export class ProfilePage extends React.Component<Props, State> {
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
 
     const cards = [
-      profile?.generalInfo && <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} />,
-      <AboutCard data={aboutMyself} isEditingModeEnabled={isProfileOwner} />,
+      profile?.generalInfo && (
+        <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />
+      ),
+      <AboutCard data={aboutMyself} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />,
       profile?.generalInfo?.educationHistory !== undefined && (
-        <EducationCard data={profile.generalInfo?.educationHistory || []} isEditingModeEnabled={isProfileOwner} />
+        <EducationCard
+          data={profile.generalInfo?.educationHistory || []}
+          isEditingModeEnabled={isProfileOwner}
+          updateProfile={this.updateProfile}
+        />
       ),
       profile?.contacts !== undefined && (
         <ContactsCard
@@ -254,6 +224,7 @@ export class ProfilePage extends React.Component<Props, State> {
           isEditingModeEnabled={isProfileOwner}
           connections={connections}
           sendConfirmationEmail={this.sendEmailConfirmationLink}
+          updateProfile={this.updateProfile}
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,

@@ -18,11 +18,11 @@ const mockData: ProfileMainCardData = {
 describe('MainCard', () => {
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
-      const output = render(<MainCard data={mockData} isEditingModeEnabled={false} />);
+      const output = render(<MainCard data={mockData} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
       expect(output.container).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
-      const output = render(<MainCard data={mockData} isEditingModeEnabled={true} />);
+      const output = render(<MainCard data={mockData} isEditingModeEnabled={true} updateProfile={jest.fn()} />);
       expect(output.container).toMatchSnapshot();
     });
   });

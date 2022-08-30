@@ -2,12 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { List, Typography } from 'antd';
 import { ContactsOutlined } from '@ant-design/icons';
 import { isEqual } from 'lodash';
-import { ProfileApi, UpdateProfileInfoDto } from 'api';
+import { UpdateProfileInfoDto } from 'api';
 import { Contacts } from 'common/models/profile';
 import { NotificationChannel } from 'modules/Notifications/services/notifications';
 import { EmailConfirmation } from './EmailConfirmation';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
-import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
 import { Contact, ContactsKeys } from 'services/user';
 import ContactsCardForm from './ContactsCardForm';
 
@@ -30,10 +29,10 @@ type Props = {
   isEditingModeEnabled: boolean;
   connections: Connections;
   sendConfirmationEmail: () => void;
+  updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
-const profileApi = new ProfileApi();
 
-const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmationEmail }: Props) => {
+const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmationEmail, updateProfile }: Props) => {
   const [displayValues, setDisplayValues] = useState(data);
   const [values, setValues] = useState(displayValues);
   const [hasError, setHasError] = useState(false);
@@ -86,23 +85,24 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
   const filledContacts = contacts.filter(({ value }: Contact) => value);
 
   const handleSave = async () => {
-    try {
-      const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = values;
-      const updatedContacts: UpdateProfileInfoDto = {
-        contactsEpamEmail: epamEmail,
-        contactsEmail: email,
-        contactsTelegram: telegram,
-        contactsPhone: phone,
-        contactsSkype: skype,
-        contactsNotes: notes,
-        contactsLinkedIn: linkedIn,
-      };
-      await profileApi.updateProfileInfoFlat(updatedContacts);
-      setDisplayValues(values);
-      onSaveSuccess();
-    } catch (error) {
-      onSaveError();
+    const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = values;
+    const updatedContacts: UpdateProfileInfoDto = {
+      contactsEpamEmail: epamEmail,
+      contactsEmail: email,
+      contactsTelegram: telegram,
+      contactsPhone: phone,
+      contactsSkype: skype,
+      contactsNotes: notes,
+      contactsLinkedIn: linkedIn,
+    };
+
+    const isUpdated = await updateProfile(updatedContacts);
+
+    if (!isUpdated) {
+      return;
     }
+
+    setDisplayValues(values);
   };
 
   const handleCancel = () => {

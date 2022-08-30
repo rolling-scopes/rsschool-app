@@ -1,8 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Typography, Input } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { ProfileApi } from 'api';
-import { onSaveError, onSaveSuccess } from 'utils/profileMessengers';
+import { UpdateProfileInfoDto } from 'api';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 
 const { Paragraph, Text } = Typography;
@@ -11,11 +10,10 @@ const { TextArea } = Input;
 type Props = {
   data: string;
   isEditingModeEnabled: boolean;
+  updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const profileApi = new ProfileApi();
-
-const AboutCard = ({ isEditingModeEnabled, data }: Props) => {
+const AboutCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
   const [displayValue, setDisplayValue] = useState(data);
   const [value, setValue] = useState(displayValue);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -25,13 +23,12 @@ const AboutCard = ({ isEditingModeEnabled, data }: Props) => {
   };
 
   const handleSave = async () => {
-    try {
-      await profileApi.updateProfileInfoFlat({ aboutMyself: value });
-      setDisplayValue(value);
-      onSaveSuccess();
-    } catch (error) {
-      onSaveError();
+    const isUpdated = await updateProfile({ aboutMyself: value });
+    if (!isUpdated) {
+      return;
     }
+
+    setDisplayValue(value);
   };
 
   const handleCancel = () => {
