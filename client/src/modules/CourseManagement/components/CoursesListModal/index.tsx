@@ -1,17 +1,17 @@
 import { Form, Select } from 'antd';
 import { CourseDto, CoursesApi } from 'api';
 import { ModalForm } from 'components/Forms';
-import { useCallback } from 'react';
+import { useCallback, PropsWithChildren } from 'react';
 import { useAsync } from 'react-use';
 
 const { Option } = Select;
 
-type Props = {
+type Props = PropsWithChildren<{
   onCancel: () => void;
   onSubmit: (record: Pick<CourseDto, 'id'>) => void;
   data: Partial<Pick<CourseDto, 'id'>> | null;
   okText?: string;
-};
+}>;
 
 const coursesApi = new CoursesApi();
 
@@ -49,6 +49,7 @@ export function CoursesListModal(props: Props) {
       submit={handleModalSubmit}
       cancel={handleModalCancel}
     >
+      {props.children}
       <Form.Item name="courseId" label="Course" rules={[{ required: true, message: 'Please select a course' }]}>
         <Select filterOption={filterOption} showSearch placeholder="Please select a course">
           {courses.map(task => (
@@ -62,6 +63,6 @@ export function CoursesListModal(props: Props) {
   );
 }
 
-function createRecord(values: any) {
-  return { id: values.courseId as number };
+function createRecord(values: { courseId: number }) {
+  return { id: values.courseId };
 }

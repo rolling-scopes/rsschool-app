@@ -1,3 +1,4 @@
+import { Alert } from 'antd';
 import { CourseDto, CoursesScheduleApi, CoursesTasksApi, CreateCourseTaskDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
@@ -68,7 +69,13 @@ export function SchedulePage(props: PageProps) {
         data={copyModal}
         onSubmit={handleCopyFromSubmit}
         onCancel={() => setCopyModal(null)}
-      />
+      >
+        <Alert
+          style={{ marginBottom: 16 }}
+          type="error"
+          description="It will copy all tasks and events from selected couse to your course. The action is not reversible."
+        />
+      </CoursesListModal>
     </PageLayout>
   );
 }
