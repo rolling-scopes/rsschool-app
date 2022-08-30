@@ -22,7 +22,6 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto } from 'api';
 import { Course, UpdateCourse } from 'services/models';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
