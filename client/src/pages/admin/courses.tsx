@@ -276,8 +276,6 @@ function createRecord(values: any) {
     inviteOnly: values.inviteOnly,
     description: values.description,
     disciplineId: values.discipline?.id,
-    primarySkillId: values.primarySkillId,
-    primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
