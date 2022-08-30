@@ -38,7 +38,7 @@ export const validateCrossCheckExpirationDate = async (ctx: Router.RouterContext
   }
 
   const task = await getCourseTask(Number(courseTaskId));
-  if (!task || DateTime.local() > DateTime.fromJSDate(new Date(task.studentEndDate))) {
+  if (!task || (task.studentEndDate && DateTime.local() > DateTime.fromJSDate(new Date(task.studentEndDate)))) {
     setResponse(ctx, BAD_REQUEST, 'Cross Check deadline has expired');
     return;
   }

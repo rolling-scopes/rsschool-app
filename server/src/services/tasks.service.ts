@@ -25,6 +25,7 @@ export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckS
 
 export function isSubmissionDeadlinePassed({ studentEndDate }: CourseTask) {
   const currentTimestamp = Date.now();
+  if (!studentEndDate) return false;
   const submitDeadlineTimestamp = new Date(studentEndDate).getTime();
   return currentTimestamp > submitDeadlineTimestamp;
 }

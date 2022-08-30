@@ -1,48 +1,30 @@
-import { useCallback, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
-import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
-import moment from 'moment-timezone';
-import { times } from 'lodash';
+import { Button, Dropdown, Menu, message, Table } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
-import { ModalForm } from 'components/Forms';
-import {
-  dateRenderer,
-  crossCheckDateRenderer,
-  idFromArrayRenderer,
-  stringSorter,
-  tagsRenderer,
-  crossCheckStatusRenderer,
-} from 'components/Table';
-import { UserSearch } from 'components/UserSearch';
+import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
+import { withSession } from 'components/withSession';
+import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
+import { useCallback, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseService, CourseTaskDetails, CrossCheckStatus } from 'services/course';
-import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { Task, TaskService } from 'services/task';
-import { UserService } from 'services/user';
-import { TASK_TYPES } from 'data/taskTypes';
 
-const { Option } = Select;
 const { Item, Divider } = Menu;
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-  const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseTaskDetails[]);
-  const [tasks, setTasks] = useState([] as Task[]);
   const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [data, tasks] = await Promise.all([service.getCourseTasksDetails(), new TaskService().getTasks()]);
+    const data = await service.getCourseTasksDetails();
     setData(data);
-    setTasks(tasks);
     setLoading(false);
   }, [courseId]);
 
@@ -71,13 +53,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const loadUsers = async (searchText: string) => {
-    return userService.searchUser(searchText);
-  };
-
-  const handleModalSubmit = async (values: any) => {
-    const record = createRecord(values);
-
+  const handleModalSubmit = async (record: any) => {
     if (modalAction === 'update') {
       await service.updateCourseTask(modalData!.id!, record);
     } else {
@@ -100,17 +76,6 @@ function Page(props: CoursePageProps) {
     await service.createInterviewDistribution(record.id);
     setLoading(false);
   };
-
-  const filterOption = useCallback(
-    (input, option) => {
-      if (!input) {
-        return false;
-      }
-      const task = tasks.find(t => t.id === option?.value);
-      return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
-    },
-    [tasks],
-  );
 
   const getDropdownMenu = (record: CourseTaskDetails) => {
     const hasInterviewDistibute = record.type === 'interview';
@@ -183,101 +148,6 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const renderModal = (modalData: Partial<CourseTaskDetails> | null) => {
-    return (
-      <ModalForm
-        getInitialValues={getInitialValues}
-        data={modalData}
-        onChange={values => {
-          setModalData({ ...modalData, checker: values.checker });
-        }}
-        title="Course Task"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-      >
-        <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-          <Select filterOption={filterOption} showSearch placeholder="Please select a task">
-            {tasks.map((task: Task) => (
-              <Option key={task.id} value={task.id}>
-                {task.name} {tagsRenderer(task.tags)}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="type" label="Task Type">
-          <Select>
-            {TASK_TYPES.map(({ id, name }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="checker" required label="Checker">
-          <Select placeholder="Please select who checks">
-            <Option value="auto-test">Auto-Test</Option>
-            <Option value="mentor">Mentor</Option>
-            <Option value="assigned">Cross-Mentor</Option>
-            <Option value="taskOwner">Task Owner</Option>
-            <Option value="crossCheck">Cross-Check</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="taskOwnerId"
-          label="Task Owner"
-          rules={[{ required: false, message: 'Please select a task owner' }]}
-        >
-          <UserSearch defaultValues={modalData?.taskOwner ? [modalData.taskOwner] : []} searchFn={loadUsers} />
-        </Form.Item>
-        <Form.Item name="timeZone" label="TimeZone">
-          <Select defaultValue="UTC" placeholder="Please select a timezone">
-            <Option value="UTC">UTC</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="range"
-          label="Start Date - End Date"
-          rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
-        >
-          <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-        {modalData?.checker === 'crossCheck' ? (
-          <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
-            <DatePicker format="YYYY-MM-DD" />
-          </Form.Item>
-        ) : null}
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item name="maxScore" label="Score" rules={[{ required: true, message: 'Please enter max score' }]}>
-              <InputNumber step={1} min={0} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="scoreWeight"
-              label="Score Weight"
-              rules={[{ required: true, message: 'Please enter score weight' }]}
-            >
-              <InputNumber step={0.1} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        {modalData?.checker === 'crossCheck' ? (
-          <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
-            <Select placeholder="Cross-Check Pairs Count">
-              {times(10, num => (
-                <Option key={num} value={num + 1}>
-                  {num + 1}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        ) : null}
-      </ModalForm>
-    );
-  };
-
   return (
     <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
       <Button type="primary" onClick={handleAddItem}>
@@ -289,20 +159,19 @@ function Page(props: CoursePageProps) {
         pagination={false}
         size="small"
         dataSource={data}
-        columns={getColumns(getDropdownMenu, { tasks })}
+        columns={getColumns(getDropdownMenu)}
       />
-      {renderModal(modalData)}
+      <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
     </AdminPageLayout>
   );
 }
 
-function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks }: { tasks: any[] }) {
+function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
       title: 'Name',
-      dataIndex: 'taskId',
-      render: idFromArrayRenderer(tasks),
+      dataIndex: 'name',
     },
     { title: 'Scores Count', dataIndex: 'resultsCount' },
     {
@@ -348,48 +217,6 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
       },
     },
   ];
-}
-
-function createRecord(values: any) {
-  const [startDate, endDate] = values.range;
-
-  const data = {
-    studentStartDate: formatTimezoneToUTC(startDate, values.timeZone),
-    studentEndDate: formatTimezoneToUTC(endDate, values.timeZone),
-    crossCheckEndDate: values.crossCheckEndDate
-      ? formatTimezoneToUTC(values.crossCheckEndDate.set({ hour: 23, minute: 59 }), values.timeZone)
-      : undefined,
-    taskId: values.taskId,
-    taskOwnerId: values.taskOwnerId,
-    checker: values.checker,
-    scoreWeight: values.scoreWeight,
-    maxScore: values.maxScore,
-    type: values.type,
-    pairsCount: values.pairsCount,
-  };
-
-  return data;
-}
-
-function getInitialValues(modalData: Partial<CourseTaskDetails>) {
-  const timeZone = 'UTC';
-
-  return {
-    ...modalData,
-    timeZone,
-    taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
-    maxScore: modalData.maxScore || 100,
-    scoreWeight: modalData.scoreWeight ?? 1,
-    crossCheckEndDate: modalData.crossCheckEndDate ? moment.tz(modalData.crossCheckEndDate, timeZone) : null,
-    range:
-      modalData.studentStartDate && modalData.studentEndDate
-        ? [
-            modalData.studentStartDate ? moment.tz(modalData.studentStartDate, timeZone) : null,
-            modalData.studentEndDate ? moment.tz(modalData.studentEndDate, timeZone) : null,
-          ]
-        : null,
-    checker: modalData.checker || 'mentor',
-  };
 }
 
 export default withCourseData(withSession(Page));

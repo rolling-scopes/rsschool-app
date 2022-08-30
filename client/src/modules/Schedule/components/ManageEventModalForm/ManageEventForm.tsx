@@ -1,32 +1,15 @@
-import times from 'lodash/times';
-import moment from 'moment-timezone';
-import React, { useState } from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  DatePicker,
-  Select,
-  Row,
-  Col,
-  message,
-  Divider,
-  Collapse,
-  Checkbox,
-} from 'antd';
-import { Task, TaskService } from 'services/task';
-import { CourseEvent, CourseService } from 'services/course';
-import { withSession } from 'components/withSession';
+import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
 import { UserSearch } from 'components/UserSearch';
-import { UserService } from 'services/user';
-import { formatTimezoneToUTC } from 'services/formatter';
-import { Event, EventService } from 'services/event';
-import { githubRepoUrl, urlPattern } from 'services/validators';
+import { withSession } from 'components/withSession';
 import { TIMEZONES } from 'configs/timezones';
-import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
-import { TASK_TYPES } from 'data/taskTypes';
 import { EVENT_TYPES } from 'data/eventTypes';
+import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
+import moment from 'moment-timezone';
+import React from 'react';
+import { CourseEvent, CourseService } from 'services/course';
+import { Event, EventService } from 'services/event';
+import { UserService } from 'services/user';
+import { urlPattern } from 'services/validators';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -66,19 +49,13 @@ const FormEntity: React.FC<Props> = ({
   editableRecord,
   refreshData,
 }) => {
-  const checker = editableRecord?.isTask && editableRecord.checker === 'crossCheck' ? true : false;
-  const [isCrossCheckChecker, setIsCrossCheckChecker] = useState(checker);
   const isUpdateMode = editableRecord ? true : false;
 
   const handleModalSubmit = async (values: any) => {
     try {
-      if (entityType === 'task') {
-        await createTask(courseId, values, isUpdateMode, editableRecord);
-      } else {
-        await createEvent(courseId, values, isUpdateMode, editableRecord);
-      }
+      await createEvent(courseId, values, isUpdateMode, editableRecord);
       await refreshData();
-      message.success(`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`);
+      message.success(`Your event successfully ${isUpdateMode ? 'updated' : 'added'}`);
     } catch (error) {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -87,15 +64,10 @@ const FormEntity: React.FC<Props> = ({
   };
 
   const handleFormChange = (_changedValues: any, allValues: any) => {
-    if (_changedValues.checker) {
-      const checker = _changedValues.checker === 'crossCheck' ? true : false;
-      setIsCrossCheckChecker(checker);
-    }
-
     onFieldsChange(allValues);
   };
 
-  const typesList = entityType === 'task' ? TASK_TYPES : EVENT_TYPES;
+  const typesList = EVENT_TYPES;
   const entityTypes = typesList.map(tag => {
     return (
       <Option key={tag.id} value={tag.id}>
@@ -115,7 +87,6 @@ const FormEntity: React.FC<Props> = ({
     >
       <Form.Item name="entityType" label="Entity type">
         <Select onChange={selectedValue => onEntityTypeChange(selectedValue as string)} disabled={isUpdateMode}>
-          <Option value="task">Task</Option>
           <Option value="event">Event</Option>
         </Select>
       </Form.Item>
@@ -159,15 +130,13 @@ const FormEntity: React.FC<Props> = ({
         </Form.Item>
       )}
 
-      {entityType === 'event' && (
-        <Form.Item
-          name="dateTime"
-          label="Date and Time"
-          rules={[{ required: true, message: 'Please enter date and time' }]}
-        >
-          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-      )}
+      <Form.Item
+        name="dateTime"
+        label="Date and Time"
+        rules={[{ required: true, message: 'Please enter date and time' }]}
+      >
+        <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+      </Form.Item>
 
       <Form.Item
         name="descriptionUrl"
@@ -199,71 +168,9 @@ const FormEntity: React.FC<Props> = ({
         <TextArea />
       </Form.Item>
 
-      {entityType === 'task' && (
-        <>
-          <Form.Item name="maxScore" label="Max score" rules={[{ required: true, message: 'Please enter max score' }]}>
-            <InputNumber step={1} min={0} />
-          </Form.Item>
-          <Form.Item
-            name="scoreWeight"
-            label="Score Weight"
-            rules={[{ required: true, message: 'Please enter score weight' }]}
-          >
-            <InputNumber step={0.1} />
-          </Form.Item>
-
-          <Form.Item name="checker" required label="Checker">
-            <Select placeholder="Please select who checks">
-              <Option value="auto-test">Auto-Test</Option>
-              <Option value="mentor">Mentor</Option>
-              <Option value="assigned">Cross-Mentor</Option>
-              <Option value="taskOwner">Task Owner</Option>
-              <Option value="crossCheck">Cross-Check</Option>
-            </Select>
-          </Form.Item>
-
-          {isCrossCheckChecker && (
-            <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
-              <Select placeholder="Cross-Check Pairs Count">
-                {times(10, num => (
-                  <Option key={num} value={num + 1}>
-                    {num + 1}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          )}
-
-          <Divider />
-
-          <Collapse>
-            <Collapse.Panel header="Github" key="1">
-              <Form.Item name="githubPrRequired" label="" valuePropName="checked">
-                <Checkbox>Pull Request required</Checkbox>
-              </Form.Item>
-              <Form.Item name="sourceGithubRepoUrl" label="Source Repo Url" rules={[{ pattern: githubRepoUrl }]}>
-                <Input placeholder="https://github.com/rolling-scopes-school/task1" />
-              </Form.Item>
-              <Form.Item name="githubRepoName" label="Expected Repo Name">
-                <Input placeholder="task1" />
-              </Form.Item>
-            </Collapse.Panel>
-            <Collapse.Panel header="JSON Attributes" key="2">
-              <Form.Item
-                name="attributes"
-                rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
-              >
-                <Input.TextArea rows={6} />
-              </Form.Item>
-            </Collapse.Panel>
-          </Collapse>
-        </>
-      )}
-      {entityType === 'event' && (
-        <Form.Item name="place" label="Place">
-          <Input style={{ minWidth: 250 }} />
-        </Form.Item>
-      )}
+      <Form.Item name="place" label="Place">
+        <Input style={{ minWidth: 250 }} />
+      </Form.Item>
 
       <Divider />
 
@@ -344,53 +251,6 @@ const getInitialValues = (entityType: string, data: any) => {
 
 const loadUsers = async (searchText: string) => {
   return new UserService().searchUser(searchText);
-};
-
-const createTask = async (courseId: number, values: any, isUpdateMode: boolean, editableRecord: CourseEvent | null) => {
-  const taskService = new TaskService();
-  const serviceCourseTask = new CourseService(courseId);
-
-  const templateTaskData = {
-    name: values.name,
-    type: values.type,
-    descriptionUrl: values.descriptionUrl || '',
-    description: values.description || '',
-    githubPrRequired: values.githubPrRequired,
-    sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-    githubRepoName: values.githubRepoName,
-    attributes: JSON.parse(values.attributes ?? '{}'),
-  } as Partial<Task>;
-
-  let taskTemplateId;
-
-  if (isUpdateMode && editableRecord) {
-    taskTemplateId = editableRecord.id;
-    await taskService.updateTask(taskTemplateId, templateTaskData);
-  } else {
-    const data: any = await taskService.createTask(templateTaskData);
-    taskTemplateId = data.identifiers[0].id;
-  }
-
-  const [startDate, endDate] = values.range || [null, null];
-  values = {
-    taskId: taskTemplateId,
-    special: values.special ? values.special.join(',') : '',
-    studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
-    studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
-    duration: values.duration ? values.duration : null,
-
-    scoreWeight: values.scoreWeight ? values.scoreWeight : 1,
-    maxScore: values.maxScore ? values.maxScore : 100,
-    taskOwnerId: values.organizerId ? values.organizerId : null,
-    checker: values.checker,
-    pairsCount: values.pairsCount,
-  };
-
-  if (isUpdateMode && editableRecord) {
-    await serviceCourseTask.updateCourseTask(editableRecord.id, values);
-  } else {
-    await serviceCourseTask.createCourseTask(values);
-  }
 };
 
 const createEvent = async (

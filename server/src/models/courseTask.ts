@@ -17,6 +17,7 @@ import { Course } from './course';
 import { TaskSolution } from './taskSolution';
 
 export enum Checker {
+  AutoTest = 'auto-test',
   Assigned = 'assigned',
   Mentor = 'mentor',
   TaskOwner = 'taskOwner',
@@ -63,19 +64,19 @@ export class CourseTask {
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentStartDate: Date | string;
+  studentStartDate: null | Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentEndDate: Date | string;
+  studentEndDate: null | Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
-  crossCheckEndDate: string;
+  crossCheckEndDate: null | Date | string;
 
   @Column({ type: 'timestamp', nullable: true })
-  mentorStartDate: string;
+  mentorStartDate: null | Date | string;
 
   @Column({ type: 'timestamp', nullable: true })
-  mentorEndDate: string;
+  mentorEndDate: null | Date | string;
 
   @Column({ nullable: true })
   maxScore: number;

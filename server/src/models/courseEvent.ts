@@ -29,13 +29,13 @@ export class CourseEvent {
   stageId: number;
 
   @Column({ type: 'date', nullable: true })
-  date: string;
+  date: string | null;
 
   @Column({ type: 'time with time zone', nullable: true })
-  time: string;
+  time: string | null;
 
   @Column({ type: 'timestamptz', nullable: true })
-  dateTime: string | Date;
+  dateTime: string | Date | null;
 
   @Column({ nullable: true })
   place: string;

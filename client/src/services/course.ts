@@ -15,6 +15,7 @@ import {
   UpdateCourseEventDto,
   CreateCourseEventDto,
   StudentsScoreApi,
+  CreateCourseTaskDtoCheckerEnum,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -23,8 +24,6 @@ export enum CrossCheckStatus {
   Distributed = 'distributed',
   Completed = 'completed',
 }
-
-export type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export type Feedback = {
   url?: string;
@@ -54,7 +53,7 @@ export interface CourseTask {
   crossCheckEndDate: string | null;
   crossCheckStatus: CrossCheckStatus;
   useJury: boolean;
-  checker: Checker;
+  checker: CreateCourseTaskDtoCheckerEnum;
   taskOwnerId: number | null;
   isVisible?: boolean;
   special?: string;
@@ -125,8 +124,6 @@ export interface CourseEvent {
   broadcastUrl: string;
   special?: string;
   duration?: number;
-  isTask?: boolean;
-  checker?: Checker;
   score?: string;
   done?: number;
 }
