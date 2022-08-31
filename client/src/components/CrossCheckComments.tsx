@@ -83,7 +83,7 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
                   </Typography.Text>
                 </Row>
 
-                <Row gutter={2} align="middle">
+                <Row gutter={4} align="middle">
                   <Col>
                     <ScoreIcon maxScore={maxScore} score={score} />
                   </Col>

@@ -124,11 +124,11 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -157,7 +157,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -282,11 +282,11 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -315,7 +315,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -440,11 +440,11 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -473,7 +473,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -640,11 +640,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -673,7 +673,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -798,11 +798,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -831,7 +831,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -996,11 +996,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -1029,7 +1029,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -1244,11 +1244,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -1277,7 +1277,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -1452,11 +1452,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -1485,7 +1485,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -1692,11 +1692,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -1725,7 +1725,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -1940,11 +1940,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -1973,7 +1973,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
@@ -2188,11 +2188,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row ant-row-middle"
-              style="margin-left: -1px; margin-right: -1px;"
+              style="margin-left: -2px; margin-right: -2px;"
             >
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   aria-label="star"
@@ -2221,7 +2221,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               </div>
               <div
                 class="ant-col"
-                style="padding-left: 1px; padding-right: 1px;"
+                style="padding-left: 2px; padding-right: 2px;"
               >
                 <span
                   class="ant-typography"
