@@ -26,18 +26,25 @@ export function AdminNotificationsPage() {
     (notification: NotificationDto) => {
       setModal(
         <NotificationSettingsModal
+          notifications={notifications}
           notification={notification}
           onCancel={() => setModal(undefined)}
           onOk={saveNotification}
         />,
       );
     },
-    [saveNotification],
+    [saveNotification, notifications],
   );
 
   const create = useCallback(() => {
-    setModal(<NotificationSettingsModal onCancel={() => setModal(undefined)} onOk={saveNotification} />);
-  }, []);
+    setModal(
+      <NotificationSettingsModal
+        onCancel={() => setModal(undefined)}
+        onOk={saveNotification}
+        notifications={notifications}
+      />,
+    );
+  }, [notifications]);
 
   return (
     <Spin spinning={loading}>

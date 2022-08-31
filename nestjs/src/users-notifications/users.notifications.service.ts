@@ -3,7 +3,7 @@ import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateNotificationUserSettingsDto } from 'src/users-notifications/dto/update-notification-user-settings.dto';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { NotificationConnectionExistsDto } from 'src/users-notifications/dto/notification-connection-exists.dto';
@@ -43,7 +43,7 @@ export class UserNotificationsService {
         'userSettings.notificationId = notification.id and userSettings.userId = :userId',
         { userId },
       )
-      .where({ enabled: true, type: NotificationType.event })
+      .where({ enabled: true, type: NotificationType.event, parent: IsNull() })
       .orderBy('name')
       .getMany() as Promise<(Notification & { settings: NotificationUserSettings[] })[]>;
   }
@@ -100,7 +100,7 @@ export class UserNotificationsService {
         'notification.userSettings',
         NotificationUserSettings,
         'userSettings',
-        'userSettings.notificationId = notification.id and userSettings.userId = :userId',
+        '(userSettings.notificationId = notification.id or userSettings.notificationId = notification.parentId) and userSettings.userId = :userId',
         { userId },
       )
       .innerJoinAndMapMany(
