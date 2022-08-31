@@ -13,7 +13,7 @@
     "discord.js": "11.5.1",
     "dotenv": "8.0.0",
     "forever": "4.0.3",
-    "moment-timezone": "0.5.26",
+    "moment-timezone": "0.5.35",
     "node-telegram-bot-api": "0.30.0",
     "punycode": "2.1.1"
   },
