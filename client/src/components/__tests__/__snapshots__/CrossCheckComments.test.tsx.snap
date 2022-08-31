@@ -7,72 +7,191 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
   >
     <div
       class="ant-row"
+      style="margin: 8px 0px;"
+    >
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          Student Contacts
+        </span>
+      </div>
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <button
+          aria-checked="true"
+          class="ant-switch ant-switch-small ant-switch-checked"
+          role="switch"
+          type="button"
+        >
+          <div
+            class="ant-switch-handle"
+          />
+          <span
+            class="ant-switch-inner"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="ant-row"
     >
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 1
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  1
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -83,68 +202,154 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 2
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  2
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -155,68 +360,154 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 3
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  3
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -232,72 +523,191 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
   >
     <div
       class="ant-row"
+      style="margin: 8px 0px;"
+    >
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          Student Contacts
+        </span>
+      </div>
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <button
+          aria-checked="true"
+          class="ant-switch ant-switch-small ant-switch-checked"
+          role="switch"
+          type="button"
+        >
+          <div
+            class="ant-switch-handle"
+          />
+          <span
+            class="ant-switch-inner"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="ant-row"
     >
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 1
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  1
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -308,68 +718,154 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 2
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  2
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -380,45 +876,51 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
-              <span
-                class="ant-comment-content-author-name"
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
                 <div
                   class="link-user"
@@ -480,26 +982,137 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       
                   </style>
                 </div>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-27 09:51
               </span>
             </div>
             <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
               >
-                <strong>
-                  Score: 
-                  100
-                </strong>
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#f6ffed"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#52c41a"
+                    />
+                  </svg>
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  100
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Great job, you better quit cross stitching and start programming.
-                </div>
+                </p>
               </span>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-typography"
+                style="margin: 0px;"
+              >
+                Student Discord:
+                 
+                <a
+                  class="ant-typography"
+                  href="https://discordapp.com/users/123456789012345680"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  @LinusTorvalds#1234
+                </a>
+                 
+                <button
+                  class="ant-btn ant-btn-dashed ant-btn-icon-only"
+                  type="button"
+                >
+                  <span
+                    aria-label="copy"
+                    class="anticon anticon-copy"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="copy"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M232 706h142c22.1 0 40 17.9 40 40v142h250V264H232v442z"
+                        fill="#e6f7ff"
+                      />
+                      <path
+                        d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32z"
+                        fill="#1890ff"
+                      />
+                      <path
+                        d="M704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+                        fill="#1890ff"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -511,45 +1124,51 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
-              <span
-                class="ant-comment-content-author-name"
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
                 <div
                   class="link-user"
@@ -611,26 +1230,137 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       
                   </style>
                 </div>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-27 09:51
               </span>
             </div>
             <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
               >
-                <strong>
-                  Score: 
-                  100
-                </strong>
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#f6ffed"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#52c41a"
+                    />
+                  </svg>
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  100
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Great job, you better quit cross stitching and start programming.
-                </div>
+                </p>
               </span>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-typography"
+                style="margin: 0px;"
+              >
+                Student Discord:
+                 
+                <a
+                  class="ant-typography"
+                  href="https://discordapp.com/users/123456789012345680"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  @LinusTorvalds#1234
+                </a>
+                 
+                <button
+                  class="ant-btn ant-btn-dashed ant-btn-icon-only"
+                  type="button"
+                >
+                  <span
+                    aria-label="copy"
+                    class="anticon anticon-copy"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="copy"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M232 706h142c22.1 0 40 17.9 40 40v142h250V264H232v442z"
+                        fill="#e6f7ff"
+                      />
+                      <path
+                        d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32z"
+                        fill="#1890ff"
+                      />
+                      <path
+                        d="M704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+                        fill="#1890ff"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -642,68 +1372,154 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
-            >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                Student 5
-              </span>
-            </div>
-            <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
-                <strong>
-                  Score: 
-                  5
-                </strong>
+                <span
+                  class="ant-avatar ant-avatar-circle ant-avatar-image"
+                  style="width: 24px; height: 24px; line-height: 24px; font-size: 18px;"
+                >
+                  <img
+                    src="/static/svg/badges/ThankYou.svg"
+                  />
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  Student
+                   
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-30 13:35
+              </span>
+            </div>
+            <div
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
+            >
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#fffbf0"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#ffa940"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Awful job, you better quit programming and learn to cross stitch.
-                </div>
+                </p>
               </span>
             </div>
+            <div
+              class="ant-row"
+            />
           </div>
         </div>
       </div>
@@ -719,49 +1535,88 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
   >
     <div
       class="ant-row"
+      style="margin: 8px 0px;"
+    >
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <span
+          class="ant-typography"
+        >
+          Student Contacts
+        </span>
+      </div>
+      <div
+        class="ant-col"
+        style="padding-left: 4px; padding-right: 4px;"
+      >
+        <button
+          aria-checked="true"
+          class="ant-switch ant-switch-small ant-switch-checked"
+          role="switch"
+          type="button"
+        >
+          <div
+            class="ant-switch-handle"
+          />
+          <span
+            class="ant-switch-inner"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="ant-row"
     >
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
-              <span
-                class="ant-comment-content-author-name"
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
                 <div
                   class="link-user"
@@ -823,26 +1678,137 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       
                   </style>
                 </div>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-27 09:51
               </span>
             </div>
             <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
               >
-                <strong>
-                  Score: 
-                  100
-                </strong>
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#f6ffed"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#52c41a"
+                    />
+                  </svg>
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  100
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Great job, you better quit cross stitching and start programming.
-                </div>
+                </p>
               </span>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-typography"
+                style="margin: 0px;"
+              >
+                Student Discord:
+                 
+                <a
+                  class="ant-typography"
+                  href="https://discordapp.com/users/123456789012345680"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  @LinusTorvalds#1234
+                </a>
+                 
+                <button
+                  class="ant-btn ant-btn-dashed ant-btn-icon-only"
+                  type="button"
+                >
+                  <span
+                    aria-label="copy"
+                    class="anticon anticon-copy"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="copy"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M232 706h142c22.1 0 40 17.9 40 40v142h250V264H232v442z"
+                        fill="#e6f7ff"
+                      />
+                      <path
+                        d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32z"
+                        fill="#1890ff"
+                      />
+                      <path
+                        d="M704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+                        fill="#1890ff"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -854,45 +1820,51 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
-              <span
-                class="ant-comment-content-author-name"
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
                 <div
                   class="link-user"
@@ -954,26 +1926,137 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       
                   </style>
                 </div>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-27 09:51
               </span>
             </div>
             <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
               >
-                <strong>
-                  Score: 
-                  100
-                </strong>
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#f6ffed"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#52c41a"
+                    />
+                  </svg>
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  100
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Great job, you better quit cross stitching and start programming.
-                </div>
+                </p>
               </span>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-typography"
+                style="margin: 0px;"
+              >
+                Student Discord:
+                 
+                <a
+                  class="ant-typography"
+                  href="https://discordapp.com/users/123456789012345680"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  @LinusTorvalds#1234
+                </a>
+                 
+                <button
+                  class="ant-btn ant-btn-dashed ant-btn-icon-only"
+                  type="button"
+                >
+                  <span
+                    aria-label="copy"
+                    class="anticon anticon-copy"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="copy"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M232 706h142c22.1 0 40 17.9 40 40v142h250V264H232v442z"
+                        fill="#e6f7ff"
+                      />
+                      <path
+                        d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32z"
+                        fill="#1890ff"
+                      />
+                      <path
+                        d="M704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+                        fill="#1890ff"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -985,45 +2068,51 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       <div
         class="ant-divider ant-divider-horizontal"
         role="separator"
+        style="margin: 8px 0px;"
       />
+    </div>
+    <div
+      class="ant-comment"
+    >
       <div
-        class="ant-comment"
-        style="margin: 16px;"
+        class="ant-comment-inner"
       >
         <div
-          class="ant-comment-inner"
+          class="ant-comment-avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="ant-comment-content"
         >
           <div
-            class="ant-comment-avatar"
-          >
-            <span
-              aria-label="user"
-              class="anticon anticon-user"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="user"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
-              >
-                <path
-                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="ant-comment-content"
+            class="ant-comment-content-detail"
           >
             <div
-              class="ant-comment-content-author"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1.5px; margin-right: -1.5px;"
             >
-              <span
-                class="ant-comment-content-author-name"
+              <div
+                class="ant-col"
+                style="padding-left: 1.5px; padding-right: 1.5px;"
               >
                 <div
                   class="link-user"
@@ -1085,26 +2174,137 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
       
                   </style>
                 </div>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="margin-bottom: 8px; font-size: 12px;"
+              >
+                2022-08-27 09:51
               </span>
             </div>
             <div
-              class="ant-comment-content-detail"
+              class="ant-row ant-row-middle"
+              style="margin-left: -1px; margin-right: -1px;"
             >
               <div
-                class="ant-typography"
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
               >
-                <strong>
-                  Score: 
-                  100
-                </strong>
+                <span
+                  aria-label="star"
+                  class="anticon anticon-star"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="star"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512.5 190.4l-94.4 191.3-211.2 30.7 152.8 149-36.1 210.3 188.9-99.3 188.9 99.2-36.1-210.3 152.8-148.9-211.2-30.7z"
+                      fill="#f6ffed"
+                    />
+                    <path
+                      d="M908.6 352.8l-253.9-36.9L541.2 85.8c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L370.3 315.9l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1L239 839.4a31.95 31.95 0 0046.4 33.7l227.1-119.4 227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3zM665.3 561.3l36.1 210.3-188.9-99.2-188.9 99.3 36.1-210.3-152.8-149 211.2-30.7 94.4-191.3 94.4 191.3 211.2 30.7-152.8 148.9z"
+                      fill="#52c41a"
+                    />
+                  </svg>
+                </span>
               </div>
+              <div
+                class="ant-col"
+                style="padding-left: 1px; padding-right: 1px;"
+              >
+                <span
+                  class="ant-typography"
+                >
+                  100
+                </span>
+              </div>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 24px;"
+            >
+              <span
+                class="ant-typography ant-typography-secondary"
+                style="font-size: 12px; line-height: 12px;"
+              >
+                maximum score: 
+                100
+              </span>
+            </div>
+            <div
+              class="ant-row"
+            >
               <span
                 class="ant-typography"
               >
-                <div>
+                <p>
                   Great job, you better quit cross stitching and start programming.
-                </div>
+                </p>
               </span>
+            </div>
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-typography"
+                style="margin: 0px;"
+              >
+                Student Discord:
+                 
+                <a
+                  class="ant-typography"
+                  href="https://discordapp.com/users/123456789012345680"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  @LinusTorvalds#1234
+                </a>
+                 
+                <button
+                  class="ant-btn ant-btn-dashed ant-btn-icon-only"
+                  type="button"
+                >
+                  <span
+                    aria-label="copy"
+                    class="anticon anticon-copy"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="copy"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M232 706h142c22.1 0 40 17.9 40 40v142h250V264H232v442z"
+                        fill="#e6f7ff"
+                      />
+                      <path
+                        d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32z"
+                        fill="#1890ff"
+                      />
+                      <path
+                        d="M704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+                        fill="#1890ff"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

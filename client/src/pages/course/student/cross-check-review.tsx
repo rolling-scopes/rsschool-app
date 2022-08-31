@@ -4,10 +4,10 @@ import {
   EyeInvisibleFilled,
   EyeTwoTone,
   EyeFilled,
-  StarTwoTone,
   EditOutlined,
   EditFilled,
 } from '@ant-design/icons';
+import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
@@ -35,6 +35,7 @@ function CrossCheckHistory(props: {
   githubId: string | null;
   courseId: number;
   courseTaskId: number | null;
+  maxScore: number | undefined;
   setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
 }) {
   if (props.githubId == null || props.courseTaskId == null) {
@@ -75,7 +76,7 @@ function CrossCheckHistory(props: {
           >
             <div>{formatDateTime(historyItem.dateTime)}</div>
             <div>
-              <StarTwoTone twoToneColor={i === 0 ? '#52c41a' : 'gray'} />{' '}
+              <ScoreIcon maxScore={props.maxScore} score={historyItem.score} isOutdatedScore={!!i} />{' '}
               <Typography.Text>{historyItem.score}</Typography.Text>
             </div>
             <div>
@@ -183,6 +184,7 @@ function Page(props: CoursePageProps) {
   };
 
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
+  const maxScore = courseTask?.maxScore;
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
@@ -227,6 +229,7 @@ function Page(props: CoursePageProps) {
             githubId={githubId}
             courseId={props.course.id}
             courseTaskId={courseTaskId}
+            maxScore={maxScore}
             setHistoricalCommentSelected={setHistoricalCommentSelected}
           />
         </Col>

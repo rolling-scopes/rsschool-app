@@ -26,7 +26,7 @@ const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const [feedback, setFeedback] = useState<Feedback>();
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const router = useRouter();
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
@@ -111,7 +111,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   }
 
   const handleTaskChange = async (value: number) => {
-    setFeedback(undefined);
+    setFeedback(null);
     const courseTaskId = Number(value);
     const courseTask = courseTasks.find(t => t.id === courseTaskId);
     if (courseTask == null) {
@@ -147,8 +147,8 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     setNewComments(comments);
   };
 
-  const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
+  const maxScore = task?.maxScore;
   const taskExists = !!task;
   const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
@@ -235,7 +235,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         </Col>
       </Row>
       <Row>
-        <CrossCheckComments comments={feedbackComments} />
+        <CrossCheckComments feedback={feedback} maxScore={maxScore} />
       </Row>
     </PageLayout>
   );

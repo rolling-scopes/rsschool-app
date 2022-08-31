@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { StudentBasic } from 'services/models';
+import { StudentContacts } from './StudentContacts';
 
 export type AssignmentLink = { student: StudentBasic; url: string };
 
@@ -14,24 +14,10 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
     url: solutionUrl,
   } = assignment;
 
-  const discordUsername = discord ? `@${discord.username}#${discord.discriminator}` : null;
-
   return (
     <div style={{ marginTop: 16 }}>
-      <Typography.Paragraph>
-        Student Discord:{' '}
-        {discordUsername ? (
-          <>
-            <Typography.Link target="_blank" href={`https://discordapp.com/users/${discord?.id}`}>
-              {discordUsername}
-            </Typography.Link>{' '}
-            <CopyToClipboardButton value={discordUsername} />
-          </>
-        ) : (
-          'unknown'
-        )}
-      </Typography.Paragraph>
-      <Typography.Paragraph>
+      <StudentContacts discord={discord} />
+      <Typography.Paragraph style={{ marginTop: 14 }}>
         Solution:{' '}
         <Typography.Link target="_blank" href={solutionUrl}>
           {solutionUrl}
