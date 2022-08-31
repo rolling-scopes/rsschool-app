@@ -35,11 +35,20 @@ export class NotificationsService {
   }
 
   public getNotifications() {
-    return this.notificationsRepository.find({ relations: ['channels'], order: { name: 'ASC' } });
+    return this.notificationsRepository.find({ relations: ['channels', 'parent'], order: { name: 'ASC' } });
   }
 
-  public saveNotification(notification: UpdateNotificationDto) {
-    return this.notificationsRepository.save(notification);
+  public saveNotification(notificationUpdate: UpdateNotificationDto) {
+    const { parentId, ...notification } = notificationUpdate;
+
+    return this.notificationsRepository.save({
+      ...notification,
+      parent: parentId
+        ? {
+            id: parentId,
+          }
+        : null,
+    });
   }
 
   public async createNotification(notification: UpdateNotificationDto) {

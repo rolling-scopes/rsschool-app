@@ -1,7 +1,7 @@
 import { NotificationId, NotificationType } from '@entities/notification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ChannelSettings } from './notification.dto';
 
 export class UpdateNotificationDto {
@@ -27,4 +27,9 @@ export class UpdateNotificationDto {
   @ApiProperty({ enum: NotificationType, enumName: 'NotificationType' })
   @IsEnum(NotificationType)
   public type: NotificationType;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  public parentId?: NotificationId;
 }

@@ -13,6 +13,7 @@ type Props = {
   notification?: NotificationDto;
   onCancel: () => void;
   onOk: (notification: NotificationDto) => void;
+  notifications: Pick<NotificationDto, 'id' | 'name'>[];
 };
 
 export function NotificationSettingsModal(props: Props) {
@@ -22,6 +23,7 @@ export function NotificationSettingsModal(props: Props) {
     } as NotificationDto,
     onCancel,
     onOk,
+    notifications = [],
   } = props;
 
   const initialValue = {
@@ -35,6 +37,10 @@ export function NotificationSettingsModal(props: Props) {
     }),
   };
   const { channels } = initialValue;
+  const parentNotifications = [
+    { id: undefined, name: 'Empty' },
+    ...notifications.filter(n => n.id !== notification.id),
+  ];
 
   return (
     <ModalForm title="Notification Settings" data={initialValue} submit={handleSubmit} cancel={onCancel}>
@@ -60,6 +66,17 @@ export function NotificationSettingsModal(props: Props) {
                 ))}
               </Select>
             </Form.Item>
+            {notifications.length > 1 && (
+              <Form.Item name="parentId" label="Parent">
+                <Select placeholder="Please select parent">
+                  {parentNotifications.map(({ id, name }) => (
+                    <Select.Option key={id} value={id}>
+                      {name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            )}
           </TabPane>
           {channels.map((channel, index) => (
             <TabPane tab={channel.channelId} key={channel.channelId} forceRender>

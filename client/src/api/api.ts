@@ -2129,6 +2129,12 @@ export interface NotificationDto {
      * @memberof NotificationDto
      */
     'channels': Array<ChannelSettings>;
+    /**
+     * 
+     * @type {string}
+     * @memberof NotificationDto
+     */
+    'parentId': string;
 }
 /**
  * 
@@ -3509,6 +3515,12 @@ export interface UpdateNotificationDto {
      * @memberof UpdateNotificationDto
      */
     'type': NotificationType;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateNotificationDto
+     */
+    'parentId': string;
 }
 /**
  * 
