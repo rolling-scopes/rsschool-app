@@ -31,6 +31,7 @@ import { Discipline1661087975938 } from './1661087975938-Discipline';
 import { Disciplines1661106736439 } from './1661106736439-Disciplines';
 import { Disciplines1661107174477 } from './1661107174477-Disciplines';
 import { ResumeUpdatedAt1661699918902 } from './1661699918902-ResumeUpdatedAt';
+import { RevertResumeUpdate1661973638676 } from './1661973638676-RevertResumeUpdate';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -66,4 +67,5 @@ export const migrations = [
   Disciplines1661106736439,
   Disciplines1661107174477,
   ResumeUpdatedAt1661699918902,
+  RevertResumeUpdate1661973638676,
 ];

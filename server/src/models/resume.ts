@@ -91,4 +91,7 @@ export class Resume {
 
   @Column('int', { array: true, default: [] })
   visibleCourses: number[];
+
+  @Column({ nullable: true, type: 'numeric' })
+  expires: number;
 }
