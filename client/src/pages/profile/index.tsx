@@ -51,6 +51,7 @@ export type ChangedPermissionsSettings = {
 };
 
 const profileApi = new ProfileApi();
+
 export class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
