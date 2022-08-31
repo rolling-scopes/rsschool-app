@@ -37,6 +37,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
   const initialQuery = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.course', 'course')
+    .innerJoin('course.discipline', 'discipline')
     .innerJoin('student.user', 'user')
     .addSelect([
       'user.id',
@@ -44,8 +45,11 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       'user.lastName',
       'user.githubId',
       'course.name',
+      'course.disciplineId',
       'course.primarySkillName',
       'course.certificateIssuer',
+      'discipline.name',
+      'discipline.id',
     ]);
   if (studentIds.length > 0) {
     students = await initialQuery.where('student."id" IN (:...ids)', { ids: studentIds }).getMany();
@@ -72,7 +76,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
     return {
       courseId,
       courseName: course.name,
-      coursePrimarySkill: course.primarySkillName,
+      coursePrimarySkill: course.discipline?.name ?? course.primarySkillName,
       certificateIssuer: course.certificateIssuer,
       studentId: student.id,
       studentName: `${user.firstName} ${user.lastName}`,
@@ -87,22 +91,13 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
 
 export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
-  const student = await getRepository(Student)
-    .createQueryBuilder('student')
-    .innerJoin('student.course', 'course')
-    .innerJoin('student.user', 'user')
-    .addSelect([
-      'user.id',
-      'user.firstName',
-      'user.lastName',
-      'user.githubId',
-      'course.name',
-      'course.primarySkillName',
-      'course.certificateIssuer',
-    ])
-    .where('student."courseId" = :courseId', { courseId })
-    .andWhere('"user"."githubId" = :githubId', { githubId })
-    .getOne();
+  const student = await getRepository(Student).findOne({
+    where: {
+      courseId: Number(courseId),
+      user: { githubId },
+    },
+    relations: ['user', 'course', 'course.discipline'],
+  });
 
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'No student' });
@@ -111,7 +106,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
   const result = {
     courseId,
     courseName: student.course.name,
-    coursePrimarySkill: student.course.primarySkillName,
+    coursePrimarySkill: student.course.discipline?.name ?? student.course.primarySkillName,
     certificateIssuer: student.course.certificateIssuer,
     studentId: student.id,
     studentName: `${student.user.firstName} ${student.user.lastName}`,

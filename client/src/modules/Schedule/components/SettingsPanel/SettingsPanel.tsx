@@ -1,10 +1,10 @@
-import { Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
+import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import { AddEventButton } from './AddEventButton';
 import ManageCsvButtons from './ManageCsvButtons';
 
 interface SettingsPanelProps {
@@ -13,9 +13,19 @@ interface SettingsPanelProps {
   settings: ScheduleSettings;
   tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
+  onCreateCourseTask: () => void;
+  onCopyFromCourse: () => void;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId, settings, tags, refreshData }) => {
+export function SettingsPanel({
+  isCourseManager,
+  onCreateCourseTask,
+  onCopyFromCourse,
+  courseId,
+  settings,
+  tags,
+  refreshData,
+}: SettingsPanelProps) {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
 
@@ -38,7 +48,23 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId
         ) : null}
         {isCourseManager ? (
           <Col>
-            <AddEventButton onClick={openManageEventModal} />
+            <Button icon={<CopyOutlined />} onClick={onCopyFromCourse}>
+              Copy From
+            </Button>
+          </Col>
+        ) : null}
+        {isCourseManager ? (
+          <Col>
+            <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
+              Event
+            </Button>
+          </Col>
+        ) : null}
+        {isCourseManager ? (
+          <Col>
+            <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
+              Task
+            </Button>
           </Col>
         ) : null}
       </Row>
@@ -54,6 +80,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isCourseManager, courseId
       )}
     </>
   );
-};
+}
 
 export default SettingsPanel;

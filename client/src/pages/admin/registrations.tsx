@@ -137,7 +137,7 @@ function Page(props: Props) {
             <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
               {courses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
-                  {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                  {course.name} ({course.discipline?.name}, {formatMonthFriendly(course.startDate)})
                 </Select.Option>
               ))}
             </Select>

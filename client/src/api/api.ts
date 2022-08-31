@@ -537,6 +537,19 @@ export interface ContactsVisibilitySettings {
 /**
  * 
  * @export
+ * @interface CourseCopyFromDto
+ */
+export interface CourseCopyFromDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseCopyFromDto
+     */
+    'copyFromCourseId': number;
+}
+/**
+ * 
+ * @export
  * @interface CourseDto
  */
 export interface CourseDto {
@@ -888,7 +901,7 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
-    'checker': string;
+    'checker': CourseTaskDetailedDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -968,6 +981,15 @@ export const CourseTaskDetailedDtoTypeEnum = {
 } as const;
 
 export type CourseTaskDetailedDtoTypeEnum = typeof CourseTaskDetailedDtoTypeEnum[keyof typeof CourseTaskDetailedDtoTypeEnum];
+export const CourseTaskDetailedDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseTaskDetailedDtoCheckerEnum = typeof CourseTaskDetailedDtoCheckerEnum[keyof typeof CourseTaskDetailedDtoCheckerEnum];
 
 /**
  * 
@@ -998,7 +1020,7 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
-    'checker': string;
+    'checker': CourseTaskDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -1060,6 +1082,15 @@ export const CourseTaskDtoTypeEnum = {
 } as const;
 
 export type CourseTaskDtoTypeEnum = typeof CourseTaskDtoTypeEnum[keyof typeof CourseTaskDtoTypeEnum];
+export const CourseTaskDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseTaskDtoCheckerEnum = typeof CourseTaskDtoCheckerEnum[keyof typeof CourseTaskDtoCheckerEnum];
 
 /**
  * 
@@ -1214,7 +1245,7 @@ export interface CreateCourseTaskDto {
      * @type {string}
      * @memberof CreateCourseTaskDto
      */
-    'checker': string;
+    'checker': CreateCourseTaskDtoCheckerEnum;
     /**
      * 
      * @type {string}
@@ -1265,6 +1296,15 @@ export interface CreateCourseTaskDto {
     'duration'?: number;
 }
 
+export const CreateCourseTaskDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CreateCourseTaskDtoCheckerEnum = typeof CreateCourseTaskDtoCheckerEnum[keyof typeof CreateCourseTaskDtoCheckerEnum];
 export const CreateCourseTaskDtoTypeEnum = {
     Jstask: 'jstask',
     Kotlintask: 'kotlintask',
@@ -5622,6 +5662,45 @@ export const CoursesScheduleApiAxiosParamCreator = function (configuration?: Con
         /**
          * 
          * @param {number} courseId 
+         * @param {CourseCopyFromDto} courseCopyFromDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copySchedule: async (courseId: number, courseCopyFromDto: CourseCopyFromDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('copySchedule', 'courseId', courseId)
+            // verify required parameter 'courseCopyFromDto' is not null or undefined
+            assertParamExists('copySchedule', 'courseCopyFromDto', courseCopyFromDto)
+            const localVarPath = `/courses/{courseId}/schedule/copy`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(courseCopyFromDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5665,6 +5744,17 @@ export const CoursesScheduleApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {CourseCopyFromDto} courseCopyFromDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async copySchedule(courseId: number, courseCopyFromDto: CourseCopyFromDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copySchedule(courseId, courseCopyFromDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5685,6 +5775,16 @@ export const CoursesScheduleApiFactory = function (configuration?: Configuration
         /**
          * 
          * @param {number} courseId 
+         * @param {CourseCopyFromDto} courseCopyFromDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copySchedule(courseId: number, courseCopyFromDto: CourseCopyFromDto, options?: any): AxiosPromise<void> {
+            return localVarFp.copySchedule(courseId, courseCopyFromDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5701,6 +5801,18 @@ export const CoursesScheduleApiFactory = function (configuration?: Configuration
  * @extends {BaseAPI}
  */
 export class CoursesScheduleApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CourseCopyFromDto} courseCopyFromDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesScheduleApi
+     */
+    public copySchedule(courseId: number, courseCopyFromDto: CourseCopyFromDto, options?: AxiosRequestConfig) {
+        return CoursesScheduleApiFp(this.configuration).copySchedule(courseId, courseCopyFromDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 

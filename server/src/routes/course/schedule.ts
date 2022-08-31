@@ -8,6 +8,7 @@ import { ILogger } from '../../logger';
 import { getCourseTasksWithOwner, getEvents } from '../../services/course.service';
 import { getUserByGithubId } from '../../services/user.service';
 import { setCsvResponse, setResponse, dateFormatter } from '../utils';
+import { Checker } from '../../models/courseTask';
 
 const DEFAULT_TIMEZONE = 'Europe/Minsk';
 
@@ -23,7 +24,7 @@ type EntityFromCSV = {
   descriptionUrl: string;
   githubId: string | null;
   place: string | null;
-  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | null;
+  checker: Checker | null;
   pairsCount: number | null;
 };
 
@@ -52,7 +53,7 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
     entityType: 'event',
     templateId: item.eventId,
     id: item.id,
-    startDate: dateFormatter(item.dateTime.toString(), timeZone, 'YYYY-MM-DD HH:mm'),
+    startDate: item.dateTime ? dateFormatter(item.dateTime.toString(), timeZone, 'YYYY-MM-DD HH:mm') : '',
     type: item.event.type,
     special: item.special,
     name: item.event.name,

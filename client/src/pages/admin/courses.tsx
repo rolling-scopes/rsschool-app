@@ -15,14 +15,13 @@ import {
 } from 'antd';
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
-import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
+import { dateUtcRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto } from 'api';
 import { Course, UpdateCourse } from 'services/models';
-import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
@@ -268,16 +267,14 @@ function createRecord(values: any) {
     name: values.name,
     fullName: values.fullName,
     alias: values.alias,
-    startDate: startDate ? startDate.toISOString() : null,
-    endDate: endDate ? endDate.toISOString() : null,
+    startDate: startDate ? moment.utc(startDate).startOf('day').toISOString() : undefined,
+    endDate: endDate ? moment.utc(endDate).startOf('day').toISOString() : undefined,
     registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
     completed: values.state === 'completed',
     planned: values.state === 'planned',
     inviteOnly: values.inviteOnly,
     description: values.description,
     disciplineId: values.discipline?.id,
-    primarySkillId: values.primarySkillId,
-    primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
@@ -324,13 +321,13 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Start Date',
       dataIndex: 'startDate',
-      render: dateRenderer,
+      render: dateUtcRenderer,
       width: 120,
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
-      render: dateRenderer,
+      render: dateUtcRenderer,
     },
     {
       title: 'Discipline',

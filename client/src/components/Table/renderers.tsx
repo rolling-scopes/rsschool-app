@@ -6,9 +6,9 @@ import {
   YoutubeOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
-import { CourseScheduleItemDto } from 'api';
+import { CourseScheduleItemDto, CreateCourseTaskDtoCheckerEnum } from 'api';
 import moment from 'moment-timezone';
-import { Checker, CrossCheckStatus } from 'services/course';
+import { CrossCheckStatus } from 'services/course';
 
 const { Text } = Typography;
 
@@ -16,12 +16,19 @@ export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
 }
 
-export function crossCheckDateRenderer(value: string | null, { checker }: { checker: Checker }) {
+export function dateUtcRenderer(value: string | null) {
+  return value ? moment.utc(value).format('YYYY-MM-DD') : '';
+}
+
+export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CreateCourseTaskDtoCheckerEnum }) {
   if (checker !== 'crossCheck') return 'N/A';
   return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
-export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: Checker }) {
+export function crossCheckStatusRenderer(
+  value: CrossCheckStatus,
+  { checker }: { checker: CreateCourseTaskDtoCheckerEnum },
+) {
   return checker !== 'crossCheck' ? (
     'N/A'
   ) : value === CrossCheckStatus.Initial ? (

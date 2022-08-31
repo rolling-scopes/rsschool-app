@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PersonDto } from 'src/core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
+import { Course } from '@entities/course';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -49,6 +50,8 @@ export enum CourseScheduleItemStatus {
 @Injectable()
 export class CourseScheduleService {
   constructor(
+    @InjectRepository(Course)
+    readonly courseRepository: Repository<Course>,
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(CourseEvent)
@@ -101,6 +104,7 @@ export class CourseScheduleService {
           status,
           tag,
           descriptionUrl: courseTask.task.descriptionUrl,
+          organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
         } as CourseScheduleItem;
       })
       .concat(
@@ -124,6 +128,40 @@ export class CourseScheduleService {
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     return schedule;
+  }
+
+  public async copyFromTo(fromCourseId: number, toCourseId: number) {
+    const [fromCourse, toCourse] = await Promise.all([
+      this.courseRepository.findOneByOrFail({ id: fromCourseId }),
+      this.courseRepository.findOneByOrFail({ id: toCourseId }),
+    ]);
+
+    const timeDiff = toCourse.startDate.getTime() - fromCourse.startDate.getTime();
+    const courseTasks = await this.courseTaskRepository.find({ where: { courseId: fromCourseId } });
+    for (const courseTask of courseTasks) {
+      const { id, createdDate, updatedDate, crossCheckStatus, ...newCourseTask } = courseTask;
+      newCourseTask.courseId = toCourseId;
+      newCourseTask.crossCheckEndDate = this.adjustDate(newCourseTask.crossCheckEndDate, timeDiff);
+      newCourseTask.studentStartDate = this.adjustDate(newCourseTask.studentStartDate, timeDiff);
+      newCourseTask.studentEndDate = this.adjustDate(newCourseTask.studentEndDate, timeDiff);
+      newCourseTask.mentorStartDate = this.adjustDate(newCourseTask.mentorStartDate, timeDiff);
+      newCourseTask.mentorEndDate = this.adjustDate(newCourseTask.mentorEndDate, timeDiff);
+      await this.courseTaskRepository.save(newCourseTask);
+    }
+    const courseEvents = await this.courseEventRepository.find({ where: { courseId: fromCourseId } });
+    for (const courseEvent of courseEvents) {
+      const { id, createdDate, updatedDate, ...newCourseEvent } = courseEvent;
+      newCourseEvent.courseId = toCourseId;
+      newCourseEvent.dateTime = this.adjustDate(newCourseEvent.dateTime, timeDiff);
+      newCourseEvent.date = null;
+      newCourseEvent.time = null;
+      await this.courseEventRepository.save(newCourseEvent);
+    }
+  }
+
+  private adjustDate(date: string | Date | null, timeDiff: number): Date | null {
+    const fixedDate = typeof date === 'string' ? new Date(date) : date;
+    return fixedDate ? new Date((fixedDate as Date).getTime() + timeDiff) : fixedDate;
   }
 
   private getCurrentTaskScore(
@@ -198,7 +236,7 @@ export class CourseScheduleService {
   private async getActiveCourseTasks(courseId: number, studentId?: number): Promise<CourseTask[]> {
     return this.courseTaskRepository.find({
       where: { courseId, disabled: false },
-      relations: ['task'],
+      relations: ['task', 'taskOwner'],
       cache: studentId ? 90 * 1000 : undefined,
     });
   }
@@ -227,6 +265,9 @@ export class CourseScheduleService {
     courseTask: CourseTask,
     studentData?: { currentScore: number | null; submitted: boolean },
   ) {
+    if (!courseTask.studentStartDate || !courseTask.studentEndDate) {
+      return CourseScheduleItemStatus.Archived;
+    }
     const startTime = new Date(courseTask.studentStartDate).getTime();
     const endTime = new Date(courseTask.studentEndDate).getTime();
     const { currentScore = null, submitted = false } = studentData ?? {};

@@ -1,3 +1,4 @@
+import { Checker } from '@entities/courseTask';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { typeEnum } from './course-task.dto';
@@ -18,7 +19,7 @@ export class CreateCourseTaskDto {
   @IsNumber()
   scoreWeight?: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Checker })
   @IsNotEmpty()
   checker: string;
 
