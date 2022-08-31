@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
-import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
+import { dateUtcRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -267,8 +267,8 @@ function createRecord(values: any) {
     name: values.name,
     fullName: values.fullName,
     alias: values.alias,
-    startDate: startDate ? startDate.toISOString() : null,
-    endDate: endDate ? endDate.toISOString() : null,
+    startDate: startDate ? moment.utc(startDate).startOf('day').toISOString() : undefined,
+    endDate: endDate ? moment.utc(endDate).startOf('day').toISOString() : undefined,
     registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
     completed: values.state === 'completed',
     planned: values.state === 'planned',
@@ -321,13 +321,13 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Start Date',
       dataIndex: 'startDate',
-      render: dateRenderer,
+      render: dateUtcRenderer,
       width: 120,
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
-      render: dateRenderer,
+      render: dateUtcRenderer,
     },
     {
       title: 'Discipline',

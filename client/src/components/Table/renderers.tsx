@@ -16,6 +16,10 @@ export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
 }
 
+export function dateUtcRenderer(value: string | null) {
+  return value ? moment.utc(value).format('YYYY-MM-DD') : '';
+}
+
 export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CreateCourseTaskDtoCheckerEnum }) {
   if (checker !== 'crossCheck') return 'N/A';
   return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
