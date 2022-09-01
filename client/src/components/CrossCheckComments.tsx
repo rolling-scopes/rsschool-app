@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
-import { UserOutlined } from '@ant-design/icons';
+import { CDN_AVATARS_URL } from 'configs/cdn';
 import { ScoreIcon } from './Icons/ScoreIcon';
 import { Avatar, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
+import css from 'styled-jsx/css';
 import { useLocalStorage } from 'react-use';
 import { Feedback } from 'services/course';
 import { formatDateTime } from 'services/formatter';
@@ -54,26 +55,26 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
           </Row>
 
           <Comment
-            avatar={<UserOutlined />}
+            avatar={
+              <Avatar
+                size={32}
+                src={
+                  areStudentContactsVisible && author
+                    ? `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`
+                    : '/static/svg/badges/ThankYou.svg'
+                }
+              />
+            }
             content={
               <>
-                <Row align="middle" gutter={3}>
+                <Row>
                   {areStudentContactsVisible && author ? (
-                    <Col>
-                      <GithubUserLink value={author.githubId} />
-                    </Col>
+                    <GithubUserLink value={author.githubId} isUserIconHidden={true} />
                   ) : (
-                    <>
-                      <Col>
-                        <Avatar size={24} src="/static/svg/badges/ThankYou.svg" />
-                      </Col>
-                      <Col>
-                        <Typography.Text>
-                          {'Student'} {i + 1}
-                          {!areStudentContactsVisible && author && ' (hidden)'}
-                        </Typography.Text>
-                      </Col>
-                    </>
+                    <Typography.Text>
+                      {'Student'} {i + 1}
+                      {!areStudentContactsVisible && author && ' (hidden)'}
+                    </Typography.Text>
                   )}
                 </Row>
 
@@ -108,6 +109,20 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
           />
         </Fragment>
       ))}
+      <style jsx>{styles}</style>
     </Col>
   );
 }
+
+const styles = css`
+  :global(.ant-comment-avatar) {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+  }
+
+  :global(.ant-comment-avatar img) {
+    width: 100%;
+    height: 100%;
+  }
+`;

@@ -1,19 +1,28 @@
 import { GithubFilled } from '@ant-design/icons';
 import { CDN_AVATARS_URL } from 'configs/cdn';
 
-export function GithubUserLink(props: { value: string }) {
+type Props = {
+  value: string;
+  isUserIconHidden?: boolean;
+};
+
+export function GithubUserLink({ value, isUserIconHidden = false }: Props) {
   const imgProps: any = { loading: 'lazy' };
   return (
     <div className="link-user">
-      <a target="_blank" className="link-user-profile" href={`/profile?githubId=${props.value}`}>
-        <img
-          {...imgProps}
-          style={{ height: '24px', width: '24px', borderRadius: '12px' }}
-          src={`${CDN_AVATARS_URL}/${props.value}.png?size=48`}
-        />{' '}
-        {props.value}
+      <a target="_blank" className="link-user-profile" href={`/profile?githubId=${value}`}>
+        {!isUserIconHidden && (
+          <>
+            <img
+              {...imgProps}
+              style={{ height: '24px', width: '24px', borderRadius: '12px' }}
+              src={`${CDN_AVATARS_URL}/${value}.png?size=48`}
+            />{' '}
+          </>
+        )}
+        {value}
       </a>{' '}
-      <a target="_blank" className="link-user-github" href={`https://github.com/${props.value}`}>
+      <a target="_blank" className="link-user-github" href={`https://github.com/${value}`}>
         <GithubFilled />
       </a>
       <style jsx>{`
