@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { CDN_AVATARS_URL } from 'configs/cdn';
 import { ScoreIcon } from './Icons/ScoreIcon';
 import { Avatar, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
-import css from 'styled-jsx/css';
 import { useLocalStorage } from 'react-use';
 import { Feedback } from 'services/course';
 import { formatDateTime } from 'services/formatter';
@@ -109,20 +108,18 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
           />
         </Fragment>
       ))}
-      <style jsx>{styles}</style>
+      <style jsx>{`
+        :global(.ant-comment-avatar) {
+          position: sticky;
+          top: 16px;
+          align-self: start;
+        }
+
+        :global(.ant-comment-avatar img) {
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </Col>
   );
 }
-
-const styles = css`
-  :global(.ant-comment-avatar) {
-    position: sticky;
-    top: 16px;
-    align-self: start;
-  }
-
-  :global(.ant-comment-avatar img) {
-    width: 100%;
-    height: 100%;
-  }
-`;
