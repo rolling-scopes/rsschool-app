@@ -1,11 +1,11 @@
-import { ColumnType } from 'antd/lib/table';
+import { ColumnType, TableProps } from 'antd/lib/table';
 import { Table, TablePaginationConfig } from 'antd';
 import { isUndefined } from 'lodash';
 import { getColumns } from 'modules/Score/data/getColumns';
 import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
@@ -16,7 +16,7 @@ import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
 import useWindowDimensions from 'utils/useWindowDimensions';
-import { SorterResult } from 'antd/lib/table/interface';
+import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
@@ -55,6 +55,7 @@ export function ScoreTable(props: Props) {
     filter: { activeOnly: true },
     order: { field: 'rank', order: 'ascend' },
   });
+  const recentlyAppliedFilters = useRef<null | Record<string, FilterValue | null>>(null);
 
   const [notVisibleColumns = [], setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns');
   const courseService = useMemo(() => new CourseService(props.course.id), []);
@@ -153,6 +154,20 @@ export function ScoreTable(props: Props) {
     return null;
   }
 
+  const handleChange: TableProps<ScoreStudentDto>['onChange'] = (pagination, filters, sorter, { action }) => {
+    // Dirty hack to prevent sort request with old filters on Enter key in filter modal search input
+    // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
+    // TODO: Remove this hack after fix in antd
+    if (action === 'filter') {
+      recentlyAppliedFilters.current = filters;
+      setTimeout(() => (recentlyAppliedFilters.current = null), 50);
+    }
+    if (action === 'sort' && recentlyAppliedFilters.current) {
+      filters = recentlyAppliedFilters.current;
+    }
+    getCourseScore(pagination, filters, sorter);
+  };
+
   return (
     <>
       <Table<ScoreStudentDto>
@@ -163,7 +178,7 @@ export function ScoreTable(props: Props) {
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
-        onChange={getCourseScore}
+        onChange={handleChange}
         columns={getVisibleColumns(columns)}
         rowSelection={{
           selectedRowKeys: state,
