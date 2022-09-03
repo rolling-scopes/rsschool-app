@@ -1,22 +1,22 @@
-import { ColumnType, TableProps } from 'antd/lib/table';
 import { Table, TablePaginationConfig } from 'antd';
+import { ColumnType, TableProps } from 'antd/lib/table';
+import { FilterValue, SorterResult } from 'antd/lib/table/interface';
+import { Store } from 'rc-field-form/lib/interface';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 import { isUndefined } from 'lodash';
+import { useRouter } from 'next/router';
+import css from 'styled-jsx/css';
+import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
 import { getColumns } from 'modules/Score/data/getColumns';
 import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
 import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
-import { SettingsModal } from 'modules/Score/components/SettingsModal';
-import { Store } from 'rc-field-form/lib/interface';
-import { useLocalStorage } from 'react-use';
-import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
 import useWindowDimensions from 'utils/useWindowDimensions';
-import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
