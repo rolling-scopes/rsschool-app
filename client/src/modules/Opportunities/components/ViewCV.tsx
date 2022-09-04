@@ -1,7 +1,9 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Typography, Modal, Button, notification } from 'antd';
+import React, { useEffect, useCallback, useState, CSSProperties } from 'react';
+import { useCopyToClipboard } from 'react-use';
+import { ExclamationCircleTwoTone, DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { ResumeDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
-import React, { useEffect, useState } from 'react';
 import { useViewData } from '../hooks/useViewData';
 import AboutSection from './AboutSection';
 import { ContactsSection } from './ContactsSection';
@@ -12,24 +14,96 @@ import { NameTitle } from './NameTitle';
 import { PersonalSection } from './PersonalSection';
 import { PublicLink } from './PublicLink';
 
+const { Title, Text, Paragraph } = Typography;
+
 type Props = {
   initialData: ResumeDto;
+  onRemoveConsent?: () => void;
+  switchView?: () => void;
   publicMode?: boolean;
 };
 
-function ViewCV({ initialData, publicMode }: Props) {
+const buttonStyle = { width: 'fit-content', margin: '5px' };
+
+type ActionButtonsProps = {
+  url?: string;
+  switchView?: () => void;
+  onRemoveConsent?: () => void;
+};
+
+const ActionButtons = ({ onRemoveConsent, switchView, url }: ActionButtonsProps) => {
+  const [, copyToClipboard] = useCopyToClipboard();
+  const showDeletionConfirmationModal = useCallback(() => {
+    const textStyle: CSSProperties = { textAlign: 'center' };
+
+    const title = (
+      <Title level={3} style={{ textAlign: 'center' }}>
+        <ExclamationCircleTwoTone twoToneColor="#d60000" /> <Text strong>Deleting CV</Text>
+      </Title>
+    );
+
+    const message =
+      'Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.';
+    const messageRu =
+      'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
+    const confirmationModalContent = (
+      <>
+        <Paragraph style={textStyle}>{message}</Paragraph>
+        <Paragraph style={textStyle}>{messageRu}</Paragraph>
+      </>
+    );
+
+    Modal.confirm({
+      icon: null,
+      title,
+      content: confirmationModalContent,
+      centered: true,
+      maskClosable: true,
+      okText: 'Delete my CV',
+      onOk: () => onRemoveConsent && onRemoveConsent(),
+    });
+  }, [onRemoveConsent]);
+
+  return (
+    <Row justify="center" style={{ paddingTop: '10px' }}>
+      <Button style={buttonStyle} type="primary" htmlType="button" onClick={switchView} icon={<EditOutlined />}>
+        Edit CV
+      </Button>
+      <Button
+        style={buttonStyle}
+        htmlType="button"
+        onClick={() => {
+          if (url) {
+            copyToClipboard(url);
+            notification.success({ message: 'Copied to clipboard' });
+          }
+        }}
+        icon={<ShareAltOutlined />}
+      >
+        Share
+      </Button>
+      <Button style={buttonStyle} htmlType="button" onClick={showDeletionConfirmationModal} icon={<DeleteOutlined />}>
+        Delete
+      </Button>
+    </Row>
+  );
+};
+
+function ViewCV({ initialData, publicMode, onRemoveConsent, switchView }: Props) {
   const { loading, uuid, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ initialData });
   const [url, setUrl] = useState('');
 
   useEffect(() => {
-    if (!publicMode) {
-      setUrl(`${window.location.origin}/cv/${uuid}`);
-    }
+    setUrl(`${window.location.origin}/cv/${uuid}`);
   }, [uuid]);
 
   return (
     <LoadingScreen show={loading}>
-      <PublicLink url={url} />
+      {publicMode ? (
+        <PublicLink url={url} />
+      ) : (
+        <ActionButtons onRemoveConsent={onRemoveConsent} switchView={switchView} url={url} />
+      )}
       {userData && (
         <Row className="print-no-padding" style={{ minHeight: '100vh', padding: 10 }}>
           <Col xl={8} lg={8} md={10} sm={24} xs={24} className="cv-sidebar">

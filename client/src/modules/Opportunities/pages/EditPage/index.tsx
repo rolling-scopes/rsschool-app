@@ -15,17 +15,17 @@ const service = new OpportunitiesApi();
 export function EditPage() {
   const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
-  const [editMode, setEditMode] = useState(false);
-  const [consent, setConsent] = useState(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
 
-  const switchView = async (checked: boolean) => setEditMode(!checked);
+  const switchView = () => setEditMode(!editMode);
 
   useEffect(() => {
     getData();
   }, [editMode]);
 
-  const getData = async () => {
+  const getData = withLoading(async () => {
     const { data } = await service.getConsent();
     if (data.consent) {
       try {
@@ -41,18 +41,17 @@ export function EditPage() {
       }
     }
     setConsent(data.consent);
-  };
+  });
 
   const handleConsentUpdate = withLoading(async (value: boolean) => {
     value ? await service.createConsent() : await service.deleteConsent();
     await getData();
   });
 
-  // const loadData = withLoading(getData);
-
-  // useEffect(() => {
-  //   loadData();
-  // }, [githubId]);
+  const createConsent = async () => {
+    await handleConsentUpdate(true);
+    setEditMode(true);
+  };
 
   return (
     <>
@@ -60,7 +59,7 @@ export function EditPage() {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <LoadingScreen show={loading}>
-        <Header username={githubId} />
+        <Header username={githubId} title="My Resume" />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
             <EditViewResume
@@ -70,7 +69,7 @@ export function EditPage() {
               editMode={editMode || resume == null}
               switchView={switchView}
               onRemoveConsent={() => handleConsentUpdate(false)}
-              onCreateConsent={() => handleConsentUpdate(true)}
+              onCreateConsent={createConsent}
               onUpdateResume={() => getData()}
             />
           </Content>

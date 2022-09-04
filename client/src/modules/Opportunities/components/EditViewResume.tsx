@@ -1,10 +1,8 @@
-import { Divider, Switch, Typography } from 'antd';
 import { ResumeDto } from 'api';
+import { transformCvData } from '../transformers/transformCvData';
 import EditCV from './EditCV';
 import { NoConsentView } from './NoConsentView';
 import ViewCV from './ViewCV';
-
-const { Text } = Typography;
 
 type ResumeProps = {
   githubId: string;
@@ -12,7 +10,7 @@ type ResumeProps = {
   error?: Error;
   data: ResumeDto | null;
   editMode: boolean;
-  switchView: (checked: boolean) => Promise<void>;
+  switchView: () => void;
   onRemoveConsent: () => void;
   onCreateConsent: () => void;
   onUpdateResume?: () => void;
@@ -25,24 +23,26 @@ export function EditViewResume(props: ResumeProps) {
     return <NoConsentView isOwner={true} giveConsent={onCreateConsent} />;
   }
 
+  const { userData, contacts, updatedDate, visibleCourses, courses } = transformCvData(data);
+
   const editing = editMode || data == null;
 
   return (
     <>
-      <Divider className="no-print" plain>
-        <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
-        <Switch
-          style={{ marginLeft: '5px' }}
-          defaultChecked={!editMode}
-          onChange={switchView}
-          checkedChildren="CV view"
-          unCheckedChildren="Edit view"
-        />
-      </Divider>
       {editing ? (
-        <EditCV data={data} onUpdateResume={onUpdateResume} githubId={githubId} onRemoveConsent={onRemoveConsent} />
+        <EditCV
+          courses={courses}
+          userData={userData}
+          contacts={contacts}
+          updatedAt={updatedDate}
+          visibleCourses={visibleCourses}
+          onUpdateResume={onUpdateResume}
+          githubId={githubId}
+          onRemoveConsent={onRemoveConsent}
+          switchView={switchView}
+        />
       ) : (
-        <ViewCV initialData={data} />
+        <ViewCV onRemoveConsent={onRemoveConsent} switchView={switchView} initialData={data} />
       )}
     </>
   );
