@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { DiscordServersService } from './discord-servers.service';
 import { DiscordServerDto, CreateDiscordServerDto, UpdateDiscordServerDto } from './dto';
 
 @Controller('discord-servers')
 @ApiTags('discord-servers')
-@RequiredRoles([Role.Admin])
+@RequiredRoles([Role.Admin, CourseRole.Manager])
 @UseGuards(DefaultGuard, RoleGuard)
 export class DiscordServersController {
   constructor(private readonly service: DiscordServersService) {}
