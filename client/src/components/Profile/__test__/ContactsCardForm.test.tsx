@@ -8,13 +8,13 @@ describe('ContactsCardForm', () => {
     {
       name: 'EPAM E-mail',
       value: 'epamEmail',
-      key: ContactsKeys.epamEmail,
+      key: ContactsKeys.EpamEmail,
       rules: [{ type: 'email', message: 'Email is not valid' }],
     },
     {
       name: 'E-mail',
       value: 'email',
-      key: ContactsKeys.email,
+      key: ContactsKeys.Email,
       rules: [{ type: 'email', message: 'Email is not valid' }],
     },
   ];

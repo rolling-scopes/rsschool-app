@@ -16,7 +16,7 @@ describe('EducationCard', () => {
       expect(result.container).toMatchSnapshot();
     });
 
-    it('if "data" has element with "null" values', () => {
+    it('if "data" has element with "null" value', () => {
       const result = render(
         <EducationCard
           data={[{ graduationYear: null, faculty: null, university: null }]}

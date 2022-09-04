@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
+exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"
@@ -99,7 +99,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
 </div>
 `;
 
-exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
+exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"

@@ -4,7 +4,7 @@ import CommonCardWithSettingsModal from '../CommonCardWithSettingsModal';
 
 describe('CommonCardWithSettingsModal', () => {
   describe('Should render correctly', () => {
-    it('if just basic props is present', () => {
+    it('if just basic props are present', () => {
       const output = render(
         <CommonCardWithSettingsModal
           title="Test"
@@ -18,7 +18,7 @@ describe('CommonCardWithSettingsModal', () => {
       );
       expect(output.container).toMatchSnapshot();
     });
-    it('if is null content passed and editing mode is disabled', () => {
+    it('if null content is passed and editing mode is disabled', () => {
       const output = render(
         <CommonCardWithSettingsModal
           title="Test"

@@ -12,17 +12,13 @@ import ContactsCardForm from './ContactsCardForm';
 
 const { Text } = Typography;
 
-type Connections = Partial<
-  Record<
-    NotificationChannel,
-    | {
-        value: string;
-        enabled: boolean;
-        lastLinkSentAt?: string;
-      }
-    | undefined
-  >
->;
+type ConnectionValue = {
+  value: string;
+  enabled: boolean;
+  lastLinkSentAt?: string;
+};
+
+type Connections = Partial<Record<NotificationChannel, ConnectionValue | undefined>>;
 
 type Props = {
   data: Contacts;
@@ -44,39 +40,39 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
       {
         name: 'EPAM E-mail',
         value: epamEmail,
-        key: ContactsKeys.epamEmail,
+        key: ContactsKeys.EpamEmail,
         rules: [{ type: 'email', message: 'Email is not valid' }],
       },
       {
         name: 'E-mail',
         value: email,
-        key: ContactsKeys.email,
+        key: ContactsKeys.Email,
         rules: [{ type: 'email', message: 'Email is not valid' }],
       },
       {
         name: 'Telegram',
         value: telegram,
-        key: ContactsKeys.telegram,
+        key: ContactsKeys.Telegram,
       },
       {
         name: 'Phone',
         value: phone,
-        key: ContactsKeys.phone,
+        key: ContactsKeys.Phone,
       },
       {
         name: 'Skype',
         value: skype,
-        key: ContactsKeys.skype,
+        key: ContactsKeys.Skype,
       },
       {
         name: 'Notes',
         value: notes,
-        key: ContactsKeys.notes,
+        key: ContactsKeys.Notes,
       },
       {
         name: 'LinkedIn',
         value: linkedIn,
-        key: ContactsKeys.linkedIn,
+        key: ContactsKeys.LinkedIn,
       },
     ],
     [displayValues],
@@ -117,10 +113,10 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
       renderItem={({ name, value, key }: Contact) => (
         <List.Item>
           <Text strong>{name}:</Text>{' '}
-          {key !== ContactsKeys.linkedIn ? (
+          {key !== ContactsKeys.LinkedIn ? (
             <>
               {value}
-              {key === ContactsKeys.email &&
+              {key === ContactsKeys.Email &&
               (!connections.email || !connections.email.enabled) &&
               isEditingModeEnabled ? (
                 <EmailConfirmation connection={connections.email} sendConfirmationEmail={sendConfirmationEmail} />

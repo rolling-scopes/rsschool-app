@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EducationCard Should render correctly if "data" has element with "null" values 1`] = `
+exports[`EducationCard Should render correctly if "data" has element with "null" value 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"

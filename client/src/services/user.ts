@@ -232,14 +232,14 @@ export type ProfileMainCardData = {
   publicCvUrl: string | null;
 };
 
-export enum ContactsKeys {
-  epamEmail = 'epamEmail',
-  email = 'email',
-  telegram = 'telegram',
-  phone = 'phone',
-  skype = 'skype',
-  notes = 'notes',
-  linkedIn = 'linkedIn',
+export const enum ContactsKeys {
+  EpamEmail = 'epamEmail',
+  Email = 'email',
+  Telegram = 'telegram',
+  Phone = 'phone',
+  Skype = 'skype',
+  Notes = 'notes',
+  LinkedIn = 'linkedIn',
 }
 
 export type Contact = {
