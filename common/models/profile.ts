@@ -58,9 +58,9 @@ export interface Contacts {
 }
 
 export interface Discord {
-  id: number;
+  id: string;
   username: string;
-  discriminator: number;
+  discriminator: string;
 }
 
 export interface Student {
