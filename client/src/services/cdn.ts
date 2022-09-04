@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Course } from 'services/models';
 import type { CoursesResponse } from './courses';
 
 const baseURL = process.env.CDN_HOST || '';
@@ -8,8 +9,8 @@ export class CdnService {
 
   public async getCourses() {
     try {
-      const result = await this.client.get<CoursesResponse>(`/api/courses`);
-      return result.data.data;
+      const result = await this.client.get<Course[]>(`/api/v2/courses`);
+      return result.data;
     } catch (e) {
       return [];
     }
