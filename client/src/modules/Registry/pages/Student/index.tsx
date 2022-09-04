@@ -178,9 +178,9 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                       {student?.courses.map(course => (
                         <Select.Option key={course.id} value={course.id}>
                           <CourseIcon course={course} /> {course.name}{' '}
-                          {`${course.discipline?.name ? `${course.discipline.name},` : ''} ${formatMonthFriendly(
+                          {`(${course.discipline?.name ? `${course.discipline.name}, ` : ''}${formatMonthFriendly(
                             course.startDate,
-                          )}`}
+                          )})`}
                         </Select.Option>
                       ))}
                     </Select>
