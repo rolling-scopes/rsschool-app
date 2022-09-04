@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import isEqual from 'lodash/isEqual'
 import { CoreJsInterviewsData } from './CoreJsIviewsCard';
 import { Modal, Table, Typography, Tag } from 'antd';
 

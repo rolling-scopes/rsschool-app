@@ -1,152 +1,157 @@
-import * as React from 'react';
-import isEqual from 'lodash/isEqual';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Card, Typography, Input, Row, Col } from 'antd';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { GithubFilled, EnvironmentFilled, EditOutlined } from '@ant-design/icons';
+import { isEqual } from 'lodash';
+import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
-import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
-import ProfileSettingsDrawer from './ProfileSettingsDrawer';
+import { Location } from 'common/models/profile';
+import ProfileSettingsModal from './ProfileSettingsModal';
+import { UpdateProfileInfoDto } from 'api';
+import { ProfileMainCardData } from 'services/user';
 
 const { Title, Paragraph, Text } = Typography;
 
-import { GithubFilled, EnvironmentFilled, EditOutlined, SettingOutlined } from '@ant-design/icons';
-import { ProfileInfo } from 'services/user';
-
 type Props = {
-  data: ProfileInfo;
+  data: ProfileMainCardData;
   isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
-  onProfileSettingsChange: (event: any, path: string) => void;
+  updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-type State = {
-  isVisibilitySettingsVisible: boolean;
-  isProfileSettingsVisible: boolean;
-};
+const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
+  const { githubId, name, location, publicCvUrl } = data;
+  const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const [displayName, setDisplayName] = useState(name);
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [nameInputValue, setNameInputValue] = useState(displayName);
+  const [locationSelectValue, setLocationSelectValue] = useState(displayLocation);
 
-class MainCard extends React.Component<Props, State> {
-  state: State = {
-    isVisibilitySettingsVisible: false,
-    isProfileSettingsVisible: false,
+  const showProfileSettings = () => {
+    setIsProfileSettingsVisible(true);
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.data.generalInfo?.location.cityName, this.props.data.generalInfo?.location.cityName) ||
-    !isEqual(nextProps.data.generalInfo?.location.countryName, this.props.data.generalInfo?.location.countryName) ||
-    !isEqual(nextProps.data.generalInfo?.name, this.props.data.generalInfo?.name) ||
-    !isEqual(nextProps.permissionsSettings?.isProfileVisible, this.props.permissionsSettings?.isProfileVisible) ||
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
-    !isEqual(nextState, this.state);
-
-  private showVisibilitySettings = () => {
-    this.setState({ isVisibilitySettingsVisible: true });
+  const hideProfileSettings = () => {
+    setIsProfileSettingsVisible(false);
   };
 
-  private hideVisibilitySettings = () => {
-    this.setState({ isVisibilitySettingsVisible: false });
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNameInputValue(e.target.value);
   };
 
-  private showProfileSettings = () => {
-    this.setState({ isProfileSettingsVisible: true });
+  const handleLocationChange = (value: Location | null) => {
+    setLocationSelectValue(value);
   };
 
-  private hideProfileSettings = () => {
-    this.setState({ isProfileSettingsVisible: false });
+  const onSave = async () => {
+    const isNameChanged = displayName !== nameInputValue;
+    const isLocationChanged = !isEqual(displayLocation, locationSelectValue);
+    const updateProfileDto: UpdateProfileInfoDto = {};
+
+    if (isNameChanged) {
+      updateProfileDto.name = nameInputValue;
+    }
+
+    if (isLocationChanged) {
+      updateProfileDto.cityName = locationSelectValue?.cityName ?? null;
+      updateProfileDto.countryName = locationSelectValue?.countryName ?? null;
+    }
+
+    const isUpdated = await updateProfile(updateProfileDto);
+
+    if (isUpdated) {
+      setDisplayName(nameInputValue);
+      setDisplayLocation(locationSelectValue);
+    }
+
+    hideProfileSettings();
   };
-  private filterPermissions = ({ isProfileVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isProfileVisible,
-  });
 
-  render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
-      this.props;
-    const { githubId, name, location } = this.props.data.generalInfo ?? {};
-    const publicCvUrl = this.props.data.publicCvUrl;
-    const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
+  const onCancel = () => {
+    setNameInputValue(displayName);
+    setLocationSelectValue(displayLocation);
+    hideProfileSettings();
+  };
 
-    return (
-      <>
-        <Card
-          actions={
-            isEditingModeEnabled
-              ? [
-                  <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />,
-                  <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />,
-                ]
-              : undefined
-          }
-        >
+  useEffect(() => {
+    const isNameChanged = displayName !== nameInputValue && nameInputValue?.trim();
+    const isLocationChanged = !isEqual(displayLocation, locationSelectValue);
+    const readyToUpdate = isNameChanged || isLocationChanged;
+
+    setIsSaveDisabled(!readyToUpdate);
+  }, [nameInputValue, locationSelectValue, displayName, displayLocation]);
+
+  return (
+    <>
+      <Card style={{ position: 'relative' }}>
+        {isEditingModeEnabled ? (
+          <EditOutlined
+            style={{ position: 'absolute', top: 18, right: 24, fontSize: 16 }}
+            key="main-card-actions-edit"
+            onClick={showProfileSettings}
+          />
+        ) : null}
+        {githubId ? (
           <GithubAvatar size={96} githubId={githubId} style={{ margin: '0 auto 10px', display: 'block' }} />
-          <Title level={1} style={{ fontSize: 24, textAlign: 'center', margin: 0 }}>
-            {name}
-          </Title>
+        ) : null}
+        <Title level={1} style={{ fontSize: 24, textAlign: 'center', margin: 0 }}>
+          {displayName}
+        </Title>
 
-          <Paragraph style={{ textAlign: 'center', marginBottom: 20 }}>
-            <a target="_blank" href={`https://github.com/${githubId}`} style={{ marginLeft: '-14px', fontSize: 16 }}>
+        <Paragraph style={{ textAlign: 'center', marginBottom: 20 }}>
+          {githubId ? (
+            <a target="_blank" href={`https://github.com/${githubId}`} style={{ fontSize: 16 }}>
               <GithubFilled /> {githubId}
             </a>
-          </Paragraph>
-
-          <Paragraph style={{ textAlign: 'center', margin: 0 }}>
-            <span style={{ marginLeft: '-14px' }}>
-              <EnvironmentFilled /> {`${location?.cityName}, ${location?.countryName}`}
-            </span>
-          </Paragraph>
-          {publicCvUrl ? (
-            <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
-              <a target="_blank" href={publicCvUrl}>
-                Public CV
-              </a>
-            </Paragraph>
           ) : null}
-          {isEditingModeEnabled && (
-            <>
-              <PermissionsSettingsDrawer
-                isSettingsVisible={isVisibilitySettingsVisible}
-                hideSettings={this.hideVisibilitySettings}
-                permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
-                onPermissionsSettingsChange={onPermissionsSettingsChange}
-              />
-              <ProfileSettingsDrawer
-                isSettingsVisible={isProfileSettingsVisible}
-                hideSettings={this.hideProfileSettings}
-                content={
-                  <Row>
-                    <Col>
-                      <Row>
-                        <Text strong>Name</Text>
-                      </Row>
-                      <Row style={{ marginTop: 4 }}>
-                        <Input
-                          value={name}
-                          placeholder="Firstname Lastname"
-                          onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.name')}
-                        />
-                      </Row>
+        </Paragraph>
 
-                      <Row style={{ marginTop: 24 }}>
-                        <Text strong>Location</Text>
-                      </Row>
-                      <Row style={{ marginTop: 4 }}>
-                        <LocationSelect
-                          style={{ flex: 1 }}
-                          onChange={location => onProfileSettingsChange(location, 'generalInfo.location')}
-                          location={location ?? null}
-                        />
-                      </Row>
-                    </Col>
+        <Paragraph style={{ textAlign: 'center', margin: 0 }}>
+          {displayLocation ? (
+            <span>
+              <EnvironmentFilled /> {`${displayLocation.cityName}, ${displayLocation.countryName}`}
+            </span>
+          ) : null}
+        </Paragraph>
+        {publicCvUrl ? (
+          <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
+            <a target="_blank" href={publicCvUrl}>
+              Public CV
+            </a>
+          </Paragraph>
+        ) : null}
+        {isEditingModeEnabled && (
+          <ProfileSettingsModal
+            isSettingsVisible={isProfileSettingsVisible}
+            onCancel={onCancel}
+            onSave={onSave}
+            isSaveDisabled={isSaveDisabled}
+            content={
+              <Row>
+                <Col style={{ width: '100%' }}>
+                  <Row>
+                    <Text strong>Name</Text>
                   </Row>
-                }
-              />
-            </>
-          )}
-        </Card>
-      </>
-    );
-  }
-}
+                  <Row style={{ marginTop: 4 }}>
+                    <Input value={nameInputValue} placeholder="First-name Last-name" onChange={handleNameChange} />
+                  </Row>
+                  <Row style={{ marginTop: 24 }}>
+                    <Text strong>Location</Text>
+                  </Row>
+                  <Row style={{ marginTop: 4 }}>
+                    <LocationSelect
+                      style={{ flex: 1 }}
+                      onChange={handleLocationChange}
+                      location={locationSelectValue}
+                    />
+                  </Row>
+                </Col>
+              </Row>
+            }
+          />
+        )}
+      </Card>
+    </>
+  );
+};
 
 export default MainCard;

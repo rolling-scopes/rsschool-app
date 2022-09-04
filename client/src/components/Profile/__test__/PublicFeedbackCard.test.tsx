@@ -75,18 +75,8 @@ describe('PublicFeedbackCard', () => {
     },
   ];
 
-  describe('Should render correctly', () => {
-    it('if is editing mode disabled', () => {
-      const output = render(
-        <PublicFeedbackCard data={data} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
-    it('if is editing mode enabled', () => {
-      const output = render(
-        <PublicFeedbackCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
+  it('should render correctly', () => {
+    const output = render(<PublicFeedbackCard data={data} />);
+    expect(output.container).toMatchSnapshot();
   });
 });

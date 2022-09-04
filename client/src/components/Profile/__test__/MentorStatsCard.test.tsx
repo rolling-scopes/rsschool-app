@@ -29,18 +29,9 @@ describe('MentorStatsCard', () => {
       ],
     },
   ];
-  describe('Should render correctly', () => {
-    it('if is editing mode disabled', () => {
-      const output = render(
-        <MentorStatsCard data={mentorStats} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
-    it('if is editing mode enabled', () => {
-      const output = render(
-        <MentorStatsCard data={mentorStats} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
-      );
-      expect(output.container).toMatchSnapshot();
-    });
+
+  it('should render correctly', () => {
+    const output = render(<MentorStatsCard data={mentorStats} />);
+    expect(output.container).toMatchSnapshot();
   });
 });
