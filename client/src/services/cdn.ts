@@ -1,15 +1,17 @@
 import axios from 'axios';
-import { Course } from 'services/models';
+import { CoursesApi } from 'api';
 import type { CoursesResponse } from './courses';
 
 const baseURL = process.env.CDN_HOST || '';
+
+const coursesService = new CoursesApi();
 
 export class CdnService {
   constructor(private client = axios.create({ baseURL, withCredentials: !!baseURL })) {}
 
   public async getCourses() {
     try {
-      const result = await this.client.get<Course[]>(`/api/v2/courses`);
+      const result = await coursesService.getCourses();
       return result.data;
     } catch (e) {
       return [];
