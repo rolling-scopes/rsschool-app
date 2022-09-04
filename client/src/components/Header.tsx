@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Fragment } from 'react';
 import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
 import {
   EyeOutlined,
@@ -28,7 +29,6 @@ const MENU_ITEMS = [
     icon: <NotificationOutlined />,
     title: 'Notifications',
   },
-
   {
     link: '/cv/edit',
     icon: <SolutionOutlined />,
@@ -48,14 +48,14 @@ export function Header({ title, courseName, username }: Props) {
   const menu = (
     <Menu>
       {MENU_ITEMS.map(({ link, icon, title }, id, arr) => (
-        <>
+        <Fragment key={id}>
           {id === arr.length - 1 ? <Menu.Divider /> : null}
           <Menu.Item key={id} style={currentRoute === link ? menuActiveItemStyle : undefined}>
             <Button type="link" href={link} style={{ textAlign: 'left', width: '100%' }}>
               {icon} {title}
             </Button>
           </Menu.Item>
-        </>
+        </Fragment>
       ))}
     </Menu>
   );
