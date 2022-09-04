@@ -5,5 +5,4 @@ server/dist
 nestjs/dist
 client/src/api/
 client/playwright-report/
-nestjs/src/spec.json
 package-lock.json
