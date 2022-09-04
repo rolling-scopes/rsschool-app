@@ -232,13 +232,13 @@ function EditCV(props: Props) {
                   type="primary"
                   color="green"
                   htmlType="button"
-                  onClick={() => handleSave()}
+                  onClick={handleSave}
                   icon={<SaveOutlined />}
                 >
                   Save CV
                 </Button>
                 <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
-                  Go to View
+                  Cancel
                 </Button>
               </Row>
               <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
