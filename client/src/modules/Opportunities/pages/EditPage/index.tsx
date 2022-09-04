@@ -59,7 +59,7 @@ export function EditPage() {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <LoadingScreen show={loading}>
-        <Header username={githubId} title="My Resume" />
+        <Header username={githubId} title="My CV" />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
             <EditViewResume
