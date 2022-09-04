@@ -16,6 +16,7 @@ import {
   CreateCourseEventDto,
   StudentsScoreApi,
   CreateCourseTaskDtoCheckerEnum,
+  Discord,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -28,10 +29,12 @@ export enum CrossCheckStatus {
 export type Feedback = {
   url?: string;
   comments?: {
+    updatedDate: string;
     comment: string;
     author: {
       name: string;
       githubId: string;
+      discord: Discord | null;
     } | null;
     score: number;
   }[];

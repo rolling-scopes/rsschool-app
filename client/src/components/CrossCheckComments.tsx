@@ -1,43 +1,125 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Col, Comment, Divider, Row, Typography } from 'antd';
+import { Fragment } from 'react';
+import { CDN_AVATARS_URL } from 'configs/cdn';
+import { ScoreIcon } from './Icons/ScoreIcon';
+import { Avatar, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
+import { useLocalStorage } from 'react-use';
+import { Feedback } from 'services/course';
+import { formatDateTime } from 'services/formatter';
 import { GithubUserLink } from 'components/GithubUserLink';
 import PreparedComment from './Forms/PreparedComment';
+import { StudentContacts } from './CrossCheck/StudentContacts';
+
+enum LocalStorage {
+  AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
+}
 
 type Props = {
-  comments: {
-    comment: string;
-    score: number;
-    author: {
-      name: string;
-      githubId: string;
-    } | null;
-  }[];
+  feedback: Feedback | null;
+  maxScore?: number;
 };
 
-export function CrossCheckComments(props: Props) {
-  const { comments } = props;
-  if (!comments || comments.length === 0) {
+export function CrossCheckComments({ feedback, maxScore }: Props) {
+  if (!feedback || !feedback.comments || feedback.comments.length === 0) {
     return null;
   }
-  const style = { margin: 16 };
+
+  const { comments } = feedback;
+  const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
+    LocalStorage.AreStudentContactsVisible,
+  );
+
+  const handleStudentContactsVisibilityChange = () => {
+    setAreStudentContactsHidden(!areStudentContactsVisible);
+  };
+
   return (
     <Col>
-      {comments.map(({ comment, author, score }, i) => (
-        <Row key={i}>
-          <Divider />
+      <Row gutter={8} style={{ margin: '8px 0' }}>
+        <Col>
+          <Typography.Text>Student Contacts</Typography.Text>
+        </Col>
+        <Col>
+          <Switch
+            size={'small'}
+            defaultChecked={areStudentContactsVisible}
+            onChange={handleStudentContactsVisibilityChange}
+          />
+        </Col>
+      </Row>
+
+      {comments.map(({ comment, updatedDate, author, score }, i) => (
+        <Fragment key={i}>
+          <Row>
+            <Divider style={{ margin: '8px 0' }} />
+          </Row>
+
           <Comment
-            style={style}
-            author={author ? <GithubUserLink value={author.githubId} /> : `Student ${i + 1}`}
-            avatar={<UserOutlined />}
+            avatar={
+              <Avatar
+                size={32}
+                src={
+                  areStudentContactsVisible && author
+                    ? `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`
+                    : '/static/svg/badges/ThankYou.svg'
+                }
+              />
+            }
             content={
               <>
-                <Typography.Paragraph strong>Score: {score}</Typography.Paragraph>
-                <PreparedComment text={comment} />
+                <Row>
+                  {areStudentContactsVisible && author ? (
+                    <GithubUserLink value={author.githubId} isUserIconHidden={true} />
+                  ) : (
+                    <Typography.Text>
+                      {'Student'} {i + 1}
+                      {!areStudentContactsVisible && author && ' (hidden)'}
+                    </Typography.Text>
+                  )}
+                </Row>
+
+                <Row>
+                  <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
+                    {formatDateTime(updatedDate)}
+                  </Typography.Text>
+                </Row>
+
+                <Row gutter={4} align="middle">
+                  <Col>
+                    <ScoreIcon maxScore={maxScore} score={score} />
+                  </Col>
+                  <Col>
+                    <Typography.Text>{score}</Typography.Text>
+                  </Col>
+                </Row>
+
+                <Row style={{ marginBottom: 24 }}>
+                  <Typography.Text style={{ fontSize: 12, lineHeight: '12px' }} type="secondary">
+                    maximum score: {maxScore ?? 'unknown'}
+                  </Typography.Text>
+                </Row>
+
+                <Row>
+                  <PreparedComment text={comment} />
+                </Row>
+
+                <Row>{areStudentContactsVisible && author && <StudentContacts discord={author.discord} />}</Row>
               </>
             }
           />
-        </Row>
+        </Fragment>
       ))}
+      <style jsx>{`
+        :global(.ant-comment-avatar) {
+          position: sticky;
+          top: 16px;
+          align-self: start;
+        }
+
+        :global(.ant-comment-avatar img) {
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </Col>
   );
 }
