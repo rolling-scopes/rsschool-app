@@ -177,8 +177,10 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                     <Select placeholder="Select course...">
                       {student?.courses.map(course => (
                         <Select.Option key={course.id} value={course.id}>
-                          <CourseIcon course={course} /> {course.name} ({course.discipline?.name},{' '}
-                          {formatMonthFriendly(course.startDate)})
+                          <CourseIcon course={course} /> {course.name}{' '}
+                          {`(${course.discipline?.name ? `${course.discipline.name}, ` : ''}${formatMonthFriendly(
+                            course.startDate,
+                          )})`}
                         </Select.Option>
                       ))}
                     </Select>
