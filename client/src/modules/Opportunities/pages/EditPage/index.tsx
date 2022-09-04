@@ -1,16 +1,21 @@
-import { Layout } from 'antd';
-import { OpportunitiesApi, ResumeDto } from 'api';
+import React, { useContext, useEffect, useState } from 'react';
+import { Layout, Typography, Modal } from 'antd';
 import { AxiosError } from 'axios';
+import moment from 'moment';
+import Head from 'next/head';
+import { OpportunitiesApi, ResumeDto } from 'api';
+import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
 import { SessionContext } from 'modules/Course/contexts';
 import { EditViewResume } from 'modules/Opportunities/components/EditViewResume';
-import Head from 'next/head';
-import React, { useContext, useEffect, useState } from 'react';
 
 const { Content } = Layout;
+const { Text, Paragraph } = Typography;
+
 const service = new OpportunitiesApi();
+const oldService = new OpportunitiesService();
 
 export function EditPage() {
   const { githubId } = useContext(SessionContext);
@@ -48,8 +53,34 @@ export function EditPage() {
     await getData();
   });
 
-  const createConsent = async () => {
+  const showCreationModal = (validUntilTimestamp: number) => {
+    const validUntil = moment(validUntilTimestamp).format('YY-MM-DD');
+
+    const title = <Text strong>Your CV is now public until {validUntil} (for 1 month period from now on)</Text>;
+    const content = (
+      <>
+        <Paragraph>You need to renew or make changes in your CV every month.</Paragraph>
+        <Paragraph>
+          {' '}
+          Otherwise it will not be shown to other RS App users.{' '}
+          <a href="https://docs.app.rs.school/#/platform/cv" target="_blank" rel="noreferrer">
+            Learn more about CV
+          </a>
+        </Paragraph>
+      </>
+    );
+
+    Modal.info({
+      title,
+      content,
+      okText: 'Got it',
+    });
+  };
+
+  const handleCreateConsent = async () => {
     await handleConsentUpdate(true);
+    const updatedTimestamp = await oldService.updateResume();
+    showCreationModal(updatedTimestamp);
     setEditMode(true);
   };
 
@@ -69,7 +100,7 @@ export function EditPage() {
               editMode={editMode || resume == null}
               switchView={switchView}
               onRemoveConsent={() => handleConsentUpdate(false)}
-              onCreateConsent={createConsent}
+              onCreateConsent={handleCreateConsent}
               onUpdateResume={() => getData()}
             />
           </Content>
