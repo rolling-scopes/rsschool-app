@@ -1575,10 +1575,10 @@ export interface DisciplineDto {
 export interface Discord {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof Discord
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -1587,10 +1587,10 @@ export interface Discord {
     'username': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof Discord
      */
-    'discriminator': number;
+    'discriminator': string;
 }
 /**
  * 
