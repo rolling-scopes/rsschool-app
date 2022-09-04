@@ -15,6 +15,7 @@ export function useViewData({ initialData: resume }: Props) {
   const [courses, setCourses] = useState<ResumeCourseDto[]>([]);
   const [gratitudes, setGratitudes] = useState<GratitudeDto[]>([]);
   const [feedbacks, setFeedbacks] = useState<FeedbackDto[]>([]);
+  const [expires, setExpires] = useState<number | null>(null);
   const [uuid, setUuid] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -48,6 +49,7 @@ export function useViewData({ initialData: resume }: Props) {
       gratitudes,
       feedbacks,
       uuid,
+      expires,
     } = data;
 
     const userData = {
@@ -78,11 +80,12 @@ export function useViewData({ initialData: resume }: Props) {
     setCourses(courses);
     setGratitudes(gratitudes);
     setFeedbacks(feedbacks);
+    setExpires(expires);
     setUuid(uuid);
     setLoading(false);
   }, []);
 
   useAsync(fetchData, []);
 
-  return { userData, loading, contacts, courses, feedbacks, gratitudes, uuid };
+  return { userData, loading, contacts, courses, feedbacks, gratitudes, expires, uuid, setExpires };
 }

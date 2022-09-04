@@ -1,8 +1,18 @@
 import { Col, Row, Typography, Modal, Button, notification } from 'antd';
 import React, { useEffect, useCallback, useState, CSSProperties } from 'react';
 import { useCopyToClipboard } from 'react-use';
-import { ExclamationCircleTwoTone, DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import {
+  ExclamationCircleTwoTone,
+  QuestionCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ShareAltOutlined,
+  CloseCircleTwoTone,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
 import { ResumeDto } from 'api';
+import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useViewData } from '../hooks/useViewData';
 import AboutSection from './AboutSection';
@@ -23,15 +33,18 @@ type Props = {
   publicMode?: boolean;
 };
 
+const oldService = new OpportunitiesService();
+
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 type ActionButtonsProps = {
   url?: string;
   switchView?: () => void;
   onRemoveConsent?: () => void;
+  isExpired: boolean;
 };
 
-const ActionButtons = ({ onRemoveConsent, switchView, url }: ActionButtonsProps) => {
+const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: ActionButtonsProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
   const showDeletionConfirmationModal = useCallback(() => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -70,6 +83,7 @@ const ActionButtons = ({ onRemoveConsent, switchView, url }: ActionButtonsProps)
         Edit CV
       </Button>
       <Button
+        disabled={isExpired}
         style={buttonStyle}
         htmlType="button"
         onClick={() => {
@@ -89,8 +103,148 @@ const ActionButtons = ({ onRemoveConsent, switchView, url }: ActionButtonsProps)
   );
 };
 
+const enum ExpirationState {
+  Expired,
+  NearlyExpired,
+  NotExpired,
+}
+
+const ExpirationTooltip = ({
+  expirationDate,
+  expirationState,
+}: {
+  expirationDate: string;
+  expirationState: ExpirationState;
+}) => {
+  const textStyle = { fontSize: '12px' };
+
+  const showRenewModal = () => {
+    const title =
+      expirationState === ExpirationState.NotExpired ? (
+        <Text strong>Your CV is public until {expirationDate}</Text>
+      ) : expirationState === ExpirationState.NearlyExpired ? (
+        <Text strong>Your CV will expire in 2 days on {expirationDate}</Text>
+      ) : (
+        <Text strong>Your CV is archived</Text>
+      );
+    const content =
+      expirationState === ExpirationState.Expired ? (
+        <Paragraph>You need to renew your resume to make it visible to other users again.</Paragraph>
+      ) : (
+        <Paragraph>
+          If you won't renew your CV until this date, it will get archived and will not be visible to other users of RS
+          App.
+        </Paragraph>
+      );
+    const icon =
+      expirationState === ExpirationState.NotExpired ? (
+        <ExclamationCircleTwoTone twoToneColor="#1890FF" />
+      ) : expirationState === ExpirationState.Expired ? (
+        <CloseCircleTwoTone twoToneColor="#FF4D4F" />
+      ) : (
+        <ExclamationCircleTwoTone twoToneColor="#FFA940" />
+      );
+
+    Modal.confirm({
+      icon,
+      title,
+      content,
+      okText: (
+        <span>
+          <ClockCircleOutlined /> Renew
+        </span>
+      ),
+      maskClosable: true,
+      onOk: async () => {
+        await oldService.updateResume();
+        notification.success({
+          message: 'CV successfully renewed',
+          placement: 'topRight',
+          closeIcon: ' ',
+          duration: 2,
+        });
+      },
+    });
+  };
+
+  const PublicButton = () => (
+    <Button
+      size="small"
+      onClick={showRenewModal}
+      style={{ backgroundColor: '#F6FFED', color: '#52C41A', borderColor: '#B7EB8F' }}
+    >
+      Public
+    </Button>
+  );
+  const ArchivedButton = () => (
+    <Button
+      size="small"
+      onClick={showRenewModal}
+      style={{ backgroundColor: '#FFF1F0', color: '#F5222D', borderColor: '#FFA39E' }}
+    >
+      Archived
+    </Button>
+  );
+
+  const expiredContent = (
+    <>
+      <Text style={{ ...textStyle, color: '#FF4D4F' }}>
+        Expired on {expirationDate} <QuestionCircleOutlined />
+      </Text>{' '}
+      <ArchivedButton />
+    </>
+  );
+
+  const nearlyExpiredContent = (
+    <>
+      <Text style={{ ...textStyle, color: '#FAAD14' }}>
+        Expires on {expirationDate} <QuestionCircleOutlined />
+      </Text>{' '}
+      <PublicButton />
+    </>
+  );
+
+  const notExpiredContent = (
+    <>
+      <Text style={{ ...textStyle, color: '#FFFFFF' }}>
+        Expires on {expirationDate} <QuestionCircleOutlined />
+      </Text>{' '}
+      <PublicButton />
+    </>
+  );
+
+  switch (expirationState) {
+    case ExpirationState.Expired:
+      return expiredContent;
+
+    case ExpirationState.NearlyExpired:
+      return nearlyExpiredContent;
+
+    case ExpirationState.NotExpired:
+      return notExpiredContent;
+
+    default:
+      return null;
+  }
+};
+
+const useExpiration = (expires: string) => {
+  const expirationDate = moment(Number(expires));
+  const expirationDateFormatted = expirationDate.format('YYYY-MM-DD');
+  const diff = expirationDate.diff(Date.now());
+  const daysLeft = moment.duration(diff).asDays();
+  const expirationState =
+    daysLeft < 0 ? ExpirationState.Expired : daysLeft < 2 ? ExpirationState.NearlyExpired : ExpirationState.NotExpired;
+
+  return {
+    expirationDateFormatted,
+    expirationState,
+  };
+};
+
 function ViewCV({ initialData, publicMode, onRemoveConsent, switchView }: Props) {
-  const { loading, uuid, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ initialData });
+  const { loading, uuid, userData, contacts, courses, feedbacks, gratitudes, expires } = useViewData({ initialData });
+  const { expirationState, expirationDateFormatted } = useExpiration(expires as unknown as string);
   const [url, setUrl] = useState('');
 
   useEffect(() => {
@@ -102,11 +256,19 @@ function ViewCV({ initialData, publicMode, onRemoveConsent, switchView }: Props)
       {publicMode ? (
         <PublicLink url={url} />
       ) : (
-        <ActionButtons onRemoveConsent={onRemoveConsent} switchView={switchView} url={url} />
+        <ActionButtons
+          onRemoveConsent={onRemoveConsent}
+          switchView={switchView}
+          url={url}
+          isExpired={expirationState === ExpirationState.Expired}
+        />
       )}
       {userData && (
-        <Row className="print-no-padding" style={{ minHeight: '100vh', padding: 10 }}>
+        <Row className="print-no-padding" style={{ minHeight: '100vh', minWidth: '300px', padding: 10 }}>
           <Col xl={8} lg={8} md={10} sm={24} xs={24} className="cv-sidebar">
+            <Row justify="space-between">
+              <ExpirationTooltip expirationDate={expirationDateFormatted} expirationState={expirationState} />
+            </Row>
             <Row>
               <NameTitle userData={userData} />
             </Row>
