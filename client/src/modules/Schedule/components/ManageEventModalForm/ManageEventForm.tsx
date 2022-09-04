@@ -1,4 +1,5 @@
 import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
+import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { UserSearch } from 'components/UserSearch';
 import { withSession } from 'components/withSession';
 import { TIMEZONES } from 'configs/timezones';
@@ -209,28 +210,7 @@ const getInitialValues = (entityType: string, data: any) => {
       maxScore: 100,
       scoreWeight: 1,
       timeZone,
-      checker: 'mentor',
-    };
-  }
-
-  if (entityType === 'task') {
-    return {
-      ...data,
-      entityType,
-      timeZone,
-      organizerId: data.taskOwner ? data.taskOwner.id : undefined,
-      special: data && data.special ? data.special.split(',') : [],
-      maxScore: (data && data.maxScore) ?? 100,
-      scoreWeight: (data && data.scoreWeight) ?? 1,
-      description: data.description ? data.description : '',
-      checker: data.checker || 'mentor',
-      range:
-        data && data.studentStartDate && data.studentEndDate
-          ? [
-              data.studentStartDate ? moment.tz(data.studentStartDate, timeZone) : null,
-              data.studentEndDate ? moment.tz(data.studentEndDate, timeZone) : null,
-            ]
-          : null,
+      checker: CreateCourseTaskDtoCheckerEnum.Mentor,
     };
   }
 
@@ -242,7 +222,6 @@ const getInitialValues = (entityType: string, data: any) => {
     description: data.event.description ? data.event.description : '',
     entityType,
     timeZone,
-    // organizerId: data.organizer ? data.organizer.githubId : '',
     organizerId: data.organizer ? data.organizer.id : undefined,
     special: data && data.special ? data.special.split(',') : [],
     dateTime: (data && moment(data.dateTime)) || null,

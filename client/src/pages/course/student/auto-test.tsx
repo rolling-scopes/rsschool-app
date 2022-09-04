@@ -1,7 +1,14 @@
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { CoursesTasksApi, CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum, CourseTaskDto } from 'api';
+import {
+  CoursesTasksApi,
+  CourseTaskDetailedDto,
+  CourseTaskDetailedDtoTypeEnum,
+  CourseTaskDto,
+  CourseTaskDtoTypeEnum,
+  CreateCourseTaskDtoCheckerEnum,
+} from 'api';
 import { AxiosError } from 'axios';
 import { CourseTaskSelect } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
@@ -527,7 +534,9 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 }
 
 function filterAutoTestTasks(tasks: CourseTaskDto[]) {
-  return tasks.filter(task => task.checker === 'auto-test' && task.type !== 'test');
+  return tasks.filter(
+    task => task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest && task.type !== CourseTaskDtoTypeEnum.Test,
+  );
 }
 
 function getRandomQuestions(questions: SelfEducationQuestion[]) {

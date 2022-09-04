@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { InputNumber, Form } from 'antd';
-import { CourseTask } from 'services/course';
+import { CourseTaskDto } from 'api';
 
-type Props = { maxScore?: number; courseTask?: Pick<CourseTask, 'id' | 'maxScore'> };
+type Props = { maxScore?: number; courseTask?: Pick<CourseTaskDto, 'id' | 'maxScore'> };
 
 export function ScoreInput({ maxScore, courseTask }: Props) {
   const maxScoreValue = maxScore || (courseTask ? courseTask.maxScore || 100 : undefined);

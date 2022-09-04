@@ -18,14 +18,15 @@ export class CourseTasksService {
     readonly courseTaskRepository: Repository<CourseTask>,
   ) {}
 
-  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished') {
-    return this.courseTaskRepository
-      .createQueryBuilder('courseTask')
-      .innerJoinAndSelect('courseTask.task', 'task')
-      .where({ courseId, disabled: false, ...this.getFindConditionForStatus(status) })
-      .orderBy('courseTask.studentEndDate', 'ASC')
-      .addOrderBy('task.name', 'ASC')
-      .getMany();
+  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false) {
+    return this.courseTaskRepository.find({
+      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status) },
+      relations: ['task', 'taskOwner'],
+      order: {
+        studentEndDate: 'ASC',
+      },
+      cache: useCache ? 60 * 1000 : undefined,
+    });
   }
 
   public getById(courseTaskId: number) {
@@ -99,6 +100,7 @@ export class CourseTasksService {
   }
 
   public updateCourseTask(id: number, courseEvent: Partial<CourseTask>) {
+    console.log(courseEvent);
     return this.courseTaskRepository.update(id, courseEvent);
   }
 

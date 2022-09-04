@@ -1,5 +1,5 @@
 import { Alert, Button, Col, Layout, List, Row } from 'antd';
-import type { AlertDto } from 'api';
+import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
@@ -16,7 +16,6 @@ import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { AlertsService } from 'services/alerts';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
@@ -29,6 +28,7 @@ type Props = {
 };
 
 const mentorRegistryService = new MentorRegistryService();
+const alertService = new AlertsApi();
 
 export function HomePage(props: Props) {
   const plannedCourses = (props.courses || []).filter(course => course.planned && !course.inviteOnly);
@@ -47,7 +47,10 @@ export function HomePage(props: Props) {
   const courseLinks = useMemo(() => getCourseLinks(props.session, activeCourse), [activeCourse]);
   const [approvedCourse] = preselectedCourses.filter(course => !props.session.courses?.[course.id]);
 
-  useAsync(async () => setAlerts(await new AlertsService().getAll()));
+  useAsync(async () => {
+    const { data } = await alertService.getAlerts(true);
+    setAlerts(data);
+  });
 
   useAsync(async () => {
     const mentor = await mentorRegistryService.getMentor().catch(() => null);

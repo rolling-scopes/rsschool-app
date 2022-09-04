@@ -1,6 +1,7 @@
-import { CourseTask, Checker, CrossCheckStatus } from '@entities/courseTask';
+import { CourseTask, Checker, CrossCheckStatus, CourseTaskValidation } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
+import { PersonDto } from 'src/core/dto';
 
 export const typeEnum = [
   'jstask',
@@ -18,10 +19,16 @@ export const typeEnum = [
   'cv:markdown',
 ];
 
+class Validations {
+  @ApiProperty()
+  [CourseTaskValidation.githubIdInUrl]: boolean;
+}
+
 @ApiResponse({})
 export class CourseTaskDto {
   constructor(courseTask: CourseTask) {
     this.id = courseTask.id;
+    this.taskId = courseTask.taskId;
     this.type = courseTask.type;
     this.name = courseTask.task.name;
     this.studentStartDate = (courseTask.studentStartDate as Date)?.toISOString();
@@ -31,14 +38,20 @@ export class CourseTaskDto {
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.checker = courseTask.checker;
     this.crossCheckStatus = courseTask.crossCheckStatus;
-
-    this.taskOwnerId = courseTask.taskOwnerId ?? undefined;
+    this.submitText = courseTask.submitText;
+    this.taskOwner = courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null;
+    this.validations = courseTask.validations;
   }
 
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty()
   id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty()
+  taskId: number;
 
   @IsNotEmpty()
   @ApiProperty({ enum: typeEnum })
@@ -57,13 +70,14 @@ export class CourseTaskDto {
   @ApiProperty()
   studentEndDate: string;
 
+  @ApiProperty({ nullable: true, type: String })
+  crossCheckEndDate: string | null;
+
   @ApiProperty()
   descriptionUrl: string;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsOptional()
-  taskOwnerId?: number;
+  @ApiProperty({ nullable: true, type: PersonDto })
+  taskOwner: PersonDto | null;
 
   @IsNotEmpty()
   @IsNumber()
@@ -78,4 +92,10 @@ export class CourseTaskDto {
   @IsNotEmpty()
   @ApiProperty()
   crossCheckStatus: CrossCheckStatus;
+
+  @ApiProperty({ nullable: true, type: String })
+  submitText: string | null;
+
+  @ApiProperty({ nullable: true, type: Validations })
+  validations: Record<CourseTaskValidation, boolean> | null;
 }

@@ -1,5 +1,6 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Table } from 'antd';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
@@ -8,22 +9,23 @@ import { withSession } from 'components/withSession';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTaskDetails, CrossCheckStatus } from 'services/course';
+import { CourseService, CrossCheckStatus } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
 const { Item, Divider } = Menu;
+const courseTasksApi = new CoursesTasksApi();
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([] as CourseTaskDetails[]);
-  const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
+  const [data, setData] = useState([] as CourseTaskDto[]);
+  const [modalData, setModalData] = useState(null as Partial<CourseTaskDto> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const data = await service.getCourseTasksDetails();
+    const { data } = await courseTasksApi.getCourseTasks(courseId);
     setData(data);
     setLoading(false);
   }, [courseId]);
@@ -35,7 +37,7 @@ function Page(props: CoursePageProps) {
     setModalAction('create');
   };
 
-  const handleEditItem = (record: CourseTaskDetails) => {
+  const handleEditItem = (record: CourseTaskDto) => {
     setModalData(record);
     setModalAction('update');
   };
@@ -46,7 +48,7 @@ function Page(props: CoursePageProps) {
       if (!result) {
         return;
       }
-      await service.deleteCourseTask(id);
+      await courseTasksApi.deleteCourseTask(props.course.id, id);
       await loadData();
     } catch {
       message.error('Failed to delete item. Please try later.');
@@ -55,29 +57,29 @@ function Page(props: CoursePageProps) {
 
   const handleModalSubmit = async (record: any) => {
     if (modalAction === 'update') {
-      await service.updateCourseTask(modalData!.id!, record);
+      await courseTasksApi.updateCourseTask(props.course.id, modalData!.id!, record);
     } else {
       const { ...rest } = record;
-      await service.createCourseTask(rest);
+      await courseTasksApi.createCourseTask(props.course.id, rest);
     }
     await loadData();
 
     setModalData(null);
   };
 
-  const handleTaskDistribute = async (record: CourseTaskDetails) => {
+  const handleTaskDistribute = async (record: CourseTaskDto) => {
     setLoading(true);
     await service.createTaskDistribution(record.id);
     setLoading(false);
   };
 
-  const handleInterviewDistribute = async (record: CourseTaskDetails) => {
+  const handleInterviewDistribute = async (record: CourseTaskDto) => {
     setLoading(true);
     await service.createInterviewDistribution(record.id);
     setLoading(false);
   };
 
-  const getDropdownMenu = (record: CourseTaskDetails) => {
+  const getDropdownMenu = (record: CourseTaskDto) => {
     const hasInterviewDistibute = record.type === 'interview';
     const hasTaskDistibute = record.checker === 'assigned';
     const hasCrossCheck = record.checker === 'crossCheck';
@@ -119,7 +121,7 @@ function Page(props: CoursePageProps) {
     );
   };
 
-  const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
+  const handleCrossCheckDistribution = async (record: CourseTaskDto) => {
     try {
       const {
         data: { crossCheckPairs },
@@ -136,7 +138,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const handleCrossCheckCompletion = async (record: CourseTaskDetails) => {
+  const handleCrossCheckCompletion = async (record: CourseTaskDto) => {
     try {
       await service.createCrossCheckCompletion(record.id);
 
@@ -166,7 +168,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any) {
+function getColumns(getDropdownMenu: (record: CourseTaskDto) => any) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -212,7 +214,7 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any) {
     {
       dataIndex: 'actions',
       width: 80,
-      render: (_: any, record: CourseTaskDetails) => {
+      render: (_: any, record: CourseTaskDto) => {
         return getDropdownMenu(record);
       },
     },

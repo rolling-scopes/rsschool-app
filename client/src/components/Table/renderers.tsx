@@ -21,7 +21,7 @@ export function dateUtcRenderer(value: string | null) {
 }
 
 export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CreateCourseTaskDtoCheckerEnum }) {
-  if (checker !== 'crossCheck') return 'N/A';
+  if (checker !== CreateCourseTaskDtoCheckerEnum.CrossCheck) return 'N/A';
   return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
@@ -29,7 +29,7 @@ export function crossCheckStatusRenderer(
   value: CrossCheckStatus,
   { checker }: { checker: CreateCourseTaskDtoCheckerEnum },
 ) {
-  return checker !== 'crossCheck' ? (
+  return checker !== CreateCourseTaskDtoCheckerEnum.CrossCheck ? (
     'N/A'
   ) : value === CrossCheckStatus.Initial ? (
     'Not distributed'

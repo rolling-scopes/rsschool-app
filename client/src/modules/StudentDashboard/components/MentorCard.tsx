@@ -1,6 +1,6 @@
 import { EnvironmentFilled, GithubFilled } from '@ant-design/icons';
 import { Button, Col, Descriptions, Form, Input, Row, Typography } from 'antd';
-import { CoursesTasksApi, CoursesTaskSolutionsApi, CourseTaskDto } from 'api';
+import { CoursesTasksApi, CoursesTaskSolutionsApi, CourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
 import { AxiosError } from 'axios';
 import { MentorBasic } from 'common/models';
 import { CourseTaskSelect } from 'components/Forms';
@@ -83,7 +83,7 @@ export function MentorCard(props: Props) {
     const { data } = await coursesTasksApi.getCourseTasks(props.courseId);
     const courseTasks = data.filter(
       item =>
-        item.checker === 'mentor' &&
+        item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
         item.type != 'selfeducation' &&
         item.type != 'stage-interview' &&
         item.type != 'interview',
