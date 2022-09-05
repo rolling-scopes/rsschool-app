@@ -1,6 +1,6 @@
 import { CourseTask, Checker, CrossCheckStatus, CourseTaskValidation } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
 
 export const typeEnum = [
@@ -38,6 +38,8 @@ export class CourseTaskDto {
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.checker = courseTask.checker;
     this.crossCheckStatus = courseTask.crossCheckStatus;
+    this.crossCheckEndDate = (courseTask.crossCheckEndDate as Date)?.toISOString() ?? null;
+    this.pairsCount = courseTask.pairsCount;
     this.submitText = courseTask.submitText;
     this.taskOwner = courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null;
     this.validations = courseTask.validations;
@@ -88,6 +90,11 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ type: Number, nullable: true })
+  pairsCount: number | null;
 
   @IsNotEmpty()
   @ApiProperty()

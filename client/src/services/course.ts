@@ -80,7 +80,6 @@ export interface CourseTaskDetails extends CourseTaskDto {
   description: string | null;
   resultsCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
-  pairsCount?: number;
 }
 
 export interface CourseEvent {
