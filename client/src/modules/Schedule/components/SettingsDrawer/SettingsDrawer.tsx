@@ -1,5 +1,5 @@
 import { SettingOutlined } from '@ant-design/icons';
-import { Button, Drawer, Tooltip } from 'antd';
+import { Button, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
@@ -21,9 +21,11 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
   const closeDrawer = () => setOpened(false);
 
   return (
-    <Tooltip title={TITLE} mouseEnterDelay={1} trigger={['hover', 'focus']}>
-      <Button icon={<SettingOutlined />} onClick={openDrawer} />
-      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened} zIndex={1080}>
+    <>
+      <Button icon={<SettingOutlined />} onClick={openDrawer}>
+        Settings
+      </Button>
+      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns
           tags={tags}
@@ -35,7 +37,7 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
         />
         <ChangeTagColors tags={tags} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
       </Drawer>
-    </Tooltip>
+    </>
   );
 }
 

@@ -591,6 +591,35 @@
         "tags": ["courses schedule"]
       }
     },
+    "/courses/{courseId}/icalendar/token": {
+      "get": {
+        "operationId": "getScheduleICalendarToken",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseScheduleTokenDto" } } }
+          }
+        },
+        "tags": ["courses schedule ical"]
+      }
+    },
+    "/courses/{courseId}/icalendar/{token}": {
+      "get": {
+        "operationId": "getScheduleICalendar",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "token", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "timezone", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "string" } } } }
+        },
+        "tags": ["courses schedule ical"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -1912,6 +1941,11 @@
         "type": "object",
         "properties": { "copyFromCourseId": { "type": "number" } },
         "required": ["copyFromCourseId"]
+      },
+      "CourseScheduleTokenDto": {
+        "type": "object",
+        "properties": { "token": { "type": "string" } },
+        "required": ["token"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

@@ -850,6 +850,19 @@ export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[k
 /**
  * 
  * @export
+ * @interface CourseScheduleTokenDto
+ */
+export interface CourseScheduleTokenDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleTokenDto
+     */
+    'token': string;
+}
+/**
+ * 
+ * @export
  * @interface CourseStatsDto
  */
 export interface CourseStatsDto {
@@ -6082,6 +6095,187 @@ export class CoursesScheduleApi extends BaseAPI {
      */
     public getSchedule(courseId: number, options?: AxiosRequestConfig) {
         return CoursesScheduleApiFp(this.configuration).getSchedule(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesScheduleIcalApi - axios parameter creator
+ * @export
+ */
+export const CoursesScheduleIcalApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} token 
+         * @param {string} timezone 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScheduleICalendar: async (courseId: number, token: string, timezone: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getScheduleICalendar', 'courseId', courseId)
+            // verify required parameter 'token' is not null or undefined
+            assertParamExists('getScheduleICalendar', 'token', token)
+            // verify required parameter 'timezone' is not null or undefined
+            assertParamExists('getScheduleICalendar', 'timezone', timezone)
+            const localVarPath = `/courses/{courseId}/icalendar/{token}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"token"}}`, encodeURIComponent(String(token)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (timezone !== undefined) {
+                localVarQueryParameter['timezone'] = timezone;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScheduleICalendarToken: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getScheduleICalendarToken', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/icalendar/token`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesScheduleIcalApi - functional programming interface
+ * @export
+ */
+export const CoursesScheduleIcalApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesScheduleIcalApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} token 
+         * @param {string} timezone 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScheduleICalendar(courseId: number, token: string, timezone: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScheduleICalendar(courseId, token, timezone, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScheduleICalendarToken(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseScheduleTokenDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScheduleICalendarToken(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesScheduleIcalApi - factory interface
+ * @export
+ */
+export const CoursesScheduleIcalApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesScheduleIcalApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} token 
+         * @param {string} timezone 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScheduleICalendar(courseId: number, token: string, timezone: string, options?: any): AxiosPromise<string> {
+            return localVarFp.getScheduleICalendar(courseId, token, timezone, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScheduleICalendarToken(courseId: number, options?: any): AxiosPromise<CourseScheduleTokenDto> {
+            return localVarFp.getScheduleICalendarToken(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesScheduleIcalApi - object-oriented interface
+ * @export
+ * @class CoursesScheduleIcalApi
+ * @extends {BaseAPI}
+ */
+export class CoursesScheduleIcalApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} token 
+     * @param {string} timezone 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesScheduleIcalApi
+     */
+    public getScheduleICalendar(courseId: number, token: string, timezone: string, options?: AxiosRequestConfig) {
+        return CoursesScheduleIcalApiFp(this.configuration).getScheduleICalendar(courseId, token, timezone, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesScheduleIcalApi
+     */
+    public getScheduleICalendarToken(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesScheduleIcalApiFp(this.configuration).getScheduleICalendarToken(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
