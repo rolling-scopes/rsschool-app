@@ -100,7 +100,6 @@ export class CourseTasksService {
   }
 
   public updateCourseTask(id: number, courseEvent: Partial<CourseTask>) {
-    console.log(courseEvent);
     return this.courseTaskRepository.update(id, courseEvent);
   }
 
