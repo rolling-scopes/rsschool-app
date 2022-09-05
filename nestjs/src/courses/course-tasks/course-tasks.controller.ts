@@ -1,32 +1,16 @@
 import { CourseTask } from '@entities/courseTask';
-import {
-  Body,
-  CacheInterceptor,
-  CacheTTL,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
-import { DEFAULT_CACHE_TTL } from '../../constants';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService, Status } from './course-tasks.service';
-import { CourseTaskDto, CourseTaskDetailedDto } from './dto';
+import { CourseTaskDetailedDto, CourseTaskDto } from './dto';
 import { CreateCourseTaskDto } from './dto/create-course-task.dto';
 import { UpdateCourseTaskDto } from './dto/update-course-task.dto';
 
@@ -37,8 +21,6 @@ export class CourseTasksController {
   constructor(private courseTasksService: CourseTasksService) {}
 
   @Get()
-  @CacheTTL(DEFAULT_CACHE_TTL)
-  @UseInterceptors(CacheInterceptor)
   @ApiOkResponse({ type: [CourseTaskDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
@@ -46,10 +28,12 @@ export class CourseTasksController {
   @ApiQuery({ name: 'status', enum: ['started', 'inprogress', 'finished'], required: false })
   @UseGuards(CourseGuard)
   public async getAll(
+    @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Query('status') status?: Status,
   ): Promise<CourseTaskDto[]> {
-    const data = await this.courseTasksService.getAll(courseId, status);
+    const isStudent = !!req.user.courses[courseId]?.studentId;
+    const data = await this.courseTasksService.getAll(courseId, status, isStudent);
     return data.map(item => new CourseTaskDto(item));
   }
 
@@ -98,14 +82,16 @@ export class CourseTasksController {
     } as Partial<CourseTask>);
   }
 
-  @Delete('/:courseEventId')
+  @Delete('/:courseTaskId')
   @ApiOkResponse()
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
-  @ApiParam({ name: 'courseId' })
   @ApiOperation({ operationId: 'deleteCourseTask' })
   @RequiredRoles([Role.Admin, CourseRole.Manager])
-  public async deleteCourseTask(@Param('courseEventId', ParseIntPipe) courseEventId: number) {
-    await this.courseTasksService.disable(courseEventId);
+  public async deleteCourseTask(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    await this.courseTasksService.disable(courseTaskId);
   }
 }

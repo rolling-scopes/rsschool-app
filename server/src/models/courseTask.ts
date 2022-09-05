@@ -30,6 +30,10 @@ export enum CrossCheckStatus {
   Completed = 'completed',
 }
 
+export enum CourseTaskValidation {
+  githubIdInUrl = 'githubIdInUrl',
+}
+
 @Entity()
 export class CourseTask {
   @PrimaryGeneratedColumn() id: number;
@@ -106,12 +110,12 @@ export class CourseTask {
   @Index()
   disabled: boolean;
 
-  @Column({ default: '' })
-  special: string;
-
-  @Column({ nullable: true, type: 'int' })
-  duration: number;
-
-  @Column({ type: 'varchar', default: 'initial' })
+  @Column({ type: 'enum', enum: CrossCheckStatus, default: CrossCheckStatus.Initial })
   crossCheckStatus: CrossCheckStatus;
+
+  @Column({ type: 'varchar', length: 1024, nullable: true })
+  submitText: string | null;
+
+  @Column({ type: 'simple-json', nullable: true })
+  validations: Record<CourseTaskValidation, boolean> | null;
 }

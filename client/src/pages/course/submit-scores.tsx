@@ -35,7 +35,7 @@ export function Page(props: CoursePageProps) {
   useAsync(async () => {
     const { data } = await courseTasksApi.getCourseTasks(courseId);
     setCourseTasks(
-      data.filter(item => item.taskOwnerId === props.session.id || isCourseManager(props.session, courseId)),
+      data.filter(item => item.taskOwner?.id === props.session.id || isCourseManager(props.session, courseId)),
     );
   }, [courseService]);
 

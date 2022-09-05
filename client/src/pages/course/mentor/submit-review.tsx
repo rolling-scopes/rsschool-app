@@ -109,7 +109,7 @@ const hasStudentEndDate = (task: CourseTaskDto) => Boolean(task.studentEndDate);
 const isNotInterview = (task: CourseTaskDto) => task.type !== 'interview';
 
 const isTaskOwner = (userId: number) => (task?: CourseTaskDto) => {
-  return task?.taskOwnerId === userId;
+  return task?.taskOwner?.id === userId;
 };
 
 const isSubmittedByTaskOwner = (userId: number) => (task: CourseTaskDto) =>

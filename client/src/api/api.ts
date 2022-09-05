@@ -880,6 +880,12 @@ export interface CourseTaskDetailedDto {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'taskId': number;
+    /**
+     * 
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
@@ -913,13 +919,19 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
+    'crossCheckEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
     'descriptionUrl': string;
     /**
      * 
-     * @type {number}
+     * @type {PersonDto}
      * @memberof CourseTaskDetailedDto
      */
-    'taskOwnerId': number;
+    'taskOwner': PersonDto | null;
     /**
      * 
      * @type {number}
@@ -938,6 +950,18 @@ export interface CourseTaskDetailedDto {
      * @memberof CourseTaskDetailedDto
      */
     'crossCheckStatus': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
+    'submitText': string | null;
+    /**
+     * 
+     * @type {Validations}
+     * @memberof CourseTaskDetailedDto
+     */
+    'validations': Validations | null;
     /**
      * 
      * @type {object}
@@ -999,6 +1023,12 @@ export interface CourseTaskDto {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
+    'taskId': number;
+    /**
+     * 
      * @type {string}
      * @memberof CourseTaskDto
      */
@@ -1032,13 +1062,19 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
+    'crossCheckEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
     'descriptionUrl': string;
     /**
      * 
-     * @type {number}
+     * @type {PersonDto}
      * @memberof CourseTaskDto
      */
-    'taskOwnerId': number;
+    'taskOwner': PersonDto | null;
     /**
      * 
      * @type {number}
@@ -1057,6 +1093,18 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'crossCheckStatus': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'submitText': string | null;
+    /**
+     * 
+     * @type {Validations}
+     * @memberof CourseTaskDto
+     */
+    'validations': Validations | null;
 }
 
 export const CourseTaskDtoTypeEnum = {
@@ -1245,12 +1293,6 @@ export interface CreateCourseTaskDto {
      * @type {string}
      * @memberof CreateCourseTaskDto
      */
-    'special'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateCourseTaskDto
-     */
     'studentStartDate': string;
     /**
      * 
@@ -1284,10 +1326,16 @@ export interface CreateCourseTaskDto {
     'type': CreateCourseTaskDtoTypeEnum;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof CreateCourseTaskDto
      */
-    'duration'?: number;
+    'submitText': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof CreateCourseTaskDto
+     */
+    'validations': object;
 }
 
 export const CreateCourseTaskDtoCheckerEnum = {
@@ -3402,25 +3450,25 @@ export interface UpdateCourseTaskDto {
      * @type {number}
      * @memberof UpdateCourseTaskDto
      */
-    'duration'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateCourseTaskDto
-     */
     'taskId'?: number;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseTaskDto
      */
-    'special'?: string;
+    'crossCheckEndDate'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseTaskDto
      */
-    'crossCheckEndDate'?: string;
+    'submitText': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateCourseTaskDto
+     */
+    'validations': object;
 }
 
 export const UpdateCourseTaskDtoTypeEnum = {
@@ -3910,6 +3958,19 @@ export interface UserNotificationsDto {
      * @memberof UserNotificationsDto
      */
     'connections': object;
+}
+/**
+ * 
+ * @export
+ * @interface Validations
+ */
+export interface Validations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Validations
+     */
+    'githubIdInUrl': boolean;
 }
 /**
  * 
@@ -5990,19 +6051,19 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
-         * @param {number} courseEventId 
-         * @param {any} courseId 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCourseTask: async (courseEventId: number, courseId: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'courseEventId' is not null or undefined
-            assertParamExists('deleteCourseTask', 'courseEventId', courseEventId)
+        deleteCourseTask: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('deleteCourseTask', 'courseId', courseId)
-            const localVarPath = `/courses/{courseId}/tasks/{courseEventId}`
-                .replace(`{${"courseEventId"}}`, encodeURIComponent(String(courseEventId)))
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('deleteCourseTask', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/tasks/{courseTaskId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6278,13 +6339,13 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} courseEventId 
-         * @param {any} courseId 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteCourseTask(courseEventId: number, courseId: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCourseTask(courseEventId, courseId, options);
+        async deleteCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCourseTask(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -6371,13 +6432,13 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
-         * @param {number} courseEventId 
-         * @param {any} courseId 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCourseTask(courseEventId: number, courseId: any, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteCourseTask(courseEventId, courseId, options).then((request) => request(axios, basePath));
+        deleteCourseTask(courseId: number, courseTaskId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteCourseTask(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6460,14 +6521,14 @@ export class CoursesTasksApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} courseEventId 
-     * @param {any} courseId 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesTasksApi
      */
-    public deleteCourseTask(courseEventId: number, courseId: any, options?: AxiosRequestConfig) {
-        return CoursesTasksApiFp(this.configuration).deleteCourseTask(courseEventId, courseId, options).then((request) => request(this.axios, this.basePath));
+    public deleteCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).deleteCourseTask(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

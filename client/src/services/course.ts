@@ -2,7 +2,6 @@ import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
-import { TaskType } from './task';
 import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
@@ -10,13 +9,11 @@ import { PreferredStudentsLocation } from 'common/enums/mentor';
 import {
   CoursesTasksApi,
   CoursesEventsApi,
-  CreateCourseTaskDto,
-  UpdateCourseTaskDto,
   UpdateCourseEventDto,
   CreateCourseEventDto,
   StudentsScoreApi,
-  CreateCourseTaskDtoCheckerEnum,
   Discord,
+  CourseTaskDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -39,30 +36,6 @@ export type Feedback = {
     score: number;
   }[];
 };
-
-export interface CourseTask {
-  id: number;
-  taskId: number;
-  name: string;
-  maxScore: number | null;
-  scoreWeight: number;
-  type: TaskType;
-  githubRepoName: string;
-  sourceGithubRepoUrl: string;
-  githubPrRequired: boolean;
-  descriptionUrl: string | null;
-  studentStartDate: string;
-  studentEndDate: string;
-  crossCheckEndDate: string | null;
-  crossCheckStatus: CrossCheckStatus;
-  useJury: boolean;
-  checker: CreateCourseTaskDtoCheckerEnum;
-  taskOwnerId: number | null;
-  isVisible?: boolean;
-  special?: string;
-  duration?: number;
-  score?: number | null;
-}
 
 export interface Verification {
   id: number;
@@ -103,7 +76,7 @@ export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
   index: number;
 }
 
-export interface CourseTaskDetails extends CourseTask {
+export interface CourseTaskDetails extends CourseTaskDto {
   description: string | null;
   resultsCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
@@ -171,12 +144,6 @@ export class CourseService {
     this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
   }
 
-  async getCourseTask(taskId: string) {
-    type Response = { data: CourseTaskDetails };
-    const result = await this.axios.get<Response>(`/task/${taskId}`);
-    return result.data.data;
-  }
-
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
     const { data } = await courseTasksApi.getCourseTasks(this.courseId, status);
     return data.filter(t => t.checker === 'crossCheck');
@@ -186,17 +153,6 @@ export class CourseService {
     type Response = { data: CourseTaskDetails[] };
     const result = await this.axios.get<Response>('/tasks/details');
     return result.data.data.sort(sortTasksByEndDate);
-  }
-
-  async getCourseTasksForSchedule() {
-    type Response = { data: CourseTaskDetails[] };
-    const result = await this.axios.get<Response>('/tasks/schedule');
-    return result.data.data.sort(sortTasksByEndDate);
-  }
-
-  async getEventById(id: string) {
-    const result = await this.axios.get<{ data: CourseEvent }>(`/event/${id}`);
-    return result.data.data;
   }
 
   async getCourseEvents() {
@@ -226,14 +182,6 @@ export class CourseService {
         : undefined,
       ...rest,
     });
-  }
-
-  async postMultipleEntities(data: Partial<CourseTask | CourseEvent>, timeZone: string) {
-    const result = await this.axios.post<{ data: Partial<CourseTask | CourseEvent> }>(
-      `/schedule/csv/${timeZone.replace('/', '_')}`,
-      data,
-    );
-    return result.data.data;
   }
 
   async deleteCourseEvent(courseTaskId: number) {
@@ -286,18 +234,6 @@ export class CourseService {
     type Response = { data: MentorDetails[] };
     const result = await this.axios.get<Response>('/mentors/details');
     return result.data.data;
-  }
-
-  async createCourseTask(data: CreateCourseTaskDto) {
-    await courseTasksApi.createCourseTask(this.courseId, data);
-  }
-
-  async updateCourseTask(courseTaskId: number, data: UpdateCourseTaskDto) {
-    await courseTasksApi.updateCourseTask(this.courseId, courseTaskId, data);
-  }
-
-  async deleteCourseTask(courseTaskId: number) {
-    await courseTasksApi.deleteCourseTask(courseTaskId, this.courseId);
   }
 
   async getCourseScore(

@@ -41,7 +41,6 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
     startDate: dateFormatter(item.studentStartDate as string, timeZone, 'YYYY-MM-DD HH:mm'),
     endDate: dateFormatter(item.studentEndDate as string, timeZone, 'YYYY-MM-DD HH:mm'),
     type: item.type || item.task.type,
-    special: item.special,
     name: item.task.name,
     descriptionUrl: item.task.descriptionUrl,
     githubId: item.taskOwner ? item.taskOwner.githubId : null,

@@ -1,5 +1,5 @@
-import { Col, DatePicker, Form, InputNumber, Row, Select } from 'antd';
-import { CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Typography } from 'antd';
+import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
@@ -18,7 +18,7 @@ const { Option } = Select;
 type Props = {
   onCancel: () => void;
   onSubmit: (record: CreateCourseTaskDto) => void;
-  data: Partial<CourseTaskDetails> | null;
+  data: Partial<CourseTaskDto> | null;
 };
 
 const userService = new UserService();
@@ -53,7 +53,7 @@ export function CourseTaskModal(props: Props) {
       if (!input) {
         return false;
       }
-      const task = tasks.find(t => t.id === option?.value);
+      const task: Task | undefined = tasks.find(t => t.id === option?.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
@@ -78,48 +78,56 @@ export function CourseTaskModal(props: Props) {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name="type" label="Task Type">
-        <Select placeholder="Please select type">
-          {TASK_TYPES.map(({ id, name }) => (
-            <Select.Option key={id} value={id}>
-              {name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item name="checker" required label="Checker">
-        <Select placeholder="Please select who checks">
-          <Option value={CreateCourseTaskDtoCheckerEnum.AutoTest}>Auto-Test</Option>
-          <Option value={CreateCourseTaskDtoCheckerEnum.Mentor}>Mentor</Option>
-          <Option value={CreateCourseTaskDtoCheckerEnum.Assigned}>Cross-Mentor</Option>
-          <Option value={CreateCourseTaskDtoCheckerEnum.TaskOwner}>Task Owner</Option>
-          <Option value={CreateCourseTaskDtoCheckerEnum.CrossCheck}>Cross-Check</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item name="taskOwnerId" label="Task Owner">
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name="type" label="Task Type">
+            <Select placeholder="Please select type">
+              {TASK_TYPES.map(({ id, name }) => (
+                <Select.Option key={id} value={id}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="checker" required label="Checker">
+            <Select placeholder="Please select who checks">
+              <Option value={CreateCourseTaskDtoCheckerEnum.AutoTest}>Auto-Test</Option>
+              <Option value={CreateCourseTaskDtoCheckerEnum.Mentor}>Mentor</Option>
+              <Option value={CreateCourseTaskDtoCheckerEnum.Assigned}>Cross-Mentor</Option>
+              <Option value={CreateCourseTaskDtoCheckerEnum.TaskOwner}>Task Owner</Option>
+              <Option value={CreateCourseTaskDtoCheckerEnum.CrossCheck}>Cross-Check</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Form.Item name={['taskOwner', 'id']} label="Task Owner">
         <UserSearch
           placeholder="Please select a task owner"
           defaultValues={data?.taskOwner ? [data.taskOwner] : []}
           searchFn={loadUsers}
         />
       </Form.Item>
-      <Form.Item name="timeZone" label="TimeZone">
-        <Select defaultValue="UTC" placeholder="Please select a timezone">
-          <Option value="UTC">UTC</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name="range"
-        label="Start Date - End Date"
-        rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
-      >
-        <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-      </Form.Item>
-      {changes?.checker === 'crossCheck' ? (
-        <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
-          <DatePicker format="YYYY-MM-DD" />
-        </Form.Item>
-      ) : null}
+      <Row gutter={24}>
+        <Col span={18}>
+          <Form.Item
+            name="range"
+            label="Start Date - End Date"
+            rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
+          >
+            <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <Form.Item name="timeZone" label="TimeZone">
+            <Select defaultValue="UTC" placeholder="Please select a timezone">
+              <Option value="UTC">UTC</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="maxScore" label="Score" rules={[{ required: true, message: 'Please enter max score' }]}>
@@ -136,17 +144,35 @@ export function CourseTaskModal(props: Props) {
           </Form.Item>
         </Col>
       </Row>
-
       {changes?.checker === 'crossCheck' ? (
-        <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
-          <Select placeholder="Cross-Check Pairs Count">
-            {times(10, num => (
-              <Option key={num} value={num + 1}>
-                {num + 1}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <>
+          <Divider style={{ marginTop: 0, marginBottom: 8 }} />
+          <Typography.Title level={4}>Cross-Check</Typography.Title>
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
+                <DatePicker format="YYYY-MM-DD" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
+                <Select placeholder="Cross-Check Pairs Count">
+                  {times(10, num => (
+                    <Option key={num} value={num + 1}>
+                      {num + 1}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="submitText" label="Submit Text">
+            <Input.TextArea placeholder="Free form text to display on submit form" />
+          </Form.Item>
+          <Form.Item name={['validations', 'githubIdInUrl']} valuePropName="checked">
+            <Checkbox>Require Github Username in URL</Checkbox>
+          </Form.Item>
+        </>
       ) : null}
     </ModalForm>
   );
@@ -154,7 +180,6 @@ export function CourseTaskModal(props: Props) {
 
 function createRecord(values: any): CreateCourseTaskDto {
   const [startDate, endDate] = values.range;
-
   const data = {
     studentStartDate: formatTimezoneToUTC(startDate, values.timeZone),
     studentEndDate: formatTimezoneToUTC(endDate, values.timeZone),
@@ -162,14 +187,15 @@ function createRecord(values: any): CreateCourseTaskDto {
       ? formatTimezoneToUTC(values.crossCheckEndDate.set({ hour: 23, minute: 59 }), values.timeZone)
       : undefined,
     taskId: values.taskId,
-    taskOwnerId: values.taskOwnerId,
+    taskOwnerId: values.taskOwner?.id,
     checker: values.checker,
     scoreWeight: values.scoreWeight,
     maxScore: values.maxScore,
     type: values.type,
     pairsCount: values.pairsCount,
+    submitText: values.submitText,
+    validations: values.validations,
   };
-
   return data;
 }
 
