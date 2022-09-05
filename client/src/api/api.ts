@@ -946,6 +946,12 @@ export interface CourseTaskDetailedDto {
     'scoreWeight': number;
     /**
      * 
+     * @type {number}
+     * @memberof CourseTaskDetailedDto
+     */
+    'pairsCount': number | null;
+    /**
+     * 
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
@@ -1087,6 +1093,12 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'scoreWeight': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
+    'pairsCount': number | null;
     /**
      * 
      * @type {string}
