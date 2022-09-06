@@ -9,9 +9,6 @@ import {
 import type { ProfileCourseDto } from 'api';
 
 export interface Course extends ProfileCourseDto {}
-export interface UpdateCourse extends ProfileCourseDto {
-  disciplineId: number | null;
-}
 
 export interface StudentBasic extends CommonStudentBasic {}
 export type { DiscordServer };

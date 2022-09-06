@@ -3333,6 +3333,121 @@ export interface TaskSolutionDto {
 /**
  * 
  * @export
+ * @interface UpdateCourseDto
+ */
+export interface UpdateCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'fullName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'year'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'startDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'endDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'registrationEndDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'locationName'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'discordServerId'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseDto
+     */
+    'completed'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseDto
+     */
+    'planned'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseDto
+     */
+    'inviteOnly'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'certificateIssuer'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseDto
+     */
+    'usePrivateRepositories'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseDto
+     */
+    'personalMentoring'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'logo'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'disciplineId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface UpdateCourseEventDto
  */
 export interface UpdateCourseEventDto {
@@ -5214,6 +5329,45 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {UpdateCourseDto} updateCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCourse: async (courseId: number, updateCourseDto: UpdateCourseDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('updateCourse', 'courseId', courseId)
+            // verify required parameter 'updateCourseDto' is not null or undefined
+            assertParamExists('updateCourse', 'updateCourseDto', updateCourseDto)
+            const localVarPath = `/courses/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateCourseDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -5264,6 +5418,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rejoinCourse(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {UpdateCourseDto} updateCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateCourse(courseId: number, updateCourseDto: UpdateCourseDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCourse(courseId, updateCourseDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -5309,6 +5474,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          */
         rejoinCourse(courseId: number, options?: any): AxiosPromise<void> {
             return localVarFp.rejoinCourse(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {UpdateCourseDto} updateCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCourse(courseId: number, updateCourseDto: UpdateCourseDto, options?: any): AxiosPromise<CourseDto> {
+            return localVarFp.updateCourse(courseId, updateCourseDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5362,6 +5537,18 @@ export class CoursesApi extends BaseAPI {
      */
     public rejoinCourse(courseId: number, options?: AxiosRequestConfig) {
         return CoursesApiFp(this.configuration).rejoinCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {UpdateCourseDto} updateCourseDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public updateCourse(courseId: number, updateCourseDto: UpdateCourseDto, options?: AxiosRequestConfig) {
+        return CoursesApiFp(this.configuration).updateCourse(courseId, updateCourseDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
