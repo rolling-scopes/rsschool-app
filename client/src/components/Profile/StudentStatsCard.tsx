@@ -4,9 +4,6 @@ import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CoursesApi } from 'api';
 import { WarningTwoTone, ReloadOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -15,10 +12,7 @@ const { Text, Paragraph } = Typography;
 
 type Props = {
   data: StudentStats[];
-  isEditingModeEnabled: boolean;
   isProfileOwner: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   username: string;
 };
 
@@ -45,18 +39,9 @@ class StudentStatsCard extends React.Component<Props, State> {
     isExpelConfirmationModalVisible: false,
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(
-      nextProps.permissionsSettings?.isStudentStatsVisible,
-      this.props.permissionsSettings?.isStudentStatsVisible,
-    ) ||
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
     !isEqual(nextState.coursesProgress, this.state.coursesProgress);
-
-  private filterPermissions = ({ isStudentStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isStudentStatsVisible,
-  });
 
   private showStudentStatsModal = (courseIndex: number) => {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
@@ -121,7 +106,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
+    const { isProfileOwner } = this.props;
     const stats = this.props.data;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
     return (
@@ -219,9 +204,6 @@ class StudentStatsCard extends React.Component<Props, State> {
               }}
             />
           }
-          permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
-          isEditingModeEnabled={isEditingModeEnabled}
-          onPermissionsSettingsChange={onPermissionsSettingsChange}
         />
       </>
     );

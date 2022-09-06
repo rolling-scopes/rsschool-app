@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Contacts, EnglishLevel } from '@common/models';
 
 class Location {
@@ -193,16 +193,16 @@ export class ContactsDto implements Contacts {
 
 class Discord {
   @ApiProperty()
-  @IsNumber()
-  id: number;
+  @IsNotEmpty()
+  id: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNotEmpty()
   username: string;
 
   @ApiProperty()
-  @IsNumber()
-  discriminator: number;
+  @IsNotEmpty()
+  discriminator: string;
 }
 
 export class ProfileInfoDto {
@@ -248,6 +248,7 @@ export class UpdateProfileInfoDto {
 
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
+  @IsString()
   aboutMyself?: string | null;
 
   @IsString()
@@ -307,7 +308,7 @@ export class UpdateProfileInfoDto {
 
   @ApiProperty({ required: false, nullable: true, type: Discord })
   @ValidateNested()
-  @Type(() => Discord)
   @IsOptional()
+  @Type(() => Discord)
   discord?: Discord | null;
 }

@@ -126,10 +126,7 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/task/:id', courseGuard, tasks.getCourseTask(logger));
-
   router.get('/tasks/details', courseGuard, tasks.getCourseTasksDetails(logger));
-  router.get('/tasks/schedule', courseGuard, tasks.getCourseTasksDetailsForSchedule(logger));
 
   router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
   router.post('/task/:courseTaskId/distribution', courseManagerGuard, tasks.createCourseTaskDistribution(logger));

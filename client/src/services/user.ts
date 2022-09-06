@@ -12,7 +12,9 @@ import type {
   PublicFeedback,
   StageInterviewDetailedFeedback,
   StudentStats,
+  Location,
 } from 'common/models/profile';
+import { Rule } from 'antd/lib/form';
 
 export interface UserBasic {
   name: string;
@@ -222,3 +224,27 @@ export type ProfileInfo = {
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
 } & ProfileDto;
+
+export type ProfileMainCardData = {
+  location: Location | null;
+  name: string;
+  githubId: string | null;
+  publicCvUrl: string | null;
+};
+
+export const enum ContactsKeys {
+  EpamEmail = 'epamEmail',
+  Email = 'email',
+  Telegram = 'telegram',
+  Phone = 'phone',
+  Skype = 'skype',
+  Notes = 'notes',
+  LinkedIn = 'linkedIn',
+}
+
+export type Contact = {
+  name: string;
+  value: string | null;
+  key: ContactsKeys;
+  rules?: Rule[];
+};

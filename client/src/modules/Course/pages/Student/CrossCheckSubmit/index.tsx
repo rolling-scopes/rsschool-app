@@ -1,5 +1,6 @@
-import { Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
+import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 import { CrossCheckComments } from 'components/CrossCheckComments';
@@ -22,6 +23,22 @@ import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
+
+const createGithubInUrlRule = (githubId: string): Rule => {
+  return {
+    message: 'Your Github Username should be in the URL',
+    required: true,
+    pattern: new RegExp(`${githubId}`, 'i'),
+  };
+};
+
+const createUrlRule = (): Rule => {
+  return {
+    required: true,
+    pattern: urlWithIpPattern,
+    message: 'Please provide a valid link (must start with `http://` or `https://`)',
+  };
+};
 
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
@@ -178,19 +195,18 @@ export function CrossCheckSubmit(props: CoursePageProps) {
               deadlinePassed={submitDeadlinePassed}
             />
             {submitAllowed && (
-              <Form.Item
-                name="url"
-                label="Solution URL"
-                rules={[
-                  {
-                    required: true,
-                    pattern: urlWithIpPattern,
-                    message: 'Please provide a valid link (must start with `http://` or `https://`)',
-                  },
-                ]}
-              >
-                <Input placeholder="link in the form of https://www.google.com" />
-              </Form.Item>
+              <>
+                <Form.Item
+                  name="url"
+                  label="Solution URL"
+                  rules={[createUrlRule()].concat(
+                    task.validations?.githubIdInUrl ? [createGithubInUrlRule(props.session.githubId)] : [],
+                  )}
+                >
+                  <Input placeholder="link in the form of https://www.google.com" />
+                </Form.Item>
+                {task.submitText ? <Alert showIcon message={task.submitText} /> : null}
+              </>
             )}
             {submitAllowed && newCrossCheck && (
               <Form.Item name="review">

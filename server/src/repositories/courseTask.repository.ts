@@ -134,8 +134,6 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
         sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
         type: item.type || (item.task as Task).type,
         pairsCount: item.pairsCount,
-        special: item.special,
-        duration: item.duration,
         score: student && raw ? Number(raw.score) : null,
       };
     });
@@ -184,8 +182,6 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       type: item.type || item.task.type,
       pairsCount: item.pairsCount,
       publicAttributes: item.task.attributes?.public,
-      special: item.special,
-      duration: item.duration,
     }));
 
     return data;

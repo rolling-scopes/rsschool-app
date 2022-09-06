@@ -36,7 +36,6 @@ const router = {
   query: {
     githubId: 'petrov',
   },
-  asPath: '/#edit/',
 } as unknown as NextRouter;
 
 describe('ProfilePage', () => {

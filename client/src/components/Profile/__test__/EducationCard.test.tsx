@@ -1,63 +1,34 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import EducationCard from '../EducationCard';
-import { GeneralInfo } from 'common/models/profile';
 
 describe('EducationCard', () => {
   describe('Should render correctly', () => {
-    const mockData = {
-      educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
-    } as GeneralInfo;
+    const mockData = [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }];
 
     it('if editing mode is disabled', () => {
-      const result = render(
-        <EducationCard
-          data={mockData}
-          isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
+      const result = render(<EducationCard data={mockData} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
       expect(result.container).toMatchSnapshot();
     });
 
     it('if editing mode is enabled', () => {
+      const result = render(<EducationCard data={mockData} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
+      expect(result.container).toMatchSnapshot();
+    });
+
+    it('if "data" has element with "null" value', () => {
       const result = render(
         <EducationCard
-          data={mockData}
+          data={[{ graduationYear: null, faculty: null, university: null }]}
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
+          updateProfile={jest.fn()}
         />,
       );
       expect(result.container).toMatchSnapshot();
     });
 
-    it('if "educationHistory" has element with "null" values', () => {
-      const result = render(
-        <EducationCard
-          data={
-            {
-              educationHistory: [{ graduationYear: null, faculty: null, university: null }],
-            } as GeneralInfo
-          }
-          isEditingModeEnabled={true}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
-      expect(result.container).toMatchSnapshot();
-    });
-
-    it('if "educationHistory" is empty', () => {
-      const result = render(
-        <EducationCard
-          data={{ educationHistory: [] } as GeneralInfo}
-          isEditingModeEnabled={false}
-          onPermissionsSettingsChange={jest.fn()}
-          onProfileSettingsChange={jest.fn()}
-        />,
-      );
+    it('if "data" is empty', () => {
+      const result = render(<EducationCard data={[]} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
       expect(result.container).toMatchSnapshot();
     });
   });

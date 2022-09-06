@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 type GratitudeData = {
   fromGithubId: string;
-  toDiscordId: number | null;
+  toDiscordId: string | null;
   toGithubId: string;
   comment: string;
   gratitudeUrl: string;

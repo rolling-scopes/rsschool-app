@@ -16,29 +16,31 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
         >
           <h2
             class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
+            style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
-            <span
-              aria-label="contacts"
-              class="anticon anticon-contacts"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="contacts"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
+            <span>
+              <span
+                aria-label="contacts"
+                class="anticon anticon-contacts"
+                role="img"
               >
-                <path
-                  d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                />
-              </svg>
+                <svg
+                  aria-hidden="true"
+                  data-icon="contacts"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                  />
+                </svg>
+              </span>
+               
+              Contacts
             </span>
-             
-            Contacts
           </h2>
         </div>
       </div>
@@ -85,29 +87,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 </span>
                  
                 vasya@tut.by
-                <div
-                  class="ant-alert ant-alert-error ant-alert-no-icon"
-                  data-show="true"
-                  role="alert"
-                >
-                  <div
-                    class="ant-alert-content"
-                  >
-                    <div
-                      class="ant-alert-message"
-                    >
-                      <div>
-                        Email is not verified.
-                         
-                        <span
-                          style="text-decoration: underline; cursor: pointer;"
-                        >
-                          Send confirmation email?
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </li>
               <li
                 class="ant-list-item ant-list-item-no-flex"
@@ -209,16 +188,40 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
         >
           <h2
             class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
+            style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
+            <span>
+              <span
+                aria-label="contacts"
+                class="anticon anticon-contacts"
+                role="img"
+              >
+                <svg
+                  aria-hidden="true"
+                  data-icon="contacts"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                  />
+                </svg>
+              </span>
+               
+              Contacts
+            </span>
             <span
-              aria-label="contacts"
-              class="anticon anticon-contacts"
+              aria-label="edit"
+              class="anticon anticon-edit"
               role="img"
+              tabindex="-1"
             >
               <svg
                 aria-hidden="true"
-                data-icon="contacts"
+                data-icon="edit"
                 fill="currentColor"
                 focusable="false"
                 height="1em"
@@ -226,12 +229,10 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 width="1em"
               >
                 <path
-                  d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                  d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
                 />
               </svg>
             </span>
-             
-            Contacts
           </h2>
         </div>
       </div>
@@ -334,71 +335,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           </div>
         </div>
       </div>
-      <div
-        class="ant-drawer ant-drawer-top ant-drawer-inline"
-        style="position: absolute; display: none;"
-        tabindex="-1"
-      >
-        <div
-          aria-hidden="true"
-          data-sentinel="start"
-          style="width: 0px; height: 0px; overflow: hidden; outline: none; position: absolute;"
-          tabindex="0"
-        />
-        <div
-          aria-hidden="true"
-          data-sentinel="end"
-          style="width: 0px; height: 0px; overflow: hidden; outline: none; position: absolute;"
-          tabindex="0"
-        />
-      </div>
-      <style>
-        
-        :global(.ant-drawer-content-wrapper) {
-          height: inherit !important;
-        }
-
-        :global(.ant-drawer-wrapper-body) {
-          overflow: hidden;
-        }
-
-        :global(.ant-drawer-body) {
-          height: calc(100% - 55px);
-          overflow: auto;
-        }
-      
-      </style>
     </div>
-    <ul
-      class="ant-card-actions"
-    >
-      <li
-        style="width: 100%;"
-      >
-        <span>
-          <span
-            aria-label="edit"
-            class="anticon anticon-edit"
-            role="img"
-            tabindex="-1"
-          >
-            <svg
-              aria-hidden="true"
-              data-icon="edit"
-              fill="currentColor"
-              focusable="false"
-              height="1em"
-              viewBox="64 64 896 896"
-              width="1em"
-            >
-              <path
-                d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
-              />
-            </svg>
-          </span>
-        </span>
-      </li>
-    </ul>
   </div>
 </div>
 `;

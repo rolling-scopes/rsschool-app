@@ -8,8 +8,9 @@ import { EntityNotFoundFilter, UnhandledExceptionsFilter } from './core/filters'
 import { ValidationFilter } from './core/validation';
 
 export function setupApp(app: INestApplication) {
+  const logger = app.get(Logger);
   app.enableCors();
-  app.useLogger(app.get(Logger));
+  app.useLogger(logger);
   app.use(cookieParser());
 
   const httpAdapterHost = app.get(HttpAdapterHost);
@@ -25,6 +26,7 @@ export function setupApp(app: INestApplication) {
       forbidNonWhitelisted: true,
       exceptionFactory: (errors: ValidationError[]) => {
         const message = errors.map(error => Object.values(error?.constraints ?? {}).join('\n')).join('\n');
+        logger.warn('Validation Pipe Error', errors);
         return new BadRequestException(message);
       },
     }),

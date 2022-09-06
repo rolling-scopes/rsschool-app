@@ -6,9 +6,6 @@ import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from 'common/models/profile';
-import { ConfigurableProfilePermissions } from 'common/models/profile';
-import { ChangedPermissionsSettings } from 'pages/profile';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Text, Paragraph } = Typography;
@@ -17,9 +14,6 @@ import { MessageOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 type Props = {
   data: PublicFeedback[];
-  isEditingModeEnabled: boolean;
-  permissionsSettings?: ConfigurableProfilePermissions;
-  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
 };
 
 interface State {
@@ -34,10 +28,6 @@ class PublicFeedbackCard extends React.Component<Props, State> {
     badgesCount: {},
     isPublicFeedbackModalVisible: false,
   };
-
-  private filterPermissions = ({ isPublicFeedbackVisible }: Partial<ConfigurableProfilePermissions>) => ({
-    isPublicFeedbackVisible,
-  });
 
   private showPublicFeedbackModal = () => {
     this.setState({ isPublicFeedbackModalVisible: true });
@@ -60,12 +50,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
     return badgesCount;
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(
-      nextProps.permissionsSettings?.isPublicFeedbackVisible,
-      this.props.permissionsSettings?.isPublicFeedbackVisible,
-    ) ||
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !(nextState.isPublicFeedbackModalVisible === this.state.isPublicFeedbackModalVisible) ||
     !isEqual(nextState.badgesCount, this.state.badgesCount);
 
@@ -75,7 +60,6 @@ class PublicFeedbackCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
     const badges = this.props.data;
     const { badgesCount } = this.state;
 
@@ -141,9 +125,6 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               ))}
             </>
           }
-          permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
-          isEditingModeEnabled={isEditingModeEnabled}
-          onPermissionsSettingsChange={onPermissionsSettingsChange}
         />
       </>
     );

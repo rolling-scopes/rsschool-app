@@ -17,7 +17,7 @@ export function SubmittedStatus(props: Props) {
   if (!solution) {
     const deadlinePassedMessage = 'Sumbission deadline has already passed';
     const message = `You haven't submitted solution. ${deadlinePassed ? deadlinePassedMessage : ''}`;
-    return <Alert message={message} type="info" showIcon style={{ marginBottom: 8 }} />;
+    return <Alert message={message} type="warning" showIcon style={{ marginBottom: 8 }} />;
   }
 
   return (

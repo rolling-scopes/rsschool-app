@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] = `
+exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"
@@ -16,32 +16,34 @@ exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] =
         >
           <h2
             class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
+            style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
-            <span
-              aria-label="info-circle"
-              class="anticon anticon-info-circle"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="info-circle"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
+            <span>
+              <span
+                aria-label="info-circle"
+                class="anticon anticon-info-circle"
+                role="img"
               >
-                <path
-                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                />
-                <path
-                  d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
-                />
-              </svg>
+                <svg
+                  aria-hidden="true"
+                  data-icon="info-circle"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                  />
+                  <path
+                    d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                  />
+                </svg>
+              </span>
+               
+              About
             </span>
-             
-            About
           </h2>
         </div>
       </div>
@@ -100,7 +102,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] =
 </div>
 `;
 
-exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
+exports[`AboutCard Should render correctly if "data" is present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"
@@ -116,32 +118,34 @@ exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
         >
           <h2
             class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-            style="font-size: 16px; margin-bottom: 0px;"
+            style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
-            <span
-              aria-label="info-circle"
-              class="anticon anticon-info-circle"
-              role="img"
-            >
-              <svg
-                aria-hidden="true"
-                data-icon="info-circle"
-                fill="currentColor"
-                focusable="false"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
+            <span>
+              <span
+                aria-label="info-circle"
+                class="anticon anticon-info-circle"
+                role="img"
               >
-                <path
-                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                />
-                <path
-                  d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
-                />
-              </svg>
+                <svg
+                  aria-hidden="true"
+                  data-icon="info-circle"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                  />
+                  <path
+                    d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                  />
+                </svg>
+              </span>
+               
+              About
             </span>
-             
-            About
           </h2>
         </div>
       </div>
