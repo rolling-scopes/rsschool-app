@@ -25,7 +25,7 @@ export class CoursesController {
   @ApiForbiddenResponse()
   @ApiOkResponse({ type: CourseDto })
   @UseGuards(DefaultGuard, CourseGuard)
-  public async getCourse(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+  public async getCourse(@Req() _: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
     const data = await this.courseService.getById(courseId);
     return new CourseDto(data);
   }
