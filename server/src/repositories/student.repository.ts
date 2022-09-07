@@ -224,7 +224,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       .addSelect('"course"."name" AS "courseName"')
       .addSelect('"course"."locationName" AS "locationName"')
       .addSelect('"course"."fullName" AS "courseFullName"')
-      .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
+      .addSelect('"course"."completed" AS "isCourseCompleted"')
       .addSelect('"student"."totalScore" AS "totalScore"')
       .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
       .addSelect('"userMentor"."lastName" AS "mentorLastName"')
