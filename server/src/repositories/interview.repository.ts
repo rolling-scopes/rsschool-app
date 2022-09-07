@@ -175,7 +175,7 @@ SELECT
   s_user."lastName" AS "studentLastName",
   s_user."githubId" AS "studentGithubId"
 FROM task_checker AS tc
-LEFT JOIN task_interview_result ON tc."studentId" = task_interview_result."studentId"
+LEFT JOIN task_interview_result ON tc."studentId" = task_interview_result."studentId" AND tc."courseTaskId" = task_interview_result."courseTaskId"
 LEFT JOIN mentor AS m ON m.id = tc."mentorId"
 LEFT JOIN student AS s ON s.id = tc."studentId"
 LEFT JOIN "user" AS m_user ON m_user.id = m."userId"
