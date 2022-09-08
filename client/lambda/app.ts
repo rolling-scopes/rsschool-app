@@ -6,16 +6,16 @@ import next from 'next';
 import slsHttp from 'serverless-http';
 import { ServerResponse, IncomingMessage } from 'http';
 
-const app = next({ dev: false });
+const app = next({ dev: false, port: 8080, hostname: '0.0.0.0' });
 const nextHandler = app.getRequestHandler();
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
 export const handler = slsHttp(
   async (req: IncomingMessage, res: ServerResponse) => {
-    console.info('REQUEST', `[${req.url}, ${req.method}]`);
+    console.info('REQUEST', `[${req.url}, ${req.method}]`, req.headers);
 
-    req.url = `https://pr1723.app.rs.school${req.url?.replace('//', '/')}`;
+    req.url = req.url?.replace('//', '/');
 
     console.info('REQUEST', 'Fixed', `[${req.url}]`);
     await nextHandler(req, res).catch(e => {
