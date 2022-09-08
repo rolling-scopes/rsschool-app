@@ -4,17 +4,19 @@
 */
 import next from 'next';
 import slsHttp from 'serverless-http';
-import { ServerResponse } from 'http';
+import { ServerResponse, IncomingMessage } from 'http';
 
-const app = next({ dev: false, port: 8080, hostname: '0.0.0.0' });
+const app = next({ dev: false });
 const nextHandler = app.getRequestHandler();
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
 export const handler = slsHttp(
-  async (req: any, res: ServerResponse) => {
+  async (req: IncomingMessage, res: ServerResponse) => {
     console.info('REQUEST', `[${req.url}, ${req.method}]`);
-    req.url = req.url.replace('//', '/');
+
+    req.url = `https://pr1723.app.rs.school${req.url?.replace('//', '/')}`;
+
     console.info('REQUEST', 'Fixed', `[${req.url}]`);
     await nextHandler(req, res).catch(e => {
       console.error('REQUEST', `NextJS request failed due to:`, e);
