@@ -406,7 +406,7 @@ export class StudentRepository extends AbstractRepository<Student> {
 
     if (criteria.minTotalScore != null) {
       query = query.andWhere('student.totalScore >= :minTotalScore', {
-        minTotalScore: criteria.minTotalScore ? criteria.minTotalScore : 1,
+        minTotalScore: typeof criteria.minTotalScore === 'number' ? criteria.minTotalScore : 1,
       });
     }
 
