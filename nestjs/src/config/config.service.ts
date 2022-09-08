@@ -35,6 +35,10 @@ type AWSServices = {
   accessKeyId: string;
 };
 
+type Secure = {
+  encryptKey: string;
+};
+
 @Injectable()
 export class ConfigService {
   public readonly auth: AuthConfig;
@@ -42,6 +46,7 @@ export class ConfigService {
   public readonly awsServices: AWSServices;
   public readonly host: string;
   public readonly isDev = process.env.NODE_ENV !== 'production';
+  public readonly secure: Secure;
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -76,6 +81,10 @@ export class ConfigService {
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
+    };
+
+    this.secure = {
+      encryptKey: conf.get('RSSHCOOL_SECURE_ENCRYPT_KEY') ?? 'secret',
     };
 
     this.host = conf.get('RSSHCOOL_HOST') ?? '';

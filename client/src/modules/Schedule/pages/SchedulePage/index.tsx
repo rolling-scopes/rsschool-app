@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import { CourseDto, CoursesScheduleApi, CoursesTasksApi, CreateCourseTaskDto } from 'api';
+import { CourseDto, CoursesScheduleApi, CoursesScheduleIcalApi, CoursesTasksApi, CreateCourseTaskDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
@@ -14,10 +14,13 @@ import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry } from 'react-use';
 
 const courseScheduleApi = new CoursesScheduleApi();
+const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
+
 const courseTaskApi = new CoursesTasksApi();
 
 export function SchedulePage(props: PageProps) {
   const session = useContext(SessionContext);
+  const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
@@ -45,7 +48,11 @@ export function SchedulePage(props: PageProps) {
     loading,
     error,
   } = useAsyncRetry(async () => {
-    const response = await courseScheduleApi.getSchedule(props.course.id);
+    const [response, tokenResponse] = await Promise.all([
+      courseScheduleApi.getSchedule(props.course.id),
+      coursesScheduleIcalApi.getScheduleICalendarToken(props.course.id),
+    ]);
+    setCipher(tokenResponse.data.token);
     return response.data ?? [];
   }, [props.course.id]);
 
@@ -58,7 +65,9 @@ export function SchedulePage(props: PageProps) {
         onCopyFromCourse={() => setCopyModal({})}
         isCourseManager={isManager}
         courseId={props.course.id}
+        courseAlias={props.course.alias}
         settings={settings}
+        calendarToken={cipher}
         tags={eventTags}
         refreshData={refreshData}
       />

@@ -11,7 +11,7 @@ import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
-import { JwtService } from './jwt.service';
+import { JwtService } from '../core/jwt/jwt.service';
 import { lastValueFrom } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';

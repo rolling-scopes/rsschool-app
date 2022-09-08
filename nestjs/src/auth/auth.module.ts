@@ -9,14 +9,15 @@ import { CoursesModule } from '../courses/courses.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtService } from './jwt.service';
 import { BasicStrategy } from './strategies/basic.strategy';
 import { DevStrategy } from './strategies/dev.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { CoreModule } from '../core/core.module';
 
 @Module({
   imports: [
+    CoreModule,
     PassportModule.register({}),
     UsersModule,
     CoursesModule,
@@ -25,7 +26,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     TypeOrmModule.forFeature([LoginState, NotificationUserConnection]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy],
+  providers: [AuthService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy],
   exports: [GithubStrategy, AuthService],
 })
 export class AuthModule {}

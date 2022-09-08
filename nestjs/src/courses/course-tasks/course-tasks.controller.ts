@@ -37,6 +37,21 @@ export class CourseTasksController {
     return data.map(item => new CourseTaskDto(item));
   }
 
+  @Get('/detailed')
+  @ApiOkResponse({ type: [CourseTaskDetailedDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getCourseTasksDetailed' })
+  @UseGuards(CourseGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  public async getAllExtended(
+    @Req() _: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ): Promise<CourseTaskDto[]> {
+    const data = await this.courseTasksService.getAllDetailed(courseId);
+    return data.map(item => new CourseTaskDetailedDto(item));
+  }
+
   @Get('/:courseTaskId')
   @ApiOkResponse({ type: CourseTaskDetailedDto })
   @ApiForbiddenResponse()

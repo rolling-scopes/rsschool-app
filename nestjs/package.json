@@ -8,7 +8,6 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start --watch | pino-pretty -i time,remoteAddress,req,reqId",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -19,8 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "openapi": "npm run openapi:spec && npm run openapi:sdk",
+    "openapi": "npm run openapi:spec && npm run openapi:sdk && npm run openapi:format",
     "openapi:spec": "ts-node --project tsconfig.json ./src/openapi-spec.ts",
+    "openapi:format": "prettier --write src/spec.json",
     "openapi:sdk": "npx openapi-generator-cli generate -i ./src/spec.json -g typescript-axios -o ../client/src/api --additional-properties=supportsES6=true"
   },
   "dependencies": {
@@ -31,8 +31,8 @@
     "@nestjs/core": "9.0.11",
     "@nestjs/mapped-types": "1.1.0",
     "@nestjs/passport": "9.0.0",
-    "@nestjs/schedule": "2.1.0",
     "@nestjs/platform-express": "9.0.11",
+    "@nestjs/schedule": "2.1.0",
     "@nestjs/swagger": "6.0.5",
     "@nestjs/typeorm": "9.0.1",
     "@vendia/serverless-express": "4.10.1",
@@ -44,6 +44,7 @@
     "dotenv": "16.0.1",
     "express": "4.18.1",
     "handlebars": "4.7.7",
+    "ical-generator": "3.5.1",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.21",
     "nanoid": "3.3.4",
