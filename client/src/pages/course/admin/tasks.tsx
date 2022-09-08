@@ -25,7 +25,7 @@ function Page(props: CoursePageProps) {
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const { data } = await courseTasksApi.getCourseTasks(courseId);
+    const { data } = await courseTasksApi.getCourseTasksDetailed(courseId);
     setData(data);
     setLoading(false);
   }, [courseId]);

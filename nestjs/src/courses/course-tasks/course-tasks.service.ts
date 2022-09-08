@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository, FindOptionsWhere } from 'typeorm';
 import * as dayjs from 'dayjs';
+import { TaskResult } from '@entities/taskResult';
+import { TaskInterviewResult } from '@entities/taskInterviewResult';
 
 export enum Status {
   Started = 'started',
@@ -26,6 +28,31 @@ export class CourseTasksService {
         studentEndDate: 'ASC',
       },
       cache: useCache ? 60 * 1000 : undefined,
+    });
+  }
+
+  public async getAllDetailed(courseId: number) {
+    const [courseTasks, courseTaskResults] = await Promise.all([
+      this.getAll(courseId),
+      // get info about task results for each task
+      this.courseTaskRepository
+        .createQueryBuilder('ct')
+        .select('ct.id', 'id')
+        .addSelect('COUNT(r.id)', 'resultsCount')
+        .addSelect('COUNT(i.id)', 'interviewResultsCount')
+        .leftJoin(TaskResult, 'r', 'r.courseTaskId = ct.id')
+        .leftJoin(TaskInterviewResult, 'i', 'i.courseTaskId = ct.id')
+        .where('ct.courseId = :courseId', { courseId })
+        .groupBy('ct.id')
+        .getRawMany<{ id: number; resultsCount: number; interviewResultsCount: number }>(),
+    ]);
+    return courseTasks.map(courseTask => {
+      const result = courseTaskResults.find(({ id }) => id === courseTask.id);
+      return {
+        ...courseTask,
+        resultsCount: Number(result?.resultsCount || 0),
+        interviewResultsCount: Number(result?.interviewResultsCount || 0),
+      };
     });
   }
 
