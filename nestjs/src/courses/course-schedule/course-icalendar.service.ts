@@ -51,7 +51,7 @@ export class CourseICalendarService {
     const result = [];
 
     if (item.organizer) {
-      result.push(`👩 Organizer: ${item.organizer.name} (@${item.organizer.githubId})`);
+      result.push(`🎙 Organizer: ${item.organizer.name} (@${item.organizer.githubId})`);
     }
     if (item.maxScore) {
       result.push(`🏅 Max Score: ${item.maxScore}`);
@@ -59,6 +59,6 @@ export class CourseICalendarService {
     if (item.scoreWeight) {
       result.push(`🔼 Score Weight: ${item.scoreWeight}`);
     }
-    return result.join('\n');
+    return result.join('\n\n');
   }
 }
