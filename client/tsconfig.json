@@ -16,7 +16,7 @@
     "declaration": false,
     "isolatedModules": true,
     "jsx": "preserve",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
@@ -27,6 +27,6 @@
     },
     "incremental": true
   },
-  "include": ["./next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": ["./next-env.d.ts", "./lambda/**/*.ts", "./src/**/*.ts", "./src/**/*.tsx"],
   "exclude": ["./node_modules"]
 }

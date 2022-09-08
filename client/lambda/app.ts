@@ -1,24 +1,31 @@
+/* eslint-disable no-console */
 /*
  Entry file should be in the root and called "app"
 */
 import next from 'next';
-import type { APIGatewayProxyEvent } from 'aws-lambda';
-import { eventToReqRes } from './eventToReqRes';
+import slsHttp from 'serverless-http';
+import { ServerResponse } from 'http';
 
-const app = next({ dev: false });
+const app = next({ dev: false, port: 8080, hostname: '0.0.0.0' });
 const nextHandler = app.getRequestHandler();
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<any> => {
-  // eslint-disable-next-line no-console
-  console.info('event', event);
+const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
-  const { req, res, responsePromise } = eventToReqRes(event);
+export const handler = slsHttp(
+  async (req: any, res: ServerResponse) => {
+    console.info('REQUEST', `[${req.url}, ${req.method}]`);
+    req.url = req.url.replace('//', '/');
+    console.info('REQUEST', 'Fixed', `[${req.url}]`);
+    await nextHandler(req, res).catch(e => {
+      console.error('REQUEST', `NextJS request failed due to:`, e);
 
-  // eslint-disable-next-line no-console
-  console.info('url', req.url);
-
-  // run request processing
-  await nextHandler(req, res);
-
-  return await responsePromise;
-};
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(getErrMessage(e), null, 3));
+    });
+    console.info('REQUEST', `Completed`, `[${res.statusCode}]`);
+  },
+  {
+    // We have separate function for handling images. Assets are handled by S3.
+    binary: true,
+  },
+);

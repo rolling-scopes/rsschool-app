@@ -30,7 +30,7 @@ export class DockerFunction extends Construct {
     const tag = feature;
     const dockerImageFunction = new lambda.DockerImageFunction(this, 'DockerImageFunction', {
       description: tag,
-      code: lambda.DockerImageCode.fromEcr(props.repository, { tag }),
+      code: lambda.DockerImageCode.fromEcr(props.repository, { tagOrDigest: tag }),
       memorySize: memorySize ?? 1024,
       timeout: cdk.Duration.seconds(30),
       environment: variables,
