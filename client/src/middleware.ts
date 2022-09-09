@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
   // eslint-disable-next-line no-console
   console.info('Middleware', request.nextUrl);
