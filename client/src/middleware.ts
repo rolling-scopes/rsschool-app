@@ -6,10 +6,8 @@ export function middleware(request: NextRequest) {
     return;
   }
 
-  console.info({ 'x-domain': request.headers.get('x-domain'), url: request.url });
-
   if (request.headers.get('x-domain') === 'job') {
     const pathname = request.nextUrl.pathname === '/' ? '' : request.nextUrl.pathname;
-    NextResponse.rewrite(new URL(`/job${pathname}${request.nextUrl.search}`, request.url));
+    return NextResponse.rewrite(new URL(`/job${pathname}${request.nextUrl.search}`, request.url));
   }
 }
