@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+/* eslint-disable no-console */
+import { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // eslint-disable-next-line no-console
-  console.info('Middleware', request.nextUrl);
-  if (request.nextUrl.pathname.includes('/course/score')) {
-    return NextResponse.rewrite(new URL(`/course/schedule${request.nextUrl.search}`, request.nextUrl.origin));
-  }
+  console.info('Middleware', 'Next URL', request.nextUrl);
+  console.info('Middleware', 'Headers', request.headers);
 }
 
 export const config = {
