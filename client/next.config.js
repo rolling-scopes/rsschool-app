@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const prodConfig = require('./next.config.prod');
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -19,10 +18,6 @@ const nextConfig = {
           { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
-  webpack: config => {
-    config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
-    return config;
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },

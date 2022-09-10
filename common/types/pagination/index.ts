@@ -4,8 +4,3 @@ export type IPaginationInfo = {
   current: number;
   pageSize: number;
 };
-
-export type Pagination<T> = {
-  content: T[];
-  pagination: IPaginationInfo;
-};

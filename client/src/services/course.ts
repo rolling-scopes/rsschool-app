@@ -2,7 +2,7 @@ import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
-import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 

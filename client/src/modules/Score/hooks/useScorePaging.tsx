@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { CourseService } from 'services/course';
 import { getQueryParams } from 'utils/queryParams-utils';
 import { IPaginationInfo } from 'common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { ScoreOrder, ScoreTableFilters } from './types';
 
 export function useScorePaging(router: NextRouter, courseService: CourseService, activeOnly: boolean) {
   const { ['mentor.githubId']: mentor, cityName, ...currentQuery } = router.query;
