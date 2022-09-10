@@ -1294,6 +1294,40 @@
         },
         "tags": ["gratitudes"]
       }
+    },
+    "/jobs-posts": {
+      "post": {
+        "operationId": "createJobPost",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateJobPostDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobPostDto" } } }
+          }
+        },
+        "tags": ["job-posts"]
+      },
+      "get": {
+        "operationId": "getJobPosts",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/JobPostDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["job-posts"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -2609,6 +2643,44 @@
           }
         },
         "required": ["name", "id"]
+      },
+      "CreateJobPostDto": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "jobType": { "type": "string", "enum": ["remote", "office", "any", "hybrid"] }
+        },
+        "required": ["description", "url", "title", "company", "jobType"]
+      },
+      "JobPostDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "author": { "$ref": "#/components/schemas/PersonDto" },
+          "updatedDate": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "object" },
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "jobType": { "type": "string", "enum": ["remote", "office", "any", "hybrid"] },
+          "status": { "type": "string", "enum": ["draft", "review", "published", "closed", "inactive"] },
+          "publishedDate": { "type": "string", "nullable": true }
+        },
+        "required": [
+          "id",
+          "author",
+          "updatedDate",
+          "description",
+          "url",
+          "title",
+          "company",
+          "jobType",
+          "status",
+          "publishedDate"
+        ]
       }
     }
   }

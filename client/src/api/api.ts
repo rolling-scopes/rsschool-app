@@ -1468,6 +1468,53 @@ export interface CreateGratitudeDto {
 /**
  * 
  * @export
+ * @interface CreateJobPostDto
+ */
+export interface CreateJobPostDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'url': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'company': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'jobType': CreateJobPostDtoJobTypeEnum;
+}
+
+export const CreateJobPostDtoJobTypeEnum = {
+    Remote: 'remote',
+    Office: 'office',
+    Any: 'any',
+    Hybrid: 'hybrid'
+} as const;
+
+export type CreateJobPostDtoJobTypeEnum = typeof CreateJobPostDtoJobTypeEnum[keyof typeof CreateJobPostDtoJobTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -1992,6 +2039,92 @@ export interface InterviewDto {
      */
     'attributes': object;
 }
+/**
+ * 
+ * @export
+ * @interface JobPostDto
+ */
+export interface JobPostDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof JobPostDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof JobPostDto
+     */
+    'author': PersonDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof JobPostDto
+     */
+    'url': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'company': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'jobType': JobPostDtoJobTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'status': JobPostDtoStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'publishedDate': string | null;
+}
+
+export const JobPostDtoJobTypeEnum = {
+    Remote: 'remote',
+    Office: 'office',
+    Any: 'any',
+    Hybrid: 'hybrid'
+} as const;
+
+export type JobPostDtoJobTypeEnum = typeof JobPostDtoJobTypeEnum[keyof typeof JobPostDtoJobTypeEnum];
+export const JobPostDtoStatusEnum = {
+    Draft: 'draft',
+    Review: 'review',
+    Published: 'published',
+    Closed: 'closed',
+    Inactive: 'inactive'
+} as const;
+
+export type JobPostDtoStatusEnum = typeof JobPostDtoStatusEnum[keyof typeof JobPostDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -7812,6 +7945,165 @@ export class GratitudesApi extends BaseAPI {
      */
     public getBadges(courseId: number, options?: AxiosRequestConfig) {
         return GratitudesApiFp(this.configuration).getBadges(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * JobPostsApi - axios parameter creator
+ * @export
+ */
+export const JobPostsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateJobPostDto} createJobPostDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createJobPost: async (createJobPostDto: CreateJobPostDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createJobPostDto' is not null or undefined
+            assertParamExists('createJobPost', 'createJobPostDto', createJobPostDto)
+            const localVarPath = `/jobs-posts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createJobPostDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJobPosts: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/jobs-posts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * JobPostsApi - functional programming interface
+ * @export
+ */
+export const JobPostsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = JobPostsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateJobPostDto} createJobPostDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createJobPost(createJobPostDto: CreateJobPostDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobPostDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createJobPost(createJobPostDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getJobPosts(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<JobPostDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getJobPosts(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * JobPostsApi - factory interface
+ * @export
+ */
+export const JobPostsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = JobPostsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateJobPostDto} createJobPostDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createJobPost(createJobPostDto: CreateJobPostDto, options?: any): AxiosPromise<JobPostDto> {
+            return localVarFp.createJobPost(createJobPostDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJobPosts(options?: any): AxiosPromise<Array<JobPostDto>> {
+            return localVarFp.getJobPosts(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * JobPostsApi - object-oriented interface
+ * @export
+ * @class JobPostsApi
+ * @extends {BaseAPI}
+ */
+export class JobPostsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateJobPostDto} createJobPostDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof JobPostsApi
+     */
+    public createJobPost(createJobPostDto: CreateJobPostDto, options?: AxiosRequestConfig) {
+        return JobPostsApiFp(this.configuration).createJobPost(createJobPostDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof JobPostsApi
+     */
+    public getJobPosts(options?: AxiosRequestConfig) {
+        return JobPostsApiFp(this.configuration).getJobPosts(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

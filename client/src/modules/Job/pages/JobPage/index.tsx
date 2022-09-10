@@ -25,7 +25,7 @@ export function JobPage() {
             title: 'Description',
           },
           {
-            title: 'Date',
+            title: 'Published Date',
           },
         ]}
       />

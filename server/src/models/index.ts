@@ -42,11 +42,13 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { UserGroup } from './userGroup';
+import { JobPost } from './job-post';
+import { JobPostApply } from './job-post-apply';
 
 export * from './session';
 export {
   Alert,
-  AlertType as AlertTypes,
+  AlertType,
   Certificate,
   Course,
   CourseEvent,
@@ -60,6 +62,8 @@ export {
   Feedback,
   InterviewQuestion,
   InterviewQuestionCategory,
+  JobPost,
+  JobPostApply,
   LoginState,
   Mentor,
   MentorRegistry,
@@ -107,6 +111,8 @@ export const models = [
   History,
   InterviewQuestion,
   InterviewQuestionCategory,
+  JobPost,
+  JobPostApply,
   LoginState,
   Mentor,
   MentorRegistry,

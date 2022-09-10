@@ -32,6 +32,7 @@ import { Disciplines1661106736439 } from './1661106736439-Disciplines';
 import { Disciplines1661107174477 } from './1661107174477-Disciplines';
 import { NotificationCategory1661616212488 } from './1661616212488-NotificationCategory';
 import { CourseTask1662275601017 } from './1662275601017-CourseTask';
+import { JobPost1662840290761 } from './1662840290761-JobPost';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -68,4 +69,5 @@ export const migrations = [
   Disciplines1661107174477,
   NotificationCategory1661616212488,
   CourseTask1662275601017,
+  JobPost1662840290761,
 ];
