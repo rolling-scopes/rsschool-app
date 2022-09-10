@@ -13,7 +13,6 @@ const noAccessResponse: GetServerSidePropsResult<any> = {
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
     // eslint-disable-next-line no-console
-    console.info(ctx.req.url, ctx.req.headers);
     const token = getTokenFromContext(ctx);
     if (token == null) {
       return noAccessResponse;

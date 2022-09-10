@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  console.info('Middleware', 'Next URL', request.nextUrl);
-  console.info('Middleware', 'Headers', request.headers);
-}
+  if (request.nextUrl.pathname === '/login') {
+    return;
+  }
 
-export const config = {
-  matcher: '/course/:path*',
-};
+  if (request.headers.get('x-domain') === 'job') {
+    const pathname = request.nextUrl.pathname === '/' ? '' : request.nextUrl.pathname;
+    NextResponse.rewrite(new URL(`/job${pathname}${request.nextUrl.search}`, request.url));
+  }
+}
