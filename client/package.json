@@ -44,6 +44,7 @@
     "use-places-autocomplete": "3.0.0"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^12.3.0",
     "@playwright/test": "1.25.2",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
@@ -59,9 +60,9 @@
     "@typescript-eslint/parser": "5.36.2",
     "dotenv": "16.0.2",
     "eslint": "8.23.0",
-    "jest": "29.0.2",
-    "jest-environment-jsdom": "29.0.2",
-    "jest-junit": "14.0.0",
+    "jest": "29.0.3",
+    "jest-environment-jsdom": "29.0.3",
+    "jest-junit": "14.0.1",
     "typescript": "4.8.3"
   },
   "nextBundleAnalysis": {

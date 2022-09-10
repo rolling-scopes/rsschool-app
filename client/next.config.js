@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const prodConfig = require('./next.config.prod');
 
 const isProd = process.env.NODE_ENV === 'production';

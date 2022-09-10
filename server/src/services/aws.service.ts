@@ -15,7 +15,7 @@ export async function postTaskVerification(data: TaskVerificationEvent[]) {
     if (config.isDevMode) {
       return;
     }
-    return axios.post<any>(`${config.aws.restApiUrl}/task`, data, {
+    return axios.post(`${config.aws.restApiUrl}/task`, data, {
       headers: { 'x-api-key': config.aws.restApiKey },
     });
   } catch (err) {
@@ -29,7 +29,7 @@ export async function uploadFileByGithubId(githubId: string, key: string, data: 
     // if (config.isDevMode) {
     //   return;
     // }
-    const response = await axios.post<any>(`${config.aws.restApiUrl}/upload?key=${key}&githubId=${githubId}`, data, {
+    const response = await axios.post(`${config.aws.restApiUrl}/upload?key=${key}&githubId=${githubId}`, data, {
       headers: { 'x-api-key': config.aws.restApiKey },
     });
     return response.data;

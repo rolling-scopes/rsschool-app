@@ -18,12 +18,12 @@ export class CdnService {
     }
   }
 
-  public async registerStudent(payload: any) {
+  public async registerStudent(payload: unknown) {
     const result = await this.client.post<CoursesResponse>(`/api/registry`, payload);
     return result.data.data;
   }
 
-  public async registerMentor(payload: any) {
+  public async registerMentor(payload: unknown) {
     const result = await this.client.post<CoursesResponse>(`/api/registry/mentor`, payload);
     return result.data.data;
   }

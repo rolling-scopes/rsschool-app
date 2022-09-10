@@ -10,7 +10,7 @@ export function GithubPrInput(props: any) {
       rules={[
         {
           message: 'Please enter a valid Github Pull Request URL',
-          pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
+          pattern: /https:\/\/github.com\/(\w|\d|-)+\/(\w|\d|-)+\/pull\/(\d)+/gi,
         },
       ]}
     >
