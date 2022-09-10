@@ -3,7 +3,7 @@ import { message } from 'antd';
 
 export function useLoading(
   value = false,
-  catchHandler = (_: Error): void => {
+  catchHandler = (): void => {
     message.error('An unexpected error occured. Please try later.');
   },
 ) {
@@ -15,7 +15,7 @@ export function useLoading(
         setLoading(true);
         return await action(...args);
       } catch (e) {
-        catchHandler(e as Error);
+        catchHandler();
       } finally {
         setLoading(false);
       }

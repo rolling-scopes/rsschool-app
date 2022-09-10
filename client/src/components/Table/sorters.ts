@@ -64,8 +64,8 @@ export function dateSorter<T>(field: keyof T) {
     if (b == null) {
       return -1;
     }
-    const aValue = get(a, field, 0);
-    const bValue = get(b, field, 0);
+    const aValue = get(a, field, 0) as number;
+    const bValue = get(b, field, 0) as number;
     return new Date(bValue).getTime() - new Date(aValue).getTime();
   };
 }

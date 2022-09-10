@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import { Layout } from 'antd';
 import { OpportunitiesApi, ResumeDto } from 'api';
 import { AxiosError } from 'axios';

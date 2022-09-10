@@ -1,6 +1,7 @@
 import { message, Alert, Space } from 'antd';
 import { EmailConfirmation } from 'components/Profile/EmailConfirmation';
 import discordIntegration from 'configs/discord-integration';
+import Link from 'next/link';
 import { useCallback } from 'react';
 import { UserService } from 'services/user';
 
@@ -66,7 +67,7 @@ export function Consents({
         <Alert
           message={
             <div>
-              To set up email notification, please enter your email on <a href="/profile#edit">Profile</a> page
+              To set up email notification, please enter your email on <Link href="/profile">Profile</Link> page
             </div>
           }
           type="info"

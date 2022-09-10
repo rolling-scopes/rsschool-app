@@ -422,20 +422,6 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
         </div>
       </div>
     </div>
-    <style>
-      
-        :global(.ant-comment-avatar) {
-          position: sticky;
-          top: 16px;
-          align-self: start;
-        }
-
-        :global(.ant-comment-avatar img) {
-          width: 100%;
-          height: 100%;
-        }
-      
-    </style>
   </div>
 </div>
 `;
@@ -771,10 +757,10 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               class="ant-row"
             >
               <div
-                class="link-user"
+                class="jsx-73373418f14ff6c link-user"
               >
                 <a
-                  class="link-user-profile"
+                  class="jsx-73373418f14ff6c link-user-profile"
                   href="/profile?githubId=torvalds"
                   target="_blank"
                 >
@@ -782,7 +768,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 </a>
                  
                 <a
-                  class="link-user-github"
+                  class="jsx-73373418f14ff6c link-user-github"
                   href="https://github.com/torvalds"
                   target="_blank"
                 >
@@ -806,23 +792,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                     </svg>
                   </span>
                 </a>
-                <style>
-                  
-        .link-user {
-          display: inline-block;
-        }
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-        }
-        .link-user-github {
-          visibility: hidden;
-        }
-        .link-user:hover .link-user-github {
-          visibility: visible;
-        }
-      
-                </style>
               </div>
             </div>
             <div
@@ -996,10 +965,10 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
               class="ant-row"
             >
               <div
-                class="link-user"
+                class="jsx-73373418f14ff6c link-user"
               >
                 <a
-                  class="link-user-profile"
+                  class="jsx-73373418f14ff6c link-user-profile"
                   href="/profile?githubId=torvalds"
                   target="_blank"
                 >
@@ -1007,7 +976,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 </a>
                  
                 <a
-                  class="link-user-github"
+                  class="jsx-73373418f14ff6c link-user-github"
                   href="https://github.com/torvalds"
                   target="_blank"
                 >
@@ -1031,23 +1000,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                     </svg>
                   </span>
                 </a>
-                <style>
-                  
-        .link-user {
-          display: inline-block;
-        }
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-        }
-        .link-user-github {
-          visibility: hidden;
-        }
-        .link-user:hover .link-user-github {
-          visibility: visible;
-        }
-      
-                </style>
               </div>
             </div>
             <div
@@ -1312,20 +1264,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
         </div>
       </div>
     </div>
-    <style>
-      
-        :global(.ant-comment-avatar) {
-          position: sticky;
-          top: 16px;
-          align-self: start;
-        }
-
-        :global(.ant-comment-avatar img) {
-          width: 100%;
-          height: 100%;
-        }
-      
-    </style>
   </div>
 </div>
 `;
@@ -1405,10 +1343,10 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               class="ant-row"
             >
               <div
-                class="link-user"
+                class="jsx-73373418f14ff6c link-user"
               >
                 <a
-                  class="link-user-profile"
+                  class="jsx-73373418f14ff6c link-user-profile"
                   href="/profile?githubId=torvalds"
                   target="_blank"
                 >
@@ -1416,7 +1354,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 </a>
                  
                 <a
-                  class="link-user-github"
+                  class="jsx-73373418f14ff6c link-user-github"
                   href="https://github.com/torvalds"
                   target="_blank"
                 >
@@ -1440,23 +1378,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                     </svg>
                   </span>
                 </a>
-                <style>
-                  
-        .link-user {
-          display: inline-block;
-        }
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-        }
-        .link-user-github {
-          visibility: hidden;
-        }
-        .link-user:hover .link-user-github {
-          visibility: visible;
-        }
-      
-                </style>
               </div>
             </div>
             <div
@@ -1630,10 +1551,10 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               class="ant-row"
             >
               <div
-                class="link-user"
+                class="jsx-73373418f14ff6c link-user"
               >
                 <a
-                  class="link-user-profile"
+                  class="jsx-73373418f14ff6c link-user-profile"
                   href="/profile?githubId=torvalds"
                   target="_blank"
                 >
@@ -1641,7 +1562,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 </a>
                  
                 <a
-                  class="link-user-github"
+                  class="jsx-73373418f14ff6c link-user-github"
                   href="https://github.com/torvalds"
                   target="_blank"
                 >
@@ -1665,23 +1586,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                     </svg>
                   </span>
                 </a>
-                <style>
-                  
-        .link-user {
-          display: inline-block;
-        }
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-        }
-        .link-user-github {
-          visibility: hidden;
-        }
-        .link-user:hover .link-user-github {
-          visibility: visible;
-        }
-      
-                </style>
               </div>
             </div>
             <div
@@ -1855,10 +1759,10 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
               class="ant-row"
             >
               <div
-                class="link-user"
+                class="jsx-73373418f14ff6c link-user"
               >
                 <a
-                  class="link-user-profile"
+                  class="jsx-73373418f14ff6c link-user-profile"
                   href="/profile?githubId=torvalds"
                   target="_blank"
                 >
@@ -1866,7 +1770,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 </a>
                  
                 <a
-                  class="link-user-github"
+                  class="jsx-73373418f14ff6c link-user-github"
                   href="https://github.com/torvalds"
                   target="_blank"
                 >
@@ -1890,23 +1794,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                     </svg>
                   </span>
                 </a>
-                <style>
-                  
-        .link-user {
-          display: inline-block;
-        }
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-        }
-        .link-user-github {
-          visibility: hidden;
-        }
-        .link-user:hover .link-user-github {
-          visibility: visible;
-        }
-      
-                </style>
               </div>
             </div>
             <div
@@ -2043,20 +1930,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
         </div>
       </div>
     </div>
-    <style>
-      
-        :global(.ant-comment-avatar) {
-          position: sticky;
-          top: 16px;
-          align-self: start;
-        }
-
-        :global(.ant-comment-avatar img) {
-          width: 100%;
-          height: 100%;
-        }
-      
-    </style>
   </div>
 </div>
 `;

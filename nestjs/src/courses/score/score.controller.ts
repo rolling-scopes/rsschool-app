@@ -35,14 +35,9 @@ export class ScoreController {
     const page = parseInt(query.current);
     const limit = parseInt(query.pageSize);
 
-    const filter = {
-      ...query,
-      activeOnly: query.activeOnly === 'true',
-    };
-
     const score = await this.scoreService.getScore({
       courseId,
-      filter,
+      filter: query,
       orderBy: { field: orderBy, direction: orderDirection },
       page,
       limit,

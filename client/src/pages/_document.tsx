@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 const enableAnalytics = process.env.NODE_ENV === 'production';
 
@@ -10,7 +11,7 @@ export default class extends Document {
         <Head>
           <link rel="shortcut icon" href="https://rs.school/favicon.ico" />
 
-          {enableAnalytics && <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55428637-3" />}
+          {enableAnalytics && <Script async src="https://www.googletagmanager.com/gtag/js?id=UA-55428637-3" />}
           {enableAnalytics && <script dangerouslySetInnerHTML={{ __html: gaJsCode }} />}
           {enableAnalytics && (
             <script
