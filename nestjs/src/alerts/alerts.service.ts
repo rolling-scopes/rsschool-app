@@ -8,7 +8,7 @@ import { omitBy, isUndefined } from 'lodash';
 
 const fields: (keyof Alert)[] = ['id', 'text', 'type', 'courseId', 'enabled'];
 
-const clean = <T>(alert: T) => omitBy(alert, isUndefined) as Partial<T>;
+const clean = <T extends Record<string, unknown>>(alert: T) => omitBy(alert, isUndefined) as Partial<T>;
 
 @Injectable()
 export class AlertsService {
