@@ -390,11 +390,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getAvailableStudentsForStageInterviews() {
-    const result = await this.axios.get(`/interviews/stage/students/available`);
-    return result.data.data;
-  }
-
   async createInterview(githubId: string, mentorGithubId: string) {
     const result = await this.axios.post(`/interview/stage/interviewer/${mentorGithubId}/student/${githubId}`);
     return result.data.data;

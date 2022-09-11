@@ -58,7 +58,7 @@ function Page(props: CoursePageProps) {
             size="small"
             style={{ marginBottom: 16 }}
             header={renderHeader(name, interview)}
-            footer={renderFooter(name, props.course.alias)}
+            footer={renderFooter(interview.id, props.course.alias)}
             itemLayout="horizontal"
             dataSource={data[name]}
             renderItem={renderItem(props.course, interview, showMentorModal)}
@@ -124,15 +124,19 @@ function isTechnicalScreening(item: { name: string }) {
   return item.name.includes('Technical Screening');
 }
 
-function renderFooter(key: string, courseAlias: string) {
-  return isTechnicalScreening({ name: key }) ? (
+function renderFooter(id: string, courseAlias: string) {
+  return (
     <>
       <div>Do you want to interview more students?</div> Please check
-      <Button size="small" type="link" href={`/course/mentor/interview-students?course=${courseAlias}`}>
+      <Button
+        size="small"
+        type="link"
+        href={`/course/mentor/interview-students?course=${courseAlias}&interviewId=${id}`}
+      >
         Available Students
       </Button>
     </>
-  ) : null;
+  );
 }
 
 function renderHeader(name: string, interview: any) {

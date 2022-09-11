@@ -455,6 +455,48 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{interviewId}": {
+      "get": {
+        "operationId": "getInterview",
+        "summary": "",
+        "parameters": [
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": {} }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/{interviewId}/students/available": {
+      "get": {
+        "operationId": "getAvailableStudents",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/AvailableStudentDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      }
+    },
     "/tasks/notify/changes": {
       "post": {
         "operationId": "notifyTasksDeadlines",
@@ -1801,8 +1843,26 @@
       },
       "InterviewDto": {
         "type": "object",
-        "properties": { "id": { "type": "number" }, "attributes": { "type": "object" } },
-        "required": ["id", "attributes"]
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "name": { "type": "string" },
+          "attributes": { "type": "object" }
+        },
+        "required": ["id", "type", "name", "attributes"]
+      },
+      "AvailableStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "cityName": { "type": "string" },
+          "isGoodCandidate": { "type": "boolean" },
+          "rating": { "type": "number" },
+          "totalScore": { "type": "number" }
+        },
+        "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore"]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",
