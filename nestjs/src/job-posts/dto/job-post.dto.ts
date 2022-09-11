@@ -12,6 +12,8 @@ export class JobPostDto {
     this.description = jobPost.description;
     this.title = jobPost.title;
     this.url = jobPost.url ?? null;
+    this.location = jobPost.location;
+    this.jobType = jobPost.jobType;
   }
 
   @ApiProperty()
@@ -26,7 +28,7 @@ export class JobPostDto {
   @ApiProperty()
   public description: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   public url: string | null;
 
   @ApiProperty()
@@ -34,6 +36,9 @@ export class JobPostDto {
 
   @ApiProperty()
   public company: string;
+
+  @ApiProperty()
+  public location: string;
 
   @ApiProperty({ enum: JobType })
   public jobType: JobType;

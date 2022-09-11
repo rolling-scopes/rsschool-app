@@ -1,8 +1,7 @@
-import { Student } from '@entities/index';
+import { Student, Certificate } from '@entities/index';
 import { JobPost, JobPostStatus } from '@entities/job-post';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Certificate } from 'crypto';
 import { In, Repository } from 'typeorm';
 import { CreateJobPostDto } from './dto';
 

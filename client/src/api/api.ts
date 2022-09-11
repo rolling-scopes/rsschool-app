@@ -1491,6 +1491,18 @@ export interface CreateJobPostDto {
     'title': string;
     /**
      * 
+     * @type {number}
+     * @memberof CreateJobPostDto
+     */
+    'disciplineId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateJobPostDto
+     */
+    'location': string;
+    /**
+     * 
      * @type {string}
      * @memberof CreateJobPostDto
      */
@@ -2071,10 +2083,10 @@ export interface JobPostDto {
     'description': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof JobPostDto
      */
-    'url': object;
+    'url': string | null;
     /**
      * 
      * @type {string}
@@ -2087,6 +2099,12 @@ export interface JobPostDto {
      * @memberof JobPostDto
      */
     'company': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobPostDto
+     */
+    'location': string;
     /**
      * 
      * @type {string}

@@ -21,7 +21,8 @@ export class UnhandledExceptionsFilter implements ExceptionFilter {
   public catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    const normalizedException = exception instanceof HttpException ? exception : new InternalServerErrorException();
+    const normalizedException =
+      exception instanceof HttpException ? exception : new InternalServerErrorException((exception as Error)?.message);
     const status = normalizedException.getStatus();
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR || status === HttpStatus.BAD_REQUEST) {

@@ -2650,10 +2650,12 @@
           "description": { "type": "string" },
           "url": { "type": "string" },
           "title": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "location": { "type": "string" },
           "company": { "type": "string" },
           "jobType": { "type": "string", "enum": ["remote", "office", "any", "hybrid"] }
         },
-        "required": ["description", "url", "title", "company", "jobType"]
+        "required": ["description", "url", "title", "disciplineId", "location", "company", "jobType"]
       },
       "JobPostDto": {
         "type": "object",
@@ -2662,9 +2664,10 @@
           "author": { "$ref": "#/components/schemas/PersonDto" },
           "updatedDate": { "type": "string" },
           "description": { "type": "string" },
-          "url": { "type": "object" },
+          "url": { "type": "string", "nullable": true },
           "title": { "type": "string" },
           "company": { "type": "string" },
+          "location": { "type": "string" },
           "jobType": { "type": "string", "enum": ["remote", "office", "any", "hybrid"] },
           "status": { "type": "string", "enum": ["draft", "review", "published", "closed", "inactive"] },
           "publishedDate": { "type": "string", "nullable": true }
@@ -2677,6 +2680,7 @@
           "url",
           "title",
           "company",
+          "location",
           "jobType",
           "status",
           "publishedDate"
