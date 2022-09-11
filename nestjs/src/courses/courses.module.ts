@@ -19,6 +19,7 @@ import {
   TaskSolution,
   TaskResult,
   TaskInterviewResult,
+  User,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -39,12 +40,19 @@ import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
 import { ScoreController, ScoreService } from './score';
 import { TaskSolutionsController, TaskSolutionsService } from './task-solutions';
-import { CourseScheduleService, CourseScheduleController } from './course-schedule';
+import {
+  CourseScheduleService,
+  CourseScheduleController,
+  CourseICalendarService,
+  CourseICalendarController,
+} from './course-schedule';
+import { CoreModule } from 'src/core/core.module';
 
 @Module({
   imports: [
     CacheModule.register(),
     TypeOrmModule.forFeature([
+      User,
       Student,
       Mentor,
       StageInterview,
@@ -62,6 +70,7 @@ import { CourseScheduleService, CourseScheduleController } from './course-schedu
       TaskResult,
       TaskInterviewResult,
     ]),
+    CoreModule,
     UsersModule,
     UsersNotificationsModule,
   ],
@@ -79,6 +88,7 @@ import { CourseScheduleService, CourseScheduleController } from './course-schedu
     ScoreController,
     TaskSolutionsController,
     CourseScheduleController,
+    CourseICalendarController,
   ],
   providers: [
     CourseTasksService,
@@ -96,6 +106,7 @@ import { CourseScheduleService, CourseScheduleController } from './course-schedu
     ScoreService,
     TaskSolutionsService,
     CourseScheduleService,
+    CourseICalendarService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

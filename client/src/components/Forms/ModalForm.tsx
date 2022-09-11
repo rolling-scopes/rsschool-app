@@ -22,7 +22,7 @@ export function ModalForm(props: Props) {
   return (
     <Modal
       style={{ top: 20 }}
-      visible={true}
+      open={true}
       title={props.title}
       okText={props.okText ?? 'Save'}
       onOk={async e => {

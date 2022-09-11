@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
 import { CourseTasksService, CourseUsersService } from '../courses';
 import { AuthService } from './auth.service';
-import { JwtService } from './jwt.service';
+import { JwtService } from '../core/jwt/jwt.service';
 import { ConfigService } from '../config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/axios';

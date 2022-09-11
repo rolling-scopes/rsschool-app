@@ -20,6 +20,7 @@ export function TimeZone({ timezone, setTimezone }: TimeZoneProps) {
       <Select
         style={{ width: 200 }}
         placeholder="Please select a timezone"
+        filterOption={(input: string, option) => (option?.value as string)?.toLowerCase().includes(input.toLowerCase())}
         defaultValue={timezone}
         onChange={setTimezone}
         showSearch

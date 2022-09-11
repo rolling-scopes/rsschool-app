@@ -31,7 +31,7 @@ export class RsSchoolAppStack extends cdk.Stack {
       apiName: feature,
     });
 
-    const defaultProps = { feature, deployId, httpApi, memorySize: 1024 };
+    const defaultProps = { feature, deployId, httpApi, memorySize: 4096 };
 
     const nextApp = new DockerFunction(this, 'Next', {
       ...defaultProps,

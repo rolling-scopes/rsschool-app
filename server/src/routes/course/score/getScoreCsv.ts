@@ -1,7 +1,6 @@
 import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
 import { parseAsync, transforms } from 'json2csv';
-import { ScoreTableFilters } from '../../../../../common/types/score';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { ScoreService } from '../../../services/score';
@@ -12,7 +11,7 @@ export const getScoreCsv = (_: ILogger) => async (ctx: Router.RouterContext) => 
   const user = ctx.state?.user as IUserSession | undefined;
   const { cityName, ['mentor.githubId']: mentor } = ctx.query;
 
-  const filters: ScoreTableFilters = {
+  const filters = {
     activeOnly: false,
     cityName,
     'mentor.githubId': mentor,

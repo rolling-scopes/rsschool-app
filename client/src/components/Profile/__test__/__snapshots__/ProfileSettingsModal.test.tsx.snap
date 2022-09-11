@@ -61,18 +61,6 @@ exports[`ProfileSettingsModal should render correctly 1`] = `
       <div>
         content
       </div>
-      <style>
-        
-          :global(.ant-modal-content) {
-            height: inherit !important;
-          }
-
-          :global(.ant-modal-body) {
-            max-height: calc(90vh - 80px);
-            overflow-y: auto;
-          }
-        
-      </style>
     </div>
     <div
       class="ant-modal-footer"

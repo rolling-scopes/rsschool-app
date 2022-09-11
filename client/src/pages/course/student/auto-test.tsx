@@ -1,5 +1,6 @@
+import crypto from 'crypto';
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
+import { Button, Checkbox, Col, Form, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import {
   CoursesTasksApi,
@@ -13,6 +14,7 @@ import { AxiosError } from 'axios';
 import { CourseTaskSelect } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { shortDateTimeRenderer } from 'components/Table';
+import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import shuffle from 'lodash/shuffle';
@@ -29,7 +31,6 @@ import {
 } from 'services/course';
 import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
-import { notUrlPattern } from 'services/validators';
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -319,17 +320,20 @@ function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, v
         </>
       );
     case CourseTaskDetailedDtoTypeEnum.Codewars: {
+      const codewarsLink = 'https://www.codewars.com/users/edit';
+      const codewarsUsername = getCodewarsUsername(githubId);
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
           {explanationsSubmissionTasks()}
-          <Form.Item
-            name="codewars"
-            label="Codewars Account"
-            rules={[{ pattern: notUrlPattern, message: 'Enter valid Codewars account' }]}
-          >
-            <Input style={{ maxWidth: 250 }} placeholder="username" />
-          </Form.Item>
+          <Typography.Paragraph>
+            Please use the next username in your{' '}
+            <a href={codewarsLink} target="_blank">
+              codewars profile
+            </a>
+            : <b>{codewarsUsername}</b>
+            <CopyToClipboardButton value={codewarsUsername} />
+          </Typography.Paragraph>
         </>
       );
     }
@@ -556,13 +560,7 @@ function getSubmitData(task: CourseTaskDetailedDto, values: any) {
         });
       break;
     case CourseTaskDetailedDtoTypeEnum.Codewars:
-      if (!values.codewars) {
-        message.error('Enter Account');
-        return null;
-      }
-
       data = {
-        codewars: values.codewars,
         deadline: task.studentEndDate,
       };
       break;
@@ -596,4 +594,9 @@ function explanationsSubmissionTasks() {
       submission will be closed.
     </Typography.Paragraph>
   );
+}
+
+function getCodewarsUsername(githubId: string) {
+  const hash = crypto.createHash('sha1').update(githubId).digest('hex');
+  return `rsschool_${hash.slice(0, 16)}`;
 }

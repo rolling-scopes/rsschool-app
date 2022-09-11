@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { ScoreTableFilters } from '../../../../common/types/score';
 import { Course, CourseTask, Student, TaskResult } from '../../models';
 import { createName } from '../user.service';
 import { getPrimaryUserFields, convertToMentorBasic, getContactsUserFields } from '../course.service';
@@ -21,7 +20,7 @@ const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
-const defaultFilter: ScoreTableFilters = {
+const defaultFilter = {
   activeOnly: false,
   githubId: '',
   name: '',
@@ -222,7 +221,7 @@ export class ScoreService {
     return students;
   }
 
-  public async getStudentsScoreForExport(filters: ScoreTableFilters) {
+  public async getStudentsScoreForExport(filters: any) {
     const students = await this.getStudentsScore(filters);
     const courseTasks = await getCourseTasks(this.courseId);
 

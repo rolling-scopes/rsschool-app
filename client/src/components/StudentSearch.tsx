@@ -11,7 +11,7 @@ export function StudentSearch(props: Props) {
   const { courseId, ...otherProps } = props;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const handleSearch = useCallback(
-    async (value: string, onlyStudentsWithoutMentorShown: boolean = false) =>
+    async (value: string, onlyStudentsWithoutMentorShown = false) =>
       courseService.searchStudents(value, onlyStudentsWithoutMentorShown),
     [courseService],
   );
