@@ -1328,6 +1328,24 @@
         },
         "tags": ["job-posts"]
       }
+    },
+    "/jobs-posts/my": {
+      "get": {
+        "operationId": "getMyJobPosts",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/JobPostDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["job-posts"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },

@@ -44,6 +44,15 @@ export class JobPostsService {
     return jobPosts;
   }
 
+  public async getMy(userId: number) {
+    const jobPosts = await this.repository.find({
+      where: {
+        authorId: userId,
+      },
+    });
+    return jobPosts;
+  }
+
   public async getById(id: number) {
     return this.repository.findOneBy({ id });
   }

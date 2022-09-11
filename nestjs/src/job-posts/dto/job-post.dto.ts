@@ -14,6 +14,7 @@ export class JobPostDto {
     this.url = jobPost.url ?? null;
     this.location = jobPost.location;
     this.jobType = jobPost.jobType;
+    this.status = jobPost.status;
   }
 
   @ApiProperty()

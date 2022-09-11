@@ -21,7 +21,15 @@ export class JobPostsController {
   @Get('/')
   @ApiOperation({ operationId: 'getJobPosts' })
   @ApiOkResponse({ type: [JobPostDto] })
-  public async getAll(@Req() request: CurrentRequest) {
+  public async getAvailable(@Req() request: CurrentRequest) {
+    const items = await this.service.getAvailable(request.user.id);
+    return items.map(item => new JobPostDto(item));
+  }
+
+  @Get('/my')
+  @ApiOperation({ operationId: 'getMyJobPosts' })
+  @ApiOkResponse({ type: [JobPostDto] })
+  public async getMY(@Req() request: CurrentRequest) {
     const items = await this.service.getAvailable(request.user.id);
     return items.map(item => new JobPostDto(item));
   }

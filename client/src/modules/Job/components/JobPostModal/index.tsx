@@ -83,7 +83,7 @@ export function JobPostModal(props: Props) {
         </Col>
         <Col span={12}>
           <Form.Item name="location" rules={[{ min: 3 }]} required label="Location">
-            <Input placeholder='Job Location' />
+            <Input placeholder="Job Location" />
           </Form.Item>
         </Col>
       </Row>

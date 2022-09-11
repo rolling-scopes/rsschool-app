@@ -36,6 +36,7 @@ export type AuthDetails = {
   students: { courseId: number; id: number }[];
   mentors: { courseId: number; id: number }[];
   courseUsers: CourseUser[];
+  jobPostsCount: number;
 };
 
 @Injectable()
@@ -102,7 +103,7 @@ export class AuthService {
       this.courseTaskService.getByOwner(username),
     ]);
     const isAdmin = this.admins.includes(username) || admin;
-    const isHirer = this.hirers.includes(username);
+    const isHirer = this.hirers.includes(username) || authInfo.jobPostsCount > 0;
     return new AuthUser(authInfo, courseTasks, isAdmin, isHirer);
   }
 
@@ -196,6 +197,7 @@ export class AuthService {
       .createQueryBuilder(User, 'user')
       .select('user.id', 'id')
       .addSelect('user.githubId', 'githubId')
+      .addSelect(qb => qb.select(`COUNT(*)`).from('job_post', 'j').where('j.authorId = user.id'), 'jobPostsCount')
       .addSelect(
         qb =>
           qb
@@ -230,6 +232,7 @@ export class AuthService {
       students: result.students ?? [],
       mentors: result.mentors ?? [],
       courseUsers: result.courseUsers ?? [],
+      jobPostsCount: result.jobPostsCount,
     };
   }
 }
