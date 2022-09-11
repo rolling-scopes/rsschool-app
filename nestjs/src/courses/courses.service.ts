@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Course } from '@entities/course';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { UpdateCourseDto } from './dto';
 
 @Injectable()
@@ -24,10 +24,11 @@ export class CoursesService {
     return this.repository.findOneByOrFail({ id });
   }
 
-  public async getByIds(ids: number[]) {
+  public async getByIds(ids: number[], filter?: FindOptionsWhere<Course>) {
     return this.repository.find({
       where: {
         id: In(ids),
+        ...filter,
       },
     });
   }
