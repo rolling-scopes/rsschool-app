@@ -54,4 +54,9 @@ export default {
     pictureId: 36,
     url: 'RSActivist.svg',
   },
+  Jury_Team: {
+    name: 'Jury team',
+    pictureId: 36,
+    url: 'JuryTeam.svg',
+  },
 };
