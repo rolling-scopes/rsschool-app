@@ -12,6 +12,7 @@ export enum Badge {
   TopPerformer = 'Top_performer',
   JobOffer = 'Job_Offer',
   RSActivist = 'RS_activist',
+  JuryTeam = 'Jury_Team',
 }
 
 export class BadgeDto {
