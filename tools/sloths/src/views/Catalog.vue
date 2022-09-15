@@ -174,6 +174,14 @@ export default defineComponent({
     this.saveStore();
   },
 
+  watch: {
+    isChecked(newVal) {
+      if (!newVal) {
+        this.isDownloadShow = false;
+      }
+    },
+  },
+
   methods: {
     async getSloths() {
       this.isLoad = true;
