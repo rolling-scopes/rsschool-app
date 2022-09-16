@@ -55,10 +55,19 @@ export class InterviewsService {
       .createQueryBuilder('is')
       .innerJoin('is.student', 'student')
       .innerJoin('student.user', 'user')
-      .addSelect(['student.id', 'student.totalScore', 'student.mentorId', ...this.getPrimaryUserFields()])
+      .leftJoin('student.taskChecker', 'taskChecker')
+      .addSelect([
+        'student.id',
+        'student.totalScore',
+        'student.mentorId',
+        ...this.getPrimaryUserFields(),
+        'taskChecker.id',
+      ])
       .where('is.courseId = :courseId', { courseId })
       .andWhere('is.courseTaskId = :courseTaskId', { courseTaskId })
       .andWhere('student.isExpelled = false')
+      .andWhere('student.isExpelled = false')
+      .andWhere('taskChecker.id IS NULL')
       .orderBy('student.totalScore', 'DESC')
       .getMany();
 

@@ -18,7 +18,7 @@ export class AvailableStudentDto {
   githubId: string;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   cityName: string | null;
 
   @IsBoolean()
@@ -26,7 +26,7 @@ export class AvailableStudentDto {
   isGoodCandidate?: boolean;
 
   @IsNumber()
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   rating?: number | null;
 
   @IsNotEmpty()

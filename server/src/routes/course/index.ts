@@ -7,6 +7,7 @@ import {
   anyCourseMentorGuard,
   basicAuthAws,
   courseGuard,
+  courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
   courseSupervisorGuard,
@@ -98,7 +99,7 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   router.get('/interviews/:courseTaskId', courseManagerGuard, interviews.getInterviewPairs(logger));
   router.post(
     '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
-    courseManagerGuard,
+    courseInterviewGuard,
     interviews.createInterview(logger),
   );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));

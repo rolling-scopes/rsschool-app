@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import type { PageProps } from './index';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
+import moment from 'moment';
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
   try {
@@ -32,6 +33,12 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     if (!interview) {
       return notAuthorizedResponse;
     }
+
+    const isStage = interview.type === 'stage-interview';
+    if (!isStage && moment(interview.startDate).isAfter(moment())) {
+      return notAuthorizedResponse;
+    }
+
     return {
       props: { course, interview },
     };

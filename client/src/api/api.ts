@@ -304,7 +304,7 @@ export interface AvailableStudentDto {
      * @type {string}
      * @memberof AvailableStudentDto
      */
-    'cityName': string;
+    'cityName': string | null;
     /**
      * 
      * @type {boolean}
@@ -313,16 +313,22 @@ export interface AvailableStudentDto {
     'isGoodCandidate': boolean;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof AvailableStudentDto
      */
-    'rating': number;
+    'rating': string | null;
     /**
      * 
      * @type {number}
      * @memberof AvailableStudentDto
      */
     'totalScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AvailableStudentDto
+     */
+    'registeredDate': string;
 }
 /**
  * 
@@ -2046,6 +2052,12 @@ export interface InterviewDto {
      * @memberof InterviewDto
      */
     'name': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof InterviewDto
+     */
+    'startDate': object;
     /**
      * 
      * @type {object}

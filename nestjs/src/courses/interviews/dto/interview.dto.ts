@@ -9,6 +9,7 @@ export class InterviewDto {
     this.id = courseTask.id;
     this.type = courseTask.type;
     this.name = courseTask.task.name;
+    this.startDate = courseTask.studentStartDate;
     this.attributes = courseTask.task?.attributes;
   }
 
@@ -26,6 +27,9 @@ export class InterviewDto {
   @IsString()
   @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  startDate: string | null | Date;
 
   @ApiProperty({ type: Object })
   attributes: Record<string, string>;

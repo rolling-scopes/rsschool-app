@@ -1847,9 +1847,10 @@
           "id": { "type": "number" },
           "type": { "type": "string" },
           "name": { "type": "string" },
+          "startDate": { "type": "object" },
           "attributes": { "type": "object" }
         },
-        "required": ["id", "type", "name", "attributes"]
+        "required": ["id", "type", "name", "startDate", "attributes"]
       },
       "AvailableStudentDto": {
         "type": "object",
@@ -1857,12 +1858,13 @@
           "id": { "type": "number" },
           "name": { "type": "string" },
           "githubId": { "type": "string" },
-          "cityName": { "type": "string" },
+          "cityName": { "type": "string", "nullable": true },
           "isGoodCandidate": { "type": "boolean" },
-          "rating": { "type": "number" },
-          "totalScore": { "type": "number" }
+          "rating": { "type": "string", "nullable": true },
+          "totalScore": { "type": "number" },
+          "registeredDate": { "type": "string" }
         },
-        "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore"]
+        "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore", "registeredDate"]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",

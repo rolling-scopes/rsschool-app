@@ -605,6 +605,7 @@ export interface Interview {
   id: string;
   descriptionUrl: string;
   type: string;
+  template: string | null;
 }
 
 export interface StudentProfile {

@@ -8,17 +8,18 @@ import withSession from 'components/withSession';
 import { Dictionary, groupBy } from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
+import { CourseService, Interview } from 'services/course';
 import { Course } from 'services/models';
 import { formatDateFriendly } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { SelectMentorModal } from 'components/SelectMentorModal';
+import moment from 'moment';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const [data, setData] = useState({} as Dictionary<any[]>);
   const [activeInterviewId, setActiveIntervewId] = useState(null as number | null);
-  const [interviews, setInterviews] = useState([] as any[]);
+  const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, withLoading] = useLoading();
   const [mentorModalShown, setMentorModalShown] = useState(false);
 
@@ -51,6 +52,7 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
       {interviews.map(interview => {
         const name = interview.name;
+
         return (
           <List
             key={interview.id}
@@ -58,7 +60,7 @@ function Page(props: CoursePageProps) {
             size="small"
             style={{ marginBottom: 16 }}
             header={renderHeader(name, interview)}
-            footer={renderFooter(interview.id, props.course.alias)}
+            footer={renderFooter(interview, props.course.alias)}
             itemLayout="horizontal"
             dataSource={data[name]}
             renderItem={renderItem(props.course, interview, showMentorModal)}
@@ -124,19 +126,23 @@ function isTechnicalScreening(item: { name: string }) {
   return item.name.includes('Technical Screening');
 }
 
-function renderFooter(id: string, courseAlias: string) {
-  return (
-    <>
-      <div>Do you want to interview more students?</div> Please check
-      <Button
-        size="small"
-        type="link"
-        href={`/course/mentor/interview-students?course=${courseAlias}&interviewId=${id}`}
-      >
-        Available Students
-      </Button>
-    </>
-  );
+function renderFooter(interview: Interview, courseAlias: string) {
+  const { name, startDate, id } = interview;
+  const showWaitList = isTechnicalScreening({ name }) || moment(startDate).isBefore(moment());
+
+  if (showWaitList)
+    return (
+      <>
+        <div>Do you want to interview more students?</div> Please check
+        <Button
+          size="small"
+          type="link"
+          href={`/course/mentor/interview-students?course=${courseAlias}&interviewId=${id}`}
+        >
+          Available Students
+        </Button>
+      </>
+    );
 }
 
 function renderHeader(name: string, interview: any) {
