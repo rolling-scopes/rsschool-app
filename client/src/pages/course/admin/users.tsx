@@ -35,9 +35,9 @@ function Page(props: Props) {
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [users, groups] = await Promise.all([
+    const [users, { data: groups }] = await Promise.all([
       courseService.getUsers(),
-      props.session.isAdmin ? (await userGroupService.getUserGroups()).data : null,
+      props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
     ]);
     setLoading(false);
     setCourseUsers(users);
