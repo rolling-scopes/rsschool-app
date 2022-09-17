@@ -23,7 +23,7 @@ export function ShowTableColumns({ columnsHidden, setColumnsHidden }: ShowTableC
     },
     [columnsHidden, setColumnsHidden],
   );
-
+// comment
   return (
     <SettingsItem header="Table columns" IconComponent={FilterOutlined}>
       <div style={{ marginBottom: 10 }}>
