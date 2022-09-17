@@ -52,6 +52,7 @@
     "@types/cookie": "0.5.1",
     "@types/jest": "29.0.0",
     "@types/lodash": "4.14.184",
+    "@types/next": "9.0.0",
     "@types/node": "16.11.52",
     "@types/react": "17.0.39",
     "@types/react-color": "2.17.6",
