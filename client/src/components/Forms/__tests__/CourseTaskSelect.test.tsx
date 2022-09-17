@@ -74,7 +74,7 @@ const fullData = [
     taskOwnerId: 2084,
     type: 'htmltask',
   },
-] as CourseTaskDto[];
+] as unknown as CourseTaskDto[];
 
 const onlyExpired = [
   {
