@@ -187,8 +187,8 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={DEFAULT_ROW_GUTTER}>
-                <Col xs={24} sm={12} md={10} lg={10} xl={10} style={{ marginBottom: 24 }}>
+              <Row gutter={DEFAULT_ROW_GUTTER} style={{ marginBottom: 10 }}>
+                <Col xs={24} sm={12} md={10} lg={10} xl={10}>
                   <Row>
                     <Typography.Title level={5}>First Name</Typography.Title>
                   </Row>
@@ -203,9 +203,8 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                       </Form.Item>
                     </Col>
                   </Row>
-                  <span className="descriptions-name">In English, as in passport</span>
                 </Col>
-                <Col xs={24} sm={12} md={10} lg={10} xl={10} style={{ marginBottom: 24 }}>
+                <Col xs={24} sm={12} md={10} lg={10} xl={10}>
                   <Row>
                     <Typography.Title level={5}>Last Name</Typography.Title>
                   </Row>
@@ -220,7 +219,13 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                       </Form.Item>
                     </Col>
                   </Row>
-                  <span className="descriptions-name last">In English, as in passport</span>
+                </Col>
+              </Row>
+              <Row gutter={DEFAULT_ROW_GUTTER}>
+                <Col xs={24} sm={24} md={20} lg={20} xl={20}>
+                  <span className="descriptions-name">
+                    In English, as in the passport. This information will be written on the course certificate.
+                  </span>
                 </Col>
               </Row>
               <Row gutter={DEFAULT_ROW_GUTTER}>
