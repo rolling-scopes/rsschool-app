@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import css from 'styled-jsx/css';
 
-export function DataTextValue({ children }: PropsWithChildren<{}>) {
+export function DataTextValue({ children }: PropsWithChildren<unknown>) {
   return (
     <>
       <span className="course-data-key">{children}</span>

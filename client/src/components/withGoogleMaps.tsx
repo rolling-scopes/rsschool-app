@@ -11,7 +11,7 @@ function withGoogleMaps(WrappedComponent: React.ComponentType<any>) {
         <>
           {mapsApiKey && (
             <Head>
-              <script src={url}></script>
+              <script async src={url}></script>
             </Head>
           )}
           <WrappedComponent {...this.props} />

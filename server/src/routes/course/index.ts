@@ -1,84 +1,71 @@
-import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
-import { Next } from 'koa';
 import { ILogger } from '../../logger';
 import { Course } from '../../models';
-import { createGetRoute, createPostRoute, createPutRoute } from '../common';
+import { createPostRoute } from '../common';
 import {
   adminGuard,
-  guard,
+  anyCourseMentorGuard,
+  basicAuthAws,
   courseGuard,
+  courseManagerGuard,
   courseMentorGuard,
   courseSupervisorGuard,
-  taskOwnerGuard,
-  courseManagerGuard,
-  basicAuthAws,
-  crossCheckGuard,
-  anyCourseMentorGuard,
   courseSupervisorOrMentorGuard,
+  crossCheckGuard,
+  guard,
+  taskOwnerGuard,
 } from '../guards';
-import { setResponse } from '../utils';
+import { postCertificates, postStudentCertificate } from './certificates';
+import { getCourseEvent, getCourseEvents } from './events';
 import {
-  getAllMentorStudents,
-  getMentorStudents,
-  getMentorInterview,
   deleteMentor as postMentorStatusExpelled,
+  getAllMentorStudents,
+  getMentorInterview,
+  getMentorStudents,
   postMentor,
   restoreExpelledMentor,
 } from './mentor';
 import * as mentors from './mentors';
 import * as score from './score';
-import { postCertificates, postStudentCertificate } from './certificates';
+import * as stageInterview from './stageInterview';
 import {
   getStudents,
+  getStudentsCsv,
+  getStudentsWithDetails,
   postStudents,
   searchStudent,
-  getStudentsWithDetails,
-  getStudentsCsv,
   updateStatuses,
 } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { createTaskVerification } from './taskVerification';
-import { getCourseEvent, getCourseEvents, getCourseEventsCalendar } from './events';
-import { getStudentTaskVerifications, getCourseTasksVerifications } from './taskVerifications';
-import * as stageInterview from './stageInterview';
+import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
 
 import * as interviews from './interviews';
 
-import * as tasks from './tasks';
+import { validateCrossCheckExpirationDate, validateGithubId, validateGithubIdAndAccess } from '../validators';
+import * as crossCheck from './crossCheck';
 import {
-  createRepository,
   createRepositories,
-  updateRepositories,
-  inviteMentorToTeam,
+  createRepository,
   inviteAllMentorsToTeam,
+  inviteMentorToTeam,
+  updateRepositories,
 } from './repository';
-import { validateGithubIdAndAccess, validateGithubId, validateCrossCheckExpirationDate } from '../validators';
+import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import {
-  updateStudentStatus,
-  selfUpdateStudentStatus,
-  getStudentSummary,
   createInterviewResult,
   getCrossMentors,
   getStudent,
-  updateStudent,
+  getStudentSummary,
   postFeedback,
+  selfUpdateStudentStatus,
   updateMentoringAvailability,
+  updateStudent,
+  updateStudentStatus,
 } from './student';
-import * as crossCheck from './crossCheck';
-import { getUsers, putUsers, putUser } from './user';
+import * as tasks from './tasks';
 import { postCopyCourse } from './template';
-import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
-
-const validateId = async (ctx: Router.RouterContext<any, any>, next: Next) => {
-  const id = Number(ctx.params.id);
-  if (isNaN(id)) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, 'Incorrect [Id]');
-    return;
-  }
-  ctx.params.id = id;
-  await next();
-};
+import { getUsers, putUser, putUsers } from './user';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
@@ -122,7 +109,6 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
   router.get('/event/:id', courseGuard, getCourseEvent(logger));
 
   router.get('/events', courseGuard, getCourseEvents(logger));
-  router.get('/events/ical', courseGuard, getCourseEventsCalendar(logger));
 }
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
@@ -297,8 +283,6 @@ export function courseCrudRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course' });
 
   router.post('/', adminGuard, createPostRoute(Course, logger));
-  router.get('/:id', guard, validateId, createGetRoute(Course, logger));
-  router.put('/:id', adminGuard, validateId, createPutRoute(Course, logger));
 
   return router;
 }

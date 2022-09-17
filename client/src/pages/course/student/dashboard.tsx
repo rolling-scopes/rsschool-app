@@ -176,7 +176,7 @@ function Page(props: CoursePageProps) {
           </div>
         ) : (
           <>
-            <Result status={'403' as any} title="You have no access to this page" />
+            <Result status={'403'} title="You have no access to this page" />
           </>
         )}
       </LoadingScreen>
@@ -206,7 +206,8 @@ const TaskTypes = {
   lecture: 'lecture',
 };
 
-const checkTaskResults = (results: any[], taskId: number) => results.find((task: any) => task.courseTaskId === taskId);
+const checkTaskResults = (results: { courseTaskId: number }[], taskId: number) =>
+  results.find(task => task.courseTaskId === taskId);
 
 const tasksToEvents = (tasks: CourseTaskDto[]) => {
   return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {

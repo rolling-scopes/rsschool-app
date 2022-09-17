@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import { Layout } from 'antd';
 import { ResumeDto } from 'api';
 import ViewCV from 'modules/Opportunities/components/ViewCV';

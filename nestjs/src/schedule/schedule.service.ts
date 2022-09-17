@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CoursesService } from 'src/courses/courses.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';
-import { In, MoreThanOrEqual, Repository } from 'typeorm';
+import { In, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { Course } from '@entities/course';
 import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
@@ -27,7 +27,12 @@ export class ScheduleService {
 
   public async getChangedCoursesRecipients(lastHours: number = 2): Promise<Recipients> {
     const courseChangesMap = await this.getCourseChangesMap(lastHours);
-    const updatedCourses = await this.courseService.getByIds([...courseChangesMap.keys()]);
+
+    const updatedCourses = await this.courseService.getByIds([...courseChangesMap.keys()], {
+      startDate: LessThanOrEqual(new Date()),
+      endDate: MoreThanOrEqual(new Date()),
+    });
+
     const aliasMap = new Map(updatedCourses.map(course => [course.alias, course]));
 
     this.logger.log({ message: `updated courses: ${updatedCourses.map(course => course.name)} ` });
@@ -250,7 +255,7 @@ export class ScheduleService {
         fields.place = event.place;
         fields.placeOld = previousEvent.place;
       }
-      if (event.dateTime !== previousEvent.dateTime) {
+      if (!this.isDateEqual(event.dateTime, previousEvent.dateTime)) {
         fields.dateTime = event.dateTime;
         fields.dateTimeOld = previousEvent.dateTime as string;
       }
@@ -268,21 +273,26 @@ export class ScheduleService {
       }
     > = {};
 
-    if (task.studentStartDate !== previousTask.studentStartDate) {
+    if (!this.isDateEqual(task.studentStartDate, previousTask.studentStartDate)) {
       fields.studentStartDate = task.studentStartDate;
       fields.studentStartDateOld = previousTask.studentStartDate ?? undefined;
     }
-    if (task.studentEndDate !== previousTask.studentEndDate) {
+    if (!this.isDateEqual(task.studentEndDate, previousTask.studentEndDate)) {
       fields.studentEndDate = task.studentEndDate;
       fields.studentEndDateOld = previousTask.studentEndDate ?? undefined;
     }
 
-    if (task.crossCheckEndDate != previousTask.crossCheckEndDate) {
+    if (!this.isDateEqual(task.crossCheckEndDate, previousTask.crossCheckEndDate)) {
       fields.crossCheckEndDate = task.crossCheckEndDate;
       fields.crossCheckEndDateOld = previousTask.crossCheckEndDate ?? undefined;
     }
 
     return fields;
+  }
+
+  private isDateEqual(date1: string | Date | null, date2: string | Date | null) {
+    if (!date1 && !date2) return true;
+    return dayjs(date1).isSame(dayjs(date2));
   }
 }
 

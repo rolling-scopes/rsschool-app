@@ -8,12 +8,9 @@ import {
 } from 'common/models';
 import type { ProfileCourseDto } from 'api';
 
-export interface Course extends ProfileCourseDto {}
-export interface UpdateCourse extends ProfileCourseDto {
-  disciplineId: number | null;
-}
+export type Course = ProfileCourseDto;
+export type StudentBasic = CommonStudentBasic;
 
-export interface StudentBasic extends CommonStudentBasic {}
 export type { DiscordServer };
 export type { UserGroup };
 export type { InterviewQuestion };

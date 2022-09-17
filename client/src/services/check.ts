@@ -39,7 +39,7 @@ export class CheckService {
 
   private async getDataFromServer(taskId: number, type: routesType, courseId: number) {
     if (this.cache?.[taskId]?.[type]) return this.cache[taskId][type];
-    const result = await this.axios.get<any>(`checks/${ROUTES[type]}/${courseId}/${taskId}`);
+    const result = await this.axios.get(`checks/${ROUTES[type]}/${courseId}/${taskId}`);
     this.saveToCache(taskId, type, result.data.data);
     return result.data.data;
   }

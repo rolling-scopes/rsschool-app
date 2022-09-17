@@ -12,11 +12,6 @@ export class CoursesService {
     this.coursesApi = new CoursesApi(getApiConfiguration(this.token));
   }
 
-  async updateCourse(id: number, data: Partial<Course>) {
-    const result = await axios.put<CourseResponse>(`/api/course/${id}`, data);
-    return result.data.data;
-  }
-
   async createCourse(data: Partial<Course>) {
     const result = await axios.post<CourseResponse>(`/api/course/`, data);
     return result.data.data;

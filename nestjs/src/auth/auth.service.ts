@@ -1,7 +1,7 @@
 import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
@@ -11,7 +11,7 @@ import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
-import { JwtService } from './jwt.service';
+import { JwtService } from '../core/jwt/jwt.service';
 import { lastValueFrom } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
@@ -221,6 +221,9 @@ export class AuthService {
       });
 
     const result = await query.getRawOne();
+    if (result == null) {
+      throw new NotFoundException('User not found');
+    }
     return {
       id: result.id,
       githubId: result.githubId,

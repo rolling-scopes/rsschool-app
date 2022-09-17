@@ -31,6 +31,7 @@ exports[`CourseTaskSelect should render with both groups 1`] = `
             class="ant-form-item-control-input-content"
           >
             <div
+              aria-required="true"
               class="ant-select ant-select-in-form-item ant-select-single ant-select-show-arrow"
             >
               <div
@@ -45,6 +46,7 @@ exports[`CourseTaskSelect should render with both groups 1`] = `
                     aria-controls="courseTaskId_list"
                     aria-haspopup="listbox"
                     aria-owns="courseTaskId_list"
+                    aria-required="true"
                     autocomplete="off"
                     class="ant-select-selection-search-input"
                     id="courseTaskId"

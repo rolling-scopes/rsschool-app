@@ -15,7 +15,7 @@ interface ManageEventModalFormProps {
   handleCancel: () => void;
   courseId: number;
   editableRecord?: CourseEvent | null;
-  refreshData: Function;
+  refreshData: () => void;
   settings: ScheduleSettings;
 }
 
@@ -45,7 +45,7 @@ export function ManageEventModalForm({
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       onCancel={handleCancel}
       width={
         width >= 1280 ? '45vw' : width >= 960 && width < 1280 ? '55vw' : width < 960 && width > 800 ? '65vw' : '100vw'

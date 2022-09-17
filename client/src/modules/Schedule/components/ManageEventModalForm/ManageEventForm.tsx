@@ -38,7 +38,7 @@ type Props = {
   entityType: string;
   onEntityTypeChange: (type: string) => void;
   editableRecord: CourseEvent | null;
-  refreshData: Function;
+  refreshData: () => void;
 };
 
 const FormEntity: React.FC<Props> = ({

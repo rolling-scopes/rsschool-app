@@ -5,17 +5,15 @@ import * as _ from 'lodash';
 
 import { Student } from '@entities/student';
 
-import { ScoreTableFilters } from '@common/types/score';
-
 import { paginate } from '../../core/paginate';
 import { MentorsService } from '../../courses/mentors';
 
-import { orderByFieldMapping, OrderDirection, OrderField } from './dto/score-query.dto';
+import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from './dto/score-query.dto';
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 
-const defaultFilter: ScoreTableFilters = {
-  activeOnly: false,
+const defaultFilter: Partial<ScoreQueryDto> = {
+  activeOnly: 'false',
   githubId: '',
   name: '',
   'mentor.githubId': '',
@@ -41,7 +39,7 @@ export class ScoreService {
     limit,
     courseId,
   }: {
-    filter: ScoreTableFilters;
+    filter: Partial<ScoreQueryDto>;
     orderBy: { field: OrderField; direction: OrderDirection };
     page: number;
     limit: number;
@@ -92,7 +90,7 @@ export class ScoreService {
     orderBy,
     courseId,
   }: {
-    filter: ScoreTableFilters;
+    filter: Partial<ScoreQueryDto>;
     orderBy: { field: OrderField; direction: OrderDirection };
     courseId: number;
   }) {
@@ -115,7 +113,7 @@ export class ScoreService {
       .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
       .where('student."courseId" = :courseId', { courseId });
 
-    if (filter.activeOnly) {
+    if (Boolean(filter.activeOnly)) {
       query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
     }
 

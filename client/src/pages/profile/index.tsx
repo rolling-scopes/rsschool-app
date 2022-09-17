@@ -20,7 +20,6 @@ import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
-import { CoursesService } from 'services/courses';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 
 type Props = {
@@ -63,12 +62,6 @@ export class ProfilePage extends React.Component<Props, State> {
 
   private userService = new UserService();
   private notificationsService = new NotificationsService();
-  private coursesService = new CoursesService();
-
-  private getCoursesInfo = async (profile: ProfileInfo) =>
-    profile?.studentStats
-      ? await Promise.all(profile?.studentStats?.map(({ courseId }) => this.coursesService.getCourse(courseId)))
-      : [];
 
   private hadStudentCoreJSInterview = (stats: StudentStats[]) =>
     stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
@@ -105,14 +98,8 @@ export class ProfilePage extends React.Component<Props, State> {
         profileApi.getProfile(githubId ?? session.githubId),
       ]);
 
-      const coursesInfo = await this.getCoursesInfo(profile);
-
       const updateProfile = {
         ...profile,
-        studentStats: profile.studentStats?.map(stats => ({
-          ...stats,
-          isCourseCompleted: coursesInfo.find(course => course.id === stats.courseId)?.completed ?? false,
-        })),
         ...data,
       };
 

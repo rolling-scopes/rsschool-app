@@ -15,7 +15,7 @@ import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { IPaginationInfo } from 'common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import useWindowDimensions from 'utils/useWindowDimensions';
 
 type Props = CoursePageProps & {

@@ -3,7 +3,7 @@
 exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
 <div>
   <div
-    class="loading-screen"
+    class="jsx-24f0c3f38e667ccd loading-screen"
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh;"
   >
     <div
@@ -34,16 +34,6 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
         Loading...
       </div>
     </div>
-    <style>
-      
-        .loading-screen {
-          z-index: 1;
-          top: 0;
-          left: 0;
-          background-color: #fff;
-        }
-      
-    </style>
   </div>
 </div>
 `;

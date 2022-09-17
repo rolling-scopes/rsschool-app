@@ -20,11 +20,12 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto } from 'api';
-import { Course, UpdateCourse } from 'services/models';
+import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto, CoursesApi, UpdateCourseDto } from 'api';
+import { Course } from 'services/models';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import { isCourseManager } from 'domain/user';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -32,9 +33,14 @@ type Props = { session: Session; courses: Course[] };
 const disciplinesApi = new DisciplinesApi();
 const courseService = new CoursesService();
 const discordServersService = new DiscordServersApi();
+const courseApi = new CoursesApi();
+
+function filterCourses(session: Session, courses: Course[]) {
+  return courses.filter(course => isCourseManager(session, course.id));
+}
 
 function Page(props: Props) {
-  const [courses, setCourses] = useState<Course[]>(props.courses);
+  const [courses, setCourses] = useState<Course[]>(filterCourses(props.session, props.courses));
   const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
@@ -43,12 +49,12 @@ function Page(props: Props) {
   const [isCopy, setIsCopy] = useState(false);
 
   const loadData = async () => {
-    const [courses, { data: discordServers }, { data: disciplines }] = await Promise.all([
-      courseService.getCourses(),
+    const [{ data: courses }, { data: discordServers }, { data: disciplines }] = await Promise.all([
+      courseApi.getCourses(),
       discordServersService.getDiscordServers(),
       disciplinesApi.getDisciplines(),
     ]);
-    setCourses(courses);
+    setCourses(filterCourses(props.session, courses));
     setDiscordServers(discordServers);
     setDisciplines(disciplines);
   };
@@ -74,7 +80,7 @@ function Page(props: Props) {
         setModalLoading(true);
         const record = createRecord(values);
         if (modalAction === 'update') {
-          await courseService.updateCourse(modalData!.id!, record);
+          await courseApi.updateCourse(modalData!.id!, record);
         } else {
           if (values.courseId) {
             await courseService.createCourseCopy(record, values.courseId);
@@ -263,7 +269,7 @@ function Page(props: Props) {
 
 function createRecord(values: any) {
   const [startDate, endDate] = values.range || [null, null];
-  const record: Partial<UpdateCourse> = {
+  const record: UpdateCourseDto = {
     name: values.name,
     fullName: values.fullName,
     alias: values.alias,

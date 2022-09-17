@@ -12,7 +12,14 @@ import {
 } from '@ant-design/icons';
 import { DiscordFilled } from 'components/Icons/DiscordFilled';
 import { Session } from 'components/withSession';
-import { isAdmin, isAnyCoursePowerUser, isCourseManager, isCourseSupervisor, isHirer } from 'domain/user';
+import {
+  isAdmin,
+  isAnyCourseManager,
+  isAnyCoursePowerUser,
+  isCourseManager,
+  isCourseSupervisor,
+  isHirer,
+} from 'domain/user';
 import { Course } from 'services/models';
 
 export interface MenuItemsData {
@@ -63,7 +70,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'courses',
     icon: <GlobalOutlined />,
     href: '/admin/courses',
-    access: session => isAdmin(session),
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   // {
   //   name: 'Interview questions',
