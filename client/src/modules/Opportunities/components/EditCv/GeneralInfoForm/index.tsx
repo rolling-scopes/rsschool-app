@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, ForwardedRef } from 'react';
 import moment from 'moment';
-import { Form, Input, Select, DatePicker, Checkbox, Card, FormInstance, Typography } from 'antd';
+import { Form, Input, Select, DatePicker, Checkbox, Card, FormInstance, Typography, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { UserData } from 'modules/Opportunities/models';
 import { ENGLISH_LEVELS } from 'data/english';
 import { userDataValidationRules as validationRules } from '../form-validation';
@@ -10,6 +11,15 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { Text } = Typography;
 
+const LabelWithTooltip = ({ label, tooltip }: { label: string; tooltip: string }) => (
+  <Text>
+    {label}{' '}
+    <Tooltip title={tooltip}>
+      <InfoCircleOutlined style={{ fontSize: 12, opacity: 0.7 }} />
+    </Tooltip>
+  </Text>
+);
+
 type Props = {
   userData: UserData;
 };
@@ -17,7 +27,8 @@ type Props = {
 export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
   const { userData } = props;
 
-  const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
+  const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes, locations } =
+    userData;
 
   const startFrom = userData.startFrom ? moment(userData.startFrom, 'YYYY.MM.DD') : undefined;
   const fullTime = userData.fullTime ?? false;
@@ -32,6 +43,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
     notes,
     startFrom,
     fullTime,
+    locations,
   };
 
   const [form] = Form.useForm();
@@ -46,7 +58,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
   };
 
   return (
-    <Card title={<Text strong>General info</Text>} style={{ width: '70vw' }}>
+    <Card title={<Text strong>General info</Text>} style={{ width: '70vw', marginBottom: '20px' }}>
       <Form
         form={form}
         ref={ref}
@@ -61,11 +73,12 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
         <Item label="Desired position" name="desiredPosition" rules={[...validationRules['desiredPosition']]}>
           <Input style={inputStyle} placeholder="Enter desired position" />
         </Item>
-        <Item label="Self introduction video" name="selfIntroLink" rules={[...validationRules['selfIntroLink']]}>
-          <Input style={inputStyle} placeholder="Link to video with self introduction" />
-        </Item>
-        <Item label="Link to avatar" name="avatarLink" rules={[...validationRules['avatarLink']]}>
-          <Input style={inputStyle} placeholder="Link to image" />
+        <Item
+          label={<LabelWithTooltip label="Locations" tooltip="Up to 3, comma-separated" />}
+          name="locations"
+          rules={[...validationRules['locations']]}
+        >
+          <Input style={inputStyle} placeholder="Enter locations" />
         </Item>
         <Item label="Select your English level" name="englishLevel" rules={[...validationRules['englishLevel']]}>
           <Select style={inputStyle} placeholder="Not selected yet">
@@ -94,8 +107,24 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
         <Item label="Ready to work full time" colon={false} name="fullTime" valuePropName="checked">
           <Checkbox />
         </Item>
+        <Item
+          label={<LabelWithTooltip label="Photo" tooltip="Direct link to the image" />}
+          name="avatarLink"
+          rules={[...validationRules['avatarLink']]}
+        >
+          <Input style={inputStyle} placeholder="Enter link to your photo" />
+        </Item>
+        <Item label="Self introduction video" name="selfIntroLink" rules={[...validationRules['selfIntroLink']]}>
+          <Input style={inputStyle} placeholder="Link to video with self introduction" />
+        </Item>
         <Item label="About me" name="notes" rules={[...validationRules['notes']]}>
-          <TextArea style={inputStyle} rows={4} placeholder="Short info about you (30-1000 symbols)" />
+          <TextArea
+            showCount
+            style={inputStyle}
+            maxLength={1500}
+            rows={4}
+            placeholder="Short info about you (50-1500 symbols)"
+          />
         </Item>
       </Form>
     </Card>

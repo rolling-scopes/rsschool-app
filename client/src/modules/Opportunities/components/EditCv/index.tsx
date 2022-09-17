@@ -132,6 +132,7 @@ export const EditCV = (props: Props) => {
       avatarLink: newAvatarLink,
       desiredPosition: newDesiredPosition,
       englishLevel: newEnglishLevel,
+      locations: newLocations,
       name: newName,
       notes: newNotes,
       startFrom: newStartFrom,
@@ -144,7 +145,6 @@ export const EditCV = (props: Props) => {
       skype: newSkype,
       telegram: newTelegram,
       linkedin: newLinkedin,
-      locations: newLocations,
       github: newGithub,
       website: newWebsite,
     };
@@ -165,10 +165,10 @@ export const EditCV = (props: Props) => {
     locationsRaw === null
       ? null
       : locationsRaw
-          .split('\n')
+          .split(',')
           .slice(0, length)
           .map(location => location.trim())
-          .join('\n');
+          .join(',');
 
   const nullifyConditional = (str?: string | null) => str?.trim() || null;
 

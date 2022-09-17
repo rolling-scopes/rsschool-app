@@ -1,6 +1,7 @@
-import { Card, Checkbox, Form, FormInstance, Typography } from 'antd';
-import { ResumeCourseDto } from 'api';
 import { ForwardedRef, forwardRef } from 'react';
+import { Card, Checkbox, Form, FormInstance, Typography, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { ResumeCourseDto } from 'api';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -23,7 +24,17 @@ export const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<Fo
   }, {});
 
   return (
-    <Card title={<Text strong>Show RS Courses</Text>} style={{ width: '70vw' }}>
+    <Card
+      title={
+        <Text>
+          Show RS Courses{' '}
+          <Tooltip title="Selected courses will be displayed in your CV">
+            <InfoCircleOutlined style={{ fontSize: 12, opacity: 0.7 }} />
+          </Tooltip>
+        </Text>
+      }
+      style={{ width: '70vw' }}
+    >
       <Form
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}
         ref={ref}
@@ -37,7 +48,7 @@ export const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<Fo
             key={id}
             name={id}
             colon={false}
-            label={fullName}
+            label={<span style={{ whiteSpace: 'normal' }}>{fullName}</span>}
             style={{ marginBottom: '0', overflow: 'hidden' }}
             valuePropName="checked"
           >

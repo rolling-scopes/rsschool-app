@@ -26,7 +26,7 @@ export interface VisibleCoursesFormData {
   [id: string]: boolean;
 }
 
-export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
+export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'github' | 'website';
 
 export interface UserData {
   avatarLink: string | null;
@@ -38,6 +38,7 @@ export interface UserData {
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
+  locations: string | null;
 }
 
 export type Contacts = {

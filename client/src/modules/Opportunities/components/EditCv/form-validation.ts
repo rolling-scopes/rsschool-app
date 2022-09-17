@@ -13,6 +13,10 @@ export const contactsValidationRules: {
 } = {
   phone: [
     {
+      required: true,
+      message: validationMessages.required,
+    },
+    {
       max: 25,
       message: validationMessages.max(25),
     },
@@ -34,6 +38,10 @@ export const contactsValidationRules: {
     },
   ],
   email: [
+    {
+      required: true,
+      message: validationMessages.required,
+    },
     {
       type: 'email',
       message: validationMessages.invalid('email'),
@@ -71,20 +79,6 @@ export const contactsValidationRules: {
     {
       type: 'url',
       message: validationMessages.invalid('URL'),
-    },
-  ],
-  locations: [
-    {
-      required: true,
-      message: validationMessages.required,
-    },
-    {
-      max: 300,
-      message: validationMessages.max(300),
-    },
-    {
-      whitespace: true,
-      message: validationMessages.whitespace,
     },
   ],
   github: [
@@ -131,6 +125,20 @@ export const userDataValidationRules: {
     },
   ],
   desiredPosition: [
+    {
+      required: true,
+      message: validationMessages.required,
+    },
+    {
+      max: 300,
+      message: validationMessages.max(300),
+    },
+    {
+      whitespace: true,
+      message: validationMessages.whitespace,
+    },
+  ],
+  locations: [
     {
       required: true,
       message: validationMessages.required,
@@ -191,10 +199,6 @@ export const userDataValidationRules: {
     },
   ],
   notes: [
-    {
-      required: true,
-      message: validationMessages.required,
-    },
     {
       max: 1500,
       message: validationMessages.max(1500),

@@ -31,6 +31,7 @@ export const transformCvData = (data: ResumeDto | null) => {
     avatarLink: avatarLink ?? null,
     desiredPosition: desiredPosition ?? null,
     englishLevel: englishLevel ?? null,
+    locations: locations ?? null,
     startFrom: startFrom ?? null,
     fullTime: !!fullTime,
   };
@@ -39,7 +40,6 @@ export const transformCvData = (data: ResumeDto | null) => {
     email: email ?? null,
     github: githubUsername ?? null,
     linkedin: linkedin ?? null,
-    locations: locations ?? null,
     phone: phone ?? null,
     skype: skype ?? null,
     telegram: telegram ?? null,
