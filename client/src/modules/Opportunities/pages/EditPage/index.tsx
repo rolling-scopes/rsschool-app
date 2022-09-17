@@ -59,7 +59,7 @@ export function EditPage() {
     const title = <Text strong>Your CV is now public until {validUntil} (for 1 month period from now on)</Text>;
     const content = (
       <>
-        <Paragraph>You need to renew or make changes in your CV every month.</Paragraph>
+        <Paragraph>You need to renew your CV every month.</Paragraph>
         <Paragraph>
           {' '}
           Otherwise it will not be shown to other RS App users.{' '}

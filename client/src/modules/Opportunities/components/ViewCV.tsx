@@ -12,7 +12,6 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import { ResumeDto } from 'api';
-import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useViewData } from '../hooks/useViewData';
 import AboutSection from './AboutSection';
@@ -23,8 +22,11 @@ import { GratitudeSection } from './GratitudeSection';
 import { NameTitle } from './NameTitle';
 import { PersonalSection } from './PersonalSection';
 import { PublicLink } from './PublicLink';
+import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 
 const { Title, Text, Paragraph } = Typography;
+
+const service = new OpportunitiesService();
 
 type Props = {
   initialData: ResumeDto;
@@ -32,8 +34,6 @@ type Props = {
   switchView?: () => void;
   publicMode?: boolean;
 };
-
-const oldService = new OpportunitiesService();
 
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
@@ -156,7 +156,7 @@ const ExpirationTooltip = ({
       ),
       maskClosable: true,
       onOk: async () => {
-        await oldService.updateResume();
+        await service.updateResume();
         notification.success({
           message: 'CV successfully renewed',
           placement: 'topRight',
