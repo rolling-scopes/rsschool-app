@@ -221,7 +221,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                   </Row>
                 </Col>
               </Row>
-              <Row gutter={DEFAULT_ROW_GUTTER}>
+              <Row gutter={DEFAULT_ROW_GUTTER} style={{ marginBottom: 14 }}>
                 <Col xs={24} sm={24} md={20} lg={20} xl={20}>
                   <span className="descriptions-name">
                     In English, as in the passport. This information will be written on the course certificate.
