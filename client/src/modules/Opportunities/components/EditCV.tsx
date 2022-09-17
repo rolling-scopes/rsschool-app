@@ -1,6 +1,6 @@
 import { useState, useCallback, createRef, ReactNode, RefObject } from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
+import { Layout, Space, Button, Modal, Row, Col } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto } from 'api';
@@ -18,13 +18,11 @@ import {
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 
 const { Content } = Layout;
-const { Text } = Typography;
 
 type Props = {
   githubId: string;
   contacts: Contacts | null;
   userData: UserData | null;
-  updatedAt: string | null;
   visibleCourses: number[];
   courses: ResumeCourseDto[] | null;
   switchView: () => void;
@@ -172,13 +170,6 @@ function EditCV(props: Props) {
 
   const nullifyConditional = (str?: string | null) => str?.trim() || null;
 
-  const formatDate = (lastUpdatedAt: string) => {
-    const expirationDate = new Date(lastUpdatedAt);
-    const addZeroPadding = (num: number) => `0${num}`.slice(-2);
-    const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
-    return `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
-  };
-
   const hasInvalidFields = (form: FormInstance | null) =>
     !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
 
@@ -250,15 +241,6 @@ function EditCV(props: Props) {
                     courses={props.courses}
                     visibleCourses={visibleCourses}
                   />
-                )}
-              </Row>
-              <Row>
-                {props.updatedAt && (
-                  <Card size="small" style={{ width: '100%' }}>
-                    <Text>
-                      Last update made: <Text strong>{formatDate(props.updatedAt)}</Text>
-                    </Text>
-                  </Card>
                 )}
               </Row>
             </Col>

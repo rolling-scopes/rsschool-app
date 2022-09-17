@@ -19,7 +19,6 @@ export const transformCvData = (data: ResumeDto | null) => {
     website,
     startFrom,
     fullTime,
-    updatedDate,
     courses = [],
     visibleCourses = [],
   } = data ?? {};
@@ -50,7 +49,6 @@ export const transformCvData = (data: ResumeDto | null) => {
   return {
     contacts,
     userData,
-    updatedDate: updatedDate ?? null,
     visibleCourses,
     courses,
   };
