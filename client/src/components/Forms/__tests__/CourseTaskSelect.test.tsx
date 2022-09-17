@@ -4,123 +4,275 @@ import { render } from '@testing-library/react';
 import { CourseTaskSelect } from '..';
 import { CourseTaskDto } from 'api';
 
-const futureDate = new Date();
-futureDate.setDate(futureDate.getDate() + 1);
+const tomorrowDate = new Date();
+const dayAfterTomorrowDate = new Date();
+const afterDayAfterTomorrowDate = new Date();
 
-const fullData = [
+tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+dayAfterTomorrowDate.setDate(dayAfterTomorrowDate.getDate() + 2);
+afterDayAfterTomorrowDate.setDate(afterDayAfterTomorrowDate.getDate() + 3);
+
+const ActiveCodewarsData: CourseTaskDto[] = [
   {
-    id: 432,
-    taskId: 644,
-    name: 'Flex / Grid test',
+    id: 451,
+    taskId: 704,
+    type: 'codewars',
+    name: 'Codewars Algorithms-2',
+    studentStartDate: '2022-09-12T23:59:00.000Z',
+    studentEndDate: tomorrowDate.toISOString(),
     maxScore: 100,
     scoreWeight: 1,
-    githubPrRequired: false,
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md',
-    studentStartDate: '2022-02-06T13:44:00.000Z',
-    studentEndDate: futureDate.toISOString(),
-    useJury: false,
-    checker: 'crossCheck',
-    taskOwnerId: 606,
-    githubRepoName: 'clean-code-s1e1',
-    sourceGithubRepoUrl: 'src',
-    type: 'jstask',
-    special: '',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/algorithms-2.md',
+    checker: 'auto-test',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: null,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
   },
   {
-    id: 431,
-    taskId: 729,
-    name: 'Drum Kit',
+    id: 764,
+    taskId: 592,
+    type: 'codewars',
+    name: 'Codewars #0',
+    studentStartDate: '2022-09-14T23:59:00.000Z',
+    studentEndDate: tomorrowDate.toISOString(),
+    maxScore: 15,
+    scoreWeight: 1,
+    descriptionUrl: 'https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/codewars',
+    checker: 'auto-test',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: null,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
+  },
+];
+
+const ActiveTestData: CourseTaskDto[] = [
+  {
+    id: 440,
+    taskId: 720,
+    type: 'selfeducation',
+    name: 'React. Testing',
+    studentStartDate: '2022-09-12T23:59:00.000Z',
+    studentEndDate: tomorrowDate.toISOString(),
+    maxScore: 100,
+    scoreWeight: 0.1,
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-testing.md',
+    checker: 'auto-test',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: null,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
+  },
+  {
+    id: 442,
+    taskId: 727,
+    type: 'selfeducation',
+    name: 'Test Algorithms & Data structures',
+    studentStartDate: '2022-09-15T23:59:00.000Z',
+    studentEndDate: tomorrowDate.toISOString(),
     maxScore: 100,
     scoreWeight: 1,
-    githubPrRequired: false,
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-1.md',
-    studentStartDate: '2022-02-06T11:37:00.000Z',
-    studentEndDate: futureDate.toISOString(),
-    useJury: false,
-    checker: 'crossCheck',
-    taskOwnerId: 606,
-    githubRepoName: 'clean',
-    sourceGithubRepoUrl: 'src',
+    descriptionUrl: 'https://www.youtube.com/playlist?list=PLP-a1IHLCS7PqDf08LFIYCiTYY1CtoAkt',
+    checker: 'auto-test',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: null,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
+  },
+];
+
+const UnknownTaskData: CourseTaskDto[] = [
+  {
+    id: 846,
+    taskId: 625,
     type: 'jstask',
-    special: '',
+    name: 'Virtual-piano',
+    studentStartDate: '2021-03-16T04:32:00.000Z',
+    studentEndDate: '2021-03-23T01:59:00.000Z',
+    maxScore: 50,
+    scoreWeight: 1,
+    descriptionUrl: 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/js-projects/virtual-piano',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: 4,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
   },
   {
-    id: 978,
-    taskId: 695,
-    name: 'Chess S1E2. Cross-check',
-    maxScore: 480,
+    id: 853,
+    taskId: 630,
+    type: 'htmltask',
+    name: 'Clean-code-s1e1',
+    studentStartDate: '2021-03-23T01:59:00.000Z',
+    studentEndDate: '2021-04-06T23:59:00.000Z',
+    maxScore: 45,
     scoreWeight: 1,
-    githubPrRequired: false,
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md',
-    studentStartDate: '2021-06-30T00:00:00.000Z',
-    studentEndDate: '2021-07-19T23:59:00.000Z',
-    useJury: false,
+    descriptionUrl: 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/clean-code/clean-code-s1e1',
     checker: 'crossCheck',
-    taskOwnerId: 2084,
-    githubRepoName: 'js',
-    sourceGithubRepoUrl: 'src',
-    type: 'jstask',
-    special: '',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: null,
+    pairsCount: 4,
+    submitText: null,
+    taskOwner: null,
+    validations: null,
   },
+];
+
+const FutureTaskData: CourseTaskDto[] = [
+  {
+    id: 438,
+    taskId: 576,
+    type: 'jstask',
+    name: 'Shelter Cross-check',
+    studentStartDate: tomorrowDate.toISOString(),
+    studentEndDate: dayAfterTomorrowDate.toISOString(),
+    maxScore: 100,
+    scoreWeight: 1,
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/shelter',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: afterDayAfterTomorrowDate.toISOString(),
+    pairsCount: null,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
+  },
+  {
+    id: 441,
+    taskId: 493,
+    type: 'jstask',
+    name: 'Virtual Keyboard Cross-Check',
+    studentStartDate: tomorrowDate.toISOString(),
+    studentEndDate: dayAfterTomorrowDate.toISOString(),
+    maxScore: 100,
+    scoreWeight: 1,
+    descriptionUrl: 'https://rolling-scopes-school.github.io/checklist/',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: afterDayAfterTomorrowDate.toISOString(),
+    pairsCount: 4,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
+  },
+];
+
+const ReviewTaskData: CourseTaskDto[] = [
+  {
+    id: 434,
+    taskId: 680,
+    type: 'jstask',
+    name: 'Async Race',
+    studentStartDate: '2022-09-05T23:59:00.000Z',
+    studentEndDate: '2022-09-12T23:59:00.000Z',
+    maxScore: 100,
+    scoreWeight: 1,
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/async-race.md',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: tomorrowDate.toISOString(),
+    pairsCount: 2,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
+  },
+  {
+    id: 450,
+    taskId: 452,
+    type: 'htmltask',
+    name: 'Fancy-weather Cross-Check',
+    studentStartDate: '2022-09-14T16:48:00.000Z',
+    studentEndDate: '2022-09-16T16:48:00.000Z',
+    maxScore: 100,
+    scoreWeight: 1,
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: dayAfterTomorrowDate.toISOString(),
+    pairsCount: 2,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
+  },
+];
+
+const expiredTaskData: CourseTaskDto[] = [
   {
     id: 821,
+    taskId: 593,
+    type: 'htmltask',
     name: 'CV. Cross-Check',
+    studentStartDate: '2021-02-28T23:59:00.000Z',
+    studentEndDate: '2021-03-08T23:59:00.000Z',
     maxScore: 100,
     scoreWeight: 0.2,
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cv/html-css.md',
-    studentStartDate: '2021-02-28T10:00:00.000Z',
-    studentEndDate: '2021-03-08T23:59:00.000Z',
     checker: 'crossCheck',
-    taskOwnerId: 2084,
-    type: 'htmltask',
-  },
-] as CourseTaskDto[];
-
-const onlyExpired = [
-  {
-    id: 978,
-    name: 'Chess S1E2. Cross-check',
-    maxScore: 480,
-    scoreWeight: 1,
-    githubPrRequired: false,
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md',
-    studentStartDate: '2021-06-30T00:00:00.000Z',
-    studentEndDate: '2021-07-19T23:59:00.000Z',
-    useJury: false,
-    checker: 'crossCheck',
-    taskOwnerId: 2084,
-    githubRepoName: 'js',
-    sourceGithubRepoUrl: 'src',
-    type: 'jstask',
-    special: '',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: '2021-03-11T23:59:00.000Z',
+    pairsCount: 4,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
   },
   {
-    id: 821,
-    name: 'CV. Cross-Check',
-    maxScore: 100,
-    scoreWeight: 0.2,
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cv/html-css.md',
-    studentStartDate: '2021-02-28T10:00:00.000Z',
-    studentEndDate: '2021-03-08T23:59:00.000Z',
-    checker: 'crossCheck',
-    taskOwnerId: 2084,
+    id: 841,
+    taskId: 594,
     type: 'htmltask',
+    name: 'Wildlife',
+    studentStartDate: '2021-02-28T23:59:00.000Z',
+    studentEndDate: '2021-03-15T23:59:00.000Z',
+    maxScore: 50,
+    scoreWeight: 0.5,
+    descriptionUrl: 'https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/wildlife',
+    checker: 'crossCheck',
+    crossCheckStatus: 'initial',
+    crossCheckEndDate: '2021-05-06T23:59:00.000Z',
+    pairsCount: 4,
+    submitText: null,
+    taskOwner: null,
+    validations: {},
   },
-] as CourseTaskDto[];
+];
 
 describe('CourseTaskSelect', () => {
-  const outputFull = render(<CourseTaskSelect data={fullData} groupBy="deadline"></CourseTaskSelect>);
-  const outputOnlyExpired = render(<CourseTaskSelect data={onlyExpired} groupBy="deadline"></CourseTaskSelect>);
-  const outputEmpty = render(<CourseTaskSelect data={[]} groupBy="deadline"></CourseTaskSelect>);
+  describe('Should render correctly', () => {
+    it('render deadline group', () => {
+      const deadlineGroup = render(
+        <CourseTaskSelect data={[...ActiveCodewarsData, ...ActiveTestData]} groupBy="deadline"></CourseTaskSelect>,
+      );
+      expect(deadlineGroup.container).toMatchSnapshot();
+    });
 
-  it('should render with both groups', () => {
-    expect(outputFull.container).toMatchSnapshot();
-  });
-  it('should render with one group', () => {
-    expect(outputOnlyExpired.container).toMatchSnapshot();
-  });
+    it('render cross-check deadline group', () => {
+      const crossCheckDeadlineGroup = render(
+        <CourseTaskSelect
+          data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
+          groupBy="crossCheckDeadline"
+        ></CourseTaskSelect>,
+      );
+      expect(crossCheckDeadlineGroup.container).toMatchSnapshot();
+    });
 
-  it('should render empty', () => {
-    expect(outputEmpty.container).toMatchSnapshot();
+    it('render default group', () => {
+      const defaultGroup = render(
+        <CourseTaskSelect
+          data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
+          groupBy="default"
+        ></CourseTaskSelect>,
+      );
+      expect(defaultGroup.container).toMatchSnapshot();
+    });
   });
 });

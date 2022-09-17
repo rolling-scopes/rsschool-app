@@ -1,34 +1,40 @@
-import * as React from 'react';
 import { Select, Form } from 'antd';
 import { CourseTaskDto } from 'api';
+import { TaskSelectIcon } from 'components/Icons/TaskSelectIcon';
+
+export enum Group {
+  Default = 'default',
+  Deadline = 'deadline',
+  CrossCheckDeadline = 'crossCheckDeadline',
+}
+
+export type GroupType = `${Group}`;
+
+enum Section {
+  Unknown = 'Unknown',
+  AllTasks = 'All tasks',
+  Future = 'Future',
+  Active = 'Active',
+  Review = 'Review',
+  Expired = 'Expired',
+}
+
+enum SortingDirection {
+  Ascending = 'ascending',
+  Descending = 'descending',
+}
 
 type Props = {
   data: CourseTaskDto[];
-  groupBy?: string;
+  groupBy?: GroupType;
   onChange?: (id: number) => void;
   defaultValue?: number | null;
 };
 
-const MAX_DATE = '+275760-09-13T00:00:00.000Z';
-
 export function CourseTaskSelect(props: Props) {
-  const { data, groupBy, onChange, defaultValue, ...options } = props;
-
-  const sortedData = data.sort((firstTask, secondTask) =>
-    (secondTask.studentEndDate ?? MAX_DATE).localeCompare(firstTask.studentEndDate ?? MAX_DATE),
-  );
+  const { data, groupBy = Group.Default, onChange, defaultValue, ...options } = props;
   const selectProps = onChange ? { onChange } : {};
-
-  const dataActive = sortedData.filter(task => Date.now() < Date.parse(task.studentEndDate ?? MAX_DATE));
-  const dataExpired = sortedData.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));
-
-  const selectGroups =
-    groupBy === 'deadline'
-      ? [
-          { data: dataActive, title: 'Active' },
-          { data: dataExpired, title: 'Expired' },
-        ]
-      : [{ data: sortedData, title: 'All tasks' }];
+  const selectingGroup = getSelectingGroup(data, groupBy);
 
   return (
     <Form.Item
@@ -39,12 +45,18 @@ export function CourseTaskSelect(props: Props) {
       rules={[{ required: true, message: 'Please select a task' }]}
     >
       <Select placeholder="Select task" {...selectProps}>
-        {selectGroups.map(
-          group =>
-            group.data.length > 0 && (
-              <Select.OptGroup label={group.title}>
-                {group.data.map(task => (
+        {selectingGroup.map(
+          (section, index) =>
+            section.tasks.length > 0 && (
+              <Select.OptGroup key={index} label={`${section.title} (${section.tasks.length})`}>
+                {section.tasks.map(task => (
                   <Select.Option key={task.id} value={task.id}>
+                    {section.title === Section.Active && groupBy === Group.Deadline && (
+                      <TaskSelectIcon group={groupBy} endDate={task.studentEndDate} />
+                    )}
+                    {section.title === Section.Review && groupBy === Group.CrossCheckDeadline && (
+                      <TaskSelectIcon group={groupBy} endDate={task.crossCheckEndDate} />
+                    )}{' '}
                     {task.name}
                   </Select.Option>
                 ))}
@@ -54,4 +66,144 @@ export function CourseTaskSelect(props: Props) {
       </Select>
     </Form.Item>
   );
+}
+
+function getSelectingGroup(data: CourseTaskDto[], groupBy: GroupType) {
+  switch (groupBy) {
+    case Group.Deadline:
+      return [
+        {
+          title: Section.Active,
+          tasks: sortTasks({
+            tasks: getTasksBetweenStudentStartDateStudentEndDate(data),
+            sortBy: 'studentEndDate',
+            sortingDirection: SortingDirection.Ascending,
+          }),
+        },
+        {
+          title: Section.Future,
+          tasks: sortTasks({
+            tasks: getTasksBeforeStudentStartDate(data),
+            sortBy: 'studentStartDate',
+            sortingDirection: SortingDirection.Ascending,
+          }),
+        },
+        {
+          title: Section.Expired,
+          tasks: sortTasks({
+            tasks: getTasksAfterStudentEndDate(data),
+            sortBy: 'studentEndDate',
+            sortingDirection: SortingDirection.Descending,
+          }),
+        },
+      ];
+
+    case Group.CrossCheckDeadline: {
+      const unknownTasks = data.filter(({ crossCheckEndDate }) => !crossCheckEndDate);
+      const tasksWithoutUnknown = data.filter(({ crossCheckEndDate }) => crossCheckEndDate);
+
+      return [
+        {
+          title: Section.Review,
+          tasks: sortTasks({
+            tasks: getTasksBetweenStudentEndDateCrossCheckEndDate(tasksWithoutUnknown),
+            sortBy: 'crossCheckEndDate',
+            sortingDirection: SortingDirection.Ascending,
+          }),
+        },
+        {
+          title: Section.Unknown,
+          tasks: sortTasks({
+            tasks: unknownTasks,
+            sortBy: 'studentEndDate',
+            sortingDirection: SortingDirection.Ascending,
+          }),
+        },
+        {
+          title: Section.Future,
+          tasks: sortTasks({
+            tasks: getTasksBeforeStudentEndDate(tasksWithoutUnknown),
+            sortBy: 'studentEndDate',
+            sortingDirection: SortingDirection.Ascending,
+          }),
+        },
+        {
+          title: Section.Expired,
+          tasks: sortTasks({
+            tasks: getTasksAfterCrossCheckEndDate(tasksWithoutUnknown),
+            sortBy: 'crossCheckEndDate',
+            sortingDirection: SortingDirection.Descending,
+          }),
+        },
+      ];
+    }
+
+    case Group.Default:
+    default:
+      return [
+        {
+          title: Section.AllTasks,
+          tasks: sortTasks({
+            tasks: data,
+            sortBy: 'studentEndDate',
+            sortingDirection: SortingDirection.Descending,
+          }),
+        },
+      ];
+  }
+}
+
+type SortTasksProps = {
+  tasks: CourseTaskDto[];
+  sortBy: 'studentStartDate' | 'studentEndDate' | 'crossCheckEndDate';
+  sortingDirection: SortingDirection;
+};
+
+function sortTasks({ tasks, sortBy, sortingDirection }: SortTasksProps) {
+  return [...tasks].sort((firstTask, secondTask) => {
+    const firstDate = firstTask[sortBy];
+    const secondDate = secondTask[sortBy];
+
+    if (firstDate && secondDate) {
+      return sortingDirection === SortingDirection.Ascending
+        ? firstDate.localeCompare(secondDate)
+        : secondDate.localeCompare(firstDate);
+    }
+
+    return 1;
+  });
+}
+
+function getTasksBeforeStudentStartDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(task => Date.now() < Date.parse(task.studentStartDate));
+}
+
+function getTasksBeforeStudentEndDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(task => Date.now() < Date.parse(task.studentEndDate));
+}
+
+function getTasksAfterStudentEndDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(task => Date.now() >= Date.parse(task.studentEndDate));
+}
+
+function getTasksAfterCrossCheckEndDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(task => {
+    if (task.crossCheckEndDate) {
+      return Date.now() >= Date.parse(task.crossCheckEndDate);
+    }
+  });
+}
+
+function getTasksBetweenStudentStartDateStudentEndDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(
+    task => Date.now() >= Date.parse(task.studentStartDate) && Date.now() < Date.parse(task.studentEndDate),
+  );
+}
+
+function getTasksBetweenStudentEndDateCrossCheckEndDate(tasks: CourseTaskDto[]) {
+  return tasks.filter(task => {
+    if (task.crossCheckEndDate) {
+      return Date.now() >= Date.parse(task.studentEndDate) && Date.now() < Date.parse(task.crossCheckEndDate);
+    }
+  });
 }
