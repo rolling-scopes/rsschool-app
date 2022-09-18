@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserData } from 'modules/Opportunities/models';
-import { AvatarCV } from 'modules/Opportunities/components/AvatarCV';
+import { AvatarCv } from 'modules/Opportunities/components/AvatarCv';
 
 type Props = {
   userData: UserData;
@@ -13,7 +13,7 @@ export const NameTitle = ({ userData }: Props) => {
     <div style={{ display: 'flex' }}>
       <div>
         <div style={{ paddingRight: 16 }}>
-          <AvatarCV src={avatarLink} />
+          <AvatarCv src={avatarLink} />
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

@@ -7,7 +7,7 @@ type Props = {
 
 const AVATAR_SIZE = 80;
 
-export const AvatarCV = (props: Props) => {
+export const AvatarCv = (props: Props) => {
   const src = props.src ?? undefined;
   const icon = src ? null : <UserOutlined />;
   return <Avatar src={src} icon={icon} size={AVATAR_SIZE} />;

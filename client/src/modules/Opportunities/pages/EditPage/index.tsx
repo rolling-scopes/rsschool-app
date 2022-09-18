@@ -10,7 +10,7 @@ import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
 import { SessionContext } from 'modules/Course/contexts';
-import { EditViewResume } from 'modules/Opportunities/components/EditViewResume';
+import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
 
 const { Content } = Layout;
 const { Text, Paragraph } = Typography;
@@ -78,12 +78,12 @@ export function EditPage() {
     });
   };
 
-  const handleCreateConsent = async () => {
+  const handleCreateConsent = withLoading(async () => {
     await handleConsentUpdate(true);
     const updatedTimestamp = await oldService.updateResume();
     showCreationModal(updatedTimestamp);
     setEditMode(true);
-  };
+  });
 
   return (
     <>
@@ -94,7 +94,7 @@ export function EditPage() {
         <Header username={githubId} title="My CV" />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
-            <EditViewResume
+            <EditViewCv
               githubId={githubId}
               consent={consent}
               data={resume}

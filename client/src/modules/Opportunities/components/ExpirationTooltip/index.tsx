@@ -1,19 +1,16 @@
 import { Typography, Button, Modal, notification } from 'antd';
+import { useCallback } from 'react';
+import { useEffectOnce } from 'react-use';
 import {
   ExclamationCircleTwoTone,
   QuestionCircleOutlined,
   CloseCircleTwoTone,
   ClockCircleOutlined,
 } from '@ant-design/icons';
+import { ExpirationState } from 'modules/Opportunities/constants';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 
 const { Text, Paragraph } = Typography;
-
-const enum ExpirationState {
-  Expired,
-  NearlyExpired,
-  NotExpired,
-}
 
 const service = new OpportunitiesService();
 
@@ -26,7 +23,11 @@ export const ExpirationTooltip = ({
 }) => {
   const textStyle = { fontSize: '12px' };
 
-  const showRenewModal = () => {
+  useEffectOnce(() => {
+    if (expirationState === ExpirationState.Expired) showRenewModal();
+  });
+
+  const showRenewModal = useCallback(() => {
     const title =
       expirationState === ExpirationState.NotExpired ? (
         <Text strong>Your CV is public until {expirationDate}</Text>
@@ -73,7 +74,7 @@ export const ExpirationTooltip = ({
         });
       },
     });
-  };
+  }, [expirationDate, expirationState]);
 
   const PublicButton = () => (
     <Button
@@ -84,6 +85,7 @@ export const ExpirationTooltip = ({
       Public
     </Button>
   );
+
   const ArchivedButton = () => (
     <Button
       size="small"

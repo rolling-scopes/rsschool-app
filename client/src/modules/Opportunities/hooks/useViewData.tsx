@@ -56,7 +56,8 @@ export function useViewData({ initialData: resume }: Props) {
       notes,
       name,
       selfIntroLink,
-      militaryService: militaryService as any,
+      militaryService: militaryService,
+      locations,
       avatarLink,
       desiredPosition,
       englishLevel,
@@ -65,9 +66,8 @@ export function useViewData({ initialData: resume }: Props) {
     };
 
     const contactsList = {
-      locations,
       email,
-      github: githubUsername,
+      githubUsername,
       linkedin,
       phone,
       skype,

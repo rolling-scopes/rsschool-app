@@ -26,7 +26,7 @@ export interface VisibleCoursesFormData {
   [id: string]: boolean;
 }
 
-export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'github' | 'website';
+export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'githubUsername' | 'website';
 
 export interface UserData {
   avatarLink: string | null;
@@ -45,20 +45,6 @@ export type Contacts = {
   [key in ContactType]: string | null;
 };
 
-export interface ContactsFromProfile {
-  phone: string | null;
-  email: string | null;
-  skype: string | null;
-  telegram: string | null;
-  linkedin: string | null;
-  locations: string | null;
-}
-
-export interface CVDataFromProfile extends ContactsFromProfile {
-  name: string;
-  notes: string | null;
-}
-
 export interface FieldData {
   name: string[];
   value: any;
@@ -67,8 +53,7 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface AllUserCVData extends Omit<UserData, 'uuid'>, Omit<Contacts, 'github'> {
-  githubUsername: string | null;
+export interface AllUserCVData extends Omit<UserData, 'uuid'>, Contacts {
   visibleCourses: VisibleCourses;
 }
 

@@ -49,7 +49,7 @@ export const ContactsForm = forwardRef((props: Props, ref: ForwardedRef<FormInst
         <Item label="LinkedIn" name="linkedin" rules={[...validationRules['linkedin']]}>
           <Input style={inputStyle} placeholder="LinkedIn username" />
         </Item>
-        <Item label="Github" name="github" rules={[...validationRules['github']]}>
+        <Item label="Github" name="githubUsername" rules={[...validationRules['github']]}>
           <Input style={inputStyle} placeholder="Github username" />
         </Item>
         <Item label="Website" name="website" rules={[...validationRules['website']]}>

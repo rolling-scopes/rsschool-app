@@ -1,6 +1,6 @@
 import { ResumeDto } from 'api';
 
-export const transformCvData = (data: ResumeDto | null) => {
+export const transformInitialCvData = (data: ResumeDto | null) => {
   const {
     notes,
     name,
@@ -38,7 +38,7 @@ export const transformCvData = (data: ResumeDto | null) => {
 
   const contacts = {
     email: email ?? null,
-    github: githubUsername ?? null,
+    githubUsername: githubUsername ?? null,
     linkedin: linkedin ?? null,
     phone: phone ?? null,
     skype: skype ?? null,

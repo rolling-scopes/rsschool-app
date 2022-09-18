@@ -1,6 +1,5 @@
-import { useState, useCallback, createRef, ReactNode, RefObject } from 'react';
-import moment from 'moment';
-import { Layout, Space, Button, Modal, Row, Col } from 'antd';
+import { useState, createRef, RefObject } from 'react';
+import { Layout, Space, Button, Row, Col, Alert } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto } from 'api';
@@ -18,6 +17,7 @@ import {
   VisibleCourses,
 } from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
+import { transformFieldsData, splitDataForForms } from 'modules/Opportunities/transformers';
 
 const { Content } = Layout;
 
@@ -41,139 +41,31 @@ export const EditCV = (props: Props) => {
   const [contacts, setContacts] = useState<Contacts | null>(props.contacts);
   const [userData, setUserData] = useState<UserData | null>(props.userData);
   const [visibleCourses, setVisibleCourses] = useState<number[] | null>(props.visibleCourses);
+  const [validationFailed, setValidationFailed] = useState<boolean>(false);
 
   const userFormRef: RefObject<FormInstance> = createRef();
   const contactsFormRef: RefObject<FormInstance> = createRef();
   const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
 
-  const showWarningModal = useCallback(({ title, content }: { title: string; content: ReactNode }) => {
-    Modal.warn({
-      title,
-      content,
-      maskClosable: true,
-    });
-  }, []);
+  const submitData = async (data: AllUserCVData) => {
+    const newData = await cvService.saveResumeData(data);
 
-  const submitData = async (data: AllDataToSubmit) => {
-    setLoading(true);
+    const { userData, contacts, visibleCourses } = splitDataForForms(newData);
 
-    const {
-      avatarLink,
-      desiredPosition,
-      email,
-      englishLevel,
-      fullTime,
-      github,
-      linkedin,
-      locations,
-      militaryService,
-      name,
-      notes,
-      phone,
-      selfIntroLink,
-      skype,
-      startFrom,
-      telegram,
-      website,
-      visibleCourses,
-    } = data;
+    setUserData(userData);
+    setContacts(contacts);
+    setVisibleCourses(visibleCourses);
 
-    const LOCATIONS_COUNT = 3;
-
-    const topLocations = getTopLocations(locations, LOCATIONS_COUNT);
-
-    const cvData: AllUserCVData = {
-      selfIntroLink: nullifyConditional(selfIntroLink),
-      militaryService,
-      avatarLink: nullifyConditional(avatarLink),
-      desiredPosition: nullifyConditional(desiredPosition),
-      englishLevel,
-      name: nullifyConditional(name),
-      notes: nullifyConditional(notes),
-      phone: nullifyConditional(phone),
-      email: nullifyConditional(email),
-      skype: nullifyConditional(skype),
-      telegram: nullifyConditional(telegram),
-      linkedin: nullifyConditional(linkedin),
-      locations: topLocations,
-      githubUsername: nullifyConditional(github),
-      website: nullifyConditional(website),
-      startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
-      fullTime,
-      visibleCourses,
-    };
-
-    const newCVData = await cvService.saveResumeData(cvData);
-
-    const {
-      selfIntroLink: newSelfIntroLink,
-      militaryService: newMilitaryService,
-      avatarLink: newAvatarLink,
-      desiredPosition: newDesiredPosition,
-      englishLevel: newEnglishLevel,
-      name: newName,
-      notes: newNotes,
-      startFrom: newStartFrom,
-      fullTime: newFullTime,
-      phone: newPhone,
-      email: newEmail,
-      skype: newSkype,
-      telegram: newTelegram,
-      linkedin: newLinkedin,
-      locations: newLocations,
-      githubUsername: newGithub,
-      website: newWebsite,
-      visibleCourses: newVisibleCourses,
-    } = newCVData;
-
-    const newUserData: Omit<UserData, 'uuid'> = {
-      selfIntroLink: newSelfIntroLink,
-      militaryService: newMilitaryService,
-      avatarLink: newAvatarLink,
-      desiredPosition: newDesiredPosition,
-      englishLevel: newEnglishLevel,
-      locations: newLocations,
-      name: newName,
-      notes: newNotes,
-      startFrom: newStartFrom,
-      fullTime: newFullTime,
-    };
-
-    const newContacts: Contacts = {
-      phone: newPhone,
-      email: newEmail,
-      skype: newSkype,
-      telegram: newTelegram,
-      linkedin: newLinkedin,
-      github: newGithub,
-      website: newWebsite,
-    };
-
-    setUserData(newUserData);
-    setContacts(newContacts);
-    setVisibleCourses(newVisibleCourses);
-
-    setLoading(false);
-    props.onUpdateResume?.();
+    props.onUpdateResume && props.onUpdateResume();
   };
 
   const saveData = async (data: AllDataToSubmit) => {
-    await submitData(data);
+    const dataToSubmit = transformFieldsData(data);
+    await submitData(dataToSubmit);
   };
 
-  const getTopLocations = (locationsRaw: string | null, length: number) =>
-    locationsRaw === null
-      ? null
-      : locationsRaw
-          .split(',')
-          .slice(0, length)
-          .map(location => location.trim())
-          .join(',');
-
-  const nullifyConditional = (str?: string | null) => str?.trim() || null;
-
   const hasInvalidFields = (form: FormInstance | null) =>
-    !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
+    !form ? false : form.getFieldsError().some(field => field.errors.length);
 
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
@@ -194,10 +86,9 @@ export const EditCV = (props: Props) => {
 
   const handleSave = async () => {
     if (hasInvalidFields(userFormRef.current) || hasInvalidFields(contactsFormRef.current)) {
-      return showWarningModal({
-        title: 'Some form fields do not meet validation criteria',
-        content: 'Please fill it correctly and try again',
-      });
+      setValidationFailed(true);
+      setTimeout(() => setValidationFailed(false), 2000);
+      return;
     }
 
     const values = getDataFromForms();
@@ -233,6 +124,16 @@ export const EditCV = (props: Props) => {
                 <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
                   Cancel
                 </Button>
+              </Row>
+              <Row>
+                {validationFailed ? (
+                  <Alert
+                    style={{ marginBottom: '10px', width: '100%' }}
+                    showIcon
+                    type="error"
+                    message="All required fields must be filled first"
+                  />
+                ) : null}
               </Row>
               <Row>{userData && <GeneralInfoForm ref={userFormRef} userData={userData} />}</Row>
               <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>

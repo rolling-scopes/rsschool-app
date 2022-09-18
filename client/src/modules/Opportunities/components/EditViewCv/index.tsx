@@ -1,5 +1,5 @@
 import { ResumeDto } from 'api';
-import { transformCvData } from '../../transformers/transformCvData';
+import { transformInitialCvData } from '../../transformers/transformInitialCvData';
 import { EditCV } from '../EditCv';
 import { ViewCV } from '../ViewCv';
 import { NoConsentView } from '../NoConsentView';
@@ -16,14 +16,14 @@ type ResumeProps = {
   onUpdateResume?: () => void;
 };
 
-export const EditViewResume = (props: ResumeProps) => {
+export const EditViewCv = (props: ResumeProps) => {
   const { githubId, data, consent, editMode, switchView, onUpdateResume, onRemoveConsent, onCreateConsent } = props;
 
   if (!consent) {
     return <NoConsentView isOwner={true} giveConsent={onCreateConsent} />;
   }
 
-  const { userData, contacts, visibleCourses, courses } = transformCvData(data);
+  const { userData, contacts, visibleCourses, courses } = transformInitialCvData(data);
 
   const editing = editMode || data == null;
 
