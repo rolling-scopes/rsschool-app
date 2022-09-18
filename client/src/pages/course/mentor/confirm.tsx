@@ -17,8 +17,8 @@ function Page(props: { session: Session; courseAlias?: string }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [noAccess, setNoAccess] = useState(false);
-  const [isPreferredCourse, setIsPreferredCourse] = useState(false);
+  const [noAccess, setNoAccess] = useState<boolean | null>(null);
+  const [isPreferredCourse, setIsPreferredCourse] = useState<boolean | null>(null);
   const [success, setSuccess] = useState(false);
   const [mentorData, setMentorData] = useState<MentorResponse | null>(null);
   const [course, setCourse] = useState(null as Course | null);
@@ -33,26 +33,28 @@ function Page(props: { session: Session; courseAlias?: string }) {
   useAsync(async () => {
     try {
       setLoading(true);
-      const courseAlias: string | undefined = router.query?.course;
+      const courseAlias = (router.query?.course as string).toLowerCase();
       if (courseAlias == null) {
+        setIsPreferredCourse(false);
         return;
       }
       const courses = await new CoursesService().getCourses();
-      const course = courses.find(c => c.alias.toLowerCase() === courseAlias.toLowerCase()) ?? null;
+      const course = courses.find(c => c.alias.toLowerCase() === courseAlias) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
-      const preferredCourse = mentor.preferredCourses?.includes(course?.id ?? 0);
-      setIsPreferredCourse(!preferredCourse ? false : true);
-      if (!mentor.preselectedCourses?.includes(course?.id ?? 0)) {
+      const preferredCourse = course?.id ? mentor.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mentor.preselectedCourses?.includes(course?.id) : null;
+      setIsPreferredCourse(preferredCourse);
+      if (preselectedCourses === false) {
         setNoAccess(true);
         return;
       } else {
         setNoAccess(false);
+        setMentorData(mentor);
+        form.setFieldsValue(mentor);
       }
-      setMentorData(mentor);
-      form.setFieldsValue(mentor);
     } catch {
-      setNoAccess(true);
+      setNoAccess(null);
     } finally {
       setLoading(false);
     }
@@ -72,24 +74,24 @@ function Page(props: { session: Session; courseAlias?: string }) {
       });
       setSuccess(true);
     } catch (e) {
-      message.error('An error occured. Please try later.');
+      message.error('An error occurred. Please try later.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
+  if (loading || (noAccess === null && isPreferredCourse === null)) {
     return null;
   }
 
-  if (course == null || (mentorData == null && loading)) {
+  if (course == null) {
     return (
       <PageLayout loading={false} githubId={props.session.githubId}>
         <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
+          <Image src="/static/svg/err.svg" alt="Course Not Found" width={175} height={175} />
         </Row>
         <Row justify="center">
-          <h1 style={{ fontSize: '36px', marginBottom: 0 }}>Sorry, Course or Mentor Not Found</h1>
+          <h1 style={{ fontSize: '36px', marginBottom: 0 }}>Sorry, Course Not Found</h1>
         </Row>
       </PageLayout>
     );
@@ -105,7 +107,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
   if (noAccess && !isPreferredCourse) {
     return (
       <PageLayout {...pageProps}>
-        <Result status={'403' as any} title="You are not registered to the course" />
+        <Result status={'403'} title="You are not registered to the course" />
       </PageLayout>
     );
   }
@@ -114,7 +116,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
     return (
       <PageLayout loading={false} githubId={props.session.githubId}>
         <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/images/rs-hero.png" alt="Error 404" width={175} height={175} />
+          <Image src="/static/images/rs-hero.png" alt="You are RS hero" width={175} height={175} />
         </Row>
         <Row justify="center">
           <h1 style={{ fontSize: '32px', marginBottom: 15, maxWidth: 600, textAlign: 'center' }}>
