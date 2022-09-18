@@ -1,5 +1,6 @@
 import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
+import Image from 'next/image';
 import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { StudentSearch } from 'components/StudentSearch';
@@ -17,6 +18,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
+  const [isPreferredCourse, setIsPreferredCourse] = useState(false);
   const [success, setSuccess] = useState(false);
   const [mentorData, setMentorData] = useState<MentorResponse | null>(null);
   const [course, setCourse] = useState(null as Course | null);
@@ -31,21 +33,22 @@ function Page(props: { session: Session; courseAlias?: string }) {
   useAsync(async () => {
     try {
       setLoading(true);
-      const courseAlias = router.query?.course;
-      if (!courseAlias) {
+      const courseAlias: string | undefined = router.query?.course;
+      if (courseAlias == null) {
         return;
       }
       const courses = await new CoursesService().getCourses();
-      const course = courses.find(c => c.alias === courseAlias) ?? null;
+      const course = courses.find(c => c.alias.toLowerCase() === courseAlias.toLowerCase()) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
+      const preferredCourse = mentor.preferredCourses?.includes(course?.id ?? 0);
+      setIsPreferredCourse(!preferredCourse ? false : true);
       if (!mentor.preselectedCourses?.includes(course?.id ?? 0)) {
         setNoAccess(true);
         return;
       } else {
         setNoAccess(false);
       }
-
       setMentorData(mentor);
       form.setFieldsValue(mentor);
     } catch {
@@ -75,8 +78,21 @@ function Page(props: { session: Session; courseAlias?: string }) {
     }
   };
 
-  if (course == null || (mentorData == null && loading)) {
+  if (loading) {
     return null;
+  }
+
+  if (course == null || (mentorData == null && loading)) {
+    return (
+      <PageLayout loading={false} githubId={props.session.githubId}>
+        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
+          <Image src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
+        </Row>
+        <Row justify="center">
+          <h1 style={{ fontSize: '36px', marginBottom: 0 }}>Sorry, Course or Mentor Not Found</h1>
+        </Row>
+      </PageLayout>
+    );
   }
 
   const pageProps = {
@@ -86,10 +102,41 @@ function Page(props: { session: Session; courseAlias?: string }) {
     courseName: course.name,
   };
 
-  if (noAccess) {
+  if (noAccess && !isPreferredCourse) {
     return (
       <PageLayout {...pageProps}>
-        <Result status={'403' as any} title="You are not preselected to the course" />
+        <Result status={'403' as any} title="You are not registered to the course" />
+      </PageLayout>
+    );
+  }
+
+  if (noAccess && isPreferredCourse) {
+    return (
+      <PageLayout loading={false} githubId={props.session.githubId}>
+        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
+          <Image src="/static/images/rs-hero.png" alt="Error 404" width={175} height={175} />
+        </Row>
+        <Row justify="center">
+          <h1 style={{ fontSize: '32px', marginBottom: 15, maxWidth: 600, textAlign: 'center' }}>
+            Thank you for registration as a mentor for Rolling Scopes School
+          </h1>
+        </Row>
+        <Row justify="center">
+          <h2 style={{ marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
+            <p>
+              Hello, our future mentor, we are very happy to see your in The Rolling Scopes School. But before you start
+              your journey we need to consider your application and submit you to a course.
+            </p>
+            <p style={{ marginBottom: 15 }}>
+              It can take a little time. We will send you another mail with next steps late
+            </p>
+            <p style={{ fontWeight: 500 }}>
+              We really appreciate your interest for school.
+              <br />
+              See you soon.
+            </p>
+          </h2>
+        </Row>
       </PageLayout>
     );
   }
