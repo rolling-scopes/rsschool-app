@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form } from 'antd';
 import { render } from '@testing-library/react';
 
 import { CourseTaskSelect } from '..';
@@ -248,31 +249,37 @@ const expiredTaskData: CourseTaskDto[] = [
 
 describe('CourseTaskSelect', () => {
   describe('Should render correctly', () => {
-    it('render deadline group', () => {
-      const deadlineGroup = render(
-        <CourseTaskSelect data={[...ActiveCodewarsData, ...ActiveTestData]} groupBy="deadline"></CourseTaskSelect>,
+    it('if groupBy is default', () => {
+      const { container } = render(
+        <Form>
+          <CourseTaskSelect
+            data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
+            groupBy="default"
+          ></CourseTaskSelect>
+        </Form>,
       );
-      expect(deadlineGroup.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
-    it('render cross-check deadline group', () => {
-      const crossCheckDeadlineGroup = render(
-        <CourseTaskSelect
-          data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
-          groupBy="crossCheckDeadline"
-        ></CourseTaskSelect>,
+    it('if groupBy is deadline', () => {
+      const { container } = render(
+        <Form>
+          <CourseTaskSelect data={[...ActiveCodewarsData, ...ActiveTestData]} groupBy="deadline"></CourseTaskSelect>,
+        </Form>,
       );
-      expect(crossCheckDeadlineGroup.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
-    it('render default group', () => {
-      const defaultGroup = render(
-        <CourseTaskSelect
-          data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
-          groupBy="default"
-        ></CourseTaskSelect>,
+    it('if groupBy is cross-check deadline', () => {
+      const { container } = render(
+        <Form>
+          <CourseTaskSelect
+            data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
+            groupBy="crossCheckDeadline"
+          ></CourseTaskSelect>
+        </Form>,
       );
-      expect(defaultGroup.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
   });
 });
