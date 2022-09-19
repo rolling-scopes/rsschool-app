@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, message, notification, Radio, Row, Table, Typography, Upload, Grid } from 'antd';
+import { Button, Checkbox, Col, Form, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import {
   CoursesTasksApi,
@@ -32,8 +32,6 @@ import {
 import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
 
-const { useBreakpoint } = Grid;
-
 const courseTasksApi = new CoursesTasksApi();
 
 const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
@@ -62,8 +60,6 @@ function Page(props: CoursePageProps) {
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
   const [isModified, setIsModified] = useState(false);
-
-  const screens = useBreakpoint();
 
   useBeforeUnload(isModified, 'You have changes in test! Do you realy want to close this page?');
 
