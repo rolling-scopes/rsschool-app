@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
+import { Button, Checkbox, Col, Form, message, notification, Radio, Row, Table, Typography, Upload, Grid } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import {
   CoursesTasksApi,
@@ -32,6 +32,8 @@ import {
 import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
 
+const { useBreakpoint } = Grid;
+
 const courseTasksApi = new CoursesTasksApi();
 
 const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
@@ -60,6 +62,8 @@ function Page(props: CoursePageProps) {
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
   const [isModified, setIsModified] = useState(false);
+
+  const screens = useBreakpoint();
 
   useBeforeUnload(isModified, 'You have changes in test! Do you realy want to close this page?');
 
@@ -197,7 +201,7 @@ function Page(props: CoursePageProps) {
             </Row>
           </Form>
         </Col>
-        <Col xs={24} sm={20} md={18} lg={14}>
+        <Col xs={24} sm={24} md={24} lg={14}>
           <Row justify="space-between">
             <Typography.Title type="secondary" level={4}>
               Verification Results
@@ -215,23 +219,22 @@ function Page(props: CoursePageProps) {
                 title: 'Date/Time',
                 dataIndex: 'createdDate',
                 render: shortDateTimeRenderer,
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Status',
                 dataIndex: 'status',
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Task Name',
                 dataIndex: ['courseTask', 'task', 'name'],
-                ellipsis: true,
-                width: 150,
+                width: '17%',
               },
               {
                 title: 'Score',
                 dataIndex: 'score',
-                width: 60,
+                width: '8%',
               },
               {
                 title: 'Details',
