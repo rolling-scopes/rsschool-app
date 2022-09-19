@@ -1,0 +1,276 @@
+{
+  "header": {
+    "title": "Header"
+  },
+
+  "footer": {
+    "title": "Footer"
+  },
+
+  "home": {
+    "title": "Home",
+    "more": "Read more",
+    "about": {
+      "project": "Our project is a depository of sloths. View all existing stickers, download the necessary ones or chill a bit - why not? Feel a sloth!",
+      "team": "We are a team of beginner frontend developers. We welcome you to our project, which we completed as part of the final task of the JS/FE2022Q1 Rolling Scopes School course!"
+    }
+  },
+
+  "about": {
+    "title": "About",
+    "sloths": {
+      "title": "About RS SLOTHS",
+      "main": "All sloths in one site!",
+      "descr": "We have gathered all the sloths together for you! Now you just need to go to the catalog, select the necessary ones and download them. Any ideas, but no such sloth? Suggest! It can be a ready-made sloth, a sketch drawing or just a text description - and if the idea resonates with sloth fans, it will definitely come true!"
+    },
+    "interactives": {
+      "title": "Interactive",
+      "main": "Sloths are about chilling!",
+      "descr": "We have tried to make sure that you can relax during your stay on our resource. Relax and play Memory Game, try to correctly guess all the sloths in the game of the same name, or create memes based on existing stickers: fun time, work hour! And since you've come here, don't forget to find out what kind of sloth you're today!"
+    },
+    "teammates": {
+      "main": "WOV WOV Team is a team of like-minded people who strive to create something new, interesting and beautiful. We're for a businesslike attitude to humor and a humorous attitude to business!",
+      "wiijoy": "Designer, memolog and Vue.js promoter. Performed the initial setup, created a design layout and carried out work on the front-end part of the project.",
+      "ogimly": "Queen of TypeScript, mistress of API requests and just a good person. Worked on the front-end part of the project, completed all the work on communicating the front-end component with its server part.",
+      "vanet": "Genius, billionaire, playboy, philanthropist. In short, team-lead. Gathered a team, solved all organizational questions (and just solved), developed the backend of the project."
+    }
+  },
+
+  "profile": {
+    "title": "User Profile",
+    "name": "Name",
+    "github": "GitHub",
+    "role": "Role",
+    "createdAt": "Created at",
+    "avatar": "User photo",
+    "btn": {
+      "logout": "Sign out",
+      "guess": "Guess-a-Sloth Game results",
+      "memory": "Memory Game results",
+      "suggest": "Your Sloths suggestions",
+      "admin": "To Admin panel",
+      "sloth": "Your Sloth today"
+    }
+  },
+
+  "catalog": {
+    "title": "Catalog",
+    "search": "...caption or description",
+    "sorting": "Sort by...",
+    "info": "Detail info",
+    "caption": "Caption",
+    "description": "Description",
+    "rating": "Rating",
+    "image_url": "Image url",
+    "createdAt": "Created at",
+    "tags": "Tags",
+    "btn": {
+      "new": "New Sloth"
+    },
+    "count": "Total count"
+  },
+
+  "guess": {
+    "title": "Guess-a-Sloth Game",
+    "description": "Try to guess which sloth is hiding behind the dark outline? Only a real sloth can guess everyone!",
+    "rules": "(Press 1-4 to select an answer, press Enter to send)",
+    "start": "Let's Go!",
+    "congrats": "Congratulations!",
+    "win": "You guessed everyone!",
+    "result": "Your result:",
+    "guess": "Guess image",
+    "guesses": "guesses",
+    "next": "Send an answer",
+    "points1": "point",
+    "points2": "points",
+    "pointsN": "points",
+    "results": "Guess-a-Sloth Results"
+  },
+
+  "memory": {
+    "title": "Memory Game",
+    "start": "Let's Go!",
+    "congrats": "Congratulations!",
+    "win": "You won! Your result:",
+    "steps1": "step",
+    "steps2": "steps",
+    "stepsN": "steps",
+    "time": "seconds",
+    "level": "Choose your level",
+    "junior": "Junior",
+    "middle": "Middle",
+    "senior": "Senior",
+    "results": "Memory Results"
+  },
+
+  "suggest": {
+    "title": "Suggest a new Sloth",
+    "search": "...description",
+    "sorting": "Sort by...",
+    "info": "Detail info",
+    "description": "Description",
+    "rating": "Rating",
+    "createdAt": "Created at",
+    "status": "Status",
+    "user": "User",
+    "btn": {
+      "new": "Your Suggestion",
+      "switch": {
+        "to-new": "New Suggestion",
+        "to-watch": "All Suggestions"
+      },
+      "submit": "Submit"
+    },
+    "new": "Create new Suggestion",
+    "placeholder": "Enter description of meme",
+    "count": "Total count"
+  },
+
+  "create": {
+    "title": "Create a meme",
+    "description": "Choose an image, enter text and copy the result",
+    "top": "Text Top",
+    "bottom": "Text Bottom",
+    "margin": "Image Margin",
+    "color": "Text Color",
+    "stroke": "Text Stroke Color",
+    "backgroundColor": "Background Color",
+    "backgroundTransparent": "Transparent Background"
+  },
+
+  "merch": {
+    "title": "Merch",
+    "description": "Choose an image, enter text and copy the result",
+    "bottom": "Text",
+    "kText": "Text width (relative to image width)",
+    "kFont": "Font size (relative to image width)",
+    "marginTop": "Image Margin Top",
+    "marginLeft": "Image Margin Left",
+    "color": "Text Color",
+    "backgroundColor": "Item Color"
+  },
+
+  "sloth": {
+    "title": "What kind of sloth are you today"
+  },
+
+  "admin": {
+    "title": "Admin panel",
+    "search": "...name or GitHub",
+    "sorting": "Sort by...",
+    "btn": {
+      "users": "Users",
+      "sloths": "Sloths",
+      "suggest": "Suggest a Sloth",
+      "guess": "Guess-a-Sloth",
+      "memory": "Memory"
+    },
+    "users": {
+      "title": "Users List",
+      "info": "Detail info",
+      "btn": {
+        "new": "New user"
+      }
+    }
+  },
+
+  "modal": {
+    "header": {
+      "alert": "Alert!",
+      "error": "ERROR!",
+      "authorization": "Please login via GitHub",
+      "switchers": {
+        "sound": "Turn on/off sound (Ctrl+1)",
+        "locale": "Switch language (Ctrl+2)",
+        "theme": "Switch theme (Ctrl+3)"
+      }
+    },
+    "body": {
+      "authorization": "In order to access the RS Sloths, you need to login with your GitHub account",
+      "del-sloth": "Do you really want to delete this wonderful sloth?",
+      "del-user": "Do you really want to delete this wonderful user?",
+      "del-suggest": "Do you really want to delete this wonderful suggestion?",
+      "empty-file": "File not selected!",
+      "empty-caption": "Name the sloth!",
+      "empty-description": "Describe the sloth!",
+      "download": "Download selected files?"
+    },
+    "btn": {
+      "close": "Close",
+      "authorization": "Sign up with GitHub"
+    }
+  },
+
+  "loader": {
+    "text": "Sloth's loading in progress"
+  },
+
+  "404": {
+    "title": "404: Page Not Found",
+    "text": "Sloth made a bug or didn't make this page.\nPlease check the correctness of path again"
+  },
+
+  "sorting": {
+    "name+": "...Name (ascending)",
+    "name-": "...Name (descending)",
+    "github+": "...GitHub (ascending)",
+    "github-": "...GitHub (descending)",
+    "createdAt+": "...Creation date (ascending)",
+    "createdAt-": "...Creation date (descending)",
+    "caption+": "...Caption (ascending)",
+    "caption-": "...Caption (descending)",
+    "rating+": "...Rating (ascending)",
+    "rating-": "...Rating (descending)",
+    "status+": "...Status (ascending)",
+    "status-": "...Status (descending)"
+  },
+
+  "btn": {
+    "reset": "Reset filters",
+    "del": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "show": "Detail info",
+    "upload": "Choose File",
+    "yes": "Yes",
+    "no": "No",
+    "pick": "Pick",
+    "copy": "Copy",
+    "download": "Download",
+    "trueSize": "True Size",
+    "center": "on Center",
+    "scaleUp": "Scale Up",
+    "scaleDown": "Scale Down",
+    "count-": "Count ▼",
+    "count+": "Count ▲",
+    "time-": "Time ▼",
+    "time+": "Time ▲",
+    "createdAt-": "Creation date ▼",
+    "createdAt+": "Creation date ▲"
+  },
+
+  "pagination": {
+    "perPage": "Items per page",
+    "next": "❯",
+    "prev": "❮",
+    "top": "❮❮",
+    "bottom": "❯❯",
+    "nextTitle": "❯ (Page Down)",
+    "prevTitle": "❮ (Page Up)",
+    "topTitle": "❮❮ (Home)",
+    "bottomTitle": "❯❯ (End)",
+    "count": "Total count"
+  },
+
+  "results": {
+    "user": "Personal results",
+    "all": "Top 10",
+    "again": "Try again:"
+  },
+
+  "rate": {
+    "none": "No rating",
+    "user": "User rating:",
+    "your": "Your rate:"
+  }
+}
