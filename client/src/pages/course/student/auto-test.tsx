@@ -197,7 +197,7 @@ function Page(props: CoursePageProps) {
             </Row>
           </Form>
         </Col>
-        <Col xs={24} sm={20} md={18} lg={14}>
+        <Col xs={24} sm={24} md={24} lg={14}>
           <Row justify="space-between">
             <Typography.Title type="secondary" level={4}>
               Verification Results
@@ -215,23 +215,22 @@ function Page(props: CoursePageProps) {
                 title: 'Date/Time',
                 dataIndex: 'createdDate',
                 render: shortDateTimeRenderer,
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Status',
                 dataIndex: 'status',
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Task Name',
                 dataIndex: ['courseTask', 'task', 'name'],
-                ellipsis: true,
-                width: 150,
+                width: '17%',
               },
               {
                 title: 'Score',
                 dataIndex: 'score',
-                width: 60,
+                width: '8%',
               },
               {
                 title: 'Details',
