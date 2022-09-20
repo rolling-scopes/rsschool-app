@@ -20,7 +20,7 @@ const PROPS_MOCK: TableViewProps = {
       name: 'Codewars stage 1',
       startDate: '2020-02-01T21:00:00.000Z',
       endDate: '2020-03-15T20:59:00.000Z',
-      maxScore: 60,
+      maxScore: 100,
       scoreWeight: 0.2,
       organizer: null,
       status: 'missed',
@@ -46,5 +46,20 @@ describe('TableView', () => {
     render(<TableView {...PROPS_MOCK} />);
 
     expect(screen.getByText(label)).toBeInTheDocument();
+  });
+
+  it.each`
+    value
+    ${'Codewars stage 1'}
+    ${'2020-02-02 00:00'}
+    ${'2020-03-15 23:59'}
+    ${'×0.2'}
+    ${'80 / 100'}
+    ${'Missed'}
+    ${'Coding'}
+  `('should render data field "$value"', ({ value }: { value: string }) => {
+    render(<TableView {...PROPS_MOCK} />);
+
+    expect(screen.getByText(value)).toBeInTheDocument();
   });
 });
