@@ -9,6 +9,7 @@ import { CoursesListModal } from 'modules/CourseManagement/components/CoursesLis
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { SettingsPanel } from 'modules/Schedule/components/SettingsPanel';
 import { TableView } from 'modules/Schedule/components/TableView';
+import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
 import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry } from 'react-use';
@@ -60,6 +61,7 @@ export function SchedulePage(props: PageProps) {
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
+      <StatusTabs data={data} />
       <SettingsPanel
         onCreateCourseTask={handleCreateCourseTask}
         onCopyFromCourse={() => setCopyModal({})}
