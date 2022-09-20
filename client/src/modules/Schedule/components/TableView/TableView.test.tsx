@@ -31,8 +31,8 @@ const PROPS_MOCK: TableViewProps = {
     },
     {
       name: 'Codewars stage 2',
-      startDate: '2020-02-01T21:00:00.000Z',
-      endDate: '2020-03-15T20:59:00.000Z',
+      startDate: '2020-03-01T21:00:00.000Z',
+      endDate: '2020-04-15T20:59:00.000Z',
       maxScore: 0,
       scoreWeight: 0,
       organizer: null,
