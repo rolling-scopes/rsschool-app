@@ -154,6 +154,7 @@ export function TableView({ data, settings }: TableViewProps) {
         }}
         pagination={false}
         dataSource={filteredData}
+        rowKey="name"
         size="middle"
         columns={columns}
       />

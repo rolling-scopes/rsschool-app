@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
+import * as ReactUse from 'react-use';
 
 const PROPS_MOCK: TableViewProps = {
   settings: {
@@ -25,6 +26,18 @@ const PROPS_MOCK: TableViewProps = {
       organizer: null,
       status: 'missed',
       score: 80,
+      tag: 'test',
+      descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md',
+    },
+    {
+      name: 'Codewars stage 2',
+      startDate: '2020-02-01T21:00:00.000Z',
+      endDate: '2020-03-15T20:59:00.000Z',
+      maxScore: 0,
+      scoreWeight: 0,
+      organizer: null,
+      status: 'archived',
+      score: 0,
       tag: 'coding',
       descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md',
     },
@@ -56,10 +69,36 @@ describe('TableView', () => {
     ${'×0.2'}
     ${'80 / 100'}
     ${'Missed'}
-    ${'Coding'}
+    ${'Test'}
   `('should render data field "$value"', ({ value }: { value: string }) => {
     render(<TableView {...PROPS_MOCK} />);
 
     expect(screen.getByText(value)).toBeInTheDocument();
+  });
+
+  describe('should show data', () => {
+    it('by selected status', () => {
+      jest
+        .spyOn(ReactUse, 'useLocalStorage')
+        // Mock useLocalStorage for statusFilter
+        .mockReturnValueOnce([['missed'], jest.fn, jest.fn]);
+
+      render(<TableView {...PROPS_MOCK} />);
+
+      expect(screen.queryByText('Coding')).not.toBeInTheDocument();
+    });
+
+    it('by selected tag', () => {
+      jest
+        .spyOn(ReactUse, 'useLocalStorage')
+        // Mock useLocalStorage for statusFilter
+        .mockReturnValueOnce([[], jest.fn, jest.fn])
+        // Mock useLocalStorage for tagFilter
+        .mockReturnValueOnce([['coding'], jest.fn, jest.fn]);
+
+      render(<TableView {...PROPS_MOCK} />);
+
+      expect(screen.queryByText('Missed')).not.toBeInTheDocument();
+    });
   });
 });
