@@ -743,7 +743,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             style="width: 32px; height: 32px; line-height: 32px; font-size: 18px;"
           >
             <img
-              src="https://cdn.rs.school/torvalds.png?size=48"
+              src="https://cdn.rs.school/avatars/torvalds.png?size=48"
             />
           </span>
         </div>
@@ -951,7 +951,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             style="width: 32px; height: 32px; line-height: 32px; font-size: 18px;"
           >
             <img
-              src="https://cdn.rs.school/torvalds.png?size=48"
+              src="https://cdn.rs.school/avatars/torvalds.png?size=48"
             />
           </span>
         </div>
@@ -1329,7 +1329,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             style="width: 32px; height: 32px; line-height: 32px; font-size: 18px;"
           >
             <img
-              src="https://cdn.rs.school/torvalds.png?size=48"
+              src="https://cdn.rs.school/avatars/torvalds.png?size=48"
             />
           </span>
         </div>
@@ -1537,7 +1537,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             style="width: 32px; height: 32px; line-height: 32px; font-size: 18px;"
           >
             <img
-              src="https://cdn.rs.school/torvalds.png?size=48"
+              src="https://cdn.rs.school/avatars/torvalds.png?size=48"
             />
           </span>
         </div>
@@ -1745,7 +1745,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             style="width: 32px; height: 32px; line-height: 32px; font-size: 18px;"
           >
             <img
-              src="https://cdn.rs.school/torvalds.png?size=48"
+              src="https://cdn.rs.school/avatars/torvalds.png?size=48"
             />
           </span>
         </div>
