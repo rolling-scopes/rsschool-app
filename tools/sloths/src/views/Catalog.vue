@@ -2,12 +2,6 @@
   <div class="catalog" :class="isAdmin ? 'catalog_admin' : ''">
     <div class="catalog__aside list-aside">
       <custom-btn
-        v-show="getPageName === 'admin'"
-        :text="$t('catalog.btn.new')"
-        className="btn btn-primary"
-        @click="showSlothInfoNew"
-      ></custom-btn>
-      <custom-btn
         v-show="getPageName === 'catalog'"
         :imgPath="`./img/catalog/download-${$i18n.locale}-${currTheme}.svg`"
         :disabled="!isChecked"
@@ -42,9 +36,6 @@
           v-for="sloth in sloths"
           :key="sloth.id"
           :slothInfo="sloth"
-          @editRating="updSlothRating"
-          @delSloth="delSloth"
-          @editSloth="showSlothInfoEdit"
           @showSloth="showSlothInfoView"
           @checkSloth="checkSlothInfoView"
         ></sloth-card>
@@ -54,9 +45,6 @@
         :headerText="getHeaderSlothInfo"
         :modalEvents="modalEvents"
         @closeSlothInfo="closeSlothInfo"
-        @createSloth="createSloth"
-        @updSloth="updSloth"
-        @updSlothImage="updSlothImage"
       ></sloth-info>
     </div>
     <modal-window v-show="isDownloadShow" @close="closeModal">
@@ -66,7 +54,7 @@
         <div class="catalog__download">
           <sloth-card
             v-for="sloth in checked"
-            :key="sloth.id"
+            :key="sloth.name"
             :slothInfo="sloth"
             :isDownload="true"
             @checkSloth="checkSlothInfoView"
@@ -114,7 +102,7 @@ import usePagesStore from '@/stores/pages-store';
 
 const service = new SlothsService();
 
-const { setEmptySlothInfo, setSlothInfo } = useSlothInfo();
+const { setSlothInfo } = useSlothInfo();
 
 const { getPerPage, getCurrPage, setPerPage, setCurrPage } = usePagination();
 const { getSearchText, setSearchText } = useSearchText();
@@ -175,6 +163,7 @@ export default defineComponent({
   },
 
   async mounted() {
+    await service.getJsonData();
     await this.getSloths();
   },
 
@@ -193,8 +182,6 @@ export default defineComponent({
         const sorting = getSortingList();
 
         const res = await service.getAll(currPage, perPage, sorting, searchText, selected.join(','));
-
-        if (!res.ok) throw Error(); // todo
 
         this.sloths = res.data.items;
         this.count = res.data.count;
@@ -216,89 +203,14 @@ export default defineComponent({
       }
     },
 
-    async delSloth(id: string) {
-      this.isLoad = true;
-      try {
-        const res = await service.deleteById(id);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async createSloth(sloth: Sloth, file: File) {
-      this.isLoad = true;
-      try {
-        const res = await service.createImage(sloth, file);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSlothRating(sloth: Sloth, rate: number) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateRatingById(sloth.id, rate);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSloth(sloth: Sloth) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateByIdAndTags(sloth.id, sloth);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSlothImage(sloth: Sloth, file: File) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateByIdAndTagsImage(sloth.id, sloth, file);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
     async getTags() {
       this.isLoad = true;
       try {
-        const res = await SlothsService.getTags();
+        const res = service.getTags();
 
-        if (!res.ok) throw Error(); // todo
+        if (!res) throw Error(); // todo
 
-        this.tags = res.data.map((el) => el.value);
+        this.tags = res.slice();
       } catch (error) {
         errorHandler(error);
       } finally {
@@ -332,9 +244,9 @@ export default defineComponent({
       try {
         const res = await service.getById(sloth.id);
 
-        if (!res.ok) throw Error(); // todo
+        if (!res) throw Error(); // todo
 
-        const dataSloth = res.data;
+        const dataSloth = res;
         const slothIndex = this.sloths.findIndex((el) => el.id === sloth.id);
 
         if (slothIndex !== -1) this.sloths[slothIndex] = dataSloth;
@@ -347,18 +259,6 @@ export default defineComponent({
       } finally {
         this.isLoad = false;
       }
-    },
-
-    showSlothInfoNew() {
-      this.modalEvents = ModalEvents.new;
-      setEmptySlothInfo();
-      this.showSlothInfo();
-    },
-
-    showSlothInfoEdit(sloth: Sloth) {
-      this.modalEvents = ModalEvents.edit;
-      setSlothInfo(sloth);
-      this.showSlothInfo();
     },
 
     showSlothInfo() {
