@@ -101,7 +101,6 @@ import ModalWindow from '@/components/modal/ModalWindow.vue';
 import usePagesStore from '@/stores/pages-store';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import JSZipUtils from 'jszip-utils';
 
 const service = new SlothsService();
 
@@ -296,22 +295,19 @@ export default defineComponent({
     async downloadZip(ids: string[]) {
       const zip = JSZip();
       const zipFilename = `sloths_${new Date().toISOString()}.zip`;
-      let count = 0;
 
       ids.forEach((id) => {
-        JSZipUtils.getBinaryContent(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`, (err: unknown, data: Blob) => {
-          if (err) {
-            throw err;
-          }
-          zip.file(`${id}.svg`, data, { binary: true });
-          count += 1;
-          if (count === ids.length) {
-            zip.generateAsync({ type: 'blob' }).then((content) => {
-              saveAs(content, zipFilename);
-            });
-          }
+        const blobPromise = fetch(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`).then((r) => {
+          if (r.status === 200) return r.blob();
+          return Promise.reject(new Error(r.statusText));
         });
+        zip.file(`${id}.svg`, blobPromise);
       });
+
+      zip
+        .generateAsync({ type: 'blob' })
+        .then((blob) => saveAs(blob, zipFilename))
+        .catch((e) => errorHandler(e));
     },
 
     closeModal() {
