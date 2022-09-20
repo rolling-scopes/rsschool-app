@@ -44,7 +44,7 @@ export function CourseTaskSelect(props: Props) {
       initialValue={defaultValue}
       rules={[{ required: true, message: 'Please select a task' }]}
     >
-      <Select placeholder="Select task" {...selectProps}>
+      <Select placeholder="Select task" {...selectProps} listHeight={274}>
         {selectingGroup.map(
           (section, index) =>
             section.tasks.length > 0 && (
