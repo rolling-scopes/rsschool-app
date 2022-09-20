@@ -1,0 +1,1 @@
+https://discord.com/developers/docs/topics/gateway
