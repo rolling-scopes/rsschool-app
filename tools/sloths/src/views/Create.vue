@@ -41,11 +41,11 @@
             type="checkbox"
             id="backgroundTransparent"
             class="meme__transparent"
-            v-model="transparent"
+            v-model="backgroundTransparent"
             @change="draw()"
           />
         </div>
-        <div class="meme__property" :class="{ 'meme__property-disabled': transparent }">
+        <div class="meme__property" :class="{ 'meme__property-disabled': backgroundTransparent }">
           <label class="meme__label" for="backgroundColor">{{ $t('create.backgroundColor') }}</label>
           <input
             type="color"
@@ -53,7 +53,7 @@
             class="meme__color"
             v-model="backgroundColor"
             @input="draw()"
-            :disabled="transparent"
+            :disabled="backgroundTransparent"
           />
         </div>
         <div class="meme__property">
@@ -97,7 +97,15 @@
             @click="copyImage"
           ></custom-btn>
         </div>
-        <canvas class="meme__canvas" ref="canvas"> </canvas>
+        <canvas
+          class="meme__canvas"
+          ref="canvas"
+          @mousemove="handleMouseMove"
+          @mousedown="handleMouseDown"
+          @mouseup="handleMouseUp"
+          @mouseout="handleMouseUp"
+        >
+        </canvas>
       </div>
     </div>
   </div>
@@ -111,6 +119,24 @@ import { MEMES_SLOTHS } from '@/common/const';
 
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 
+type CanvasElement = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  scaledWidth: number;
+  scaledHeight: number;
+  scaleSteps: number;
+  isHovered: boolean;
+  isSelected: boolean;
+  selectedPos: Pos;
+};
+
+type Pos = {
+  x: number;
+  y: number;
+};
+
 export default defineComponent({
   name: 'CreateView',
 
@@ -122,25 +148,30 @@ export default defineComponent({
     return {
       images: [] as string[],
       index: 0,
-      topText: '',
-      bottomText: '',
-      scaleSteps: 1,
       canvas: {} as HTMLCanvasElement,
       ctx: {} as CanvasRenderingContext2D,
-      img: {} as HTMLImageElement,
-      imageX: 0,
-      imageY: 0,
-      scaledImageWidth: 0,
-      scaledImageHeight: 0,
-      imageWidth: 0,
-      imageHeight: 0,
-      imageRight: 0,
-      imageBottom: 0,
-      color: '#ffffff',
+      backgroundTransparent: false,
       backgroundColor: '#777777',
-      transparent: false,
-      strokeStyle: '#000000',
       margin: 50,
+      img: {} as HTMLImageElement,
+      topText: '',
+      bottomText: '',
+      color: '#ffffff',
+      strokeStyle: '#000000',
+      imgCanvasElement: {
+        top: 0,
+        left: 0,
+        width: 0,
+        height: 0,
+        scaledWidth: 0,
+        scaledHeight: 0,
+        scaleSteps: 1,
+        isHovered: false,
+        isSelected: false,
+        selectedPos: {} as Pos,
+      } as CanvasElement,
+      topCanvasElement: {} as CanvasElement,
+      bottomCanvasElement: {} as CanvasElement,
     };
   },
 
@@ -160,16 +191,13 @@ export default defineComponent({
 
     const image = new Image();
     image.onload = () => {
-      // Grab position info
-      this.imageRight = this.imageX + this.img.width;
-      this.imageBottom = this.imageY + this.img.height;
-
-      // Update CTX
       this.draw();
     };
     image.src = this.images[this.index];
 
     this.img = image;
+    this.imgCanvasElement.left = this.imgCanvasElement.left || this.margin;
+    this.imgCanvasElement.top = this.imgCanvasElement.top || this.margin;
   },
 
   beforeRouteLeave() {
@@ -186,59 +214,148 @@ export default defineComponent({
     },
 
     scaleUp() {
-      this.scaleSteps = Math.min(2, this.scaleSteps + 0.1);
+      this.imgCanvasElement.scaleSteps = Math.min(2, this.imgCanvasElement.scaleSteps + 0.1);
       this.draw();
     },
 
     scaleTrue() {
-      this.scaleSteps = 1;
+      this.imgCanvasElement.scaleSteps = 1;
       this.draw();
     },
 
     scaleDown() {
-      this.scaleSteps = Math.max(0.1, this.scaleSteps - 0.1);
+      this.imgCanvasElement.scaleSteps = Math.max(0.1, this.imgCanvasElement.scaleSteps - 0.1);
       this.draw();
     },
 
     draw() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // some maths
-      this.scaledImageWidth = this.img.naturalWidth * this.scaleSteps;
-      this.scaledImageHeight = this.scaledImageWidth * (this.img.naturalHeight / this.img.naturalWidth);
 
-      this.imageX = this.margin * this.scaleSteps;
-      this.imageY = this.margin * this.scaleSteps;
+      this.calcImgSizes();
 
-      // canvas size
-      this.canvas.width = this.scaledImageWidth
-        ? this.scaledImageWidth + this.margin * 2 * this.scaleSteps
-        : this.canvas.width;
-      this.canvas.height = this.scaledImageHeight
-        ? this.scaledImageHeight + this.margin * 2 * this.scaleSteps
-        : this.canvas.height;
+      this.calcCanvasSizes();
 
-      // image background
-      if (!this.transparent) {
-        this.ctx.fillStyle = this.backgroundColor;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      }
+      this.drawBackground();
 
-      // draw the image
       this.ctx.drawImage(
         this.img,
         0,
         0,
-        this.img.naturalWidth,
-        this.img.naturalHeight,
-        this.imageX,
-        this.imageY,
-        this.scaledImageWidth,
-        this.scaledImageHeight
+        this.imgCanvasElement.width,
+        this.imgCanvasElement.height,
+        this.imgCanvasElement.left,
+        this.imgCanvasElement.top,
+        this.imgCanvasElement.scaledWidth,
+        this.imgCanvasElement.scaledHeight
       );
-      this.imageRight = this.imageX + this.scaledImageWidth;
-      this.imageBottom = this.imageY + this.scaledImageHeight;
 
-      this.drawText();
+      this.drawBorder(this.imgCanvasElement);
+
+      // this.drawText();
+    },
+
+    calcImgSizes() {
+      if (this.img) {
+        this.imgCanvasElement.width = this.img.naturalWidth;
+        this.imgCanvasElement.height = this.img.naturalHeight;
+
+        this.imgCanvasElement.scaledWidth = this.imgCanvasElement.width * this.imgCanvasElement.scaleSteps;
+        this.imgCanvasElement.scaledHeight =
+          this.imgCanvasElement.scaledWidth * (this.imgCanvasElement.height / this.imgCanvasElement.width);
+      } else {
+        this.imgCanvasElement.width = 0;
+        this.imgCanvasElement.height = 0;
+        this.imgCanvasElement.scaledWidth = 0;
+        this.imgCanvasElement.scaledHeight = 0;
+      }
+    },
+
+    calcCanvasSizes() {
+      if (this.img) {
+        this.canvas.width = this.imgCanvasElement.width + this.margin * 2;
+        this.canvas.height = this.imgCanvasElement.height + this.margin * 2;
+      }
+    },
+
+    drawBackground() {
+      if (!this.backgroundTransparent) {
+        this.ctx.fillStyle = this.backgroundColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+    },
+
+    drawBorder(el: CanvasElement) {
+      if (el.isHovered || el.isSelected) {
+        const x1 = el.left;
+        const x2 = el.left + el.scaledWidth;
+        const y1 = el.top;
+        const y2 = el.top + el.scaledHeight;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.lineTo(x1, y2);
+        this.ctx.closePath();
+        this.ctx.stroke();
+      }
+    },
+
+    getMousePos(evt: MouseEvent) {
+      const rect = this.canvas.getBoundingClientRect(); // abs. size of element
+      const scaleX = this.canvas.width / rect.width; // relationship bitmap vs. element for X
+      const scaleY = this.canvas.height / rect.height; // relationship bitmap vs. element for Y
+
+      return {
+        x: (evt.clientX - rect.left) * scaleX, // scale mouse coordinates after they have
+        y: (evt.clientY - rect.top) * scaleY, // been adjusted to be relative to element
+      } as Pos;
+    },
+
+    handleMouseMove(e: MouseEvent) {
+      const mousePos = this.getMousePos(e);
+
+      if (this.imgCanvasElement.isSelected) {
+        const dx = mousePos.x - this.imgCanvasElement.selectedPos.x;
+        const dy = mousePos.y - this.imgCanvasElement.selectedPos.y;
+
+        this.imgCanvasElement.left += dx;
+        this.imgCanvasElement.top += dy;
+
+        this.imgCanvasElement.selectedPos.x = mousePos.x;
+        this.imgCanvasElement.selectedPos.y = mousePos.y;
+      } else {
+        const x1 = this.imgCanvasElement.left;
+        const x2 = this.imgCanvasElement.left + this.imgCanvasElement.scaledWidth;
+        const y1 = this.imgCanvasElement.top;
+        const y2 = this.imgCanvasElement.top + this.imgCanvasElement.scaledHeight;
+
+        this.imgCanvasElement.isHovered = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+      }
+      this.draw();
+    },
+
+    handleMouseDown(e: MouseEvent) {
+      const mousePos = this.getMousePos(e);
+
+      const x1 = this.imgCanvasElement.left;
+      const x2 = this.imgCanvasElement.left + this.imgCanvasElement.scaledWidth;
+      const y1 = this.imgCanvasElement.top;
+      const y2 = this.imgCanvasElement.top + this.imgCanvasElement.scaledHeight;
+
+      const isSelected = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+
+      this.imgCanvasElement.isSelected = isSelected;
+      if (isSelected) {
+        this.imgCanvasElement.selectedPos = { ...mousePos };
+      }
+      this.draw();
+    },
+
+    handleMouseUp() {
+      this.imgCanvasElement.isSelected = false;
+      this.imgCanvasElement.selectedPos = {} as Pos;
+      this.draw();
     },
 
     updImage(i: number) {
@@ -252,11 +369,6 @@ export default defineComponent({
 
       this.img = image;
 
-      // Grab position info
-      this.imageRight = this.imageX + this.img.width;
-      this.imageBottom = this.imageY + this.img.height;
-
-      // Update CTX
       this.draw();
     },
 
