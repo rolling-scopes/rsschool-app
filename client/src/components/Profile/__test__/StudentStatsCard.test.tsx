@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from 'common/models/profile';
 
-describe('', () => {
+describe('StudentStatsCard', () => {
   const githubId = 'test';
   const data = [
     {
