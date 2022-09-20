@@ -9,7 +9,7 @@
       ></custom-btn>
       <custom-btn
         v-show="getPageName === 'catalog'"
-        :imgPath="`./img/catalog/download-${$i18n.locale}-${currTheme}.svg`"
+        :imgPath="`./img/catalog/download-${currTheme}.svg`"
         :disabled="!isChecked"
         :text="$t('btn.download')"
         className="btn btn-download"

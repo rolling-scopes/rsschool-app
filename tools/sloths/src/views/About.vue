@@ -10,7 +10,7 @@
     ></about-section>
 
     <section class="about__teammates">
-      <img class="about__wwt" :src="`/img/team/wwt-light-${$i18n.locale}.svg`" alt="wwt" />
+      <img class="about__wwt" :src="`/img/team/wwt.svg`" alt="wwt" />
       <div class="about__team">{{ $t(`about.teammates.main`) }}</div>
       <div class="about__teammates__wrap">
         <about-teammate v-for="teammate in teammates" :key="`${teammate}`" :teammate="teammate"></about-teammate>
