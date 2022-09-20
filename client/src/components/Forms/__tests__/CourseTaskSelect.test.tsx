@@ -109,20 +109,22 @@ const onlyExpired = [
 ] as CourseTaskDto[];
 
 describe('CourseTaskSelect', () => {
-  it('should render with both groups', () => {
-    const { container } = render(<CourseTaskSelect data={fullData} groupBy="deadline"></CourseTaskSelect>);
+  const { container: fullDataContainer } = render(
+    <CourseTaskSelect data={fullData} groupBy="deadline"></CourseTaskSelect>,
+  );
+  const { container: expiredContainer } = render(
+    <CourseTaskSelect data={onlyExpired} groupBy="deadline"></CourseTaskSelect>,
+  );
+  const { container: emptyContainer } = render(<CourseTaskSelect data={[]} groupBy="deadline"></CourseTaskSelect>);
 
-    expect(container).toMatchSnapshot();
+  it('should render with both groups', () => {
+    expect(fullDataContainer).toMatchSnapshot();
   });
   it('should render with one group', () => {
-    const { container } = render(<CourseTaskSelect data={onlyExpired} groupBy="deadline"></CourseTaskSelect>);
-
-    expect(container).toMatchSnapshot();
+    expect(expiredContainer).toMatchSnapshot();
   });
 
   it('should render empty', () => {
-    const { container } = render(<CourseTaskSelect data={[]} groupBy="deadline"></CourseTaskSelect>);
-
-    expect(container).toMatchSnapshot();
+    expect(emptyContainer).toMatchSnapshot();
   });
 });

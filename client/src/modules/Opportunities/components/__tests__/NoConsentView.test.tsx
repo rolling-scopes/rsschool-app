@@ -68,7 +68,8 @@ describe('NoConsentView', () => {
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
-    fireEvent.click(createCvButton);
+    // eslint-disable-next-line testing-library/no-wait-for-side-effects
+    await waitFor(() => fireEvent.click(createCvButton));
 
     const modal = await screen.findByRole('dialog');
 
@@ -90,7 +91,8 @@ describe('NoConsentView', () => {
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
-    fireEvent.click(createCvButton);
+    // eslint-disable-next-line testing-library/no-wait-for-side-effects
+    await waitFor(() => fireEvent.click(createCvButton));
 
     const consentButton = await screen.findByRole('button', { name: 'I consent' });
 
