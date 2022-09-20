@@ -17,7 +17,7 @@ const useSlothInfo = defineStore({
 
     setSlothInfo(newSlothInfo: Sloth) {
       this.slothInfo = { ...newSlothInfo };
-      this.tagsStr = newSlothInfo.tags.map((el) => el.value).join(' ');
+      this.tagsStr = newSlothInfo.tags.join(' ');
     },
   },
 });

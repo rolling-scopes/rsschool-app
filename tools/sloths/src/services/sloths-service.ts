@@ -1,117 +1,71 @@
-import type {
-  API,
-  APIRequestResult,
-  QueryStringOptions,
-  RequestError,
-  Sloth,
-  SlothRating,
-  SlothTags,
-  Tag,
-} from '@/common/types';
-import { Endpoints } from '@/common/enums/endpoints';
-import useCurrUser from '@/stores/curr-user';
-import { APIService } from './api-service';
-import { APIError } from './error-handling/api-error';
+import type { MetadataSloths, QueryStringOptions, Sloth } from '@/common/types';
 import { errorHandler } from './error-handling/error-handler';
+import { apiRequest } from './api-request';
 
-const { hasAuth, getUserId } = useCurrUser();
+const JSON_URL = import.meta.env.VITE_JSON_URL;
 
-export class SlothsService implements API<Sloth> {
-  private service = new APIService<Sloth>(Endpoints.sloths);
+export class SlothsService {
+  private data!: Sloth[];
 
-  public getAllList() {
-    return this.service.getAllList();
-  }
-
-  public getByOptions(options: QueryStringOptions) {
-    return this.service.getByOptions(options);
-  }
-
-  public getAll(page = 1, limit = 10, order = '', searchText = '', filter = '', userId = '') {
-    return this.service.getAll(page, limit, order, searchText, filter, userId);
-  }
-
-  public getById(id: string) {
-    return this.service.getById(id);
-  }
-
-  public create(body: Sloth) {
-    return this.service.create(body);
-  }
-
-  public createImage(sloth: Sloth, file: File) {
-    const formData = new FormData();
-    formData.append('caption', sloth.caption);
-    formData.append('description', sloth.description);
-
-    if (sloth.tags) formData.append('tags', JSON.stringify(sloth.tags));
-
-    formData.append('file', file);
-
-    return this.service.createImage(formData);
-  }
-
-  public updateById(slothId: string, sloth: Sloth) {
-    const { id, caption, description } = sloth;
-    const imageUrl = sloth.image_url;
-    const body = { id, caption, description, image_url: imageUrl };
-    return this.service.updateById(slothId, body);
-  }
-
-  public static updateByIdAndTags(slothId: string, sloth: Sloth) {
-    const tagsService = new APIService<SlothTags>(Endpoints.sloths);
-
-    const { id, caption, description, tags } = sloth;
-    const imageUrl = sloth.image_url;
-    const body = { id, caption, description, image_url: imageUrl, tags: JSON.stringify(tags) };
-    return tagsService.updateById(slothId, body);
-  }
-
-  public static updateByIdAndTagsImage(slothId: string, sloth: Sloth, file: File) {
-    const tagsService = new APIService<SlothTags>(Endpoints.sloths);
-
-    const formData = new FormData();
-    formData.append('id', sloth.id);
-    formData.append('caption', sloth.caption);
-    formData.append('description', sloth.description);
-    formData.append('image_url', sloth.image_url);
-
-    if (sloth.tags) formData.append('tags', JSON.stringify(sloth.tags));
-
-    formData.append('file', file);
-    return tagsService.updateByIdAndImage(slothId, formData);
-  }
-
-  public static updateRatingById(slothId: string, rate: number) {
-    const res: APIRequestResult<SlothRating> = {
-      ok: false,
-      status: 401,
-      data: {} as SlothRating,
-      error: {} as RequestError,
-      headers: {} as Headers,
-    };
+  public async getJsonData() {
     try {
-      const ratingService = new APIService<SlothRating>(`${Endpoints.sloths}/${slothId}/rating`);
-      const userId = getUserId;
-
-      if (!(hasAuth && userId)) throw new APIError('Unauthorized', 401, res.error);
-
-      const body: SlothRating = { slothId, userId, rate };
-      return ratingService.update(body);
+      const response = await apiRequest<MetadataSloths>(JSON_URL);
+      this.data = response?.data?.stickers.map((sloth) => ({
+        id: sloth?.name
+          ?.replace(/[^ a-z0-9]gi/, '')
+          .replace(/ /g, '-')
+          .toLowerCase(),
+        ...sloth,
+        checked: false,
+      }));
     } catch (error) {
       errorHandler(error);
     }
-    return res;
   }
 
-  public deleteById(id: string) {
-    return this.service.deleteById(id);
+  public async getAll(page = 1, limit = 10, order = '', searchText = '', filter = '') {
+    let items = this.data;
+    const [field, direction] = order.split('-', 2);
+    const orderMultiplier = direction === 'asc' ? 1 : -1;
+
+    items.sort((a: Sloth, b: Sloth) => {
+      if (Number.isNaN(+a[field])) {
+        if (a[field] > b[field]) {
+          return 1 * orderMultiplier;
+        }
+        if (a[field] < b[field]) {
+          return -1 * orderMultiplier;
+        }
+        return 0;
+      }
+      return (+a[field] - +b[field]) * orderMultiplier;
+    });
+
+    if (filter) {
+      const filterTags = filter.split(',');
+      items = items.filter((sloth) => {
+        return sloth.tags.some((tag) => filterTags.includes(tag));
+      });
+    }
+    if (searchText) {
+      items = items.filter((sloth) => sloth.caption === searchText || sloth.description === searchText);
+    }
+
+    const count = items.length;
+
+    const start = (+page - 1) * +limit;
+    const end = +start + +limit;
+    items = items.slice(start, end);
+
+    return { data: { items, count }, status: 200 };
   }
 
-  public static getTags() {
-    const tagsService = new APIService<Tag>(`${Endpoints.sloths}/tags`);
+  public getById(id: string) {
+    return this.data.find((sloth) => id === sloth.id);
+  }
 
-    return tagsService.getAllList();
+  public getTags() {
+    return [...new Set(this.data.flatMap((sloth) => sloth.tags))].sort();
   }
 }
 
