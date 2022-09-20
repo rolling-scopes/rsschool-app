@@ -22,7 +22,7 @@ const tabsOrder = [
   CourseScheduleItemDtoStatusEnum.Archived,
 ];
 
-export const getStatusesCount = (data: CourseScheduleItemDto[]): Item[] => {
+export const tabsRenderer = (data: CourseScheduleItemDto[]): { label: ReactNode; key: string }[] => {
   const statuses = data.map(({ status }) => status);
 
   return SCHEDULE_STATUSES.reduce(
@@ -49,16 +49,15 @@ export const getStatusesCount = (data: CourseScheduleItemDto[]): Item[] => {
         count: statuses.length,
       },
     ],
-  ).sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key));
+  )
+    .sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key))
+    .map(({ count, key, label }) => ({
+      label: (
+        <Space>
+          {label}
+          <Badge count={count} />
+        </Space>
+      ),
+      key,
+    }));
 };
-
-export const tabsRenderer = (data: CourseScheduleItemDto[]): { label: ReactNode; key: string }[] =>
-  getStatusesCount(data).map(({ count, key, label }) => ({
-    label: (
-      <Space>
-        {label}
-        <Badge count={count} />
-      </Space>
-    ),
-    key,
-  }));
