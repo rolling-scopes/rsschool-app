@@ -766,10 +766,10 @@ export type CourseEventDtoTypeEnum = typeof CourseEventDtoTypeEnum[keyof typeof 
 export interface CourseScheduleItemDto {
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'score': object;
+    'score': number;
     /**
      * 
      * @type {string}
@@ -802,16 +802,16 @@ export interface CourseScheduleItemDto {
     'organizer': object | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'maxScore': object | null;
+    'maxScore': number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'scoreWeight': object | null;
+    'scoreWeight': number | null;
     /**
      * 
      * @type {string}

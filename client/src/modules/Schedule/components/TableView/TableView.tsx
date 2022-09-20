@@ -110,7 +110,7 @@ const getColumns = ({
   ];
 };
 
-interface TableViewProps {
+export interface TableViewProps {
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
 }
