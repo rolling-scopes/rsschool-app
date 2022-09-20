@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions, mapState, mapWritableState } from 'pinia';
+import { mapState, mapWritableState } from 'pinia';
 import HomeCategory from '../components/home/HomeCategory.vue';
 import HomeAbout from '../components/home/HomeAbout.vue';
 import HomeCatalog from '../components/home/HomeCatalog.vue';
@@ -34,7 +34,7 @@ export default defineComponent({
 
   data(): { categories: string[] } {
     return {
-      categories: ['profile', 'memory', 'guess', 'create', 'suggest', 'merch'],
+      categories: ['memory', 'create', 'guess', 'merch'],
     };
   },
 
@@ -73,7 +73,7 @@ export default defineComponent({
   justify-items: center;
   justify-content: center;
   grid-template-columns: repeat(2, 14rem);
-  grid-template-rows: repeat(3, 17rem);
+  grid-template-rows: repeat(2, 17rem);
   gap: 5rem 1rem;
 }
 
@@ -89,7 +89,7 @@ export default defineComponent({
 
   .home__menu {
     grid-area: C;
-    grid-template-columns: repeat(3, 14rem);
+    grid-template-columns: repeat(2, 14rem);
     grid-template-rows: repeat(2, 17rem);
     gap: 2rem;
   }

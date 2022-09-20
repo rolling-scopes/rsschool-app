@@ -75,7 +75,7 @@
 import { defineComponent } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import GuessInfo from '@/components/profile/GuessInfo.vue';
+import GuessInfo from '@/components/guess/GuessInfo.vue';
 import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_GAME_ID, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
 import type { GameResult } from '@/common/types';
