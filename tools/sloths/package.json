@@ -23,6 +23,9 @@
   "dependencies": {
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",
     "eslint-import-resolver-typescript": "^3.5.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "jszip-utils": "^0.1.0",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.17",
     "vue": "^3.2.37",
@@ -32,6 +35,7 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
+    "@types/file-saver": "^2.0.5",
     "@types/node": "^16.11.47",
     "@typescript-eslint/parser": "^5.33.0",
     "@vitejs/plugin-vue": "^3.0.1",

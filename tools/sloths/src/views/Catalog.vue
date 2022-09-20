@@ -83,7 +83,7 @@ import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
 import { errorHandler } from '@/services/error-handling/error-handler';
-import { BASE, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
+import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
 import { ModalEvents } from '@/common/enums/modal-events';
 import useLoader from '@/stores/loader';
@@ -99,6 +99,9 @@ import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import usePagesStore from '@/stores/pages-store';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import JSZipUtils from 'jszip-utils';
 
 const service = new SlothsService();
 
@@ -279,18 +282,36 @@ export default defineComponent({
       if (this.checked.length) this.isDownloadShow = true;
     },
 
-    approveDownload() {
+    async approveDownload() {
       const forDownload = this.checked.filter((el) => el.checked).map((el) => el.id);
 
       if (!forDownload.length) return;
 
-      const downloadUrl = `${BASE}/download/${forDownload.join(',')}`;
       // download
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.click();
+      await this.downloadZip(forDownload);
 
       this.closeModal();
+    },
+
+    async downloadZip(ids: string[]) {
+      const zip = JSZip();
+      const zipFilename = `sloths_${new Date().toISOString()}.zip`;
+      let count = 0;
+
+      ids.forEach((id) => {
+        JSZipUtils.getBinaryContent(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`, (err: unknown, data: Blob) => {
+          if (err) {
+            throw err;
+          }
+          zip.file(`${id}.svg`, data, { binary: true });
+          count += 1;
+          if (count === ids.length) {
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+              saveAs(content, zipFilename);
+            });
+          }
+        });
+      });
     },
 
     closeModal() {
