@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` should render correctly 1`] = `
+exports[`StudentStatsCard should render correctly 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered"
