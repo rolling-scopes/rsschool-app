@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
 import * as ReactUse from 'react-use';
+import { ColumnKey } from 'modules/Schedule/constants';
 
 const PROPS_MOCK: TableViewProps = {
   settings: {
@@ -55,7 +56,7 @@ describe('TableView', () => {
     ${'Score / Max'}
     ${'End Date (UTC +03:00)'}
     ${'Start Date (UTC +03:00)'}
-  `('should render header "$label"', ({ label }: { label: string }) => {
+  `('should render column "$label"', ({ label }: { label: string }) => {
     render(<TableView {...PROPS_MOCK} />);
 
     expect(screen.getByText(label)).toBeInTheDocument();
@@ -74,6 +75,19 @@ describe('TableView', () => {
     render(<TableView {...PROPS_MOCK} />);
 
     expect(screen.getByText(value)).toBeInTheDocument();
+  });
+
+  it('should not render hidden columns', () => {
+    const propsWithHiddenColumn: TableViewProps = {
+      ...PROPS_MOCK,
+      settings: {
+        ...PROPS_MOCK.settings,
+        columnsHidden: [ColumnKey.Tag],
+      },
+    };
+    render(<TableView {...propsWithHiddenColumn} />);
+
+    expect(screen.queryByText('Tag')).not.toBeInTheDocument();
   });
 
   describe('should show data', () => {
