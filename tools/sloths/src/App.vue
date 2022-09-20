@@ -61,6 +61,7 @@ export default defineComponent({
     this.isAlert = false;
     this.header = 'modal.header.alert';
     this.message = '';
+    this.$i18n.locale = 'en';
   },
 
   async mounted() {
