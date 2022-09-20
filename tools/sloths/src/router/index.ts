@@ -18,11 +18,6 @@ const router = createRouter({
       component: () => import('../views/About.vue'),
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/Profile.vue'),
-    },
-    {
       path: '/catalog',
       name: 'catalog',
       component: () => import('../views/Catalog.vue'),
@@ -46,16 +41,6 @@ const router = createRouter({
       path: '/memory',
       name: 'memory',
       component: () => import('../views/Memory.vue'),
-    },
-    {
-      path: '/suggest',
-      name: 'suggest',
-      component: () => import('../views/Suggestion.vue'),
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('../views/Admin.vue'),
     },
     // 404 always last item
     {

@@ -37,7 +37,7 @@ import { defineComponent } from 'vue';
 import GameField from '@/components/memory/GameField.vue';
 import { MEMORY_LEVELS } from '@/common/const';
 import usePagesStore from '@/stores/pages-store';
-import MemoryInfo from '@/components/profile/MemoryInfo.vue';
+import MemoryInfo from '@/components/memory/MemoryInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 
