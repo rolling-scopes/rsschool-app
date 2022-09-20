@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import { CourseTaskSelect } from '..';
 import { CourseTaskDto } from 'api';
@@ -250,7 +250,7 @@ const expiredTaskData: CourseTaskDto[] = [
 describe('CourseTaskSelect', () => {
   describe('Should render correctly', () => {
     it('if groupBy is default', () => {
-      const { container } = render(
+      const { container, baseElement } = render(
         <Form>
           <CourseTaskSelect
             data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
@@ -258,20 +258,34 @@ describe('CourseTaskSelect', () => {
           ></CourseTaskSelect>
         </Form>,
       );
-      expect(container).toMatchSnapshot();
+
+      const select = container.querySelector('.ant-select-selector');
+
+      if (select) {
+        fireEvent.mouseDown(select);
+      }
+
+      expect(baseElement).toMatchSnapshot();
     });
 
     it('if groupBy is deadline', () => {
-      const { container } = render(
+      const { container, baseElement } = render(
         <Form>
           <CourseTaskSelect data={[...ActiveCodewarsData, ...ActiveTestData]} groupBy="deadline"></CourseTaskSelect>,
         </Form>,
       );
-      expect(container).toMatchSnapshot();
+
+      const select = container.querySelector('.ant-select-selector');
+
+      if (select) {
+        fireEvent.mouseDown(select);
+      }
+
+      expect(baseElement).toMatchSnapshot();
     });
 
     it('if groupBy is cross-check deadline', () => {
-      const { container } = render(
+      const { container, baseElement } = render(
         <Form>
           <CourseTaskSelect
             data={[...UnknownTaskData, ...FutureTaskData, ...ReviewTaskData, ...expiredTaskData]}
@@ -279,7 +293,14 @@ describe('CourseTaskSelect', () => {
           ></CourseTaskSelect>
         </Form>,
       );
-      expect(container).toMatchSnapshot();
+
+      const select = container.querySelector('.ant-select-selector');
+
+      if (select) {
+        fireEvent.mouseDown(select);
+      }
+
+      expect(baseElement).toMatchSnapshot();
     });
   });
 });
