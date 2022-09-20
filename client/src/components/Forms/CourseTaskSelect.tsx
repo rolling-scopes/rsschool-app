@@ -1,6 +1,6 @@
 import { Select, Form } from 'antd';
 import { CourseTaskDto } from 'api';
-import { TaskSelectIcon } from 'components/Icons/TaskSelectIcon';
+import { DeadlineIcon } from 'components/Icons/DeadlineIcon';
 
 export enum Group {
   Default = 'default',
@@ -52,10 +52,10 @@ export function CourseTaskSelect(props: Props) {
                 {section.tasks.map(task => (
                   <Select.Option key={task.id} value={task.id}>
                     {section.title === Section.Active && groupBy === Group.Deadline && (
-                      <TaskSelectIcon group={groupBy} endDate={task.studentEndDate} />
+                      <DeadlineIcon group={groupBy} endDate={task.studentEndDate} />
                     )}
                     {section.title === Section.Review && groupBy === Group.CrossCheckDeadline && (
-                      <TaskSelectIcon group={groupBy} endDate={task.crossCheckEndDate} />
+                      <DeadlineIcon group={groupBy} endDate={task.crossCheckEndDate} />
                     )}{' '}
                     {task.name}
                   </Select.Option>

@@ -15,7 +15,7 @@ type Props = {
   endDate: string | null;
 };
 
-export function TaskSelectIcon({ group, endDate }: Props) {
+export function DeadlineIcon({ group, endDate }: Props) {
   const date = formatDateTime(endDate ?? '');
   const title = `${group === Group.CrossCheckDeadline ? `Cross-Check Deadline` : 'Deadline'}: ${date}`;
   const color = getColor(endDate);
