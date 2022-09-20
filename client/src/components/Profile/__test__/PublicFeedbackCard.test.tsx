@@ -76,7 +76,7 @@ describe('PublicFeedbackCard', () => {
   ];
 
   it('should render correctly', () => {
-    const output = render(<PublicFeedbackCard data={data} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<PublicFeedbackCard data={data} />);
+    expect(container).toMatchSnapshot();
   });
 });

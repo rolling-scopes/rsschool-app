@@ -4,7 +4,7 @@ import MentorStatsModal from '../MentorStatsModal';
 
 describe('MentorStatsModal', () => {
   it('Should render correctly', () => {
-    const output = render(
+    const { container } = render(
       <MentorStatsModal
         stats={{
           courseLocationName: 'Minsk',
@@ -29,6 +29,6 @@ describe('MentorStatsModal', () => {
         onHide={jest.fn()}
       />,
     );
-    expect(output.container).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

@@ -71,7 +71,7 @@ describe('PublicFeedbackModal', () => {
   });
 
   it('Should render correctly', () => {
-    const output = render(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
+    expect(container).toMatchSnapshot();
   });
 });

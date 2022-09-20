@@ -106,7 +106,7 @@ describe('', () => {
   ] as StudentStats[];
 
   it('should render correctly', () => {
-    const output = render(<StudentStatsCard isProfileOwner={false} data={data} username={githubId} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<StudentStatsCard isProfileOwner={false} data={data} username={githubId} />);
+    expect(container).toMatchSnapshot();
   });
 });

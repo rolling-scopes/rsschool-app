@@ -68,7 +68,7 @@ describe('NoConsentView', () => {
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
-    await waitFor(() => fireEvent.click(createCvButton));
+    fireEvent.click(createCvButton);
 
     const modal = await screen.findByRole('dialog');
 
@@ -90,7 +90,7 @@ describe('NoConsentView', () => {
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
-    await waitFor(() => fireEvent.click(createCvButton));
+    fireEvent.click(createCvButton);
 
     const consentButton = await screen.findByRole('button', { name: 'I consent' });
 
