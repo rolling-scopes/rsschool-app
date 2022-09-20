@@ -4,7 +4,6 @@
     <h2 v-show="$route.name !== 'home'" class="section__title">{{ $route.name ? $t(`${currRoute}.title`) : '' }}</h2>
     <div class="header__tools">
       <sound-switcher />
-      <locale-switcher />
       <theme-switcher />
     </div>
   </header>
@@ -12,14 +11,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import LocaleSwitcher from '../switchers/LocaleSwitcher.vue';
 import ThemeSwitcher from '../switchers/ThemeSwitcher.vue';
 import SoundSwitcher from '../switchers/SoundSwitcher.vue';
 
 export default defineComponent({
   name: 'HeaderView',
 
-  components: { LocaleSwitcher, ThemeSwitcher, SoundSwitcher },
+  components: { ThemeSwitcher, SoundSwitcher },
 
   computed: {
     currRoute(): string {
