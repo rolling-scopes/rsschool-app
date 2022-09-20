@@ -104,6 +104,7 @@
           @mousedown="handleMouseDown"
           @mouseup="handleMouseUp"
           @mouseout="handleMouseUp"
+          @wheel="handleWheel"
         >
         </canvas>
       </div>
@@ -214,7 +215,7 @@ export default defineComponent({
     },
 
     scaleUp() {
-      this.imgCanvasElement.scaleSteps = Math.min(2, this.imgCanvasElement.scaleSteps + 0.1);
+      this.imgCanvasElement.scaleSteps = Math.min(2, this.imgCanvasElement.scaleSteps + 0.05);
       this.draw();
     },
 
@@ -224,7 +225,7 @@ export default defineComponent({
     },
 
     scaleDown() {
-      this.imgCanvasElement.scaleSteps = Math.max(0.1, this.imgCanvasElement.scaleSteps - 0.1);
+      this.imgCanvasElement.scaleSteps = Math.max(0.1, this.imgCanvasElement.scaleSteps - 0.05);
       this.draw();
     },
 
@@ -251,7 +252,7 @@ export default defineComponent({
 
       this.drawBorder(this.imgCanvasElement);
 
-      // this.drawText();
+      this.drawText();
     },
 
     calcImgSizes() {
@@ -356,6 +357,15 @@ export default defineComponent({
       this.imgCanvasElement.isSelected = false;
       this.imgCanvasElement.selectedPos = {} as Pos;
       this.draw();
+    },
+
+    handleWheel(e: WheelEvent) {
+      if (this.imgCanvasElement.isHovered) {
+        const dy = e.deltaY;
+        if (dy > 0) {
+          this.scaleUp();
+        } else if (dy < 0) this.scaleDown();
+      }
     },
 
     updImage(i: number) {
