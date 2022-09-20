@@ -175,18 +175,24 @@ export default defineComponent({
     async getSloths() {
       this.isLoad = true;
       try {
-        const currPage = getCurrPage();
-        const perPage = getPerPage();
+        const page = getCurrPage();
+        const limit = getPerPage();
         const searchText = getSearchText();
         const selected = getSelected();
         const sorting = getSortingList();
 
-        const res = await service.getAll(currPage, perPage, sorting, searchText, selected.join(','));
+        const res = await service.getAll({
+          page: `${page}`,
+          limit: `${limit}`,
+          order: sorting,
+          searchText,
+          filter: selected.join(','),
+        });
 
         this.sloths = res.data.items;
         this.count = res.data.count;
 
-        if (!this.sloths.length && currPage !== 1) {
+        if (!this.sloths.length && page !== 1) {
           const pagination = this.$refs.pagination as PaginationListElement;
           if (pagination) pagination.top();
         }

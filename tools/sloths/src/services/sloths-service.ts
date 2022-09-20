@@ -9,12 +9,8 @@ export class SlothsService {
 
   public async getJsonData() {
     try {
-      const response = await apiRequest<MetadataSloths>(JSON_URL);
+      const response = await apiRequest<MetadataSloths>(JSON_URL, { mode: 'no-cors' });
       this.data = response?.data?.stickers.map((sloth) => ({
-        id: sloth?.name
-          ?.replace(/[^ a-z0-9]gi/, '')
-          .replace(/ /g, '-')
-          .toLowerCase(),
         ...sloth,
         checked: false,
       }));
@@ -23,22 +19,19 @@ export class SlothsService {
     }
   }
 
-  public async getAll(page = 1, limit = 10, order = '', searchText = '', filter = '') {
+  public async getAll({ page = '1', limit = '10', order = 'name-asc', searchText, filter }: QueryStringOptions) {
     let items = this.data;
-    const [field, direction] = order.split('-', 2);
-    const orderMultiplier = direction === 'asc' ? 1 : -1;
+    const [orderField, orderDirection] = order.split('-', 2);
+    const orderMultiplier = orderDirection === 'asc' ? 1 : -1;
 
     items.sort((a: Sloth, b: Sloth) => {
-      if (Number.isNaN(+a[field])) {
-        if (a[field] > b[field]) {
-          return 1 * orderMultiplier;
+      if (Number.isNaN(+a[orderField])) {
+        if (a[orderField] === b[orderField]) {
+          return 0;
         }
-        if (a[field] < b[field]) {
-          return -1 * orderMultiplier;
-        }
-        return 0;
+        return a[orderField] < b[orderField] ? -1 * orderMultiplier : 1 * orderMultiplier;
       }
-      return (+a[field] - +b[field]) * orderMultiplier;
+      return (+a[orderField] - +b[orderField]) * orderMultiplier;
     });
 
     if (filter) {
@@ -48,7 +41,11 @@ export class SlothsService {
       });
     }
     if (searchText) {
-      items = items.filter((sloth) => sloth.caption === searchText || sloth.description === searchText);
+      items = items.filter(
+        (sloth) =>
+          sloth.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          sloth.description.toLowerCase().includes(searchText.toLowerCase())
+      );
     }
 
     const count = items.length;

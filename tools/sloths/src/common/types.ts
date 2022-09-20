@@ -83,6 +83,7 @@ export type MetadataSloths = {
   stickers: MetadataSloth[];
 };
 export type MetadataSloth = {
+  id: string;
   name: string;
   description: string;
   tags: Tags;
