@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'testing-library'],
+  plugins: ['@typescript-eslint', 'testing-library', 'jest'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@next/next/recommended',
     'plugin:jest-dom/recommended',
     'plugin:testing-library/dom',
+    'plugin:jest/recommended',
   ],
   env: {
     browser: true,

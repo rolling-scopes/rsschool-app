@@ -28,6 +28,7 @@
     "axios": "0.27.2",
     "cookie": "0.5.0",
     "csvtojson": "2.0.10",
+    "eslint-plugin-jest": "^27.0.4",
     "lodash": "4.17.21",
     "moment": "2.29.4",
     "moment-timezone": "0.5.37",
