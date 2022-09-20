@@ -1,1 +1,1 @@
-export const CDN_AVATARS_URL = 'https://cdn.rs.school';
+export const CDN_AVATARS_URL = 'https://cdn.rs.school/avatars';
