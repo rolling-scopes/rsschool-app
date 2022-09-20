@@ -44,9 +44,7 @@ export interface API<T> {
 }
 
 export type Tags = Tag[];
-export type Tag = {
-  value: string;
-};
+export type Tag = string;
 
 export type Users = User[];
 export type User = {
@@ -60,15 +58,12 @@ export type User = {
 
 export type Sloths = Sloth[];
 export type Sloth = {
+  [keyof: string]: string | boolean | Tags;
   id: string;
-  caption: string;
+  name: string;
   description: string;
-  image_url: string;
-  rating: number;
-  ratings: UserRate[];
-  createdAt: number;
   tags: Tags;
-  checked?: boolean;
+  checked: boolean;
 };
 export type SlothTags = {
   id: string;
@@ -83,6 +78,14 @@ export type SlothRating = {
   slothId: string;
   userId: string;
   rate: number;
+};
+export type MetadataSloths = {
+  stickers: MetadataSloth[];
+};
+export type MetadataSloth = {
+  name: string;
+  description: string;
+  tags: Tags;
 };
 
 export type Suggestions = Suggestion[];
