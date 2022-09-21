@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import StatusTabs, { Status } from './StatusTabs';
 import { ALL_TAB_KEY, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
@@ -6,7 +6,7 @@ import { CourseScheduleItemDtoStatusEnum } from 'api';
 const StatusEnum = CourseScheduleItemDtoStatusEnum;
 
 describe('StatusTabs', () => {
-  const onTabChangeMock = jest.fn;
+  const onTabChangeMock = jest.fn();
 
   it('should render status tabs', () => {
     const statuses = generateStatuses();
@@ -66,6 +66,40 @@ describe('StatusTabs', () => {
 
     const totalCount = missedCount + doneCount + reviewCount;
     expect(screen.getByText(totalCount)).toBeInTheDocument();
+  });
+
+  describe('when active tab was changed', () => {
+    it('should call onTabChange with tab name "all"', () => {
+      const statuses = generateStatuses();
+      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
+      // At first, active by default tab "All" should be deactivated
+      const missedStatusTab = screen.getByText(new RegExp(StatusEnum.Missed, 'i'));
+      fireEvent.click(missedStatusTab);
+      expect(onTabChangeMock).toHaveBeenCalledWith(StatusEnum.Missed);
+
+      const selectedTab = screen.getByText(new RegExp(ALL_TAB_KEY, 'i'));
+      fireEvent.click(selectedTab);
+
+      expect(onTabChangeMock).toHaveBeenCalledWith(ALL_TAB_KEY);
+    });
+
+    it.each`
+      tabName
+      ${StatusEnum.Missed}
+      ${StatusEnum.Done}
+      ${StatusEnum.Available}
+      ${StatusEnum.Archived}
+      ${StatusEnum.Future}
+      ${StatusEnum.Review}
+    `('should call onTabChange with tab name "$tabName"', ({ tabName }: { tabName: string }) => {
+      const statuses = generateStatuses(undefined, { [tabName]: 2 });
+      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
+
+      const selectedTab = screen.getByText(new RegExp(tabName, 'i'));
+      fireEvent.click(selectedTab);
+
+      expect(onTabChangeMock).toHaveBeenCalledWith(tabName);
+    });
   });
 });
 
