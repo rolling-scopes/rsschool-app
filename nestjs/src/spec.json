@@ -461,7 +461,7 @@
         "summary": "",
         "parameters": [
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "courseId", "required": true, "in": "path", "schema": {} }
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {

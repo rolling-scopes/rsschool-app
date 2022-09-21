@@ -48,7 +48,7 @@ export class InterviewsController {
   @ApiOkResponse({ type: InterviewDto })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
-  @ApiParam({ name: 'courseId' })
+  @ApiParam({ name: 'courseId', type: Number })
   @ApiOperation({ operationId: 'getInterview' })
   public async getInterview(@Param('interviewId', ParseIntPipe) interviewId: number) {
     const data = await this.courseTasksService.getById(interviewId);

@@ -18,6 +18,7 @@ import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto } from 'api';
 import { getApiConfiguration } from 'utils/axios';
+import { stageInterviewType } from 'domain/interview';
 
 const api = new CoursesInterviewsApi(getApiConfiguration());
 
@@ -29,7 +30,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const isStageInteview = interview.type === 'stage-interview';
+  const isStageInterview = interview.type === stageInterviewType;
 
   useAsync(
     withLoading(async () => {
@@ -40,7 +41,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
   );
 
   const inviteStudent = withLoading(async (githubId: string) => {
-    if (isStageInteview) {
+    if (isStageInterview) {
       await courseService.createInterview(githubId, session.githubId);
     } else {
       await courseService.addInterviewPair(`${interview.id}`, session.githubId, githubId);
@@ -74,7 +75,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
             render: (_: string, record) => <PersonCell value={record} />,
             ...getColumnSearchProps(['githubId', 'name']),
           },
-          ...(isStageInteview
+          ...(isStageInterview
             ? [
                 {
                   title: 'Good Candidate',
@@ -119,7 +120,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
                 <Button type="link" onClick={() => inviteStudent(record.githubId)}>
                   Want to interview
                 </Button>
-                {isStageInteview && isPowerUser ? (
+                {isStageInterview && isPowerUser ? (
                   <Button type="link" onClick={() => removeFromList(record.githubId)}>
                     Remove from list
                   </Button>

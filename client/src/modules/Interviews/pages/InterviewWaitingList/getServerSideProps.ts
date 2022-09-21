@@ -5,6 +5,7 @@ import type { PageProps } from './index';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
 import moment from 'moment';
+import { stageInterviewType } from 'domain/interview';
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
   try {
@@ -21,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     const { data: courses } = await new CoursesApi(getApiConfiguration(token)).getCourses();
     const course = courses.find(course => course.alias === alias) ?? null;
 
-    if (course == null) {
+    if (!course) {
       return notAuthorizedResponse;
     }
 
@@ -34,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       return notAuthorizedResponse;
     }
 
-    const isStage = interview.type === 'stage-interview';
+    const isStage = interview.type === stageInterviewType;
     if (!isStage && moment(interview.startDate).isAfter(moment())) {
       return notAuthorizedResponse;
     }

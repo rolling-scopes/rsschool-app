@@ -130,7 +130,7 @@ function renderFooter(interview: Interview, courseAlias: string) {
   const { name, startDate, id } = interview;
   const showWaitList = isTechnicalScreening({ name }) || moment(startDate).isBefore(moment());
 
-  if (showWaitList)
+  if (showWaitList) {
     return (
       <>
         <div>Do you want to interview more students?</div> Please check
@@ -143,6 +143,7 @@ function renderFooter(interview: Interview, courseAlias: string) {
         </Button>
       </>
     );
+  }
 }
 
 function renderHeader(name: string, interview: any) {

@@ -5950,11 +5950,11 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} interviewId 
-         * @param {any} courseId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterview: async (interviewId: number, courseId: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getInterview: async (interviewId: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'interviewId' is not null or undefined
             assertParamExists('getInterview', 'interviewId', interviewId)
             // verify required parameter 'courseId' is not null or undefined
@@ -6041,11 +6041,11 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} interviewId 
-         * @param {any} courseId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInterview(interviewId: number, courseId: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InterviewDto>> {
+        async getInterview(interviewId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InterviewDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getInterview(interviewId, courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6082,11 +6082,11 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} interviewId 
-         * @param {any} courseId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterview(interviewId: number, courseId: any, options?: any): AxiosPromise<InterviewDto> {
+        getInterview(interviewId: number, courseId: number, options?: any): AxiosPromise<InterviewDto> {
             return localVarFp.getInterview(interviewId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6123,12 +6123,12 @@ export class CoursesInterviewsApi extends BaseAPI {
     /**
      * 
      * @param {number} interviewId 
-     * @param {any} courseId 
+     * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesInterviewsApi
      */
-    public getInterview(interviewId: number, courseId: any, options?: AxiosRequestConfig) {
+    public getInterview(interviewId: number, courseId: number, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).getInterview(interviewId, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
