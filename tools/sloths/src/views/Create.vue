@@ -56,10 +56,6 @@
             :disabled="backgroundTransparent"
           />
         </div>
-        <div class="meme__property">
-          <label class="meme__label" for="margin">{{ $t('create.margin') }}</label>
-          <input type="number" id="margin" min="0" max="100" class="meme__number" v-model="margin" @input="draw()" />
-        </div>
       </div>
 
       <div class="meme__canvas-wrapper">
@@ -77,11 +73,17 @@
               className="btn btn-icon icon-plus"
               @click="scaleUp"
             ></custom-btn>
-            <custom-btn
+            <!-- <custom-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
               @click="scaleTrue"
+            ></custom-btn> -->
+            <custom-btn
+              :text="$t('btn.center')"
+              imgPath="icon"
+              className="btn btn-icon icon-true"
+              @click="setImgCenter"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.scaleDown')"
@@ -103,7 +105,7 @@
           @mousemove="handleMouseMove"
           @mousedown="handleMouseDown"
           @mouseup="handleMouseUp"
-          @mouseout="handleMouseUp"
+          @mouseout="handleMouseOut"
           @wheel="handleWheel"
         >
         </canvas>
@@ -119,6 +121,7 @@ import usePagesStore from '@/stores/pages-store';
 import { MEMES_SLOTHS } from '@/common/const';
 
 const { getPageCreateState, setPageCreateState } = usePagesStore();
+const canvasSize = 500;
 
 type CanvasElement = {
   top: number;
@@ -153,7 +156,6 @@ export default defineComponent({
       ctx: {} as CanvasRenderingContext2D,
       backgroundTransparent: false,
       backgroundColor: '#777777',
-      margin: 50,
       img: {} as HTMLImageElement,
       topText: '',
       bottomText: '',
@@ -192,13 +194,14 @@ export default defineComponent({
 
     const image = new Image();
     image.onload = () => {
+      this.calcCanvasSizes();
+      this.calcImgSizes();
+      this.setImgCenter();
       this.draw();
     };
     image.src = this.images[this.index];
 
     this.img = image;
-    this.imgCanvasElement.left = this.imgCanvasElement.left || this.margin;
-    this.imgCanvasElement.top = this.imgCanvasElement.top || this.margin;
   },
 
   beforeRouteLeave() {
@@ -226,6 +229,12 @@ export default defineComponent({
 
     scaleDown() {
       this.imgCanvasElement.scaleSteps = Math.max(0.1, this.imgCanvasElement.scaleSteps - 0.05);
+      this.draw();
+    },
+
+    setImgCenter() {
+      this.imgCanvasElement.left = (this.canvas.width - this.imgCanvasElement.scaledWidth) / 2;
+      this.imgCanvasElement.top = (this.canvas.height - this.imgCanvasElement.scaledHeight) / 2;
       this.draw();
     },
 
@@ -272,10 +281,8 @@ export default defineComponent({
     },
 
     calcCanvasSizes() {
-      if (this.img) {
-        this.canvas.width = this.imgCanvasElement.width + this.margin * 2;
-        this.canvas.height = this.imgCanvasElement.height + this.margin * 2;
-      }
+      this.canvas.width = canvasSize;
+      this.canvas.height = canvasSize;
     },
 
     drawBackground() {
@@ -359,6 +366,11 @@ export default defineComponent({
       this.draw();
     },
 
+    handleMouseOut() {
+      this.imgCanvasElement.isHovered = false;
+      this.handleMouseUp();
+    },
+
     handleWheel(e: WheelEvent) {
       if (this.imgCanvasElement.isHovered) {
         const dy = e.deltaY;
@@ -378,6 +390,8 @@ export default defineComponent({
       if (!(image instanceof HTMLImageElement)) return;
 
       this.img = image;
+      this.calcImgSizes();
+      this.setImgCenter();
 
       this.draw();
     },
