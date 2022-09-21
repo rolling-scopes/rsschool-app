@@ -1,6 +1,6 @@
 import { Badge, Space } from 'antd';
 import { ReactNode } from 'react';
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDtoStatusEnum } from 'api';
 import { SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { Status } from './StatusTabs';
 

@@ -1,9 +1,9 @@
-import { render, screen, within } from '@testing-library/react';
-import StatusTabs, { Status, StatusTabsProps } from './StatusTabs';
+import { render, screen } from '@testing-library/react';
+import StatusTabs, { Status } from './StatusTabs';
 import { SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 
 describe('StatusTabs', () => {
-  it('should render all statuses', () => {
+  it('should render all status tabs', () => {
     const statuses = generateStatuses();
 
     render(<StatusTabs statuses={statuses} />);
