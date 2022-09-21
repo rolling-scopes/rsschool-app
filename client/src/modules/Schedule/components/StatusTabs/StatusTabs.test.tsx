@@ -15,6 +15,21 @@ describe('StatusTabs', () => {
     expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
   });
 
+  it('should order tabs', () => {
+    const statuses = generateStatuses();
+
+    render(<StatusTabs statuses={statuses} />);
+
+    const [all, available, review, future, missed, done, archived] = screen.getAllByRole('tab');
+    expect(all).toHaveTextContent(/all/i);
+    expect(available).toHaveTextContent(new RegExp(StatusEnum.Available, 'i'));
+    expect(review).toHaveTextContent(new RegExp(StatusEnum.Review, 'i'));
+    expect(future).toHaveTextContent(new RegExp(StatusEnum.Future, 'i'));
+    expect(missed).toHaveTextContent(new RegExp(StatusEnum.Missed, 'i'));
+    expect(done).toHaveTextContent(new RegExp(StatusEnum.Done, 'i'));
+    expect(archived).toHaveTextContent(new RegExp(StatusEnum.Archived, 'i'));
+  });
+
   it.each`
     status                  | count
     ${StatusEnum.Done}      | ${2}
