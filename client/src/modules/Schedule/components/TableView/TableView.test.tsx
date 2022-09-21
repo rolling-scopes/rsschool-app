@@ -131,6 +131,33 @@ describe('TableView', () => {
       expect(items).toHaveLength(courseItemCount);
     });
   });
+
+  describe('should hide data', () => {
+    it.each`
+      selectedStatus          | hiddenStatus
+      ${StatusEnum.Missed}    | ${StatusEnum.Done}
+      ${StatusEnum.Done}      | ${StatusEnum.Available}
+      ${StatusEnum.Available} | ${StatusEnum.Archived}
+      ${StatusEnum.Archived}  | ${StatusEnum.Future}
+      ${StatusEnum.Future}    | ${StatusEnum.Review}
+      ${StatusEnum.Review}    | ${StatusEnum.Missed}
+    `(
+      'when "$selectedStatus" was selected and "$hiddenStatus" was filtered',
+      ({
+        selectedStatus,
+        hiddenStatus,
+      }: {
+        selectedStatus: CourseScheduleItemDtoStatusEnum;
+        hiddenStatus: CourseScheduleItemDtoStatusEnum;
+      }) => {
+        const data = generateCourseData(2, [selectedStatus, hiddenStatus]);
+        render(<TableView {...PROPS_MOCK} data={data} statusFilter={selectedStatus} />);
+
+        const filteredItem = screen.queryByText(new RegExp(hiddenStatus, 'i'));
+        expect(filteredItem).not.toBeInTheDocument();
+      },
+    );
+  });
 });
 
 function generateCourseData(
