@@ -71,7 +71,7 @@
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
-              @click="scaleUp"
+              @click="scaleUp(imgCanvasElement)"
             ></custom-btn>
             <!-- <custom-btn
               :text="$t('btn.trueSize')"
@@ -83,13 +83,13 @@
               :text="$t('btn.center')"
               imgPath="icon"
               className="btn btn-icon icon-true"
-              @click="setImgCenter"
+              @click="centering"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
-              @click="scaleDown"
+              @click="scaleDown(imgCanvasElement)"
             ></custom-btn>
           </div>
           <custom-btn
@@ -122,6 +122,7 @@ import { MEMES_SLOTHS } from '@/common/const';
 
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 const canvasSize = 500;
+const textMargin = 10;
 
 type CanvasElement = {
   top: number;
@@ -161,20 +162,9 @@ export default defineComponent({
       bottomText: '',
       color: '#ffffff',
       strokeStyle: '#000000',
-      imgCanvasElement: {
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 0,
-        scaledWidth: 0,
-        scaledHeight: 0,
-        scaleSteps: 1,
-        isHovered: false,
-        isSelected: false,
-        selectedPos: {} as Pos,
-      } as CanvasElement,
-      topCanvasElement: {} as CanvasElement,
-      bottomCanvasElement: {} as CanvasElement,
+      imgCanvasElement: this.initCanvasElement(0),
+      topCanvasElement: this.initCanvasElement(textMargin),
+      bottomCanvasElement: this.initCanvasElement(canvasSize - textMargin),
     };
   },
 
@@ -196,7 +186,7 @@ export default defineComponent({
     image.onload = () => {
       this.calcCanvasSizes();
       this.calcImgSizes();
-      this.setImgCenter();
+      this.centering();
       this.draw();
     };
     image.src = this.images[this.index];
@@ -217,33 +207,64 @@ export default defineComponent({
       return this.images[i];
     },
 
-    scaleUp() {
-      this.imgCanvasElement.scaleSteps = Math.min(2, this.imgCanvasElement.scaleSteps + 0.05);
+    initCanvasElement(top: number) {
+      return {
+        top,
+        left: 0,
+        width: 0,
+        height: 0,
+        scaledWidth: 0,
+        scaledHeight: 0,
+        scaleSteps: 1,
+        isHovered: false,
+        isSelected: false,
+        selectedPos: {} as Pos,
+      } as CanvasElement;
+    },
+
+    scaleUp(el: CanvasElement) {
+      const canvasElement = el;
+
+      canvasElement.scaleSteps = Math.min(2, canvasElement.scaleSteps + 0.05);
+
       this.draw();
     },
 
-    scaleTrue() {
-      this.imgCanvasElement.scaleSteps = 1;
+    scaleTrue(el: CanvasElement) {
+      const canvasElement = el;
+
+      canvasElement.scaleSteps = 1;
+
       this.draw();
     },
 
-    scaleDown() {
-      this.imgCanvasElement.scaleSteps = Math.max(0.1, this.imgCanvasElement.scaleSteps - 0.05);
+    scaleDown(el: CanvasElement) {
+      const canvasElement = el;
+
+      canvasElement.scaleSteps = Math.max(0.1, canvasElement.scaleSteps - 0.05);
+
       this.draw();
     },
 
-    setImgCenter() {
-      this.imgCanvasElement.left = (this.canvas.width - this.imgCanvasElement.scaledWidth) / 2;
-      this.imgCanvasElement.top = (this.canvas.height - this.imgCanvasElement.scaledHeight) / 2;
+    centering() {
+      this.imgCanvasElement.left = (canvasSize - this.imgCanvasElement.scaledWidth) / 2;
+      this.imgCanvasElement.top = (canvasSize - this.imgCanvasElement.scaledHeight) / 2;
+
+      this.topCanvasElement.left = 0;
+      this.topCanvasElement.top = textMargin;
+
+      this.bottomCanvasElement.left = 0;
+      this.bottomCanvasElement.top = canvasSize - textMargin - this.bottomCanvasElement.scaledHeight;
+
       this.draw();
     },
 
     draw() {
+      this.calcCanvasSizes();
+
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.calcImgSizes();
-
-      this.calcCanvasSizes();
 
       this.drawBackground();
 
@@ -259,9 +280,11 @@ export default defineComponent({
         this.imgCanvasElement.scaledHeight
       );
 
-      this.drawBorder(this.imgCanvasElement);
-
       this.drawText();
+
+      this.drawBorder(this.imgCanvasElement);
+      this.drawBorder(this.topCanvasElement);
+      this.drawBorder(this.bottomCanvasElement);
     },
 
     calcImgSizes() {
@@ -299,6 +322,7 @@ export default defineComponent({
         const y1 = el.top;
         const y2 = el.top + el.scaledHeight;
 
+        this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.moveTo(x1, y1);
         this.ctx.lineTo(x2, y1);
@@ -323,60 +347,99 @@ export default defineComponent({
     handleMouseMove(e: MouseEvent) {
       const mousePos = this.getMousePos(e);
 
-      if (this.imgCanvasElement.isSelected) {
-        const dx = mousePos.x - this.imgCanvasElement.selectedPos.x;
-        const dy = mousePos.y - this.imgCanvasElement.selectedPos.y;
+      this.handleMouseMoveEl(mousePos, this.imgCanvasElement);
+      this.handleMouseMoveEl(mousePos, this.topCanvasElement);
+      this.handleMouseMoveEl(mousePos, this.bottomCanvasElement);
 
-        this.imgCanvasElement.left += dx;
-        this.imgCanvasElement.top += dy;
-
-        this.imgCanvasElement.selectedPos.x = mousePos.x;
-        this.imgCanvasElement.selectedPos.y = mousePos.y;
-      } else {
-        const x1 = this.imgCanvasElement.left;
-        const x2 = this.imgCanvasElement.left + this.imgCanvasElement.scaledWidth;
-        const y1 = this.imgCanvasElement.top;
-        const y2 = this.imgCanvasElement.top + this.imgCanvasElement.scaledHeight;
-
-        this.imgCanvasElement.isHovered = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
-      }
       this.draw();
+    },
+
+    handleMouseMoveEl(mousePos: Pos, el: CanvasElement) {
+      const canvasElement = el;
+
+      if (canvasElement.isSelected) {
+        const dx = mousePos.x - canvasElement.selectedPos.x;
+        const dy = mousePos.y - canvasElement.selectedPos.y;
+
+        canvasElement.left += dx;
+        canvasElement.top += dy;
+
+        canvasElement.selectedPos.x = mousePos.x;
+        canvasElement.selectedPos.y = mousePos.y;
+      } else {
+        const x1 = canvasElement.left;
+        const x2 = canvasElement.left + canvasElement.scaledWidth;
+        const y1 = canvasElement.top;
+        const y2 = canvasElement.top + canvasElement.scaledHeight;
+
+        canvasElement.isHovered = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+      }
     },
 
     handleMouseDown(e: MouseEvent) {
       const mousePos = this.getMousePos(e);
 
-      const x1 = this.imgCanvasElement.left;
-      const x2 = this.imgCanvasElement.left + this.imgCanvasElement.scaledWidth;
-      const y1 = this.imgCanvasElement.top;
-      const y2 = this.imgCanvasElement.top + this.imgCanvasElement.scaledHeight;
+      this.handleMouseDownEl(mousePos, this.imgCanvasElement);
+      this.handleMouseDownEl(mousePos, this.topCanvasElement);
+      this.handleMouseDownEl(mousePos, this.bottomCanvasElement);
 
-      const isSelected = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
-
-      this.imgCanvasElement.isSelected = isSelected;
-      if (isSelected) {
-        this.imgCanvasElement.selectedPos = { ...mousePos };
-      }
       this.draw();
     },
 
+    handleMouseDownEl(mousePos: Pos, el: CanvasElement) {
+      const canvasElement = el;
+
+      const x1 = canvasElement.left;
+      const x2 = canvasElement.left + canvasElement.scaledWidth;
+      const y1 = canvasElement.top;
+      const y2 = canvasElement.top + canvasElement.scaledHeight;
+
+      const isSelected = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+
+      canvasElement.isSelected = isSelected;
+      if (isSelected) {
+        canvasElement.selectedPos = { ...mousePos };
+      }
+    },
+
     handleMouseUp() {
-      this.imgCanvasElement.isSelected = false;
-      this.imgCanvasElement.selectedPos = {} as Pos;
+      this.handleMouseUpEl(this.imgCanvasElement);
+      this.handleMouseUpEl(this.topCanvasElement);
+      this.handleMouseUpEl(this.bottomCanvasElement);
+
       this.draw();
+    },
+
+    handleMouseUpEl(el: CanvasElement) {
+      const canvasElement = el;
+
+      canvasElement.isSelected = false;
+      canvasElement.selectedPos = {} as Pos;
     },
 
     handleMouseOut() {
       this.imgCanvasElement.isHovered = false;
+      this.topCanvasElement.isHovered = false;
+      this.bottomCanvasElement.isHovered = false;
+
       this.handleMouseUp();
     },
 
     handleWheel(e: WheelEvent) {
-      if (this.imgCanvasElement.isHovered) {
-        const dy = e.deltaY;
+      const dy = e.deltaY;
+
+      this.handleWheelEl(dy, this.imgCanvasElement);
+      this.handleWheelEl(dy, this.topCanvasElement);
+      this.handleWheelEl(dy, this.bottomCanvasElement);
+    },
+
+    handleWheelEl(dy: number, el: CanvasElement) {
+      const canvasElement = el;
+
+      if (canvasElement.isHovered) {
         if (dy > 0) {
-          this.scaleUp();
-        } else if (dy < 0) this.scaleDown();
+          this.scaleUp(canvasElement);
+        } else if (dy < 0) this.scaleDown(canvasElement);
       }
     },
 
@@ -391,70 +454,95 @@ export default defineComponent({
 
       this.img = image;
       this.calcImgSizes();
-      this.setImgCenter();
+      this.centering();
 
       this.draw();
     },
 
     drawText() {
       const { width, height } = this.canvas;
-      const fontSize = Math.floor(width / 10);
-      const yOffset = height / 25;
 
-      this.ctx.strokeStyle = this.strokeStyle; // 'black';
-      this.ctx.lineWidth = Math.floor(fontSize / 4);
-      this.ctx.fillStyle = this.color; // 'white';
+      this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.fillStyle = this.color;
       this.ctx.textAlign = 'center';
       this.ctx.lineJoin = 'round';
-      this.ctx.font = `${fontSize}px sans-serif`;
 
-      this.ctx.textBaseline = 'top';
-      this.drawTextMultiLineTop(this.topText, width / 2, yOffset, this.canvas.width, fontSize);
+      if (this.topText) {
+        const fontSize = Math.floor((height * this.topCanvasElement.scaleSteps) / 10);
+        this.ctx.lineWidth = Math.floor(fontSize / 5);
+        this.ctx.font = `${fontSize}px sans-serif`;
+        this.ctx.textBaseline = 'top';
+        const { left, top } = this.topCanvasElement;
+        this.drawTextMultiLineTop(this.topText, width / 2 + left, top, width, fontSize);
+      }
 
-      this.ctx.textBaseline = 'bottom';
-      this.drawTextMultiLineBottom(this.bottomText, width / 2, height - yOffset, this.canvas.width, fontSize);
+      if (this.bottomText) {
+        const fontSize = Math.floor((height * this.bottomCanvasElement.scaleSteps) / 10);
+        this.ctx.lineWidth = Math.floor(fontSize / 5);
+        this.ctx.font = `${fontSize}px sans-serif`;
+        this.ctx.textBaseline = 'bottom';
+        const { left, top } = this.bottomCanvasElement;
+        this.drawTextMultiLineBottom(this.bottomText, width / 2 + left, top, width, fontSize);
+      }
     },
 
-    drawTextMultiLineTop(text: string, x: number, top: number, maxWidth: number, lineHeight: number) {
+    drawTextMultiLineTop(text: string, x: number, top: number, maxWidth: number, fontSize: number) {
       const words = text.split(' ');
       let line = '';
-      let y = top;
+      let y = top + fontSize * 0.1;
+      let textHeight = fontSize;
+
       words.forEach((word, index) => {
         const testLine = `${line + word} `;
         const metrics = this.ctx.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && index > 0) {
-          this.ctx.strokeText(line, x, y);
-          this.ctx.fillText(line, x, y);
+          this.ctx.strokeText(line.trim(), x, y);
+          this.ctx.fillText(line.trim(), x, y);
           line = `${word} `;
-          y += lineHeight;
+          y += fontSize;
+          textHeight += fontSize;
         } else {
           line = testLine;
         }
       });
-      this.ctx.strokeText(line, x, y);
-      this.ctx.fillText(line, x, y);
+      this.ctx.strokeText(line.trim(), x, y);
+      this.ctx.fillText(line.trim(), x, y);
+
+      this.topCanvasElement.width = maxWidth;
+      this.topCanvasElement.height = textHeight;
+      this.topCanvasElement.scaledWidth = maxWidth;
+      this.topCanvasElement.scaledHeight = textHeight;
     },
 
-    drawTextMultiLineBottom(text: string, x: number, top: number, maxWidth: number, lineHeight: number) {
+    drawTextMultiLineBottom(text: string, x: number, top: number, maxWidth: number, fontSize: number) {
       const words = text.split(' ').reverse();
       let line = '';
-      let y = top;
+      let y = top + this.bottomCanvasElement.height + fontSize * 0.1;
+      let textHeight = fontSize;
+
       words.forEach((word, index) => {
         const testLine = ` ${word + line}`;
         const metrics = this.ctx.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && index > 0) {
-          this.ctx.strokeText(line, x, y);
-          this.ctx.fillText(line, x, y);
+          this.ctx.strokeText(line.trim(), x, y);
+          this.ctx.fillText(line.trim(), x, y);
           line = ` ${word}`;
-          y -= lineHeight;
+          y -= fontSize;
+          textHeight += fontSize;
         } else {
           line = testLine;
         }
       });
-      this.ctx.strokeText(line, x, y);
-      this.ctx.fillText(line, x, y);
+      this.ctx.strokeText(line.trim(), x, y);
+      this.ctx.fillText(line.trim(), x, y);
+
+      this.bottomCanvasElement.top -= textHeight - this.bottomCanvasElement.height;
+      this.bottomCanvasElement.width = maxWidth;
+      this.bottomCanvasElement.height = textHeight;
+      this.bottomCanvasElement.scaledWidth = maxWidth;
+      this.bottomCanvasElement.scaledHeight = textHeight;
     },
 
     saveImage() {
