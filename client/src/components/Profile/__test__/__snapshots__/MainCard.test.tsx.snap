@@ -14,7 +14,7 @@ exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
         style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
         <img
-          src="https://cdn.rs.school/john-doe.png?size=192"
+          src="https://cdn.rs.school/avatars/john-doe.png?size=192"
         />
       </span>
       <h1
@@ -134,7 +134,7 @@ exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
         style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
         <img
-          src="https://cdn.rs.school/john-doe.png?size=192"
+          src="https://cdn.rs.school/avatars/john-doe.png?size=192"
         />
       </span>
       <h1
