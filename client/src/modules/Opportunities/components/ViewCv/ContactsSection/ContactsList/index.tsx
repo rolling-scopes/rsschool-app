@@ -5,7 +5,6 @@ import {
   MailOutlined,
   SkypeOutlined,
   LinkedinOutlined,
-  AimOutlined,
   GithubOutlined,
   IdcardOutlined,
   MessageOutlined,
@@ -76,7 +75,7 @@ export const ContactsList = ({ contacts }: Props) => {
 };
 
 type AllowedContacts = {
-  [key in ContactType]: {
+  [key in ContactType & { locations: string | null }]: {
     icon: React.ReactNode;
     render?: (contact: string) => React.ReactNode;
   };
@@ -103,11 +102,7 @@ const contactRendererMap: AllowedContacts = {
     icon: <LinkedinOutlined />,
     render: contact => <Link title="LinkedIn" url={contact} text={contact} />,
   },
-  locations: {
-    icon: <AimOutlined />,
-    render: locations => locations.split('\n').join('; '),
-  },
-  github: {
+  githubUsername: {
     icon: <GithubOutlined />,
     render: contact => <Link title="Github" url={`https://github.com/${contact}`} text={contact} />,
   },

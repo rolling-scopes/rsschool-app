@@ -10,7 +10,7 @@ export const NameTitle = ({ userData }: Props) => {
   const { name, avatarLink, desiredPosition } = userData;
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div>
         <div style={{ paddingRight: 16 }}>
           <AvatarCv src={avatarLink} />

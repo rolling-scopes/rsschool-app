@@ -1,7 +1,6 @@
 import { UserData } from 'modules/Opportunities/models';
 import { Fragment } from 'react';
 import { getPersonalToRender } from 'modules/Opportunities/data/getPersonalToRender';
-import { SidebarSectionHeader } from 'modules/Opportunities/components/SidebarSectionHeader';
 
 type Props = {
   user: UserData | null;
@@ -15,7 +14,6 @@ export function PersonalSection({ user }: Props) {
 
   return (
     <div>
-      <SidebarSectionHeader title="Personal" />
       <div>
         {data.map(({ title, value }) => (
           <Fragment key={title}>

@@ -5,15 +5,9 @@ body,
 }
 
 .rs-link {
-  background-color: #fff;
-  color: #000;
+  color: #fff;
   display: inline-block;
   padding: 1px 2px;
-}
-
-.rs-link:hover {
-  background-color: #10f3ff;
-  color: #000;
 }
 
 .ant-layout-sider-dark h4 {

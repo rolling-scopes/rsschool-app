@@ -43,13 +43,19 @@ export const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<Fo
         labelCol={{ span: 9, offset: 4 }}
         wrapperCol={{ span: 10 }}
       >
-        {courses.map(({ id, fullName }) => (
+        {courses.map(({ id, fullName, rank }) => (
           <Item
             key={id}
             name={id}
             colon={false}
-            label={<span style={{ whiteSpace: 'normal' }}>{fullName}</span>}
-            style={{ marginBottom: '0', overflow: 'hidden' }}
+            label={
+              <div style={{ whiteSpace: 'normal' }}>
+                <Text>{fullName}</Text>
+                <br />
+                <Text type="secondary">Position: {rank}</Text>
+              </div>
+            }
+            style={{ overflow: 'hidden' }}
             valuePropName="checked"
           >
             <Checkbox />

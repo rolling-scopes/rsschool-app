@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Divider, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { ResumeDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -52,10 +52,12 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
             <Row>
               <NameTitle userData={userData} />
             </Row>
+            <Divider style={{ margin: '8px 0', backgroundColor: '#262626' }} />
             <Row gutter={24}>
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
                 <PersonalSection user={userData} />
               </Col>
+              <Divider style={{ margin: '8px 0', backgroundColor: '#262626' }} />
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
                 <ContactsSection contacts={contacts} />
               </Col>
