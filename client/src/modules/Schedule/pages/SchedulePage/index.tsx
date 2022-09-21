@@ -58,10 +58,11 @@ export function SchedulePage(props: PageProps) {
   }, [props.course.id]);
 
   const eventTags = useMemo(() => uniq(data.map(item => item.tag)), [data]);
+  const statuses = useMemo(() => data.map(({ status }) => status), [data]);
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
-      <StatusTabs data={data} />
+      <StatusTabs statuses={statuses} />
       <SettingsPanel
         onCreateCourseTask={handleCreateCourseTask}
         onCopyFromCourse={() => setCopyModal({})}

@@ -1,14 +1,15 @@
 import { Tabs } from 'antd';
-import { CourseScheduleItemDto } from 'api';
 import { useMemo } from 'react';
 import { tabsRenderer } from './renderers';
 
+export type Status = string;
+
 export interface StatusTabsProps {
-  data: CourseScheduleItemDto[];
+  statuses: Status[];
 }
 
-function StatusTabs({ data }: StatusTabsProps) {
-  const tabs = useMemo(() => tabsRenderer(data), [data]);
+function StatusTabs({ statuses }: StatusTabsProps) {
+  const tabs = useMemo(() => tabsRenderer(statuses), [statuses]);
 
   return (
     <>
@@ -19,8 +20,8 @@ function StatusTabs({ data }: StatusTabsProps) {
           color: rgba(0, 0, 0, 0.45);
         }
         :global(.ant-tabs-tab-active .ant-badge-count) {
-          background-color: #E6F7FF;
-          color: #1890FF;
+          background-color: #e6f7ff;
+          color: #1890ff;
         }
       `}</style>
     </>
