@@ -5,32 +5,15 @@ import type { ErrorDescription, MemoryLevel, SelectOptions } from './types';
 // Services
 export const BASE = import.meta.env.VITE_BFF_URL;
 
+export const JSON_URL = import.meta.env.VITE_JSON_URL;
+
+export const CDN_URL = import.meta.env.VITE_CDN_URL;
+
 // custom Errors
 export const JSON_ERROR: ErrorDescription = { code: 'NOT_JSON', message: 'Response is not a JSON!' };
 
-export const USERS_ERROR_GET_LIST: ErrorDescription = {
-  code: 'USERS_GET_LIST',
-  message: 'Failed to get list of users from server',
-};
-export const USERS_ERROR_GET: ErrorDescription = {
-  code: 'USERS_GET',
-  message: 'Failed to get user info from server',
-};
-export const USERS_ERROR_DEL: ErrorDescription = {
-  code: 'USERS_DEL',
-  message: 'Failed to delete user from server',
-};
-export const USERS_ERROR_CREATE: ErrorDescription = {
-  code: 'USERS_CREATE',
-  message: 'Failed to add user to server',
-};
-export const USERS_ERROR_UPD: ErrorDescription = {
-  code: 'USERS_UPD',
-  message: 'Failed to update user on server',
-};
-
 // Sorting
-export const USER_SORTING: SelectOptions[] = [
+export const SLOTH_SORTING: SelectOptions[] = [
   {
     value: 'name-desc',
     text: 'sorting.name-',
@@ -38,75 +21,6 @@ export const USER_SORTING: SelectOptions[] = [
   {
     value: 'name-asc',
     text: 'sorting.name+',
-  },
-  {
-    value: 'github-desc',
-    text: 'sorting.github-',
-  },
-  {
-    value: 'github-asc',
-    text: 'sorting.github+',
-  },
-  {
-    value: 'createdAt-desc',
-    text: 'sorting.createdAt-',
-  },
-  {
-    value: 'createdAt-asc',
-    text: 'sorting.createdAt+',
-  },
-];
-
-export const SLOTH_SORTING: SelectOptions[] = [
-  {
-    value: 'caption-desc',
-    text: 'sorting.caption-',
-  },
-  {
-    value: 'caption-asc',
-    text: 'sorting.caption+',
-  },
-  {
-    value: 'rating-desc',
-    text: 'sorting.rating-',
-  },
-  {
-    value: 'rating-asc',
-    text: 'sorting.rating+',
-  },
-  {
-    value: 'createdAt-desc',
-    text: 'sorting.createdAt-',
-  },
-  {
-    value: 'createdAt-asc',
-    text: 'sorting.createdAt+',
-  },
-];
-export const SUGGESTION_SORTING: SelectOptions[] = [
-  {
-    value: 'status-desc',
-    text: 'sorting.status-',
-  },
-  {
-    value: 'status-asc',
-    text: 'sorting.status+',
-  },
-  {
-    value: 'rating-desc',
-    text: 'sorting.rating-',
-  },
-  {
-    value: 'rating-asc',
-    text: 'sorting.rating+',
-  },
-  {
-    value: 'createdAt-desc',
-    text: 'sorting.createdAt-',
-  },
-  {
-    value: 'createdAt-asc',
-    text: 'sorting.createdAt+',
   },
 ];
 export const GAME_RESULT_SORTING: SelectOptions[] = [
@@ -138,9 +52,6 @@ export const GAME_RESULT_SORTING: SelectOptions[] = [
 
 // Pagination
 export const PAGINATION_OPTIONS: number[] = [10, 15, 20, 25, 50, 100];
-
-// Rating
-export const RATING_OPTIONS: number[] = [0, 1, 2, 3, 4, 5];
 
 // Users
 export const DEFAULT_USER_AVATAR = './img/profile/default.svg';

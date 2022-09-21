@@ -2,58 +2,24 @@
   <div :class="`${getPageName}-sloth-info`">
     <div v-if="isAdmin" class="admin-sloth-info__inner">
       <div class="admin-sloth-info__sloth">
-        <img class="admin-sloth-info__img" :src="getImageUrl" :alt="slothInfo.caption" />
+        <img class="admin-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
         <div class="sloth-info__tags tags">
-          <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag.value">{{ tag.value }}</span>
+          <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag">{{ tag }}</span>
         </div>
-      </div>
-      <div class="sloth-info__btn">
-        <custom-btn className="btn btn-icon icon-edit" @click="$emit('editSloth', slothInfo)"></custom-btn>
-        <custom-btn className="btn btn-icon icon-del" @click="delItem"></custom-btn>
       </div>
       <div class="admin-sloth-info__props">
         <p class="sloth-info__property">{{ $t('catalog.caption') }}</p>
-        <p class="sloth-info__property">{{ $t('catalog.rating') }}</p>
-        <p class="sloth-info__property">{{ $t('catalog.createdAt') }}</p>
       </div>
       <div class="admin-sloth-info__props">
-        <p class="sloth-info__property">{{ slothInfo.caption }}</p>
-        <p v-show="slothInfo.rating === 0" class="sloth-info__text__main">0</p>
-        <p class="sloth-info__property">
-          <img
-            v-for="item in Math.floor(slothInfo.rating) || 0"
-            :key="item"
-            src="/img/catalog/sloths.svg"
-            alt="sloths"
-            class="sloth-info__text__sloth"
-            :title="`${slothInfo.rating.toFixed(1)}`"
-          />
-          <img
-            v-show="slothInfo.rating - Math.floor(slothInfo.rating) !== 0"
-            src="/img/catalog/sloths.svg"
-            alt="sloths"
-            class="sloth-info__text__sloth"
-            :title="`${slothInfo.rating.toFixed(1)}`"
-            :style="{
-              height: '20px',
-              width: 22 * (slothInfo.rating - Math.floor(slothInfo.rating)) + 'px',
-              overflowX: 'hidden',
-              objectFit: 'cover',
-              objectPosition: 'left center',
-            }"
-          />
-        </p>
-        <p class="sloth-info__property">
-          {{ new Date(slothInfo.createdAt).toLocaleDateString() }}
-        </p>
+        <p class="sloth-info__property">{{ slothInfo.name }}</p>
       </div>
     </div>
 
     <div v-else-if="isCatalog && !isDownload" class="catalog-sloth-info__inner">
       <div class="catalog-sloth-info__sloth">
-        <img class="catalog-sloth-info__img" :src="getImageUrl" :alt="slothInfo.caption" />
+        <img class="catalog-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
         <div class="sloth-info__tags tags">
-          <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag.value">{{ tag.value }}</span>
+          <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag">{{ tag }}</span>
         </div>
       </div>
       <custom-btn
@@ -62,48 +28,7 @@
       ></custom-btn>
       <div>
         <div class="catalog-sloth-info__props">
-          <p class="sloth-info__property sloth-info__property_text">{{ slothInfo.caption }}</p>
-          <div class="sloth-info__property sloth-info__property_rating">
-            <p v-if="slothInfo.rating === 0" class="sloth-info__user-rate">
-              <span class="user-rate__main">{{ $t('rate.none') }}</span>
-            </p>
-            <p v-else class="sloth-info__user-rate">
-              <img
-                v-for="item in Math.floor(slothInfo.rating)"
-                :key="item"
-                src="/img/catalog/sloths.svg"
-                alt="sloths"
-                class="user-rate__sloth"
-                :title="`${slothInfo.rating.toFixed(1)}`"
-              />
-              <img
-                v-show="slothInfo.rating - Math.floor(slothInfo.rating) !== 0"
-                src="/img/catalog/sloths.svg"
-                alt="sloths"
-                class="user-rate__sloth"
-                :title="`${slothInfo.rating.toFixed(1)}`"
-                :style="{
-                  height: '40px',
-                  width: 44 * (slothInfo.rating - Math.floor(slothInfo.rating)) + 'px',
-                  overflowX: 'hidden',
-                  objectFit: 'cover',
-                  objectPosition: 'left center',
-                }"
-              />
-            </p>
-          </div>
-          <div class="sloth-info__property sloth-info__property_rate">
-            <label for="range" class="sloth-info__label">{{ $t('rate.your') }}</label>
-            <select
-              class="sloth-info__select"
-              name="range"
-              id="range"
-              v-model="newRating"
-              @change="$emit('editRating', slothInfo, +newRating)"
-            >
-              <option v-for="value in rateValues" :key="value" :value="value">{{ value }}</option>
-            </select>
-          </div>
+          <p class="sloth-info__property sloth-info__property_text">{{ slothInfo.name }}</p>
         </div>
       </div>
       <custom-btn
@@ -119,9 +44,9 @@
         @click="$emit('checkSloth', slothInfo)"
       ></custom-btn>
       <div class="download-sloth-info__sloth">
-        <img class="download-sloth-info__img" :src="getImageUrl" :alt="slothInfo.caption" />
+        <img class="download-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
       </div>
-      <p class="sloth-info__property">{{ slothInfo.caption }}</p>
+      <p class="sloth-info__property">{{ slothInfo.name }}</p>
     </div>
 
     <modal-window v-show="isApproveShow" @close="closeModal">
@@ -131,7 +56,6 @@
 
       <template v-slot:footer>
         <div class="sloth-info__btn btn-horizontal">
-          <custom-btn :text="$t('btn.yes')" className="btn btn-primary" :onClick="approveDelItem"></custom-btn>
           <custom-btn :text="$t('btn.no')" className="btn btn-primary" :onClick="closeModal"></custom-btn>
         </div>
       </template>
@@ -144,7 +68,7 @@ import { defineComponent, type PropType } from 'vue';
 import type { Sloth } from '@/common/types';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
-import { BASE, RATING_OPTIONS } from '@/common/const';
+import { CDN_URL } from '../../common/const';
 
 export default defineComponent({
   name: 'SlothCard',
@@ -156,9 +80,7 @@ export default defineComponent({
 
   data() {
     return {
-      newRating: this.slothInfo.ratings[0]?.rate ?? 0,
       isApproveShow: false,
-      rateValues: RATING_OPTIONS,
     };
   },
 
@@ -175,7 +97,7 @@ export default defineComponent({
 
   computed: {
     getImageUrl(): string {
-      return `${BASE}/${this.slothInfo.image_url}`;
+      return `${CDN_URL}/${this.slothInfo.id}/image.svg`;
     },
 
     getPageName(): string {
@@ -193,13 +115,6 @@ export default defineComponent({
   },
 
   methods: {
-    delItem() {
-      this.isApproveShow = true;
-    },
-    approveDelItem() {
-      this.$emit('delSloth', this.slothInfo.id);
-      this.closeModal();
-    },
     closeModal() {
       this.isApproveShow = false;
     },
