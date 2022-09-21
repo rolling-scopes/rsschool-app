@@ -2,6 +2,9 @@ import { render, screen } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
 import * as ReactUse from 'react-use';
 import { ColumnKey } from 'modules/Schedule/constants';
+import { CourseScheduleItemDtoStatusEnum } from 'api';
+
+const StatusEnum = CourseScheduleItemDtoStatusEnum;
 
 const PROPS_MOCK: TableViewProps = {
   settings: {
@@ -43,6 +46,7 @@ const PROPS_MOCK: TableViewProps = {
       descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md',
     },
   ],
+  statusFilter: 'all',
 };
 
 describe('TableView', () => {
@@ -91,28 +95,31 @@ describe('TableView', () => {
   });
 
   describe('should show data', () => {
-    it('by selected status', () => {
-      jest
-        .spyOn(ReactUse, 'useLocalStorage')
-        // Mock useLocalStorage for statusFilter
-        .mockReturnValueOnce([['missed'], jest.fn, jest.fn]);
+    it.each`
+      status
+      ${StatusEnum.Missed}
+      ${StatusEnum.Done}
+      ${StatusEnum.Available}
+      ${StatusEnum.Archived}
+      ${StatusEnum.Future}
+      ${StatusEnum.Review}
+    `('by "$status" status "$status"', ({ status }: { status: string }) => {
+      // TODO: генерировать data с разными статусами
+      render(<TableView {...PROPS_MOCK} statusFilter={status} />);
 
-      render(<TableView {...PROPS_MOCK} />);
-
-      expect(screen.queryByText('Coding')).not.toBeInTheDocument();
+      // TODO: найте все строки со статусами
+      expect(screen.getByText('Missed')).toBeInTheDocument();
     });
 
     it('by selected tag', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
-        // Mock useLocalStorage for statusFilter
-        .mockReturnValueOnce([[], jest.fn, jest.fn])
         // Mock useLocalStorage for tagFilter
         .mockReturnValueOnce([['coding'], jest.fn, jest.fn]);
 
       render(<TableView {...PROPS_MOCK} />);
 
-      expect(screen.queryByText('Missed')).not.toBeInTheDocument();
+      expect(screen.getByText('Coding')).toBeInTheDocument();
     });
   });
 });
