@@ -75,7 +75,7 @@ export const ContactsList = ({ contacts }: Props) => {
 };
 
 type AllowedContacts = {
-  [key in ContactType & { locations: string | null }]: {
+  [key in ContactType]: {
     icon: React.ReactNode;
     render?: (contact: string) => React.ReactNode;
   };
