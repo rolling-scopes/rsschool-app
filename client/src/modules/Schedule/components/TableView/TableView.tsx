@@ -4,11 +4,11 @@ import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
 import {
+  ALL_TAB_KEY,
   ColumnKey,
   ColumnName,
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
-  SCHEDULE_STATUSES,
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
@@ -20,10 +20,8 @@ import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './rende
 const getColumns = ({
   timezone,
   tagColors,
-  statusFilter,
   tagFilter,
 }: {
-  statusFilter: string[];
   tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
@@ -35,9 +33,6 @@ const getColumns = ({
       title: ColumnName.Status,
       dataIndex: 'status',
       render: statusRenderer,
-      filters: SCHEDULE_STATUSES.map(status => ({ text: statusRenderer(status.value), value: status.value })),
-      defaultFilteredValue: statusFilter,
-      filtered: statusFilter.length > 0,
     },
     {
       key: ColumnKey.Name,
@@ -113,15 +108,15 @@ const getColumns = ({
 export interface TableViewProps {
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
+  statusFilter: string;
 }
 
-export function TableView({ data, settings }: TableViewProps) {
+export function TableView({ data, settings, statusFilter }: TableViewProps) {
   const [form] = Form.useForm();
-  const [statusFilter = [], setStatusFilter] = useLocalStorage<string[]>(LocalStorageKeys.StatusFilter);
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
 
   const filteredData = data
-    .filter(item => (statusFilter?.length > 0 ? statusFilter.includes(item.status) : item))
+    .filter(item => (statusFilter === ALL_TAB_KEY || item.status === statusFilter ? item : null))
     .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event));
 
   const filteredColumns = useMemo(
@@ -129,7 +124,6 @@ export function TableView({ data, settings }: TableViewProps) {
       getColumns({
         tagColors: settings.tagColors,
         timezone: settings.timezone,
-        statusFilter,
         tagFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
@@ -149,7 +143,6 @@ export function TableView({ data, settings }: TableViewProps) {
           cancelSort: undefined,
         }}
         onChange={(_, filters) => {
-          setStatusFilter((filters?.status as string[]) ?? []);
           setTagFilter((filters?.tag as string[]) ?? []);
         }}
         pagination={false}

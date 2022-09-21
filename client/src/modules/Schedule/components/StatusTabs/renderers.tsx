@@ -1,7 +1,7 @@
 import { Badge, Space } from 'antd';
 import { ReactNode } from 'react';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
-import { SCHEDULE_STATUSES } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { Status } from './StatusTabs';
 
 type Item = {
@@ -15,11 +15,8 @@ type TabItem = {
   key: string;
 };
 
-const ALL_KEY = 'all';
-const ALL_LABEL = 'All';
-
 const tabsOrder = [
-  ALL_KEY,
+  ALL_TAB_KEY,
   CourseScheduleItemDtoStatusEnum.Available,
   CourseScheduleItemDtoStatusEnum.Review,
   CourseScheduleItemDtoStatusEnum.Future,
@@ -30,8 +27,8 @@ const tabsOrder = [
 
 export const tabsRenderer = (statuses: Status[]): TabItem[] => {
   const initialItem = {
-    label: ALL_LABEL,
-    key: ALL_KEY,
+    label: ALL_TAB_LABEL,
+    key: ALL_TAB_KEY,
     count: statuses.length,
   };
 
@@ -56,11 +53,13 @@ export const tabsRenderer = (statuses: Status[]): TabItem[] => {
   )
     .sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key))
     .map(({ count, key, label }) => ({
-      label: (
+      label: count ? (
         <Space>
           {label}
           <Badge count={count} />
         </Space>
+      ) : (
+        label
       ),
       key,
     }));

@@ -1,15 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import StatusTabs, { Status } from './StatusTabs';
-import { SCHEDULE_STATUSES } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
 
 const StatusEnum = CourseScheduleItemDtoStatusEnum;
 
 describe('StatusTabs', () => {
+  const onTabChangeMock = jest.fn;
+
   it('should render status tabs', () => {
     const statuses = generateStatuses();
 
-    render(<StatusTabs statuses={statuses} />);
+    render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
     const expectedStatusCount = SCHEDULE_STATUSES.length + 1; // +1 is for 'All' tab
     expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
@@ -18,10 +20,10 @@ describe('StatusTabs', () => {
   it('should order tabs', () => {
     const statuses = generateStatuses();
 
-    render(<StatusTabs statuses={statuses} />);
+    render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
     const [all, available, review, future, missed, done, archived] = screen.getAllByRole('tab');
-    expect(all).toHaveTextContent(/all/i);
+    expect(all).toHaveTextContent(new RegExp(ALL_TAB_KEY, 'i'));
     expect(available).toHaveTextContent(new RegExp(StatusEnum.Available, 'i'));
     expect(review).toHaveTextContent(new RegExp(StatusEnum.Review, 'i'));
     expect(future).toHaveTextContent(new RegExp(StatusEnum.Future, 'i'));
@@ -43,7 +45,7 @@ describe('StatusTabs', () => {
       const missedCount = 1;
       const statuses = generateStatuses(undefined, { [StatusEnum.Missed]: missedCount, [status]: count });
 
-      render(<StatusTabs statuses={statuses} />);
+      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
       expect(screen.getByText(missedCount)).toBeInTheDocument();
       expect(screen.getByText(count)).toBeInTheDocument();
@@ -60,7 +62,7 @@ describe('StatusTabs', () => {
       review: reviewCount,
     });
 
-    render(<StatusTabs statuses={statuses} />);
+    render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
     const totalCount = missedCount + doneCount + reviewCount;
     expect(screen.getByText(totalCount)).toBeInTheDocument();

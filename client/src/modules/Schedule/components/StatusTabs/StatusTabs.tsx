@@ -6,14 +6,19 @@ export type Status = string;
 
 export interface StatusTabsProps {
   statuses: Status[];
+  onTabChange: (tab: string) => void
 }
 
-function StatusTabs({ statuses }: StatusTabsProps) {
+function StatusTabs({ statuses, onTabChange }: StatusTabsProps) {
   const tabs = useMemo(() => tabsRenderer(statuses), [statuses]);
+
+  const handleTabChange = (activeTab: string) => {
+    onTabChange(activeTab)
+  };
 
   return (
     <>
-      <Tabs items={tabs} />
+      <Tabs items={tabs} onChange={handleTabChange} />
       <style jsx>{`
         :global(.ant-tabs-tab .ant-badge-count) {
           background-color: #f0f2f5;
