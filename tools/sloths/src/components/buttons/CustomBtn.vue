@@ -220,6 +220,14 @@ export default defineComponent({
   background-image: url('@/assets/icons/btn/check-square-black.svg');
 }
 
+.icon-light-center {
+  background-image: url('@/assets/icons/btn/center-square.svg');
+}
+
+.icon-dark-center {
+  background-image: url('@/assets/icons/btn/center-square-black.svg');
+}
+
 .icon-light-minus {
   background-image: url('@/assets/icons/btn/dash-square.svg');
 }

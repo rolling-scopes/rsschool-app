@@ -73,16 +73,16 @@
               className="btn btn-icon icon-plus"
               @click="scaleUp(imgCanvasElement)"
             ></custom-btn>
-            <!-- <custom-btn
+            <custom-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
-              @click="scaleTrue"
-            ></custom-btn> -->
+              @click="scaleTrue(imgCanvasElement)"
+            ></custom-btn>
             <custom-btn
               :text="$t('btn.center')"
               imgPath="icon"
-              className="btn btn-icon icon-true"
+              className="btn btn-icon icon-center"
               @click="centering"
             ></custom-btn>
             <custom-btn
@@ -323,6 +323,7 @@ export default defineComponent({
         const y2 = el.top + el.scaledHeight;
 
         this.ctx.lineWidth = 2;
+        this.ctx.strokeStyle = this.invertHex(this.backgroundColor);
         this.ctx.beginPath();
         this.ctx.moveTo(x1, y1);
         this.ctx.lineTo(x2, y1);
@@ -331,6 +332,24 @@ export default defineComponent({
         this.ctx.closePath();
         this.ctx.stroke();
       }
+    },
+
+    invertHex(color: string): string {
+      if (this.backgroundTransparent) return 'gray';
+
+      let hex = color;
+      if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+      }
+      // convert 3-digit hex to 6-digits.
+      if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+      }
+
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
     },
 
     getMousePos(evt: MouseEvent) {
