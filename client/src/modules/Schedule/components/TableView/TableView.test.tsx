@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
 import * as ReactUse from 'react-use';
-import { ColumnKey } from 'modules/Schedule/constants';
-import { CourseScheduleItemDtoStatusEnum } from 'api';
+import { ALL_TAB_KEY, ColumnKey } from 'modules/Schedule/constants';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
 
 const StatusEnum = CourseScheduleItemDtoStatusEnum;
 
@@ -95,22 +95,6 @@ describe('TableView', () => {
   });
 
   describe('should show data', () => {
-    it.each`
-      status
-      ${StatusEnum.Missed}
-      ${StatusEnum.Done}
-      ${StatusEnum.Available}
-      ${StatusEnum.Archived}
-      ${StatusEnum.Future}
-      ${StatusEnum.Review}
-    `('by "$status" status "$status"', ({ status }: { status: string }) => {
-      // TODO: генерировать data с разными статусами
-      render(<TableView {...PROPS_MOCK} statusFilter={status} />);
-
-      // TODO: найте все строки со статусами
-      expect(screen.getByText('Missed')).toBeInTheDocument();
-    });
-
     it('by selected tag', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
@@ -121,5 +105,50 @@ describe('TableView', () => {
 
       expect(screen.getByText('Coding')).toBeInTheDocument();
     });
+
+    it('by "all" status', () => {
+      const data = generateCourseData();
+      render(<TableView {...PROPS_MOCK} data={data} statusFilter={ALL_TAB_KEY} />);
+
+      const items = screen.getAllByText(/Course Item/i);
+      expect(items).toHaveLength(data.length);
+    });
+
+    it.each`
+      status
+      ${StatusEnum.Missed}
+      ${StatusEnum.Done}
+      ${StatusEnum.Available}
+      ${StatusEnum.Archived}
+      ${StatusEnum.Future}
+      ${StatusEnum.Review}
+    `('by "$status" status', ({ status }: { status: CourseScheduleItemDtoStatusEnum }) => {
+      const courseItemCount = 2;
+      const data = generateCourseData(courseItemCount, [status, status]);
+      render(<TableView {...PROPS_MOCK} data={data} statusFilter={status} />);
+
+      const items = screen.getAllByText(new RegExp(status, 'i'));
+      expect(items).toHaveLength(courseItemCount);
+    });
   });
 });
+
+function generateCourseData(
+  count = 3,
+  statusMock: CourseScheduleItemDtoStatusEnum[] = [StatusEnum.Missed, StatusEnum.Archived, StatusEnum.Done],
+): CourseScheduleItemDto[] {
+  return new Array(count).fill({}).map((_, idx) => {
+    return {
+      name: `Course Item ${idx}`,
+      startDate: '2020-02-01T21:00:00.000Z',
+      endDate: '2020-03-15T20:59:00.000Z',
+      maxScore: idx * 100,
+      scoreWeight: 0.2,
+      organizer: null,
+      status: statusMock[idx],
+      score: idx * 20,
+      tag: 'test',
+      descriptionUrl: '',
+    };
+  });
+}
