@@ -5,6 +5,10 @@ import type { ErrorDescription, MemoryLevel, SelectOptions } from './types';
 // Services
 export const BASE = import.meta.env.VITE_BFF_URL;
 
+export const JSON_URL = import.meta.env.VITE_JSON_URL;
+
+export const CDN_URL = import.meta.env.VITE_CDN_URL;
+
 // custom Errors
 export const JSON_ERROR: ErrorDescription = { code: 'NOT_JSON', message: 'Response is not a JSON!' };
 

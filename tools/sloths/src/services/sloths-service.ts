@@ -1,8 +1,7 @@
 import type { MetadataSloths, QueryStringOptions, Sloth } from '@/common/types';
 import { errorHandler } from './error-handling/error-handler';
 import { apiRequest } from './api-request';
-
-const JSON_URL = import.meta.env.VITE_JSON_URL;
+import { JSON_URL } from '../common/const';
 
 export class SlothsService {
   private data!: Sloth[];

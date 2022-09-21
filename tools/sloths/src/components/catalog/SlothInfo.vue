@@ -30,7 +30,7 @@ import { storeToRefs } from 'pinia';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import useSlothInfo from '@/stores/sloth-info';
 import { ModalEvents } from '@/common/enums/modal-events';
-import { CATALOG_SLOTH_PREVIEW } from '@/common/const';
+import { CATALOG_SLOTH_PREVIEW, CDN_URL } from '@/common/const';
 
 const { slothInfo, tagsStr } = storeToRefs(useSlothInfo());
 
@@ -76,7 +76,7 @@ export default defineComponent({
     },
 
     getImageUrl(): string {
-      return `${import.meta.env.VITE_CDN_URL}/${this.slothInfo.id}/image.svg`;
+      return this.slothInfo.id ? `${CDN_URL}/${this.slothInfo.id}/image.svg` : CATALOG_SLOTH_PREVIEW;
     },
   },
 
