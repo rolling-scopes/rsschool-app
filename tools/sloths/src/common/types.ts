@@ -155,3 +155,21 @@ export type PageSettings = {
   sorting: string;
   checked?: string[];
 };
+
+export type CanvasElement = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  scaledWidth: number;
+  scaledHeight: number;
+  scaleSteps: number;
+  isHovered: boolean;
+  isSelected: boolean;
+  selectedPos: CanvasPos;
+};
+
+export type CanvasPos = {
+  x: number;
+  y: number;
+};

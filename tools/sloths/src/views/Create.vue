@@ -71,13 +71,13 @@
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
-              @click="scaleUp(imgCanvasElement)"
+              @click="scaleUp()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
-              @click="scaleTrue(imgCanvasElement)"
+              @click="scaleTrue()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.center')"
@@ -89,7 +89,7 @@
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
-              @click="scaleDown(imgCanvasElement)"
+              @click="scaleDown()"
             ></custom-btn>
           </div>
           <custom-btn
@@ -119,28 +119,11 @@ import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
 import { MEMES_SLOTHS } from '@/common/const';
+import type { CanvasElement, CanvasPos } from '@/common/types';
 
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 const canvasSize = 500;
 const textMargin = 10;
-
-type CanvasElement = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-  scaledWidth: number;
-  scaledHeight: number;
-  scaleSteps: number;
-  isHovered: boolean;
-  isSelected: boolean;
-  selectedPos: Pos;
-};
-
-type Pos = {
-  x: number;
-  y: number;
-};
 
 export default defineComponent({
   name: 'CreateView',
@@ -165,6 +148,7 @@ export default defineComponent({
       imgCanvasElement: this.initCanvasElement(0),
       topCanvasElement: this.initCanvasElement(textMargin),
       bottomCanvasElement: this.initCanvasElement(canvasSize - textMargin),
+      layers: [] as CanvasElement[],
     };
   },
 
@@ -192,6 +176,11 @@ export default defineComponent({
     image.src = this.images[this.index];
 
     this.img = image;
+
+    // order of layers, index is z-index
+    this.layers[0] = this.imgCanvasElement;
+    this.layers[1] = this.topCanvasElement;
+    this.layers[2] = this.bottomCanvasElement;
   },
 
   beforeRouteLeave() {
@@ -207,7 +196,7 @@ export default defineComponent({
       return this.images[i];
     },
 
-    initCanvasElement(top: number) {
+    initCanvasElement(top: number): CanvasElement {
       return {
         top,
         left: 0,
@@ -218,32 +207,41 @@ export default defineComponent({
         scaleSteps: 1,
         isHovered: false,
         isSelected: false,
-        selectedPos: {} as Pos,
+        selectedPos: {} as CanvasPos,
       } as CanvasElement;
     },
 
-    scaleUp(el: CanvasElement) {
-      const canvasElement = el;
+    scaleUp() {
+      this.layers.forEach((el) => this.scaleUpEl(el));
 
+      this.draw();
+    },
+
+    scaleUpEl(el: CanvasElement) {
+      const canvasElement = el;
       canvasElement.scaleSteps = Math.min(2, canvasElement.scaleSteps + 0.05);
+    },
+
+    scaleTrue() {
+      this.layers.forEach((el) => this.scaleTrueEl(el));
 
       this.draw();
     },
 
-    scaleTrue(el: CanvasElement) {
+    scaleTrueEl(el: CanvasElement) {
       const canvasElement = el;
-
       canvasElement.scaleSteps = 1;
+    },
+
+    scaleDown() {
+      this.layers.forEach((el) => this.scaleDownEl(el));
 
       this.draw();
     },
 
-    scaleDown(el: CanvasElement) {
+    scaleDownEl(el: CanvasElement) {
       const canvasElement = el;
-
       canvasElement.scaleSteps = Math.max(0.1, canvasElement.scaleSteps - 0.05);
-
-      this.draw();
     },
 
     centering() {
@@ -360,20 +358,37 @@ export default defineComponent({
       return {
         x: (evt.clientX - rect.left) * scaleX, // scale mouse coordinates after they have
         y: (evt.clientY - rect.top) * scaleY, // been adjusted to be relative to element
-      } as Pos;
+      } as CanvasPos;
     },
 
     handleMouseMove(e: MouseEvent) {
       const mousePos = this.getMousePos(e);
 
-      this.handleMouseMoveEl(mousePos, this.imgCanvasElement);
-      this.handleMouseMoveEl(mousePos, this.topCanvasElement);
-      this.handleMouseMoveEl(mousePos, this.bottomCanvasElement);
+      const selected = this.layers.filter((el) => el.isSelected);
+
+      if (selected.length) {
+        // move selected only
+        this.handleMouseMoveEl(mousePos, selected[0]);
+      } else {
+        // move top of layers
+        let isHovered = false;
+
+        for (let i = this.layers.length - 1; i >= 0; i -= 1) {
+          const el = this.layers[i];
+
+          if (isHovered) {
+            el.isHovered = false;
+          } else {
+            this.handleMouseMoveEl(mousePos, el);
+            isHovered = el.isHovered;
+          }
+        }
+      }
 
       this.draw();
     },
 
-    handleMouseMoveEl(mousePos: Pos, el: CanvasElement) {
+    handleMouseMoveEl(mousePos: CanvasPos, el: CanvasElement) {
       const canvasElement = el;
 
       if (canvasElement.isSelected) {
@@ -398,14 +413,23 @@ export default defineComponent({
     handleMouseDown(e: MouseEvent) {
       const mousePos = this.getMousePos(e);
 
-      this.handleMouseDownEl(mousePos, this.imgCanvasElement);
-      this.handleMouseDownEl(mousePos, this.topCanvasElement);
-      this.handleMouseDownEl(mousePos, this.bottomCanvasElement);
+      let isSelected = false;
+
+      for (let i = this.layers.length - 1; i >= 0; i -= 1) {
+        const el = this.layers[i];
+
+        if (isSelected) {
+          el.isSelected = false;
+        } else {
+          this.handleMouseDownEl(mousePos, el);
+          isSelected = el.isSelected;
+        }
+      }
 
       this.draw();
     },
 
-    handleMouseDownEl(mousePos: Pos, el: CanvasElement) {
+    handleMouseDownEl(mousePos: CanvasPos, el: CanvasElement) {
       const canvasElement = el;
 
       const x1 = canvasElement.left;
@@ -422,18 +446,14 @@ export default defineComponent({
     },
 
     handleMouseUp() {
-      this.handleMouseUpEl(this.imgCanvasElement);
-      this.handleMouseUpEl(this.topCanvasElement);
-      this.handleMouseUpEl(this.bottomCanvasElement);
+      this.layers.forEach((el) => {
+        const canvasElement = el;
+
+        canvasElement.isSelected = false;
+        canvasElement.selectedPos = {} as CanvasPos;
+      });
 
       this.draw();
-    },
-
-    handleMouseUpEl(el: CanvasElement) {
-      const canvasElement = el;
-
-      canvasElement.isSelected = false;
-      canvasElement.selectedPos = {} as Pos;
     },
 
     handleMouseOut() {
@@ -447,9 +467,13 @@ export default defineComponent({
     handleWheel(e: WheelEvent) {
       const dy = e.deltaY;
 
-      this.handleWheelEl(dy, this.imgCanvasElement);
-      this.handleWheelEl(dy, this.topCanvasElement);
-      this.handleWheelEl(dy, this.bottomCanvasElement);
+      this.layers.forEach((el) => this.handleWheelEl(dy, el));
+
+      // this.handleWheelEl(dy, this.imgCanvasElement);
+      // this.handleWheelEl(dy, this.topCanvasElement);
+      // this.handleWheelEl(dy, this.bottomCanvasElement);
+
+      this.draw();
     },
 
     handleWheelEl(dy: number, el: CanvasElement) {
@@ -457,8 +481,8 @@ export default defineComponent({
 
       if (canvasElement.isHovered) {
         if (dy > 0) {
-          this.scaleUp(canvasElement);
-        } else if (dy < 0) this.scaleDown(canvasElement);
+          this.scaleUpEl(el);
+        } else if (dy < 0) this.scaleDownEl(el);
       }
     },
 
