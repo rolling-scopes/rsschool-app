@@ -59,20 +59,20 @@ describe('CrossCheckComments', () => {
     const maxScore = 100;
 
     it("if there's no comments", () => {
-      const output = render(<CrossCheckComments feedback={feedbackWithEmptyComments} maxScore={maxScore} />);
-      expect(output.container).toMatchSnapshot();
+      const { container } = render(<CrossCheckComments feedback={feedbackWithEmptyComments} maxScore={maxScore} />);
+      expect(container).toMatchSnapshot();
     });
     it('if there are anonymous comments', () => {
-      const output = render(<CrossCheckComments feedback={feedbackWithAnonComments} maxScore={maxScore} />);
-      expect(output.container).toMatchSnapshot();
+      const { container } = render(<CrossCheckComments feedback={feedbackWithAnonComments} maxScore={maxScore} />);
+      expect(container).toMatchSnapshot();
     });
     it('if there are signed comments', () => {
-      const output = render(<CrossCheckComments feedback={feedbackWithSignedComments} maxScore={maxScore} />);
-      expect(output.container).toMatchSnapshot();
+      const { container } = render(<CrossCheckComments feedback={feedbackWithSignedComments} maxScore={maxScore} />);
+      expect(container).toMatchSnapshot();
     });
     it('if there are both types of comments', () => {
-      const output = render(<CrossCheckComments feedback={feedbackWithMixedComments} maxScore={maxScore} />);
-      expect(output.container).toMatchSnapshot();
+      const { container } = render(<CrossCheckComments feedback={feedbackWithMixedComments} maxScore={maxScore} />);
+      expect(container).toMatchSnapshot();
     });
   });
 });

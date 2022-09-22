@@ -4,7 +4,7 @@ import CoreJsIviewsModal from '../CoreJsIviewsModal';
 
 describe('CoreJsIviewsModal', () => {
   it('Should render correctly', () => {
-    const wrapper = render(
+    const { container } = render(
       <CoreJsIviewsModal
         stats={{
           courseFullName: 'TEST COURSE',
@@ -57,6 +57,6 @@ describe('CoreJsIviewsModal', () => {
         interviewIndex={0}
       />,
     );
-    expect(wrapper.container).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });
