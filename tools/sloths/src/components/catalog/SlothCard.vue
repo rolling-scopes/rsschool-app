@@ -68,7 +68,6 @@ import { defineComponent, type PropType } from 'vue';
 import type { Sloth } from '@/common/types';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
-import { CDN_URL } from '../../common/const';
 
 export default defineComponent({
   name: 'SlothCard',
@@ -97,7 +96,7 @@ export default defineComponent({
 
   computed: {
     getImageUrl(): string {
-      return `${CDN_URL}/stickers/${this.slothInfo.id}/image.svg`;
+      return this.slothInfo.image;
     },
 
     getPageName(): string {

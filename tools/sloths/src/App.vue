@@ -98,6 +98,7 @@ export default defineComponent({
           const data: MetadataSloths = await response.json();
           this.sloths = data.stickers.map((sloth) => ({
             ...sloth,
+            image: `${CDN_URL}/stickers/${sloth.id}/image.svg`,
             checked: false,
           }));
         }
