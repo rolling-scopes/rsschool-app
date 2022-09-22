@@ -1,3 +1,5 @@
+/* eslint-disable testing-library/no-container */
+/* eslint-disable testing-library/no-node-access */
 import React from 'react';
 import { Form } from 'antd';
 import { fireEvent, render } from '@testing-library/react';
