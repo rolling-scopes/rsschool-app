@@ -157,13 +157,17 @@ export type PageSettings = {
 };
 
 export type CanvasElement = {
-  top: number;
   left: number;
+  top: number;
+  bottom: number;
+  scaledLeft: number;
+  scaledTop: number;
+  scaledBottom: number;
   width: number;
   height: number;
+  scaleSteps: number;
   scaledWidth: number;
   scaledHeight: number;
-  scaleSteps: number;
   isHovered: boolean;
   isSelected: boolean;
   selectedPos: CanvasPos;
@@ -172,4 +176,11 @@ export type CanvasElement = {
 export type CanvasPos = {
   x: number;
   y: number;
+};
+
+export type CanvasRectXY = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
 };

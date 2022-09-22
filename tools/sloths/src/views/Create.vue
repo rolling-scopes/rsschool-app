@@ -71,13 +71,13 @@
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
-              @click="scaleUp()"
+              @click="scaleUpCanvas()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
-              @click="scaleTrue()"
+              @click="scaleTrueCanvas()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.center')"
@@ -89,7 +89,7 @@
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
-              @click="scaleDown()"
+              @click="scaleDownCanvas()"
             ></custom-btn>
           </div>
           <custom-btn
@@ -119,7 +119,7 @@ import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
 import { MEMES_SLOTHS } from '@/common/const';
-import type { CanvasElement, CanvasPos } from '@/common/types';
+import type { CanvasElement, CanvasPos, CanvasRectXY } from '@/common/types';
 
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 const canvasSize = 500;
@@ -137,6 +137,7 @@ export default defineComponent({
       images: [] as string[],
       index: 0,
       canvas: {} as HTMLCanvasElement,
+      canvasScaleSteps: 1,
       ctx: {} as CanvasRenderingContext2D,
       backgroundTransparent: false,
       backgroundColor: '#777777',
@@ -145,9 +146,9 @@ export default defineComponent({
       bottomText: '',
       color: '#ffffff',
       strokeStyle: '#000000',
-      imgCanvasElement: this.initCanvasElement(0),
-      topCanvasElement: this.initCanvasElement(textMargin),
-      bottomCanvasElement: this.initCanvasElement(canvasSize - textMargin),
+      imgCanvasElement: this.initCanvasElement(0, 0),
+      topCanvasElement: this.initCanvasElement(textMargin, 0),
+      bottomCanvasElement: this.initCanvasElement(0, canvasSize - textMargin),
       layers: [] as CanvasElement[],
     };
   },
@@ -196,10 +197,13 @@ export default defineComponent({
       return this.images[i];
     },
 
-    initCanvasElement(top: number): CanvasElement {
+    initCanvasElement(top: number, bottom: number): CanvasElement {
       return {
-        top,
         left: 0,
+        top,
+        bottom,
+        scaledLeft: 0,
+        scaledTop: top,
         width: 0,
         height: 0,
         scaledWidth: 0,
@@ -211,8 +215,21 @@ export default defineComponent({
       } as CanvasElement;
     },
 
-    scaleUp() {
-      this.layers.forEach((el) => this.scaleUpEl(el));
+    scaleUpCanvas() {
+      this.canvasScaleSteps = Math.min(1.5, this.canvasScaleSteps + 0.02);
+
+      this.draw();
+    },
+
+    scaleTrueCanvas() {
+      this.canvasScaleSteps = 1;
+      this.layers.forEach((el) => this.scaleTrueEl(el));
+
+      this.draw();
+    },
+
+    scaleDownCanvas() {
+      this.canvasScaleSteps = Math.max(0.5, this.canvasScaleSteps - 0.02);
 
       this.draw();
     },
@@ -222,21 +239,9 @@ export default defineComponent({
       canvasElement.scaleSteps = Math.min(2, canvasElement.scaleSteps + 0.05);
     },
 
-    scaleTrue() {
-      this.layers.forEach((el) => this.scaleTrueEl(el));
-
-      this.draw();
-    },
-
     scaleTrueEl(el: CanvasElement) {
       const canvasElement = el;
       canvasElement.scaleSteps = 1;
-    },
-
-    scaleDown() {
-      this.layers.forEach((el) => this.scaleDownEl(el));
-
-      this.draw();
     },
 
     scaleDownEl(el: CanvasElement) {
@@ -245,14 +250,16 @@ export default defineComponent({
     },
 
     centering() {
-      this.imgCanvasElement.left = (canvasSize - this.imgCanvasElement.scaledWidth) / 2;
-      this.imgCanvasElement.top = (canvasSize - this.imgCanvasElement.scaledHeight) / 2;
+      this.imgCanvasElement.left = (canvasSize - this.imgCanvasElement.scaledWidth / this.canvasScaleSteps) / 2;
+      this.imgCanvasElement.top = (canvasSize - this.imgCanvasElement.scaledHeight / this.canvasScaleSteps) / 2;
 
       this.topCanvasElement.left = 0;
       this.topCanvasElement.top = textMargin;
 
       this.bottomCanvasElement.left = 0;
-      this.bottomCanvasElement.top = canvasSize - textMargin - this.bottomCanvasElement.scaledHeight;
+      this.bottomCanvasElement.top =
+        canvasSize - textMargin - this.bottomCanvasElement.scaledHeight / this.canvasScaleSteps;
+      this.bottomCanvasElement.bottom = canvasSize - textMargin;
 
       this.draw();
     },
@@ -262,9 +269,11 @@ export default defineComponent({
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+      this.drawBackground();
+
       this.calcImgSizes();
 
-      this.drawBackground();
+      this.calcElPosition();
 
       this.ctx.drawImage(
         this.img,
@@ -272,8 +281,8 @@ export default defineComponent({
         0,
         this.imgCanvasElement.width,
         this.imgCanvasElement.height,
-        this.imgCanvasElement.left,
-        this.imgCanvasElement.top,
+        this.imgCanvasElement.scaledLeft,
+        this.imgCanvasElement.scaledTop,
         this.imgCanvasElement.scaledWidth,
         this.imgCanvasElement.scaledHeight
       );
@@ -283,12 +292,25 @@ export default defineComponent({
       this.layers.forEach((el) => this.drawBorder(el));
     },
 
+    calcCanvasSizes() {
+      this.canvas.width = canvasSize * this.canvasScaleSteps;
+      this.canvas.height = canvasSize * this.canvasScaleSteps;
+    },
+
+    drawBackground() {
+      if (!this.backgroundTransparent) {
+        this.ctx.fillStyle = this.backgroundColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+    },
+
     calcImgSizes() {
       if (this.img) {
         this.imgCanvasElement.width = this.img.naturalWidth;
         this.imgCanvasElement.height = this.img.naturalHeight;
 
-        this.imgCanvasElement.scaledWidth = this.imgCanvasElement.width * this.imgCanvasElement.scaleSteps;
+        this.imgCanvasElement.scaledWidth =
+          this.imgCanvasElement.width * this.imgCanvasElement.scaleSteps * this.canvasScaleSteps;
         this.imgCanvasElement.scaledHeight =
           this.imgCanvasElement.scaledWidth * (this.imgCanvasElement.height / this.imgCanvasElement.width);
       } else {
@@ -299,32 +321,36 @@ export default defineComponent({
       }
     },
 
-    calcCanvasSizes() {
-      this.canvas.width = canvasSize;
-      this.canvas.height = canvasSize;
+    calcElPosition() {
+      this.layers.forEach((el) => {
+        const canvasElement = el;
+
+        canvasElement.scaledLeft = canvasElement.left * this.canvasScaleSteps;
+        canvasElement.scaledTop = canvasElement.top * this.canvasScaleSteps;
+        canvasElement.scaledBottom = canvasElement.bottom * this.canvasScaleSteps;
+      });
     },
 
-    drawBackground() {
-      if (!this.backgroundTransparent) {
-        this.ctx.fillStyle = this.backgroundColor;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      }
+    getElRectXY(el: CanvasElement): CanvasRectXY {
+      return {
+        x1: el.scaledLeft,
+        x2: el.scaledLeft + el.scaledWidth,
+        y1: el.scaledTop,
+        y2: el.scaledTop + el.scaledHeight,
+      } as CanvasRectXY;
     },
 
     drawBorder(el: CanvasElement) {
       if (el.isHovered || el.isSelected) {
-        const x1 = el.left;
-        const x2 = el.left + el.scaledWidth;
-        const y1 = el.top;
-        const y2 = el.top + el.scaledHeight;
+        const elXY = this.getElRectXY(el);
 
         this.ctx.lineWidth = 2;
         this.ctx.strokeStyle = this.invertHex(this.backgroundColor);
         this.ctx.beginPath();
-        this.ctx.moveTo(x1, y1);
-        this.ctx.lineTo(x2, y1);
-        this.ctx.lineTo(x2, y2);
-        this.ctx.lineTo(x1, y2);
+        this.ctx.moveTo(elXY.x1, elXY.y1);
+        this.ctx.lineTo(elXY.x2, elXY.y1);
+        this.ctx.lineTo(elXY.x2, elXY.y2);
+        this.ctx.lineTo(elXY.x1, elXY.y2);
         this.ctx.closePath();
         this.ctx.stroke();
       }
@@ -393,18 +419,17 @@ export default defineComponent({
         const dx = mousePos.x - canvasElement.selectedPos.x;
         const dy = mousePos.y - canvasElement.selectedPos.y;
 
-        canvasElement.left += dx;
-        canvasElement.top += dy;
+        canvasElement.left += dx / this.canvasScaleSteps;
+        canvasElement.top += dy / this.canvasScaleSteps;
+        canvasElement.bottom += dy / this.canvasScaleSteps;
 
         canvasElement.selectedPos.x = mousePos.x;
         canvasElement.selectedPos.y = mousePos.y;
       } else {
-        const x1 = canvasElement.left;
-        const x2 = canvasElement.left + canvasElement.scaledWidth;
-        const y1 = canvasElement.top;
-        const y2 = canvasElement.top + canvasElement.scaledHeight;
+        const elXY = this.getElRectXY(el);
 
-        canvasElement.isHovered = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+        canvasElement.isHovered =
+          mousePos.x >= elXY.x1 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
       }
     },
 
@@ -430,12 +455,10 @@ export default defineComponent({
     handleMouseDownEl(mousePos: CanvasPos, el: CanvasElement) {
       const canvasElement = el;
 
-      const x1 = canvasElement.left;
-      const x2 = canvasElement.left + canvasElement.scaledWidth;
-      const y1 = canvasElement.top;
-      const y2 = canvasElement.top + canvasElement.scaledHeight;
+      const elXY = this.getElRectXY(el);
 
-      const isSelected = mousePos.x >= x1 && mousePos.x <= x2 && mousePos.y >= y1 && mousePos.y <= y2;
+      const isSelected =
+        mousePos.x >= elXY.x1 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
 
       canvasElement.isSelected = isSelected;
       if (isSelected) {
@@ -465,12 +488,22 @@ export default defineComponent({
     handleWheel(e: WheelEvent) {
       const dy = e.deltaY;
 
+      let isHovered = false;
+
       this.layers.forEach((el) => {
-        if (el.isHovered)
+        if (el.isHovered) {
+          isHovered = true;
           if (dy > 0) {
             this.scaleUpEl(el);
           } else if (dy < 0) this.scaleDownEl(el);
+        }
       });
+
+      if (!isHovered) {
+        if (dy > 0) {
+          this.scaleUpCanvas();
+        } else if (dy < 0) this.scaleDownCanvas();
+      }
 
       this.draw();
     },
@@ -504,8 +537,8 @@ export default defineComponent({
         this.ctx.lineWidth = Math.floor(fontSize / 5);
         this.ctx.font = `${fontSize}px sans-serif`;
         this.ctx.textBaseline = 'top';
-        const { left, top } = this.topCanvasElement;
-        this.drawTextMultiLineTop(this.topText, width / 2 + left, top, width, fontSize);
+        const { scaledLeft, scaledTop } = this.topCanvasElement;
+        this.drawTextMultiLineTop(this.topText, width / 2 + scaledLeft, scaledTop, width, fontSize);
       }
 
       if (this.bottomText) {
@@ -513,8 +546,8 @@ export default defineComponent({
         this.ctx.lineWidth = Math.floor(fontSize / 5);
         this.ctx.font = `${fontSize}px sans-serif`;
         this.ctx.textBaseline = 'bottom';
-        const { left, top } = this.bottomCanvasElement;
-        this.drawTextMultiLineBottom(this.bottomText, width / 2 + left, top, width, fontSize);
+        const { scaledLeft, scaledBottom } = this.bottomCanvasElement;
+        this.drawTextMultiLineBottom(this.bottomText, width / 2 + scaledLeft, scaledBottom, width, fontSize);
       }
     },
 
@@ -545,10 +578,10 @@ export default defineComponent({
       this.topCanvasElement.scaledHeight = textHeight;
     },
 
-    drawTextMultiLineBottom(text: string, x: number, top: number, maxWidth: number, fontSize: number) {
+    drawTextMultiLineBottom(text: string, x: number, bottom: number, maxWidth: number, fontSize: number) {
       const words = text.split(' ').reverse();
       let line = '';
-      let y = top + this.bottomCanvasElement.height + fontSize * 0.1;
+      let y = bottom + fontSize * 0.1;
       let textHeight = fontSize;
 
       words.forEach((word, index) => {
@@ -566,7 +599,7 @@ export default defineComponent({
       });
       this.drawTextLine(line.trim(), x, y);
 
-      this.bottomCanvasElement.top -= textHeight - this.bottomCanvasElement.height;
+      this.bottomCanvasElement.top = (bottom - textHeight) / this.canvasScaleSteps;
       this.bottomCanvasElement.width = maxWidth;
       this.bottomCanvasElement.height = textHeight;
       this.bottomCanvasElement.scaledWidth = maxWidth;
