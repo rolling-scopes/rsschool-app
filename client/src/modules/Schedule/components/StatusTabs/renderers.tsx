@@ -35,12 +35,12 @@ export const tabsRenderer = (statuses: Status[]): TabItem[] => {
   return SCHEDULE_STATUSES.reduce(
     (
       acc: Item[],
-      curr: {
+      current: {
         value: CourseScheduleItemDtoStatusEnum;
         text: string;
       },
     ): Item[] => {
-      const { text, value } = curr;
+      const { text, value } = current;
 
       const newItem: Item = {
         label: text,
@@ -53,6 +53,7 @@ export const tabsRenderer = (statuses: Status[]): TabItem[] => {
   )
     .sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key))
     .map(({ count, key, label }) => ({
+      key,
       label: count ? (
         <Space>
           {label}
@@ -61,6 +62,5 @@ export const tabsRenderer = (statuses: Status[]): TabItem[] => {
       ) : (
         label
       ),
-      key,
     }));
 };

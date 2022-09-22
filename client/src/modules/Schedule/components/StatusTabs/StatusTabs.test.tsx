@@ -17,6 +17,13 @@ describe('StatusTabs', () => {
     expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
   });
 
+  it('should render status tabs when statuses were not provided', () => {
+    render(<StatusTabs statuses={[]} onTabChange={onTabChangeMock} />);
+
+    const expectedStatusCount = SCHEDULE_STATUSES.length + 1; // +1 is for 'All' tab
+    expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
+  });
+
   it('should order tabs', () => {
     const statuses = generateStatuses();
 
@@ -57,9 +64,9 @@ describe('StatusTabs', () => {
     const doneCount = 2;
     const reviewCount = 3;
     const statuses = generateStatuses(undefined, {
-      missed: missedCount,
-      done: doneCount,
-      review: reviewCount,
+      [StatusEnum.Missed]: missedCount,
+      [StatusEnum.Done]: doneCount,
+      [StatusEnum.Review]: reviewCount,
     });
 
     render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
