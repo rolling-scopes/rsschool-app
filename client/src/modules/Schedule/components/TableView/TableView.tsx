@@ -15,7 +15,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
-import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
+import { statusRenderer, renderTagWithStyle, coloredDateRenderer, tagFilterRenderer } from './renderers';
 
 const getColumns = ({
   timezone,
@@ -135,6 +135,7 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
 
   return (
     <Form form={form} component={false}>
+      {tagFilterRenderer(tagFilter)}
       <Table
         locale={{
           // disable default tooltips on sortable columns
