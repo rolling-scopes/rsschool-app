@@ -1,10 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProfileSettingsModal from '../ProfileSettingsModal';
 
 describe('ProfileSettingsModal', () => {
   it('should render correctly', () => {
-    const output = render(
+    render(
       <ProfileSettingsModal
         isSettingsVisible={true}
         content={<div>content</div>}
@@ -14,11 +14,11 @@ describe('ProfileSettingsModal', () => {
       />,
     );
 
-    expect(output.getByRole('dialog')).toMatchSnapshot();
+    expect(screen.getByRole('dialog')).toMatchSnapshot();
   });
 
   it('should not be rendered if isSettingsVisible === false', async () => {
-    const output = render(
+    render(
       <ProfileSettingsModal
         isSettingsVisible={false}
         content={<div>content</div>}
@@ -28,8 +28,8 @@ describe('ProfileSettingsModal', () => {
       />,
     );
 
-    const modal = output.queryByRole('dialog');
+    const modal = screen.queryByRole('dialog');
 
-    expect(modal).toBe(null);
+    expect(modal).not.toBeInTheDocument();
   });
 });

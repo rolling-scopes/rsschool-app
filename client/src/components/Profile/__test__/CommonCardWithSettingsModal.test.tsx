@@ -5,7 +5,7 @@ import CommonCardWithSettingsModal from '../CommonCardWithSettingsModal';
 describe('CommonCardWithSettingsModal', () => {
   describe('Should render correctly', () => {
     it('if just basic props are present', () => {
-      const output = render(
+      const { container } = render(
         <CommonCardWithSettingsModal
           title="Test"
           icon={<i>Icon</i>}
@@ -16,10 +16,10 @@ describe('CommonCardWithSettingsModal', () => {
           cancelChanges={jest.fn()}
         />,
       );
-      expect(output.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
     it('if null content is passed and editing mode is disabled', () => {
-      const output = render(
+      const { container } = render(
         <CommonCardWithSettingsModal
           title="Test"
           icon={<i>Icon</i>}
@@ -30,7 +30,7 @@ describe('CommonCardWithSettingsModal', () => {
           cancelChanges={jest.fn()}
         />,
       );
-      expect(output.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
   });
 });
