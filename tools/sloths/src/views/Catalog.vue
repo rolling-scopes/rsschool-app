@@ -83,7 +83,7 @@ import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
 import { errorHandler } from '@/services/error-handling/error-handler';
-import { BASE, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
+import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
 import { ModalEvents } from '@/common/enums/modal-events';
 import useLoader from '@/stores/loader';
@@ -99,6 +99,8 @@ import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import usePagesStore from '@/stores/pages-store';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const service = new SlothsService();
 
@@ -279,18 +281,33 @@ export default defineComponent({
       if (this.checked.length) this.isDownloadShow = true;
     },
 
-    approveDownload() {
+    async approveDownload() {
       const forDownload = this.checked.filter((el) => el.checked).map((el) => el.id);
 
       if (!forDownload.length) return;
 
-      const downloadUrl = `${BASE}/download/${forDownload.join(',')}`;
       // download
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.click();
+      await this.downloadZip(forDownload);
 
       this.closeModal();
+    },
+
+    async downloadZip(ids: string[]) {
+      const zip = JSZip();
+      const zipFilename = `sloths_${new Date().toISOString()}.zip`;
+
+      ids.forEach((id) => {
+        const blobPromise = fetch(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`).then((r) => {
+          if (r.status === 200) return r.blob();
+          return Promise.reject(new Error(r.statusText));
+        });
+        zip.file(`${id}.svg`, blobPromise);
+      });
+
+      zip
+        .generateAsync({ type: 'blob' })
+        .then((blob) => saveAs(blob, zipFilename))
+        .catch((e) => errorHandler(e));
     },
 
     closeModal() {
