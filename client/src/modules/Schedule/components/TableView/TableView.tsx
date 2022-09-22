@@ -3,6 +3,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
+import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,
   ColumnKey,
@@ -15,7 +16,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
-import { statusRenderer, renderTagWithStyle, coloredDateRenderer, tagFilterRenderer } from './renderers';
+import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
 
 const getColumns = ({
   timezone,
@@ -135,7 +136,7 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
 
   return (
     <Form form={form} component={false}>
-      {tagFilterRenderer(tagFilter)}
+      <FilteredTags tagFilter={tagFilter} onTagClose={setTagFilter} />
       <Table
         locale={{
           // disable default tooltips on sortable columns

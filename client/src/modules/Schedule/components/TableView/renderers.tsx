@@ -1,5 +1,5 @@
-import { InfoCircleOutlined, FilterFilled } from '@ant-design/icons';
-import { Badge, Divider, Tag, Tooltip, Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Badge, Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
 import { dateWithTimeZoneRenderer } from 'components/Table/renderers';
@@ -68,13 +68,3 @@ export const coloredDateRenderer = (timeZone: string, format: string, date: 'sta
     return <Typography.Text type={color}>{text}</Typography.Text>;
   };
 };
-
-export const tagFilterRenderer = (tagFilter: string[]) =>
-  tagFilter?.length > 0 ? (
-    <>
-      <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 10 }} />
-      {tagFilter.map(tag => (
-        <Tag closable>{`Tag: ${tag}`}</Tag>
-      ))}
-    </>
-  ) : null;
