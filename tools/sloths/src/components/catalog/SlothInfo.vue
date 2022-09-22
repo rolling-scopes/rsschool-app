@@ -76,7 +76,7 @@ export default defineComponent({
     },
 
     getImageUrl(): string {
-      return this.slothInfo.id ? `${CDN_URL}/${this.slothInfo.id}/image.svg` : CATALOG_SLOTH_PREVIEW;
+      return this.slothInfo.id ? `${CDN_URL}/stickers/${this.slothInfo.id}/image.svg` : CATALOG_SLOTH_PREVIEW;
     },
   },
 

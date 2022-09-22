@@ -97,7 +97,7 @@ export default defineComponent({
 
   computed: {
     getImageUrl(): string {
-      return `${CDN_URL}/${this.slothInfo.id}/image.svg`;
+      return `${CDN_URL}/stickers/${this.slothInfo.id}/image.svg`;
     },
 
     getPageName(): string {

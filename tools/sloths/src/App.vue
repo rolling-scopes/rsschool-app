@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
-import { CDN_URL, CLEANED_JSON_URL } from '@/common/const';
+import { CDN_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
 import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
 import LoaderView from './components/loader/LoaderView.vue';
@@ -33,6 +33,8 @@ import useAlertModal from './stores/alert-modal';
 import useAuthorizationModal from './stores/authorization-modal';
 import useAudioOn from './stores/audio-on';
 import useCleanedStore from './stores/cleaned';
+import useSlothsStore from './stores/sloths';
+import type { MetadataSloths } from './common/types';
 
 export default defineComponent({
   name: 'App',
@@ -52,6 +54,7 @@ export default defineComponent({
     ...mapWritableState(useAuthorizationModal, ['isAuthorization']),
     ...mapWritableState(useAudioOn, ['isAudioOn']),
     ...mapWritableState(useCleanedStore, ['cleanedFilelist']),
+    ...mapWritableState(useSlothsStore, ['sloths']),
   },
 
   created() {
@@ -64,6 +67,7 @@ export default defineComponent({
   async mounted() {
     this.isLoad = true;
     try {
+      await this.getStickers();
       await this.getCleaned();
     } catch (error: string | unknown) {
       throw new Error(error as string);
@@ -80,6 +84,22 @@ export default defineComponent({
         if (response.status === 200) {
           const data: string[] = await response.json();
           this.cleanedFilelist = data.map((file) => `${CDN_URL}/cleaned/${file}`);
+        }
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    },
+
+    async getStickers(): Promise<void> {
+      try {
+        const response = await fetch(STICKERS_JSON_URL);
+
+        if (response.status === 200) {
+          const data: MetadataSloths = await response.json();
+          this.sloths = data.stickers.map((sloth) => ({
+            ...sloth,
+            checked: false,
+          }));
         }
       } catch (error) {
         console.log('error: ', error);
