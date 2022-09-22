@@ -280,9 +280,7 @@ export default defineComponent({
 
       this.drawText();
 
-      this.drawBorder(this.imgCanvasElement);
-      this.drawBorder(this.topCanvasElement);
-      this.drawBorder(this.bottomCanvasElement);
+      this.layers.forEach((el) => this.drawBorder(el));
     },
 
     calcImgSizes() {
@@ -467,23 +465,14 @@ export default defineComponent({
     handleWheel(e: WheelEvent) {
       const dy = e.deltaY;
 
-      this.layers.forEach((el) => this.handleWheelEl(dy, el));
-
-      // this.handleWheelEl(dy, this.imgCanvasElement);
-      // this.handleWheelEl(dy, this.topCanvasElement);
-      // this.handleWheelEl(dy, this.bottomCanvasElement);
+      this.layers.forEach((el) => {
+        if (el.isHovered)
+          if (dy > 0) {
+            this.scaleUpEl(el);
+          } else if (dy < 0) this.scaleDownEl(el);
+      });
 
       this.draw();
-    },
-
-    handleWheelEl(dy: number, el: CanvasElement) {
-      const canvasElement = el;
-
-      if (canvasElement.isHovered) {
-        if (dy > 0) {
-          this.scaleUpEl(el);
-        } else if (dy < 0) this.scaleDownEl(el);
-      }
     },
 
     updImage(i: number) {
@@ -540,8 +529,7 @@ export default defineComponent({
         const metrics = this.ctx.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && index > 0) {
-          this.ctx.strokeText(line.trim(), x, y);
-          this.ctx.fillText(line.trim(), x, y);
+          this.drawTextLine(line.trim(), x, y);
           line = `${word} `;
           y += fontSize;
           textHeight += fontSize;
@@ -549,8 +537,7 @@ export default defineComponent({
           line = testLine;
         }
       });
-      this.ctx.strokeText(line.trim(), x, y);
-      this.ctx.fillText(line.trim(), x, y);
+      this.drawTextLine(line.trim(), x, y);
 
       this.topCanvasElement.width = maxWidth;
       this.topCanvasElement.height = textHeight;
@@ -569,8 +556,7 @@ export default defineComponent({
         const metrics = this.ctx.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && index > 0) {
-          this.ctx.strokeText(line.trim(), x, y);
-          this.ctx.fillText(line.trim(), x, y);
+          this.drawTextLine(line.trim(), x, y);
           line = ` ${word}`;
           y -= fontSize;
           textHeight += fontSize;
@@ -578,14 +564,18 @@ export default defineComponent({
           line = testLine;
         }
       });
-      this.ctx.strokeText(line.trim(), x, y);
-      this.ctx.fillText(line.trim(), x, y);
+      this.drawTextLine(line.trim(), x, y);
 
       this.bottomCanvasElement.top -= textHeight - this.bottomCanvasElement.height;
       this.bottomCanvasElement.width = maxWidth;
       this.bottomCanvasElement.height = textHeight;
       this.bottomCanvasElement.scaledWidth = maxWidth;
       this.bottomCanvasElement.scaledHeight = textHeight;
+    },
+
+    drawTextLine(line: string, x: number, y: number) {
+      this.ctx.strokeText(line, x, y);
+      this.ctx.fillText(line, x, y);
     },
 
     saveImage() {
