@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
-import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus } from 'domain/interview';
+import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -61,7 +61,7 @@ function Page(props: CoursePageProps) {
 
   const getRegisteredInterviews = async (interviews: Interview[]) => {
     const requests = interviews
-      .map(({ type, id }) => (type === 'stage-interview' ? 'stage' : id))
+      .map(({ type, id }) => (type === stageInterviewType ? 'stage' : id))
       .map(async id => {
         const data = await courseService.getInterviewStudent(props.session.githubId, id).catch(() => null);
         return data ? id : null;
@@ -72,7 +72,7 @@ function Page(props: CoursePageProps) {
   };
 
   const renderExtra = (interview: Interview) => {
-    const id = interview.type === 'stage-interview' ? 'stage' : interview.id;
+    const id = interview.type === stageInterviewType ? 'stage' : interview.id;
     const hasInterview = registeredInterviews.includes(id);
     return (
       <Button

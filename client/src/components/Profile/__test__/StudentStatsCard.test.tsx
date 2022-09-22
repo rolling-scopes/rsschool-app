@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from 'common/models/profile';
 
-describe('', () => {
+describe('StudentStatsCard', () => {
   const githubId = 'test';
   const data = [
     {
@@ -106,7 +106,7 @@ describe('', () => {
   ] as StudentStats[];
 
   it('should render correctly', () => {
-    const output = render(<StudentStatsCard isProfileOwner={false} data={data} username={githubId} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<StudentStatsCard isProfileOwner={false} data={data} username={githubId} />);
+    expect(container).toMatchSnapshot();
   });
 });

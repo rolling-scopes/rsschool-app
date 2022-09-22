@@ -31,7 +31,7 @@ describe('PreScreeningIviewModal', () => {
       },
     } as StageInterviewDetailedFeedback;
 
-    const output = render(<PreScreeningIviewModal feedback={feedback} isVisible={true} onHide={jest.fn()} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<PreScreeningIviewModal feedback={feedback} isVisible={true} onHide={jest.fn()} />);
+    expect(container).toMatchSnapshot();
   });
 });

@@ -6,6 +6,7 @@ import { courseService, InterviewService, notificationService } from '../../serv
 import { setResponse } from '../utils';
 import { InterviewRepository } from '../../repositories/interview.repository';
 import { StageInterviewRepository } from '../../repositories/stageInterview.repository';
+import { userGuards } from '../guards';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 
@@ -98,8 +99,19 @@ export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterCont
 };
 
 export const createInterview = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const user = ctx.state.user;
+  const guard = userGuards(user);
   const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
   const interviewService = new InterviewService(courseId, logger);
+
+  if (guard.isMentor(courseId)) {
+    const isStarted = await interviewService.isInterviewStarted(courseTaskId);
+    if (!isStarted) {
+      setResponse(ctx, StatusCodes.FORBIDDEN);
+      return;
+    }
+  }
+
   const result = await interviewService.createInterview(courseTaskId, interviewerGithubId, studentGithubId);
 
   await sendInteviewerAssignedNotification(logger, courseId, { interviewerGithubId, studentGithubId });
