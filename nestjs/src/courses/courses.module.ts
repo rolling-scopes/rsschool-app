@@ -20,6 +20,7 @@ import {
   TaskResult,
   TaskInterviewResult,
   User,
+  TaskInterviewStudent,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -69,6 +70,7 @@ import { CoreModule } from 'src/core/core.module';
       TaskSolution,
       TaskResult,
       TaskInterviewResult,
+      TaskInterviewStudent,
     ]),
     CoreModule,
     UsersModule,

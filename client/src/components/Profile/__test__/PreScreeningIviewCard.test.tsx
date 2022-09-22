@@ -58,7 +58,7 @@ describe('PreScreeningIviewCard', () => {
   ] as StageInterviewDetailedFeedback[];
 
   it('Should render correctly', () => {
-    const output = render(<PreScreeningIviewCard data={data} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<PreScreeningIviewCard data={data} />);
+    expect(container).toMatchSnapshot();
   });
 });
