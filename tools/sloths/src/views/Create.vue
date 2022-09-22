@@ -171,7 +171,7 @@ export default defineComponent({
   mounted() {
     this.getImages();
 
-    this.loadStore();
+    const loaded = this.loadStore();
 
     const { canvas } = this.$refs;
     if (!(canvas instanceof HTMLCanvasElement)) return;
@@ -186,7 +186,7 @@ export default defineComponent({
     image.onload = () => {
       this.calcCanvasSizes();
       this.calcImgSizes();
-      this.centering();
+      if (!loaded) this.centering();
       this.draw();
     };
     image.src = this.images[this.index];
@@ -581,14 +581,15 @@ export default defineComponent({
       });
     },
 
-    loadStore() {
+    loadStore(): boolean {
       const str = getPageCreateState();
-      if (!str) return;
+      if (!str) return false;
 
       const data = JSON.parse(str);
-      if (!data) return;
+      if (!data) return false;
 
       Object.assign(this.$data, data);
+      return true;
     },
   },
 });
