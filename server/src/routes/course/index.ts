@@ -7,6 +7,7 @@ import {
   anyCourseMentorGuard,
   basicAuthAws,
   courseGuard,
+  courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
   courseSupervisorGuard,
@@ -98,7 +99,7 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   router.get('/interviews/:courseTaskId', courseManagerGuard, interviews.getInterviewPairs(logger));
   router.post(
     '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
-    courseManagerGuard,
+    courseInterviewGuard,
     interviews.createInterview(logger),
   );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
@@ -140,7 +141,6 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
   router.put('/interview/stage/:interviewId', courseMentorGuard, stageInterview.updateInterview(logger));
   router.delete('/interview/stage/:interviewId', courseMentorGuard, stageInterview.cancelInterview(logger));
 
-  router.get('/interviews/stage/students/available', courseMentorGuard, stageInterview.getAvailableStudents(logger));
   router.post('/interviews/stage', courseManagerGuard, stageInterview.createInterviews(logger));
   router.get('/interviews/stage', courseMentorGuard, stageInterview.getInterviews(logger));
 }

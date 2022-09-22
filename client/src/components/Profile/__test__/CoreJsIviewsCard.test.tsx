@@ -35,8 +35,8 @@ describe('CoreJSIviewsCard', () => {
   ] as CoreJsInterviewsData[];
 
   it('should render correctly', () => {
-    const wrapper = render(<CoreJsIviewsCard data={data} />);
-    expect(wrapper.container).toMatchSnapshot();
+    const { container } = render(<CoreJsIviewsCard data={data} />);
+    expect(container).toMatchSnapshot();
   });
 
   it('should show modal', async () => {
@@ -44,6 +44,6 @@ describe('CoreJSIviewsCard', () => {
     const btn = await screen.findByTestId('profile-corejs-iview-button');
     btn.click();
     const modal = screen.queryByTestId('profile-corejs-iviews-modal-table');
-    expect(modal).toBeDefined();
+    expect(modal).toBeInTheDocument();
   });
 });

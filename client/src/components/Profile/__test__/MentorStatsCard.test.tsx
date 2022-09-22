@@ -31,7 +31,7 @@ describe('MentorStatsCard', () => {
   ];
 
   it('should render correctly', () => {
-    const output = render(<MentorStatsCard data={mentorStats} />);
-    expect(output.container).toMatchSnapshot();
+    const { container } = render(<MentorStatsCard data={mentorStats} />);
+    expect(container).toMatchSnapshot();
   });
 });

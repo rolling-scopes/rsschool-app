@@ -46,4 +46,15 @@ export class UsersService {
       where: { id: In(userIds) },
     });
   }
+
+  public getFullName({ firstName, lastName }: { firstName: string; lastName: string }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 }

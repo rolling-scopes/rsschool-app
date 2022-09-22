@@ -41,8 +41,8 @@ const router = {
 describe('ProfilePage', () => {
   describe('Should render correctly', () => {
     it('if full profile info is in the state', () => {
-      const wrapper = render(<ProfilePage session={session} router={router} />);
-      expect(wrapper.container).toMatchSnapshot();
+      const { container } = render(<ProfilePage session={session} router={router} />);
+      expect(container).toMatchSnapshot();
     });
   });
 });

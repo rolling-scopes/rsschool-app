@@ -5,7 +5,7 @@ import ContactsCard from '../ContactsCard';
 describe('ContactsCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper = render(
+      const { container } = render(
         <ContactsCard
           data={{
             epamEmail: 'vasya@epam.com',
@@ -22,10 +22,10 @@ describe('ContactsCard', () => {
           updateProfile={jest.fn()}
         />,
       );
-      expect(wrapper.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper = render(
+      const { container } = render(
         <ContactsCard
           data={{
             epamEmail: 'vasya@epam.com',
@@ -42,7 +42,7 @@ describe('ContactsCard', () => {
           updateProfile={jest.fn()}
         />,
       );
-      expect(wrapper.container).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
   });
 });
