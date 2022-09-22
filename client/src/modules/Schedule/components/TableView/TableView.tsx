@@ -58,6 +58,7 @@ const getColumns = ({
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
       defaultFilteredValue: tagFilter,
       filtered: tagFilter.length > 0,
+      filteredValue: tagFilter,
     },
     {
       key: ColumnKey.StartDate,
@@ -134,9 +135,13 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
+  const handleTagClose = (removedTag: string) => {
+    setTagFilter(tagFilter.filter(t => t !== removedTag) ?? []);
+  };
+
   return (
     <Form form={form} component={false}>
-      <FilteredTags tagFilter={tagFilter} onTagClose={setTagFilter} />
+      <FilteredTags tagFilter={tagFilter} onTagClose={handleTagClose} />
       <Table
         locale={{
           // disable default tooltips on sortable columns

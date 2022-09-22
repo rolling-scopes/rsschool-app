@@ -52,7 +52,7 @@ describe('FilteredTags', () => {
     fireEvent.click(interviewCrossIcon);
 
     expect(onTagCloseMock).toHaveBeenCalled();
-    expect(onTagCloseMock).toHaveBeenCalledWith([TagsEnum.Coding, TagsEnum.CrossCheck]);
+    expect(onTagCloseMock).toHaveBeenCalledWith(TagsEnum.Interview);
   });
 });
 
