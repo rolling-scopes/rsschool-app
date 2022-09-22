@@ -40,6 +40,7 @@ import usePagesStore from '@/stores/pages-store';
 import MemoryInfo from '@/components/memory/MemoryInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
+import type { GameResult, GameResults, MemoryLevel } from '@/common/types';
 
 const { getPageMemoryState, setPageMemoryState } = usePagesStore();
 
@@ -53,11 +54,17 @@ export default defineComponent({
     CustomBtn,
   },
 
-  data() {
+  data(): {
+    levels: MemoryLevel[];
+    activeLevel: number;
+    isTableResultsVisible: boolean;
+    records: GameResults;
+  } {
     return {
       levels: MEMORY_LEVELS,
       activeLevel: 1,
       isTableResultsVisible: false,
+      records: [],
     };
   },
 
@@ -97,6 +104,20 @@ export default defineComponent({
     closeTableResults() {
       this.isTableResultsVisible = false;
     },
+
+    getMemoryRecords() {
+      const savedRecords = localStorage.getItem('rs-sloths-memory')
+
+      if (savedRecords) {
+        this.records = JSON.parse(savedRecords)
+      }
+    },
+
+    updateMemoryRecords(record: GameResult) {
+      this.records.push(record)
+
+      localStorage.setItem('rs-sloths-memory', JSON.stringify(this.records))
+    }
   },
 });
 </script>
