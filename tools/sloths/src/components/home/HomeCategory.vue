@@ -1,43 +1,21 @@
 <template>
   <div :class="`home-category home-category_${category}`">
-    <div class="home-category__img">
-      <template v-if="category === 'profile'">
-        <img
-          class="home-category__photo"
-          :src="hasAuth ? getUserAvatar : imageSrc"
-          :alt="hasAuth ? 'Profile' : 'Authorization'"
-        />
-      </template>
-    </div>
+    <div class="home-category__img"></div>
     <div class="home-category__name">{{ $t(`${category}.title`) }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
-import useCurrUser from '@/stores/curr-user';
-
-import { DEFAULT_USER_AVATAR } from '@/common/const';
 
 export default defineComponent({
   name: 'HomeCategory',
-
-  data() {
-    return {
-      imageSrc: DEFAULT_USER_AVATAR,
-    };
-  },
 
   props: {
     category: {
       type: String,
       default: () => '',
     },
-  },
-
-  computed: {
-    ...mapState(useCurrUser, ['hasAuth', 'getUserAvatar']),
   },
 });
 </script>
@@ -58,13 +36,6 @@ export default defineComponent({
   border: 0.3rem var(--color-border-inverse) solid;
   background-color: var(--color-background-soft);
   transition: 0.3s;
-}
-
-.home-category__photo {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
 }
 
 .home-category_suggest > .home-category__img {
