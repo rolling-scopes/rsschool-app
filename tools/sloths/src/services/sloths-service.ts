@@ -1,14 +1,14 @@
 import type { MetadataSloths, QueryStringOptions, Sloth } from '@/common/types';
 import { errorHandler } from './error-handling/error-handler';
 import { apiRequest } from './api-request';
-import { JSON_URL } from '../common/const';
+import { STICKERS_JSON_URL } from '../common/const';
 
 export class SlothsService {
   private data!: Sloth[];
 
   public async getJsonData() {
     try {
-      const response = await apiRequest<MetadataSloths>(JSON_URL, { mode: 'no-cors' });
+      const response = await apiRequest<MetadataSloths>(STICKERS_JSON_URL, { mode: 'no-cors' });
       this.data = response?.data?.stickers.map((sloth) => ({
         ...sloth,
         checked: false,
