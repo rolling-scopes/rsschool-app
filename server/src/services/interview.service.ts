@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { CourseTask, TaskChecker } from '../models';
 import { MentorRepository } from '../repositories/mentor.repository';
@@ -67,5 +68,13 @@ export class InterviewService {
 
   public async createInterview(courseTaskId: number, interviewerGithubId: string, studentGithubId: string) {
     return this.interviewRepository.addPair(this.courseId, courseTaskId, interviewerGithubId, studentGithubId);
+  }
+
+  public async isInterviewStarted(courseTaskId: number) {
+    const courseTask = await getRepository(CourseTask).findOne({
+      where: { id: courseTaskId },
+      select: ['studentStartDate'],
+    });
+    return moment(courseTask?.studentStartDate).isBefore(moment());
   }
 }
