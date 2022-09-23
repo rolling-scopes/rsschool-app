@@ -1997,14 +1997,14 @@
       "CourseScheduleItemDto": {
         "type": "object",
         "properties": {
-          "score": { "type": "object" },
+          "score": { "type": "number", "nullable": true },
           "name": { "type": "string" },
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "organizer": { "type": "object", "nullable": true },
-          "maxScore": { "type": "object", "nullable": true },
-          "scoreWeight": { "type": "object", "nullable": true },
+          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "maxScore": { "type": "number", "nullable": true },
+          "scoreWeight": { "type": "number", "nullable": true },
           "descriptionUrl": { "type": "string", "nullable": true },
           "tag": { "type": "string", "enum": ["lecture", "coding", "self-study", "interview", "cross-check", "test"] }
         },
@@ -2448,7 +2448,8 @@
               "Outstanding_work",
               "Top_performer",
               "Job_Offer",
-              "RS_activist"
+              "RS_activist",
+              "Jury_Team"
             ]
           },
           "comment": { "type": "string" },
@@ -2666,7 +2667,8 @@
               "Outstanding_work",
               "Top_performer",
               "Job_Offer",
-              "RS_activist"
+              "RS_activist",
+              "Jury_Team"
             ]
           }
         },
