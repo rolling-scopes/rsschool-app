@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
 import * as ReactUse from 'react-use';
 import { ALL_TAB_KEY, ColumnKey } from 'modules/Schedule/constants';
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
 
 const StatusEnum = CourseScheduleItemDtoStatusEnum;
+const TagsEnum = CourseScheduleItemDtoTagEnum;
 
 const PROPS_MOCK: TableViewProps = {
   settings: {
@@ -94,7 +95,7 @@ describe('TableView', () => {
     expect(screen.queryByText('Tag')).not.toBeInTheDocument();
   });
 
-  describe('should show data', () => {
+  describe('should filter data', () => {
     it('by selected tag', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
@@ -161,6 +162,27 @@ describe('TableView', () => {
         expect(filteredItem).not.toBeInTheDocument();
       },
     );
+  });
+
+  it.each`
+    tag
+    ${TagsEnum.Coding}
+    ${TagsEnum.Test}
+    ${TagsEnum.Interview}
+  `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
+    jest
+      .spyOn(ReactUse, 'useLocalStorage')
+      // Mock useLocalStorage for tagFilter
+      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn, jest.fn]);
+    render(<TableView {...PROPS_MOCK} />);
+
+    const tagFilterBtn = screen.getByRole('button', { name: /filter/i });
+    fireEvent.click(tagFilterBtn);
+
+    const filtersDropdown = await screen.findByRole('menu');
+    const codingMenuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
+    const codingCheckbox = within(codingMenuItem).getByRole('checkbox');
+    expect(codingCheckbox).toBeChecked();
   });
 });
 
