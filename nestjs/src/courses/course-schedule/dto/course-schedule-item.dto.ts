@@ -17,7 +17,7 @@ export class CourseScheduleItemDto {
     this.descriptionUrl = item.descriptionUrl ?? null;
   }
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   score: number | null;
 
   @ApiProperty()
@@ -32,13 +32,13 @@ export class CourseScheduleItemDto {
   @ApiProperty()
   endDate: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: PersonDto })
   organizer: PersonDto | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: Number })
   maxScore: number | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: Number })
   scoreWeight: number | null;
 
   @ApiProperty({ nullable: true, type: String })
