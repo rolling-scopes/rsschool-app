@@ -392,7 +392,7 @@ export default defineComponent({
 
       if (selected.length) {
         // move selected only
-        this.handleMouseMoveEl(mousePos, selected[0]);
+        this.moveElement(mousePos, selected[0]);
       } else {
         // move top of layers
         let isHovered = false;
@@ -403,7 +403,7 @@ export default defineComponent({
           if (isHovered) {
             el.isHovered = false;
           } else {
-            this.handleMouseMoveEl(mousePos, el);
+            this.moveElement(mousePos, el);
             isHovered = el.isHovered;
           }
         }
@@ -412,7 +412,7 @@ export default defineComponent({
       this.draw();
     },
 
-    handleMouseMoveEl(mousePos: CanvasPos, el: CanvasElement) {
+    moveElement(mousePos: CanvasPos, el: CanvasElement) {
       const canvasElement = el;
 
       if (canvasElement.isSelected) {
@@ -444,7 +444,7 @@ export default defineComponent({
         if (isSelected) {
           el.isSelected = false;
         } else {
-          this.handleMouseDownEl(mousePos, el);
+          this.selectElement(mousePos, el);
           isSelected = el.isSelected;
         }
       }
@@ -452,7 +452,7 @@ export default defineComponent({
       this.draw();
     },
 
-    handleMouseDownEl(mousePos: CanvasPos, el: CanvasElement) {
+    selectElement(mousePos: CanvasPos, el: CanvasElement) {
       const canvasElement = el;
 
       const elXY = this.getElRectXY(el);
