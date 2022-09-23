@@ -21,7 +21,7 @@ export function DeadlineIcon({ group, endDate }: Props) {
   const color = getColor(endDate);
 
   return (
-    <Tooltip title={title} placement="bottomRight">
+    <Tooltip title={title} placement="topRight">
       <ClockCircleOutlined style={{ fontSize: '14px', color }} />
     </Tooltip>
   );
