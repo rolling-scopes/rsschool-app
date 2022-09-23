@@ -1,24 +1,28 @@
 import { Tabs } from 'antd';
 import { useMemo } from 'react';
+import { ALL_TAB_KEY } from 'modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
 
 export type Status = string;
 
 export interface StatusTabsProps {
   statuses: Status[];
+  activeTab?: string;
   onTabChange: (tab: string) => void;
 }
 
-function StatusTabs({ statuses, onTabChange }: StatusTabsProps) {
+function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
   const tabs = useMemo(() => tabsRenderer(statuses), [statuses]);
 
-  const handleTabChange = (activeTab: string) => {
-    onTabChange(activeTab);
+  const handleTabChange = (selectedTab: string) => {
+    onTabChange(selectedTab);
   };
+
+  const getActiveTab = () => (!activeTab || Array.isArray(activeTab) ? ALL_TAB_KEY : activeTab);
 
   return (
     <>
-      <Tabs items={tabs} onChange={handleTabChange} />
+      <Tabs activeKey={getActiveTab()} items={tabs} onChange={handleTabChange} />
       <style jsx>{`
         :global(.ant-tabs-tab .ant-badge-count) {
           background-color: #f0f2f5;

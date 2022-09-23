@@ -24,6 +24,23 @@ describe('StatusTabs', () => {
     expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
   });
 
+  it.each`
+    activeTab
+    ${undefined}
+    ${[]}
+    ${['missed']}
+  `(
+    'should render "all" tab selected by default when active tab is $activeTab',
+    ({ activeTab }: { activeTab: string }) => {
+      render(<StatusTabs activeTab={activeTab} statuses={[]} onTabChange={onTabChangeMock} />);
+
+      // Rule is disabled because the tab with text "all" is nested inside div with "active" class
+      // eslint-disable-next-line testing-library/no-node-access
+      const allTab = screen.getByText(/all/i).parentElement;
+      expect(allTab).toHaveClass('ant-tabs-tab-active');
+    },
+  );
+
   it('should order tabs', () => {
     const statuses = generateStatuses();
 
@@ -78,11 +95,7 @@ describe('StatusTabs', () => {
   describe('when active tab was changed', () => {
     it('should call onTabChange with tab name "all"', () => {
       const statuses = generateStatuses();
-      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
-      // At first, active by default tab "All" should be deactivated
-      const missedStatusTab = screen.getByText(new RegExp(StatusEnum.Missed, 'i'));
-      fireEvent.click(missedStatusTab);
-      expect(onTabChangeMock).toHaveBeenCalledWith(StatusEnum.Missed);
+      render(<StatusTabs activeTab={StatusEnum.Missed} statuses={statuses} onTabChange={onTabChangeMock} />);
 
       const selectedTab = screen.getByText(new RegExp(ALL_TAB_KEY, 'i'));
       fireEvent.click(selectedTab);
