@@ -13,19 +13,22 @@ import {
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
 import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
+import { FilterValue } from 'antd/lib/table/interface';
 
 const getColumns = ({
   timezone,
   tagColors,
   tagFilter,
+  filteredInfo,
 }: {
   tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
+  filteredInfo: Record<string, FilterValue | null>;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${moment().tz(timezone).format('Z')})`;
   return [
@@ -48,7 +51,8 @@ const getColumns = ({
           </a>
         );
       },
-      ...getColumnSearchProps('name'),
+      filteredValue: filteredInfo.name || null,
+      ...getColumnSearchProps('name', undefined),
     },
     {
       key: ColumnKey.Tag,
@@ -58,7 +62,7 @@ const getColumns = ({
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
       defaultFilteredValue: tagFilter,
       filtered: tagFilter.length > 0,
-      filteredValue: tagFilter,
+      filteredValue: tagFilter || null,
     },
     {
       key: ColumnKey.StartDate,
@@ -89,6 +93,7 @@ const getColumns = ({
       title: ColumnName.Organizer,
       dataIndex: ['organizer', 'githubId'],
       render: (value: string) => !!value && <GithubUserLink value={value} />,
+      filteredValue: filteredInfo.organizer || null,
       ...getColumnSearchProps('organizer.githubId'),
     },
     {
@@ -119,6 +124,7 @@ const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
 export function TableView({ data, settings, statusFilter }: TableViewProps) {
   const [form] = Form.useForm();
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
+  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
 
   const filteredData = data
     .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
@@ -130,6 +136,7 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
         tagColors: settings.tagColors,
         timezone: settings.timezone,
         tagFilter,
+        filteredInfo,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
@@ -152,8 +159,9 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
           triggerAsc: undefined,
           cancelSort: undefined,
         }}
-        onChange={(_, filters) => {
+        onChange={(_, filters: Record<string, FilterValue | string[] | null>) => {
           setTagFilter((filters?.tag as string[]) ?? []);
+          setFilteredInfo(filters);
         }}
         pagination={false}
         dataSource={filteredData}
