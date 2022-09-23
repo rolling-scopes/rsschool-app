@@ -57,10 +57,12 @@ export function registryRouter(logger?: ILogger) {
       setResponse(ctx, NOT_FOUND);
       return;
     }
+
     const result = {
       maxStudentsLimit: mentorRegistry.maxStudentsLimit,
       preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
       preselectedCourses: mentorRegistry.preselectedCourses.map(c => Number(c)),
+      preferredCourses: mentorRegistry.preferedCourses.map(c => Number(c)),
     };
     setResponse(ctx, OK, result);
   });

@@ -173,6 +173,20 @@ export const courseManagerGuard = async (ctx: RouterContext, next: () => Promise
   await basicAuthAdmin(ctx, next);
 };
 
+export const courseInterviewGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+  const user = ctx.state.user;
+  ctx.params.courseId = Number(ctx.params.courseId);
+  if (user) {
+    const guards = userGuards(user);
+    const { courseId } = ctx.params;
+    if (guards.isLoggedIn(ctx) && (guards.isPowerUser(courseId) || guards.isMentor(courseId))) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
 export const anyCourseManagerGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
   const user = ctx.state.user;
   ctx.params.courseId = Number(ctx.params.courseId);

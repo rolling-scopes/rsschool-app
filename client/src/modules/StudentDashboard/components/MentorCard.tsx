@@ -6,6 +6,7 @@ import { MentorBasic } from 'common/models';
 import { CourseTaskSelect } from 'components/Forms';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { stageInterviewType } from 'domain/interview';
 import { useReducer } from 'react';
 import { urlPattern } from 'services/validators';
 import CommonCard from './CommonDashboardCard';
@@ -85,7 +86,7 @@ export function MentorCard(props: Props) {
       item =>
         item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
         item.type != 'selfeducation' &&
-        item.type != 'stage-interview' &&
+        item.type != stageInterviewType &&
         item.type != 'interview',
     );
     dispatch({ type: 'open', state: { data: { courseTasks } } });

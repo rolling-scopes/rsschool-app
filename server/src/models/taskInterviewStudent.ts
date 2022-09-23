@@ -9,7 +9,7 @@ export class TaskInterviewStudent {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
   updatedDate: number;
