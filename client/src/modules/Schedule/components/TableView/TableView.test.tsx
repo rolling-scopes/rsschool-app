@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import TableView, { TableViewProps } from './TableView';
 import * as ReactUse from 'react-use';
-import { ALL_TAB_KEY, ColumnKey } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, ColumnKey, ColumnName } from 'modules/Schedule/constants';
 import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
@@ -106,6 +106,33 @@ describe('TableView', () => {
       const items = screen.getAllByText(new RegExp(status, 'i'));
       expect(items).toHaveLength(courseItemCount);
     });
+
+    it.each`
+      field                   | searchQuery
+      ${ColumnName.Name}      | ${'Course Item 0'}
+      ${ColumnName.Organizer} | ${'organizer 0'}
+    `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+      const data = generateCourseData();
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
+      // Check that all items rendered
+      expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
+      // Find and click search button for column
+      const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
+      const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
+      fireEvent.click(searchButton);
+      // Type search query inside search input
+      const searchInput = await screen.findByRole('textbox');
+      fireEvent.change(searchInput, { target: { value: searchQuery } });
+
+      // Apply search
+      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
+      fireEvent.click(inputSearchBtn);
+
+      // Find the line with search query and no others
+      const item = await screen.findByText(searchQuery);
+      expect(item).toBeInTheDocument();
+      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+    });
   });
 
   describe('should hide data', () => {
@@ -168,7 +195,11 @@ function generateCourseData(
       endDate: '2020-03-15T20:59:00.000Z',
       maxScore: idx + 100,
       scoreWeight: 0.2,
-      organizer: null,
+      organizer: {
+        id: idx,
+        name: '',
+        githubId: `organizer ${idx}`,
+      },
       status: statusMock[idx],
       score: idx + 20,
       tag: 'test',
