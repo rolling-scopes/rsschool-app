@@ -289,13 +289,15 @@ export default defineComponent({
     },
 
     async saveResult() {
-      const service = new GameResultService(this.level.gameId);
+      // const service = new GameResultService(this.level.gameId);
       const gameResult: GameResult = {
         gameId: this.level.gameId,
         count: this.steps,
         time: this.getTime,
       };
-      await service.create(gameResult);
+      // await service.create(gameResult);
+
+      this.$emit('new-result', gameResult)
     },
 
     closeModal() {

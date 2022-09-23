@@ -21,7 +21,7 @@
       ></custom-btn>
     </div>
     <div class="memory__main list-main">
-      <game-field :level="levels[activeLevel]"></game-field>
+      <game-field :level="levels[activeLevel]" @new-result="updateMemoryRecords"></game-field>
     </div>
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
       <template v-slot:header> {{ $t('memory.results') }} </template>
