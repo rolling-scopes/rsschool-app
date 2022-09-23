@@ -121,7 +121,7 @@ export interface TableViewProps {
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
-export function TableView({ data, settings, statusFilter }: TableViewProps) {
+export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
   const [form] = Form.useForm();
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
