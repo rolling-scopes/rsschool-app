@@ -64,6 +64,7 @@ export type Sloth = {
   description: string;
   tags: Tags;
   checked: boolean;
+  image: string;
 };
 export type SlothTags = {
   id: string;

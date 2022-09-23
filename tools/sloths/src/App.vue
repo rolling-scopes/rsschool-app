@@ -15,15 +15,12 @@
   <loader-view v-show="isLoad" />
 
   <alert-modal v-show="isAlert" :header="header" :message="message" @closeAlertModal="isAlert = false"></alert-modal>
-  <authorization-modal v-show="isAuthorization" @closeAuthorizationModal="closeAuthorization"></authorization-modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
-import type { User } from '@/common/types';
-import { BASE } from '@/common/const';
-import router from './router';
+import { CDN_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
 import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
 import LoaderView from './components/loader/LoaderView.vue';
@@ -35,7 +32,9 @@ import useLoader from './stores/loader';
 import useAlertModal from './stores/alert-modal';
 import useAuthorizationModal from './stores/authorization-modal';
 import useAudioOn from './stores/audio-on';
-import useCurrUser from './stores/curr-user';
+import useCleanedStore from './stores/cleaned';
+import useSlothsStore from './stores/sloths';
+import type { MetadataSloths } from './common/types';
 
 export default defineComponent({
   name: 'App',
@@ -54,7 +53,8 @@ export default defineComponent({
     ...mapWritableState(useAlertModal, ['isAlert', 'header', 'message']),
     ...mapWritableState(useAuthorizationModal, ['isAuthorization']),
     ...mapWritableState(useAudioOn, ['isAudioOn']),
-    ...mapWritableState(useCurrUser, ['currUser']),
+    ...mapWritableState(useCleanedStore, ['cleanedFilelist']),
+    ...mapWritableState(useSlothsStore, ['sloths']),
   },
 
   created() {
@@ -65,47 +65,46 @@ export default defineComponent({
   },
 
   async mounted() {
-    if (this.isThereCookies('rs-sloths-cookie')) {
-      this.isLoad = true;
-      try {
-        await this.getCurrUser();
-      } catch (error: string | unknown) {
-        throw new Error(error as string);
-      } finally {
-        this.isLoad = false;
-      }
+    this.isLoad = true;
+    try {
+      await this.getStickers();
+      await this.getCleaned();
+    } catch (error: string | unknown) {
+      throw new Error(error as string);
+    } finally {
+      this.isLoad = false;
     }
   },
 
   methods: {
-    closeAuthorization() {
-      this.isAuthorization = false;
-      router.push('/');
-    },
+    async getCleaned(): Promise<void> {
+      try {
+        const response = await fetch(CLEANED_JSON_URL);
 
-    async getCurrUser(): Promise<void> {
-      const res = await fetch(`${BASE}/users/session`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (res.status === 401) {
-        this.isAuthorization = true;
-      }
-
-      if (res.status === 200) {
-        const data: User = await res.json();
-        this.currUser = data;
+        if (response.status === 200) {
+          const data: string[] = await response.json();
+          this.cleanedFilelist = data.map((file) => `${CDN_URL}/cleaned/${file}`);
+        }
+      } catch (error) {
+        console.log('error: ', error);
       }
     },
 
-    isThereCookies(name: string): boolean {
-      const date = new Date();
-      date.setTime(date.getTime() + 1000);
-      const expires = `expires=${date.toUTCString()}`;
+    async getStickers(): Promise<void> {
+      try {
+        const response = await fetch(STICKERS_JSON_URL);
 
-      document.cookie = `${name}=new_value;path=/;${expires}`;
-      return document.cookie.indexOf(`${name}=`) === -1;
+        if (response.status === 200) {
+          const data: MetadataSloths = await response.json();
+          this.sloths = data.stickers.map((sloth) => ({
+            ...sloth,
+            image: `${CDN_URL}/stickers/${sloth.id}/image.svg`,
+            checked: false,
+          }));
+        }
+      } catch (error) {
+        console.log('error: ', error);
+      }
     },
   },
 });

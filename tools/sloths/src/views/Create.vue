@@ -107,8 +107,9 @@
 import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
-import { MEMES_SLOTHS } from '@/common/const';
+import useCleanedStore from '@/stores/cleaned';
 
+const { cleanedFilelist } = useCleanedStore();
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 
 export default defineComponent({
@@ -178,7 +179,7 @@ export default defineComponent({
 
   methods: {
     async getImages() {
-      this.images = MEMES_SLOTHS;
+      this.images = cleanedFilelist;
     },
 
     getImg(i: number): string {
