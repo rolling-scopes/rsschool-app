@@ -106,9 +106,13 @@ describe('TableView', () => {
       expect(screen.getByText('Coding')).toBeInTheDocument();
     });
 
-    it('by "all" status', () => {
+    it.each`
+      initialStatus
+      ${ALL_TAB_KEY}
+      ${[]}
+    `('by "all" status when initial status is $initialStatus', ({ initialStatus }: { initialStatus: string }) => {
       const data = generateCourseData();
-      render(<TableView {...PROPS_MOCK} data={data} statusFilter={ALL_TAB_KEY} />);
+      render(<TableView {...PROPS_MOCK} data={data} statusFilter={initialStatus} />);
 
       const items = screen.getAllByText(/Course Item/i);
       expect(items).toHaveLength(data.length);

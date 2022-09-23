@@ -22,3 +22,5 @@ export enum InterviewStatus {
   Completed,
   Canceled,
 }
+
+export const stageInterviewType = 'stage-interview';

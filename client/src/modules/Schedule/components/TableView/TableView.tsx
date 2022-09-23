@@ -110,15 +110,18 @@ const getColumns = ({
 export interface TableViewProps {
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
-  statusFilter: string;
+  statusFilter?: string;
 }
+
+const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
+  Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
 export function TableView({ data, settings, statusFilter }: TableViewProps) {
   const [form] = Form.useForm();
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
 
   const filteredData = data
-    .filter(item => (statusFilter === ALL_TAB_KEY || item.status === statusFilter ? item : null))
+    .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
     .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event));
 
   const filteredColumns = useMemo(
