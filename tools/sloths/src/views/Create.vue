@@ -11,7 +11,7 @@
           alt="images"
           object-fit="contain"
           class="meme__image"
-          @click="updImage(index)"
+          @click="updateImage(index)"
         />
       </div>
     </div>
@@ -508,7 +508,7 @@ export default defineComponent({
       this.draw();
     },
 
-    updImage(i: number) {
+    updateImage(i: number) {
       this.index = i;
 
       const { imgs } = this.$refs;
