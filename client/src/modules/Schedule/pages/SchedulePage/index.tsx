@@ -12,8 +12,8 @@ import { TableView } from 'modules/Schedule/components/TableView';
 import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
 import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
-import { useAsyncRetry } from 'react-use';
-import { ALL_TAB_KEY } from 'modules/Schedule/constants';
+import { useAsyncRetry, useLocalStorage } from 'react-use';
+import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
@@ -25,7 +25,7 @@ export function SchedulePage(props: PageProps) {
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
-  const [selectedTab, setSelectedTab] = useState<string>(ALL_TAB_KEY);
+  const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
   const settings = useScheduleSettings();
 
@@ -64,7 +64,7 @@ export function SchedulePage(props: PageProps) {
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
-      <StatusTabs statuses={statuses} onTabChange={setSelectedTab} />
+      <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} />
       <SettingsPanel
         onCreateCourseTask={handleCreateCourseTask}
         onCopyFromCourse={() => setCopyModal({})}
