@@ -16,7 +16,7 @@ export class ResumeService {
   public async updateStatus() {
     const resume = await this.resumeRepository.find(this.githubId);
 
-    const EXPIRATION_DAYS_PROLONGATION = 14;
+    const EXPIRATION_DAYS_PROLONGATION = 30;
 
     const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
     const result = await this.resumeRepository.save(this.githubId, { ...resume, expires: expirationTimestamp });
