@@ -67,7 +67,7 @@ export class OpportunitiesService {
     const resume = await this.resumeRepository.findOneBy({ githubId });
     const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
     const result = await this.resumeRepository.save({ id: resume?.id, githubId, expires: expirationTimestamp });
-    return result;
+    return result.expires;
   }
 
   public async setVisibility(githubId: string, isVisible: boolean) {

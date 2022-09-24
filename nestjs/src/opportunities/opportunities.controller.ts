@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -22,6 +23,8 @@ import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'sr
 import { ApplicantResumeDto } from './dto/applicant-resume.dto';
 import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
+import { StatusDto } from './dto/status.dto';
+import { VisibilityDto } from './dto/visibility.dto';
 import { OpportunitiesService } from './opportunities.service';
 
 @Controller('opportunities')
@@ -77,6 +80,24 @@ export class OpportunitiesController {
   public async deleteConsent(@Req() req: CurrentRequest) {
     const data = await this.opportunitiesService.deleteConsent(req.user.githubId);
     return new ConsentDto(data);
+  }
+
+  @Post('/status')
+  @ApiOperation({ operationId: 'updateStatus' })
+  @ApiOkResponse({ type: StatusDto })
+  @UseGuards(DefaultGuard)
+  public async updateStatus(@Req() req: CurrentRequest) {
+    const data = await this.opportunitiesService.updateStatus(req.user.githubId);
+    return new StatusDto(data);
+  }
+
+  @Post('/visibility')
+  @ApiOperation({ operationId: 'updateStatus' })
+  @ApiOkResponse({ type: VisibilityDto })
+  @UseGuards(DefaultGuard)
+  public async setVisibility(@Req() req: CurrentRequest, @Body() dto: VisibilityDto) {
+    const data = await this.opportunitiesService.setVisibility(req.user.githubId, !dto.isHidden);
+    return new VisibilityDto(data);
   }
 
   @Get('/public/:uuid')
