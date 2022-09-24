@@ -7,6 +7,9 @@ import { Feedback } from '@entities/feedback';
 import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Student } from '@entities/student';
+import { ResumeDto } from './dto/resume.dto';
+
+const EXPIRATION_DAYS_PROLONGATION = 30;
 
 type ResumeData = {
   resume: Resume;
@@ -38,10 +41,14 @@ export class OpportunitiesService {
   public async getResumeByGithubId(githubId: string): Promise<ResumeData | null> {
     const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({ where: { userId: user.id } });
-    if (resume == null) {
-      return null;
-    }
+    if (resume == null) return null;
     return await this.getFullResume(resume, false);
+  }
+
+  public async saveResume(githubId: string, resumeDto: ResumeDto): Promise<ResumeDto | null> {
+    const resume = await this.resumeRepository.findOneBy({ githubId });
+    if (resume == null) return null;
+    return await this.resumeRepository.save({ ...resume, ...resumeDto });
   }
 
   public async getApplicantResumes(): Promise<Resume[]> {
@@ -58,9 +65,6 @@ export class OpportunitiesService {
 
   public async updateStatus(githubId: string) {
     const resume = await this.resumeRepository.findOneBy({ githubId });
-
-    const EXPIRATION_DAYS_PROLONGATION = 30;
-
     const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
     const result = await this.resumeRepository.save({ id: resume?.id, githubId, expires: expirationTimestamp });
     return result;
@@ -68,19 +72,14 @@ export class OpportunitiesService {
 
   public async setVisibility(githubId: string, isVisible: boolean) {
     const resume = await this.resumeRepository.findOneBy({ githubId });
-
     const isHidden = !isVisible;
-
     const savedResume = await this.resumeRepository.save({ id: resume?.id, githubId, isHidden });
-
     return savedResume.isHidden;
   }
 
   public async getConsent(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
-    if (user == null) {
-      return false;
-    }
+    if (user == null) return false;
     const value = user.opportunitiesConsent;
     return Boolean(value);
   }
