@@ -66,6 +66,16 @@ export class OpportunitiesService {
     return result;
   }
 
+  public async setVisibility(githubId: string, isVisible: boolean) {
+    const resume = await this.resumeRepository.findOneBy({ githubId });
+
+    const isHidden = !isVisible;
+
+    const savedResume = await this.resumeRepository.save({ id: resume?.id, githubId, isHidden });
+
+    return savedResume.isHidden;
+  }
+
   public async getConsent(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
     if (user == null) {
