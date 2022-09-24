@@ -138,3 +138,6 @@ export const CHECKER_TYPES = {
   taskOwner: 'Task Owner',
   crossCheck: 'Cross-Check',
 };
+
+export const ALL_TAB_KEY = 'all';
+export const ALL_TAB_LABEL = 'All';

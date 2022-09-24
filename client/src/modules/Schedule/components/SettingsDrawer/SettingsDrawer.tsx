@@ -25,16 +25,9 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
       <Button icon={<SettingOutlined />} onClick={openDrawer}>
         Settings
       </Button>
-      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} visible={opened}>
+      <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} open={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
-        <ShowTableColumns
-          tags={tags}
-          columnsHidden={settings.columnsHidden}
-          setColumnsHidden={settings.setColumnsHidden}
-          eventTagsHidden={settings.tagsHidden}
-          setTagsHidden={settings.setTagsHidden}
-          closeDrawer={closeDrawer}
-        />
+        <ShowTableColumns columnsHidden={settings.columnsHidden} setColumnsHidden={settings.setColumnsHidden} />
         <ChangeTagColors tags={tags} tagColors={settings.tagColors} setTagColors={settings.setTagColors} />
       </Drawer>
     </>

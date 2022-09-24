@@ -9,9 +9,11 @@ import { CoursesListModal } from 'modules/CourseManagement/components/CoursesLis
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { SettingsPanel } from 'modules/Schedule/components/SettingsPanel';
 import { TableView } from 'modules/Schedule/components/TableView';
+import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
 import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
-import { useAsyncRetry } from 'react-use';
+import { useAsyncRetry, useLocalStorage } from 'react-use';
+import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
@@ -23,6 +25,7 @@ export function SchedulePage(props: PageProps) {
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
+  const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
   const settings = useScheduleSettings();
 
@@ -57,9 +60,11 @@ export function SchedulePage(props: PageProps) {
   }, [props.course.id]);
 
   const eventTags = useMemo(() => uniq(data.map(item => item.tag)), [data]);
+  const statuses = useMemo(() => data.map(({ status }) => status), [data]);
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
+      <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} />
       <SettingsPanel
         onCreateCourseTask={handleCreateCourseTask}
         onCopyFromCourse={() => setCopyModal({})}
@@ -71,7 +76,7 @@ export function SchedulePage(props: PageProps) {
         tags={eventTags}
         refreshData={refreshData}
       />
-      <TableView settings={settings} data={data} />
+      <TableView settings={settings} data={data} statusFilter={selectedTab} />
       <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
       <CoursesListModal
         okText="Copy"

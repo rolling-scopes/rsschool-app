@@ -92,6 +92,20 @@ $ git push origin feature-x
 
 16. Create a pull request. We support "feature branch" deployments. If you want to deploy your pull request, please add `deploy` label during creation.
 
+
+### API client generation
+
+We use [OpenAPI Generator](https://openapi-generator.tech/) to generate API client for `nestjs` API. Here are steps how to do it:
+
+- Make sure database is runing locally
+- Navigate to `./nestjs`
+- Run
+
+```sh
+npm run openapi
+```
+- Commit updated files (`/client/src/api/*` and `./nestjs/src/spec.json`)
+
 ### Database Migrations
 
 If you made changes to DB models, you need to create a DB migration. Here are steps how to do it

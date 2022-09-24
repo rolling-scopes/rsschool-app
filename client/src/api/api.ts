@@ -361,7 +361,8 @@ export const BadgeDtoIdEnum = {
     OutstandingWork: 'Outstanding_work',
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
-    RsActivist: 'RS_activist'
+    RsActivist: 'RS_activist',
+    JuryTeam: 'Jury_Team'
 } as const;
 
 export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
@@ -821,10 +822,10 @@ export type CourseEventDtoTypeEnum = typeof CourseEventDtoTypeEnum[keyof typeof 
 export interface CourseScheduleItemDto {
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'score': object;
+    'score': number | null;
     /**
      * 
      * @type {string}
@@ -851,22 +852,22 @@ export interface CourseScheduleItemDto {
     'endDate': string;
     /**
      * 
-     * @type {object}
+     * @type {PersonDto}
      * @memberof CourseScheduleItemDto
      */
-    'organizer': object | null;
+    'organizer': PersonDto | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'maxScore': object | null;
+    'maxScore': number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CourseScheduleItemDto
      */
-    'scoreWeight': object | null;
+    'scoreWeight': number | null;
     /**
      * 
      * @type {string}
@@ -2004,7 +2005,8 @@ export const GratitudeDtoBadgeIdEnum = {
     OutstandingWork: 'Outstanding_work',
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
-    RsActivist: 'RS_activist'
+    RsActivist: 'RS_activist',
+    JuryTeam: 'Jury_Team'
 } as const;
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
