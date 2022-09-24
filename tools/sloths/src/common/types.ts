@@ -162,6 +162,7 @@ export type PageSettings = {
 };
 
 export type CanvasElement = {
+  isResizable: boolean;
   left: number;
   top: number;
   bottom: number;
@@ -175,6 +176,9 @@ export type CanvasElement = {
   scaledHeight: number;
   isHovered: boolean;
   isSelected: boolean;
+  isBorderHovered: boolean;
+  isLeftBorderSelected: boolean;
+  isRightBorderSelected: boolean;
   selectedPos: CanvasPos;
 };
 
