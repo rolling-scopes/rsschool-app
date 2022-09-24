@@ -10,7 +10,7 @@ type FilteredTagsProps = {
 
 export const FilteredTags = ({ tagFilter, onTagClose }: FilteredTagsProps) =>
   tagFilter?.length > 0 ? (
-    <div style={{ marginBottom: 14 }}>
+    <div style={{ marginBottom: 16 }}>
       <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 10 }} />
       {tagFilter.map(tag => (
         <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`Tag: ${
