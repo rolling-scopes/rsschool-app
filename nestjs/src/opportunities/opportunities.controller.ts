@@ -25,6 +25,7 @@ import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
 import { StatusDto } from './dto/status.dto';
 import { VisibilityDto } from './dto/visibility.dto';
+import { FormDataDto } from './dto/form-data.dto';
 import { OpportunitiesService } from './opportunities.service';
 
 @Controller('opportunities')
@@ -50,6 +51,24 @@ export class OpportunitiesController {
     }
     const { resume, students, gratitudes, feedbacks } = data;
     return new ResumeDto(resume, students, gratitudes, feedbacks);
+  }
+
+  @Post('/:githubId/resume')
+  @ApiOperation({ operationId: 'saveResume' })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse({ type: FormDataDto })
+  @UseGuards(DefaultGuard)
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: ResumeDto) {
+    if (githubId !== req.user.githubId) {
+      throw new ForbiddenException('No access to resume');
+    }
+    const data = await this.opportunitiesService.saveResume(githubId, dto);
+    if (data == null) {
+      throw new NotFoundException('Resume not found');
+    }
+    return new FormDataDto(data);
   }
 
   @Get('/consent')
@@ -92,7 +111,7 @@ export class OpportunitiesController {
   }
 
   @Post('/visibility')
-  @ApiOperation({ operationId: 'updateStatus' })
+  @ApiOperation({ operationId: 'setVisibility' })
   @ApiOkResponse({ type: VisibilityDto })
   @UseGuards(DefaultGuard)
   public async setVisibility(@Req() req: CurrentRequest, @Body() dto: VisibilityDto) {
