@@ -1910,6 +1910,160 @@ export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface FormDataDto
+ */
+export interface FormDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'uuid': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'avatarLink': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof FormDataDto
+     */
+    'visibleCourses': Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'desiredPosition': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'englishLevel': FormDataDtoEnglishLevelEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof FormDataDto
+     */
+    'expires': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FormDataDto
+     */
+    'fullTime': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'githubUsername': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FormDataDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'linkedin': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'locations': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'militaryService': FormDataDtoMilitaryServiceEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'notes': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'phone': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'selfIntroLink': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'skype': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'startFrom': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'telegram': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'website': string;
+}
+
+export const FormDataDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type FormDataDtoEnglishLevelEnum = typeof FormDataDtoEnglishLevelEnum[keyof typeof FormDataDtoEnglishLevelEnum];
+export const FormDataDtoMilitaryServiceEnum = {
+    Served: 'served',
+    Liable: 'liable',
+    NotLiable: 'notLiable'
+} as const;
+
+export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEnum[keyof typeof FormDataDtoMilitaryServiceEnum];
+
+/**
+ * 
+ * @export
  * @interface GeneralInfo
  */
 export interface GeneralInfo {
@@ -3215,6 +3369,19 @@ export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface StatusDto
+ */
+export interface StatusDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StatusDto
+     */
+    'data': number;
+}
+/**
+ * 
+ * @export
  * @interface StudentDto
  */
 export interface StudentDto {
@@ -4192,6 +4359,19 @@ export interface Validations {
      * @memberof Validations
      */
     'githubIdInUrl': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VisibilityDto
+ */
+export interface VisibilityDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilityDto
+     */
+    'isHidden': boolean;
 }
 /**
  * 
@@ -8607,6 +8787,109 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {ResumeDto} resumeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveResume: async (githubId: string, resumeDto: ResumeDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('saveResume', 'githubId', githubId)
+            // verify required parameter 'resumeDto' is not null or undefined
+            assertParamExists('saveResume', 'resumeDto', resumeDto)
+            const localVarPath = `/opportunities/{githubId}/resume`
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(resumeDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {VisibilityDto} visibilityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setVisibility: async (visibilityDto: VisibilityDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'visibilityDto' is not null or undefined
+            assertParamExists('setVisibility', 'visibilityDto', visibilityDto)
+            const localVarPath = `/opportunities/visibility`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(visibilityDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStatus: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/opportunities/status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8673,6 +8956,36 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getResume(githubId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {ResumeDto} resumeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveResume(githubId: string, resumeDto: ResumeDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormDataDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveResume(githubId, resumeDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {VisibilityDto} visibilityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setVisibility(visibilityDto: VisibilityDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VisibilityDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setVisibility(visibilityDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateStatus(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStatus(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -8732,6 +9045,33 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
          */
         getResume(githubId: string, options?: any): AxiosPromise<ResumeDto> {
             return localVarFp.getResume(githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {ResumeDto} resumeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveResume(githubId: string, resumeDto: ResumeDto, options?: any): AxiosPromise<FormDataDto> {
+            return localVarFp.saveResume(githubId, resumeDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {VisibilityDto} visibilityDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setVisibility(visibilityDto: VisibilityDto, options?: any): AxiosPromise<VisibilityDto> {
+            return localVarFp.setVisibility(visibilityDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStatus(options?: any): AxiosPromise<StatusDto> {
+            return localVarFp.updateStatus(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8803,6 +9143,39 @@ export class OpportunitiesApi extends BaseAPI {
      */
     public getResume(githubId: string, options?: AxiosRequestConfig) {
         return OpportunitiesApiFp(this.configuration).getResume(githubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} githubId 
+     * @param {ResumeDto} resumeDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpportunitiesApi
+     */
+    public saveResume(githubId: string, resumeDto: ResumeDto, options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).saveResume(githubId, resumeDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {VisibilityDto} visibilityDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpportunitiesApi
+     */
+    public setVisibility(visibilityDto: VisibilityDto, options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).setVisibility(visibilityDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpportunitiesApi
+     */
+    public updateStatus(options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).updateStatus(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

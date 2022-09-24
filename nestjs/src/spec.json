@@ -1149,6 +1149,25 @@
           "404": { "description": "" }
         },
         "tags": ["opportunities"]
+      },
+      "post": {
+        "operationId": "saveResume",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ResumeDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FormDataDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" },
+          "404": { "description": "" }
+        },
+        "tags": ["opportunities"]
       }
     },
     "/opportunities/consent": {
@@ -1184,6 +1203,38 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
+          }
+        },
+        "tags": ["opportunities"]
+      }
+    },
+    "/opportunities/status": {
+      "post": {
+        "operationId": "updateStatus",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StatusDto" } } }
+          }
+        },
+        "tags": ["opportunities"]
+      }
+    },
+    "/opportunities/visibility": {
+      "post": {
+        "operationId": "setVisibility",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisibilityDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisibilityDto" } } }
           }
         },
         "tags": ["opportunities"]
@@ -2552,7 +2603,62 @@
           "website"
         ]
       },
+      "FormDataDto": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string" },
+          "avatarLink": { "type": "string" },
+          "visibleCourses": { "type": "array", "items": { "type": "number" } },
+          "desiredPosition": { "type": "string" },
+          "email": { "type": "string" },
+          "englishLevel": { "type": "string", "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"] },
+          "expires": { "type": "number" },
+          "fullTime": { "type": "boolean" },
+          "githubUsername": { "type": "string" },
+          "id": { "type": "number" },
+          "linkedin": { "type": "string" },
+          "locations": { "type": "string" },
+          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"] },
+          "name": { "type": "string" },
+          "notes": { "type": "string" },
+          "phone": { "type": "string" },
+          "selfIntroLink": { "type": "string" },
+          "skype": { "type": "string" },
+          "startFrom": { "type": "string" },
+          "telegram": { "type": "string" },
+          "website": { "type": "string" }
+        },
+        "required": [
+          "uuid",
+          "avatarLink",
+          "visibleCourses",
+          "desiredPosition",
+          "email",
+          "englishLevel",
+          "expires",
+          "fullTime",
+          "githubUsername",
+          "id",
+          "linkedin",
+          "locations",
+          "militaryService",
+          "name",
+          "notes",
+          "phone",
+          "selfIntroLink",
+          "skype",
+          "startFrom",
+          "telegram",
+          "website"
+        ]
+      },
       "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
+      "StatusDto": { "type": "object", "properties": { "data": { "type": "number" } }, "required": ["data"] },
+      "VisibilityDto": {
+        "type": "object",
+        "properties": { "isHidden": { "type": "boolean" } },
+        "required": ["isHidden"]
+      },
       "ApplicantResumeDto": {
         "type": "object",
         "properties": {
