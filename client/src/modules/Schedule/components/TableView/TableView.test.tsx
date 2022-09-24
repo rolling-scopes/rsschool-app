@@ -178,9 +178,9 @@ describe('TableView', () => {
     fireEvent.click(tagFilterBtn);
 
     const filtersDropdown = await screen.findByRole('menu');
-    const codingMenuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
-    const codingCheckbox = within(codingMenuItem).getByRole('checkbox');
-    expect(codingCheckbox).toBeChecked();
+    const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
+    const checkbox = within(menuItem).getByRole('checkbox');
+    expect(checkbox).toBeChecked();
   });
 });
 
