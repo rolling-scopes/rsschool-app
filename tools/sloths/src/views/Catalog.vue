@@ -2,12 +2,6 @@
   <div class="catalog" :class="isAdmin ? 'catalog_admin' : ''">
     <div class="catalog__aside list-aside">
       <custom-btn
-        v-show="getPageName === 'admin'"
-        :text="$t('catalog.btn.new')"
-        className="btn btn-primary"
-        @click="showSlothInfoNew"
-      ></custom-btn>
-      <custom-btn
         v-show="getPageName === 'catalog'"
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
         :disabled="!isChecked"
@@ -42,9 +36,6 @@
           v-for="sloth in sloths"
           :key="sloth.id"
           :slothInfo="sloth"
-          @editRating="updSlothRating"
-          @delSloth="delSloth"
-          @editSloth="showSlothInfoEdit"
           @showSloth="showSlothInfoView"
           @checkSloth="checkSlothInfoView"
         ></sloth-card>
@@ -54,9 +45,6 @@
         :headerText="getHeaderSlothInfo"
         :modalEvents="modalEvents"
         @closeSlothInfo="closeSlothInfo"
-        @createSloth="createSloth"
-        @updSloth="updSloth"
-        @updSlothImage="updSlothImage"
       ></sloth-info>
     </div>
     <modal-window v-show="isDownloadShow" @close="closeModal">
@@ -66,7 +54,7 @@
         <div class="catalog__download">
           <sloth-card
             v-for="sloth in checked"
-            :key="sloth.id"
+            :key="sloth.name"
             :slothInfo="sloth"
             :isDownload="true"
             @checkSloth="checkSlothInfoView"
@@ -95,7 +83,7 @@ import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
 import { errorHandler } from '@/services/error-handling/error-handler';
-import { BASE, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
+import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
 import { ModalEvents } from '@/common/enums/modal-events';
 import useLoader from '@/stores/loader';
@@ -111,16 +99,20 @@ import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import usePagesStore from '@/stores/pages-store';
+import useSlothsStore from '@/stores/sloths';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
-const service = new SlothsService();
-
-const { setEmptySlothInfo, setSlothInfo } = useSlothInfo();
+const { setSlothInfo } = useSlothInfo();
 
 const { getPerPage, getCurrPage, setPerPage, setCurrPage } = usePagination();
 const { getSearchText, setSearchText } = useSearchText();
 const { getSelected, setSelected } = useSelectedTags();
 const { getSortingList, setSortingList } = useSortingList();
 const { getPageCatalogState, setPageCatalogState } = usePagesStore();
+
+const { sloths } = useSlothsStore();
+const service = new SlothsService(sloths);
 
 export default defineComponent({
   name: 'CatalogView',
@@ -182,24 +174,36 @@ export default defineComponent({
     this.saveStore();
   },
 
+  watch: {
+    isChecked(newVal) {
+      if (!newVal) {
+        this.isDownloadShow = false;
+      }
+    },
+  },
+
   methods: {
     async getSloths() {
       this.isLoad = true;
       try {
-        const currPage = getCurrPage();
-        const perPage = getPerPage();
+        const page = getCurrPage();
+        const limit = getPerPage();
         const searchText = getSearchText();
         const selected = getSelected();
         const sorting = getSortingList();
 
-        const res = await service.getAll(currPage, perPage, sorting, searchText, selected.join(','));
-
-        if (!res.ok) throw Error(); // todo
+        const res = await service.getAll({
+          page: `${page}`,
+          limit: `${limit}`,
+          order: sorting,
+          searchText,
+          filter: selected.join(','),
+        });
 
         this.sloths = res.data.items;
         this.count = res.data.count;
 
-        if (!this.sloths.length && currPage !== 1) {
+        if (!this.sloths.length && page !== 1) {
           const pagination = this.$refs.pagination as PaginationListElement;
           if (pagination) pagination.top();
         }
@@ -216,89 +220,14 @@ export default defineComponent({
       }
     },
 
-    async delSloth(id: string) {
-      this.isLoad = true;
-      try {
-        const res = await service.deleteById(id);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async createSloth(sloth: Sloth, file: File) {
-      this.isLoad = true;
-      try {
-        const res = await service.createImage(sloth, file);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSlothRating(sloth: Sloth, rate: number) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateRatingById(sloth.id, rate);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSloth(sloth: Sloth) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateByIdAndTags(sloth.id, sloth);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
-    async updSlothImage(sloth: Sloth, file: File) {
-      this.isLoad = true;
-      try {
-        const res = await SlothsService.updateByIdAndTagsImage(sloth.id, sloth, file);
-
-        if (!res.ok) throw Error(); // todo
-
-        await this.getSloths();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
-      }
-    },
-
     async getTags() {
       this.isLoad = true;
       try {
-        const res = await SlothsService.getTags();
+        const res = service.getTags();
 
-        if (!res.ok) throw Error(); // todo
+        if (!res) throw Error(); // todo
 
-        this.tags = res.data.map((el) => el.value);
+        this.tags = res.slice();
       } catch (error) {
         errorHandler(error);
       } finally {
@@ -332,9 +261,9 @@ export default defineComponent({
       try {
         const res = await service.getById(sloth.id);
 
-        if (!res.ok) throw Error(); // todo
+        if (!res) throw Error(); // todo
 
-        const dataSloth = res.data;
+        const dataSloth = res;
         const slothIndex = this.sloths.findIndex((el) => el.id === sloth.id);
 
         if (slothIndex !== -1) this.sloths[slothIndex] = dataSloth;
@@ -349,18 +278,6 @@ export default defineComponent({
       }
     },
 
-    showSlothInfoNew() {
-      this.modalEvents = ModalEvents.new;
-      setEmptySlothInfo();
-      this.showSlothInfo();
-    },
-
-    showSlothInfoEdit(sloth: Sloth) {
-      this.modalEvents = ModalEvents.edit;
-      setSlothInfo(sloth);
-      this.showSlothInfo();
-    },
-
     showSlothInfo() {
       this.isSlothInfoVisible = true;
     },
@@ -373,18 +290,33 @@ export default defineComponent({
       if (this.checked.length) this.isDownloadShow = true;
     },
 
-    approveDownload() {
+    async approveDownload() {
       const forDownload = this.checked.filter((el) => el.checked).map((el) => el.id);
 
       if (!forDownload.length) return;
 
-      const downloadUrl = `${BASE}/download/${forDownload.join(',')}`;
       // download
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.click();
+      await this.downloadZip(forDownload);
 
       this.closeModal();
+    },
+
+    async downloadZip(ids: string[]) {
+      const zip = JSZip();
+      const zipFilename = `sloths_${new Date().toISOString()}.zip`;
+
+      ids.forEach((id) => {
+        const blobPromise = fetch(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`).then((r) => {
+          if (r.status === 200) return r.blob();
+          return Promise.reject(new Error(r.statusText));
+        });
+        zip.file(`${id}.svg`, blobPromise);
+      });
+
+      zip
+        .generateAsync({ type: 'blob' })
+        .then((blob) => saveAs(blob, zipFilename))
+        .catch((e) => errorHandler(e));
     },
 
     closeModal() {

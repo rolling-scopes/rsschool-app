@@ -1,13 +1,23 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "target": "es2020",
     "module": "es2020",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
     "moduleResolution": "node",
     "outDir": "./build/",
     "esModuleInterop": true,
@@ -17,7 +27,6 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-
   "references": [
     {
       "path": "./tsconfig.config.json"

@@ -118,9 +118,10 @@
 import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
-import { MEMES_SLOTHS } from '@/common/const';
+import useCleanedStore from '@/stores/cleaned';
 import type { CanvasElement, CanvasPos, CanvasRectXY } from '@/common/types';
 
+const { cleanedFilelist } = useCleanedStore();
 const { getPageCreateState, setPageCreateState } = usePagesStore();
 const canvasSize = 500;
 const textMargin = 10;
@@ -190,7 +191,7 @@ export default defineComponent({
 
   methods: {
     async getImages() {
-      this.images = MEMES_SLOTHS;
+      this.images = cleanedFilelist;
     },
 
     getImg(i: number): string {

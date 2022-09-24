@@ -4,7 +4,7 @@ import { APIError } from './error-handling/api-error';
 import { CustomError } from './error-handling/custom-error';
 import { errorHandler } from './error-handling/error-handler';
 
-export const apiRequest = async <T>(url: string, config: RequestInit): Promise<APIRequestResult<T>> => {
+export const apiRequest = async <T>(url: string, config: RequestInit = {}): Promise<APIRequestResult<T>> => {
   const res: APIRequestResult<T> = {
     ok: false,
     status: 0,
