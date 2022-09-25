@@ -62,6 +62,10 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    isVisible: {
+      type: Boolean,
+      default: false,
+    }
   },
 
   computed: {
@@ -76,28 +80,28 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    isVisible() {
+      this.getGameInfo();
+      this.takeSort();
+    }
+  },
+
   async mounted() {
-    await this.getGameInfo();
+    this.getGameInfo();
 
     this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
   },
 
   methods: {
-    async getGameInfo() {
-      this.isLoad = true;
-      try {
-        const service = new GameResultService(GUESS_GAME_ID, this.userId);
+    getGameInfo() {
+      const levelData = localStorage.getItem('rs-sloths-guess');
 
-        const res = await service.getAll(undefined, undefined, this.sortingOptionsALL[this.sorting].value);
-        if (!res.ok) throw Error(); // todo
-
-        this.count = res.data.count;
-        this.results = res.data.items;
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
+      if (levelData) {
+        this.results = JSON.parse(levelData);
       }
+
+      this.count = this.results.length;
     },
 
     getPointText(val: number): string {
@@ -113,8 +117,38 @@ export default defineComponent({
 
       this.sorting = this.sortingOptions[i];
 
-      this.getGameInfo();
+      this.takeSort();
     },
+
+    takeSort() {
+      // this.gameResults.forEach((gameResult) => {
+      this.results.sort((a, b) => {
+        const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
+        const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+
+        return this.sortElems(item1, item2, this.sorting);
+      });
+      // })
+    },
+
+    sortElems(a: number, b: number, direct: number): number {
+      if (direct % 2 === 0) {
+        if (a < b) {
+          return -1
+        }
+        if (a > b) {
+          return 1
+        }
+      } else {
+        if (a < b) {
+          return 1
+        }
+        if (a > b) {
+          return -1
+        }
+      }
+      return 0
+    }
   },
 });
 </script>

@@ -130,27 +130,27 @@ export default defineComponent({
           const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
 
           return this.sortElems(item1, item2, this.sorting);
-        })
-      })
+        });
+      });
     },
 
     sortElems(a: number, b: number, direct: number): number {
       if (direct % 2 === 0) {
         if (a < b) {
-          return -1
+          return -1;
         }
         if (a > b) {
-          return 1
+          return 1;
         }
       } else {
         if (a < b) {
-          return 1
+          return 1;
         }
         if (a > b) {
-          return -1
+          return -1;
         }
       }
-      return 0
+      return 0;
     }
   },
 });
