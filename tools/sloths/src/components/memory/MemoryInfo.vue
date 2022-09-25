@@ -62,6 +62,10 @@ export default defineComponent({
     userId: {
       type: String,
       default: '',
+    },
+    isVisible: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -77,6 +81,14 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    isVisible(newVal) {
+      console.log('isVisible: ', newVal)
+      this.getGameInfo();
+      this.takeSort()
+    }
+  },
+
   async mounted() {
     this.getGameInfo();
 
@@ -86,6 +98,7 @@ export default defineComponent({
 
   methods: {
     getGameInfo() {
+      console.log('start getGameInfo')
       this.gameResults = [];
       MEMORY_LEVELS.forEach((item) => {
         let levelRecords: GameResults = [];
@@ -118,6 +131,10 @@ export default defineComponent({
 
       this.sorting = this.sortingOptions[i];
 
+      this.takeSort();
+    },
+
+    takeSort() {
       this.gameResults.forEach((gameResult) => {
         gameResult.results.sort((a, b) => {
           const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;

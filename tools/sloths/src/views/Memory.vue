@@ -26,7 +26,7 @@
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
       <template v-slot:header> {{ $t('memory.results') }} </template>
       <template v-slot:body>
-        <memory-info></memory-info>
+        <memory-info :isVisible="isTableResultsVisible"></memory-info>
       </template>
     </modal-window>
   </div>

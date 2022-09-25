@@ -302,7 +302,11 @@ export default defineComponent({
         createdAt: (new Date).getTime()
       };
 
-      currResults.push(gameResult);
+      currResults.unshift(gameResult)
+
+      if (currResults.length > 10) {
+        currResults.pop()
+      }
 
       localStorage.setItem(`rs-sloths-memory-${this.level.level}`, JSON.stringify(currResults));
     },
