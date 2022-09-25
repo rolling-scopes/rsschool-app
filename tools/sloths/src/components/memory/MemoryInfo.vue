@@ -1,6 +1,6 @@
 <template>
   <div class="game-info">
-    <div class="game-info__title">{{ isAdmin || isMemory ? $t('results.all') : $t('results.user') }}</div>
+    <div class="game-info__title">{{ $t('results.user') }}</div>
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
@@ -12,25 +12,24 @@
     </div>
 
     <div class="game-info__wrap">
-      <!-- <div
-        class="game-info__level"
-        :class="isAdmin || isMemory ? 'game-info__level_admin' : ''"
+      <div
+        class="game-info__level game-info__level_admin"
         v-for="(res, index) in gameResults"
         :key="index"
-      > -->
-        <!-- <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4> -->
-        <div class="game-info__result" v-for="(res, index) in gameResults" :key="index">
-          <span class="result__index">{{ `${index + 1}.` }}</span>
+      >
+        <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
+        <div class="game-info__result" v-for="(r, i) in res.results" :key="r.gameId">
+          <span class="result__index">{{ `${i + 1}.` }}</span>
           <!-- <span class="result__user" v-show="isAdmin || isMemory">{{ `${r.user?.name}` }}</span> -->
-          <span class="result__steps">{{ `${res.count} ${getStepsText(res.count)}` }}</span>
-          <span class="result__time">{{ `${res.time / 1000} s` }}</span>
+          <span class="result__steps">{{ `${r.count} ${getStepsText(r.count)}` }}</span>
+          <span class="result__time">{{ `${r.time / 1000} s` }}</span>
         </div>
-      <!-- </div> -->
+      </div>
     </div>
-    <div class="game-info__again" v-show="!(isAdmin || isMemory)">
+    <!-- <div class="game-info__again" v-show="!(isAdmin || isMemory)">
       <div class="game-info__title">{{ $t('results.again') }}</div>
       <home-category category="memory" @click="$router.push({ name: 'memory' })"></home-category>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -46,7 +45,7 @@ import type { GameResult, MemoryLevel, APIRequestResult, GetList, GameResults } 
 // import { errorHandler } from '@/services/error-handling/error-handler';
 import useLoader from '@/stores/loader';
 
-// type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
+type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
 
 export default defineComponent({
   name: 'MemoryInfo',
@@ -58,7 +57,7 @@ export default defineComponent({
 
   data() {
     return {
-      gameResults: [] as GameResult[],
+      gameResults: [] as MemoryLevelResult[],
       sortingOptionsALL: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
@@ -79,9 +78,9 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
 
-    // isAdmin() {
-    //   return this.$route.name === 'admin';
-    // },
+    isAdmin() {
+      return this.$route.name === 'admin';
+    },
 
     isMemory() {
       return this.$route.name === 'memory';
@@ -93,17 +92,27 @@ export default defineComponent({
 
     this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
 
-    console.log('memoryRecords: ', this.memoryRecords)
   },
 
   methods: {
     getGameInfo() {
-      if (this.memoryRecords.length !== 0) {
-        this.memoryRecords.forEach((result, i) => {
-          // if (!result.ok) throw Error(); // todo
-          this.gameResults.push(result);
+      MEMORY_LEVELS.forEach((item) => {
+        let levelRecords: GameResults = [];
+        const levelData = localStorage.getItem(`rs-sloths-memory-${item.level}`);
+
+        if (levelData) {
+          levelRecords = JSON.parse(levelData);
+        }
+
+        this.gameResults.push({
+          level: item.level,
+          n: item.n,
+          gameId: item.gameId,
+          count: levelRecords.length,
+          results: levelRecords
         });
-      }
+      });
+      
       // this.isLoad = true;
 
       // try {
