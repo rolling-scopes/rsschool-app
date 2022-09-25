@@ -73,7 +73,7 @@ export default defineComponent({
   },
 
   watch: {
-    isVisible(newVal) {
+    isVisible() {
       this.getGameInfo();
       this.takeSort()
     }
