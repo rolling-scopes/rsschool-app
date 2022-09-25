@@ -223,14 +223,6 @@ export default defineComponent({
     },
 
     saveResult() {
-      // const service = new GameResultService(GUESS_GAME_ID);
-      // const gameResult: GameResult = {
-      //   gameId: GUESS_GAME_ID,
-      //   count: this.getGuesses,
-      //   time: this.getTime,
-      // };
-      // await service.create(gameResult);
-
       let currResults: GameResults = [];
       const savedRecords = localStorage.getItem('rs-sloths-guess');
 
