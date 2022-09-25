@@ -4,10 +4,9 @@ import type { ErrorDescription, MemoryLevel, SelectOptions } from './types';
 
 // Services
 export const BASE = import.meta.env.VITE_BFF_URL;
-
-export const JSON_URL = import.meta.env.VITE_JSON_URL;
-
 export const CDN_URL = import.meta.env.VITE_CDN_URL;
+export const STICKERS_JSON_URL = import.meta.env.VITE_STICKERS_JSON_URL;
+export const CLEANED_JSON_URL = import.meta.env.VITE_CLEANED_JSON_URL;
 
 // custom Errors
 export const JSON_ERROR: ErrorDescription = { code: 'NOT_JSON', message: 'Response is not a JSON!' };
@@ -136,43 +135,4 @@ export const GUESS_SLOTHS = [
   { caption: "it's a Good Job", img: './img/guess/painted/38.svg' },
   { caption: 'Congrats', img: './img/guess/painted/39.svg' },
   { caption: 'No Mentor', img: './img/guess/painted/40.svg' },
-];
-
-export const MEMES_SLOTHS = [
-  './img/memes/slothorian.png',
-  './img/memes/deadline.png',
-  './img/memes/expert.png',
-  './img/memes/git.png',
-  './img/memes/its_ok.png',
-  './img/memes/love.png',
-  './img/memes/mentor.png',
-  './img/memes/read_chat.png',
-  './img/memes/shocked.png',
-  './img/memes/so_close.png',
-  './img/memes/student_1.png',
-  './img/memes/without_mentor.png',
-  './img/memes/work_done.png',
-  './img/memes/wtf.png',
-  './img/memes/bug.png',
-  './img/memes/codewars.png',
-  './img/memes/congrats.png',
-  './img/memes/congratulation.png',
-  './img/memes/error.png',
-  './img/memes/finished.png',
-  './img/memes/good.png',
-  './img/memes/google.png',
-  './img/memes/group.png',
-  './img/memes/helper.png',
-  './img/memes/hero.png',
-  './img/memes/i_break.png',
-  './img/memes/i_saw.png',
-  './img/memes/lazy.png',
-  './img/memes/one_hour.png',
-  './img/memes/pay.png',
-  './img/memes/train.png',
-  './img/memes/welcome.png',
-  './img/memes/what_is_it.png',
-  './img/memes/works.png',
-  './img/memes/writing.png',
-  './img/memes/walk.png',
 ];

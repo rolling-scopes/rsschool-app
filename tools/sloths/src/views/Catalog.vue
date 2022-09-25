@@ -99,10 +99,9 @@ import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import usePagesStore from '@/stores/pages-store';
+import useSlothsStore from '@/stores/sloths';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-
-const service = new SlothsService();
 
 const { setSlothInfo } = useSlothInfo();
 
@@ -111,6 +110,9 @@ const { getSearchText, setSearchText } = useSearchText();
 const { getSelected, setSelected } = useSelectedTags();
 const { getSortingList, setSortingList } = useSortingList();
 const { getPageCatalogState, setPageCatalogState } = usePagesStore();
+
+const { sloths } = useSlothsStore();
+const service = new SlothsService(sloths);
 
 export default defineComponent({
   name: 'CatalogView',
@@ -165,12 +167,19 @@ export default defineComponent({
   },
 
   async mounted() {
-    await service.getJsonData();
     await this.getSloths();
   },
 
   beforeUnmount() {
     this.saveStore();
+  },
+
+  watch: {
+    isChecked(newVal) {
+      if (!newVal) {
+        this.isDownloadShow = false;
+      }
+    },
   },
 
   methods: {

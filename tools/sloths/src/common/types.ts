@@ -64,6 +64,7 @@ export type Sloth = {
   description: string;
   tags: Tags;
   checked: boolean;
+  image: string;
 };
 export type SlothTags = {
   id: string;
@@ -160,4 +161,33 @@ export type PageSettings = {
   selected: string[];
   sorting: string;
   checked?: string[];
+};
+
+export type CanvasElement = {
+  left: number;
+  top: number;
+  bottom: number;
+  scaledLeft: number;
+  scaledTop: number;
+  scaledBottom: number;
+  width: number;
+  height: number;
+  scaleSteps: number;
+  scaledWidth: number;
+  scaledHeight: number;
+  isHovered: boolean;
+  isSelected: boolean;
+  selectedPos: CanvasPos;
+};
+
+export type CanvasPos = {
+  x: number;
+  y: number;
+};
+
+export type CanvasRectXY = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
 };
