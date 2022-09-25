@@ -55,7 +55,6 @@ import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { playAudio, audioSlide, audioFlip, audioFail, audioSuccess, audioWin } from '@/utils/audio';
-import { GameResultService } from '@/services/game-result-service';
 import themeProp from '../../stores/theme';
 
 type Card = {
@@ -305,15 +304,6 @@ export default defineComponent({
       currResults.push(gameResult);
 
       localStorage.setItem(`rs-sloths-memory-${this.level.level}`, JSON.stringify(currResults));
-
-            // const service = new GameResultService(this.level.gameId);
-
-      // await service.create(gameResult);
-
-      // this.$emit('new-result',  {
-      //   level: this.level.gameId,
-      //   record: gameResult
-      // })
     },
 
     closeModal() {
