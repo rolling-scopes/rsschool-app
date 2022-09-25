@@ -33,8 +33,8 @@ export interface UserData {
   name: string | null;
   desiredPosition: string | null;
   selfIntroLink: string | null;
-  englishLevel: ResumeDtoEnglishLevelEnum;
-  militaryService: ResumeDtoMilitaryServiceEnum;
+  englishLevel: ResumeDtoEnglishLevelEnum | null;
+  militaryService: ResumeDtoMilitaryServiceEnum | null;
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
