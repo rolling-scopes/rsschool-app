@@ -20,16 +20,11 @@
         <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
         <div class="game-info__result" v-for="(r, i) in res.results" :key="r.gameId">
           <span class="result__index">{{ `${i + 1}.` }}</span>
-          <!-- <span class="result__user" v-show="isAdmin || isMemory">{{ `${r.user?.name}` }}</span> -->
           <span class="result__steps">{{ `${r.count} ${getStepsText(r.count)}` }}</span>
           <span class="result__time">{{ `${r.time / 1000} s` }}</span>
         </div>
       </div>
     </div>
-    <!-- <div class="game-info__again" v-show="!(isAdmin || isMemory)">
-      <div class="game-info__title">{{ $t('results.again') }}</div>
-      <home-category category="memory" @click="$router.push({ name: 'memory' })"></home-category>
-    </div> -->
   </div>
 </template>
 
@@ -40,9 +35,7 @@ import HomeCategory from '@/components/home/HomeCategory.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { ruNounEnding } from '@/utils/ru-noun-ending';
 import { GAME_RESULT_SORTING, MEMORY_LEVELS } from '@/common/const';
-// import { GameResultService } from '@/services/game-result-service';
-import type { GameResult, MemoryLevel, APIRequestResult, GetList, GameResults } from '@/common/types';
-// import { errorHandler } from '@/services/error-handling/error-handler';
+import type { GameResult, MemoryLevel, GameResults } from '@/common/types';
 import useLoader from '@/stores/loader';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
@@ -68,11 +61,7 @@ export default defineComponent({
     userId: {
       type: String,
       default: '',
-    },
-    // memoryRecords: {
-    //   type: Array as PropType<GameResults>,
-    //   default: []
-    // }
+    }
   },
 
   computed: {
@@ -112,34 +101,6 @@ export default defineComponent({
           results: levelRecords
         });
       });
-      
-      // this.isLoad = true;
-
-      // try {
-      //   const promises: Promise<APIRequestResult<GetList<GameResult>>>[] = [];
-      //   MEMORY_LEVELS.forEach((level) => {
-      //     const service = new GameResultService(level.gameId, this.userId);
-      //     const res = service.getAll(undefined, undefined, this.sortingOptionsALL[this.sorting].value);
-      //     promises.push(res);
-      //   });
-
-      //   const results = await Promise.all(promises);
-      //   this.gameResults = [];
-      //   results.forEach((result, i) => {
-      //     if (!result.ok) throw Error(); // todo
-      //     this.gameResults.push({
-      //       level: MEMORY_LEVELS[i].level,
-      //       n: MEMORY_LEVELS[i].n,
-      //       gameId: MEMORY_LEVELS[i].gameId,
-      //       count: result.data.count,
-      //       results: result.data.items,
-      //     });
-      //   });
-      // } catch (error) {
-      //   errorHandler(error);
-      // } finally {
-      //   this.isLoad = false;
-      // }
     },
 
     getStepsText(val: number): string {
