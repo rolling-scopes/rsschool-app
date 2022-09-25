@@ -54,15 +54,10 @@ export default defineComponent({
       sortingOptionsALL: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
-      // sortParams: ['count', 'time', 'createdAt'],
     };
   },
 
   props: {
-    userId: {
-      type: String,
-      default: '',
-    },
     isVisible: {
       type: Boolean,
       default: false
@@ -72,10 +67,6 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
 
-    isAdmin() {
-      return this.$route.name === 'admin';
-    },
-
     isMemory() {
       return this.$route.name === 'memory';
     },
@@ -83,7 +74,6 @@ export default defineComponent({
 
   watch: {
     isVisible(newVal) {
-      console.log('isVisible: ', newVal)
       this.getGameInfo();
       this.takeSort()
     }
@@ -98,7 +88,6 @@ export default defineComponent({
 
   methods: {
     getGameInfo() {
-      console.log('start getGameInfo')
       this.gameResults = [];
       MEMORY_LEVELS.forEach((item) => {
         let levelRecords: GameResults = [];
