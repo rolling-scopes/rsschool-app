@@ -31,22 +31,22 @@
       <div class="merch__settings">
         <div class="merch__property">
           <label class="merch__label" for="top">{{ $t('create.top') }}</label>
-          <input type="text" class="merch__text" id="top" v-model="topText" @input="draw()" />
+          <input type="text" class="merch__text" id="top" v-model="canvasProps.topText" @input="draw()" />
         </div>
         <div class="merch__property">
           <label class="merch__label" for="bottom">{{ $t('create.bottom') }}</label>
-          <input type="text" class="merch__text" id="bottom" v-model="bottomText" @input="draw()" />
+          <input type="text" class="merch__text" id="bottom" v-model="canvasProps.bottomText" @input="draw()" />
         </div>
       </div>
       <div class="merch__settings-row">
         <div class="merch__settings">
           <div class="merch__property">
             <label class="merch__label" for="color">{{ $t('merch.color') }}</label>
-            <input type="color" id="color" class="merch__color" v-model="textColor" @input="draw()" />
+            <input type="color" id="color" class="merch__color" v-model="canvasProps.textColor" @input="draw()" />
           </div>
           <div class="merch__property">
             <label class="merch__label" for="backgroundColor">{{ $t('merch.backgroundColor') }}</label>
-            <input type="color" id="itemColor" class="merch__color" v-model="itemColor" @input="draw()" />
+            <input type="color" id="itemColor" class="merch__color" v-model="canvasProps.itemColor" @input="draw()" />
           </div>
         </div>
       </div>
@@ -64,13 +64,13 @@
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
-              @click="scaleUpCanvas()"
+              @click="scaleUp()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
-              @click="scaleTrueCanvas()"
+              @click="scaleTrue()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.center')"
@@ -82,7 +82,7 @@
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
-              @click="scaleDownCanvas()"
+              @click="scaleDown()"
             ></custom-btn>
           </div>
           <custom-btn
@@ -112,12 +112,11 @@ import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
 import useCleanedStore from '@/stores/cleaned';
-import type { CanvasElement, CanvasPos, CanvasRectXY } from '@/common/types';
+import type { CanvasElement } from '@/common/types';
+import * as CanvasUtils from '@/utils/canvas-utils';
 
 const { cleanedFilelist } = useCleanedStore();
 const { getPageMerchState, setPageMerchState } = usePagesStore();
-const canvasSize = 500;
-const textMargin = 100;
 
 export default defineComponent({
   name: 'MerchView',
@@ -133,17 +132,13 @@ export default defineComponent({
       merch: [] as string[],
       indexMerch: 0,
       canvas: {} as HTMLCanvasElement,
-      canvasScaleSteps: 1,
+      canvasProps: CanvasUtils.initProperties(0.5, 1, 1.5),
       ctx: {} as CanvasRenderingContext2D,
       imgMeme: {} as HTMLImageElement,
       imgMerch: {} as HTMLImageElement,
-      itemColor: '#999999',
-      topText: '',
-      bottomText: '',
-      textColor: '#000000',
-      imgCanvasElement: this.initCanvasElement(0, 0, false),
-      topCanvasElement: this.initCanvasElement(textMargin, 0, true),
-      bottomCanvasElement: this.initCanvasElement(canvasSize - textMargin, 0, true),
+      imgCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2, false),
+      topCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
+      bottomCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
       layers: [] as CanvasElement[],
     };
   },
@@ -161,13 +156,19 @@ export default defineComponent({
     this.canvas = canvas;
     this.ctx = ctx;
 
-    const imageMerch = this.loadImage(this.merch[this.indexMerch]);
-    const imageMeme = this.loadImage(this.images[this.indexMeme]);
+    const imageMerch = CanvasUtils.loadImage(this.merch[this.indexMerch]);
+    const imageMeme = CanvasUtils.loadImage(this.images[this.indexMeme]);
 
     [this.imgMerch, this.imgMeme] = await Promise.all([imageMerch, imageMeme]);
 
-    this.calcCanvasSizes();
-    this.calcImgSizes();
+    CanvasUtils.calcCanvasSizes(this.canvas, this.canvasProps.scaleSteps);
+    CanvasUtils.calcElementsSizes(
+      this.imgMeme,
+      this.imgCanvasElement,
+      this.topCanvasElement,
+      this.bottomCanvasElement,
+      this.canvasProps.scaleSteps
+    );
     if (!loaded) this.centering();
 
     // order of layers, index is z-index
@@ -184,13 +185,7 @@ export default defineComponent({
 
   computed: {
     getCursor() {
-      const borderHovered = this.layers.filter((el) => el.isBorderHovered);
-      if (borderHovered.length > 0 && borderHovered[0].isResizable) return 'w-resize';
-
-      const isHovered = this.layers.filter((el) => el.isHovered).length > 0;
-      if (isHovered) return 'move';
-
-      return 'auto';
+      return CanvasUtils.getCursor(this.layers);
     },
   },
 
@@ -213,100 +208,50 @@ export default defineComponent({
       return this.merch[i];
     },
 
-    loadImage(url: string): Promise<HTMLImageElement> {
-      return new Promise((resolve) => {
-        const image = new Image();
-        image.addEventListener('load', () => {
-          resolve(image);
-        });
-        image.src = url;
-      });
-    },
-
-    initCanvasElement(top: number, bottom: number, isResizable: boolean): CanvasElement {
-      return {
-        isResizable,
-        left: 0,
-        top,
-        bottom,
-        scaledLeft: 0,
-        scaledTop: top,
-        width: canvasSize / 2,
-        height: 0,
-        scaledWidth: canvasSize / 2,
-        scaledHeight: 0,
-        scaleSteps: 0.5,
-        isHovered: false,
-        isSelected: false,
-        isBorderHovered: false,
-        isLeftBorderSelected: false,
-        isRightBorderSelected: false,
-        selectedPos: {} as CanvasPos,
-      } as CanvasElement;
-    },
-
-    scaleUpCanvas() {
-      this.canvasScaleSteps = Math.min(1.5, this.canvasScaleSteps + 0.02);
+    scaleUp() {
+      CanvasUtils.scaleUpCanvas(this.canvasProps);
 
       this.draw();
     },
 
-    scaleTrueCanvas() {
-      this.canvasScaleSteps = 1;
-      this.layers.forEach((el) => this.scaleTrueEl(el));
+    scaleTrue() {
+      CanvasUtils.scaleTrueCanvas(this.canvasProps, this.layers);
 
       this.draw();
     },
 
-    scaleDownCanvas() {
-      this.canvasScaleSteps = Math.max(0.5, this.canvasScaleSteps - 0.02);
+    scaleDown() {
+      CanvasUtils.scaleDownCanvas(this.canvasProps);
 
       this.draw();
-    },
-
-    scaleUpEl(el: CanvasElement) {
-      const canvasElement = el;
-      canvasElement.scaleSteps = Math.min(2, canvasElement.scaleSteps + 0.05);
-    },
-
-    scaleTrueEl(el: CanvasElement) {
-      const canvasElement = el;
-      canvasElement.scaleSteps = 0.5;
-    },
-
-    scaleDownEl(el: CanvasElement) {
-      const canvasElement = el;
-      canvasElement.scaleSteps = Math.max(0.1, canvasElement.scaleSteps - 0.05);
     },
 
     centering() {
-      this.imgCanvasElement.left = (canvasSize - this.imgCanvasElement.scaledWidth / this.canvasScaleSteps) / 2;
-      this.imgCanvasElement.top = (canvasSize - this.imgCanvasElement.scaledHeight / this.canvasScaleSteps) / 2;
-
-      this.topCanvasElement.left = (canvasSize - this.topCanvasElement.scaledWidth / this.canvasScaleSteps) / 2;
-      this.topCanvasElement.top =
-        this.imgCanvasElement.top -
-        (this.topCanvasElement.scaledHeight ||
-          Math.floor((this.canvas.height * this.topCanvasElement.scaleSteps) / 10)) /
-          this.canvasScaleSteps;
-
-      this.bottomCanvasElement.left = (canvasSize - this.bottomCanvasElement.scaledWidth / this.canvasScaleSteps) / 2;
-      this.bottomCanvasElement.top =
-        this.imgCanvasElement.top + this.imgCanvasElement.scaledHeight / this.canvasScaleSteps;
+      CanvasUtils.centeringElements(
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps,
+        true
+      );
 
       this.draw();
     },
 
     draw() {
-      this.calcCanvasSizes();
-
+      CanvasUtils.calcCanvasSizes(this.canvas, this.canvasProps.scaleSteps);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      CanvasUtils.drawMerchImage(this.canvas, this.ctx, this.imgMerch, this.canvasProps.itemColor);
 
-      this.drawMerchImage();
+      CanvasUtils.calcElementsSizes(
+        this.imgMeme,
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps
+      );
 
-      this.calcImgSizes();
-
-      this.calcElPosition();
+      CanvasUtils.calcElementsPosition(this.layers, this.canvasProps.scaleSteps);
 
       this.ctx.drawImage(
         this.imgMeme,
@@ -320,286 +265,41 @@ export default defineComponent({
         this.imgCanvasElement.scaledHeight
       );
 
-      this.drawText(this.ctx);
+      let text = this.canvasProps.topText;
+      CanvasUtils.drawTextUp(this.canvas, this.ctx, this.canvasProps, text, this.topCanvasElement);
+      text = this.canvasProps.bottomText;
+      CanvasUtils.drawTextDown(this.canvas, this.ctx, this.canvasProps, text, this.bottomCanvasElement);
 
-      this.layers.forEach((el) => this.drawBorder(el));
-    },
-
-    calcCanvasSizes() {
-      this.canvas.width = canvasSize * this.canvasScaleSteps;
-      this.canvas.height = canvasSize * this.canvasScaleSteps;
-    },
-
-    drawMerchImage() {
-      const tempCanvas = document.createElement('canvas');
-      const tempctx = tempCanvas.getContext('2d');
-      if (!tempctx) return;
-
-      tempCanvas.width = this.canvas.width;
-      tempCanvas.height = this.canvas.height;
-      tempctx.drawImage(
-        this.imgMerch,
-        0,
-        0,
-        this.imgMerch.naturalWidth,
-        this.imgMerch.naturalHeight,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
-
-      tempctx.globalCompositeOperation = 'source-atop';
-      tempctx.fillStyle = this.itemColor;
-      tempctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-      this.ctx.drawImage(tempCanvas, 0, 0);
-      this.ctx.globalCompositeOperation = 'overlay';
-      this.ctx.drawImage(
-        this.imgMerch,
-        0,
-        0,
-        this.imgMerch.naturalWidth,
-        this.imgMerch.naturalHeight,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
-
-      // always clean up: reset compositing to its default
-      this.ctx.globalCompositeOperation = 'source-over';
-    },
-
-    calcImgSizes() {
-      if (this.imgMeme) {
-        this.imgCanvasElement.width = this.imgMeme.naturalWidth;
-        this.imgCanvasElement.height = this.imgMeme.naturalHeight;
-
-        this.imgCanvasElement.scaledWidth =
-          this.imgCanvasElement.width * this.imgCanvasElement.scaleSteps * this.canvasScaleSteps;
-        this.imgCanvasElement.scaledHeight =
-          this.imgCanvasElement.scaledWidth * (this.imgCanvasElement.height / this.imgCanvasElement.width);
-      } else {
-        this.imgCanvasElement.width = 0;
-        this.imgCanvasElement.height = 0;
-        this.imgCanvasElement.scaledWidth = 0;
-        this.imgCanvasElement.scaledHeight = 0;
-      }
-    },
-
-    calcElPosition() {
-      this.layers.forEach((el) => {
-        const canvasElement = el;
-
-        canvasElement.scaledLeft = canvasElement.left * this.canvasScaleSteps;
-        canvasElement.scaledTop = canvasElement.top * this.canvasScaleSteps;
-        canvasElement.scaledBottom = canvasElement.bottom * this.canvasScaleSteps;
-      });
-    },
-
-    getElRectXY(el: CanvasElement): CanvasRectXY {
-      return {
-        x1: el.scaledLeft,
-        x2: el.scaledLeft + el.scaledWidth,
-        y1: el.scaledTop,
-        y2: el.scaledTop + el.scaledHeight,
-      } as CanvasRectXY;
-    },
-
-    drawBorder(el: CanvasElement) {
-      if (el.isHovered || el.isSelected) {
-        const elXY = this.getElRectXY(el);
-
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeStyle = this.invertHex(this.itemColor);
-        this.ctx.beginPath();
-        this.ctx.moveTo(elXY.x1, elXY.y1);
-        this.ctx.lineTo(elXY.x2, elXY.y1);
-        this.ctx.lineTo(elXY.x2, elXY.y2);
-        this.ctx.lineTo(elXY.x1, elXY.y2);
-        this.ctx.closePath();
-        this.ctx.stroke();
-      }
-    },
-
-    invertHex(color: string): string {
-      let hex = color;
-      if (hex.indexOf('#') === 0) {
-        hex = hex.slice(1);
-      }
-      // convert 3-digit hex to 6-digits.
-      if (hex.length === 3) {
-        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-      }
-
-      const r = parseInt(hex.slice(0, 2), 16);
-      const g = parseInt(hex.slice(2, 4), 16);
-      const b = parseInt(hex.slice(4, 6), 16);
-      return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
-    },
-
-    getMousePos(evt: MouseEvent) {
-      const rect = this.canvas.getBoundingClientRect(); // abs. size of element
-      const scaleX = this.canvas.width / rect.width; // relationship bitmap vs. element for X
-      const scaleY = this.canvas.height / rect.height; // relationship bitmap vs. element for Y
-
-      return {
-        x: (evt.clientX - rect.left) * scaleX, // scale mouse coordinates after they have
-        y: (evt.clientY - rect.top) * scaleY, // been adjusted to be relative to element
-      } as CanvasPos;
+      const color = CanvasUtils.invertHex(this.canvasProps.itemColor);
+      this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
     },
 
     handleMouseMove(e: MouseEvent) {
-      const mousePos = this.getMousePos(e);
-
-      const selected = this.layers.filter((el) => el.isSelected);
-
-      if (selected.length) {
-        // move selected only
-        this.moveElement(mousePos, selected[0]);
-      } else {
-        // move top of layers
-        let isHovered = false;
-
-        for (let i = this.layers.length - 1; i >= 0; i -= 1) {
-          const el = this.layers[i];
-
-          if (isHovered) {
-            el.isHovered = false;
-          } else {
-            this.moveElement(mousePos, el);
-            isHovered = el.isHovered;
-          }
-        }
-      }
+      CanvasUtils.moveElements(e, this.canvas, this.layers, this.canvasProps.scaleSteps);
 
       this.draw();
-    },
-
-    moveElement(mousePos: CanvasPos, el: CanvasElement) {
-      const canvasElement = el;
-
-      const dx = mousePos.x - canvasElement.selectedPos.x;
-      const dy = mousePos.y - canvasElement.selectedPos.y;
-
-      if (canvasElement.isLeftBorderSelected) {
-        canvasElement.left += dx / this.canvasScaleSteps;
-        canvasElement.width -= dx / this.canvasScaleSteps;
-
-        canvasElement.selectedPos.x = mousePos.x;
-        canvasElement.selectedPos.y = mousePos.y;
-      } else if (canvasElement.isRightBorderSelected) {
-        canvasElement.width += dx / this.canvasScaleSteps;
-
-        canvasElement.selectedPos.x = mousePos.x;
-        canvasElement.selectedPos.y = mousePos.y;
-      } else if (canvasElement.isSelected) {
-        canvasElement.left += dx / this.canvasScaleSteps;
-        canvasElement.top += dy / this.canvasScaleSteps;
-        canvasElement.bottom += dy / this.canvasScaleSteps;
-
-        canvasElement.selectedPos.x = mousePos.x;
-        canvasElement.selectedPos.y = mousePos.y;
-      } else {
-        const elXY = this.getElRectXY(el);
-
-        canvasElement.isBorderHovered =
-          (mousePos.x >= elXY.x1 && mousePos.x <= elXY.x1 + 2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2) ||
-          (mousePos.x >= elXY.x2 - 2 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2);
-
-        canvasElement.isHovered =
-          mousePos.x >= elXY.x1 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
-      }
     },
 
     handleMouseDown(e: MouseEvent) {
-      const mousePos = this.getMousePos(e);
-
-      let isSelected = false;
-
-      for (let i = this.layers.length - 1; i >= 0; i -= 1) {
-        const el = this.layers[i];
-
-        if (isSelected) {
-          el.isLeftBorderSelected = false;
-          el.isRightBorderSelected = false;
-          el.isSelected = false;
-        } else {
-          this.selectElement(mousePos, el);
-          isSelected = el.isSelected || el.isLeftBorderSelected || el.isRightBorderSelected;
-        }
-      }
+      CanvasUtils.selectElements(e, this.canvas, this.layers);
 
       this.draw();
     },
 
-    selectElement(mousePos: CanvasPos, el: CanvasElement) {
-      const canvasElement = el;
-
-      const elXY = this.getElRectXY(el);
-
-      const isLeftBorderSelected =
-        mousePos.x >= elXY.x1 && mousePos.x <= elXY.x1 + 2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
-
-      const isRightBorderSelected =
-        mousePos.x >= elXY.x2 - 2 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
-
-      const isSelected =
-        mousePos.x >= elXY.x1 && mousePos.x <= elXY.x2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
-
-      canvasElement.isLeftBorderSelected = isLeftBorderSelected;
-      canvasElement.isRightBorderSelected = isRightBorderSelected && !isLeftBorderSelected;
-      canvasElement.isSelected = isSelected && !isLeftBorderSelected && !isRightBorderSelected;
-
-      if (isSelected || isLeftBorderSelected || isRightBorderSelected) {
-        canvasElement.selectedPos = { ...mousePos };
-      }
-    },
-
     handleMouseUp() {
-      this.layers.forEach((el) => {
-        const canvasElement = el;
-
-        canvasElement.isSelected = false;
-        canvasElement.isLeftBorderSelected = false;
-        canvasElement.isRightBorderSelected = false;
-        canvasElement.selectedPos = {} as CanvasPos;
-      });
+      CanvasUtils.deselectElements(this.layers);
 
       this.draw();
     },
 
     handleMouseOut() {
-      this.layers.forEach((el) => {
-        const canvasElement = el;
-
-        canvasElement.isHovered = false;
-        canvasElement.isBorderHovered = false;
-      });
+      CanvasUtils.unhoverElements(this.layers);
 
       this.handleMouseUp();
     },
 
     handleWheel(e: WheelEvent) {
-      const dy = e.deltaY;
-
-      let isHovered = false;
-
-      this.layers.forEach((el) => {
-        if (el.isHovered) {
-          isHovered = true;
-          if (dy > 0) {
-            this.scaleUpEl(el);
-          } else if (dy < 0) this.scaleDownEl(el);
-        }
-      });
-
-      if (!isHovered) {
-        if (dy > 0) {
-          this.scaleUpCanvas();
-        } else if (dy < 0) this.scaleDownCanvas();
-      }
+      CanvasUtils.scalingElements(e, this.layers, this.canvasProps);
 
       this.draw();
     },
@@ -628,64 +328,16 @@ export default defineComponent({
       if (!(image instanceof HTMLImageElement)) return;
 
       this.imgMeme = image;
+      CanvasUtils.calcElementsSizes(
+        this.imgMeme,
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps
+      );
+      this.centering();
 
       this.draw();
-    },
-
-    drawText(ctx: CanvasRenderingContext2D) {
-      const { height } = this.canvas;
-
-      this.ctx.fillStyle = this.textColor;
-      this.ctx.textAlign = 'center';
-      this.ctx.lineJoin = 'round';
-
-      if (this.topText) {
-        const fontSize = Math.floor((height * this.topCanvasElement.scaleSteps) / 10);
-        this.ctx.lineWidth = Math.floor(fontSize / 5);
-        this.ctx.font = `${fontSize}px sans-serif`;
-        this.ctx.textBaseline = 'top';
-        this.drawTextMultiLine(this.topCanvasElement, ctx, this.topText, fontSize);
-      }
-
-      if (this.bottomText) {
-        const fontSize = Math.floor((height * this.bottomCanvasElement.scaleSteps) / 10);
-        this.ctx.lineWidth = Math.floor(fontSize / 5);
-        this.ctx.font = `${fontSize}px sans-serif`;
-        this.ctx.textBaseline = 'top';
-        this.drawTextMultiLine(this.bottomCanvasElement, ctx, this.bottomText, fontSize);
-      }
-    },
-
-    drawTextMultiLine(el: CanvasElement, ctx: CanvasRenderingContext2D, text: string, fontSize: number) {
-      const { scaledLeft, scaledTop, width } = el;
-      const x = width / 2 + scaledLeft;
-
-      const words = text.split(' ');
-      let line = '';
-      let y = scaledTop + fontSize * 0.1;
-      let textHeight = fontSize;
-
-      words.forEach((word, index) => {
-        const testLine = `${line + word} `;
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > width && index > 0) {
-          ctx.fillText(line.trim(), x, y);
-          line = `${word} `;
-          y += fontSize;
-          textHeight += fontSize;
-        } else {
-          line = testLine;
-        }
-      });
-      ctx.fillText(line.trim(), x, y);
-
-      const canvasElement = el;
-
-      canvasElement.width = width;
-      canvasElement.height = textHeight;
-      canvasElement.scaledWidth = width;
-      canvasElement.scaledHeight = textHeight;
     },
 
     prepareForSave(tempCanvas: HTMLCanvasElement, tempctx: CanvasRenderingContext2D) {
