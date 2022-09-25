@@ -25,45 +25,44 @@ export class ApplicantResumeDto {
   }
   @ApiProperty()
   public uuid: string;
-  @ApiProperty()
-  public avatarLink: string;
+  @ApiProperty({ nullable: true, type: String })
+  public avatarLink: string | null;
   @ApiProperty({ type: [Number] })
   public visibleCourses: number[];
-
-  @ApiProperty()
-  public desiredPosition: string;
-  @ApiProperty()
-  public email: string;
-  @ApiProperty({ enum: LanguageLevel })
-  public englishLevel: LanguageLevel;
-  @ApiProperty()
-  public expires: number;
+  @ApiProperty({ nullable: true, type: String })
+  public desiredPosition: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public email: string | null;
+  @ApiProperty({ enum: LanguageLevel, nullable: true })
+  public englishLevel: LanguageLevel | null;
+  @ApiProperty({ nullable: true, type: Number })
+  public expires: number | null;
   @ApiProperty()
   public fullTime: boolean;
   @ApiProperty()
   public githubId: string;
   @ApiProperty()
   public id: number;
-  @ApiProperty()
-  public linkedin: string;
-  @ApiProperty()
-  public locations: string;
-  @ApiProperty({ enum: ['served', 'liable', 'notLiable'] })
-  public militaryService: string;
-  @ApiProperty()
-  public name: string;
-  @ApiProperty()
-  public notes: string;
-  @ApiProperty()
-  public phone: string;
-  @ApiProperty()
-  public selfIntroLink: string;
-  @ApiProperty()
-  public skype: string;
-  @ApiProperty()
-  public startFrom: string;
-  @ApiProperty()
-  public telegram: string;
-  @ApiProperty()
-  public website: string;
+  @ApiProperty({ nullable: true, type: String })
+  public linkedin: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public locations: string | null;
+  @ApiProperty({ enum: ['served', 'liable', 'notLiable'], nullable: true })
+  public militaryService: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public name: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public notes: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public phone: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public selfIntroLink: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public skype: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public startFrom: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public telegram: string | null;
+  @ApiProperty({ nullable: true, type: String })
+  public website: string | null;
 }

@@ -27,6 +27,7 @@ import { StatusDto } from './dto/status.dto';
 import { VisibilityDto } from './dto/visibility.dto';
 import { FormDataDto } from './dto/form-data.dto';
 import { OpportunitiesService } from './opportunities.service';
+import { Resume } from '@entities/resume';
 
 @Controller('opportunities')
 @ApiTags('opportunities')
@@ -58,18 +59,18 @@ export class OpportunitiesController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiOkResponse({ type: FormDataDto })
+  @ApiOkResponse({ type: Resume })
   @UseGuards(DefaultGuard)
-  // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type
-  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: any) {
+  // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type + @Body() decorator
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string) {
     if (githubId !== req.user.githubId) {
       throw new ForbiddenException('No access to resume');
     }
-    const data = await this.opportunitiesService.saveResume(githubId, dto);
+    const data = await this.opportunitiesService.saveResume(githubId, req.body as FormDataDto);
     if (data == null) {
       throw new NotFoundException('Resume not found');
     }
-    return new FormDataDto(data);
+    return data;
   }
 
   @Get('/consent')
