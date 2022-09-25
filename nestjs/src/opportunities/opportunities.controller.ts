@@ -115,8 +115,8 @@ export class OpportunitiesController {
   @ApiOperation({ operationId: 'setVisibility' })
   @ApiOkResponse({ type: VisibilityDto })
   @UseGuards(DefaultGuard)
-  public async setVisibility(@Req() req: CurrentRequest, @Body() dto: VisibilityDto) {
-    const data = await this.opportunitiesService.setVisibility(req.user.githubId, !dto.isHidden);
+  public async setVisibility(@Req() req: CurrentRequest, @Body('isHidden') isHidden: boolean) {
+    const data = await this.opportunitiesService.setVisibility(req.user.githubId, !isHidden);
     return new VisibilityDto(data);
   }
 
