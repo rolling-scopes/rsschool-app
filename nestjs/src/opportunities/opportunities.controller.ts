@@ -60,7 +60,8 @@ export class OpportunitiesController {
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: FormDataDto })
   @UseGuards(DefaultGuard)
-  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: ResumeDto) {
+  // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: any) {
     if (githubId !== req.user.githubId) {
       throw new ForbiddenException('No access to resume');
     }

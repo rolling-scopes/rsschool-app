@@ -1,4 +1,4 @@
-import { In, Repository } from 'typeorm';
+import { DeepPartial, In, Repository } from 'typeorm';
 import { DateTime } from 'luxon';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,7 +7,7 @@ import { Feedback } from '@entities/feedback';
 import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Student } from '@entities/student';
-import { ResumeDto } from './dto/resume.dto';
+import { FormDataDto } from './dto/form-data.dto';
 
 const EXPIRATION_DAYS_PROLONGATION = 30;
 
@@ -45,10 +45,12 @@ export class OpportunitiesService {
     return await this.getFullResume(resume, false);
   }
 
-  public async saveResume(githubId: string, resumeDto: ResumeDto): Promise<ResumeDto | null> {
+  public async saveResume(githubId: string, dto: FormDataDto): Promise<any | null> {
     const resume = await this.resumeRepository.findOneBy({ githubId });
     if (resume == null) return null;
-    return await this.resumeRepository.save({ ...resume, ...resumeDto });
+    // TODO: fix issue with types - save method awaits for undefined, but we should pass null there
+    const dataToSave = { ...resume, ...dto } as DeepPartial<Resume>;
+    return await this.resumeRepository.save(dataToSave);
   }
 
   public async getApplicantResumes(): Promise<Resume[]> {

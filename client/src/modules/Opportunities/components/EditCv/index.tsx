@@ -2,7 +2,7 @@ import { useState, createRef, RefObject } from 'react';
 import { Layout, Space, Button, Row, Col, Alert } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto } from 'api';
+import { ResumeCourseDto, OpportunitiesApi } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm } from './ContactsForm';
 import { GeneralInfoForm } from './GeneralInfoForm';
@@ -16,7 +16,6 @@ import {
   VisibleCoursesFormData,
   VisibleCourses,
 } from 'modules/Opportunities/models';
-import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { transformFieldsData, splitDataForForms } from 'modules/Opportunities/transformers';
 
 const { Content } = Layout;
@@ -32,7 +31,7 @@ type Props = {
   onUpdateResume?: () => void;
 };
 
-const cvService = new OpportunitiesService();
+const service = new OpportunitiesApi();
 
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
@@ -48,9 +47,9 @@ export const EditCV = (props: Props) => {
   const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
 
   const submitData = async (data: AllUserCVData) => {
-    const newData = await cvService.saveResumeData(data);
+    const newData = await service.saveResume(props.githubId, data);
 
-    const { userData, contacts, visibleCourses } = splitDataForForms(newData);
+    const { userData, contacts, visibleCourses } = splitDataForForms(newData.data);
 
     setUserData(userData);
     setContacts(contacts);
