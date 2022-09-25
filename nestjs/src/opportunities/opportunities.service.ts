@@ -1,4 +1,4 @@
-import { DeepPartial, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { DateTime } from 'luxon';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -48,8 +48,7 @@ export class OpportunitiesService {
   public async saveResume(githubId: string, dto: FormDataDto): Promise<any | null> {
     const resume = await this.resumeRepository.findOneBy({ githubId });
     if (resume == null) return null;
-    // TODO: fix issue with types - save method awaits for undefined, but we should pass null there
-    const dataToSave = { ...resume, ...dto } as DeepPartial<Resume>;
+    const dataToSave = { ...resume, ...dto };
     return await this.resumeRepository.save(dataToSave);
   }
 
