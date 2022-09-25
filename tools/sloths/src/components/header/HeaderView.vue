@@ -24,12 +24,6 @@ export default defineComponent({
       return String(this.$route.name);
     },
   },
-
-  methods: {
-    pushToAdmin() {
-      this.$router.push({ name: 'admin' });
-    },
-  },
 });
 </script>
 

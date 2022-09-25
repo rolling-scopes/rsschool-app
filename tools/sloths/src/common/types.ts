@@ -113,11 +113,12 @@ export type UserRate = {
 
 export type GameResults = GameResult[];
 export type GameResult = {
+  [keyof: string]: string | number | undefined | {}
   id?: string;
   gameId?: string;
   count: number;
   time: number;
-  createdAt?: Date;
+  createdAt: number;
   user?: {
     github: string;
     id: string;
@@ -148,6 +149,7 @@ export type QueryStringOptions = {
 export type SelectOptions = {
   value: string;
   text: string;
+  type: string;
 };
 
 export type TagCloud = Set<string>;

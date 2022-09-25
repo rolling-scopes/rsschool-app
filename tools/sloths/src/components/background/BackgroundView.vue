@@ -56,28 +56,12 @@ export default defineComponent({
   background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-memory-dark.svg');
 }
 
-.background-suggest-light {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-suggest-light.svg');
-}
-
-.background-suggest-dark {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-suggest-dark.svg');
-}
-
 .background-404-light {
   background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-404-light.svg');
 }
 
 .background-404-dark {
   background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-404-dark.svg');
-}
-
-.background-admin-light {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-admin-light.svg');
-}
-
-.background-admin-dark {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-admin-dark.svg');
 }
 
 .background-catalog-light {
@@ -102,14 +86,6 @@ export default defineComponent({
 
 .background-guess-dark {
   background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-guess-dark.svg');
-}
-
-.background-profile-light {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-profile-light.svg');
-}
-
-.background-profile-dark {
-  background: no-repeat left bottom / cover url('../../assets/backgrounds/bg-profile-dark.svg');
 }
 
 .background-merch-light {

@@ -1,21 +1,6 @@
 <template>
   <div :class="`${getPageName}-sloth-info`">
-    <div v-if="isAdmin" class="admin-sloth-info__inner">
-      <div class="admin-sloth-info__sloth">
-        <img class="admin-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
-        <div class="sloth-info__tags tags">
-          <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag">{{ tag }}</span>
-        </div>
-      </div>
-      <div class="admin-sloth-info__props">
-        <p class="sloth-info__property">{{ $t('catalog.caption') }}</p>
-      </div>
-      <div class="admin-sloth-info__props">
-        <p class="sloth-info__property">{{ slothInfo.name }}</p>
-      </div>
-    </div>
-
-    <div v-else-if="isCatalog && !isDownload" class="catalog-sloth-info__inner">
+    <div v-if="isCatalog && !isDownload" class="catalog-sloth-info__inner">
       <div class="catalog-sloth-info__sloth">
         <img class="catalog-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
         <div class="sloth-info__tags tags">
@@ -101,11 +86,7 @@ export default defineComponent({
 
     getPageName(): string {
       if (this.isDownload) return 'download';
-      return this.$route.name === 'admin' ? 'admin' : 'catalog';
-    },
-
-    isAdmin(): boolean {
-      return this.$route.name === 'admin';
+      return 'catalog';
     },
 
     isCatalog(): boolean {
@@ -122,17 +103,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.catalog-sloth-info,
-.admin-sloth-info {
+.catalog-sloth-info {
   overflow: hidden;
   background-color: var(--color-background-soft);
   border: 1px solid gray;
-}
-
-.admin-sloth-info {
-  padding: 0.5rem;
-  width: calc(50% - var(--gap));
-  border-radius: 0.5rem;
 }
 
 .catalog-sloth-info {
@@ -142,13 +116,11 @@ export default defineComponent({
   border-radius: 1rem;
 }
 
-.admin-sloth-info:hover,
 .catalog-sloth-info:hover {
   box-shadow: 0px 0px 0.5rem gray;
 }
 
 .catalog-sloth-info__inner,
-.admin-sloth-info__inner,
 .download-sloth-info__inner {
   display: flex;
   align-items: center;
@@ -165,26 +137,15 @@ export default defineComponent({
   overflow: hidden;
 }
 
-.admin-sloth-info__img {
-  width: calc(10rem - 1rem);
-  height: calc(10rem - 1rem);
-  object-fit: contain;
-}
-
 .catalog-sloth-info__img {
   width: 100%;
   height: 25rem;
   object-fit: contain;
 }
 
-.admin-sloth-info__props,
 .catalog-sloth-info__props {
   display: flex;
   flex-direction: column;
-}
-
-.admin-sloth-info__props {
-  align-items: flex-start;
 }
 
 .catalog-sloth-info__props {
@@ -321,11 +282,5 @@ export default defineComponent({
 
 .sloth-info__text__sloth {
   height: 2rem;
-}
-
-@media (max-width: 1000px) {
-  .admin-sloth-info {
-    width: 100%;
-  }
 }
 </style>

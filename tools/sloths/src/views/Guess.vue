@@ -65,7 +65,7 @@
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
       <template v-slot:header> {{ $t('guess.results') }} </template>
       <template v-slot:body>
-        <guess-info></guess-info>
+        <guess-info :isVisible="isTableResultsVisible"></guess-info>
       </template>
     </modal-window>
   </div>
@@ -78,8 +78,7 @@ import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
 import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_GAME_ID, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
-import type { GameResult } from '@/common/types';
-import { GameResultService } from '@/services/game-result-service';
+import type { GameResult, GameResults } from '@/common/types';
 
 type Card = {
   caption: string;
@@ -223,14 +222,28 @@ export default defineComponent({
       this.isModalVisible = false;
     },
 
-    async saveResult() {
-      const service = new GameResultService(GUESS_GAME_ID);
+    saveResult() {
+      let currResults: GameResults = [];
+      const savedRecords = localStorage.getItem('rs-sloths-guess');
+
+      if (savedRecords) {
+        currResults = JSON.parse(savedRecords);
+      }
+
       const gameResult: GameResult = {
         gameId: GUESS_GAME_ID,
         count: this.getGuesses,
         time: this.getTime,
+        createdAt: (new Date).getTime()
       };
-      await service.create(gameResult);
+
+      currResults.unshift(gameResult)
+
+      if (currResults.length > 10) {
+        currResults.pop()
+      }
+
+      localStorage.setItem('rs-sloths-guess', JSON.stringify(currResults));
     },
 
     closeTableResults() {

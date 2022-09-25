@@ -1,6 +1,6 @@
 <template>
   <div class="game-info">
-    <div class="game-info__title">{{ isAdmin || isGuess ? $t('results.all') : $t('results.user') }}</div>
+    <div class="game-info__title">{{ $t('results.user') }}</div>
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
@@ -11,18 +11,12 @@
       ></custom-btn>
     </div>
 
-    <div class="results" :class="isAdmin || isGuess ? 'results_admin' : ''">
+    <div class="results results_admin">
       <div class="results__item" v-for="(res, index) in results" :key="index">
         <span class="result__index">{{ `${index + 1}.` }}</span>
-        <span class="result__user" v-show="isAdmin || isGuess">{{ `${res.user?.name}` }}</span>
         <span class="result__steps">{{ `${res.count} ${getPointText(res.count)}` }}</span>
         <span class="result__time">{{ `${res.time / 1000} s` }}</span>
       </div>
-    </div>
-
-    <div class="game-info__again" v-show="!(isAdmin || isGuess)">
-      <div class="game-info__title">{{ $t('results.again') }}</div>
-      <home-category category="guess" @click="$router.push({ name: 'guess' })"></home-category>
     </div>
   </div>
 </template>
@@ -32,9 +26,7 @@ import type { GameResult } from '@/common/types';
 import { defineComponent } from 'vue';
 import HomeCategory from '@/components/home/HomeCategory.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import { errorHandler } from '@/services/error-handling/error-handler';
-import { GameResultService } from '@/services/game-result-service';
-import { GAME_RESULT_SORTING, GUESS_GAME_ID } from '@/common/const';
+import { GAME_RESULT_SORTING } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
 import { ruNounEnding } from '@/utils/ru-noun-ending';
@@ -58,46 +50,42 @@ export default defineComponent({
   },
 
   props: {
-    userId: {
-      type: String,
-      default: '',
-    },
+    isVisible: {
+      type: Boolean,
+      default: false,
+    }
   },
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
-
-    isAdmin() {
-      return this.$route.name === 'admin';
-    },
 
     isGuess() {
       return this.$route.name === 'guess';
     },
   },
 
+  watch: {
+    isVisible() {
+      this.getGameInfo();
+      this.takeSort();
+    }
+  },
+
   async mounted() {
-    await this.getGameInfo();
+    this.getGameInfo();
 
     this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
   },
 
   methods: {
-    async getGameInfo() {
-      this.isLoad = true;
-      try {
-        const service = new GameResultService(GUESS_GAME_ID, this.userId);
+    getGameInfo() {
+      const levelData = localStorage.getItem('rs-sloths-guess');
 
-        const res = await service.getAll(undefined, undefined, this.sortingOptionsALL[this.sorting].value);
-        if (!res.ok) throw Error(); // todo
-
-        this.count = res.data.count;
-        this.results = res.data.items;
-      } catch (error) {
-        errorHandler(error);
-      } finally {
-        this.isLoad = false;
+      if (levelData) {
+        this.results = JSON.parse(levelData);
       }
+
+      this.count = this.results.length;
     },
 
     getPointText(val: number): string {
@@ -113,8 +101,36 @@ export default defineComponent({
 
       this.sorting = this.sortingOptions[i];
 
-      this.getGameInfo();
+      this.takeSort();
     },
+
+    takeSort() {
+      this.results.sort((a, b) => {
+        const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
+        const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+
+        return this.sortElems(item1, item2, this.sorting);
+      });
+    },
+
+    sortElems(a: number, b: number, direct: number): number {
+      if (direct % 2 === 0) {
+        if (a < b) {
+          return -1
+        }
+        if (a > b) {
+          return 1
+        }
+      } else {
+        if (a < b) {
+          return 1
+        }
+        if (a > b) {
+          return -1
+        }
+      }
+      return 0
+    }
   },
 });
 </script>
@@ -163,7 +179,9 @@ export default defineComponent({
 .results__item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2rem;
+  width: 100%;
   color: var(--color-text);
 }
 

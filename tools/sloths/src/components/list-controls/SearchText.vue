@@ -1,5 +1,5 @@
 <template>
-  <div class="search" :class="isAdmin ? 'search_admin' : ''">
+  <div class="search">
     <input
       type="text"
       class="search__text"
@@ -39,12 +39,6 @@ const searchText = defineComponent({
     },
   },
 
-  computed: {
-    isAdmin() {
-      return this.$route.name === 'admin';
-    },
-  },
-
   methods: {
     search() {
       setSearchText(this.searchText);
@@ -70,10 +64,6 @@ export type SearchTextElement = InstanceType<typeof searchText>;
 .search {
   position: relative;
   color: var(--color-text);
-}
-
-.search_admin {
-  grid-area: B;
 }
 
 .search__text {

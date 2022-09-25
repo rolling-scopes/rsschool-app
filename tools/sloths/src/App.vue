@@ -20,18 +20,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
+
 import { CDN_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
+
 import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
 import LoaderView from './components/loader/LoaderView.vue';
 import BackgroundView from './components/background/BackgroundView.vue';
 import AlertModal from './components/modal/AlertModal.vue';
-import AuthorizationModal from './components/modal/AuthorizationModal.vue';
 
 import useLoader from './stores/loader';
 import useAlertModal from './stores/alert-modal';
-import useAuthorizationModal from './stores/authorization-modal';
 import useAudioOn from './stores/audio-on';
+
 import useCleanedStore from './stores/cleaned';
 import useSlothsStore from './stores/sloths';
 import type { MetadataSloths } from './common/types';
@@ -45,13 +46,11 @@ export default defineComponent({
     LoaderView,
     BackgroundView,
     AlertModal,
-    AuthorizationModal,
   },
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(useAlertModal, ['isAlert', 'header', 'message']),
-    ...mapWritableState(useAuthorizationModal, ['isAuthorization']),
     ...mapWritableState(useAudioOn, ['isAudioOn']),
     ...mapWritableState(useCleanedStore, ['cleanedFilelist']),
     ...mapWritableState(useSlothsStore, ['sloths']),

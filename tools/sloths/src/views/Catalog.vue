@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog" :class="isAdmin ? 'catalog_admin' : ''">
+  <div class="catalog">
     <div class="catalog__aside list-aside">
       <custom-btn
         v-show="getPageName === 'catalog'"
@@ -144,7 +144,7 @@ export default defineComponent({
     ...mapWritableState(themeProp, ['currTheme']),
 
     getPageName(): string {
-      return this.$route.name === 'admin' ? 'admin' : 'catalog';
+      return 'catalog';
     },
 
     getHeaderSlothInfo(): string {
@@ -155,10 +155,6 @@ export default defineComponent({
 
     isChecked(): boolean {
       return !!this.checked.filter((el) => el.checked).length;
-    },
-
-    isAdmin() {
-      return this.$route.name === 'admin';
     },
   },
 
@@ -384,10 +380,6 @@ export default defineComponent({
   color: var(--color-text);
 }
 
-.catalog_admin {
-  flex-direction: column;
-}
-
 .catalog__main {
   display: flex;
   flex-direction: column;
@@ -397,18 +389,6 @@ export default defineComponent({
 
 .catalog__aside {
   padding: 1rem;
-}
-
-.catalog_admin > .catalog__aside {
-  width: 100%;
-  margin: 0;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.catalog_admin > .catalog__main {
-  width: 100%;
 }
 
 .catalog__list {
