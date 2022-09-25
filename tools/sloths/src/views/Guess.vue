@@ -79,7 +79,6 @@ import GuessInfo from '@/components/guess/GuessInfo.vue';
 import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_GAME_ID, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
 import type { GameResult, GameResults } from '@/common/types';
-import { GameResultService } from '@/services/game-result-service';
 
 type Card = {
   caption: string;
