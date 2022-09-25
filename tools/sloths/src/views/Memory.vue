@@ -26,7 +26,7 @@
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
       <template v-slot:header> {{ $t('memory.results') }} </template>
       <template v-slot:body>
-        <memory-info></memory-info>
+        <memory-info :memoryRecords="records"></memory-info>
       </template>
     </modal-window>
   </div>
@@ -54,17 +54,16 @@ export default defineComponent({
     CustomBtn,
   },
 
-  data(): {
-    levels: MemoryLevel[];
-    activeLevel: number;
-    isTableResultsVisible: boolean;
-    records: GameResults;
-  } {
+  data() {
     return {
       levels: MEMORY_LEVELS,
       activeLevel: 1,
       isTableResultsVisible: false,
-      records: [],
+      // records: {
+      //   '36fdb508-80e4-4e0d-a6b8-78fe7e66a5d5': [] as GameResults,
+      //   'ca0305dc-9dab-4f36-84f1-45f8223818e0': [] as GameResults,
+      //   '42df7648-5c56-4a66-a288-ec6acf8b18b0': [] as GameResults
+      // },
     };
   },
 
@@ -73,6 +72,10 @@ export default defineComponent({
       return `memory.${this.levels[this.activeLevel].level}`;
     },
   },
+
+  // created() {
+  //   this.getMemoryRecords();
+  // },
 
   mounted() {
     const str = getPageMemoryState();
@@ -105,19 +108,31 @@ export default defineComponent({
       this.isTableResultsVisible = false;
     },
 
-    getMemoryRecords() {
-      const savedRecords = localStorage.getItem('rs-sloths-memory')
+    // getMemoryRecords() {
+    //   const savedRecords = localStorage.getItem('rs-sloths-memory')
 
-      if (savedRecords) {
-        this.records = JSON.parse(savedRecords)
-      }
-    },
+    //   if (savedRecords) {
+    //     this.records = JSON.parse(savedRecords)
+    //   }
+    // },
 
-    updateMemoryRecords(record: GameResult) {
-      this.records.push(record)
+    // updateMemoryRecords(obj: {level: string, record: GameResult}) {
+    //   console.log('updateMemoryRecords: ', obj.level)
 
-      localStorage.setItem('rs-sloths-memory', JSON.stringify(this.records))
-    }
+
+
+    //   this.records[obj.level].push(obj.record)
+      
+    //   // if (record.gameId) {
+    //   //   this.records[level].push(record)
+    //   //   this.records[level].push()
+    //   //   this.records[record.gameId].push(record)
+    //   //   localStorage.setItem('rs-sloths-memory', JSON.stringify(this.records))
+    //   // }
+      
+
+      
+    // }
   },
 });
 </script>
