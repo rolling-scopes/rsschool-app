@@ -17,36 +17,44 @@ export const SLOTH_SORTING: SelectOptions[] = [
   {
     value: 'name-desc',
     text: 'sorting.name-',
+    type: 'name',
   },
   {
     value: 'name-asc',
     text: 'sorting.name+',
+    type: 'name',
   },
 ];
 export const GAME_RESULT_SORTING: SelectOptions[] = [
   {
     value: 'count-asc',
     text: 'btn.count+',
+    type: 'count',
   },
   {
     value: 'count-desc',
     text: 'btn.count-',
+    type: 'count',
   },
   {
     value: 'time-asc',
     text: 'btn.time+',
+    type: 'time',
   },
   {
     value: 'time-desc',
     text: 'btn.time-',
+    type: 'time',
   },
   {
     value: 'createdAt-asc',
     text: 'btn.createdAt+',
+    type: 'createdAt',
   },
   {
     value: 'createdAt-desc',
     text: 'btn.createdAt-',
+    type: 'createdAt',
   },
 ];
 

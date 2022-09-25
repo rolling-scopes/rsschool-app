@@ -54,6 +54,7 @@ export default defineComponent({
       sortingOptionsALL: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
+      // sortParams: ['count', 'time', 'createdAt'],
     };
   },
 
@@ -85,6 +86,7 @@ export default defineComponent({
 
   methods: {
     getGameInfo() {
+      this.gameResults = [];
       MEMORY_LEVELS.forEach((item) => {
         let levelRecords: GameResults = [];
         const levelData = localStorage.getItem(`rs-sloths-memory-${item.level}`);
@@ -116,8 +118,34 @@ export default defineComponent({
 
       this.sorting = this.sortingOptions[i];
 
-      this.getGameInfo();
+      this.gameResults.forEach((gameResult) => {
+        gameResult.results.sort((a, b) => {
+          const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
+          const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+
+          return this.sortElems(item1, item2, this.sorting);
+        })
+      })
     },
+
+    sortElems(a: number, b: number, direct: number): number {
+      if (direct % 2 === 0) {
+        if (a < b) {
+          return -1
+        }
+        if (a > b) {
+          return 1
+        }
+      } else {
+        if (a < b) {
+          return 1
+        }
+        if (a > b) {
+          return -1
+        }
+      }
+      return 0
+    }
   },
 });
 </script>
