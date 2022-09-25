@@ -299,7 +299,7 @@ export default defineComponent({
         gameId: this.level.gameId,
         count: this.steps,
         time: this.getTime,
-        createdAt: new Date
+        createdAt: (new Date).getTime()
       };
 
       currResults.push(gameResult);
