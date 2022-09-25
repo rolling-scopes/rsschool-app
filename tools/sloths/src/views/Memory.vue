@@ -40,7 +40,6 @@ import usePagesStore from '@/stores/pages-store';
 import MemoryInfo from '@/components/memory/MemoryInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import type { GameResult, GameResults, MemoryLevel } from '@/common/types';
 
 const { getPageMemoryState, setPageMemoryState } = usePagesStore();
 
@@ -58,12 +57,7 @@ export default defineComponent({
     return {
       levels: MEMORY_LEVELS,
       activeLevel: 1,
-      isTableResultsVisible: false,
-      // records: {
-      //   '36fdb508-80e4-4e0d-a6b8-78fe7e66a5d5': [] as GameResults,
-      //   'ca0305dc-9dab-4f36-84f1-45f8223818e0': [] as GameResults,
-      //   '42df7648-5c56-4a66-a288-ec6acf8b18b0': [] as GameResults
-      // },
+      isTableResultsVisible: false
     };
   },
 
@@ -72,10 +66,6 @@ export default defineComponent({
       return `memory.${this.levels[this.activeLevel].level}`;
     },
   },
-
-  // created() {
-  //   this.getMemoryRecords();
-  // },
 
   mounted() {
     const str = getPageMemoryState();
@@ -106,33 +96,7 @@ export default defineComponent({
 
     closeTableResults() {
       this.isTableResultsVisible = false;
-    },
-
-    // getMemoryRecords() {
-    //   const savedRecords = localStorage.getItem('rs-sloths-memory')
-
-    //   if (savedRecords) {
-    //     this.records = JSON.parse(savedRecords)
-    //   }
-    // },
-
-    // updateMemoryRecords(obj: {level: string, record: GameResult}) {
-    //   console.log('updateMemoryRecords: ', obj.level)
-
-
-
-    //   this.records[obj.level].push(obj.record)
-      
-    //   // if (record.gameId) {
-    //   //   this.records[level].push(record)
-    //   //   this.records[level].push()
-    //   //   this.records[record.gameId].push(record)
-    //   //   localStorage.setItem('rs-sloths-memory', JSON.stringify(this.records))
-    //   // }
-      
-
-      
-    // }
+    }
   },
 });
 </script>
