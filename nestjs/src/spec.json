@@ -1150,7 +1150,7 @@
         },
         "tags": ["opportunities"]
       },
-      "post": {
+      "patch": {
         "operationId": "saveResume",
         "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],

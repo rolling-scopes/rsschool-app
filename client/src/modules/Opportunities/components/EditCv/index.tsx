@@ -47,9 +47,9 @@ export const EditCV = (props: Props) => {
   const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
 
   const submitData = async (data: AllUserCVData) => {
-    const newData = await service.saveResume(props.githubId, data);
+    const newData = await service.saveResume(props.githubId, { data });
 
-    const { userData, contacts, visibleCourses } = splitDataForForms(newData.data);
+    const { userData, contacts, visibleCourses } = splitDataForForms(newData.data as AllUserCVData);
 
     setUserData(userData);
     setContacts(contacts);

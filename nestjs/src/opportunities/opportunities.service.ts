@@ -45,7 +45,7 @@ export class OpportunitiesService {
     return await this.getFullResume(resume, false);
   }
 
-  public async saveResume(githubId: string, dto: FormDataDto): Promise<any | null> {
+  public async saveResume(githubId: string, dto: FormDataDto): Promise<Resume | null> {
     const resume = await this.resumeRepository.findOneBy({ githubId });
     if (resume == null) return null;
     const dataToSave = { ...resume, ...dto };

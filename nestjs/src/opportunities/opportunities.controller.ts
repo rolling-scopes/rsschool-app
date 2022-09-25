@@ -7,6 +7,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Patch,
   Req,
   UseGuards,
   Body,
@@ -25,7 +26,7 @@ import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
 import { StatusDto } from './dto/status.dto';
 import { VisibilityDto } from './dto/visibility.dto';
-import { FormDataDto } from './dto/form-data.dto';
+//import { FormDataDto } from './dto/form-data.dto';
 import { OpportunitiesService } from './opportunities.service';
 import { Resume } from '@entities/resume';
 
@@ -54,7 +55,7 @@ export class OpportunitiesController {
     return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 
-  @Post('/:githubId/resume')
+  @Patch('/:githubId/resume')
   @ApiOperation({ operationId: 'saveResume' })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
@@ -62,11 +63,13 @@ export class OpportunitiesController {
   @ApiOkResponse({ type: Resume })
   @UseGuards(DefaultGuard)
   // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type + @Body() decorator
-  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string) {
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: any) {
+    console.log('dto', dto);
+    console.log('req.body', req.body);
     if (githubId !== req.user.githubId) {
       throw new ForbiddenException('No access to resume');
     }
-    const data = await this.opportunitiesService.saveResume(githubId, req.body as FormDataDto);
+    const data = await this.opportunitiesService.saveResume(githubId, dto);
     if (data == null) {
       throw new NotFoundException('Resume not found');
     }
