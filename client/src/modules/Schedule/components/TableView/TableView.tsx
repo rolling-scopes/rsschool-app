@@ -3,6 +3,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
+import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,
   ColumnKey,
@@ -12,19 +13,22 @@ import {
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
 import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
+import { FilterValue } from 'antd/lib/table/interface';
 
 const getColumns = ({
   timezone,
   tagColors,
   tagFilter,
+  filteredInfo,
 }: {
   tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
+  filteredInfo: Record<string, FilterValue | null>;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${moment().tz(timezone).format('Z')})`;
   return [
@@ -47,6 +51,7 @@ const getColumns = ({
           </a>
         );
       },
+      filteredValue: filteredInfo.name,
       ...getColumnSearchProps('name'),
     },
     {
@@ -57,6 +62,7 @@ const getColumns = ({
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
       defaultFilteredValue: tagFilter,
       filtered: tagFilter.length > 0,
+      filteredValue: tagFilter,
     },
     {
       key: ColumnKey.StartDate,
@@ -87,6 +93,7 @@ const getColumns = ({
       title: ColumnName.Organizer,
       dataIndex: ['organizer', 'githubId'],
       render: (value: string) => !!value && <GithubUserLink value={value} />,
+      filteredValue: filteredInfo.organizer,
       ...getColumnSearchProps('organizer.githubId'),
     },
     {
@@ -114,9 +121,10 @@ export interface TableViewProps {
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
-export function TableView({ data, settings, statusFilter }: TableViewProps) {
+export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
   const [form] = Form.useForm();
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
+  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
 
   const filteredData = data
     .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
@@ -128,6 +136,7 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
         tagColors: settings.tagColors,
         timezone: settings.timezone,
         tagFilter,
+        filteredInfo,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
@@ -136,8 +145,13 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
+  const handleTagClose = (removedTag: string) => {
+    setTagFilter(tagFilter.filter(t => t !== removedTag));
+  };
+
   return (
     <Form form={form} component={false}>
+      <FilteredTags tagFilter={tagFilter} onTagClose={handleTagClose} />
       <Table
         locale={{
           // disable default tooltips on sortable columns
@@ -145,8 +159,9 @@ export function TableView({ data, settings, statusFilter }: TableViewProps) {
           triggerAsc: undefined,
           cancelSort: undefined,
         }}
-        onChange={(_, filters) => {
-          setTagFilter((filters?.tag as string[]) ?? []);
+        onChange={(_, filters: Record<string, FilterValue | string[] | null>) => {
+          setTagFilter(filters?.tag as string[]);
+          setFilteredInfo(filters);
         }}
         pagination={false}
         dataSource={filteredData}
