@@ -4,7 +4,7 @@ import { EditCV } from '../EditCv';
 import { ViewCV } from '../ViewCv';
 import { NoConsentView } from '../NoConsentView';
 
-type ResumeProps = {
+export type ResumeProps = {
   githubId: string;
   consent: boolean;
   error?: Error;
