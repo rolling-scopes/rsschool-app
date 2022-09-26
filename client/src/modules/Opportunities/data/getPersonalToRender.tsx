@@ -31,6 +31,10 @@ export function getPersonalToRender(user: UserData) {
       title: 'Military service status',
       value: user.militaryService ? capitalize(militaryServiceDictionary[user.militaryService]) : 'Unknown',
     },
+    {
+      title: 'Locations',
+      value: user.locations ? user.locations.split(',').join(', ') : 'Unknown',
+    },
   ];
 }
 

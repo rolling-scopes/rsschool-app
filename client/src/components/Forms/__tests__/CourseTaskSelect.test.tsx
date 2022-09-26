@@ -169,7 +169,7 @@ const FutureTaskData: CourseTaskDto[] = [
     taskOwner: null,
     validations: {},
   },
-];
+] as unknown as CourseTaskDto[];
 
 const ReviewTaskData: CourseTaskDto[] = [
   {

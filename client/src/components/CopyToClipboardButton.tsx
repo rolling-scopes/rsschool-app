@@ -11,7 +11,7 @@ export default function CopyToClipboardButton({ value }: Props) {
 
   const handleClick = () => {
     copyToClipboard(value);
-    notification.success({ message: 'Copied to clipboard' });
+    notification.success({ message: 'Copied to clipboard', duration: 2 });
   };
 
   return <Button type="dashed" icon={<CopyTwoTone />} onClick={handleClick} />;
