@@ -1789,6 +1789,7 @@
           "eventId": { "type": "number" },
           "special": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "duration": { "type": "number" },
           "place": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/Organizer" },
@@ -1823,15 +1824,17 @@
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/PersonDto" }
         },
-        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "organizer"]
+        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "endTime", "organizer"]
       },
       "UpdateCourseEventDto": {
         "type": "object",
         "properties": {
           "special": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "duration": { "type": "number" },
           "place": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/Organizer" },

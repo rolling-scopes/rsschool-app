@@ -139,6 +139,10 @@ const FormEntity: React.FC<Props> = ({
         <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
       </Form.Item>
 
+      <Form.Item name="endTime" label="End Date and Time">
+        <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+      </Form.Item>
+
       <Form.Item
         name="descriptionUrl"
         label="Description URL"
@@ -225,6 +229,7 @@ const getInitialValues = (entityType: string, data: any) => {
     organizerId: data.organizer ? data.organizer.id : undefined,
     special: data && data.special ? data.special.split(',') : [],
     dateTime: (data && moment(data.dateTime)) || null,
+    endTime: (data && moment(data.endTime)) || null,
   };
 };
 
@@ -239,7 +244,7 @@ const createEvent = async (
   editableRecord: CourseEvent | null,
 ) => {
   const eventService = new EventService();
-  const serviceCouse = new CourseService(courseId);
+  const serviceCourse = new CourseService(courseId);
 
   const templateEventData = {
     name: values.name,
@@ -262,15 +267,16 @@ const createEvent = async (
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
     dateTime: values.dateTime || null,
+    endTime: values.endTime || null,
     duration: values.duration || null,
     place: values.place || null,
     organizer: values.organizerId ? { id: values.organizerId } : null,
   };
 
   if (isUpdateMode && editableRecord) {
-    await serviceCouse.updateCourseEvent(editableRecord.id, values);
+    await serviceCourse.updateCourseEvent(editableRecord.id, values);
   } else {
-    await serviceCouse.createCourseEvent(values);
+    await serviceCourse.createCourseEvent(values);
   }
 };
 
