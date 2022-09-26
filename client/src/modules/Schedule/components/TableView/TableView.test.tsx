@@ -147,13 +147,7 @@ describe('TableView', () => {
       ${StatusEnum.Review}    | ${StatusEnum.Missed}
     `(
       'when "$selectedStatus" was selected and "$hiddenStatus" was filtered',
-      ({
-        selectedStatus,
-        hiddenStatus,
-      }: {
-        selectedStatus: StatusEnum;
-        hiddenStatus: StatusEnum;
-      }) => {
+      ({ selectedStatus, hiddenStatus }: { selectedStatus: StatusEnum; hiddenStatus: StatusEnum }) => {
         const data = generateCourseData(2, [selectedStatus, hiddenStatus]);
         render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={selectedStatus} />);
 
