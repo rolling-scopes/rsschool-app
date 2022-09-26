@@ -1,52 +1,26 @@
-import { render, screen } from '@testing-library/react';
-import TableView, { TableViewProps } from './TableView';
+import { fireEvent, render, screen, within } from '@testing-library/react';
+import TableView from './TableView';
 import * as ReactUse from 'react-use';
-import { ALL_TAB_KEY, ColumnKey } from 'modules/Schedule/constants';
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
+import { ALL_TAB_KEY, ColumnKey, ColumnName } from 'modules/Schedule/constants';
+import {
+  CourseScheduleItemDto,
+  CourseScheduleItemDtoStatusEnum as StatusEnum,
+  CourseScheduleItemDtoTagEnum as TagsEnum,
+} from 'api';
+import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
-const StatusEnum = CourseScheduleItemDtoStatusEnum;
-
-const PROPS_MOCK: TableViewProps = {
-  settings: {
-    timezone: 'Europe/Moscow',
-    setTimezone: jest.fn,
-    tagColors: {
-      coding: '#722ed1',
-      'cross-check': '#13c2c2',
-    },
-    setTagColors: jest.fn,
-    columnsHidden: [],
-    setColumnsHidden: jest.fn,
-    tagsHidden: [],
-    setTagsHidden: jest.fn,
+const PROPS_SETTINGS_MOCK: ScheduleSettings = {
+  timezone: 'Europe/Moscow',
+  setTimezone: jest.fn(),
+  tagColors: {
+    coding: '#722ed1',
+    'cross-check': '#13c2c2',
   },
-  data: [
-    {
-      name: 'Codewars stage 1',
-      startDate: '2020-02-01T21:00:00.000Z',
-      endDate: '2020-03-15T20:59:00.000Z',
-      maxScore: 100,
-      scoreWeight: 0.2,
-      organizer: null,
-      status: 'missed',
-      score: 80,
-      tag: 'test',
-      descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md',
-    },
-    {
-      name: 'Codewars stage 2',
-      startDate: '2020-03-01T21:00:00.000Z',
-      endDate: '2020-04-15T20:59:00.000Z',
-      maxScore: 0,
-      scoreWeight: 0,
-      organizer: null,
-      status: 'archived',
-      score: 0,
-      tag: 'coding',
-      descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md',
-    },
-  ],
-  statusFilter: 'all',
+  setTagColors: jest.fn(),
+  columnsHidden: [],
+  setColumnsHidden: jest.fn(),
+  tagsHidden: [],
+  setTagsHidden: jest.fn(),
 };
 
 describe('TableView', () => {
@@ -61,49 +35,48 @@ describe('TableView', () => {
     ${'End Date (UTC +03:00)'}
     ${'Start Date (UTC +03:00)'}
   `('should render column "$label"', ({ label }: { label: string }) => {
-    render(<TableView {...PROPS_MOCK} />);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     expect(screen.getByText(label)).toBeInTheDocument();
   });
 
   it.each`
     value
-    ${'Codewars stage 1'}
+    ${'Course Item 0'}
     ${'2020-02-02 00:00'}
     ${'2020-03-15 23:59'}
     ${'×0.2'}
-    ${'80 / 100'}
+    ${'20 / 100'}
     ${'Missed'}
     ${'Test'}
   `('should render data field "$value"', ({ value }: { value: string }) => {
-    render(<TableView {...PROPS_MOCK} />);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
-    expect(screen.getByText(value)).toBeInTheDocument();
+    const [dataField] = screen.getAllByText(value);
+    expect(dataField).toBeInTheDocument();
   });
 
   it('should not render hidden columns', () => {
-    const propsWithHiddenColumn: TableViewProps = {
-      ...PROPS_MOCK,
-      settings: {
-        ...PROPS_MOCK.settings,
-        columnsHidden: [ColumnKey.Tag],
-      },
+    const propsWithHiddenColumn: ScheduleSettings = {
+      ...PROPS_SETTINGS_MOCK,
+      columnsHidden: [ColumnKey.Tag],
     };
-    render(<TableView {...propsWithHiddenColumn} />);
+    render(<TableView settings={propsWithHiddenColumn} data={generateCourseData()} />);
 
     expect(screen.queryByText('Tag')).not.toBeInTheDocument();
   });
 
-  describe('should show data', () => {
+  describe('should filter data', () => {
     it('by selected tag', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for tagFilter
-        .mockReturnValueOnce([['coding'], jest.fn, jest.fn]);
+        .mockReturnValueOnce([[TagsEnum.Test], jest.fn(), jest.fn()]);
+      const data = generateCourseData();
 
-      render(<TableView {...PROPS_MOCK} />);
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
 
-      expect(screen.getByText('Coding')).toBeInTheDocument();
+      expect(screen.getAllByText('Test')).toHaveLength(data.length);
     });
 
     it.each`
@@ -112,7 +85,7 @@ describe('TableView', () => {
       ${[]}
     `('by "all" status when initial status is $initialStatus', ({ initialStatus }: { initialStatus: string }) => {
       const data = generateCourseData();
-      render(<TableView {...PROPS_MOCK} data={data} statusFilter={initialStatus} />);
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={initialStatus} />);
 
       const items = screen.getAllByText(/Course Item/i);
       expect(items).toHaveLength(data.length);
@@ -126,13 +99,40 @@ describe('TableView', () => {
       ${StatusEnum.Archived}
       ${StatusEnum.Future}
       ${StatusEnum.Review}
-    `('by "$status" status', ({ status }: { status: CourseScheduleItemDtoStatusEnum }) => {
+    `('by "$status" status', ({ status }: { status: StatusEnum }) => {
       const courseItemCount = 2;
       const data = generateCourseData(courseItemCount, [status, status]);
-      render(<TableView {...PROPS_MOCK} data={data} statusFilter={status} />);
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={status} />);
 
       const items = screen.getAllByText(new RegExp(status, 'i'));
       expect(items).toHaveLength(courseItemCount);
+    });
+
+    it.each`
+      field                   | searchQuery
+      ${ColumnName.Name}      | ${'Course Item 0'}
+      ${ColumnName.Organizer} | ${'organizer 0'}
+    `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+      const data = generateCourseData();
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
+      // Check that all items rendered
+      expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
+      // Find and click search button for column
+      const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
+      const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
+      fireEvent.click(searchButton);
+      // Type search query inside search input
+      const searchInput = await screen.findByRole('textbox');
+      fireEvent.change(searchInput, { target: { value: searchQuery } });
+
+      // Apply search
+      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
+      fireEvent.click(inputSearchBtn);
+
+      // Find the line with search query and no others
+      const item = await screen.findByText(searchQuery);
+      expect(item).toBeInTheDocument();
+      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
     });
   });
 
@@ -147,37 +147,56 @@ describe('TableView', () => {
       ${StatusEnum.Review}    | ${StatusEnum.Missed}
     `(
       'when "$selectedStatus" was selected and "$hiddenStatus" was filtered',
-      ({
-        selectedStatus,
-        hiddenStatus,
-      }: {
-        selectedStatus: CourseScheduleItemDtoStatusEnum;
-        hiddenStatus: CourseScheduleItemDtoStatusEnum;
-      }) => {
+      ({ selectedStatus, hiddenStatus }: { selectedStatus: StatusEnum; hiddenStatus: StatusEnum }) => {
         const data = generateCourseData(2, [selectedStatus, hiddenStatus]);
-        render(<TableView {...PROPS_MOCK} data={data} statusFilter={selectedStatus} />);
+        render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={selectedStatus} />);
 
         const filteredItem = screen.queryByText(new RegExp(hiddenStatus, 'i'));
         expect(filteredItem).not.toBeInTheDocument();
       },
     );
   });
+
+  it.each`
+    tag
+    ${TagsEnum.Coding}
+    ${TagsEnum.Test}
+    ${TagsEnum.Interview}
+  `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
+    jest
+      .spyOn(ReactUse, 'useLocalStorage')
+      // Mock useLocalStorage for tagFilter
+      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn(), jest.fn()]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    const tagFilterBtn = screen.getByRole('button', { name: /filter/i });
+    fireEvent.click(tagFilterBtn);
+
+    const filtersDropdown = await screen.findByRole('menu');
+    const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
+    const checkbox = within(menuItem).getByRole('checkbox');
+    expect(checkbox).toBeChecked();
+  });
 });
 
 function generateCourseData(
   count = 3,
-  statusMock: CourseScheduleItemDtoStatusEnum[] = [StatusEnum.Missed, StatusEnum.Archived, StatusEnum.Done],
+  statusMock: StatusEnum[] = [StatusEnum.Missed, StatusEnum.Archived, StatusEnum.Done],
 ): CourseScheduleItemDto[] {
   return new Array(count).fill({}).map((_, idx) => {
     return {
       name: `Course Item ${idx}`,
       startDate: '2020-02-01T21:00:00.000Z',
       endDate: '2020-03-15T20:59:00.000Z',
-      maxScore: idx * 100,
+      maxScore: idx + 100,
       scoreWeight: 0.2,
-      organizer: null,
+      organizer: {
+        id: idx,
+        name: '',
+        githubId: `organizer ${idx}`,
+      },
       status: statusMock[idx],
-      score: idx * 20,
+      score: idx + 20,
       tag: 'test',
       descriptionUrl: '',
     };
