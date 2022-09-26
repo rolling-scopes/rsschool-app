@@ -15,7 +15,9 @@ export function CommentModal(props: Props) {
       await form.validateFields();
       const comment = form.getFieldValue('comment');
       props.onOk(comment);
-    } catch {}
+    } catch {
+      return;
+    }
   };
 
   return (
