@@ -171,12 +171,11 @@ export type CanvasProperties = {
   itemColor: string;
   textColor: string;
   strokeColor: string;
-  topText: string;
-  bottomText: string;
 };
 
 export type CanvasElement = {
   isResizable: boolean;
+  text: string;
   left: number;
   top: number;
   bottom: number;

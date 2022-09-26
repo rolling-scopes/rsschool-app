@@ -31,11 +31,11 @@
       <div class="merch__settings">
         <div class="merch__property">
           <label class="merch__label" for="top">{{ $t('create.top') }}</label>
-          <input type="text" class="merch__text" id="top" v-model="canvasProps.topText" @input="draw()" />
+          <input type="text" class="merch__text" id="top" v-model="topCanvasElement.text" @input="draw()" />
         </div>
         <div class="merch__property">
           <label class="merch__label" for="bottom">{{ $t('create.bottom') }}</label>
-          <input type="text" class="merch__text" id="bottom" v-model="canvasProps.bottomText" @input="draw()" />
+          <input type="text" class="merch__text" id="bottom" v-model="bottomCanvasElement.text" @input="draw()" />
         </div>
       </div>
       <div class="merch__settings-row">
@@ -265,10 +265,10 @@ export default defineComponent({
         this.imgCanvasElement.scaledHeight
       );
 
-      let text = this.canvasProps.topText;
-      CanvasUtils.drawTextUp(this.canvas, this.ctx, this.canvasProps, text, this.topCanvasElement);
-      text = this.canvasProps.bottomText;
-      CanvasUtils.drawTextDown(this.canvas, this.ctx, this.canvasProps, text, this.bottomCanvasElement);
+      const { scaleSteps } = this.canvasProps;
+      const { height } = this.canvas;
+      CanvasUtils.drawTextUp(height, this.ctx, this.canvasProps, this.topCanvasElement, scaleSteps);
+      CanvasUtils.drawTextDown(height, this.ctx, this.canvasProps, this.bottomCanvasElement, scaleSteps);
 
       const color = CanvasUtils.invertHex(this.canvasProps.itemColor);
       this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
@@ -340,40 +340,74 @@ export default defineComponent({
       this.draw();
     },
 
-    prepareForSave(tempCanvas: HTMLCanvasElement, tempctx: CanvasRenderingContext2D) {
-      // tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-      // const kWidth = this.bottomText ? this.kText : 1;
-      // const kHeight = this.bottomText ? 1 + this.kFont * this.lines + this.kFont * 1.2 : 1;
-      // const scaleSteps = Math.min(
-      //   tempCanvas.width / (this.imgMeme.naturalWidth * kWidth),
-      //   tempCanvas.height / (this.imgMeme.naturalHeight * kHeight)
-      // );
-      // const scaledImageWidth = this.imgMeme.naturalWidth * scaleSteps;
-      // const scaledImageHeight = scaledImageWidth * (this.imgMeme.naturalHeight / this.imgMeme.naturalWidth);
-      // const imageX = (tempCanvas.width - scaledImageWidth) / 2;
-      // const imageY = (tempCanvas.height - scaledImageHeight * kHeight) / 2;
-      // tempctx.drawImage(
-      //   this.imgMeme,
-      //   0,
-      //   0,
-      //   this.imgMeme.naturalWidth,
-      //   this.imgMeme.naturalHeight,
-      //   imageX,
-      //   imageY,
-      //   scaledImageWidth,
-      //   scaledImageHeight
-      // );
-      // const fontSize = Math.floor(scaledImageWidth * this.kFont);
-      // const yOffsetBottom = imageY + scaledImageHeight + fontSize * 1.2;
-      // const xOffset = imageX + scaledImageWidth / 2;
-      // const temp = tempctx;
-      // temp.lineWidth = Math.floor(fontSize / 4);
-      // temp.fillStyle = this.color;
-      // temp.textAlign = 'center';
-      // temp.lineJoin = 'round';
-      // temp.font = `${fontSize}px sans-serif`;
-      // temp.textBaseline = 'bottom';
-      // this.drawTextMultiLine(tempctx, this.bottomText, xOffset, yOffsetBottom, scaledImageWidth * this.kText, fontSize);
+    calcsScaleSteps(tempCanvas: HTMLCanvasElement, tempctx: CanvasRenderingContext2D) {
+      tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      const minLeft =
+        Math.min.apply(
+          null,
+          this.layers.map((el) => el.scaledLeft)
+        ) / this.canvasProps.scaleSteps;
+      const maxRight =
+        Math.max.apply(
+          null,
+          this.layers.map((el) => el.scaledLeft + el.scaledWidth)
+        ) / this.canvasProps.scaleSteps;
+      const maxWidth = maxRight - minLeft;
+
+      const minTop =
+        Math.min.apply(
+          null,
+          this.layers.map((el) => el.scaledTop)
+        ) / this.canvasProps.scaleSteps;
+      const maxBottom =
+        Math.max.apply(
+          null,
+          this.layers.map((el) => el.scaledTop + el.scaledHeight)
+        ) / this.canvasProps.scaleSteps;
+      const maxHeight = maxBottom - minTop;
+
+      return {
+        minLeft,
+        minTop,
+        scaleSteps: Math.min(tempCanvas.width / maxWidth, tempCanvas.height / maxHeight),
+      };
+    },
+
+    prepareForSave(tempCanvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+      const tempctx = ctx;
+      tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      const { minLeft, minTop, scaleSteps } = this.calcsScaleSteps(tempCanvas, tempctx);
+
+      const imgCanvasElement = { ...this.imgCanvasElement };
+      const topCanvasElement = { ...this.topCanvasElement };
+      const bottomCanvasElement = { ...this.bottomCanvasElement };
+      const layers = [imgCanvasElement, topCanvasElement, bottomCanvasElement];
+
+      layers.forEach((el) => {
+        const canvasElement = el;
+        canvasElement.left -= minLeft;
+        canvasElement.top -= minTop;
+        canvasElement.bottom -= minTop;
+      });
+
+      CanvasUtils.calcElementsSizes(this.imgMeme, imgCanvasElement, topCanvasElement, bottomCanvasElement, scaleSteps);
+      CanvasUtils.calcElementsPosition(layers, scaleSteps);
+
+      tempctx.drawImage(
+        this.imgMeme,
+        0,
+        0,
+        imgCanvasElement.width,
+        imgCanvasElement.height,
+        imgCanvasElement.scaledLeft,
+        imgCanvasElement.scaledTop,
+        imgCanvasElement.scaledWidth,
+        imgCanvasElement.scaledHeight
+      );
+
+      const height = (this.canvas.height / this.canvasProps.scaleSteps) * scaleSteps;
+      CanvasUtils.drawTextUp(height, tempctx, this.canvasProps, topCanvasElement, scaleSteps);
+      CanvasUtils.drawTextDown(height, tempctx, this.canvasProps, bottomCanvasElement, scaleSteps);
     },
 
     saveImage() {

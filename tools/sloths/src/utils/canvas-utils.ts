@@ -14,8 +14,6 @@ export const initProperties = (scaleMin: number, scaleTrue: number, scaleMax: nu
     itemColor: '#222222',
     textColor: '#ffffff',
     strokeColor: '#000000',
-    topText: '',
-    bottomText: '',
   } as CanvasProperties;
 };
 
@@ -30,6 +28,7 @@ export const initElement = (
 ): CanvasElement => {
   return {
     isResizable,
+    text: '',
     left: 0,
     top,
     bottom,
@@ -374,7 +373,6 @@ export const drawTextLine = (ctx: CanvasRenderingContext2D, line: string, x: num
 export const drawTextMultiLineDown = (
   ctx: CanvasRenderingContext2D,
   el: CanvasElement,
-  text: string,
   canvasScaleSteps: number,
   fontSize: number,
   isStroked: boolean
@@ -383,7 +381,7 @@ export const drawTextMultiLineDown = (
   const width = el.scaledWidth;
   const x = width / 2 + scaledLeft;
 
-  const words = text.split(' ');
+  const words = el.text.split(' ');
   let line = '';
   let y = scaledTop + fontSize * 0.1;
   let textHeight = fontSize;
@@ -412,15 +410,13 @@ export const drawTextMultiLineDown = (
 };
 
 export const drawTextDown = (
-  canvas: HTMLCanvasElement,
+  height: number,
   ctx: CanvasRenderingContext2D,
   canvasProps: CanvasProperties,
-  text: string,
   el: CanvasElement,
+  canvasScaleSteps: number,
   isStroked = false
 ) => {
-  const { height } = canvas;
-
   ctx.fillStyle = canvasProps.textColor;
   if (isStroked) ctx.strokeStyle = canvasProps.strokeColor;
   ctx.textAlign = 'center';
@@ -430,13 +426,12 @@ export const drawTextDown = (
   ctx.lineWidth = Math.floor(fontSize / 5);
   ctx.font = `${fontSize}px sans-serif`;
   ctx.textBaseline = 'top';
-  drawTextMultiLineDown(ctx, el, text, canvasProps.scaleSteps, fontSize, isStroked);
+  drawTextMultiLineDown(ctx, el, canvasScaleSteps, fontSize, isStroked);
 };
 
 export const drawTextMultiLineUp = (
   ctx: CanvasRenderingContext2D,
   el: CanvasElement,
-  text: string,
   canvasScaleSteps: number,
   fontSize: number,
   isStroked: boolean
@@ -445,7 +440,7 @@ export const drawTextMultiLineUp = (
   const width = el.scaledWidth;
   const x = width / 2 + scaledLeft;
 
-  const words = text.split(' ').reverse();
+  const words = el.text.split(' ').reverse();
   let line = '';
   let y = scaledBottom + fontSize * 0.1;
   let textHeight = fontSize;
@@ -475,15 +470,13 @@ export const drawTextMultiLineUp = (
 };
 
 export const drawTextUp = (
-  canvas: HTMLCanvasElement,
+  height: number,
   ctx: CanvasRenderingContext2D,
   canvasProps: CanvasProperties,
-  text: string,
   el: CanvasElement,
+  canvasScaleSteps: number,
   isStroked = false
 ) => {
-  const { height } = canvas;
-
   ctx.fillStyle = canvasProps.textColor;
   if (isStroked) ctx.strokeStyle = canvasProps.strokeColor;
   ctx.textAlign = 'center';
@@ -493,7 +486,7 @@ export const drawTextUp = (
   ctx.lineWidth = Math.floor(fontSize / 5);
   ctx.font = `${fontSize}px sans-serif`;
   ctx.textBaseline = 'bottom';
-  drawTextMultiLineUp(ctx, el, text, canvasProps.scaleSteps, fontSize, isStroked);
+  drawTextMultiLineUp(ctx, el, canvasScaleSteps, fontSize, isStroked);
 };
 
 // others

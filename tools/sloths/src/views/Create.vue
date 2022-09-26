@@ -19,11 +19,11 @@
       <div class="meme__settings">
         <div class="meme__property">
           <label class="meme__label" for="top">{{ $t('create.top') }}</label>
-          <input type="text" class="meme__text" id="top" v-model="canvasProps.topText" @input="draw()" />
+          <input type="text" class="meme__text" id="top" v-model="topCanvasElement.text" @input="draw()" />
         </div>
         <div class="meme__property">
           <label class="meme__label" for="bottom">{{ $t('create.bottom') }}</label>
-          <input type="text" class="meme__text" id="bottom" v-model="canvasProps.bottomText" @input="draw()" />
+          <input type="text" class="meme__text" id="bottom" v-model="bottomCanvasElement.text" @input="draw()" />
         </div>
       </div>
       <div class="meme__settings">
@@ -253,10 +253,10 @@ export default defineComponent({
         this.imgCanvasElement.scaledHeight
       );
 
-      let text = this.canvasProps.topText;
-      CanvasUtils.drawTextDown(this.canvas, this.ctx, this.canvasProps, text, this.topCanvasElement, true);
-      text = this.canvasProps.bottomText;
-      CanvasUtils.drawTextUp(this.canvas, this.ctx, this.canvasProps, text, this.bottomCanvasElement, true);
+      const { scaleSteps } = this.canvasProps;
+      const { height } = this.canvas;
+      CanvasUtils.drawTextDown(height, this.ctx, this.canvasProps, this.topCanvasElement, scaleSteps, true);
+      CanvasUtils.drawTextUp(height, this.ctx, this.canvasProps, this.bottomCanvasElement, scaleSteps, true);
 
       const color = CanvasUtils.invertHex(this.canvasProps.backgroundColor, this.canvasProps.backgroundTransparent);
       this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
