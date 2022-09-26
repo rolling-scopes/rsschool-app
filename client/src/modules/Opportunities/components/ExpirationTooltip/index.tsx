@@ -14,13 +14,12 @@ const { Text, Paragraph } = Typography;
 
 const service = new OpportunitiesService();
 
-export const ExpirationTooltip = ({
-  expirationDate,
-  expirationState,
-}: {
+type Props = {
   expirationDate: string;
   expirationState: ExpirationState;
-}) => {
+};
+
+export const ExpirationTooltip = ({ expirationDate, expirationState }: Props) => {
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {
