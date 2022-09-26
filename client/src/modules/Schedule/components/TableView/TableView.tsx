@@ -146,7 +146,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
   const handleTagClose = (removedTag: string) => {
-    setTagFilter(tagFilter.filter(t => t !== removedTag) ?? []);
+    setTagFilter(tagFilter.filter(t => t !== removedTag));
   };
 
   return (
