@@ -51,7 +51,7 @@ const getColumns = ({
           </a>
         );
       },
-      filteredValue: filteredInfo.name || null,
+      filteredValue: filteredInfo.name,
       ...getColumnSearchProps('name'),
     },
     {
@@ -62,7 +62,7 @@ const getColumns = ({
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
       defaultFilteredValue: tagFilter,
       filtered: tagFilter.length > 0,
-      filteredValue: tagFilter || null,
+      filteredValue: tagFilter,
     },
     {
       key: ColumnKey.StartDate,
@@ -93,7 +93,7 @@ const getColumns = ({
       title: ColumnName.Organizer,
       dataIndex: ['organizer', 'githubId'],
       render: (value: string) => !!value && <GithubUserLink value={value} />,
-      filteredValue: filteredInfo.organizer || null,
+      filteredValue: filteredInfo.organizer,
       ...getColumnSearchProps('organizer.githubId'),
     },
     {
