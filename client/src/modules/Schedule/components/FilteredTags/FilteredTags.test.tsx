@@ -1,9 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { FilteredTags } from './FilteredTags';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum as TagsEnum } from 'api';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
-
-const TagsEnum = CourseScheduleItemDtoTagEnum;
 
 describe('FilteredTags', () => {
   const onTagCloseMock = jest.fn();
@@ -51,7 +49,6 @@ describe('FilteredTags', () => {
 
     fireEvent.click(interviewCrossIcon);
 
-    expect(onTagCloseMock).toHaveBeenCalled();
     expect(onTagCloseMock).toHaveBeenCalledWith(TagsEnum.Interview);
   });
 });

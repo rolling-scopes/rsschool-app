@@ -1,25 +1,26 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import TableView, { TableViewProps } from './TableView';
+import TableView from './TableView';
 import * as ReactUse from 'react-use';
 import { ALL_TAB_KEY, ColumnKey, ColumnName } from 'modules/Schedule/constants';
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
+import {
+  CourseScheduleItemDto,
+  CourseScheduleItemDtoStatusEnum as StatusEnum,
+  CourseScheduleItemDtoTagEnum as TagsEnum,
+} from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-
-const StatusEnum = CourseScheduleItemDtoStatusEnum;
-const TagsEnum = CourseScheduleItemDtoTagEnum;
 
 const PROPS_SETTINGS_MOCK: ScheduleSettings = {
   timezone: 'Europe/Moscow',
-  setTimezone: jest.fn,
+  setTimezone: jest.fn(),
   tagColors: {
     coding: '#722ed1',
     'cross-check': '#13c2c2',
   },
-  setTagColors: jest.fn,
+  setTagColors: jest.fn(),
   columnsHidden: [],
-  setColumnsHidden: jest.fn,
+  setColumnsHidden: jest.fn(),
   tagsHidden: [],
-  setTagsHidden: jest.fn,
+  setTagsHidden: jest.fn(),
 };
 
 describe('TableView', () => {
@@ -70,7 +71,7 @@ describe('TableView', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for tagFilter
-        .mockReturnValueOnce([[TagsEnum.Test], jest.fn, jest.fn]);
+        .mockReturnValueOnce([[TagsEnum.Test], jest.fn(), jest.fn()]);
       const data = generateCourseData();
 
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
@@ -98,7 +99,7 @@ describe('TableView', () => {
       ${StatusEnum.Archived}
       ${StatusEnum.Future}
       ${StatusEnum.Review}
-    `('by "$status" status', ({ status }: { status: CourseScheduleItemDtoStatusEnum }) => {
+    `('by "$status" status', ({ status }: { status: StatusEnum }) => {
       const courseItemCount = 2;
       const data = generateCourseData(courseItemCount, [status, status]);
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={status} />);
@@ -150,8 +151,8 @@ describe('TableView', () => {
         selectedStatus,
         hiddenStatus,
       }: {
-        selectedStatus: CourseScheduleItemDtoStatusEnum;
-        hiddenStatus: CourseScheduleItemDtoStatusEnum;
+        selectedStatus: StatusEnum;
+        hiddenStatus: StatusEnum;
       }) => {
         const data = generateCourseData(2, [selectedStatus, hiddenStatus]);
         render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} statusFilter={selectedStatus} />);
@@ -171,7 +172,7 @@ describe('TableView', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for tagFilter
-      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn, jest.fn]);
+      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tagFilterBtn = screen.getByRole('button', { name: /filter/i });
@@ -186,7 +187,7 @@ describe('TableView', () => {
 
 function generateCourseData(
   count = 3,
-  statusMock: CourseScheduleItemDtoStatusEnum[] = [StatusEnum.Missed, StatusEnum.Archived, StatusEnum.Done],
+  statusMock: StatusEnum[] = [StatusEnum.Missed, StatusEnum.Archived, StatusEnum.Done],
 ): CourseScheduleItemDto[] {
   return new Array(count).fill({}).map((_, idx) => {
     return {

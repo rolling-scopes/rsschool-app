@@ -52,7 +52,7 @@ const getColumns = ({
         );
       },
       filteredValue: filteredInfo.name || null,
-      ...getColumnSearchProps('name', undefined),
+      ...getColumnSearchProps('name'),
     },
     {
       key: ColumnKey.Tag,
@@ -160,7 +160,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
           cancelSort: undefined,
         }}
         onChange={(_, filters: Record<string, FilterValue | string[] | null>) => {
-          setTagFilter((filters?.tag as string[]) ?? []);
+          setTagFilter((filters?.tag as string[]));
           setFilteredInfo(filters);
         }}
         pagination={false}
