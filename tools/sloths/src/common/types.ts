@@ -163,7 +163,21 @@ export type PageSettings = {
   checked?: string[];
 };
 
+export type CanvasProperties = {
+  scaleSteps: number;
+  scaleMin: number;
+  scaleTrue: number;
+  scaleMax: number;
+  backgroundTransparent: boolean;
+  backgroundColor: string;
+  itemColor: string;
+  textColor: string;
+  strokeColor: string;
+};
+
 export type CanvasElement = {
+  isResizable: boolean;
+  text: string;
   left: number;
   top: number;
   bottom: number;
@@ -173,10 +187,16 @@ export type CanvasElement = {
   width: number;
   height: number;
   scaleSteps: number;
+  scaleMin: number;
+  scaleTrue: number;
+  scaleMax: number;
   scaledWidth: number;
   scaledHeight: number;
   isHovered: boolean;
   isSelected: boolean;
+  isBorderHovered: boolean;
+  isLeftBorderSelected: boolean;
+  isRightBorderSelected: boolean;
   selectedPos: CanvasPos;
 };
 

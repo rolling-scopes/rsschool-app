@@ -30,71 +30,23 @@
       </div>
       <div class="merch__settings">
         <div class="merch__property">
-          <label class="merch__label" for="bottom">{{ $t('merch.bottom') }}</label>
-          <input type="text" class="merch__text" id="bottom" v-model="bottomText" @input="draw()" />
+          <label class="merch__label" for="top">{{ $t('create.top') }}</label>
+          <input type="text" class="merch__text" id="top" v-model="topCanvasElement.text" @input="draw()" />
         </div>
         <div class="merch__property">
-          <label class="merch__label" for="kText">{{ $t('merch.kText') }}</label>
-          <input
-            type="number"
-            id="kText"
-            min="0"
-            max="3"
-            step="0.1"
-            class="merch__number"
-            v-model="kText"
-            @input="draw()"
-          />
-        </div>
-        <div class="merch__property">
-          <label class="merch__label" for="kFont">{{ $t('merch.kFont') }}</label>
-          <input
-            type="number"
-            id="kFont"
-            min="0"
-            max="1"
-            step="0.01"
-            class="merch__number"
-            v-model="kFont"
-            @input="draw()"
-          />
+          <label class="merch__label" for="bottom">{{ $t('create.bottom') }}</label>
+          <input type="text" class="merch__text" id="bottom" v-model="bottomCanvasElement.text" @input="draw()" />
         </div>
       </div>
       <div class="merch__settings-row">
         <div class="merch__settings">
           <div class="merch__property">
             <label class="merch__label" for="color">{{ $t('merch.color') }}</label>
-            <input type="color" id="color" class="merch__color" v-model="color" @input="draw()" />
+            <input type="color" id="color" class="merch__color" v-model="canvasProps.textColor" @input="draw()" />
           </div>
           <div class="merch__property">
             <label class="merch__label" for="backgroundColor">{{ $t('merch.backgroundColor') }}</label>
-            <input type="color" id="backgroundColor" class="merch__color" v-model="backgroundColor" @input="draw()" />
-          </div>
-        </div>
-        <div class="merch__settings">
-          <div class="merch__property">
-            <label class="merch__label" for="marginTop">{{ $t('merch.marginTop') }}</label>
-            <input
-              type="number"
-              id="marginTop"
-              min="0"
-              max="250"
-              class="merch__number"
-              v-model="marginTop"
-              @input="draw()"
-            />
-          </div>
-          <div class="merch__property">
-            <label class="merch__label" for="marginLeft">{{ $t('merch.marginLeft') }}</label>
-            <input
-              type="number"
-              id="marginLeft"
-              min="0"
-              max="250"
-              class="merch__number"
-              v-model="marginLeft"
-              @input="draw()"
-            />
+            <input type="color" id="itemColor" class="merch__color" v-model="canvasProps.itemColor" @input="draw()" />
           </div>
         </div>
       </div>
@@ -112,19 +64,25 @@
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
-              @click="scaleUp"
+              @click="scaleUp()"
+            ></custom-btn>
+            <custom-btn
+              :text="$t('btn.trueSize')"
+              imgPath="icon"
+              className="btn btn-icon icon-true"
+              @click="scaleTrue()"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.center')"
               imgPath="icon"
-              className="btn btn-icon icon-true"
-              @click="imgCenter"
+              className="btn btn-icon icon-center"
+              @click="centering"
             ></custom-btn>
             <custom-btn
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
-              @click="scaleDown"
+              @click="scaleDown()"
             ></custom-btn>
           </div>
           <custom-btn
@@ -134,7 +92,16 @@
             @click="copyImage"
           ></custom-btn>
         </div>
-        <canvas class="merch__canvas" ref="canvas"> </canvas>
+        <canvas
+          class="merch__canvas"
+          ref="canvas"
+          @mousemove="handleMouseMove"
+          @mousedown="handleMouseDown"
+          @mouseup="handleMouseUp"
+          @mouseout="handleMouseOut"
+          @wheel="handleWheel"
+        >
+        </canvas>
       </div>
     </div>
   </div>
@@ -145,6 +112,8 @@ import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import usePagesStore from '@/stores/pages-store';
 import useCleanedStore from '@/stores/cleaned';
+import type { CanvasElement } from '@/common/types';
+import * as CanvasUtils from '@/utils/canvas-utils';
 
 const { cleanedFilelist } = useCleanedStore();
 const { getPageMerchState, setPageMerchState } = usePagesStore();
@@ -162,30 +131,21 @@ export default defineComponent({
       indexMeme: 0,
       merch: [] as string[],
       indexMerch: 0,
-      bottomText: '',
-      lines: 0,
-      scaleSteps: 0.5,
       canvas: {} as HTMLCanvasElement,
+      canvasProps: CanvasUtils.initProperties(0.5, 1, 1.5),
       ctx: {} as CanvasRenderingContext2D,
       imgMeme: {} as HTMLImageElement,
       imgMerch: {} as HTMLImageElement,
-      imageX: 0,
-      imageY: 0,
-      scaledImageWidth: 0,
-      scaledImageHeight: 0,
-      color: '#000000',
-      backgroundColor: '#999999',
-      strokeStyle: '#000000',
-      marginTop: 0,
-      marginLeft: 0,
-      kText: 1.5,
-      kFont: 0.2,
+      imgCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2, false),
+      topCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
+      bottomCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
+      layers: [] as CanvasElement[],
     };
   },
 
   async mounted() {
     this.getImages();
-    this.loadStore();
+    const loaded = this.loadStore();
 
     const { canvas } = this.$refs;
     if (!(canvas instanceof HTMLCanvasElement)) return;
@@ -196,22 +156,37 @@ export default defineComponent({
     this.canvas = canvas;
     this.ctx = ctx;
 
-    const imageMerch = this.loadImage(this.merch[this.indexMerch]);
-    const imageMeme = this.loadImage(this.images[this.indexMeme]);
+    const imageMerch = CanvasUtils.loadImage(this.merch[this.indexMerch]);
+    const imageMeme = CanvasUtils.loadImage(this.images[this.indexMeme]);
 
     [this.imgMerch, this.imgMeme] = await Promise.all([imageMerch, imageMeme]);
 
-    this.canvas.width = this.imgMerch.naturalWidth;
-    this.canvas.height = this.imgMerch.naturalHeight;
-    this.marginLeft = (this.canvas.width - this.imgMeme.naturalWidth * this.scaleSteps) / 2;
-    this.marginTop = (this.canvas.height - this.imgMeme.naturalHeight * this.scaleSteps) / 2;
+    CanvasUtils.calcCanvasSizes(this.canvas, this.canvasProps.scaleSteps);
+    CanvasUtils.calcElementsSizes(
+      this.imgMeme,
+      this.imgCanvasElement,
+      this.topCanvasElement,
+      this.bottomCanvasElement,
+      this.canvasProps.scaleSteps
+    );
+    if (!loaded) this.centering();
 
-    // Update CTX
+    // order of layers, index is z-index
+    this.layers[0] = this.imgCanvasElement;
+    this.layers[1] = this.topCanvasElement;
+    this.layers[2] = this.bottomCanvasElement;
+
     this.draw();
   },
 
   beforeRouteLeave() {
     setPageMerchState(JSON.stringify(this.$data));
+  },
+
+  computed: {
+    getCursor() {
+      return CanvasUtils.getCursor(this.layers);
+    },
   },
 
   methods: {
@@ -233,92 +208,100 @@ export default defineComponent({
       return this.merch[i];
     },
 
-    loadImage(url: string): Promise<HTMLImageElement> {
-      return new Promise((resolve) => {
-        const image = new Image();
-        image.addEventListener('load', () => {
-          resolve(image);
-        });
-        image.src = url;
-      });
-    },
-
     scaleUp() {
-      this.scaleSteps = Math.min(2, this.scaleSteps + 0.01);
+      CanvasUtils.scaleUpCanvas(this.canvasProps);
+
       this.draw();
     },
 
-    imgCenter() {
-      this.marginLeft = (this.canvas.width - this.imgMeme.naturalWidth * this.scaleSteps) / 2;
-      this.marginTop = (this.canvas.height - this.imgMeme.naturalHeight * this.scaleSteps) / 2;
+    scaleTrue() {
+      CanvasUtils.scaleTrueCanvas(this.canvasProps, this.layers);
+
       this.draw();
     },
 
     scaleDown() {
-      this.scaleSteps = Math.max(0.1, this.scaleSteps - 0.01);
+      CanvasUtils.scaleDownCanvas(this.canvasProps);
+
       this.draw();
     },
 
-    setImgProps() {
-      this.scaledImageWidth = this.imgMeme.naturalWidth * this.scaleSteps;
-      this.scaledImageHeight = this.scaledImageWidth * (this.imgMeme.naturalHeight / this.imgMeme.naturalWidth);
+    centering() {
+      CanvasUtils.centeringElements(
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps,
+        true
+      );
 
-      this.imageX = this.marginLeft;
-      this.imageY = this.marginTop;
-    },
-
-    setMerchImage() {
-      // create an overlay with solid color
-      const tempCanvas = document.createElement('canvas');
-      const tempctx = tempCanvas.getContext('2d');
-      if (!tempctx) return;
-
-      tempCanvas.width = this.imgMerch.naturalWidth;
-      tempCanvas.height = this.imgMerch.naturalHeight;
-
-      tempctx.drawImage(this.imgMerch, 0, 0);
-
-      tempctx.globalCompositeOperation = 'source-atop';
-      tempctx.fillStyle = this.backgroundColor;
-      tempctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-      // set canvas size abd fill background
-      this.canvas.width = this.imgMerch.naturalWidth;
-      this.canvas.height = this.imgMerch.naturalHeight;
-
-      // use compositing to change the overlay of the original image
-      this.ctx.drawImage(tempCanvas, 0, 0);
-      this.ctx.globalCompositeOperation = 'overlay';
-      this.ctx.drawImage(this.imgMerch, 0, 0);
-
-      // always clean up: reset compositing to its default
-      this.ctx.globalCompositeOperation = 'source-over';
+      this.draw();
     },
 
     draw() {
-      // clear background
+      CanvasUtils.calcCanvasSizes(this.canvas, this.canvasProps.scaleSteps);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      CanvasUtils.drawMerchImage(this.canvas, this.ctx, this.imgMerch, this.canvasProps.itemColor);
 
-      // some maths
-      this.setImgProps();
+      CanvasUtils.calcElementsSizes(
+        this.imgMeme,
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps
+      );
 
-      // draw the t-shirt
-      this.setMerchImage();
+      CanvasUtils.calcElementsPosition(this.layers, this.canvasProps.scaleSteps);
 
-      // draw the image
       this.ctx.drawImage(
         this.imgMeme,
         0,
         0,
-        this.imgMeme.naturalWidth,
-        this.imgMeme.naturalHeight,
-        this.imageX,
-        this.imageY,
-        this.scaledImageWidth,
-        this.scaledImageHeight
+        this.imgCanvasElement.width,
+        this.imgCanvasElement.height,
+        this.imgCanvasElement.scaledLeft,
+        this.imgCanvasElement.scaledTop,
+        this.imgCanvasElement.scaledWidth,
+        this.imgCanvasElement.scaledHeight
       );
 
-      this.drawText(this.ctx);
+      const { scaleSteps } = this.canvasProps;
+      const { height } = this.canvas;
+      CanvasUtils.drawTextUp(height, this.ctx, this.canvasProps, this.topCanvasElement, scaleSteps);
+      CanvasUtils.drawTextDown(height, this.ctx, this.canvasProps, this.bottomCanvasElement, scaleSteps);
+
+      const color = CanvasUtils.invertHex(this.canvasProps.itemColor);
+      this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
+    },
+
+    handleMouseMove(e: MouseEvent) {
+      CanvasUtils.moveElements(e, this.canvas, this.layers, this.canvasProps.scaleSteps);
+
+      this.draw();
+    },
+
+    handleMouseDown(e: MouseEvent) {
+      CanvasUtils.selectElements(e, this.canvas, this.layers);
+
+      this.draw();
+    },
+
+    handleMouseUp() {
+      CanvasUtils.deselectElements(this.layers);
+
+      this.draw();
+    },
+
+    handleMouseOut() {
+      CanvasUtils.unhoverElements(this.layers);
+
+      this.handleMouseUp();
+    },
+
+    handleWheel(e: WheelEvent) {
+      CanvasUtils.scalingElements(e, this.layers, this.canvasProps);
+
+      this.draw();
     },
 
     updMerch(i: number) {
@@ -332,7 +315,6 @@ export default defineComponent({
 
       this.imgMerch = image;
 
-      // Update CTX
       this.draw();
     },
 
@@ -346,101 +328,86 @@ export default defineComponent({
       if (!(image instanceof HTMLImageElement)) return;
 
       this.imgMeme = image;
+      CanvasUtils.calcElementsSizes(
+        this.imgMeme,
+        this.imgCanvasElement,
+        this.topCanvasElement,
+        this.bottomCanvasElement,
+        this.canvasProps.scaleSteps
+      );
+      this.centering();
 
-      // Update CTX
       this.draw();
     },
 
-    drawText(ctx: CanvasRenderingContext2D) {
-      const fontSize = Math.floor(this.scaledImageWidth * this.kFont);
-      const yOffsetBottom = this.marginTop + this.scaledImageHeight + fontSize * 1.2;
-      const xOffset = this.marginLeft + this.scaledImageWidth / 2;
-
-      ctx.strokeStyle = this.strokeStyle; // 'black';
-      ctx.lineWidth = Math.floor(fontSize / 4);
-      ctx.fillStyle = this.color; // 'white';
-      ctx.textAlign = 'center';
-      ctx.lineJoin = 'round';
-      ctx.font = `${fontSize}px sans-serif`;
-
-      ctx.textBaseline = 'bottom';
-      this.drawTextMultiLine(
-        ctx,
-        this.bottomText,
-        xOffset,
-        yOffsetBottom,
-        this.scaledImageWidth * this.kText,
-        fontSize
-      );
-    },
-
-    drawTextMultiLine(
-      ctx: CanvasRenderingContext2D,
-      text: string,
-      x: number,
-      top: number,
-      maxWidth: number,
-      lineHeight: number
-    ) {
-      const words = text.split(' ');
-      this.lines = 0;
-      let line = '';
-      let y = top;
-      words.forEach((word, index) => {
-        const testLine = `${line + word} `;
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > maxWidth && index > 0) {
-          ctx.fillText(line, x, y);
-          line = `${word} `;
-          y += lineHeight;
-          this.lines += 1;
-        } else {
-          line = testLine;
-        }
-      });
-      ctx.fillText(line, x, y);
-      this.lines += 1;
-    },
-
-    prepareForSave(tempCanvas: HTMLCanvasElement, tempctx: CanvasRenderingContext2D) {
+    calcsScaleSteps(tempCanvas: HTMLCanvasElement, tempctx: CanvasRenderingContext2D) {
       tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      const minLeft =
+        Math.min.apply(
+          null,
+          this.layers.map((el) => el.scaledLeft)
+        ) / this.canvasProps.scaleSteps;
+      const maxRight =
+        Math.max.apply(
+          null,
+          this.layers.map((el) => el.scaledLeft + el.scaledWidth)
+        ) / this.canvasProps.scaleSteps;
+      const maxWidth = maxRight - minLeft;
 
-      const kWidth = this.bottomText ? this.kText : 1;
-      const kHeight = this.bottomText ? 1 + this.kFont * this.lines + this.kFont * 1.2 : 1;
-      const scaleSteps = Math.min(
-        tempCanvas.width / (this.imgMeme.naturalWidth * kWidth),
-        tempCanvas.height / (this.imgMeme.naturalHeight * kHeight)
-      );
-      const scaledImageWidth = this.imgMeme.naturalWidth * scaleSteps;
-      const scaledImageHeight = scaledImageWidth * (this.imgMeme.naturalHeight / this.imgMeme.naturalWidth);
-      const imageX = (tempCanvas.width - scaledImageWidth) / 2;
-      const imageY = (tempCanvas.height - scaledImageHeight * kHeight) / 2;
+      const minTop =
+        Math.min.apply(
+          null,
+          this.layers.map((el) => el.scaledTop)
+        ) / this.canvasProps.scaleSteps;
+      const maxBottom =
+        Math.max.apply(
+          null,
+          this.layers.map((el) => el.scaledTop + el.scaledHeight)
+        ) / this.canvasProps.scaleSteps;
+      const maxHeight = maxBottom - minTop;
+
+      return {
+        minLeft,
+        minTop,
+        scaleSteps: Math.min(tempCanvas.width / maxWidth, tempCanvas.height / maxHeight),
+      };
+    },
+
+    prepareForSave(tempCanvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+      const tempctx = ctx;
+      tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      const { minLeft, minTop, scaleSteps } = this.calcsScaleSteps(tempCanvas, tempctx);
+
+      const imgCanvasElement = { ...this.imgCanvasElement };
+      const topCanvasElement = { ...this.topCanvasElement };
+      const bottomCanvasElement = { ...this.bottomCanvasElement };
+      const layers = [imgCanvasElement, topCanvasElement, bottomCanvasElement];
+
+      layers.forEach((el) => {
+        const canvasElement = el;
+        canvasElement.left -= minLeft;
+        canvasElement.top -= minTop;
+        canvasElement.bottom -= minTop;
+      });
+
+      CanvasUtils.calcElementsSizes(this.imgMeme, imgCanvasElement, topCanvasElement, bottomCanvasElement, scaleSteps);
+      CanvasUtils.calcElementsPosition(layers, scaleSteps);
+
       tempctx.drawImage(
         this.imgMeme,
         0,
         0,
-        this.imgMeme.naturalWidth,
-        this.imgMeme.naturalHeight,
-        imageX,
-        imageY,
-        scaledImageWidth,
-        scaledImageHeight
+        imgCanvasElement.width,
+        imgCanvasElement.height,
+        imgCanvasElement.scaledLeft,
+        imgCanvasElement.scaledTop,
+        imgCanvasElement.scaledWidth,
+        imgCanvasElement.scaledHeight
       );
 
-      const fontSize = Math.floor(scaledImageWidth * this.kFont);
-      const yOffsetBottom = imageY + scaledImageHeight + fontSize * 1.2;
-      const xOffset = imageX + scaledImageWidth / 2;
-
-      const temp = tempctx;
-      temp.lineWidth = Math.floor(fontSize / 4);
-      temp.fillStyle = this.color;
-      temp.textAlign = 'center';
-      temp.lineJoin = 'round';
-      temp.font = `${fontSize}px sans-serif`;
-
-      temp.textBaseline = 'bottom';
-      this.drawTextMultiLine(tempctx, this.bottomText, xOffset, yOffsetBottom, scaledImageWidth * this.kText, fontSize);
+      const height = (this.canvas.height / this.canvasProps.scaleSteps) * scaleSteps;
+      CanvasUtils.drawTextUp(height, tempctx, this.canvasProps, topCanvasElement, scaleSteps);
+      CanvasUtils.drawTextDown(height, tempctx, this.canvasProps, bottomCanvasElement, scaleSteps);
     },
 
     saveImage() {
@@ -468,14 +435,15 @@ export default defineComponent({
       });
     },
 
-    loadStore() {
+    loadStore(): boolean {
       const str = getPageMerchState();
-      if (!str) return;
+      if (!str) return false;
 
       const data = JSON.parse(str);
-      if (!data) return;
+      if (!data) return false;
 
       Object.assign(this.$data, data);
+      return true;
     },
   },
 });
@@ -491,12 +459,21 @@ export default defineComponent({
 }
 
 .merch {
-  padding: 0 3rem;
+  padding-left: 3rem;
+  height: 100%;
 }
 
 .merch__generator {
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  padding-right: 3rem;
+  overflow-y: auto;
+}
+
+.merch__list {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .merch__images,
@@ -511,6 +488,7 @@ export default defineComponent({
 .merch__image {
   width: 14rem;
   height: 14rem;
+  object-fit: contain;
 }
 
 .merch__settings,
@@ -595,5 +573,18 @@ export default defineComponent({
 
 .merch__canvas {
   border: 0.2px solid gray;
+}
+.merch__canvas:hover {
+  cursor: v-bind(getCursor);
+}
+
+@media (max-width: 1200px) {
+  .merch {
+    padding-left: 1.5rem;
+  }
+
+  .merch__generator {
+    padding-right: 1.5rem;
+  }
 }
 </style>
