@@ -10,13 +10,18 @@ type Props = {
 export function CommentModal(props: Props) {
   const [form] = Form.useForm();
 
+  const onOk = async () => {
+    try {
+      await form.validateFields();
+      const comment = form.getFieldValue('comment');
+      props.onOk(comment);
+    } catch {
+      return;
+    }
+  };
+
   return (
-    <Modal
-      title={props.title}
-      visible={props.visible}
-      onOk={() => props.onOk(form.getFieldValue('comment'))}
-      onCancel={props.onCancel}
-    >
+    <Modal title={props.title} open={props.visible} onOk={onOk} onCancel={props.onCancel}>
       <Form form={form} layout="vertical" initialValues={{ comment: '' }}>
         <Row gutter={24}>
           <Col span={24}>

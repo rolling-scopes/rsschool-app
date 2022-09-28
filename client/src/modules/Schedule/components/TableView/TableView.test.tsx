@@ -177,6 +177,18 @@ describe('TableView', () => {
     const checkbox = within(menuItem).getByRole('checkbox');
     expect(checkbox).toBeChecked();
   });
+
+  it('should not render filtered tags when tagFilter is null', () => {
+    jest
+      .spyOn(ReactUse, 'useLocalStorage')
+      // Mock useLocalStorage for tagFilter
+      .mockReturnValueOnce([null, jest.fn(), jest.fn()]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    const tag = screen.queryByText(/Tag: /);
+
+    expect(tag).not.toBeInTheDocument();
+  });
 });
 
 function generateCourseData(
