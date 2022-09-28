@@ -42,7 +42,7 @@ html {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 2;
+  z-index: 3;
 }
 
 .list-aside {

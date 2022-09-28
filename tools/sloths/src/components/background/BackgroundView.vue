@@ -26,7 +26,7 @@ export default defineComponent({
   position: fixed;
   height: 100vh;
   width: 100vw;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   bottom: 0;
   transition: 0.5s ease;

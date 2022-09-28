@@ -24,7 +24,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   padding: 3rem;
-  z-index: 2;
+  z-index: 3;
 }
 
 .rss {
