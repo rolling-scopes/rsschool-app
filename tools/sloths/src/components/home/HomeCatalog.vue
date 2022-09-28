@@ -75,9 +75,25 @@ export default defineComponent({
   opacity: 1;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .home-catalog {
     grid-area: B;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-catalog_up {
+  top: 0;
+  transform: translate(0, 0);
+}
+
+.home-catalog_down {
+  bottom: 0;
+  transform: translate(0, 0);
+}
+
+  .home-catalog__name {
+    opacity: 1;
   }
 }
 </style>
