@@ -59,26 +59,6 @@ export default defineComponent({
   transition: 0.5s ease;
 }
 
-.about__section_sloths-light::before {
-  left: 10rem;
-  background: no-repeat center center / contain url('../../assets/icons/about/section-sloths-light.svg');
-}
-
-.about__section_interactives-light::before {
-  right: 10rem;
-  background: no-repeat center center / contain url('../../assets/icons/about/section-interactives-light.svg');
-}
-
-.about__section_sloths-dark::before {
-  left: 10rem;
-  background: no-repeat center center / contain url('../../assets/icons/about/section-sloths-dark.svg');
-}
-
-.about__section_interactives-dark::before {
-  right: 10rem;
-  background: no-repeat center center / contain url('../../assets/icons/about/section-interactives-dark.svg');
-}
-
 .about__title {
   font-size: 2.8rem;
   font-weight: 700;
