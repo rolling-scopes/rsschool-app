@@ -50,7 +50,7 @@ export default defineComponent({
   justify-items: center;
   align-items: center;
   justify-content: center;
-  grid-template-columns: 30rem 40rem 30rem;
+  grid-template-columns: 40rem 40rem 40rem;
   margin: 0 auto;
   padding: 2rem 0;
 }
@@ -59,12 +59,12 @@ export default defineComponent({
   display: grid;
   justify-items: center;
   justify-content: center;
-  grid-template-columns: repeat(2, 14rem);
-  grid-template-rows: repeat(2, 17rem);
+  grid-template-columns: repeat(2, 20rem);
+  grid-template-rows: repeat(2, 22rem);
   gap: 5rem 1rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .home {
     grid-template-columns: 30rem 40rem;
     grid-template-rows: 50rem auto;
@@ -76,8 +76,6 @@ export default defineComponent({
 
   .home__menu {
     grid-area: C;
-    grid-template-columns: repeat(2, 14rem);
-    grid-template-rows: repeat(2, 17rem);
     gap: 2rem;
   }
 }
@@ -86,7 +84,7 @@ export default defineComponent({
   .home {
     grid-template-columns: 40rem;
     grid-template-rows: auto;
-    gap: 2rem;
+    gap: 5rem;
     grid-template-areas:
       'B'
       'C'
@@ -94,8 +92,6 @@ export default defineComponent({
   }
 
   .home__menu {
-    grid-template-columns: repeat(2, 14rem);
-    grid-template-rows: repeat(3, 17rem);
     gap: 1.5rem;
   }
 }

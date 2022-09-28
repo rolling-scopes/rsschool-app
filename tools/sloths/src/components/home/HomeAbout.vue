@@ -41,6 +41,7 @@ export default defineComponent({
 <style scoped>
 .home__about {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,6 +83,7 @@ export default defineComponent({
   transition: 0.5s;
   color: var(--color-text);
   font-weight: 300;
+  font-size: 2rem;
 }
 
 .home__controls {

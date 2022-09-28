@@ -22,15 +22,15 @@ export default defineComponent({
 
 <style scoped>
 .home-category {
-  width: 10rem;
+  width: 15rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.5rem;
   cursor: pointer;
 }
 
 .home-category__img {
-  height: 10rem;
+  height: 15rem;
   width: 100%;
   border-radius: 50%;
   border: 0.3rem var(--color-border-inverse) solid;
@@ -62,6 +62,7 @@ export default defineComponent({
   text-align: center;
   color: var(--color-text);
   font-weight: 300;
+  font-size: 2rem;
   opacity: 0;
   transition: 0.3s;
 }
@@ -83,5 +84,11 @@ export default defineComponent({
 
 .home-category:hover .home-category__name {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .home-category__name {
+    opacity: 1;
+  }
 }
 </style>
