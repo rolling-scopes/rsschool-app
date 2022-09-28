@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" :class="`footer-${currTheme}`">
     <a class="rss" href="https://rs.school/js/" target="_blank"></a>
     <div class="team">
       <a class="team__item link" href="https://github.com/WiiJoy" target="_blank">WiiJoy</a>
@@ -12,9 +12,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapWritableState } from 'pinia';
+
+import themeProp from '../../stores/theme';
 
 export default defineComponent({
   name: 'FooterView',
+
+  computed: {
+    ...mapWritableState(themeProp, ['currTheme']),
+  },
 });
 </script>
 
@@ -25,6 +32,15 @@ export default defineComponent({
   align-items: center;
   padding: 3rem;
   z-index: 3;
+  transition: .5s ease;
+}
+
+.footer-light {
+  background: repeat-x left bottom / contain url('../../assets/backgrounds/bg-footer-light.svg');
+}
+
+.footer-dark {
+  background: repeat-x left bottom / contain url('../../assets/backgrounds/bg-footer-dark.svg');
 }
 
 .rss {
