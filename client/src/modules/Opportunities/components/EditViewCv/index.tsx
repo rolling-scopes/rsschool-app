@@ -37,7 +37,6 @@ export const EditViewCv = (props: ResumeProps) => {
           visibleCourses={visibleCourses}
           onUpdateResume={onUpdateResume}
           githubId={githubId}
-          onRemoveConsent={onRemoveConsent}
           switchView={switchView}
         />
       ) : (
