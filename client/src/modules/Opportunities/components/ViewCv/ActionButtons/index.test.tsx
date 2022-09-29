@@ -1,5 +1,4 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { ActionButtons } from './index';
 
 const mockUrl = 'https://example.com';
