@@ -17,13 +17,14 @@ const service = new OpportunitiesService();
 type Props = {
   expirationDate: string;
   expirationState: ExpirationState;
+  publicMode?: boolean;
 };
 
-export const ExpirationTooltip = ({ expirationDate, expirationState }: Props) => {
+export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode }: Props) => {
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {
-    if (expirationState === ExpirationState.Expired) showRenewModal();
+    if (expirationState === ExpirationState.Expired && publicMode !== true) showRenewModal();
   });
 
   const showRenewModal = useCallback(() => {
