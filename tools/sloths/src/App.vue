@@ -84,12 +84,13 @@ export default defineComponent({
       try {
         const response = await fetch(CLEANED_JSON_URL);
 
-        if (response.status === 200) {
-          const data: string[] = await response.json();
-          this.cleanedFilelist = data.map((file) => `${CDN_URL}/cleaned/${file}`);
-        }
+        if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+        const data: string[] = await response.json();
+        this.cleanedFilelist = data.map((file) => `${CDN_URL}/cleaned/${file}`);
       } catch (error) {
-        console.log('error: ', error);
+        this.isAlert = true;
+        this.header = 'modal.header.error';
+        this.message = `${error}`;
       }
     },
 
@@ -97,16 +98,17 @@ export default defineComponent({
       try {
         const response = await fetch(STICKERS_JSON_URL);
 
-        if (response.status === 200) {
-          const data: MetadataSloths = await response.json();
-          this.sloths = data.stickers.map((sloth) => ({
-            ...sloth,
-            image: `${CDN_URL}/stickers/${sloth.id}/image.svg`,
-            checked: false,
-          }));
-        }
+        if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+        const data: MetadataSloths = await response.json();
+        this.sloths = data.stickers.map((sloth) => ({
+          ...sloth,
+          image: `${CDN_URL}/stickers/${sloth.id}/image.svg`,
+          checked: false,
+        }));
       } catch (error) {
-        console.log('error: ', error);
+        this.isAlert = true;
+        this.header = 'modal.header.error';
+        this.message = `${error}`;
       }
     },
   },

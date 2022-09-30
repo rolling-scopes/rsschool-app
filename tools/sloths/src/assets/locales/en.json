@@ -45,7 +45,8 @@
     "search": "...caption or description",
     "sorting": "Sort by...",
     "info": "Detail info",
-    "count": "Total count"
+    "count": "Total count",
+    "stickersNotFound": "Sloth stickers not found. Please, contact the site administrator"
   },
 
   "guess": {
