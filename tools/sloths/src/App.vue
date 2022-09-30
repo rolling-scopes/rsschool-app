@@ -23,7 +23,7 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import { CDN_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
+import { CDN_CLEANED_URL, CDN_STICKERS_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
 
 import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
@@ -85,8 +85,9 @@ export default defineComponent({
         const response = await fetch(CLEANED_JSON_URL);
 
         if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+
         const data: string[] = await response.json();
-        this.cleanedFilelist = data.map((file) => `${CDN_URL}/cleaned/${file}`);
+        this.cleanedFilelist = data.map((file) => `${CDN_CLEANED_URL}/${file}`);
       } catch (error) {
         this.isAlert = true;
         this.header = 'modal.header.error';
@@ -99,10 +100,11 @@ export default defineComponent({
         const response = await fetch(STICKERS_JSON_URL);
 
         if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+
         const data: MetadataSloths = await response.json();
         this.sloths = data.stickers.map((sloth) => ({
           ...sloth,
-          image: `${CDN_URL}/stickers/${sloth.id}/image.svg`,
+          image: `${CDN_STICKERS_URL}/${sloth.id}/image.svg`,
           checked: false,
         }));
       } catch (error) {

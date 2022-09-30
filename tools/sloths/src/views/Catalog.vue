@@ -82,7 +82,7 @@ import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
 import { errorHandler } from '@/services/error-handler';
-import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
+import { CDN_STICKERS_URL, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
 import useLoader from '@/stores/loader';
 import usePagination from '@/stores/pagination';
@@ -296,7 +296,7 @@ export default defineComponent({
       const zipFilename = `sloths_${new Date().toISOString()}.zip`;
 
       ids.forEach((id) => {
-        const blobPromise = fetch(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`).then((r) => {
+        const blobPromise = fetch(`${CDN_STICKERS_URL}/${id}/image.svg`).then((r) => {
           if (r.status === 200) return r.blob();
           return Promise.reject(new Error(r.statusText));
         });

@@ -2,7 +2,8 @@
 import type { MemoryLevel, SelectOptions } from './types';
 
 // Services
-export const CDN_URL = import.meta.env.VITE_CDN_URL;
+export const CDN_STICKERS_URL = import.meta.env.VITE_CDN_STICKERS_URL;
+export const CDN_CLEANED_URL = import.meta.env.VITE_CDN_CLEANED_URL;
 export const STICKERS_JSON_URL = import.meta.env.VITE_STICKERS_JSON_URL;
 export const CLEANED_JSON_URL = import.meta.env.VITE_CLEANED_JSON_URL;
 
