@@ -2,7 +2,6 @@
   <div class="catalog">
     <div class="catalog__aside list-aside">
       <custom-btn
-        v-show="getPageName === 'catalog'"
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
         :disabled="!isChecked"
         :text="$t('btn.download')"
@@ -22,7 +21,6 @@
       >
       </list-controls>
       <custom-btn
-        v-show="getPageName === 'catalog'"
         :text="$t('merch.title')"
         :imgPath="'./img/catalog/merch.svg'"
         className="btn btn-catalog"
@@ -42,7 +40,7 @@
       </div>
       <sloth-info
         :isSlothInfoVisible="isSlothInfoVisible"
-        :headerText="getHeaderSlothInfo"
+        :headerText="$t('catalog.info')"
         @closeSlothInfo="closeSlothInfo"
       ></sloth-info>
     </div>
@@ -139,14 +137,6 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(themeProp, ['currTheme']),
-
-    getPageName(): string {
-      return 'catalog';
-    },
-
-    getHeaderSlothInfo(): string {
-      return this.$t('catalog.info');
-    },
 
     isChecked(): boolean {
       return !!this.checked.filter((el) => el.checked).length;
