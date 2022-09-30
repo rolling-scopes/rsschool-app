@@ -10,13 +10,13 @@ export const CLEANED_JSON_URL = import.meta.env.VITE_CLEANED_JSON_URL;
 // Sorting
 export const SLOTH_SORTING: SelectOptions[] = [
   {
-    value: 'name-desc',
-    text: 'sorting.name-',
+    value: 'name-asc',
+    text: 'sorting.name+',
     type: 'name',
   },
   {
-    value: 'name-asc',
-    text: 'sorting.name+',
+    value: 'name-desc',
+    text: 'sorting.name-',
     type: 'name',
   },
 ];
