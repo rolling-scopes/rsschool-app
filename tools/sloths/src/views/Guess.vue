@@ -76,7 +76,7 @@ import { defineComponent } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
-import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_GAME_ID, GUESS_SLOTHS } from '@/common/const';
+import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
 import type { GameResult, GameResults } from '@/common/types';
 
@@ -231,16 +231,15 @@ export default defineComponent({
       }
 
       const gameResult: GameResult = {
-        gameId: GUESS_GAME_ID,
         count: this.getGuesses,
         time: this.getTime,
-        createdAt: (new Date).getTime()
+        createdAt: new Date().getTime(),
       };
 
-      currResults.unshift(gameResult)
+      currResults.unshift(gameResult);
 
       if (currResults.length > 10) {
-        currResults.pop()
+        currResults.pop();
       }
 
       localStorage.setItem('rs-sloths-guess', JSON.stringify(currResults));

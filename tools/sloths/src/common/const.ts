@@ -65,17 +65,14 @@ export const MEMORY_LEVELS: MemoryLevel[] = [
   {
     level: 'junior',
     n: 4,
-    gameId: '36fdb508-80e4-4e0d-a6b8-78fe7e66a5d5',
   },
   {
     level: 'middle',
     n: 8,
-    gameId: 'ca0305dc-9dab-4f36-84f1-45f8223818e0',
   },
   {
     level: 'senior',
     n: 12,
-    gameId: '42df7648-5c56-4a66-a288-ec6acf8b18b0',
   },
 ];
 export const MEMORY_GAME_TIMEOUT = 1000;
@@ -83,7 +80,6 @@ export const MEMORY_GAME_COVER = './img/memory/card-cover.svg';
 export const MEMORY_GAME_WINNER = './img/memory/winner1.svg';
 
 // Guess Game
-export const GUESS_GAME_ID = '431b4880-0ac6-4082-ae9f-b34f5f9a84a6';
 export const GUESS_GAME_WINNER = './img/guess/winner3.svg';
 export const GUESS_GAME_WINNER_ALL = './img/guess/winner2.svg';
 

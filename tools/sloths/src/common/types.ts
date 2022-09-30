@@ -85,7 +85,6 @@ export type GameResults = GameResult[];
 export type GameResult = {
   [keyof: string]: string | number | undefined | {};
   id?: string;
-  gameId?: string;
   count: number;
   time: number;
   createdAt: number;
@@ -99,7 +98,6 @@ export type GameResult = {
 export type MemoryLevel = {
   level: string;
   n: number;
-  gameId: string;
 };
 
 export type ErrorDescription = {
