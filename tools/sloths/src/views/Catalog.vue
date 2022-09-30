@@ -206,7 +206,7 @@ export default defineComponent({
       try {
         const res = service.getTags();
 
-        if (!res) throw Error(); // todo
+        if (!res) throw new Error(this.$t('catalog.tagsNotFound'));
 
         this.tags = res.slice();
       } catch (error) {
@@ -242,7 +242,7 @@ export default defineComponent({
       try {
         const res = await service.getById(sloth.id);
 
-        if (!res) throw Error(); // todo
+        if (!res) throw new Error(`${this.$t('catalog.idNotFound')} (${sloth.id})`);
 
         const dataSloth = res;
         const slothIndex = this.sloths.findIndex((el) => el.id === sloth.id);
