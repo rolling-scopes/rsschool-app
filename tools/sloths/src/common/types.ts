@@ -1,6 +1,3 @@
-import type { SuggestionStatus } from './enums/suggestion-status';
-import type { Role } from './enums/user-role';
-
 export type RequestError = {
   statusCode: number;
   message: string | string[];
@@ -46,16 +43,6 @@ export interface API<T> {
 export type Tags = Tag[];
 export type Tag = string;
 
-export type Users = User[];
-export type User = {
-  id: string;
-  name: string;
-  github: string;
-  avatar_url: string;
-  createdAt: Date;
-  role: Role;
-};
-
 export type Sloths = Sloth[];
 export type Sloth = {
   [keyof: string]: string | boolean | Tags;
@@ -90,30 +77,13 @@ export type MetadataSloth = {
   tags: Tags;
 };
 
-export type Suggestions = Suggestion[];
-export type Suggestion = {
-  id: string;
-  description: string;
-  image_url: string;
-  userId: string;
-  rating: number;
-  ratings: UserRate[];
-  createdAt: Date;
-  status: SuggestionStatus;
-};
-export type SuggestionsRating = {
-  suggestionId: string;
-  userId: string;
-  rate: number;
-};
-
 export type UserRate = {
   rate: number;
 };
 
 export type GameResults = GameResult[];
 export type GameResult = {
-  [keyof: string]: string | number | undefined | {}
+  [keyof: string]: string | number | undefined | {};
   id?: string;
   gameId?: string;
   count: number;
