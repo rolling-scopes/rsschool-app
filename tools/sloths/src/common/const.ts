@@ -60,11 +60,6 @@ export const GAME_RESULT_SORTING: SelectOptions[] = [
 // Pagination
 export const PAGINATION_OPTIONS: number[] = [10, 15, 20, 25, 50, 100];
 
-// Users
-export const DEFAULT_USER_AVATAR = './img/profile/default.svg';
-export const AUTHORIZATION_IMG = './img/github.svg';
-export const AUTHORIZATION_URL = `${BASE}/auth/github`;
-
 // Memory Game
 export const MEMORY_LEVELS: MemoryLevel[] = [
   {

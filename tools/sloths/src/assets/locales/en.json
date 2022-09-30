@@ -114,15 +114,12 @@
     "header": {
       "alert": "Alert!",
       "error": "ERROR!",
-      "authorization": "Please login via GitHub",
       "switchers": {
         "sound": "Turn on/off sound (Ctrl+1)",
-        "locale": "Switch language (Ctrl+2)",
         "theme": "Switch theme (Ctrl+3)"
       }
     },
     "body": {
-      "authorization": "In order to access the RS Sloths, you need to login with your GitHub account",
       "del-sloth": "Do you really want to delete this wonderful sloth?",
       "del-user": "Do you really want to delete this wonderful user?",
       "del-suggest": "Do you really want to delete this wonderful suggestion?",
@@ -132,8 +129,7 @@
       "download": "Download selected files?"
     },
     "btn": {
-      "close": "Close",
-      "authorization": "Sign up with GitHub"
+      "close": "Close"
     }
   },
 
