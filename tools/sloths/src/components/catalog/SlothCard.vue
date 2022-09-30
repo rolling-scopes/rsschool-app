@@ -33,18 +33,6 @@
       </div>
       <p class="sloth-info__property">{{ slothInfo.name }}</p>
     </div>
-
-    <modal-window v-show="isApproveShow" @close="closeModal">
-      <template v-slot:header> {{ $t('modal.header.alert') }} </template>
-
-      <template v-slot:body> {{ $t('modal.body.del-sloth') }} </template>
-
-      <template v-slot:footer>
-        <div class="sloth-info__btn btn-horizontal">
-          <custom-btn :text="$t('btn.no')" className="btn btn-primary" :onClick="closeModal"></custom-btn>
-        </div>
-      </template>
-    </modal-window>
   </div>
 </template>
 
@@ -52,14 +40,12 @@
 import { defineComponent, type PropType } from 'vue';
 import type { Sloth } from '@/common/types';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import ModalWindow from '@/components/modal/ModalWindow.vue';
 
 export default defineComponent({
   name: 'SlothCard',
 
   components: {
     CustomBtn,
-    ModalWindow,
   },
 
   data() {
@@ -234,16 +220,6 @@ export default defineComponent({
 
 .download-sloth-info__img {
   height: 6rem;
-}
-
-.sloth-info__property_rating {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.sloth-info__rating {
-  text-transform: uppercase;
 }
 
 .sloth-info__select {

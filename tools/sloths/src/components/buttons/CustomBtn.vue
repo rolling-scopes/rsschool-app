@@ -172,22 +172,6 @@ export default defineComponent({
   background-color: var(--color-background-inverse-soft);
 }
 
-.icon-light-del {
-  background-image: url('@/assets/icons/btn/trash.svg');
-}
-
-.icon-dark-del {
-  background-image: url('@/assets/icons/btn/trash-black.svg');
-}
-
-.icon-light-edit {
-  background-image: url('@/assets/icons/btn/pencil.svg');
-}
-
-.icon-dark-edit {
-  background-image: url('@/assets/icons/btn/pencil-black.svg');
-}
-
 .icon-light-download {
   background-image: url('@/assets/icons/btn/download.svg');
 }

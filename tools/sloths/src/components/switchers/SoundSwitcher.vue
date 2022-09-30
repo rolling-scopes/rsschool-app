@@ -15,7 +15,7 @@
       class="sound-switcher__label"
       :for="`sound-${checkSound}`"
       :class="`sound-switcher__label_${currTheme}-${checkSound}`"
-      :title="$t('modal.header.switchers.sound')"
+      :title="$t('header.switchers.sound')"
       v-shortkey="['ctrl', '1']"
       @shortkey="setSoundValue(`${checkSound}`)"
     ></label>

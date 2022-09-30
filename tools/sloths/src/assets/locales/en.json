@@ -1,6 +1,10 @@
 {
   "header": {
-    "title": "Header"
+    "title": "Header",
+    "switchers": {
+      "sound": "Turn on/off sound (Ctrl+1)",
+      "theme": "Switch theme (Ctrl+2)"
+    }
   },
 
   "footer": {
@@ -41,15 +45,6 @@
     "search": "...caption or description",
     "sorting": "Sort by...",
     "info": "Detail info",
-    "caption": "Caption",
-    "description": "Description",
-    "rating": "Rating",
-    "image_url": "Image url",
-    "createdAt": "Created at",
-    "tags": "Tags",
-    "btn": {
-      "new": "New Sloth"
-    },
     "count": "Total count"
   },
 
@@ -113,24 +108,12 @@
   "modal": {
     "header": {
       "alert": "Alert!",
-      "error": "ERROR!",
-      "switchers": {
-        "sound": "Turn on/off sound (Ctrl+1)",
-        "theme": "Switch theme (Ctrl+3)"
-      }
+      "error": "ERROR!"
     },
     "body": {
-      "del-sloth": "Do you really want to delete this wonderful sloth?",
-      "del-user": "Do you really want to delete this wonderful user?",
-      "del-suggest": "Do you really want to delete this wonderful suggestion?",
-      "empty-file": "File not selected!",
-      "empty-caption": "Name the sloth!",
-      "empty-description": "Describe the sloth!",
       "download": "Download selected files?"
     },
-    "btn": {
-      "close": "Close"
-    }
+    "btn": {}
   },
 
   "loader": {
@@ -144,29 +127,15 @@
 
   "sorting": {
     "name+": "...Name (ascending)",
-    "name-": "...Name (descending)",
-    "github+": "...GitHub (ascending)",
-    "github-": "...GitHub (descending)",
-    "createdAt+": "...Creation date (ascending)",
-    "createdAt-": "...Creation date (descending)",
-    "caption+": "...Caption (ascending)",
-    "caption-": "...Caption (descending)",
-    "rating+": "...Rating (ascending)",
-    "rating-": "...Rating (descending)",
-    "status+": "...Status (ascending)",
-    "status-": "...Status (descending)"
+    "name-": "...Name (descending)"
   },
 
   "btn": {
+    "close": "Close",
     "reset": "Reset filters",
-    "del": "Delete",
-    "edit": "Edit",
-    "save": "Save",
     "show": "Detail info",
-    "upload": "Choose File",
     "yes": "Yes",
     "no": "No",
-    "pick": "Pick",
     "copy": "Copy",
     "download": "Download",
     "trueSize": "True Size",
@@ -195,8 +164,6 @@
   },
 
   "results": {
-    "user": "Personal results",
-    "all": "Top 10",
-    "again": "Try again:"
+    "user": "Personal results"
   }
 }
