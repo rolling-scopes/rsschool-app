@@ -1,15 +1,10 @@
 /* eslint-disable import/prefer-default-export */
-
-import type { ErrorDescription, MemoryLevel, SelectOptions } from './types';
+import type { MemoryLevel, SelectOptions } from './types';
 
 // Services
-export const BASE = import.meta.env.VITE_BFF_URL;
 export const CDN_URL = import.meta.env.VITE_CDN_URL;
 export const STICKERS_JSON_URL = import.meta.env.VITE_STICKERS_JSON_URL;
 export const CLEANED_JSON_URL = import.meta.env.VITE_CLEANED_JSON_URL;
-
-// custom Errors
-export const JSON_ERROR: ErrorDescription = { code: 'NOT_JSON', message: 'Response is not a JSON!' };
 
 // Sorting
 export const SLOTH_SORTING: SelectOptions[] = [
@@ -80,8 +75,7 @@ export const MEMORY_GAME_COVER = './img/memory/card-cover.svg';
 export const MEMORY_GAME_WINNER = './img/memory/winner1.svg';
 
 // Guess Game
-export const GUESS_GAME_WINNER = './img/guess/winner3.svg';
-export const GUESS_GAME_WINNER_ALL = './img/guess/winner2.svg';
+export const GUESS_GAME_WINNER = './img/guess/winner2.svg';
 
 export const CATALOG_SLOTH_PREVIEW = './img/preview.svg';
 

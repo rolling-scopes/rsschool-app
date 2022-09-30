@@ -1,14 +1,3 @@
-export type RequestError = {
-  statusCode: number;
-  message: string | string[];
-  error: string;
-};
-
-export type GetList<T> = {
-  count: number;
-  items: T[];
-};
-
 export type Tags = Tag[];
 export type Tag = string;
 
@@ -22,20 +11,6 @@ export type Sloth = {
   checked: boolean;
   image: string;
 };
-export type SlothTags = {
-  id: string;
-  caption: string;
-  description: string;
-  image_url: string;
-  rating: number;
-  createdAt: number;
-  tags: string;
-};
-export type SlothRating = {
-  slothId: string;
-  userId: string;
-  rate: number;
-};
 export type MetadataSloths = {
   stickers: MetadataSloth[];
 };
@@ -44,10 +19,6 @@ export type MetadataSloth = {
   name: string;
   description: string;
   tags: Tags;
-};
-
-export type UserRate = {
-  rate: number;
 };
 
 export type GameResults = GameResult[];
@@ -69,18 +40,12 @@ export type MemoryLevel = {
   n: number;
 };
 
-export type ErrorDescription = {
-  code: string;
-  message: string;
-};
-
 export type QueryStringOptions = {
   page?: string;
   limit?: string;
   order?: string;
   searchText?: string;
   filter?: string;
-  userId?: string;
 };
 
 export type SelectOptions = {

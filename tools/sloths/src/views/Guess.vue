@@ -54,7 +54,7 @@
 
       <template v-slot:body>
         <div class="guess-modal__wrap">
-          <img class="guess-modal__img" :src="cardWinnerAll" alt="winner" />
+          <img class="guess-modal__img" :src="cardWinner" alt="winner" />
           <p class="guess-modal__points">{{ Math.round((getGuesses * 100) / gameCards.length) }} %</p>
         </div>
         <p>{{ allGuesses ? `${$t('guess.win')} ` : '' }}{{ $t('guess.result') }}</p>
@@ -76,7 +76,7 @@ import { defineComponent } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
-import { GUESS_GAME_WINNER, GUESS_GAME_WINNER_ALL, GUESS_SLOTHS } from '@/common/const';
+import { GUESS_GAME_WINNER, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
 import type { GameResult, GameResults } from '@/common/types';
 
@@ -111,7 +111,6 @@ export default defineComponent({
       stepSelection: -1,
       stepAnswer: false,
       cardWinner: GUESS_GAME_WINNER,
-      cardWinnerAll: GUESS_GAME_WINNER_ALL,
       isAnimated: false,
       isModalVisible: false,
       isTableResultsVisible: false,
