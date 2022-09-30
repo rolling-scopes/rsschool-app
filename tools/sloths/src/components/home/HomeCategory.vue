@@ -38,10 +38,6 @@ export default defineComponent({
   transition: 0.3s;
 }
 
-.home-category_suggest > .home-category__img {
-  background: no-repeat center center / contain url('../../assets/icons/home/suggest.svg') var(--color-background-soft);
-}
-
 .home-category_memory > .home-category__img {
   background: no-repeat center center / contain url('../../assets/icons/home/memory.svg') var(--color-background-soft);
 }
