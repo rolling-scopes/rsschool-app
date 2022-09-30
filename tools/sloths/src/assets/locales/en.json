@@ -21,35 +21,18 @@
     "sloths": {
       "title": "About RS SLOTHS",
       "main": "All sloths in one site!",
-      "descr": "We have gathered all the sloths together for you! Now you just need to go to the catalog, select the necessary ones and download them. Any ideas, but no such sloth? Suggest! It can be a ready-made sloth, a sketch drawing or just a text description - and if the idea resonates with sloth fans, it will definitely come true!"
+      "descr": "We have gathered all the sloths together for you! Go to the catalog and see all the existing sloths! And if you want to use them somewhere, you can just select the ones you need and download it! Or you can go to the merch builder and prepare the source for something cool. Be active, but not too active. We are sloths here!"
     },
     "interactives": {
       "title": "Interactive",
       "main": "Sloths are about chilling!",
-      "descr": "We have tried to make sure that you can relax during your stay on our resource. Relax and play Memory Game, try to correctly guess all the sloths in the game of the same name, or create memes based on existing stickers: fun time, work hour! And since you've come here, don't forget to find out what kind of sloth you're today!"
+      "descr": "We have tried to make sure that you can relax during your stay on our resource. Relax and play Memory Game, try to correctly guess all the sloths in the game of the same name, or create memes based on existing stickers: fun time, work hour!"
     },
     "teammates": {
       "main": "WOV WOV Team is a team of like-minded people who strive to create something new, interesting and beautiful. We're for a businesslike attitude to humor and a humorous attitude to business!",
       "wiijoy": "Designer, memolog and Vue.js promoter. Performed the initial setup, created a design layout and carried out work on the front-end part of the project.",
       "ogimly": "Queen of TypeScript, mistress of API requests and just a good person. Worked on the front-end part of the project, completed all the work on communicating the front-end component with its server part.",
       "vanet": "Genius, billionaire, playboy, philanthropist. In short, team-lead. Gathered a team, solved all organizational questions (and just solved), developed the backend of the project."
-    }
-  },
-
-  "profile": {
-    "title": "User Profile",
-    "name": "Name",
-    "github": "GitHub",
-    "role": "Role",
-    "createdAt": "Created at",
-    "avatar": "User photo",
-    "btn": {
-      "logout": "Sign out",
-      "guess": "Guess-a-Sloth Game results",
-      "memory": "Memory Game results",
-      "suggest": "Your Sloths suggestions",
-      "admin": "To Admin panel",
-      "sloth": "Your Sloth today"
     }
   },
 
@@ -103,29 +86,6 @@
     "results": "Memory Results"
   },
 
-  "suggest": {
-    "title": "Suggest a new Sloth",
-    "search": "...description",
-    "sorting": "Sort by...",
-    "info": "Detail info",
-    "description": "Description",
-    "rating": "Rating",
-    "createdAt": "Created at",
-    "status": "Status",
-    "user": "User",
-    "btn": {
-      "new": "Your Suggestion",
-      "switch": {
-        "to-new": "New Suggestion",
-        "to-watch": "All Suggestions"
-      },
-      "submit": "Submit"
-    },
-    "new": "Create new Suggestion",
-    "placeholder": "Enter description of meme",
-    "count": "Total count"
-  },
-
   "create": {
     "title": "Create a meme",
     "description": "Choose an image, enter text and copy the result",
@@ -148,30 +108,6 @@
     "marginLeft": "Image Margin Left",
     "color": "Text Color",
     "backgroundColor": "Item Color"
-  },
-
-  "sloth": {
-    "title": "What kind of sloth are you today"
-  },
-
-  "admin": {
-    "title": "Admin panel",
-    "search": "...name or GitHub",
-    "sorting": "Sort by...",
-    "btn": {
-      "users": "Users",
-      "sloths": "Sloths",
-      "suggest": "Suggest a Sloth",
-      "guess": "Guess-a-Sloth",
-      "memory": "Memory"
-    },
-    "users": {
-      "title": "Users List",
-      "info": "Detail info",
-      "btn": {
-        "new": "New user"
-      }
-    }
   },
 
   "modal": {
@@ -266,11 +202,5 @@
     "user": "Personal results",
     "all": "Top 10",
     "again": "Try again:"
-  },
-
-  "rate": {
-    "none": "No rating",
-    "user": "User rating:",
-    "your": "Your rate:"
   }
 }

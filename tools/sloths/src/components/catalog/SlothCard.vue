@@ -242,28 +242,8 @@ export default defineComponent({
   gap: 1rem;
 }
 
-.sloth-info__user-rate {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .sloth-info__rating {
   text-transform: uppercase;
-}
-
-.user-rate__main {
-  font-size: 2rem;
-}
-
-.user-rate__sloth {
-  height: 4rem;
-}
-
-.sloth-info__property_rate {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
 }
 
 .sloth-info__select {

@@ -53,7 +53,7 @@ export default defineComponent({
   width: 30rem;
   height: 30rem;
   justify-self: start;
-  background: no-repeat center center / contain url('@/assets/icons/home/rs-sloths.svg');
+  background: no-repeat center center / contain url('/img/logo.svg');
 }
 
 .home__radio {
