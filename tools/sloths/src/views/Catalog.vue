@@ -82,7 +82,7 @@ import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
-import { errorHandler } from '@/services/error-handling/error-handler';
+import { errorHandler } from '@/services/error-handler';
 import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
 import { ModalEvents } from '@/common/enums/modal-events';

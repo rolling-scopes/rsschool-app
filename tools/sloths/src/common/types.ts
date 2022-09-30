@@ -4,41 +4,10 @@ export type RequestError = {
   error: string;
 };
 
-export type APIRequestResult<T> = {
-  ok: boolean;
-  status: number;
-  data: T;
-  error: RequestError;
-  headers: Headers;
-};
-
 export type GetList<T> = {
   count: number;
   items: T[];
 };
-
-export interface API<T> {
-  getAllList(): Promise<APIRequestResult<T[]>>;
-
-  getByOptions(options: QueryStringOptions): Promise<APIRequestResult<GetList<T>>>;
-
-  getAll(
-    page: number,
-    limit: number,
-    order: string,
-    searchText: string,
-    filter: string,
-    userId: string
-  ): Promise<APIRequestResult<GetList<T>>>;
-
-  getById(id: string): Promise<APIRequestResult<T>>;
-
-  create(body: T): Promise<APIRequestResult<T>>;
-
-  updateById(id: string, body: T): Promise<APIRequestResult<Partial<T>>>;
-
-  deleteById(id: string): Promise<APIRequestResult<T>>;
-}
 
 export type Tags = Tag[];
 export type Tag = string;
