@@ -43,7 +43,6 @@
       <sloth-info
         :isSlothInfoVisible="isSlothInfoVisible"
         :headerText="getHeaderSlothInfo"
-        :modalEvents="modalEvents"
         @closeSlothInfo="closeSlothInfo"
       ></sloth-info>
     </div>
@@ -85,7 +84,6 @@ import type { PageSettings, Sloth, Sloths } from '@/common/types';
 import { errorHandler } from '@/services/error-handler';
 import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
-import { ModalEvents } from '@/common/enums/modal-events';
 import useLoader from '@/stores/loader';
 import usePagination from '@/stores/pagination';
 import useSearchText from '@/stores/search-text';
@@ -131,7 +129,6 @@ export default defineComponent({
       sloths: [] as Sloths,
       count: 0,
       isSlothInfoVisible: false,
-      modalEvents: ModalEvents.view,
       tags: [] as string[],
       sortingOptions: SLOTH_SORTING,
       isDownloadShow: false,
@@ -148,8 +145,6 @@ export default defineComponent({
     },
 
     getHeaderSlothInfo(): string {
-      if (this.modalEvents === ModalEvents.new) return this.$t('catalog.btn.new');
-      if (this.modalEvents === ModalEvents.edit) return this.$t('btn.edit');
       return this.$t('catalog.info');
     },
 
@@ -264,7 +259,6 @@ export default defineComponent({
 
         if (slothIndex !== -1) this.sloths[slothIndex] = dataSloth;
 
-        this.modalEvents = ModalEvents.view;
         setSlothInfo(dataSloth);
         this.showSlothInfo();
       } catch (error) {

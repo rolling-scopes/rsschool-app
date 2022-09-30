@@ -5,7 +5,7 @@
 
       <template v-slot:body>
         <div>
-          <div v-if="isView" class="sloth-info__props">
+          <div class="sloth-info__props">
             <div class="sloth-info__sloth">
               <img class="sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
             </div>
@@ -25,11 +25,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import useSlothInfo from '@/stores/sloth-info';
-import { ModalEvents } from '@/common/enums/modal-events';
 import { CATALOG_SLOTH_PREVIEW } from '@/common/const';
 
 const { slothInfo, tagsStr } = storeToRefs(useSlothInfo());
@@ -60,17 +59,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    modalEvents: {
-      type: String as PropType<ModalEvents>,
-      default: ModalEvents.view,
-    },
   },
 
   computed: {
-    isView(): boolean {
-      return this.modalEvents === ModalEvents.view;
-    },
-
     getHeader(): string {
       return this.slothInfo.name;
     },
@@ -121,11 +112,6 @@ export default defineComponent({
   align-items: center;
 }
 
-.sloth-info__file {
-  opacity: 0;
-  height: 1px;
-}
-
 .sloth-info__img {
   height: 20rem;
 }
@@ -133,22 +119,5 @@ export default defineComponent({
 .sloth-info__text {
   text-align: center;
   white-space: pre-wrap;
-}
-
-.sloth-info__text_rate {
-  display: flex;
-  align-items: center;
-}
-
-.sloth-info__input {
-  width: 30rem !important;
-}
-
-.sloth-info__text__main {
-  font-size: 2rem;
-}
-
-.sloth-info__text__sloth {
-  height: 2rem;
 }
 </style>
