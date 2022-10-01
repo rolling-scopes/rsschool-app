@@ -16,6 +16,7 @@ export interface CourseInfo {
   mentorId?: number;
   studentId?: number;
   roles: CourseRole[];
+  isExpelled?: boolean;
 }
 
 export interface Session {

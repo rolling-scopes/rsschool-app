@@ -50,7 +50,7 @@ const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-
+  const isExpelledStudent = props.session.courses[courseId]?.isExpelled;
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -141,16 +141,19 @@ function Page(props: CoursePageProps) {
         const pubAtts = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
         const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
         notification.error({
-          message: (
-            <>
-              You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
-              {!!oneAttemptPerNumberOfHours &&
-                `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
-                  oneAttemptPerNumberOfHours !== 1 && 's'
-                } `}
-              For now your attempts limit is over!
-            </>
-          ),
+          message:
+            isExpelledStudent === true ? (
+              <>This task can only be submitted by active students</>
+            ) : (
+              <>
+                You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
+                {!!oneAttemptPerNumberOfHours &&
+                  `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
+                    oneAttemptPerNumberOfHours !== 1 && 's'
+                  } `}
+                For now your attempts limit is over!
+              </>
+            ),
         });
         form.resetFields();
         return;

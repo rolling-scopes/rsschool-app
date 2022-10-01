@@ -66,7 +66,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
 type AuthDetails = {
   id: number;
   githubId: string;
-  students: { courseId: number; id: number }[];
+  students: { courseId: number; id: number; isExpelled: boolean | null }[];
   mentors: { courseId: number; id: number }[];
   courseUsers: CourseUser[];
 };
@@ -87,7 +87,9 @@ async function getAuthDetails(id: number): Promise<AuthDetails> {
     .addSelect(
       qb =>
         qb
-          .select(`jsonb_agg(json_build_object('id', student.id, 'courseId', student."courseId"))`)
+          .select(
+            `jsonb_agg(json_build_object('id', student.id, 'courseId', student."courseId", 'isExpelled', student."isExpelled"))`,
+          )
           .from('student', 'student')
           .where('student.userId = :id', { id }),
       'students',
