@@ -66,7 +66,7 @@ describe('useViewData', () => {
         selfIntroLink: mockResume.selfIntroLink,
         startFrom: mockResume.startFrom,
       },
-      uuid: '0882dc34-415d-4fa2-919d-37cab831db3a',
+      uuid: mockResume.uuid,
     });
   });
 
