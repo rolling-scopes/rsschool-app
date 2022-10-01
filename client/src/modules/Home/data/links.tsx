@@ -129,8 +129,6 @@ const links: LinkData[] = [
 ];
 
 export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {
-  console.log('🚀 ~ file: links.tsx ~ line 132 ~ getCourseLinks ~ activeCourse', activeCourse);
-  console.log('🚀 ~ file: links.tsx ~ line 132 ~ getCourseLinks ~ session', session);
   return activeCourse
     ? links
         .filter(
