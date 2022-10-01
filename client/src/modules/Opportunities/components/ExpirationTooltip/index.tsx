@@ -123,17 +123,28 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
     </>
   );
 
+  let content;
+
   switch (expirationState) {
     case ExpirationState.Expired:
-      return expiredContent;
+      content = expiredContent;
+      break;
 
     case ExpirationState.NearlyExpired:
-      return nearlyExpiredContent;
+      content = nearlyExpiredContent;
+      break;
 
     case ExpirationState.NotExpired:
-      return notExpiredContent;
+      content = notExpiredContent;
+      break;
 
     default:
       return null;
   }
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="no-print">
+      {content}
+    </div>
+  );
 };
