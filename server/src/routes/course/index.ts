@@ -234,7 +234,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
     '/student/:githubId/task/:courseTaskId/verification',
     courseGuard,
     ...activeStudentValidators,
-    validateExpelledStudent,
     createTaskVerification(logger),
   );
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
