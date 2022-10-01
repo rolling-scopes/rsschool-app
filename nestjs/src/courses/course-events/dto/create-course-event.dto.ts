@@ -21,6 +21,10 @@ export class CreateCourseEventDto {
   dateTime?: string;
 
   @ApiProperty({ required: false })
+  @IsOptional()
+  endTime?: string;
+
+  @ApiProperty({ required: false })
   @IsNumber()
   @IsOptional()
   duration?: number;
