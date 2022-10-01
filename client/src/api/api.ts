@@ -792,6 +792,12 @@ export interface CourseEventDto {
     'dateTime': string;
     /**
      * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'endTime': string;
+    /**
+     * 
      * @type {PersonDto}
      * @memberof CourseEventDto
      */
@@ -1302,6 +1308,12 @@ export interface CreateCourseEventDto {
      * @memberof CreateCourseEventDto
      */
     'dateTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseEventDto
+     */
+    'endTime'?: string;
     /**
      * 
      * @type {number}
@@ -3557,6 +3569,12 @@ export interface UpdateCourseEventDto {
      * @memberof UpdateCourseEventDto
      */
     'dateTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseEventDto
+     */
+    'endTime'?: string;
     /**
      * 
      * @type {number}

@@ -42,7 +42,7 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalVisible(false);
   };
 
@@ -85,9 +85,10 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
         visible={isModalVisible}
         width={1250}
         style={{ top: 20 }}
+        onCancel={handleCancel}
         footer={[
-          <Button type="primary" onClick={handleOk}>
-            OK
+          <Button type="primary" onClick={handleCancel}>
+            Cancel
           </Button>,
         ]}
       >
