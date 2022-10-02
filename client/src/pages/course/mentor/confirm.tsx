@@ -11,6 +11,9 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
+import { Warning } from 'components/Warning';
+
+const { Link } = Typography;
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session; courseAlias?: string }) {
@@ -86,14 +89,13 @@ function Page(props: { session: Session; courseAlias?: string }) {
 
   if (course == null) {
     return (
-      <PageLayout loading={false} githubId={props.session.githubId}>
-        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/svg/err.svg" alt="Course Not Found" width={175} height={175} />
-        </Row>
-        <Row justify="center">
-          <h1 style={{ fontSize: '36px', marginBottom: 0 }}>Sorry, Course Not Found</h1>
-        </Row>
-      </PageLayout>
+      <Warning
+        loading={false}
+        githubId={props.session.githubId}
+        imagePath="/svg/err.svg"
+        nameImage="Course Not Found"
+        textMessage="Sorry, Course Not Found"
+      />
     );
   }
 
@@ -105,10 +107,21 @@ function Page(props: { session: Session; courseAlias?: string }) {
   };
 
   if (noAccess && !isPreferredCourse) {
+    const message = (
+      <div>
+        <Link href={`/registry/mentor?course=${router.query?.course}`}>
+          <a>Register as a mentor for the course</a>
+        </Link>
+      </div>
+    );
     return (
-      <PageLayout {...pageProps}>
-        <Result status={'403'} title="You are not registered to the course" />
-      </PageLayout>
+      <Warning
+        loading={false}
+        githubId={props.session.githubId}
+        imagePath="/svg/wanted-mentors.svg"
+        nameImage="Not registered"
+        textMessage={message}
+      />
     );
   }
 
