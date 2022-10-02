@@ -109,7 +109,7 @@ export class CourseScheduleService {
       })
       .concat(
         courseEvents.map(courseEvent => {
-          const { courseId, dateTime, id } = courseEvent;
+          const { courseId, dateTime, endTime, id } = courseEvent;
           const { name } = courseEvent.event;
           const tag = this.getCourseEventTag(courseEvent);
           return {
@@ -117,7 +117,7 @@ export class CourseScheduleService {
             name,
             courseId,
             startDate: dateTime,
-            endDate: dateTime,
+            endDate: endTime,
             status: this.getEventStatus(courseEvent),
             tag,
             descriptionUrl: courseEvent.event.descriptionUrl,
@@ -251,7 +251,7 @@ export class CourseScheduleService {
 
   private getEventStatus(courseEvent: CourseEvent) {
     const startTime = (courseEvent.dateTime as Date).getTime();
-    const endTime = startTime + (courseEvent.duration ?? 60) * 1000 * 60;
+    const endTime = courseEvent.endTime ?? startTime + (courseEvent.duration ?? 60) * 1000 * 60;
     if (endTime < Date.now()) {
       return CourseScheduleItemStatus.Archived;
     }

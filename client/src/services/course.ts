@@ -88,6 +88,7 @@ export interface CourseEvent {
   date?: string;
   time?: string;
   dateTime: string;
+  endTime?: string;
   place: string;
   comment: string;
   eventId: number;
