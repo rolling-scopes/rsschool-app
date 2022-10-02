@@ -84,7 +84,7 @@ export const MEMORY_LEVELS: MemoryLevel[] = [
   },
 ];
 export const MEMORY_GAME_TIMEOUT = 1000;
-export const MEMORY_GAME_COVER = './img/memory/card-cover.svg';
+export const MEMORY_GAME_COVER = './img/memory/sprite.svg';
 export const MEMORY_GAME_WINNER = './img/memory/winner1.svg';
 
 // Guess Game

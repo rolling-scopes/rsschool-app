@@ -22,14 +22,13 @@
         @click="gameHandler(index)"
       >
         <transition name="flip" mode="out-in" @before-leave="isAnimated = true" @after-enter="isAnimated = false">
-          <img
-            v-if="!getIsOpen(index)"
-            :src="cardCover"
-            alt="cover"
-            class="game-field__img"
-            :class="{ success: item.success }"
-          />
-          <img v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }" />
+          <svg v-if="!getIsOpen(index)" alt="cover" class="game-field__img" :class="{ success: item.success }">
+            <use :xlink:href="`${cardCover}#card-cover`"></use>
+          </svg>
+          <!-- <img v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }" /> -->
+          <svg v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }">
+            <use :xlink:href="getImage(index)"></use>
+          </svg>
         </transition>
       </div>
     </transition-group>
@@ -134,18 +133,30 @@ export default defineComponent({
   methods: {
     getImages() {
       this.images = [
-        './img/memory/memory01.svg',
-        './img/memory/memory02.svg',
-        './img/memory/memory03.svg',
-        './img/memory/memory04.svg',
-        './img/memory/memory05.svg',
-        './img/memory/memory06.svg',
-        './img/memory/memory07.svg',
-        './img/memory/memory08.svg',
-        './img/memory/memory09.svg',
-        './img/memory/memory10.svg',
-        './img/memory/memory11.svg',
-        './img/memory/memory12.svg',
+        // './img/memory/memory01.svg',
+        // './img/memory/memory02.svg',
+        // './img/memory/memory03.svg',
+        // './img/memory/memory04.svg',
+        // './img/memory/memory05.svg',
+        // './img/memory/memory06.svg',
+        // './img/memory/memory07.svg',
+        // './img/memory/memory08.svg',
+        // './img/memory/memory09.svg',
+        // './img/memory/memory10.svg',
+        // './img/memory/memory11.svg',
+        // './img/memory/memory12.svg',
+        `${MEMORY_GAME_COVER}#memory01`,
+        `${MEMORY_GAME_COVER}#memory02`,
+        `${MEMORY_GAME_COVER}#memory03`,
+        `${MEMORY_GAME_COVER}#memory04`,
+        `${MEMORY_GAME_COVER}#memory05`,
+        `${MEMORY_GAME_COVER}#memory06`,
+        `${MEMORY_GAME_COVER}#memory07`,
+        `${MEMORY_GAME_COVER}#memory08`,
+        `${MEMORY_GAME_COVER}#memory09`,
+        `${MEMORY_GAME_COVER}#memory10`,
+        `${MEMORY_GAME_COVER}#memory11`,
+        `${MEMORY_GAME_COVER}#memory12`,
       ];
 
       this.getCards();
