@@ -261,9 +261,8 @@ export class RepositoryService {
     this.logger?.info(`[${ownerRepo}] creating`);
     let repository = null;
     try {
-      const response = await github.rest.repos.createUsingTemplate({
-        template_repo: 'template-repo',
-        template_owner: owner,
+      const response = await github.rest.repos.createInOrg({
+        org: owner,
         name: repo,
         private: true,
         auto_init: true,
