@@ -37,6 +37,9 @@ export class CourseEvent {
   @Column({ type: 'timestamptz', nullable: true })
   dateTime: string | Date | null;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  endTime: string | Date | null;
+
   @Column({ nullable: true })
   place: string;
 

@@ -129,9 +129,12 @@ function Page(props: Props) {
         </Form.Item>
         <Form.Item
           name="dateTime"
-          label="Date and Time"
+          label="Start Date and Time"
           rules={[{ required: true, message: 'Please enter date and time' }]}
         >
+          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+        </Form.Item>
+        <Form.Item name="endTime" label="End Date and Time">
           <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
         </Form.Item>
         <Form.Item name="place" label="Place">
@@ -196,6 +199,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
     { title: 'Type', dataIndex: ['event', 'type'] },
     { title: 'Date', dataIndex: 'dateTime', render: dateRenderer, width: 100 },
     { title: 'Time', dataIndex: 'dateTime', render: timeZoneRenderer(timeZone), width: 60 },
+    { title: 'End Date', dataIndex: 'endTime', render: dateRenderer },
     { title: 'Place', dataIndex: 'place' },
     {
       title: 'Organizer',
@@ -230,6 +234,7 @@ function createRecord(values: FormData) {
   const data = {
     place: values.place,
     dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
+    endTime: values.endTime ? formatTimezoneToUTC(values.endTime, values.timeZone) : undefined,
     eventId: values.eventId,
     comment: values.comment,
 
@@ -246,6 +251,7 @@ function getInitialValues(modalData: Partial<CourseEvent>) {
     ...modalData,
     timeZone,
     dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
+    endTime: modalData.endTime ? moment.tz(modalData.dateTime, timeZone) : null,
   };
 }
 
