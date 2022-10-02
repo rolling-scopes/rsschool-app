@@ -21,7 +21,7 @@ jest.mock('./VisibleCoursesForm', () => ({
   VisibleCoursesForm: forwardRef(() => <div>{EditCvForms.VisibleCoursesForm}</div>),
 }));
 
-const mockGithubId = 'alreadybored';
+const mockGithubId = 'some-github';
 
 const mockSwitchView = jest.fn();
 const mockOnUpdateResume = jest.fn();

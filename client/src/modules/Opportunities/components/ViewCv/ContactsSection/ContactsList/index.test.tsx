@@ -3,7 +3,7 @@ import { ContactsList } from './index';
 
 const mockContacts = {
   email: 'example@example.com',
-  githubUsername: 'alreadybored',
+  githubUsername: 'some-github',
   linkedin: 'https://linked.in',
   phone: '+1111111111111',
   skype: 'some_skype',
