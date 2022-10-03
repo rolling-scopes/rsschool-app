@@ -13,12 +13,15 @@ export const StudentStatus = (props: { certificateId: string | null; isCourseCom
       </span>
     );
   }
-  if (isCourseCompleted)
+
+  if (isCourseCompleted) {
     return (
       <span>
         <CheckCircleTwoTone /> Completed
       </span>
     );
+  }
+
   return (
     <span>
       <ClockCircleTwoTone twoToneColor="#ec9607" /> In Progress

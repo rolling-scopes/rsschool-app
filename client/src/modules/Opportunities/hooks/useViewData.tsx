@@ -4,7 +4,6 @@ import { useAsync } from 'react-use';
 import { Contacts, UserData } from '../models';
 
 type Props = {
-  githubId?: string;
   initialData?: ResumeDto;
 };
 

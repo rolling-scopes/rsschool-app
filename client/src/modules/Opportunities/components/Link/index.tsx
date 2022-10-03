@@ -5,11 +5,9 @@ type Props = {
 };
 
 export const Link = ({ url, text, title }: Props) => {
-  return url ? (
+  return (
     <a title={title} className="rs-link" target="_blank" rel="nofollow" href={url}>
       {text}
     </a>
-  ) : (
-    <>{text}</>
   );
 };

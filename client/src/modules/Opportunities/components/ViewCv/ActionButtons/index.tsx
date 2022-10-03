@@ -63,7 +63,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
   }, [onRemoveConsent]);
 
   return (
-    <Row justify="center" style={{ paddingTop: '10px' }}>
+    <Row justify="center" style={{ paddingTop: '10px' }} className="no-print">
       <Button style={buttonStyle} type="primary" htmlType="button" onClick={switchView} icon={<EditOutlined />}>
         Edit CV
       </Button>

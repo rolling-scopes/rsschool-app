@@ -14,17 +14,17 @@ const { Text, Paragraph } = Typography;
 
 const service = new OpportunitiesApi();
 
-export const ExpirationTooltip = ({
-  expirationDate,
-  expirationState,
-}: {
+type Props = {
   expirationDate: string;
   expirationState: ExpirationState;
-}) => {
+  publicMode?: boolean;
+};
+
+export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode }: Props) => {
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {
-    if (expirationState === ExpirationState.Expired) showRenewModal();
+    if (expirationState === ExpirationState.Expired && !publicMode) showRenewModal();
   });
 
   const showRenewModal = useCallback(() => {
@@ -123,17 +123,28 @@ export const ExpirationTooltip = ({
     </>
   );
 
+  let content;
+
   switch (expirationState) {
     case ExpirationState.Expired:
-      return expiredContent;
+      content = expiredContent;
+      break;
 
     case ExpirationState.NearlyExpired:
-      return nearlyExpiredContent;
+      content = nearlyExpiredContent;
+      break;
 
     case ExpirationState.NotExpired:
-      return notExpiredContent;
+      content = notExpiredContent;
+      break;
 
     default:
       return null;
   }
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="no-print">
+      {content}
+    </div>
+  );
 };
