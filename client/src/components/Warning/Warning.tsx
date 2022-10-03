@@ -6,19 +6,19 @@ const defaultMessage = 'Something went wrong, please try reloading the page late
 const defaultImageName = 'Image error';
 
 type Props = {
-  loading: boolean;
   githubId: string;
   imagePath: string;
-  nameImage: string;
+  imageName: string;
   textMessage: string | JSX.Element;
+  loading?: boolean;
 };
 
 export function Warning(props: Props) {
-  const { loading = false, githubId, imagePath, nameImage = defaultImageName, textMessage = defaultMessage } = props;
+  const { loading = false, githubId, imagePath, imageName = defaultImageName, textMessage = defaultMessage } = props;
   return (
     <PageLayout loading={loading} githubId={githubId}>
       <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-        <Image src={`/static${imagePath}`} alt={nameImage} width={175} height={175} />
+        <Image src={`/static${imagePath}`} alt={imageName} width={175} height={175} />
       </Row>
       <Row justify="center">
         <h1 style={{ fontSize: '36px', marginBottom: 0 }}>{textMessage}</h1>

@@ -90,10 +90,9 @@ function Page(props: { session: Session; courseAlias?: string }) {
   if (course == null) {
     return (
       <Warning
-        loading={false}
         githubId={props.session.githubId}
         imagePath="/svg/err.svg"
-        nameImage="Course Not Found"
+        imageName="Course Not Found"
         textMessage="Sorry, Course Not Found"
       />
     );
@@ -116,10 +115,9 @@ function Page(props: { session: Session; courseAlias?: string }) {
     );
     return (
       <Warning
-        loading={false}
         githubId={props.session.githubId}
         imagePath="/svg/wanted-mentors.svg"
-        nameImage="Not registered"
+        imageName="Not registered"
         textMessage={message}
       />
     );
