@@ -26,7 +26,7 @@
             <use :xlink:href="`${cardCover}#card-cover`"></use>
           </svg>
           <!-- <img v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }" /> -->
-          <svg v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }">
+          <svg v-else alt="card" class="game-field__img" :class="{ success: item.success }">
             <use :xlink:href="getImage(index)"></use>
           </svg>
         </transition>
