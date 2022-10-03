@@ -28,7 +28,6 @@ type Props = {
   visibleCourses: number[];
   courses: ResumeCourseDto[] | null;
   switchView: () => void;
-  onRemoveConsent: () => void;
   onUpdateResume?: () => void;
 };
 
