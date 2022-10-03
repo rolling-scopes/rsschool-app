@@ -24,7 +24,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {
-    if (expirationState === ExpirationState.Expired && publicMode !== true) showRenewModal();
+    if (expirationState === ExpirationState.Expired && !publicMode) showRenewModal();
   });
 
   const showRenewModal = useCallback(() => {
