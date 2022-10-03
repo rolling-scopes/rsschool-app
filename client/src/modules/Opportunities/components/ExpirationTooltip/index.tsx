@@ -28,6 +28,8 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
   });
 
   const showRenewModal = useCallback(() => {
+    if (publicMode) return;
+
     const title =
       expirationState === ExpirationState.NotExpired ? (
         <Text strong>Your CV is public until {expirationDate}</Text>
