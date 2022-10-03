@@ -137,11 +137,11 @@ function Page(props: { session: Session; courseAlias?: string }) {
         <Row justify="center">
           <h2 style={{ marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
             <p>
-              Hello, our future mentor, we are very happy to see your in The Rolling Scopes School. But before you start
+              Hello, our future mentor, we are very happy to see you in The Rolling Scopes School. But before you start
               your journey we need to consider your application and submit you to a course.
             </p>
             <p style={{ marginBottom: 15 }}>
-              It can take a little time. We will send you another mail with next steps late
+              It can take a little time. We will send you another mail with next steps later
             </p>
             <p style={{ fontWeight: 500 }}>
               We really appreciate your interest for school.
