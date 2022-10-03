@@ -23,9 +23,8 @@
       >
         <transition name="flip" mode="out-in" @before-leave="isAnimated = true" @after-enter="isAnimated = false">
           <svg v-if="!getIsOpen(index)" alt="cover" class="game-field__img" :class="{ success: item.success }">
-            <use :xlink:href="`${cardCover}#card-cover`"></use>
+            <use :xlink:href="`${memorySprite}#card-cover`"></use>
           </svg>
-          <!-- <img v-else :src="getImage(index)" alt="card" class="game-field__img" :class="{ success: item.success }" /> -->
           <svg v-else alt="card" class="game-field__img" :class="{ success: item.success }">
             <use :xlink:href="getImage(index)"></use>
           </svg>
@@ -48,7 +47,7 @@
 <script lang="ts">
 import { mapWritableState } from 'pinia';
 import { ruNounEnding } from '@/utils/ru-noun-ending';
-import { MEMORY_GAME_COVER, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
+import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
 import type { MemoryLevel, GameResult, GameResults } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
@@ -74,7 +73,7 @@ export default defineComponent({
 
   data() {
     return {
-      cardCover: MEMORY_GAME_COVER,
+      memorySprite: MEMORY_GAME_SRPITE,
       cardWinner: MEMORY_GAME_WINNER,
       images: [] as string[],
       cards: [] as Card[],
@@ -133,30 +132,18 @@ export default defineComponent({
   methods: {
     getImages() {
       this.images = [
-        // './img/memory/memory01.svg',
-        // './img/memory/memory02.svg',
-        // './img/memory/memory03.svg',
-        // './img/memory/memory04.svg',
-        // './img/memory/memory05.svg',
-        // './img/memory/memory06.svg',
-        // './img/memory/memory07.svg',
-        // './img/memory/memory08.svg',
-        // './img/memory/memory09.svg',
-        // './img/memory/memory10.svg',
-        // './img/memory/memory11.svg',
-        // './img/memory/memory12.svg',
-        `${MEMORY_GAME_COVER}#memory01`,
-        `${MEMORY_GAME_COVER}#memory02`,
-        `${MEMORY_GAME_COVER}#memory03`,
-        `${MEMORY_GAME_COVER}#memory04`,
-        `${MEMORY_GAME_COVER}#memory05`,
-        `${MEMORY_GAME_COVER}#memory06`,
-        `${MEMORY_GAME_COVER}#memory07`,
-        `${MEMORY_GAME_COVER}#memory08`,
-        `${MEMORY_GAME_COVER}#memory09`,
-        `${MEMORY_GAME_COVER}#memory10`,
-        `${MEMORY_GAME_COVER}#memory11`,
-        `${MEMORY_GAME_COVER}#memory12`,
+        `${MEMORY_GAME_SRPITE}#memory01`,
+        `${MEMORY_GAME_SRPITE}#memory02`,
+        `${MEMORY_GAME_SRPITE}#memory03`,
+        `${MEMORY_GAME_SRPITE}#memory04`,
+        `${MEMORY_GAME_SRPITE}#memory05`,
+        `${MEMORY_GAME_SRPITE}#memory06`,
+        `${MEMORY_GAME_SRPITE}#memory07`,
+        `${MEMORY_GAME_SRPITE}#memory08`,
+        `${MEMORY_GAME_SRPITE}#memory09`,
+        `${MEMORY_GAME_SRPITE}#memory10`,
+        `${MEMORY_GAME_SRPITE}#memory11`,
+        `${MEMORY_GAME_SRPITE}#memory12`,
       ];
 
       this.getCards();
