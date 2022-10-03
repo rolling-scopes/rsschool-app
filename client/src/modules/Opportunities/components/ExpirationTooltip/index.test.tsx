@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { ExpirationState } from 'modules/Opportunities/constants';
 import { ExpirationTooltip } from './index';
 
@@ -62,7 +62,7 @@ describe('ExpirationTooltip', () => {
     modal.remove();
   });
 
-  test('should show expiration modal without click on button in case if CV is expired', async () => {
+  test('should show expiration modal without click on button in case if CV is expired in no public mode', async () => {
     const datestring1DayBefore = '2022-09-25';
 
     render(<ExpirationTooltip expirationDate={datestring1DayBefore} expirationState={ExpirationState.Expired} />);
@@ -87,7 +87,7 @@ describe('ExpirationTooltip', () => {
     modal.remove();
   });
 
-  test('should show expiration modal on click in case if CV is expired', async () => {
+  test('should show expiration modal on click in case if CV is expired in no public mode', async () => {
     const datestring1DayBefore = '2022-09-25';
 
     render(<ExpirationTooltip expirationDate={datestring1DayBefore} expirationState={ExpirationState.Expired} />);
@@ -111,5 +111,31 @@ describe('ExpirationTooltip', () => {
 
     // Modal is rendered outside of the container, this is custom cleanup
     modal.remove();
+  });
+
+  test('should not show expiration modal in public mode', async () => {
+    const datestring1DayBefore = '2022-09-25';
+
+    render(
+      <ExpirationTooltip
+        publicMode={true}
+        expirationDate={datestring1DayBefore}
+        expirationState={ExpirationState.Expired}
+      />,
+    );
+
+    const button = await screen.findByRole('button', { name: 'Archived' });
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
+
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
   });
 });
