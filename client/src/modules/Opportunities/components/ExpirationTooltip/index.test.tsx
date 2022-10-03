@@ -9,7 +9,7 @@ describe('ExpirationTooltip', () => {
     jest.useFakeTimers().setSystemTime(mockSystemTime);
   });
 
-  test('should work correctly in case if CV is far from expiration', async () => {
+  test('should show corresponding title and text in case if CV is far from expiration', async () => {
     const datestring30DaysAfter = '2022-10-26';
 
     render(<ExpirationTooltip expirationDate={datestring30DaysAfter} expirationState={ExpirationState.NotExpired} />);
@@ -35,7 +35,7 @@ describe('ExpirationTooltip', () => {
     modal.remove();
   });
 
-  test('should work correctly in case if CV is nearly expired', async () => {
+  test('should show corresponding title and text in case if CV is nearly expired', async () => {
     const datestring1DayAfter = '2022-09-27';
 
     render(<ExpirationTooltip expirationDate={datestring1DayAfter} expirationState={ExpirationState.NearlyExpired} />);
@@ -57,7 +57,6 @@ describe('ExpirationTooltip', () => {
 
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
-    expect(within(modal).getAllByRole('button')).toHaveLength(2);
 
     // Modal is rendered outside of the container, this is custom cleanup
     modal.remove();
@@ -83,7 +82,6 @@ describe('ExpirationTooltip', () => {
 
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
-    expect(within(modal).getAllByRole('button')).toHaveLength(2);
 
     // Modal is rendered outside of the container, this is custom cleanup
     modal.remove();
@@ -110,7 +108,6 @@ describe('ExpirationTooltip', () => {
 
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
-    expect(within(modal).getAllByRole('button')).toHaveLength(2);
 
     // Modal is rendered outside of the container, this is custom cleanup
     modal.remove();
