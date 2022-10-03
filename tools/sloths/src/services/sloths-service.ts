@@ -1,23 +1,27 @@
+import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import type { QueryStringOptions, Sloth } from '@/common/types';
 
 export class SlothsService {
   constructor(private data: Sloth[]) {}
 
-  public async getAll({ page = '1', limit = '10', order = 'name-asc', searchText, filter }: QueryStringOptions) {
+  public async getAll({
+    page = '1',
+    limit = `${PAGINATION_OPTIONS[0]}`,
+    order = SLOTH_SORTING[0].value,
+    searchText,
+    filter,
+  }: QueryStringOptions) {
     let items = this.data;
     const [orderField, orderDirection] = order.split('-', 2);
     const orderMultiplier = orderDirection === 'asc' ? 1 : -1;
 
     items.sort((a: Sloth, b: Sloth) => {
       if (Number.isNaN(+a[orderField])) {
-        if (a[orderField] === b[orderField]) {
-          return 0;
-        }
+        if (a[orderField] === b[orderField]) return 0;
         return a[orderField] < b[orderField] ? -1 * orderMultiplier : 1 * orderMultiplier;
       }
       return (+a[orderField] - +b[orderField]) * orderMultiplier;
     });
-
     if (filter) {
       const filterTags = filter.split(',');
       items = items.filter((sloth) => {

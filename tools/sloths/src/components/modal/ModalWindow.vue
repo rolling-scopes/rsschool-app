@@ -15,7 +15,7 @@
           <slot name="footer"></slot>
         </footer>
         <custom-btn
-          :text="$t('modal.btn.close')"
+          :text="$t('btn.close')"
           className="btn btn-link"
           :onClick="close"
           v-shortkey="['esc']"

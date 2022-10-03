@@ -1,26 +1,22 @@
 /* eslint-disable import/prefer-default-export */
-
-import type { ErrorDescription, MemoryLevel, SelectOptions } from './types';
+import type { MemoryLevel, SelectOptions } from './types';
 
 // Services
-export const BASE = import.meta.env.VITE_BFF_URL;
-export const CDN_URL = import.meta.env.VITE_CDN_URL;
+export const CDN_STICKERS_URL = import.meta.env.VITE_CDN_STICKERS_URL;
+export const CDN_CLEANED_URL = import.meta.env.VITE_CDN_CLEANED_URL;
 export const STICKERS_JSON_URL = import.meta.env.VITE_STICKERS_JSON_URL;
 export const CLEANED_JSON_URL = import.meta.env.VITE_CLEANED_JSON_URL;
-
-// custom Errors
-export const JSON_ERROR: ErrorDescription = { code: 'NOT_JSON', message: 'Response is not a JSON!' };
 
 // Sorting
 export const SLOTH_SORTING: SelectOptions[] = [
   {
-    value: 'name-desc',
-    text: 'sorting.name-',
+    value: 'name-asc',
+    text: 'sorting.name+',
     type: 'name',
   },
   {
-    value: 'name-asc',
-    text: 'sorting.name+',
+    value: 'name-desc',
+    text: 'sorting.name-',
     type: 'name',
   },
 ];
@@ -60,27 +56,19 @@ export const GAME_RESULT_SORTING: SelectOptions[] = [
 // Pagination
 export const PAGINATION_OPTIONS: number[] = [10, 15, 20, 25, 50, 100];
 
-// Users
-export const DEFAULT_USER_AVATAR = './img/profile/default.svg';
-export const AUTHORIZATION_IMG = './img/github.svg';
-export const AUTHORIZATION_URL = `${BASE}/auth/github`;
-
 // Memory Game
 export const MEMORY_LEVELS: MemoryLevel[] = [
   {
     level: 'junior',
     n: 4,
-    gameId: '36fdb508-80e4-4e0d-a6b8-78fe7e66a5d5',
   },
   {
     level: 'middle',
     n: 8,
-    gameId: 'ca0305dc-9dab-4f36-84f1-45f8223818e0',
   },
   {
     level: 'senior',
     n: 12,
-    gameId: '42df7648-5c56-4a66-a288-ec6acf8b18b0',
   },
 ];
 export const MEMORY_GAME_TIMEOUT = 1000;
@@ -88,9 +76,7 @@ export const MEMORY_GAME_COVER = './img/memory/card-cover.svg';
 export const MEMORY_GAME_WINNER = './img/memory/winner1.svg';
 
 // Guess Game
-export const GUESS_GAME_ID = '431b4880-0ac6-4082-ae9f-b34f5f9a84a6';
-export const GUESS_GAME_WINNER = './img/guess/winner3.svg';
-export const GUESS_GAME_WINNER_ALL = './img/guess/winner2.svg';
+export const GUESS_GAME_WINNER = './img/guess/winner2.svg';
 
 export const CATALOG_SLOTH_PREVIEW = './img/preview.svg';
 

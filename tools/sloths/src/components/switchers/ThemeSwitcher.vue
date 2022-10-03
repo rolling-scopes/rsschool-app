@@ -15,8 +15,8 @@
       class="theme-switcher__label"
       :for="`${checkTheme}-theme`"
       :class="`theme-switcher__label_${checkTheme}`"
-      :title="$t('modal.header.switchers.theme')"
-      v-shortkey="['ctrl', '3']"
+      :title="$t('header.switchers.theme')"
+      v-shortkey="['ctrl', '2']"
       @shortkey="setTheme(`${checkTheme}`)"
     ></label>
   </div>

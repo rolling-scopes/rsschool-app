@@ -296,16 +296,15 @@ export default defineComponent({
       }
 
       const gameResult: GameResult = {
-        gameId: this.level.gameId,
         count: this.steps,
         time: this.getTime,
-        createdAt: (new Date).getTime()
+        createdAt: new Date().getTime(),
       };
 
-      currResults.unshift(gameResult)
+      currResults.unshift(gameResult);
 
       if (currResults.length > 10) {
-        currResults.pop()
+        currResults.pop();
       }
 
       localStorage.setItem(`rs-sloths-memory-${this.level.level}`, JSON.stringify(currResults));

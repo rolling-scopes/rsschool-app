@@ -12,13 +12,9 @@
     </div>
 
     <div class="game-info__wrap">
-      <div
-        class="game-info__level game-info__level_admin"
-        v-for="(res, index) in gameResults"
-        :key="index"
-      >
+      <div class="game-info__level game-info__level_admin" v-for="(res, index) in gameResults" :key="index">
         <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
-        <div class="game-info__result" v-for="(r, i) in res.results" :key="r.gameId">
+        <div class="game-info__result" v-for="(r, i) in res.results" :key="r.id">
           <span class="result__index">{{ `${i + 1}.` }}</span>
           <span class="result__steps">{{ `${r.count} ${getStepsText(r.count)}` }}</span>
           <span class="result__time">{{ `${r.time / 1000} s` }}</span>
@@ -29,9 +25,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
-import HomeCategory from '@/components/home/HomeCategory.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { ruNounEnding } from '@/utils/ru-noun-ending';
 import { GAME_RESULT_SORTING, MEMORY_LEVELS } from '@/common/const';
@@ -44,7 +39,6 @@ export default defineComponent({
   name: 'MemoryInfo',
 
   components: {
-    HomeCategory,
     CustomBtn,
   },
 
@@ -60,8 +54,8 @@ export default defineComponent({
   props: {
     isVisible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -75,15 +69,14 @@ export default defineComponent({
   watch: {
     isVisible() {
       this.getGameInfo();
-      this.takeSort()
-    }
+      this.takeSort();
+    },
   },
 
   async mounted() {
     this.getGameInfo();
 
     this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
-
   },
 
   methods: {
@@ -100,9 +93,8 @@ export default defineComponent({
         this.gameResults.push({
           level: item.level,
           n: item.n,
-          gameId: item.gameId,
           count: levelRecords.length,
-          results: levelRecords
+          results: levelRecords,
         });
       });
     },
@@ -151,7 +143,7 @@ export default defineComponent({
         }
       }
       return 0;
-    }
+    },
   },
 });
 </script>

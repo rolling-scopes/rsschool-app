@@ -2,7 +2,6 @@
   <div class="catalog">
     <div class="catalog__aside list-aside">
       <custom-btn
-        v-show="getPageName === 'catalog'"
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
         :disabled="!isChecked"
         :text="$t('btn.download')"
@@ -22,7 +21,6 @@
       >
       </list-controls>
       <custom-btn
-        v-show="getPageName === 'catalog'"
         :text="$t('merch.title')"
         :imgPath="'./img/catalog/merch.svg'"
         className="btn btn-catalog"
@@ -42,8 +40,7 @@
       </div>
       <sloth-info
         :isSlothInfoVisible="isSlothInfoVisible"
-        :headerText="getHeaderSlothInfo"
-        :modalEvents="modalEvents"
+        :headerText="$t('catalog.info')"
         @closeSlothInfo="closeSlothInfo"
       ></sloth-info>
     </div>
@@ -82,10 +79,9 @@ import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
 import type { PageSettings, Sloth, Sloths } from '@/common/types';
-import { errorHandler } from '@/services/error-handling/error-handler';
-import { PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
+import { errorHandler } from '@/services/error-handler';
+import { CDN_STICKERS_URL, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
-import { ModalEvents } from '@/common/enums/modal-events';
 import useLoader from '@/stores/loader';
 import usePagination from '@/stores/pagination';
 import useSearchText from '@/stores/search-text';
@@ -131,7 +127,6 @@ export default defineComponent({
       sloths: [] as Sloths,
       count: 0,
       isSlothInfoVisible: false,
-      modalEvents: ModalEvents.view,
       tags: [] as string[],
       sortingOptions: SLOTH_SORTING,
       isDownloadShow: false,
@@ -142,16 +137,6 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(themeProp, ['currTheme']),
-
-    getPageName(): string {
-      return 'catalog';
-    },
-
-    getHeaderSlothInfo(): string {
-      if (this.modalEvents === ModalEvents.new) return this.$t('catalog.btn.new');
-      if (this.modalEvents === ModalEvents.edit) return this.$t('btn.edit');
-      return this.$t('catalog.info');
-    },
 
     isChecked(): boolean {
       return !!this.checked.filter((el) => el.checked).length;
@@ -221,7 +206,7 @@ export default defineComponent({
       try {
         const res = service.getTags();
 
-        if (!res) throw Error(); // todo
+        if (!res) throw new Error(this.$t('catalog.tagsNotFound'));
 
         this.tags = res.slice();
       } catch (error) {
@@ -257,14 +242,13 @@ export default defineComponent({
       try {
         const res = await service.getById(sloth.id);
 
-        if (!res) throw Error(); // todo
+        if (!res) throw new Error(`${this.$t('catalog.idNotFound')} (${sloth.id})`);
 
         const dataSloth = res;
         const slothIndex = this.sloths.findIndex((el) => el.id === sloth.id);
 
         if (slothIndex !== -1) this.sloths[slothIndex] = dataSloth;
 
-        this.modalEvents = ModalEvents.view;
         setSlothInfo(dataSloth);
         this.showSlothInfo();
       } catch (error) {
@@ -302,7 +286,7 @@ export default defineComponent({
       const zipFilename = `sloths_${new Date().toISOString()}.zip`;
 
       ids.forEach((id) => {
-        const blobPromise = fetch(`${import.meta.env.VITE_CDN_URL}/${id}/image.svg`).then((r) => {
+        const blobPromise = fetch(`${CDN_STICKERS_URL}/${id}/image.svg`).then((r) => {
           if (r.status === 200) return r.blob();
           return Promise.reject(new Error(r.statusText));
         });
@@ -338,7 +322,7 @@ export default defineComponent({
         perPage: PAGINATION_OPTIONS[0],
         searchText: '',
         selected: [] as string[],
-        sorting: SLOTH_SORTING[1].value,
+        sorting: SLOTH_SORTING[0].value,
         checked: [] as string[],
       };
 
