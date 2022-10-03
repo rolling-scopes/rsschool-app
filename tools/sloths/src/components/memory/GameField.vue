@@ -383,6 +383,7 @@ export default defineComponent({
   overflow: hidden;
   border-radius: 1em;
   background-color: lightgray;
+  padding: 0.2rem;
 }
 
 .game-field__img:hover {
