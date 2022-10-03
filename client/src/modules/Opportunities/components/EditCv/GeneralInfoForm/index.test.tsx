@@ -22,8 +22,8 @@ describe('GeneralInfoForm', () => {
     const name = await screen.findByDisplayValue(mockUserData.name);
     const desiredPosition = await screen.findByDisplayValue(mockUserData.desiredPosition);
     const locations = await screen.findByDisplayValue(mockUserData.locations);
-    const englishLevelValue = await screen.findByText(mockUserData.englishLevel);
-    const militaryServiceValue = await screen.findByText('Not liable');
+    const englishLevel = await screen.findByText(mockUserData.englishLevel);
+    const militaryService = await screen.findByText('Not liable');
     const startFrom = await screen.findByDisplayValue(mockUserData.startFrom);
     const fullTime = await screen.findByRole('checkbox', { name: /ready to work full time/i });
     const avatarLink = await screen.findByDisplayValue(mockUserData.avatarLink);
@@ -33,35 +33,7 @@ describe('GeneralInfoForm', () => {
     expect(name).toBeInTheDocument();
     expect(desiredPosition).toBeInTheDocument();
     expect(locations).toBeInTheDocument();
-    expect(englishLevelValue).toBeInTheDocument();
-    expect(militaryServiceValue).toBeInTheDocument();
-    expect(startFrom).toBeInTheDocument();
-    expect(fullTime).toBeChecked();
-    expect(avatarLink).toBeInTheDocument();
-    expect(selfIntroLink).toBeInTheDocument();
-    expect(notes).toBeInTheDocument();
-  });
-
-  test('should render form items with proper labels', async () => {
-    render(<GeneralInfoForm userData={mockUserData} />);
-
-    const name = await screen.findByLabelText('Name');
-    const desiredPosition = await screen.findByLabelText('Desired position');
-    const locations = await screen.findByLabelText('Locations');
-    const englishLevelSelect = await screen.findByLabelText('Select your English level');
-    const englishLevelValue = await screen.findByText(ResumeDtoEnglishLevelEnum.A2);
-    const militaryService = await screen.findByLabelText('Military service');
-    const startFrom = await screen.findByLabelText('Ready to start work from');
-    const fullTime = await screen.findByRole('checkbox', { name: /ready to work full time/i });
-    const avatarLink = await screen.findByLabelText('Photo');
-    const selfIntroLink = await screen.findByLabelText('Self introduction video');
-    const notes = await screen.findByLabelText('About me');
-
-    expect(name).toBeInTheDocument();
-    expect(desiredPosition).toBeInTheDocument();
-    expect(locations).toBeInTheDocument();
-    expect(englishLevelSelect).toBeInTheDocument();
-    expect(englishLevelValue).toBeInTheDocument();
+    expect(englishLevel).toBeInTheDocument();
     expect(militaryService).toBeInTheDocument();
     expect(startFrom).toBeInTheDocument();
     expect(fullTime).toBeChecked();
@@ -70,14 +42,32 @@ describe('GeneralInfoForm', () => {
     expect(notes).toBeInTheDocument();
   });
 
-  test('should render form items with proper placeholders', async () => {
+  test.each`
+    label
+    ${'Name'}
+    ${'Desired position'}
+    ${'Locations'}
+    ${'Select your English level'}
+    ${'Military service'}
+    ${'Ready to start work from'}
+    ${'Ready to work full time'}
+    ${'Photo'}
+    ${'Self introduction video'}
+    ${'About me'}
+  `('should render field with $label label', async ({ label }) => {
     render(<GeneralInfoForm userData={mockUserData} />);
+    const fieldLabel = await screen.findByLabelText(label);
+    expect(fieldLabel).toBeInTheDocument();
+  });
+
+  test('should render form items with proper placeholders', async () => {
+    render(<GeneralInfoForm userData={{ ...mockUserData, englishLevel: null, militaryService: null }} />);
 
     const name = await screen.findByPlaceholderText('Enter your name');
     const desiredPosition = await screen.findByPlaceholderText('Enter desired position');
     const locations = await screen.findByPlaceholderText('Enter locations');
-    const englishLevelSelect = await screen.findByPlaceholderText('Not selected yet');
-    const militaryService = await screen.findByPlaceholderText('Not selected yet');
+    const englishLevel = await screen.findByText(/english level is not selected yet/i);
+    const militaryService = await screen.findByText(/military service status is not selected yet/i);
     const startFrom = await screen.findByPlaceholderText('Not selected yet');
     const avatarLink = await screen.findByPlaceholderText('Enter link to your photo');
     const selfIntroLink = await screen.findByPlaceholderText('Link to video with self introduction');
@@ -86,7 +76,7 @@ describe('GeneralInfoForm', () => {
     expect(name).toBeInTheDocument();
     expect(desiredPosition).toBeInTheDocument();
     expect(locations).toBeInTheDocument();
-    expect(englishLevelSelect).toBeInTheDocument();
+    expect(englishLevel).toBeInTheDocument();
     expect(militaryService).toBeInTheDocument();
     expect(startFrom).toBeInTheDocument();
     expect(avatarLink).toBeInTheDocument();
