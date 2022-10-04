@@ -56,7 +56,7 @@ export default defineComponent({
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(useAlertModal, ['isAlert', 'header', 'message']),
     ...mapWritableState(useAudioOn, ['isAudioOn']),
-    ...mapWritableState(useCleanedStore, ['cleanedFilelist']),
+    ...mapWritableState(useCleanedStore, ['cleanedFilelist', 'originalFilelist']),
     ...mapWritableState(useSlothsStore, ['sloths']),
   },
 
@@ -107,6 +107,7 @@ export default defineComponent({
           image: `${CDN_STICKERS_URL}/${sloth.id}/image.svg`,
           checked: false,
         }));
+        this.originalFilelist = data.stickers.map((file) => `${CDN_STICKERS_URL}/${file.id}/image.svg`);
       } catch (error) {
         this.isAlert = true;
         this.header = 'modal.header.error';
