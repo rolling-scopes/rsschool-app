@@ -150,7 +150,8 @@
     "time-": "Time ▼",
     "time+": "Time ▲",
     "createdAt-": "Creation date ▼",
-    "createdAt+": "Creation date ▲"
+    "createdAt+": "Creation date ▲",
+    "change": "Change kit"
   },
 
   "pagination": {

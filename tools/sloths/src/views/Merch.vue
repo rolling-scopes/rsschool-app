@@ -1,12 +1,20 @@
 <template>
   <div class="merch">
     <div class="merch__list list-aside">
-      <custom-btn
+      <!-- <custom-btn
         :imgPath="`./img/merch/merch-${currItems}.svg`"
-        :text="$t('btn.download')"
+        :text="$t('btn.change')"
         className="btn btn-download"
         @click="changeItems"
-      ></custom-btn>
+      ></custom-btn> -->
+      <div class="merch__option">
+        <div
+          :title="$t('btn.change')"
+          class="merch__change"
+          :class="`merch__change_${currItems}`"
+          @click="changeItems"
+        ></div>
+      </div>
       <h3>{{ $t('merch.description') }}</h3>
       <div class="merch__images">
         <img
@@ -208,9 +216,11 @@ export default defineComponent({
     },
 
     changeItems() {
-      this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
-      this.getImages();
-      setTimeout(() => this.updImage(this.indexMeme), 0);
+      this.images = this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist;
+      setTimeout(() => {
+        this.updImage(this.indexMeme)
+        this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
+      }, 100);
     },
 
     getImg(i: number): string {
@@ -487,6 +497,24 @@ export default defineComponent({
 .merch__list {
   height: 100%;
   overflow-y: auto;
+}
+
+.merch__option {
+  margin: 0 auto;
+}
+
+.merch__change {
+  width: 24rem;
+  height: 16.7rem;
+  transition: .5s ease;
+}
+
+.merch__change_cleaned {
+  background: no-repeat center center / contain url('./img/merch/merch-cleaned.svg');
+}
+
+.merch__change_original {
+  background: no-repeat center center / contain url('./img/merch/merch-original.svg');
 }
 
 .merch__images,
