@@ -210,6 +210,7 @@ export default defineComponent({
     changeItems() {
       this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
       this.getImages();
+      setTimeout(() => this.updImage(this.indexMeme), 0);
     },
 
     getImg(i: number): string {
