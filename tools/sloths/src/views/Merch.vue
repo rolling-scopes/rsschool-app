@@ -1,6 +1,12 @@
 <template>
   <div class="merch">
     <div class="merch__list list-aside">
+      <custom-btn
+        :imgPath="`./img/merch/merch-${currItems}.svg`"
+        :text="$t('btn.download')"
+        className="btn btn-download"
+        @click="changeItems"
+      ></custom-btn>
       <h3>{{ $t('merch.description') }}</h3>
       <div class="merch__images">
         <img
@@ -115,7 +121,7 @@ import useCleanedStore from '@/stores/cleaned';
 import type { CanvasElement } from '@/common/types';
 import * as CanvasUtils from '@/utils/canvas-utils';
 
-const { cleanedFilelist } = useCleanedStore();
+const { cleanedFilelist, originalFilelist } = useCleanedStore();
 const { getPageMerchState, setPageMerchState } = usePagesStore();
 
 export default defineComponent({
@@ -140,6 +146,7 @@ export default defineComponent({
       topCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
       bottomCanvasElement: CanvasUtils.initElement(0, 0, 0.5, 0.1, 0.5, 2),
       layers: [] as CanvasElement[],
+      currItems: 'cleaned',
     };
   },
 
@@ -191,13 +198,18 @@ export default defineComponent({
 
   methods: {
     getImages() {
-      this.images = cleanedFilelist;
+      this.images = this.currItems === 'cleaned' ? cleanedFilelist : originalFilelist;
       this.merch = [
         './img/merch/tshirt.png',
         './img/merch/hoodie.png',
         './img/merch/mug.png',
         './img/merch/thermo.png',
       ];
+    },
+
+    changeItems() {
+      this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
+      this.getImages();
     },
 
     getImg(i: number): string {
