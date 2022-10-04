@@ -1,12 +1,6 @@
 <template>
   <div class="merch">
     <div class="merch__list list-aside">
-      <!-- <custom-btn
-        :imgPath="`./img/merch/merch-${currItems}.svg`"
-        :text="$t('btn.change')"
-        className="btn btn-download"
-        @click="changeItems"
-      ></custom-btn> -->
       <div class="merch__option">
         <div
           :title="$t('btn.change')"
@@ -218,7 +212,7 @@ export default defineComponent({
     changeItems() {
       this.images = this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist;
       setTimeout(() => {
-        this.updImage(this.indexMeme)
+        this.updImage(this.indexMeme);
         this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
       }, 100);
     },
