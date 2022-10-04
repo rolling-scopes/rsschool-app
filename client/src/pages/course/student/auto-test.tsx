@@ -142,7 +142,7 @@ function Page(props: CoursePageProps) {
         const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
         notification.error({
           message:
-            isExpelledStudent === true ? (
+            isExpelledStudent ? (
               <>This task can only be submitted by active students</>
             ) : (
               <>
