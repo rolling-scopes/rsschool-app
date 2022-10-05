@@ -4,7 +4,7 @@ import React from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 type Props = {
-  url: string;
+  url: string | null;
 };
 
 export const PublicLink = ({ url }: Props) => {
