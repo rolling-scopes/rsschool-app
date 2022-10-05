@@ -186,8 +186,8 @@ export class RepositoryService {
         }
       });
       this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
-    } catch {
-      this.logger?.info(`[${ownerRepo}] failed to enable Github Pages`);
+    } catch (err) {
+      this.logger?.info(`[${ownerRepo}] failed to enable Github Pages`, err);
     }
   }
 
