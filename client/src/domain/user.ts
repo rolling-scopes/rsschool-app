@@ -5,7 +5,7 @@ function hasRole(session: Session, courseId: number, role: CourseRole) {
   return session.courses[courseId]?.roles.includes(role) ?? false;
 }
 
-function isExpelledStudent(session: Session, courseId: number) {
+export function isExpelledStudent(session: Session, courseId: number) {
   return session.courses[courseId]?.isExpelled === true;
 }
 

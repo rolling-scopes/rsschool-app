@@ -39,8 +39,7 @@ export class AuthUser {
 
     user.students?.forEach(student => {
       roles[student.courseId] = 'student';
-      const info =
-        courses[student.courseId] ?? ({ mentorId: null, studentId: null, roles: [], isExpelled: null } as CourseInfo);
+      const info = courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [], isExpelled: null };
       info.studentId = student.id;
       info.roles.push(CourseRole.Student);
       info.isExpelled = student.isExpelled;
@@ -48,8 +47,7 @@ export class AuthUser {
     });
     user.mentors?.forEach(mentor => {
       roles[mentor.courseId] = 'mentor';
-      const info =
-        courses[mentor.courseId] ?? ({ mentorId: null, studentId: null, roles: [], isExpelled: null } as CourseInfo);
+      const info = courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [], isExpelled: null };
       info.mentorId = mentor.id;
       info.roles.push(CourseRole.Mentor);
       courses[mentor.courseId] = info;
@@ -92,7 +90,7 @@ export class AuthUser {
       .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.TaskOwner })))
       .reduce((acc, item) => {
         if (!acc[item.courseId]) {
-          acc[item.courseId] = { mentorId: null, studentId: null, isExpelled: null, roles: [] } as CourseInfo;
+          acc[item.courseId] = { mentorId: null, studentId: null, isExpelled: null, roles: [] };
         }
         if (!acc[item.courseId]?.roles.includes(item.role)) {
           acc[item.courseId]?.roles.push(item.role);
