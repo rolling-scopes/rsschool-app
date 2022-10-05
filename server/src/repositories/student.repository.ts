@@ -53,7 +53,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       return;
     }
 
-    await getRepository(Student).update(student.id, { mentorId });
+    await getRepository(Student).update(student.id, { mentorId: mentorId ?? null });
   }
 
   public async setMentorsBatch(pairs: { mentor: { id: number }; student: { id: number } }[]) {

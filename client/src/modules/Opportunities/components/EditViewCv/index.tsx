@@ -4,7 +4,7 @@ import { EditCV } from '../EditCv';
 import { ViewCV } from '../ViewCv';
 import { NoConsentView } from '../NoConsentView';
 
-type ResumeProps = {
+export type ResumeProps = {
   githubId: string;
   consent: boolean;
   error?: Error;
@@ -37,7 +37,6 @@ export const EditViewCv = (props: ResumeProps) => {
           visibleCourses={visibleCourses}
           onUpdateResume={onUpdateResume}
           githubId={githubId}
-          onRemoveConsent={onRemoveConsent}
           switchView={switchView}
         />
       ) : (

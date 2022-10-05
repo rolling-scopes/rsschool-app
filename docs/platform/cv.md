@@ -32,7 +32,7 @@ There are 3 types of data presented in the CV:
 
   - `General info`
 
-    - `Name` - name (required field)
+    - `Name` - name
     - `Desired position` - prefered position
     - `Self introduction video` - link to a video with a short self-presentation
     - `Link to avatar` - link to the image that will be used as an avatar
@@ -41,6 +41,7 @@ There are 3 types of data presented in the CV:
     - `Ready to start work from` - the date from which the user is ready to start work
     - `Ready to work full time` - is the user ready to work full time
     - `About me` - a few sentences to tell about yourself
+    - `Locations` - locations where the user is able to work (3 locations can be added, each comma-separated, the extra ones will be truncated)
 
   - `Contacts`
     - `Phone` - phone number (international format)
@@ -48,7 +49,6 @@ There are 3 types of data presented in the CV:
     - `Skype id` - skype id
     - `Telegram public name` - Telegram public name (contained in the link to Telegram after `t.me/`)
     - `LinkedIn` - link to the user's profile in LinkedIn
-    - `Locations` - locations where the user is able to work (3 locations can be added, each from a new line, the extra ones will be truncated)
     - `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
     - `Website` - a link to a website (with a portfolio, some profile etc.)
   - `Visible courses` - the courses user wants to show in his CV and on the Employer page (he can only select courses for which he has registered). User can explicitly choose which courses to show, all courses are shown if no `visible courses` were selected.
@@ -60,27 +60,31 @@ There are 3 types of data presented in the CV:
     - `Mentor` - mentor's name and a link to his profile, if the student had a mentor, "No mentor" otherwise
     - `Score` - total score
     - `Position` - usert's position in score
-  - `Public feedback` - public feedback on the user (gratitudes). Displays only the date and text of the feedback, as well as the total. By default, the last 5 records are shown, and it can be expanded by clicking `Show all` button (after that user will be able to click `Show partially` button and the last 5 records will be shown again)
+  - `Feedback` - mentor's feedback
+  - `Gratitudes` - public feedback on the user (gratitudes). Displays only the date and text of the feedback, as well as the total. By default, the last 5 records are shown, and it can be expanded by clicking `Show all` button (after that user will be able to click `Show partially` button and the last 5 records will be shown again)
 
-If the user is the owner of the CV that he opens (if the `githubid` under which the user is logged in matches the `githubid` of the requested CV), in addition to the CV itself, in the upper left corner there will be a switch to the `Form` view.
+If the user is the owner of the CV that they opens (if the `githubid` under which the user is logged in matches the `githubid` of the requested CV) user sees control buttons (Edit CV, Share, Delete)
 
-<kbd>![CV emply with switch](./img/cv/cv-empty.JPG)</kbd>
+<kbd>![CV Form](./img/cv/view-control-buttons.JPG)</kbd>
 
-When user clicks on this switch, the `Form` will appear where user can fill in the data for the CV
+- `Edit CV` - when user clicks on this button, CV switches to the `Form` mode
+- `Share` - when user clicks on this button, public link is copied to clipboard
+- `Delete` - when user clicks on this button, delete confirmation popup appears  
+  <kbd>![CV Form](./img/cv/view-delete-cv.JPG)</kbd>
+
+When user clicks on Edit CV button, the `Form` will appear where user can fill in the data for the CV
 
 <kbd>![CV Form](./img/cv/cv-form-filled.JPG)</kbd>
+<kbd>![CV Form](./img/cv/cv-form-filled-1.JPG)</kbd>
 
 All this data doesn't overlap with user profile/student data/etc, it's associated with CV only.
 
 Also there are few buttons at the bottom.
 
-<kbd>![CV Form buttons](./img/cv/cv-form-buttons.JPG)</kbd>
+<kbd>![CV Form buttons](./img/cv/edit-cv-buttons.JPG)</kbd>
 
 - `Save` button saves the entered CV data on the server
-- `Get data from profile` button fills the form fields with data from the profile (without saving these values ​​on the server)
-- `Reset fields` button resets the form fields to the last saved on server values
-- `Extend CV` button extends the CV “expiration date” by 14 days. This term is displayed in CV and in `/applicants` page table record. Table on `/applicants` page includes only those users whose CV has not yet expired
-- `Delete my CV` button removes the consent that user gives before using the CV, and also deletes all CV-related information from the server
+- `Cancel` button switches CV to the `View` mode without saving the data
 
 Other features:
 

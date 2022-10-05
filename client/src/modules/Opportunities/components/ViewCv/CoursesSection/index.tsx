@@ -31,7 +31,7 @@ export const CoursesSection = ({ courses, visibleCourses }: Props) => {
         renderItem={(record: ResumeCourseDto) => {
           const { fullName, certificateId, completed, totalScore, rank, locationName, mentor } = record;
 
-          const title = `${fullName}${locationName ? locationName : ''}`;
+          const title = `${fullName}${locationName ? ` (${locationName})` : ''}`;
           return (
             <Item>
               <Col flex="1">
