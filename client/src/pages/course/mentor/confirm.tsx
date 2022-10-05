@@ -1,6 +1,5 @@
 import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import Image from 'next/image';
 import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { StudentSearch } from 'components/StudentSearch';
@@ -109,7 +108,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
     const message = (
       <div>
         <Link href={`/registry/mentor?course=${router.query?.course}`}>
-          <a>Register as a mentor for the course</a>
+          <a>Register as a Mentor for the Course</a>
         </Link>
       </div>
     );
@@ -124,18 +123,15 @@ function Page(props: { session: Session; courseAlias?: string }) {
   }
 
   if (noAccess && isPreferredCourse) {
-    return (
-      <PageLayout loading={false} githubId={props.session.githubId}>
-        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/images/rs-hero.png" alt="You are RS hero" width={175} height={175} />
-        </Row>
+    const message = (
+      <div>
         <Row justify="center">
           <h1 style={{ fontSize: '32px', marginBottom: 15, maxWidth: 600, textAlign: 'center' }}>
             Thank you for registration as a mentor for Rolling Scopes School
           </h1>
         </Row>
         <Row justify="center">
-          <h2 style={{ marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
+          <h2 style={{ fontSize: '19px', marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
             <p>
               Hello, our future mentor, we are very happy to see you in The Rolling Scopes School. But before you start
               your journey we need to consider your application and submit you to a course.
@@ -150,7 +146,15 @@ function Page(props: { session: Session; courseAlias?: string }) {
             </p>
           </h2>
         </Row>
-      </PageLayout>
+      </div>
+    );
+    return (
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/images/rs-hero.png"
+        imageName="You are RS hero"
+        textMessage={message}
+      />
     );
   }
 
