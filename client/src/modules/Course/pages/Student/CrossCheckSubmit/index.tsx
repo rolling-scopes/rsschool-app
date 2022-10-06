@@ -3,7 +3,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
-import { CrossCheckComments } from 'components/CrossCheckComments';
+import { SolutionReview } from 'components/CrossCheck/SolutionReview';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
@@ -250,9 +250,13 @@ export function CrossCheckSubmit(props: CoursePageProps) {
           </Form>
         </Col>
       </Row>
-      <Row>
-        <CrossCheckComments feedback={feedback} maxScore={maxScore} />
-      </Row>
+
+      {feedback?.comments?.length &&
+        feedback.comments.map((review, index) => (
+          <Row>
+            <SolutionReview key={index} index={index} review={review} maxScore={maxScore} />
+          </Row>
+        ))}
     </PageLayout>
   );
 }

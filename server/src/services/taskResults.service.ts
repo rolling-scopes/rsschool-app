@@ -191,7 +191,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
       .getMany()
   ).map(c => {
-    const author = !c.anonymous
+    const checker = !c.anonymous
       ? {
           name: createName(c.checker.user),
           githubId: c.checker.user.githubId,
@@ -199,7 +199,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
         }
       : null;
     return {
-      author,
+      checker,
       updatedDate: c.updatedDate,
       comment: c.comment,
       score: c.score,

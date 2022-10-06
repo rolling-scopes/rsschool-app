@@ -1,9 +1,11 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { TaskSolution, CourseTask, TaskSolutionResult } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
+import { Discord } from '../../../common/models';
 import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
+import { createName, getUserByGithubId } from './user.service';
 import { CrossCheckRepository } from '../repositories/crossCheck.repository';
 import { UserRepository } from '../repositories/user.repository';
 
@@ -143,8 +145,14 @@ export class CrossCheckService {
   public async getResult(
     studentId: number,
     checkerId: number,
+    checkerGithubId: string,
   ): Promise<
     | (CrossCheckReviewResult & {
+        checker: {
+          name: string;
+          discord: Discord | null;
+          githubId: string;
+        };
         comments?: TaskSolutionComment[];
         historicalScores: TaskSolutionResult['historicalScores'];
       })
@@ -173,6 +181,8 @@ export class CrossCheckService {
       comments.map(c => c.authorId).filter(c => c),
     );
 
+    const checkerData = await getUserByGithubId(checkerGithubId);
+
     comments = comments.map(c => ({
       ...c,
       authorGithubId:
@@ -188,6 +198,14 @@ export class CrossCheckService {
       review: reviewResult.review,
       checkerId,
       studentId,
+      checker: {
+        name: createName({
+          firstName: checkerData?.firstName ?? '',
+          lastName: checkerData?.lastName ?? '',
+        }),
+        githubId: checkerGithubId,
+        discord: checkerData?.discord ?? null,
+      },
       comments,
       historicalScores: reviewResult.historicalScores ?? [],
     };

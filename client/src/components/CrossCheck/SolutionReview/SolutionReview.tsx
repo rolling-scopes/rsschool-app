@@ -1,29 +1,28 @@
-import { Fragment } from 'react';
 import { CDN_AVATARS_URL } from 'configs/cdn';
-import { ScoreIcon } from './Icons/ScoreIcon';
-import { Avatar, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
+import { ScoreIcon } from 'components/Icons/ScoreIcon';
+import { Avatar, Button, Col, Comment, Divider, Input, Row, Switch, Typography } from 'antd';
 import { useLocalStorage } from 'react-use';
-import { Feedback } from 'services/course';
+import { SolutionReviewType } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { GithubUserLink } from 'components/GithubUserLink';
-import PreparedComment from './Forms/PreparedComment';
-import { StudentContacts } from './CrossCheck/StudentContacts';
+import PreparedComment from 'components/Forms/PreparedComment';
+import { StudentContacts } from '../StudentContacts';
+import { StudentMessage } from './StudentMessage';
 
 enum LocalStorage {
   AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
 }
 
 type Props = {
-  feedback: Feedback | null;
+  index: number;
+  review: SolutionReviewType;
   maxScore?: number;
 };
 
-export function CrossCheckComments({ feedback, maxScore }: Props) {
-  if (!feedback || !feedback.comments || feedback.comments.length === 0) {
-    return null;
-  }
+export function SolutionReview(props: Props) {
+  const { index, review, maxScore } = props;
+  const { checker, comment, score, checkDate } = review;
 
-  const { comments } = feedback;
   const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
     LocalStorage.AreStudentContactsVisible,
   );
@@ -34,7 +33,7 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
 
   return (
     <Col>
-      <Row gutter={8} style={{ margin: '8px 0' }}>
+      {/* <Row gutter={8} style={{ margin: '8px 0' }}>
         <Col>
           <Typography.Text>Student Contacts</Typography.Text>
         </Col>
@@ -45,21 +44,23 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
             onChange={handleStudentContactsVisibilityChange}
           />
         </Col>
+      </Row> */}
+
+      <Row>
+        <Col span={24}>
+          <Divider style={{ margin: '8px 0' }} />
+        </Col>
       </Row>
 
-      {comments.map(({ comment, updatedDate, author, score }, i) => (
-        <Fragment key={i}>
-          <Row>
-            <Divider style={{ margin: '8px 0' }} />
-          </Row>
-
+      <Row>
+        <Col>
           <Comment
             avatar={
               <Avatar
                 size={32}
                 src={
-                  areStudentContactsVisible && author
-                    ? `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`
+                  areStudentContactsVisible && checker
+                    ? `${CDN_AVATARS_URL}/${checker.githubId}.png?size=48`
                     : '/static/svg/badges/ThankYou.svg'
                 }
               />
@@ -67,19 +68,19 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
             content={
               <>
                 <Row>
-                  {areStudentContactsVisible && author ? (
-                    <GithubUserLink value={author.githubId} isUserIconHidden={true} />
+                  {areStudentContactsVisible && checker ? (
+                    <GithubUserLink value={checker.githubId} isUserIconHidden={true} />
                   ) : (
                     <Typography.Text>
-                      {'Student'} {i + 1}
-                      {!areStudentContactsVisible && author && ' (hidden)'}
+                      {'Student'} {index + 1}
+                      {!areStudentContactsVisible && checker && ' (hidden)'}
                     </Typography.Text>
                   )}
                 </Row>
 
                 <Row>
                   <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
-                    {formatDateTime(updatedDate)}
+                    {formatDateTime(checkDate)}
                   </Typography.Text>
                 </Row>
 
@@ -102,12 +103,41 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
                   <PreparedComment text={comment} />
                 </Row>
 
-                <Row>{areStudentContactsVisible && author && <StudentContacts discord={author.discord} />}</Row>
+                <Row>{areStudentContactsVisible && checker && <StudentContacts discord={checker.discord} />}</Row>
               </>
             }
-          />
-        </Fragment>
-      ))}
+          >
+            {/* {comments.map(({ comment, updatedDate, author, score }) => (
+          <StudentMessage comment={comment} updatedDate={updatedDate} author={author} />
+        ))} */}
+
+            {/* <Comment
+              avatar={
+                <Avatar
+                  size={24}
+                  src={
+                    checker ? `${CDN_AVATARS_URL}/${checker.githubId}.png?size=48` : '/static/svg/badges/ThankYou.svg'
+                  }
+                />
+              }
+              content={
+                <>
+                  <Row>
+                    <Col span={24}>
+                      <Input.TextArea rows={3} showCount maxLength={512} />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Button type="primary">Send Message</Button>
+                  </Row>
+                </>
+              }
+            /> */}
+          </Comment>
+        </Col>
+      </Row>
+
       <style jsx>{`
         :global(.ant-comment-avatar) {
           position: sticky;

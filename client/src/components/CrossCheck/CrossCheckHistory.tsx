@@ -1,30 +1,49 @@
-import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
-import { Spin, Timeline, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Spin, Tag, Timeline, Typography } from 'antd';
+import { CourseService, SolutionReviewType } from 'services/course';
+import { markdownLabel } from 'components/Forms/PreparedComment';
+import { SolutionReview } from './SolutionReview';
 
-type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
-
-export function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
+export function CrossCheckHistory(props: {
+  githubId: string | null;
+  courseId: number;
+  courseTaskId: number | null;
+  maxScore: number | undefined;
+  setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
+}) {
   if (props.githubId == null || props.courseTaskId == null) {
     return null;
   }
   const githubId = props.githubId;
   const courseTaskId = props.courseTaskId;
 
-  const [state, setState] = useState({ loading: false, data: [] as HistoryItem[] });
+  const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
 
   const loadStudentScoreHistory = async (githubId: string) => {
     const courseService = new CourseService(props.courseId);
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId);
-    setState({ loading: false, data: result?.historicalScores?.sort((a, b) => b.dateTime - a.dateTime) ?? [] });
+    const sortedData = result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [];
+
+    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous }) => ({
+      checkDate: new Date(dateTime).toISOString(),
+      comment,
+      checker: !anonymous ? result?.checker ?? null : null,
+      score,
+    }));
+
+    setState({ loading: false, data: solutionReviews });
   };
 
   useEffect(() => {
     loadStudentScoreHistory(githubId);
   }, [githubId]);
+
+  const handleClickAmendButton = (historicalComment: string) => {
+    const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
+    props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
+  };
 
   return (
     <Spin spinning={state.loading}>
@@ -32,38 +51,33 @@ export function CrossCheckHistory(props: { githubId: string | null; courseId: nu
         History
       </Typography.Title>
       <Timeline>
-        {state.data.map((historyItem, i) => (
+        {state.data.map((review, index) => (
           <Timeline.Item
-            key={i}
-            color={i === 0 ? 'green' : 'gray'}
+            key={index}
+            color={index === 0 ? 'green' : 'gray'}
             dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
           >
-            <div>{formatDateTime(historyItem.dateTime)}</div>
-            <div>
-              <StarTwoTone twoToneColor={i === 0 ? '#52c41a' : 'gray'} />{' '}
-              <Typography.Text>{historyItem.score}</Typography.Text>
-            </div>
-            <div>
-              {historyItem.anonymous ? (
-                <>
-                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is hidden</Typography.Text>
-                </>
-              ) : (
-                <>
-                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is visible</Typography.Text>
-                </>
-              )}
-              <Typography.Text>{}</Typography.Text>
-            </div>
-            <div>
-              <Typography.Text>
-                {historyItem.comment.split('\n').map((item, i) => (
-                  <div key={i}>{item}</div>
-                ))}
-              </Typography.Text>
-            </div>
+            <Row>
+              <Col>{index === 0 ? <Tag color="success">Current review</Tag> : <Tag>Outdated review</Tag>}</Col>
+            </Row>
+
+            <Row>
+              <SolutionReview key={index} index={index} review={review} maxScore={props.maxScore} />
+            </Row>
+
+            <Row>
+              <Col>
+                <Button
+                  size="middle"
+                  type={index === 0 ? 'primary' : 'default'}
+                  htmlType="button"
+                  icon={index === 0 ? <EditFilled /> : <EditOutlined />}
+                  onClick={() => handleClickAmendButton(review.comment)}
+                >
+                  Amend review
+                </Button>
+              </Col>
+            </Row>
           </Timeline.Item>
         ))}
       </Timeline>

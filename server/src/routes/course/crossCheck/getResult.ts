@@ -30,6 +30,6 @@ export const getResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
     setErrorResponse(ctx, BAD_REQUEST, 'no assigned cross-check');
     return;
   }
-  const existingResult = await crossCheckService.getResult(student.id, checker.id);
+  const existingResult = await crossCheckService.getResult(student.id, checker.id, checker.githubId);
   setResponse(ctx, OK, existingResult);
 };

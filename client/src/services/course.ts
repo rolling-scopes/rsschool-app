@@ -23,18 +23,20 @@ export enum CrossCheckStatus {
   Completed = 'completed',
 }
 
+export type SolutionReviewType = {
+  checkDate: string;
+  comment: string;
+  checker: {
+    name: string;
+    githubId: string;
+    discord: Discord | null;
+  } | null;
+  score: number;
+};
+
 export type Feedback = {
   url?: string;
-  comments?: {
-    updatedDate: string;
-    comment: string;
-    author: {
-      name: string;
-      githubId: string;
-      discord: Discord | null;
-    } | null;
-    score: number;
-  }[];
+  comments?: SolutionReviewType[];
 };
 
 export interface Verification {
@@ -359,6 +361,11 @@ export class CourseService {
       review: CrossCheckReview[];
       studentId: number;
       checkerId: number;
+      checker: {
+        name: string;
+        discord: Discord | null;
+        githubId: string;
+      };
       historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
     } | null;
   }
