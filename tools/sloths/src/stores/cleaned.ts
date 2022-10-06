@@ -4,6 +4,7 @@ const useCleanedStore = defineStore({
   id: 'cleaned',
   state: () => ({
     cleanedFilelist: [] as string[],
+    originalFilelist: [] as string[],
   }),
 });
 
