@@ -39,19 +39,19 @@ export default defineComponent({
 }
 
 .home-category_memory > .home-category__img {
-  background: no-repeat center center / contain url('../../assets/icons/home/memory.svg') var(--color-background-soft);
+  background: no-repeat center center / contain url('./img/home/memory.svg') var(--color-background-soft);
 }
 
 .home-category_guess > .home-category__img {
-  background: no-repeat center center / contain url('../../assets/icons/home/guess.svg') var(--color-background-soft);
+  background: no-repeat center center / contain url('./img/home/guess.svg') var(--color-background-soft);
 }
 
 .home-category_create > .home-category__img {
-  background: no-repeat center center / contain url('../../assets/icons/home/create.svg') var(--color-background-soft);
+  background: no-repeat center center / contain url('./img/home/create.svg') var(--color-background-soft);
 }
 
 .home-category_merch > .home-category__img {
-  background: no-repeat center center / contain url('../../assets/icons/home/merch.svg') var(--color-background-soft);
+  background: no-repeat center center / contain url('./img/home/merch.svg') var(--color-background-soft);
 }
 
 .home-category__name {

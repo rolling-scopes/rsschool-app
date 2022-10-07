@@ -22,7 +22,7 @@
       </list-controls>
       <custom-btn
         :text="$t('merch.title')"
-        :imgPath="'./img/catalog/merch.svg'"
+        :imgPath="'./img/home/merch.svg'"
         className="btn btn-catalog"
         @click="$router.push({ name: 'merch' })"
       ></custom-btn>
