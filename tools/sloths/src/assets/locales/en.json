@@ -86,7 +86,7 @@
 
   "create": {
     "title": "Create a meme",
-    "description": "Choose an image, enter text and copy the result",
+    "description": "Choose an image, enter text, use mouse to move and scroll wheel to scale objects, copy the result at the end",
     "top": "Text Top",
     "bottom": "Text Bottom",
     "margin": "Image Margin",
@@ -98,7 +98,7 @@
 
   "merch": {
     "title": "Merch",
-    "description": "Choose an image, enter text and copy the result",
+    "description": "Choose an image, enter text, use mouse to move and scroll wheel to scale objects, copy the result at the end",
     "bottom": "Text",
     "kText": "Text width (relative to image width)",
     "kFont": "Font size (relative to image width)",
