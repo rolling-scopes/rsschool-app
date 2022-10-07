@@ -59,7 +59,7 @@ export function ExpelCriteria(props: Props) {
           </Form.Item>
 
           <Form.Item name="courseTaskIds" label="Tasks">
-            <Select mode="multiple">
+            <Select mode="multiple" optionFilterProp="children">
               {courseTasks.map(task => (
                 <Select.Option key={task.id} value={task.id}>
                   {task.name}
