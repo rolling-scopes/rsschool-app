@@ -8,7 +8,7 @@
         className="btn btn-download"
         @click="downloadFiles"
       ></custom-btn>
-      <list-controls
+      <controls-list
         @search="getSloths"
         @tags="getSloths"
         @sorting="getSloths"
@@ -19,7 +19,7 @@
         :options="sortingOptions"
         :text="$t('btn.reset')"
       >
-      </list-controls>
+      </controls-list>
       <custom-btn
         :text="$t('merch.title')"
         :imgPath="'./img/home/merch.svg'"
@@ -89,8 +89,8 @@ import useSelectedTags from '@/stores/tag-cloud';
 import useSortingList from '@/stores/sorting-list';
 import useSlothInfo from '@/stores/sloth-info';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import ListControls from '@/components/list-controls/ListControls.vue';
-import ListPagination, { type PaginationListElement } from '@/components/list-controls/ListPagination.vue';
+import ControlsList from '@/components/controls-list/ControlsList.vue';
+import ListPagination, { type PaginationListElement } from '@/components/controls-list/ListPagination.vue';
 import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
@@ -117,7 +117,7 @@ export default defineComponent({
     CustomBtn,
     SlothCard,
     SlothInfo,
-    ListControls,
+    ControlsList,
     ListPagination,
     ModalWindow,
   },

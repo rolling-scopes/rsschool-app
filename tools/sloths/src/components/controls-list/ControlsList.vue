@@ -11,12 +11,12 @@
 import { defineComponent, type PropType } from 'vue';
 import type { SelectOptions } from '@/common/types';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import SearchText, { type SearchTextElement } from '@/components/list-controls/SearchText.vue';
-import TagCloud, { type TagCloudElement } from '@/components/list-controls/TagCloud.vue';
-import SortingList, { type SortingListElement } from '@/components/list-controls/SortingList.vue';
+import SearchText, { type SearchTextElement } from '@/components/controls-list/SearchText.vue';
+import TagCloud, { type TagCloudElement } from '@/components/controls-list/TagCloud.vue';
+import SortingList, { type SortingListElement } from '@/components/controls-list/SortingList.vue';
 
 export default defineComponent({
-  name: 'ListControls',
+  name: 'ControlsList',
 
   components: {
     CustomBtn,
