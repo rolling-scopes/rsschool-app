@@ -7,7 +7,7 @@ import { formatDateTime } from 'services/formatter';
 import { GithubUserLink } from 'components/GithubUserLink';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { StudentContacts } from '../StudentContacts';
-import { StudentMessage } from './StudentMessage';
+import { Message } from './Message';
 
 enum LocalStorage {
   AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
@@ -19,11 +19,11 @@ type Props = {
   index: number;
   review: SolutionReviewType;
   maxScore?: number;
-  isStudentMessagesVisible?: boolean;
+  isMessagesVisible?: boolean;
 };
 
 export function SolutionReview(props: Props) {
-  const { children, sessionGithubId, index, review, maxScore, isStudentMessagesVisible = true } = props;
+  const { children, sessionGithubId, index, review, maxScore, isMessagesVisible = true } = props;
   const { checker, comment, score, checkDate } = review;
 
   const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
@@ -113,10 +113,10 @@ export function SolutionReview(props: Props) {
             {children}
 
             {/* {comments.map(({ comment, updatedDate, author, score }) => (
-          <StudentMessage comment={comment} updatedDate={updatedDate} author={author} />
+          <Message comment={comment} updatedDate={updatedDate} author={author} />
         ))} */}
 
-            {isStudentMessagesVisible && (
+            {isMessagesVisible && (
               <Comment
                 avatar={
                   <Avatar

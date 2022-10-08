@@ -20,7 +20,7 @@ type Props = {
   updatedDate: string;
 };
 
-export function StudentMessage({ comment, author, updatedDate }: Props) {
+export function Message({ comment, author, updatedDate }: Props) {
   const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
     LocalStorage.AreStudentContactsVisible,
   );
