@@ -1,13 +1,10 @@
-export type Tags = Tag[];
-export type Tag = string;
-
 export type Sloths = Sloth[];
 export type Sloth = {
-  [keyof: string]: string | boolean | Tags;
+  [keyof: string]: string | boolean | string[];
   id: string;
   name: string;
   description: string;
-  tags: Tags;
+  tags: string[];
   checked: boolean;
   image: string;
 };
@@ -18,7 +15,7 @@ export type MetadataSloth = {
   id: string;
   name: string;
   description: string;
-  tags: Tags;
+  tags: string[];
 };
 
 export type GameResults = GameResult[];
