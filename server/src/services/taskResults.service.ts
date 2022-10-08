@@ -210,7 +210,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
     .where('"ts"."studentId" = :studentId', { studentId })
     .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
-  return { url: taskSolution?.url, comments };
+  return { url: taskSolution?.url, reviews: comments };
 }
 
 type TaskArtefactInput = {

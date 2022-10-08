@@ -36,7 +36,7 @@ export type SolutionReviewType = {
 
 export type Feedback = {
   url?: string;
-  comments?: SolutionReviewType[];
+  reviews?: SolutionReviewType[];
 };
 
 export interface Verification {

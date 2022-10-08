@@ -251,8 +251,8 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         </Col>
       </Row>
 
-      {feedback?.comments &&
-        feedback.comments.map((review, index) => (
+      {feedback?.reviews &&
+        feedback.reviews.map((review, index) => (
           <Row key={index}>
             <SolutionReview
               sessionGithubId={props.session.githubId}
