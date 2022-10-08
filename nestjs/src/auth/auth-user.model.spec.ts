@@ -7,14 +7,14 @@ describe('AuthUser', () => {
   it('creates user with supervisor role', () => {
     const user = new AuthUser({ courseUsers: [{ courseId: 1, isSupervisor: true } as CourseUser] } as AuthDetails);
     expect(user.courses).toStrictEqual({
-      1: { isExpelled: null, mentorId: null, studentId: null, roles: [CourseRole.Supervisor] },
+      1: { roles: [CourseRole.Supervisor] },
     });
   });
 
   it('creates user with manager role', () => {
     const user = new AuthUser({ courseUsers: [{ courseId: 2, isManager: true } as CourseUser] } as AuthDetails);
     expect(user.courses).toStrictEqual({
-      2: { isExpelled: null, mentorId: null, studentId: null, roles: [CourseRole.Manager] },
+      2: { roles: [CourseRole.Manager] },
     });
   });
 });
