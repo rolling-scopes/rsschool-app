@@ -50,10 +50,11 @@ export default defineComponent({
   methods: {
     clearAll() {
       const search = this.$refs.search as SearchTextElement;
-      if (search) search.clearSearchText();
       const tags = this.$refs.tags as TagCloudElement;
-      if (tags) tags.clearSelected();
       const sorting = this.$refs.sorting as SortingListElement;
+
+      if (search) search.clearSearchText();
+      if (tags) tags.clearSelected();
       if (sorting) sorting.clearSorting();
 
       this.$emit('clearAll');
