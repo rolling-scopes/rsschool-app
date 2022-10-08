@@ -7,10 +7,7 @@
           <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag">{{ tag }}</span>
         </div>
       </div>
-      <custom-btn
-        :className="slothInfo.checked ? 'icon icon_check-on' : 'icon icon_check-off'"
-        @click="$emit('checkSloth', slothInfo)"
-      ></custom-btn>
+      <custom-btn :className="'icon ' + getClassNameCheckIcon" @click="$emit('checkSloth', slothInfo)"></custom-btn>
       <div>
         <div class="catalog-sloth-info__props">
           <p class="sloth-info__property sloth-info__property_text">{{ slothInfo.name }}</p>
@@ -25,7 +22,7 @@
 
     <div v-else class="download-sloth-info__inner">
       <custom-btn
-        :className="slothInfo.checked ? 'download-icon icon_check-on' : 'download-icon icon_check-off'"
+        :className="'download-icon ' + getClassNameCheckIcon"
         @click="$emit('checkSloth', slothInfo)"
       ></custom-btn>
       <div class="download-sloth-info__sloth">
@@ -77,6 +74,10 @@ export default defineComponent({
 
     isCatalog(): boolean {
       return this.$route.name === 'catalog';
+    },
+
+    getClassNameCheckIcon(): string {
+      return this.slothInfo.checked ? 'icon_check-on' : 'icon_check-off';
     },
   },
 
