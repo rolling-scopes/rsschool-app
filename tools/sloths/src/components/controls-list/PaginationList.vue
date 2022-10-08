@@ -70,7 +70,7 @@ import { defineComponent } from 'vue';
 const { getPerPage, getCurrPage, setPerPage, setCurrPage } = usePagination();
 
 const paginationList = defineComponent({
-  name: 'ListPagination',
+  name: 'PaginationList',
 
   components: {
     CustomBtn,

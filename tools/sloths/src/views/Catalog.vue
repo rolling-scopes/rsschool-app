@@ -28,7 +28,7 @@
       ></custom-btn>
     </div>
     <div class="catalog__main list-main">
-      <list-pagination ref="pagination" :size="count" @getPage="getSloths"></list-pagination>
+      <pagination-list ref="pagination" :size="count" @getPage="getSloths"></pagination-list>
       <div class="catalog__list">
         <sloth-card
           v-for="sloth in sloths"
@@ -90,7 +90,7 @@ import useSortingList from '@/stores/sorting-list';
 import useSlothInfo from '@/stores/sloth-info';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import ControlsList from '@/components/controls-list/ControlsList.vue';
-import ListPagination, { type PaginationListElement } from '@/components/controls-list/ListPagination.vue';
+import PaginationList, { type PaginationListElement } from '@/components/controls-list/PaginationList.vue';
 import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
@@ -118,7 +118,7 @@ export default defineComponent({
     SlothCard,
     SlothInfo,
     ControlsList,
-    ListPagination,
+    PaginationList,
     ModalWindow,
   },
 
