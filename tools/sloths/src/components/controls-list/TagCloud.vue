@@ -1,6 +1,6 @@
 <template>
   <div class="tags tags-center">
-    <span class="tag" :class="{ active: isHas(item) }" v-for="item in tags" :key="item" @click="select(item)">
+    <span class="tag" :class="{ active: isTagSelected(item) }" v-for="item in tags" :key="item" @click="select(item)">
       {{ item }}
     </span>
   </div>
@@ -33,7 +33,7 @@ const tagCloud = defineComponent({
   },
 
   methods: {
-    isHas(tag: string) {
+    isTagSelected(tag: string) {
       return this.selected.includes(tag);
     },
 
