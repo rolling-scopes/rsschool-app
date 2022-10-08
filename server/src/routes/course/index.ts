@@ -43,7 +43,12 @@ import { getCourseTasksVerifications, getStudentTaskVerifications } from './task
 
 import * as interviews from './interviews';
 
-import { validateCrossCheckExpirationDate, validateGithubId, validateGithubIdAndAccess } from '../validators';
+import {
+  validateCrossCheckExpirationDate,
+  validateExpelledStudent,
+  validateGithubId,
+  validateGithubIdAndAccess,
+} from '../validators';
 import * as crossCheck from './crossCheck';
 import {
   createRepositories,
@@ -186,6 +191,7 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
+  const activeStudentValidators = [validateGithubIdAndAccess, validateExpelledStudent];
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
@@ -227,7 +233,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post(
     '/student/:githubId/task/:courseTaskId/verification',
     courseGuard,
-    ...validators,
+    ...activeStudentValidators,
     createTaskVerification(logger),
   );
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
@@ -251,12 +257,13 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
+  const activeStudentValidators = [validateGithubIdAndAccess, validateExpelledStudent];
   const baseUrl = `/student/:githubId/task/:courseTaskId`;
 
   router.post(
     `${baseUrl}/cross-check/solution`,
     courseGuard,
-    ...validators,
+    ...activeStudentValidators,
     validateCrossCheckExpirationDate,
     crossCheck.createSolution(logger),
   );
