@@ -92,7 +92,7 @@ const paginationList = defineComponent({
   },
 
   computed: {
-    pages(): number {
+    pagesCount(): number {
       return Math.ceil(this.size / this.perPage);
     },
 
@@ -101,7 +101,7 @@ const paginationList = defineComponent({
     },
 
     checkBottom(): boolean {
-      return this.currPage === this.pages;
+      return this.currPage === this.pagesCount;
     },
   },
 
@@ -126,7 +126,7 @@ const paginationList = defineComponent({
 
     next() {
       if (!this.checkBottom) {
-        if (this.currPage < this.pages) this.currPage += 1;
+        if (this.currPage < this.pagesCount) this.currPage += 1;
         this.getPage();
       }
     },
@@ -140,7 +140,7 @@ const paginationList = defineComponent({
 
     bottom() {
       if (!this.checkBottom) {
-        this.currPage = this.pages;
+        this.currPage = this.pagesCount;
         this.getPage();
       }
     },
