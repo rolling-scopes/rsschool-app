@@ -56,41 +56,45 @@ export function CrossCheckHistory(props: Props) {
         History
       </Typography.Title>
       <Timeline>
-        {state.data.map((review, index) => (
-          <Timeline.Item
-            key={index}
-            color={index === 0 ? 'green' : 'gray'}
-            dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
-          >
-            <Row>
-              <Col>{index === 0 ? <Tag color="success">Current review</Tag> : <Tag>Outdated review</Tag>}</Col>
-            </Row>
+        {state.data.map((review, index) => {
+          const isCurrentReview = index === 0;
 
-            <Row>
-              <SolutionReview
-                sessionGithubId={props.sessionGithubId}
-                index={index}
-                review={review}
-                maxScore={props.maxScore}
-                isMessagesVisible={index === 0}
-              >
-                <Row>
-                  <Col>
-                    <Button
-                      size="middle"
-                      type={index === 0 ? 'primary' : 'default'}
-                      htmlType="button"
-                      icon={index === 0 ? <EditFilled /> : <EditOutlined />}
-                      onClick={() => handleClickAmendButton(review.comment)}
-                    >
-                      Amend review
-                    </Button>
-                  </Col>
-                </Row>
-              </SolutionReview>
-            </Row>
-          </Timeline.Item>
-        ))}
+          return (
+            <Timeline.Item
+              key={index}
+              color={isCurrentReview ? 'green' : 'gray'}
+              dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
+            >
+              <Row>
+                <Col>{isCurrentReview ? <Tag color="success">Current review</Tag> : <Tag>Outdated review</Tag>}</Col>
+              </Row>
+
+              <Row>
+                <SolutionReview
+                  sessionGithubId={props.sessionGithubId}
+                  index={index}
+                  review={review}
+                  maxScore={props.maxScore}
+                  isMessagesVisible={isCurrentReview}
+                >
+                  <Row>
+                    <Col>
+                      <Button
+                        size="middle"
+                        type={isCurrentReview ? 'primary' : 'default'}
+                        htmlType="button"
+                        icon={isCurrentReview ? <EditFilled /> : <EditOutlined />}
+                        onClick={() => handleClickAmendButton(review.comment)}
+                      >
+                        Amend review
+                      </Button>
+                    </Col>
+                  </Row>
+                </SolutionReview>
+              </Row>
+            </Timeline.Item>
+          );
+        })}
       </Timeline>
     </Spin>
   );
