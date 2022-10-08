@@ -46,5 +46,8 @@ export class CourseEventDto {
   dateTime: string;
 
   @ApiProperty()
+  endTime: string;
+
+  @ApiProperty()
   organizer: PersonDto;
 }

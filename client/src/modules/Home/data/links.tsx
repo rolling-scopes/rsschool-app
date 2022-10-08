@@ -13,7 +13,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager } from 'domain/user';
+import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent } from 'domain/user';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -88,14 +88,14 @@ const links: LinkData[] = [
     name: 'Cross-Check: Submit',
     icon: <CodeTwoTone />,
     getUrl: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
-    access: every(isStudent),
+    access: every(isActiveStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Cross-Check: Review',
     icon: <CheckCircleTwoTone twoToneColor="#f56161" />,
     getUrl: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
-    access: every(isStudent),
+    access: every(isActiveStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
@@ -116,7 +116,7 @@ const links: LinkData[] = [
     name: 'Auto-Test',
     icon: <PlayCircleTwoTone twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
-    access: some(isStudent, isCourseManager),
+    access: some(isActiveStudent, isCourseManager),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {

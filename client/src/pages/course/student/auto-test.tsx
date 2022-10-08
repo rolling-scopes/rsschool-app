@@ -31,6 +31,7 @@ import {
 } from 'services/course';
 import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
+import { isExpelledStudent } from 'domain/user';
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -50,7 +51,6 @@ const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -141,7 +141,9 @@ function Page(props: CoursePageProps) {
         const pubAtts = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
         const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
         notification.error({
-          message: (
+          message: isExpelledStudent(props.session, courseId) ? (
+            <>This task can only be submitted by active students</>
+          ) : (
             <>
               You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
               {!!oneAttemptPerNumberOfHours &&

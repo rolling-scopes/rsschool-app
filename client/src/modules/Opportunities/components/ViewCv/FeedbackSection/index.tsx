@@ -63,7 +63,7 @@ export const FeedbackSection = ({ data }: Props) => {
                   <Paragraph italic>
                     <ul>
                       {softSkills.map(skill => (
-                        <li>
+                        <li key={skill.id}>
                           {formatSoftSkill(skill.id)}: {skill.value}
                         </li>
                       ))}

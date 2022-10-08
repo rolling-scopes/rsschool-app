@@ -47,7 +47,11 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
         <Row className="print-no-padding" style={{ minHeight: '100vh', minWidth: '300px', padding: 10 }}>
           <Col xl={8} lg={8} md={10} sm={24} xs={24} className="cv-sidebar">
             <Row justify="space-between">
-              <ExpirationTooltip expirationDate={expirationDateFormatted} expirationState={expirationState} />
+              <ExpirationTooltip
+                publicMode={publicMode}
+                expirationDate={expirationDateFormatted}
+                expirationState={expirationState}
+              />
             </Row>
             <Row>
               <NameTitle userData={userData} />

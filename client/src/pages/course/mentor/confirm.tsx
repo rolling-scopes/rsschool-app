@@ -1,6 +1,5 @@
 import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import Image from 'next/image';
 import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { StudentSearch } from 'components/StudentSearch';
@@ -11,6 +10,9 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
+import { Warning } from 'components/Warning';
+
+const { Link } = Typography;
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session; courseAlias?: string }) {
@@ -86,14 +88,12 @@ function Page(props: { session: Session; courseAlias?: string }) {
 
   if (course == null) {
     return (
-      <PageLayout loading={false} githubId={props.session.githubId}>
-        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/svg/err.svg" alt="Course Not Found" width={175} height={175} />
-        </Row>
-        <Row justify="center">
-          <h1 style={{ fontSize: '36px', marginBottom: 0 }}>Sorry, Course Not Found</h1>
-        </Row>
-      </PageLayout>
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/svg/err.svg"
+        imageName="Course Not Found"
+        textMessage="Sorry, Course Not Found"
+      />
     );
   }
 
@@ -105,32 +105,39 @@ function Page(props: { session: Session; courseAlias?: string }) {
   };
 
   if (noAccess && !isPreferredCourse) {
+    const message = (
+      <div>
+        <Link href={`/registry/mentor?course=${router.query?.course}`}>
+          <a>Register as a Mentor for the Course</a>
+        </Link>
+      </div>
+    );
     return (
-      <PageLayout {...pageProps}>
-        <Result status={'403'} title="You are not registered to the course" />
-      </PageLayout>
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/svg/wanted-mentors.svg"
+        imageName="Not registered"
+        textMessage={message}
+      />
     );
   }
 
   if (noAccess && isPreferredCourse) {
-    return (
-      <PageLayout loading={false} githubId={props.session.githubId}>
-        <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
-          <Image src="/static/images/rs-hero.png" alt="You are RS hero" width={175} height={175} />
-        </Row>
+    const message = (
+      <div>
         <Row justify="center">
           <h1 style={{ fontSize: '32px', marginBottom: 15, maxWidth: 600, textAlign: 'center' }}>
             Thank you for registration as a mentor for Rolling Scopes School
           </h1>
         </Row>
         <Row justify="center">
-          <h2 style={{ marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
+          <h2 style={{ fontSize: '19px', marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
             <p>
-              Hello, our future mentor, we are very happy to see your in The Rolling Scopes School. But before you start
+              Hello, our future mentor, we are very happy to see you in The Rolling Scopes School. But before you start
               your journey we need to consider your application and submit you to a course.
             </p>
             <p style={{ marginBottom: 15 }}>
-              It can take a little time. We will send you another mail with next steps late
+              It can take a little time. We will send you another mail with next steps later
             </p>
             <p style={{ fontWeight: 500 }}>
               We really appreciate your interest for school.
@@ -139,7 +146,15 @@ function Page(props: { session: Session; courseAlias?: string }) {
             </p>
           </h2>
         </Row>
-      </PageLayout>
+      </div>
+    );
+    return (
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/images/rs-hero.png"
+        imageName="You are RS hero"
+        textMessage={message}
+      />
     );
   }
 

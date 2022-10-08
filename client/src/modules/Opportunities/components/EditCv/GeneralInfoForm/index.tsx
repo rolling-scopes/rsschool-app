@@ -81,7 +81,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
           <Input style={inputStyle} placeholder="Enter locations" />
         </Item>
         <Item label="Select your English level" name="englishLevel" rules={[...validationRules['englishLevel']]}>
-          <Select style={inputStyle} placeholder="Not selected yet">
+          <Select style={inputStyle} placeholder="English level is not selected yet">
             {ENGLISH_LEVELS.map((level, idx) => (
               <Option value={level} key={idx}>
                 {level}
@@ -90,7 +90,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
           </Select>
         </Item>
         <Item label="Military service" name="militaryService" rules={[...validationRules['militaryService']]}>
-          <Select style={inputStyle} placeholder="Not selected yet">
+          <Select style={inputStyle} placeholder="Military service status is not selected yet">
             <Option value="served">Served</Option>
             <Option value="liable">Liable</Option>
             <Option value="notLiable">Not liable</Option>
