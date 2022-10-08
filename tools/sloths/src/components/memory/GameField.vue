@@ -37,7 +37,7 @@
       <template v-slot:body>
         <img :src="cardWinner" alt="winner" />
         <p>{{ $t('memory.win') }}</p>
-        <p>{{ steps }} {{ getStepsText }}</p>
+        <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
         <p>{{ getTime / 1000 }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import { mapWritableState } from 'pinia';
-import { ruNounEnding } from '@/utils/ru-noun-ending';
 import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
 import type { MemoryLevel, GameResult, GameResults } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
@@ -100,10 +99,6 @@ export default defineComponent({
 
     getLevel(): string {
       return `memory.${this.level.level}`;
-    },
-
-    getStepsText(): string {
-      return ruNounEnding(this.steps, this.$t('memory.steps1'), this.$t('memory.steps2'), this.$t('memory.stepsN'));
     },
 
     getTime(): number {

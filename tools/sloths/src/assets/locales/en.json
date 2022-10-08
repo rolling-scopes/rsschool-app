@@ -62,9 +62,7 @@
     "guess": "Guess image",
     "guesses": "guesses",
     "next": "Send an answer",
-    "points1": "point",
-    "points2": "points",
-    "pointsN": "points",
+    "points": "point | points",
     "results": "Guess-a-Sloth Results"
   },
 
@@ -73,9 +71,7 @@
     "start": "Let's Go!",
     "congrats": "Congratulations!",
     "win": "You won! Your result:",
-    "steps1": "step",
-    "steps2": "steps",
-    "stepsN": "steps",
+    "steps": "step | steps",
     "time": "seconds",
     "level": "Choose your level",
     "junior": "Junior",

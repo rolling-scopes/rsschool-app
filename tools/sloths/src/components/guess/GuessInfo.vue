@@ -14,7 +14,7 @@
     <div class="results results_admin">
       <div class="results__item" v-for="(res, index) in results" :key="index">
         <span class="result__index">{{ `${index + 1}.` }}</span>
-        <span class="result__steps">{{ `${res.count} ${getPointText(res.count)}` }}</span>
+        <span class="result__steps">{{ `${res.count} ${$t('guess.points', res.count)}` }}</span>
         <span class="result__time">{{ `${res.time / 1000} s` }}</span>
       </div>
     </div>
@@ -24,18 +24,15 @@
 <script lang="ts">
 import type { GameResult } from '@/common/types';
 import { defineComponent } from 'vue';
-import HomeCategory from '@/components/home/HomeCategory.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { GAME_RESULT_SORTING } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
-import { ruNounEnding } from '@/utils/ru-noun-ending';
 
 export default defineComponent({
   name: 'GuessInfo',
 
   components: {
-    HomeCategory,
     CustomBtn,
   },
 
@@ -53,7 +50,7 @@ export default defineComponent({
     isVisible: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 
   computed: {
@@ -68,7 +65,7 @@ export default defineComponent({
     isVisible() {
       this.getGameInfo();
       this.takeSort();
-    }
+    },
   },
 
   async mounted() {
@@ -86,10 +83,6 @@ export default defineComponent({
       }
 
       this.count = this.results.length;
-    },
-
-    getPointText(val: number): string {
-      return ruNounEnding(val, this.$t('guess.points1'), this.$t('guess.points2'), this.$t('guess.pointsN'));
     },
 
     setSorting(i: number) {
@@ -116,21 +109,21 @@ export default defineComponent({
     sortElems(a: number, b: number, direct: number): number {
       if (direct % 2 === 0) {
         if (a < b) {
-          return -1
+          return -1;
         }
         if (a > b) {
-          return 1
+          return 1;
         }
       } else {
         if (a < b) {
-          return 1
+          return 1;
         }
         if (a > b) {
-          return -1
+          return -1;
         }
       }
-      return 0
-    }
+      return 0;
+    },
   },
 });
 </script>
