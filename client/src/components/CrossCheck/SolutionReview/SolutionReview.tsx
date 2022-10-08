@@ -14,13 +14,16 @@ enum LocalStorage {
 }
 
 type Props = {
+  children?: JSX.Element;
+  sessionGithubId: string;
   index: number;
   review: SolutionReviewType;
   maxScore?: number;
+  isStudentMessagesVisible?: boolean;
 };
 
 export function SolutionReview(props: Props) {
-  const { index, review, maxScore } = props;
+  const { children, sessionGithubId, index, review, maxScore, isStudentMessagesVisible = true } = props;
   const { checker, comment, score, checkDate } = review;
 
   const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
@@ -107,33 +110,39 @@ export function SolutionReview(props: Props) {
               </>
             }
           >
+            {children}
+
             {/* {comments.map(({ comment, updatedDate, author, score }) => (
           <StudentMessage comment={comment} updatedDate={updatedDate} author={author} />
         ))} */}
 
-            {/* <Comment
-              avatar={
-                <Avatar
-                  size={24}
-                  src={
-                    checker ? `${CDN_AVATARS_URL}/${checker.githubId}.png?size=48` : '/static/svg/badges/ThankYou.svg'
-                  }
-                />
-              }
-              content={
-                <>
-                  <Row>
-                    <Col span={24}>
-                      <Input.TextArea rows={3} showCount maxLength={512} />
-                    </Col>
-                  </Row>
+            {isStudentMessagesVisible && (
+              <Comment
+                avatar={
+                  <Avatar
+                    size={24}
+                    src={
+                      /* checker ? `${CDN_AVATARS_URL}/${sessionGithubId}.png?size=48` : '/static/svg/badges/ThankYou.svg' */
+                      /* TODO если я аноним то не показывать мою аватарку */
+                      `${CDN_AVATARS_URL}/${sessionGithubId}.png?size=48`
+                    }
+                  />
+                }
+                content={
+                  <>
+                    <Row>
+                      <Col span={24}>
+                        <Input.TextArea rows={3} showCount maxLength={512} />
+                      </Col>
+                    </Row>
 
-                  <Row>
-                    <Button type="primary">Send Message</Button>
-                  </Row>
-                </>
-              }
-            /> */}
+                    <Row>
+                      <Button type="primary">Send Message</Button>
+                    </Row>
+                  </>
+                }
+              />
+            )}
           </Comment>
         </Col>
       </Row>

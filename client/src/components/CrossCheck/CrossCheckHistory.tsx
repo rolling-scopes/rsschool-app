@@ -1,17 +1,20 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
-import { Button, Col, Row, Spin, Tag, Timeline, Typography } from 'antd';
+import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
 import { CourseService, SolutionReviewType } from 'services/course';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from './SolutionReview';
 
-export function CrossCheckHistory(props: {
-  githubId: string | null;
+type Props = {
+  sessionGithubId: string;
   courseId: number;
+  githubId: string | null;
   courseTaskId: number | null;
   maxScore: number | undefined;
   setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
-}) {
+};
+
+export function CrossCheckHistory(props: Props) {
   if (props.githubId == null || props.courseTaskId == null) {
     return null;
   }
@@ -43,6 +46,8 @@ export function CrossCheckHistory(props: {
   const handleClickAmendButton = (historicalComment: string) => {
     const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
     props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
+
+    notification.success({ message: 'Pasted to comment field', duration: 2 });
   };
 
   return (
@@ -62,21 +67,27 @@ export function CrossCheckHistory(props: {
             </Row>
 
             <Row>
-              <SolutionReview key={index} index={index} review={review} maxScore={props.maxScore} />
-            </Row>
-
-            <Row>
-              <Col>
-                <Button
-                  size="middle"
-                  type={index === 0 ? 'primary' : 'default'}
-                  htmlType="button"
-                  icon={index === 0 ? <EditFilled /> : <EditOutlined />}
-                  onClick={() => handleClickAmendButton(review.comment)}
-                >
-                  Amend review
-                </Button>
-              </Col>
+              <SolutionReview
+                sessionGithubId={props.sessionGithubId}
+                index={index}
+                review={review}
+                maxScore={props.maxScore}
+                isStudentMessagesVisible={index === 0}
+              >
+                <Row>
+                  <Col>
+                    <Button
+                      size="middle"
+                      type={index === 0 ? 'primary' : 'default'}
+                      htmlType="button"
+                      icon={index === 0 ? <EditFilled /> : <EditOutlined />}
+                      onClick={() => handleClickAmendButton(review.comment)}
+                    >
+                      Amend review
+                    </Button>
+                  </Col>
+                </Row>
+              </SolutionReview>
             </Row>
           </Timeline.Item>
         ))}

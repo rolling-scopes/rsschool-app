@@ -138,8 +138,9 @@ function Page(props: CoursePageProps) {
         </Col>
         <Col {...colSizes}>
           <CrossCheckHistory
-            githubId={githubId}
+            sessionGithubId={props.session.githubId}
             courseId={props.course.id}
+            githubId={githubId}
             courseTaskId={courseTaskId}
             maxScore={maxScore}
             setHistoricalCommentSelected={setHistoricalCommentSelected}
