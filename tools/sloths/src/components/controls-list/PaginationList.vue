@@ -33,7 +33,7 @@
       ></custom-btn>
 
       <div class="pagination__page">
-        <span>{{ currPage }}</span>
+        <span>{{ currPageNumber }}</span>
       </div>
 
       <custom-btn
@@ -80,7 +80,7 @@ const paginationList = defineComponent({
     return {
       perPageArr: PAGINATION_OPTIONS,
       perPage: getPerPage(),
-      currPage: getCurrPage(),
+      currPageNumber: getCurrPage(),
     };
   },
 
@@ -97,50 +97,50 @@ const paginationList = defineComponent({
     },
 
     checkTop(): boolean {
-      return this.currPage === 1;
+      return this.currPageNumber === 1;
     },
 
     checkBottom(): boolean {
-      return this.currPage === this.pagesCount;
+      return this.currPageNumber === this.pagesCount;
     },
   },
 
   methods: {
     getPage() {
-      setCurrPage(this.currPage);
+      setCurrPage(this.currPageNumber);
       setPerPage(this.perPage);
       this.$emit('getPage');
     },
 
     setPerPage() {
-      this.currPage = 1;
+      this.currPageNumber = 1;
       this.getPage();
     },
 
     top() {
       if (!this.checkTop) {
-        this.currPage = 1;
+        this.currPageNumber = 1;
         this.getPage();
       }
     },
 
     next() {
       if (!this.checkBottom) {
-        if (this.currPage < this.pagesCount) this.currPage += 1;
+        if (this.currPageNumber < this.pagesCount) this.currPageNumber += 1;
         this.getPage();
       }
     },
 
     prev() {
       if (!this.checkTop) {
-        if (this.currPage > 1) this.currPage -= 1;
+        if (this.currPageNumber > 1) this.currPageNumber -= 1;
         this.getPage();
       }
     },
 
     bottom() {
       if (!this.checkBottom) {
-        this.currPage = this.pagesCount;
+        this.currPageNumber = this.pagesCount;
         this.getPage();
       }
     },
