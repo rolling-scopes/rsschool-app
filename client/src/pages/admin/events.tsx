@@ -7,7 +7,6 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-// import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';

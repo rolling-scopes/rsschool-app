@@ -26,7 +26,6 @@ import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
 import { StatusDto } from './dto/status.dto';
 import { VisibilityDto } from './dto/visibility.dto';
-//import { FormDataDto } from './dto/form-data.dto';
 import { OpportunitiesService } from './opportunities.service';
 import { Resume } from '@entities/resume';
 
