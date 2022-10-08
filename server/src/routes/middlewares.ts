@@ -66,7 +66,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
 type AuthDetails = {
   id: number;
   githubId: string;
-  students: { courseId: number; id: number; isExpelled: boolean | null }[];
+  students: { courseId: number; id: number; isExpelled?: boolean }[];
   mentors: { courseId: number; id: number }[];
   courseUsers: CourseUser[];
 };
