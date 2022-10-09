@@ -1,13 +1,13 @@
 <template>
   <div class="catalog">
     <div class="catalog__aside list-aside">
-      <custom-btn
+      <image-btn
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
         :disabled="!anyChecked"
         :text="$t('btn.download')"
-        className="btn btn-download"
+        className="btn btn-img btn-download"
         @click="downloadFiles"
-      ></custom-btn>
+      ></image-btn>
       <controls-list
         @search="getSloths"
         @tags="getSloths"
@@ -20,12 +20,12 @@
         :text="$t('btn.reset')"
       >
       </controls-list>
-      <custom-btn
+      <image-btn
         :text="$t('merch.title')"
         :imgPath="'./img/home/merch.svg'"
-        className="btn btn-catalog"
+        className="btn btn-img btn-merch"
         @click="$router.push({ name: 'merch' })"
-      ></custom-btn>
+      ></image-btn>
     </div>
     <div class="catalog__main list-main">
       <pagination-list ref="pagination" :size="count" @getPage="getSloths"></pagination-list>
@@ -89,6 +89,7 @@ import useSelectedTags from '@/stores/tag-cloud';
 import useSortingList from '@/stores/sorting-list';
 import useSlothInfo from '@/stores/sloth-info';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
+import ImageBtn from '@/components/buttons/ImageBtn.vue';
 import ControlsList from '@/components/controls-list/ControlsList.vue';
 import PaginationList, { type PaginationListElement } from '@/components/controls-list/PaginationList.vue';
 import SlothCard from '@/components/catalog/SlothCard.vue';
@@ -115,6 +116,7 @@ export default defineComponent({
 
   components: {
     CustomBtn,
+    ImageBtn,
     SlothCard,
     SlothInfo,
     ControlsList,

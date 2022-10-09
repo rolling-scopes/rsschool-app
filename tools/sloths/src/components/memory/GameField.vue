@@ -4,13 +4,13 @@
       <div class="game-field__steps">
         <p>{{ steps }}</p>
       </div>
-      <custom-btn
+      <image-btn
         :imgPath="`./img/memory/reload-${currTheme}.svg`"
         :text="$t('memory.start')"
-        className="btn btn-memory"
+        className="btn btn-img btn-memory"
         :disabled="steps === 0"
         :onClick="startGame"
-      ></custom-btn>
+      ></image-btn>
     </div>
     <transition-group name="shuffle-list" tag="div" class="game-field__cards">
       <div
@@ -50,7 +50,7 @@ import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEV
 import type { MemoryLevel, GameResult } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
-import CustomBtn from '@/components/buttons/CustomBtn.vue';
+import ImageBtn from '@/components/buttons/ImageBtn.vue';
 import { playAudio, audioSlide, audioFlip, audioFail, audioSuccess, audioWin } from '@/utils/audio';
 import themeProp from '../../stores/theme';
 
@@ -66,7 +66,7 @@ export default defineComponent({
   name: 'GameField',
 
   components: {
-    CustomBtn,
+    ImageBtn,
     ModalWindow,
   },
 

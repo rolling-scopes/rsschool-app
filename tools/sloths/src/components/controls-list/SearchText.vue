@@ -8,7 +8,7 @@
       v-model="searchText"
       @change="search"
     />
-    <custom-btn @click="clearSearch" text="X" className="btn btn-search btn-search_admin"></custom-btn>
+    <custom-btn @click="clearSearch" text="X" className="btn btn-search"></custom-btn>
   </div>
 </template>
 

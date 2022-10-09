@@ -1,9 +1,6 @@
 <template>
-  <button v-if="imgPath === ''" :class="classNameTheme" @click="onClick" :disabled="disabled" :title="text">
+  <button :class="className" @click="onClick" :disabled="disabled" :title="text">
     {{ text }}
-  </button>
-  <button v-else class="btn-img" :class="className" @click="onClick" :disabled="disabled" :title="text">
-    <img class="image" :src="imgPath" :alt="text" />
   </button>
 </template>
 
@@ -24,10 +21,6 @@ export default defineComponent({
       type: String,
       default: 'btn btn-primary',
     },
-    imgPath: {
-      type: String,
-      default: '',
-    },
     onClick: {
       type: Function as PropType<(payload: MouseEvent) => void>,
       default: () => {},
@@ -40,12 +33,6 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
-
-    classNameTheme() {
-      return this.className.includes('icon-')
-        ? this.className.replace('icon-', `icon-${this.currTheme}-`)
-        : this.className;
-    },
   },
 });
 </script>
@@ -90,31 +77,6 @@ export default defineComponent({
   background-color: var(--color-background-inverse-soft);
 }
 
-.btn-img .image {
-  overflow: hidden;
-  border: 0.2rem solid var(--color-border-inverse);
-}
-
-.btn-catalog {
-  width: 20rem;
-  height: 20rem;
-  border-radius: 50%;
-  border: 0.2rem solid var(--color-border-inverse);
-  align-self: center;
-}
-
-.btn-catalog .image {
-  height: 100%;
-  width: 100%;
-  padding: 0.5rem;
-  object-fit: contain;
-  border: none;
-}
-
-.btn-img:hover:not([disabled]) {
-  transform: scale(1.1) rotate(10deg);
-}
-
 .btn-tab {
   border: 1px solid;
   border-top-left-radius: 5px;
@@ -137,43 +99,14 @@ export default defineComponent({
 
 .btn-search {
   position: absolute;
-  top: 0.5rem;
+  top: 0;
   right: -0.5rem;
   background: none;
   color: inherit;
 }
 
-.btn-search_admin {
-  top: 0;
-}
-
 .btn__text {
   color: var(--color-text-inverse);
-}
-
-.btn-memory {
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color-background-inverse-soft);
-  transition: 0.5s ease;
-}
-
-.btn-memory > img {
-  border: none;
-  border-radius: 0.5rem;
-}
-
-.btn-memory:disabled {
-  cursor: default;
-}
-
-.btn-memory:hover:not([disabled]) {
-  transform: scale(1.1) rotate(10deg);
 }
 
 .btn-link {
@@ -186,26 +119,6 @@ export default defineComponent({
 .btn-link:hover:not([disabled]) {
   border-color: var(--color-border-theme);
   background-color: var(--color-background-soft);
-}
-
-.btn-download {
-  margin: 0 auto;
-  padding: 0;
-  width: 24rem;
-}
-
-.btn-download > .image {
-  border: none;
-}
-
-.btn-download:hover:not([disabled]) {
-  transform: scale(1.1);
-}
-
-.btn-download:disabled {
-  filter: grayscale(1);
-  transform: scale(0.9);
-  cursor: default;
 }
 
 @media (max-width: 1200px) {
