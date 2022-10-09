@@ -87,9 +87,7 @@ export default defineComponent({
         const data: string[] = await response.json();
         this.cleanedFilelist = data.map((file) => `${CDN_CLEANED_URL}/${file}`);
       } catch (error) {
-        this.isAlert = true;
-        this.header = 'modal.header.error';
-        this.message = `${error}`;
+        this.showErrorModal(error);
       }
     },
 
@@ -107,10 +105,15 @@ export default defineComponent({
         }));
         this.originalFilelist = data.stickers.map((file) => `${CDN_STICKERS_URL}/${file.id}/image.svg`);
       } catch (error) {
-        this.isAlert = true;
-        this.header = 'modal.header.error';
-        this.message = `${error}`;
+        this.showErrorModal(error);
       }
+    },
+
+    showErrorModal(error: unknown) {
+      if (!(error instanceof Error)) return;
+      this.isAlert = true;
+      this.header = 'modal.header.error';
+      this.message = error.message;
     },
   },
 });
