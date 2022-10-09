@@ -72,8 +72,6 @@ export default defineComponent({
     try {
       await this.getStickers();
       await this.getCleaned();
-    } catch (error: string | unknown) {
-      throw new Error(error as string);
     } finally {
       this.isLoad = false;
     }
