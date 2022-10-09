@@ -78,7 +78,7 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
-import type { PageSettings, Sloth, Sloths } from '@/common/types';
+import type { PageSettings, Sloth } from '@/common/types';
 import { errorHandler } from '@/services/error-handler';
 import { CDN_STICKERS_URL, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
@@ -124,13 +124,13 @@ export default defineComponent({
 
   data() {
     return {
-      sloths: [] as Sloths,
+      sloths: [] as Sloth[],
       count: 0,
       isSlothInfoVisible: false,
       tags: [] as string[],
       sortingOptions: SLOTH_SORTING,
       isDownloadShow: false,
-      checked: [] as Sloths,
+      checked: [] as Sloth[],
     };
   },
 

@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { GAME_RESULT_SORTING, MEMORY_LEVELS } from '@/common/const';
-import type { GameResult, MemoryLevel, GameResults } from '@/common/types';
+import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
@@ -82,7 +82,7 @@ export default defineComponent({
     getGameInfo() {
       this.gameResults = [];
       MEMORY_LEVELS.forEach((item) => {
-        let levelRecords: GameResults = [];
+        let levelRecords: GameResult[] = [];
         const levelData = localStorage.getItem(`rs-sloths-memory-${item.level}`);
 
         if (levelData) {

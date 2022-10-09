@@ -78,7 +78,7 @@ import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
 import { GUESS_GAME_WINNER, GUESS_SLOTHS } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
-import type { GameResult, GameResults } from '@/common/types';
+import type { GameResult } from '@/common/types';
 
 type Card = {
   caption: string;
@@ -222,7 +222,7 @@ export default defineComponent({
     },
 
     saveResult() {
-      let currResults: GameResults = [];
+      let currResults: GameResult[] = [];
       const savedRecords = localStorage.getItem('rs-sloths-guess');
 
       if (savedRecords) {

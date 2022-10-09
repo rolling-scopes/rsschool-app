@@ -1,4 +1,3 @@
-export type Sloths = Sloth[];
 export type Sloth = {
   [keyof: string]: string | boolean | string[];
   id: string;
@@ -18,7 +17,6 @@ export type MetadataSloth = {
   tags: string[];
 };
 
-export type GameResults = GameResult[];
 export type GameResult = {
   [keyof: string]: string | number | undefined | {};
   id?: string;

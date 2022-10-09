@@ -47,7 +47,7 @@
 <script lang="ts">
 import { mapWritableState } from 'pinia';
 import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
-import type { MemoryLevel, GameResult, GameResults } from '@/common/types';
+import type { MemoryLevel, GameResult } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
@@ -281,7 +281,7 @@ export default defineComponent({
     },
 
     saveResult() {
-      let currResults: GameResults = [];
+      let currResults: GameResult[] = [];
       const savedRecords = localStorage.getItem(`rs-sloths-memory-${this.level.level}`);
 
       if (savedRecords) {
