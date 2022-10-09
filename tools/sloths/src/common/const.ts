@@ -8,6 +8,8 @@ export const CDN_CLEANED_URL = `${CDN_URL}/cleaned`;
 export const STICKERS_JSON_URL = `${CDN_STICKERS_URL}/metadata.json`;
 export const CLEANED_JSON_URL = `${CDN_CLEANED_URL}/filelist.json`;
 
+export const RESPONSE_STATUS_OK = 200;
+
 // Sorting
 export const SLOTH_SORTING: SelectOptions[] = [
   {
