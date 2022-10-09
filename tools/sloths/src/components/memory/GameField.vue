@@ -148,7 +148,7 @@ export default defineComponent({
       const images = this.images.sort(() => Math.random() - 0.5).filter((el, i) => i < this.level.n);
 
       images.forEach((el, i) => {
-        this.push2Cards(el, i, index);
+        this.pushTwoCards(el, i, index);
         index += 2;
       });
       setTimeout(() => this.changeScrollHidden(''), MEMORY_GAME_TIMEOUT);
@@ -258,7 +258,7 @@ export default defineComponent({
       this.cards.sort(() => Math.random() - 0.5);
     },
 
-    push2Cards(img: string, id: number, index: number) {
+    pushTwoCards(img: string, id: number, index: number) {
       this.cards.push({ img, id, index, open: false, success: false });
       this.cards.push({ img, id, index: index + 1, open: false, success: false });
     },
