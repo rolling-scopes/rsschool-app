@@ -2,7 +2,7 @@
   <div class="memory">
     <div class="memory__aside list-aside">
       <h3 class="memory__subtitle">{{ $t('memory.level') }}</h3>
-      <h2 class="memory__title">{{ $t(getLevel) }}</h2>
+      <h2 class="memory__title">{{ $t(level) }}</h2>
       <div class="memory__level">
         <div
           v-for="(level, index) in levels"
@@ -57,12 +57,12 @@ export default defineComponent({
     return {
       levels: MEMORY_LEVELS,
       activeLevel: 1,
-      isTableResultsVisible: false
+      isTableResultsVisible: false,
     };
   },
 
   computed: {
-    getLevel(): string {
+    level(): string {
       return `memory.${this.levels[this.activeLevel].level}`;
     },
   },
@@ -96,7 +96,7 @@ export default defineComponent({
 
     closeTableResults() {
       this.isTableResultsVisible = false;
-    }
+    },
   },
 });
 </script>

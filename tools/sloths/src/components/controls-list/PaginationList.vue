@@ -17,19 +17,19 @@
         :text="$t('pagination.top')"
         :title="$t('pagination.topTitle')"
         className="btn btn-pagination"
-        @click="top"
+        @click="goTop"
         v-shortkey="['home']"
-        @shortkey="top"
-        :disabled="checkTop"
+        @shortkey="goTop"
+        :disabled="top"
       ></custom-btn>
       <custom-btn
         :text="$t('pagination.prev')"
         :title="$t('pagination.prevTitle')"
         className="btn btn-pagination"
-        @click="prev"
+        @click="goPrev"
         v-shortkey="['pageup']"
-        @shortkey="prev"
-        :disabled="checkTop"
+        @shortkey="goPrev"
+        :disabled="top"
       ></custom-btn>
 
       <div class="pagination__page">
@@ -40,19 +40,19 @@
         :text="$t('pagination.next')"
         :title="$t('pagination.nextTitle')"
         className="btn btn-pagination"
-        @click="next"
+        @click="goNext"
         v-shortkey="['pagedown']"
-        @shortkey="next"
-        :disabled="checkBottom"
+        @shortkey="goNext"
+        :disabled="bottom"
       ></custom-btn>
       <custom-btn
         :text="$t('pagination.bottom')"
         :title="$t('pagination.bottomTitle')"
         className="btn btn-pagination"
-        @click="bottom"
+        @click="goBottom"
         v-shortkey="['end']"
-        @shortkey="bottom"
-        :disabled="checkBottom"
+        @shortkey="goBottom"
+        :disabled="bottom"
       ></custom-btn>
     </div>
     <div class="pagination__count">
@@ -96,11 +96,11 @@ const paginationList = defineComponent({
       return Math.ceil(this.size / this.perPage);
     },
 
-    checkTop(): boolean {
+    top(): boolean {
       return this.currPageNumber === 1;
     },
 
-    checkBottom(): boolean {
+    bottom(): boolean {
       return this.currPageNumber === this.pagesCount;
     },
   },
@@ -117,29 +117,29 @@ const paginationList = defineComponent({
       this.getPage();
     },
 
-    top() {
-      if (!this.checkTop) {
+    goTop() {
+      if (!this.top) {
         this.currPageNumber = 1;
         this.getPage();
       }
     },
 
-    next() {
-      if (!this.checkBottom) {
+    goNext() {
+      if (!this.bottom) {
         if (this.currPageNumber < this.pagesCount) this.currPageNumber += 1;
         this.getPage();
       }
     },
 
-    prev() {
-      if (!this.checkTop) {
+    goPrev() {
+      if (!this.top) {
         if (this.currPageNumber > 1) this.currPageNumber -= 1;
         this.getPage();
       }
     },
 
-    bottom() {
-      if (!this.checkBottom) {
+    goBottom() {
+      if (!this.bottom) {
         this.currPageNumber = this.pagesCount;
         this.getPage();
       }

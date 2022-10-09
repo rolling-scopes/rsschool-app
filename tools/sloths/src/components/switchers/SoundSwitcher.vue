@@ -13,11 +13,11 @@
 
     <label
       class="sound-switcher__label"
-      :for="`sound-${checkSound}`"
-      :class="`sound-switcher__label_${currTheme}-${checkSound}`"
+      :for="`sound-${soundStatus}`"
+      :class="`sound-switcher__label_${currTheme}-${soundStatus}`"
       :title="$t('header.switchers.sound')"
       v-shortkey="['ctrl', '1']"
-      @shortkey="setSoundValue(`${checkSound}`)"
+      @shortkey="setSoundValue(`${soundStatus}`)"
     ></label>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useAudioOn, ['isAudioOn']),
     ...mapWritableState(themeProp, ['currTheme']),
-    checkSound(): string {
+    soundStatus(): string {
       return this.sounds.filter((sound) => sound !== this.currSound)[0];
     },
   },

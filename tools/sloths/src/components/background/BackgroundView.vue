@@ -39,7 +39,6 @@ export default defineComponent({
 
 .background-home-dark {
   background: no-repeat left 5rem center / contain url('../../assets/backgrounds/bg-home-dark.svg');
-  
 }
 
 .background-about-light {

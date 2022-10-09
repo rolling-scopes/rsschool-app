@@ -1,10 +1,10 @@
 <template>
-  <button v-if="imgPath === ''" :class="getClassNameTheme" @click="onClick" :disabled="disabled" :title="text">
+  <button v-if="imgPath === ''" :class="classNameTheme" @click="onClick" :disabled="disabled" :title="text">
     {{ text }}
   </button>
   <button
     v-else-if="imgPath === 'icon'"
-    :class="getClassNameTheme"
+    :class="classNameTheme"
     @click="onClick"
     :disabled="disabled"
     :title="text"
@@ -48,7 +48,7 @@ export default defineComponent({
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
 
-    getClassNameTheme() {
+    classNameTheme() {
       return this.className.includes('icon-')
         ? this.className.replace('icon-', `icon-${this.currTheme}-`)
         : this.className;

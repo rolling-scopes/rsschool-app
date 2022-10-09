@@ -1,13 +1,13 @@
 <template>
-  <div :class="`${getPageName}-sloth-info`">
-    <div v-if="isCatalog && !isDownload" class="catalog-sloth-info__inner">
+  <div :class="`${pageName}-sloth-info`">
+    <div v-if="catalogPage && !isDownload" class="catalog-sloth-info__inner">
       <div class="catalog-sloth-info__sloth">
-        <img class="catalog-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
+        <img class="catalog-sloth-info__img" :src="imageUrl" :alt="slothInfo.name" />
         <div class="sloth-info__tags tags">
           <span class="sloth-info__tag" v-for="tag in slothInfo.tags" :key="tag">{{ tag }}</span>
         </div>
       </div>
-      <custom-btn :className="'icon ' + getClassNameCheckIcon" @click="$emit('checkSloth', slothInfo)"></custom-btn>
+      <custom-btn :className="'icon ' + classNameCheckIcon" @click="$emit('checkSloth', slothInfo)"></custom-btn>
       <div>
         <div class="catalog-sloth-info__props">
           <p class="sloth-info__property sloth-info__property_text">{{ slothInfo.name }}</p>
@@ -22,11 +22,11 @@
 
     <div v-else class="download-sloth-info__inner">
       <custom-btn
-        :className="'download-icon ' + getClassNameCheckIcon"
+        :className="'download-icon ' + classNameCheckIcon"
         @click="$emit('checkSloth', slothInfo)"
       ></custom-btn>
       <div class="download-sloth-info__sloth">
-        <img class="download-sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
+        <img class="download-sloth-info__img" :src="imageUrl" :alt="slothInfo.name" />
       </div>
       <p class="sloth-info__property">{{ slothInfo.name }}</p>
     </div>
@@ -63,20 +63,20 @@ export default defineComponent({
   },
 
   computed: {
-    getImageUrl(): string {
+    imageUrl(): string {
       return this.slothInfo.image;
     },
 
-    getPageName(): string {
+    pageName(): string {
       if (this.isDownload) return 'download';
       return 'catalog';
     },
 
-    isCatalog(): boolean {
+    catalogPage(): boolean {
       return this.$route.name === 'catalog';
     },
 
-    getClassNameCheckIcon(): string {
+    classNameCheckIcon(): string {
       return this.slothInfo.checked ? 'icon_check-on' : 'icon_check-off';
     },
   },

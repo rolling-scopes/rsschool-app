@@ -193,7 +193,7 @@ export default defineComponent({
   },
 
   computed: {
-    getCursor() {
+    cursorPointer() {
       return CanvasUtils.getCursor(this.layers);
     },
   },
@@ -500,7 +500,7 @@ export default defineComponent({
 .merch__change {
   width: 24rem;
   height: 16.7rem;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
 .merch__change_cleaned {
@@ -610,7 +610,7 @@ export default defineComponent({
   border: 0.2px solid gray;
 }
 .merch__canvas:hover {
-  cursor: v-bind(getCursor);
+  cursor: v-bind(cursorPointer);
 }
 
 @media (max-width: 1200px) {

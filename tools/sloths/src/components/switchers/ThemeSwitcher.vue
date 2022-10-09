@@ -13,11 +13,11 @@
 
     <label
       class="theme-switcher__label"
-      :for="`${checkTheme}-theme`"
-      :class="`theme-switcher__label_${checkTheme}`"
+      :for="`${ThemeStatus}-theme`"
+      :class="`theme-switcher__label_${ThemeStatus}`"
       :title="$t('header.switchers.theme')"
       v-shortkey="['ctrl', '2']"
-      @shortkey="setTheme(`${checkTheme}`)"
+      @shortkey="setTheme(`${ThemeStatus}`)"
     ></label>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
-    checkTheme(): string {
+    ThemeStatus(): string {
       return this.themes.filter((theme) => theme !== this.currTheme)[0];
     },
   },

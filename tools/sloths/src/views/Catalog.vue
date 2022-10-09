@@ -3,7 +3,7 @@
     <div class="catalog__aside list-aside">
       <custom-btn
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
-        :disabled="!isChecked"
+        :disabled="!anyChecked"
         :text="$t('btn.download')"
         className="btn btn-download"
         @click="downloadFiles"
@@ -65,7 +65,7 @@
             :text="$t('btn.yes')"
             className="btn btn-primary"
             :onClick="approveDownload"
-            :disabled="!isChecked"
+            :disabled="!anyChecked"
           ></custom-btn>
           <custom-btn :text="$t('btn.no')" className="btn btn-primary" :onClick="closeModal"></custom-btn>
         </div>
@@ -138,7 +138,7 @@ export default defineComponent({
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(themeProp, ['currTheme']),
 
-    isChecked(): boolean {
+    anyChecked(): boolean {
       return !!this.checked.filter((el) => el.checked).length;
     },
   },
@@ -156,7 +156,7 @@ export default defineComponent({
   },
 
   watch: {
-    isChecked(newVal) {
+    anyChecked(newVal) {
       if (!newVal) {
         this.isDownloadShow = false;
       }
@@ -186,7 +186,7 @@ export default defineComponent({
 
         if (!this.sloths.length && page !== 1) {
           const pagination = this.$refs.pagination as PaginationListElement;
-          if (pagination) pagination.top();
+          if (pagination) pagination.goTop();
         }
 
         this.setChecked();

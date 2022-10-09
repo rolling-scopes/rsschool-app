@@ -55,11 +55,11 @@
       <template v-slot:body>
         <div class="guess-modal__wrap">
           <img class="guess-modal__img" :src="cardWinner" alt="winner" />
-          <p class="guess-modal__points">{{ Math.round((getGuesses * 100) / gameCards.length) }} %</p>
+          <p class="guess-modal__points">{{ Math.round((guesses * 100) / gameCards.length) }} %</p>
         </div>
         <p>{{ allGuesses ? `${$t('guess.win')} ` : '' }}{{ $t('guess.result') }}</p>
-        <p>{{ getGuesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
-        <p>{{ getTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ guesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
+        <p>{{ gameTime / 1000 }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
@@ -118,15 +118,15 @@ export default defineComponent({
   },
 
   computed: {
-    getGuesses(): number {
+    guesses(): number {
       return this.result.filter((el) => el).length;
     },
 
     allGuesses(): boolean {
-      return this.getGuesses === this.gameCards.length;
+      return this.guesses === this.gameCards.length;
     },
 
-    getTime(): number {
+    gameTime(): number {
       return this.endTime - this.startTime;
     },
   },
@@ -230,8 +230,8 @@ export default defineComponent({
       }
 
       const gameResult: GameResult = {
-        count: this.getGuesses,
-        time: this.getTime,
+        count: this.guesses,
+        time: this.gameTime,
         createdAt: new Date().getTime(),
       };
 

@@ -31,14 +31,14 @@
         </transition>
       </div>
     </transition-group>
-    <modal-window v-show="getShowModal" @close="closeModal">
+    <modal-window v-show="modalVisible" @close="closeModal">
       <template v-slot:header> {{ $t('memory.congrats') }} </template>
 
       <template v-slot:body>
         <img :src="cardWinner" alt="winner" />
         <p>{{ $t('memory.win') }}</p>
         <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
-        <p>{{ getTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ gameTime / 1000 }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
   </div>
@@ -97,15 +97,11 @@ export default defineComponent({
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
 
-    getLevel(): string {
-      return `memory.${this.level.level}`;
-    },
-
-    getTime(): number {
+    gameTime(): number {
       return this.endTime - this.startTime;
     },
 
-    getShowModal(): boolean {
+    modalVisible(): boolean {
       return this.isModalVisible && !this.isAnimated && !this.isHandled;
     },
   },
@@ -292,7 +288,7 @@ export default defineComponent({
 
       const gameResult: GameResult = {
         count: this.steps,
-        time: this.getTime,
+        time: this.gameTime,
         createdAt: new Date().getTime(),
       };
 

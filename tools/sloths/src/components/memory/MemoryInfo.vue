@@ -59,10 +59,6 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
-
-    isMemory() {
-      return this.$route.name === 'memory';
-    },
   },
 
   watch: {

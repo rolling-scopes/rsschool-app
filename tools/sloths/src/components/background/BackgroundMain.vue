@@ -14,7 +14,7 @@ export default defineComponent({
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
   },
-})
+});
 </script>
 
 <style scoped>

@@ -184,7 +184,7 @@ export default defineComponent({
   },
 
   computed: {
-    getCursor() {
+    cursorPointer() {
       return CanvasUtils.getCursor(this.layers);
     },
   },
@@ -468,7 +468,7 @@ export default defineComponent({
   border: 0.2px solid gray;
 }
 .meme__canvas:hover {
-  cursor: v-bind(getCursor);
+  cursor: v-bind(cursorPointer);
 }
 
 @media (max-width: 1200px) {

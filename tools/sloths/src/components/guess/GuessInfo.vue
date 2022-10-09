@@ -55,10 +55,6 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
-
-    isGuess() {
-      return this.$route.name === 'guess';
-    },
   },
 
   watch: {
