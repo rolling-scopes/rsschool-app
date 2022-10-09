@@ -34,15 +34,7 @@ export const playAudio = (a: HTMLAudioElement) => {
     const playPromise = audio.play();
 
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          // Automatic playback started!
-          // Show playing UI.
-        })
-        .catch(() => {
-          // Auto-play was prevented
-          // Show paused UI.
-        });
+      playPromise.catch(() => {});
     }
   }
 };
