@@ -152,10 +152,8 @@ export default defineComponent({
       const images = this.images.sort(() => Math.random() - 0.5).filter((el, i) => i < this.level.n);
 
       images.forEach((el, i) => {
-        this.cards.push({ img: el, id: i, index, open: false, success: false });
-        index += 1;
-        this.cards.push({ img: el, id: i, index, open: false, success: false });
-        index += 1;
+        this.push2Cards(el, i, index);
+        index += 2;
       });
       setTimeout(() => this.changeScrollHidden(''), MEMORY_GAME_TIMEOUT);
     },
@@ -181,18 +179,12 @@ export default defineComponent({
       this.endTime = 0;
 
       if (isAllClosed) {
-        playAudio(audioSlide);
-        this.cards.sort(() => Math.random() - 0.5);
+        this.shuffleCards();
       } else {
-        setTimeout(() => {
-          playAudio(audioSlide);
-          this.cards.sort(() => Math.random() - 0.5);
-        }, MEMORY_GAME_TIMEOUT);
+        setTimeout(() => this.shuffleCards(), MEMORY_GAME_TIMEOUT);
       }
-      setTimeout(() => {
-        playAudio(audioSlide);
-        this.cards.sort(() => Math.random() - 0.5);
-      }, MEMORY_GAME_TIMEOUT / 2);
+      // shuffle 2 times
+      setTimeout(() => this.shuffleCards(), MEMORY_GAME_TIMEOUT / 2);
     },
 
     getImage(i: number): string {
@@ -245,15 +237,9 @@ export default defineComponent({
       if (this.activeCard === Infinity) {
         this.activeCard = i;
       } else if (this.cards[i].id === this.cards[this.activeCard].id) {
-        const i2 = this.activeCard;
-        this.activeCard = Infinity;
-
-        if (!this.isWin()) this.cardsMatched(i, i2);
+        if (!this.isWin()) this.cardsMatched(i, this.changeActiveCard());
       } else {
-        const i2 = this.activeCard;
-        this.activeCard = Infinity;
-
-        this.cardsNotMatched(i, i2);
+        this.cardsNotMatched(i, this.changeActiveCard());
       }
 
       if (this.isWin()) {
@@ -269,6 +255,22 @@ export default defineComponent({
 
     isWin(): boolean {
       return this.cards.every((el) => el.open);
+    },
+
+    shuffleCards() {
+      playAudio(audioSlide);
+      this.cards.sort(() => Math.random() - 0.5);
+    },
+
+    push2Cards(img: string, id: number, index: number) {
+      this.cards.push({ img, id, index, open: false, success: false });
+      this.cards.push({ img, id, index: index + 1, open: false, success: false });
+    },
+
+    changeActiveCard(): number {
+      const { activeCard } = this;
+      this.activeCard = Infinity;
+      return activeCard;
     },
 
     openCard(i: number) {
