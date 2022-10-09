@@ -59,7 +59,7 @@
         </div>
         <p>{{ allGuesses ? `${$t('guess.win')} ` : '' }}{{ $t('guess.result') }}</p>
         <p>{{ guesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
-        <p>{{ gameTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ gameTime / millisecondInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
@@ -76,7 +76,7 @@ import { defineComponent } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
-import { GUESS_GAME_WINNER, GUESS_SLOTHS } from '@/common/const';
+import { GUESS_GAME_WINNER, GUESS_SLOTHS, MILLISECONDS_IN_SECOND } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
 import type { GameResult } from '@/common/types';
 
@@ -128,6 +128,10 @@ export default defineComponent({
 
     gameTime(): number {
       return this.endTime - this.startTime;
+    },
+
+    millisecondInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
     },
   },
 

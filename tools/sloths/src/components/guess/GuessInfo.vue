@@ -15,7 +15,7 @@
       <div class="results__item" v-for="(res, index) in results" :key="index">
         <span class="result__index">{{ `${index + 1}.` }}</span>
         <span class="result__steps">{{ `${res.count} ${$t('guess.points', res.count)}` }}</span>
-        <span class="result__time">{{ `${res.time / 1000} s` }}</span>
+        <span class="result__time">{{ `${res.time / millisecondInSecond} s` }}</span>
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@
 import type { GameResult } from '@/common/types';
 import { defineComponent } from 'vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import { GAME_RESULT_SORTING } from '@/common/const';
+import { GAME_RESULT_SORTING, MILLISECONDS_IN_SECOND } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
 
@@ -55,6 +55,10 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
+
+    millisecondInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
+    },
   },
 
   watch: {

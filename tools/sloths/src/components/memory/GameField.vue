@@ -38,7 +38,7 @@
         <img :src="cardWinner" alt="winner" />
         <p>{{ $t('memory.win') }}</p>
         <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
-        <p>{{ gameTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ gameTime / millisecondInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
   </div>
@@ -46,7 +46,13 @@
 
 <script lang="ts">
 import { mapWritableState } from 'pinia';
-import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
+import {
+  MEMORY_GAME_SRPITE,
+  MEMORY_GAME_TIMEOUT,
+  MEMORY_GAME_WINNER,
+  MEMORY_LEVELS,
+  MILLISECONDS_IN_SECOND,
+} from '@/common/const';
 import type { MemoryLevel, GameResult } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
@@ -103,6 +109,10 @@ export default defineComponent({
 
     modalVisible(): boolean {
       return this.isModalVisible && !this.isAnimated && !this.isHandled;
+    },
+
+    millisecondInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
     },
   },
 

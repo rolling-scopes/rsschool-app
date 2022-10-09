@@ -17,7 +17,7 @@
         <div class="game-info__result" v-for="(r, i) in res.results" :key="r.id">
           <span class="result__index">{{ `${i + 1}.` }}</span>
           <span class="result__steps">{{ `${r.count} ${$t('memory.steps', r.count)}` }}</span>
-          <span class="result__time">{{ `${r.time / 1000} s` }}</span>
+          <span class="result__time">{{ `${r.time / millisecondInSecond} s` }}</span>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import { GAME_RESULT_SORTING, MEMORY_LEVELS } from '@/common/const';
+import { GAME_RESULT_SORTING, MEMORY_LEVELS, MILLISECONDS_IN_SECOND } from '@/common/const';
 import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
 
@@ -59,6 +59,10 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
+
+    millisecondInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
+    },
   },
 
   watch: {
