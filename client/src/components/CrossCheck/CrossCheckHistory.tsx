@@ -75,7 +75,7 @@ export function CrossCheckHistory(props: Props) {
                   index={index}
                   review={review}
                   maxScore={props.maxScore}
-                  isMessagesVisible={isCurrentReview}
+                  areMessagesVisible={isCurrentReview}
                 >
                   <Row>
                     <Col>

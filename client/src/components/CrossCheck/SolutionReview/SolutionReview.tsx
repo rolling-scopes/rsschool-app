@@ -19,11 +19,11 @@ type Props = {
   index: number;
   review: SolutionReviewType;
   maxScore?: number;
-  isMessagesVisible?: boolean;
+  areMessagesVisible?: boolean;
 };
 
 export function SolutionReview(props: Props) {
-  const { children, sessionGithubId, index, review, maxScore, isMessagesVisible = true } = props;
+  const { children, sessionGithubId, index, review, maxScore, areMessagesVisible = true } = props;
   const { checker, comment, score, checkDate } = review;
 
   const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
@@ -116,7 +116,7 @@ export function SolutionReview(props: Props) {
           <Message comment={comment} updatedDate={updatedDate} author={author} />
         ))} */}
 
-            {isMessagesVisible && (
+            {areMessagesVisible && (
               <Comment
                 avatar={
                   <Avatar
