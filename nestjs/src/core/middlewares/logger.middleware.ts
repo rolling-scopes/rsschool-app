@@ -1,6 +1,9 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 
+const NS_PER_SEC = 1e9;
+const NS_TO_MS = 1e6;
+
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
   private logger = new Logger(LoggingMiddleware.name);
@@ -24,8 +27,6 @@ export class LoggingMiddleware implements NestMiddleware {
   }
 
   private getDurationInMilliseconds(start: [number, number]) {
-    const NS_PER_SEC = 1e9;
-    const NS_TO_MS = 1e6;
     const [diff0, diff1] = process.hrtime(start);
     return (diff0 * NS_PER_SEC + diff1) / NS_TO_MS;
   }
