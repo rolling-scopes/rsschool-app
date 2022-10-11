@@ -17,42 +17,42 @@
         :text="$t('pagination.top')"
         :title="$t('pagination.topTitle')"
         className="btn btn-pagination"
-        @click="top"
+        @click="goTop"
         v-shortkey="['home']"
-        @shortkey="top"
-        :disabled="checkTop"
+        @shortkey="goTop"
+        :disabled="top"
       ></custom-btn>
       <custom-btn
         :text="$t('pagination.prev')"
         :title="$t('pagination.prevTitle')"
         className="btn btn-pagination"
-        @click="prev"
+        @click="goPrev"
         v-shortkey="['pageup']"
-        @shortkey="prev"
-        :disabled="checkTop"
+        @shortkey="goPrev"
+        :disabled="top"
       ></custom-btn>
 
       <div class="pagination__page">
-        <span>{{ currPage }}</span>
+        <span>{{ currPageNumber }}</span>
       </div>
 
       <custom-btn
         :text="$t('pagination.next')"
         :title="$t('pagination.nextTitle')"
         className="btn btn-pagination"
-        @click="next"
+        @click="goNext"
         v-shortkey="['pagedown']"
-        @shortkey="next"
-        :disabled="checkBottom"
+        @shortkey="goNext"
+        :disabled="bottom"
       ></custom-btn>
       <custom-btn
         :text="$t('pagination.bottom')"
         :title="$t('pagination.bottomTitle')"
         className="btn btn-pagination"
-        @click="bottom"
+        @click="goBottom"
         v-shortkey="['end']"
-        @shortkey="bottom"
-        :disabled="checkBottom"
+        @shortkey="goBottom"
+        :disabled="bottom"
       ></custom-btn>
     </div>
     <div class="pagination__count">
@@ -70,7 +70,7 @@ import { defineComponent } from 'vue';
 const { getPerPage, getCurrPage, setPerPage, setCurrPage } = usePagination();
 
 const paginationList = defineComponent({
-  name: 'ListPagination',
+  name: 'PaginationList',
 
   components: {
     CustomBtn,
@@ -80,7 +80,7 @@ const paginationList = defineComponent({
     return {
       perPageArr: PAGINATION_OPTIONS,
       perPage: getPerPage(),
-      currPage: getCurrPage(),
+      currPageNumber: getCurrPage(),
     };
   },
 
@@ -92,55 +92,55 @@ const paginationList = defineComponent({
   },
 
   computed: {
-    pages(): number {
+    pagesCount(): number {
       return Math.ceil(this.size / this.perPage);
     },
 
-    checkTop(): boolean {
-      return this.currPage === 1;
+    top(): boolean {
+      return this.currPageNumber === 1;
     },
 
-    checkBottom(): boolean {
-      return this.currPage === this.pages;
+    bottom(): boolean {
+      return this.currPageNumber === this.pagesCount;
     },
   },
 
   methods: {
     getPage() {
-      setCurrPage(this.currPage);
+      setCurrPage(this.currPageNumber);
       setPerPage(this.perPage);
       this.$emit('getPage');
     },
 
     setPerPage() {
-      this.currPage = 1;
+      this.currPageNumber = 1;
       this.getPage();
     },
 
-    top() {
-      if (!this.checkTop) {
-        this.currPage = 1;
+    goTop() {
+      if (!this.top) {
+        this.currPageNumber = 1;
         this.getPage();
       }
     },
 
-    next() {
-      if (!this.checkBottom) {
-        if (this.currPage < this.pages) this.currPage += 1;
+    goNext() {
+      if (!this.bottom) {
+        if (this.currPageNumber < this.pagesCount) this.currPageNumber += 1;
         this.getPage();
       }
     },
 
-    prev() {
-      if (!this.checkTop) {
-        if (this.currPage > 1) this.currPage -= 1;
+    goPrev() {
+      if (!this.top) {
+        if (this.currPageNumber > 1) this.currPageNumber -= 1;
         this.getPage();
       }
     },
 
-    bottom() {
-      if (!this.checkBottom) {
-        this.currPage = this.pages;
+    goBottom() {
+      if (!this.bottom) {
+        this.currPageNumber = this.pagesCount;
         this.getPage();
       }
     },

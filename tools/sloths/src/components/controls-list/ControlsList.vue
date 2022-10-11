@@ -11,12 +11,12 @@
 import { defineComponent, type PropType } from 'vue';
 import type { SelectOptions } from '@/common/types';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import SearchText, { type SearchTextElement } from '@/components/list-controls/SearchText.vue';
-import TagCloud, { type TagCloudElement } from '@/components/list-controls/TagCloud.vue';
-import SortingList, { type SortingListElement } from '@/components/list-controls/SortingList.vue';
+import SearchText, { type SearchTextElement } from '@/components/controls-list/SearchText.vue';
+import TagCloud, { type TagCloudElement } from '@/components/controls-list/TagCloud.vue';
+import SortingList, { type SortingListElement } from '@/components/controls-list/SortingList.vue';
 
 export default defineComponent({
-  name: 'ListControls',
+  name: 'ControlsList',
 
   components: {
     CustomBtn,
@@ -50,10 +50,11 @@ export default defineComponent({
   methods: {
     clearAll() {
       const search = this.$refs.search as SearchTextElement;
-      if (search) search.clearSearchText();
       const tags = this.$refs.tags as TagCloudElement;
-      if (tags) tags.clearSelected();
       const sorting = this.$refs.sorting as SortingListElement;
+
+      if (search) search.clearSearchText();
+      if (tags) tags.clearSelected();
       if (sorting) sorting.clearSorting();
 
       this.$emit('clearAll');

@@ -1,13 +1,13 @@
 <template>
   <div class="sloth-info">
     <modal-window v-show="isSlothInfoVisible" @close="closeModal">
-      <template v-slot:header> {{ getHeader }} </template>
+      <template v-slot:header> {{ header }} </template>
 
       <template v-slot:body>
         <div>
           <div class="sloth-info__props">
             <div class="sloth-info__sloth">
-              <img class="sloth-info__img" :src="getImageUrl" :alt="slothInfo.name" />
+              <img class="sloth-info__img" :src="imageUrl" :alt="slothInfo.name" />
             </div>
             <div class="sloth-info__property property-center">
               <p class="sloth-info__text">{{ slothInfo.description }}</p>
@@ -62,11 +62,11 @@ export default defineComponent({
   },
 
   computed: {
-    getHeader(): string {
+    header(): string {
       return this.slothInfo.name;
     },
 
-    getImageUrl(): string {
+    imageUrl(): string {
       return this.slothInfo.image ? this.slothInfo.image : CATALOG_SLOTH_PREVIEW;
     },
   },

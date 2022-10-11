@@ -3,6 +3,14 @@ import type { CanvasElement, CanvasPos, CanvasProperties, CanvasRectXY } from '@
 export const canvasSize = 500;
 export const textMargin = 10;
 
+const scaleStepDeltaCanvas = 0.02;
+const scaleStepDeltaElement = 0.05;
+
+const hexR = 0.299;
+const hexG = 0.587;
+const hexB = 0.114;
+const contrastLimit = 186;
+
 export const initProperties = (scaleMin: number, scaleTrue: number, scaleMax: number): CanvasProperties => {
   return {
     scaleSteps: 1,
@@ -134,7 +142,7 @@ export const calcElementsPosition = (layers: CanvasElement[], canvasScaleSteps: 
   });
 };
 
-export const getElRectXY = (el: CanvasElement): CanvasRectXY => {
+const getElementRectXY = (el: CanvasElement): CanvasRectXY => {
   return {
     x1: el.scaledLeft,
     x2: el.scaledLeft + el.scaledWidth,
@@ -158,12 +166,12 @@ export const invertHex = (color: string, backgroundTransparent = false): string 
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);
   const b = parseInt(hex.slice(4, 6), 16);
-  return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
+  return r * hexR + g * hexG + b * hexB > contrastLimit ? 'black' : 'white';
 };
 
 export const drawBorder = (el: CanvasElement, ctx: CanvasRenderingContext2D, color: string) => {
   if (el.isHovered || el.isSelected) {
-    const elXY = getElRectXY(el);
+    const elXY = getElementRectXY(el);
 
     ctx.lineWidth = 2;
     ctx.strokeStyle = color;
@@ -178,7 +186,7 @@ export const drawBorder = (el: CanvasElement, ctx: CanvasRenderingContext2D, col
 };
 
 // mouse handlers
-export const getMousePos = (evt: MouseEvent, canvas: HTMLCanvasElement): CanvasPos => {
+const getMousePos = (evt: MouseEvent, canvas: HTMLCanvasElement): CanvasPos => {
   const rect = canvas.getBoundingClientRect(); // abs. size of element
   const scaleX = canvas.width / rect.width; // relationship bitmap vs. element for X
   const scaleY = canvas.height / rect.height; // relationship bitmap vs. element for Y
@@ -189,11 +197,11 @@ export const getMousePos = (evt: MouseEvent, canvas: HTMLCanvasElement): CanvasP
   } as CanvasPos;
 };
 
-export const moveElement = (mousePos: CanvasPos, el: CanvasElement, canvasScaleSteps: number) => {
+const moveElement = (mousePos: CanvasPos, el: CanvasElement, canvasScaleSteps: number) => {
   const canvasElement = el;
   const dx = mousePos.x - canvasElement.selectedPos.x;
   const dy = mousePos.y - canvasElement.selectedPos.y;
-  const elXY = getElRectXY(el);
+  const elXY = getElementRectXY(el);
 
   let isSelected = false;
   if (canvasElement.isLeftBorderSelected) {
@@ -260,10 +268,10 @@ export const moveElements = (
   }
 };
 
-export const selectElement = (mousePos: CanvasPos, el: CanvasElement) => {
+const selectElement = (mousePos: CanvasPos, el: CanvasElement) => {
   const canvasElement = el;
 
-  const elXY = getElRectXY(el);
+  const elXY = getElementRectXY(el);
 
   const isLeftBorderSelected =
     mousePos.x >= elXY.x1 && mousePos.x <= elXY.x1 + 2 && mousePos.y >= elXY.y1 && mousePos.y <= elXY.y2;
@@ -324,7 +332,7 @@ export const unhoverElements = (layers: CanvasElement[]) => {
 // scaling
 export const scaleUpCanvas = (props: CanvasProperties) => {
   const canvasProps = props;
-  canvasProps.scaleSteps = Math.min(canvasProps.scaleMax, canvasProps.scaleSteps + 0.02);
+  canvasProps.scaleSteps = Math.min(canvasProps.scaleMax, canvasProps.scaleSteps + scaleStepDeltaCanvas);
 };
 
 export const scaleTrueCanvas = (props: CanvasProperties, layers: CanvasElement[]) => {
@@ -339,13 +347,13 @@ export const scaleTrueCanvas = (props: CanvasProperties, layers: CanvasElement[]
 
 export const scaleDownCanvas = (props: CanvasProperties) => {
   const canvasProps = props;
-  canvasProps.scaleSteps = Math.max(canvasProps.scaleMin, canvasProps.scaleSteps - 0.02);
+  canvasProps.scaleSteps = Math.max(canvasProps.scaleMin, canvasProps.scaleSteps - scaleStepDeltaCanvas);
 };
 
 export const scalingElements = (e: WheelEvent, layers: CanvasElement[], props: CanvasProperties) => {
   if (e.deltaY === 0) return;
 
-  const dStep = e.deltaY > 0 ? 0.05 : -0.05;
+  const dStep = e.deltaY > 0 ? scaleStepDeltaElement : -scaleStepDeltaElement;
 
   let isHovered = false;
 
@@ -365,12 +373,12 @@ export const scalingElements = (e: WheelEvent, layers: CanvasElement[], props: C
 };
 
 // text
-export const drawTextLine = (ctx: CanvasRenderingContext2D, line: string, x: number, y: number, isStroked: boolean) => {
+const drawTextLine = (ctx: CanvasRenderingContext2D, line: string, x: number, y: number, isStroked: boolean) => {
   if (isStroked) ctx.strokeText(line, x, y);
   ctx.fillText(line, x, y);
 };
 
-export const drawTextMultiLineDown = (
+const drawTextMultiLineDown = (
   ctx: CanvasRenderingContext2D,
   el: CanvasElement,
   canvasScaleSteps: number,
@@ -429,7 +437,7 @@ export const drawTextDown = (
   drawTextMultiLineDown(ctx, el, canvasScaleSteps, fontSize, isStroked);
 };
 
-export const drawTextMultiLineUp = (
+const drawTextMultiLineUp = (
   ctx: CanvasRenderingContext2D,
   el: CanvasElement,
   canvasScaleSteps: number,

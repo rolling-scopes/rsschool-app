@@ -1,12 +1,16 @@
 /* eslint-disable import/prefer-default-export */
 import type { MemoryLevel, SelectOptions } from './types';
 
+export const MILLISECONDS_IN_SECOND = 1000;
+
 // Services
 export const CDN_URL = import.meta.env.VITE_CDN_URL;
 export const CDN_STICKERS_URL = `${CDN_URL}/stickers`;
 export const CDN_CLEANED_URL = `${CDN_URL}/cleaned`;
 export const STICKERS_JSON_URL = `${CDN_STICKERS_URL}/metadata.json`;
 export const CLEANED_JSON_URL = `${CDN_CLEANED_URL}/filelist.json`;
+
+export const RESPONSE_STATUS_OK = 200;
 
 // Sorting
 export const SLOTH_SORTING: SelectOptions[] = [
@@ -72,7 +76,7 @@ export const MEMORY_LEVELS: MemoryLevel[] = [
     n: 12,
   },
 ];
-export const MEMORY_GAME_TIMEOUT = 1000;
+export const MEMORY_GAME_TIMEOUT = MILLISECONDS_IN_SECOND;
 export const MEMORY_GAME_SRPITE = './img/memory/memory-sprite.svg';
 export const MEMORY_GAME_WINNER = './img/memory/winner1.svg';
 

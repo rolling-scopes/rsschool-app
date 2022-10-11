@@ -4,13 +4,13 @@
       <div class="game-field__steps">
         <p>{{ steps }}</p>
       </div>
-      <custom-btn
+      <image-btn
         :imgPath="`./img/memory/reload-${currTheme}.svg`"
         :text="$t('memory.start')"
-        className="btn btn-memory"
+        className="btn btn-img btn-memory"
         :disabled="steps === 0"
         :onClick="startGame"
-      ></custom-btn>
+      ></image-btn>
     </div>
     <transition-group name="shuffle-list" tag="div" class="game-field__cards">
       <div
@@ -31,14 +31,14 @@
         </transition>
       </div>
     </transition-group>
-    <modal-window v-show="getShowModal" @close="closeModal">
+    <modal-window v-show="modalVisible" @close="closeModal">
       <template v-slot:header> {{ $t('memory.congrats') }} </template>
 
       <template v-slot:body>
         <img :src="cardWinner" alt="winner" />
         <p>{{ $t('memory.win') }}</p>
-        <p>{{ steps }} {{ getStepsText }}</p>
-        <p>{{ getTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
+        <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
   </div>
@@ -46,12 +46,17 @@
 
 <script lang="ts">
 import { mapWritableState } from 'pinia';
-import { ruNounEnding } from '@/utils/ru-noun-ending';
-import { MEMORY_GAME_SRPITE, MEMORY_GAME_TIMEOUT, MEMORY_GAME_WINNER, MEMORY_LEVELS } from '@/common/const';
-import type { MemoryLevel, GameResult, GameResults } from '@/common/types';
+import {
+  MEMORY_GAME_SRPITE,
+  MEMORY_GAME_TIMEOUT,
+  MEMORY_GAME_WINNER,
+  MEMORY_LEVELS,
+  MILLISECONDS_IN_SECOND,
+} from '@/common/const';
+import type { MemoryLevel, GameResult } from '@/common/types';
 import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
-import CustomBtn from '@/components/buttons/CustomBtn.vue';
+import ImageBtn from '@/components/buttons/ImageBtn.vue';
 import { playAudio, audioSlide, audioFlip, audioFail, audioSuccess, audioWin } from '@/utils/audio';
 import themeProp from '../../stores/theme';
 
@@ -67,7 +72,7 @@ export default defineComponent({
   name: 'GameField',
 
   components: {
-    CustomBtn,
+    ImageBtn,
     ModalWindow,
   },
 
@@ -98,20 +103,16 @@ export default defineComponent({
   computed: {
     ...mapWritableState(themeProp, ['currTheme']),
 
-    getLevel(): string {
-      return `memory.${this.level.level}`;
-    },
-
-    getStepsText(): string {
-      return ruNounEnding(this.steps, this.$t('memory.steps1'), this.$t('memory.steps2'), this.$t('memory.stepsN'));
-    },
-
-    getTime(): number {
+    gameTime(): number {
       return this.endTime - this.startTime;
     },
 
-    getShowModal(): boolean {
+    modalVisible(): boolean {
       return this.isModalVisible && !this.isAnimated && !this.isHandled;
+    },
+
+    millisecondsInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
     },
   },
 
@@ -157,10 +158,8 @@ export default defineComponent({
       const images = this.images.sort(() => Math.random() - 0.5).filter((el, i) => i < this.level.n);
 
       images.forEach((el, i) => {
-        this.cards.push({ img: el, id: i, index, open: false, success: false });
-        index += 1;
-        this.cards.push({ img: el, id: i, index, open: false, success: false });
-        index += 1;
+        this.pushTwoCards(el, i, index);
+        index += 2;
       });
       setTimeout(() => this.changeScrollHidden(''), MEMORY_GAME_TIMEOUT);
     },
@@ -186,18 +185,12 @@ export default defineComponent({
       this.endTime = 0;
 
       if (isAllClosed) {
-        playAudio(audioSlide);
-        this.cards.sort(() => Math.random() - 0.5);
+        this.shuffleCards();
       } else {
-        setTimeout(() => {
-          playAudio(audioSlide);
-          this.cards.sort(() => Math.random() - 0.5);
-        }, MEMORY_GAME_TIMEOUT);
+        setTimeout(() => this.shuffleCards(), MEMORY_GAME_TIMEOUT);
       }
-      setTimeout(() => {
-        playAudio(audioSlide);
-        this.cards.sort(() => Math.random() - 0.5);
-      }, MEMORY_GAME_TIMEOUT / 2);
+      // shuffle 2 times
+      setTimeout(() => this.shuffleCards(), MEMORY_GAME_TIMEOUT / 2);
     },
 
     getImage(i: number): string {
@@ -250,15 +243,9 @@ export default defineComponent({
       if (this.activeCard === Infinity) {
         this.activeCard = i;
       } else if (this.cards[i].id === this.cards[this.activeCard].id) {
-        const i2 = this.activeCard;
-        this.activeCard = Infinity;
-
-        if (!this.isWin()) this.cardsMatched(i, i2);
+        if (!this.isWin()) this.cardsMatched(i, this.changeActiveCard());
       } else {
-        const i2 = this.activeCard;
-        this.activeCard = Infinity;
-
-        this.cardsNotMatched(i, i2);
+        this.cardsNotMatched(i, this.changeActiveCard());
       }
 
       if (this.isWin()) {
@@ -276,6 +263,22 @@ export default defineComponent({
       return this.cards.every((el) => el.open);
     },
 
+    shuffleCards() {
+      playAudio(audioSlide);
+      this.cards.sort(() => Math.random() - 0.5);
+    },
+
+    pushTwoCards(img: string, id: number, index: number) {
+      this.cards.push({ img, id, index, open: false, success: false });
+      this.cards.push({ img, id, index: index + 1, open: false, success: false });
+    },
+
+    changeActiveCard(): number {
+      const { activeCard } = this;
+      this.activeCard = Infinity;
+      return activeCard;
+    },
+
     openCard(i: number) {
       this.cards[i].open = true;
     },
@@ -286,7 +289,7 @@ export default defineComponent({
     },
 
     saveResult() {
-      let currResults: GameResults = [];
+      let currResults: GameResult[] = [];
       const savedRecords = localStorage.getItem(`rs-sloths-memory-${this.level.level}`);
 
       if (savedRecords) {
@@ -295,7 +298,7 @@ export default defineComponent({
 
       const gameResult: GameResult = {
         count: this.steps,
-        time: this.getTime,
+        time: this.gameTime,
         createdAt: new Date().getTime(),
       };
 

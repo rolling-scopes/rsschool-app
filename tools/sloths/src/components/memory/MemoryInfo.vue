@@ -16,8 +16,8 @@
         <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
         <div class="game-info__result" v-for="(r, i) in res.results" :key="r.id">
           <span class="result__index">{{ `${i + 1}.` }}</span>
-          <span class="result__steps">{{ `${r.count} ${getStepsText(r.count)}` }}</span>
-          <span class="result__time">{{ `${r.time / 1000} s` }}</span>
+          <span class="result__steps">{{ `${r.count} ${$t('memory.steps', r.count)}` }}</span>
+          <span class="result__time">{{ `${r.time / millisecondsInSecond} s` }}</span>
         </div>
       </div>
     </div>
@@ -28,9 +28,8 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import { ruNounEnding } from '@/utils/ru-noun-ending';
-import { GAME_RESULT_SORTING, MEMORY_LEVELS } from '@/common/const';
-import type { GameResult, MemoryLevel, GameResults } from '@/common/types';
+import { GAME_RESULT_SORTING, MEMORY_LEVELS, MILLISECONDS_IN_SECOND } from '@/common/const';
+import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
@@ -61,8 +60,8 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
 
-    isMemory() {
-      return this.$route.name === 'memory';
+    millisecondsInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
     },
   },
 
@@ -83,7 +82,7 @@ export default defineComponent({
     getGameInfo() {
       this.gameResults = [];
       MEMORY_LEVELS.forEach((item) => {
-        let levelRecords: GameResults = [];
+        let levelRecords: GameResult[] = [];
         const levelData = localStorage.getItem(`rs-sloths-memory-${item.level}`);
 
         if (levelData) {
@@ -97,10 +96,6 @@ export default defineComponent({
           results: levelRecords,
         });
       });
-    },
-
-    getStepsText(val: number): string {
-      return ruNounEnding(val, this.$t('memory.steps1'), this.$t('memory.steps2'), this.$t('memory.stepsN'));
     },
 
     setSorting(i: number) {

@@ -23,7 +23,13 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import { CDN_CLEANED_URL, CDN_STICKERS_URL, CLEANED_JSON_URL, STICKERS_JSON_URL } from '@/common/const';
+import {
+  CDN_CLEANED_URL,
+  CDN_STICKERS_URL,
+  CLEANED_JSON_URL,
+  RESPONSE_STATUS_OK,
+  STICKERS_JSON_URL,
+} from '@/common/const';
 
 import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
@@ -72,8 +78,6 @@ export default defineComponent({
     try {
       await this.getStickers();
       await this.getCleaned();
-    } catch (error: string | unknown) {
-      throw new Error(error as string);
     } finally {
       this.isLoad = false;
     }
@@ -84,14 +88,12 @@ export default defineComponent({
       try {
         const response = await fetch(CLEANED_JSON_URL);
 
-        if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+        if (response.status !== RESPONSE_STATUS_OK) throw new Error(this.$t('catalog.stickersNotFound'));
 
         const data: string[] = await response.json();
         this.cleanedFilelist = data.map((file) => `${CDN_CLEANED_URL}/${file}`);
       } catch (error) {
-        this.isAlert = true;
-        this.header = 'modal.header.error';
-        this.message = `${error}`;
+        this.showErrorModal(error);
       }
     },
 
@@ -99,7 +101,7 @@ export default defineComponent({
       try {
         const response = await fetch(STICKERS_JSON_URL);
 
-        if (response.status !== 200) throw new Error(this.$t('catalog.stickersNotFound'));
+        if (response.status !== RESPONSE_STATUS_OK) throw new Error(this.$t('catalog.stickersNotFound'));
 
         const data: MetadataSloths = await response.json();
         this.sloths = data.stickers.map((sloth) => ({
@@ -109,10 +111,15 @@ export default defineComponent({
         }));
         this.originalFilelist = data.stickers.map((file) => `${CDN_STICKERS_URL}/${file.id}/image.svg`);
       } catch (error) {
-        this.isAlert = true;
-        this.header = 'modal.header.error';
-        this.message = `${error}`;
+        this.showErrorModal(error);
       }
+    },
+
+    showErrorModal(error: unknown) {
+      if (!(error instanceof Error)) return;
+      this.isAlert = true;
+      this.header = 'modal.header.error';
+      this.message = error.message;
     },
   },
 });

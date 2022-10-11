@@ -60,44 +60,44 @@
 
       <div class="meme__canvas-wrapper">
         <div class="meme__control-buttons">
-          <custom-btn
+          <icon-btn
             :text="$t('btn.download')"
             imgPath="icon"
             className="btn btn-icon icon-download"
             @click="saveImage"
-          ></custom-btn>
+          ></icon-btn>
           <div class="meme__control-buttons-scale">
-            <custom-btn
+            <icon-btn
               :text="$t('btn.scaleUp')"
               imgPath="icon"
               className="btn btn-icon icon-plus"
               @click="scaleUp()"
-            ></custom-btn>
-            <custom-btn
+            ></icon-btn>
+            <icon-btn
               :text="$t('btn.trueSize')"
               imgPath="icon"
               className="btn btn-icon icon-true"
               @click="scaleTrue()"
-            ></custom-btn>
-            <custom-btn
+            ></icon-btn>
+            <icon-btn
               :text="$t('btn.center')"
               imgPath="icon"
               className="btn btn-icon icon-center"
               @click="centering"
-            ></custom-btn>
-            <custom-btn
+            ></icon-btn>
+            <icon-btn
               :text="$t('btn.scaleDown')"
               imgPath="icon"
               className="btn btn-icon icon-minus"
               @click="scaleDown()"
-            ></custom-btn>
+            ></icon-btn>
           </div>
-          <custom-btn
+          <icon-btn
             :text="$t('btn.copy')"
             imgPath="icon"
             className="btn btn-icon icon-copy"
             @click="copyImage"
-          ></custom-btn>
+          ></icon-btn>
         </div>
         <canvas
           class="meme__canvas"
@@ -116,7 +116,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import CustomBtn from '@/components/buttons/CustomBtn.vue';
+import IconBtn from '@/components/buttons/IconBtn.vue';
 import usePagesStore from '@/stores/pages-store';
 import useCleanedStore from '@/stores/cleaned';
 import type { CanvasElement } from '@/common/types';
@@ -129,7 +129,7 @@ export default defineComponent({
   name: 'CreateView',
 
   components: {
-    CustomBtn,
+    IconBtn,
   },
 
   data() {
@@ -184,7 +184,7 @@ export default defineComponent({
   },
 
   computed: {
-    getCursor() {
+    cursorPointer() {
       return CanvasUtils.getCursor(this.layers);
     },
   },
@@ -468,7 +468,7 @@ export default defineComponent({
   border: 0.2px solid gray;
 }
 .meme__canvas:hover {
-  cursor: v-bind(getCursor);
+  cursor: v-bind(cursorPointer);
 }
 
 @media (max-width: 1200px) {

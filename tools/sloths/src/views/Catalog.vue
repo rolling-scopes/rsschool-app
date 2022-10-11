@@ -1,14 +1,14 @@
 <template>
   <div class="catalog">
     <div class="catalog__aside list-aside">
-      <custom-btn
+      <image-btn
         :imgPath="`./img/catalog/download-${currTheme}.svg`"
-        :disabled="!isChecked"
+        :disabled="!someChecked"
         :text="$t('btn.download')"
-        className="btn btn-download"
+        className="btn btn-img btn-download"
         @click="downloadFiles"
-      ></custom-btn>
-      <list-controls
+      ></image-btn>
+      <controls-list
         @search="getSloths"
         @tags="getSloths"
         @sorting="getSloths"
@@ -19,16 +19,16 @@
         :options="sortingOptions"
         :text="$t('btn.reset')"
       >
-      </list-controls>
-      <custom-btn
+      </controls-list>
+      <image-btn
         :text="$t('merch.title')"
         :imgPath="'./img/home/merch.svg'"
-        className="btn btn-catalog"
+        className="btn btn-img btn-merch"
         @click="$router.push({ name: 'merch' })"
-      ></custom-btn>
+      ></image-btn>
     </div>
     <div class="catalog__main list-main">
-      <list-pagination ref="pagination" :size="count" @getPage="getSloths"></list-pagination>
+      <pagination-list ref="pagination" :size="count" @getPage="getSloths"></pagination-list>
       <div class="catalog__list">
         <sloth-card
           v-for="sloth in sloths"
@@ -65,7 +65,7 @@
             :text="$t('btn.yes')"
             className="btn btn-primary"
             :onClick="approveDownload"
-            :disabled="!isChecked"
+            :disabled="!someChecked"
           ></custom-btn>
           <custom-btn :text="$t('btn.no')" className="btn btn-primary" :onClick="closeModal"></custom-btn>
         </div>
@@ -78,7 +78,7 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 import themeProp from '@/stores/theme';
-import type { PageSettings, Sloth, Sloths } from '@/common/types';
+import type { PageSettings, Sloth } from '@/common/types';
 import { errorHandler } from '@/services/error-handler';
 import { CDN_STICKERS_URL, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
 import { SlothsService } from '@/services/sloths-service';
@@ -89,8 +89,9 @@ import useSelectedTags from '@/stores/tag-cloud';
 import useSortingList from '@/stores/sorting-list';
 import useSlothInfo from '@/stores/sloth-info';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
-import ListControls from '@/components/list-controls/ListControls.vue';
-import ListPagination, { type PaginationListElement } from '@/components/list-controls/ListPagination.vue';
+import ImageBtn from '@/components/buttons/ImageBtn.vue';
+import ControlsList from '@/components/controls-list/ControlsList.vue';
+import PaginationList, { type PaginationListElement } from '@/components/controls-list/PaginationList.vue';
 import SlothCard from '@/components/catalog/SlothCard.vue';
 import SlothInfo from '@/components/catalog/SlothInfo.vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
@@ -115,22 +116,23 @@ export default defineComponent({
 
   components: {
     CustomBtn,
+    ImageBtn,
     SlothCard,
     SlothInfo,
-    ListControls,
-    ListPagination,
+    ControlsList,
+    PaginationList,
     ModalWindow,
   },
 
   data() {
     return {
-      sloths: [] as Sloths,
+      sloths: [] as Sloth[],
       count: 0,
       isSlothInfoVisible: false,
       tags: [] as string[],
       sortingOptions: SLOTH_SORTING,
       isDownloadShow: false,
-      checked: [] as Sloths,
+      checked: [] as Sloth[],
     };
   },
 
@@ -138,8 +140,8 @@ export default defineComponent({
     ...mapWritableState(useLoader, ['isLoad']),
     ...mapWritableState(themeProp, ['currTheme']),
 
-    isChecked(): boolean {
-      return !!this.checked.filter((el) => el.checked).length;
+    someChecked(): boolean {
+      return this.checked.some((el) => el.checked);
     },
   },
 
@@ -156,7 +158,7 @@ export default defineComponent({
   },
 
   watch: {
-    isChecked(newVal) {
+    someChecked(newVal) {
       if (!newVal) {
         this.isDownloadShow = false;
       }
@@ -186,7 +188,7 @@ export default defineComponent({
 
         if (!this.sloths.length && page !== 1) {
           const pagination = this.$refs.pagination as PaginationListElement;
-          if (pagination) pagination.top();
+          if (pagination) pagination.goTop();
         }
 
         this.setChecked();

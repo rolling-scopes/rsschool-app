@@ -55,11 +55,11 @@
       <template v-slot:body>
         <div class="guess-modal__wrap">
           <img class="guess-modal__img" :src="cardWinner" alt="winner" />
-          <p class="guess-modal__points">{{ Math.round((getGuesses * 100) / gameCards.length) }} %</p>
+          <p class="guess-modal__points">{{ Math.round((guesses * 100) / gameCards.length) }} %</p>
         </div>
         <p>{{ allGuesses ? `${$t('guess.win')} ` : '' }}{{ $t('guess.result') }}</p>
-        <p>{{ getGuesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
-        <p>{{ getTime / 1000 }} {{ $t('memory.time') }}</p>
+        <p>{{ guesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
+        <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
@@ -76,9 +76,9 @@ import { defineComponent } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import GuessInfo from '@/components/guess/GuessInfo.vue';
-import { GUESS_GAME_WINNER, GUESS_SLOTHS } from '@/common/const';
+import { GUESS_GAME_WINNER, GUESS_SLOTHS, MILLISECONDS_IN_SECOND } from '@/common/const';
 import { playAudio, audioWin, audioSadTrombone, audioOvation } from '@/utils/audio';
-import type { GameResult, GameResults } from '@/common/types';
+import type { GameResult } from '@/common/types';
 
 type Card = {
   caption: string;
@@ -118,16 +118,20 @@ export default defineComponent({
   },
 
   computed: {
-    getGuesses(): number {
+    guesses(): number {
       return this.result.filter((el) => el).length;
     },
 
     allGuesses(): boolean {
-      return this.getGuesses === this.gameCards.length;
+      return this.guesses === this.gameCards.length;
     },
 
-    getTime(): number {
+    gameTime(): number {
       return this.endTime - this.startTime;
+    },
+
+    millisecondsInSecond(): number {
+      return MILLISECONDS_IN_SECOND;
     },
   },
 
@@ -222,7 +226,7 @@ export default defineComponent({
     },
 
     saveResult() {
-      let currResults: GameResults = [];
+      let currResults: GameResult[] = [];
       const savedRecords = localStorage.getItem('rs-sloths-guess');
 
       if (savedRecords) {
@@ -230,8 +234,8 @@ export default defineComponent({
       }
 
       const gameResult: GameResult = {
-        count: this.getGuesses,
-        time: this.getTime,
+        count: this.guesses,
+        time: this.gameTime,
         createdAt: new Date().getTime(),
       };
 
