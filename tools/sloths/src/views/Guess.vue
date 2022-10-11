@@ -59,7 +59,7 @@
         </div>
         <p>{{ allGuesses ? `${$t('guess.win')} ` : '' }}{{ $t('guess.result') }}</p>
         <p>{{ guesses }} / {{ gameCards.length }} {{ $t('guess.guesses') }}</p>
-        <p>{{ gameTime / millisecondInSecond }} {{ $t('memory.time') }}</p>
+        <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
     <modal-window v-show="isTableResultsVisible" @close="closeTableResults">
@@ -130,7 +130,7 @@ export default defineComponent({
       return this.endTime - this.startTime;
     },
 
-    millisecondInSecond(): number {
+    millisecondsInSecond(): number {
       return MILLISECONDS_IN_SECOND;
     },
   },

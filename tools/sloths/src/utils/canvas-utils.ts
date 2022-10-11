@@ -3,8 +3,8 @@ import type { CanvasElement, CanvasPos, CanvasProperties, CanvasRectXY } from '@
 export const canvasSize = 500;
 export const textMargin = 10;
 
-const scalingStepCanvas = 0.02;
-const scalingStepElement = 0.05;
+const scaleStepDeltaCanvas = 0.02;
+const scaleStepDeltaElement = 0.05;
 
 const hexR = 0.299;
 const hexG = 0.587;
@@ -332,7 +332,7 @@ export const unhoverElements = (layers: CanvasElement[]) => {
 // scaling
 export const scaleUpCanvas = (props: CanvasProperties) => {
   const canvasProps = props;
-  canvasProps.scaleSteps = Math.min(canvasProps.scaleMax, canvasProps.scaleSteps + scalingStepCanvas);
+  canvasProps.scaleSteps = Math.min(canvasProps.scaleMax, canvasProps.scaleSteps + scaleStepDeltaCanvas);
 };
 
 export const scaleTrueCanvas = (props: CanvasProperties, layers: CanvasElement[]) => {
@@ -347,13 +347,13 @@ export const scaleTrueCanvas = (props: CanvasProperties, layers: CanvasElement[]
 
 export const scaleDownCanvas = (props: CanvasProperties) => {
   const canvasProps = props;
-  canvasProps.scaleSteps = Math.max(canvasProps.scaleMin, canvasProps.scaleSteps - scalingStepCanvas);
+  canvasProps.scaleSteps = Math.max(canvasProps.scaleMin, canvasProps.scaleSteps - scaleStepDeltaCanvas);
 };
 
 export const scalingElements = (e: WheelEvent, layers: CanvasElement[], props: CanvasProperties) => {
   if (e.deltaY === 0) return;
 
-  const dStep = e.deltaY > 0 ? scalingStepElement : -scalingStepElement;
+  const dStep = e.deltaY > 0 ? scaleStepDeltaElement : -scaleStepDeltaElement;
 
   let isHovered = false;
 

@@ -141,7 +141,7 @@ export default defineComponent({
     ...mapWritableState(themeProp, ['currTheme']),
 
     someChecked(): boolean {
-      return !!this.checked.filter((el) => el.checked).length;
+      return this.checked.some((el) => el.checked);
     },
   },
 

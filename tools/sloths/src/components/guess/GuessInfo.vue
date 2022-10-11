@@ -15,7 +15,7 @@
       <div class="results__item" v-for="(res, index) in results" :key="index">
         <span class="result__index">{{ `${index + 1}.` }}</span>
         <span class="result__steps">{{ `${res.count} ${$t('guess.points', res.count)}` }}</span>
-        <span class="result__time">{{ `${res.time / millisecondInSecond} s` }}</span>
+        <span class="result__time">{{ `${res.time / millisecondsInSecond} s` }}</span>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
 
-    millisecondInSecond(): number {
+    millisecondsInSecond(): number {
       return MILLISECONDS_IN_SECOND;
     },
   },

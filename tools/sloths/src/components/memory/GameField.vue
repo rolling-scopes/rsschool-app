@@ -38,7 +38,7 @@
         <img :src="cardWinner" alt="winner" />
         <p>{{ $t('memory.win') }}</p>
         <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
-        <p>{{ gameTime / millisecondInSecond }} {{ $t('memory.time') }}</p>
+        <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
       </template>
     </modal-window>
   </div>
@@ -111,7 +111,7 @@ export default defineComponent({
       return this.isModalVisible && !this.isAnimated && !this.isHandled;
     },
 
-    millisecondInSecond(): number {
+    millisecondsInSecond(): number {
       return MILLISECONDS_IN_SECOND;
     },
   },
