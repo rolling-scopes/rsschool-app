@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -16,6 +16,8 @@ const twoDaysMs = 1000 * 60 * 60 * 24 * 2;
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
+  private logger = new Logger(AuthController.name);
+
   constructor(private readonly authService: AuthService, private githubStrategy: GithubStrategy) {}
 
   @Get('github/login')
@@ -27,23 +29,29 @@ export class AuthController {
   @ApiOperation({ operationId: 'githubCallback' })
   @UseGuards(AuthGuard(isDev ? 'dev' : 'github'))
   async githubCallback(@Req() req: CurrentRequest, @Res() res: Response) {
-    const token = this.authService.validateGithub(req);
+    try {
+      const token = this.authService.validateGithub(req);
 
-    res.cookie(JWT_COOKIE_NAME, token, {
-      expires: new Date(Date.now() + twoDaysMs),
-      httpOnly: true,
-      secure: true,
-      domain: isDev ? undefined : 'rs.school',
-      sameSite: 'none',
-    });
+      res.cookie(JWT_COOKIE_NAME, token, {
+        expires: new Date(Date.now() + twoDaysMs),
+        httpOnly: true,
+        secure: true,
+        domain: isDev ? undefined : 'rs.school',
+        sameSite: 'none',
+      });
 
-    const { loginState } = req;
+      const { loginState } = req;
 
-    if (loginState?.channelId) {
-      await this.authService.onConnectionComplete(loginState, req.user.id);
-      res.redirect(`/profile/connection-confirmed?connectionType=${loginState.channelId}`);
-    } else {
-      res.redirect(this.authService.getRedirectUrl(loginState));
+      if (loginState?.channelId) {
+        await this.authService.onConnectionComplete(loginState, req.user.id);
+        res.redirect(`/profile/connection-confirmed?connectionType=${loginState.channelId}`);
+      } else {
+        res.redirect(this.authService.getRedirectUrl(loginState));
+      }
+    } catch (err) {
+      const error = err as Error;
+      this.logger.error(`Auth error: ${error.message}`, error);
+      throw err;
     }
   }
 
