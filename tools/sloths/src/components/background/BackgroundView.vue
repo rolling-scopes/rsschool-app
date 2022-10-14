@@ -6,13 +6,13 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 export default defineComponent({
   name: 'BackgroundView',
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
 
     currRoute() {
       return String(this.$route.name);

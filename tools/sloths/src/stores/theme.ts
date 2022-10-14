@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 
-const themeProp = defineStore({
+const useThemeProp = defineStore({
   id: 'theme',
   state: () => ({
     currTheme: '',
   }),
 });
 
-export default themeProp;
+export default useThemeProp;

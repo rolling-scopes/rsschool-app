@@ -26,7 +26,7 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 import getUserTheme from '../../utils/userTheme';
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
     themeStatus(): string {
       return this.themes.filter((theme) => theme !== this.currTheme)[0];
     },

@@ -58,7 +58,7 @@ import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import ImageBtn from '@/components/buttons/ImageBtn.vue';
 import { playAudio, audioSlide, audioFlip, audioFail, audioSuccess, audioWin } from '@/utils/audio';
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 type Card = {
   img: string;
@@ -101,7 +101,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
 
     gameTime(): number {
       return this.endTime - this.startTime;
