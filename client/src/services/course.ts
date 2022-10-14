@@ -674,3 +674,15 @@ export interface TaskSolution {
   comments?: CrossCheckComment[];
   studentId: number;
 }
+
+export interface CriteriaData {
+  key: string;
+  max?: number;
+  text: string;
+  type: string;
+  index: number;
+}
+
+export interface IAddCriteriaForCrossCheck {
+  onCreate: (data: CriteriaData) => void;
+}
