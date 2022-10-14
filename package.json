@@ -31,6 +31,7 @@
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
+    "@testing-library/user-event": "^14.4.3",
     "concurrently": "7.4.0",
     "prettier": "2.7.1"
   }
