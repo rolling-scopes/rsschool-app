@@ -4,7 +4,7 @@
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
-        :key="index"
+        :key="`${index}_${sortingOptionsALL[indexAll].text}`"
         :text="$t(sortingOptionsALL[indexAll].text)"
         className="btn btn-primary"
         @click="setSorting(index)"
@@ -12,7 +12,7 @@
     </div>
 
     <div class="results results_admin">
-      <div class="results__item" v-for="(res, index) in results" :key="index">
+      <div class="results__item" v-for="(res, index) in results" :key="`${index}_${res.count}`">
         <span class="result__index">{{ `${index + 1}.` }}</span>
         <span class="result__steps">{{ `${res.count} ${$t('guess.points', res.count)}` }}</span>
         <span class="result__time">{{ `${res.time / millisecondsInSecond} s` }}</span>

@@ -6,7 +6,7 @@
       <div class="memory__level">
         <div
           v-for="(level, index) in levels"
-          :key="index"
+          :key="level.level"
           class="btn btn-img memory__btn"
           :class="{ active_lvl: activeLevel === index }"
           @click="setLevel(index)"

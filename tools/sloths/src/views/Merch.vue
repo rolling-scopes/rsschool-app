@@ -12,9 +12,9 @@
       <h3>{{ $t('merch.description') }}</h3>
       <div class="merch__images">
         <img
-          ref="imgs"
+          :ref="setImageRef"
           v-for="(item, index) in images"
-          :key="index"
+          :key="item"
           :src="getImg(index)"
           alt="image"
           object-fit="contain"
@@ -28,7 +28,7 @@
         <img
           ref="merch"
           v-for="(item, index) in merch"
-          :key="index"
+          :key="`${index}_${item}`"
           :src="getMerch(index)"
           alt="merch"
           object-fit="contain"
@@ -136,6 +136,7 @@ export default defineComponent({
   data() {
     return {
       images: [] as string[],
+      imageRef: [] as HTMLImageElement[],
       indexMeme: 0,
       merch: [] as string[],
       indexMerch: 0,
@@ -192,6 +193,10 @@ export default defineComponent({
     setPageMerchState(JSON.stringify(this.$data));
   },
 
+  beforeUpdate() {
+    this.imageRef = [];
+  },
+
   computed: {
     cursorPointer() {
       return CanvasUtils.getCursor(this.layers);
@@ -199,6 +204,10 @@ export default defineComponent({
   },
 
   methods: {
+    setImageRef(el: HTMLImageElement) {
+      if (el) this.imageRef.push(el);
+    },
+
     getImages() {
       this.images = this.currItems === 'cleaned' ? cleanedFilelist : originalFilelist;
       this.merch = [
@@ -336,13 +345,21 @@ export default defineComponent({
     },
 
     updImage(i: number) {
+      // console.log('updImage ind: ', i)
       this.indexMeme = i;
 
-      const { imgs } = this.$refs;
-      if (!(imgs instanceof Array)) return;
+      // const { imgs } = this.$refs;
+      // if (!(imgs instanceof Array)) return;
 
-      const image = imgs[this.indexMeme];
+      // console.log('imgs: ', imgs)
+
+      // const image = imgs[this.indexMeme];
+
+      const image = this.imageRef[this.indexMeme];
+
       if (!(image instanceof HTMLImageElement)) return;
+
+      // console.log('image: ', image)
 
       this.imgMeme = image;
       CanvasUtils.calcElementsSizes(
