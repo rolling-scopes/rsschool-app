@@ -12,9 +12,9 @@
       <h3>{{ $t('merch.description') }}</h3>
       <div class="merch__images">
         <img
-          :ref="setImageRef"
+          ref="imgs"
           v-for="(item, index) in images"
-          :key="item"
+          :key="item.id"
           :src="getImg(index)"
           alt="image"
           object-fit="contain"
@@ -28,7 +28,7 @@
         <img
           ref="merch"
           v-for="(item, index) in merch"
-          :key="`${index}_${item}`"
+          :key="item.id"
           :src="getMerch(index)"
           alt="merch"
           object-fit="contain"
@@ -126,6 +126,11 @@ import * as CanvasUtils from '@/utils/canvas-utils';
 const { cleanedFilelist, originalFilelist } = useCleanedStore();
 const { getPageMerchState, setPageMerchState } = usePagesStore();
 
+type ImageItem = {
+  id: number;
+  path: string;
+};
+
 export default defineComponent({
   name: 'MerchView',
 
@@ -135,10 +140,9 @@ export default defineComponent({
 
   data() {
     return {
-      images: [] as string[],
-      imageRef: [] as HTMLImageElement[],
+      images: [] as ImageItem[],
       indexMeme: 0,
-      merch: [] as string[],
+      merch: [] as ImageItem[],
       indexMerch: 0,
       canvas: {} as HTMLCanvasElement,
       canvasProps: CanvasUtils.initProperties(0.5, 1, 1.5),
@@ -166,8 +170,8 @@ export default defineComponent({
     this.canvas = canvas;
     this.ctx = ctx;
 
-    const imageMerch = CanvasUtils.loadImage(this.merch[this.indexMerch]);
-    const imageMeme = CanvasUtils.loadImage(this.images[this.indexMeme]);
+    const imageMerch = CanvasUtils.loadImage(this.merch[this.indexMerch].path);
+    const imageMeme = CanvasUtils.loadImage(this.images[this.indexMeme].path);
 
     [this.imgMerch, this.imgMeme] = await Promise.all([imageMerch, imageMeme]);
 
@@ -193,10 +197,6 @@ export default defineComponent({
     setPageMerchState(JSON.stringify(this.$data));
   },
 
-  beforeUpdate() {
-    this.imageRef = [];
-  },
-
   computed: {
     cursorPointer() {
       return CanvasUtils.getCursor(this.layers);
@@ -204,34 +204,36 @@ export default defineComponent({
   },
 
   methods: {
-    setImageRef(el: HTMLImageElement) {
-      if (el) this.imageRef.push(el);
-    },
-
     getImages() {
-      this.images = this.currItems === 'cleaned' ? cleanedFilelist : originalFilelist;
-      this.merch = [
+      this.images = this.mappingImages(this.currItems === 'cleaned' ? cleanedFilelist : originalFilelist);
+      this.merch = this.mappingImages([
         './img/merch/tshirt.png',
         './img/merch/hoodie.png',
         './img/merch/mug.png',
         './img/merch/thermo.png',
-      ];
+      ]);
     },
 
     changeItems() {
-      this.images = this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist;
+      this.images = this.mappingImages(this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist);
       setTimeout(() => {
-        this.updImage(0);
+        this.updImage(this.indexMeme);
         this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
       }, 100);
     },
 
+    mappingImages(stringArray: string[]): ImageItem[] {
+      return stringArray.map((path, id) => {
+        return { path, id };
+      });
+    },
+
     getImg(i: number): string {
-      return this.images[i];
+      return this.images[i].path;
     },
 
     getMerch(i: number): string {
-      return this.merch[i];
+      return this.merch[i].path;
     },
 
     scaleUp() {
@@ -347,8 +349,10 @@ export default defineComponent({
     updImage(i: number) {
       this.indexMeme = i;
 
-      const image = this.imageRef[this.indexMeme];
+      const { imgs } = this.$refs;
+      if (!(imgs instanceof Array)) return;
 
+      const image = imgs[this.indexMeme];
       if (!(image instanceof HTMLImageElement)) return;
 
       this.imgMeme = image;
@@ -516,10 +520,6 @@ export default defineComponent({
 
 .merch__change_original {
   background: no-repeat center center / contain url('./img/merch/merch-original.svg');
-}
-
-.merch__change:hover {
-  transform: scale(1.1);
 }
 
 .merch__images,
