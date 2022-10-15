@@ -31,6 +31,7 @@ import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { GAME_RESULT_SORTING, MEMORY_LEVELS, MILLISECONDS_IN_SECOND } from '@/common/const';
 import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
+import isEven from '@/utils/game-utils';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
 
@@ -75,7 +76,7 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
+    this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => isEven(el));
   },
 
   methods: {
@@ -99,7 +100,7 @@ export default defineComponent({
     },
 
     setSorting(i: number) {
-      if (this.sortingOptions[i] % 2 === 0) {
+      if (isEven(this.sortingOptions[i])) {
         this.sortingOptions[i] += 1;
       } else {
         this.sortingOptions[i] -= 1;
@@ -122,7 +123,7 @@ export default defineComponent({
     },
 
     sortElems(a: number, b: number, direct: number): number {
-      if (direct % 2 === 0) {
+      if (isEven(direct)) {
         if (a < b) {
           return -1;
         }
