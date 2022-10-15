@@ -1,7 +1,7 @@
 <template>
   <header class="header" :class="moreClass">
-    <router-link class="header__title" v-show="notHome" to="/">RS SLOTHS</router-link>
-    <h2 v-show="notHome" class="section__title">{{ routeTitle }}</h2>
+    <router-link class="header__title" v-show="!home" to="/">RS SLOTHS</router-link>
+    <h2 v-show="!home" class="section__title">{{ routeTitle }}</h2>
     <div class="header__tools">
       <sound-switcher />
       <theme-switcher />
@@ -23,11 +23,11 @@ export default defineComponent({
     currRoute(): string {
       return String(this.$route.name);
     },
-    notHome(): boolean {
-      return this.currRoute !== 'home';
+    home(): boolean {
+      return this.currRoute === 'home';
     },
     moreClass(): string {
-      return this.notHome ? '' : 'header_home';
+      return !this.home ? '' : 'header_home';
     },
     routeTitle(): string {
       return this.$route.name ? this.$t(`${this.currRoute}.title`) : '';
