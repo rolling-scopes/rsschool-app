@@ -220,6 +220,7 @@ export default defineComponent({
 
     changeItems() {
       this.images = this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist;
+      this.indexMeme = 0;
       setTimeout(() => {
         this.updImage(this.indexMeme);
         this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
