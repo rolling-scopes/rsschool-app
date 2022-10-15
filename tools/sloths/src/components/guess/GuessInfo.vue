@@ -29,9 +29,12 @@ import { GAME_RESULT_SORTING, MILLISECONDS_IN_SECOND } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
 import isEven from '@/utils/game-utils';
+import { sortMixins } from '@/components/mixins/sort-mixin';
 
 export default defineComponent({
   name: 'GuessInfo',
+
+  mixins: [sortMixins],
 
   components: {
     CustomBtn,
@@ -105,25 +108,6 @@ export default defineComponent({
 
         return this.sortElems(item1, item2, this.sorting);
       });
-    },
-
-    sortElems(a: number, b: number, direct: number): number {
-      if (isEven(direct)) {
-        if (a < b) {
-          return -1;
-        }
-        if (a > b) {
-          return 1;
-        }
-      } else {
-        if (a < b) {
-          return 1;
-        }
-        if (a > b) {
-          return -1;
-        }
-      }
-      return 0;
     },
   },
 });
