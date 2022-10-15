@@ -149,9 +149,17 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
     setTagFilter(tagFilter.filter(t => t !== removedTag));
   };
 
+  const handleClearAllButtonClick = () => {
+    setTagFilter([]);
+  };
+
   return (
     <Form form={form} component={false}>
-      <FilteredTags tagFilter={tagFilter} onTagClose={handleTagClose} />
+      <FilteredTags
+        tagFilter={tagFilter}
+        onTagClose={handleTagClose}
+        onClearAllButtonClick={handleClearAllButtonClick}
+      />
       <Table
         locale={{
           // disable default tooltips on sortable columns

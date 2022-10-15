@@ -5,9 +5,10 @@ import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 
 describe('FilteredTags', () => {
   const onTagCloseMock = jest.fn();
+  const onClearAllButtonClick = jest.fn();
 
   it('should not render when tags were not provided', () => {
-    render(<FilteredTags tagFilter={[]} onTagClose={onTagCloseMock} />);
+    render(<FilteredTags tagFilter={[]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />);
 
     expect(screen.queryByText(/Type: /)).not.toBeInTheDocument();
   });
@@ -21,7 +22,9 @@ describe('FilteredTags', () => {
     ${TagsEnum.SelfStudy}
     ${TagsEnum.Test}
   `('should render tag "$tag"', ({ tag }: { tag: CourseScheduleItemDto['tag'] }) => {
-    render(<FilteredTags tagFilter={[tag]} onTagClose={onTagCloseMock} />);
+    render(
+      <FilteredTags tagFilter={[tag]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />,
+    );
 
     expect(screen.getByText(getTagLabel(tag))).toBeInTheDocument();
   });
@@ -31,10 +34,23 @@ describe('FilteredTags', () => {
       <FilteredTags
         tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
+        onClearAllButtonClick={onClearAllButtonClick}
       />,
     );
 
     expect(screen.getAllByText(/Type: /)).toHaveLength(3);
+  });
+
+  it('should render "Clear all" button', () => {
+    render(
+      <FilteredTags
+        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        onTagClose={onTagCloseMock}
+        onClearAllButtonClick={onClearAllButtonClick}
+      />,
+    );
+
+    expect(screen.getByText(/Clear all/)).toBeInTheDocument();
   });
 
   it('should remove selected tag when onTagClose was called', () => {
@@ -42,6 +58,7 @@ describe('FilteredTags', () => {
       <FilteredTags
         tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
+        onClearAllButtonClick={onClearAllButtonClick}
       />,
     );
     const interviewTag = screen.getByText(getTagLabel(TagsEnum.Interview));
@@ -50,6 +67,21 @@ describe('FilteredTags', () => {
     fireEvent.click(interviewCrossIcon);
 
     expect(onTagCloseMock).toHaveBeenCalledWith(TagsEnum.Interview);
+  });
+
+  it('should clear all tags when onClearAllButtonClick was called', () => {
+    render(
+      <FilteredTags
+        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        onTagClose={onTagCloseMock}
+        onClearAllButtonClick={onClearAllButtonClick}
+      />,
+    );
+
+    const clearAllBtn = screen.getByText(/Clear all/);
+    fireEvent.click(clearAllBtn);
+
+    expect(onClearAllButtonClick).toHaveBeenCalled();
   });
 });
 

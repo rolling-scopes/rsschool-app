@@ -189,6 +189,20 @@ describe('TableView', () => {
 
     expect(tag).not.toBeInTheDocument();
   });
+
+  it('should remove tags when "Clear all" button was clicked', async () => {
+    const setFilterMock = jest.fn();
+    jest
+      .spyOn(ReactUse, 'useLocalStorage')
+      // Mock useLocalStorage for tagFilter
+      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], setFilterMock, jest.fn()]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    const clearAllBtn = screen.getByText(/Clear all/);
+    fireEvent.click(clearAllBtn);
+
+    expect(setFilterMock).toHaveBeenCalledWith([]);
+  });
 });
 
 function generateCourseData(
