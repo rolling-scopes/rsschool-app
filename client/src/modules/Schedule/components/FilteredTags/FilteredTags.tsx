@@ -11,7 +11,7 @@ type FilteredTagsProps = {
 
 export const FilteredTags = ({ tagFilter, onTagClose, onClearAllButtonClick }: FilteredTagsProps) =>
   tagFilter?.length > 0 ? (
-    <div style={{ marginBottom: 16 }}>
+    <div style={{ marginBottom: 12 }}>
       <Row>
         <Col flex="auto">
           <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 8 }} />
