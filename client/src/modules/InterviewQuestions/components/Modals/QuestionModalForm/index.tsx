@@ -78,7 +78,7 @@ export function QuestionsModalForm(props: Props) {
           <TextArea rows={4} maxLength={400} />
         </Form.Item>
         <Form.Item key="categories" name="categories" label="categories" labelAlign="left">
-          <Select mode="multiple" style={{ width: '100%' }} placeholder="Please select">
+          <Select mode="multiple" style={{ width: '100%' }} placeholder="Please select" optionFilterProp="children">
             {categories.map(el => (
               <Option key={el.name}>{el.name}</Option>
             ))}
