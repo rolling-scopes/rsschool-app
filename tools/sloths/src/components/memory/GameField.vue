@@ -47,7 +47,7 @@
 <script lang="ts">
 import { mapWritableState } from 'pinia';
 import {
-  MEMORY_GAME_SRPITE,
+  MEMORY_GAME_SPRITE,
   MEMORY_GAME_TIMEOUT,
   MEMORY_GAME_WINNER,
   MEMORY_LEVELS,
@@ -78,7 +78,7 @@ export default defineComponent({
 
   data() {
     return {
-      memorySprite: MEMORY_GAME_SRPITE,
+      memorySprite: MEMORY_GAME_SPRITE,
       cardWinner: MEMORY_GAME_WINNER,
       images: [] as string[],
       cards: [] as Card[],
@@ -133,18 +133,18 @@ export default defineComponent({
   methods: {
     getImages() {
       this.images = [
-        `${MEMORY_GAME_SRPITE}#memory01`,
-        `${MEMORY_GAME_SRPITE}#memory02`,
-        `${MEMORY_GAME_SRPITE}#memory03`,
-        `${MEMORY_GAME_SRPITE}#memory04`,
-        `${MEMORY_GAME_SRPITE}#memory05`,
-        `${MEMORY_GAME_SRPITE}#memory06`,
-        `${MEMORY_GAME_SRPITE}#memory07`,
-        `${MEMORY_GAME_SRPITE}#memory08`,
-        `${MEMORY_GAME_SRPITE}#memory09`,
-        `${MEMORY_GAME_SRPITE}#memory10`,
-        `${MEMORY_GAME_SRPITE}#memory11`,
-        `${MEMORY_GAME_SRPITE}#memory12`,
+        `${MEMORY_GAME_SPRITE}#memory01`,
+        `${MEMORY_GAME_SPRITE}#memory02`,
+        `${MEMORY_GAME_SPRITE}#memory03`,
+        `${MEMORY_GAME_SPRITE}#memory04`,
+        `${MEMORY_GAME_SPRITE}#memory05`,
+        `${MEMORY_GAME_SPRITE}#memory06`,
+        `${MEMORY_GAME_SPRITE}#memory07`,
+        `${MEMORY_GAME_SPRITE}#memory08`,
+        `${MEMORY_GAME_SPRITE}#memory09`,
+        `${MEMORY_GAME_SPRITE}#memory10`,
+        `${MEMORY_GAME_SPRITE}#memory11`,
+        `${MEMORY_GAME_SPRITE}#memory12`,
       ];
 
       this.getCards();
