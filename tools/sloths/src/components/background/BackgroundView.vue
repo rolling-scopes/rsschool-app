@@ -26,8 +26,10 @@ export default defineComponent({
     },
 
     currClassGroup() {
-      return this.bgStyle === 'background' ? `${this.bgStyle} ${this.bgStyle}-${this.currRoute}-${this.currTheme}` : `${this.bgStyle} ${this.bgStyle}-${this.currTheme}`;
-    }
+      return this.bgStyle === 'background'
+        ? `${this.bgStyle} ${this.bgStyle}-${this.currRoute}-${this.currTheme}`
+        : `${this.bgStyle} ${this.bgStyle}-${this.currTheme}`;
+    },
   },
 });
 </script>

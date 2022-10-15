@@ -46,7 +46,11 @@
       @shortkey="nextStep"
     ></custom-btn>
     <div v-show="step >= 0" class="guess__results">
-      <div v-for="(res, index) in result" :key="`${index}_guess-result`" :class="`guess__result ${getClassStepResult(index)}`"></div>
+      <div
+        v-for="(res, index) in result"
+        :key="`${index}_guess-result`"
+        :class="`guess__result ${getClassStepResult(index)}`"
+      ></div>
     </div>
 
     <modal-window v-show="isModalVisible" @close="closeModal">

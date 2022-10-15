@@ -32,7 +32,7 @@ export default defineComponent({
   align-items: center;
   padding: 3rem;
   z-index: 3;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
 .footer-light {

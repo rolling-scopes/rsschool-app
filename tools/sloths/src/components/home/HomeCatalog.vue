@@ -83,14 +83,14 @@ export default defineComponent({
 
 @media (max-width: 768px) {
   .home-catalog_up {
-  top: 0;
-  transform: translate(0, 0);
-}
+    top: 0;
+    transform: translate(0, 0);
+  }
 
-.home-catalog_down {
-  bottom: 0;
-  transform: translate(0, 0);
-}
+  .home-catalog_down {
+    bottom: 0;
+    transform: translate(0, 0);
+  }
 
   .home-catalog__name {
     opacity: 1;

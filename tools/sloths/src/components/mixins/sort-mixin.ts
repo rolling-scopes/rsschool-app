@@ -1,6 +1,7 @@
 import isEven from '@/utils/game-utils';
+import type { GameResult } from '@/common/types';
 
-export const sortMixins = {
+const sortMixins = {
   methods: {
     sortElems(a: number, b: number, direct: number): number {
       if (isEven(direct)) {
@@ -20,5 +21,17 @@ export const sortMixins = {
       }
       return 0;
     },
-  }
-}
+
+    sortTypes(sorting: number, item: GameResult): number {
+      if (sorting < 2) {
+        return item.count;
+      }
+      if (sorting < 4) {
+        return item.time;
+      }
+      return item.createdAt;
+    },
+  },
+};
+
+export default sortMixins;

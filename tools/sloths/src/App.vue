@@ -12,7 +12,7 @@
   <footer-view />
 
   <background-view :bgStyle="'background-main'" />
-  <background-view :bgStyle="'background'"/>
+  <background-view :bgStyle="'background'" />
 
   <loader-view v-show="isLoad" />
 

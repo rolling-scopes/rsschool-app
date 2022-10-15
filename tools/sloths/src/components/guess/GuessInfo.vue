@@ -29,7 +29,7 @@ import { GAME_RESULT_SORTING, MILLISECONDS_IN_SECOND } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
 import isEven from '@/utils/game-utils';
-import { sortMixins } from '@/components/mixins/sort-mixin';
+import sortMixins from '@/components/mixins/sort-mixin';
 
 export default defineComponent({
   name: 'GuessInfo',
@@ -103,8 +103,11 @@ export default defineComponent({
 
     takeSort() {
       this.results.sort((a, b) => {
-        const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
-        const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+        // const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
+        // const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+
+        const item1: number = this.sortTypes(this.sorting, a);
+        const item2: number = this.sortTypes(this.sorting, b);
 
         return this.sortElems(item1, item2, this.sorting);
       });

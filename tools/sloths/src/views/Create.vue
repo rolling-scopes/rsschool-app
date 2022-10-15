@@ -192,7 +192,6 @@ export default defineComponent({
   methods: {
     async getImages() {
       this.images = cleanedFilelist;
-      console.log('images:', this.images)
     },
 
     getImg(i: number): string {

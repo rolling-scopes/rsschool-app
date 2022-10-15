@@ -18,7 +18,6 @@ export type MetadataSloth = {
 };
 
 export type GameResult = {
-  [keyof: string]: string | number | undefined | {};
   id?: string;
   count: number;
   time: number;

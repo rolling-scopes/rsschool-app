@@ -12,7 +12,11 @@
     </div>
 
     <div class="game-info__wrap">
-      <div class="game-info__level game-info__level_admin" v-for="(res, index) in gameResults" :key="`${index}_${res.level}`">
+      <div
+        class="game-info__level game-info__level_admin"
+        v-for="(res, index) in gameResults"
+        :key="`${index}_${res.level}`"
+      >
         <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
         <div class="game-info__result" v-for="(r, i) in res.results" :key="r.id">
           <span class="result__index">{{ `${i + 1}.` }}</span>
@@ -32,7 +36,7 @@ import { GAME_RESULT_SORTING, MEMORY_LEVELS, MILLISECONDS_IN_SECOND } from '@/co
 import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
 import isEven from '@/utils/game-utils';
-import { sortMixins } from '@/components/mixins/sort-mixin';
+import sortMixins from '@/components/mixins/sort-mixin';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
 
@@ -117,8 +121,8 @@ export default defineComponent({
     takeSort() {
       this.gameResults.forEach((gameResult) => {
         gameResult.results.sort((a, b) => {
-          const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
-          const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+          const item1: number = this.sortTypes(this.sorting, a);
+          const item2: number = this.sortTypes(this.sorting, b);
 
           return this.sortElems(item1, item2, this.sorting);
         });
