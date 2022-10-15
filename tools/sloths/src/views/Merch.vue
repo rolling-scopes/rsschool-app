@@ -220,9 +220,8 @@ export default defineComponent({
 
     changeItems() {
       this.images = this.currItems !== 'cleaned' ? cleanedFilelist : originalFilelist;
-      this.indexMeme = 0;
       setTimeout(() => {
-        this.updImage(this.indexMeme);
+        this.updImage(0);
         this.currItems = this.currItems === 'cleaned' ? 'original' : 'cleaned';
       }, 100);
     },
@@ -346,21 +345,11 @@ export default defineComponent({
     },
 
     updImage(i: number) {
-      // console.log('updImage ind: ', i)
       this.indexMeme = i;
-
-      // const { imgs } = this.$refs;
-      // if (!(imgs instanceof Array)) return;
-
-      // console.log('imgs: ', imgs)
-
-      // const image = imgs[this.indexMeme];
 
       const image = this.imageRef[this.indexMeme];
 
       if (!(image instanceof HTMLImageElement)) return;
-
-      // console.log('image: ', image)
 
       this.imgMeme = image;
       CanvasUtils.calcElementsSizes(
@@ -527,6 +516,10 @@ export default defineComponent({
 
 .merch__change_original {
   background: no-repeat center center / contain url('./img/merch/merch-original.svg');
+}
+
+.merch__change:hover {
+  transform: scale(1.1);
 }
 
 .merch__images,
