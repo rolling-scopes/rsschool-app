@@ -1,14 +1,7 @@
 <template>
   <div class="loader">
     <div class="loader__wrap">
-      <div class="sloth-loader sloth-1"></div>
-      <div class="sloth-loader sloth-2"></div>
-      <div class="sloth-loader sloth-3"></div>
-      <div class="sloth-loader sloth-4"></div>
-      <div class="sloth-loader sloth-5"></div>
-      <div class="sloth-loader sloth-6"></div>
-      <div class="sloth-loader sloth-7"></div>
-      <div class="sloth-loader sloth-8"></div>
+      <div v-for="n in 8" :key="`sloth_${n}`" class="sloth-loader" :class="`sloth-${n}`"></div>
     </div>
     <span class="loader__text">{{ $t('loader.text') }}</span>
   </div>
