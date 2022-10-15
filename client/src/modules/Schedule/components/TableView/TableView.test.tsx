@@ -26,12 +26,12 @@ const PROPS_SETTINGS_MOCK: ScheduleSettings = {
 describe('TableView', () => {
   it.each`
     label
-    ${'Status'}
-    ${'Task / Event'}
-    ${'Tag'}
-    ${'Organizer'}
-    ${'Weight'}
-    ${'Score / Max'}
+    ${ColumnName.Status}
+    ${ColumnName.Name}
+    ${ColumnName.Type}
+    ${ColumnName.Organizer}
+    ${ColumnName.Weight}
+    ${ColumnName.Score}
     ${'End Date (UTC +03:00)'}
     ${'Start Date (UTC +03:00)'}
   `('should render column "$label"', ({ label }: { label: string }) => {
@@ -59,11 +59,11 @@ describe('TableView', () => {
   it('should not render hidden columns', () => {
     const propsWithHiddenColumn: ScheduleSettings = {
       ...PROPS_SETTINGS_MOCK,
-      columnsHidden: [ColumnKey.Tag],
+      columnsHidden: [ColumnKey.Type],
     };
     render(<TableView settings={propsWithHiddenColumn} data={generateCourseData()} />);
 
-    expect(screen.queryByText('Tag')).not.toBeInTheDocument();
+    expect(screen.queryByText('Type')).not.toBeInTheDocument();
   });
 
   describe('should filter data', () => {
@@ -185,7 +185,7 @@ describe('TableView', () => {
       .mockReturnValueOnce([null, jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
-    const tag = screen.queryByText(/Tag: /);
+    const tag = screen.queryByText(/Type: /);
 
     expect(tag).not.toBeInTheDocument();
   });

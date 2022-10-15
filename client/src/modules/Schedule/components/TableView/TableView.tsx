@@ -55,8 +55,8 @@ const getColumns = ({
       ...getColumnSearchProps('name'),
     },
     {
-      key: ColumnKey.Tag,
-      title: ColumnName.Tag,
+      key: ColumnKey.Type,
+      title: ColumnName.Type,
       dataIndex: 'tag',
       render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag, tagColors),
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
@@ -159,8 +159,8 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
           triggerAsc: undefined,
           cancelSort: undefined,
         }}
-        onChange={(_, filters: Record<string, FilterValue | string[] | null>) => {
-          setTagFilter(filters?.tag as string[]);
+        onChange={(_, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
+          setTagFilter(filters?.type as string[]);
           setFilteredInfo(filters);
         }}
         pagination={false}

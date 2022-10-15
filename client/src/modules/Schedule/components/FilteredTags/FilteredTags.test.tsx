@@ -9,7 +9,7 @@ describe('FilteredTags', () => {
   it('should not render when tags were not provided', () => {
     render(<FilteredTags tagFilter={[]} onTagClose={onTagCloseMock} />);
 
-    expect(screen.queryByText(/Tag: /)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Type: /)).not.toBeInTheDocument();
   });
 
   it.each`
@@ -34,7 +34,7 @@ describe('FilteredTags', () => {
       />,
     );
 
-    expect(screen.getAllByText(/Tag: /)).toHaveLength(3);
+    expect(screen.getAllByText(/Type: /)).toHaveLength(3);
   });
 
   it('should remove selected tag when onTagClose was called', () => {
@@ -54,5 +54,5 @@ describe('FilteredTags', () => {
 });
 
 function getTagLabel(tag: CourseScheduleItemDto['tag']) {
-  return `Tag: ${TAG_NAME_MAP[tag]}`;
+  return `Type: ${TAG_NAME_MAP[tag]}`;
 }

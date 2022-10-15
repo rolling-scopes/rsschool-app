@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
 import { FilterFilled } from '@ant-design/icons';
-import { TAG_NAME_MAP } from 'modules/Schedule/constants';
+import { ColumnName, TAG_NAME_MAP } from 'modules/Schedule/constants';
 import { CourseScheduleItemDto } from 'api';
 
 type FilteredTagsProps = {
@@ -13,7 +13,7 @@ export const FilteredTags = ({ tagFilter, onTagClose }: FilteredTagsProps) =>
     <div style={{ marginBottom: 16 }}>
       <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 8 }} />
       {tagFilter.map(tag => (
-        <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`Tag: ${
+        <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`${ColumnName.Type}: ${
           TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']] || tag
         }`}</Tag>
       ))}
