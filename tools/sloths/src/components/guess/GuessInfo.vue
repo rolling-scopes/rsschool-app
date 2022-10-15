@@ -103,9 +103,6 @@ export default defineComponent({
 
     takeSort() {
       this.results.sort((a, b) => {
-        // const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
-        // const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
-
         const item1: number = this.sortTypes(this.sorting, a);
         const item2: number = this.sortTypes(this.sorting, b);
 
