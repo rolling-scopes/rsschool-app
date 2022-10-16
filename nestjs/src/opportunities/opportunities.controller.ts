@@ -63,8 +63,6 @@ export class OpportunitiesController {
   @UseGuards(DefaultGuard)
   // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type + @Body() decorator
   public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: any) {
-    console.log('dto', dto);
-    console.log('req.body', req.body);
     if (githubId !== req.user.githubId) {
       throw new ForbiddenException('No access to resume');
     }
