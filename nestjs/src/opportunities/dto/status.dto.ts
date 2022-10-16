@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class StatusDto {
   constructor(expires: number) {
-    this.data = expires;
+    this.expires = expires;
   }
 
   @ApiProperty()
-  public data: number;
+  public expires: number;
 }

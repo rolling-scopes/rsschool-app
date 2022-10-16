@@ -3235,7 +3235,7 @@ export interface StatusDto {
      * @type {number}
      * @memberof StatusDto
      */
-    'data': number;
+    'expires': number;
 }
 /**
  * 

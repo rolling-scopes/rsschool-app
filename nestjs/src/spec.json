@@ -2604,7 +2604,7 @@
       },
       "Resume": { "type": "object", "properties": {} },
       "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
-      "StatusDto": { "type": "object", "properties": { "data": { "type": "number" } }, "required": ["data"] },
+      "StatusDto": { "type": "object", "properties": { "expires": { "type": "number" } }, "required": ["expires"] },
       "VisibilityDto": {
         "type": "object",
         "properties": { "isHidden": { "type": "boolean" } },
