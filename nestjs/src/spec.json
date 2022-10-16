@@ -1204,9 +1204,9 @@
         "tags": ["opportunities"]
       }
     },
-    "/opportunities/status": {
+    "/opportunities/prolong": {
       "post": {
-        "operationId": "updateStatus",
+        "operationId": "prolong",
         "summary": "",
         "parameters": [],
         "responses": {

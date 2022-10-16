@@ -67,7 +67,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
       ),
       maskClosable: true,
       onOk: async () => {
-        await service.updateStatus();
+        await service.prolong();
         notification.success({
           message: 'CV successfully renewed',
           placement: 'topRight',

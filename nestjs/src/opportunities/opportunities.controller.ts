@@ -103,12 +103,12 @@ export class OpportunitiesController {
     return new ConsentDto(data);
   }
 
-  @Post('/status')
-  @ApiOperation({ operationId: 'updateStatus' })
+  @Post('/prolong')
+  @ApiOperation({ operationId: 'prolong' })
   @ApiOkResponse({ type: StatusDto })
   @UseGuards(DefaultGuard)
-  public async updateStatus(@Req() req: CurrentRequest) {
-    const data = await this.opportunitiesService.updateStatus(req.user.githubId);
+  public async prolong(@Req() req: CurrentRequest) {
+    const data = await this.opportunitiesService.prolong(req.user.githubId);
     return new StatusDto(data);
   }
 

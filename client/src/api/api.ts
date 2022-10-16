@@ -8653,6 +8653,35 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prolong: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/opportunities/prolong`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8691,35 +8720,6 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
          */
         setVisibility: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/opportunities/visibility`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateStatus: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/opportunities/status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8810,6 +8810,15 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async prolong(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.prolong(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8825,15 +8834,6 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
          */
         async setVisibility(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VisibilityDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.setVisibility(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateStatus(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStatus(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -8898,6 +8898,14 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prolong(options?: any): AxiosPromise<StatusDto> {
+            return localVarFp.prolong(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8912,14 +8920,6 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
          */
         setVisibility(options?: any): AxiosPromise<VisibilityDto> {
             return localVarFp.setVisibility(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateStatus(options?: any): AxiosPromise<StatusDto> {
-            return localVarFp.updateStatus(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8995,6 +8995,16 @@ export class OpportunitiesApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpportunitiesApi
+     */
+    public prolong(options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).prolong(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} githubId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9012,16 +9022,6 @@ export class OpportunitiesApi extends BaseAPI {
      */
     public setVisibility(options?: AxiosRequestConfig) {
         return OpportunitiesApiFp(this.configuration).setVisibility(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpportunitiesApi
-     */
-    public updateStatus(options?: AxiosRequestConfig) {
-        return OpportunitiesApiFp(this.configuration).updateStatus(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

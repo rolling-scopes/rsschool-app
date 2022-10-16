@@ -78,8 +78,8 @@ export function EditPage() {
 
   const handleCreateConsent = withLoading(async () => {
     await handleConsentUpdate(true);
-    const updatedTimestamp = await service.updateStatus();
-    showCreationModal(updatedTimestamp.data.data);
+    const updatedTimestamp = await service.prolong();
+    showCreationModal(updatedTimestamp.data.expires);
     setEditMode(true);
   });
 
