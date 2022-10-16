@@ -1,5 +1,5 @@
 import { In, Repository } from 'typeorm';
-import { DateTime } from 'luxon';
+import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';
@@ -66,7 +66,7 @@ export class OpportunitiesService {
 
   public async prolong(githubId: string) {
     const resume = await this.resumeRepository.findOneBy({ githubId });
-    const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
+    const expirationTimestamp = dayjs().add(EXPIRATION_DAYS_PROLONGATION, 'days').valueOf();
     const result = await this.resumeRepository.save({ id: resume?.id, githubId, expires: expirationTimestamp });
     return result.expires;
   }
