@@ -15,17 +15,17 @@
     ></custom-btn>
 
     <div class="guess__imgs" :class="step >= 0 ? 'guess__imgs_active' : ''">
-      <div v-for="(item, index) in gameCards" :key="index" class="guess__img-wrapper">
+      <div v-for="(item, index) in gameCards" :key="`${index}_guess-card`" class="guess__img-wrapper">
         <transition name="slider" mode="out-in">
           <img v-show="index === step" :src="item.question.img" :alt="$t('guess.guess')" class="guess__img" />
         </transition>
       </div>
     </div>
-    <div v-for="(item, index) in gameCards" :key="index">
+    <div v-for="(item, index) in gameCards" :key="`${index}_guess-answer`">
       <div v-show="index === step" class="guess__answers">
         <span
           v-for="(answer, i) in item.answers"
-          :key="i"
+          :key="`${i}_${answer.caption}`"
           :class="`guess__answer ${getClassStepSelect(i)}`"
           @click="setAnswer(index, i)"
           v-shortkey.once="[`${i + 1}`]"
@@ -46,7 +46,11 @@
       @shortkey="nextStep"
     ></custom-btn>
     <div v-show="step >= 0" class="guess__results">
-      <div v-for="(res, index) in result" :key="index" :class="`guess__result ${getClassStepResult(index)}`"></div>
+      <div
+        v-for="(res, index) in result"
+        :key="`${index}_guess-result`"
+        :class="`guess__result ${getClassStepResult(index)}`"
+      ></div>
     </div>
 
     <modal-window v-show="isModalVisible" @close="closeModal">

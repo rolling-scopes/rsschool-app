@@ -2,7 +2,7 @@
   <div class="teammate">
     <img class="teammate__photo" :src="`/img/photo/${teammate}.png`" alt="photo" />
     <div class="teammate__wrap">
-      <div class="teammate__main">{{ `${teammate}` }}</div>
+      <div class="teammate__main">{{ teammate }}</div>
       <div class="teammate__descr">{{ $t(`about.teammates.${teammate}`) }}</div>
     </div>
   </div>

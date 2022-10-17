@@ -11,8 +11,8 @@
 
   <footer-view />
 
-  <background-main />
-  <background-view />
+  <background-view :bgStyle="'background-main'" />
+  <background-view :bgStyle="'background'" />
 
   <loader-view v-show="isLoad" />
 
@@ -35,7 +35,6 @@ import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/footer/FooterView.vue';
 import LoaderView from './components/loader/LoaderView.vue';
 import BackgroundView from './components/background/BackgroundView.vue';
-import BackgroundMain from './components/background/BackgroundMain.vue';
 import AlertModal from './components/modal/AlertModal.vue';
 
 import useLoader from './stores/loader';
@@ -54,7 +53,6 @@ export default defineComponent({
     FooterView,
     LoaderView,
     BackgroundView,
-    BackgroundMain,
     AlertModal,
   },
 

@@ -14,13 +14,13 @@
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 export default defineComponent({
   name: 'FooterView',
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
   },
 });
 </script>
@@ -32,7 +32,7 @@ export default defineComponent({
   align-items: center;
   padding: 3rem;
   z-index: 3;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
 .footer-light {

@@ -1,36 +1,63 @@
 <template>
-  <div class="background" :class="`background-${currRoute}-${currTheme}`"></div>
+  <div :class="currClassGroup"></div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 export default defineComponent({
   name: 'BackgroundView',
 
+  props: {
+    bgStyle: {
+      type: String,
+      default: () => 'background',
+    },
+  },
+
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
 
     currRoute() {
       return String(this.$route.name);
+    },
+
+    currClassGroup() {
+      return this.bgStyle === 'background'
+        ? `${this.bgStyle} ${this.bgStyle}-${this.currRoute}-${this.currTheme}`
+        : `${this.bgStyle} ${this.bgStyle}-${this.currTheme}`;
     },
   },
 });
 </script>
 
 <style scoped>
-.background {
-  position: fixed;
-  height: calc(100vh - 5rem);
+.background,
+.background-main {
+  height: 100vh;
   width: 100vw;
+  position: fixed;
+  z-index: 1;
+  transition: 0.5s ease;
+}
+
+.background {
+  height: calc(100vh - 5rem);
   margin: 2rem 0;
   z-index: 2;
   left: 0;
   bottom: 0;
-  transition: 0.5s ease;
+}
+
+.background-main-light {
+  background: no-repeat center center / cover url('../../assets/backgrounds/bg-stars-light.svg');
+}
+
+.background-main-dark {
+  background: no-repeat center center / cover url('../../assets/backgrounds/bg-stars-dark.svg');
 }
 
 .background-home-light {

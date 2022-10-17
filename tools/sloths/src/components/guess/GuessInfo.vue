@@ -4,15 +4,15 @@
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
-        :key="index"
-        :text="$t(sortingOptionsALL[indexAll].text)"
+        :key="`${index}_${sortingOptionsAll[indexAll].text}`"
+        :text="$t(sortingOptionsAll[indexAll].text)"
         className="btn btn-primary"
         @click="setSorting(index)"
       ></custom-btn>
     </div>
 
     <div class="results results_admin">
-      <div class="results__item" v-for="(res, index) in results" :key="index">
+      <div class="results__item" v-for="(res, index) in results" :key="`${index}_${res.count}`">
         <span class="result__index">{{ `${index + 1}.` }}</span>
         <span class="result__steps">{{ `${res.count} ${$t('guess.points', res.count)}` }}</span>
         <span class="result__time">{{ `${res.time / millisecondsInSecond} s` }}</span>
@@ -28,9 +28,13 @@ import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { GAME_RESULT_SORTING, MILLISECONDS_IN_SECOND } from '@/common/const';
 import useLoader from '@/stores/loader';
 import { mapWritableState } from 'pinia';
+import isEven from '@/utils/game-utils';
+import sortMixins from '@/components/mixins/sort-mixin';
 
 export default defineComponent({
   name: 'GuessInfo',
+
+  mixins: [sortMixins],
 
   components: {
     CustomBtn,
@@ -40,7 +44,7 @@ export default defineComponent({
     return {
       count: 0,
       results: [] as GameResult[],
-      sortingOptionsALL: GAME_RESULT_SORTING,
+      sortingOptionsAll: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
     };
@@ -71,7 +75,7 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
+    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter((el) => isEven(el));
   },
 
   methods: {
@@ -86,7 +90,7 @@ export default defineComponent({
     },
 
     setSorting(i: number) {
-      if (this.sortingOptions[i] % 2 === 0) {
+      if (isEven(this.sortingOptions[i])) {
         this.sortingOptions[i] += 1;
       } else {
         this.sortingOptions[i] -= 1;
@@ -99,30 +103,11 @@ export default defineComponent({
 
     takeSort() {
       this.results.sort((a, b) => {
-        const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
-        const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+        const item1: number = this.sortTypes(this.sorting, a);
+        const item2: number = this.sortTypes(this.sorting, b);
 
         return this.sortElems(item1, item2, this.sorting);
       });
-    },
-
-    sortElems(a: number, b: number, direct: number): number {
-      if (direct % 2 === 0) {
-        if (a < b) {
-          return -1;
-        }
-        if (a > b) {
-          return 1;
-        }
-      } else {
-        if (a < b) {
-          return 1;
-        }
-        if (a > b) {
-          return -1;
-        }
-      }
-      return 0;
     },
   },
 });

@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
 import { mapWritableState } from 'pinia';
-import themeProp from '@/stores/theme';
+import useThemeProp from '@/stores/theme';
 
 export default defineComponent({
   name: 'CustomBtn',
@@ -32,7 +32,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
   },
 });
 </script>

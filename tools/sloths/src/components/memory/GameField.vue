@@ -47,7 +47,7 @@
 <script lang="ts">
 import { mapWritableState } from 'pinia';
 import {
-  MEMORY_GAME_SRPITE,
+  MEMORY_GAME_SPRITE,
   MEMORY_GAME_TIMEOUT,
   MEMORY_GAME_WINNER,
   MEMORY_LEVELS,
@@ -58,7 +58,7 @@ import { defineComponent, type PropType } from 'vue';
 import ModalWindow from '@/components/modal/ModalWindow.vue';
 import ImageBtn from '@/components/buttons/ImageBtn.vue';
 import { playAudio, audioSlide, audioFlip, audioFail, audioSuccess, audioWin } from '@/utils/audio';
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 type Card = {
   img: string;
@@ -78,7 +78,7 @@ export default defineComponent({
 
   data() {
     return {
-      memorySprite: MEMORY_GAME_SRPITE,
+      memorySprite: MEMORY_GAME_SPRITE,
       cardWinner: MEMORY_GAME_WINNER,
       images: [] as string[],
       cards: [] as Card[],
@@ -101,7 +101,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
 
     gameTime(): number {
       return this.endTime - this.startTime;
@@ -133,19 +133,20 @@ export default defineComponent({
   methods: {
     getImages() {
       this.images = [
-        `${MEMORY_GAME_SRPITE}#memory01`,
-        `${MEMORY_GAME_SRPITE}#memory02`,
-        `${MEMORY_GAME_SRPITE}#memory03`,
-        `${MEMORY_GAME_SRPITE}#memory04`,
-        `${MEMORY_GAME_SRPITE}#memory05`,
-        `${MEMORY_GAME_SRPITE}#memory06`,
-        `${MEMORY_GAME_SRPITE}#memory07`,
-        `${MEMORY_GAME_SRPITE}#memory08`,
-        `${MEMORY_GAME_SRPITE}#memory09`,
-        `${MEMORY_GAME_SRPITE}#memory10`,
-        `${MEMORY_GAME_SRPITE}#memory11`,
-        `${MEMORY_GAME_SRPITE}#memory12`,
+        `${MEMORY_GAME_SPRITE}#memory01`,
+        `${MEMORY_GAME_SPRITE}#memory02`,
+        `${MEMORY_GAME_SPRITE}#memory03`,
+        `${MEMORY_GAME_SPRITE}#memory04`,
+        `${MEMORY_GAME_SPRITE}#memory05`,
+        `${MEMORY_GAME_SPRITE}#memory06`,
+        `${MEMORY_GAME_SPRITE}#memory07`,
+        `${MEMORY_GAME_SPRITE}#memory08`,
+        `${MEMORY_GAME_SPRITE}#memory09`,
+        `${MEMORY_GAME_SPRITE}#memory10`,
+        `${MEMORY_GAME_SPRITE}#memory11`,
+        `${MEMORY_GAME_SPRITE}#memory12`,
       ];
+      this.images = Array.from({ length: 12 }, (x, i) => `${MEMORY_GAME_SPRITE}#memory${i + 1}`);
 
       this.getCards();
     },

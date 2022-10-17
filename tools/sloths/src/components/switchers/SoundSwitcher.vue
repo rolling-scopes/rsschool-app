@@ -27,7 +27,7 @@ import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
 
 import useAudioOn from '../../stores/audio-on';
-import themeProp from '../../stores/theme';
+import useThemeProp from '../../stores/theme';
 
 export default defineComponent({
   name: 'ThemeSwitcher',
@@ -41,7 +41,7 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useAudioOn, ['isAudioOn']),
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
     soundStatus(): string {
       return this.sounds.filter((sound) => sound !== this.currSound)[0];
     },

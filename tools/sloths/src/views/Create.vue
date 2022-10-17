@@ -6,7 +6,7 @@
         <img
           ref="imgs"
           v-for="(item, index) in images"
-          :key="index"
+          :key="`${index}_${item}`"
           :src="getImg(index)"
           alt="images"
           object-fit="contain"

@@ -1,11 +1,10 @@
 # rs-sloths
 
+RS SLOTHS is a depository of sloths. View all existing stickers, download the necessary ones or chill a bit - why not? Feel a sloth!
+
 ## Stack
 
 Vue3, Pinia, Vue Router, TypeScript, Vite
-
-## Backend
-https://github.com/ThorsAngerVaNeT/rs-sloths-be
 
 ## Project Setup
 

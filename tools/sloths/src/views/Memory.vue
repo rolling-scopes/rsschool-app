@@ -5,8 +5,8 @@
       <h2 class="memory__title">{{ $t(level) }}</h2>
       <div class="memory__level">
         <div
-          v-for="(level, index) in levels"
-          :key="index"
+          v-for="(item, index) in levels"
+          :key="item.level"
           class="btn btn-img memory__btn"
           :class="{ active_lvl: activeLevel === index }"
           @click="setLevel(index)"

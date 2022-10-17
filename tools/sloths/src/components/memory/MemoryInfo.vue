@@ -4,15 +4,19 @@
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
-        :key="index"
-        :text="$t(sortingOptionsALL[indexAll].text)"
+        :key="`${index}_${sortingOptionsAll[indexAll].text}`"
+        :text="$t(sortingOptionsAll[indexAll].text)"
         className="btn btn-primary"
         @click="setSorting(index)"
       ></custom-btn>
     </div>
 
     <div class="game-info__wrap">
-      <div class="game-info__level game-info__level_admin" v-for="(res, index) in gameResults" :key="index">
+      <div
+        class="game-info__level game-info__level_admin"
+        v-for="(res, index) in gameResults"
+        :key="`${index}_${res.level}`"
+      >
         <h4 class="result__level__title">{{ $t(`memory.${res.level}`) }}</h4>
         <div class="game-info__result" v-for="(r, i) in res.results" :key="r.id">
           <span class="result__index">{{ `${i + 1}.` }}</span>
@@ -31,11 +35,15 @@ import CustomBtn from '@/components/buttons/CustomBtn.vue';
 import { GAME_RESULT_SORTING, MEMORY_LEVELS, MILLISECONDS_IN_SECOND } from '@/common/const';
 import type { GameResult, MemoryLevel } from '@/common/types';
 import useLoader from '@/stores/loader';
+import isEven from '@/utils/game-utils';
+import sortMixins from '@/components/mixins/sort-mixin';
 
 type MemoryLevelResult = MemoryLevel & { count: number; results: GameResult[] };
 
 export default defineComponent({
   name: 'MemoryInfo',
+
+  mixins: [sortMixins],
 
   components: {
     CustomBtn,
@@ -44,7 +52,7 @@ export default defineComponent({
   data() {
     return {
       gameResults: [] as MemoryLevelResult[],
-      sortingOptionsALL: GAME_RESULT_SORTING,
+      sortingOptionsAll: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
     };
@@ -75,7 +83,7 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => el % 2 === 0);
+    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter((el) => isEven(el));
   },
 
   methods: {
@@ -99,7 +107,7 @@ export default defineComponent({
     },
 
     setSorting(i: number) {
-      if (this.sortingOptions[i] % 2 === 0) {
+      if (isEven(this.sortingOptions[i])) {
         this.sortingOptions[i] += 1;
       } else {
         this.sortingOptions[i] -= 1;
@@ -113,31 +121,12 @@ export default defineComponent({
     takeSort() {
       this.gameResults.forEach((gameResult) => {
         gameResult.results.sort((a, b) => {
-          const item1: number = this.sorting < 2 ? a.count : this.sorting < 4 ? a.time : a.createdAt;
-          const item2: number = this.sorting < 2 ? b.count : this.sorting < 4 ? b.time : b.createdAt;
+          const item1: number = this.sortTypes(this.sorting, a);
+          const item2: number = this.sortTypes(this.sorting, b);
 
           return this.sortElems(item1, item2, this.sorting);
         });
       });
-    },
-
-    sortElems(a: number, b: number, direct: number): number {
-      if (direct % 2 === 0) {
-        if (a < b) {
-          return -1;
-        }
-        if (a > b) {
-          return 1;
-        }
-      } else {
-        if (a < b) {
-          return 1;
-        }
-        if (a > b) {
-          return -1;
-        }
-      }
-      return 0;
     },
   },
 });

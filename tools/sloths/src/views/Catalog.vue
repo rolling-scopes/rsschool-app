@@ -77,7 +77,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapWritableState } from 'pinia';
-import themeProp from '@/stores/theme';
+import useThemeProp from '@/stores/theme';
 import type { PageSettings, Sloth } from '@/common/types';
 import { errorHandler } from '@/services/error-handler';
 import { CDN_STICKERS_URL, PAGINATION_OPTIONS, SLOTH_SORTING } from '@/common/const';
@@ -138,7 +138,7 @@ export default defineComponent({
 
   computed: {
     ...mapWritableState(useLoader, ['isLoad']),
-    ...mapWritableState(themeProp, ['currTheme']),
+    ...mapWritableState(useThemeProp, ['currTheme']),
 
     someChecked(): boolean {
       return this.checked.some((el) => el.checked);
