@@ -4,8 +4,8 @@
     <div class="game-info__btns">
       <custom-btn
         v-for="(indexAll, index) in sortingOptions"
-        :key="`${index}_${sortingOptionsALL[indexAll].text}`"
-        :text="$t(sortingOptionsALL[indexAll].text)"
+        :key="`${index}_${sortingOptionsAll[indexAll].text}`"
+        :text="$t(sortingOptionsAll[indexAll].text)"
         className="btn btn-primary"
         @click="setSorting(index)"
       ></custom-btn>
@@ -52,7 +52,7 @@ export default defineComponent({
   data() {
     return {
       gameResults: [] as MemoryLevelResult[],
-      sortingOptionsALL: GAME_RESULT_SORTING,
+      sortingOptionsAll: GAME_RESULT_SORTING,
       sortingOptions: [] as number[],
       sorting: 0,
     };
@@ -83,7 +83,7 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsALL.map((el, i) => i).filter((el) => isEven(el));
+    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter((el) => isEven(el));
   },
 
   methods: {

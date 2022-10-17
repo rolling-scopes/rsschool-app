@@ -146,6 +146,7 @@ export default defineComponent({
         `${MEMORY_GAME_SPRITE}#memory11`,
         `${MEMORY_GAME_SPRITE}#memory12`,
       ];
+      this.images = Array.from({ length: 12 }, (x, i) => `${MEMORY_GAME_SPRITE}#memory${i + 1}`);
 
       this.getCards();
     },
