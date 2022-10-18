@@ -87,8 +87,14 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
-      <Row gutter={24}>
+    <PageLayout
+      loading={loading}
+      title="Interviews"
+      background="#F0F2F5"
+      githubId={props.session.githubId}
+      courseName={props.course.name}
+    >
+      <Row gutter={24} style={{ minHeight: '85vh' }}>
         {interviews.map(interview => {
           const items = data.filter(d => d.name === interview.name);
           return (
