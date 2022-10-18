@@ -7,15 +7,6 @@ interface IUploadCriteriaJSON {
   onLoad: (data: string) => void;
 }
 
-// interface IFileUpload {
-//   file: {
-//     status: string;
-//     name: string;
-//     originFileObj: {};
-//   };
-//   fileList: {};
-// }
-
 export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'done') {
@@ -30,7 +21,7 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
   };
 
   return (
-    <Upload accept=".JSON" onChange={handleChange}>
+    <Upload data-testid="uploader" accept=".JSON" onChange={handleChange}>
       <Button icon={<UploadOutlined />} title='required format: {"Type": "string", "Max": number, "Text": "string"}'>
         Click to Upload Criteria (JSON)
       </Button>

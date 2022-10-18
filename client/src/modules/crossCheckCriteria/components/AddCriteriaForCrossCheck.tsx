@@ -4,6 +4,7 @@ import { IAddCriteriaForCrossCheck } from 'services/course';
 
 const { Item } = Form;
 const { TextArea } = Input;
+const { Option } = Select;
 
 export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck) => {
   const [type, setType] = useState('');
@@ -55,10 +56,10 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   return (
     <>
       <Item label="Criteria Type">
-        <Select placeholder="Select type" onChange={changeType}>
-          <Select.Option value="Title">Title</Select.Option>
-          <Select.Option value="Subtask">Subtask</Select.Option>
-          <Select.Option value="Penalty">Penalty</Select.Option>
+        <Select data-testid="select" placeholder="Select type" onChange={changeType}>
+          <Option data-testid="Title" value="Title">Title</Option>
+          <Option data-testid="Subtask" value="Subtask">Subtask</Option>
+          <Option data-testid="Penalty" value="Penalty">Penalty</Option>
         </Select>
       </Item>
 
