@@ -345,7 +345,7 @@ function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, v
 
 function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
   if (value === 1) {
-    return `Only 1 attempt left. Be carefull, It's your last attempt!`;
+    return `Only 1 attempt left. Be careful, It's your last attempt!`;
   }
   if (value > 1) {
     return `${value} attempts left.`;
