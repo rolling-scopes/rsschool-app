@@ -175,13 +175,7 @@ export default defineComponent({
         const selected = getSelected();
         const sorting = getSortingList();
 
-        const res = await service.getAll({
-          page: `${page}`,
-          limit: `${limit}`,
-          order: sorting,
-          searchText,
-          filter: selected.join(','),
-        });
+        const res = await service.getAll({ page, limit, order: sorting, searchText, filter: selected.join(',') });
 
         this.sloths = res.data.items;
         this.count = res.data.count;
