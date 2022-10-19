@@ -35,8 +35,8 @@ export type MemoryLevel = {
 };
 
 export type QueryStringOptions = {
-  page?: string;
-  limit?: string;
+  page?: number;
+  limit?: number;
   order?: string;
   searchText?: string;
   filter?: string;

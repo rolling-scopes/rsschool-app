@@ -5,8 +5,8 @@ export class SlothsService {
   constructor(private data: Sloth[]) {}
 
   public async getAll({
-    page = '1',
-    limit = `${PAGINATION_OPTIONS[0]}`,
+    page = 1,
+    limit = PAGINATION_OPTIONS[0],
     order = SLOTH_SORTING[0].value,
     searchText,
     filter,
@@ -38,8 +38,8 @@ export class SlothsService {
 
     const count = items.length;
 
-    const start = (+page - 1) * +limit;
-    const end = +start + +limit;
+    const start = (page - 1) * limit;
+    const end = start + limit;
     items = items.slice(start, end);
 
     return { data: { items, count }, status: 200 };
@@ -50,7 +50,9 @@ export class SlothsService {
   }
 
   public getTags() {
-    return [...new Set(this.data.flatMap((sloth) => sloth.tags))].sort();
+    const allTags = this.data.flatMap((sloth) => sloth.tags);
+    const uniqueTags = [...new Set(allTags)];
+    return uniqueTags.sort();
   }
 }
 
