@@ -50,7 +50,9 @@ export class SlothsService {
   }
 
   public getTags() {
-    return [...new Set(this.data.flatMap((sloth) => sloth.tags))].sort();
+    const allTags = this.data.flatMap((sloth) => sloth.tags);
+    const uniqueTags = [...new Set(allTags)];
+    return uniqueTags.sort();
   }
 }
 
