@@ -386,8 +386,7 @@ export class StudentRepository extends AbstractRepository<Student> {
   ): Promise<number[]> {
     const tasksCount = criteria.courseTaskIds.length;
 
-    let query = await getRepository(Student).createQueryBuilder('student').select(['student.id']);
-
+    let query = getRepository(Student).createQueryBuilder('student').select(['student.id']);
     if (tasksCount > 0) {
       query = query
         .leftJoin(
@@ -399,7 +398,19 @@ export class StudentRepository extends AbstractRepository<Student> {
             minScore: criteria.minScore ? criteria.minScore : 1,
           },
         )
-        .addSelect('ARRAY_AGG ("tr"."courseTaskId") AS "tasks"');
+        .addSelect('array_remove(ARRAY_AGG (DISTINCT "tr"."courseTaskId"), NULL) AS "tasks"');
+
+      query = query
+        .leftJoin(
+          'student.taskInterviewResults',
+          'interviewResults',
+          'interviewResults.studentId = student.id AND interviewResults.score >= :minScore AND interviewResults.courseTaskId IN (:...requiredCourseTaskIds)',
+          {
+            requiredCourseTaskIds: criteria.courseTaskIds,
+            minScore: criteria.minScore ? criteria.minScore : 1,
+          },
+        )
+        .addSelect('array_remove(ARRAY_AGG (DISTINCT "interviewResults"."courseTaskId"), NULL) AS "interviews"');
     }
 
     query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
@@ -411,14 +422,21 @@ export class StudentRepository extends AbstractRepository<Student> {
     }
 
     if (tasksCount > 0) {
-      query = query.andWhere('tr.id IS NOT NULL');
+      query = query.andWhere('(tr.id IS NOT NULL OR interviewResults.id IS NOT NULL)');
     }
     query = query.groupBy('"student"."id"');
 
     const rawCertificates = await query.getRawMany();
-
     return rawCertificates
-      .map(({ student_id, tasks }) => (!tasksCount || tasks?.length === tasksCount ? student_id : undefined))
+      .map(({ student_id, tasks = [], interviews = [] }) => {
+        if (!tasksCount) {
+          return student_id;
+        }
+        if (tasks.length + interviews.length === tasksCount) {
+          return student_id;
+        }
+        return undefined;
+      })
       .filter(Boolean);
   }
 }
