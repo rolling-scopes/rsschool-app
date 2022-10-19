@@ -39,7 +39,7 @@ export class SlothsService {
     const count = items.length;
 
     const start = (page - 1) * limit;
-    const end = +start + +limit;
+    const end = start + limit;
     items = items.slice(start, end);
 
     return { data: { items, count }, status: 200 };
