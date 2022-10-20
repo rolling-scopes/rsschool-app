@@ -5,7 +5,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import { AdditionalActions } from './AdditionalActions';
+import { AdditionalActions } from '../AdditionalActions';
 
 interface SettingsPanelProps {
   isCourseManager: boolean;
