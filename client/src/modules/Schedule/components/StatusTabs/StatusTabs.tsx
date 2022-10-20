@@ -1,4 +1,4 @@
-import { Tabs } from 'antd';
+import { Col, Row, Tabs } from 'antd';
 import { FC, useMemo } from 'react';
 import { ALL_TAB_KEY } from 'modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
@@ -22,7 +22,17 @@ const StatusTabs: FC<StatusTabsProps> = ({ statuses, activeTab, onTabChange, chi
 
   return (
     <>
-      <Tabs activeKey={getActiveTab()} items={tabs} onChange={handleTabChange} tabBarExtraContent={children} />
+      <Row gutter={48} style={{ background: 'white' }}>
+        <Col span={24}>
+          <Tabs
+            tabBarStyle={{ marginBottom: 0 }}
+            activeKey={getActiveTab()}
+            items={tabs}
+            onChange={handleTabChange}
+            tabBarExtraContent={children}
+          />
+        </Col>
+      </Row>
       <style jsx>{`
         :global(.ant-tabs-tab .ant-badge-count) {
           background-color: #f0f2f5;
