@@ -1,12 +1,11 @@
-import { Button, Col, message, Row } from 'antd';
-import { PlusOutlined, CopyOutlined, CalendarOutlined } from '@ant-design/icons';
+import { Button, Col, Row } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import ManageCsvButtons from './ManageCsvButtons';
-import { useCopyToClipboard } from 'react-use';
+import { AdditionalActions } from './AdditionalActions';
 
 interface SettingsPanelProps {
   isCourseManager: boolean;
@@ -18,10 +17,6 @@ interface SettingsPanelProps {
   refreshData: () => void;
   onCreateCourseTask: () => void;
   onCopyFromCourse: () => void;
-}
-
-function buildICalendarLink(courseId: number, token: string, timezone: string) {
-  return `/api/v2/courses/${courseId}/icalendar/${token}?timezone=${encodeURIComponent(timezone || '')}`;
 }
 
 export function SettingsPanel({
@@ -37,7 +32,6 @@ export function SettingsPanel({
 }: SettingsPanelProps) {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
-  const [, copyToClipboard] = useCopyToClipboard();
 
   const openManageEventModal = () => setIsManageEventModalOpen(true);
   const closeManageEventModal = () => {
@@ -45,47 +39,9 @@ export function SettingsPanel({
     setIsManageEventModalOpen(false);
   };
 
-  const iCalLink = buildICalendarLink(courseId, calendarToken, settings.timezone);
-
   return (
     <>
-      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col>
-          <SettingsDrawer tags={tags} settings={settings} />
-        </Col>
-        {calendarToken ? (
-          <Col>
-            <Button.Group>
-              <Button
-                icon={<CalendarOutlined />}
-                download={`schedule-${courseAlias}.ics`}
-                target="_blank"
-                href={iCalLink}
-              >
-                iCal Link
-              </Button>
-              <Button
-                icon={<CopyOutlined />}
-                onClick={() => {
-                  copyToClipboard(`${window.document.location.origin}${iCalLink}`);
-                  message.success('Copied to clipboard');
-                }}
-              />
-            </Button.Group>
-          </Col>
-        ) : null}
-        {isCourseManager ? (
-          <Col>
-            <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
-          </Col>
-        ) : null}
-        {isCourseManager ? (
-          <Col>
-            <Button icon={<CopyOutlined />} onClick={onCopyFromCourse}>
-              Copy From
-            </Button>
-          </Col>
-        ) : null}
+      <Row justify="end" gutter={[16, 16]}>
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
@@ -100,6 +56,19 @@ export function SettingsPanel({
             </Button>
           </Col>
         ) : null}
+        <Col>
+          <SettingsDrawer tags={tags} settings={settings} />
+        </Col>
+        <Col>
+          <AdditionalActions
+            isCourseManager={isCourseManager}
+            courseId={courseId}
+            timezone={settings.timezone}
+            calendarToken={calendarToken}
+            courseAlias={courseAlias}
+            onCopyFromCourse={onCopyFromCourse}
+          />
+        </Col>
       </Row>
       {isManageEventModalOpen && (
         <ManageEventModalForm

@@ -64,18 +64,19 @@ export function SchedulePage(props: PageProps) {
 
   return (
     <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
-      <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} />
-      <SettingsPanel
-        onCreateCourseTask={handleCreateCourseTask}
-        onCopyFromCourse={() => setCopyModal({})}
-        isCourseManager={isManager}
-        courseId={props.course.id}
-        courseAlias={props.course.alias}
-        settings={settings}
-        calendarToken={cipher}
-        tags={eventTags}
-        refreshData={refreshData}
-      />
+      <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
+        <SettingsPanel
+          onCreateCourseTask={handleCreateCourseTask}
+          onCopyFromCourse={() => setCopyModal({})}
+          isCourseManager={isManager}
+          courseId={props.course.id}
+          courseAlias={props.course.alias}
+          settings={settings}
+          calendarToken={cipher}
+          tags={eventTags}
+          refreshData={refreshData}
+        />
+      </StatusTabs>
       <TableView settings={settings} data={data} statusFilter={selectedTab} />
       <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
       <CoursesListModal
