@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
 type MenuItemType = Required<MenuProps>['items'][number];
 
-interface AdditionalActionsProps {
+export interface AdditionalActionsProps {
   isCourseManager: boolean;
   courseId: number;
   timezone: string;
@@ -15,7 +15,13 @@ interface AdditionalActionsProps {
   onCopyFromCourse: () => void;
 }
 
-const getMenuItem = (title: string, icon: React.ReactNode, isVisible: boolean): MenuItemType | null =>
+export enum AdditionalItems {
+  Calendar = 'iCal Link',
+  Export = 'Export',
+  Copy = 'Copy from',
+}
+
+const buildMenuItem = (title: string, icon: React.ReactNode, isVisible: boolean): MenuItemType | null =>
   isVisible
     ? {
         key: title,
@@ -28,13 +34,7 @@ function buildICalendarLink(courseId: number, token: string, timezone: string) {
   return `/api/v2/courses/${courseId}/icalendar/${token}?timezone=${encodeURIComponent(timezone || '')}`;
 }
 
-enum AdditionalItems {
-  Calendar = 'iCal Link',
-  Export = 'Export',
-  Copy = 'Copy from',
-}
-
-export const AdditionalActions = ({
+const AdditionalActions = ({
   isCourseManager,
   courseId,
   timezone,
@@ -45,9 +45,9 @@ export const AdditionalActions = ({
   const menuItems = useMemo(
     () =>
       [
-        getMenuItem(AdditionalItems.Calendar, <CalendarOutlined />, !!calendarToken),
-        getMenuItem(AdditionalItems.Export, <FileExcelOutlined />, isCourseManager),
-        getMenuItem(AdditionalItems.Copy, <CopyOutlined />, isCourseManager),
+        buildMenuItem(AdditionalItems.Calendar, <CalendarOutlined />, !!calendarToken),
+        buildMenuItem(AdditionalItems.Export, <FileExcelOutlined />, isCourseManager),
+        buildMenuItem(AdditionalItems.Copy, <CopyOutlined />, isCourseManager),
       ].filter(Boolean),
     [calendarToken, isCourseManager],
   );
@@ -99,3 +99,5 @@ export const AdditionalActions = ({
     </Dropdown>
   );
 };
+
+export default AdditionalActions;
