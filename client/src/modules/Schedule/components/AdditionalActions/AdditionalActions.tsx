@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Space } from 'antd';
+import { Button, Col, Dropdown, Menu, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import { DownOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import React, { useMemo } from 'react';
@@ -76,14 +76,16 @@ const AdditionalActions = ({
   const dropdownMenu = <Menu items={menuItems} onClick={handleMenuItemClick} />;
 
   return menuItems?.length !== 0 ? (
-    <Dropdown overlay={dropdownMenu} trigger={['click']} placement="bottomRight">
-      <Button>
-        <Space>
-          More
-          <DownOutlined />
-        </Space>
-      </Button>
-    </Dropdown>
+    <Col>
+      <Dropdown overlay={dropdownMenu} trigger={['click']} placement="bottomRight">
+        <Button>
+          <Space>
+            More
+            <DownOutlined />
+          </Space>
+        </Button>
+      </Dropdown>
+    </Col>
   ) : null;
 };
 

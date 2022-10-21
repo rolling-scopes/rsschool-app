@@ -59,16 +59,14 @@ export function SettingsPanel({
         <Col>
           <SettingsDrawer tags={tags} settings={settings} />
         </Col>
-        <Col>
-          <AdditionalActions
-            isCourseManager={isCourseManager}
-            courseId={courseId}
-            timezone={settings.timezone}
-            calendarToken={calendarToken}
-            courseAlias={courseAlias}
-            onCopyFromCourse={onCopyFromCourse}
-          />
-        </Col>
+        <AdditionalActions
+          isCourseManager={isCourseManager}
+          courseId={courseId}
+          timezone={settings.timezone}
+          calendarToken={calendarToken}
+          courseAlias={courseAlias}
+          onCopyFromCourse={onCopyFromCourse}
+        />
       </Row>
       {isManageEventModalOpen && (
         <ManageEventModalForm
