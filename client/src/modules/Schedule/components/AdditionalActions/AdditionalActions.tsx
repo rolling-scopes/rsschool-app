@@ -2,9 +2,9 @@ import { Button, Dropdown, Menu, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import { DownOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import React, { useMemo } from 'react';
+import { buildExportLink, buildICalendarLink, buildMenuItem } from './helpers';
 
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
-type MenuItemType = Required<MenuProps>['items'][number];
 
 export interface AdditionalActionsProps {
   isCourseManager: boolean;
@@ -19,19 +19,6 @@ export enum AdditionalItems {
   Calendar = 'iCal Link',
   Export = 'Export',
   Copy = 'Copy from',
-}
-
-const buildMenuItem = (title: string, icon: React.ReactNode, isVisible: boolean): MenuItemType | null =>
-  isVisible
-    ? {
-        key: title,
-        label: title,
-        icon: icon,
-      }
-    : null;
-
-function buildICalendarLink(courseId: number, token: string, timezone: string) {
-  return `/api/v2/courses/${courseId}/icalendar/${token}?timezone=${encodeURIComponent(timezone || '')}`;
 }
 
 const AdditionalActions = ({
@@ -53,7 +40,7 @@ const AdditionalActions = ({
   );
 
   const onExport = () => {
-    window.location.href = `/api/course/${courseId}/schedule/csv/${timezone.replace('/', '_')}`;
+    window.location.href = buildExportLink(courseId, timezone);
   };
 
   const onCalendarDownload = () => {
@@ -88,7 +75,7 @@ const AdditionalActions = ({
 
   const dropdownMenu = <Menu items={menuItems} onClick={handleMenuItemClick} />;
 
-  return (
+  return menuItems?.length !== 0 ? (
     <Dropdown overlay={dropdownMenu} trigger={['click']}>
       <Button>
         <Space>
@@ -97,7 +84,7 @@ const AdditionalActions = ({
         </Space>
       </Button>
     </Dropdown>
-  );
+  ) : null;
 };
 
 export default AdditionalActions;
