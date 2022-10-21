@@ -76,7 +76,7 @@ const AdditionalActions = ({
   const dropdownMenu = <Menu items={menuItems} onClick={handleMenuItemClick} />;
 
   return menuItems?.length !== 0 ? (
-    <Dropdown overlay={dropdownMenu} trigger={['click']}>
+    <Dropdown overlay={dropdownMenu} trigger={['click']} placement="bottomRight">
       <Button>
         <Space>
           More
