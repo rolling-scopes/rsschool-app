@@ -41,7 +41,7 @@ export function SettingsPanel({
 
   return (
     <>
-      <Row justify="end" gutter={[16, 16]}>
+      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
