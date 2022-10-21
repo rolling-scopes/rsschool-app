@@ -1,13 +1,14 @@
 import { Button, Col, Row } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { AdditionalActions } from '../AdditionalActions';
+import { buildMenuItem } from './helpers';
 
-interface SettingsPanelProps {
+export interface SettingsPanelProps {
   isCourseManager: boolean;
   courseId: number;
   courseAlias: string;
@@ -17,6 +18,15 @@ interface SettingsPanelProps {
   refreshData: () => void;
   onCreateCourseTask: () => void;
   onCopyFromCourse: () => void;
+}
+
+export enum SettingsButtons {
+  Event = 'Event',
+  Task = 'Task',
+  Calendar = 'iCal Link',
+  Export = 'Export',
+  Copy = 'Copy from',
+  More = 'More',
 }
 
 export function SettingsPanel({
@@ -39,34 +49,48 @@ export function SettingsPanel({
     setIsManageEventModalOpen(false);
   };
 
+  const additionalMenuItems = useMemo(
+    () =>
+      [
+        buildMenuItem(SettingsButtons.Calendar, <CalendarOutlined />, !!calendarToken),
+        buildMenuItem(SettingsButtons.Export, <FileExcelOutlined />, isCourseManager),
+        buildMenuItem(SettingsButtons.Copy, <CopyOutlined />, isCourseManager),
+      ].filter(Boolean),
+    [calendarToken, isCourseManager],
+  );
+
   return (
     <>
       <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
-              Event
+              {SettingsButtons.Event}
             </Button>
           </Col>
         ) : null}
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
-              Task
+              {SettingsButtons.Task}
             </Button>
           </Col>
         ) : null}
         <Col>
           <SettingsDrawer tags={tags} settings={settings} />
         </Col>
-        <AdditionalActions
-          isCourseManager={isCourseManager}
-          courseId={courseId}
-          timezone={settings.timezone}
-          calendarToken={calendarToken}
-          courseAlias={courseAlias}
-          onCopyFromCourse={onCopyFromCourse}
-        />
+        {additionalMenuItems?.length !== 0 && (
+          <Col>
+            <AdditionalActions
+              menuItems={additionalMenuItems}
+              courseId={courseId}
+              timezone={settings.timezone}
+              calendarToken={calendarToken}
+              courseAlias={courseAlias}
+              onCopyFromCourse={onCopyFromCourse}
+            />
+          </Col>
+        )}
       </Row>
       {isManageEventModalOpen && (
         <ManageEventModalForm

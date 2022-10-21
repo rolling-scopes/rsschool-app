@@ -1,13 +1,15 @@
-import { Button, Col, Dropdown, Menu, Space } from 'antd';
+import { Button, Dropdown, Menu, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { DownOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
-import React, { useMemo } from 'react';
-import { buildExportLink, buildICalendarLink, buildMenuItem } from './helpers';
+import React from 'react';
+import { buildExportLink, buildICalendarLink } from './helpers';
+import { SettingsButtons } from '../SettingsPanel';
 
+export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
 
 export interface AdditionalActionsProps {
-  isCourseManager: boolean;
+  menuItems: MenuItemType[];
   courseId: number;
   timezone: string;
   calendarToken: string;
@@ -15,30 +17,14 @@ export interface AdditionalActionsProps {
   onCopyFromCourse: () => void;
 }
 
-export enum AdditionalItems {
-  Calendar = 'iCal Link',
-  Export = 'Export',
-  Copy = 'Copy from',
-}
-
 const AdditionalActions = ({
-  isCourseManager,
+  menuItems,
   courseId,
   timezone,
   calendarToken,
   courseAlias,
   onCopyFromCourse,
 }: AdditionalActionsProps) => {
-  const menuItems = useMemo(
-    () =>
-      [
-        buildMenuItem(AdditionalItems.Calendar, <CalendarOutlined />, !!calendarToken),
-        buildMenuItem(AdditionalItems.Export, <FileExcelOutlined />, isCourseManager),
-        buildMenuItem(AdditionalItems.Copy, <CopyOutlined />, isCourseManager),
-      ].filter(Boolean),
-    [calendarToken, isCourseManager],
-  );
-
   const onExport = () => {
     window.location.href = buildExportLink(courseId, timezone);
   };
@@ -59,13 +45,13 @@ const AdditionalActions = ({
 
   const handleMenuItemClick: MenuItemClickHandler = item => {
     switch (item.key) {
-      case AdditionalItems.Calendar:
+      case SettingsButtons.Calendar:
         onCalendarDownload();
         break;
-      case AdditionalItems.Export:
+      case SettingsButtons.Export:
         onExport();
         break;
-      case AdditionalItems.Copy:
+      case SettingsButtons.Copy:
         onCopyFromCourse();
         break;
       default:
@@ -73,20 +59,20 @@ const AdditionalActions = ({
     }
   };
 
-  const dropdownMenu = <Menu items={menuItems} onClick={handleMenuItemClick} />;
-
-  return menuItems?.length !== 0 ? (
-    <Col>
-      <Dropdown overlay={dropdownMenu} trigger={['click']} placement="bottomRight">
-        <Button>
-          <Space>
-            More
-            <DownOutlined />
-          </Space>
-        </Button>
-      </Dropdown>
-    </Col>
-  ) : null;
+  return (
+    <Dropdown
+      overlay={<Menu items={menuItems} onClick={handleMenuItemClick} />}
+      trigger={['click']}
+      placement="bottomRight"
+    >
+      <Button>
+        <Space>
+          {SettingsButtons.More}
+          <DownOutlined />
+        </Space>
+      </Button>
+    </Dropdown>
+  );
 };
 
 export default AdditionalActions;
