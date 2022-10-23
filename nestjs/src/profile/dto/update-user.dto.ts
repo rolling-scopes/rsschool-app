@@ -55,6 +55,11 @@ export class UpdateUserDto {
   @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
+  contactsWhatsApp?: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsString()
   contactsTelegram?: string;
 
   @ApiProperty({ required: false, nullable: true })

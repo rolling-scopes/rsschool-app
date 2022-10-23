@@ -5489,6 +5489,12 @@ export interface UpdateUserDto {
      * @type {string}
      * @memberof UpdateUserDto
      */
+    'contactsWhatsApp'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
     'contactsTelegram'?: string | null;
     /**
      * 

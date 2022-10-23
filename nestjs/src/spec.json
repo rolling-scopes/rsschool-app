@@ -3070,6 +3070,7 @@
           "contactsEmail": { "type": "string", "nullable": true },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "contactsSkype": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true },
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },

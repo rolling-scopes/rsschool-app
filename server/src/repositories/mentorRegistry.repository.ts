@@ -42,7 +42,7 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     const mentorData: Partial<MentorRegistry> = {
       maxStudentsLimit,
       preferedStudentsLocation,
-      englishMentoring: Boolean(languagesMentoring?.find(language => language === 'english')),
+      englishMentoring: languagesMentoring.some(language => language.toLowerCase() === 'english'),
       languagesMentoring,
       preferedCourses,
       technicalMentoring,
