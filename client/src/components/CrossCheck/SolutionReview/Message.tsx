@@ -23,47 +23,51 @@ export function Message(props: Props) {
   const { areStudentContactsVisible } = settings;
 
   return (
-    <Col>
-      <Comment
-        avatar={
-          <CommentAvatar
-            author={author && { ...author, discord: null }}
-            role={role}
-            areStudentContactsVisible={areStudentContactsVisible}
-            size={24}
-          />
-        }
-        content={
-          <>
+    <Comment
+      avatar={
+        <CommentAvatar
+          author={author && { ...author, discord: null }}
+          role={role}
+          areStudentContactsVisible={areStudentContactsVisible}
+          size={24}
+        />
+      }
+      content={
+        <>
+          <Row>
+            <Col>
+              <CommentUsername
+                reviewNumber={reviewNumber}
+                author={author && { ...author, discord: null }}
+                role={role}
+                areStudentContactsVisible={settings.areStudentContactsVisible}
+              />
+            </Col>
+          </Row>
+
+          {role !== TaskSolutionResultRole.Student && (
             <Row>
               <Col>
-                <CommentUsername
-                  reviewNumber={reviewNumber}
-                  author={author && { ...author, discord: null }}
-                  role={role}
-                  areStudentContactsVisible={settings.areStudentContactsVisible}
-                />
+                <Tag color={ROLE_TAG_COLOR[role]}>{role}</Tag>
               </Col>
             </Row>
+          )}
 
-            {role !== TaskSolutionResultRole.Student && (
-              <Row>
-                <Col>{<Tag color={ROLE_TAG_COLOR[role]}>{role}</Tag>}</Col>
-              </Row>
-            )}
-
-            <Row>
+          <Row>
+            <Col>
               <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
                 {formatDateTime(timestamp)}
               </Typography.Text>
-            </Row>
+            </Col>
+          </Row>
 
-            <Row>
+          <Row>
+            <Col>
               <PreparedComment text={content} />
-            </Row>
-          </>
-        }
-      />
-    </Col>
+            </Col>
+          </Row>
+        </>
+      }
+    />
   );
 }

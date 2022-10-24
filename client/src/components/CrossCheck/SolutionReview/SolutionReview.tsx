@@ -62,7 +62,7 @@ export function SolutionReview(props: Props) {
   };
 
   return (
-    <Col>
+    <>
       <Row>
         <Col span={24}>
           <Divider style={{ margin: '8px 0' }} />
@@ -115,7 +115,9 @@ export function SolutionReview(props: Props) {
                 </Row>
 
                 <Row>
-                  <PreparedComment text={comment} />
+                  <Col>
+                    <PreparedComment text={comment} />
+                  </Col>
                 </Row>
 
                 <Row>
@@ -128,44 +130,50 @@ export function SolutionReview(props: Props) {
 
             {review.messages.map((message, index) => (
               <Row key={index}>
-                <Message reviewNumber={reviewNumber} message={message} settings={settings} />
+                <Col>
+                  <Message reviewNumber={reviewNumber} message={message} settings={settings} />
+                </Col>
               </Row>
             ))}
 
             {areMessagesVisible && (
-              <Comment
-                avatar={
-                  <CommentAvatar
-                    author={
-                      role === TaskSolutionResultRole.Checker
-                        ? author && { githubId: sessionGithubId, discord: null }
-                        : { githubId: sessionGithubId, discord: null }
+              <Row>
+                <Col span={24}>
+                  <Comment
+                    avatar={
+                      <CommentAvatar
+                        author={
+                          role === TaskSolutionResultRole.Checker
+                            ? author && { githubId: sessionGithubId, discord: null }
+                            : { githubId: sessionGithubId, discord: null }
+                        }
+                        role={role}
+                        areStudentContactsVisible={settings.areStudentContactsVisible}
+                        size={24}
+                      />
                     }
-                    role={role}
-                    areStudentContactsVisible={settings.areStudentContactsVisible}
-                    size={24}
-                  />
-                }
-                content={
-                  <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
-                    <Row>
-                      <Col span={24}>
-                        <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
-                          <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 768 }} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                    content={
+                      <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
+                        <Row>
+                          <Col span={24}>
+                            <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
+                              <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 768 }} />
+                            </Form.Item>
+                          </Col>
+                        </Row>
 
-                    <Row>
-                      <Col>
-                        <Button htmlType="submit" icon={<MessageFilled />} type="primary">
-                          Send message
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
-                }
-              />
+                        <Row>
+                          <Col>
+                            <Button htmlType="submit" icon={<MessageFilled />} type="primary">
+                              Send message
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+                    }
+                  />
+                </Col>
+              </Row>
             )}
           </Comment>
         </Col>
@@ -183,6 +191,6 @@ export function SolutionReview(props: Props) {
           height: 100%;
         }
       `}</style>
-    </Col>
+    </>
   );
 }

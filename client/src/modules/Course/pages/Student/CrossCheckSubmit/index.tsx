@@ -266,17 +266,19 @@ export function CrossCheckSubmit(props: CoursePageProps) {
       {feedback?.reviews &&
         feedback.reviews.map((review, index) => (
           <Row key={index}>
-            <SolutionReview
-              sessionGithubId={props.session.githubId}
-              courseId={props.course.id}
-              reviewNumber={index}
-              settings={solutionReviewSettings}
-              courseTaskId={courseTaskId}
-              review={review}
-              isActiveReview={true}
-              role={TaskSolutionResultRole.Student}
-              maxScore={maxScore}
-            />
+            <Col>
+              <SolutionReview
+                sessionGithubId={props.session.githubId}
+                courseId={props.course.id}
+                reviewNumber={index}
+                settings={solutionReviewSettings}
+                courseTaskId={courseTaskId}
+                review={review}
+                isActiveReview={true}
+                role={TaskSolutionResultRole.Student}
+                maxScore={maxScore}
+              />
+            </Col>
           </Row>
         ))}
     </PageLayout>

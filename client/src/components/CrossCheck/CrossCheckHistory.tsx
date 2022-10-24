@@ -102,32 +102,34 @@ export function CrossCheckHistory(props: Props) {
               </Row>
 
               <Row>
-                <SolutionReview
-                  sessionGithubId={props.sessionGithubId}
-                  courseId={props.courseId}
-                  reviewNumber={0}
-                  settings={solutionReviewSettings}
-                  courseTaskId={courseTaskId}
-                  review={review}
-                  isActiveReview={isActiveReview}
-                  areMessagesVisible={isActiveReview}
-                  role={TaskSolutionResultRole.Checker}
-                  maxScore={props.maxScore}
-                >
-                  <Row>
-                    <Col>
-                      <Button
-                        size="middle"
-                        type={isActiveReview ? 'primary' : 'default'}
-                        htmlType="button"
-                        icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
-                        onClick={() => handleClickAmendButton(review.comment)}
-                      >
-                        Amend review
-                      </Button>
-                    </Col>
-                  </Row>
-                </SolutionReview>
+                <Col>
+                  <SolutionReview
+                    sessionGithubId={props.sessionGithubId}
+                    courseId={props.courseId}
+                    reviewNumber={0}
+                    settings={solutionReviewSettings}
+                    courseTaskId={courseTaskId}
+                    review={review}
+                    isActiveReview={isActiveReview}
+                    areMessagesVisible={isActiveReview}
+                    role={TaskSolutionResultRole.Checker}
+                    maxScore={props.maxScore}
+                  >
+                    <Row>
+                      <Col>
+                        <Button
+                          size="middle"
+                          type={isActiveReview ? 'primary' : 'default'}
+                          htmlType="button"
+                          icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
+                          onClick={() => handleClickAmendButton(review.comment)}
+                        >
+                          Amend review
+                        </Button>
+                      </Col>
+                    </Row>
+                  </SolutionReview>
+                </Col>
               </Row>
             </Timeline.Item>
           );
