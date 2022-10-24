@@ -1,8 +1,9 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-import { TaskSolution, CourseTask, TaskSolutionResult } from '../models';
+import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
+import { TaskSolutionResultMessage, TaskSolutionResultRole } from '../models/taskSolutionResult';
 import { Discord } from '../../../common/models';
-import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
+import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
 import { createName, getUserByGithubId } from './user.service';
@@ -148,13 +149,14 @@ export class CrossCheckService {
     checkerGithubId: string,
   ): Promise<
     | (CrossCheckReviewResult & {
-        checker: {
+        author: {
           name: string;
           discord: Discord | null;
           githubId: string;
         };
         comments?: TaskSolutionComment[];
         historicalScores: TaskSolutionResult['historicalScores'];
+        messages: TaskSolutionResultMessage[];
       })
     | null
   > {
@@ -198,7 +200,7 @@ export class CrossCheckService {
       review: reviewResult.review,
       checkerId,
       studentId,
-      checker: {
+      author: {
         name: createName({
           firstName: checkerData?.firstName ?? '',
           lastName: checkerData?.lastName ?? '',
@@ -208,6 +210,36 @@ export class CrossCheckService {
       },
       comments,
       historicalScores: reviewResult.historicalScores ?? [],
+      messages: reviewResult.messages,
     };
+  }
+
+  public async saveMessage(
+    taskSolutionResultId: number,
+    data: { content: string; role: TaskSolutionResultRole },
+    params: { user: IUserSession },
+  ) {
+    const { user } = params;
+
+    const message: TaskSolutionResultMessage = {
+      ...data,
+      timestamp: new Date().toISOString(),
+      author: {
+        id: user.id,
+        githubId: user.githubId,
+      },
+      isCheckerRead: data.role === TaskSolutionResultRole.Checker,
+      isStudentRead: data.role === TaskSolutionResultRole.Student,
+    };
+
+    const repository = getRepository(TaskSolutionResult);
+    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      messages.push(message);
+      await repository.update(taskSolutionResultById.id, { messages });
+    }
   }
 }

@@ -279,6 +279,11 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, crossCheck.getFeedback(logger));
   router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, crossCheck.getAssignments(logger));
+  router.post(
+    `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,
+    courseGuard,
+    crossCheck.createMessage(logger),
+  );
 }
 
 function addScheduleApi(router: Router<any, any>, logger: ILogger) {

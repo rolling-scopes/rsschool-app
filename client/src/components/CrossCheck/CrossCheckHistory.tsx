@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
-import { CourseService, SolutionReviewType } from 'services/course';
+import { CourseService, SolutionReviewType, TaskSolutionResultRole } from 'services/course';
+import { useSolutionReviewSettings } from './hooks/useSolutionReviewSettings';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from './SolutionReview';
+import { SolutionReviewSettingsPanel } from './SolutionReviewSettingsPanel';
 
 type Props = {
   sessionGithubId: string;
@@ -20,6 +22,7 @@ export function CrossCheckHistory(props: Props) {
   }
   const githubId = props.githubId;
   const courseTaskId = props.courseTaskId;
+  const solutionReviewSettings = useSolutionReviewSettings();
 
   const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
 
@@ -27,13 +30,27 @@ export function CrossCheckHistory(props: Props) {
     const courseService = new CourseService(props.courseId);
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId);
-    const sortedData = result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [];
 
-    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous }) => ({
-      checkDate: new Date(dateTime).toISOString(),
+    if (!result) {
+      return setState({ loading: false, data: [] });
+    }
+
+    const sortedData = result.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+
+    const messages = result.anonymous
+      ? result.messages.map(message => ({
+          ...message,
+          author: message.role === TaskSolutionResultRole.Checker ? null : message.author,
+        }))
+      : result.messages;
+
+    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous }, index) => ({
+      dateTime,
       comment,
-      checker: !anonymous ? result?.checker ?? null : null,
       score,
+      id: result.id,
+      author: !anonymous ? result.author : null,
+      messages: index === 0 ? messages : [],
     }));
 
     setState({ loading: false, data: solutionReviews });
@@ -55,35 +72,55 @@ export function CrossCheckHistory(props: Props) {
       <Typography.Title style={{ marginTop: 24 }} level={4}>
         History
       </Typography.Title>
+
+      {state.data.length > 0 && (
+        <Row style={{ marginBottom: '16px' }}>
+          <Col>
+            <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
+          </Col>
+        </Row>
+      )}
+
       <Timeline>
         {state.data.map((review, index) => {
-          const isCurrentReview = index === 0;
+          const isActiveReview = index === 0;
 
           return (
             <Timeline.Item
               key={index}
-              color={isCurrentReview ? 'green' : 'gray'}
+              color={isActiveReview ? 'green' : 'gray'}
               dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
             >
               <Row>
-                <Col>{isCurrentReview ? <Tag color="success">Current review</Tag> : <Tag>Outdated review</Tag>}</Col>
+                <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>Outdated review</Tag>}</Col>
+
+                {review.author && (
+                  <Col>
+                    <Tag color={isActiveReview ? 'warning' : ''}>your name is visible</Tag>
+                  </Col>
+                )}
               </Row>
 
               <Row>
                 <SolutionReview
                   sessionGithubId={props.sessionGithubId}
-                  index={index}
+                  courseId={props.courseId}
+                  reviewNumber={0}
+                  settings={solutionReviewSettings}
+                  courseTaskId={courseTaskId}
                   review={review}
+                  isActiveReview={isActiveReview}
+                  areMessagesVisible={isActiveReview}
+                  role={TaskSolutionResultRole.Checker}
                   maxScore={props.maxScore}
-                  areMessagesVisible={isCurrentReview}
                 >
                   <Row>
                     <Col>
                       <Button
                         size="middle"
-                        type={isCurrentReview ? 'primary' : 'default'}
+                        type={isActiveReview ? 'primary' : 'default'}
                         htmlType="button"
-                        icon={isCurrentReview ? <EditFilled /> : <EditOutlined />}
+                        icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
                         onClick={() => handleClickAmendButton(review.comment)}
                       >
                         Amend review

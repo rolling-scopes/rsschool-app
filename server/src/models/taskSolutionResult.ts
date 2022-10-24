@@ -19,6 +19,23 @@ type ScoreRecord = {
   authorId: number;
 };
 
+export enum TaskSolutionResultRole {
+  Student = 'student',
+  Checker = 'checker',
+}
+
+export type TaskSolutionResultMessage = {
+  timestamp: string;
+  content: string;
+  author: {
+    id: number;
+    githubId: string;
+  } | null;
+  role: TaskSolutionResultRole;
+  isCheckerRead: boolean;
+  isStudentRead: boolean;
+};
+
 @Entity()
 @Unique(['courseTaskId', 'studentId', 'checkerId'])
 export class TaskSolutionResult {
@@ -65,4 +82,7 @@ export class TaskSolutionResult {
 
   @Column({ type: 'json', default: [] })
   review: TaskSolutionReview[];
+
+  @Column({ type: 'json', default: [] })
+  messages: TaskSolutionResultMessage[];
 }

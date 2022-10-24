@@ -1,64 +1,65 @@
-import { CDN_AVATARS_URL } from 'configs/cdn';
-import { Avatar, Col, Comment, Row, Typography } from 'antd';
-import { Discord } from 'api';
-import { useLocalStorage } from 'react-use';
+import { Col, Comment, Row, Tag, Typography } from 'antd';
 import { formatDateTime } from 'services/formatter';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
+import { SolutionReviewSettings } from '../hooks/useSolutionReviewSettings';
 import PreparedComment from 'components/Forms/PreparedComment';
+import { CommentAvatar } from './CommentAvatar';
+import { CommentUsername } from './CommentUsername';
 
-enum LocalStorage {
-  AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
-}
-
-type Props = {
-  comment: string;
-  author: {
-    name: string;
-    githubId: string;
-    discord: Discord | null;
-  } | null;
-  updatedDate: string;
+const ROLE_TAG_COLOR = {
+  [TaskSolutionResultRole.Checker]: 'processing',
+  [TaskSolutionResultRole.Student]: '',
 };
 
-export function Message({ comment, author, updatedDate }: Props) {
-  const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
-    LocalStorage.AreStudentContactsVisible,
-  );
+type Props = {
+  reviewNumber: number;
+  message: TaskSolutionResultMessage;
+  settings: SolutionReviewSettings;
+};
+
+export function Message(props: Props) {
+  const { reviewNumber, message, settings } = props;
+  const { timestamp, content, author, role } = message;
+  const { areStudentContactsVisible } = settings;
 
   return (
     <Col>
       <Comment
         avatar={
-          <Avatar
+          <CommentAvatar
+            author={author && { ...author, discord: null }}
+            role={role}
+            areStudentContactsVisible={areStudentContactsVisible}
             size={24}
-            src={
-              areStudentContactsVisible && author
-                ? `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`
-                : '/static/svg/badges/ThankYou.svg'
-            }
           />
         }
         content={
           <>
             <Row>
-              {areStudentContactsVisible && author ? (
-                <GithubUserLink value={author.githubId} isUserIconHidden={true} />
-              ) : (
-                <Typography.Text>
-                  {'Student'} {/* i */ +1}
-                  {!areStudentContactsVisible && author && ' (hidden)'}
-                </Typography.Text>
-              )}
+              <Col>
+                <CommentUsername
+                  reviewNumber={reviewNumber}
+                  author={author && { ...author, discord: null }}
+                  role={role}
+                  areStudentContactsVisible={settings.areStudentContactsVisible}
+                />
+              </Col>
             </Row>
+
+            {role !== TaskSolutionResultRole.Student && (
+              <Row>
+                <Col>{<Tag color={ROLE_TAG_COLOR[role]}>{role}</Tag>}</Col>
+              </Row>
+            )}
 
             <Row>
               <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
-                {formatDateTime(updatedDate)}
+                {formatDateTime(timestamp)}
               </Typography.Text>
             </Row>
 
             <Row>
-              <PreparedComment text={comment} />
+              <PreparedComment text={content} />
             </Row>
           </>
         }

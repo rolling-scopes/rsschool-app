@@ -4,6 +4,8 @@ import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 import { SolutionReview } from 'components/CrossCheck/SolutionReview';
+import { useSolutionReviewSettings } from 'components/CrossCheck/hooks/useSolutionReviewSettings';
+import { SolutionReviewSettingsPanel } from 'components/CrossCheck/SolutionReviewSettingsPanel';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
@@ -17,6 +19,7 @@ import {
   CrossCheckReview,
   Feedback,
   TaskSolution,
+  TaskSolutionResultRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
@@ -43,6 +46,7 @@ const createUrlRule = (): Rule => {
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const solutionReviewSettings = useSolutionReviewSettings();
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const router = useRouter();
@@ -251,13 +255,26 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         </Col>
       </Row>
 
+      {(feedback?.reviews?.length || 0) > 0 && (
+        <Row style={{ margin: '8px 0' }}>
+          <Col>
+            <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
+          </Col>
+        </Row>
+      )}
+
       {feedback?.reviews &&
         feedback.reviews.map((review, index) => (
           <Row key={index}>
             <SolutionReview
               sessionGithubId={props.session.githubId}
-              index={index}
+              courseId={props.course.id}
+              reviewNumber={index}
+              settings={solutionReviewSettings}
+              courseTaskId={courseTaskId}
               review={review}
+              isActiveReview={true}
+              role={TaskSolutionResultRole.Student}
               maxScore={maxScore}
             />
           </Row>

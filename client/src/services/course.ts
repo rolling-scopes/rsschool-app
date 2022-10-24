@@ -23,15 +23,34 @@ export enum CrossCheckStatus {
   Completed = 'completed',
 }
 
+export enum TaskSolutionResultRole {
+  Student = 'student',
+  Checker = 'checker',
+}
+
+export type TaskSolutionResultMessage = {
+  timestamp: string;
+  content: string;
+  author: {
+    id: number;
+    githubId: string;
+  } | null;
+  role: TaskSolutionResultRole;
+  isCheckerRead: boolean;
+  isStudentRead: boolean;
+};
+
 export type SolutionReviewType = {
-  checkDate: string;
+  id: number;
+  dateTime: number;
   comment: string;
-  checker: {
+  author: {
     name: string;
     githubId: string;
     discord: Discord | null;
   } | null;
   score: number;
+  messages: TaskSolutionResultMessage[];
 };
 
 export type Feedback = {
@@ -357,17 +376,34 @@ export class CourseService {
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
     const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/result`);
     return result.data.data as {
+      id: number;
       comments: CrossCheckComment[];
       review: CrossCheckReview[];
+      anonymous: boolean;
       studentId: number;
       checkerId: number;
-      checker: {
+      author: {
         name: string;
         discord: Discord | null;
         githubId: string;
       };
       historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
+      messages: TaskSolutionResultMessage[];
     } | null;
+  }
+
+  async postTaskSolutionResultMessage(
+    taskSolutionResultId: number,
+    courseTaskId: number,
+    data: {
+      content: string;
+      role: string;
+    },
+  ) {
+    await this.axios.post(
+      `/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`,
+      data,
+    );
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {

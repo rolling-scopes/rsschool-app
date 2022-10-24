@@ -11,6 +11,7 @@ import {
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
 import { createName } from './user.service';
+import { TaskSolutionResultRole } from '../models/taskSolutionResult';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -63,6 +64,13 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
     .where('"taskSolutionResult"."studentId" = :studentId', { studentId })
     .andWhere('"taskSolutionResult"."checkerId" = :checkerId', { checkerId })
     .andWhere('"taskSolutionResult"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+}
+
+export async function getTaskSolutionResultById(id: number) {
+  return getRepository(TaskSolutionResult)
+    .createQueryBuilder('taskSolutionResult')
+    .where('"taskSolutionResult"."id" = :id', { id })
     .getOne();
 }
 
@@ -183,7 +191,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   const comments = (
     await getRepository(TaskSolutionResult)
       .createQueryBuilder('tsr')
-      .select(['tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score'])
+      .select(['tsr.id', 'tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages'])
       .innerJoin('tsr.checker', 'checker')
       .innerJoin('checker.user', 'user')
       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
@@ -191,16 +199,24 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
       .getMany()
   ).map(c => {
-    const checker = !c.anonymous
+    const author = !c.anonymous
       ? {
           name: createName(c.checker.user),
           githubId: c.checker.user.githubId,
           discord: c.checker.user.discord,
         }
       : null;
+    const messages = !c.anonymous
+      ? c.messages
+      : c.messages.map(message => ({
+          ...message,
+          author: message.role === TaskSolutionResultRole.Checker ? null : message.author,
+        }));
     return {
-      checker,
-      updatedDate: c.updatedDate,
+      author,
+      messages,
+      id: c.id,
+      dateTime: new Date(c.updatedDate).getTime(),
       comment: c.comment,
       score: c.score,
     };

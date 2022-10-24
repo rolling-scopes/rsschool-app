@@ -1,54 +1,68 @@
-import { CDN_AVATARS_URL } from 'configs/cdn';
+import { useMemo } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Avatar, Button, Col, Comment, Divider, Input, Row, Switch, Typography } from 'antd';
-import { useLocalStorage } from 'react-use';
-import { SolutionReviewType } from 'services/course';
+import { Button, Col, Comment, Divider, Form, Input, message, Row, Typography } from 'antd';
+import { MessageFilled } from '@ant-design/icons';
+import { CourseService, SolutionReviewType, TaskSolutionResultRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { GithubUserLink } from 'components/GithubUserLink';
-import PreparedComment from 'components/Forms/PreparedComment';
+import { SolutionReviewSettings } from '../hooks/useSolutionReviewSettings';
+import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { StudentContacts } from '../StudentContacts';
 import { Message } from './Message';
-
-enum LocalStorage {
-  AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
-}
+import { CommentAvatar } from './CommentAvatar';
+import { CommentUsername } from './CommentUsername';
 
 type Props = {
   children?: JSX.Element;
   sessionGithubId: string;
-  index: number;
+  courseId: number;
+  reviewNumber: number;
+  settings: SolutionReviewSettings;
+  courseTaskId: number | null;
   review: SolutionReviewType;
-  maxScore?: number;
+  isActiveReview: boolean;
   areMessagesVisible?: boolean;
+  role: TaskSolutionResultRole;
+  maxScore?: number;
 };
 
 export function SolutionReview(props: Props) {
-  const { children, sessionGithubId, index, review, maxScore, areMessagesVisible = true } = props;
-  const { checker, comment, score, checkDate } = review;
+  const {
+    children,
+    sessionGithubId,
+    courseId,
+    reviewNumber,
+    settings,
+    courseTaskId,
+    review,
+    isActiveReview,
+    areMessagesVisible = true,
+    role,
+    maxScore,
+  } = props;
+  const { id, author, comment, score, dateTime } = review;
+  const [form] = Form.useForm();
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
-    LocalStorage.AreStudentContactsVisible,
-  );
+  const handleSubmit = async (values: { content: string }) => {
+    const { content } = values;
 
-  const handleStudentContactsVisibilityChange = () => {
-    setAreStudentContactsHidden(!areStudentContactsVisible);
+    if (courseTaskId) {
+      try {
+        await courseService.postTaskSolutionResultMessage(id, courseTaskId, {
+          content: `${markdownLabel}${content}`,
+          role: role,
+        });
+
+        message.success('The message has been sent.');
+        form.resetFields(['content']);
+      } catch (error) {
+        message.error('An error occurred. Please try later.');
+      }
+    }
   };
 
   return (
     <Col>
-      {/* <Row gutter={8} style={{ margin: '8px 0' }}>
-        <Col>
-          <Typography.Text>Student Contacts</Typography.Text>
-        </Col>
-        <Col>
-          <Switch
-            size={'small'}
-            defaultChecked={areStudentContactsVisible}
-            onChange={handleStudentContactsVisibilityChange}
-          />
-        </Col>
-      </Row> */}
-
       <Row>
         <Col span={24}>
           <Divider style={{ margin: '8px 0' }} />
@@ -59,37 +73,35 @@ export function SolutionReview(props: Props) {
         <Col>
           <Comment
             avatar={
-              <Avatar
+              <CommentAvatar
+                author={author}
+                role={TaskSolutionResultRole.Checker}
+                areStudentContactsVisible={settings.areStudentContactsVisible}
                 size={32}
-                src={
-                  areStudentContactsVisible && checker
-                    ? `${CDN_AVATARS_URL}/${checker.githubId}.png?size=48`
-                    : '/static/svg/badges/ThankYou.svg'
-                }
               />
             }
             content={
               <>
                 <Row>
-                  {areStudentContactsVisible && checker ? (
-                    <GithubUserLink value={checker.githubId} isUserIconHidden={true} />
-                  ) : (
-                    <Typography.Text>
-                      {'Student'} {index + 1}
-                      {!areStudentContactsVisible && checker && ' (hidden)'}
-                    </Typography.Text>
-                  )}
+                  <Col>
+                    <CommentUsername
+                      reviewNumber={reviewNumber}
+                      author={author}
+                      role={TaskSolutionResultRole.Checker}
+                      areStudentContactsVisible={settings.areStudentContactsVisible}
+                    />
+                  </Col>
                 </Row>
 
                 <Row>
                   <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
-                    {formatDateTime(checkDate)}
+                    {formatDateTime(dateTime)}
                   </Typography.Text>
                 </Row>
 
                 <Row gutter={4} align="middle">
                   <Col>
-                    <ScoreIcon maxScore={maxScore} score={score} />
+                    <ScoreIcon maxScore={maxScore} score={score} isOutdatedScore={!isActiveReview} />
                   </Col>
                   <Col>
                     <Typography.Text>{score}</Typography.Text>
@@ -106,40 +118,52 @@ export function SolutionReview(props: Props) {
                   <PreparedComment text={comment} />
                 </Row>
 
-                <Row>{areStudentContactsVisible && checker && <StudentContacts discord={checker.discord} />}</Row>
+                <Row>
+                  {settings.areStudentContactsVisible && author && <StudentContacts discord={author.discord} />}
+                </Row>
               </>
             }
           >
             {children}
 
-            {/* {comments.map(({ comment, updatedDate, author, score }) => (
-          <Message comment={comment} updatedDate={updatedDate} author={author} />
-        ))} */}
+            {review.messages.map((message, index) => (
+              <Row key={index}>
+                <Message reviewNumber={reviewNumber} message={message} settings={settings} />
+              </Row>
+            ))}
 
             {areMessagesVisible && (
               <Comment
                 avatar={
-                  <Avatar
-                    size={24}
-                    src={
-                      /* checker ? `${CDN_AVATARS_URL}/${sessionGithubId}.png?size=48` : '/static/svg/badges/ThankYou.svg' */
-                      /* TODO если я аноним то не показывать мою аватарку */
-                      `${CDN_AVATARS_URL}/${sessionGithubId}.png?size=48`
+                  <CommentAvatar
+                    author={
+                      role === TaskSolutionResultRole.Checker
+                        ? author && { githubId: sessionGithubId, discord: null }
+                        : { githubId: sessionGithubId, discord: null }
                     }
+                    role={role}
+                    areStudentContactsVisible={settings.areStudentContactsVisible}
+                    size={24}
                   />
                 }
                 content={
-                  <>
+                  <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
                     <Row>
                       <Col span={24}>
-                        <Input.TextArea rows={3} showCount maxLength={512} />
+                        <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
+                          <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 768 }} />
+                        </Form.Item>
                       </Col>
                     </Row>
 
                     <Row>
-                      <Button type="primary">Send Message</Button>
+                      <Col>
+                        <Button htmlType="submit" icon={<MessageFilled />} type="primary">
+                          Send message
+                        </Button>
+                      </Col>
                     </Row>
-                  </>
+                  </Form>
                 }
               />
             )}
