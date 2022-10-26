@@ -9,6 +9,7 @@ import {
   FireTwoTone,
   PlayCircleTwoTone,
   StopTwoTone,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
@@ -51,6 +52,13 @@ const links: LinkData[] = [
     getUrl: (course: Course) => `/course/student/dashboard?course=${course.alias}`,
     access: every(isStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
+  },
+  {
+    name: 'Dashboard',
+    icon: <AppstoreOutlined />,
+    getUrl: (course: Course) => `/course/mentor/dashboard?course=${course.alias}`,
+    // NOTE: WiP, so access should be false for now
+    access: () => true, // every(isMentor),
   },
   {
     name: 'Score',
