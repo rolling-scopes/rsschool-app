@@ -17,7 +17,7 @@ import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
 import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
-import { FilterValue, GetRowKey } from 'antd/lib/table/interface';
+import { FilterValue } from 'antd/lib/table/interface';
 
 const getColumns = ({
   timezone,
