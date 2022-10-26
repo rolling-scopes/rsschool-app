@@ -28,6 +28,7 @@ import { StatusDto } from './dto/status.dto';
 import { VisibilityDto } from './dto/visibility.dto';
 import { OpportunitiesService } from './opportunities.service';
 import { Resume } from '@entities/resume';
+import { FormDataDto } from './dto/form-data.dto';
 
 @Controller('opportunities')
 @ApiTags('opportunities')
@@ -62,7 +63,7 @@ export class OpportunitiesController {
   @ApiOkResponse({ type: Resume })
   @UseGuards(DefaultGuard)
   // TODO: deal with 500 status code validation issue on assigning dto FormDataDto type + @Body() decorator
-  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: any) {
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: FormDataDto) {
     if (githubId !== req.user.githubId) {
       throw new ForbiddenException('No access to resume');
     }
