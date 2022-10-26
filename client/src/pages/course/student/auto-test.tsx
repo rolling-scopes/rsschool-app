@@ -186,8 +186,14 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
-      <Row gutter={24}>
+    <PageLayout
+      loading={loading}
+      title="Auto-Test"
+      background="#F0F2F5"
+      courseName={props.course.name}
+      githubId={props.session.githubId}
+    >
+      <Row gutter={24} style={{ minHeight: '85vh' }}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical" onChange={() => setIsModified(true)}>
             <CourseTaskSelect onChange={handleCourseTaskChange} groupBy="deadline" data={courseTasks} />
@@ -345,7 +351,7 @@ function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, v
 
 function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
   if (value === 1) {
-    return `Only 1 attempt left. Be carefull, It's your last attempt!`;
+    return `Only 1 attempt left. Be careful, It's your last attempt!`;
   }
   if (value > 1) {
     return `${value} attempts left.`;
