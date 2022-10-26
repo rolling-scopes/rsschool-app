@@ -2,6 +2,7 @@ import React from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
 import { Notification } from 'modules/Mentor/components/Notification';
+import { Instructions } from 'modules/Mentor/components/Instructions';
 
 // TODO: add useLoading & <Loading />
 function MentorDashboard(props: CoursePageProps) {
@@ -14,6 +15,7 @@ function MentorDashboard(props: CoursePageProps) {
       courseName={props.course.name}
     >
       <Notification />
+      <Instructions />
     </PageLayout>
   );
 }
