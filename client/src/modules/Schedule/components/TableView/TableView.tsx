@@ -17,7 +17,7 @@ import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
 import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
-import { FilterValue } from 'antd/lib/table/interface';
+import { FilterValue, GetRowKey } from 'antd/lib/table/interface';
 
 const getColumns = ({
   timezone,
@@ -153,6 +153,9 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
     setTagFilter([]);
   };
 
+  const generateUniqueRowKey = ({ name, startDate, endDate, status }: CourseScheduleItemDto) =>
+    [name, startDate, endDate, status].filter(Boolean).join('|');
+
   return (
     <Row style={{ padding: '24px 0 0', minHeight: '80vh', height: 'auto' }} gutter={32}>
       <Col span={24}>
@@ -175,7 +178,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
             }}
             pagination={false}
             dataSource={filteredData}
-            rowKey="name"
+            rowKey={generateUniqueRowKey}
             size="middle"
             columns={columns}
           />
