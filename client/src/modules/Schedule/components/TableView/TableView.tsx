@@ -1,4 +1,4 @@
-import { Form, Table } from 'antd';
+import { Col, Form, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -55,8 +55,8 @@ const getColumns = ({
       ...getColumnSearchProps('name'),
     },
     {
-      key: ColumnKey.Tag,
-      title: ColumnName.Tag,
+      key: ColumnKey.Type,
+      title: ColumnName.Type,
       dataIndex: 'tag',
       render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag, tagColors),
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
@@ -149,27 +149,39 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
     setTagFilter(tagFilter.filter(t => t !== removedTag));
   };
 
+  const handleClearAllButtonClick = () => {
+    setTagFilter([]);
+  };
+
   return (
-    <Form form={form} component={false}>
-      <FilteredTags tagFilter={tagFilter} onTagClose={handleTagClose} />
-      <Table
-        locale={{
-          // disable default tooltips on sortable columns
-          triggerDesc: undefined,
-          triggerAsc: undefined,
-          cancelSort: undefined,
-        }}
-        onChange={(_, filters: Record<string, FilterValue | string[] | null>) => {
-          setTagFilter(filters?.tag as string[]);
-          setFilteredInfo(filters);
-        }}
-        pagination={false}
-        dataSource={filteredData}
-        rowKey="name"
-        size="middle"
-        columns={columns}
-      />
-    </Form>
+    <Row style={{ padding: '24px 0 0', minHeight: '80vh', height: 'auto' }} gutter={32}>
+      <Col span={24}>
+        <Form form={form} component={false}>
+          <FilteredTags
+            tagFilter={tagFilter}
+            onTagClose={handleTagClose}
+            onClearAllButtonClick={handleClearAllButtonClick}
+          />
+          <Table
+            locale={{
+              // disable default tooltips on sortable columns
+              triggerDesc: undefined,
+              triggerAsc: undefined,
+              cancelSort: undefined,
+            }}
+            onChange={(_, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
+              setTagFilter(filters?.type as string[]);
+              setFilteredInfo(filters);
+            }}
+            pagination={false}
+            dataSource={filteredData}
+            rowKey="name"
+            size="middle"
+            columns={columns}
+          />
+        </Form>
+      </Col>
+    </Row>
   );
 }
 
