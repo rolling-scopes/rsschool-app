@@ -35,6 +35,8 @@ export enum CourseScheduleItemTag {
   SelfStudy = 'self-study',
   Interview = 'interview',
   CrossCheck = 'cross-check',
+  CrossCheckSubmit = 'cross-check-submit',
+  CrossCheckReview = 'cross-check-review',
   Test = 'test',
 }
 
@@ -73,6 +75,7 @@ export class CourseScheduleService {
       this.getActiveCourseTasks(courseId, studentId),
       this.getCourseEvents(courseId, studentId),
     ]);
+
     const [taskResults, interviewResults, technicalScreeningResults, taskSolutions, taskCheckers] = await Promise.all([
       this.getTaskResults(studentId),
       this.getInterviewResults(studentId),
@@ -82,31 +85,45 @@ export class CourseScheduleService {
     ]);
 
     const schedule = courseTasks
-      .map(courseTask => {
-        const { id, courseId, studentStartDate, studentEndDate, maxScore, scoreWeight } = courseTask;
+      .reduce<CourseScheduleItem[]>((acc, courseTask) => {
+        const { id, courseId, studentStartDate, studentEndDate, maxScore, scoreWeight, crossCheckEndDate } = courseTask;
         const { name } = courseTask.task;
 
+        const isCrossCheckTask = courseTask.checker === Checker.CrossCheck;
+
         const currentScore = this.getCurrentTaskScore(id, taskResults, interviewResults, technicalScreeningResults);
-        const submitted =
-          taskSolutions.some(({ courseTaskId }) => courseTaskId === id) ||
-          taskCheckers.some(({ courseTaskId }) => courseTaskId === id);
-        const status = this.getCourseTaskStatus(courseTask, studentId ? { currentScore, submitted } : undefined);
+        const submitted = this.getCourseTaskSubmitted(courseTask.id, taskSolutions, taskCheckers);
+        const status = this.getCourseTaskStatus(
+          { startTime: courseTask.studentStartDate, endTime: courseTask.studentEndDate },
+          studentId ? { currentScore, submitted } : undefined,
+        );
         const tag = this.getCourseTaskTag(courseTask);
-        return {
-          id,
-          name,
-          courseId,
-          startDate: studentStartDate,
-          endDate: studentEndDate,
-          maxScore,
-          scoreWeight,
-          score: currentScore,
-          status,
-          tag,
-          descriptionUrl: courseTask.task.descriptionUrl,
-          organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
-        } as CourseScheduleItem;
-      })
+
+        if (isCrossCheckTask) {
+          const scheduleItems = this.transformCrossCheckTask(courseTask, submitted, currentScore, studentId);
+          acc.concat(scheduleItems);
+        } else {
+          const scheduleItem = {
+            id,
+            name,
+            courseId,
+            startDate: studentStartDate,
+            endDate: studentEndDate,
+            crossCheckEndDate,
+            maxScore,
+            scoreWeight,
+            score: currentScore,
+            status,
+            tag,
+            descriptionUrl: courseTask.task.descriptionUrl,
+            organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
+          } as CourseScheduleItem;
+
+          acc.push(scheduleItem);
+        }
+
+        return acc;
+      }, [])
       .concat(
         courseEvents.map(courseEvent => {
           const { courseId, dateTime, endTime, id } = courseEvent;
@@ -127,7 +144,52 @@ export class CourseScheduleService {
       )
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
+    console.info(schedule);
+
     return schedule;
+  }
+
+  public getCourseTaskSubmitted(courseTaskId: number, taskSolutions: TaskSolution[], taskCheckers: TaskChecker[]) {
+    return (
+      taskSolutions.some(courseTask => courseTask.id === courseTaskId) ||
+      taskCheckers.some(courseTask => courseTask.id === courseTaskId)
+    );
+  }
+
+  public transformCrossCheckTask(
+    crossCheckTask: CourseTask,
+    submitted: boolean,
+    currentScore: number | null,
+    studentId?: number,
+  ): CourseScheduleItem[] {
+    const submitRange = { startTime: crossCheckTask.studentStartDate, endTime: crossCheckTask.studentEndDate };
+    const reviewRange = { startTime: crossCheckTask.studentEndDate, endTime: crossCheckTask.crossCheckEndDate };
+
+    const submitItem = {
+      id: crossCheckTask.id,
+      name: crossCheckTask.task.name,
+      courseId: crossCheckTask.courseId,
+      startDate: crossCheckTask.studentStartDate,
+      endDate: crossCheckTask.studentEndDate,
+      status: this.getCourseTaskStatus(submitRange, studentId ? { currentScore, submitted } : undefined),
+      tag: CourseScheduleItemTag.CrossCheckSubmit,
+      description: crossCheckTask.task.descriptionUrl,
+      organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+    };
+
+    const reviewItem = {
+      id: crossCheckTask.id,
+      name: crossCheckTask.task.name,
+      courseId: crossCheckTask.courseId,
+      startDate: crossCheckTask.studentStartDate,
+      endDate: crossCheckTask.studentEndDate,
+      status: this.getCourseTaskStatus(reviewRange, studentId ? { currentScore, submitted } : undefined),
+      tag: CourseScheduleItemTag.CrossCheckReview,
+      description: crossCheckTask.task.descriptionUrl,
+      organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+    };
+
+    return [submitItem, reviewItem] as CourseScheduleItem[];
   }
 
   public async copyFromTo(fromCourseId: number, toCourseId: number) {
@@ -262,14 +324,14 @@ export class CourseScheduleService {
   }
 
   private getCourseTaskStatus(
-    courseTask: CourseTask,
+    range: { startTime: string | Date | null; endTime: string | Date | null },
     studentData?: { currentScore: number | null; submitted: boolean },
   ) {
-    if (!courseTask.studentStartDate || !courseTask.studentEndDate) {
+    if (!range.startTime || !range.endTime) {
       return CourseScheduleItemStatus.Archived;
     }
-    const startTime = new Date(courseTask.studentStartDate).getTime();
-    const endTime = new Date(courseTask.studentEndDate).getTime();
+    const startTime = new Date(range.startTime).getTime();
+    const endTime = new Date(range.endTime).getTime();
     const { currentScore = null, submitted = false } = studentData ?? {};
     const now = Date.now();
     if (startTime > now) {
@@ -290,13 +352,13 @@ export class CourseScheduleService {
   private getCourseTaskTag(courseTask: CourseTask): CourseScheduleItemTag {
     const taskType = courseTask.type || courseTask.task.type;
 
-    if (courseTask.checker == Checker.CrossCheck) {
+    if (courseTask.checker === Checker.CrossCheck) {
       return CourseScheduleItemTag.CrossCheck;
     }
     if (taskType === 'selfeducation' || taskType === 'test') {
       return CourseScheduleItemTag.Test;
     }
-    if (taskType === 'interview' || taskType == 'stage-interview') {
+    if (taskType === 'interview' || taskType === 'stage-interview') {
       return CourseScheduleItemTag.Interview;
     }
     return CourseScheduleItemTag.Coding;

@@ -32,6 +32,9 @@ export class CourseScheduleItemDto {
   @ApiProperty()
   endDate: string;
 
+  @ApiProperty()
+  crossCheckEndDate: string;
+
   @ApiProperty({ nullable: true, type: PersonDto })
   organizer: PersonDto | null;
 
