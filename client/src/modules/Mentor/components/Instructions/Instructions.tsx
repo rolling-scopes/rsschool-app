@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Card, Col, Divider, Row, Space, Typography } from 'antd';
+import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
 
 const { Meta, Grid } = Card;
