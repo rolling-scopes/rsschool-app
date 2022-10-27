@@ -840,6 +840,12 @@ export interface CourseScheduleItemDto {
     'name': string;
     /**
      * 
+     * @type {number}
+     * @memberof CourseScheduleItemDto
+     */
+    'id': number;
+    /**
+     * 
      * @type {string}
      * @memberof CourseScheduleItemDto
      */
