@@ -25,15 +25,15 @@ export function CommentUsername(props: Props) {
   );
 }
 
-function createFakeUsername(props: Props) {
+function createFakeUsername(props: Props): string {
   const { reviewNumber, author, role, areStudentContactsVisible } = props;
 
   switch (role) {
     case TaskSolutionResultRole.Checker:
-      return `Student ${reviewNumber + 1}${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
+      return `Checker ${reviewNumber + 1}${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
 
     case TaskSolutionResultRole.Student:
     default:
-      return `Sloth${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
+      return `Student${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
   }
 }

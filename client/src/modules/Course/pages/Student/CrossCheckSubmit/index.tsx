@@ -275,7 +275,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                 courseTaskId={courseTaskId}
                 review={review}
                 isActiveReview={true}
-                role={TaskSolutionResultRole.Student}
+                currentRole={TaskSolutionResultRole.Student}
                 maxScore={maxScore}
               />
             </Col>

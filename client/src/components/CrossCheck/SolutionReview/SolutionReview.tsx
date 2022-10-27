@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Button, Col, Comment, Divider, Form, Input, message, Row, Typography } from 'antd';
+import { Alert, Button, Col, Comment, Divider, Form, Input, message, notification, Row, Typography } from 'antd';
 import { MessageFilled } from '@ant-design/icons';
-import { CourseService, SolutionReviewType, TaskSolutionResultRole } from 'services/course';
+import { CourseService, SolutionReviewType, TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { SolutionReviewSettings } from '../hooks/useSolutionReviewSettings';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
@@ -21,7 +21,7 @@ type Props = {
   review: SolutionReviewType;
   isActiveReview: boolean;
   areMessagesVisible?: boolean;
-  role: TaskSolutionResultRole;
+  currentRole: TaskSolutionResultRole;
   maxScore?: number;
 };
 
@@ -36,12 +36,22 @@ export function SolutionReview(props: Props) {
     review,
     isActiveReview,
     areMessagesVisible = true,
-    role,
+    currentRole,
     maxScore,
   } = props;
-  const { id, author, comment, score, dateTime } = review;
+  const { id, dateTime, author, comment, score, messages } = review;
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const amountUnreadMessages = getAmountUnreadMessages({ currentRole, messages });
+  const howManyUnreadMessagesText = getHowManyUnreadMessagesText(amountUnreadMessages);
+
+  useEffect(() => {
+    if (amountUnreadMessages) {
+      notification.info({
+        message: howManyUnreadMessagesText,
+      });
+    }
+  }, []);
 
   const handleSubmit = async (values: { content: string }) => {
     const { content } = values;
@@ -50,7 +60,7 @@ export function SolutionReview(props: Props) {
       try {
         await courseService.postTaskSolutionResultMessage(id, courseTaskId, {
           content: `${markdownLabel}${content}`,
-          role: role,
+          role: currentRole,
         });
 
         message.success('The message has been sent.');
@@ -63,13 +73,21 @@ export function SolutionReview(props: Props) {
 
   return (
     <>
-      <Row>
+      <Row style={{ margin: '8px 0' }}>
         <Col span={24}>
-          <Divider style={{ margin: '8px 0' }} />
+          <Divider style={{ margin: 0 }} />
         </Col>
       </Row>
 
-      <Row>
+      {amountUnreadMessages > 0 && (
+        <Row>
+          <Col>
+            <Alert message={howManyUnreadMessagesText} type="info" showIcon />
+          </Col>
+        </Row>
+      )}
+
+      <Row style={{ margin: '16px 0' }}>
         <Col>
           <Comment
             avatar={
@@ -128,26 +146,31 @@ export function SolutionReview(props: Props) {
           >
             {children}
 
-            {review.messages.map((message, index) => (
-              <Row key={index}>
+            {messages.map((message, index) => (
+              <Row key={index} style={{ margin: '16px 0' }}>
                 <Col>
-                  <Message reviewNumber={reviewNumber} message={message} settings={settings} />
+                  <Message
+                    reviewNumber={reviewNumber}
+                    message={message}
+                    currentRole={currentRole}
+                    settings={settings}
+                  />
                 </Col>
               </Row>
             ))}
 
             {areMessagesVisible && (
-              <Row>
+              <Row style={{ marginTop: 16 }}>
                 <Col span={24}>
                   <Comment
                     avatar={
                       <CommentAvatar
                         author={
-                          role === TaskSolutionResultRole.Checker
+                          currentRole === TaskSolutionResultRole.Checker
                             ? author && { githubId: sessionGithubId, discord: null }
                             : { githubId: sessionGithubId, discord: null }
                         }
-                        role={role}
+                        role={currentRole}
                         areStudentContactsVisible={settings.areStudentContactsVisible}
                         size={24}
                       />
@@ -180,6 +203,10 @@ export function SolutionReview(props: Props) {
       </Row>
 
       <style jsx>{`
+        :global(.ant-comment-inner) {
+          padding: 0;
+        }
+
         :global(.ant-comment-avatar) {
           position: sticky;
           top: 16px;
@@ -193,4 +220,28 @@ export function SolutionReview(props: Props) {
       `}</style>
     </>
   );
+}
+
+type GetAmountUnreadMessagesProps = {
+  currentRole: TaskSolutionResultRole;
+  messages: TaskSolutionResultMessage[];
+};
+
+function getAmountUnreadMessages(props: GetAmountUnreadMessagesProps): number {
+  const { currentRole, messages } = props;
+
+  switch (currentRole) {
+    case TaskSolutionResultRole.Checker:
+      return messages.filter(messages => !messages.isCheckerRead).length;
+
+    case TaskSolutionResultRole.Student:
+      return messages.filter(messages => !messages.isStudentRead).length;
+
+    default:
+      return 0;
+  }
+}
+
+function getHowManyUnreadMessagesText(amountUnreadMessages: number) {
+  return `You have ${amountUnreadMessages} unread ${amountUnreadMessages > 1 ? 'messages' : 'message'}`;
 }

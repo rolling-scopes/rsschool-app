@@ -12,7 +12,7 @@ type Props = {
   } | null;
   role: TaskSolutionResultRole;
   areStudentContactsVisible: boolean;
-  size: number;
+  size: 24 | 32;
 };
 
 export function CommentAvatar(props: Props) {
@@ -21,13 +21,13 @@ export function CommentAvatar(props: Props) {
   return <Avatar size={size} src={createAvatarPath(props)} />;
 }
 
-function createAvatarPath(props: Props) {
-  const { author, role, areStudentContactsVisible } = props;
+function createAvatarPath(props: Props): string {
+  const { author, role, areStudentContactsVisible, size } = props;
 
   switch (role) {
     case TaskSolutionResultRole.Checker:
       if (author && areStudentContactsVisible) {
-        return `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`;
+        return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
         return author ? '/static/svg/badges/TopPerformer.svg' : '/static/svg/badges/ThankYou.svg';
       }
@@ -35,7 +35,7 @@ function createAvatarPath(props: Props) {
     case TaskSolutionResultRole.Student:
     default:
       if (author && areStudentContactsVisible) {
-        return `${CDN_AVATARS_URL}/${author.githubId}.png?size=48`;
+        return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
         return '/static/svg/badges/Hero.svg';
       }

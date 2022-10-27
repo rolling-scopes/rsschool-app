@@ -138,6 +138,7 @@ export class CrossCheckService {
         checkerId: checkerId,
         courseTaskId: this.courseTaskId,
         historicalScores: [historicalResult],
+        messages: [],
         ...data,
       });
     }

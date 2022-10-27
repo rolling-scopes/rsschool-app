@@ -92,7 +92,7 @@ export function CrossCheckHistory(props: Props) {
               dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
             >
               <Row>
-                <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>Outdated review</Tag>}</Col>
+                <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>outdated review</Tag>}</Col>
 
                 {review.author && (
                   <Col>
@@ -112,10 +112,10 @@ export function CrossCheckHistory(props: Props) {
                     review={review}
                     isActiveReview={isActiveReview}
                     areMessagesVisible={isActiveReview}
-                    role={TaskSolutionResultRole.Checker}
+                    currentRole={TaskSolutionResultRole.Checker}
                     maxScore={props.maxScore}
                   >
-                    <Row>
+                    <Row style={{ marginTop: 16 }}>
                       <Col>
                         <Button
                           size="middle"
@@ -124,7 +124,7 @@ export function CrossCheckHistory(props: Props) {
                           icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
                           onClick={() => handleClickAmendButton(review.comment)}
                         >
-                          Amend review
+                          Amend comment
                         </Button>
                       </Col>
                     </Row>

@@ -21,7 +21,7 @@ enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
-const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
+const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 
 function Page(props: CoursePageProps) {
   const router = useRouter();
@@ -152,7 +152,7 @@ function Page(props: CoursePageProps) {
                 icon={<EyeInvisibleFilled />}
                 disabled={submissionDisabled}
               >
-                Submit review as Student1
+                Submit review as Checker1
               </Button>
             )}
           </Form>
