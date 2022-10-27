@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge, Card, Space, Typography } from 'antd';
-import { INSTRUCTIONS_TEXT, renderSocialLinks } from '.';
+import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
 
 const { Meta, Grid } = Card;
 const { Text } = Typography;
@@ -24,9 +24,7 @@ function Instructions() {
             }
             description={
               <Space direction="vertical" size="middle">
-                <Text>
-                  <div dangerouslySetInnerHTML={{ __html: s.html }}></div>
-                </Text>
+                {renderDescription(s.html)}
                 {s.links ? renderSocialLinks(s.links) : null}
               </Space>
             }

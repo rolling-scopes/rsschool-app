@@ -2,7 +2,7 @@ import { Space, Typography } from 'antd';
 import { DiscordFilled, LinkedInIcon, TelegramIcon } from 'components/Icons';
 import { GithubOutlined } from '@ant-design/icons';
 
-const { Link } = Typography;
+const { Link, Text } = Typography;
 
 const getSocialLinkIcon = (title: string) => {
   switch (title) {
@@ -20,8 +20,7 @@ const getSocialLinkIcon = (title: string) => {
 };
 
 export const renderSocialLinks = (links: Record<'title' | 'url', string>[]) => (
-  // TODO: center
-  <Space size="middle">
+  <Space size="middle" style={{ width: '100%', justifyContent: 'center' }}>
     {links.map(link => (
       <Link key={link.title} href={link.url} target="_blank">
         {getSocialLinkIcon(link.title)}
@@ -29,3 +28,15 @@ export const renderSocialLinks = (links: Record<'title' | 'url', string>[]) => (
     ))}
   </Space>
 );
+
+export const renderDescription = (text: string) => {
+  return (
+    <Text>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: text,
+        }}
+      ></div>
+    </Text>
+  );
+};

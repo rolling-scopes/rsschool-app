@@ -3,8 +3,8 @@ import Icon from '@ant-design/icons';
 import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 
 const svg = () => (
-  <svg width="25" height="25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#a)">
+  <svg width="1em" height="1em" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#a)">
       <path
         d="M12.445 24.002c6.628 0 12-5.373 12-12s-5.372-12-12-12c-6.627 0-12 5.373-12 12s5.373 12 12 12Z"
         fill="#5865F2"
