@@ -392,7 +392,7 @@ export class CourseService {
     } | null;
   }
 
-  async postTaskSolutionResultMessage(
+  async postTaskSolutionResultMessages(
     taskSolutionResultId: number,
     courseTaskId: number,
     data: {
@@ -404,6 +404,16 @@ export class CourseService {
       `/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`,
       data,
     );
+  }
+
+  async updateTaskSolutionResultMessages(
+    taskSolutionResultId: number,
+    courseTaskId: number,
+    data: {
+      role: string;
+    },
+  ) {
+    await this.axios.put(`/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`, data);
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {

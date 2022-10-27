@@ -46,10 +46,22 @@ export function SolutionReview(props: Props) {
   const howManyUnreadMessagesText = getHowManyUnreadMessagesText(amountUnreadMessages);
 
   useEffect(() => {
-    if (amountUnreadMessages) {
-      notification.info({
-        message: howManyUnreadMessagesText,
-      });
+    if (!amountUnreadMessages) return;
+
+    notification.info({
+      message: howManyUnreadMessagesText,
+    });
+
+    if (courseTaskId) {
+      (async () => {
+        try {
+          await courseService.updateTaskSolutionResultMessages(id, courseTaskId, {
+            role: currentRole,
+          });
+        } catch (error) {
+          message.error('An error occurred. Please try later.');
+        }
+      })();
     }
   }, []);
 
@@ -58,7 +70,7 @@ export function SolutionReview(props: Props) {
 
     if (courseTaskId) {
       try {
-        await courseService.postTaskSolutionResultMessage(id, courseTaskId, {
+        await courseService.postTaskSolutionResultMessages(id, courseTaskId, {
           content: `${markdownLabel}${content}`,
           role: currentRole,
         });

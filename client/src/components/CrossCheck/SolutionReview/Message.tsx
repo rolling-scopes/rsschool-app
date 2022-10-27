@@ -58,7 +58,7 @@ export function Message(props: Props) {
             </Col>
           </Row>
 
-          <Row gutter={16}>
+          <Row gutter={16} style={{ marginBottom: 8 }}>
             <Col>
               <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
                 {formatDateTime(timestamp)}
@@ -88,7 +88,6 @@ export function Message(props: Props) {
 
           <Row>
             <Col>
-              {`isCheckerRead: ${isCheckerRead}`} {`| isStudentRead: ${isStudentRead}`}
               <PreparedComment text={content} />
             </Col>
           </Row>

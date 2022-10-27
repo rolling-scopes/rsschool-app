@@ -243,4 +243,23 @@ export class CrossCheckService {
       await repository.update(taskSolutionResultById.id, { messages });
     }
   }
+
+  public async updateMessage(taskSolutionResultId: number, data: { role: TaskSolutionResultRole }) {
+    const { role } = data;
+
+    const repository = getRepository(TaskSolutionResult);
+    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      const updatedMessages = messages.map(message => ({
+        ...message,
+        isCheckerRead: TaskSolutionResultRole.Checker === role ? true : message.isCheckerRead,
+        isStudentRead: TaskSolutionResultRole.Student === role ? true : message.isStudentRead,
+      }));
+
+      await repository.update(taskSolutionResultById.id, { messages: updatedMessages });
+    }
+  }
 }

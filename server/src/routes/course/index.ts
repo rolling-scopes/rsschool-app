@@ -284,6 +284,11 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
     courseGuard,
     crossCheck.createMessage(logger),
   );
+  router.put(
+    `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,
+    courseGuard,
+    crossCheck.updateMessage(logger),
+  );
 }
 
 function addScheduleApi(router: Router<any, any>, logger: ILogger) {
