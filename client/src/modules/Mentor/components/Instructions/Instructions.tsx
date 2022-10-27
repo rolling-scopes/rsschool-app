@@ -1,21 +1,20 @@
 import React from 'react';
 import { Badge, Card, Space, Typography } from 'antd';
-import { steps } from './constants';
+import { INSTRUCTIONS_TEXT, renderSocialLinks } from '.';
 
 const { Meta, Grid } = Card;
 const { Text } = Typography;
 
 function Instructions() {
+  const { title, description, steps } = INSTRUCTIONS_TEXT;
+
   return (
     <Card bordered={false}>
       <Grid style={{ width: '100%' }} hoverable={false}>
-        <Meta
-          title="What's next?"
-          description={<Text>No panic! information about students tasks for review will appear here.</Text>}
-        />
+        <Meta title={title} description={<Text>{description}</Text>} />
       </Grid>
       {steps.map((s, idx) => (
-        <Grid hoverable={false} style={{ width: '33.33333%' }}>
+        <Grid key={s.title} hoverable={false} style={{ width: '33.33333%' }}>
           <Meta
             title={
               <Space>
@@ -24,12 +23,12 @@ function Instructions() {
               </Space>
             }
             description={
-              <>
+              <Space direction="vertical" size="middle">
                 <Text>
                   <div dangerouslySetInnerHTML={{ __html: s.html }}></div>
                 </Text>
-                {/* {s.links && s.links} */}
-              </>
+                {s.links ? renderSocialLinks(s.links) : null}
+              </Space>
             }
           />
         </Grid>

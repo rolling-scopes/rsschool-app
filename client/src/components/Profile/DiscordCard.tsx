@@ -4,7 +4,7 @@ import { CheckSquareTwoTone, WarningTwoTone } from '@ant-design/icons';
 import { Discord } from 'common/models/profile';
 import discordIntegration from '../../configs/discord-integration';
 import CopyToClipboardButton from '../CopyToClipboardButton';
-import { DiscordFilled } from 'components/Icons/DiscordFilled';
+import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import CommonCard from './CommonCard';
 
 const { Paragraph, Text } = Typography;
@@ -26,7 +26,7 @@ class DiscordCard extends React.Component<Props> {
     return (
       <CommonCard
         title="Discord Integration"
-        icon={<DiscordFilled />}
+        icon={<DiscordOutlined />}
         content={
           <>
             <Paragraph>

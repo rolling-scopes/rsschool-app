@@ -53,11 +53,11 @@ const links: LinkData[] = [
     access: every(isStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
+  // TODO: remove this link before PR creation
   {
     name: 'Dashboard',
     icon: <AppstoreOutlined />,
     getUrl: (course: Course) => `/course/mentor/dashboard?course=${course.alias}`,
-    // NOTE: WiP, so access should be false for now
     access: () => true, // every(isMentor),
   },
   {

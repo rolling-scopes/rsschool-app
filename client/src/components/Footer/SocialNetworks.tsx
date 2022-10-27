@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Row, Col, Space } from 'antd';
 import { YoutubeFilled, GithubFilled, LinkedinOutlined } from '@ant-design/icons';
-import { DiscordFilled } from 'components/Icons/DiscordFilled';
+import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 
 const iconStyle = { fontSize: 24, color: '#000' };
 
@@ -19,7 +19,7 @@ const socialLinks = [
     newTab: true,
   },
   {
-    icon: <DiscordFilled style={iconStyle} />,
+    icon: <DiscordOutlined style={iconStyle} />,
     name: 'Discord',
     link: `https://discord.gg/PRADsJB`,
     newTab: true,
