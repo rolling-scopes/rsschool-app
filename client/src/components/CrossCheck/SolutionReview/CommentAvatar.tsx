@@ -29,7 +29,7 @@ function createAvatarPath(props: Props): string {
       if (author && areStudentContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return author ? '/static/svg/badges/TopPerformer.svg' : '/static/svg/badges/ThankYou.svg';
+        return '/static/svg/crossCheck/Expert.svg';
       }
 
     case TaskSolutionResultRole.Student:
@@ -37,7 +37,7 @@ function createAvatarPath(props: Props): string {
       if (author && areStudentContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return '/static/svg/badges/Hero.svg';
+        return '/static/svg/crossCheck/Thanks.svg';
       }
   }
 }
