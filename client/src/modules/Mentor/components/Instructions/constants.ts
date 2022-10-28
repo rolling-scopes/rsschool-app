@@ -4,7 +4,7 @@ export const INSTRUCTIONS_TEXT = {
   steps: [
     {
       title: 'Wait for the distribution of students',
-      // TODO: should be links customizable for course?
+      // TODO: should be the links customizable for a course?
       html: "We haven't forgotten about you, don't worry. Make sure notifications are turned on. While you can read <a href='https://github.com/rolling-scopes-school/mentoring/tree/master/JS-FE-2022Q1' target='_blank'>this</a> information and subscribe to our communities:",
       links: [
         { title: 'github', url: 'https://github.com/rolling-scopes/rsschool-app' },
