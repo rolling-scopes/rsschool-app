@@ -2,7 +2,7 @@ import { CDN_AVATARS_URL } from 'configs/cdn';
 import { Avatar } from 'antd';
 import { Discord } from 'api';
 import { TaskSolutionResultRole } from 'services/course';
-import { AVATAR_ICON } from '../constants';
+import { AVATAR_ICON_PATH } from '../constants';
 
 type Props = {
   author: {
@@ -30,7 +30,7 @@ function createAvatarPath(props: Props): string {
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return AVATAR_ICON.expert;
+        return AVATAR_ICON_PATH.expert;
       }
 
     case TaskSolutionResultRole.Student:
@@ -38,7 +38,7 @@ function createAvatarPath(props: Props): string {
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return AVATAR_ICON.thanks;
+        return AVATAR_ICON_PATH.thanks;
       }
   }
 }

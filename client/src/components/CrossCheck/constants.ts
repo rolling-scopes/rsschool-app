@@ -9,7 +9,7 @@ export interface SolutionReviewSettings {
   setAreContactsVisible: (value: boolean) => void;
 }
 
-export const AVATAR_ICON = {
+export const AVATAR_ICON_PATH = {
   expert: '/static/svg/crossCheck/Expert.svg',
   thanks: '/static/svg/crossCheck/Thanks.svg',
 };
