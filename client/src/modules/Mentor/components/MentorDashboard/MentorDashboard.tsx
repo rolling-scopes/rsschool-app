@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
-import { Notification } from 'modules/Mentor/components/Notification';
-import { Instructions } from 'modules/Mentor/components/Instructions';
+import { Instructions, Notification, StudentsTable } from '..';
 
 // TODO: add useLoading & <Loading />
-function MentorDashboard(props: CoursePageProps) {
+function MentorDashboard({ session, course }: CoursePageProps) {
+  const [hasStudents] = useState(true);
+
   return (
     <PageLayout
       loading={false}
       title="Mentor's dashboard"
       background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
+      githubId={session.githubId}
+      courseName={course.name}
     >
       <Notification />
-      <Instructions />
+      {hasStudents ? <StudentsTable /> : <Instructions />}
     </PageLayout>
   );
 }
