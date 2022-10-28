@@ -16,7 +16,7 @@ type Props = {
   size: 24 | 32;
 };
 
-export function CommentAvatar(props: Props) {
+export function UserAvatar(props: Props) {
   const { size } = props;
 
   return <Avatar size={size} src={createAvatarPath(props)} />;

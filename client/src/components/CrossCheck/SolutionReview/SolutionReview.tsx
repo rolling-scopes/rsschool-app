@@ -8,8 +8,8 @@ import { SolutionReviewSettings } from '../constants';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { StudentContacts } from '../StudentContacts';
 import { Message } from './Message';
-import { CommentAvatar } from './CommentAvatar';
-import { CommentUsername } from './CommentUsername';
+import { UserAvatar } from './UserAvatar';
+import { Username } from './Username';
 
 type Props = {
   children?: JSX.Element;
@@ -103,7 +103,7 @@ export function SolutionReview(props: Props) {
         <Col>
           <Comment
             avatar={
-              <CommentAvatar
+              <UserAvatar
                 author={author}
                 role={TaskSolutionResultRole.Checker}
                 areContactsVisible={settings.areContactsVisible}
@@ -114,7 +114,7 @@ export function SolutionReview(props: Props) {
               <>
                 <Row>
                   <Col>
-                    <CommentUsername
+                    <Username
                       reviewNumber={reviewNumber}
                       author={author}
                       role={TaskSolutionResultRole.Checker}
@@ -174,7 +174,7 @@ export function SolutionReview(props: Props) {
                 <Col span={24}>
                   <Comment
                     avatar={
-                      <CommentAvatar
+                      <UserAvatar
                         author={
                           currentRole === TaskSolutionResultRole.Checker
                             ? author && { githubId: sessionGithubId, discord: null }

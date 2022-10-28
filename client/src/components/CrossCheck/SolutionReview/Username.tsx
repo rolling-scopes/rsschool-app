@@ -15,7 +15,7 @@ type Props = {
   areContactsVisible: boolean;
 };
 
-export function CommentUsername(props: Props) {
+export function Username(props: Props) {
   const { author, areContactsVisible } = props;
 
   return author && areContactsVisible ? (

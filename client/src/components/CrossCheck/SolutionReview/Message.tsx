@@ -4,8 +4,8 @@ import { formatDateTime } from 'services/formatter';
 import { TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
 import { ROLE_TAG_COLOR, SolutionReviewSettings } from '../constants';
 import PreparedComment from 'components/Forms/PreparedComment';
-import { CommentAvatar } from './CommentAvatar';
-import { CommentUsername } from './CommentUsername';
+import { UserAvatar } from './UserAvatar';
+import { Username } from './Username';
 
 type Props = {
   reviewNumber: number;
@@ -25,7 +25,7 @@ export function Message(props: Props) {
       avatar={
         <Tooltip title={isBadgeDotVisible ? 'Unread message' : ''} placement="topLeft">
           <Badge dot={isBadgeDotVisible}>
-            <CommentAvatar
+            <UserAvatar
               author={author && { ...author, discord: null }}
               role={role}
               areContactsVisible={areContactsVisible}
@@ -38,7 +38,7 @@ export function Message(props: Props) {
         <>
           <Row>
             <Col>
-              <CommentUsername
+              <Username
                 reviewNumber={reviewNumber}
                 author={author && { ...author, discord: null }}
                 role={role}
