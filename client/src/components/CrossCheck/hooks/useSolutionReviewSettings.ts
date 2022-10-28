@@ -1,18 +1,10 @@
 import { useLocalStorage } from 'react-use';
-
-enum LocalStorageKey {
-  AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
-}
-
-export interface SolutionReviewSettings {
-  areStudentContactsVisible: boolean;
-  setAreStudentContactsHidden: (value: boolean) => void;
-}
+import { LocalStorageKey, SolutionReviewSettings } from '../constants';
 
 export function useSolutionReviewSettings(): SolutionReviewSettings {
-  const [areStudentContactsVisible = true, setAreStudentContactsHidden] = useLocalStorage<boolean>(
-    LocalStorageKey.AreStudentContactsVisible,
+  const [areContactsVisible = true, setAreContactsVisible] = useLocalStorage<boolean>(
+    LocalStorageKey.AreContactsVisible,
   );
 
-  return { areStudentContactsVisible, setAreStudentContactsHidden };
+  return { areContactsVisible, setAreContactsVisible };
 }

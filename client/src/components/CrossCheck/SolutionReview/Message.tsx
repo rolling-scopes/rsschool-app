@@ -2,15 +2,10 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Badge, Col, Comment, Row, Tag, Tooltip, Typography } from 'antd';
 import { formatDateTime } from 'services/formatter';
 import { TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
-import { SolutionReviewSettings } from '../hooks/useSolutionReviewSettings';
+import { ROLE_TAG_COLOR, SolutionReviewSettings } from '../constants';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { CommentAvatar } from './CommentAvatar';
 import { CommentUsername } from './CommentUsername';
-
-const ROLE_TAG_COLOR = {
-  [TaskSolutionResultRole.Checker]: 'processing',
-  [TaskSolutionResultRole.Student]: 'success',
-};
 
 type Props = {
   reviewNumber: number;
@@ -22,7 +17,7 @@ type Props = {
 export function Message(props: Props) {
   const { reviewNumber, message, settings } = props;
   const { timestamp, content, author, role, isCheckerRead, isStudentRead } = message;
-  const { areStudentContactsVisible } = settings;
+  const { areContactsVisible } = settings;
   const isBadgeDotVisible = getBadgeDotVisibility(props);
 
   return (
@@ -33,7 +28,7 @@ export function Message(props: Props) {
             <CommentAvatar
               author={author && { ...author, discord: null }}
               role={role}
-              areStudentContactsVisible={areStudentContactsVisible}
+              areContactsVisible={areContactsVisible}
               size={24}
             />
           </Badge>
@@ -47,7 +42,7 @@ export function Message(props: Props) {
                 reviewNumber={reviewNumber}
                 author={author && { ...author, discord: null }}
                 role={role}
-                areStudentContactsVisible={settings.areStudentContactsVisible}
+                areContactsVisible={settings.areContactsVisible}
               />
             </Col>
           </Row>

@@ -2,6 +2,7 @@ import { CDN_AVATARS_URL } from 'configs/cdn';
 import { Avatar } from 'antd';
 import { Discord } from 'api';
 import { TaskSolutionResultRole } from 'services/course';
+import { AVATAR_ICON } from '../constants';
 
 type Props = {
   author: {
@@ -11,7 +12,7 @@ type Props = {
     discord: Discord | null;
   } | null;
   role: TaskSolutionResultRole;
-  areStudentContactsVisible: boolean;
+  areContactsVisible: boolean;
   size: 24 | 32;
 };
 
@@ -22,22 +23,22 @@ export function CommentAvatar(props: Props) {
 }
 
 function createAvatarPath(props: Props): string {
-  const { author, role, areStudentContactsVisible, size } = props;
+  const { author, role, areContactsVisible, size } = props;
 
   switch (role) {
     case TaskSolutionResultRole.Checker:
-      if (author && areStudentContactsVisible) {
+      if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return '/static/svg/crossCheck/Expert.svg';
+        return AVATAR_ICON.expert;
       }
 
     case TaskSolutionResultRole.Student:
     default:
-      if (author && areStudentContactsVisible) {
+      if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {
-        return '/static/svg/crossCheck/Thanks.svg';
+        return AVATAR_ICON.thanks;
       }
   }
 }

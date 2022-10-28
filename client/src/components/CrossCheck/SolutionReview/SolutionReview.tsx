@@ -4,7 +4,7 @@ import { Alert, Button, Col, Comment, Divider, Form, Input, message, notificatio
 import { MessageFilled } from '@ant-design/icons';
 import { CourseService, SolutionReviewType, TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { SolutionReviewSettings } from '../hooks/useSolutionReviewSettings';
+import { SolutionReviewSettings } from '../constants';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { StudentContacts } from '../StudentContacts';
 import { Message } from './Message';
@@ -106,7 +106,7 @@ export function SolutionReview(props: Props) {
               <CommentAvatar
                 author={author}
                 role={TaskSolutionResultRole.Checker}
-                areStudentContactsVisible={settings.areStudentContactsVisible}
+                areContactsVisible={settings.areContactsVisible}
                 size={32}
               />
             }
@@ -118,7 +118,7 @@ export function SolutionReview(props: Props) {
                       reviewNumber={reviewNumber}
                       author={author}
                       role={TaskSolutionResultRole.Checker}
-                      areStudentContactsVisible={settings.areStudentContactsVisible}
+                      areContactsVisible={settings.areContactsVisible}
                     />
                   </Col>
                 </Row>
@@ -150,9 +150,7 @@ export function SolutionReview(props: Props) {
                   </Col>
                 </Row>
 
-                <Row>
-                  {settings.areStudentContactsVisible && author && <StudentContacts discord={author.discord} />}
-                </Row>
+                <Row>{settings.areContactsVisible && author && <StudentContacts discord={author.discord} />}</Row>
               </>
             }
           >
@@ -183,7 +181,7 @@ export function SolutionReview(props: Props) {
                             : { githubId: sessionGithubId, discord: null }
                         }
                         role={currentRole}
-                        areStudentContactsVisible={settings.areStudentContactsVisible}
+                        areContactsVisible={settings.areContactsVisible}
                         size={24}
                       />
                     }

@@ -12,13 +12,13 @@ type Props = {
     discord: Discord | null;
   } | null;
   role: TaskSolutionResultRole;
-  areStudentContactsVisible: boolean;
+  areContactsVisible: boolean;
 };
 
 export function CommentUsername(props: Props) {
-  const { author, areStudentContactsVisible } = props;
+  const { author, areContactsVisible } = props;
 
-  return author && areStudentContactsVisible ? (
+  return author && areContactsVisible ? (
     <GithubUserLink value={author.githubId} isUserIconHidden={true} />
   ) : (
     <Typography.Text>{createFakeUsername(props)}</Typography.Text>
@@ -26,14 +26,14 @@ export function CommentUsername(props: Props) {
 }
 
 function createFakeUsername(props: Props): string {
-  const { reviewNumber, author, role, areStudentContactsVisible } = props;
+  const { reviewNumber, author, role, areContactsVisible } = props;
 
   switch (role) {
     case TaskSolutionResultRole.Checker:
-      return `Checker ${reviewNumber + 1}${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
+      return `Checker ${reviewNumber + 1}${author && !areContactsVisible ? ' (hidden)' : ''}`;
 
     case TaskSolutionResultRole.Student:
     default:
-      return `Student${author && !areStudentContactsVisible ? ' (hidden)' : ''}`;
+      return `Student${author && !areContactsVisible ? ' (hidden)' : ''}`;
   }
 }
