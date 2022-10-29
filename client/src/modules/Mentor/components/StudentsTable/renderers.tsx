@@ -38,10 +38,11 @@ export const columns: ColumnsType<StudentsTableRow> = [
     title: StudentsTableColumnKName.Score,
     render: scoreRenderer,
   },
-  {
-    key: StudentsTableColumnKey.SubmitScores,
-    title: StudentsTableColumnKName.SubmitScores,
-  },
+  // TODO: display when functionality will be ready
+  // {
+  //   key: StudentsTableColumnKey.SubmitScores,
+  //   title: StudentsTableColumnKName.SubmitScores,
+  // },
 ];
 
 function renderName(value: string, row: StudentsTableRow) {
