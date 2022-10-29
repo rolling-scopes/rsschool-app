@@ -34,7 +34,6 @@ export enum CourseScheduleItemTag {
   Coding = 'coding',
   SelfStudy = 'self-study',
   Interview = 'interview',
-  CrossCheck = 'cross-check',
   CrossCheckSubmit = 'cross-check-submit',
   CrossCheckReview = 'cross-check-review',
   Test = 'test',
@@ -101,7 +100,7 @@ export class CourseScheduleService {
 
         if (isCrossCheckTask) {
           const scheduleItems = this.transformCrossCheckTask(courseTask, submitted, currentScore, studentId);
-          acc.concat(scheduleItems);
+          acc.push(...scheduleItems);
         } else {
           const scheduleItem = {
             id,
@@ -144,8 +143,6 @@ export class CourseScheduleService {
       )
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
-    console.info(schedule);
-
     return schedule;
   }
 
@@ -181,8 +178,8 @@ export class CourseScheduleService {
       id: crossCheckTask.id,
       name: crossCheckTask.task.name,
       courseId: crossCheckTask.courseId,
-      startDate: crossCheckTask.studentStartDate,
-      endDate: crossCheckTask.studentEndDate,
+      startDate: crossCheckTask.studentEndDate,
+      endDate: crossCheckTask.crossCheckEndDate,
       status: this.getCourseTaskStatus(reviewRange, studentId ? { currentScore, submitted } : undefined),
       tag: CourseScheduleItemTag.CrossCheckReview,
       description: crossCheckTask.task.descriptionUrl,
@@ -352,9 +349,6 @@ export class CourseScheduleService {
   private getCourseTaskTag(courseTask: CourseTask): CourseScheduleItemTag {
     const taskType = courseTask.type || courseTask.task.type;
 
-    if (courseTask.checker === Checker.CrossCheck) {
-      return CourseScheduleItemTag.CrossCheck;
-    }
     if (taskType === 'selfeducation' || taskType === 'test') {
       return CourseScheduleItemTag.Test;
     }
