@@ -10,7 +10,7 @@ import {
   ProfileFilled,
   NotificationFilled,
 } from '@ant-design/icons';
-import { DiscordFilled } from 'components/Icons/DiscordFilled';
+import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
   isAdmin,
@@ -110,7 +110,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
   {
     name: 'Discord Servers',
     key: 'discordServers',
-    icon: <DiscordFilled />,
+    icon: <DiscordOutlined />,
     href: '/admin/discord-server',
     access: session => isAdmin(session),
   },

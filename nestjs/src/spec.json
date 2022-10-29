@@ -2045,6 +2045,7 @@
         "properties": {
           "score": { "type": "number", "nullable": true },
           "name": { "type": "string" },
+          "id": { "type": "number" },
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
@@ -2057,6 +2058,7 @@
         "required": [
           "score",
           "name",
+          "id",
           "status",
           "startDate",
           "endDate",
