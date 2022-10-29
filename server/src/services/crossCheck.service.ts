@@ -229,7 +229,7 @@ export class CrossCheckService {
         id: user.id,
         githubId: user.githubId,
       },
-      isCheckerRead: data.role === TaskSolutionResultRole.Checker,
+      isReviewerRead: data.role === TaskSolutionResultRole.Reviewer,
       isStudentRead: data.role === TaskSolutionResultRole.Student,
     };
 
@@ -255,7 +255,7 @@ export class CrossCheckService {
 
       const updatedMessages = messages.map(message => ({
         ...message,
-        isCheckerRead: TaskSolutionResultRole.Checker === role ? true : message.isCheckerRead,
+        isReviewerRead: TaskSolutionResultRole.Reviewer === role ? true : message.isReviewerRead,
         isStudentRead: TaskSolutionResultRole.Student === role ? true : message.isStudentRead,
       }));
 

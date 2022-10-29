@@ -152,7 +152,7 @@ function Page(props: CoursePageProps) {
                 icon={<EyeInvisibleFilled />}
                 disabled={submissionDisabled}
               >
-                Submit review as Checker1
+                Submit review as Reviewer1
               </Button>
             )}
           </Form>

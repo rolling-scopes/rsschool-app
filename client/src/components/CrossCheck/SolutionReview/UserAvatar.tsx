@@ -26,7 +26,7 @@ function createAvatarPath(props: Props): string {
   const { author, role, areContactsVisible, size } = props;
 
   switch (role) {
-    case TaskSolutionResultRole.Checker:
+    case TaskSolutionResultRole.Reviewer:
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
       } else {

@@ -40,7 +40,7 @@ export function CrossCheckHistory(props: Props) {
     const messages = result.anonymous
       ? result.messages.map(message => ({
           ...message,
-          author: message.role === TaskSolutionResultRole.Checker ? null : message.author,
+          author: message.role === TaskSolutionResultRole.Reviewer ? null : message.author,
         }))
       : result.messages;
 
@@ -112,7 +112,7 @@ export function CrossCheckHistory(props: Props) {
                     review={review}
                     isActiveReview={isActiveReview}
                     areMessagesVisible={isActiveReview}
-                    currentRole={TaskSolutionResultRole.Checker}
+                    currentRole={TaskSolutionResultRole.Reviewer}
                     maxScore={props.maxScore}
                   >
                     <Row style={{ marginTop: 16 }}>

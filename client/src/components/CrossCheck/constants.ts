@@ -15,6 +15,6 @@ export const AVATAR_ICON_PATH = {
 };
 
 export const ROLE_TAG_COLOR = {
-  [TaskSolutionResultRole.Checker]: 'processing',
+  [TaskSolutionResultRole.Reviewer]: 'processing',
   [TaskSolutionResultRole.Student]: 'success',
 };

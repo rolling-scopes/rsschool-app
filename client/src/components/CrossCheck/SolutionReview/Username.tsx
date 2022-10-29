@@ -29,8 +29,8 @@ function createFakeUsername(props: Props): string {
   const { reviewNumber, author, role, areContactsVisible } = props;
 
   switch (role) {
-    case TaskSolutionResultRole.Checker:
-      return `Checker ${reviewNumber + 1}${author && !areContactsVisible ? ' (hidden)' : ''}`;
+    case TaskSolutionResultRole.Reviewer:
+      return `Reviewer ${reviewNumber + 1}${author && !areContactsVisible ? ' (hidden)' : ''}`;
 
     case TaskSolutionResultRole.Student:
     default:

@@ -32,7 +32,7 @@ export const createMessage = (_: ILogger) => async (ctx: Router.RouterContext) =
   } = ctx.request.body;
 
   switch (inputData.role) {
-    case TaskSolutionResultRole.Checker:
+    case TaskSolutionResultRole.Reviewer:
       if (student.id !== taskSolutionResult.checkerId) {
         setErrorResponse(ctx, BAD_REQUEST, 'user is not checker');
         return;

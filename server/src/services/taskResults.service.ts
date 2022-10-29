@@ -210,7 +210,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       ? c.messages
       : c.messages.map(message => ({
           ...message,
-          author: message.role === TaskSolutionResultRole.Checker ? null : message.author,
+          author: message.role === TaskSolutionResultRole.Reviewer ? null : message.author,
         }));
     return {
       author,

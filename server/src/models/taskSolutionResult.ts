@@ -20,8 +20,8 @@ type ScoreRecord = {
 };
 
 export enum TaskSolutionResultRole {
+  Reviewer = 'reviewer',
   Student = 'student',
-  Checker = 'checker',
 }
 
 export type TaskSolutionResultMessage = {
@@ -32,7 +32,7 @@ export type TaskSolutionResultMessage = {
     githubId: string;
   } | null;
   role: TaskSolutionResultRole;
-  isCheckerRead: boolean;
+  isReviewerRead: boolean;
   isStudentRead: boolean;
 };
 

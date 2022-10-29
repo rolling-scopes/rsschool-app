@@ -16,7 +16,7 @@ type Props = {
 
 export function Message(props: Props) {
   const { reviewNumber, message, settings } = props;
-  const { timestamp, content, author, role, isCheckerRead, isStudentRead } = message;
+  const { timestamp, content, author, role, isReviewerRead, isStudentRead } = message;
   const { areContactsVisible } = settings;
   const isBadgeDotVisible = getBadgeDotVisibility(props);
 
@@ -60,11 +60,11 @@ export function Message(props: Props) {
               </Typography.Text>
             </Col>
 
-            {(isCheckerRead || isStudentRead) && (
+            {(isReviewerRead || isStudentRead) && (
               <Row>
-                {isCheckerRead && (
+                {isReviewerRead && (
                   <Col>
-                    <Tooltip title={'Checker read this message'} placement="bottom">
+                    <Tooltip title={'Reviewer read this message'} placement="bottom">
                       <CheckOutlined style={{ color: '#0f8ee8' }} />
                     </Tooltip>
                   </Col>
@@ -94,11 +94,11 @@ export function Message(props: Props) {
 
 function getBadgeDotVisibility(props: Props): boolean {
   const { message, currentRole } = props;
-  const { isCheckerRead, isStudentRead } = message;
+  const { isReviewerRead, isStudentRead } = message;
 
   switch (currentRole) {
-    case TaskSolutionResultRole.Checker:
-      return !isCheckerRead;
+    case TaskSolutionResultRole.Reviewer:
+      return !isReviewerRead;
 
     case TaskSolutionResultRole.Student:
       return !isStudentRead;

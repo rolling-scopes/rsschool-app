@@ -105,7 +105,7 @@ export function SolutionReview(props: Props) {
             avatar={
               <UserAvatar
                 author={author}
-                role={TaskSolutionResultRole.Checker}
+                role={TaskSolutionResultRole.Reviewer}
                 areContactsVisible={settings.areContactsVisible}
                 size={32}
               />
@@ -117,7 +117,7 @@ export function SolutionReview(props: Props) {
                     <Username
                       reviewNumber={reviewNumber}
                       author={author}
-                      role={TaskSolutionResultRole.Checker}
+                      role={TaskSolutionResultRole.Reviewer}
                       areContactsVisible={settings.areContactsVisible}
                     />
                   </Col>
@@ -176,7 +176,7 @@ export function SolutionReview(props: Props) {
                     avatar={
                       <UserAvatar
                         author={
-                          currentRole === TaskSolutionResultRole.Checker
+                          currentRole === TaskSolutionResultRole.Reviewer
                             ? author && { githubId: sessionGithubId, discord: null }
                             : { githubId: sessionGithubId, discord: null }
                         }
@@ -241,8 +241,8 @@ function getAmountUnreadMessages(props: GetAmountUnreadMessagesProps): number {
   const { currentRole, messages } = props;
 
   switch (currentRole) {
-    case TaskSolutionResultRole.Checker:
-      return messages.filter(messages => !messages.isCheckerRead).length;
+    case TaskSolutionResultRole.Reviewer:
+      return messages.filter(messages => !messages.isReviewerRead).length;
 
     case TaskSolutionResultRole.Student:
       return messages.filter(messages => !messages.isStudentRead).length;
