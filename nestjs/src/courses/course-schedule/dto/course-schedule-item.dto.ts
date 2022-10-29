@@ -5,6 +5,7 @@ import { CourseScheduleItem, CourseScheduleItemStatus, CourseScheduleItemTag } f
 @ApiResponse({})
 export class CourseScheduleItemDto {
   constructor(item: CourseScheduleItem) {
+    this.id = item.id;
     this.name = item.name;
     this.startDate = (item.startDate as Date)?.toISOString();
     this.endDate = (item.endDate as Date)?.toISOString();
@@ -22,6 +23,9 @@ export class CourseScheduleItemDto {
 
   @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  id: number;
 
   @ApiProperty({ enum: CourseScheduleItemStatus })
   status: CourseScheduleItemStatus;

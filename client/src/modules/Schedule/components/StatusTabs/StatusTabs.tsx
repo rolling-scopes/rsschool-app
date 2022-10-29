@@ -1,5 +1,5 @@
-import { Tabs } from 'antd';
-import { useMemo } from 'react';
+import { Col, Row, Tabs } from 'antd';
+import { FC, useMemo } from 'react';
 import { ALL_TAB_KEY } from 'modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
 
@@ -11,7 +11,7 @@ export interface StatusTabsProps {
   onTabChange: (tab: string) => void;
 }
 
-function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
+const StatusTabs: FC<StatusTabsProps> = ({ statuses, activeTab, onTabChange, children }) => {
   const tabs = useMemo(() => tabsRenderer(statuses), [statuses]);
 
   const handleTabChange = (selectedTab: string) => {
@@ -22,7 +22,17 @@ function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
 
   return (
     <>
-      <Tabs activeKey={getActiveTab()} items={tabs} onChange={handleTabChange} />
+      <Row gutter={48} style={{ background: 'white' }}>
+        <Col span={24}>
+          <Tabs
+            tabBarStyle={{ marginBottom: 0 }}
+            activeKey={getActiveTab()}
+            items={tabs}
+            onChange={handleTabChange}
+            tabBarExtraContent={children}
+          />
+        </Col>
+      </Row>
       <style jsx>{`
         :global(.ant-tabs-tab .ant-badge-count) {
           background-color: #f0f2f5;
@@ -35,6 +45,6 @@ function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
       `}</style>
     </>
   );
-}
+};
 
 export default StatusTabs;

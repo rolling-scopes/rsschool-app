@@ -11,21 +11,19 @@ type FilteredTagsProps = {
 
 export const FilteredTags = ({ tagFilter, onTagClose, onClearAllButtonClick }: FilteredTagsProps) =>
   tagFilter?.length > 0 ? (
-    <div style={{ marginBottom: 12 }}>
-      <Row>
-        <Col flex="auto">
-          <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 8 }} />
-          {tagFilter.map(tag => (
-            <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`${ColumnName.Type}: ${
-              TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']] || tag
-            }`}</Tag>
-          ))}
-        </Col>
-        <Col flex="none">
-          <Button size="small" onClick={onClearAllButtonClick}>
-            Clear all
-          </Button>
-        </Col>
-      </Row>
-    </div>
+    <Row style={{ padding: 12, background: 'white' }}>
+      <Col flex="auto">
+        <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 8 }} />
+        {tagFilter.map(tag => (
+          <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`${ColumnName.Type}: ${
+            TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']] || tag
+          }`}</Tag>
+        ))}
+      </Col>
+      <Col flex="none">
+        <Button size="small" onClick={onClearAllButtonClick}>
+          Clear all
+        </Button>
+      </Col>
+    </Row>
   ) : null;

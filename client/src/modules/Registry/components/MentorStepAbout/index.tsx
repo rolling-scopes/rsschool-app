@@ -1,6 +1,6 @@
 import { Button, Col, Row, Typography } from 'antd';
 import { SolidarityUkraine } from 'components/SolidarityUkraine';
-import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER } from 'modules/Registry/constants';
+import { DEFAULT_COLUMN_SIZES } from 'modules/Registry/constants';
 import css from 'styled-jsx/css';
 import { MentorStep } from '../MentorStep';
 
@@ -15,36 +15,47 @@ export function MentorStepAbout(props: Props) {
       <style jsx>{styles}</style>
     </>
   );
+
+  const mentorshipItems = [
+    'Duration: 10-13 weeks',
+    'Responsibilities: check practical tasks completion, code review, provide feedback, answer questions, do consulting (on career growth, etc.)',
+    'Start date: depends on the course',
+    'Expected workload: 3-5 hours a week, depending on the number of students in your group',
+    'Fully remote',
+    'In case of vacations, BTs and others, you can reschedule/get other mentor’s help',
+    'The main course language is English, but any other language acceptable for a mentor-student communication',
+    'All our courses are mentee driven - that means the responsibility to do tasks and learn necessary materials is on a mentee, while the main purpose of a mentor is to help with difficult situations, do consulting, and check practical tasks completion.',
+  ];
+
+  const benefitsItems = [
+    "Mentor's T-Shirt",
+    'Mentoring experience',
+    'Interviewing experience',
+    'Team leadership experience',
+    'Opportunity to hire mentees',
+    'Networking and collaboration',
+  ];
+
   return (
     <MentorStep header={header} title="About mentorship">
       <SolidarityUkraine />
-      <Row gutter={DEFAULT_ROW_GUTTER}>
+      <Row>
         <Col {...DEFAULT_COLUMN_SIZES}>
           <Typography.Paragraph style={{ fontSize: 14, marginBottom: 32, marginTop: 15 }}>
-            You are required to mentor students (from 2 to 6) and coach them 4-8 hours a week (or more, if you wish).
-            Mentoring topics - html/css/vanillajs. You can teach them remotely.
+            <ul>
+              {mentorshipItems.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <Typography.Title level={3}>Benefits</Typography.Title>
+            <ul>
+              {benefitsItems.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </Typography.Paragraph>
         </Col>
       </Row>
-
-      <Row>
-        <Typography.Title level={4}>Responsibilities:</Typography.Title>
-      </Row>
-
-      <Row gutter={DEFAULT_ROW_GUTTER}>
-        <Col {...DEFAULT_COLUMN_SIZES}>
-          <Typography.Paragraph style={{ fontSize: 14, marginTop: 10 }}>
-            As a mentor you will meet weekly with your group of students in any messenger that is convenient for you,
-            answer questions and share your experience.
-          </Typography.Paragraph>
-
-          <Typography.Paragraph style={{ fontSize: 14, marginBottom: 40 }}>
-            It will also be necessary to check and evaluate student’s work (about 7 tasks), conduct training interviews
-            (2 for each student) and give additional lectures (if you wish).
-          </Typography.Paragraph>
-        </Col>
-      </Row>
-
       <Button size="large" type="primary" onClick={() => props.onNext()}>
         Register
       </Button>

@@ -1,14 +1,14 @@
-import { Button, Col, message, Row } from 'antd';
-import { PlusOutlined, CopyOutlined, CalendarOutlined } from '@ant-design/icons';
+import { Button, Col, Row } from 'antd';
+import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
-import ManageCsvButtons from './ManageCsvButtons';
-import { useCopyToClipboard } from 'react-use';
+import { AdditionalActions } from '../AdditionalActions';
+import { buildMenuItem } from './helpers';
 
-interface SettingsPanelProps {
+export interface SettingsPanelProps {
   isCourseManager: boolean;
   courseId: number;
   courseAlias: string;
@@ -20,8 +20,13 @@ interface SettingsPanelProps {
   onCopyFromCourse: () => void;
 }
 
-function buildICalendarLink(courseId: number, token: string, timezone: string) {
-  return `/api/v2/courses/${courseId}/icalendar/${token}?timezone=${encodeURIComponent(timezone || '')}`;
+export enum SettingsButtons {
+  Event = 'Event',
+  Task = 'Task',
+  Calendar = 'iCal Link',
+  Export = 'Export',
+  Copy = 'Copy from',
+  More = 'More',
 }
 
 export function SettingsPanel({
@@ -37,7 +42,6 @@ export function SettingsPanel({
 }: SettingsPanelProps) {
   const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
-  const [, copyToClipboard] = useCopyToClipboard();
 
   const openManageEventModal = () => setIsManageEventModalOpen(true);
   const closeManageEventModal = () => {
@@ -45,61 +49,48 @@ export function SettingsPanel({
     setIsManageEventModalOpen(false);
   };
 
-  const iCalLink = buildICalendarLink(courseId, calendarToken, settings.timezone);
+  const additionalMenuItems = useMemo(
+    () =>
+      [
+        buildMenuItem(SettingsButtons.Calendar, <CalendarOutlined />, !!calendarToken),
+        buildMenuItem(SettingsButtons.Export, <FileExcelOutlined />, isCourseManager),
+        buildMenuItem(SettingsButtons.Copy, <CopyOutlined />, isCourseManager),
+      ].filter(Boolean),
+    [calendarToken, isCourseManager],
+  );
 
   return (
     <>
-      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col>
-          <SettingsDrawer tags={tags} settings={settings} />
-        </Col>
-        {calendarToken ? (
-          <Col>
-            <Button.Group>
-              <Button
-                icon={<CalendarOutlined />}
-                download={`schedule-${courseAlias}.ics`}
-                target="_blank"
-                href={iCalLink}
-              >
-                iCal Link
-              </Button>
-              <Button
-                icon={<CopyOutlined />}
-                onClick={() => {
-                  copyToClipboard(`${window.document.location.origin}${iCalLink}`);
-                  message.success('Copied to clipboard');
-                }}
-              />
-            </Button.Group>
-          </Col>
-        ) : null}
-        {isCourseManager ? (
-          <Col>
-            <ManageCsvButtons courseId={courseId} timezone={settings.timezone} refreshData={refreshData} />
-          </Col>
-        ) : null}
-        {isCourseManager ? (
-          <Col>
-            <Button icon={<CopyOutlined />} onClick={onCopyFromCourse}>
-              Copy From
-            </Button>
-          </Col>
-        ) : null}
+      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
-              Event
+              {SettingsButtons.Event}
             </Button>
           </Col>
         ) : null}
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
-              Task
+              {SettingsButtons.Task}
             </Button>
           </Col>
         ) : null}
+        <Col>
+          <SettingsDrawer tags={tags} settings={settings} />
+        </Col>
+        {additionalMenuItems?.length !== 0 && (
+          <Col>
+            <AdditionalActions
+              menuItems={additionalMenuItems}
+              courseId={courseId}
+              timezone={settings.timezone}
+              calendarToken={calendarToken}
+              courseAlias={courseAlias}
+              onCopyFromCourse={onCopyFromCourse}
+            />
+          </Col>
+        )}
       </Row>
       {isManageEventModalOpen && (
         <ManageEventModalForm
