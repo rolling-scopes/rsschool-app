@@ -113,7 +113,7 @@ export class ScoreService {
       .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
       .where('student."courseId" = :courseId', { courseId });
 
-    if (Boolean(filter.activeOnly)) {
+    if (filter.activeOnly === 'true') {
       query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
     }
 

@@ -88,6 +88,7 @@ export interface CourseEvent {
   date?: string;
   time?: string;
   dateTime: string;
+  endTime?: string;
   place: string;
   comment: string;
   eventId: number;
@@ -390,11 +391,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getAvailableStudentsForStageInterviews() {
-    const result = await this.axios.get(`/interviews/stage/students/available`);
-    return result.data.data;
-  }
-
   async createInterview(githubId: string, mentorGithubId: string) {
     const result = await this.axios.post(`/interview/stage/interviewer/${mentorGithubId}/student/${githubId}`);
     return result.data.data;
@@ -610,6 +606,7 @@ export interface Interview {
   id: string;
   descriptionUrl: string;
   type: string;
+  template: string | null;
 }
 
 export interface StudentProfile {

@@ -31,6 +31,7 @@ import {
 } from 'services/course';
 import { FilesService } from 'services/files';
 import { CoursePageProps } from 'services/models';
+import { isExpelledStudent } from 'domain/user';
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -50,7 +51,6 @@ const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -141,7 +141,9 @@ function Page(props: CoursePageProps) {
         const pubAtts = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
         const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
         notification.error({
-          message: (
+          message: isExpelledStudent(props.session, courseId) ? (
+            <>This task can only be submitted by active students</>
+          ) : (
             <>
               You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
               {!!oneAttemptPerNumberOfHours &&
@@ -184,8 +186,14 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
-      <Row gutter={24}>
+    <PageLayout
+      loading={loading}
+      title="Auto-Test"
+      background="#F0F2F5"
+      courseName={props.course.name}
+      githubId={props.session.githubId}
+    >
+      <Row gutter={24} style={{ minHeight: '85vh' }}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical" onChange={() => setIsModified(true)}>
             <CourseTaskSelect onChange={handleCourseTaskChange} groupBy="deadline" data={courseTasks} />
@@ -197,7 +205,7 @@ function Page(props: CoursePageProps) {
             </Row>
           </Form>
         </Col>
-        <Col xs={24} sm={20} md={18} lg={14}>
+        <Col xs={24} sm={24} md={24} lg={14}>
           <Row justify="space-between">
             <Typography.Title type="secondary" level={4}>
               Verification Results
@@ -215,23 +223,22 @@ function Page(props: CoursePageProps) {
                 title: 'Date/Time',
                 dataIndex: 'createdDate',
                 render: shortDateTimeRenderer,
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Status',
                 dataIndex: 'status',
-                width: 100,
+                width: '12%',
               },
               {
                 title: 'Task Name',
                 dataIndex: ['courseTask', 'task', 'name'],
-                ellipsis: true,
-                width: 150,
+                width: '17%',
               },
               {
                 title: 'Score',
                 dataIndex: 'score',
-                width: 60,
+                width: '8%',
               },
               {
                 title: 'Details',
@@ -344,7 +351,7 @@ function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, v
 
 function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
   if (value === 1) {
-    return `Only 1 attempt left. Be carefull, It's your last attempt!`;
+    return `Only 1 attempt left. Be careful, It's your last attempt!`;
   }
   if (value > 1) {
     return `${value} attempts left.`;

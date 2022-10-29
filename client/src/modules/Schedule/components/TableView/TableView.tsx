@@ -1,32 +1,34 @@
-import { Form, Table } from 'antd';
+import { Col, Form, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
+import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
+  ALL_TAB_KEY,
   ColumnKey,
   ColumnName,
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
-  SCHEDULE_STATUSES,
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
 import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
+import { FilterValue } from 'antd/lib/table/interface';
 
 const getColumns = ({
   timezone,
   tagColors,
-  statusFilter,
   tagFilter,
+  filteredInfo,
 }: {
-  statusFilter: string[];
   tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
+  filteredInfo: Record<string, FilterValue | null>;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${moment().tz(timezone).format('Z')})`;
   return [
@@ -35,9 +37,6 @@ const getColumns = ({
       title: ColumnName.Status,
       dataIndex: 'status',
       render: statusRenderer,
-      filters: SCHEDULE_STATUSES.map(status => ({ text: statusRenderer(status.value), value: status.value })),
-      defaultFilteredValue: statusFilter,
-      filtered: statusFilter.length > 0,
     },
     {
       key: ColumnKey.Name,
@@ -52,16 +51,18 @@ const getColumns = ({
           </a>
         );
       },
+      filteredValue: filteredInfo.name || null,
       ...getColumnSearchProps('name'),
     },
     {
-      key: ColumnKey.Tag,
-      title: ColumnName.Tag,
+      key: ColumnKey.Type,
+      title: ColumnName.Type,
       dataIndex: 'tag',
       render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag, tagColors),
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
       defaultFilteredValue: tagFilter,
-      filtered: tagFilter.length > 0,
+      filtered: tagFilter?.length > 0,
+      filteredValue: tagFilter || null,
     },
     {
       key: ColumnKey.StartDate,
@@ -92,6 +93,7 @@ const getColumns = ({
       title: ColumnName.Organizer,
       dataIndex: ['organizer', 'githubId'],
       render: (value: string) => !!value && <GithubUserLink value={value} />,
+      filteredValue: filteredInfo.organizer || null,
       ...getColumnSearchProps('organizer.githubId'),
     },
     {
@@ -110,18 +112,22 @@ const getColumns = ({
   ];
 };
 
-interface TableViewProps {
+export interface TableViewProps {
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
+  statusFilter?: string;
 }
 
-export function TableView({ data, settings }: TableViewProps) {
+const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
+  Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
+
+export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
   const [form] = Form.useForm();
-  const [statusFilter = [], setStatusFilter] = useLocalStorage<string[]>(LocalStorageKeys.StatusFilter);
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
+  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
 
   const filteredData = data
-    .filter(item => (statusFilter?.length > 0 ? statusFilter.includes(item.status) : item))
+    .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
     .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event));
 
   const filteredColumns = useMemo(
@@ -129,8 +135,8 @@ export function TableView({ data, settings }: TableViewProps) {
       getColumns({
         tagColors: settings.tagColors,
         timezone: settings.timezone,
-        statusFilter,
         tagFilter,
+        filteredInfo,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
@@ -139,25 +145,45 @@ export function TableView({ data, settings }: TableViewProps) {
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
+  const handleTagClose = (removedTag: string) => {
+    setTagFilter(tagFilter.filter(t => t !== removedTag));
+  };
+
+  const handleClearAllButtonClick = () => {
+    setTagFilter([]);
+  };
+
+  const generateUniqueRowKey = ({ id, name, tag }: CourseScheduleItemDto) => [id, name, tag].join('|');
+
   return (
-    <Form form={form} component={false}>
-      <Table
-        locale={{
-          // disable default tooltips on sortable columns
-          triggerDesc: undefined,
-          triggerAsc: undefined,
-          cancelSort: undefined,
-        }}
-        onChange={(_, filters) => {
-          setStatusFilter((filters?.status as string[]) ?? []);
-          setTagFilter((filters?.tag as string[]) ?? []);
-        }}
-        pagination={false}
-        dataSource={filteredData}
-        size="middle"
-        columns={columns}
-      />
-    </Form>
+    <Row style={{ padding: '24px 0 0', minHeight: '80vh', height: 'auto' }} gutter={32}>
+      <Col span={24}>
+        <Form form={form} component={false}>
+          <FilteredTags
+            tagFilter={tagFilter}
+            onTagClose={handleTagClose}
+            onClearAllButtonClick={handleClearAllButtonClick}
+          />
+          <Table
+            locale={{
+              // disable default tooltips on sortable columns
+              triggerDesc: undefined,
+              triggerAsc: undefined,
+              cancelSort: undefined,
+            }}
+            onChange={(_, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
+              setTagFilter(filters?.type as string[]);
+              setFilteredInfo(filters);
+            }}
+            pagination={false}
+            dataSource={filteredData}
+            rowKey={generateUniqueRowKey}
+            size="middle"
+            columns={columns}
+          />
+        </Form>
+      </Col>
+    </Row>
   );
 }
 

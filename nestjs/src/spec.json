@@ -455,6 +455,48 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{interviewId}": {
+      "get": {
+        "operationId": "getInterview",
+        "summary": "",
+        "parameters": [
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/{interviewId}/students/available": {
+      "get": {
+        "operationId": "getAvailableStudents",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/AvailableStudentDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      }
+    },
     "/tasks/notify/changes": {
       "post": {
         "operationId": "notifyTasksDeadlines",
@@ -1747,6 +1789,7 @@
           "eventId": { "type": "number" },
           "special": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "duration": { "type": "number" },
           "place": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/Organizer" },
@@ -1781,15 +1824,17 @@
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/PersonDto" }
         },
-        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "organizer"]
+        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "endTime", "organizer"]
       },
       "UpdateCourseEventDto": {
         "type": "object",
         "properties": {
           "special": { "type": "string" },
           "dateTime": { "type": "string" },
+          "endTime": { "type": "string" },
           "duration": { "type": "number" },
           "place": { "type": "string" },
           "organizer": { "$ref": "#/components/schemas/Organizer" },
@@ -1801,8 +1846,28 @@
       },
       "InterviewDto": {
         "type": "object",
-        "properties": { "id": { "type": "number" }, "attributes": { "type": "object" } },
-        "required": ["id", "attributes"]
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "name": { "type": "string" },
+          "startDate": { "type": "object" },
+          "attributes": { "type": "object" }
+        },
+        "required": ["id", "type", "name", "startDate", "attributes"]
+      },
+      "AvailableStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "cityName": { "type": "string", "nullable": true },
+          "isGoodCandidate": { "type": "boolean" },
+          "rating": { "type": "string", "nullable": true },
+          "totalScore": { "type": "number" },
+          "registeredDate": { "type": "string" }
+        },
+        "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore", "registeredDate"]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",
@@ -1935,20 +2000,22 @@
       "CourseScheduleItemDto": {
         "type": "object",
         "properties": {
-          "score": { "type": "object" },
+          "score": { "type": "number", "nullable": true },
           "name": { "type": "string" },
+          "id": { "type": "number" },
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "organizer": { "type": "object", "nullable": true },
-          "maxScore": { "type": "object", "nullable": true },
-          "scoreWeight": { "type": "object", "nullable": true },
+          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "maxScore": { "type": "number", "nullable": true },
+          "scoreWeight": { "type": "number", "nullable": true },
           "descriptionUrl": { "type": "string", "nullable": true },
           "tag": { "type": "string", "enum": ["lecture", "coding", "self-study", "interview", "cross-check", "test"] }
         },
         "required": [
           "score",
           "name",
+          "id",
           "status",
           "startDate",
           "endDate",
@@ -2386,7 +2453,8 @@
               "Outstanding_work",
               "Top_performer",
               "Job_Offer",
-              "RS_activist"
+              "RS_activist",
+              "Jury_Team"
             ]
           },
           "comment": { "type": "string" },
@@ -2604,7 +2672,8 @@
               "Outstanding_work",
               "Top_performer",
               "Job_Offer",
-              "RS_activist"
+              "RS_activist",
+              "Jury_Team"
             ]
           }
         },

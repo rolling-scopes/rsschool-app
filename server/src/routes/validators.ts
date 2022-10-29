@@ -61,3 +61,18 @@ export const validateGithubId = async (ctx: Router.RouterContext, next: Next) =>
   ctx.params.githubId = githubId;
   await next();
 };
+
+export const validateExpelledStudent = async (ctx: Router.RouterContext, next: Next) => {
+  const githubId: string = ctx.params.githubId;
+  if (!githubId) {
+    setResponse(ctx, BAD_REQUEST, 'Incorrect [githubId]');
+    return;
+  }
+  const user = ctx.state.user;
+  const courseId = ctx.params.courseId;
+  if (user.courses[courseId].isExpelled) {
+    setResponse(ctx, FORBIDDEN);
+    return;
+  }
+  await next();
+};

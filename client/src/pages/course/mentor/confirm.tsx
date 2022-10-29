@@ -10,13 +10,17 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
+import { Warning } from 'components/Warning';
+
+const { Link } = Typography;
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session; courseAlias?: string }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [noAccess, setNoAccess] = useState(false);
+  const [noAccess, setNoAccess] = useState<boolean | null>(null);
+  const [isPreferredCourse, setIsPreferredCourse] = useState<boolean | null>(null);
   const [success, setSuccess] = useState(false);
   const [mentorData, setMentorData] = useState<MentorResponse | null>(null);
   const [course, setCourse] = useState(null as Course | null);
@@ -31,25 +35,28 @@ function Page(props: { session: Session; courseAlias?: string }) {
   useAsync(async () => {
     try {
       setLoading(true);
-      const courseAlias = router.query?.course;
-      if (!courseAlias) {
+      const courseAlias = (router.query?.course as string).toLowerCase();
+      if (courseAlias == null) {
+        setIsPreferredCourse(false);
         return;
       }
       const courses = await new CoursesService().getCourses();
-      const course = courses.find(c => c.alias === courseAlias) ?? null;
+      const course = courses.find(c => c.alias.toLowerCase() === courseAlias) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
-      if (!mentor.preselectedCourses?.includes(course?.id ?? 0)) {
+      const preferredCourse = course?.id ? mentor.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mentor.preselectedCourses?.includes(course?.id) : null;
+      setIsPreferredCourse(preferredCourse);
+      if (preselectedCourses === false) {
         setNoAccess(true);
         return;
       } else {
         setNoAccess(false);
+        setMentorData(mentor);
+        form.setFieldsValue(mentor);
       }
-
-      setMentorData(mentor);
-      form.setFieldsValue(mentor);
     } catch {
-      setNoAccess(true);
+      setNoAccess(null);
     } finally {
       setLoading(false);
     }
@@ -69,14 +76,25 @@ function Page(props: { session: Session; courseAlias?: string }) {
       });
       setSuccess(true);
     } catch (e) {
-      message.error('An error occured. Please try later.');
+      message.error('An error occurred. Please try later.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (course == null || (mentorData == null && loading)) {
+  if (loading || (noAccess === null && isPreferredCourse === null)) {
     return null;
+  }
+
+  if (course == null) {
+    return (
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/svg/err.svg"
+        imageName="Course Not Found"
+        textMessage="Sorry, Course Not Found"
+      />
+    );
   }
 
   const pageProps = {
@@ -86,11 +104,57 @@ function Page(props: { session: Session; courseAlias?: string }) {
     courseName: course.name,
   };
 
-  if (noAccess) {
+  if (noAccess && !isPreferredCourse) {
+    const message = (
+      <div>
+        <Link href={`/registry/mentor?course=${router.query?.course}`}>
+          <a>Register as a Mentor for the Course</a>
+        </Link>
+      </div>
+    );
     return (
-      <PageLayout {...pageProps}>
-        <Result status={'403' as any} title="You are not preselected to the course" />
-      </PageLayout>
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/svg/wanted-mentors.svg"
+        imageName="Not registered"
+        textMessage={message}
+      />
+    );
+  }
+
+  if (noAccess && isPreferredCourse) {
+    const message = (
+      <div>
+        <Row justify="center">
+          <h1 style={{ fontSize: '32px', marginBottom: 15, maxWidth: 600, textAlign: 'center' }}>
+            Thank you for registration as a mentor for Rolling Scopes School
+          </h1>
+        </Row>
+        <Row justify="center">
+          <h2 style={{ fontSize: '19px', marginBottom: 15, maxWidth: 600, textAlign: 'center', fontWeight: 100 }}>
+            <p>
+              Hello, our future mentor, we are very happy to see you in The Rolling Scopes School. But before you start
+              your journey we need to consider your application and submit you to a course.
+            </p>
+            <p style={{ marginBottom: 15 }}>
+              It can take a little time. We will send you another mail with next steps later
+            </p>
+            <p style={{ fontWeight: 500 }}>
+              We really appreciate your interest for school.
+              <br />
+              See you soon.
+            </p>
+          </h2>
+        </Row>
+      </div>
+    );
+    return (
+      <Warning
+        githubId={props.session.githubId}
+        imagePath="/images/rs-hero.png"
+        imageName="You are RS hero"
+        textMessage={message}
+      />
     );
   }
 

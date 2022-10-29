@@ -188,11 +188,16 @@ function Page(props: CoursePageProps) {
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
-    <PageLayout loading={loading} title="Cross-Check" githubId={props.session.githubId} courseName={props.course.name}>
+    <PageLayout
+      loading={loading}
+      title="Cross-Check Review"
+      githubId={props.session.githubId}
+      courseName={props.course.name}
+    >
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect data={courseTasks} groupBy="deadline" onChange={handleTaskChange} />
+            <CourseTaskSelect data={courseTasks} groupBy="crossCheckDeadline" onChange={handleTaskChange} />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
               <UserSearch
                 keyField="githubId"

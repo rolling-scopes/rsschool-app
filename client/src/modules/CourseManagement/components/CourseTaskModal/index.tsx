@@ -150,12 +150,20 @@ export function CourseTaskModal(props: Props) {
           <Typography.Title level={4}>Cross-Check</Typography.Title>
           <Row gutter={24}>
             <Col span={12}>
-              <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
+              <Form.Item
+                name="crossCheckEndDate"
+                label="Cross-Check End Date"
+                rules={[{ required: true, message: 'Please enter cross-check end date' }]}
+              >
                 <DatePicker format="YYYY-MM-DD" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
+              <Form.Item
+                name="pairsCount"
+                label="Cross-Check Pairs Count"
+                rules={[{ required: true, message: 'Please enter cross-check pairs count' }]}
+              >
                 <Select placeholder="Cross-Check Pairs Count">
                   {times(10, num => (
                     <Option key={num} value={num + 1}>

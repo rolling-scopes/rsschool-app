@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getPersonalToRender should correctly handle missing values 1`] = `
+[
+  {
+    "title": "English",
+    "value": null,
+  },
+  {
+    "title": "Self Introduction",
+    "value": "Not Available",
+  },
+  {
+    "title": "Ready to work full time",
+    "value": "No",
+  },
+  {
+    "title": "Ready to work from",
+    "value": null,
+  },
+  {
+    "title": "Military service status",
+    "value": "Unknown",
+  },
+  {
+    "title": "Locations",
+    "value": "Unknown",
+  },
+]
+`;
+
+exports[`getPersonalToRender should return correct data in case all values are present 1`] = `
+[
+  {
+    "title": "English",
+    "value": "B1",
+  },
+  {
+    "title": "Self Introduction",
+    "value": <a
+      className="rs-link"
+      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      rel="nofollow"
+      target="_blank"
+    >
+      https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    </a>,
+  },
+  {
+    "title": "Ready to work full time",
+    "value": "Yes",
+  },
+  {
+    "title": "Ready to work from",
+    "value": "2022-09-24",
+  },
+  {
+    "title": "Military service status",
+    "value": "Not liable",
+  },
+  {
+    "title": "Locations",
+    "value": "Minsk Belarus",
+  },
+]
+`;

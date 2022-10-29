@@ -189,7 +189,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
-                src="https://cdn.rs.school/apetr.png?size=96"
+                src="https://cdn.rs.school/avatars/apetr.png?size=96"
               />
             </span>
           </div>

@@ -33,9 +33,10 @@ export class CourseICalendarService {
     });
 
     for (const item of data) {
+      const endDate = item.endDate || new Date(item.startDate.getTime() + 1000 * 60 * 60);
       icalData.createEvent({
         start: dayjs.utc(item.startDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
-        end: dayjs.utc(item.endDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
+        end: dayjs.utc(endDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
         summary: item.name,
         description: this.buildDescription(item),
         id: item.id,

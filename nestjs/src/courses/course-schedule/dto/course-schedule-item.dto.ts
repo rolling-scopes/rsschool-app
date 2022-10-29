@@ -5,6 +5,7 @@ import { CourseScheduleItem, CourseScheduleItemStatus, CourseScheduleItemTag } f
 @ApiResponse({})
 export class CourseScheduleItemDto {
   constructor(item: CourseScheduleItem) {
+    this.id = item.id;
     this.name = item.name;
     this.startDate = (item.startDate as Date)?.toISOString();
     this.endDate = (item.endDate as Date)?.toISOString();
@@ -17,11 +18,14 @@ export class CourseScheduleItemDto {
     this.descriptionUrl = item.descriptionUrl ?? null;
   }
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   score: number | null;
 
   @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  id: number;
 
   @ApiProperty({ enum: CourseScheduleItemStatus })
   status: CourseScheduleItemStatus;
@@ -32,13 +36,13 @@ export class CourseScheduleItemDto {
   @ApiProperty()
   endDate: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: PersonDto })
   organizer: PersonDto | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: Number })
   maxScore: number | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: Number })
   scoreWeight: number | null;
 
   @ApiProperty({ nullable: true, type: String })

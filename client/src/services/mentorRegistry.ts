@@ -5,6 +5,7 @@ export type MentorResponse = {
   preselectedCourses: number[];
   maxStudentsLimit: number;
   preferedStudentsLocation: PreferredStudentsLocation;
+  preferredCourses: number[];
 };
 
 export interface MentorRegistry {

@@ -5,7 +5,7 @@ export enum ColumnName {
   StartDate = 'Start Date',
   EndDate = 'End Date',
   Time = 'Time',
-  Tag = 'Tag',
+  Type = 'Type',
   Name = 'Task / Event',
   Organizer = 'Organizer',
   Score = 'Score / Max',
@@ -16,7 +16,7 @@ export enum ColumnKey {
   Status = 'status',
   StartDate = 'studentStartDate',
   EndDate = 'studentEndDate',
-  Tag = 'tag',
+  Type = 'type',
   Name = 'name',
   Organizer = 'organizer',
   Score = 'score',
@@ -28,7 +28,7 @@ export const COLUMNS: { key: ColumnKey; name: ColumnName }[] = [
   { key: ColumnKey.Name, name: ColumnName.Name },
   { key: ColumnKey.StartDate, name: ColumnName.StartDate },
   { key: ColumnKey.EndDate, name: ColumnName.EndDate },
-  { key: ColumnKey.Tag, name: ColumnName.Tag },
+  { key: ColumnKey.Type, name: ColumnName.Type },
   { key: ColumnKey.Organizer, name: ColumnName.Organizer },
   { key: ColumnKey.Weight, name: ColumnName.Weight },
   { key: ColumnKey.Score, name: ColumnName.Score },
@@ -67,7 +67,7 @@ export const TAGS = Object.values(CourseScheduleItemDtoTagEnum).map((value: Cour
 export const CONFIGURABLE_COLUMNS = [
   ColumnKey.StartDate,
   ColumnKey.EndDate,
-  ColumnKey.Tag,
+  ColumnKey.Type,
   ColumnKey.Organizer,
   ColumnKey.Score,
   ColumnKey.Weight,
@@ -138,3 +138,6 @@ export const CHECKER_TYPES = {
   taskOwner: 'Task Owner',
   crossCheck: 'Cross-Check',
 };
+
+export const ALL_TAB_KEY = 'all';
+export const ALL_TAB_LABEL = 'All';

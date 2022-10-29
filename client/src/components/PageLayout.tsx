@@ -20,7 +20,8 @@ export function PageLayout(props: Props) {
   if (process.env.NODE_ENV !== 'production' && props.error) console.error(props.error);
 
   return (
-    <Layout style={{ background: props.background ?? 'transparent' }}>
+    // TODO: recheck all pages (added min-height)
+    <Layout style={{ background: props.background ?? 'transparent', minHeight: '100vh' }}>
       <Header title={props.title} username={props.githubId} courseName={props.courseName} />
       {props.error ? (
         <Result
