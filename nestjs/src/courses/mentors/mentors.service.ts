@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
+import { TaskSolution } from '@entities/taskSolution';
 
 import { MentorBasic } from '@common/models';
 
@@ -17,6 +18,8 @@ export class MentorsService {
     readonly mentorsRepository: Repository<Mentor>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+    @InjectRepository(TaskSolution)
+    readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
@@ -74,5 +77,29 @@ export class MentorsService {
     }
 
     return mentorId === currentMentorId;
+  }
+
+  private async getTaskSolutions(studentId: number | undefined): Promise<TaskSolution[]> {
+    if (!studentId) {
+      return [];
+    }
+    return this.taskSolutionRepository.find({
+      where: { studentId },
+      select: ['id', 'url', 'courseTaskId', 'studentId'],
+    });
+  }
+
+  public async getDataByStudent(courseId: number, studentId?: number): Promise<any> {
+    // const [courseTasks, courseEvents] = await Promise.all([
+    //   this.getActiveCourseTasks(courseId, studentId),
+    //   this.getCourseEvents(courseId, studentId),
+    // ]);
+    const [taskSolutions] = await Promise.all([this.getTaskSolutions(studentId)]);
+    // this.getTaskResults(studentId),
+    // this.getInterviewResults(studentId),
+    // this.getPrescreeningResults(studentId),
+    // this.getTaskCheckers(studentId),
+
+    return taskSolutions;
   }
 }

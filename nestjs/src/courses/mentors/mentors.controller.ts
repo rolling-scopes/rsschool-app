@@ -2,6 +2,7 @@ import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuard
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MentorsService } from '.';
 import { CurrentRequest, DefaultGuard } from '../../auth';
+import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { MentorStudentDto } from './dto/mentor-student.dto';
 
 @Controller('mentors')
@@ -21,5 +22,25 @@ export class MentorsController {
     }
     const items = await this.mentorsService.getStudents(mentorId);
     return items.map(item => new MentorStudentDto(item));
+  }
+
+  @Get('/:mentorId/dashboard')
+  @UseGuards(DefaultGuard)
+  @ApiOperation({ operationId: 'getMentorDashboardData' })
+  @ApiOkResponse({ type: [MentorDashboardDto] })
+  @ApiBadRequestResponse()
+  public async getMentorDashboardData(@Param('mentorId', ParseIntPipe) mentorId: number, @Req() req: CurrentRequest) {
+    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
+    if (!hasAccess) {
+      throw new ForbiddenException();
+    }
+    const students = await this.mentorsService.getStudents(mentorId);
+    const res = [];
+    for (const student of students) {
+      const data = await this.mentorsService.getDataByStudent(0, student.id);
+      res.push(data);
+    }
+    console.log(res);
+    return students.map(student => new MentorDashboardDto(student));
   }
 }

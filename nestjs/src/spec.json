@@ -269,6 +269,25 @@
         "tags": ["mentors"]
       }
     },
+    "/mentors/{mentorId}/dashboard": {
+      "get": {
+        "operationId": "getMentorDashboardData",
+        "summary": "",
+        "parameters": [{ "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorDashboardDto" } }
+              }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",
@@ -1584,6 +1603,20 @@
           "feedbacks",
           "repoUrl"
         ]
+      },
+      "MentorDashboardDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "id": { "type": "number" },
+          "active": { "type": "boolean" },
+          "cityName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
+          "totalScore": { "type": "number" },
+          "rank": { "type": "number" }
+        },
+        "required": ["name", "githubId", "id", "active", "cityName", "countryName", "totalScore", "rank"]
       },
       "Validations": {
         "type": "object",

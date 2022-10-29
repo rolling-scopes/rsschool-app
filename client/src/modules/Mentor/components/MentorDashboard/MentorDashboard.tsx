@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
 import { Instructions, Notification, StudentsTable } from '..';
+import { getMentorId } from 'domain/user';
+import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 
 // TODO: add useLoading & <Loading />
 function MentorDashboard({ session, course }: CoursePageProps) {
-  const [hasStudents] = useState(true);
+  const { id: courseId } = course;
+  const mentorId = getMentorId(session, courseId);
+
+  const [data, loading] = useMentorDashboard(mentorId);
+  const hasStudents = useMemo(() => data?.length !== 0, [data]);
+  console.log(data);
 
   return (
     <PageLayout
