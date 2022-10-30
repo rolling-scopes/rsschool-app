@@ -71,7 +71,7 @@ export function CategoryModalForm(props: Props) {
           <Input />
         </Form.Item>
         <Form.Item key="questions" name="questions" label="questions" labelAlign="left">
-          <Select mode="multiple" style={{ width: '100%' }} placeholder="Please select">
+          <Select mode="multiple" style={{ width: '100%' }} placeholder="Please select" optionFilterProp="children">
             {questions.map(el => (
               <Option key={el.title}>{el.title}</Option>
             ))}

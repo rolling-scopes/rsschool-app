@@ -43,9 +43,11 @@ export function MentorRegistrationGeneral({ courses, checkedList, location, setL
           </Row>
           <Form.Item name="preferedCourses">
             <Select
+              optionFilterProp="name"
               mode="multiple"
               value={checkedList}
               options={courses.map(c => ({
+                name: c.name,
                 label: (
                   <>
                     <CourseIcon course={c} /> {`${c.name} (Start: ${formatMonthFriendly(c.startDate)})`}{' '}

@@ -13,7 +13,7 @@
    - "Discipline" - select course-related discipline;
    - "Tags" - set tags (optional) to highlight which aspect of the course it is related to. For example, "javascript", "html/css", etc.;
    - "Description URL" - link to the task description;
-   - "JSON Attributes" - copy the JSON file's content with test settings, questions and possible answers (<span style="color:green_apple">[see below](https://docs.app.rs.school/#/adding-tests?id=json-attributes)</span>).
+   - "JSON Attributes" - copy the JSON file's content with test settings, questions and possible answers (<span style="color:green_apple">[see below](https://docs.app.rs.school/#/platform/adding-tests?id=json-attributes)</span>).
 
    </br>![RS School App Test Form](./img/adding-tests-3.png)
 

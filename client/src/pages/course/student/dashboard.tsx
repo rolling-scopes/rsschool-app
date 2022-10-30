@@ -149,12 +149,13 @@ function Page(props: CoursePageProps) {
     <PageLayout
       loading={loading}
       title="Student dashboard"
+      background="#F0F2F5"
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
       <LoadingScreen show={loading}>
         {studentSummary ? (
-          <div>
+          <>
             <Masonry
               breakpointCols={{
                 default: 4,
@@ -173,11 +174,9 @@ function Page(props: CoursePageProps) {
             </Masonry>
             {masonryStyles}
             {masonryColumnStyles}
-          </div>
-        ) : (
-          <>
-            <Result status={'403'} title="You have no access to this page" />
           </>
+        ) : (
+          <Result status={'403'} title="You have no access to this page" />
         )}
       </LoadingScreen>
     </PageLayout>
@@ -190,6 +189,7 @@ const { className: masonryClassName, styles: masonryStyles } = css.resolve`
     display: flex;
     margin-left: -${gapSize}px;
     width: auto;
+    min-height: 85vh;
   }
 `;
 const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`

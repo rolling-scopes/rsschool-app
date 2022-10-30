@@ -72,7 +72,7 @@ export function MentorRegistrationMentorship({ checkedList }: Props) {
             <Typography.Title level={5}>Which language are you able to mentor?</Typography.Title>
           </Row>
           <Form.Item name="languagesMentoring">
-            <Select mode="multiple" placeholder="Select languages...">
+            <Select mode="multiple" placeholder="Select languages..." optionFilterProp="children">
               <Select.Option value={'english'}>English</Select.Option>
               <Select.Option value={'russian'}>Russian</Select.Option>
             </Select>
