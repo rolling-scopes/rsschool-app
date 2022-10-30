@@ -4,7 +4,7 @@ import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 import { SolutionReview } from 'components/CrossCheck/SolutionReview';
-import { useSolutionReviewSettings } from 'components/CrossCheck/hooks/useSolutionReviewSettings';
+import { useSolutionReviewSettings } from 'components/CrossCheck/hooks';
 import { SolutionReviewSettingsPanel } from 'components/CrossCheck/SolutionReviewSettingsPanel';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
