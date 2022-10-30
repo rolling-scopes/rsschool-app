@@ -190,7 +190,7 @@ export function SolutionReview(props: Props) {
                         <Row>
                           <Col span={24}>
                             <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
-                              <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 768 }} />
+                              <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 512 }} />
                             </Form.Item>
                           </Col>
                         </Row>
