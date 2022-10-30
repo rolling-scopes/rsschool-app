@@ -1607,74 +1607,33 @@
           "repoUrl"
         ]
       },
-      "Validations": {
-        "type": "object",
-        "properties": { "githubIdInUrl": { "type": "boolean" } },
-        "required": ["githubIdInUrl"]
-      },
       "MentorDashboardDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "number" },
           "taskId": { "type": "number" },
-          "type": {
-            "type": "string",
-            "enum": [
-              "jstask",
-              "kotlintask",
-              "objctask",
-              "htmltask",
-              "ipynb",
-              "selfeducation",
-              "codewars",
-              "test",
-              "codejam",
-              "interview",
-              "stage-interview",
-              "cv:html",
-              "cv:markdown"
-            ]
-          },
           "taskName": { "type": "string" },
-          "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
-          "studentStartDate": { "type": "string" },
-          "studentEndDate": { "type": "string" },
-          "crossCheckEndDate": { "type": "string", "nullable": true },
-          "descriptionUrl": { "type": "string" },
-          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskDescriptionUrl": { "type": "string" },
           "maxScore": { "type": "number" },
-          "scoreWeight": { "type": "number" },
-          "pairsCount": { "type": "number", "nullable": true },
-          "crossCheckStatus": { "type": "string" },
-          "submitText": { "type": "string", "nullable": true },
-          "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] },
           "resultScore": { "type": "number" },
           "githubPrUrl": { "type": "string" },
           "studentGithubId": { "type": "string" },
           "studentName": { "type": "string" }
         },
         "required": [
-          "id",
           "taskId",
-          "type",
           "taskName",
-          "checker",
-          "studentStartDate",
-          "studentEndDate",
-          "crossCheckEndDate",
-          "descriptionUrl",
-          "taskOwner",
+          "taskDescriptionUrl",
           "maxScore",
-          "scoreWeight",
-          "pairsCount",
-          "crossCheckStatus",
-          "submitText",
-          "validations",
           "resultScore",
           "githubPrUrl",
           "studentGithubId",
           "studentName"
         ]
+      },
+      "Validations": {
+        "type": "object",
+        "properties": { "githubIdInUrl": { "type": "boolean" } },
+        "required": ["githubIdInUrl"]
       },
       "CourseTaskDto": {
         "type": "object",

@@ -38,7 +38,6 @@ export class MentorsController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const data = await this.mentorsService.getAll(mentorId, courseId);
-    return data;
+    return await this.mentorsService.getAll(mentorId, courseId);
   }
 }

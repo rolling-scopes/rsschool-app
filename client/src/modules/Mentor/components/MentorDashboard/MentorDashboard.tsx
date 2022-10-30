@@ -14,7 +14,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
 
   return (
     <PageLayout
-      loading={false}
+      loading={loading}
       title="Mentor's dashboard"
       background="#F0F2F5"
       githubId={session.githubId}

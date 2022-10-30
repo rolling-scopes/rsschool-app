@@ -2128,19 +2128,7 @@ export interface MentorDashboardDto {
      * @type {number}
      * @memberof MentorDashboardDto
      */
-    'id': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MentorDashboardDto
-     */
     'taskId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'type': MentorDashboardDtoTypeEnum;
     /**
      * 
      * @type {string}
@@ -2152,73 +2140,13 @@ export interface MentorDashboardDto {
      * @type {string}
      * @memberof MentorDashboardDto
      */
-    'checker': MentorDashboardDtoCheckerEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'studentStartDate': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'studentEndDate': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'crossCheckEndDate': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'descriptionUrl': string;
-    /**
-     * 
-     * @type {PersonDto}
-     * @memberof MentorDashboardDto
-     */
-    'taskOwner': PersonDto | null;
+    'taskDescriptionUrl': string;
     /**
      * 
      * @type {number}
      * @memberof MentorDashboardDto
      */
     'maxScore': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MentorDashboardDto
-     */
-    'scoreWeight': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MentorDashboardDto
-     */
-    'pairsCount': number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'crossCheckStatus': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'submitText': string | null;
-    /**
-     * 
-     * @type {Validations}
-     * @memberof MentorDashboardDto
-     */
-    'validations': Validations | null;
     /**
      * 
      * @type {number}
@@ -2244,34 +2172,6 @@ export interface MentorDashboardDto {
      */
     'studentName': string;
 }
-
-export const MentorDashboardDtoTypeEnum = {
-    Jstask: 'jstask',
-    Kotlintask: 'kotlintask',
-    Objctask: 'objctask',
-    Htmltask: 'htmltask',
-    Ipynb: 'ipynb',
-    Selfeducation: 'selfeducation',
-    Codewars: 'codewars',
-    Test: 'test',
-    Codejam: 'codejam',
-    Interview: 'interview',
-    StageInterview: 'stage-interview',
-    Cvhtml: 'cv:html',
-    Cvmarkdown: 'cv:markdown'
-} as const;
-
-export type MentorDashboardDtoTypeEnum = typeof MentorDashboardDtoTypeEnum[keyof typeof MentorDashboardDtoTypeEnum];
-export const MentorDashboardDtoCheckerEnum = {
-    AutoTest: 'auto-test',
-    Assigned: 'assigned',
-    Mentor: 'mentor',
-    TaskOwner: 'taskOwner',
-    CrossCheck: 'crossCheck'
-} as const;
-
-export type MentorDashboardDtoCheckerEnum = typeof MentorDashboardDtoCheckerEnum[keyof typeof MentorDashboardDtoCheckerEnum];
-
 /**
  * 
  * @export

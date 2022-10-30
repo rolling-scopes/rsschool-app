@@ -4,6 +4,7 @@ import { columns, StudentsTableProps, StudentsTableRow } from '.';
 
 function StudentsTable({ data }: StudentsTableProps) {
   const getUniqueKey = (record: StudentsTableRow) => Object.values(record).join('|');
+  
   return (
     <Row>
       <Col span={24}>
