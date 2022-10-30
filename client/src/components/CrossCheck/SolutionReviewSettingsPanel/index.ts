@@ -1,1 +1,0 @@
-export { SolutionReviewSettingsPanel } from './SolutionReviewSettingsPanel';

@@ -2,7 +2,7 @@ import { CDN_AVATARS_URL } from 'configs/cdn';
 import { Avatar } from 'antd';
 import { Discord } from 'api';
 import { TaskSolutionResultRole } from 'services/course';
-import { AVATAR_ICON_PATH } from '../constants';
+import { AVATAR_ICON_PATH } from 'components/CrossCheck/constants';
 
 type Props = {
   author: {

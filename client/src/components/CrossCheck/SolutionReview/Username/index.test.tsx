@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { TaskSolutionResultRole } from 'services/course';
-import { Username } from './Username';
+import { Username } from '.';
 
 const mockAuthor = {
   githubId: 'test-github-1234',
