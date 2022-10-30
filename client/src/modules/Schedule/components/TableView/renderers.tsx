@@ -10,21 +10,27 @@ import moment from 'moment-timezone';
 
 export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
   const label = capitalize(value);
+  const color = getTaskStatusColor(value);
+
+  return <Badge color={color} text={label} />;
+}
+
+export function getTaskStatusColor(value: CourseScheduleItemDtoStatusEnum) {
   switch (value) {
     case CourseScheduleItemDtoStatusEnum.Done:
-      return <Badge status="success" text={label} />;
+      return '#52c41a';
     case CourseScheduleItemDtoStatusEnum.Missed:
-      return <Badge status="error" text={label} />;
+      return '#ff4d4f';
     case CourseScheduleItemDtoStatusEnum.Archived:
-      return <Badge status="default" text={label} />;
+      return '#d9d9d9';
     case CourseScheduleItemDtoStatusEnum.Available:
-      return <Badge status="processing" text={label} />;
+      return '#1890ff';
     case CourseScheduleItemDtoStatusEnum.Future:
-      return <Badge color="cyan" text={label} />;
+      return '#13c2c2';
     case CourseScheduleItemDtoStatusEnum.Review:
-      return <Badge color="purple" text={label} />;
+      return '#722ed1';
     default:
-      return <Badge status="default" text={label} />;
+      return '#d9d9d9';
   }
 }
 

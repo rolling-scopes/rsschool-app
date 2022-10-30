@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { StudentStats } from 'common/models/profile';
 import { Modal, Table, Typography } from 'antd';
 import { dateTimeRenderer, dateRenderer } from 'components/Table';
-import { CourseTaskDto } from 'api';
+import { TaskStat } from './TasksStatsCard';
 
 const { Text } = Typography;
 
 type Props = {
   courseName: string;
   tableName: string;
-  tasks: (CourseTaskDto | StudentStats)[];
+  tasks: TaskStat[];
   isVisible: boolean;
   onHide: () => void;
 };
@@ -24,7 +23,7 @@ export function TasksStatsModal(props: Props) {
   return (
     <Modal
       title={`${courseName} statistics`}
-      visible={props.isVisible}
+      open={props.isVisible}
       onCancel={props.onHide}
       footer={null}
       width={'90%'}
@@ -81,13 +80,13 @@ export function TasksStatsModal(props: Props) {
           {
             title: '*Start date',
             width: 140,
-            dataIndex: 'studentStartDate',
+            dataIndex: 'startDate',
             render: (startDate: string) => <Text>{dateRenderer(startDate)}</Text>,
           },
           {
             title: '*Deadline',
             width: 140,
-            dataIndex: 'studentEndDate',
+            dataIndex: 'endDate',
             render: (endDate: string) => <Text>{dateTimeRenderer(endDate)}</Text>,
           },
           {
