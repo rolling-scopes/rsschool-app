@@ -3,7 +3,7 @@ export const INFO_MESSAGE =
 
 export enum StudentsTableColumnKey {
   Number = 'number',
-  GithubId = 'githubId',
+  GithubId = 'studentGithubId',
   Name = 'name',
   Task = 'task',
   DesiredDeadline = 'desiredDeadline',

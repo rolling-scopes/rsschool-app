@@ -1,8 +1,9 @@
 import { Col, Row, Table } from 'antd';
 import React from 'react';
-import { columns } from '.';
+import { columns, StudentsTableProps, StudentsTableRow } from '.';
 
-function StudentsTable() {
+function StudentsTable({ data }: StudentsTableProps) {
+  const getUniqueKey = (record: StudentsTableRow) => Object.values(record).join('|');
   return (
     <Row>
       <Col span={24}>
@@ -15,8 +16,9 @@ function StudentsTable() {
           }}
           pagination={false}
           columns={columns}
-          dataSource={[]}
+          dataSource={data}
           size="middle"
+          rowKey={getUniqueKey}
         />
       </Col>
     </Row>

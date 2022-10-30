@@ -11,7 +11,6 @@ function MentorDashboard({ session, course }: CoursePageProps) {
   const mentorId = getMentorId(session, courseId);
 
   const [data, loading] = useMentorDashboard(mentorId, courseId);
-  const hasStudents = useMemo(() => data?.length !== 0, [data]);
 
   return (
     <PageLayout
@@ -22,7 +21,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       courseName={course.name}
     >
       <Notification />
-      {hasStudents ? <StudentsTable /> : <Instructions />}
+      {data && data?.length !== 0 ? <StudentsTable data={data} /> : <Instructions />}
     </PageLayout>
   );
 }

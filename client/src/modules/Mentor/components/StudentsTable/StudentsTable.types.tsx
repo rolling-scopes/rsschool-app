@@ -1,3 +1,7 @@
-import { MentorStudentDto } from "api";
+import { MentorDashboardDto } from 'api';
 
-export type StudentsTableRow = MentorStudentDto;
+export type StudentsTableRow = MentorDashboardDto;
+
+export interface StudentsTableProps {
+  data: StudentsTableRow[];
+}
