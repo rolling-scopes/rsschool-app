@@ -1,5 +1,5 @@
 import { Col, Row, Switch, Typography } from 'antd';
-import { SolutionReviewSettings } from '../constants';
+import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 
 type Props = {
   settings: SolutionReviewSettings;

@@ -2,7 +2,7 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Badge, Col, Comment, Row, Tag, Tooltip, Typography } from 'antd';
 import { formatDateTime } from 'services/formatter';
 import { TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
-import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'components/CrossCheck/constants';
+import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
 import { Username } from '../Username';

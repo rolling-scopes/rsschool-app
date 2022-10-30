@@ -2,10 +2,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
 import { CourseService, SolutionReviewType, TaskSolutionResultRole } from 'services/course';
-import { useSolutionReviewSettings } from './hooks';
+import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { markdownLabel } from 'components/Forms/PreparedComment';
-import { SolutionReview } from './SolutionReview';
-import { SolutionReviewSettingsPanel } from './SolutionReviewSettingsPanel';
+import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
+import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 
 type Props = {
   sessionGithubId: string;

@@ -4,9 +4,9 @@ import { Alert, Button, Col, Comment, Divider, Form, Input, message, notificatio
 import { MessageFilled } from '@ant-design/icons';
 import { CourseService, SolutionReviewType, TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { SolutionReviewSettings } from '../constants';
+import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
-import { StudentContacts } from '../StudentContacts';
+import { StudentContacts } from 'components/CrossCheck/StudentContacts';
 import { Message } from './Message';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
