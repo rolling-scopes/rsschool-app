@@ -10,9 +10,8 @@ function MentorDashboard({ session, course }: CoursePageProps) {
   const { id: courseId } = course;
   const mentorId = getMentorId(session, courseId);
 
-  const [data, loading] = useMentorDashboard(mentorId);
+  const [data, loading] = useMentorDashboard(mentorId, courseId);
   const hasStudents = useMemo(() => data?.length !== 0, [data]);
-  console.log(data);
 
   return (
     <PageLayout

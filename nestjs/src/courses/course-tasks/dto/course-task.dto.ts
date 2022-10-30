@@ -30,7 +30,7 @@ export class CourseTaskDto {
     this.id = courseTask.id;
     this.taskId = courseTask.taskId;
     this.type = courseTask.type;
-    this.name = courseTask.task.name;
+    this.taskName = courseTask.task.name;
     this.studentStartDate = (courseTask.studentStartDate as Date)?.toISOString();
     this.studentEndDate = (courseTask.studentEndDate as Date)?.toISOString();
     this.maxScore = courseTask.maxScore;
@@ -61,7 +61,7 @@ export class CourseTaskDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  name: string;
+  taskName: string;
 
   @ApiProperty({ enum: Checker })
   checker: Checker;

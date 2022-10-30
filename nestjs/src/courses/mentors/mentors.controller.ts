@@ -24,23 +24,21 @@ export class MentorsController {
     return items.map(item => new MentorStudentDto(item));
   }
 
-  @Get('/:mentorId/dashboard')
+  @Get('/:mentorId/dashboard/:courseId')
   @UseGuards(DefaultGuard)
   @ApiOperation({ operationId: 'getMentorDashboardData' })
   @ApiOkResponse({ type: [MentorDashboardDto] })
   @ApiBadRequestResponse()
-  public async getMentorDashboardData(@Param('mentorId', ParseIntPipe) mentorId: number, @Req() req: CurrentRequest) {
+  public async getMentorDashboardData(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
     const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const students = await this.mentorsService.getStudents(mentorId);
-    const res = [];
-    for (const student of students) {
-      const data = await this.mentorsService.getDataByStudent(0, student.id);
-      res.push(data);
-    }
-    console.log(res);
-    return students.map(student => new MentorDashboardDto(student));
+    const data = await this.mentorsService.getAll(mentorId, courseId);
+    return data;
   }
 }

@@ -4,12 +4,13 @@ import { Repository } from 'typeorm';
 
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
-import { TaskSolution } from '@entities/taskSolution';
 
 import { MentorBasic } from '@common/models';
 
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
+import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
+import { TaskResult } from '../../../../server/src/models';
 
 @Injectable()
 export class MentorsService {
@@ -18,8 +19,8 @@ export class MentorsService {
     readonly mentorsRepository: Repository<Mentor>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
-    @InjectRepository(TaskSolution)
-    readonly taskSolutionRepository: Repository<TaskSolution>,
+    @InjectRepository(TaskResult)
+    readonly taskResultRepository: Repository<TaskResult>,
   ) {}
 
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
@@ -79,27 +80,42 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
-  private async getTaskSolutions(studentId: number | undefined): Promise<TaskSolution[]> {
+  private async getTaskResults(studentId: number | undefined): Promise<TaskResult[]> {
     if (!studentId) {
       return [];
     }
-    return this.taskSolutionRepository.find({
+    return this.taskResultRepository.find({
       where: { studentId },
-      select: ['id', 'url', 'courseTaskId', 'studentId'],
+      select: ['id', 'score', 'studentId', 'courseTaskId', 'githubPrUrl'],
     });
   }
 
-  public async getDataByStudent(courseId: number, studentId?: number): Promise<any> {
+  private async getDataByStudent(courseId: number, studentId: number): Promise<any> {
     // const [courseTasks, courseEvents] = await Promise.all([
     //   this.getActiveCourseTasks(courseId, studentId),
     //   this.getCourseEvents(courseId, studentId),
     // ]);
-    const [taskSolutions] = await Promise.all([this.getTaskSolutions(studentId)]);
+    const [taskResults] = await Promise.all([this.getTaskResults(studentId)]);
     // this.getTaskResults(studentId),
     // this.getInterviewResults(studentId),
     // this.getPrescreeningResults(studentId),
     // this.getTaskCheckers(studentId),
 
-    return taskSolutions;
+    return taskResults;
+  }
+
+  public async getAll(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
+    const data: MentorDashboardDto[] = [];
+    const students = await this.getStudents(mentorId);
+
+    for (const student of students) {
+      const taskResults = await this.getDataByStudent(courseId, student.id);
+
+      for (const taskResult of taskResults) {
+        data.push(new MentorDashboardDto(taskResult, student));
+      }
+    }
+
+    return data;
   }
 }

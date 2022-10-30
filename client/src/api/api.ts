@@ -976,7 +976,7 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
-    'name': string;
+    'taskName': string;
     /**
      * 
      * @type {string}
@@ -1131,7 +1131,7 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
-    'name': string;
+    'taskName': string;
     /**
      * 
      * @type {string}
@@ -2125,53 +2125,153 @@ export interface Location {
 export interface MentorDashboardDto {
     /**
      * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'githubId': string;
-    /**
-     * 
      * @type {number}
      * @memberof MentorDashboardDto
      */
     'id': number;
     /**
      * 
-     * @type {boolean}
+     * @type {number}
      * @memberof MentorDashboardDto
      */
-    'active': boolean;
+    'taskId': number;
     /**
      * 
      * @type {string}
      * @memberof MentorDashboardDto
      */
-    'cityName': string | null;
+    'type': MentorDashboardDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof MentorDashboardDto
      */
-    'countryName': string | null;
+    'taskName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'checker': MentorDashboardDtoCheckerEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'studentStartDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'crossCheckEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof MentorDashboardDto
+     */
+    'taskOwner': PersonDto | null;
     /**
      * 
      * @type {number}
      * @memberof MentorDashboardDto
      */
-    'totalScore': number;
+    'maxScore': number;
     /**
      * 
      * @type {number}
      * @memberof MentorDashboardDto
      */
-    'rank': number;
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDashboardDto
+     */
+    'pairsCount': number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'crossCheckStatus': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'submitText': string | null;
+    /**
+     * 
+     * @type {Validations}
+     * @memberof MentorDashboardDto
+     */
+    'validations': Validations | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDashboardDto
+     */
+    'resultScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'githubPrUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'studentGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'studentName': string;
 }
+
+export const MentorDashboardDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type MentorDashboardDtoTypeEnum = typeof MentorDashboardDtoTypeEnum[keyof typeof MentorDashboardDtoTypeEnum];
+export const MentorDashboardDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type MentorDashboardDtoCheckerEnum = typeof MentorDashboardDtoCheckerEnum[keyof typeof MentorDashboardDtoCheckerEnum];
+
 /**
  * 
  * @export
@@ -8119,14 +8219,18 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorDashboardData: async (mentorId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMentorDashboardData: async (mentorId: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'mentorId' is not null or undefined
             assertParamExists('getMentorDashboardData', 'mentorId', mentorId)
-            const localVarPath = `/mentors/{mentorId}/dashboard`
-                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)));
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMentorDashboardData', 'courseId', courseId)
+            const localVarPath = `/mentors/{mentorId}/dashboard/{courseId}`
+                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)))
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8195,11 +8299,12 @@ export const MentorsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMentorDashboardData(mentorId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorDashboardDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorDashboardData(mentorId, options);
+        async getMentorDashboardData(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorDashboardDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorDashboardData(mentorId, courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -8225,11 +8330,12 @@ export const MentorsApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorDashboardData(mentorId: number, options?: any): AxiosPromise<Array<MentorDashboardDto>> {
-            return localVarFp.getMentorDashboardData(mentorId, options).then((request) => request(axios, basePath));
+        getMentorDashboardData(mentorId: number, courseId: number, options?: any): AxiosPromise<Array<MentorDashboardDto>> {
+            return localVarFp.getMentorDashboardData(mentorId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8253,12 +8359,13 @@ export class MentorsApi extends BaseAPI {
     /**
      * 
      * @param {number} mentorId 
+     * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MentorsApi
      */
-    public getMentorDashboardData(mentorId: number, options?: AxiosRequestConfig) {
-        return MentorsApiFp(this.configuration).getMentorDashboardData(mentorId, options).then((request) => request(this.axios, this.basePath));
+    public getMentorDashboardData(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
+        return MentorsApiFp(this.configuration).getMentorDashboardData(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

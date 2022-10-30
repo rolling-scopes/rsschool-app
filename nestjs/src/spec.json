@@ -269,11 +269,14 @@
         "tags": ["mentors"]
       }
     },
-    "/mentors/{mentorId}/dashboard": {
+    "/mentors/{mentorId}/dashboard/{courseId}": {
       "get": {
         "operationId": "getMentorDashboardData",
         "summary": "",
-        "parameters": [{ "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1604,24 +1607,74 @@
           "repoUrl"
         ]
       },
-      "MentorDashboardDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "githubId": { "type": "string" },
-          "id": { "type": "number" },
-          "active": { "type": "boolean" },
-          "cityName": { "type": "string", "nullable": true },
-          "countryName": { "type": "string", "nullable": true },
-          "totalScore": { "type": "number" },
-          "rank": { "type": "number" }
-        },
-        "required": ["name", "githubId", "id", "active", "cityName", "countryName", "totalScore", "rank"]
-      },
       "Validations": {
         "type": "object",
         "properties": { "githubIdInUrl": { "type": "boolean" } },
         "required": ["githubIdInUrl"]
+      },
+      "MentorDashboardDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "taskId": { "type": "number" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "jstask",
+              "kotlintask",
+              "objctask",
+              "htmltask",
+              "ipynb",
+              "selfeducation",
+              "codewars",
+              "test",
+              "codejam",
+              "interview",
+              "stage-interview",
+              "cv:html",
+              "cv:markdown"
+            ]
+          },
+          "taskName": { "type": "string" },
+          "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
+          "studentStartDate": { "type": "string" },
+          "studentEndDate": { "type": "string" },
+          "crossCheckEndDate": { "type": "string", "nullable": true },
+          "descriptionUrl": { "type": "string" },
+          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "maxScore": { "type": "number" },
+          "scoreWeight": { "type": "number" },
+          "pairsCount": { "type": "number", "nullable": true },
+          "crossCheckStatus": { "type": "string" },
+          "submitText": { "type": "string", "nullable": true },
+          "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] },
+          "resultScore": { "type": "number" },
+          "githubPrUrl": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "studentName": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "taskId",
+          "type",
+          "taskName",
+          "checker",
+          "studentStartDate",
+          "studentEndDate",
+          "crossCheckEndDate",
+          "descriptionUrl",
+          "taskOwner",
+          "maxScore",
+          "scoreWeight",
+          "pairsCount",
+          "crossCheckStatus",
+          "submitText",
+          "validations",
+          "resultScore",
+          "githubPrUrl",
+          "studentGithubId",
+          "studentName"
+        ]
       },
       "CourseTaskDto": {
         "type": "object",
@@ -1646,7 +1699,7 @@
               "cv:markdown"
             ]
           },
-          "name": { "type": "string" },
+          "taskName": { "type": "string" },
           "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
           "studentStartDate": { "type": "string" },
           "studentEndDate": { "type": "string" },
@@ -1664,7 +1717,7 @@
           "id",
           "taskId",
           "type",
-          "name",
+          "taskName",
           "checker",
           "studentStartDate",
           "studentEndDate",
@@ -1702,7 +1755,7 @@
               "cv:markdown"
             ]
           },
-          "name": { "type": "string" },
+          "taskName": { "type": "string" },
           "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
           "studentStartDate": { "type": "string" },
           "studentEndDate": { "type": "string" },
@@ -1724,7 +1777,7 @@
           "id",
           "taskId",
           "type",
-          "name",
+          "taskName",
           "checker",
           "studentStartDate",
           "studentEndDate",
