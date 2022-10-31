@@ -10,7 +10,7 @@ import { MentorBasic } from '@common/models';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
-import { CourseTask, Task, TaskResult } from '../../../../server/src/models';
+import { CourseTask, Task, TaskResult, TaskSolution } from '../../../../server/src/models';
 import { Checker } from '../../../../server/src/models/courseTask';
 
 @Injectable()
@@ -22,6 +22,8 @@ export class MentorsService {
     readonly studentRepository: Repository<Student>,
     @InjectRepository(TaskResult)
     readonly taskResultRepository: Repository<TaskResult>,
+    @InjectRepository(TaskSolution)
+    readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(Task)
@@ -60,13 +62,6 @@ export class MentorsService {
     });
   }
 
-  public getStudentsByMentorAndCourse(mentorId: number, courseId: number) {
-    return this.studentRepository.find({
-      where: { mentorId, courseId },
-      relations: ['user', 'feedbacks'],
-    });
-  }
-
   public async canAccessMentor(user: AuthUser, mentorId: number): Promise<boolean> {
     const mentor = await this.getById(mentorId);
     if (mentor == null) {
@@ -92,6 +87,13 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
+  private getStudentsByMentorAndCourse(mentorId: number, courseId: number) {
+    return this.studentRepository.find({
+      where: { mentorId, courseId },
+      relations: ['user'],
+    });
+  }
+
   private async getTaskResultsByStudentsIds(studentsIds?: number[]) {
     if (!studentsIds) {
       return [];
@@ -99,43 +101,74 @@ export class MentorsService {
 
     return this.taskResultRepository.find({
       where: { studentId: In(studentsIds) },
-      relations: ['courseTask'],
+      select: ['courseTaskId', 'score'],
     });
   }
 
-  private async getTasks(courseTaskIds?: number[]) {
+  private async getTaskSolutionsByStudentsIds(studentsIds?: number[]) {
+    if (!studentsIds) {
+      return [];
+    }
+
+    return this.taskSolutionRepository.find({
+      where: { studentId: In(studentsIds) },
+      select: ['courseTaskId', 'url'],
+    });
+  }
+
+  private async getCourseTasks(courseTaskIds?: number[]) {
     if (!courseTaskIds) {
       return [];
     }
 
-    return this.taskRepository.find({
-      where: { id: In(courseTaskIds) },
+    return this.courseTaskRepository.find({
+      where: { id: In(courseTaskIds), checker: Checker.Mentor },
+      relations: ['task'],
     });
   }
 
   private async getTasksByStudentsIds(studentsIds?: number[]) {
-    const taskResults = await this.getTaskResultsByStudentsIds(studentsIds);
-    const mentorTaskResults = taskResults.filter(tr => tr.courseTask.checker === Checker.Mentor);
-    const courseTaskIds = mentorTaskResults.map(tr => tr.courseTask.taskId);
-    const tasks = await this.getTasks(courseTaskIds);
+    const [taskResults, taskSolutions] = await Promise.all([
+      this.getTaskResultsByStudentsIds(studentsIds),
+      this.getTaskSolutionsByStudentsIds(studentsIds),
+    ]);
 
-    return { tasks, taskResults: mentorTaskResults };
+    const courseTaskIds = [
+      ...new Set([...taskResults.map(tr => tr.courseTaskId), ...taskSolutions.map(ts => ts.courseTaskId)]),
+    ];
+
+    const courseTasks = await this.getCourseTasks(courseTaskIds);
+
+    return { courseTasks, taskResults, taskSolutions };
   }
 
   public async getAll(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
     const students = await this.getStudentsByMentorAndCourse(mentorId, courseId);
-    const studentsIds = students.map(s => s.id);
-    const { tasks, taskResults } = await this.getTasksByStudentsIds(studentsIds);
 
-    if (taskResults) {
-      return taskResults.map(taskResult => {
-        const { courseTask } = taskResult;
-        const task = tasks.find(t => t.id === courseTask.taskId) || ({} as Task);
-        const student = students.find(st => st.id === taskResult.studentId) || ({} as Student);
-        return new MentorDashboardDto(task, courseTask, taskResult, student);
-      });
+    if (!students) {
+      return [];
     }
 
-    return [];
+    const studentsIds = students.map(s => s.id);
+    const { courseTasks, taskResults, taskSolutions } = await this.getTasksByStudentsIds(studentsIds);
+
+    if (!courseTasks) {
+      return [];
+    }
+
+    const student = students.find(s => s.courseId === courseId);
+
+    if (!student) {
+      return [];
+    }
+
+    return courseTasks.map(courseTask => {
+      const { task, id: courseTaskId } = courseTask;
+
+      const taskResult = taskResults.find(tr => tr.courseTaskId === courseTaskId);
+      const taskSolution = taskSolutions.find(tr => tr.courseTaskId === courseTaskId);
+
+      return new MentorDashboardDto(student, task, courseTask, taskResult, taskSolution);
+    });
   }
 }

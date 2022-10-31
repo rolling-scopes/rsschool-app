@@ -1,22 +1,28 @@
 import { Student } from '@entities/student';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { CourseTask, Task, TaskResult } from '../../../../../server/src/models';
+import { CourseTask, Task, TaskResult, TaskSolution } from '../../../../../server/src/models';
 
 @ApiResponse({})
 export class MentorDashboardDto {
-  constructor(task: Task, courseTask: CourseTask, taskResult: TaskResult, student: Student) {
-    this.taskId = courseTask.id;
-    this.maxScore = courseTask.maxScore;
-    this.taskName = task.name;
-    this.taskDescriptionUrl = task.descriptionUrl;
-    this.resultScore = taskResult.score;
-    this.githubPrUrl = taskResult.githubPrUrl;
+  constructor(
+    student: Student,
+    task: Task,
+    courseTask: CourseTask,
+    taskResult?: TaskResult,
+    taskSolution?: TaskSolution,
+  ) {
     this.studentName = student.user.firstName; // TODO: get name
     this.studentGithubId = student.user.githubId;
+    this.taskName = task.name;
+    this.taskDescriptionUrl = task.descriptionUrl;
+    this.courseTaskId = courseTask.id;
+    this.maxScore = courseTask.maxScore;
+    this.resultScore = taskResult?.score ?? null;
+    this.solutionUrl = taskSolution?.url ?? null;
   }
 
   @ApiProperty()
-  taskId: number;
+  courseTaskId: number;
 
   @ApiProperty()
   taskName: string;
@@ -27,11 +33,11 @@ export class MentorDashboardDto {
   @ApiProperty()
   maxScore: number;
 
-  @ApiProperty()
-  resultScore: number;
+  @ApiProperty({ nullable: true })
+  resultScore: number | null;
 
-  @ApiProperty()
-  githubPrUrl: string;
+  @ApiProperty({ nullable: true })
+  solutionUrl: string | null;
 
   @ApiProperty()
   studentGithubId: string;
