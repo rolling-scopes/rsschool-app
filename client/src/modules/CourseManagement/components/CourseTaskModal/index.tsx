@@ -116,7 +116,7 @@ export function CourseTaskModal(props: Props) {
             label="Start Date - End Date"
             rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
           >
-            <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+            <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm', defaultValue: [moment().hour(0).minute(0), moment().hour(23).minute(59)] }} />
           </Form.Item>
         </Col>
         <Col span={6}>
