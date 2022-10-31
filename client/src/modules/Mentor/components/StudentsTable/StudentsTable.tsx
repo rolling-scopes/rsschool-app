@@ -1,8 +1,14 @@
 import { Col, Row, Table } from 'antd';
 import React from 'react';
-import { getColumns, StudentsTableProps, StudentsTableRow } from '.';
+import { getColumns } from '.';
+import { MentorDashboardDto, ProfileCourseDto } from 'api';
 
-const getUniqueKey = (record: StudentsTableRow) => Object.values(record).filter(Boolean).join('|');
+export interface StudentsTableProps {
+  data: MentorDashboardDto[];
+  course: ProfileCourseDto;
+}
+
+const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filter(Boolean).join('|');
 
 function StudentsTable({ data, course }: StudentsTableProps) {
   return (

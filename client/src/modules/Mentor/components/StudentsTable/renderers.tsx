@@ -1,15 +1,14 @@
 import { ColumnsType } from 'antd/lib/table';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Mentor/constants';
-import { StudentsTableRow } from '.';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
 import { Space, Typography } from 'antd';
 import { SelectOutlined } from '@ant-design/icons';
-import { ProfileCourseDto } from 'api';
+import { MentorDashboardDto, ProfileCourseDto } from 'api';
 
 const { Text, Link } = Typography;
 
-export const getColumns = (course: ProfileCourseDto): ColumnsType<StudentsTableRow> => [
+export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboardDto> => [
   {
     key: StudentsTableColumnKey.Number,
     title: StudentsTableColumnName.Number,
@@ -54,7 +53,7 @@ export const getColumns = (course: ProfileCourseDto): ColumnsType<StudentsTableR
   },
 ];
 
-function renderName(value: string, row: StudentsTableRow) {
+function renderName(value: string, row: MentorDashboardDto) {
   if (!row.studentName) return value;
 
   return (
@@ -64,7 +63,7 @@ function renderName(value: string, row: StudentsTableRow) {
   );
 }
 
-function renderTask(value: string, row: StudentsTableRow) {
+function renderTask(value: string, row: MentorDashboardDto) {
   if (!row.taskDescriptionUrl) return value;
 
   return (
@@ -74,7 +73,7 @@ function renderTask(value: string, row: StudentsTableRow) {
   );
 }
 
-function renderScore(_v: string, row: StudentsTableRow) {
+function renderScore(_v: string, row: MentorDashboardDto) {
   const { maxScore, resultScore } = row;
   if (maxScore == null) return null;
 
