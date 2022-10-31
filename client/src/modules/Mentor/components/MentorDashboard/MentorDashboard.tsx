@@ -20,7 +20,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       courseName={course.name}
     >
       <Notification />
-      {data && data?.length !== 0 ? <StudentsTable data={data} course={course} /> : <Instructions />}
+      {data && data?.length > 0 ? <StudentsTable data={data} course={course} /> : <Instructions />}
     </PageLayout>
   );
 }
