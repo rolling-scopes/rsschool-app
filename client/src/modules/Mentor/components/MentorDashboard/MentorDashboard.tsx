@@ -5,7 +5,6 @@ import { Instructions, Notification, StudentsTable } from '..';
 import { getMentorId } from 'domain/user';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 
-// TODO: add useLoading & <Loading />
 function MentorDashboard({ session, course }: CoursePageProps) {
   const { id: courseId } = course;
   const mentorId = getMentorId(session, courseId);
