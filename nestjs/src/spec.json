@@ -1658,7 +1658,7 @@
               "cv:markdown"
             ]
           },
-          "taskName": { "type": "string" },
+          "name": { "type": "string" },
           "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
           "studentStartDate": { "type": "string" },
           "studentEndDate": { "type": "string" },
@@ -1676,7 +1676,7 @@
           "id",
           "taskId",
           "type",
-          "taskName",
+          "name",
           "checker",
           "studentStartDate",
           "studentEndDate",
@@ -1714,7 +1714,7 @@
               "cv:markdown"
             ]
           },
-          "taskName": { "type": "string" },
+          "name": { "type": "string" },
           "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
           "studentStartDate": { "type": "string" },
           "studentEndDate": { "type": "string" },
@@ -1736,7 +1736,7 @@
           "id",
           "taskId",
           "type",
-          "taskName",
+          "name",
           "checker",
           "studentStartDate",
           "studentEndDate",

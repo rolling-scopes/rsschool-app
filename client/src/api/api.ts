@@ -976,7 +976,7 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
-    'taskName': string;
+    'name': string;
     /**
      * 
      * @type {string}
@@ -1131,7 +1131,7 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
-    'taskName': string;
+    'name': string;
     /**
      * 
      * @type {string}
