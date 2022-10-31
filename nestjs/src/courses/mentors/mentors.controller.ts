@@ -38,6 +38,6 @@ export class MentorsController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    return await this.mentorsService.getAll(mentorId, courseId);
+    return await this.mentorsService.getData(mentorId, courseId);
   }
 }
