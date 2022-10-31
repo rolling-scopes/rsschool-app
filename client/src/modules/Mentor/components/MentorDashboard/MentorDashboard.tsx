@@ -23,8 +23,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       <Notification />
       {data && data?.length !== 0 ? <StudentsTable data={data} /> : <Instructions />}
       {/* TODO: remove when data will be ready */}
-      {/*
-      <StudentsTable
+      {/* <StudentsTable
         data={[
           {
             githubPrUrl: 'githubPrUrl',
@@ -32,7 +31,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
             resultScore: 20,
             studentGithubId: 'github',
             studentName: 'Name',
-            taskDescriptionUrl: 'githubPrUrl',
+            taskDescriptionUrl: 'taskDescriptionUrl',
             taskId: 12,
             taskName: 'Task Name',
           },

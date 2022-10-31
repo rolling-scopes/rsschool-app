@@ -63,9 +63,9 @@ function renderName(value: string, row: StudentsTableRow) {
   if (!row.studentName) return value;
 
   return (
-    <a target="_blank" href={row.studentName}>
+    <Link target="_blank" href={row.studentName}>
       {value}
-    </a>
+    </Link>
   );
 }
 
@@ -73,9 +73,9 @@ function renderTask(value: string, row: StudentsTableRow) {
   if (!row.taskDescriptionUrl) return value;
 
   return (
-    <a target="_blank" href={row.taskDescriptionUrl}>
+    <Link target="_blank" href={row.taskDescriptionUrl}>
       {value}
-    </a>
+    </Link>
   );
 }
 
@@ -94,7 +94,7 @@ function renderSubmitButton() {
   // TODO: modal window to submit scores
   const courseAlias = ''; // TODO: course.alias
   return (
-    <Link href={`/course/mentor/submit-review?${courseAlias}`}>
+    <Link target="_blank" href={`/course/mentor/submit-review?${courseAlias}`}>
       <Space>
         SubmitReview <SelectOutlined rotate={90} />
       </Space>
