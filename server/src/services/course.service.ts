@@ -710,6 +710,9 @@ function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
   if (task.mentorEndDate) {
     task.mentorEndDate = shiftDate(task.mentorEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   }
+  if (task.crossCheckEndDate) {
+    task.crossCheckEndDate = shiftDate(task.crossCheckEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  }
   task.courseId = courseId;
 }
 
