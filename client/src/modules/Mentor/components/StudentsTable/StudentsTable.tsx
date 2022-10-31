@@ -1,10 +1,10 @@
 import { Col, Row, Table } from 'antd';
 import React from 'react';
-import { columns, StudentsTableProps, StudentsTableRow } from '.';
+import { getColumns, StudentsTableProps, StudentsTableRow } from '.';
 
-function StudentsTable({ data }: StudentsTableProps) {
-  const getUniqueKey = (record: StudentsTableRow) => Object.values(record).join('|');
-  
+function StudentsTable({ data, course }: StudentsTableProps) {
+  const getUniqueKey = (record: StudentsTableRow) => Object.values(record).filter(Boolean).join('|');
+
   return (
     <Row>
       <Col span={24}>
@@ -16,7 +16,7 @@ function StudentsTable({ data }: StudentsTableProps) {
             cancelSort: undefined,
           }}
           pagination={false}
-          columns={columns}
+          columns={getColumns(course)}
           dataSource={data}
           size="middle"
           rowKey={getUniqueKey}

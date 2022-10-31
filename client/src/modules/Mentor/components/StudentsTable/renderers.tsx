@@ -5,10 +5,11 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
 import { Space, Typography } from 'antd';
 import { SelectOutlined } from '@ant-design/icons';
+import { ProfileCourseDto } from 'api';
 
 const { Text, Link } = Typography;
 
-export const columns: ColumnsType<StudentsTableRow> = [
+export const getColumns = (course: ProfileCourseDto): ColumnsType<StudentsTableRow> => [
   {
     key: StudentsTableColumnKey.Number,
     title: StudentsTableColumnKName.Number,
@@ -36,17 +37,11 @@ export const columns: ColumnsType<StudentsTableRow> = [
     render: renderTask,
   },
   {
-    key: StudentsTableColumnKey.GithubPrUrl,
-    title: StudentsTableColumnKName.GithubPrUrl,
-    dataIndex: 'githubPrUrl',
+    key: StudentsTableColumnKey.SolutionUrl,
+    title: StudentsTableColumnKName.SolutionUrl,
+    dataIndex: 'solutionUrl',
     render: renderTask,
   },
-  // {
-  //   key: StudentsTableColumnKey.DesiredDeadline,
-  //   title: StudentsTableColumnKName.DesiredDeadline,
-  //   // TODO: change to date when proper API&DTO will be added
-  //   sorter: dateSorter('date'),
-  // },
   {
     key: StudentsTableColumnKey.Score,
     title: StudentsTableColumnKName.Score,
@@ -55,7 +50,7 @@ export const columns: ColumnsType<StudentsTableRow> = [
   {
     key: StudentsTableColumnKey.SubmitScores,
     title: StudentsTableColumnKName.SubmitScores,
-    render: renderSubmitButton,
+    render: () => renderSubmitButton(course),
   },
 ];
 
@@ -90,11 +85,10 @@ function renderScore(_v: string, row: StudentsTableRow) {
   );
 }
 
-function renderSubmitButton() {
+function renderSubmitButton({ alias }: ProfileCourseDto) {
   // TODO: modal window to submit scores
-  const courseAlias = ''; // TODO: course.alias
   return (
-    <Link target="_blank" href={`/course/mentor/submit-review?${courseAlias}`}>
+    <Link target="_blank" href={`/course/mentor/submit-review?${alias}`}>
       <Space>
         SubmitReview <SelectOutlined rotate={90} />
       </Space>

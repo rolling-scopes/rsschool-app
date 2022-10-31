@@ -39,9 +39,9 @@ export class MentorDashboardDto {
   @ApiProperty()
   maxScore: number;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: Number })
   resultScore: number | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   solutionUrl: string | null;
 }

@@ -1610,24 +1610,24 @@
       "MentorDashboardDto": {
         "type": "object",
         "properties": {
-          "taskId": { "type": "number" },
+          "studentGithubId": { "type": "string" },
+          "studentName": { "type": "string" },
           "taskName": { "type": "string" },
           "taskDescriptionUrl": { "type": "string" },
+          "courseTaskId": { "type": "number" },
           "maxScore": { "type": "number" },
-          "resultScore": { "type": "number" },
-          "githubPrUrl": { "type": "string" },
-          "studentGithubId": { "type": "string" },
-          "studentName": { "type": "string" }
+          "resultScore": { "type": "number", "nullable": true },
+          "solutionUrl": { "type": "string", "nullable": true }
         },
         "required": [
-          "taskId",
+          "studentGithubId",
+          "studentName",
           "taskName",
           "taskDescriptionUrl",
+          "courseTaskId",
           "maxScore",
           "resultScore",
-          "githubPrUrl",
-          "studentGithubId",
-          "studentName"
+          "solutionUrl"
         ]
       },
       "Validations": {

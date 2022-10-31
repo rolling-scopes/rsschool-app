@@ -21,22 +21,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       courseName={course.name}
     >
       <Notification />
-      {data && data?.length !== 0 ? <StudentsTable data={data} /> : <Instructions />}
-      {/* TODO: remove when data will be ready */}
-      {/* <StudentsTable
-        data={[
-          {
-            githubPrUrl: 'githubPrUrl',
-            maxScore: 100,
-            resultScore: 20,
-            studentGithubId: 'github',
-            studentName: 'Name',
-            taskDescriptionUrl: 'taskDescriptionUrl',
-            taskId: 12,
-            taskName: 'Task Name',
-          },
-        ]}
-      /> */}
+      {data && data?.length !== 0 ? <StudentsTable data={data} course={course} /> : <Instructions />}
     </PageLayout>
   );
 }

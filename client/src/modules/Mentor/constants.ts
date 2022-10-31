@@ -9,7 +9,7 @@ export enum StudentsTableColumnKey {
   DesiredDeadline = 'desiredDeadline',
   Score = 'score',
   SubmitScores = 'submitScores',
-  GithubPrUrl = 'githubPrUrl',
+  SolutionUrl = 'solutionUrl',
 }
 
 export enum StudentsTableColumnKName {
@@ -20,5 +20,5 @@ export enum StudentsTableColumnKName {
   DesiredDeadline = 'Desired deadline',
   Score = 'Score / Max',
   SubmitScores = 'Submit scores',
-  GithubPrUrl = 'Pull request',
+  SolutionUrl = 'Pull request',
 }

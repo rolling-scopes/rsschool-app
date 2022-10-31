@@ -2125,10 +2125,16 @@ export interface Location {
 export interface MentorDashboardDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof MentorDashboardDto
      */
-    'taskId': number;
+    'studentGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'studentName': string;
     /**
      * 
      * @type {string}
@@ -2146,31 +2152,25 @@ export interface MentorDashboardDto {
      * @type {number}
      * @memberof MentorDashboardDto
      */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDashboardDto
+     */
     'maxScore': number;
     /**
      * 
      * @type {number}
      * @memberof MentorDashboardDto
      */
-    'resultScore': number;
+    'resultScore': number | null;
     /**
      * 
      * @type {string}
      * @memberof MentorDashboardDto
      */
-    'githubPrUrl': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'studentGithubId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MentorDashboardDto
-     */
-    'studentName': string;
+    'solutionUrl': string | null;
 }
 /**
  * 
