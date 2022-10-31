@@ -58,7 +58,7 @@ function renderName(value: string, row: StudentsTableRow) {
   if (!row.studentName) return value;
 
   return (
-    <Link target="_blank" href={row.studentName}>
+    <Link target="_blank" href={`/profile?githubId=${row.studentGithubId}`}>
       {value}
     </Link>
   );
@@ -88,7 +88,7 @@ function renderScore(_v: string, row: StudentsTableRow) {
 function renderSubmitButton({ alias }: ProfileCourseDto) {
   // TODO: modal window to submit scores
   return (
-    <Link target="_blank" href={`/course/mentor/submit-review?${alias}`}>
+    <Link target="_blank" href={`/course/mentor/submit-review?course=${alias}`}>
       <Space>
         SubmitReview <SelectOutlined rotate={90} />
       </Space>
