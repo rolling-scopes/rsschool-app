@@ -1,5 +1,5 @@
 import { ColumnsType } from 'antd/lib/table';
-import { StudentsTableColumnKey, StudentsTableColumnKName } from 'modules/Mentor/constants';
+import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Mentor/constants';
 import { StudentsTableRow } from '.';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
@@ -12,44 +12,44 @@ const { Text, Link } = Typography;
 export const getColumns = (course: ProfileCourseDto): ColumnsType<StudentsTableRow> => [
   {
     key: StudentsTableColumnKey.Number,
-    title: StudentsTableColumnKName.Number,
+    title: StudentsTableColumnName.Number,
     render: (_v, _r, idx) => idx + 1,
     align: 'center',
   },
   {
     key: StudentsTableColumnKey.GithubId,
-    title: StudentsTableColumnKName.GithubId,
+    title: StudentsTableColumnName.GithubId,
     dataIndex: 'studentGithubId',
     render: (value: string) => !!value && <GithubUserLink value={value} />,
     ...getColumnSearchProps('studentGithubId'),
   },
   {
     key: StudentsTableColumnKey.Name,
-    title: StudentsTableColumnKName.Name,
+    title: StudentsTableColumnName.Name,
     dataIndex: 'studentName',
     render: renderName,
     ...getColumnSearchProps('studentName'),
   },
   {
     key: StudentsTableColumnKey.Task,
-    title: StudentsTableColumnKName.Task,
+    title: StudentsTableColumnName.Task,
     dataIndex: 'taskName',
     render: renderTask,
   },
   {
     key: StudentsTableColumnKey.SolutionUrl,
-    title: StudentsTableColumnKName.SolutionUrl,
+    title: StudentsTableColumnName.SolutionUrl,
     dataIndex: 'solutionUrl',
     render: renderTask,
   },
   {
     key: StudentsTableColumnKey.Score,
-    title: StudentsTableColumnKName.Score,
+    title: StudentsTableColumnName.Score,
     render: renderScore,
   },
   {
     key: StudentsTableColumnKey.SubmitScores,
-    title: StudentsTableColumnKName.SubmitScores,
+    title: StudentsTableColumnName.SubmitScores,
     render: () => renderSubmitButton(course),
   },
 ];

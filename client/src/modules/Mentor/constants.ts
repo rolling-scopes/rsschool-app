@@ -12,7 +12,7 @@ export enum StudentsTableColumnKey {
   SolutionUrl = 'solutionUrl',
 }
 
-export enum StudentsTableColumnKName {
+export enum StudentsTableColumnName {
   Number = '#',
   GithubId = 'Github',
   Name = 'Name',
