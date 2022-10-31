@@ -6,9 +6,9 @@ import { CourseTask, Task, TaskResult } from '../../../../../server/src/models';
 export class MentorDashboardDto {
   constructor(task: Task, courseTask: CourseTask, taskResult: TaskResult, student: Student) {
     this.taskId = courseTask.id;
+    this.maxScore = courseTask.maxScore;
     this.taskName = task.name;
     this.taskDescriptionUrl = task.descriptionUrl;
-    this.maxScore = courseTask.maxScore;
     this.resultScore = taskResult.score;
     this.githubPrUrl = taskResult.githubPrUrl;
     this.studentName = student.user.firstName; // TODO: get name

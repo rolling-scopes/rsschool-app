@@ -11,6 +11,7 @@ import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { CourseTask, Task, TaskResult } from '../../../../server/src/models';
+import { Checker } from '../../../../server/src/models/courseTask';
 
 @Injectable()
 export class MentorsService {
@@ -102,28 +103,29 @@ export class MentorsService {
     });
   }
 
-  private async getTasks(taskIds?: number[]) {
-    if (!taskIds) {
+  private async getTasks(courseTaskIds?: number[]) {
+    if (!courseTaskIds) {
       return [];
     }
 
     return this.taskRepository.find({
-      where: { id: In(taskIds) },
+      where: { id: In(courseTaskIds) },
     });
   }
 
-  private async getData(studentsIds?: number[]) {
+  private async getTasksByStudentsIds(studentsIds?: number[]) {
     const taskResults = await this.getTaskResultsByStudentsIds(studentsIds);
-    const taskIds = taskResults.map(tr => tr.courseTask.taskId);
-    const tasks = await this.getTasks(taskIds);
+    const mentorTaskResults = taskResults.filter(tr => tr.courseTask.checker === Checker.Mentor);
+    const courseTaskIds = mentorTaskResults.map(tr => tr.courseTask.taskId);
+    const tasks = await this.getTasks(courseTaskIds);
 
-    return { tasks, taskResults };
+    return { tasks, taskResults: mentorTaskResults };
   }
 
   public async getAll(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
     const students = await this.getStudentsByMentorAndCourse(mentorId, courseId);
     const studentsIds = students.map(s => s.id);
-    const { tasks, taskResults } = await this.getData(studentsIds);
+    const { tasks, taskResults } = await this.getTasksByStudentsIds(studentsIds);
 
     if (taskResults) {
       return taskResults.map(taskResult => {
