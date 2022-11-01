@@ -1,0 +1,169 @@
+{
+  "header": {
+    "title": "Header",
+    "switchers": {
+      "sound": "Turn on/off sound (Ctrl+1)",
+      "theme": "Switch theme (Ctrl+2)"
+    }
+  },
+
+  "footer": {
+    "title": "Footer"
+  },
+
+  "home": {
+    "title": "Home",
+    "more": "Read more",
+    "about": {
+      "project": "Our project is a depository of sloths. View all existing stickers, download the necessary ones or chill a bit - why not? Feel a sloth!",
+      "team": "We are a team of beginner frontend developers. We welcome you to our project, which we completed as part of the final task of the JS/FE2022Q1 Rolling Scopes School course!"
+    }
+  },
+
+  "about": {
+    "title": "About",
+    "sloths": {
+      "title": "About RS SLOTHS",
+      "main": "All sloths in one site!",
+      "descr": "We have gathered all the sloths together for you! Go to the catalog and see all the existing sloths! And if you want to use them somewhere, you can just select the ones you need and download it! Or you can go to the merch builder and prepare the source for something cool. Be active, but not too active. We are sloths here!"
+    },
+    "interactives": {
+      "title": "Interactive",
+      "main": "Sloths are about chilling!",
+      "descr": "We have tried to make sure that you can relax during your stay on our resource. Relax and play Memory Game, try to correctly guess all the sloths in the game of the same name, or create memes based on existing stickers: fun time, work hour!"
+    },
+    "teammates": {
+      "main": "WOV WOV Team is a team of like-minded people who strive to create something new, interesting and beautiful. We're for a businesslike attitude to humor and a humorous attitude to business!",
+      "wiijoy": "Designer, memolog and Vue.js promoter. Performed the initial setup, created a design layout and carried out work on the front-end part of the project.",
+      "ogimly": "Queen of TypeScript, mistress of API requests and just a good person. Worked on the front-end part of the project, completed all the work on communicating the front-end component with its server part.",
+      "vanet": "Genius, billionaire, playboy, philanthropist. In short, team-lead. Gathered a team, solved all organizational questions (and just solved), developed the backend of the project."
+    }
+  },
+
+  "catalog": {
+    "title": "Catalog",
+    "search": "...caption or description",
+    "sorting": "Sort by...",
+    "info": "Detail info",
+    "count": "Total count",
+    "stickersNotFound": "Sloth stickers not found. Please, contact the site administrator",
+    "idNotFound": "Sloth not found",
+    "tagsNotFound": "Tags not found. Please, contact the site administrator"
+  },
+
+  "guess": {
+    "title": "Guess-a-Sloth Game",
+    "description": "Try to guess which sloth is hiding behind the dark outline? Only a real sloth can guess everyone!",
+    "rules": "(Press 1-4 to select an answer, press Enter to send)",
+    "start": "Let's Go!",
+    "congrats": "Congratulations!",
+    "win": "You guessed everyone!",
+    "result": "Your result:",
+    "guess": "Guess image",
+    "guesses": "guesses",
+    "next": "Send an answer",
+    "points": "point | points",
+    "results": "Guess-a-Sloth Results"
+  },
+
+  "memory": {
+    "title": "Memory Game",
+    "start": "Let's Go!",
+    "congrats": "Congratulations!",
+    "win": "You won! Your result:",
+    "steps": "step | steps",
+    "time": "seconds",
+    "level": "Choose your level",
+    "junior": "Junior",
+    "middle": "Middle",
+    "senior": "Senior",
+    "results": "Memory Results"
+  },
+
+  "create": {
+    "title": "Create a meme",
+    "description": "Choose an image, enter text, use mouse to move and scroll wheel to scale objects, copy the result at the end",
+    "top": "Text Top",
+    "bottom": "Text Bottom",
+    "margin": "Image Margin",
+    "color": "Text Color",
+    "stroke": "Text Stroke Color",
+    "backgroundColor": "Background Color",
+    "backgroundTransparent": "Transparent Background"
+  },
+
+  "merch": {
+    "title": "Merch",
+    "description": "Choose an image, enter text, use mouse to move and scroll wheel to scale objects, copy the result at the end",
+    "bottom": "Text",
+    "kText": "Text width (relative to image width)",
+    "kFont": "Font size (relative to image width)",
+    "marginTop": "Image Margin Top",
+    "marginLeft": "Image Margin Left",
+    "color": "Text Color",
+    "backgroundColor": "Item Color"
+  },
+
+  "modal": {
+    "header": {
+      "alert": "Alert!",
+      "error": "ERROR!"
+    },
+    "body": {
+      "download": "Download selected files?"
+    },
+    "btn": {}
+  },
+
+  "loader": {
+    "text": "Sloth's loading in progress"
+  },
+
+  "404": {
+    "title": "404: Page Not Found",
+    "text": "Sloth made a bug or didn't make this page.\nPlease check the correctness of path again"
+  },
+
+  "sorting": {
+    "name+": "...Name (ascending)",
+    "name-": "...Name (descending)"
+  },
+
+  "btn": {
+    "close": "Close",
+    "reset": "Reset filters",
+    "show": "Detail info",
+    "yes": "Yes",
+    "no": "No",
+    "copy": "Copy",
+    "download": "Download",
+    "trueSize": "True Size",
+    "center": "on Center",
+    "scaleUp": "Scale Up",
+    "scaleDown": "Scale Down",
+    "count-": "Count ▼",
+    "count+": "Count ▲",
+    "time-": "Time ▼",
+    "time+": "Time ▲",
+    "createdAt-": "Creation date ▼",
+    "createdAt+": "Creation date ▲",
+    "change": "Change kit"
+  },
+
+  "pagination": {
+    "perPage": "Items per page",
+    "next": "❯",
+    "prev": "❮",
+    "top": "❮❮",
+    "bottom": "❯❯",
+    "nextTitle": "❯ (Page Down)",
+    "prevTitle": "❮ (Page Up)",
+    "topTitle": "❮❮ (Home)",
+    "bottomTitle": "❯❯ (End)",
+    "count": "Total count"
+  },
+
+  "results": {
+    "user": "Personal results"
+  }
+}

@@ -1,0 +1,63 @@
+:root {
+  --light-main: #dcdbe1;
+  --light-addict: #fdfdff;
+
+  --dark-main: #1f1f1f;
+  --dark-addict: #303032;
+
+  --blue-main: #e3e8ff;
+
+  --gray-main: #4b4b4b;
+
+  --red-active: #b44a4a;
+  --red-disactive: #deaaaa;
+
+  --green-active: #448447;
+  --green-disactive: #bed9bf;
+
+  --yellow-main: #ffdb1f;
+  --sloth-main: #c9a67a;
+
+  --dark-opacity: rgba(31, 31, 31, 0.8);
+
+  --width-panel: 30rem;
+  --gap: 1rem;
+  --gap-2: 2rem;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--light-main);
+  --color-background-soft: var(--light-addict);
+
+  --color-background-inverse: var(--dark-addict);
+  --color-background-inverse-soft: var(--dark-main);
+
+  --color-background-opacity: rgba(220, 219, 225, 0.5);
+
+  --color-heading: var(--dark-addict);
+  --color-text: var(--dark-main);
+  --color-text-inverse: var(--light-main);
+
+  --color-border-theme: var(--light-main);
+  --color-border-inverse: var(--dark-main);
+  --color-border-inverse-soft: var(--gray-main);
+}
+
+:root.dark {
+  --color-background: var(--dark-main);
+  --color-background-soft: var(--dark-addict);
+
+  --color-background-inverse: var(--light-addict);
+  --color-background-inverse-soft: var(--light-main);
+
+  --color-background-opacity: rgba(31, 31, 31, 0.5);
+
+  --color-heading: var(--light-addict);
+  --color-text: var(--light-main);
+  --color-text-inverse: var(--dark-main);
+
+  --color-border-theme: var(--dark-main);
+  --color-border-inverse: var(--light-main);
+  --color-border-inverse-soft: var(--gray-main);
+}
