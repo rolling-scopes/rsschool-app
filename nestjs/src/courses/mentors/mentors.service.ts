@@ -4,14 +4,16 @@ import { Repository } from 'typeorm';
 
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
+import { CourseTask, Checker } from '@entities/courseTask';
+import { Task } from '@entities/task';
+import { TaskResult } from '@entities/taskResult';
+import { TaskSolution } from '@entities/taskSolution';
 
 import { MentorBasic } from '@common/models';
 
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
-import { CourseTask, Task, TaskResult, TaskSolution } from '../../../../server/src/models';
-import { Checker } from '../../../../server/src/models/courseTask';
 import { StudentDto } from '../students/dto';
 
 export interface StudentTaskSolutionItem {
@@ -30,14 +32,8 @@ export class MentorsService {
     readonly mentorsRepository: Repository<Mentor>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
-    @InjectRepository(TaskResult)
-    readonly taskResultRepository: Repository<TaskResult>,
     @InjectRepository(TaskSolution)
     readonly taskSolutionRepository: Repository<TaskSolution>,
-    @InjectRepository(CourseTask)
-    readonly courseTaskRepository: Repository<CourseTask>,
-    @InjectRepository(Task)
-    readonly taskRepository: Repository<Task>,
   ) {}
 
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
