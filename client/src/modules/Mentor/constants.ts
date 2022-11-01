@@ -1,7 +1,7 @@
 export const INFO_MESSAGE =
   'Please be sure that your personal information is filled on profile, so that assigned students can contact you.';
 
-export enum StudentsTableColumnKey {
+export enum TaskSolutionsTableColumnKey {
   Number = 'number',
   GithubId = 'studentGithubId',
   Name = 'name',
@@ -12,7 +12,7 @@ export enum StudentsTableColumnKey {
   SolutionUrl = 'solutionUrl',
 }
 
-export enum StudentsTableColumnName {
+export enum TaskSolutionsTableColumnName {
   Number = '#',
   GithubId = 'Github',
   Name = 'Name',

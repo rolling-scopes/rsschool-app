@@ -1,5 +1,5 @@
 import { ColumnsType } from 'antd/lib/table';
-import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Mentor/constants';
+import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
 import { Space, Typography } from 'antd';
@@ -10,45 +10,45 @@ const { Text, Link } = Typography;
 
 export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboardDto> => [
   {
-    key: StudentsTableColumnKey.Number,
-    title: StudentsTableColumnName.Number,
+    key: TaskSolutionsTableColumnKey.Number,
+    title: TaskSolutionsTableColumnName.Number,
     render: (_v, _r, idx) => idx + 1,
     align: 'center',
   },
   {
-    key: StudentsTableColumnKey.GithubId,
-    title: StudentsTableColumnName.GithubId,
+    key: TaskSolutionsTableColumnKey.GithubId,
+    title: TaskSolutionsTableColumnName.GithubId,
     dataIndex: 'studentGithubId',
     render: (value: string) => !!value && <GithubUserLink value={value} />,
     ...getColumnSearchProps('studentGithubId'),
   },
   {
-    key: StudentsTableColumnKey.Name,
-    title: StudentsTableColumnName.Name,
+    key: TaskSolutionsTableColumnKey.Name,
+    title: TaskSolutionsTableColumnName.Name,
     dataIndex: 'studentName',
     render: renderName,
     ...getColumnSearchProps('studentName'),
   },
   {
-    key: StudentsTableColumnKey.Task,
-    title: StudentsTableColumnName.Task,
+    key: TaskSolutionsTableColumnKey.Task,
+    title: TaskSolutionsTableColumnName.Task,
     dataIndex: 'taskName',
     render: renderTask,
   },
   {
-    key: StudentsTableColumnKey.SolutionUrl,
-    title: StudentsTableColumnName.SolutionUrl,
+    key: TaskSolutionsTableColumnKey.SolutionUrl,
+    title: TaskSolutionsTableColumnName.SolutionUrl,
     dataIndex: 'solutionUrl',
     render: renderSolutionUrl,
   },
   {
-    key: StudentsTableColumnKey.Score,
-    title: StudentsTableColumnName.Score,
+    key: TaskSolutionsTableColumnKey.Score,
+    title: TaskSolutionsTableColumnName.Score,
     render: renderScore,
   },
   {
-    key: StudentsTableColumnKey.SubmitScores,
-    title: StudentsTableColumnName.SubmitScores,
+    key: TaskSolutionsTableColumnKey.SubmitScores,
+    title: TaskSolutionsTableColumnName.SubmitScores,
     render: () => renderSubmitButton(course),
   },
 ];

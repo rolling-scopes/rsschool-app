@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
-import { Instructions, Notification, StudentsTable } from '..';
+import { Instructions, Notification, TaskSolutionsTable } from '..';
 import { getMentorId } from 'domain/user';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 
@@ -20,7 +20,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       courseName={course.name}
     >
       <Notification />
-      {data && data?.length > 0 ? <StudentsTable data={data} course={course} /> : <Instructions />}
+      {data && data?.length > 0 ? <TaskSolutionsTable data={data} course={course} /> : <Instructions />}
     </PageLayout>
   );
 }

@@ -3,14 +3,14 @@ import React from 'react';
 import { getColumns } from '.';
 import { MentorDashboardDto, ProfileCourseDto } from 'api';
 
-export interface StudentsTableProps {
+export interface TaskSolutionsTableProps {
   data: MentorDashboardDto[];
   course: ProfileCourseDto;
 }
 
 const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filter(Boolean).join('|');
 
-function StudentsTable({ data, course }: StudentsTableProps) {
+function TaskSolutionsTable({ data, course }: TaskSolutionsTableProps) {
   return (
     <Row>
       <Col span={24}>
@@ -32,4 +32,4 @@ function StudentsTable({ data, course }: StudentsTableProps) {
   );
 }
 
-export default StudentsTable;
+export default TaskSolutionsTable;
