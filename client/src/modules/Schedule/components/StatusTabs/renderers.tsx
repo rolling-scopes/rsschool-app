@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
 import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { Status } from './StatusTabs';
-import { CustomCountBadge } from 'components/CustomCountBadge';
+import { CountBadge } from 'components/CountBadge';
 
 type Item = {
   label: string;
@@ -60,7 +60,7 @@ export const tabsRenderer = (statuses: Status[], activeTab?: string): TabItem[] 
         label: count ? (
           <Space>
             {label}
-            <CustomCountBadge count={count} status={isTabActive ? 'processing' : 'default'} />
+            <CountBadge count={count} status={isTabActive ? 'processing' : 'default'} />
           </Space>
         ) : (
           label

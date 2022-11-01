@@ -4,7 +4,6 @@ import React from 'react';
 type PresetColors = BadgeProps['status'];
 
 function getStylesByStatus(status?: PresetColors) {
-  // Add other status if needed
   switch (status) {
     case 'default':
       return {
@@ -21,10 +20,10 @@ function getStylesByStatus(status?: PresetColors) {
   }
 }
 
-function CustomCountBadge(props: BadgeProps) {
+function CountBadge(props: BadgeProps) {
   const { status, ...restProps } = props;
 
   return <Badge {...restProps} style={getStylesByStatus(status)} />;
 }
 
-export default CustomCountBadge;
+export default CountBadge;
