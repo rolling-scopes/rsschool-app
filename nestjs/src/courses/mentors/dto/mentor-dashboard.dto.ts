@@ -1,24 +1,18 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { CourseTask, Task, TaskResult, TaskSolution } from '../../../../../server/src/models';
 import { StudentDto } from '../../students/dto';
+import { StudentTaskSolutionItem } from '../mentors.service';
 
 @ApiResponse({})
 export class MentorDashboardDto {
-  constructor(
-    student: StudentDto,
-    task: Task,
-    courseTask: CourseTask,
-    taskResult?: TaskResult,
-    taskSolution?: TaskSolution,
-  ) {
+  constructor(student: StudentDto, item: StudentTaskSolutionItem) {
     this.studentName = student.name;
     this.studentGithubId = student.githubId;
-    this.taskName = task.name;
-    this.taskDescriptionUrl = task.descriptionUrl;
-    this.courseTaskId = courseTask.id;
-    this.maxScore = courseTask.maxScore;
-    this.resultScore = taskResult?.score ?? null;
-    this.solutionUrl = taskSolution?.url ?? null;
+    this.taskName = item.taskName;
+    this.taskDescriptionUrl = item.taskDescriptionUrl;
+    this.courseTaskId = item.courseTaskId;
+    this.maxScore = item.maxScore;
+    this.resultScore = item.resultScore ?? null;
+    this.solutionUrl = item.solutionUrl ?? null;
   }
 
   @ApiProperty()

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
@@ -13,6 +13,15 @@ import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { CourseTask, Task, TaskResult, TaskSolution } from '../../../../server/src/models';
 import { Checker } from '../../../../server/src/models/courseTask';
 import { StudentDto } from '../students/dto';
+
+export interface StudentTaskSolutionItem {
+  maxScore: number;
+  taskName: string;
+  taskDescriptionUrl: string;
+  courseTaskId: number;
+  resultScore: number | null;
+  solutionUrl: string | null;
+}
 
 @Injectable()
 export class MentorsService {
@@ -95,52 +104,25 @@ export class MentorsService {
     });
   }
 
-  private async getTaskResultsByStudentsIds(studentId?: number) {
-    if (!studentId) {
-      return [];
-    }
+  private async getTaskSolutionByStudentId(studentId: number): Promise<StudentTaskSolutionItem[]> {
+    const tasks = await this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId"')
+      .leftJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
+      .leftJoin(Task, 't', 't.id = ct."taskId"')
+      .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
+      .where('ts."studentId" = :studentId', { studentId })
+      .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
+      .getRawMany();
 
-    return this.taskResultRepository.find({
-      where: { studentId },
-      select: ['courseTaskId', 'score'],
-    });
-  }
-
-  private async getTaskSolutionsByStudentsIds(studentId?: number) {
-    if (!studentId) {
-      return [];
-    }
-
-    return this.taskSolutionRepository.find({
-      where: { studentId },
-      select: ['courseTaskId', 'url'],
-    });
-  }
-
-  private async getCourseTasks(courseTaskIds?: number[]) {
-    if (!courseTaskIds) {
-      return [];
-    }
-
-    return this.courseTaskRepository.find({
-      where: { id: In(courseTaskIds), checker: Checker.Mentor },
-      relations: ['task'],
-    });
-  }
-
-  private async getTasksByStudentId(studentId?: number) {
-    const [taskResults, taskSolutions] = await Promise.all([
-      this.getTaskResultsByStudentsIds(studentId),
-      this.getTaskSolutionsByStudentsIds(studentId),
-    ]);
-
-    const taskResultCourseIds = taskResults.map(tr => tr.courseTaskId);
-    const taskSolutionCourseIds = taskSolutions.map(ts => ts.courseTaskId);
-    const courseTaskIds = [...new Set([...taskResultCourseIds, ...taskSolutionCourseIds])];
-
-    const courseTasks = await this.getCourseTasks(courseTaskIds);
-
-    return { courseTasks, taskResults, taskSolutions };
+    return tasks.map(task => ({
+      taskName: task.t_name,
+      courseTaskId: task.ct_id,
+      maxScore: task.ct_maxScore,
+      resultScore: task.tr_score,
+      solutionUrl: task.ts_url,
+      taskDescriptionUrl: task.t_descriptionUrl,
+    }));
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
@@ -152,18 +134,9 @@ export class MentorsService {
     }
 
     for (const student of students) {
-      const { courseTasks, taskResults, taskSolutions } = await this.getTasksByStudentId(student.id);
-
-      if (courseTasks) {
-        courseTasks.map(courseTask => {
-          const { task, id: courseTaskId } = courseTask;
-
-          const taskResult = taskResults.find(tr => tr.courseTaskId === courseTaskId);
-          const taskSolution = taskSolutions.find(tr => tr.courseTaskId === courseTaskId);
-
-          data.push(new MentorDashboardDto(new StudentDto(student), task, courseTask, taskResult, taskSolution));
-        });
-      }
+      const taskSolutions = await this.getTaskSolutionByStudentId(student.id);
+      const items = taskSolutions.map(ts => new MentorDashboardDto(new StudentDto(student), ts));
+      data.push(...items);
     }
 
     return data;
