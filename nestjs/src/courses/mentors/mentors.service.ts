@@ -93,6 +93,12 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
+  public getCourseStudentsCount(mentorId: number, courseId: number) {
+    return this.studentRepository.count({
+      where: { mentorId, courseId },
+    });
+  }
+
   private getCourseStudents(mentorId: number, courseId: number) {
     return this.studentRepository.find({
       where: { mentorId, courseId },
