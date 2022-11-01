@@ -255,7 +255,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         </Col>
       </Row>
 
-      {(feedback?.reviews?.length || 0) > 0 && (
+      {!!feedback?.reviews?.length && (
         <Row style={{ margin: '8px 0' }}>
           <Col>
             <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
@@ -263,24 +263,23 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         </Row>
       )}
 
-      {feedback?.reviews &&
-        feedback.reviews.map((review, index) => (
-          <Row key={index}>
-            <Col>
-              <SolutionReview
-                sessionGithubId={props.session.githubId}
-                courseId={props.course.id}
-                reviewNumber={index}
-                settings={solutionReviewSettings}
-                courseTaskId={courseTaskId}
-                review={review}
-                isActiveReview={true}
-                currentRole={TaskSolutionResultRole.Student}
-                maxScore={maxScore}
-              />
-            </Col>
-          </Row>
-        ))}
+      {feedback?.reviews?.map((review, index) => (
+        <Row key={index}>
+          <Col>
+            <SolutionReview
+              sessionGithubId={props.session.githubId}
+              courseId={props.course.id}
+              reviewNumber={index}
+              settings={solutionReviewSettings}
+              courseTaskId={courseTaskId}
+              review={review}
+              isActiveReview={true}
+              currentRole={TaskSolutionResultRole.Student}
+              maxScore={maxScore}
+            />
+          </Col>
+        </Row>
+      ))}
     </PageLayout>
   );
 }
