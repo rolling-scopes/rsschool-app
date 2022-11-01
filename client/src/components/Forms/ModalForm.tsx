@@ -1,4 +1,4 @@
-import { Form, Modal, Spin } from 'antd';
+import { Form, FormInstance, Modal, Spin } from 'antd';
 import * as React from 'react';
 
 type Props = {
@@ -11,13 +11,14 @@ type Props = {
   children: any;
   loading?: boolean;
   okText?: string;
+  form?: FormInstance<any>;
 };
 
 export function ModalForm(props: Props) {
   if (props.data == null) {
     return null;
   }
-  const [form] = Form.useForm();
+  const form = props.form ?? Form.useForm()[0];
   const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
   return (
     <Modal

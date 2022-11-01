@@ -17,6 +17,7 @@ export interface SettingsPanelProps {
   tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
   onCreateCourseTask: () => void;
+  onCreateCourseEvent: () => void;
   onCopyFromCourse: () => void;
 }
 
@@ -32,6 +33,7 @@ export enum SettingsButtons {
 export function SettingsPanel({
   isCourseManager,
   onCreateCourseTask,
+  onCreateCourseEvent,
   onCopyFromCourse,
   courseId,
   courseAlias,
@@ -62,6 +64,13 @@ export function SettingsPanel({
   return (
     <>
       <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
+        {isCourseManager ? (
+          <Col>
+            <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
+              {SettingsButtons.Event}
+            </Button>
+          </Col>
+        ) : null}
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>

@@ -121,16 +121,6 @@ const FormEntity: React.FC<Props> = ({
         </Select>
       </Form.Item>
 
-      {entityType === 'task' && (
-        <Form.Item
-          name="range"
-          label="Start - End Date"
-          rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
-        >
-          <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-      )}
-
       <Form.Item
         name="dateTime"
         label="Date and Time"
