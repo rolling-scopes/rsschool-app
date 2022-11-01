@@ -143,7 +143,7 @@ export class MentorsService {
     return { courseTasks, taskResults, taskSolutions };
   }
 
-  public async getData(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
+  public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
     const data: MentorDashboardDto[] = [];
     const students = await this.getCourseStudents(mentorId, courseId);
 

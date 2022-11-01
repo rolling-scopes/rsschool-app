@@ -7,11 +7,11 @@ import { MentorStudentDto } from './dto/mentor-student.dto';
 
 @Controller('mentors')
 @ApiTags('mentors')
+@UseGuards(DefaultGuard)
 export class MentorsController {
   constructor(private mentorsService: MentorsService) {}
 
   @Get('/:mentorId/students')
-  @UseGuards(DefaultGuard)
   @ApiOperation({ operationId: 'getMentorStudents' })
   @ApiOkResponse({ type: [MentorStudentDto] })
   @ApiBadRequestResponse()
@@ -25,7 +25,6 @@ export class MentorsController {
   }
 
   @Get('/:mentorId/dashboard/:courseId')
-  @UseGuards(DefaultGuard)
   @ApiOperation({ operationId: 'getMentorDashboardData' })
   @ApiOkResponse({ type: [MentorDashboardDto] })
   @ApiBadRequestResponse()
@@ -38,6 +37,6 @@ export class MentorsController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    return await this.mentorsService.getData(mentorId, courseId);
+    return await this.mentorsService.getStudentsTasks(mentorId, courseId);
   }
 }
