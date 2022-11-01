@@ -2006,11 +2006,15 @@
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
+          "crossCheckEndDate": { "type": "string" },
           "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "maxScore": { "type": "number", "nullable": true },
           "scoreWeight": { "type": "number", "nullable": true },
           "descriptionUrl": { "type": "string", "nullable": true },
-          "tag": { "type": "string", "enum": ["lecture", "coding", "self-study", "interview", "cross-check", "test"] }
+          "tag": {
+            "type": "string",
+            "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
+          }
         },
         "required": [
           "score",
@@ -2019,6 +2023,7 @@
           "status",
           "startDate",
           "endDate",
+          "crossCheckEndDate",
           "organizer",
           "maxScore",
           "scoreWeight",
