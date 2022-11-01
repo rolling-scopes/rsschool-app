@@ -170,7 +170,7 @@ export class CourseScheduleService {
       endDate: crossCheckTask.studentEndDate,
       status: this.getCourseTaskStatus(submitRange, studentId ? { currentScore, submitted } : undefined),
       tag: CourseScheduleItemTag.CrossCheckSubmit,
-      description: crossCheckTask.task.descriptionUrl,
+      descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
     };
 
@@ -182,7 +182,7 @@ export class CourseScheduleService {
       endDate: crossCheckTask.crossCheckEndDate,
       status: this.getCourseTaskStatus(reviewRange, studentId ? { currentScore, submitted } : undefined),
       tag: CourseScheduleItemTag.CrossCheckReview,
-      description: crossCheckTask.task.descriptionUrl,
+      descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
     };
 
