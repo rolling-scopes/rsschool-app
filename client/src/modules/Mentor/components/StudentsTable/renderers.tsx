@@ -39,7 +39,7 @@ export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboar
     key: StudentsTableColumnKey.SolutionUrl,
     title: StudentsTableColumnName.SolutionUrl,
     dataIndex: 'solutionUrl',
-    render: renderTask,
+    render: renderSolutionUrl,
   },
   {
     key: StudentsTableColumnKey.Score,
@@ -68,6 +68,16 @@ function renderTask(value: string, row: MentorDashboardDto) {
 
   return (
     <Link target="_blank" href={row.taskDescriptionUrl}>
+      {value}
+    </Link>
+  );
+}
+
+function renderSolutionUrl(value: string, row: MentorDashboardDto) {
+  if (!row.solutionUrl) return value;
+
+  return (
+    <Link target="_blank" href={row.solutionUrl}>
       {value}
     </Link>
   );
