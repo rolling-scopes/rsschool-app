@@ -1,5 +1,5 @@
 import { Pie, PieConfig } from '@ant-design/plots';
-import { getTaskStatusColor } from 'modules/Schedule/components/TableView/renderers';
+import { getTaskStatusColor } from 'modules/Schedule';
 import React from 'react';
 import capitalize from 'lodash/capitalize';
 import { useMeasure } from 'react-use';
@@ -57,7 +57,10 @@ export function TasksChart({ data, onItemSelected }: Props) {
     ],
     statistic: {
       title: {
-        content: 'Total tasks',
+        formatter: datum => {
+          if (!datum) return 'Total tasks';
+          return capitalize(datum.status);
+        },
         style: {
           color: 'rgba(0,0,0,0.45)',
           fontSize: '14px',

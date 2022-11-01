@@ -16,9 +16,7 @@ type Props = {
 };
 
 export function TasksStatsCard(props: Props) {
-  const [isTasksStatsModalVisible, setTasksStatsModalVisible] = useState(false);
-  const [statisticsTableName, setStatisticsTableName] = useState('');
-  const [selectedGroupTasks, setCurrentTaskStatsModal] = useState([] as TaskStat[]);
+  const [selectedStatus, setSelectedStatus] = useState<CourseScheduleItemDtoStatusEnum | null>(null);
 
   const { courseName, tasksByStatus } = props;
 
@@ -46,13 +44,11 @@ export function TasksStatsCard(props: Props) {
     const status = name as CourseScheduleItemDtoStatusEnum;
     if (!Object.values(CourseScheduleItemDtoStatusEnum).includes(status)) return;
 
-    setCurrentTaskStatsModal(tasksByStatus[status]);
-    setStatisticsTableName(`${status} tasks`);
-    setTasksStatsModalVisible(true);
+    setSelectedStatus(status);
   }, []);
 
   const hideTasksStatsModal = () => {
-    setTasksStatsModalVisible(false);
+    setSelectedStatus(null);
     updateUrl();
   };
 
@@ -71,9 +67,9 @@ export function TasksStatsCard(props: Props) {
     <>
       <TasksStatsModal
         courseName={courseName}
-        tableName={statisticsTableName}
-        tasks={selectedGroupTasks}
-        isVisible={isTasksStatsModalVisible}
+        tableName={`${selectedStatus} tasks`}
+        tasks={selectedStatus ? tasksByStatus[selectedStatus] : []}
+        isVisible={!!selectedStatus}
         onHide={hideTasksStatsModal}
       />
       <CommonCard
