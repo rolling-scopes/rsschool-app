@@ -216,7 +216,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       author,
       messages,
       id: c.id,
-      dateTime: new Date(c.updatedDate).getTime(),
+      dateTime: null,
       comment: c.comment,
       score: c.score,
     };

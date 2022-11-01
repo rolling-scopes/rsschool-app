@@ -42,7 +42,7 @@ export type TaskSolutionResultMessage = {
 
 export type SolutionReviewType = {
   id: number;
-  dateTime: number;
+  dateTime: number | null;
   comment: string;
   author: {
     name: string;

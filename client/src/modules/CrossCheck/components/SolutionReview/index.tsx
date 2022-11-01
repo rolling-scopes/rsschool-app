@@ -123,13 +123,15 @@ export function SolutionReview(props: Props) {
                   </Col>
                 </Row>
 
-                <Row>
-                  <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
-                    {formatDateTime(dateTime)}
-                  </Typography.Text>
-                </Row>
+                {dateTime && (
+                  <Row>
+                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                      {formatDateTime(dateTime)}
+                    </Typography.Text>
+                  </Row>
+                )}
 
-                <Row gutter={4} align="middle">
+                <Row gutter={4} align="middle" style={{ marginTop: 8 }}>
                   <Col>
                     <ScoreIcon maxScore={maxScore} score={score} isOutdatedScore={!isActiveReview} />
                   </Col>
