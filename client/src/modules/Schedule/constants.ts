@@ -49,7 +49,8 @@ export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
   coding: 'Coding',
   interview: 'Interview',
   test: 'Test',
-  'cross-check': 'Cross-Check',
+  'cross-check-submit': 'Cross-Check: Submit',
+  'cross-check-review': 'Cross-Check: Review',
   'self-study': 'Self-study',
   lecture: 'Lecture',
 };
@@ -80,7 +81,8 @@ export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string>
   coding: '#722ed1',
   interview: '#1890ff',
   test: '#faad14',
-  'cross-check': '#13c2c2',
+  'cross-check-submit': '#13c2c2',
+  'cross-check-review': '#13c2c2',
   'self-study': '#595959',
   lecture: '#eb2f96',
 };

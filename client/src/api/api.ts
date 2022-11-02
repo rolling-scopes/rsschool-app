@@ -864,6 +864,12 @@ export interface CourseScheduleItemDto {
     'endDate': string;
     /**
      * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'crossCheckEndDate': string;
+    /**
+     * 
      * @type {PersonDto}
      * @memberof CourseScheduleItemDto
      */
@@ -909,7 +915,8 @@ export const CourseScheduleItemDtoTagEnum = {
     Coding: 'coding',
     SelfStudy: 'self-study',
     Interview: 'interview',
-    CrossCheck: 'cross-check',
+    CrossCheckSubmit: 'cross-check-submit',
+    CrossCheckReview: 'cross-check-review',
     Test: 'test'
 } as const;
 
