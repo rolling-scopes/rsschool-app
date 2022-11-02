@@ -12,7 +12,7 @@ export class MentorDashboardDto {
     this.courseTaskId = item.courseTaskId;
     this.maxScore = item.maxScore;
     this.resultScore = item.resultScore ?? null;
-    this.solutionUrl = item.solutionUrl ?? null;
+    this.solutionUrl = item.solutionUrl;
   }
 
   @ApiProperty()
@@ -36,6 +36,6 @@ export class MentorDashboardDto {
   @ApiProperty({ nullable: true, type: Number })
   resultScore: number | null;
 
-  @ApiProperty({ nullable: true, type: String })
-  solutionUrl: string | null;
+  @ApiProperty({ type: String })
+  solutionUrl: string;
 }

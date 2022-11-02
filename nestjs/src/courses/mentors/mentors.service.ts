@@ -5,9 +5,9 @@ import { Repository } from 'typeorm';
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
 import { CourseTask, Checker } from '@entities/courseTask';
-import { Task } from '@entities/task';
 import { TaskResult } from '@entities/taskResult';
 import { TaskSolution } from '@entities/taskSolution';
+import { Task } from '@entities/task';
 
 import { MentorBasic } from '@common/models';
 
@@ -22,7 +22,7 @@ export interface StudentTaskSolutionItem {
   taskDescriptionUrl: string;
   courseTaskId: number;
   resultScore: number | null;
-  solutionUrl: string | null;
+  solutionUrl: string;
 }
 
 @Injectable()
@@ -103,7 +103,7 @@ export class MentorsService {
   private async getTaskSolutionByStudentId(studentId: number): Promise<StudentTaskSolutionItem[]> {
     const tasks = await this.taskSolutionRepository
       .createQueryBuilder('ts')
-      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId"')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Task, 't', 't.id = ct."taskId"')
       .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
