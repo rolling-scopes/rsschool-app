@@ -4,7 +4,7 @@ import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { useAsync, useLocalStorage } from 'react-use';
 import { useMemo, useState } from 'react';
-
+import groupBy from 'lodash/groupBy';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PageLayout } from 'components/PageLayout';
 
@@ -13,16 +13,23 @@ import withSession from 'components/withSession';
 import { CourseService, StudentSummary, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
-import { StudentTasksDetail } from 'common/models';
 import {
   MainStatsCard,
   MentorCard,
   TasksStatsCard,
   NextEventCard,
   RepositoryCard,
+  TaskStat,
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
-import { CoursesTasksApi, CourseTaskDto, CourseStatsApi } from 'api';
+import {
+  CoursesTasksApi,
+  CourseTaskDto,
+  CourseStatsApi,
+  CoursesScheduleApi,
+  CourseScheduleItemDto,
+  CourseScheduleItemDtoStatusEnum,
+} from 'api';
 
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
 
@@ -43,8 +50,10 @@ function Page(props: CoursePageProps) {
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
-  const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
+  const [tasksByStatus, setTasksByStatus] = useState(
+    {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
+  );
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [totalStudentsCount, setTotalStudentsCount] = useState(0);
   const [loading, withLoading] = useLoading(false);
@@ -61,12 +70,21 @@ function Page(props: CoursePageProps) {
 
   useAsync(
     withLoading(async () => {
-      const [studentSummary, { data: courseTasks }, statisticsCourses, courseEvents, courseStats] = await Promise.all([
+      const courseId = props.course.id;
+      const [
+        studentSummary,
+        { data: courseTasks },
+        statisticsCourses,
+        courseEvents,
+        courseStats,
+        { data: scheduleTasks },
+      ] = await Promise.all([
         courseService.getStudentSummary(githubId),
-        coursesTasksApi.getCourseTasks(props.course.id),
+        coursesTasksApi.getCourseTasks(courseId),
         userService.getProfileInfo(githubId),
         courseService.getCourseEvents(),
-        coursesStatsApi.getCourseStats(props.course.id),
+        coursesStatsApi.getCourseStats(courseId),
+        new CoursesScheduleApi().getSchedule(courseId),
       ]);
 
       const startOfToday = moment().startOf('day');
@@ -82,44 +100,29 @@ function Page(props: CoursePageProps) {
       setNextEvent(nextEvents);
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
-      setTasksDetail(tasksDetailCurrentCourse);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
       setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
+
+      setTasksByStatus(
+        groupBy(
+          scheduleTasks.map(task => {
+            const { comment, taskGithubPrUris } =
+              tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
+            return { ...task, comment, githubPrUri: taskGithubPrUris };
+          }),
+          'status',
+        ) as Record<CourseScheduleItemDtoStatusEnum, TaskStat[]>,
+      );
     }),
     [props.course.id],
   );
 
-  const currentDate = new Date();
-
   const studentPosition = studentSummary?.rank ?? 0;
-  const results = studentSummary?.results ?? [];
 
   const maxCourseScore = Math.round(
     courseTasks.reduce((score, task) => score + (task.maxScore ?? 0) * task.scoreWeight, 0),
   );
 
-  const tasksCompleted = courseTasks
-    .filter(task => !!checkTaskResults(results, task.id))
-    .map(task => {
-      const scoreFromResult = results.find(({ courseTaskId }) => courseTaskId === task.id)?.score;
-      const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
-      return { ...task, comment, githubPrUri: taskGithubPrUris, score: score ? score : scoreFromResult };
-    });
-
-  const tasksNotDone = courseTasks
-    .filter(
-      task =>
-        moment(task.studentEndDate as string).isBefore(currentDate, 'date') && !checkTaskResults(results, task.id),
-    )
-    .map(task => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
-
-  const tasksFuture = courseTasks
-    .filter(
-      task => moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
-    )
-    .map(task => ({ ...task, comment: null, githubPrUri: null, score: null }));
-
-  const taskStatistics = { completed: tasksCompleted, notDone: tasksNotDone, future: tasksFuture };
   const { isActive = false, totalScore = 0 } = studentSummary ?? {};
 
   const cards = [
@@ -141,7 +144,7 @@ function Page(props: CoursePageProps) {
       />
     ),
     studentSummary?.mentor && <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
-    courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
+    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
     <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,
   ].filter(Boolean) as JSX.Element[];
 
@@ -158,8 +161,7 @@ function Page(props: CoursePageProps) {
           <>
             <Masonry
               breakpointCols={{
-                default: 4,
-                1100: 3,
+                default: 3,
                 800: 2,
                 560: 1,
               }}
@@ -205,9 +207,6 @@ const TaskTypes = {
   newtask: 'newtask',
   lecture: 'lecture',
 };
-
-const checkTaskResults = (results: { courseTaskId: number }[], taskId: number) =>
-  results.find(task => task.courseTaskId === taskId);
 
 const tasksToEvents = (tasks: CourseTaskDto[]) => {
   return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
