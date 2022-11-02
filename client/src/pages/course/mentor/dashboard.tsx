@@ -1,6 +1,6 @@
 import withSession, { CourseRole } from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
-import { MentorDashboard } from 'modules/Mentor/components/MentorDashboard';
+import { MentorDashboard } from 'modules/Mentor/components';
 import withCourseData from 'components/withCourseData';
 import { CoursePageProps } from 'services/models';
 
