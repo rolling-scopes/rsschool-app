@@ -156,7 +156,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
   const generateUniqueRowKey = ({ id, name, tag }: CourseScheduleItemDto) => [id, name, tag].join('|');
 
   return (
-    <Row style={{ padding: '24px 0 0', minHeight: '80vh', height: 'auto' }} gutter={32}>
+    <Row style={{ padding: '24px 0 0' }} gutter={32}>
       <Col span={24}>
         <Form form={form} component={false}>
           <FilteredTags

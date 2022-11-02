@@ -5,27 +5,14 @@ import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleI
 import { dateWithTimeZoneRenderer } from 'components/Table/renderers';
 import capitalize from 'lodash/capitalize';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
-import { getTagStyle } from 'modules/Schedule/utils';
+import { getTagStyle, getTaskStatusColor } from 'modules/Schedule/utils';
 import moment from 'moment-timezone';
 
 export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
   const label = capitalize(value);
-  switch (value) {
-    case CourseScheduleItemDtoStatusEnum.Done:
-      return <Badge status="success" text={label} />;
-    case CourseScheduleItemDtoStatusEnum.Missed:
-      return <Badge status="error" text={label} />;
-    case CourseScheduleItemDtoStatusEnum.Archived:
-      return <Badge status="default" text={label} />;
-    case CourseScheduleItemDtoStatusEnum.Available:
-      return <Badge status="processing" text={label} />;
-    case CourseScheduleItemDtoStatusEnum.Future:
-      return <Badge color="cyan" text={label} />;
-    case CourseScheduleItemDtoStatusEnum.Review:
-      return <Badge color="purple" text={label} />;
-    default:
-      return <Badge status="default" text={label} />;
-  }
+  const color = getTaskStatusColor(value);
+
+  return <Badge color={color} text={label} />;
 }
 
 export function renderTagWithStyle(tagName: CourseScheduleItemDto['tag'], tagColors: Record<string, string>) {

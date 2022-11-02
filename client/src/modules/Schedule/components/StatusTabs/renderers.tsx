@@ -1,8 +1,9 @@
-import { Badge, Space } from 'antd';
+import { Space } from 'antd';
 import { ReactNode } from 'react';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
 import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { Status } from './StatusTabs';
+import { CountBadge } from 'components/CountBadge';
 
 type Item = {
   label: string;
@@ -25,7 +26,7 @@ const tabsOrder = [
   CourseScheduleItemDtoStatusEnum.Archived,
 ];
 
-export const tabsRenderer = (statuses: Status[]): TabItem[] => {
+export const tabsRenderer = (statuses: Status[], activeTab?: string): TabItem[] => {
   const initialItem = {
     label: ALL_TAB_LABEL,
     key: ALL_TAB_KEY,
@@ -52,15 +53,18 @@ export const tabsRenderer = (statuses: Status[]): TabItem[] => {
     [initialItem],
   )
     .sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key))
-    .map(({ count, key, label }) => ({
-      key,
-      label: count ? (
-        <Space>
-          {label}
-          <Badge count={count} />
-        </Space>
-      ) : (
-        label
-      ),
-    }));
+    .map(({ count, key, label }) => {
+      const isTabActive = activeTab === key;
+      return {
+        key,
+        label: count ? (
+          <Space>
+            {label}
+            <CountBadge count={count} status={isTabActive ? 'processing' : 'default'} />
+          </Space>
+        ) : (
+          label
+        ),
+      };
+    });
 };
