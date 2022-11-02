@@ -6,6 +6,7 @@ import { StudentTaskSolutionItem } from '../mentors.service';
 export class MentorDashboardDto {
   constructor(student: StudentDto, item: StudentTaskSolutionItem) {
     this.studentName = student.name;
+    this.studentGithubId = student.githubId;
     this.taskName = item.taskName;
     this.taskDescriptionUrl = item.taskDescriptionUrl;
     this.courseTaskId = item.courseTaskId;
@@ -13,6 +14,9 @@ export class MentorDashboardDto {
     this.resultScore = item.resultScore ?? null;
     this.solutionUrl = item.solutionUrl;
   }
+
+  @ApiProperty()
+  studentGithubId: string;
 
   @ApiProperty()
   studentName: string;
