@@ -15,17 +15,31 @@ type Props = {
   errorText?: string;
 };
 
-export function ModalSubmitForm(props: Props) {
-  if (props.data == null) {
+export function ModalSubmitForm({
+  data,
+  title,
+  submit,
+  close,
+  onChange,
+  getInitialValues,
+  children,
+  loading,
+  submitted,
+  successText,
+  errorText,
+}: Props) {
+  if (data == null) {
     return null;
   }
+
   const [form] = Form.useForm();
-  const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
+  const initialValues = getInitialValues ? getInitialValues?.(data) : data;
+  
   return (
     <Modal
       visible={true}
-      footer={props.submitted ? null : undefined}
-      title={props.title}
+      footer={submitted ? null : undefined}
+      title={title}
       okText="Submit"
       onOk={async e => {
         e.preventDefault();
@@ -33,36 +47,34 @@ export function ModalSubmitForm(props: Props) {
         if (values == null) {
           return;
         }
-        props.submit(values);
+        submit(values);
       }}
       onCancel={e => {
-        props.close(e);
+        close(e);
         form.resetFields();
       }}
     >
-      <Spin spinning={props.loading ?? false}>
-        {props.errorText ? (
-          <Alert style={{ marginBottom: 16 }} message={props.errorText} type="error" showIcon />
-        ) : null}
-        {props.submitted ? (
+      <Spin spinning={loading ?? false}>
+        {errorText ? <Alert style={{ marginBottom: 16 }} message={errorText} type="error" showIcon /> : null}
+        {submitted ? (
           <Result
             status="success"
             title="Success"
-            subTitle={props.successText ?? 'Successfully submitted'}
+            subTitle={successText ?? 'Successfully submitted'}
             extra={[
-              <Button style={{ minWidth: 80 }} onClick={props.close} type="primary" key="ok">
+              <Button style={{ minWidth: 80 }} onClick={close} type="primary" key="ok">
                 Ok
               </Button>,
             ]}
           />
         ) : (
           <Form
-            onValuesChange={() => props.onChange?.(form.getFieldsValue())}
+            onValuesChange={() => onChange?.(form.getFieldsValue())}
             form={form}
             initialValues={initialValues}
             layout="vertical"
           >
-            {props.children}
+            {children}
           </Form>
         )}
       </Spin>
