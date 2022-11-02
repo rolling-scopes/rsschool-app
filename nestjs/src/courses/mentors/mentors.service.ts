@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
 import { CourseTask, Checker } from '@entities/courseTask';
-import { Task } from '@entities/task';
 import { TaskResult } from '@entities/taskResult';
 import { TaskSolution } from '@entities/taskSolution';
 
@@ -104,10 +103,8 @@ export class MentorsService {
     const tasks = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
-      .innerJoin(Task, 't', 't.id = ct."taskId"')
-      .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
-      .where('ts."studentId" = :studentId', { studentId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
       .getRawMany();
 
