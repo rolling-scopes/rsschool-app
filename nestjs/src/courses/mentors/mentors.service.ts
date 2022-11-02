@@ -112,9 +112,19 @@ export class MentorsService {
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Task, 't', 't.id = ct."taskId"')
-      .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
+      .select([
+        't.name',
+        't.descriptionUrl',
+        'ct.id',
+        'ct.maxScore',
+        'ts.studentId',
+        'tr.score',
+        'ts.url',
+        'ts.updatedDate',
+      ])
       .where('ts."studentId" = :studentId', { studentId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
+      .orderBy('ts.updatedDate', 'DESC')
       .getRawMany();
 
     return tasks.map(task => ({
