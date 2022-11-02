@@ -104,8 +104,8 @@ export class MentorsService {
     const tasks = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId"')
-      .leftJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
-      .leftJoin(Task, 't', 't.id = ct."taskId"')
+      .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
+      .innerJoin(Task, 't', 't.id = ct."taskId"')
       .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
       .where('ts."studentId" = :studentId', { studentId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
