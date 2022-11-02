@@ -16,13 +16,6 @@ export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboar
     align: 'center',
   },
   {
-    key: TaskSolutionsTableColumnKey.GithubId,
-    title: TaskSolutionsTableColumnName.GithubId,
-    dataIndex: 'studentGithubId',
-    render: (value: string) => !!value && <GithubUserLink value={value} />,
-    ...getColumnSearchProps('studentGithubId'),
-  },
-  {
     key: TaskSolutionsTableColumnKey.Name,
     title: TaskSolutionsTableColumnName.Name,
     dataIndex: 'studentName',
