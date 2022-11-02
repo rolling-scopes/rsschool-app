@@ -34,7 +34,7 @@ export function ModalSubmitForm({
 
   const [form] = Form.useForm();
   const initialValues = getInitialValues ? getInitialValues?.(data) : data;
-  
+
   return (
     <Modal
       visible={true}
