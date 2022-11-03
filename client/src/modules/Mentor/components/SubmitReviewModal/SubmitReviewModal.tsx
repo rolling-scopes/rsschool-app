@@ -1,4 +1,4 @@
-import { Form, Typography } from 'antd';
+import { Col, Form, Row, Typography } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { ScoreInput } from 'components/Forms';
@@ -48,7 +48,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
 
   return (
     <ModalSubmitForm
-      title={`Submit Review for ${data?.studentName}`}
+      title={`Submit Score for ${data?.studentName}`}
       data={data}
       submit={handleSubmit}
       close={handleClose}
@@ -56,17 +56,21 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
       loading={loading}
       open={!isEmpty(data)}
     >
-      <Form.Item label="Task" name="task">
-        <Link href={data?.taskDescriptionUrl} target="_blank">
-          {data?.taskName}
-        </Link>
-      </Form.Item>
-      <Form.Item label="Github Pull Request URL" name="prUrl">
-        <Link href={data?.solutionUrl} target="_blank">
-          {data?.solutionUrl}
-        </Link>
-      </Form.Item>
-      <ScoreInput maxScore={data?.maxScore} />
+      <Row>
+        <Col span={18} offset={3}>
+          <Form.Item label="Task" name="task">
+            <Link href={data?.taskDescriptionUrl} target="_blank">
+              {data?.taskName}
+            </Link>
+          </Form.Item>
+          <Form.Item label="Github Pull Request" name="prUrl">
+            <Link href={data?.solutionUrl} target="_blank">
+              {data?.solutionUrl}
+            </Link>
+          </Form.Item>
+          <ScoreInput maxScore={data?.maxScore} style={{ width: '100%' }} />
+        </Col>
+      </Row>
     </ModalSubmitForm>
   );
 }

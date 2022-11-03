@@ -14,12 +14,12 @@ const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filte
 
 function TaskSolutionsTable({ mentorId, course }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
-  const [hasModalDataChanged, setHasModalDataChanged] = useState(false);
-  const [data, loading] = useMentorDashboard(mentorId, course.id, hasModalDataChanged);
+  const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
+  const [data, loading] = useMentorDashboard(mentorId, course.id, isReviewSubmitted);
 
   const handleSubmit = () => {
     setModalData(null);
-    setHasModalDataChanged(!hasModalDataChanged);
+    setIsReviewSubmitted(!isReviewSubmitted);
   };
 
   const handleSubmitClick = (data: MentorDashboardDto) => {
