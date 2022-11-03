@@ -20,7 +20,7 @@ function MentorDashboard({ session, course }: CoursePageProps) {
       courseName={course.name}
     >
       <Notification />
-      {studentsCount ? <TaskSolutionsTable mentorId={mentorId} course={course} /> : <Instructions />}
+      {studentsCount ? <TaskSolutionsTable mentorId={mentorId} courseId={courseId} /> : <Instructions />}
     </PageLayout>
   );
 }

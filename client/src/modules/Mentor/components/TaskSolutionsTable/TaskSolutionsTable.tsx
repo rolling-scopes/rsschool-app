@@ -1,21 +1,21 @@
 import { Col, Row, Table } from 'antd';
 import React, { useState } from 'react';
 import { getColumns } from '.';
-import { MentorDashboardDto, ProfileCourseDto } from 'api';
+import { MentorDashboardDto } from 'api';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 import { SubmitReviewModal } from 'modules/Mentor/components/SubmitReviewModal';
 
 export interface TaskSolutionsTableProps {
   mentorId: number | null;
-  course: ProfileCourseDto;
+  courseId: number;
 }
 
 const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filter(Boolean).join('|');
 
-function TaskSolutionsTable({ mentorId, course }: TaskSolutionsTableProps) {
+function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
-  const [data, loading] = useMentorDashboard(mentorId, course.id, isReviewSubmitted);
+  const [data, loading] = useMentorDashboard(mentorId, courseId, isReviewSubmitted);
 
   const handleSubmit = () => {
     setModalData(null);
@@ -50,7 +50,7 @@ function TaskSolutionsTable({ mentorId, course }: TaskSolutionsTableProps) {
           />
         </Col>
       </Row>
-      <SubmitReviewModal courseId={course.id} data={modalData} onClose={handleClose} onSubmit={handleSubmit} />
+      <SubmitReviewModal courseId={courseId} data={modalData} onClose={handleClose} onSubmit={handleSubmit} />
     </>
   );
 }
