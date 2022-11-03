@@ -33,13 +33,16 @@ describe('TaskSolutionsTable', () => {
     expect(name).toBeInTheDocument();
   });
 
-  it('should render column data', () => {
+  it.each`
+    value
+    ${'Student 0'}
+    ${'Task 0'}
+    ${'solution-url-0'}
+    ${'20 / 100'}
+  `('should render column data "$value"', ({ value }: { value: string }) => {
     render(<TaskSolutionsTable {...PROPS_MOCK} />);
 
-    expect(screen.getByText('Student 0')).toBeInTheDocument();
-    expect(screen.getByText('Task 0')).toBeInTheDocument();
-    expect(screen.getByText('solution-url-0')).toBeInTheDocument();
-    expect(screen.getByText('20 / 100')).toBeInTheDocument();
+    expect(screen.getByText(value)).toBeInTheDocument();
   });
 });
 
