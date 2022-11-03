@@ -12,11 +12,21 @@ import { Student } from './student';
 import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
 
+export interface CrossCheckCriteriaData {
+  key: number;
+  max?: number;
+  text: string;
+  type: string;
+  point?: number;
+  comment?: string;
+}
+
 type ScoreRecord = {
   score: number;
   dateTime: number;
   comment: string;
   authorId: number;
+  criteria?: CrossCheckCriteriaData[];
 };
 
 @Entity()

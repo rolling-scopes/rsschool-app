@@ -183,7 +183,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   const comments = (
     await getRepository(TaskSolutionResult)
       .createQueryBuilder('tsr')
-      .select(['tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score'])
+      .select(['tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.historicalScores'])
       .innerJoin('tsr.checker', 'checker')
       .innerJoin('checker.user', 'user')
       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
@@ -198,11 +198,13 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
           discord: c.checker.user.discord,
         }
       : null;
+      const criteriaData = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
     return {
       author,
       updatedDate: c.updatedDate,
       comment: c.comment,
       score: c.score,
+      criteria: criteriaData[0].criteria,
     };
   });
   const taskSolution = await getRepository(TaskSolution)

@@ -5,6 +5,7 @@ import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../../../models/taskSolution';
 import { CrossCheckStatus } from '../../../models/courseTask';
+import { CrossCheckCriteriaData } from '../../../models/taskSolutionResult';
 
 import {
   courseService,
@@ -51,6 +52,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     anonymous: boolean;
     review: TaskSolutionReview[];
     comments: TaskSolutionComment[];
+    criteria: CrossCheckCriteriaData[];
   } = ctx.request.body;
 
   const data = {
@@ -67,6 +69,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const previousScore = await crossCheckService.saveResult(taskChecker.studentId, taskChecker.checkerId, data, {
     userId: user.id,
+    criteria: inputData.criteria,
   });
 
   await crossCheckService.saveSolutionComments(taskChecker.studentId, courseTaskId, {
