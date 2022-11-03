@@ -3,7 +3,6 @@ export const INFO_MESSAGE =
 
 export enum TaskSolutionsTableColumnKey {
   Number = 'number',
-  GithubId = 'studentGithubId',
   Name = 'name',
   Task = 'task',
   DesiredDeadline = 'desiredDeadline',
@@ -14,7 +13,6 @@ export enum TaskSolutionsTableColumnKey {
 
 export enum TaskSolutionsTableColumnName {
   Number = '#',
-  GithubId = 'Github',
   Name = 'Name',
   Task = 'Task',
   DesiredDeadline = 'Desired deadline',

@@ -13,6 +13,7 @@ type Props = {
   submitted?: boolean;
   successText?: string;
   errorText?: string;
+  open?: boolean;
 };
 
 export function ModalSubmitForm({
@@ -27,6 +28,7 @@ export function ModalSubmitForm({
   submitted,
   successText,
   errorText,
+  open,
 }: Props) {
   if (data == null) {
     return null;
@@ -37,7 +39,7 @@ export function ModalSubmitForm({
 
   return (
     <Modal
-      visible={true}
+      open={open ?? true}
       footer={submitted ? null : undefined}
       title={title}
       okText="Submit"

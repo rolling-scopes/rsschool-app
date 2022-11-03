@@ -1632,7 +1632,7 @@
           "courseTaskId": { "type": "number" },
           "maxScore": { "type": "number" },
           "resultScore": { "type": "number", "nullable": true },
-          "solutionUrl": { "type": "string", "nullable": true }
+          "solutionUrl": { "type": "string" }
         },
         "required": [
           "studentGithubId",

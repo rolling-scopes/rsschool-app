@@ -2177,7 +2177,7 @@ export interface MentorDashboardDto {
      * @type {string}
      * @memberof MentorDashboardDto
      */
-    'solutionUrl': string | null;
+    'solutionUrl': string;
 }
 /**
  * 
