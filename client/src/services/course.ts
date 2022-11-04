@@ -16,6 +16,7 @@ import {
   CourseTaskDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
+import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -28,6 +29,7 @@ export type Feedback = {
   comments?: {
     updatedDate: string;
     comment: string;
+    criteria: CrossCheckCriteriaData[];
     author: {
       name: string;
       githubId: string;
@@ -347,6 +349,7 @@ export class CourseService {
       anonymous: boolean;
       review: CrossCheckReview[];
       comments: CrossCheckComment[];
+      criteria: CrossCheckCriteriaData[];
     },
   ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
@@ -359,7 +362,7 @@ export class CourseService {
       review: CrossCheckReview[];
       studentId: number;
       checkerId: number;
-      historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
+      historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean, criteria: CrossCheckCriteriaData[] }[];
     } | null;
   }
 

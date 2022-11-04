@@ -1,13 +1,15 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { CDN_AVATARS_URL } from 'configs/cdn';
 import { ScoreIcon } from './Icons/ScoreIcon';
-import { Avatar, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
+import { Avatar, Button, Col, Comment, Divider, Row, Switch, Typography } from 'antd';
 import { useLocalStorage } from 'react-use';
 import { Feedback } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { GithubUserLink } from 'components/GithubUserLink';
 import PreparedComment from './Forms/PreparedComment';
 import { StudentContacts } from './CrossCheck/StudentContacts';
+import { CrossCheckCriteriaModal } from './CrossCheck/criteria/CrossCheckCriteriaModal';
+import { CrossCheckCriteriaData } from './CrossCheck/CrossCheckCriteriaForm';
 
 enum LocalStorage {
   AreStudentContactsVisible = 'crossCheckAreStudentContactsVisible',
@@ -28,8 +30,16 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
     LocalStorage.AreStudentContactsVisible,
   );
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModaldata] = useState<CrossCheckCriteriaData[]>([]);
+
   const handleStudentContactsVisibilityChange = () => {
     setAreStudentContactsHidden(!areStudentContactsVisible);
+  };
+
+  const showModal = (modalData: CrossCheckCriteriaData[]) => {
+    setIsModalVisible(true);
+    setModaldata(modalData);
   };
 
   return (
@@ -47,12 +57,16 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
         </Col>
       </Row>
 
-      {comments.map(({ comment, updatedDate, author, score }, i) => (
+      {comments.map(({ comment, updatedDate, author, score, criteria }, i) => (
         <Fragment key={i}>
+          <CrossCheckCriteriaModal
+            modalInfo={modalData}
+            isModalVisible={isModalVisible}
+            setIsModalVisible={setIsModalVisible}
+          />
           <Row>
             <Divider style={{ margin: '8px 0' }} />
           </Row>
-
           <Comment
             avatar={
               <Avatar
@@ -92,12 +106,14 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
                   </Col>
                 </Row>
 
-                <Row style={{ marginBottom: 24 }}>
+                <Row style={{ marginBottom: 10 }}>
                   <Typography.Text style={{ fontSize: 12, lineHeight: '12px' }} type="secondary">
                     maximum score: {maxScore ?? 'unknown'}
                   </Typography.Text>
                 </Row>
-
+                <Row style={{ marginBottom: 10 }}>
+                  {criteria?.length && <Button onClick={() => showModal(criteria)}>Show detailed feedback</Button>}
+                </Row>
                 <Row>
                   <PreparedComment text={comment} />
                 </Row>
