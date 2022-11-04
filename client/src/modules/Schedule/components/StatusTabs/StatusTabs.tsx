@@ -1,5 +1,5 @@
-import { Tabs } from 'antd';
-import { useMemo } from 'react';
+import { Col, Row, Tabs } from 'antd';
+import { FC, useMemo } from 'react';
 import { ALL_TAB_KEY } from 'modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
 
@@ -11,8 +11,8 @@ export interface StatusTabsProps {
   onTabChange: (tab: string) => void;
 }
 
-function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
-  const tabs = useMemo(() => tabsRenderer(statuses), [statuses]);
+const StatusTabs: FC<StatusTabsProps> = ({ statuses, activeTab, onTabChange, children }) => {
+  const tabs = useMemo(() => tabsRenderer(statuses, activeTab), [statuses, activeTab]);
 
   const handleTabChange = (selectedTab: string) => {
     onTabChange(selectedTab);
@@ -21,20 +21,18 @@ function StatusTabs({ statuses, activeTab, onTabChange }: StatusTabsProps) {
   const getActiveTab = () => (!activeTab || Array.isArray(activeTab) ? ALL_TAB_KEY : activeTab);
 
   return (
-    <>
-      <Tabs activeKey={getActiveTab()} items={tabs} onChange={handleTabChange} />
-      <style jsx>{`
-        :global(.ant-tabs-tab .ant-badge-count) {
-          background-color: #f0f2f5;
-          color: rgba(0, 0, 0, 0.45);
-        }
-        :global(.ant-tabs-tab-active .ant-badge-count) {
-          background-color: #e6f7ff;
-          color: #1890ff;
-        }
-      `}</style>
-    </>
+    <Row gutter={48} style={{ background: 'white' }}>
+      <Col span={24}>
+        <Tabs
+          tabBarStyle={{ marginBottom: 0 }}
+          activeKey={getActiveTab()}
+          items={tabs}
+          onChange={handleTabChange}
+          tabBarExtraContent={children}
+        />
+      </Col>
+    </Row>
   );
-}
+};
 
 export default StatusTabs;
