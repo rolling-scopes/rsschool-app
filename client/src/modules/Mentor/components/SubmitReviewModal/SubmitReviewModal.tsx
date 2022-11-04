@@ -15,7 +15,12 @@ export interface SubmitReviewModalProps {
 
 const { Link } = Typography;
 
+export const MODAL_TITLE = 'Submit Score for';
+
 function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewModalProps) {
+  const { studentGithubId, courseTaskId, solutionUrl, studentName, taskDescriptionUrl, taskName, maxScore } =
+    data || {};
+
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -24,11 +29,11 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
   const handleSubmit = async (values: any) => {
     setLoading(true);
 
-    if (data) {
+    if (studentGithubId && courseTaskId) {
       try {
-        await courseService.postStudentScore(data.studentGithubId, data.courseTaskId, {
+        await courseService.postStudentScore(studentGithubId, courseTaskId, {
           score: values.score,
-          githubPrUrl: data.solutionUrl,
+          githubPrUrl: solutionUrl,
         });
         onSubmit();
       } catch (e: any) {
@@ -48,7 +53,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
 
   return (
     <ModalSubmitForm
-      title={`Submit Score for ${data?.studentName}`}
+      title={`${MODAL_TITLE} ${studentName}`}
       data={data}
       submit={handleSubmit}
       close={handleClose}
@@ -59,16 +64,16 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
       <Row>
         <Col span={18} offset={3}>
           <Form.Item label="Task" name="task">
-            <Link href={data?.taskDescriptionUrl} target="_blank">
-              {data?.taskName}
+            <Link href={taskDescriptionUrl} target="_blank">
+              {taskName}
             </Link>
           </Form.Item>
           <Form.Item label="Github Pull Request" name="prUrl">
-            <Link href={data?.solutionUrl} target="_blank">
-              {data?.solutionUrl}
+            <Link href={solutionUrl} target="_blank">
+              {solutionUrl}
             </Link>
           </Form.Item>
-          <ScoreInput maxScore={data?.maxScore} style={{ width: '100%' }} />
+          <ScoreInput maxScore={maxScore} style={{ width: '100%' }} />
         </Col>
       </Row>
     </ModalSubmitForm>

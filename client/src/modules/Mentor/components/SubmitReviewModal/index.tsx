@@ -1,1 +1,1 @@
-export { default as SubmitReviewModal, type SubmitReviewModalProps } from './SubmitReviewModal';
+export { default as SubmitReviewModal, type SubmitReviewModalProps, MODAL_TITLE } from './SubmitReviewModal';
