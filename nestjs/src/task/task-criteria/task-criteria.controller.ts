@@ -15,22 +15,25 @@ export class TaskCriteriaController {
   @ApiOperation({ operationId: 'getTaskCriteria' })
   @ApiOkResponse({ type: TaskCriteriaDto })
   async get(@Param('taskId') taskId: number) {
-    return this.taskCriteriaService.getCriteria(taskId);
+    const data = await this.taskCriteriaService.getCriteria(taskId);
+    return data;
   }
 
   @Post()
   @ApiOperation({ operationId: 'createTaskCriteria' })
   @ApiOkResponse({ type: TaskCriteriaDto })
   @ApiBody({ type: TaskCriteriaDto })
-  create(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
-    return this.taskCriteriaService.createCriteria(taskId, taskCriteriaDto.criteria);
+  async create(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
+    const data = await this.taskCriteriaService.createCriteria(taskId, taskCriteriaDto.criteria);
+    return data;
   }
 
   @Patch()
   @ApiOperation({ operationId: 'updateTaskCriteria' })
   @ApiOkResponse({ type: TaskCriteriaDto })
   @ApiBody({ type: TaskCriteriaDto })
-  update(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
-    return this.taskCriteriaService.updateCriteria(taskId, taskCriteriaDto);
+  async update(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
+    const data = await this.taskCriteriaService.updateCriteria(taskId, taskCriteriaDto);
+    return data;
   }
 }

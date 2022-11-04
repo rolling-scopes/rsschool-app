@@ -50,17 +50,17 @@ export class TaskService {
   }
 
   async createCriteriaForCourseTask(taskId: number, data: CriteriaData[]) {
-    const result = await axios.post<any>(`/api/v2/task/${taskId}/criteria`, { criteria: data });
+    const result = await axios.post<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`, { criteria: data });
     return result.data;
   }
 
   async getCriteriaForCourseTask(taskId: number) {
-    const result = await axios.get<any>(`/api/v2/task/${taskId}/criteria`);
-    return result.data.criteria as CriteriaData[];
+    const result = await axios.get<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`);
+    return result.data.criteria;
   }
 
   async updateCriteriaForCourseTask(taskId: number, data: CriteriaData[]) {
-    const result = await axios.patch<any>(`/api/v2/task/${taskId}/criteria`, { criteria: data });
+    const result = await axios.patch<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`, { criteria: data });
     return result.data;
   }
 }
