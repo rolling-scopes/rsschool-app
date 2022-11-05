@@ -23,10 +23,10 @@ export interface StudentTaskSolutionItem {
   courseTaskId: number;
   resultScore: number | null;
   solutionUrl: string;
-  status: TaskSolutionStatus;
+  status: StudentTaskSolutionItemStatus;
 }
 
-export enum TaskSolutionStatus {
+export enum StudentTaskSolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
 }
@@ -140,7 +140,7 @@ export class MentorsService {
       resultScore: task.tr_score,
       solutionUrl: task.ts_url,
       taskDescriptionUrl: task.t_descriptionUrl,
-      status: task.tr_score ? TaskSolutionStatus.Done : TaskSolutionStatus.InReview,
+      status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
     }));
   }
 
