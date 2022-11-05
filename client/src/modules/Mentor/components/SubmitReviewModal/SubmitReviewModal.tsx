@@ -37,14 +37,14 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
           score: values.score,
           githubPrUrl: solutionUrl,
         });
-        setLoading(false);
         setSubmitted(true);
         onSubmit();
       }
     } catch (e: any) {
       const error = e.response?.data?.message ?? e.message;
-      setLoading(false);
       setErrorText(error);
+    } finally {
+      setLoading(false);
     }
   };
 
