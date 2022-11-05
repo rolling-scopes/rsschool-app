@@ -79,10 +79,10 @@ function Page(props: CoursePageProps) {
   }, []);
 
   useAsync(async () => {
-    const { data: couseTask } = courseTaskId
+    const { data: courseTask } = courseTaskId
       ? await courseTasksApi.getCourseTask(courseId, courseTaskId)
       : { data: null };
-    setCourseTask(couseTask ? parseCourseTask(couseTask) : couseTask);
+    setCourseTask(courseTask ? parseCourseTask(courseTask) : courseTask);
   }, [courseTaskId]);
 
   const handleSubmit = async (values: any) => {
