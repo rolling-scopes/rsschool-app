@@ -1,6 +1,6 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { StudentDto } from '../../students/dto';
-import { StudentTaskSolutionItem } from '../mentors.service';
+import { StudentTaskSolutionItem, TaskSolutionStatus } from '../mentors.service';
 
 @ApiResponse({})
 export class MentorDashboardDto {
@@ -13,6 +13,7 @@ export class MentorDashboardDto {
     this.maxScore = item.maxScore;
     this.resultScore = item.resultScore ?? null;
     this.solutionUrl = item.solutionUrl;
+    this.status = item.status;
   }
 
   @ApiProperty()
@@ -38,4 +39,7 @@ export class MentorDashboardDto {
 
   @ApiProperty({ type: String })
   solutionUrl: string;
+
+  @ApiProperty({ enum: TaskSolutionStatus })
+  status: TaskSolutionStatus;
 }
