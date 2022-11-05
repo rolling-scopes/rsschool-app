@@ -1,21 +1,26 @@
 import React from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
-import { Notification } from 'modules/Mentor/components/Notification';
-import { Instructions } from 'modules/Mentor/components/Instructions';
+import { Instructions, Notification, TaskSolutionsTable } from '..';
+import { getMentorId } from 'domain/user';
+import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 
-// TODO: add useLoading & <Loading />
-function MentorDashboard(props: CoursePageProps) {
+function MentorDashboard({ session, course }: CoursePageProps) {
+  const { id: courseId } = course;
+  const mentorId = getMentorId(session, courseId);
+
+  const [data, loading] = useMentorDashboard(mentorId, courseId);
+
   return (
     <PageLayout
-      loading={false}
+      loading={loading}
       title="Mentor's dashboard"
       background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
+      githubId={session.githubId}
+      courseName={course.name}
     >
       <Notification />
-      <Instructions />
+      {data && data?.length > 0 ? <TaskSolutionsTable data={data} course={course} /> : <Instructions />}
     </PageLayout>
   );
 }
