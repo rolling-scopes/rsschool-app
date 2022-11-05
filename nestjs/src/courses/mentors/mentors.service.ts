@@ -24,12 +24,15 @@ export interface StudentTaskSolutionItem {
   resultScore: number | null;
   solutionUrl: string;
   status: StudentTaskSolutionItemStatus;
+  endDate: Date;
 }
 
 export enum StudentTaskSolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
 }
+
+const twoWeeksMs = 1000 * 60 * 60 * 24 * 14;
 
 @Injectable()
 export class MentorsService {
@@ -123,6 +126,7 @@ export class MentorsService {
         't.descriptionUrl',
         'ct.id',
         'ct.maxScore',
+        'ct.studentEndDate',
         'ts.studentId',
         'tr.score',
         'ts.url',
@@ -141,7 +145,13 @@ export class MentorsService {
       solutionUrl: task.ts_url,
       taskDescriptionUrl: task.t_descriptionUrl,
       status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
+      endDate: this.getEndDate(task.ct_studentEndDate),
     }));
+  }
+
+  private getEndDate(date: string) {
+    const endDate = Date.parse(date);
+    return new Date(endDate + twoWeeksMs);
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {

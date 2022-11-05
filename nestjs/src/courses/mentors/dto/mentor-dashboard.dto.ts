@@ -14,6 +14,7 @@ export class MentorDashboardDto {
     this.resultScore = item.resultScore ?? null;
     this.solutionUrl = item.solutionUrl;
     this.status = item.status;
+    this.endDate = item.endDate.toISOString();
   }
 
   @ApiProperty()
@@ -42,4 +43,7 @@ export class MentorDashboardDto {
 
   @ApiProperty({ enum: StudentTaskSolutionItemStatus })
   status: StudentTaskSolutionItemStatus;
+
+  @ApiProperty({ type: String })
+  endDate: string;
 }

@@ -1,6 +1,6 @@
 import { ColumnsType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
-import { getColumnSearchProps } from 'components/Table';
+import { dateSorter, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from 'api';
 
@@ -35,6 +35,15 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
     dataIndex: 'solutionUrl',
     responsive: ['sm'],
     render: renderSolutionUrl,
+  },
+  {
+    key: TaskSolutionsTableColumnKey.DesiredDeadline,
+    title: TaskSolutionsTableColumnName.DesiredDeadline,
+    dataIndex: 'endDate',
+    responsive: ['sm'],
+    sortDirections: ['descend', 'ascend'],
+    render: renderDate,
+    sorter: dateSorter('endDate'),
   },
   {
     key: TaskSolutionsTableColumnKey.Score,
@@ -105,12 +114,18 @@ function renderSubmitButton(row: MentorDashboardDto, handleSubmitClick: (d: Ment
   );
 }
 
+function renderDate(value: string) {
+  // TODO: colored render as on schedule
+  return <Text>{value}</Text>;
+}
+
 function renderMobile(row: MentorDashboardDto) {
   return (
     <Space direction="vertical">
       {renderName(row.studentName, row)}
       {renderTask(row.taskName, row)}
       {renderSolutionUrl(row.solutionUrl, row)}
+      {renderDate(row.endDate)}
       {renderScore('', row)}
     </Space>
   );

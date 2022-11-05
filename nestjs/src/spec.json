@@ -1633,7 +1633,8 @@
           "maxScore": { "type": "number" },
           "resultScore": { "type": "number", "nullable": true },
           "solutionUrl": { "type": "string" },
-          "status": { "type": "string" }
+          "status": { "type": "string" },
+          "endDate": { "type": "string" }
         },
         "required": [
           "studentGithubId",
@@ -1644,7 +1645,8 @@
           "maxScore",
           "resultScore",
           "solutionUrl",
-          "status"
+          "status",
+          "endDate"
         ]
       },
       "Validations": {
