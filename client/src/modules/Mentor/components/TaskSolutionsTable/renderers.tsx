@@ -1,10 +1,14 @@
 import { ColumnsType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
-import { dateSorter, getColumnSearchProps } from 'components/Table';
+import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from 'api';
+import moment from 'moment';
 
 const { Text, Link } = Typography;
+
+const FORMAT = 'YYYY-MM-DD HH:mm';
+const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void): ColumnsType<MentorDashboardDto> => [
   {
@@ -65,39 +69,38 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
   },
 ];
 
-function renderName(value: string, row: MentorDashboardDto) {
-  if (!row.studentName) return value;
+function renderName(value: string, { studentName, studentGithubId }: MentorDashboardDto) {
+  if (!studentName) return value;
 
   return (
-    <Link target="_blank" href={`/profile?githubId=${row.studentGithubId}`}>
+    <Link target="_blank" href={`/profile?githubId=${studentGithubId}`}>
       {value}
     </Link>
   );
 }
 
-function renderTask(value: string, row: MentorDashboardDto) {
-  if (!row.taskDescriptionUrl) return value;
+function renderTask(value: string, { taskDescriptionUrl }: MentorDashboardDto) {
+  if (!taskDescriptionUrl) return value;
 
   return (
-    <Link target="_blank" href={row.taskDescriptionUrl}>
+    <Link target="_blank" href={taskDescriptionUrl}>
       {value}
     </Link>
   );
 }
 
-function renderSolutionUrl(value: string, row: MentorDashboardDto) {
-  if (!row.solutionUrl) return value;
+function renderSolutionUrl(value: string, { solutionUrl }: MentorDashboardDto) {
+  if (!solutionUrl) return value;
 
   return (
-    <Link target="_blank" href={row.solutionUrl}>
+    <Link target="_blank" href={solutionUrl}>
       {value}
     </Link>
   );
 }
 
-function renderScore(_v: string, row: MentorDashboardDto) {
-  const { maxScore, resultScore } = row;
-  if (maxScore == null) return null;
+function renderScore(_v: string, { maxScore, resultScore }: MentorDashboardDto) {
+  if (!maxScore) return null;
 
   return (
     <Text>
@@ -114,19 +117,23 @@ function renderSubmitButton(row: MentorDashboardDto, handleSubmitClick: (d: Ment
   );
 }
 
-function renderDate(value: string) {
-  // TODO: colored render as on schedule
-  return <Text>{value}</Text>;
-}
-
 function renderMobile(row: MentorDashboardDto) {
   return (
     <Space direction="vertical">
       {renderName(row.studentName, row)}
       {renderTask(row.taskName, row)}
       {renderSolutionUrl(row.solutionUrl, row)}
-      {renderDate(row.endDate)}
+      {renderDate(row.endDate, row)}
       {renderScore('', row)}
     </Space>
   );
+}
+
+function renderDate(value: string, { endDate, resultScore }: MentorDashboardDto) {
+  const now = moment();
+  const end = moment(endDate);
+  const color = end.diff(now, 'hours') < 48 && !resultScore ? 'warning' : undefined;
+  const text = dateWithTimeZoneRenderer(TIMEZONE, FORMAT)(value);
+
+  return <Typography.Text type={color}>{text}</Typography.Text>;
 }
