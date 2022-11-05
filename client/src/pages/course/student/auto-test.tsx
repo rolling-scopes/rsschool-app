@@ -61,7 +61,7 @@ function Page(props: CoursePageProps) {
 
   const [isModified, setIsModified] = useState(false);
 
-  useBeforeUnload(isModified, 'You have changes in test! Do you realy want to close this page?');
+  useBeforeUnload(isModified, 'You have changes in test! Do you really want to close this page?');
 
   useAsync(async () => {
     try {
@@ -71,7 +71,7 @@ function Page(props: CoursePageProps) {
       const courseTasks = filterAutoTestTasks(tasks);
       setCourseTasks(courseTasks);
     } catch {
-      message.error('An error occured. Please try later.');
+      message.error('An error occurred. Please try later.');
     } finally {
       setLoading(false);
       setIsModified(false);
@@ -121,46 +121,58 @@ function Page(props: CoursePageProps) {
 
       setIsModified(false);
       form.resetFields();
+      setCourseTaskId(null);
     } catch (e) {
       const error = e as AxiosError<any>;
-      if (error.response?.status === 429) {
-        notification.warn({
-          message: (
-            <>Please wait. You will be able to submit your task again when the current verification is completed.</>
-          ),
-        });
-        return;
+      const { oneAttemptPerNumberOfHours, maxAttemptsNumber } = (courseTask?.publicAttributes ??
+        {}) as SelfEducationPublicAttributes;
+      switch (error.response?.status) {
+        case 401:
+          notification.error({
+            message: <>Your authorization token has expired. You need to re-login in the application.</>,
+            //notification will never be closed automatically
+            duration: null,
+          });
+          break;
+
+        case 429:
+          notification.warn({
+            message: (
+              <>Please wait. You will be able to submit your task again when the current verification is completed.</>
+            ),
+          });
+          break;
+
+        case 423:
+          notification.error({
+            message: <>Please reload page. This task was expired for submit.</>,
+          });
+          break;
+
+        case 403:
+          notification.error({
+            message: isExpelledStudent(props.session, courseId) ? (
+              <>This task can only be submitted by active students</>
+            ) : (
+              <>
+                You can submit this task only {maxAttemptsNumber || 0} times.{' '}
+                {!!oneAttemptPerNumberOfHours &&
+                  `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
+                    oneAttemptPerNumberOfHours !== 1 && 's'
+                  } `}
+                For now your attempts limit is over!
+              </>
+            ),
+          });
+          form.resetFields();
+          break;
+
+        default:
+          message.error('An error occurred. Please try later.');
+          break;
       }
-      if (error.response?.status === 423) {
-        notification.error({
-          message: <>Please reload page. This task was expired for submit.</>,
-        });
-        return;
-      }
-      if (error.response?.status === 403) {
-        const pubAtts = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
-        const oneAttemptPerNumberOfHours = pubAtts.oneAttemptPerNumberOfHours;
-        notification.error({
-          message: isExpelledStudent(props.session, courseId) ? (
-            <>This task can only be submitted by active students</>
-          ) : (
-            <>
-              You can submit this task only {pubAtts.maxAttemptsNumber || 0} times.{' '}
-              {!!oneAttemptPerNumberOfHours &&
-                `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
-                  oneAttemptPerNumberOfHours !== 1 && 's'
-                } `}
-              For now your attempts limit is over!
-            </>
-          ),
-        });
-        form.resetFields();
-        return;
-      }
-      message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
-      setCourseTaskId(null);
     }
   };
 
@@ -369,7 +381,7 @@ function getTimeToTheNextSubmit(hours: number, lastAttemptTime?: string) {
   return diff;
 }
 
-function formatMiliseconds(ms: number) {
+function formatMilliseconds(ms: number) {
   return moment.utc(ms).format('HH:mm:ss');
 }
 
@@ -396,7 +408,7 @@ function renderSelfEducation(courseTask: CourseTaskDetailedDto, verifications: V
       <Typography.Paragraph>
         <Typography.Text mark strong>
           Note: You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
-          attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
+          attempts. {!strictAttemptsMode && 'After limit attempts is over you can get only half a score.'}
         </Typography.Text>
       </Typography.Paragraph>
       <Typography.Paragraph>
@@ -413,7 +425,7 @@ function renderSelfEducation(courseTask: CourseTaskDetailedDto, verifications: V
           {getAttemptsLeftMessage(attemptsLeft, strictAttemptsMode)}
           {!isSubmitAllowed &&
             attemptsLeft > 0 &&
-            ` Next submit is possible in ${formatMiliseconds(timeToTheNextSubmit)}`}
+            ` Next submit is possible in ${formatMilliseconds(timeToTheNextSubmit)}`}
         </Typography.Text>
       </Typography.Paragraph>
       {questions.map(({ question, answers, multiple, index: questionIndex, questionImage, answersType }) => {
