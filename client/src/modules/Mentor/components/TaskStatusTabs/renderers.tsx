@@ -4,52 +4,25 @@ import { Status } from './TaskStatusTabs';
 import { CountBadge } from 'components/CountBadge';
 import { TASKS_STATUSES } from '../../constants';
 
-type Item = {
-  label: string;
-  key: string;
-  count: number;
-};
-
 type TabItem = {
   label: ReactNode;
   key: string;
 };
 
-export const tabsRenderer = (statuses?: Status[], activeTab?: string): TabItem[] => {
-  if (!statuses) {
-    return [];
-  }
+export const tabsRenderer = (statuses?: Status[], activeTab?: string): TabItem[] =>
+  TASKS_STATUSES.reduce((tabs: TabItem[], { label, key }: TabItem) => {
+    const count = statuses?.filter(el => el === key).length ?? 0;
+    const badgeStatus = activeTab === key ? 'processing' : 'default';
 
-  return TASKS_STATUSES.reduce(
-    (
-      acc: Item[],
-      current: {
-        value: Status;
-        text: string;
-      },
-    ): Item[] => {
-      const { text, value } = current;
-
-      const newItem: Item = {
-        label: text,
-        key: value,
-        count: statuses.filter(el => el === value).length,
-      };
-      return [...acc, newItem];
-    },
-    [],
-  ).map(({ count, key, label }) => {
-    const isTabActive = activeTab === key;
-    return {
+    const tab = {
       key,
-      label: count ? (
+      label: (
         <Space>
           {label}
-          <CountBadge showZero count={count} status={isTabActive ? 'processing' : 'default'} />
+          <CountBadge showZero={true} count={count} status={badgeStatus} />
         </Space>
-      ) : (
-        label
       ),
     };
-  });
-};
+
+    return [...tabs, tab];
+  }, []);

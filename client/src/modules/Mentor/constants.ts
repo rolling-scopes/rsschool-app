@@ -27,6 +27,6 @@ export enum StudentTaskSolutionItemStatus {
 }
 
 export const TASKS_STATUSES = Object.entries(StudentTaskSolutionItemStatus).map(([key, value]) => ({
-  value,
-  text: key,
+  key: value,
+  label: key,
 }));
