@@ -1,8 +1,8 @@
 import { Space } from 'antd';
 import { ReactNode } from 'react';
-import { Status } from './TaskStatusTabs';
+import { Status } from '.';
 import { CountBadge } from 'components/CountBadge';
-import { TASKS_STATUSES } from '../../constants';
+import { TASKS_STATUSES } from 'modules/Mentor/constants';
 
 type TabItem = {
   label: ReactNode;
@@ -19,7 +19,7 @@ export const tabsRenderer = (statuses?: Status[], activeTab?: string): TabItem[]
       label: (
         <Space>
           {label}
-          <CountBadge showZero={true} count={count} status={badgeStatus} />
+          <CountBadge showZero count={count} status={badgeStatus} />
         </Space>
       ),
     };
