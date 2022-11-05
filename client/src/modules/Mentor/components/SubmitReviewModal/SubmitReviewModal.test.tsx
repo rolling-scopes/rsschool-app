@@ -1,5 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
+import { SUCCESS_MESSAGE } from './SubmitReviewModal';
+import mockAxios from 'jest-mock-axios';
 
 const MODAL_DATA_MOCK = {
   courseTaskId: 1,
@@ -20,6 +22,10 @@ const PROPS_MOCK: SubmitReviewModalProps = {
 };
 
 describe('SubmitReviewModal', () => {
+  afterEach(() => {
+    mockAxios.reset();
+  });
+
   it.each`
     text                           | role
     ${MODAL_DATA_MOCK.taskName}    | ${'link'}
@@ -52,5 +58,41 @@ describe('SubmitReviewModal', () => {
     const modal = screen.queryByText(new RegExp(MODAL_TITLE));
 
     expect(modal).not.toBeInTheDocument();
+  });
+
+  it('should render success message on submit', async () => {
+    mockAxios.post.mockResolvedValueOnce({ data: true });
+    render(<SubmitReviewModal {...PROPS_MOCK} />);
+    const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
+    fireEvent.change(scoreInput, { target: { value: 10 } });
+
+    const submitBtn = screen.getByRole('button', { name: 'Submit' });
+    fireEvent.click(submitBtn);
+
+    const message = await screen.findByText(SUCCESS_MESSAGE);
+    expect(message).toBeInTheDocument();
+  });
+
+  it('should render error message when error has occurred on submit', async () => {
+    const errorMessage = 'Network error';
+    mockAxios.post.mockRejectedValueOnce(new Error(errorMessage));
+    render(<SubmitReviewModal {...PROPS_MOCK} />);
+    const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
+    fireEvent.change(scoreInput, { target: { value: 10 } });
+
+    const submitBtn = screen.getByRole('button', { name: 'Submit' });
+    fireEvent.click(submitBtn);
+
+    const message = await screen.findByText(errorMessage);
+    expect(message).toBeInTheDocument();
+  });
+
+  it('should call onClose when "Cancel" button was clicked', async () => {
+    render(<SubmitReviewModal {...PROPS_MOCK} />);
+    const cancelBtn = screen.getByRole('button', { name: 'Cancel' });
+
+    fireEvent.click(cancelBtn);
+
+    expect(PROPS_MOCK.onClose).toHaveBeenCalledWith(null);
   });
 });

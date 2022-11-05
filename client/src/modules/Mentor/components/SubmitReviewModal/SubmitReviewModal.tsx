@@ -9,46 +9,50 @@ import { isEmpty } from 'lodash';
 export interface SubmitReviewModalProps {
   data: MentorDashboardDto | null;
   courseId: number;
-  onClose: () => void;
+  onClose: (d: MentorDashboardDto | null) => void;
   onSubmit: () => void;
 }
 
 const { Link } = Typography;
 
 export const MODAL_TITLE = 'Submit Score for';
+export const SUCCESS_MESSAGE = 'Your review has been successfully submitted';
 
 function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewModalProps) {
   const { studentGithubId, courseTaskId, solutionUrl, studentName, taskDescriptionUrl, taskName, maxScore } =
     data || {};
 
-  const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
 
-    if (studentGithubId && courseTaskId) {
-      try {
+    try {
+      if (studentGithubId && courseTaskId) {
         await courseService.postStudentScore(studentGithubId, courseTaskId, {
           score: values.score,
           githubPrUrl: solutionUrl,
         });
-        onSubmit();
-      } catch (e: any) {
-        const error = e.response?.data?.message ?? e.message;
-        setErrorText(error);
-      } finally {
         setLoading(false);
+        setSubmitted(true);
+        onSubmit();
       }
+    } catch (e: any) {
+      const error = e.response?.data?.message ?? e.message;
+      setLoading(false);
+      setErrorText(error);
     }
   };
 
   const handleClose = () => {
     setErrorText('');
     setLoading(false);
-    onClose();
+    setSubmitted(false);
+    onClose(null);
   };
 
   return (
@@ -59,6 +63,8 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
       close={handleClose}
       errorText={errorText}
       loading={loading}
+      submitted={submitted}
+      successText={SUCCESS_MESSAGE}
       open={!isEmpty(data)}
     >
       <Row>

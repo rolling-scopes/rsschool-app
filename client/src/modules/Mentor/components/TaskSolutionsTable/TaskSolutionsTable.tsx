@@ -17,17 +17,12 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
   const [data, loading] = useMentorDashboard(mentorId, courseId, isReviewSubmitted);
 
-  const handleSubmit = () => {
-    setModalData(null);
+  const handleDataSubmit = () => {
     setIsReviewSubmitted(!isReviewSubmitted);
   };
 
-  const handleSubmitClick = (data: MentorDashboardDto) => {
+  const handleSubmitButtonClick = (data: MentorDashboardDto) => {
     setModalData(data);
-  };
-
-  const handleClose = () => {
-    setModalData(null);
   };
 
   return (
@@ -42,7 +37,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
               cancelSort: undefined,
             }}
             pagination={false}
-            columns={getColumns(handleSubmitClick)}
+            columns={getColumns(handleSubmitButtonClick)}
             dataSource={data}
             size="middle"
             rowKey={getUniqueKey}
@@ -50,7 +45,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
           />
         </Col>
       </Row>
-      <SubmitReviewModal courseId={courseId} data={modalData} onClose={handleClose} onSubmit={handleSubmit} />
+      <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={handleDataSubmit} />
     </>
   );
 }

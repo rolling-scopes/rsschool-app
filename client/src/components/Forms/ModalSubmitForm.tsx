@@ -37,20 +37,24 @@ export function ModalSubmitForm({
   const [form] = Form.useForm();
   const initialValues = getInitialValues ? getInitialValues?.(data) : data;
 
+  function onSubmit(): ((e: React.MouseEvent<HTMLElement, MouseEvent>) => void) | undefined {
+    return async e => {
+      e.preventDefault();
+      const values = await form.validateFields().catch(() => null);
+      if (values == null) {
+        return;
+      }
+      submit(values);
+    };
+  }
+
   return (
     <Modal
       open={open ?? true}
       footer={submitted ? null : undefined}
       title={title}
       okText="Submit"
-      onOk={async e => {
-        e.preventDefault();
-        const values = await form.validateFields().catch(() => null);
-        if (values == null) {
-          return;
-        }
-        submit(values);
-      }}
+      onOk={onSubmit()}
       onCancel={e => {
         close(e);
         form.resetFields();
