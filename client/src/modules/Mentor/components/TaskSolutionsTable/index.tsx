@@ -1,2 +1,2 @@
-export { default as TaskSolutionsTable } from './TaskSolutionsTable';
+export { default as TaskSolutionsTable, type TaskSolutionsTableProps } from './TaskSolutionsTable';
 export * from './renderers';

@@ -1,26 +1,17 @@
 import { ColumnsType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
-import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
-import { Space, Typography } from 'antd';
-import { SelectOutlined } from '@ant-design/icons';
-import { MentorDashboardDto, ProfileCourseDto } from 'api';
+import { Button, Typography } from 'antd';
+import { MentorDashboardDto } from 'api';
 
 const { Text, Link } = Typography;
 
-export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboardDto> => [
+export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void): ColumnsType<MentorDashboardDto> => [
   {
     key: TaskSolutionsTableColumnKey.Number,
     title: TaskSolutionsTableColumnName.Number,
     render: (_v, _r, idx) => idx + 1,
     align: 'center',
-  },
-  {
-    key: TaskSolutionsTableColumnKey.GithubId,
-    title: TaskSolutionsTableColumnName.GithubId,
-    dataIndex: 'studentGithubId',
-    render: (value: string) => !!value && <GithubUserLink value={value} />,
-    ...getColumnSearchProps('studentGithubId'),
   },
   {
     key: TaskSolutionsTableColumnKey.Name,
@@ -49,7 +40,7 @@ export const getColumns = (course: ProfileCourseDto): ColumnsType<MentorDashboar
   {
     key: TaskSolutionsTableColumnKey.SubmitScores,
     title: TaskSolutionsTableColumnName.SubmitScores,
-    render: () => renderSubmitButton(course),
+    render: row => renderSubmitButton(row, handleSubmitClick),
   },
 ];
 
@@ -94,13 +85,10 @@ function renderScore(_v: string, row: MentorDashboardDto) {
   );
 }
 
-function renderSubmitButton({ alias }: ProfileCourseDto) {
-  // TODO: modal window to submit scores
+function renderSubmitButton(row: MentorDashboardDto, handleSubmitClick: (d: MentorDashboardDto) => void) {
   return (
-    <Link target="_blank" href={`/course/mentor/submit-review?course=${alias}`}>
-      <Space>
-        SubmitReview <SelectOutlined rotate={90} />
-      </Space>
-    </Link>
+    <Button type="link" onClick={() => handleSubmitClick(row)}>
+      Submit
+    </Button>
   );
 }
