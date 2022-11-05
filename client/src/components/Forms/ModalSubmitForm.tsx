@@ -1,6 +1,5 @@
 import { Alert, Button, Form, Modal, Result, Spin } from 'antd';
 import * as React from 'react';
-
 type Props = {
   data: any;
   title?: string;
@@ -8,7 +7,7 @@ type Props = {
   close: (arg: any) => void;
   onChange?: (values: any) => void;
   getInitialValues?: (arg: any) => any;
-  children: any;
+  children: React.ReactNode;
   loading?: boolean;
   submitted?: boolean;
   successText?: string;
