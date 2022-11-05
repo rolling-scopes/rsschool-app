@@ -9,6 +9,7 @@ export enum TaskSolutionsTableColumnKey {
   Score = 'score',
   SubmitScores = 'submitScores',
   SolutionUrl = 'solutionUrl',
+  MobileTask = 'mobileTask',
 }
 
 export enum TaskSolutionsTableColumnName {
@@ -19,6 +20,7 @@ export enum TaskSolutionsTableColumnName {
   Score = 'Score / Max',
   SubmitScores = 'Submit scores',
   SolutionUrl = 'Pull request',
+  MobileTask = 'Task',
 }
 
 export enum StudentTaskSolutionItemStatus {

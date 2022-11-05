@@ -9,7 +9,7 @@ type TabItem = {
   key: string;
 };
 
-export const tabsRenderer = (statuses?: Status[], activeTab?: string): TabItem[] =>
+export const tabsRenderer = (statuses?: Status[], activeTab?: Status): TabItem[] =>
   TASKS_STATUSES.reduce((tabs: TabItem[], { label, key }: TabItem) => {
     const count = statuses?.filter(el => el === key).length ?? 0;
     const badgeStatus = activeTab === key ? 'processing' : 'default';

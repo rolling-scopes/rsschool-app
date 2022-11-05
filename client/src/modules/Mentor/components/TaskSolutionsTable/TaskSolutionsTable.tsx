@@ -17,11 +17,13 @@ const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filte
 function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>();
+  const [activeTab, setActiveTab] = useState(StudentTaskSolutionItemStatus.InReview);
 
   const [data, loading] = useMentorDashboard(mentorId, courseId, isReviewSubmitted);
 
   const statuses = useMemo(() => data?.map(({ status }) => status as StudentTaskSolutionItemStatus), [data]);
+
+  const filteredData = data?.filter(item => item.status === activeTab);
 
   const handleDataSubmit = () => {
     setIsReviewSubmitted(!isReviewSubmitted);
@@ -38,7 +40,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
           <TaskStatusTabs statuses={statuses} onTabChange={setActiveTab} activeTab={activeTab} />
         </Col>
       </Row>
-      <Row style={{ padding: '0 24px', background: 'white'}}>
+      <Row style={{ padding: '0 24px', background: 'white' }}>
         <Col span={24}>
           <Table
             locale={{
@@ -49,7 +51,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
             }}
             pagination={false}
             columns={getColumns(handleSubmitButtonClick)}
-            dataSource={data}
+            dataSource={filteredData}
             size="middle"
             rowKey={getUniqueKey}
             loading={loading}

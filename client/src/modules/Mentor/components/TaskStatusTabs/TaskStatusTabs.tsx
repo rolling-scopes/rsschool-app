@@ -7,19 +7,19 @@ export type Status = StudentTaskSolutionItemStatus;
 
 export interface TaskStatusTabsProps {
   statuses?: Status[];
-  activeTab?: string;
-  onTabChange: (tab: string) => void;
+  activeTab?: Status;
+  onTabChange: (tab: Status) => void;
 }
 
 const TaskStatusTabs: FC<TaskStatusTabsProps> = ({
   statuses,
-  activeTab = StudentTaskSolutionItemStatus.InReview,
+  activeTab,
   onTabChange,
 }) => {
   const tabs = useMemo(() => tabsRenderer(statuses, activeTab), [statuses, activeTab]);
 
   const handleTabChange = (selectedTab: string) => {
-    onTabChange(selectedTab);
+    onTabChange(selectedTab as Status);
   };
 
   return <Tabs tabBarStyle={{ padding: '0 24px' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />;

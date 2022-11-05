@@ -1,7 +1,7 @@
 import { ColumnsType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
 import { getColumnSearchProps } from 'components/Table';
-import { Button, Typography } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from 'api';
 
 const { Text, Link } = Typography;
@@ -10,36 +10,48 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
   {
     key: TaskSolutionsTableColumnKey.Number,
     title: TaskSolutionsTableColumnName.Number,
-    render: (_v, _r, idx) => idx + 1,
     align: 'center',
+    responsive: ['sm'],
+    render: (_v, _r, idx) => idx + 1,
   },
   {
     key: TaskSolutionsTableColumnKey.Name,
     title: TaskSolutionsTableColumnName.Name,
     dataIndex: 'studentName',
     render: renderName,
+    responsive: ['sm'],
     ...getColumnSearchProps('studentName'),
   },
   {
     key: TaskSolutionsTableColumnKey.Task,
     title: TaskSolutionsTableColumnName.Task,
     dataIndex: 'taskName',
+    responsive: ['sm'],
     render: renderTask,
   },
   {
     key: TaskSolutionsTableColumnKey.SolutionUrl,
     title: TaskSolutionsTableColumnName.SolutionUrl,
     dataIndex: 'solutionUrl',
+    responsive: ['sm'],
     render: renderSolutionUrl,
   },
   {
     key: TaskSolutionsTableColumnKey.Score,
     title: TaskSolutionsTableColumnName.Score,
+    responsive: ['sm'],
     render: renderScore,
+  },
+  {
+    key: TaskSolutionsTableColumnKey.MobileTask,
+    title: TaskSolutionsTableColumnName.MobileTask,
+    responsive: ['xs'],
+    render: renderMobile,
   },
   {
     key: TaskSolutionsTableColumnKey.SubmitScores,
     title: TaskSolutionsTableColumnName.SubmitScores,
+    align: 'center',
     render: row => renderSubmitButton(row, handleSubmitClick),
   },
 ];
@@ -90,5 +102,16 @@ function renderSubmitButton(row: MentorDashboardDto, handleSubmitClick: (d: Ment
     <Button type="link" onClick={() => handleSubmitClick(row)}>
       Submit
     </Button>
+  );
+}
+
+function renderMobile(row: MentorDashboardDto) {
+  return (
+    <Space direction="vertical">
+      {renderName(row.studentName, row)}
+      {renderTask(row.taskName, row)}
+      {renderSolutionUrl(row.solutionUrl, row)}
+      {renderScore('', row)}
+    </Space>
   );
 }
