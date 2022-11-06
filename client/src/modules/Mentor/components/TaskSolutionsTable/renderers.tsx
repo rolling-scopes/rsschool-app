@@ -53,6 +53,7 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
     key: TaskSolutionsTableColumnKey.Score,
     title: TaskSolutionsTableColumnName.Score,
     responsive: ['sm'],
+    align: 'right',
     render: renderScore,
   },
   {
