@@ -12,10 +12,15 @@ const PROPS_MOCK: TaskSolutionsTableProps = {
 };
 
 describe('TaskSolutionsTable', () => {
+  const useMentorDashboardMock = useMentorDashboard as jest.MockedFunction<typeof useMentorDashboard>;
+
   beforeEach(() => {
     const data = generateData();
-    const useMentorDashboardMock = useMentorDashboard as jest.MockedFunction<typeof useMentorDashboard>;
     useMentorDashboardMock.mockReturnValueOnce([data, false]);
+  });
+
+  afterEach(() => {
+    useMentorDashboardMock.mockClear();
   });
 
   it.each`
@@ -25,6 +30,7 @@ describe('TaskSolutionsTable', () => {
     ${TaskSolutionsTableColumnName.SolutionUrl}
     ${TaskSolutionsTableColumnName.Score}
     ${TaskSolutionsTableColumnName.SubmitScores}
+    ${TaskSolutionsTableColumnName.DesiredDeadline}
   `('should render column name "$label"', ({ label }: { label: string }) => {
     render(<TaskSolutionsTable {...PROPS_MOCK} />);
 
@@ -39,6 +45,7 @@ describe('TaskSolutionsTable', () => {
     ${'Task 0'}
     ${'solution-url-0'}
     ${'20 / 100'}
+    ${'1970-02-01 00:00'}
   `('should render column data "$value"', ({ value }: { value: string }) => {
     render(<TaskSolutionsTable {...PROPS_MOCK} />);
 
@@ -57,6 +64,6 @@ function generateData(count = 3): MentorDashboardDto[] {
     taskDescriptionUrl: `task-url-${idx}`,
     taskName: `Task ${idx}`,
     status: StudentTaskSolutionItemStatus.InReview,
-    endDate: new Date().toISOString(),
+    endDate: new Date(`1970-02-0${idx + 1}`).toISOString(),
   }));
 }

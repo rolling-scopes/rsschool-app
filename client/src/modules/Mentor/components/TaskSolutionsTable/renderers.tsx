@@ -1,4 +1,5 @@
 import { ColumnsType } from 'antd/lib/table';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
 import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
@@ -9,13 +10,15 @@ const { Text, Link } = Typography;
 
 const FORMAT = 'YYYY-MM-DD HH:mm';
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['sm'];
+const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs'];
 
 export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void): ColumnsType<MentorDashboardDto> => [
   {
     key: TaskSolutionsTableColumnKey.Number,
     title: TaskSolutionsTableColumnName.Number,
     align: 'center',
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     render: (_v, _r, idx) => idx + 1,
   },
   {
@@ -23,28 +26,28 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
     title: TaskSolutionsTableColumnName.Name,
     dataIndex: 'studentName',
     render: renderName,
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     ...getColumnSearchProps('studentName'),
   },
   {
     key: TaskSolutionsTableColumnKey.Task,
     title: TaskSolutionsTableColumnName.Task,
     dataIndex: 'taskName',
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     render: renderTask,
   },
   {
     key: TaskSolutionsTableColumnKey.SolutionUrl,
     title: TaskSolutionsTableColumnName.SolutionUrl,
     dataIndex: 'solutionUrl',
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     render: renderSolutionUrl,
   },
   {
     key: TaskSolutionsTableColumnKey.DesiredDeadline,
     title: TaskSolutionsTableColumnName.DesiredDeadline,
     dataIndex: 'endDate',
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     sortDirections: ['descend', 'ascend'],
     render: renderDate,
     sorter: dateSorter('endDate'),
@@ -52,14 +55,14 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
   {
     key: TaskSolutionsTableColumnKey.Score,
     title: TaskSolutionsTableColumnName.Score,
-    responsive: ['sm'],
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
     align: 'right',
     render: renderScore,
   },
   {
     key: TaskSolutionsTableColumnKey.MobileTask,
     title: TaskSolutionsTableColumnName.MobileTask,
-    responsive: ['xs'],
+    responsive: DISPLAY_TABLE_MOBILE_BREAKPOINT,
     render: renderMobile,
   },
   {
