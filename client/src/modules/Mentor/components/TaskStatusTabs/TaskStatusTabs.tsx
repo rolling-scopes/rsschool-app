@@ -11,11 +11,7 @@ export interface TaskStatusTabsProps {
   onTabChange: (tab: Status) => void;
 }
 
-const TaskStatusTabs: FC<TaskStatusTabsProps> = ({
-  statuses,
-  activeTab,
-  onTabChange,
-}) => {
+const TaskStatusTabs: FC<TaskStatusTabsProps> = ({ statuses, activeTab, onTabChange }) => {
   const tabs = useMemo(() => tabsRenderer(statuses, activeTab), [statuses, activeTab]);
 
   const handleTabChange = (selectedTab: string) => {
