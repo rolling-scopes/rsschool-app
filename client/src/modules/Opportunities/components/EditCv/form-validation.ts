@@ -13,10 +13,6 @@ export const contactsValidationRules: {
 } = {
   phone: [
     {
-      required: true,
-      message: validationMessages.required,
-    },
-    {
       max: 25,
       message: validationMessages.max(25),
     },
@@ -38,10 +34,6 @@ export const contactsValidationRules: {
     },
   ],
   email: [
-    {
-      required: true,
-      message: validationMessages.required,
-    },
     {
       type: 'email',
       message: validationMessages.invalid('email'),
