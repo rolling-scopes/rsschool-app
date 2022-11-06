@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { TaskSolutionsTable, TaskSolutionsTableProps } from '.';
 import { MentorDashboardDto } from '../../../../api';
-import { TaskSolutionsTableColumnName } from '../../constants';
+import { StudentTaskSolutionItemStatus, TaskSolutionsTableColumnName } from '../../constants';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 
 jest.mock('modules/Mentor/hooks/useMentorDashboard');
@@ -56,5 +56,7 @@ function generateData(count = 3): MentorDashboardDto[] {
     studentName: `Student ${idx}`,
     taskDescriptionUrl: `task-url-${idx}`,
     taskName: `Task ${idx}`,
+    status: StudentTaskSolutionItemStatus.InReview,
+    endDate: new Date().toISOString(),
   }));
 }
