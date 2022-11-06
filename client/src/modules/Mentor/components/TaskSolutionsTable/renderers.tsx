@@ -60,8 +60,8 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
     render: renderScore,
   },
   {
-    key: TaskSolutionsTableColumnKey.MobileTask,
-    title: TaskSolutionsTableColumnName.MobileTask,
+    key: TaskSolutionsTableColumnKey.Task,
+    title: TaskSolutionsTableColumnName.Task,
     responsive: DISPLAY_TABLE_MOBILE_BREAKPOINT,
     render: renderMobile,
   },
@@ -139,5 +139,5 @@ function renderDate(value: string, { endDate, resultScore }: MentorDashboardDto)
   const color = end.diff(now, 'hours') < 48 && !resultScore ? 'warning' : undefined;
   const text = dateWithTimeZoneRenderer(TIMEZONE, FORMAT)(value);
 
-  return <Typography.Text type={color}>{text}</Typography.Text>;
+  return <Text type={color}>{text}</Text>;
 }
