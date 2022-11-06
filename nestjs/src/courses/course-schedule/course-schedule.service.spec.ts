@@ -146,6 +146,9 @@ describe('CourseScheduleService', () => {
           id: mockCrossCheckCourseTask.taskOwner?.id,
           name: `${mockCrossCheckCourseTask.taskOwner?.firstName} ${mockCrossCheckCourseTask.taskOwner?.lastName}`,
         },
+        scoreWeight: mockCrossCheckCourseTask.scoreWeight,
+        score: null,
+        maxScore: mockCrossCheckCourseTask.maxScore,
       });
 
       expect(reviewItem).toEqual({
@@ -162,6 +165,9 @@ describe('CourseScheduleService', () => {
           id: mockCrossCheckCourseTask.taskOwner?.id,
           name: `${mockCrossCheckCourseTask.taskOwner?.firstName} ${mockCrossCheckCourseTask.taskOwner?.lastName}`,
         },
+        scoreWeight: mockCrossCheckCourseTask.scoreWeight,
+        score: null,
+        maxScore: mockCrossCheckCourseTask.maxScore,
       });
     });
   });
