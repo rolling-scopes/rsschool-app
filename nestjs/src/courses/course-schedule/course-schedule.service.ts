@@ -176,6 +176,9 @@ export class CourseScheduleService {
       tag: CourseScheduleItemTag.CrossCheckSubmit,
       descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+      scoreWeight: crossCheckTask.scoreWeight,
+      score: currentScore,
+      maxScore: crossCheckTask.maxScore,
     };
 
     const reviewItem = {
@@ -192,6 +195,9 @@ export class CourseScheduleService {
       tag: CourseScheduleItemTag.CrossCheckReview,
       descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+      scoreWeight: crossCheckTask.scoreWeight,
+      score: currentScore,
+      maxScore: crossCheckTask.maxScore,
     };
 
     return [submitItem, reviewItem] as CourseScheduleItem[];
