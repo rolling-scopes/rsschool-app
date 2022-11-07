@@ -2178,6 +2178,18 @@ export interface MentorDashboardDto {
      * @memberof MentorDashboardDto
      */
     'solutionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'status': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDashboardDto
+     */
+    'endDate': string;
 }
 /**
  * 

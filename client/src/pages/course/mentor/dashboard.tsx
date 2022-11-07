@@ -1,8 +1,10 @@
 import withSession, { CourseRole } from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
 import { MentorDashboard } from 'modules/Mentor/components';
-import withCourseData from 'components/withCourseData';
 import { CoursePageProps } from 'services/models';
+import { getCourseProps as getServerSideProps } from 'modules/Course/data';
+
+export { getServerSideProps };
 
 function Page(props: CoursePageProps) {
   return (
@@ -12,4 +14,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page));
+export default withSession(Page);
