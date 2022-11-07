@@ -269,6 +269,43 @@
         "tags": ["mentors"]
       }
     },
+    "/mentors/{mentorId}/course/{courseId}/students": {
+      "get": {
+        "operationId": "getCourseStudentsCount",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "number" } } } },
+          "400": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
+    "/mentors/{mentorId}/course/{courseId}/dashboard": {
+      "get": {
+        "operationId": "getMentorDashboardData",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorDashboardDto" } }
+              }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",
@@ -1585,6 +1622,33 @@
           "repoUrl"
         ]
       },
+      "MentorDashboardDto": {
+        "type": "object",
+        "properties": {
+          "studentGithubId": { "type": "string" },
+          "studentName": { "type": "string" },
+          "taskName": { "type": "string" },
+          "taskDescriptionUrl": { "type": "string" },
+          "courseTaskId": { "type": "number" },
+          "maxScore": { "type": "number" },
+          "resultScore": { "type": "number", "nullable": true },
+          "solutionUrl": { "type": "string" },
+          "status": { "type": "string" },
+          "endDate": { "type": "string" }
+        },
+        "required": [
+          "studentGithubId",
+          "studentName",
+          "taskName",
+          "taskDescriptionUrl",
+          "courseTaskId",
+          "maxScore",
+          "resultScore",
+          "solutionUrl",
+          "status",
+          "endDate"
+        ]
+      },
       "Validations": {
         "type": "object",
         "properties": { "githubIdInUrl": { "type": "boolean" } },
@@ -2006,11 +2070,15 @@
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
+          "crossCheckEndDate": { "type": "string" },
           "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "maxScore": { "type": "number", "nullable": true },
           "scoreWeight": { "type": "number", "nullable": true },
           "descriptionUrl": { "type": "string", "nullable": true },
-          "tag": { "type": "string", "enum": ["lecture", "coding", "self-study", "interview", "cross-check", "test"] }
+          "tag": {
+            "type": "string",
+            "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
+          }
         },
         "required": [
           "score",
@@ -2019,6 +2087,7 @@
           "status",
           "startDate",
           "endDate",
+          "crossCheckEndDate",
           "organizer",
           "maxScore",
           "scoreWeight",
