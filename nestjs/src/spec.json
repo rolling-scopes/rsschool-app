@@ -269,7 +269,22 @@
         "tags": ["mentors"]
       }
     },
-    "/mentors/{mentorId}/dashboard/{courseId}": {
+    "/mentors/{mentorId}/course/{courseId}/students": {
+      "get": {
+        "operationId": "getCourseStudentsCount",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "number" } } } },
+          "400": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
+    "/mentors/{mentorId}/course/{courseId}/dashboard": {
       "get": {
         "operationId": "getMentorDashboardData",
         "summary": "",
@@ -1617,7 +1632,9 @@
           "courseTaskId": { "type": "number" },
           "maxScore": { "type": "number" },
           "resultScore": { "type": "number", "nullable": true },
-          "solutionUrl": { "type": "string", "nullable": true }
+          "solutionUrl": { "type": "string" },
+          "status": { "type": "string" },
+          "endDate": { "type": "string" }
         },
         "required": [
           "studentGithubId",
@@ -1627,7 +1644,9 @@
           "courseTaskId",
           "maxScore",
           "resultScore",
-          "solutionUrl"
+          "solutionUrl",
+          "status",
+          "endDate"
         ]
       },
       "Validations": {

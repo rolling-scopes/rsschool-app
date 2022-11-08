@@ -23,7 +23,16 @@ export interface StudentTaskSolutionItem {
   courseTaskId: number;
   resultScore: number | null;
   solutionUrl: string;
+  status: StudentTaskSolutionItemStatus;
+  endDate: Date;
 }
+
+export enum StudentTaskSolutionItemStatus {
+  InReview = 'in-review',
+  Done = 'done',
+}
+
+const twoWeeksMs = 1000 * 60 * 60 * 24 * 14;
 
 @Injectable()
 export class MentorsService {
@@ -93,6 +102,12 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
+  public getCourseStudentsCount(mentorId: number, courseId: number) {
+    return this.studentRepository.count({
+      where: { mentorId, courseId },
+    });
+  }
+
   private getCourseStudents(mentorId: number, courseId: number) {
     return this.studentRepository.find({
       where: { mentorId, courseId },
@@ -106,9 +121,20 @@ export class MentorsService {
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Task, 't', 't.id = ct."taskId"')
-      .select(['t.name', 't.descriptionUrl', 'ct.id', 'ct.maxScore', 'ts.studentId', 'tr.score', 'ts.url'])
+      .select([
+        't.name',
+        't.descriptionUrl',
+        'ct.id',
+        'ct.maxScore',
+        'ct.studentEndDate',
+        'ts.studentId',
+        'tr.score',
+        'ts.url',
+        'ts.updatedDate',
+      ])
       .where('ts."studentId" = :studentId', { studentId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
+      .orderBy('ts.updatedDate', 'DESC')
       .getRawMany();
 
     return tasks.map(task => ({
@@ -118,7 +144,14 @@ export class MentorsService {
       resultScore: task.tr_score,
       solutionUrl: task.ts_url,
       taskDescriptionUrl: task.t_descriptionUrl,
+      status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
+      endDate: this.getEndDate(task.ct_studentEndDate),
     }));
+  }
+
+  private getEndDate(date: string) {
+    const endDate = Date.parse(date);
+    return new Date(endDate + twoWeeksMs);
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
