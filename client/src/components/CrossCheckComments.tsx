@@ -112,7 +112,7 @@ export function CrossCheckComments({ feedback, maxScore }: Props) {
                   </Typography.Text>
                 </Row>
                 <Row style={{ marginBottom: 10 }}>
-                  {criteria?.length && <Button onClick={() => showModal(criteria)}>Show detailed feedback</Button>}
+                  {!!criteria?.length && <Button onClick={() => showModal(criteria)}>Show detailed feedback</Button>}
                 </Row>
                 <Row>
                   <PreparedComment text={comment} />

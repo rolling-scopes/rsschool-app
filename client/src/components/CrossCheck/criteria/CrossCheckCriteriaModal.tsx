@@ -1,4 +1,4 @@
-import { Modal, Typography, Divider } from 'antd';
+import { Modal, Typography } from 'antd';
 
 import { CrossCheckCriteriaData } from '../CrossCheckCriteriaForm';
 
@@ -22,12 +22,21 @@ export function CrossCheckCriteriaModal(props: {
       {props.modalInfo
         ?.filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === 'subtask')
         .map(criteriaItem => (
-          <>
-            <Text style={{ display: 'block', margin: '20px 0 0px 0', fontSize: '14px' }}>
+          <div style={{ border: '1px solid #F5F5F5', margin: '24px 0', paddingBottom: '14px' }}>
+            <Text
+              style={{
+                display: 'block',
+                fontSize: '14px',
+                background: '#FAFAFA',
+                borderBottom: '1px solid #F5F5F5',
+                padding: '14px 12px',
+                marginBottom: '14px',
+              }}
+            >
               {criteriaItem.text}
             </Text>
             {criteriaItem.textComment && (
-              <>
+              <div style={{padding: '0 12px'}}>
                 <Text style={{ fontSize: '16px' }} strong={true}>
                   Comment:
                 </Text>
@@ -36,13 +45,12 @@ export function CrossCheckCriteriaModal(props: {
                     {textLine}
                   </p>
                 ))}
-              </>
+              </div>
             )}
-            <Text style={{ fontSize: '16px' }} strong={true}>
+            <Text style={{ fontSize: '16px', padding: '0 12px' }} strong={true}>
               Points for criteria: {`${criteriaItem.point ?? 0}/${criteriaItem.max}`}
             </Text>
-            <Divider />
-          </>
+          </div>
         ))}
       {!!props.modalInfo
         ?.filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === 'penalty')
@@ -57,15 +65,16 @@ export function CrossCheckCriteriaModal(props: {
         .map(criteriaItem => (
           <>
             <Text
-              italic={true}
-              style={{ display: 'inline-block', margin: '15px 0 0px 0', fontSize: '16px' }}
+              style={{
+                display: 'inline-block',
+                width: '100%',
+                backgroundColor: '#fff2f2',
+                border: '1px #ffb0b0 solid',
+                padding: '14px 12px',
+              }}
             >
-              {criteriaItem.text}
+              {criteriaItem.text} {criteriaItem.point ?? 0}
             </Text>
-            <Text style={{ display: 'inline-block', margin: '0 0 0 5px', fontSize: '16px' }} strong={true}>
-              {criteriaItem.point ?? 0}
-            </Text>
-            <br />
           </>
         ))}
     </Modal>

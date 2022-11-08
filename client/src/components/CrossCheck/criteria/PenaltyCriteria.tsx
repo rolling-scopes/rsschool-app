@@ -1,11 +1,10 @@
 import React from 'react';
 import { Radio, Typography } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
 
 import { CrossCheckCriteriaData, ICountState } from '../CrossCheckCriteriaForm';
 
 const { Text } = Typography;
-const { Group, Button } = Radio;
+const { Group } = Radio;
 
 interface PenaltyCriteriaProps {
   task: CrossCheckCriteriaData;
@@ -19,12 +18,22 @@ export default function PenaltyCriteria({ task, updatePenalty, penalty }: Penalt
 
   const penaltyScore = -Math.abs(task.max!);
   return (
-    <React.Fragment key={task.key}>
-      <Text style={{ display: 'inline-block', margin: '15px 0 20px 0', fontSize: '14px' }}>
-        <CheckOutlined style={{ margin: '0 5px 0 0' }} />
-        {task.text}
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: '#FAFAFA',
+        borderBottom: '1px solid #F5F5F5',
+        margin: '24px 0',
+        padding: '14px 12px',
+      }}
+      key={task.key}
+    >
+      <Text style={{ display: 'inline-block', fontSize: '14px', width: 'calc(100% - 200px)' }}>
+        {task.text} ({penaltyScore} points)
       </Text>
-      <Text style={{ display: 'inline-block', margin: '0 0 0 5px', fontSize: '14px' }}>{penaltyScore}</Text>
+
       <Group
         style={{ display: 'block' }}
         size="middle"
@@ -32,9 +41,9 @@ export default function PenaltyCriteria({ task, updatePenalty, penalty }: Penalt
         buttonStyle="solid"
         onChange={event => updatePenalty(penaltyScore, task.key, event.target.value)}
       >
-        <Button value="yes">Yes</Button>
-        <Button value="">No</Button>
+        <Radio value="yes">Yes</Radio>
+        <Radio value="">No</Radio>
       </Group>
-    </React.Fragment>
+    </div>
   );
 }
