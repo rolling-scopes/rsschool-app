@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Alert, Button, Col, Comment, Divider, Form, Input, message, notification, Row, Typography } from 'antd';
-import { MessageFilled } from '@ant-design/icons';
+import { Alert, Col, Comment, Divider, Form, message, notification, Row, Typography } from 'antd';
 import { CourseService, SolutionReviewType, TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { StudentContacts } from 'components/CrossCheck/StudentContacts';
-import { Message } from './Message';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
+import { Message } from './Message';
+import { MessageSendingPanel } from './MessageSendingPanel';
 
 type Props = {
   children?: JSX.Element;
@@ -20,7 +20,7 @@ type Props = {
   courseTaskId: number | null;
   review: SolutionReviewType;
   isActiveReview: boolean;
-  areMessagesVisible?: boolean;
+  isMessageSendingPanelVisible?: boolean;
   currentRole: TaskSolutionResultRole;
   maxScore?: number;
 };
@@ -35,7 +35,7 @@ export function SolutionReview(props: Props) {
     courseTaskId,
     review,
     isActiveReview,
-    areMessagesVisible = true,
+    isMessageSendingPanelVisible = true,
     currentRole,
     maxScore,
   } = props;
@@ -171,42 +171,17 @@ export function SolutionReview(props: Props) {
               </Row>
             ))}
 
-            {areMessagesVisible && (
+            {isMessageSendingPanelVisible && (
               <Row style={{ marginTop: 16 }}>
                 <Col span={24}>
-                  <Comment
-                    avatar={
-                      <UserAvatar
-                        author={
-                          currentRole === TaskSolutionResultRole.Reviewer
-                            ? author && { githubId: sessionGithubId, discord: null }
-                            : { githubId: sessionGithubId, discord: null }
-                        }
-                        role={currentRole}
-                        areContactsVisible={settings.areContactsVisible}
-                        size={24}
-                      />
-                    }
-                    content={
-                      <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
-                        <Row>
-                          <Col span={24}>
-                            <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
-                              <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 512 }} />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-
-                        <Row>
-                          <Col>
-                            <Button htmlType="submit" icon={<MessageFilled />} type="primary">
-                              Send message
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Form>
-                    }
-                  />
+                  <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
+                    <MessageSendingPanel
+                      sessionGithubId={sessionGithubId}
+                      author={author}
+                      currentRole={currentRole}
+                      areContactsVisible={settings.areContactsVisible}
+                    />
+                  </Form>
                 </Col>
               </Row>
             )}

@@ -111,7 +111,7 @@ export function CrossCheckHistory(props: Props) {
                     courseTaskId={courseTaskId}
                     review={review}
                     isActiveReview={isActiveReview}
-                    areMessagesVisible={isActiveReview}
+                    isMessageSendingPanelVisible={isActiveReview}
                     currentRole={TaskSolutionResultRole.Reviewer}
                     maxScore={props.maxScore}
                   >
