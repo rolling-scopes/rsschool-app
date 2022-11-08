@@ -3,7 +3,6 @@ export const INFO_MESSAGE =
 
 export enum TaskSolutionsTableColumnKey {
   Number = 'number',
-  GithubId = 'studentGithubId',
   Name = 'name',
   Task = 'task',
   DesiredDeadline = 'desiredDeadline',
@@ -14,7 +13,6 @@ export enum TaskSolutionsTableColumnKey {
 
 export enum TaskSolutionsTableColumnName {
   Number = '#',
-  GithubId = 'Github',
   Name = 'Name',
   Task = 'Task',
   DesiredDeadline = 'Desired deadline',
@@ -22,3 +20,13 @@ export enum TaskSolutionsTableColumnName {
   SubmitScores = 'Submit scores',
   SolutionUrl = 'Pull request',
 }
+
+export enum StudentTaskSolutionItemStatus {
+  InReview = 'in-review',
+  Done = 'done',
+}
+
+export const TASKS_STATUSES = Object.entries(StudentTaskSolutionItemStatus).map(([key, value]) => ({
+  key: value,
+  label: key,
+}));

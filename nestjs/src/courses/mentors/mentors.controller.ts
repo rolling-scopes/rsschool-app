@@ -24,7 +24,23 @@ export class MentorsController {
     return items.map(item => new MentorStudentDto(item));
   }
 
-  @Get('/:mentorId/dashboard/:courseId')
+  @Get('/:mentorId/course/:courseId/students')
+  @ApiOperation({ operationId: 'getCourseStudentsCount' })
+  @ApiOkResponse({ type: Number })
+  @ApiBadRequestResponse()
+  public async getCourseStudentsCount(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
+    if (!hasAccess) {
+      throw new ForbiddenException();
+    }
+    return await this.mentorsService.getCourseStudentsCount(mentorId, courseId);
+  }
+
+  @Get('/:mentorId/course/:courseId/dashboard')
   @ApiOperation({ operationId: 'getMentorDashboardData' })
   @ApiOkResponse({ type: [MentorDashboardDto] })
   @ApiBadRequestResponse()
