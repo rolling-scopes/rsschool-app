@@ -26,7 +26,7 @@ describe('TaskSolutionsTable', () => {
 
     it.each`
       label
-      ${TaskSolutionsTableColumnName.Name}
+      ${TaskSolutionsTableColumnName.Student}
       ${TaskSolutionsTableColumnName.Task}
       ${TaskSolutionsTableColumnName.SolutionUrl}
       ${TaskSolutionsTableColumnName.Score}

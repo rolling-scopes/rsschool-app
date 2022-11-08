@@ -3,7 +3,7 @@ export const INFO_MESSAGE =
 
 export enum TaskSolutionsTableColumnKey {
   Number = 'number',
-  Name = 'name',
+  Student = 'student',
   Task = 'task',
   DesiredDeadline = 'desiredDeadline',
   Score = 'score',
@@ -13,7 +13,7 @@ export enum TaskSolutionsTableColumnKey {
 
 export enum TaskSolutionsTableColumnName {
   Number = '#',
-  Name = 'Name',
+  Student = 'Student',
   Task = 'Task',
   DesiredDeadline = 'Desired deadline',
   Score = 'Score / Max',
