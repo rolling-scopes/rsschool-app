@@ -14,7 +14,7 @@ export class MentorDashboardDto {
     this.resultScore = item.resultScore ?? null;
     this.solutionUrl = item.solutionUrl;
     this.status = item.status;
-    this.endDate = item.endDate.toISOString();
+    this.endDate = item.endDate;
   }
 
   @ApiProperty()

@@ -15,6 +15,7 @@ import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { StudentDto } from '../students/dto';
+import dayjs from 'dayjs';
 
 export interface StudentTaskSolutionItem {
   maxScore: number;
@@ -24,15 +25,13 @@ export interface StudentTaskSolutionItem {
   resultScore: number | null;
   solutionUrl: string;
   status: StudentTaskSolutionItemStatus;
-  endDate: Date;
+  endDate: string;
 }
 
 export enum StudentTaskSolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
 }
-
-const twoWeeksMs = 1000 * 60 * 60 * 24 * 14;
 
 @Injectable()
 export class MentorsService {
@@ -110,7 +109,7 @@ export class MentorsService {
 
   private getCourseStudents(mentorId: number, courseId: number) {
     return this.studentRepository.find({
-      where: { mentorId, courseId },
+      where: { mentorId, courseId, isExpelled: false },
       relations: ['user'],
     });
   }
@@ -130,11 +129,9 @@ export class MentorsService {
         'ts.studentId',
         'tr.score',
         'ts.url',
-        'ts.updatedDate',
       ])
       .where('ts."studentId" = :studentId', { studentId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
-      .orderBy('ts.updatedDate', 'DESC')
       .getRawMany();
 
     return tasks.map(task => ({
@@ -145,13 +142,8 @@ export class MentorsService {
       solutionUrl: task.ts_url,
       taskDescriptionUrl: task.t_descriptionUrl,
       status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
-      endDate: this.getEndDate(task.ct_studentEndDate),
+      endDate: dayjs(task.ct_studentEndDate).add(2, 'w').toISOString(),
     }));
-  }
-
-  private getEndDate(date: string) {
-    const endDate = Date.parse(date);
-    return new Date(endDate + twoWeeksMs);
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
