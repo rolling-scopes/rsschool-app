@@ -15,7 +15,7 @@ import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { StudentDto } from '../students/dto';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export interface StudentTaskSolutionItem {
   maxScore: number;
@@ -109,7 +109,7 @@ export class MentorsService {
 
   private getCourseStudents(mentorId: number, courseId: number) {
     return this.studentRepository.find({
-      where: { mentorId, courseId, isExpelled: false },
+      where: { mentorId, courseId },
       relations: ['user'],
     });
   }
