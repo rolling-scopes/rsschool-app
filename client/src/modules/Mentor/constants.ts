@@ -24,6 +24,7 @@ export enum TaskSolutionsTableColumnName {
 export enum StudentTaskSolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
+  RandomTask = 'random-task',
 }
 
 export const TASKS_STATUSES = Object.entries(StudentTaskSolutionItemStatus).map(([key, value]) => ({

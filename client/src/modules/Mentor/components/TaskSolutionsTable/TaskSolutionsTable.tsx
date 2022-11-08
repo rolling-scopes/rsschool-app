@@ -1,4 +1,4 @@
-import { Col, Row, Table } from 'antd';
+import { Button, Col, Row, Table } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { getColumns } from '.';
 import { MentorDashboardDto } from 'api';
@@ -58,6 +58,13 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
           />
         </Col>
       </Row>
+      {activeTab === StudentTaskSolutionItemStatus.RandomTask && (
+        <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
+          <Col>
+            <Button type="primary">Review random task</Button>
+          </Col>
+        </Row>
+      )}
       <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={handleDataSubmit} />
     </>
   );

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { TaskSolutionsTable, TaskSolutionsTableProps } from '.';
 import { MentorDashboardDto } from '../../../../api';
 import { StudentTaskSolutionItemStatus, TaskSolutionsTableColumnName } from '../../constants';
@@ -13,11 +13,11 @@ const PROPS_MOCK: TaskSolutionsTableProps = {
 
 describe('TaskSolutionsTable', () => {
   const useMentorDashboardMock = useMentorDashboard as jest.MockedFunction<typeof useMentorDashboard>;
-  describe('when full data was provided', () => {
-    const data = generateData();
 
+  describe('when full data was provided', () => {
     beforeEach(() => {
-      useMentorDashboardMock.mockReturnValueOnce([data, false]);
+      const data = generateData();
+      useMentorDashboardMock.mockReturnValue([data, false]);
     });
 
     afterEach(() => {
@@ -51,6 +51,23 @@ describe('TaskSolutionsTable', () => {
       render(<TaskSolutionsTable {...PROPS_MOCK} />);
 
       expect(screen.getByText(value)).toBeInTheDocument();
+    });
+
+    it('should render "Review random task" button when "Random task" tab is selected', async () => {
+      render(<TaskSolutionsTable {...PROPS_MOCK} />);
+      const randomTaskTab = screen.getByRole('tab', { name: /random task/i });
+
+      fireEvent.click(randomTaskTab);
+
+      const reviewBtn = await screen.findByText(/review random task/i);
+      expect(reviewBtn).toBeInTheDocument();
+    });
+
+    it('should not render "Review random task" button when "Random task" tab is not selected', () => {
+      render(<TaskSolutionsTable {...PROPS_MOCK} />);
+
+      const reviewBtn = screen.queryByText(/review random task/i);
+      expect(reviewBtn).not.toBeInTheDocument();
     });
   });
 

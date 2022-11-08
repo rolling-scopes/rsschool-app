@@ -26,9 +26,10 @@ describe('TaskStatusTabs', () => {
   });
 
   it.each`
-    status                 | count
-    ${StatusEnum.Done}     | ${2}
-    ${StatusEnum.InReview} | ${3}
+    status                   | count
+    ${StatusEnum.Done}       | ${2}
+    ${StatusEnum.InReview}   | ${3}
+    ${StatusEnum.RandomTask} | ${4}
   `(
     'should render badge with count of $count for "$status" tab',
     ({ status, count }: { status: StudentTaskSolutionItemStatus; count: number }) => {
