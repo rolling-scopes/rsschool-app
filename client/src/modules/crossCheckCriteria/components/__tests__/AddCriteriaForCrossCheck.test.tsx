@@ -43,7 +43,7 @@ describe('AddCriteriaForCrossCheck', () => {
     const optionSubtask = screen.getByTestId('Subtask') as HTMLOptionElement;
 
     fireEvent.click(optionSubtask);
-    const element = screen.getByRole('option', {name: 'Subtask'});
+    const element = screen.getByRole('option', { name: 'Subtask' });
     expect(element).toBeInTheDocument();
   });
 

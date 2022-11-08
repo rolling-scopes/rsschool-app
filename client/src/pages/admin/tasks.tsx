@@ -192,7 +192,7 @@ function Page(props: Props) {
           </Col>
         </Row>
         <Collapse>
-        <Collapse.Panel header="Criteria For Cross-Check Task" key="1" forceRender>
+          <Collapse.Panel header="Criteria For Cross-Check Task" key="1" forceRender>
             <Form.Item label="Criteria For Cross-Check">
               <UploadCriteriaJSON onLoad={addJSONtoCriteria} />
             </Form.Item>

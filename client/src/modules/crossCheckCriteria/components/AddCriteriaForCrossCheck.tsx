@@ -57,9 +57,15 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     <>
       <Item label="Criteria Type">
         <Select data-testid="select" placeholder="Select type" onChange={changeType}>
-          <Option data-testid="Title" value="Title">Title</Option>
-          <Option data-testid="Subtask" value="Subtask">Subtask</Option>
-          <Option data-testid="Penalty" value="Penalty">Penalty</Option>
+          <Option data-testid="Title" value="Title">
+            Title
+          </Option>
+          <Option data-testid="Subtask" value="Subtask">
+            Subtask
+          </Option>
+          <Option data-testid="Penalty" value="Penalty">
+            Penalty
+          </Option>
         </Select>
       </Item>
 

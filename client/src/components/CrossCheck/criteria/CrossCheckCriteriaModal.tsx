@@ -36,7 +36,7 @@ export function CrossCheckCriteriaModal(props: {
               {criteriaItem.text}
             </Text>
             {criteriaItem.textComment && (
-              <div style={{padding: '0 12px'}}>
+              <div style={{ padding: '0 12px' }}>
                 <Text style={{ fontSize: '16px' }} strong={true}>
                   Comment:
                 </Text>

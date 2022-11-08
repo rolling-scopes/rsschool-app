@@ -25,7 +25,7 @@ const dataCriteria = [
 ];
 
 describe('ExportJSONButton', () => {
-   test('contains following text', () => {
+  test('contains following text', () => {
     render(<ExportJSONButton dataCriteria={dataCriteria} />);
     expect(screen.getByText('Export JSON')).toBeInTheDocument();
   });

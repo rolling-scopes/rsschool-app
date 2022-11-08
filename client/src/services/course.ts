@@ -362,7 +362,13 @@ export class CourseService {
       review: CrossCheckReview[];
       studentId: number;
       checkerId: number;
-      historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean, criteria: CrossCheckCriteriaData[] }[];
+      historicalScores: {
+        score: number;
+        comment: string;
+        dateTime: number;
+        anonymous: boolean;
+        criteria: CrossCheckCriteriaData[];
+      }[];
     } | null;
   }
 

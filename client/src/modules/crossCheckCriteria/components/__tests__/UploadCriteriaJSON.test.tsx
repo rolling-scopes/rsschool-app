@@ -15,11 +15,10 @@ describe('UploadCriteriaJSON', () => {
     render(<UploadCriteriaJSON onLoad={onLoad} />);
     global.URL.createObjectURL = jest.fn();
 
-    const file = new File(["{test: 1}"], "test.json", {type: 'application/json'})
-    const input = screen.getByTestId("uploader") as HTMLInputElement;
+    const file = new File(['{test: 1}'], 'test.json', { type: 'application/json' });
+    const input = screen.getByTestId('uploader') as HTMLInputElement;
 
-    fireEvent.change(input, {target: {files: [file]}});
-    expect(input.files).toHaveLength(1)
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(input.files).toHaveLength(1);
   });
-
 });

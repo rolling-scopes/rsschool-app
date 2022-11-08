@@ -114,7 +114,7 @@ export class CrossCheckService {
     studentId: number,
     checkerId: number,
     data: CrossCheckSubmitResult,
-    params: { userId: number, criteria: CrossCheckCriteriaData[] },
+    params: { userId: number; criteria: CrossCheckCriteriaData[] },
   ) {
     const { userId } = params;
     const historicalResult = { ...data, criteria: params.criteria, authorId: userId, dateTime: Date.now() };

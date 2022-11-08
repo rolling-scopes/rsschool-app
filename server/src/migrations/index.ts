@@ -71,5 +71,5 @@ export const migrations = [
   NotificationCategory1661616212488,
   CourseTask1662275601017,
   CourseEvent1664183799115,
-  TaskCriteria1666348642811
+  TaskCriteria1666348642811,
 ];
