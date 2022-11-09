@@ -159,6 +159,7 @@ function Page(props: CoursePageProps) {
         </Col>
         <Col {...colSizes}>
           <CrossCheckHistory
+            sessionId={props.session.id}
             sessionGithubId={props.session.githubId}
             courseId={props.course.id}
             githubId={githubId}

@@ -1,17 +1,11 @@
 import { Typography } from 'antd';
-import { Discord } from 'api';
-import { TaskSolutionResultRole } from 'services/course';
+import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { GithubUserLink } from 'components/GithubUserLink';
 
 type Props = {
   reviewNumber: number;
-  author: {
-    id?: number;
-    name?: string;
-    githubId: string;
-    discord: Discord | null;
-  } | null;
-  role: TaskSolutionResultRole;
+  author: CrossCheckMessageAuthor | null;
+  role: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };
 
@@ -29,10 +23,10 @@ function createFakeUsername(props: Props): string {
   const { reviewNumber, author, role, areContactsVisible } = props;
 
   switch (role) {
-    case TaskSolutionResultRole.Reviewer:
+    case CrossCheckMessageAuthorRole.Reviewer:
       return `Reviewer ${reviewNumber + 1}${author && !areContactsVisible ? ' (hidden)' : ''}`;
 
-    case TaskSolutionResultRole.Student:
+    case CrossCheckMessageAuthorRole.Student:
     default:
       return `Student${author && !areContactsVisible ? ' (hidden)' : ''}`;
   }

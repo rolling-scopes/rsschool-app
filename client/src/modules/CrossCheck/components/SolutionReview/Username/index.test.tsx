@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { TaskSolutionResultRole } from 'services/course';
+import { CrossCheckMessageAuthorRole } from 'services/course';
 import { Username } from '.';
 
 const mockAuthor = {
@@ -9,15 +9,15 @@ const mockAuthor = {
 
 describe('Username', () => {
   test.each`
-    reviewNumber | author        | role                               | areContactsVisible | expectedUsername
-    ${0}         | ${null}       | ${TaskSolutionResultRole.Reviewer} | ${true}            | ${'Reviewer 1'}
-    ${1}         | ${null}       | ${TaskSolutionResultRole.Reviewer} | ${false}           | ${'Reviewer 2'}
-    ${2}         | ${mockAuthor} | ${TaskSolutionResultRole.Reviewer} | ${true}            | ${'test-github-1234'}
-    ${3}         | ${mockAuthor} | ${TaskSolutionResultRole.Reviewer} | ${false}           | ${'Reviewer 4 (hidden)'}
-    ${4}         | ${null}       | ${TaskSolutionResultRole.Student}  | ${true}            | ${'Student'}
-    ${5}         | ${null}       | ${TaskSolutionResultRole.Student}  | ${false}           | ${'Student'}
-    ${6}         | ${mockAuthor} | ${TaskSolutionResultRole.Student}  | ${true}            | ${'test-github-1234'}
-    ${7}         | ${mockAuthor} | ${TaskSolutionResultRole.Student}  | ${false}           | ${'Student (hidden)'}
+    reviewNumber | author        | role                                    | areContactsVisible | expectedUsername
+    ${0}         | ${null}       | ${CrossCheckMessageAuthorRole.Reviewer} | ${true}            | ${'Reviewer 1'}
+    ${1}         | ${null}       | ${CrossCheckMessageAuthorRole.Reviewer} | ${false}           | ${'Reviewer 2'}
+    ${2}         | ${mockAuthor} | ${CrossCheckMessageAuthorRole.Reviewer} | ${true}            | ${'test-github-1234'}
+    ${3}         | ${mockAuthor} | ${CrossCheckMessageAuthorRole.Reviewer} | ${false}           | ${'Reviewer 4 (hidden)'}
+    ${4}         | ${null}       | ${CrossCheckMessageAuthorRole.Student}  | ${true}            | ${'Student'}
+    ${5}         | ${null}       | ${CrossCheckMessageAuthorRole.Student}  | ${false}           | ${'Student'}
+    ${6}         | ${mockAuthor} | ${CrossCheckMessageAuthorRole.Student}  | ${true}            | ${'test-github-1234'}
+    ${7}         | ${mockAuthor} | ${CrossCheckMessageAuthorRole.Student}  | ${false}           | ${'Student (hidden)'}
   `(
     `should display "$expectedUsername" if:
     "reviewNumber" = "$reviewNumber", "author" = "$author", "role" = "$role", "areContactsVisible" = "$areContactsVisible"`,

@@ -1,4 +1,4 @@
-import { TaskSolutionResultRole } from 'services/course';
+import { CrossCheckMessageAuthorRole } from 'services/course';
 
 export enum LocalStorageKey {
   AreContactsVisible = 'crossCheckAreContactsVisible',
@@ -15,6 +15,6 @@ export const AVATAR_ICON_PATH = {
 };
 
 export const ROLE_TAG_COLOR = {
-  [TaskSolutionResultRole.Reviewer]: 'processing',
-  [TaskSolutionResultRole.Student]: 'success',
+  [CrossCheckMessageAuthorRole.Reviewer]: 'processing',
+  [CrossCheckMessageAuthorRole.Student]: 'success',
 };

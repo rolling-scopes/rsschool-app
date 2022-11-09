@@ -11,7 +11,7 @@ import {
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
 import { createName } from './user.service';
-import { TaskSolutionResultRole } from '../models/taskSolutionResult';
+import { CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -191,7 +191,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   const comments = (
     await getRepository(TaskSolutionResult)
       .createQueryBuilder('tsr')
-      .select(['tsr.id', 'tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages'])
+      .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages'])
       .innerJoin('tsr.checker', 'checker')
       .innerJoin('checker.user', 'user')
       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
@@ -201,6 +201,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   ).map(c => {
     const author = !c.anonymous
       ? {
+          id: c.checker.user.id,
           name: createName(c.checker.user),
           githubId: c.checker.user.githubId,
           discord: c.checker.user.discord,
@@ -210,7 +211,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       ? c.messages
       : c.messages.map(message => ({
           ...message,
-          author: message.role === TaskSolutionResultRole.Reviewer ? null : message.author,
+          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
         }));
     return {
       author,

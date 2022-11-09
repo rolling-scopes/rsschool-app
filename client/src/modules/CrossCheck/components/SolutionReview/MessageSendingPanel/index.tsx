@@ -1,31 +1,32 @@
 import { MessageFilled } from '@ant-design/icons';
 import { Button, Col, Comment, Form, Input, Row } from 'antd';
 import { Discord } from 'api';
-import { TaskSolutionResultRole } from 'services/course';
+import { CrossCheckMessageAuthorRole } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
 
 type Props = {
+  sessionId: number;
   sessionGithubId: string;
   author: {
     name: string;
     githubId: string;
     discord: Discord | null;
   } | null;
-  currentRole: TaskSolutionResultRole;
+  currentRole: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };
 
 export function MessageSendingPanel(props: Props) {
-  const { author, sessionGithubId, currentRole, areContactsVisible } = props;
+  const { author, sessionId, sessionGithubId, currentRole, areContactsVisible } = props;
 
   return (
     <Comment
       avatar={
         <UserAvatar
           author={
-            currentRole === TaskSolutionResultRole.Reviewer
-              ? author && { githubId: sessionGithubId, discord: null }
-              : { githubId: sessionGithubId, discord: null }
+            currentRole === CrossCheckMessageAuthorRole.Reviewer
+              ? author && { id: sessionId, githubId: sessionGithubId }
+              : { id: sessionId, githubId: sessionGithubId }
           }
           role={currentRole}
           areContactsVisible={areContactsVisible}

@@ -1,7 +1,7 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
-import { TaskSolutionResultMessage, TaskSolutionResultRole } from '../models/taskSolutionResult';
+import { TaskSolutionResultMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
 import { Discord } from '../../../common/models';
 import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
@@ -151,6 +151,7 @@ export class CrossCheckService {
   ): Promise<
     | (CrossCheckReviewResult & {
         author: {
+          id: number;
           name: string;
           discord: Discord | null;
           githubId: string;
@@ -202,6 +203,7 @@ export class CrossCheckService {
       checkerId,
       studentId,
       author: {
+        id: checkerData?.id ?? 0,
         name: createName({
           firstName: checkerData?.firstName ?? '',
           lastName: checkerData?.lastName ?? '',
@@ -217,7 +219,7 @@ export class CrossCheckService {
 
   public async saveMessage(
     taskSolutionResultId: number,
-    data: { content: string; role: TaskSolutionResultRole },
+    data: { content: string; role: CrossCheckMessageAuthorRole },
     params: { user: IUserSession },
   ) {
     const { user } = params;
@@ -229,8 +231,8 @@ export class CrossCheckService {
         id: user.id,
         githubId: user.githubId,
       },
-      isReviewerRead: data.role === TaskSolutionResultRole.Reviewer,
-      isStudentRead: data.role === TaskSolutionResultRole.Student,
+      isReviewerRead: data.role === CrossCheckMessageAuthorRole.Reviewer,
+      isStudentRead: data.role === CrossCheckMessageAuthorRole.Student,
     };
 
     const repository = getRepository(TaskSolutionResult);
@@ -244,7 +246,7 @@ export class CrossCheckService {
     }
   }
 
-  public async updateMessage(taskSolutionResultId: number, data: { role: TaskSolutionResultRole }) {
+  public async updateMessage(taskSolutionResultId: number, data: { role: CrossCheckMessageAuthorRole }) {
     const { role } = data;
 
     const repository = getRepository(TaskSolutionResult);
@@ -255,8 +257,8 @@ export class CrossCheckService {
 
       const updatedMessages = messages.map(message => ({
         ...message,
-        isReviewerRead: TaskSolutionResultRole.Reviewer === role ? true : message.isReviewerRead,
-        isStudentRead: TaskSolutionResultRole.Student === role ? true : message.isStudentRead,
+        isReviewerRead: CrossCheckMessageAuthorRole.Reviewer === role ? true : message.isReviewerRead,
+        isStudentRead: CrossCheckMessageAuthorRole.Student === role ? true : message.isStudentRead,
       }));
 
       await repository.update(taskSolutionResultById.id, { messages: updatedMessages });

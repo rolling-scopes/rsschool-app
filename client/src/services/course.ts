@@ -23,7 +23,12 @@ export enum CrossCheckStatus {
   Completed = 'completed',
 }
 
-export enum TaskSolutionResultRole {
+export interface CrossCheckMessageAuthor {
+  id: number;
+  githubId: string;
+}
+
+export enum CrossCheckMessageAuthorRole {
   Reviewer = 'reviewer',
   Student = 'student',
 }
@@ -31,11 +36,8 @@ export enum TaskSolutionResultRole {
 export type TaskSolutionResultMessage = {
   timestamp: string;
   content: string;
-  author: {
-    id: number;
-    githubId: string;
-  } | null;
-  role: TaskSolutionResultRole;
+  author: CrossCheckMessageAuthor | null;
+  role: CrossCheckMessageAuthorRole;
   isReviewerRead: boolean;
   isStudentRead: boolean;
 };
@@ -45,6 +47,7 @@ export type SolutionReviewType = {
   dateTime: number | null;
   comment: string;
   author: {
+    id: number;
     name: string;
     githubId: string;
     discord: Discord | null;
@@ -383,6 +386,7 @@ export class CourseService {
       studentId: number;
       checkerId: number;
       author: {
+        id: number;
         name: string;
         discord: Discord | null;
         githubId: string;

@@ -2,7 +2,7 @@ import Router from '@koa/router';
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
-import { TaskSolutionResultRole } from '../../../models/taskSolutionResult';
+import { CrossCheckMessageAuthorRole } from '../../../models/taskSolutionResult';
 import { courseService, CrossCheckService } from '../../../services';
 import { getTaskSolutionResultById } from '../../../services/taskResults.service';
 import { setErrorResponse, setResponse } from '../../utils';
@@ -27,18 +27,18 @@ export const updateMessage = (_: ILogger) => async (ctx: Router.RouterContext) =
   }
 
   const inputData: {
-    role: TaskSolutionResultRole;
+    role: CrossCheckMessageAuthorRole;
   } = ctx.request.body;
 
   switch (inputData.role) {
-    case TaskSolutionResultRole.Reviewer:
+    case CrossCheckMessageAuthorRole.Reviewer:
       if (student.id !== taskSolutionResult.checkerId) {
         setErrorResponse(ctx, BAD_REQUEST, 'user is not checker');
         return;
       }
       break;
 
-    case TaskSolutionResultRole.Student:
+    case CrossCheckMessageAuthorRole.Student:
       if (student.id !== taskSolutionResult.studentId) {
         setErrorResponse(ctx, BAD_REQUEST, 'user is not student');
         return;

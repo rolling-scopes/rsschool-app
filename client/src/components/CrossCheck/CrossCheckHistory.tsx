@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
-import { CourseService, SolutionReviewType, TaskSolutionResultRole } from 'services/course';
+import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 
 type Props = {
+  sessionId: number;
   sessionGithubId: string;
   courseId: number;
   githubId: string | null;
@@ -40,7 +41,7 @@ export function CrossCheckHistory(props: Props) {
     const messages = result.anonymous
       ? result.messages.map(message => ({
           ...message,
-          author: message.role === TaskSolutionResultRole.Reviewer ? null : message.author,
+          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
         }))
       : result.messages;
 
@@ -104,6 +105,7 @@ export function CrossCheckHistory(props: Props) {
               <Row>
                 <Col>
                   <SolutionReview
+                    sessionId={props.sessionId}
                     sessionGithubId={props.sessionGithubId}
                     courseId={props.courseId}
                     reviewNumber={0}
@@ -112,7 +114,7 @@ export function CrossCheckHistory(props: Props) {
                     review={review}
                     isActiveReview={isActiveReview}
                     isMessageSendingPanelVisible={isActiveReview}
-                    currentRole={TaskSolutionResultRole.Reviewer}
+                    currentRole={CrossCheckMessageAuthorRole.Reviewer}
                     maxScore={props.maxScore}
                   >
                     <Row style={{ marginTop: 16 }}>

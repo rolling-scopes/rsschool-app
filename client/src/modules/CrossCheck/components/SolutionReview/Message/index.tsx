@@ -1,7 +1,7 @@
 import { CheckOutlined } from '@ant-design/icons';
 import { Badge, Col, Comment, Row, Tag, Tooltip, Typography } from 'antd';
 import { formatDateTime } from 'services/formatter';
-import { TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
+import { TaskSolutionResultMessage, CrossCheckMessageAuthorRole } from 'services/course';
 import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
@@ -10,7 +10,7 @@ import { Username } from '../Username';
 type Props = {
   reviewNumber: number;
   message: TaskSolutionResultMessage;
-  currentRole: TaskSolutionResultRole;
+  currentRole: CrossCheckMessageAuthorRole;
   settings: SolutionReviewSettings;
 };
 
@@ -25,12 +25,7 @@ export function Message(props: Props) {
       avatar={
         <Tooltip title={isBadgeDotVisible ? 'Unread message' : ''} placement="topLeft">
           <Badge dot={isBadgeDotVisible}>
-            <UserAvatar
-              author={author && { ...author, discord: null }}
-              role={role}
-              areContactsVisible={areContactsVisible}
-              size={24}
-            />
+            <UserAvatar author={author} role={role} areContactsVisible={areContactsVisible} size={24} />
           </Badge>
         </Tooltip>
       }
@@ -40,7 +35,7 @@ export function Message(props: Props) {
             <Col>
               <Username
                 reviewNumber={reviewNumber}
-                author={author && { ...author, discord: null }}
+                author={author}
                 role={role}
                 areContactsVisible={settings.areContactsVisible}
               />
@@ -97,10 +92,10 @@ function getBadgeDotVisibility(props: Props): boolean {
   const { isReviewerRead, isStudentRead } = message;
 
   switch (currentRole) {
-    case TaskSolutionResultRole.Reviewer:
+    case CrossCheckMessageAuthorRole.Reviewer:
       return !isReviewerRead;
 
-    case TaskSolutionResultRole.Student:
+    case CrossCheckMessageAuthorRole.Student:
       return !isStudentRead;
 
     default:

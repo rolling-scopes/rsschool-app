@@ -1,7 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { Alert, Col, Comment, Divider, Form, message, notification, Row, Typography } from 'antd';
-import { CourseService, SolutionReviewType, TaskSolutionResultMessage, TaskSolutionResultRole } from 'services/course';
+import {
+  CourseService,
+  SolutionReviewType,
+  TaskSolutionResultMessage,
+  CrossCheckMessageAuthorRole,
+} from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
@@ -13,6 +18,7 @@ import { MessageSendingPanel } from './MessageSendingPanel';
 
 type Props = {
   children?: JSX.Element;
+  sessionId: number;
   sessionGithubId: string;
   courseId: number;
   reviewNumber: number;
@@ -21,13 +27,14 @@ type Props = {
   review: SolutionReviewType;
   isActiveReview: boolean;
   isMessageSendingPanelVisible?: boolean;
-  currentRole: TaskSolutionResultRole;
+  currentRole: CrossCheckMessageAuthorRole;
   maxScore?: number;
 };
 
 export function SolutionReview(props: Props) {
   const {
     children,
+    sessionId,
     sessionGithubId,
     courseId,
     reviewNumber,
@@ -105,7 +112,7 @@ export function SolutionReview(props: Props) {
             avatar={
               <UserAvatar
                 author={author}
-                role={TaskSolutionResultRole.Reviewer}
+                role={CrossCheckMessageAuthorRole.Reviewer}
                 areContactsVisible={settings.areContactsVisible}
                 size={32}
               />
@@ -117,7 +124,7 @@ export function SolutionReview(props: Props) {
                     <Username
                       reviewNumber={reviewNumber}
                       author={author}
-                      role={TaskSolutionResultRole.Reviewer}
+                      role={CrossCheckMessageAuthorRole.Reviewer}
                       areContactsVisible={settings.areContactsVisible}
                     />
                   </Col>
@@ -176,6 +183,7 @@ export function SolutionReview(props: Props) {
                 <Col span={24}>
                   <Form form={form} onFinish={handleSubmit} initialValues={{ content: '' }}>
                     <MessageSendingPanel
+                      sessionId={sessionId}
                       sessionGithubId={sessionGithubId}
                       author={author}
                       currentRole={currentRole}
@@ -210,7 +218,7 @@ export function SolutionReview(props: Props) {
 }
 
 type GetAmountUnreadMessagesProps = {
-  currentRole: TaskSolutionResultRole;
+  currentRole: CrossCheckMessageAuthorRole;
   messages: TaskSolutionResultMessage[];
 };
 
@@ -218,10 +226,10 @@ function getAmountUnreadMessages(props: GetAmountUnreadMessagesProps): number {
   const { currentRole, messages } = props;
 
   switch (currentRole) {
-    case TaskSolutionResultRole.Reviewer:
+    case CrossCheckMessageAuthorRole.Reviewer:
       return messages.filter(messages => !messages.isReviewerRead).length;
 
-    case TaskSolutionResultRole.Student:
+    case CrossCheckMessageAuthorRole.Student:
       return messages.filter(messages => !messages.isStudentRead).length;
 
     default:

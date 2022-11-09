@@ -19,7 +19,7 @@ import {
   CrossCheckReview,
   Feedback,
   TaskSolution,
-  TaskSolutionResultRole,
+  CrossCheckMessageAuthorRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
@@ -267,6 +267,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         <Row key={index}>
           <Col>
             <SolutionReview
+              sessionId={props.session.id}
               sessionGithubId={props.session.githubId}
               courseId={props.course.id}
               reviewNumber={index}
@@ -274,7 +275,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
               courseTaskId={courseTaskId}
               review={review}
               isActiveReview={true}
-              currentRole={TaskSolutionResultRole.Student}
+              currentRole={CrossCheckMessageAuthorRole.Student}
               maxScore={maxScore}
             />
           </Col>
