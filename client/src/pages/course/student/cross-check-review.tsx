@@ -150,6 +150,7 @@ function Page(props: CoursePageProps) {
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
+    resetCriterias();
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
     setState({ loading: false, data: result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [] });
@@ -185,6 +186,13 @@ function Page(props: CoursePageProps) {
     }
   }, [historicalCommentSelected]);
 
+  const resetCriterias = () => {
+    setCountStar([{ key: '', point: 0 }]);
+    setComment([{ key: '', textComment: '' }]);
+    setPenalty([{ key: '', point: 0 }]);
+    setScore(0);
+  };
+
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
       return;
@@ -212,10 +220,7 @@ function Page(props: CoursePageProps) {
       });
       message.success('The review has been submitted. Thanks!');
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
-      setCountStar([{ key: '', point: 0 }]);
-      setComment([{ key: '', textComment: '' }]);
-      setPenalty([{ key: '', point: 0 }]);
-      setScore(0);
+      resetCriterias();
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
