@@ -24,7 +24,7 @@ import { formatDateTime } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
 import { TaskService } from 'services/task';
-import { useCriteriaState } from './hooks/useCriteriaState';
+import { useCriteriaState } from '../../../components/CrossCheck/hooks/useCriteriaState';
 import {
   CrossCheckCriteriaForm,
   CrossCheckCriteriaData,

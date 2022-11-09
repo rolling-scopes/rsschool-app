@@ -138,7 +138,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -147,6 +147,19 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -266,7 +279,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -275,6 +288,19 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -394,7 +420,7 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -403,6 +429,19 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -564,7 +603,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -573,6 +612,19 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -692,7 +744,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -701,6 +753,19 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -850,7 +915,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -859,6 +924,19 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -882,11 +960,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                  
                 <a
                   class="ant-typography"
-                  href="https://discordapp.com/users/123456789012345680"
+                  href="https://discordapp.com/users/123456789012345678"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  @LinusTorvalds#1234
+                  @LinusTorvalds#234
                 </a>
                  
                 <button
@@ -1058,7 +1136,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -1067,6 +1145,19 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -1090,11 +1181,11 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                  
                 <a
                   class="ant-typography"
-                  href="https://discordapp.com/users/123456789012345680"
+                  href="https://discordapp.com/users/123456789012345678"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  @LinusTorvalds#1234
+                  @LinusTorvalds#234
                 </a>
                  
                 <button
@@ -1236,7 +1327,7 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -1245,6 +1336,19 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -1436,7 +1540,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -1445,6 +1549,19 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -1468,11 +1585,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                  
                 <a
                   class="ant-typography"
-                  href="https://discordapp.com/users/123456789012345680"
+                  href="https://discordapp.com/users/123456789012345678"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  @LinusTorvalds#1234
+                  @LinusTorvalds#234
                 </a>
                  
                 <button
@@ -1644,7 +1761,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -1653,6 +1770,19 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -1676,11 +1806,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                  
                 <a
                   class="ant-typography"
-                  href="https://discordapp.com/users/123456789012345680"
+                  href="https://discordapp.com/users/123456789012345678"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  @LinusTorvalds#1234
+                  @LinusTorvalds#234
                 </a>
                  
                 <button
@@ -1852,7 +1982,7 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
             </div>
             <div
               class="ant-row"
-              style="margin-bottom: 24px;"
+              style="margin-bottom: 10px;"
             >
               <span
                 class="ant-typography ant-typography-secondary"
@@ -1861,6 +1991,19 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                 maximum score: 
                 100
               </span>
+            </div>
+            <div
+              class="ant-row"
+              style="margin-bottom: 10px;"
+            >
+              <button
+                class="ant-btn ant-btn-default"
+                type="button"
+              >
+                <span>
+                  Show detailed feedback
+                </span>
+              </button>
             </div>
             <div
               class="ant-row"
@@ -1884,11 +2027,11 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
                  
                 <a
                   class="ant-typography"
-                  href="https://discordapp.com/users/123456789012345680"
+                  href="https://discordapp.com/users/123456789012345678"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  @LinusTorvalds#1234
+                  @LinusTorvalds#234
                 </a>
                  
                 <button

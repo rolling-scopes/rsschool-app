@@ -3,27 +3,61 @@ import { render } from '@testing-library/react';
 import { Feedback } from 'services/course';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { CrossCheckComments } from '../CrossCheckComments';
+import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
+import { Discord } from 'api';
+
+interface IComment {
+  updatedDate: string;
+  comment: string;
+  criteria: CrossCheckCriteriaData[];
+  score: number;
+  author: {
+    name: string;
+    githubId: string;
+    discord: Discord | null;
+  } | null;
+}
 
 describe('CrossCheckComments', () => {
   describe('Should render correctly', () => {
-    const anonComment = {
+    const anonComment: IComment = {
       updatedDate: '2022-08-30T13:35:14.866Z',
       comment: `${markdownLabel}Awful job, you better quit programming and learn to cross stitch.`,
+      criteria: [
+        {
+          key: '1',
+          max: 10,
+          text: 'Add slider with random images',
+          type: 'subtask',
+          point: 8,
+          textComment: 'Great',
+        },
+      ],
       score: 5,
       author: null,
     };
 
-    const signedComment = {
+    const signedComment: IComment = {
       updatedDate: '2022-08-27T09:51:34.615Z',
       comment: `${markdownLabel}Great job, you better quit cross stitching and start programming.`,
+      criteria: [
+        {
+          key: '1',
+          max: 10,
+          text: 'Add slider with random images',
+          type: 'subtask',
+          point: 8,
+          textComment: 'Great',
+        },
+      ],
       score: 100,
       author: {
         name: 'Linus Torvalds',
         githubId: 'torvalds',
         discord: {
-          id: +'123456789012345678',
+          id: '123456789012345678',
           username: 'LinusTorvalds',
-          discriminator: 1234,
+          discriminator: '234',
         },
       },
     };
