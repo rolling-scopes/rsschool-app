@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageAuthorRole, CrossCheckMessageAuthor } from 'services/course';
 import { Username } from '.';
 
-const mockAuthor = {
+const mockAuthor: CrossCheckMessageAuthor = {
+  id: 2345,
   githubId: 'test-github-1234',
-  discord: null,
 };
 
 describe('Username', () => {
