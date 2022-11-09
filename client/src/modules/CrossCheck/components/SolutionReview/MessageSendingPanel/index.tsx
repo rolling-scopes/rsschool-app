@@ -1,17 +1,12 @@
 import { MessageFilled } from '@ant-design/icons';
 import { Button, Col, Comment, Form, Input, Row } from 'antd';
-import { Discord } from 'api';
-import { CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
 
 type Props = {
   sessionId: number;
   sessionGithubId: string;
-  author: {
-    name: string;
-    githubId: string;
-    discord: Discord | null;
-  } | null;
+  author: CrossCheckMessageAuthor | null;
   currentRole: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };

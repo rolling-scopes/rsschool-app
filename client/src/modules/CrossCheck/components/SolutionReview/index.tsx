@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Alert, Col, Comment, Divider, Form, message, notification, Row, Typography } from 'antd';
+import { Alert, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
 import {
   CourseService,
   SolutionReviewType,
@@ -47,6 +47,8 @@ export function SolutionReview(props: Props) {
     maxScore,
   } = props;
   const { id, dateTime, author, comment, score, messages } = review;
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const amountUnreadMessages = getAmountUnreadMessages({ currentRole, messages });
@@ -73,6 +75,8 @@ export function SolutionReview(props: Props) {
   }, []);
 
   const handleSubmit = async (values: { content: string }) => {
+    setLoading(true);
+
     const { content } = values;
 
     if (courseTaskId) {
@@ -86,12 +90,14 @@ export function SolutionReview(props: Props) {
         form.resetFields(['content']);
       } catch (error) {
         message.error('An error occurred. Please try later.');
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
-    <>
+    <Spin spinning={loading}>
       <Row style={{ margin: '8px 0' }}>
         <Col span={24}>
           <Divider style={{ margin: 0 }} />
@@ -213,7 +219,7 @@ export function SolutionReview(props: Props) {
           height: 100%;
         }
       `}</style>
-    </>
+    </Spin>
   );
 }
 
