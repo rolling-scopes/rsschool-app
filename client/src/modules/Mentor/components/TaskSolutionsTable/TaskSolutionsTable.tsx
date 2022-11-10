@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { getColumns } from '.';
 import { MentorDashboardDto } from 'api';
@@ -6,6 +6,7 @@ import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 import { SubmitReviewModal } from 'modules/Mentor/components/SubmitReviewModal';
 import { TaskStatusTabs } from '../TaskStatusTabs';
 import { StudentTaskSolutionItemStatus } from '../../constants';
+import { ReviewRandomTask } from '../ReviewRandomTask';
 
 export interface TaskSolutionsTableProps {
   mentorId: number | null;
@@ -61,7 +62,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
       {activeTab === StudentTaskSolutionItemStatus.RandomTask && (
         <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
           <Col>
-            <Button type="primary">Review random task</Button>
+            <ReviewRandomTask mentorId={mentorId} courseId={courseId} />
           </Col>
         </Row>
       )}

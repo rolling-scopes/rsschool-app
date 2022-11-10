@@ -118,9 +118,9 @@ export class MentorsService {
       .innerJoin(User, 'u', 'u.id = s."userId"')
       .select([
         'u.id',
-        'u."firstName"',
-        'u."lastName"',
-        'u."githubId"',
+        'u.firstName',
+        'u.lastName',
+        'u.githubId',
         't.name',
         't.descriptionUrl',
         'ct.id',
@@ -154,7 +154,7 @@ export class MentorsService {
       endDate: dayjs(s.ct_studentEndDate).add(2, 'w').toISOString(),
       person: new PersonDto({
         id: s.u_id,
-        firstName: s.u_firstname,
+        firstName: s.u_firstName,
         lastName: s.u_lastName,
         githubId: s.u_githubId,
       }),
