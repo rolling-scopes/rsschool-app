@@ -306,6 +306,28 @@
         "tags": ["mentors"]
       }
     },
+    "/mentors/{mentorId}/course/{courseId}/random-task": {
+      "get": {
+        "operationId": "getRandomTask",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorDashboardDto" } }
+              }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",

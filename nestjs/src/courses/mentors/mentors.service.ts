@@ -108,7 +108,7 @@ export class MentorsService {
     });
   }
 
-  private async getSolutions(courseId: number, mentorId: number | null): Promise<SolutionItem[]> {
+  private async getSolutions(courseId: number, mentorId?: number | null): Promise<SolutionItem[]> {
     const query = this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
@@ -164,5 +164,15 @@ export class MentorsService {
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
     const solutions = await this.getSolutions(courseId, mentorId);
     return solutions.map(solution => new MentorDashboardDto(solution));
+  }
+
+  public async getRandomTask(courseId: number): Promise<MentorDashboardDto | null> {
+    const [solution] = await this.getSolutions(courseId);
+
+    if (!solution) {
+      return null;
+    }
+
+    return new MentorDashboardDto(solution);
   }
 }

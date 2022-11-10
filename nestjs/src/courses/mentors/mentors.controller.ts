@@ -55,4 +55,20 @@ export class MentorsController {
     }
     return await this.mentorsService.getStudentsTasks(mentorId, courseId);
   }
+
+  @Get('/:mentorId/course/:courseId/random-task')
+  @ApiOperation({ operationId: 'getRandomTask' })
+  @ApiOkResponse({ type: [MentorDashboardDto] })
+  @ApiBadRequestResponse()
+  public async getRandomTask(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
+    if (!hasAccess) {
+      throw new ForbiddenException();
+    }
+    return await this.mentorsService.getRandomTask(courseId);
+  }
 }
