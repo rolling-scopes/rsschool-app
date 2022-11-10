@@ -1,12 +1,11 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { StudentDto } from '../../students/dto';
-import { StudentTaskSolutionItem, StudentTaskSolutionItemStatus } from '../mentors.service';
+import { SolutionItem, SolutionItemStatus } from '../mentors.service';
 
 @ApiResponse({})
 export class MentorDashboardDto {
-  constructor(student: StudentDto, item: StudentTaskSolutionItem) {
-    this.studentName = student.name;
-    this.studentGithubId = student.githubId;
+  constructor(item: SolutionItem) {
+    this.studentName = item.person.name;
+    this.studentGithubId = item.person.githubId;
     this.taskName = item.taskName;
     this.taskDescriptionUrl = item.taskDescriptionUrl;
     this.courseTaskId = item.courseTaskId;
@@ -41,8 +40,8 @@ export class MentorDashboardDto {
   @ApiProperty({ type: String })
   solutionUrl: string;
 
-  @ApiProperty({ enum: StudentTaskSolutionItemStatus })
-  status: StudentTaskSolutionItemStatus;
+  @ApiProperty({ enum: SolutionItemStatus })
+  status: SolutionItemStatus;
 
   @ApiProperty({ type: String })
   endDate: string;
