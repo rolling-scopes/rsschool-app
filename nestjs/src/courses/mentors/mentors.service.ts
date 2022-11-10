@@ -146,6 +146,49 @@ export class MentorsService {
     }));
   }
 
+  private async getSolutions(courseId: number, mentorId: number | null): Promise<StudentTaskSolutionItem[]> {
+    const query = this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
+      .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
+      .innerJoin(Task, 't', 't.id = ct."taskId"')
+      .innerJoin(Student, 's', 's.id = ts."studentId"')
+      .select([
+        't.name',
+        't.descriptionUrl',
+        'ct.id',
+        'ct.maxScore',
+        'ct.studentEndDate',
+        'ts.studentId',
+        'tr.score',
+        'ts.url',
+      ])
+      .where('s."courseId" = :courseId', { courseId })
+      .andWhere('ct.checker = :checker', { checker: Checker.Mentor });
+
+    if (mentorId) {
+      query.andWhere('s."mentorId" = :mentorId', { mentorId });
+    }
+
+    if (!mentorId) {
+      query.limit(1);
+    }
+
+    const tasks = await query.getRawMany();
+
+    return tasks.map(task => ({
+      taskName: task.t_name,
+      courseTaskId: task.ct_id,
+      maxScore: task.ct_maxScore,
+      resultScore: task.tr_score,
+      solutionUrl: task.ts_url,
+      taskDescriptionUrl: task.t_descriptionUrl,
+      status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
+      // TODO: end course date??
+      endDate: dayjs(task.ct_studentEndDate).add(2, 'w').toISOString(),
+    }));
+  }
+
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
     const data: MentorDashboardDto[] = [];
     const students = await this.getCourseStudents(mentorId, courseId);
