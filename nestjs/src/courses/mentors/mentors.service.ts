@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -111,8 +111,8 @@ export class MentorsService {
     });
   }
 
-  private async getSolutions(courseId: number, mentorId?: number | null): Promise<SolutionItem[]> {
-    const query = this.taskSolutionRepository
+  private async getSolutions(mentorId: number, courseId: number): Promise<SolutionItem[]> {
+    const solutions = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
       .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
@@ -137,17 +137,10 @@ export class MentorsService {
       ])
       .where('s."courseId" = :courseId', { courseId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
-      .andWhere('s."isExpelled" = false');
-
-    if (mentorId) {
-      query.andWhere('s."mentorId" = :mentorId', { mentorId }).orWhere('tc."mentorId" = :mentorId', { mentorId });
-    }
-
-    if (!mentorId) {
-      query.limit(1);
-    }
-
-    const solutions = await query.getRawMany();
+      .andWhere('s."isExpelled" = false')
+      .andWhere('s."mentorId" = :mentorId', { mentorId })
+      .orWhere('tc."mentorId" = :mentorId', { mentorId })
+      .getRawMany();
 
     return solutions.map(s => ({
       taskName: s.t_name,
@@ -176,24 +169,45 @@ export class MentorsService {
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
-    const solutions = await this.getSolutions(courseId, mentorId);
+    const solutions = await this.getSolutions(mentorId, courseId);
     return solutions.map(solution => new MentorDashboardDto(solution));
   }
 
-  public async getRandomTask(courseId: number, mentorId: number) {
-    // TODO: find only tasks without score
-    const [solution] = await this.getSolutions(courseId);
+  private async getRandomSolution(courseId: number): Promise<{ courseTaskId: number; studentId: number }> {
+    const task = await this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
+      .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
+      .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
+      .innerJoin(Student, 's', 's.id = ts."studentId"')
+      .select(['ts.studentId', 'ts.courseTaskId'])
+      .where('s."courseId" = :courseId', { courseId })
+      .andWhere('s."isExpelled" = false')
+      .andWhere('s."mentorId" IS NULL')
+      .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
+      .andWhere('tr."score" IS NULL')
+      .getOneOrFail();
 
-    if (!solution) {
-      return null;
+    return {
+      courseTaskId: task.courseTaskId,
+      studentId: task.studentId,
+    };
+  }
+
+  public async getRandomTask(mentorId: number, courseId: number) {
+    const { courseTaskId, studentId } = await this.getRandomSolution(courseId);
+
+    if (courseTaskId && studentId) {
+      const checker: Partial<TaskChecker> = {
+        courseTaskId,
+        studentId,
+        mentorId,
+      };
+
+      return await this.taskCheckerRepository.insert(checker);
     }
 
-    const checker: Partial<TaskChecker> = {
-      courseTaskId: solution.courseTaskId,
-      studentId: solution.person.id,
-      mentorId,
-    };
-
-    return await this.taskCheckerRepository.insert(checker);
+    // TODO: throw proper error
+    throw new NotFoundException();
   }
 }

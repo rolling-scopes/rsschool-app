@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { useLoading } from 'components/useLoading';
 import { MentorsApi } from 'api';
 
@@ -10,7 +10,15 @@ interface Props {
 }
 
 function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
-  const [loading, withLoading] = useLoading();
+  const [loading, withLoading] = useLoading(false, e => {
+    const {
+      response: { status },
+    } = (e as any) || {};
+
+    if (status > 300 && status < 500) {
+      message.info('Task for review was not found. Please try later.');
+    }
+  });
 
   const handleClick = withLoading(async () => {
     if (mentorId) {

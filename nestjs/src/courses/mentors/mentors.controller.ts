@@ -69,6 +69,6 @@ export class MentorsController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    return await this.mentorsService.getRandomTask(courseId, mentorId);
+    return await this.mentorsService.getRandomTask(mentorId, courseId);
   }
 }
