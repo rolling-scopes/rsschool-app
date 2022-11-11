@@ -5,7 +5,7 @@ import { MentorDashboardDto } from 'api';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 import { SubmitReviewModal } from 'modules/Mentor/components/SubmitReviewModal';
 import { TaskStatusTabs } from '../TaskStatusTabs';
-import { StudentTaskSolutionItemStatus } from '../../constants';
+import { SolutionItemStatus } from '../../constants';
 import { ReviewRandomTask } from '../ReviewRandomTask';
 
 export interface TaskSolutionsTableProps {
@@ -18,11 +18,15 @@ const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filte
 function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState(StudentTaskSolutionItemStatus.InReview);
+  const [activeTab, setActiveTab] = useState(SolutionItemStatus.InReview);
 
   const [data, loading] = useMentorDashboard(mentorId, courseId, isReviewSubmitted);
 
-  const statuses = useMemo(() => data?.map(({ status }) => status as StudentTaskSolutionItemStatus), [data]);
+  const statuses = useMemo(() => data?.map(({ status }) => status as SolutionItemStatus), [data]);
+  const isReviewRandomTaskVisible = useMemo(() => {
+    const hasRandomTask = data && data?.filter(({ status }) => status === SolutionItemStatus.RandomTask)?.length > 0;
+    return activeTab === SolutionItemStatus.RandomTask && !hasRandomTask;
+  }, [data, activeTab]);
 
   const filteredData = data?.filter(item => item.status === activeTab);
 
@@ -59,7 +63,7 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
           />
         </Col>
       </Row>
-      {activeTab === StudentTaskSolutionItemStatus.RandomTask && (
+      {isReviewRandomTaskVisible && (
         <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
           <Col>
             <ReviewRandomTask mentorId={mentorId} courseId={courseId} />

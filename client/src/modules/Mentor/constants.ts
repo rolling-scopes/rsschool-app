@@ -21,13 +21,13 @@ export enum TaskSolutionsTableColumnName {
   SolutionUrl = 'Pull request',
 }
 
-export enum StudentTaskSolutionItemStatus {
+export enum SolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
   RandomTask = 'random-task',
 }
 
-export const TASKS_STATUSES = Object.entries(StudentTaskSolutionItemStatus).map(([key, value]) => ({
+export const TASKS_STATUSES = Object.entries(SolutionItemStatus).map(([key, value]) => ({
   key: value,
   label: key,
 }));

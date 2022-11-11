@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import TaskStatusTabs, { Status } from './TaskStatusTabs';
-import { StudentTaskSolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
+import { SolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
 
-const StatusEnum = StudentTaskSolutionItemStatus;
+const StatusEnum = SolutionItemStatus;
 
 const PROPS_MOCK = {
   statuses: [],
@@ -32,7 +32,7 @@ describe('TaskStatusTabs', () => {
     ${StatusEnum.RandomTask} | ${4}
   `(
     'should render badge with count of $count for "$status" tab',
-    ({ status, count }: { status: StudentTaskSolutionItemStatus; count: number }) => {
+    ({ status, count }: { status: SolutionItemStatus; count: number }) => {
       const statuses = generateStatuses(count, status);
 
       render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
