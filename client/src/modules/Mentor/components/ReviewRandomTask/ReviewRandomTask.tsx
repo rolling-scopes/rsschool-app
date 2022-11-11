@@ -6,9 +6,10 @@ import { MentorsApi } from 'api';
 interface Props {
   mentorId: number | null;
   courseId: number;
+  onClick: () => void;
 }
 
-function ReviewRandomTask({ mentorId, courseId }: Props) {
+function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
   const [loading, withLoading] = useLoading();
 
   const handleClick = withLoading(async () => {
@@ -16,6 +17,7 @@ function ReviewRandomTask({ mentorId, courseId }: Props) {
       const service = new MentorsApi();
       await service.getRandomTask(mentorId, courseId);
     }
+    onClick();
   });
 
   return (
