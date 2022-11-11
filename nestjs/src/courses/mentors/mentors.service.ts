@@ -188,6 +188,7 @@ export class MentorsService {
       .andWhere('tr."score" IS NULL')
       .getOneOrFail();
 
+    // TODO: pick solution that does not exist in task_checker for courseTaskId-studentId-mentorId
     return {
       courseTaskId: task.courseTaskId,
       studentId: task.studentId,
