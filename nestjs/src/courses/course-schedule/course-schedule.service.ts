@@ -7,7 +7,7 @@ import { TaskResult } from '@entities/taskResult';
 import { TaskSolution } from '@entities/taskSolution';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PersonDto } from 'src/core/dto';
+import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
@@ -148,8 +148,8 @@ export class CourseScheduleService {
 
   public getCourseTaskSubmitted(courseTaskId: number, taskSolutions: TaskSolution[], taskCheckers: TaskChecker[]) {
     return (
-      taskSolutions.some(courseTask => courseTask.id === courseTaskId) ||
-      taskCheckers.some(courseTask => courseTask.id === courseTaskId)
+      taskSolutions.some(solution => solution.courseTaskId === courseTaskId) ||
+      taskCheckers.some(checker => checker.courseTaskId === courseTaskId)
     );
   }
 
@@ -168,10 +168,17 @@ export class CourseScheduleService {
       courseId: crossCheckTask.courseId,
       startDate: crossCheckTask.studentStartDate,
       endDate: crossCheckTask.studentEndDate,
-      status: this.getCourseTaskStatus(submitRange, studentId ? { currentScore, submitted } : undefined),
+      status: this.getCrossCheckItemStatus(
+        submitRange,
+        CourseScheduleItemTag.CrossCheckSubmit,
+        studentId ? { currentScore, submitted } : undefined,
+      ),
       tag: CourseScheduleItemTag.CrossCheckSubmit,
       descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+      scoreWeight: crossCheckTask.scoreWeight,
+      score: currentScore,
+      maxScore: crossCheckTask.maxScore,
     };
 
     const reviewItem = {
@@ -180,13 +187,49 @@ export class CourseScheduleService {
       courseId: crossCheckTask.courseId,
       startDate: crossCheckTask.studentEndDate,
       endDate: crossCheckTask.crossCheckEndDate,
-      status: this.getCourseTaskStatus(reviewRange, studentId ? { currentScore, submitted } : undefined),
+      status: this.getCrossCheckItemStatus(
+        reviewRange,
+        CourseScheduleItemTag.CrossCheckReview,
+        studentId ? { currentScore, submitted } : undefined,
+      ),
       tag: CourseScheduleItemTag.CrossCheckReview,
       descriptionUrl: crossCheckTask.task.descriptionUrl,
       organizer: crossCheckTask.taskOwner ? new PersonDto(crossCheckTask.taskOwner) : null,
+      scoreWeight: crossCheckTask.scoreWeight,
+      score: currentScore,
+      maxScore: crossCheckTask.maxScore,
     };
 
     return [submitItem, reviewItem] as CourseScheduleItem[];
+  }
+
+  public getCrossCheckItemStatus(
+    range: { startTime: string | Date | null; endTime: string | Date | null },
+    tag: CourseScheduleItemTag,
+    studentData?: { currentScore: number | null; submitted: boolean },
+  ) {
+    if (!range.startTime || !range.endTime) {
+      return CourseScheduleItemStatus.Archived;
+    }
+
+    const startTime = new Date(range.startTime).getTime();
+    const endTime = new Date(range.endTime).getTime();
+    const { currentScore = null, submitted = false } = studentData ?? {};
+    const now = Date.now();
+
+    if (startTime > now) {
+      return CourseScheduleItemStatus.Future;
+    }
+
+    if (currentScore != null || (endTime < now && tag === CourseScheduleItemTag.CrossCheckSubmit && submitted)) {
+      return CourseScheduleItemStatus.Done;
+    }
+
+    if (startTime <= now && endTime >= now) {
+      return CourseScheduleItemStatus.Available;
+    }
+
+    return studentData ? CourseScheduleItemStatus.Missed : CourseScheduleItemStatus.Archived;
   }
 
   public async copyFromTo(fromCourseId: number, toCourseId: number) {
