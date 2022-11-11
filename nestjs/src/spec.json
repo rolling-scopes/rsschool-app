@@ -1675,7 +1675,9 @@
           "courseTaskId": { "type": "number" },
           "maxScore": { "type": "number" },
           "resultScore": { "type": "number", "nullable": true },
-          "solutionUrl": { "type": "string" }
+          "solutionUrl": { "type": "string" },
+          "status": { "type": "string" },
+          "endDate": { "type": "string" }
         },
         "required": [
           "studentGithubId",
@@ -1685,7 +1687,9 @@
           "courseTaskId",
           "maxScore",
           "resultScore",
-          "solutionUrl"
+          "solutionUrl",
+          "status",
+          "endDate"
         ]
       },
       "Validations": {
