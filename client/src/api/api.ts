@@ -1935,6 +1935,142 @@ export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface FormDataDto
+ */
+export interface FormDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'avatarLink': string | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof FormDataDto
+     */
+    'visibleCourses': Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'desiredPosition': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'email': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'englishLevel': FormDataDtoEnglishLevelEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FormDataDto
+     */
+    'fullTime': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'githubUsername': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'linkedin': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'locations': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'militaryService': FormDataDtoMilitaryServiceEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'name': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'notes': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'phone': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'selfIntroLink': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'skype': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'startFrom': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'telegram': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FormDataDto
+     */
+    'website': string | null;
+}
+
+export const FormDataDtoEnglishLevelEnum = {
+    Unknown: 'unknown',
+    A0: 'a0',
+    A1: 'a1',
+    A2: 'a2',
+    B1: 'b1',
+    B2: 'b2',
+    C1: 'c1',
+    C2: 'c2'
+} as const;
+
+export type FormDataDtoEnglishLevelEnum = typeof FormDataDtoEnglishLevelEnum[keyof typeof FormDataDtoEnglishLevelEnum];
+export const FormDataDtoMilitaryServiceEnum = {
+    Served: 'served',
+    Liable: 'liable',
+    NotLiable: 'notLiable'
+} as const;
+
+export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEnum[keyof typeof FormDataDtoMilitaryServiceEnum];
+
+/**
+ * 
+ * @export
  * @interface GeneralInfo
  */
 export interface GeneralInfo {
@@ -8903,12 +9039,15 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {string} githubId 
+         * @param {FormDataDto} formDataDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveResume: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        saveResume: async (githubId: string, formDataDto: FormDataDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'githubId' is not null or undefined
             assertParamExists('saveResume', 'githubId', githubId)
+            // verify required parameter 'formDataDto' is not null or undefined
+            assertParamExists('saveResume', 'formDataDto', formDataDto)
             const localVarPath = `/opportunities/{githubId}/resume`
                 .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8924,9 +9063,12 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(formDataDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9040,11 +9182,12 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} githubId 
+         * @param {FormDataDto} formDataDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async saveResume(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.saveResume(githubId, options);
+        async saveResume(githubId: string, formDataDto: FormDataDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveResume(githubId, formDataDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9127,11 +9270,12 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
         /**
          * 
          * @param {string} githubId 
+         * @param {FormDataDto} formDataDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveResume(githubId: string, options?: any): AxiosPromise<object> {
-            return localVarFp.saveResume(githubId, options).then((request) => request(axios, basePath));
+        saveResume(githubId: string, formDataDto: FormDataDto, options?: any): AxiosPromise<object> {
+            return localVarFp.saveResume(githubId, formDataDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9226,12 +9370,13 @@ export class OpportunitiesApi extends BaseAPI {
     /**
      * 
      * @param {string} githubId 
+     * @param {FormDataDto} formDataDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OpportunitiesApi
      */
-    public saveResume(githubId: string, options?: AxiosRequestConfig) {
-        return OpportunitiesApiFp(this.configuration).saveResume(githubId, options).then((request) => request(this.axios, this.basePath));
+    public saveResume(githubId: string, formDataDto: FormDataDto, options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).saveResume(githubId, formDataDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
