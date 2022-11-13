@@ -114,7 +114,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "^@entities(.*)$": "<rootDir>/../../server/src/models/$1"
+      "^@entities(.*)$": "<rootDir>/../../server/src/models/$1",
+      "^src/(.*)$": "<rootDir>/$1"
     },
     "clearMocks": true
   },
