@@ -1,60 +1,24 @@
-import { CourseTaskDto } from 'api';
-import { StudentStats } from 'common/models';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getQueryString } from 'utils/queryParams-utils';
 import CommonCard from './CommonDashboardCard';
 import { TasksStatsModal } from './TasksStatsModal';
 
 const TasksChart = dynamic(() => import('./TasksChart'), { ssr: false });
 
-export interface TasksStatistics {
-  completed: (CourseTaskDto | StudentStats)[];
-  notDone: (CourseTaskDto | StudentStats)[];
-  future: (CourseTaskDto | StudentStats)[];
-}
-
-export interface ITooltipItem {
-  datasetIndex: number;
-  index: number;
-  x: number;
-  xLabel: string;
-  y: number;
-  yLabel: number;
-}
-
-export interface ITooltipData {
-  datasets: IChartsConfigDataDatasets[];
-  labels: string[];
-}
-
-interface IChartsConfigDataDatasets {
-  data: number[];
-  backgroundColor?: string[];
-  hoverBackgroundColor?: string[];
-}
-
-enum GroupTaskName {
-  Completed = 'completed',
-  NotCompleted = 'notCompleted',
-  Future = 'future',
-}
+export type TaskStat = CourseScheduleItemDto & { comment?: string; githubPrUri?: string };
 
 type Props = {
-  tasks: TasksStatistics;
+  tasksByStatus: Record<CourseScheduleItemDtoStatusEnum, TaskStat[]>;
   courseName: string;
 };
 
 export function TasksStatsCard(props: Props) {
-  const [isTasksStatsModalVisible, setTasksStatsModalVisible] = useState(false);
-  const [statisticsTableName, setStatisticsTableName] = useState('');
-  const [selectedGroupTasks, setCurrentTaskStatsModal] = useState([] as (CourseTaskDto | StudentStats)[]);
+  const [selectedStatus, setSelectedStatus] = useState<CourseScheduleItemDtoStatusEnum | null>(null);
 
-  const {
-    tasks: { completed, notDone, future },
-    courseName,
-  } = props;
+  const { courseName, tasksByStatus } = props;
 
   const router = useRouter();
   const queryStatType = router.query.statType ? (router.query.statType as string) : null;
@@ -76,55 +40,43 @@ export function TasksStatsCard(props: Props) {
     router.replace(url);
   }
 
-  const showTasksStatsModal = useCallback((chartLabel: string) => {
-    switch (chartLabel) {
-      case GroupTaskName.Completed:
-        setStatisticsTableName('Completed tasks');
-        setCurrentTaskStatsModal(completed);
-        break;
-      case GroupTaskName.Future:
-        setStatisticsTableName('Future tasks');
-        setCurrentTaskStatsModal(future);
-        break;
-      default:
-        setStatisticsTableName('Tasks not completed');
-        setCurrentTaskStatsModal(notDone);
-        break;
-    }
-    setTasksStatsModalVisible(true);
+  const showTasksStatsModal = useCallback((name: string) => {
+    const status = name as CourseScheduleItemDtoStatusEnum;
+    if (!Object.values(CourseScheduleItemDtoStatusEnum).includes(status)) return;
+
+    setSelectedStatus(status);
   }, []);
 
   const hideTasksStatsModal = () => {
-    setTasksStatsModalVisible(false);
+    setSelectedStatus(null);
     updateUrl();
   };
 
-  const data = [
-    { value: completed.length, type: GroupTaskName.Completed },
-    { value: notDone.length, type: GroupTaskName.NotCompleted },
-    { value: future.length, type: GroupTaskName.Future },
-  ].filter(item => item.value);
-
-  const colors = {
-    [GroupTaskName.Completed]: '#FF6384',
-    [GroupTaskName.NotCompleted]: '#36A2EB',
-    [GroupTaskName.Future]: '#FFCE56',
-  };
+  const chartData = useMemo(
+    () =>
+      Object.entries(tasksByStatus).map(([status, tasks]) => {
+        return {
+          value: tasks.length,
+          status,
+        };
+      }),
+    [tasksByStatus],
+  );
 
   return (
     <>
       <TasksStatsModal
         courseName={courseName}
-        tableName={statisticsTableName}
-        tasks={selectedGroupTasks}
-        isVisible={isTasksStatsModalVisible}
+        tableName={`${selectedStatus} tasks`}
+        tasks={selectedStatus ? tasksByStatus[selectedStatus] : []}
+        isVisible={!!selectedStatus}
         onHide={hideTasksStatsModal}
       />
       <CommonCard
         title="Tasks statistics"
         content={
-          <div style={{ minWidth: 200, maxWidth: 200, margin: 'auto' }}>
-            <TasksChart data={data} colors={colors} onItemSelected={data => updateUrl(data.type)} />
+          <div>
+            <TasksChart data={chartData} onItemSelected={data => updateUrl(data.status)} />
           </div>
         }
       />

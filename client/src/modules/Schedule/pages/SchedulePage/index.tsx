@@ -63,33 +63,45 @@ export function SchedulePage(props: PageProps) {
   const statuses = useMemo(() => data.map(({ status }) => status), [data]);
 
   return (
-    <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
-      <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} />
-      <SettingsPanel
-        onCreateCourseTask={handleCreateCourseTask}
-        onCopyFromCourse={() => setCopyModal({})}
-        isCourseManager={isManager}
-        courseId={props.course.id}
-        courseAlias={props.course.alias}
-        settings={settings}
-        calendarToken={cipher}
-        tags={eventTags}
-        refreshData={refreshData}
-      />
-      <TableView settings={settings} data={data} statusFilter={selectedTab} />
-      <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
-      <CoursesListModal
-        okText="Copy"
-        data={copyModal}
-        onSubmit={handleCopyFromSubmit}
-        onCancel={() => setCopyModal(null)}
-      >
-        <Alert
-          style={{ marginBottom: 16 }}
-          type="error"
-          description="It will copy all tasks and events from selected couse to your course. The action is not reversible."
-        />
-      </CoursesListModal>
-    </PageLayout>
+    <>
+      <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
+        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
+          <SettingsPanel
+            onCreateCourseTask={handleCreateCourseTask}
+            onCopyFromCourse={() => setCopyModal({})}
+            isCourseManager={isManager}
+            courseId={props.course.id}
+            courseAlias={props.course.alias}
+            settings={settings}
+            calendarToken={cipher}
+            tags={eventTags}
+            refreshData={refreshData}
+          />
+        </StatusTabs>
+        <TableView settings={settings} data={data} statusFilter={selectedTab} />
+        <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
+        <CoursesListModal
+          okText="Copy"
+          data={copyModal}
+          onSubmit={handleCopyFromSubmit}
+          onCancel={() => setCopyModal(null)}
+        >
+          <Alert
+            style={{ marginBottom: 16 }}
+            type="error"
+            description="It will copy all tasks and events from selected couse to your course. The action is not reversible."
+          />
+        </CoursesListModal>
+      </PageLayout>
+      <style jsx>
+        {`
+          :global(.ant-layout-content) {
+            background-color: #f0f2f5;
+            margin: 16px 0 0 !important;
+            padding: 0 24px 24px;
+          }
+        `}
+      </style>
+    </>
   );
 }

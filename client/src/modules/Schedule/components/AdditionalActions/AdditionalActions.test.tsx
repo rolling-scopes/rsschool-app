@@ -1,0 +1,72 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { AdditionalActions, AdditionalActionsProps, MenuItemType } from '.';
+import { SettingsButtons } from '../SettingsPanel';
+import { buildMenuItem } from '../SettingsPanel/helpers';
+import { buildExportLink, buildICalendarLink } from './helpers';
+
+jest.mock('./helpers', () => ({
+  buildExportLink: jest.fn(),
+  buildICalendarLink: jest.fn(),
+}));
+
+const PROPS_MOCK: AdditionalActionsProps = {
+  menuItems: generateMenuItems(),
+  courseId: 1,
+  timezone: 'Region/Town',
+  calendarToken: 'calendar-token',
+  courseAlias: 'course-alias',
+  onCopyFromCourse: jest.fn(),
+};
+
+describe('AdditionalActions', () => {
+  it('should render menu items', async () => {
+    render(<AdditionalActions {...PROPS_MOCK} />);
+
+    const moreBtn = screen.getByRole('button', { name: /more/i });
+    fireEvent.click(moreBtn);
+
+    const menuItems = await screen.findAllByRole('menuitem');
+    expect(menuItems).toHaveLength(3);
+  });
+
+  it('should call onCopyFromCourse when "Copy from" action was clicked', async () => {
+    render(<AdditionalActions {...PROPS_MOCK} />);
+    const moreBtn = screen.getByRole('button', { name: /more/i });
+    fireEvent.click(moreBtn);
+
+    const copyBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Copy, 'i') });
+    fireEvent.click(copyBtn);
+
+    expect(PROPS_MOCK.onCopyFromCourse).toHaveBeenCalled();
+  });
+
+  it('should call onCalendarDownload when "iCal Link" action was clicked', async () => {
+    render(<AdditionalActions {...PROPS_MOCK} />);
+    const moreBtn = screen.getByRole('button', { name: /more/i });
+    fireEvent.click(moreBtn);
+
+    const calendarBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Calendar, 'i') });
+    fireEvent.click(calendarBtn);
+
+    expect(buildICalendarLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.calendarToken, PROPS_MOCK.timezone);
+  });
+
+  it('should call onExport when "Export" action was clicked', async () => {
+    render(<AdditionalActions {...PROPS_MOCK} />);
+    const moreBtn = screen.getByRole('button', { name: /more/i });
+    fireEvent.click(moreBtn);
+
+    const exportBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Export, 'i') });
+    fireEvent.click(exportBtn);
+
+    expect(buildExportLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.timezone);
+  });
+});
+
+function generateMenuItems(): MenuItemType[] {
+  return [
+    buildMenuItem(SettingsButtons.Calendar, <></>, true),
+    buildMenuItem(SettingsButtons.Export, <></>, true),
+    buildMenuItem(SettingsButtons.Copy, <></>, true),
+  ];
+}
