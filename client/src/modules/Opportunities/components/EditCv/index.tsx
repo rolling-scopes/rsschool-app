@@ -2,7 +2,7 @@ import { useState, createRef, RefObject } from 'react';
 import { Layout, Space, Button, Row, Col, Alert } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto, OpportunitiesApi } from 'api';
+import { ResumeCourseDto, OpportunitiesApi, FormDataDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm } from './ContactsForm';
 import { GeneralInfoForm } from './GeneralInfoForm';
@@ -46,7 +46,7 @@ export const EditCV = (props: Props) => {
   const visibleCoursesFormRef: RefObject<FormInstance> = createRef();
 
   const submitData = async (data: AllUserCVData) => {
-    const newData = await service.saveResume(props.githubId, { data });
+    const newData = await service.saveResume(props.githubId, data as FormDataDto);
 
     const { userData, contacts, visibleCourses } = splitDataForForms(newData.data as AllUserCVData);
 
