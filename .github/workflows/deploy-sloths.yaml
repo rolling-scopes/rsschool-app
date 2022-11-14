@@ -43,6 +43,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_CDN_URL: https://cdn.rs.school/sloths
         run: npm run build-only
 
       - name: Upload to S3
