@@ -515,11 +515,11 @@ export default defineComponent({
 }
 
 .merch__change_cleaned {
-  background: no-repeat center center / contain url('./img/merch/merch-cleaned.svg');
+  background: no-repeat center center / contain url('/img/merch/merch-cleaned.svg');
 }
 
 .merch__change_original {
-  background: no-repeat center center / contain url('./img/merch/merch-original.svg');
+  background: no-repeat center center / contain url('/img/merch/merch-original.svg');
 }
 
 .merch__images,
