@@ -16,7 +16,7 @@ import { Username } from './Username';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 
-type Props = {
+export type SolutionReviewProps = {
   children?: JSX.Element;
   sessionId: number;
   sessionGithubId: string;
@@ -31,7 +31,7 @@ type Props = {
   maxScore?: number;
 };
 
-export function SolutionReview(props: Props) {
+function SolutionReview(props: SolutionReviewProps) {
   const {
     children,
     sessionId,
@@ -246,3 +246,5 @@ function getAmountUnreadMessages(props: GetAmountUnreadMessagesProps): number {
 function getHowManyUnreadMessagesText(amountUnreadMessages: number) {
   return `You have ${amountUnreadMessages} unread ${amountUnreadMessages > 1 ? 'messages' : 'message'}`;
 }
+
+export default SolutionReview;

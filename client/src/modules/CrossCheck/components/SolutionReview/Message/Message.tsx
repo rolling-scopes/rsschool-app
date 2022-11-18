@@ -7,14 +7,14 @@ import PreparedComment from 'components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
 import { Username } from '../Username';
 
-type Props = {
+export type MessageProps = {
   reviewNumber: number;
   message: TaskSolutionResultMessage;
   currentRole: CrossCheckMessageAuthorRole;
   settings: SolutionReviewSettings;
 };
 
-export function Message(props: Props) {
+function Message(props: MessageProps) {
   const { reviewNumber, message, settings } = props;
   const { timestamp, content, author, role, isReviewerRead, isStudentRead } = message;
   const { areContactsVisible } = settings;
@@ -87,7 +87,7 @@ export function Message(props: Props) {
   );
 }
 
-function getBadgeDotVisibility(props: Props): boolean {
+function getBadgeDotVisibility(props: MessageProps): boolean {
   const { message, currentRole } = props;
   const { isReviewerRead, isStudentRead } = message;
 
@@ -102,3 +102,5 @@ function getBadgeDotVisibility(props: Props): boolean {
       return false;
   }
 }
+
+export default Message;

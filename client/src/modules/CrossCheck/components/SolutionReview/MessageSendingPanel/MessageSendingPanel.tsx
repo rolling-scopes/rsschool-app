@@ -3,7 +3,7 @@ import { Button, Col, Comment, Form, Input, Row } from 'antd';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
 
-type Props = {
+export type MessageSendingPanelProps = {
   sessionId: number;
   sessionGithubId: string;
   author: CrossCheckMessageAuthor | null;
@@ -11,7 +11,7 @@ type Props = {
   areContactsVisible: boolean;
 };
 
-export function MessageSendingPanel(props: Props) {
+function MessageSendingPanel(props: MessageSendingPanelProps) {
   const { author, sessionId, sessionGithubId, currentRole, areContactsVisible } = props;
 
   return (
@@ -50,3 +50,5 @@ export function MessageSendingPanel(props: Props) {
     />
   );
 }
+
+export default MessageSendingPanel;

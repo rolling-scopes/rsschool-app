@@ -2,14 +2,14 @@ import { Typography } from 'antd';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { GithubUserLink } from 'components/GithubUserLink';
 
-type Props = {
+export type UsernameProps = {
   reviewNumber: number;
   author: CrossCheckMessageAuthor | null;
   role: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };
 
-export function Username(props: Props) {
+function Username(props: UsernameProps) {
   const { author, areContactsVisible } = props;
 
   return author && areContactsVisible ? (
@@ -19,7 +19,7 @@ export function Username(props: Props) {
   );
 }
 
-function createFakeUsername(props: Props): string {
+function createFakeUsername(props: UsernameProps): string {
   const { reviewNumber, author, role, areContactsVisible } = props;
 
   switch (role) {
@@ -31,3 +31,5 @@ function createFakeUsername(props: Props): string {
       return `Student${author && !areContactsVisible ? ' (hidden)' : ''}`;
   }
 }
+
+export default Username;

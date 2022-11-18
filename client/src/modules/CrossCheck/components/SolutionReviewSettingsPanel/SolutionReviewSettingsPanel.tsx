@@ -1,11 +1,11 @@
 import { Col, Row, Switch, Typography } from 'antd';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 
-type Props = {
+export type SolutionReviewSettingsPanelProps = {
   settings: SolutionReviewSettings;
 };
 
-export function SolutionReviewSettingsPanel(props: Props) {
+function SolutionReviewSettingsPanel(props: SolutionReviewSettingsPanelProps) {
   const { settings } = props;
   const { areContactsVisible, setAreContactsVisible } = settings;
 
@@ -24,3 +24,5 @@ export function SolutionReviewSettingsPanel(props: Props) {
     </Row>
   );
 }
+
+export default SolutionReviewSettingsPanel;
