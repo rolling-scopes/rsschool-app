@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { Alert, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
-import {
-  CourseService,
-  SolutionReviewType,
-  TaskSolutionResultMessage,
-  CrossCheckMessageAuthorRole,
-} from 'services/course';
+import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
+import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { StudentContacts } from 'components/CrossCheck/StudentContacts';
 import { UserAvatar } from './UserAvatar';
@@ -51,7 +47,7 @@ function SolutionReview(props: SolutionReviewProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const amountUnreadMessages = getAmountUnreadMessages({ currentRole, messages });
+  const amountUnreadMessages = getAmountUnreadMessages(currentRole, messages);
   const howManyUnreadMessagesText = getHowManyUnreadMessagesText(amountUnreadMessages);
 
   useEffect(() => {
@@ -221,30 +217,6 @@ function SolutionReview(props: SolutionReviewProps) {
       `}</style>
     </Spin>
   );
-}
-
-type GetAmountUnreadMessagesProps = {
-  currentRole: CrossCheckMessageAuthorRole;
-  messages: TaskSolutionResultMessage[];
-};
-
-function getAmountUnreadMessages(props: GetAmountUnreadMessagesProps): number {
-  const { currentRole, messages } = props;
-
-  switch (currentRole) {
-    case CrossCheckMessageAuthorRole.Reviewer:
-      return messages.filter(messages => !messages.isReviewerRead).length;
-
-    case CrossCheckMessageAuthorRole.Student:
-      return messages.filter(messages => !messages.isStudentRead).length;
-
-    default:
-      return 0;
-  }
-}
-
-function getHowManyUnreadMessagesText(amountUnreadMessages: number) {
-  return `You have ${amountUnreadMessages} unread ${amountUnreadMessages > 1 ? 'messages' : 'message'}`;
 }
 
 export default SolutionReview;
