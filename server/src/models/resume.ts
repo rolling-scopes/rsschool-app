@@ -36,58 +36,58 @@ export class Resume {
   githubId: string;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
-  name: string;
+  name: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
-  selfIntroLink: string;
+  selfIntroLink: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 32 })
-  startFrom: string;
+  startFrom: string | null;
 
   @Column({ default: false })
   fullTime: boolean;
 
   @Column({ nullable: true, type: 'numeric' })
-  expires: number;
+  expires: number | null;
 
   @Column({ nullable: true, type: 'varchar', length: 32 })
-  militaryService: string;
+  militaryService: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 8 })
-  englishLevel: LanguageLevel;
+  englishLevel: LanguageLevel | null;
 
   @Column({ nullable: true, type: 'varchar', length: 512 })
-  avatarLink: string;
+  avatarLink: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
-  desiredPosition: string;
+  desiredPosition: string | null;
 
   @Column({ nullable: true, type: 'text' })
-  notes: string;
+  notes: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 32 })
-  phone: string;
+  phone: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
-  email: string;
+  email: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 128 })
-  skype: string;
+  skype: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 128 })
-  telegram: string;
+  telegram: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 512 })
-  linkedin: string;
+  linkedin: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 512 })
-  locations: string;
+  locations: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
-  githubUsername: string;
+  githubUsername: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 512 })
-  website: string;
+  website: string | null;
 
   @Column({ default: false })
   isHidden: boolean;

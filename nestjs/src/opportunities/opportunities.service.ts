@@ -1,11 +1,15 @@
+import { In, Repository } from 'typeorm';
+import * as dayjs from 'dayjs';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';
 import { Feedback } from '@entities/feedback';
 import { Resume } from '@entities/resume';
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
 import { Student } from '@entities/student';
+import { FormDataDto } from './dto/form-data.dto';
+
+const EXPIRATION_DAYS_PROLONGATION = 30;
 
 type ResumeData = {
   resume: Resume;
@@ -37,10 +41,15 @@ export class OpportunitiesService {
   public async getResumeByGithubId(githubId: string): Promise<ResumeData | null> {
     const user = await this.userRepository.findOneOrFail({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({ where: { userId: user.id } });
-    if (resume == null) {
-      return null;
-    }
+    if (resume == null) return null;
     return await this.getFullResume(resume, false);
+  }
+
+  public async saveResume(githubId: string, dto: FormDataDto): Promise<Resume | null> {
+    const resume = await this.resumeRepository.findOneBy({ githubId });
+    if (resume == null) return null;
+    const dataToSave = { ...resume, ...dto };
+    return await this.resumeRepository.save(dataToSave);
   }
 
   public async getApplicantResumes(): Promise<Resume[]> {
@@ -55,11 +64,23 @@ export class OpportunitiesService {
     return resume;
   }
 
+  public async prolong(githubId: string) {
+    const resume = await this.resumeRepository.findOneBy({ githubId });
+    const expirationTimestamp = dayjs().add(EXPIRATION_DAYS_PROLONGATION, 'days').valueOf();
+    const result = await this.resumeRepository.save({ id: resume?.id, githubId, expires: expirationTimestamp });
+    return result.expires;
+  }
+
+  public async setVisibility(githubId: string, isVisible: boolean) {
+    const resume = await this.resumeRepository.findOneBy({ githubId });
+    const isHidden = !isVisible;
+    const savedResume = await this.resumeRepository.save({ id: resume?.id, githubId, isHidden });
+    return savedResume.isHidden;
+  }
+
   public async getConsent(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
-    if (user == null) {
-      return false;
-    }
+    if (user == null) return false;
     const value = user.opportunitiesConsent;
     return Boolean(value);
   }

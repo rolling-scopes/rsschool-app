@@ -1186,6 +1186,25 @@
           "404": { "description": "" }
         },
         "tags": ["opportunities"]
+      },
+      "patch": {
+        "operationId": "saveResume",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FormDataDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Resume" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" },
+          "404": { "description": "" }
+        },
+        "tags": ["opportunities"]
       }
     },
     "/opportunities/consent": {
@@ -1221,6 +1240,34 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
+          }
+        },
+        "tags": ["opportunities"]
+      }
+    },
+    "/opportunities/prolong": {
+      "post": {
+        "operationId": "prolong",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StatusDto" } } }
+          }
+        },
+        "tags": ["opportunities"]
+      }
+    },
+    "/opportunities/visibility": {
+      "post": {
+        "operationId": "setVisibility",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisibilityDto" } } }
           }
         },
         "tags": ["opportunities"]
@@ -2575,29 +2622,33 @@
         "type": "object",
         "properties": {
           "uuid": { "type": "string" },
-          "avatarLink": { "type": "string" },
+          "avatarLink": { "type": "string", "nullable": true },
           "visibleCourses": { "type": "array", "items": { "type": "number" } },
           "courses": { "type": "array", "items": { "$ref": "#/components/schemas/ResumeCourseDto" } },
-          "desiredPosition": { "type": "string" },
-          "email": { "type": "string" },
-          "englishLevel": { "type": "string", "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"] },
-          "expires": { "type": "number" },
+          "desiredPosition": { "type": "string", "nullable": true },
+          "email": { "type": "string", "nullable": true },
+          "englishLevel": {
+            "type": "string",
+            "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"],
+            "nullable": true
+          },
+          "expires": { "type": "number", "nullable": true },
           "gratitudes": { "type": "array", "items": { "$ref": "#/components/schemas/GratitudeDto" } },
           "feedbacks": { "type": "array", "items": { "$ref": "#/components/schemas/FeedbackDto" } },
           "fullTime": { "type": "boolean" },
-          "githubUsername": { "type": "string" },
+          "githubUsername": { "type": "string", "nullable": true },
           "id": { "type": "number" },
-          "linkedin": { "type": "string" },
-          "locations": { "type": "string" },
-          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"] },
-          "name": { "type": "string" },
-          "notes": { "type": "string" },
-          "phone": { "type": "string" },
-          "selfIntroLink": { "type": "string" },
-          "skype": { "type": "string" },
-          "startFrom": { "type": "string" },
-          "telegram": { "type": "string" },
-          "website": { "type": "string" }
+          "linkedin": { "type": "string", "nullable": true },
+          "locations": { "type": "string", "nullable": true },
+          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"], "nullable": true },
+          "name": { "type": "string", "nullable": true },
+          "notes": { "type": "string", "nullable": true },
+          "phone": { "type": "string", "nullable": true },
+          "selfIntroLink": { "type": "string", "nullable": true },
+          "skype": { "type": "string", "nullable": true },
+          "startFrom": { "type": "string", "nullable": true },
+          "telegram": { "type": "string", "nullable": true },
+          "website": { "type": "string", "nullable": true }
         },
         "required": [
           "uuid",
@@ -2626,31 +2677,89 @@
           "website"
         ]
       },
+      "FormDataDto": {
+        "type": "object",
+        "properties": {
+          "avatarLink": { "type": "string", "nullable": true },
+          "visibleCourses": { "type": "array", "items": { "type": "number" } },
+          "desiredPosition": { "type": "string", "nullable": true },
+          "email": { "type": "string", "nullable": true },
+          "englishLevel": {
+            "type": "string",
+            "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"],
+            "nullable": true
+          },
+          "fullTime": { "type": "boolean" },
+          "githubUsername": { "type": "string", "nullable": true },
+          "linkedin": { "type": "string", "nullable": true },
+          "locations": { "type": "string", "nullable": true },
+          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"], "nullable": true },
+          "name": { "type": "string", "nullable": true },
+          "notes": { "type": "string", "nullable": true },
+          "phone": { "type": "string", "nullable": true },
+          "selfIntroLink": { "type": "string", "nullable": true },
+          "skype": { "type": "string", "nullable": true },
+          "startFrom": { "type": "string", "nullable": true },
+          "telegram": { "type": "string", "nullable": true },
+          "website": { "type": "string", "nullable": true }
+        },
+        "required": [
+          "avatarLink",
+          "visibleCourses",
+          "desiredPosition",
+          "email",
+          "englishLevel",
+          "fullTime",
+          "githubUsername",
+          "linkedin",
+          "locations",
+          "militaryService",
+          "name",
+          "notes",
+          "phone",
+          "selfIntroLink",
+          "skype",
+          "startFrom",
+          "telegram",
+          "website"
+        ]
+      },
+      "Resume": { "type": "object", "properties": {} },
       "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
+      "StatusDto": { "type": "object", "properties": { "expires": { "type": "number" } }, "required": ["expires"] },
+      "VisibilityDto": {
+        "type": "object",
+        "properties": { "isHidden": { "type": "boolean" } },
+        "required": ["isHidden"]
+      },
       "ApplicantResumeDto": {
         "type": "object",
         "properties": {
           "uuid": { "type": "string" },
-          "avatarLink": { "type": "string" },
+          "avatarLink": { "type": "string", "nullable": true },
           "visibleCourses": { "type": "array", "items": { "type": "number" } },
-          "desiredPosition": { "type": "string" },
-          "email": { "type": "string" },
-          "englishLevel": { "type": "string", "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"] },
-          "expires": { "type": "number" },
+          "desiredPosition": { "type": "string", "nullable": true },
+          "email": { "type": "string", "nullable": true },
+          "englishLevel": {
+            "type": "string",
+            "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"],
+            "nullable": true
+          },
+          "expires": { "type": "number", "nullable": true },
           "fullTime": { "type": "boolean" },
           "githubId": { "type": "string" },
           "id": { "type": "number" },
-          "linkedin": { "type": "string" },
-          "locations": { "type": "string" },
-          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"] },
-          "name": { "type": "string" },
-          "notes": { "type": "string" },
-          "phone": { "type": "string" },
-          "selfIntroLink": { "type": "string" },
-          "skype": { "type": "string" },
-          "startFrom": { "type": "string" },
-          "telegram": { "type": "string" },
-          "website": { "type": "string" }
+          "linkedin": { "type": "string", "nullable": true },
+          "locations": { "type": "string", "nullable": true },
+          "militaryService": { "type": "string", "enum": ["served", "liable", "notLiable"], "nullable": true },
+          "name": { "type": "string", "nullable": true },
+          "notes": { "type": "string", "nullable": true },
+          "phone": { "type": "string", "nullable": true },
+          "selfIntroLink": { "type": "string", "nullable": true },
+          "skype": { "type": "string", "nullable": true },
+          "startFrom": { "type": "string", "nullable": true },
+          "telegram": { "type": "string", "nullable": true },
+          "website": { "type": "string", "nullable": true }
         },
         "required": [
           "uuid",

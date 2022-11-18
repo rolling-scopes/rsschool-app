@@ -75,7 +75,7 @@ export function TasksStatsCard(props: Props) {
       <CommonCard
         title="Tasks statistics"
         content={
-          <div>
+          <div style={{ height: '220px' }}>
             <TasksChart data={chartData} onItemSelected={data => updateUrl(data.status)} />
           </div>
         }

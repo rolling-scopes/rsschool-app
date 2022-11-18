@@ -7,12 +7,12 @@ import {
   CloseCircleTwoTone,
   ClockCircleOutlined,
 } from '@ant-design/icons';
+import { OpportunitiesApi } from 'api';
 import { ExpirationState } from 'modules/Opportunities/constants';
-import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 
 const { Text, Paragraph } = Typography;
 
-const service = new OpportunitiesService();
+const service = new OpportunitiesApi();
 
 type Props = {
   expirationDate: string;
@@ -67,7 +67,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
       ),
       maskClosable: true,
       onOk: async () => {
-        await service.updateResume();
+        await service.prolong();
         notification.success({
           message: 'CV successfully renewed',
           placement: 'topRight',
