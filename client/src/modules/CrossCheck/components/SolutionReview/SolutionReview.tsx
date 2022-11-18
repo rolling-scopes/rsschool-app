@@ -51,24 +51,22 @@ function SolutionReview(props: SolutionReviewProps) {
   const howManyUnreadMessagesText = getHowManyUnreadMessagesText(amountUnreadMessages);
 
   useEffect(() => {
-    if (!amountUnreadMessages) return;
+    if (!courseTaskId || !amountUnreadMessages) return;
 
     notification.info({
       message: howManyUnreadMessagesText,
     });
 
-    if (courseTaskId) {
-      (async () => {
-        try {
-          await courseService.updateTaskSolutionResultMessages(id, courseTaskId, {
-            role: currentRole,
-          });
-        } catch (error) {
-          message.error('An error occurred. Please try later.');
-        }
-      })();
-    }
-  }, []);
+    (async () => {
+      try {
+        await courseService.updateTaskSolutionResultMessages(id, courseTaskId, {
+          role: currentRole,
+        });
+      } catch (error) {
+        message.error('An error occurred. Please try later.');
+      }
+    })();
+  }, [courseTaskId, amountUnreadMessages]);
 
   const handleSubmit = async (values: { content: string }) => {
     setLoading(true);
