@@ -10,8 +10,8 @@ export interface SolutionReviewSettings {
 }
 
 export const AVATAR_ICON_PATH = {
-  expert: '/static/svg/crossCheck/Expert.svg',
-  thanks: '/static/svg/crossCheck/Thanks.svg',
+  expert: '/static/svg/sloths/Expert.svg',
+  thanks: '/static/svg/sloths/Thanks.svg',
 };
 
 export const ROLE_TAG_COLOR = {
