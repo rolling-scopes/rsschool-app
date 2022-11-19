@@ -2,6 +2,8 @@ import { Typography } from 'antd';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { GithubUserLink } from 'components/GithubUserLink';
 
+const { Text } = Typography;
+
 export type UsernameProps = {
   reviewNumber: number;
   author: CrossCheckMessageAuthor | null;
@@ -15,7 +17,7 @@ function Username(props: UsernameProps) {
   return author && areContactsVisible ? (
     <GithubUserLink value={author.githubId} isUserIconHidden={true} />
   ) : (
-    <Typography.Text>{createFakeUsername(props)}</Typography.Text>
+    <Text>{createFakeUsername(props)}</Text>
   );
 }
 

@@ -1,9 +1,9 @@
 import { CrossCheckMessageAuthorRole, TaskSolutionResultMessage } from 'services/course';
 
-export function getAmountUnreadMessages(
+export const getAmountUnreadMessages = (
   currentRole: CrossCheckMessageAuthorRole,
   messages: TaskSolutionResultMessage[],
-): number {
+): number => {
   switch (currentRole) {
     case CrossCheckMessageAuthorRole.Reviewer:
       return messages.filter(messages => !messages.isReviewerRead).length;
@@ -14,8 +14,8 @@ export function getAmountUnreadMessages(
     default:
       return 0;
   }
-}
+};
 
-export function getHowManyUnreadMessagesText(amountUnreadMessages: number) {
+export const getHowManyUnreadMessagesText = (amountUnreadMessages: number): string => {
   return `You have ${amountUnreadMessages} unread ${amountUnreadMessages > 1 ? 'messages' : 'message'}`;
-}
+};

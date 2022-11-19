@@ -12,6 +12,8 @@ import { Username } from './Username';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 
+const { Text } = Typography;
+
 export type SolutionReviewProps = {
   children?: JSX.Element;
   sessionId: number;
@@ -132,9 +134,9 @@ function SolutionReview(props: SolutionReviewProps) {
 
                 {dateTime && (
                   <Row>
-                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
                       {formatDateTime(dateTime)}
-                    </Typography.Text>
+                    </Text>
                   </Row>
                 )}
 
@@ -143,14 +145,14 @@ function SolutionReview(props: SolutionReviewProps) {
                     <ScoreIcon maxScore={maxScore} score={score} isOutdatedScore={!isActiveReview} />
                   </Col>
                   <Col>
-                    <Typography.Text>{score}</Typography.Text>
+                    <Text>{score}</Text>
                   </Col>
                 </Row>
 
                 <Row style={{ marginBottom: 24 }}>
-                  <Typography.Text style={{ fontSize: 12, lineHeight: '12px' }} type="secondary">
+                  <Text style={{ fontSize: 12, lineHeight: '12px' }} type="secondary">
                     maximum score: {maxScore ?? 'unknown'}
-                  </Typography.Text>
+                  </Text>
                 </Row>
 
                 <Row>

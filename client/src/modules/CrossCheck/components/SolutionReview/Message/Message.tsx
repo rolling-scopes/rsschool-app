@@ -7,6 +7,8 @@ import PreparedComment from 'components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
 import { Username } from '../Username';
 
+const { Text } = Typography;
+
 export type MessageProps = {
   reviewNumber: number;
   message: TaskSolutionResultMessage;
@@ -50,9 +52,9 @@ function Message(props: MessageProps) {
 
           <Row gutter={16} style={{ marginBottom: 8 }}>
             <Col>
-              <Typography.Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
+              <Text type="secondary" style={{ marginBottom: 8, fontSize: 12 }}>
                 {formatDateTime(timestamp)}
-              </Typography.Text>
+              </Text>
             </Col>
 
             {(isReviewerRead || isStudentRead) && (

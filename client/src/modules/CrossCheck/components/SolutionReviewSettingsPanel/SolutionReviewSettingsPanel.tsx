@@ -1,6 +1,8 @@
 import { Col, Row, Switch, Typography } from 'antd';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 
+const { Text } = Typography;
+
 export type SolutionReviewSettingsPanelProps = {
   settings: SolutionReviewSettings;
 };
@@ -16,7 +18,7 @@ function SolutionReviewSettingsPanel(props: SolutionReviewSettingsPanelProps) {
   return (
     <Row gutter={8}>
       <Col>
-        <Typography.Text>Contacts</Typography.Text>
+        <Text>Contacts</Text>
       </Col>
       <Col>
         <Switch size={'small'} defaultChecked={areContactsVisible} onChange={handleContactsVisibilityChange} />
