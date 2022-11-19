@@ -33,7 +33,7 @@ export enum CrossCheckMessageAuthorRole {
   Student = 'student',
 }
 
-export type TaskSolutionResultMessage = {
+export type CrossCheckMessage = {
   timestamp: string;
   content: string;
   author: CrossCheckMessageAuthor | null;
@@ -53,7 +53,7 @@ export type SolutionReviewType = {
     discord: Discord | null;
   } | null;
   score: number;
-  messages: TaskSolutionResultMessage[];
+  messages: CrossCheckMessage[];
 };
 
 export type Feedback = {
@@ -392,7 +392,7 @@ export class CourseService {
         githubId: string;
       };
       historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
-      messages: TaskSolutionResultMessage[];
+      messages: CrossCheckMessage[];
     } | null;
   }
 

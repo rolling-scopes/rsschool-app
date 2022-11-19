@@ -1,7 +1,7 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
-import { TaskSolutionResultMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
+import { CrossCheckMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
 import { Discord } from '../../../common/models';
 import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
@@ -158,7 +158,7 @@ export class CrossCheckService {
         };
         comments?: TaskSolutionComment[];
         historicalScores: TaskSolutionResult['historicalScores'];
-        messages: TaskSolutionResultMessage[];
+        messages: CrossCheckMessage[];
       })
     | null
   > {
@@ -224,7 +224,7 @@ export class CrossCheckService {
   ) {
     const { user } = params;
 
-    const message: TaskSolutionResultMessage = {
+    const message: CrossCheckMessage = {
       ...data,
       timestamp: new Date().toISOString(),
       author: {

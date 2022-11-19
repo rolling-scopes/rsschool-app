@@ -1,8 +1,8 @@
-import { CrossCheckMessageAuthorRole, TaskSolutionResultMessage } from 'services/course';
+import { CrossCheckMessageAuthorRole, CrossCheckMessage } from 'services/course';
 
 export const getAmountUnreadMessages = (
   currentRole: CrossCheckMessageAuthorRole,
-  messages: TaskSolutionResultMessage[],
+  messages: CrossCheckMessage[],
 ): number => {
   switch (currentRole) {
     case CrossCheckMessageAuthorRole.Reviewer:

@@ -29,14 +29,14 @@ export enum CrossCheckMessageAuthorRole {
   Student = 'student',
 }
 
-export type TaskSolutionResultMessage = {
+export interface CrossCheckMessage {
   timestamp: string;
   content: string;
   author: CrossCheckMessageAuthor | null;
   role: CrossCheckMessageAuthorRole;
   isReviewerRead: boolean;
   isStudentRead: boolean;
-};
+}
 
 @Entity()
 @Unique(['courseTaskId', 'studentId', 'checkerId'])
@@ -86,5 +86,5 @@ export class TaskSolutionResult {
   review: TaskSolutionReview[];
 
   @Column({ type: 'json', default: [] })
-  messages: TaskSolutionResultMessage[];
+  messages: CrossCheckMessage[];
 }
