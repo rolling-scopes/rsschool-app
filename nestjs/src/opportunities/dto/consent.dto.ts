@@ -4,6 +4,7 @@ export class ConsentDto {
   constructor(consent: boolean) {
     this.consent = consent;
   }
+
   @ApiProperty()
   public consent: boolean;
 }
