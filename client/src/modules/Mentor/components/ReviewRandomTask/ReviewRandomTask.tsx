@@ -4,7 +4,7 @@ import { useLoading } from 'components/useLoading';
 import { MentorsApi } from 'api';
 
 interface Props {
-  mentorId: number | null;
+  mentorId: number;
   courseId: number;
   onClick: () => void;
 }
@@ -15,16 +15,14 @@ function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
       response: { status },
     } = (e as any) || {};
 
-    if (status > 300 && status < 500) {
+    if (status >= 400 && status < 500) {
       message.info('Task for review was not found. Please try later.');
     }
   });
 
   const handleClick = withLoading(async () => {
-    if (mentorId) {
-      const service = new MentorsApi();
-      await service.getRandomTask(mentorId, courseId);
-    }
+    const service = new MentorsApi();
+    await service.getRandomTask(mentorId, courseId);
     onClick();
   });
 

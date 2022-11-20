@@ -9,7 +9,7 @@ import { SolutionItemStatus } from '../../constants';
 import { ReviewRandomTask } from '../ReviewRandomTask';
 
 export interface TaskSolutionsTableProps {
-  mentorId: number | null;
+  mentorId: number;
   courseId: number;
 }
 

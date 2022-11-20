@@ -208,7 +208,6 @@ export class MentorsService {
       return await this.taskCheckerRepository.insert(checker);
     }
 
-    // TODO: throw proper error
     throw new NotFoundException();
   }
 }
