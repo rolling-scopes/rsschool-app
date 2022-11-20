@@ -2,7 +2,7 @@ import { Space } from 'antd';
 import { ReactNode } from 'react';
 import { Status } from '.';
 import { CountBadge } from 'components/CountBadge';
-import { TASKS_STATUSES } from 'modules/Mentor/constants';
+import { SolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
 
 type TabItem = {
   label: ReactNode;
@@ -26,4 +26,7 @@ export const tabsRenderer = (statuses?: Status[], activeTab?: Status): TabItem[]
     };
 
     return [...tabs, tab];
-  }, []);
+  }, [])
+    // Do not show Random task tab
+    // until students without mentors could not send tasks for review
+    .filter(tab => tab.key !== SolutionItemStatus.RandomTask);
