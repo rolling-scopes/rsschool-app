@@ -105,8 +105,8 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
-  public getCourseStudentsCount(mentorId: number, courseId: number) {
-    return this.studentRepository.count({
+  public async getCourseStudentsCount(mentorId: number, courseId: number) {
+    return await this.studentRepository.count({
       where: { mentorId, courseId },
     });
   }
