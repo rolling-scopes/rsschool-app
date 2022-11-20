@@ -3,7 +3,7 @@ import MentorDashboard from './MentorDashboard';
 import { Course } from 'services/models';
 import { CourseInfo, Session } from 'components/withSession';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
-import { MentorDashboardProps } from 'modules/Course/data';
+import { MentorDashboardProps } from 'pages/course/mentor/dashboard';
 
 jest.mock('modules/Mentor/hooks/useMentorDashboard', () => ({
   useMentorDashboard: jest.fn().mockReturnValue([[], false]),

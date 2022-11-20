@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { Instructions, Notification, TaskSolutionsTable } from '..';
-import { MentorDashboardProps } from 'modules/Course/data';
+import { MentorDashboardProps } from 'pages/course/mentor/dashboard';
 
 function MentorDashboard({ session, course, mentorId, studentsCount }: MentorDashboardProps) {
   const { id: courseId } = course;
