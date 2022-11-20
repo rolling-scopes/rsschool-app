@@ -1,11 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import MentorDashboard from './MentorDashboard';
-import { Course, CoursePageProps } from 'services/models';
+import { Course } from 'services/models';
 import { CourseInfo, Session } from 'components/withSession';
-import { useMentorStudentsCount } from 'modules/Mentor/hooks/useMentorStudentsCount';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
+import { MentorDashboardProps } from 'modules/Course/data';
 
-jest.mock('modules/Mentor/hooks/useMentorStudentsCount');
 jest.mock('modules/Mentor/hooks/useMentorDashboard', () => ({
   useMentorDashboard: jest.fn().mockReturnValue([[], false]),
 }));
@@ -13,7 +12,7 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn().mockImplementation(() => ({ asPath: '/course/mentor/' })),
 }));
 
-const PROPS_MOCK: CoursePageProps = {
+const PROPS_MOCK: MentorDashboardProps = {
   session: {
     id: 1,
     isActivist: false,
@@ -31,14 +30,13 @@ const PROPS_MOCK: CoursePageProps = {
     id: 400,
   } as Course,
   params: {},
+  mentorId: 1000,
+  studentsCount: 3,
 };
 
 describe('MentorDashboard', () => {
-  const useMentorStudentsCountMock = useMentorStudentsCount as jest.MockedFunction<typeof useMentorStudentsCount>;
-
   it('should render instructions when mentor has not students for this course', () => {
-    useMentorStudentsCountMock.mockReturnValueOnce([undefined, false]);
-    render(<MentorDashboard {...PROPS_MOCK} />);
+    render(<MentorDashboard {...PROPS_MOCK} studentsCount={0} />);
 
     const instructionsTitle = screen.getByText(INSTRUCTIONS_TEXT.title);
 
@@ -46,7 +44,6 @@ describe('MentorDashboard', () => {
   });
 
   it('should render empty table when mentor has students for this course', () => {
-    useMentorStudentsCountMock.mockReturnValueOnce([3, false]);
     render(<MentorDashboard {...PROPS_MOCK} />);
 
     const emptyTable = screen.getByText(/No Data/i);

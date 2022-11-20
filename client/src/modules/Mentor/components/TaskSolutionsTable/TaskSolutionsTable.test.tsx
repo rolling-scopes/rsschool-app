@@ -53,7 +53,8 @@ describe('TaskSolutionsTable', () => {
       expect(screen.getByText(value)).toBeInTheDocument();
     });
 
-    it('should render "Review random task" button when "Random task" tab is selected', async () => {
+    // TODO: enable when review random task will be available
+    it.skip('should render "Review random task" button when "Random task" tab is selected', async () => {
       render(<TaskSolutionsTable {...PROPS_MOCK} />);
       const randomTaskTab = screen.getByRole('tab', { name: /random task/i });
 
@@ -73,7 +74,7 @@ describe('TaskSolutionsTable', () => {
 
   describe('when result score was not provided', () => {
     beforeEach(() => {
-      const data = [{ ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05').toISOString() }];
+      const data = [{ ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05T00:00:00').toISOString() }];
       useMentorDashboardMock.mockReturnValueOnce([data, false]);
     });
 
@@ -110,6 +111,6 @@ function generateData(count = 3): MentorDashboardDto[] {
     taskDescriptionUrl: `task-url-${idx}`,
     taskName: `Task ${idx}`,
     status: SolutionItemStatus.InReview,
-    endDate: new Date(`1970-02-0${idx + 1}`).toISOString(),
+    endDate: new Date(`1970-02-0${idx + 1}T00:00:00`).toISOString(),
   }));
 }
