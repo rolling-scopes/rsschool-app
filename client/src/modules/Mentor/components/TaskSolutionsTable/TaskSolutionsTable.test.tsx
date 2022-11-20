@@ -74,7 +74,9 @@ describe('TaskSolutionsTable', () => {
 
   describe('when result score was not provided', () => {
     beforeEach(() => {
-      const data = [{ ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05T00:00:00').toISOString() }];
+      const data = [
+        { ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05T00:00:00').toISOString() },
+      ];
       useMentorDashboardMock.mockReturnValueOnce([data, false]);
     });
 
