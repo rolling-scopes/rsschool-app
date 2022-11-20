@@ -1,89 +1,93 @@
 import { LanguageLevel } from '@entities/data';
-import { Resume } from '@entities/resume';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsBoolean, IsString, ValidateIf } from 'class-validator';
 
-export class ApplicantResumeDto {
-  constructor(resume: Resume) {
-    this.uuid = resume.uuid;
-    this.desiredPosition = resume.desiredPosition;
-    this.email = resume.email;
-    this.englishLevel = resume.englishLevel;
-    this.fullTime = resume.fullTime;
-    this.githubId = resume.user?.githubId;
-    this.linkedin = resume.linkedin;
-    this.locations = resume.locations;
-    this.militaryService = resume.militaryService;
-    this.name = resume.name;
-    this.notes = resume.notes;
-    this.phone = resume.phone;
-    this.selfIntroLink = resume.selfIntroLink;
-    this.skype = resume.skype;
-    this.startFrom = resume.startFrom;
-    this.telegram = resume.telegram;
-    this.website = resume.website;
-    this.expires = Number(resume.expires);
-  }
-
-  @ApiProperty()
-  public uuid: string;
-
+export class FormDataDto {
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public avatarLink: string | null;
 
+  @IsArray()
   @ApiProperty({ type: [Number] })
   public visibleCourses: number[];
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public desiredPosition: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public email: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ enum: LanguageLevel, nullable: true })
   public englishLevel: LanguageLevel | null;
 
-  @ApiProperty({ nullable: true, type: Number })
-  public expires: number | null;
-
+  @IsBoolean()
   @ApiProperty()
   public fullTime: boolean;
 
-  @ApiProperty()
-  public githubId: string;
+  @IsString()
+  @ValidateIf(value => value === null)
+  @ApiProperty({ nullable: true, type: String })
+  public githubUsername: string | null;
 
-  @ApiProperty()
-  public id: number;
-
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public linkedin: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public locations: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ enum: ['served', 'liable', 'notLiable'], nullable: true })
   public militaryService: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public name: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public notes: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public phone: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public selfIntroLink: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public skype: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public startFrom: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public telegram: string | null;
 
+  @IsString()
+  @ValidateIf(value => value === null)
   @ApiProperty({ nullable: true, type: String })
   public website: string | null;
 }

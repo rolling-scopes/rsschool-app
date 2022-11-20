@@ -5,7 +5,6 @@ import { AxiosError } from 'axios';
 import moment from 'moment';
 import Head from 'next/head';
 import { OpportunitiesApi, ResumeDto } from 'api';
-import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
@@ -16,7 +15,6 @@ const { Content } = Layout;
 const { Text, Paragraph } = Typography;
 
 const service = new OpportunitiesApi();
-const oldService = new OpportunitiesService();
 
 export function EditPage() {
   const { githubId } = useContext(SessionContext);
@@ -80,8 +78,8 @@ export function EditPage() {
 
   const handleCreateConsent = withLoading(async () => {
     await handleConsentUpdate(true);
-    const updatedTimestamp = await oldService.updateResume();
-    showCreationModal(updatedTimestamp);
+    const updatedTimestamp = await service.prolong();
+    showCreationModal(updatedTimestamp.data.expires);
     setEditMode(true);
   });
 

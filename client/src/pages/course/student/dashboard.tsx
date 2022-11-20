@@ -5,6 +5,7 @@ import css from 'styled-jsx/css';
 import { useAsync, useLocalStorage } from 'react-use';
 import { useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
+import omitBy from 'lodash/omitBy';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PageLayout } from 'components/PageLayout';
 
@@ -104,13 +105,16 @@ function Page(props: CoursePageProps) {
       setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
 
       setTasksByStatus(
-        groupBy(
-          scheduleTasks.map(task => {
-            const { comment, taskGithubPrUris } =
-              tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
-            return { ...task, comment, githubPrUri: taskGithubPrUris };
-          }),
-          'status',
+        omitBy(
+          groupBy(
+            scheduleTasks.map(task => {
+              const { comment, taskGithubPrUris } =
+                tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
+              return { ...task, comment, githubPrUri: taskGithubPrUris };
+            }),
+            'status',
+          ),
+          (_, status) => status === CourseScheduleItemDtoStatusEnum.Archived,
         ) as Record<CourseScheduleItemDtoStatusEnum, TaskStat[]>,
       );
     }),
@@ -162,8 +166,8 @@ function Page(props: CoursePageProps) {
             <Masonry
               breakpointCols={{
                 default: 3,
-                800: 2,
-                560: 1,
+                1180: 2,
+                800: 1,
               }}
               className={masonryClassName}
               columnClassName={masonryColumnClassName}

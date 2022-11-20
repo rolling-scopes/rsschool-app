@@ -7,8 +7,10 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Patch,
   Req,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -22,7 +24,11 @@ import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'sr
 import { ApplicantResumeDto } from './dto/applicant-resume.dto';
 import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
+import { StatusDto } from './dto/status.dto';
+import { VisibilityDto } from './dto/visibility.dto';
 import { OpportunitiesService } from './opportunities.service';
+import { Resume } from '@entities/resume';
+import { FormDataDto } from './dto/form-data.dto';
 
 @Controller('opportunities')
 @ApiTags('opportunities')
@@ -47,6 +53,24 @@ export class OpportunitiesController {
     }
     const { resume, students, gratitudes, feedbacks } = data;
     return new ResumeDto(resume, students, gratitudes, feedbacks);
+  }
+
+  @Patch('/:githubId/resume')
+  @ApiOperation({ operationId: 'saveResume' })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse({ type: Resume })
+  @UseGuards(DefaultGuard)
+  public async saveResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string, @Body() dto: FormDataDto) {
+    if (githubId !== req.user.githubId) {
+      throw new ForbiddenException('No access to resume');
+    }
+    const data = await this.opportunitiesService.saveResume(githubId, dto);
+    if (data == null) {
+      throw new NotFoundException('Resume not found');
+    }
+    return data;
   }
 
   @Get('/consent')
@@ -77,6 +101,24 @@ export class OpportunitiesController {
   public async deleteConsent(@Req() req: CurrentRequest) {
     const data = await this.opportunitiesService.deleteConsent(req.user.githubId);
     return new ConsentDto(data);
+  }
+
+  @Post('/prolong')
+  @ApiOperation({ operationId: 'prolong' })
+  @ApiOkResponse({ type: StatusDto })
+  @UseGuards(DefaultGuard)
+  public async prolong(@Req() req: CurrentRequest) {
+    const data = await this.opportunitiesService.prolong(req.user.githubId);
+    return new StatusDto(data);
+  }
+
+  @Post('/visibility')
+  @ApiOperation({ operationId: 'setVisibility' })
+  @ApiOkResponse({ type: VisibilityDto })
+  @UseGuards(DefaultGuard)
+  public async setVisibility(@Req() req: CurrentRequest, @Body('isHidden') isHidden: boolean) {
+    const data = await this.opportunitiesService.setVisibility(req.user.githubId, !isHidden);
+    return new VisibilityDto(data);
   }
 
   @Get('/public/:uuid')
