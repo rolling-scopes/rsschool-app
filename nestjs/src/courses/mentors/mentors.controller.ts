@@ -1,5 +1,6 @@
 import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { InsertResult } from 'typeorm';
 import { MentorsService } from '.';
 import { CurrentRequest, DefaultGuard } from '../../auth';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
@@ -48,7 +49,7 @@ export class MentorsController {
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Req() req: CurrentRequest,
-  ) {
+  ): Promise<MentorDashboardDto[]> {
     const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
     if (!hasAccess) {
       throw new ForbiddenException();
@@ -58,13 +59,13 @@ export class MentorsController {
 
   @Get('/:mentorId/course/:courseId/random-task')
   @ApiOperation({ operationId: 'getRandomTask' })
-  @ApiOkResponse({ type: [MentorDashboardDto] })
+  @ApiOkResponse({ type: InsertResult })
   @ApiBadRequestResponse()
   public async getRandomTask(
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Req() req: CurrentRequest,
-  ) {
+  ): Promise<InsertResult> {
     const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
     if (!hasAccess) {
       throw new ForbiddenException();

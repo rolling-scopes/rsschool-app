@@ -8328,7 +8328,7 @@ export const MentorsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorDashboardDto>>> {
+        async getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRandomTask(mentorId, courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -8378,7 +8378,7 @@ export const MentorsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRandomTask(mentorId: number, courseId: number, options?: any): AxiosPromise<Array<MentorDashboardDto>> {
+        getRandomTask(mentorId: number, courseId: number, options?: any): AxiosPromise<object> {
             return localVarFp.getRandomTask(mentorId, courseId, options).then((request) => request(axios, basePath));
         },
     };

@@ -40,7 +40,7 @@ export class MentorDashboardDto {
   @ApiProperty({ type: String })
   solutionUrl: string;
 
-  @ApiProperty({ enum: SolutionItemStatus })
+  @ApiProperty({ enum: SolutionItemStatus, enumName: 'SolutionItemStatus' })
   status: SolutionItemStatus;
 
   @ApiProperty({ type: String })

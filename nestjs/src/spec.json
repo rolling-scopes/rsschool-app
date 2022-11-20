@@ -317,11 +317,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorDashboardDto" } }
-              }
-            }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InsertResult" } } }
           },
           "400": { "description": "" }
         },
@@ -1671,6 +1667,7 @@
           "endDate"
         ]
       },
+      "InsertResult": { "type": "object", "properties": {} },
       "Validations": {
         "type": "object",
         "properties": { "githubIdInUrl": { "type": "boolean" } },
