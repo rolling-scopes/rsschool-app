@@ -198,7 +198,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
           discord: c.checker.user.discord,
         }
       : null;
-    const [{criteria}] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+    const [{ criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
     return {
       author,
       updatedDate: c.updatedDate,
