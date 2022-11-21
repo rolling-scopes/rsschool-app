@@ -264,6 +264,7 @@ export class RepositoryService {
       const response = await github.rest.repos.createUsingTemplate({
         template_repo: 'template-repo',
         template_owner: owner,
+        owner,
         include_all_branches: true,
         name: repo,
         private: true,
