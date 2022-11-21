@@ -6,7 +6,7 @@ import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Title, Paragraph } = Typography;
 
-interface MentorContact {
+export interface MentorContact {
   contactsEmail?: string;
   contactsPhone?: string;
   contactsSkype?: string;

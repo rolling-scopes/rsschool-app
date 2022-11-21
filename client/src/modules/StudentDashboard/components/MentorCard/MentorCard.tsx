@@ -1,15 +1,15 @@
 import { Row } from 'antd';
 import { MentorBasic } from 'common/models';
-import CommonCard from './CommonDashboardCard';
-import { MentorInfo } from './MentorInfo';
+import CommonCard from '../CommonDashboardCard';
+import { MentorContact, MentorInfo } from './MentorInfo';
 import { SubmitTaskSolution } from './SubmitTaskSolution';
 
-type Props = {
-  mentor?: MentorBasic;
+export type MentorCardProps = {
+  mentor?: MentorBasic & MentorContact;
   courseId: number;
 };
 
-export function MentorCard({ mentor, courseId }: Props) {
+export function MentorCard({ mentor, courseId }: MentorCardProps) {
   return (
     <CommonCard
       title="Mentor"

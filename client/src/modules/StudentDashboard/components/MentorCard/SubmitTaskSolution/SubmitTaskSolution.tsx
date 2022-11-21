@@ -3,7 +3,7 @@ import React from 'react';
 import { CourseTaskSelect } from 'components/Forms';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { urlPattern } from 'services/validators';
-import { useSubmitTaskSolution } from '../../hooks/useSubmitTaskSolution';
+import { useSubmitTaskSolution } from 'modules/StudentDashboard/hooks/useSubmitTaskSolution';
 
 interface TaskSolutionModalProps {
   courseId: number;
