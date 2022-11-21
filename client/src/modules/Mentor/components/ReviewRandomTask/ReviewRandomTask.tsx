@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, message } from 'antd';
 import { useLoading } from 'components/useLoading';
 import { MentorsApi } from 'api';
+import { AxiosError } from 'axios';
 
 interface Props {
   mentorId: number;
@@ -11,11 +12,9 @@ interface Props {
 
 function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
   const [loading, withLoading] = useLoading(false, e => {
-    const {
-      response: { status },
-    } = (e as any) || {};
+    const error = e as AxiosError;
 
-    if (status >= 400 && status < 500) {
+    if (error.response?.status === 404) {
       message.info('Task for review was not found. Please try later.');
     }
   });
