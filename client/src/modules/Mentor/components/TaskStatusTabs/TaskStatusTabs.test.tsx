@@ -2,12 +2,10 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import TaskStatusTabs, { Status } from './TaskStatusTabs';
 import { SolutionItemStatus } from 'modules/Mentor/constants';
 
-const StatusEnum = SolutionItemStatus;
-
 const PROPS_MOCK = {
   statuses: [],
   onTabChange: jest.fn(),
-  activeTab: StatusEnum.InReview,
+  activeTab: SolutionItemStatus.InReview,
 };
 
 describe('TaskStatusTabs', () => {
@@ -26,9 +24,9 @@ describe('TaskStatusTabs', () => {
   });
 
   it.each`
-    status                 | count
-    ${StatusEnum.Done}     | ${2}
-    ${StatusEnum.InReview} | ${3}
+    status                         | count
+    ${SolutionItemStatus.Done}     | ${2}
+    ${SolutionItemStatus.InReview} | ${3}
   `(
     'should render badge with count of $count for "$status" tab',
     ({ status, count }: { status: SolutionItemStatus; count: number }) => {
@@ -42,7 +40,7 @@ describe('TaskStatusTabs', () => {
 
   describe('when active tab was changed', () => {
     it('should call onTabChange with tab name "Done"', () => {
-      const tabName = StatusEnum.Done;
+      const tabName = SolutionItemStatus.Done;
       const statuses = generateStatuses();
       render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
 
@@ -54,6 +52,6 @@ describe('TaskStatusTabs', () => {
   });
 });
 
-function generateStatuses(count = 3, status = StatusEnum.InReview): Status[] {
+function generateStatuses(count = 3, status = SolutionItemStatus.InReview): Status[] {
   return new Array(count).fill('').map(() => status);
 }

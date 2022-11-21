@@ -35,7 +35,7 @@ const PROPS_MOCK: MentorDashboardProps = {
 };
 
 describe('MentorDashboard', () => {
-  it('should render instructions when mentor has not students for this course', () => {
+  it('should render instructions when mentor has no students for this course', () => {
     render(<MentorDashboard {...PROPS_MOCK} studentsCount={0} />);
 
     const instructionsTitle = screen.getByText(INSTRUCTIONS_TEXT.title);
