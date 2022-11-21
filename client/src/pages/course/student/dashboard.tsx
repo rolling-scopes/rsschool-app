@@ -147,7 +147,7 @@ function Page(props: CoursePageProps) {
         updateUrl={updateUrl}
       />
     ),
-    studentSummary?.mentor && <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
+    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
     <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,
   ].filter(Boolean) as JSX.Element[];

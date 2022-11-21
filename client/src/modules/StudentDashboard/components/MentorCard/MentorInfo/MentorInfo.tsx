@@ -65,7 +65,7 @@ function MentorInfo({ mentor }: Props) {
         {filledContacts.length ? (
           <Descriptions layout="horizontal" column={1} size="small">
             {filledContacts.map(({ name, value }, idx) => (
-              <Descriptions.Item labelStyle={{ color: '#666' }} key={idx} label={name}>
+              <Descriptions.Item labelStyle={{ color: '#b2b2b2' }} key={idx} label={name}>
                 {value}
               </Descriptions.Item>
             ))}
