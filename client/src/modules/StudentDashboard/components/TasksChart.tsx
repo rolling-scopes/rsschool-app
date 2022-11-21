@@ -2,7 +2,6 @@ import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from 'modules/Schedule';
 import React from 'react';
 import capitalize from 'lodash/capitalize';
-import { useMeasure } from 'react-use';
 
 type Item = { status: string; value: number };
 
@@ -12,15 +11,13 @@ type Props = {
 };
 
 export function TasksChart({ data, onItemSelected }: Props) {
-  const [ref, { width }] = useMeasure();
   const config: PieConfig = {
-    appendPadding: 1,
     data,
     angleField: 'value',
     colorField: 'status',
-    radius: 0.7,
-    innerRadius: 0.66,
-
+    radius: 1,
+    innerRadius: 0.78,
+    autoFit: true,
     label: {
       type: 'inner',
       offset: '-50%',
@@ -35,7 +32,7 @@ export function TasksChart({ data, onItemSelected }: Props) {
     color: ({ status }) => getTaskStatusColor(status),
     legend: {
       layout: 'vertical',
-      position: width > 300 ? 'right' : 'bottom',
+      position: 'right',
       itemMarginBottom: 20,
       itemName: {
         formatter: (status, _, index) => {
@@ -57,6 +54,7 @@ export function TasksChart({ data, onItemSelected }: Props) {
     ],
     statistic: {
       title: {
+        offsetY: -10,
         formatter: datum => {
           if (!datum) return 'Total tasks';
           return capitalize(datum.status);
@@ -67,14 +65,13 @@ export function TasksChart({ data, onItemSelected }: Props) {
         },
       },
       content: {
-        offsetY: 10,
+        offsetY: 0,
         style: {
           fontSize: '30px',
         },
       },
     },
     onReady: plot => {
-      ref(plot.container);
       plot.chart.on('element:click', (evt: { data: { data: Item } }) => {
         onItemSelected(evt.data.data);
       });

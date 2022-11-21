@@ -19,7 +19,6 @@ import { feedbackRoute } from './feedback';
 import { lectureRoute } from './event';
 import { lecturesRoute } from './events';
 import { repositoryRoute } from './repository';
-import { opportunitiesRoute } from './opportunities';
 import { interviewQuestionRoute } from './interviewQuestion';
 
 import { ILogger } from '../logger';
@@ -67,7 +66,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
   applyRouter(router, repositoryRoute(logger));
-  applyRouter(router, opportunitiesRoute(logger));
 
   return { publicRouter: router };
 };
