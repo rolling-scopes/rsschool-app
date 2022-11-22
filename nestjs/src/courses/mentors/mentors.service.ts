@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -14,25 +14,26 @@ import { MentorBasic } from '@common/models';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
-import { StudentDto } from '../students/dto';
+import * as dayjs from 'dayjs';
+import { TaskChecker, User } from '../../../../server/src/models';
 
-export interface StudentTaskSolutionItem {
+export interface SolutionItem {
   maxScore: number;
   taskName: string;
   taskDescriptionUrl: string;
   courseTaskId: number;
   resultScore: number | null;
   solutionUrl: string;
-  status: StudentTaskSolutionItemStatus;
-  endDate: Date;
+  status: SolutionItemStatus;
+  endDate: string;
+  person: PersonDto;
 }
 
-export enum StudentTaskSolutionItemStatus {
+export enum SolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
+  RandomTask = 'random-task',
 }
-
-const twoWeeksMs = 1000 * 60 * 60 * 24 * 14;
 
 @Injectable()
 export class MentorsService {
@@ -43,6 +44,8 @@ export class MentorsService {
     readonly studentRepository: Repository<Student>,
     @InjectRepository(TaskSolution)
     readonly taskSolutionRepository: Repository<TaskSolution>,
+    @InjectRepository(TaskChecker)
+    readonly taskCheckerRepository: Repository<TaskChecker>,
   ) {}
 
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
@@ -102,26 +105,27 @@ export class MentorsService {
     return mentorId === currentMentorId;
   }
 
-  public getCourseStudentsCount(mentorId: number, courseId: number) {
-    return this.studentRepository.count({
+  public async getCourseStudentsCount(mentorId: number, courseId: number) {
+    return await this.studentRepository.count({
       where: { mentorId, courseId },
     });
   }
 
-  private getCourseStudents(mentorId: number, courseId: number) {
-    return this.studentRepository.find({
-      where: { mentorId, courseId },
-      relations: ['user'],
-    });
-  }
-
-  private async getTaskSolutionByStudentId(studentId: number): Promise<StudentTaskSolutionItem[]> {
-    const tasks = await this.taskSolutionRepository
+  private async getSolutions(mentorId: number, courseId: number): Promise<SolutionItem[]> {
+    const solutions = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
+      .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Task, 't', 't.id = ct."taskId"')
+      .innerJoin(Student, 's', 's.id = ts."studentId"')
+      .innerJoin(User, 'u', 'u.id = s."userId"')
       .select([
+        's.id',
+        's.mentorId',
+        'u.firstName',
+        'u.lastName',
+        'u.githubId',
         't.name',
         't.descriptionUrl',
         'ct.id',
@@ -130,44 +134,80 @@ export class MentorsService {
         'ts.studentId',
         'tr.score',
         'ts.url',
-        'ts.updatedDate',
       ])
-      .where('ts."studentId" = :studentId', { studentId })
+      .where('s."courseId" = :courseId', { courseId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
-      .orderBy('ts.updatedDate', 'DESC')
+      .andWhere('s."isExpelled" = false')
+      .andWhere('s."mentorId" = :mentorId', { mentorId })
+      .orWhere('tc."mentorId" = :mentorId', { mentorId })
       .getRawMany();
 
-    return tasks.map(task => ({
-      taskName: task.t_name,
-      courseTaskId: task.ct_id,
-      maxScore: task.ct_maxScore,
-      resultScore: task.tr_score,
-      solutionUrl: task.ts_url,
-      taskDescriptionUrl: task.t_descriptionUrl,
-      status: task.tr_score ? StudentTaskSolutionItemStatus.Done : StudentTaskSolutionItemStatus.InReview,
-      endDate: this.getEndDate(task.ct_studentEndDate),
+    return solutions.map(s => ({
+      taskName: s.t_name,
+      courseTaskId: s.ct_id,
+      maxScore: s.ct_maxScore,
+      resultScore: s.tr_score,
+      solutionUrl: s.ts_url,
+      taskDescriptionUrl: s.t_descriptionUrl,
+      status: this.getStatus(s.s_mentorId, s.tr_score),
+      endDate: dayjs(s.ct_studentEndDate).add(2, 'w').toISOString(),
+      person: new PersonDto({
+        id: s.s_id,
+        firstName: s.u_firstName,
+        lastName: s.u_lastName,
+        githubId: s.u_githubId,
+      }),
     }));
   }
 
-  private getEndDate(date: string) {
-    const endDate = Date.parse(date);
-    return new Date(endDate + twoWeeksMs);
+  private getStatus(mentorId: number, resultScore: number) {
+    if (!mentorId && !resultScore) {
+      return SolutionItemStatus.RandomTask;
+    }
+
+    return resultScore ? SolutionItemStatus.Done : SolutionItemStatus.InReview;
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
-    const data: MentorDashboardDto[] = [];
-    const students = await this.getCourseStudents(mentorId, courseId);
+    const solutions = await this.getSolutions(mentorId, courseId);
+    return solutions.map(solution => new MentorDashboardDto(solution));
+  }
 
-    if (!students) {
-      return [];
+  private async getRandomSolution(courseId: number): Promise<{ courseTaskId: number; studentId: number }> {
+    const task = await this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
+      .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
+      .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
+      .innerJoin(Student, 's', 's.id = ts."studentId"')
+      .select(['ts.studentId', 'ts.courseTaskId'])
+      .where('s."courseId" = :courseId', { courseId })
+      .andWhere('s."isExpelled" = false')
+      .andWhere('s."mentorId" IS NULL')
+      .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
+      .andWhere('tr."score" IS NULL')
+      .getOneOrFail();
+
+    // TODO: pick solution that does not exist in task_checker for courseTaskId-studentId-mentorId
+    return {
+      courseTaskId: task.courseTaskId,
+      studentId: task.studentId,
+    };
+  }
+
+  public async getRandomTask(mentorId: number, courseId: number) {
+    const { courseTaskId, studentId } = await this.getRandomSolution(courseId);
+
+    if (courseTaskId && studentId) {
+      const checker: Partial<TaskChecker> = {
+        courseTaskId,
+        studentId,
+        mentorId,
+      };
+
+      return await this.taskCheckerRepository.insert(checker);
     }
 
-    for (const student of students) {
-      const taskSolutions = await this.getTaskSolutionByStudentId(student.id);
-      const items = taskSolutions.map(ts => new MentorDashboardDto(new StudentDto(student), ts));
-      data.push(...items);
-    }
-
-    return data;
+    throw new NotFoundException();
   }
 }
