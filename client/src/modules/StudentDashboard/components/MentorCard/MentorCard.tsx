@@ -1,8 +1,8 @@
 import { Col, Typography, Row } from 'antd';
 import { MentorBasic } from 'common/models';
 import CommonCard from '../CommonDashboardCard';
-import { MentorContact, MentorInfo } from './MentorInfo';
-import { SubmitTaskSolution } from './SubmitTaskSolution';
+import { MentorContact, MentorInfo } from '../MentorInfo';
+import { SubmitTaskSolution } from '../SubmitTaskSolution';
 
 export type MentorCardProps = {
   mentor?: (MentorBasic & MentorContact) | null;
