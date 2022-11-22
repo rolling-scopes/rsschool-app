@@ -16,8 +16,8 @@ interface CriteriaIndex {
   newIndex: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Props {}
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Props = {};
 
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
 
