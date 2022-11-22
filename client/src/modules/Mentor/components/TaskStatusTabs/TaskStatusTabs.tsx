@@ -1,9 +1,9 @@
 import { Tabs } from 'antd';
 import { FC, useMemo } from 'react';
 import { tabsRenderer } from './renderers';
-import { StudentTaskSolutionItemStatus } from '../../constants';
+import { SolutionItemStatus } from '../../constants';
 
-export type Status = StudentTaskSolutionItemStatus;
+export type Status = SolutionItemStatus;
 
 export interface TaskStatusTabsProps {
   statuses?: Status[];

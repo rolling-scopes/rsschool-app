@@ -1,13 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import TaskStatusTabs, { Status } from './TaskStatusTabs';
-import { StudentTaskSolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
-
-const StatusEnum = StudentTaskSolutionItemStatus;
+import { SolutionItemStatus } from 'modules/Mentor/constants';
 
 const PROPS_MOCK = {
   statuses: [],
   onTabChange: jest.fn(),
-  activeTab: StatusEnum.InReview,
+  activeTab: SolutionItemStatus.InReview,
 };
 
 describe('TaskStatusTabs', () => {
@@ -16,22 +14,22 @@ describe('TaskStatusTabs', () => {
 
     render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
 
-    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
+    expect(screen.getAllByRole('tab')).toHaveLength(2);
   });
 
   it('should render status tabs when statuses were not provided', () => {
     render(<TaskStatusTabs {...PROPS_MOCK} statuses={[]} />);
 
-    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
+    expect(screen.getAllByRole('tab')).toHaveLength(2);
   });
 
   it.each`
-    status                 | count
-    ${StatusEnum.Done}     | ${2}
-    ${StatusEnum.InReview} | ${3}
+    status                         | count
+    ${SolutionItemStatus.Done}     | ${2}
+    ${SolutionItemStatus.InReview} | ${3}
   `(
     'should render badge with count of $count for "$status" tab',
-    ({ status, count }: { status: StudentTaskSolutionItemStatus; count: number }) => {
+    ({ status, count }: { status: SolutionItemStatus; count: number }) => {
       const statuses = generateStatuses(count, status);
 
       render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
@@ -42,7 +40,7 @@ describe('TaskStatusTabs', () => {
 
   describe('when active tab was changed', () => {
     it('should call onTabChange with tab name "Done"', () => {
-      const tabName = StatusEnum.Done;
+      const tabName = SolutionItemStatus.Done;
       const statuses = generateStatuses();
       render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
 
@@ -54,6 +52,6 @@ describe('TaskStatusTabs', () => {
   });
 });
 
-function generateStatuses(count = 3, status = StatusEnum.InReview): Status[] {
+function generateStatuses(count = 3, status = SolutionItemStatus.InReview): Status[] {
   return new Array(count).fill('').map(() => status);
 }

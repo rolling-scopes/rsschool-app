@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { message } from 'antd';
 
+type CatchHandler = (e?: unknown) => void;
+
 export function useLoading(
   value = false,
-  catchHandler = (): void => {
-    message.error('An unexpected error occured. Please try later.');
+  catchHandler: CatchHandler = () => {
+    message.error('An unexpected error occurred. Please try later.');
   },
 ) {
   const [loading, setLoading] = useState(value);
@@ -15,7 +17,7 @@ export function useLoading(
         setLoading(true);
         return await action(...args);
       } catch (e) {
-        catchHandler();
+        catchHandler(e);
       } finally {
         setLoading(false);
       }

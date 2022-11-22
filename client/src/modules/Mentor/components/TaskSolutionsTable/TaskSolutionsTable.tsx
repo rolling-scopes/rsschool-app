@@ -5,10 +5,11 @@ import { MentorDashboardDto } from 'api';
 import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
 import { SubmitReviewModal } from 'modules/Mentor/components/SubmitReviewModal';
 import { TaskStatusTabs } from '../TaskStatusTabs';
-import { StudentTaskSolutionItemStatus } from '../../constants';
+import { SolutionItemStatus } from '../../constants';
+import { ReviewRandomTask } from '../ReviewRandomTask';
 
 export interface TaskSolutionsTableProps {
-  mentorId: number | null;
+  mentorId: number;
   courseId: number;
 }
 
@@ -16,17 +17,21 @@ const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filte
 
 function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
-  const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState(StudentTaskSolutionItemStatus.InReview);
+  const [reloadData, setReloadData] = useState(false);
+  const [activeTab, setActiveTab] = useState(SolutionItemStatus.InReview);
 
-  const [data, loading] = useMentorDashboard(mentorId, courseId, isReviewSubmitted);
+  const [data, loading] = useMentorDashboard(mentorId, courseId, reloadData);
 
-  const statuses = useMemo(() => data?.map(({ status }) => status as StudentTaskSolutionItemStatus), [data]);
+  const statuses = useMemo(() => data?.map(({ status }) => status as SolutionItemStatus), [data]);
+  const isReviewRandomTaskVisible = useMemo(() => {
+    const hasRandomTask = data && data?.filter(({ status }) => status === SolutionItemStatus.RandomTask)?.length > 0;
+    return activeTab === SolutionItemStatus.RandomTask && !hasRandomTask;
+  }, [data, activeTab]);
 
   const filteredData = data?.filter(item => item.status === activeTab);
 
-  const handleDataSubmit = () => {
-    setIsReviewSubmitted(!isReviewSubmitted);
+  const handleReloadData = () => {
+    setReloadData(!reloadData);
   };
 
   const handleSubmitButtonClick = (data: MentorDashboardDto) => {
@@ -58,7 +63,14 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
           />
         </Col>
       </Row>
-      <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={handleDataSubmit} />
+      {isReviewRandomTaskVisible && (
+        <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
+          <Col>
+            <ReviewRandomTask mentorId={mentorId} courseId={courseId} onClick={handleReloadData} />
+          </Col>
+        </Row>
+      )}
+      <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={handleReloadData} />
     </>
   );
 }

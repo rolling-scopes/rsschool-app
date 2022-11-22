@@ -1,13 +1,14 @@
-import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { InsertResult } from 'typeorm';
 import { MentorsService } from '.';
-import { CurrentRequest, DefaultGuard } from '../../auth';
+import { CurrentRequest, DefaultGuard, RoleGuard } from '../../auth';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { MentorStudentDto } from './dto/mentor-student.dto';
 
 @Controller('mentors')
 @ApiTags('mentors')
-@UseGuards(DefaultGuard)
+@UseGuards(DefaultGuard, RoleGuard)
 export class MentorsController {
   constructor(private mentorsService: MentorsService) {}
 
@@ -16,10 +17,6 @@ export class MentorsController {
   @ApiOkResponse({ type: [MentorStudentDto] })
   @ApiBadRequestResponse()
   public async getMentorStudents(@Param('mentorId', ParseIntPipe) mentorId: number, @Req() req: CurrentRequest) {
-    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
-    if (!hasAccess) {
-      throw new ForbiddenException();
-    }
     const items = await this.mentorsService.getStudents(mentorId);
     return items.map(item => new MentorStudentDto(item));
   }
@@ -33,10 +30,6 @@ export class MentorsController {
     @Param('courseId', ParseIntPipe) courseId: number,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
-    if (!hasAccess) {
-      throw new ForbiddenException();
-    }
     return await this.mentorsService.getCourseStudentsCount(mentorId, courseId);
   }
 
@@ -48,11 +41,19 @@ export class MentorsController {
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Req() req: CurrentRequest,
-  ) {
-    const hasAccess = await this.mentorsService.canAccessMentor(req.user, mentorId);
-    if (!hasAccess) {
-      throw new ForbiddenException();
-    }
+  ): Promise<MentorDashboardDto[]> {
     return await this.mentorsService.getStudentsTasks(mentorId, courseId);
+  }
+
+  @Get('/:mentorId/course/:courseId/random-task')
+  @ApiOperation({ operationId: 'getRandomTask' })
+  @ApiOkResponse({ type: InsertResult })
+  @ApiBadRequestResponse()
+  public async getRandomTask(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ): Promise<InsertResult> {
+    return await this.mentorsService.getRandomTask(mentorId, courseId);
   }
 }

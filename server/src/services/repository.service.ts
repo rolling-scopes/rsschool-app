@@ -261,12 +261,13 @@ export class RepositoryService {
     this.logger?.info(`[${ownerRepo}] creating`);
     let repository = null;
     try {
-      const response = await github.rest.repos.createInOrg({
-        org: owner,
+      const response = await github.rest.repos.createUsingTemplate({
+        template_repo: 'template-repo',
+        template_owner: owner,
+        owner,
+        include_all_branches: true,
         name: repo,
         private: true,
-        auto_init: true,
-        gitignore_template: 'Node',
         description: `Private repository for @${githubId}`,
       });
       repository = response.data.html_url;
