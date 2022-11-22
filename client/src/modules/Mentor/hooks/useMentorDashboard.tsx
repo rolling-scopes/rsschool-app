@@ -2,11 +2,11 @@ import { MentorsApi } from 'api';
 import { useMemo } from 'react';
 import { useAsync } from 'react-use';
 
-export function useMentorDashboard(mentorId: number | null, courseId: number, hasChanged: boolean) {
+export function useMentorDashboard(mentorId: number, courseId: number, hasChanged: boolean) {
   const service = useMemo(() => new MentorsApi(), []);
 
   const { value: data, loading } = useAsync(async () => {
-    const { data = [] } = mentorId ? await service.getMentorDashboardData(mentorId, courseId) : { data: [] };
+    const { data = [] } = await service.getMentorDashboardData(mentorId, courseId);
     return data;
   }, [hasChanged]);
 

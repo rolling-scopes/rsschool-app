@@ -3,7 +3,7 @@ export const INFO_MESSAGE =
 
 export enum TaskSolutionsTableColumnKey {
   Number = 'number',
-  Name = 'name',
+  Student = 'student',
   Task = 'task',
   DesiredDeadline = 'desiredDeadline',
   Score = 'score',
@@ -13,7 +13,7 @@ export enum TaskSolutionsTableColumnKey {
 
 export enum TaskSolutionsTableColumnName {
   Number = '#',
-  Name = 'Name',
+  Student = 'Student',
   Task = 'Task',
   DesiredDeadline = 'Desired deadline',
   Score = 'Score / Max',
@@ -21,12 +21,13 @@ export enum TaskSolutionsTableColumnName {
   SolutionUrl = 'Pull request',
 }
 
-export enum StudentTaskSolutionItemStatus {
+export enum SolutionItemStatus {
   InReview = 'in-review',
   Done = 'done',
+  RandomTask = 'random-task',
 }
 
-export const TASKS_STATUSES = Object.entries(StudentTaskSolutionItemStatus).map(([key, value]) => ({
+export const TASKS_STATUSES = Object.entries(SolutionItemStatus).map(([key, value]) => ({
   key: value,
   label: key,
 }));
