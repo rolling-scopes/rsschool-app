@@ -25,6 +25,7 @@ function SubmitTaskSolution({ courseId }: TaskSolutionModalProps) {
         close={closeModal}
         errorText={state?.errorText}
         loading={state?.loading}
+        successText="Your task has been successfully submitted for review"
       >
         <CourseTaskSelect groupBy="deadline" data={state?.data?.courseTasks ?? []} />
         <Form.Item
