@@ -1,7 +1,12 @@
 import { AxiosError } from 'axios';
 import { useReducer } from 'react';
-import { CourseTaskDto, CoursesTasksApi, CreateCourseTaskDtoCheckerEnum, CoursesTaskSolutionsApi } from 'api';
-import { stageInterviewType } from '../../../domain/interview';
+import {
+  CourseTaskDto,
+  CoursesTasksApi,
+  CreateCourseTaskDtoCheckerEnum,
+  CoursesTaskSolutionsApi,
+  CourseTaskDtoTypeEnum,
+} from 'api';
 
 type Action = {
   type: 'loading' | 'open' | 'close' | 'error' | 'submit';
@@ -42,9 +47,9 @@ export function useSubmitTaskSolution(courseId: number) {
     const courseTasks = data.filter(
       item =>
         item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
-        item.type != 'selfeducation' &&
-        item.type != stageInterviewType &&
-        item.type != 'interview',
+        item.type != CourseTaskDtoTypeEnum.Selfeducation &&
+        item.type != CourseTaskDtoTypeEnum.StageInterview &&
+        item.type != CourseTaskDtoTypeEnum.Interview,
     );
     dispatch({ type: 'open', state: { data: { courseTasks } } });
   };
