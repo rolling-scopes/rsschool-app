@@ -23,11 +23,11 @@ export function MentorCard({ mentor, courseId }: MentorCardProps) {
           {mentor ? (
             <MentorInfo mentor={mentor} />
           ) : (
-            <Row gutter={8} style={{ marginBottom: 16 }}>
-              <Col>
+            <Row gutter={8} style={{ marginBottom: 16 }} wrap={false}>
+              <Col flex={'none'}>
                 <Text type="secondary">Note:</Text>
               </Col>
-              <Col>
+              <Col flex={'auto'}>
                 <Text>{ASSERTION}</Text>
               </Col>
             </Row>
