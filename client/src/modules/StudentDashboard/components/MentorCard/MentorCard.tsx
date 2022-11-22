@@ -1,4 +1,4 @@
-import { Descriptions, Row } from 'antd';
+import { Col, Typography, Row } from 'antd';
 import { MentorBasic } from 'common/models';
 import CommonCard from '../CommonDashboardCard';
 import { MentorContact, MentorInfo } from './MentorInfo';
@@ -8,6 +8,8 @@ export type MentorCardProps = {
   mentor?: (MentorBasic & MentorContact) | null;
   courseId: number;
 };
+
+const { Text } = Typography;
 
 export const ASSERTION =
   "Even if you don't have your own mentor, you can submit a task for review and someone else's mentor will review it if they have the time and desire";
@@ -21,11 +23,14 @@ export function MentorCard({ mentor, courseId }: MentorCardProps) {
           {mentor ? (
             <MentorInfo mentor={mentor} />
           ) : (
-            <Descriptions layout="horizontal" column={1} size="small">
-              <Descriptions.Item labelStyle={{ color: '#b2b2b2' }} label="Note">
-                {ASSERTION}
-              </Descriptions.Item>
-            </Descriptions>
+            <Row gutter={8} style={{ marginBottom: 16 }}>
+              <Col>
+                <Text type="secondary">Note:</Text>
+              </Col>
+              <Col>
+                <Text>{ASSERTION}</Text>
+              </Col>
+            </Row>
           )}
           <Row justify="center">
             <SubmitTaskSolution courseId={courseId} />

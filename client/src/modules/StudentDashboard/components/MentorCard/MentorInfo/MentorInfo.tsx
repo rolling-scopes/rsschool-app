@@ -1,10 +1,10 @@
-import { Col, Descriptions, Row, Space, Typography } from 'antd';
+import { Col, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { MentorBasic } from 'common/models';
 import { EnvironmentFilled, GithubFilled } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Text, Link } = Typography;
 
 export interface MentorContact {
   contactsEmail?: string;
@@ -44,41 +44,39 @@ function MentorInfo({ mentor }: Props) {
   const filledContacts = contacts.filter(({ value }: Contact) => value);
 
   return (
-    <>
-      <Row justify="center" align="middle" gutter={8} style={{ marginBottom: 16 }}>
+    <div style={{ marginBottom: 16 }}>
+      <Row justify="center" align="middle" gutter={12} style={{ marginBottom: 16 }}>
         <Col>
           <GithubAvatar size={48} githubId={githubId!} />
         </Col>
         <Col>
-          <Space direction="vertical" size={0}>
+          <Space direction="vertical" size={4}>
             {name && <Text strong>{name}</Text>}
-            <Link target="_blank" href={`https://github.com/${githubId}`} style={{ fontSize: 16 }}>
+            <Link target="_blank" href={`https://github.com/${githubId}`}>
               <GithubFilled /> {githubId}
             </Link>
           </Space>
         </Col>
       </Row>
-      <Row justify="center" style={{ marginBottom: 16 }}>
+      <Row justify="center" gutter={8} style={{ marginBottom: 16 }}>
         <Col>
           <span>
             <EnvironmentFilled /> {`${cityName}, ${countryName}`}
           </span>
         </Col>
       </Row>
-      {filledContacts.length ? (
-        <Row justify="center" style={{ marginBottom: 16 }}>
-          <Col>
-            <Descriptions layout="horizontal" column={1} size="small">
-              {filledContacts.map(({ name, value }, idx) => (
-                <Descriptions.Item labelStyle={{ color: '#b2b2b2' }} key={idx} label={name}>
-                  {value}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
-          </Col>
-        </Row>
-      ) : null}
-    </>
+      {filledContacts?.length &&
+        filledContacts.map(({ name, value }, idx) => (
+          <Row key={idx} justify="center" gutter={8} style={{ marginBottom: 8 }}>
+            <Col>
+              <Text type="secondary">{`${name}:`}</Text>
+            </Col>
+            <Col>
+              <Text>{value}</Text>
+            </Col>
+          </Row>
+        ))}
+    </div>
   );
 }
 
