@@ -33,6 +33,7 @@ import { Disciplines1661107174477 } from './1661107174477-Disciplines';
 import { NotificationCategory1661616212488 } from './1661616212488-NotificationCategory';
 import { CourseTask1662275601017 } from './1662275601017-CourseTask';
 import { CourseEvent1664183799115 } from './1664183799115-CourseEvent';
+import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionResult';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -70,4 +71,5 @@ export const migrations = [
   NotificationCategory1661616212488,
   CourseTask1662275601017,
   CourseEvent1664183799115,
+  TaskSolutionResult1666621080327,
 ];
