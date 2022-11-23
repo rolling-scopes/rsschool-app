@@ -170,6 +170,7 @@ export class MentorsService {
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
       .andWhere('tr."score" IS NULL')
       .andWhere('tc."id" IS NULL')
+      .orderBy('s."totalScore"', 'DESC')
       .getOneOrFail();
 
     return {
