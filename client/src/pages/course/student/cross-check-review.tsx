@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { EyeInvisibleFilled, EyeFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row } from 'antd';
-import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
@@ -20,7 +20,6 @@ import { TaskService } from 'services/task';
 import { useCriteriaState } from '../../../components/CrossCheck/hooks/useCriteriaState';
 import {
   CrossCheckCriteriaForm,
-  CrossCheckCriteriaData,
   ICommentState,
   ICountState,
 } from '../../../components/CrossCheck/CrossCheckCriteriaForm';

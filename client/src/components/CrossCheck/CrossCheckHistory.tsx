@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
-import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
+import { SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
