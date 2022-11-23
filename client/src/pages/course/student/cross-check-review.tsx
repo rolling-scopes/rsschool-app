@@ -74,15 +74,15 @@ function Page(props: CoursePageProps) {
         }))
       : result.messages;
 
-      const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => ({
-        dateTime,
-        comment,
-        score,
-        criteria,
-        id: result.id,
-        author: !anonymous ? result.author : null,
-        messages: index === 0 ? messages : [],
-      }));
+    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => ({
+      dateTime,
+      comment,
+      score,
+      criteria,
+      id: result.id,
+      author: !anonymous ? result.author : null,
+      messages: index === 0 ? messages : [],
+    }));
 
     setState({ loading: false, data: solutionReviews ?? [] });
     if (result !== null) {
@@ -124,9 +124,9 @@ function Page(props: CoursePageProps) {
   }, [historicalCommentSelected]);
 
   const resetCriterias = () => {
-    setCountStar([{ key: '', point: 0 }]);
-    setComment([{ key: '', textComment: '' }]);
-    setPenalty([{ key: '', point: 0 }]);
+    setCountStar([]);
+    setComment([]);
+    setPenalty([]);
     setScore(0);
   };
 
