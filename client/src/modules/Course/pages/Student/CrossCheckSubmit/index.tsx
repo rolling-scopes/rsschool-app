@@ -3,7 +3,9 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
-import { CrossCheckComments } from 'components/CrossCheckComments';
+import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
+import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
+import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
@@ -17,6 +19,7 @@ import {
   CrossCheckReview,
   Feedback,
   TaskSolution,
+  CrossCheckMessageAuthorRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
@@ -43,6 +46,7 @@ const createUrlRule = (): Rule => {
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const solutionReviewSettings = useSolutionReviewSettings();
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const router = useRouter();
@@ -250,9 +254,33 @@ export function CrossCheckSubmit(props: CoursePageProps) {
           </Form>
         </Col>
       </Row>
-      <Row>
-        <CrossCheckComments feedback={feedback} maxScore={maxScore} />
-      </Row>
+
+      {!!feedback?.reviews?.length && (
+        <Row style={{ margin: '8px 0' }}>
+          <Col>
+            <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
+          </Col>
+        </Row>
+      )}
+
+      {feedback?.reviews?.map((review, index) => (
+        <Row key={index}>
+          <Col>
+            <SolutionReview
+              sessionId={props.session.id}
+              sessionGithubId={props.session.githubId}
+              courseId={props.course.id}
+              reviewNumber={index}
+              settings={solutionReviewSettings}
+              courseTaskId={courseTaskId}
+              review={review}
+              isActiveReview={true}
+              currentRole={CrossCheckMessageAuthorRole.Student}
+              maxScore={maxScore}
+            />
+          </Col>
+        </Row>
+      ))}
     </PageLayout>
   );
 }

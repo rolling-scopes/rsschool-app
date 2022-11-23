@@ -1,71 +1,101 @@
-import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
-import { Spin, Timeline, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
+import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
+import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
+import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
+import { markdownLabel } from 'components/Forms/PreparedComment';
+import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
+import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 
-type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
+type Props = {
+  sessionId: number;
+  courseId: number;
+  courseTaskId: number | null;
+  state: { loading: boolean; data: SolutionReviewType[] };
+  sessionGithubId: string;
+  maxScore: number | undefined;
+  setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
+};
 
-export function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
-  if (props.githubId == null || props.courseTaskId == null) {
-    return null;
-  }
-  const githubId = props.githubId;
+export function CrossCheckHistory(props: Props) {
   const courseTaskId = props.courseTaskId;
+  const solutionReviewSettings = useSolutionReviewSettings();
 
-  const [state, setState] = useState({ loading: false, data: [] as HistoryItem[] });
+  const handleClickAmendButton = (historicalComment: string) => {
+    const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
+    props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
 
-  const loadStudentScoreHistory = async (githubId: string) => {
-    const courseService = new CourseService(props.courseId);
-    setState({ loading: true, data: [] });
-    const result = await courseService.getTaskSolutionResult(githubId, courseTaskId);
-    setState({ loading: false, data: result?.historicalScores?.sort((a, b) => b.dateTime - a.dateTime) ?? [] });
+    notification.success({ message: 'Pasted to comment field', duration: 2 });
   };
 
-  useEffect(() => {
-    loadStudentScoreHistory(githubId);
-  }, [githubId]);
-
   return (
-    <Spin spinning={state.loading}>
+    <Spin spinning={props.state.loading}>
       <Typography.Title style={{ marginTop: 24 }} level={4}>
         History
       </Typography.Title>
+
+      {props.state.data.length > 0 && (
+        <Row style={{ marginBottom: '16px' }}>
+          <Col>
+            <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
+          </Col>
+        </Row>
+      )}
+
       <Timeline>
-        {state.data.map((historyItem, i) => (
-          <Timeline.Item
-            key={i}
-            color={i === 0 ? 'green' : 'gray'}
-            dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
-          >
-            <div>{formatDateTime(historyItem.dateTime)}</div>
-            <div>
-              <StarTwoTone twoToneColor={i === 0 ? '#52c41a' : 'gray'} />{' '}
-              <Typography.Text>{historyItem.score}</Typography.Text>
-            </div>
-            <div>
-              {historyItem.anonymous ? (
-                <>
-                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is hidden</Typography.Text>
-                </>
-              ) : (
-                <>
-                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is visible</Typography.Text>
-                </>
-              )}
-              <Typography.Text>{}</Typography.Text>
-            </div>
-            <div>
-              <Typography.Text>
-                {historyItem.comment.split('\n').map((item, i) => (
-                  <div key={i}>{item}</div>
-                ))}
-              </Typography.Text>
-            </div>
-          </Timeline.Item>
-        ))}
+        {props.state.data.map((review, index) => {
+          const isActiveReview = index === 0;
+
+          return (
+            <Timeline.Item
+              key={index}
+              color={isActiveReview ? 'green' : 'gray'}
+              dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
+            >
+              <Row>
+                <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>outdated review</Tag>}</Col>
+
+                {review.author && (
+                  <Col>
+                    <Tag color={isActiveReview ? 'warning' : ''}>your name is visible</Tag>
+                  </Col>
+                )}
+              </Row>
+
+              <Row>
+                <Col>
+                  <SolutionReview
+                    sessionId={props.sessionId}
+                    sessionGithubId={props.sessionGithubId}
+                    courseId={props.courseId}
+                    reviewNumber={0}
+                    settings={solutionReviewSettings}
+                    courseTaskId={courseTaskId}
+                    review={review}
+                    isActiveReview={isActiveReview}
+                    isMessageSendingPanelVisible={isActiveReview}
+                    currentRole={CrossCheckMessageAuthorRole.Reviewer}
+                    maxScore={props.maxScore}
+                  >
+                    <Row style={{ marginTop: 16 }}>
+                      <Col>
+                        <Button
+                          size="middle"
+                          type={isActiveReview ? 'primary' : 'default'}
+                          htmlType="button"
+                          icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
+                          onClick={() => handleClickAmendButton(review.comment)}
+                        >
+                          Amend comment
+                        </Button>
+                      </Col>
+                    </Row>
+                  </SolutionReview>
+                </Col>
+              </Row>
+            </Timeline.Item>
+          );
+        })}
       </Timeline>
     </Spin>
   );

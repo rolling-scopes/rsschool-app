@@ -11,6 +11,7 @@ import {
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
 import { createName } from './user.service';
+import { CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -63,6 +64,13 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
     .where('"taskSolutionResult"."studentId" = :studentId', { studentId })
     .andWhere('"taskSolutionResult"."checkerId" = :checkerId', { checkerId })
     .andWhere('"taskSolutionResult"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+}
+
+export async function getTaskSolutionResultById(id: number) {
+  return getRepository(TaskSolutionResult)
+    .createQueryBuilder('taskSolutionResult')
+    .where('"taskSolutionResult"."id" = :id', { id })
     .getOne();
 }
 
@@ -183,7 +191,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   const comments = (
     await getRepository(TaskSolutionResult)
       .createQueryBuilder('tsr')
-      .select(['tsr.updatedDate', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.historicalScores'])
+      .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
       .innerJoin('tsr.checker', 'checker')
       .innerJoin('checker.user', 'user')
       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
@@ -193,15 +201,24 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   ).map(c => {
     const author = !c.anonymous
       ? {
+          id: c.checker.user.id,
           name: createName(c.checker.user),
           githubId: c.checker.user.githubId,
           discord: c.checker.user.discord,
         }
       : null;
     const [{ criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+    const messages = !c.anonymous
+      ? c.messages
+      : c.messages.map(message => ({
+          ...message,
+          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+        }));
     return {
       author,
-      updatedDate: c.updatedDate,
+      messages,
+      id: c.id,
+      dateTime: null,
       comment: c.comment,
       score: c.score,
       criteria,
@@ -212,7 +229,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
     .where('"ts"."studentId" = :studentId', { studentId })
     .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
-  return { url: taskSolution?.url, comments };
+  return { url: taskSolution?.url, reviews: comments };
 }
 
 type TaskArtefactInput = {

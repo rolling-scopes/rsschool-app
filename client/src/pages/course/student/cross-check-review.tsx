@@ -1,26 +1,19 @@
-import {
-  ClockCircleOutlined,
-  EyeInvisibleTwoTone,
-  EyeInvisibleFilled,
-  EyeTwoTone,
-  EyeFilled,
-  EditOutlined,
-  EditFilled,
-} from '@ant-design/icons';
-import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
-import { CourseTaskSelect } from 'components/Forms';
+import { useRouter } from 'next/router';
+import { EyeInvisibleFilled, EyeFilled } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, message, Row } from 'antd';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
-import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
+import { markdownLabel } from 'components/Forms/PreparedComment';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
+import { CrossCheckHistory } from 'components/CrossCheck/CrossCheckHistory';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { getQueryString } from 'utils/queryParams-utils';
+import { CourseService, CrossCheckMessageAuthorRole, SolutionReviewType } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
 import { TaskService } from 'services/task';
@@ -32,112 +25,26 @@ import {
   ICountState,
 } from '../../../components/CrossCheck/CrossCheckCriteriaForm';
 import _ from 'lodash';
-import { CrossCheckCriteriaModal } from 'components/CrossCheck/criteria/CrossCheckCriteriaModal';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
-type HistoryItem = {
-  comment: string;
-  score: number;
-  dateTime: number;
-  anonymous: boolean;
-  criteria: CrossCheckCriteriaData[];
-};
-const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
-
-function CrossCheckHistory(props: {
-  state: { loading: boolean; data: HistoryItem[] };
-  maxScore: number | undefined;
-  setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
-}) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalData, setModalData] = useState<CrossCheckCriteriaData[] | null>(null);
-
-  const showModal = (criteria: CrossCheckCriteriaData[]) => {
-    setIsModalVisible(true);
-    setModalData(criteria);
-  };
-
-  const handleClickAmendButton = (historicalComment: string) => {
-    const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
-    props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
-  };
-
-  return (
-    <Spin spinning={props.state.loading}>
-      <CrossCheckCriteriaModal
-        modalInfo={modalData}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-      />
-      <Typography.Title style={{ marginTop: 24 }} level={4}>
-        History
-      </Typography.Title>
-      <Timeline>
-        {props.state.data.map((historyItem, i) => (
-          <Timeline.Item
-            key={i}
-            color={i === 0 ? 'green' : 'gray'}
-            dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
-          >
-            <div>{formatDateTime(historyItem.dateTime)}</div>
-            <div>
-              <ScoreIcon maxScore={props.maxScore} score={historyItem.score} isOutdatedScore={!!i} />{' '}
-              <Typography.Text>{historyItem.score}</Typography.Text>
-            </div>
-            <div>
-              {historyItem.anonymous ? (
-                <>
-                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is hidden</Typography.Text>
-                </>
-              ) : (
-                <>
-                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is visible</Typography.Text>
-                </>
-              )}
-              <Typography.Text>{}</Typography.Text>
-            </div>
-            {!!historyItem.criteria.length && (
-              <Button style={{ margin: '10px 0' }} onClick={() => showModal(historyItem.criteria)}>
-                Show detailed feedback
-              </Button>
-            )}
-            <div>
-              <PreparedComment text={historyItem.comment} />
-            </div>
-            <div>
-              <Button
-                size="middle"
-                type={i === 0 ? 'primary' : 'default'}
-                htmlType="button"
-                icon={i === 0 ? <EditFilled /> : <EditOutlined />}
-                onClick={() => handleClickAmendButton(historyItem.comment)}
-              >
-                Amend
-              </Button>
-            </div>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    </Spin>
-  );
-}
+const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 
 function Page(props: CoursePageProps) {
+  const router = useRouter();
+  const queryTaskId = router.query.taskId ? +router.query.taskId : null;
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [courseTaskId, setCourseTaskId] = useState<number | null>(null);
+  const [courseTaskId, setCourseTaskId] = useState<number | null>(queryTaskId);
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
   const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
-  const [state, setState] = useState({ loading: false, data: [] as HistoryItem[] });
+  const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
 
   const [
     { countStar, penalty, criteriaData, score, criteriaComment },
@@ -153,13 +60,37 @@ function Page(props: CoursePageProps) {
     resetCriterias();
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
-    setState({ loading: false, data: result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [] });
+
+    if (!result) {
+      return setState({ loading: false, data: [] });
+    }
+
+    const sortedData = result.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+
+    const messages = result.anonymous
+      ? result.messages.map(message => ({
+          ...message,
+          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+        }))
+      : result.messages;
+
+      const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => ({
+        dateTime,
+        comment,
+        score,
+        criteria,
+        id: result.id,
+        author: !anonymous ? result.author : null,
+        messages: index === 0 ? messages : [],
+      }));
+
+    setState({ loading: false, data: solutionReviews ?? [] });
     if (result !== null) {
-      loadInitialCriteria(result.historicalScores[0]);
+      loadInitialCriteria(solutionReviews[0]);
     }
   };
 
-  const loadInitialCriteria = (data: HistoryItem) => {
+  const loadInitialCriteria = (data: SolutionReviewType) => {
     setScore(data.score);
     setCriteriaData(data.criteria);
     const newCountState = data.criteria
@@ -178,6 +109,12 @@ function Page(props: CoursePageProps) {
 
   const notFilledCriteriaWarning = () =>
     message.warning(`You have not checked all the items (${countStar.length}/${checkPoints().length})`);
+
+  useEffect(() => {
+    if (queryTaskId && courseTasks.length) {
+      handleTaskChange(queryTaskId);
+    }
+  }, [queryTaskId, courseTasks]);
 
   useEffect(() => {
     if (historicalCommentSelected !== '') {
@@ -227,6 +164,12 @@ function Page(props: CoursePageProps) {
       setLoading(false);
     }
   };
+
+  function selectTask(value: number) {
+    const query = { ...router.query, taskId: value };
+    const url = `${router.route}${getQueryString(query)}`;
+    router.replace(url);
+  }
 
   const handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
@@ -286,7 +229,12 @@ function Page(props: CoursePageProps) {
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect data={courseTasks} groupBy="crossCheckDeadline" onChange={handleTaskChange} />
+            <CourseTaskSelect
+              data={courseTasks}
+              groupBy="crossCheckDeadline"
+              onChange={selectTask}
+              defaultValue={courseTaskId}
+            />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
               <UserSearch
                 keyField="githubId"
@@ -326,7 +274,7 @@ function Page(props: CoursePageProps) {
                 icon={<EyeInvisibleFilled />}
                 disabled={submissionDisabled}
               >
-                Submit review as Student1
+                Submit review as Reviewer1
               </Button>
             )}
           </Form>
@@ -334,6 +282,10 @@ function Page(props: CoursePageProps) {
         <Col {...colSizes}>
           <CrossCheckHistory
             state={state}
+            courseTaskId={courseTaskId}
+            courseId={props.course.id}
+            sessionId={props.session.id}
+            sessionGithubId={props.session.githubId}
             maxScore={maxScore}
             setHistoricalCommentSelected={setHistoricalCommentSelected}
           />
