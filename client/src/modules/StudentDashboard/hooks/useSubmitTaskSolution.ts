@@ -41,17 +41,22 @@ export function useSubmitTaskSolution(courseId: number) {
   const [state, dispatch] = useReducer(reducer, null);
 
   const showModal = async () => {
-    dispatch({ type: 'loading' });
-    const coursesTasksApi = new CoursesTasksApi();
-    const { data } = await coursesTasksApi.getCourseTasks(courseId);
-    const courseTasks = data.filter(
-      item =>
-        item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
-        item.type != CourseTaskDtoTypeEnum.Selfeducation &&
-        item.type != CourseTaskDtoTypeEnum.StageInterview &&
-        item.type != CourseTaskDtoTypeEnum.Interview,
-    );
-    dispatch({ type: 'open', state: { data: { courseTasks } } });
+    try {
+      dispatch({ type: 'loading' });
+      const coursesTasksApi = new CoursesTasksApi();
+      const { data } = await coursesTasksApi.getCourseTasks(courseId);
+      const courseTasks = data.filter(
+        item =>
+          item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
+          item.type != CourseTaskDtoTypeEnum.Selfeducation &&
+          item.type != CourseTaskDtoTypeEnum.StageInterview &&
+          item.type != CourseTaskDtoTypeEnum.Interview,
+      );
+      dispatch({ type: 'open', state: { data: { courseTasks } } });
+    } catch (err) {
+      const error = err as AxiosError;
+      dispatch({ type: 'error', state: { errorText: (error.response?.data as Error)?.message ?? error.message } });
+    }
   };
 
   const saveSolution = async (values: { courseTaskId: number; url: string }) => {
@@ -61,7 +66,7 @@ export function useSubmitTaskSolution(courseId: number) {
       dispatch({ type: 'submit' });
     } catch (err) {
       const error = err as AxiosError;
-      dispatch({ type: 'error', state: { errorText: (error.response?.data as Error).message ?? error.message } });
+      dispatch({ type: 'error', state: { errorText: (error.response?.data as Error)?.message ?? error.message } });
     }
   };
 

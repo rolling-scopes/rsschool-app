@@ -69,7 +69,7 @@ describe('MentorCard', () => {
     const submitButton = screen.getByRole('button', { name: /submit task/i });
     fireEvent.click(submitButton);
 
-    const modalTitle = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
-    expect(modalTitle).toBeInTheDocument();
+    const modal = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
+    expect(modal).toBeInTheDocument();
   });
 });
