@@ -2,7 +2,7 @@ import { Result } from 'antd';
 import moment from 'moment';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { useAsync, useLocalStorage } from 'react-use';
+import { useAsync } from 'react-use';
 import { useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import omitBy from 'lodash/omitBy';
@@ -32,18 +32,12 @@ import {
   CourseScheduleItemDtoStatusEnum,
 } from 'api';
 
-const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
-
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
   const { fullName, usePrivateRepositories, alias } = props.course;
-
-  const [storageValue, setStorageValue] = useLocalStorage(STORAGE_KEY);
-
-  const showCountEventsOnStudentsDashboard = () => Number(storageValue ? storageValue : 1);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
@@ -55,18 +49,12 @@ function Page(props: CoursePageProps) {
   const [tasksByStatus, setTasksByStatus] = useState(
     {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
   );
-  const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [totalStudentsCount, setTotalStudentsCount] = useState(0);
   const [loading, withLoading] = useLoading(false);
 
   const updateUrl = async () => {
     const { repository } = await courseService.getStudentSummary(githubId);
     setRepositoryUrl(repository ? repository : '');
-  };
-
-  const changeCountEvents = (value: number) => {
-    setStorageValue(String(value));
-    setCountEvents(value);
   };
 
   useAsync(
@@ -92,8 +80,8 @@ function Page(props: CoursePageProps) {
       const nextEvents =
         courseEvents
           .concat(tasksToEvents(courseTasks))
-          .sort((a, b) => a.dateTime.localeCompare(b.dateTime))
-          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
+          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[])
+          .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
@@ -149,12 +137,7 @@ function Page(props: CoursePageProps) {
     ),
     <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard
-      nextEvents={nextEvents}
-      showCountEvents={countEvents}
-      setShowCountEvents={changeCountEvents}
-      courseAlias={alias}
-    />,
+    <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
   ].filter(Boolean) as JSX.Element[];
 
   return (
