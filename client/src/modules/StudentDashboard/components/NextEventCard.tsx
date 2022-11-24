@@ -9,9 +9,12 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { TASK_TYPES } from 'data/taskTypes';
 import { EVENT_TYPES } from 'data/eventTypes';
 
+const { Link, Text } = Typography;
+
 type Props = {
   nextEvents: CourseEvent[];
   showCountEvents: number;
+  courseAlias: string;
   setShowCountEvents: (count: number) => void;
 };
 
@@ -46,8 +49,7 @@ const EventTypeToName: Record<string, string> = {
 
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
 
-export function NextEventCard(props: Props) {
-  const { nextEvents, showCountEvents, setShowCountEvents } = props;
+export function NextEventCard({ nextEvents, showCountEvents, setShowCountEvents, courseAlias }: Props) {
   const [storageValue] = useLocalStorage(STORAGE_KEY);
 
   const showCountEventsOnStudentsDashboard = Number(storageValue ? storageValue : 1);
@@ -57,14 +59,15 @@ export function NextEventCard(props: Props) {
 
   return (
     <CommonCard
-      title="Next event"
+      title="Available Tasks"
+      extra={<Link href={`/course/schedule?course=${courseAlias}`}>View all</Link>}
       content={
         nextEvents.length ? (
           <div style={{ display: 'flex', justifyContent: 'space-around', flexDirection: 'column' }}>
             <div
               style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' }}
             >
-              <Typography.Text strong>Select the number of events:</Typography.Text>
+              <Text strong>Select the number of events:</Text>
               <Select onChange={setShowCountEvents} defaultValue={showCountEventsOnStudentsDashboard}>
                 {COUNT_EVENTS_LIST.map((count, idx) => (
                   <Select.Option key={idx} value={count}>
@@ -104,7 +107,7 @@ const getListEvents = (nextEvents: CourseEvent[], showCountEvents: number, timeZ
               <p style={{ marginBottom: 7 }}>
                 Name:{' '}
                 {
-                  <Typography.Text strong>
+                  <Text strong>
                     {nextEvent?.event?.descriptionUrl ? (
                       <a target="_blank" href={nextEvent?.event?.descriptionUrl}>
                         {nextEvent?.event?.name}
@@ -116,7 +119,7 @@ const getListEvents = (nextEvents: CourseEvent[], showCountEvents: number, timeZ
                     ) : (
                       nextEvent?.event?.name
                     )}
-                  </Typography.Text>
+                  </Text>
                 }
               </p>
             </Tooltip>
@@ -124,15 +127,15 @@ const getListEvents = (nextEvents: CourseEvent[], showCountEvents: number, timeZ
           {nextEvent?.dateTime && (
             <p style={{ marginBottom: 7 }}>
               Date:{' '}
-              <Typography.Text strong>
+              <Text strong>
                 {dateTimeTimeZoneRenderer(nextEvent?.dateTime, timeZone)} ({timeZone})
-              </Typography.Text>
+              </Text>
             </p>
           )}
           {nextEvent?.place && (
             <p style={{ marginBottom: 7 }}>
               Place:{' '}
-              <Typography.Text strong>
+              <Text strong>
                 {nextEvent?.place.includes('Youtube') ? (
                   <span>
                     <YoutubeOutlined /> {nextEvent?.place}{' '}
@@ -143,13 +146,12 @@ const getListEvents = (nextEvents: CourseEvent[], showCountEvents: number, timeZ
                 ) : (
                   nextEvent?.place
                 )}
-              </Typography.Text>
+              </Text>
             </p>
           )}
           {nextEvent?.organizer?.githubId && (
             <div style={{ marginBottom: 7 }}>
-              Organizer:{' '}
-              <Typography.Text strong>{<GithubUserLink value={nextEvent?.organizer.githubId} />}</Typography.Text>
+              Organizer: <Text strong>{<GithubUserLink value={nextEvent?.organizer.githubId} />}</Text>
             </div>
           )}
         </Col>

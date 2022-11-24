@@ -39,7 +39,7 @@ const coursesStatsApi = new CourseStatsApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
-  const { fullName, usePrivateRepositories } = props.course;
+  const { fullName, usePrivateRepositories, alias } = props.course;
 
   const [storageValue, setStorageValue] = useLocalStorage(STORAGE_KEY);
 
@@ -149,7 +149,12 @@ function Page(props: CoursePageProps) {
     ),
     <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,
+    <NextEventCard
+      nextEvents={nextEvents}
+      showCountEvents={countEvents}
+      setShowCountEvents={changeCountEvents}
+      courseAlias={alias}
+    />,
   ].filter(Boolean) as JSX.Element[];
 
   return (
