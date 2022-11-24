@@ -56,14 +56,14 @@ describe('MentorCard', () => {
     });
   });
 
-  it('should render Submit task button', () => {
+  it('should render "Submit task" button', () => {
     render(<MentorCard {...PROPS_MOCK} />);
 
     const submitButton = screen.getByRole('button', { name: /submit task/i });
     expect(submitButton).toBeInTheDocument();
   });
 
-  it('should open modal window when Submit task was clicked', async () => {
+  it('should open modal window when "Submit task" was clicked', async () => {
     render(<MentorCard {...PROPS_MOCK} />);
 
     const submitButton = screen.getByRole('button', { name: /submit task/i });
