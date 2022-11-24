@@ -2,6 +2,8 @@ import * as React from 'react';
 import CommonCard from './CommonDashboardCard';
 import { CourseEvent } from 'services/course';
 import { Typography, Table } from 'antd';
+import { getAvailableEventsTableColumns } from './renderers';
+import moment from 'moment';
 
 const { Link } = Typography;
 
@@ -10,44 +12,9 @@ type Props = {
   courseAlias: string;
 };
 
-enum ColumnKey {
-  Name = 'name',
-  Status = 'status',
-  EndDate = 'end-date',
-}
-
 export function NextEventCard({ nextEvents, courseAlias }: Props) {
-  const columns = [
-    {
-      key: ColumnKey.Name,
-      dataIndex: 'event.name',
-      render: (value: string, row: CourseEvent) => {
-        if (!row.event.descriptionUrl) return value;
 
-        return (
-          <a target="_blank" href={row.event.descriptionUrl}>
-            {row.event.name}
-          </a>
-        );
-      },
-    },
-    {
-      key: ColumnKey.Status,
-      dataIndex: 'status',
-      // render: statusRenderer,
-      render: () => {
-        return 'status';
-      },
-    },
-    {
-      key: ColumnKey.EndDate,
-      dataIndex: 'dateTime',
-      // render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'start', 'Recommended date for studying'),
-      render: (_: string, row: CourseEvent) => {
-        return row.dateTime;
-      },
-    },
-  ];
+  const columns = getAvailableEventsTableColumns();
 
   return (
     <>

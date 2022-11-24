@@ -314,13 +314,7 @@
           { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InsertResult" } } }
-          },
-          "400": { "description": "" }
-        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
         "tags": ["mentors"]
       }
     },
@@ -1714,7 +1708,6 @@
           "endDate"
         ]
       },
-      "InsertResult": { "type": "object", "properties": {} },
       "Validations": {
         "type": "object",
         "properties": { "githubIdInUrl": { "type": "boolean" } },

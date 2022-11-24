@@ -76,12 +76,10 @@ function Page(props: CoursePageProps) {
         new CoursesScheduleApi().getSchedule(courseId),
       ]);
 
-      const startOfToday = moment().startOf('day');
-      const nextEvents =
-        courseEvents
-          .concat(tasksToEvents(courseTasks))
-          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[])
-          .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+      const nextEvents = courseEvents
+        .concat(tasksToEvents(courseTasks))
+        .filter(({ dateTime }) => moment().isSameOrBefore(dateTime))
+        .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];

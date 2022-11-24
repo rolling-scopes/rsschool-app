@@ -15,7 +15,7 @@ export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
   return <Badge color={color} text={label} />;
 }
 
-export function renderTagWithStyle(tagName: CourseScheduleItemDto['tag'], tagColors: Record<string, string>) {
+export function renderTagWithStyle(tagName: CourseScheduleItemDto['tag'], tagColors?: Record<string, string>) {
   return (
     <Tag style={getTagStyle(tagName, tagColors)} key={tagName}>
       {TAG_NAME_MAP[tagName] || tagName}
