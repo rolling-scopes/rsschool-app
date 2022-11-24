@@ -11,7 +11,6 @@ import { Task } from '@entities/task';
 
 import { MentorBasic } from '@common/models';
 
-import { AuthUser, Role, CourseRole } from '../../auth';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import * as dayjs from 'dayjs';
@@ -80,31 +79,6 @@ export class MentorsService {
     });
   }
 
-  public async canAccessMentor(user: AuthUser, mentorId: number): Promise<boolean> {
-    const mentor = await this.getById(mentorId);
-    if (mentor == null) {
-      return false;
-    }
-
-    if (user.appRoles?.includes(Role.Admin)) {
-      return true;
-    }
-
-    const { courseId } = mentor;
-    const courseInfo = user.courses?.[courseId];
-    const currentMentorId = user.courses?.[courseId]?.mentorId;
-
-    if (courseInfo?.roles.includes(CourseRole.Manager)) {
-      return true;
-    }
-
-    if (courseInfo?.roles.includes(CourseRole.Supervisor)) {
-      return true;
-    }
-
-    return mentorId === currentMentorId;
-  }
-
   public async getCourseStudentsCount(mentorId: number, courseId: number) {
     return await this.studentRepository.count({
       where: { mentorId, courseId },
@@ -140,6 +114,7 @@ export class MentorsService {
       .andWhere('s."isExpelled" = false')
       .andWhere('s."mentorId" = :mentorId', { mentorId })
       .orWhere('tc."mentorId" = :mentorId', { mentorId })
+      .orderBy('ct."studentEndDate"', 'DESC')
       .getRawMany();
 
     return solutions.map(s => ({
@@ -173,22 +148,31 @@ export class MentorsService {
     return solutions.map(solution => new MentorDashboardDto(solution));
   }
 
-  private async getRandomSolution(courseId: number): Promise<{ courseTaskId: number; studentId: number }> {
+  private async getRandomSolution(
+    mentorId: number,
+    courseId: number,
+  ): Promise<{ courseTaskId: number; studentId: number }> {
     const task = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
-      .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
+      .leftJoin(
+        TaskChecker,
+        'tc',
+        'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId" AND tc."mentorId" = :mentorId',
+        { mentorId },
+      )
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Student, 's', 's.id = ts."studentId"')
-      .select(['ts.studentId', 'ts.courseTaskId'])
+      .select(['ts.studentId', 'ts.courseTaskId', 'tc.id'])
       .where('s."courseId" = :courseId', { courseId })
       .andWhere('s."isExpelled" = false')
       .andWhere('s."mentorId" IS NULL')
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
       .andWhere('tr."score" IS NULL')
+      .andWhere('tc."id" IS NULL')
+      .orderBy('s."totalScore"', 'DESC')
       .getOneOrFail();
 
-    // TODO: pick solution that does not exist in task_checker for courseTaskId-studentId-mentorId
     return {
       courseTaskId: task.courseTaskId,
       studentId: task.studentId,
@@ -196,7 +180,7 @@ export class MentorsService {
   }
 
   public async getRandomTask(mentorId: number, courseId: number) {
-    const { courseTaskId, studentId } = await this.getRandomSolution(courseId);
+    const { courseTaskId, studentId } = await this.getRandomSolution(mentorId, courseId);
 
     if (courseTaskId && studentId) {
       const checker: Partial<TaskChecker> = {
