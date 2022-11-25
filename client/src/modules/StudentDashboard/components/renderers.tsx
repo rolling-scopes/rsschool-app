@@ -1,7 +1,9 @@
-import { Tag } from 'antd';
-import moment from 'moment-timezone';
 import { CourseScheduleItemDto } from 'api';
 import { ColumnType } from 'antd/lib/table';
+import { coloredDateRenderer, renderTask } from 'components/Table';
+import { renderTagWithStyle } from 'modules/Schedule/components/TableView/renderers';
+import { CalendarOutlined } from '@ant-design/icons';
+import { Space, Typography } from 'antd';
 
 enum ColumnKey {
   Name = 'name',
@@ -9,41 +11,39 @@ enum ColumnKey {
   EndDate = 'end-date',
 }
 
-function dateTimeTimeZoneRenderer(value: string | null) {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return value ? moment(value).tz(timeZone).format('YYYY-MM-DD HH:mm') : '';
-}
-
 export function getAvailableEventsTableColumns(): ColumnType<CourseScheduleItemDto>[] {
   return [
     {
       key: ColumnKey.Name,
       dataIndex: 'name',
-      render: (value: string, row: CourseScheduleItemDto) => {
-        if (!row.descriptionUrl) return value;
-
-        return (
-          <a target="_blank" href={row.descriptionUrl}>
-            {row.name}
-          </a>
-        );
-      },
+      render: renderTask,
     },
     {
       key: ColumnKey.Type,
       dataIndex: 'tag',
-      render: (value: string, row: CourseScheduleItemDto) => {
-        if (!row.tag) return value;
-
-        return <Tag>{row.tag}</Tag>;
-      },
+      align: 'center',
+      render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag),
     },
     {
       key: ColumnKey.EndDate,
       dataIndex: 'endDate',
       align: 'right',
-      // render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'start', 'Recommended date for studying'),
-      render: (_: string, row: CourseScheduleItemDto) => dateTimeTimeZoneRenderer(row.endDate),
+      render: renderEndDate,
     },
   ];
+}
+
+function renderEndDate(value: string, row: CourseScheduleItemDto) {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const date = coloredDateRenderer(timeZone, 'MMM DD HH:mm', 'end', 'Recommended deadline')(value, row);
+
+  return (
+    <Space>
+      <Typography.Text type="secondary">
+        <CalendarOutlined />
+        &nbsp;Due to:
+      </Typography.Text>
+      {date}
+    </Space>
+  );
 }

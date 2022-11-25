@@ -4,13 +4,15 @@ import {
   GithubOutlined,
   MinusCircleOutlined,
   YoutubeOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
-import { CourseScheduleItemDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { BaseType } from 'antd/lib/typography/Base';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
 import moment from 'moment-timezone';
 import { CrossCheckStatus } from 'services/course';
 
-const { Text } = Typography;
+const { Text, Link } = Typography;
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -153,4 +155,47 @@ export const scoreRenderer = (item: CourseScheduleItemDto) => {
       {score ?? 0} / {maxScore}
     </Text>
   );
+};
+
+export const renderTask = (name: string, item: CourseScheduleItemDto) => {
+  if (!item.descriptionUrl) return name;
+
+  return (
+    <Link target="_blank" href={item.descriptionUrl}>
+      {name}
+    </Link>
+  );
+};
+
+export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
+  const now = moment();
+  return (value: string, { startDate, endDate, score, tag }: CourseScheduleItemDto) => {
+    let color: BaseType | undefined = undefined;
+    const start = moment(startDate);
+    const end = moment(endDate);
+
+    const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
+    const isCurrent = now >= start && now < end && !score;
+    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !score;
+    const isPast = now > end || score;
+
+    if (isDeadlineSoon && date === 'end') color = 'warning';
+    else if (isCurrent && date === 'start') color = 'success';
+    else if (isDeadlineMissed && date === 'end') color = 'danger';
+    else if (isPast) color = 'secondary';
+
+    const text = dateWithTimeZoneRenderer(timeZone, format)(value);
+
+    if (tag == CourseScheduleItemDtoTagEnum.SelfStudy) {
+      return (
+        <Text type={color}>
+          {text}
+          <Tooltip placement="topLeft" title={infoText}>
+            <InfoCircleOutlined className="ant-typography ant-typography-secondary" style={{ marginLeft: 8 }} />
+          </Tooltip>
+        </Text>
+      );
+    }
+    return <Text type={color}>{text}</Text>;
+  };
 };
