@@ -3,6 +3,7 @@ import { Button, message } from 'antd';
 import { useLoading } from 'components/useLoading';
 import { MentorsApi } from 'api';
 import { AxiosError } from 'axios';
+import { EyeOutlined } from '@ant-design/icons';
 
 interface Props {
   mentorId: number;
@@ -26,7 +27,7 @@ function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
   });
 
   return (
-    <Button type="primary" loading={loading} disabled={loading} onClick={handleClick}>
+    <Button type="primary" icon={<EyeOutlined />} loading={loading} disabled={loading} onClick={handleClick}>
       Review random task
     </Button>
   );

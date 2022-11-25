@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import TaskStatusTabs, { Status } from './TaskStatusTabs';
-import { SolutionItemStatus } from 'modules/Mentor/constants';
+import { SolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
 
 const PROPS_MOCK = {
   statuses: [],
@@ -14,19 +14,20 @@ describe('TaskStatusTabs', () => {
 
     render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
 
-    expect(screen.getAllByRole('tab')).toHaveLength(2);
+    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
   });
 
   it('should render status tabs when statuses were not provided', () => {
     render(<TaskStatusTabs {...PROPS_MOCK} statuses={[]} />);
 
-    expect(screen.getAllByRole('tab')).toHaveLength(2);
+    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
   });
 
   it.each`
-    status                         | count
-    ${SolutionItemStatus.Done}     | ${2}
-    ${SolutionItemStatus.InReview} | ${3}
+    status                           | count
+    ${SolutionItemStatus.Done}       | ${2}
+    ${SolutionItemStatus.InReview}   | ${3}
+    ${SolutionItemStatus.RandomTask} | ${4}
   `(
     'should render badge with count of $count for "$status" tab',
     ({ status, count }: { status: SolutionItemStatus; count: number }) => {

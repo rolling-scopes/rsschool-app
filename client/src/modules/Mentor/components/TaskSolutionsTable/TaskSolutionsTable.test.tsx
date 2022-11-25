@@ -53,8 +53,7 @@ describe('TaskSolutionsTable', () => {
       expect(screen.getByText(value)).toBeInTheDocument();
     });
 
-    // TODO: enable when review random task will be available
-    it.skip('should render "Review random task" button when "Random task" tab is selected', async () => {
+    it('should render "Review random task" button when "Random task" tab is selected', async () => {
       render(<TaskSolutionsTable {...PROPS_MOCK} />);
       const randomTaskTab = screen.getByRole('tab', { name: /random task/i });
 
