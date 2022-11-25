@@ -11,7 +11,7 @@ enum ColumnKey {
   EndDate = 'end-date',
 }
 
-export function getAvailableEventsTableColumns(): ColumnType<CourseScheduleItemDto>[] {
+export function getAvailableTasksColumns(): ColumnType<CourseScheduleItemDto>[] {
   return [
     {
       key: ColumnKey.Name,
@@ -34,11 +34,13 @@ export function getAvailableEventsTableColumns(): ColumnType<CourseScheduleItemD
 }
 
 function renderEndDate(value: string, row: CourseScheduleItemDto) {
+  if (!value && !row.endDate) return;
+
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const date = coloredDateRenderer(timeZone, 'MMM DD HH:mm', 'end', 'Recommended deadline')(value, row);
 
   return (
-    <Space>
+    <Space wrap style={{ justifyContent: 'end' }}>
       <Typography.Text type="secondary">
         <CalendarOutlined />
         &nbsp;Due to:

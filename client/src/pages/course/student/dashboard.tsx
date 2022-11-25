@@ -70,7 +70,7 @@ function Page(props: CoursePageProps) {
 
       const nextEvents = scheduleTasks
         .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
-        .sort((a, b) => a.endDate.localeCompare(b.endDate));
+        .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];

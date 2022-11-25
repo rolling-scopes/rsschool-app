@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CommonCard from './CommonDashboardCard';
 import { Typography, Table } from 'antd';
-import { getAvailableEventsTableColumns } from './renderers';
+import { getAvailableTasksColumns } from './renderers';
 import { CourseScheduleItemDto } from 'api';
 
 const { Link } = Typography;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function NextEventCard({ nextEvents, courseAlias }: Props) {
-  const columns = getAvailableEventsTableColumns();
+  const columns = getAvailableTasksColumns();
 
   return (
     <>
