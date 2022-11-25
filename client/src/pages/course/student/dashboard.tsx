@@ -116,6 +116,9 @@ function Page(props: CoursePageProps) {
         totalStudentsCount={totalStudentsCount}
       />
     ),
+    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
+    <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
+    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}
@@ -124,9 +127,6 @@ function Page(props: CoursePageProps) {
         updateUrl={updateUrl}
       />
     ),
-    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
-    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
   ].filter(Boolean) as JSX.Element[];
 
   return (
