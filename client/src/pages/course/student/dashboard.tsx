@@ -1,5 +1,4 @@
 import { Result } from 'antd';
-import moment from 'moment';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { useAsync } from 'react-use';
@@ -11,7 +10,7 @@ import { PageLayout } from 'components/PageLayout';
 
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { CourseService, StudentSummary, CourseEvent } from 'services/course';
+import { CourseService, StudentSummary } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import {
@@ -45,7 +44,7 @@ function Page(props: CoursePageProps) {
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
-  const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
+  const [nextEvents, setNextEvent] = useState([] as CourseScheduleItemDto[]);
   const [tasksByStatus, setTasksByStatus] = useState(
     {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
   );
@@ -60,26 +59,18 @@ function Page(props: CoursePageProps) {
   useAsync(
     withLoading(async () => {
       const courseId = props.course.id;
-      const [
-        studentSummary,
-        { data: courseTasks },
-        statisticsCourses,
-        courseEvents,
-        courseStats,
-        { data: scheduleTasks },
-      ] = await Promise.all([
-        courseService.getStudentSummary(githubId),
-        coursesTasksApi.getCourseTasks(courseId),
-        userService.getProfileInfo(githubId),
-        courseService.getCourseEvents(),
-        coursesStatsApi.getCourseStats(courseId),
-        new CoursesScheduleApi().getSchedule(courseId),
-      ]);
+      const [studentSummary, { data: courseTasks }, statisticsCourses, courseStats, { data: scheduleTasks }] =
+        await Promise.all([
+          courseService.getStudentSummary(githubId),
+          coursesTasksApi.getCourseTasks(courseId),
+          userService.getProfileInfo(githubId),
+          coursesStatsApi.getCourseStats(courseId),
+          new CoursesScheduleApi().getSchedule(courseId),
+        ]);
 
-      const nextEvents = courseEvents
-        .concat(tasksToEvents(courseTasks))
-        .filter(({ dateTime }) => moment().isSameOrBefore(dateTime))
-        .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+      const nextEvents = scheduleTasks
+        .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
+        .sort((a, b) => a.endDate.localeCompare(b.endDate));
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
@@ -190,34 +181,5 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
     background-clip: padding-box;
   }
 `;
-
-const TaskTypes = {
-  deadline: 'deadline',
-  test: 'test',
-  newtask: 'newtask',
-  lecture: 'lecture',
-};
-
-const tasksToEvents = (tasks: CourseTaskDto[]) => {
-  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
-    if (task.type !== TaskTypes.test) {
-      acc.push(createCourseEventFromTask(task, task.type));
-    }
-    acc.push(createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline));
-    return acc;
-  }, []);
-};
-
-const createCourseEventFromTask = (task: CourseTaskDto, type: string): CourseEvent => {
-  return {
-    id: task.id,
-    dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',
-    event: {
-      type: type,
-      name: task.name,
-      descriptionUrl: task.descriptionUrl,
-    },
-  } as CourseEvent;
-};
 
 export default withCourseData(withSession(Page));

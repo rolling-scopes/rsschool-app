@@ -1,19 +1,17 @@
 import * as React from 'react';
 import CommonCard from './CommonDashboardCard';
-import { CourseEvent } from 'services/course';
 import { Typography, Table } from 'antd';
 import { getAvailableEventsTableColumns } from './renderers';
-import moment from 'moment';
+import { CourseScheduleItemDto } from 'api';
 
 const { Link } = Typography;
 
 type Props = {
-  nextEvents: CourseEvent[];
+  nextEvents: CourseScheduleItemDto[];
   courseAlias: string;
 };
 
 export function NextEventCard({ nextEvents, courseAlias }: Props) {
-
   const columns = getAvailableEventsTableColumns();
 
   return (

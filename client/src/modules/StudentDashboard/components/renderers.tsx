@@ -1,6 +1,7 @@
 import { Tag } from 'antd';
 import moment from 'moment-timezone';
-import { CourseEvent } from 'services/course';
+import { CourseScheduleItemDto } from 'api';
+import { ColumnType } from 'antd/lib/table';
 
 enum ColumnKey {
   Name = 'name',
@@ -8,41 +9,41 @@ enum ColumnKey {
   EndDate = 'end-date',
 }
 
-export function dateTimeTimeZoneRenderer(value: string | null, timeZone: string) {
+function dateTimeTimeZoneRenderer(value: string | null) {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return value ? moment(value).tz(timeZone).format('YYYY-MM-DD HH:mm') : '';
 }
 
-export function getAvailableEventsTableColumns() {
+export function getAvailableEventsTableColumns(): ColumnType<CourseScheduleItemDto>[] {
   return [
     {
       key: ColumnKey.Name,
-      dataIndex: 'event.name',
-      render: (value: string, row: CourseEvent) => {
-        if (!row.event.descriptionUrl) return value;
+      dataIndex: 'name',
+      render: (value: string, row: CourseScheduleItemDto) => {
+        if (!row.descriptionUrl) return value;
 
         return (
-          <a target="_blank" href={row.event.descriptionUrl}>
-            {row.event.name}
+          <a target="_blank" href={row.descriptionUrl}>
+            {row.name}
           </a>
         );
       },
     },
     {
       key: ColumnKey.Type,
-      dataIndex: 'event.type',
-      render: (value: string, row: CourseEvent) => {
-        if (!row.event.type) return value;
+      dataIndex: 'tag',
+      render: (value: string, row: CourseScheduleItemDto) => {
+        if (!row.tag) return value;
 
-        return <Tag>{row.event.type}</Tag>;
+        return <Tag>{row.tag}</Tag>;
       },
     },
     {
       key: ColumnKey.EndDate,
-      dataIndex: 'dateTime',
+      dataIndex: 'endDate',
+      align: 'right',
       // render: coloredDateRenderer(timezone, 'YYYY-MM-DD HH:mm', 'start', 'Recommended date for studying'),
-      render: (_: string, row: CourseEvent) => {
-        return row.dateTime;
-      },
+      render: (_: string, row: CourseScheduleItemDto) => dateTimeTimeZoneRenderer(row.endDate),
     },
   ];
 }
