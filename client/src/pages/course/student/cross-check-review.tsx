@@ -38,6 +38,7 @@ function Page(props: CoursePageProps) {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [courseTaskId, setCourseTaskId] = useState<number | null>(queryTaskId);
+  const [criteriaId, setCriteriaId] = useState<number | null>(null);
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
@@ -56,6 +57,8 @@ function Page(props: CoursePageProps) {
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
+    const taskCriteriaData = await taskServise.getCriteriaForCourseTask(criteriaId as number);
+    setCriteriaData(taskCriteriaData ?? []);
     resetCriterias();
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
@@ -180,8 +183,7 @@ function Page(props: CoursePageProps) {
     const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatus.Distributed;
     setAssignments(assignments);
     setCourseTaskId(courseTask.id);
-    const taskCriteriaData = await taskServise.getCriteriaForCourseTask(courseTask.taskId);
-    setCriteriaData(taskCriteriaData ?? []);
+    setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
     form.resetFields(['githubId']);
