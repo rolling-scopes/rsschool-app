@@ -16,7 +16,7 @@ describe('NextEventCard', () => {
     ${'View all'}
     ${NEXT_EVENTS[0].name}
     ${NEXT_EVENTS[0].tag}
-    ${'Feb 01 03:00'}
+    ${'Feb 01'}
   `('should render $text', ({ text }: { text: string }) => {
     render(<NextEventCard {...PROPS_MOCK} />);
 
@@ -29,9 +29,9 @@ function generateAvailableTasks(count = 3): CourseScheduleItemDto[] {
   return new Array(count).fill({}).map((_, idx) => ({
     id: idx,
     name: `Available Task ${idx}`,
-    startDate: '1970-01-01T00:00:00Z',
-    endDate: `1970-02-0${idx + 1}T00:00:00Z`,
-    crossCheckEndDate: '1970-01-01T00:00:00Z',
+    startDate: '1970-01-01T00:00:00.000Z',
+    endDate: `1970-02-0${idx + 1}T00:00:00.000Z`,
+    crossCheckEndDate: '1970-01-01T00:00:00.000Z',
     maxScore: idx + 100,
     scoreWeight: 0.2,
     organizer: {
