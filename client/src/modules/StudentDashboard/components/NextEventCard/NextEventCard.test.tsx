@@ -26,24 +26,22 @@ describe('NextEventCard', () => {
 });
 
 function generateAvailableTasks(count = 3): CourseScheduleItemDto[] {
-  return new Array(count).fill({}).map((_, idx) => {
-    return {
+  return new Array(count).fill({}).map((_, idx) => ({
+    id: idx,
+    name: `Available Task ${idx}`,
+    startDate: '1970-01-01T00:00:00Z',
+    endDate: `1970-02-0${idx + 1}T00:00:00Z`,
+    crossCheckEndDate: '1970-01-01T00:00:00Z',
+    maxScore: idx + 100,
+    scoreWeight: 0.2,
+    organizer: {
       id: idx,
-      name: `Available Task ${idx}`,
-      startDate: new Date('1970-01-01T00:00:00Z').toISOString(),
-      endDate: new Date(`1970-02-0${idx + 1}T00:00:00Z`).toISOString(),
-      maxScore: idx + 100,
-      scoreWeight: 0.2,
-      organizer: {
-        id: idx,
-        name: '',
-        githubId: `organizer ${idx}`,
-      },
-      status: 'available',
-      score: idx + 20,
-      tag: Object.values(CourseScheduleItemDtoTagEnum)[idx],
-      descriptionUrl: 'task-description-url',
-      crossCheckEndDate: new Date().toISOString(),
-    };
-  });
+      name: '',
+      githubId: `organizer ${idx}`,
+    },
+    status: 'available',
+    score: idx + 20,
+    tag: Object.values(CourseScheduleItemDtoTagEnum)[idx],
+    descriptionUrl: 'task-description-url',
+  }));
 }
