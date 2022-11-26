@@ -4,5 +4,5 @@ export * from './MainStatsCard';
 export * from './TasksStatsCard';
 export * from './TasksStatsModal';
 export * from './NextEventCard';
-export * from './renderers';
+export * from './NextEventCard/renderers';
 export * from './RepositoryCard';

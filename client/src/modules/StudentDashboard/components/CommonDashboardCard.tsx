@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Card, Typography, Empty } from 'antd';
+import { Card, Typography, Empty, CardProps } from 'antd';
 
 import { FullscreenOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-type Props = {
+interface Props extends CardProps {
   isMoreContent?: boolean | undefined;
   noDataDescription?: string | undefined;
-  title: string;
-  content: any;
-};
+  content?: React.ReactNode;
+}
 
 type State = {
   isVisibilitySettingsVisible: boolean;
@@ -23,7 +22,7 @@ class CommonCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { title, content, isMoreContent, noDataDescription } = this.props;
+    const { title, content, isMoreContent, noDataDescription, ...restProps } = this.props;
 
     return (
       <Card
@@ -33,6 +32,7 @@ class CommonCard extends React.Component<Props, State> {
           </Title>
         }
         actions={isMoreContent ? [<FullscreenOutlined key="main-card-actions-more" />].filter(Boolean) : []}
+        {...restProps}
       >
         {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescription} />}
       </Card>

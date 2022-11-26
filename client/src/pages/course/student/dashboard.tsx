@@ -1,8 +1,7 @@
 import { Result } from 'antd';
-import moment from 'moment';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { useAsync, useLocalStorage } from 'react-use';
+import { useAsync } from 'react-use';
 import { useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import omitBy from 'lodash/omitBy';
@@ -11,7 +10,7 @@ import { PageLayout } from 'components/PageLayout';
 
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { CourseService, StudentSummary, CourseEvent } from 'services/course';
+import { CourseService, StudentSummary } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import {
@@ -32,18 +31,12 @@ import {
   CourseScheduleItemDtoStatusEnum,
 } from 'api';
 
-const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
-
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
-  const { fullName, usePrivateRepositories } = props.course;
-
-  const [storageValue, setStorageValue] = useLocalStorage(STORAGE_KEY);
-
-  const showCountEventsOnStudentsDashboard = () => Number(storageValue ? storageValue : 1);
+  const { fullName, usePrivateRepositories, alias } = props.course;
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
@@ -51,11 +44,10 @@ function Page(props: CoursePageProps) {
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
-  const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
+  const [nextEvents, setNextEvent] = useState([] as CourseScheduleItemDto[]);
   const [tasksByStatus, setTasksByStatus] = useState(
     {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
   );
-  const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [totalStudentsCount, setTotalStudentsCount] = useState(0);
   const [loading, withLoading] = useLoading(false);
 
@@ -64,36 +56,21 @@ function Page(props: CoursePageProps) {
     setRepositoryUrl(repository ? repository : '');
   };
 
-  const changeCountEvents = (value: number) => {
-    setStorageValue(String(value));
-    setCountEvents(value);
-  };
-
   useAsync(
     withLoading(async () => {
       const courseId = props.course.id;
-      const [
-        studentSummary,
-        { data: courseTasks },
-        statisticsCourses,
-        courseEvents,
-        courseStats,
-        { data: scheduleTasks },
-      ] = await Promise.all([
-        courseService.getStudentSummary(githubId),
-        coursesTasksApi.getCourseTasks(courseId),
-        userService.getProfileInfo(githubId),
-        courseService.getCourseEvents(),
-        coursesStatsApi.getCourseStats(courseId),
-        new CoursesScheduleApi().getSchedule(courseId),
-      ]);
+      const [studentSummary, { data: courseTasks }, statisticsCourses, courseStats, { data: scheduleTasks }] =
+        await Promise.all([
+          courseService.getStudentSummary(githubId),
+          coursesTasksApi.getCourseTasks(courseId),
+          userService.getProfileInfo(githubId),
+          coursesStatsApi.getCourseStats(courseId),
+          new CoursesScheduleApi().getSchedule(courseId),
+        ]);
 
-      const startOfToday = moment().startOf('day');
-      const nextEvents =
-        courseEvents
-          .concat(tasksToEvents(courseTasks))
-          .sort((a, b) => a.dateTime.localeCompare(b.dateTime))
-          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
+      const nextEvents = scheduleTasks
+        .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
+        .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
@@ -139,6 +116,9 @@ function Page(props: CoursePageProps) {
         totalStudentsCount={totalStudentsCount}
       />
     ),
+    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
+    <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
+    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}
@@ -147,9 +127,6 @@ function Page(props: CoursePageProps) {
         updateUrl={updateUrl}
       />
     ),
-    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
-    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,
   ].filter(Boolean) as JSX.Element[];
 
   return (
@@ -204,34 +181,5 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
     background-clip: padding-box;
   }
 `;
-
-const TaskTypes = {
-  deadline: 'deadline',
-  test: 'test',
-  newtask: 'newtask',
-  lecture: 'lecture',
-};
-
-const tasksToEvents = (tasks: CourseTaskDto[]) => {
-  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDto) => {
-    if (task.type !== TaskTypes.test) {
-      acc.push(createCourseEventFromTask(task, task.type));
-    }
-    acc.push(createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline));
-    return acc;
-  }, []);
-};
-
-const createCourseEventFromTask = (task: CourseTaskDto, type: string): CourseEvent => {
-  return {
-    id: task.id,
-    dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',
-    event: {
-      type: type,
-      name: task.name,
-      descriptionUrl: task.descriptionUrl,
-    },
-  } as CourseEvent;
-};
 
 export default withCourseData(withSession(Page));
