@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CommonCard from './CommonDashboardCard';
+import CommonCard from '../CommonDashboardCard';
 import { Typography, Table } from 'antd';
 import { getAvailableTasksColumns } from './renderers';
 import { CourseScheduleItemDto } from 'api';
@@ -11,7 +11,7 @@ type Props = {
   courseAlias: string;
 };
 
-export function NextEventCard({ nextEvents, courseAlias }: Props) {
+function NextEventCard({ nextEvents, courseAlias }: Props) {
   const columns = getAvailableTasksColumns();
 
   return (
@@ -43,3 +43,5 @@ export function NextEventCard({ nextEvents, courseAlias }: Props) {
     </>
   );
 }
+
+export default NextEventCard;

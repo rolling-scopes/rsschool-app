@@ -5,7 +5,7 @@ import { renderTagWithStyle } from 'modules/Schedule/components/TableView/render
 import { CalendarOutlined } from '@ant-design/icons';
 import { Space, Typography } from 'antd';
 
-enum ColumnKey {
+export enum AvailableTasksColumnKey {
   Name = 'name',
   Type = 'type',
   EndDate = 'end-date',
@@ -14,18 +14,18 @@ enum ColumnKey {
 export function getAvailableTasksColumns(): ColumnType<CourseScheduleItemDto>[] {
   return [
     {
-      key: ColumnKey.Name,
+      key: AvailableTasksColumnKey.Name,
       dataIndex: 'name',
       render: renderTask,
     },
     {
-      key: ColumnKey.Type,
+      key: AvailableTasksColumnKey.Type,
       dataIndex: 'tag',
       align: 'center',
       render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag),
     },
     {
-      key: ColumnKey.EndDate,
+      key: AvailableTasksColumnKey.EndDate,
       dataIndex: 'endDate',
       align: 'right',
       render: renderEndDate,
