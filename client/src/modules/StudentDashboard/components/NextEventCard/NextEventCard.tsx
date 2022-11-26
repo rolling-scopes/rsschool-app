@@ -32,12 +32,16 @@ function NextEventCard({ nextEvents, courseAlias }: Props) {
             rowKey="id"
             size="middle"
             columns={columns}
+            className="next-event-card-table"
           />
         }
       />
       <style jsx>{`
-        :global(.ant-table-thead) {
+        :global(.next-event-card-table .ant-table-thead) {
           display: none;
+        }
+        :global(.next-event-card-table tr:last-child > td ) {
+          border-bottom: none;
         }
       `}</style>
     </>
