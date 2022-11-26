@@ -40,7 +40,7 @@ function NextEventCard({ nextEvents, courseAlias }: Props) {
         :global(.next-event-card-table .ant-table-thead) {
           display: none;
         }
-        :global(.next-event-card-table tr:last-child > td ) {
+        :global(.next-event-card-table tr:last-child > td) {
           border-bottom: none;
         }
       `}</style>

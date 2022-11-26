@@ -18,4 +18,3 @@ export function renderTagWithStyle(tagName: CourseScheduleItemDto['tag'], tagCol
     </Tag>
   );
 }
-

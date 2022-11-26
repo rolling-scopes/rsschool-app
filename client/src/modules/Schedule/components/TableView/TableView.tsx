@@ -2,7 +2,14 @@ import { Col, Form, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { coloredDateRenderer, dateSorter, getColumnSearchProps, renderTask, scoreRenderer, weightRenderer } from 'components/Table';
+import {
+  coloredDateRenderer,
+  dateSorter,
+  getColumnSearchProps,
+  renderTask,
+  scoreRenderer,
+  weightRenderer,
+} from 'components/Table';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,
