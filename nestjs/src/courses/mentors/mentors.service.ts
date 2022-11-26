@@ -155,12 +155,7 @@ export class MentorsService {
     const task = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
-      .leftJoin(
-        TaskChecker,
-        'tc',
-        'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId" AND tc."mentorId" = :mentorId',
-        { mentorId },
-      )
+      .leftJoin(TaskChecker, 'tc', 'tc."studentId" = ts."studentId" AND tc."courseTaskId" = ts."courseTaskId"')
       .innerJoin(CourseTask, 'ct', 'ct.id = ts."courseTaskId"')
       .innerJoin(Student, 's', 's.id = ts."studentId"')
       .select(['ts.studentId', 'ts.courseTaskId', 'tc.id'])
