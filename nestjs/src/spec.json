@@ -1973,10 +1973,13 @@
           "id": { "type": "number" },
           "type": { "type": "string" },
           "name": { "type": "string" },
-          "startDate": { "type": "object" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "attributes": { "type": "object" }
         },
-        "required": ["id", "type", "name", "startDate", "attributes"]
+        "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
       "AvailableStudentDto": {
         "type": "object",
