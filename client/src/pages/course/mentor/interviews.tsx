@@ -137,7 +137,7 @@ function renderFooter(interview: Interview, courseAlias: string) {
         <Button
           size="small"
           type="link"
-          href={`/course/mentor/interview-students?course=${courseAlias}&interviewId=${id}`}
+          href={`/course/mentor/interview-wait-list?course=${courseAlias}&interviewId=${id}`}
         >
           Available Students
         </Button>
