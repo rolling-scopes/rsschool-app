@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StageInterviewFeedbackJson } from '@common/models';
@@ -23,7 +23,7 @@ export class InterviewsService {
 
   public getAll(courseId: number) {
     return this.courseTaskRepository.find({
-      where: { courseId, type: 'interview' },
+      where: { courseId, type: In(['interview', 'stage-interview']), disabled: false },
       relations: ['task'],
     });
   }

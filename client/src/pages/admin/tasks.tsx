@@ -179,6 +179,9 @@ function Page(props: Props) {
         >
           <Input />
         </Form.Item>
+        <Form.Item name="description" label="Summary">
+          <Input />
+        </Form.Item>
 
         <Row gutter={24}>
           <Col span={24}>
@@ -264,6 +267,7 @@ function createRecord(values: any) {
     descriptionUrl: values.descriptionUrl,
     githubRepoName: values.githubRepoName,
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
+    description: values.description,
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
     disciplineId: values.disciplineId,

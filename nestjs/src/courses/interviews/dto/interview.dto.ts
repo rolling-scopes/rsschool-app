@@ -9,7 +9,10 @@ export class InterviewDto {
     this.id = courseTask.id;
     this.type = courseTask.type;
     this.name = courseTask.task.name;
-    this.startDate = courseTask.studentStartDate;
+    this.startDate = courseTask.studentStartDate as string;
+    this.endDate = courseTask.studentEndDate as string;
+    this.description = courseTask.task.description;
+    this.descriptionUrl = courseTask.task.descriptionUrl;
     this.attributes = courseTask.task?.attributes;
   }
 
@@ -29,7 +32,18 @@ export class InterviewDto {
   name: string;
 
   @ApiProperty()
-  startDate: string | null | Date;
+  startDate: string;
+
+  @ApiProperty()
+  endDate: string;
+
+  @IsString()
+  @ApiProperty()
+  description?: string;
+
+  @IsString()
+  @ApiProperty()
+  descriptionUrl: string;
 
   @ApiProperty({ type: Object })
   attributes: Record<string, string>;

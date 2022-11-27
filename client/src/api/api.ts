@@ -2217,10 +2217,28 @@ export interface InterviewDto {
     'name': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof InterviewDto
      */
-    'startDate': object;
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'descriptionUrl': string;
     /**
      * 
      * @type {object}
