@@ -2030,7 +2030,7 @@
           "name": { "type": "string" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "description": { "type": "string" },
+          "description": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
           "attributes": { "type": "object" }
         },
