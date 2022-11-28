@@ -37,7 +37,9 @@ export function MainStatsCard({ totalScore, position, maxCourseScore, totalStude
                   <TrophyOutlined style={iconStyle} />
                   Position
                 </Text>
-                <Text strong style={textStyle}>{positionText}</Text>
+                <Text strong style={textStyle}>
+                  {positionText}
+                </Text>
               </div>
               <div style={contentDivStyle}>
                 <Text type="secondary">
