@@ -166,7 +166,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-const gapSize = 16;
+const gapSize = 24;
 const { className: masonryClassName, styles: masonryStyles } = css.resolve`
   div {
     display: flex;
