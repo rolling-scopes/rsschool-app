@@ -6,48 +6,52 @@ import userEvent from '@testing-library/user-event';
 const addCriteria = jest.fn();
 
 describe('AddCriteriaForCrossCheck', () => {
-  test('render match snapshot', () => {
+  test('should match shapshot', () => {
     const view = render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
     expect(view).toMatchSnapshot();
   });
 
-  test('contains following text', () => {
+  test('should render "Add New Criteria" button', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
     const element = screen.getByText(/Add New Criteria/i);
     expect(element).toBeInTheDocument();
   });
 
-  test('functions are called', () => {
+  test('should call addCriteria when "Add new criteria" button was clicked', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
-    const button = screen.getByText(/Add New Criteria/i);
+    const button = screen.getByRole('button', { name: /Add New Criteria/i });
     fireEvent.click(button);
     expect(addCriteria).toHaveBeenCalledTimes(1);
   });
 
-  test('textarea renders correct', async () => {
+  test('should render textarea', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
+
     const textarea = screen.getByPlaceholderText('Add description') as HTMLInputElement;
     expect(textarea).toBeInTheDocument();
-
-    const testString = 'test value';
-    textarea.value = '';
-    await userEvent.type(textarea, testString);
-    expect(textarea.value).toEqual(testString);
   });
 
-  test('Simulates selection', async () => {
+  test('should change textarea value on typing', async () => {
+    const expectedString = 'test value';
+    render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
+
+    const textarea = screen.getByPlaceholderText('Add description') as HTMLInputElement;
+    await userEvent.type(textarea, expectedString);
+
+    expect(textarea.value).toEqual(expectedString);
+  });
+
+  test('should select criteria', async () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
     const selectCriteriaType = screen.getByRole('combobox') as HTMLSelectElement;
     expect(selectCriteriaType).toBeInTheDocument();
     fireEvent.mouseDown(selectCriteriaType);
-    const optionSubtask = screen.getByTestId('Subtask') as HTMLOptionElement;
 
-    fireEvent.click(optionSubtask);
     const element = screen.getByRole('option', { name: 'Subtask' });
     expect(element).toBeInTheDocument();
   });
 
-  test('inputs type renders correct', async () => {
+  test('input with adding max score renders only after user select criteria type Subtask', async () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
     const selectCriteriaType = screen.getByRole('combobox') as HTMLSelectElement;
 
@@ -58,13 +62,5 @@ describe('AddCriteriaForCrossCheck', () => {
     const optionSubtask = screen.getByTestId('Subtask') as HTMLOptionElement;
     fireEvent.click(optionSubtask);
     expect(screen.getByText('Add Max Score')).toBeInTheDocument();
-
-    const inputMaxPenalty = screen.queryByLabelText('Add Max Penalty') as HTMLInputElement;
-    expect(inputMaxPenalty).not.toBeInTheDocument();
-
-    fireEvent.mouseDown(selectCriteriaType);
-    const optionPenalty = screen.getByTestId('Penalty') as HTMLOptionElement;
-    fireEvent.click(optionPenalty);
-    expect(screen.getByText('Add Max Penalty')).toBeInTheDocument();
   });
 });

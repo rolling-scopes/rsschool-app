@@ -4,14 +4,13 @@ import React from 'react';
 import { CrossCheckCriteriaData } from '../CrossCheckCriteriaForm';
 
 interface TitleCriteriaProps {
-  task: CrossCheckCriteriaData;
+  titleData: CrossCheckCriteriaData;
 }
 const { Text } = Typography;
 
-export default function TitleCriteria({ task }: TitleCriteriaProps) {
+export default function TitleCriteria({ titleData }: TitleCriteriaProps) {
   return (
-    <Text
-      key={task.key}
+    <div
       style={{
         display: 'block',
         fontSize: '14px',
@@ -22,7 +21,7 @@ export default function TitleCriteria({ task }: TitleCriteriaProps) {
         padding: '9px',
       }}
     >
-      {task.text}
-    </Text>
+      <Text key={titleData.key}>{titleData.text}</Text>
+    </div>
   );
 }

@@ -7,11 +7,16 @@ import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 
+type CrossCheckHistoryState = {
+  loading: boolean;
+  data: SolutionReviewType[];
+};
+
 type Props = {
   sessionId: number;
   courseId: number;
   courseTaskId: number | null;
-  state: { loading: boolean; data: SolutionReviewType[] };
+  state: CrossCheckHistoryState;
   sessionGithubId: string;
   maxScore: number | undefined;
   setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;

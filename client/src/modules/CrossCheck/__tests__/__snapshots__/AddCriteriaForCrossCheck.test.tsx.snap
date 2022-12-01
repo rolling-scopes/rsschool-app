@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AddCriteriaForCrossCheck render match snapshot 1`] = `
+exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
@@ -32,7 +32,6 @@ exports[`AddCriteriaForCrossCheck render match snapshot 1`] = `
               >
                 <div
                   class="ant-select ant-select-in-form-item ant-select-single ant-select-show-arrow"
-                  data-testid="select"
                 >
                   <div
                     class="ant-select-selector"
@@ -173,7 +172,6 @@ exports[`AddCriteriaForCrossCheck render match snapshot 1`] = `
             >
               <div
                 class="ant-select ant-select-in-form-item ant-select-single ant-select-show-arrow"
-                data-testid="select"
               >
                 <div
                   class="ant-select-selector"

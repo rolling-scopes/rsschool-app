@@ -1,4 +1,5 @@
 import { Button, Form, InputNumber, Select, Input, message } from 'antd';
+import { TaskType } from 'components/CrossCheck/CrossCheckCriteriaForm';
 import React, { useState } from 'react';
 import { IAddCriteriaForCrossCheck } from 'services/course';
 
@@ -22,7 +23,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
 
   const onFinish = () => {
     let criteriaDetails;
-    type === 'Title'
+    type.toLowerCase() === TaskType.Title
       ? (criteriaDetails = {
           key: DEFAULT_KEY,
           text: text,
@@ -31,7 +32,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
         })
       : (criteriaDetails = {
           key: DEFAULT_KEY,
-          max: type === 'Penalty' ? -Math.abs(maxPenalty) : max,
+          max: type.toLowerCase() === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
           text: text,
           type: type,
           index: DEFAULT_INDEX,
@@ -56,24 +57,20 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   return (
     <>
       <Item label="Criteria Type">
-        <Select data-testid="select" placeholder="Select type" onChange={changeType}>
-          <Option data-testid="Title" value="Title">
-            Title
-          </Option>
+        <Select placeholder="Select type" onChange={changeType}>
+          <Option value="Title">Title</Option>
           <Option data-testid="Subtask" value="Subtask">
             Subtask
           </Option>
-          <Option data-testid="Penalty" value="Penalty">
-            Penalty
-          </Option>
+          <Option value="Penalty">Penalty</Option>
         </Select>
       </Item>
 
-      {type === 'Subtask' ? (
+      {type.toLowerCase() === TaskType.Subtask ? (
         <Item label="Add Max Score">
           <InputNumber value={max} min={0} step={1} onChange={changeMax} />
         </Item>
-      ) : type === 'Penalty' ? (
+      ) : type.toLowerCase() === TaskType.Penalty ? (
         <Item label="Add Max Penalty">
           <InputNumber value={maxPenalty} step={1} onChange={changeMaxPenalty} />
         </Item>

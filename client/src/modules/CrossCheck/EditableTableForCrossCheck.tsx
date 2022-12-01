@@ -16,15 +16,12 @@ interface CriteriaIndex {
   newIndex: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {};
-
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
 
-const SortableItem = SortableElement((props: Props) => {
+const SortableItem = SortableElement((props: Record<string, unknown>) => {
   return <tr {...props} />;
 });
-const SortableBody = SortableContainer((props: Props) => {
+const SortableBody = SortableContainer((props: Record<string, unknown>) => {
   return <tbody {...props} />;
 });
 
@@ -39,7 +36,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     }
   };
 
-  const DraggableContainer = (props: Props) => {
+  const DraggableContainer = (props: Record<string, unknown>) => {
     return <SortableBody useDragHandle disableAutoscroll helperClass="row-dragging" onSortEnd={onSortEnd} {...props} />;
   };
 

@@ -20,10 +20,10 @@ import { TaskService } from 'services/task';
 import { useCriteriaState } from '../../../components/CrossCheck/hooks/useCriteriaState';
 import {
   CrossCheckCriteriaForm,
-  ICommentState,
-  ICountState,
+  CommentState,
+  CountState,
 } from '../../../components/CrossCheck/CrossCheckCriteriaForm';
-import _ from 'lodash';
+import { omit } from 'lodash';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -97,14 +97,14 @@ function Page(props: CoursePageProps) {
     setCriteriaData(data.criteria);
     const newCountState = data.criteria
       .filter(item => item.type.toLowerCase() === 'subtask')
-      .map(item => _.omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-    setCountStar(newCountState as ICountState[]);
-    const newCommentState = data.criteria.map(item => _.omit(item, ['text', 'index', 'point', 'type', 'max']));
-    setComment(newCommentState as ICommentState[]);
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setCountStar(newCountState as CountState[]);
+    const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
+    setComment(newCommentState as CommentState[]);
     const newPenalty = data.criteria
       .filter(item => item.type.toLowerCase() === 'penalty')
-      .map(item => _.omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-    setPenalty(newPenalty as ICountState[]);
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setPenalty(newPenalty as CountState[]);
   };
 
   const checkPoints = () => criteriaData.filter(item => item.type.toLowerCase() === 'subtask').map(item => item.type);

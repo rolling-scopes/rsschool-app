@@ -1,10 +1,21 @@
-import React, { useEffect } from 'react';
-import { Layout, Typography, InputNumber } from 'antd';
+import React, { useMemo } from 'react';
+import { Typography, InputNumber } from 'antd';
 
 import SubtaskCriteria from './criteria/SubtaskCriteria';
 import TitleCriteria from './criteria/TitleCriteria';
 import PenaltyCriteria from './criteria/PenaltyCriteria';
-import _ from 'lodash';
+import { omit } from 'lodash';
+
+export enum TaskType {
+  Title = 'title',
+  Subtask = 'subtask',
+  Penalty = 'penalty',
+}
+
+enum HasPenalty {
+  Yes = 'yes',
+  No = 'no',
+}
 
 export interface CrossCheckCriteriaData {
   key: string;
@@ -15,26 +26,26 @@ export interface CrossCheckCriteriaData {
   textComment?: string;
 }
 
-export interface ICountState {
+export interface CountState {
   key: string;
   point: number;
 }
 
-export interface ICommentState {
+export interface CommentState {
   key: string;
   textComment: string;
 }
 
 export interface CriteriaFormProps {
-  countStar: ICountState[];
-  setCountStar: (newCount: ICountState[]) => void;
+  countStar: CountState[];
+  setCountStar: (newCount: CountState[]) => void;
   criteriaData: CrossCheckCriteriaData[];
   totalPoints: number;
   setTotalPoints: (newPoint: number) => void;
-  penalty: ICountState[];
-  setPenalty: (newPenalty: ICountState[]) => void;
-  criteriaComment: ICommentState[];
-  setComment: (newComment: ICommentState[]) => void;
+  penalty: CountState[];
+  setPenalty: (newPenalty: CountState[]) => void;
+  criteriaComment: CommentState[];
+  setComment: (newComment: CommentState[]) => void;
   maxScoreForTask: number;
 }
 
@@ -50,23 +61,23 @@ export function CrossCheckCriteriaForm({
   setComment,
   maxScoreForTask,
 }: CriteriaFormProps) {
-  const { Footer, Content } = Layout;
+  const penaltyData: CrossCheckCriteriaData[] =
+    criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty).map(item => omit(item, ['point'])) ?? [];
 
-  let penaltyData: CrossCheckCriteriaData[] = criteriaData?.filter(item => item.type.toLowerCase() === 'penalty');
-
-  if (penalty.length === 0) {
-    penaltyData = penaltyData?.map(item => _.omit(item, ['point']));
+  function calculateTotalPoints() {
+    return useMemo(() => {
+      const sumPoints = +countStar
+        .map(item => item.point)
+        .reduce((prev, next) => prev + next, 0)
+        .toFixed(1);
+      const sumPenalty = penalty.map(item => item.point).reduce((prev, next) => prev + next, 0);
+      const finalPoints = sumPoints + sumPenalty;
+      setTotalPoints(finalPoints > 0 ? finalPoints : 0);
+      return finalPoints > 0 ? finalPoints : 0;
+    }, [countStar, penalty]);
   }
 
-  useEffect(() => {
-    const sumPoints = +countStar
-      .map(item => item.point)
-      .reduce((prev, next) => prev + next, 0)
-      .toFixed(1);
-    const sumPenalty = penalty.map(item => item.point).reduce((prev, next) => prev + next, 0);
-    const finalPoints = sumPoints + sumPenalty;
-    setTotalPoints(finalPoints > 0 ? finalPoints : 0);
-  }, [countStar, penalty]);
+  const calculationResultPoints = calculateTotalPoints();
 
   function updateCountStar(event: number, max: number, key: string) {
     if (countStar.find(item => item.key === key)) {
@@ -78,9 +89,9 @@ export function CrossCheckCriteriaForm({
 
   function updatePenalty(max: number, key: string, value: string) {
     if (penalty.find(item => item.key === key)) {
-      setPenalty([...penalty.filter(item => item.key !== key), { key, point: value ? max : 0 }]);
+      setPenalty([...penalty.filter(item => item.key !== key), { key, point: value === HasPenalty.Yes ? max : 0 }]);
     } else {
-      setPenalty([...penalty, { key, point: value ? max : 0 }]);
+      setPenalty([...penalty, { key, point: value === HasPenalty.Yes ? max : 0 }]);
     }
   }
 
@@ -97,47 +108,51 @@ export function CrossCheckCriteriaForm({
   }
 
   return (
-    <Layout style={{ maxWidth: '1200px', margin: '0 auto', backgroundColor: 'white' }}>
-      <Content style={{ backgroundColor: 'white' }}>
+    <div style={{ margin: '0 auto', backgroundColor: 'white' }}>
+      <div>
         {!!criteriaData?.length && (
           <>
             <Typography.Title level={4}>Criteria</Typography.Title>
-            {criteriaData?.map((task: CrossCheckCriteriaData) => {
-              return task.type.toLowerCase() === 'title' ? (
-                <TitleCriteria task={task} />
-              ) : task.type.toLowerCase() === 'subtask' ? (
-                <SubtaskCriteria
-                  criteriaComment={criteriaComment}
-                  countStar={countStar}
-                  updateCountStar={updateCountStar}
-                  task={task}
-                  updateComment={updateComment}
-                />
-              ) : null;
-            })}
+            {criteriaData
+              ?.filter(
+                (item: CrossCheckCriteriaData) =>
+                  item.type.toLowerCase() === TaskType.Title || item.type.toLowerCase() === TaskType.Subtask,
+              )
+              .map((item: CrossCheckCriteriaData) => {
+                return item.type.toLowerCase() === TaskType.Title ? (
+                  <TitleCriteria titleData={item} />
+                ) : (
+                  <SubtaskCriteria
+                    criteriaComment={criteriaComment}
+                    countStar={countStar}
+                    updateCountStar={updateCountStar}
+                    subtaskData={item}
+                    updateComment={updateComment}
+                  />
+                );
+              })}
           </>
         )}
         {!!penaltyData?.length && (
           <>
             <Typography.Title level={4}>Penalty</Typography.Title>
             {penaltyData?.map((task: CrossCheckCriteriaData) => (
-              <PenaltyCriteria task={task} updatePenalty={updatePenalty} penalty={penalty} />
+              <PenaltyCriteria penaltyData={task} updatePenalty={updatePenalty} penaltyCount={penalty} />
             ))}
           </>
         )}
-      </Content>
+      </div>
 
-      <Footer style={{ backgroundColor: 'white', padding: '10px 0 0 0' }}>
-        <Typography.Text style={{ margin: '30px 0 5px 0' }}>{`Score (Max ${maxScoreForTask} points) `}</Typography.Text>
+      <div style={{ margin: '10px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <Typography.Title level={4}>{`Score (Max ${maxScoreForTask} points) `}</Typography.Title>
         <InputNumber
           min={0}
           max={maxScoreForTask}
-          style={{ display: 'block', margin: '10px 0 10px 0', fontSize: '16px' }}
-          value={+totalPoints}
+          value={totalPoints === calculationResultPoints ? calculationResultPoints : totalPoints}
           onChange={changeFinalScore}
           size={'middle'}
         />
-      </Footer>
-    </Layout>
+      </div>
+    </div>
   );
 }

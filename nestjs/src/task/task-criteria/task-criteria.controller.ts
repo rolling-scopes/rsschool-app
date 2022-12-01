@@ -3,7 +3,7 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { TaskCriteriaService } from './task-criteria.service';
 import { TaskCriteriaDto } from './dto/task-criteria.dto';
-import { DefaultGuard, RoleGuard } from '../../auth';
+import { DefaultGuard, RoleGuard, RequiredRoles, Role, CourseRole } from '../../auth';
 
 @Controller('task/:taskId/criteria')
 @ApiTags('criteria')
@@ -23,6 +23,7 @@ export class TaskCriteriaController {
   @ApiOperation({ operationId: 'createTaskCriteria' })
   @ApiOkResponse({ type: TaskCriteriaDto })
   @ApiBody({ type: TaskCriteriaDto })
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   async create(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
     const data = await this.taskCriteriaService.createCriteria(taskId, taskCriteriaDto.criteria);
     return data;
@@ -32,6 +33,7 @@ export class TaskCriteriaController {
   @ApiOperation({ operationId: 'updateTaskCriteria' })
   @ApiOkResponse({ type: TaskCriteriaDto })
   @ApiBody({ type: TaskCriteriaDto })
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   async update(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
     const data = await this.taskCriteriaService.updateCriteria(taskId, taskCriteriaDto);
     return data;

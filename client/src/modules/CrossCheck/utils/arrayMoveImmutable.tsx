@@ -12,7 +12,7 @@ export function arrayMoveMutable(array: CriteriaData[], fromIndex: number, toInd
 }
 
 export function arrayMoveImmutable(array: CriteriaData[], fromIndex: number, toIndex: number) {
-  array = [...array];
-  arrayMoveMutable(array, fromIndex, toIndex);
-  return array;
+  const arrayCopy = [...array];
+  arrayMoveMutable(arrayCopy, fromIndex, toIndex);
+  return arrayCopy;
 }

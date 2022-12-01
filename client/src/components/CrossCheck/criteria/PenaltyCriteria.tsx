@@ -1,22 +1,22 @@
 import React from 'react';
 import { Radio, Typography } from 'antd';
 
-import { CrossCheckCriteriaData, ICountState } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData, CountState } from '../CrossCheckCriteriaForm';
 
 const { Text } = Typography;
 const { Group } = Radio;
 
 interface PenaltyCriteriaProps {
-  task: CrossCheckCriteriaData;
+  penaltyData: CrossCheckCriteriaData;
   updatePenalty: (max: number, key: string, value: string) => void;
-  penalty: ICountState[];
+  penaltyCount: CountState[];
 }
 
-export default function PenaltyCriteria({ task, updatePenalty, penalty }: PenaltyCriteriaProps) {
-  const pointForPenalty = penalty.filter(item => task.key === item.key)[0]?.point;
-  const isPenaltyTrue = pointForPenalty ? pointForPenalty !== 0 : false;
+export default function PenaltyCriteria({ penaltyData, updatePenalty, penaltyCount }: PenaltyCriteriaProps) {
+  const pointForPenalty = penaltyCount.filter(item => penaltyData.key === item.key)[0]?.point;
+  const hasPenalty = Boolean(pointForPenalty && pointForPenalty !== 0);
 
-  const penaltyScore = -Math.abs(task.max!);
+  const penaltyScore = -Math.abs(penaltyData.max!);
   return (
     <div
       style={{
@@ -28,21 +28,19 @@ export default function PenaltyCriteria({ task, updatePenalty, penalty }: Penalt
         margin: '24px 0',
         padding: '14px 12px',
       }}
-      key={task.key}
+      key={penaltyData.key}
     >
-      <Text style={{ display: 'inline-block', fontSize: '14px', width: 'calc(100% - 200px)' }}>
-        {task.text} ({penaltyScore} points)
+      <Text>
+        {penaltyData.text} ({penaltyScore} points)
       </Text>
 
       <Group
-        style={{ display: 'block' }}
         size="middle"
-        value={isPenaltyTrue ? 'yes' : ''}
-        buttonStyle="solid"
-        onChange={event => updatePenalty(penaltyScore, task.key, event.target.value)}
+        value={hasPenalty ? 'yes' : 'no'}
+        onChange={event => updatePenalty(penaltyScore, penaltyData.key, event.target.value)}
       >
         <Radio value="yes">Yes</Radio>
-        <Radio value="">No</Radio>
+        <Radio value="no">No</Radio>
       </Group>
     </div>
   );

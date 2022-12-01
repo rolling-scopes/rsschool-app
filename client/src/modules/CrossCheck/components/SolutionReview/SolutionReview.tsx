@@ -104,11 +104,7 @@ function SolutionReview(props: SolutionReviewProps) {
 
   return (
     <Spin spinning={loading}>
-      <CrossCheckCriteriaModal
-        modalInfo={modalData}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-      />
+      <CrossCheckCriteriaModal modalInfo={modalData} isModalVisible={isModalVisible} showModal={setIsModalVisible} />
       <Row style={{ margin: '8px 0' }}>
         <Col span={24}>
           <Divider style={{ margin: 0 }} />

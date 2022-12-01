@@ -13,12 +13,14 @@ import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { DisciplineDto, DisciplinesApi } from 'api';
-import { UploadCriteriaJSON } from 'modules/CrossCheck/UploadCriteriaJSON';
-import { AddCriteriaForCrossCheck } from 'modules/CrossCheck/AddCriteriaForCrossCheck';
-import { ExportJSONButton } from 'modules/CrossCheck/ExportJSONButton';
 import { CriteriaData } from 'services/course';
-import { addKeyAndIndex } from 'modules/CrossCheck/utils/addKeyAndIndex';
-import { EditableTable } from 'modules/CrossCheck/EditableTableForCrossCheck';
+import {
+  UploadCriteriaJSON,
+  AddCriteriaForCrossCheck,
+  ExportJSONButton,
+  addKeyAndIndex,
+  EditableTable,
+} from 'modules/CrossCheck';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };

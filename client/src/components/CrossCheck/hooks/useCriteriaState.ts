@@ -1,29 +1,29 @@
 import { useState } from 'react';
 
-import { CrossCheckCriteriaData, ICommentState, ICountState } from 'components/CrossCheck/CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData, CommentState, CountState } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
-export interface ICriteriaSetState {
-  setCountStar: (newCount: ICountState[]) => void;
+interface CriteriaSetState {
+  setCountStar: (newCount: CountState[]) => void;
   setCriteriaData: (newCriteria: CrossCheckCriteriaData[]) => void;
   setScore: (newPoint: number) => void;
-  setPenalty: (newPenalty: ICountState[]) => void;
-  setComment: (newComment: ICommentState[]) => void;
+  setPenalty: (newPenalty: CountState[]) => void;
+  setComment: (newComment: CommentState[]) => void;
 }
 
-interface ICriteriaState {
-  countStar: ICountState[];
+interface CriteriaState {
+  countStar: CountState[];
   criteriaData: CrossCheckCriteriaData[];
   score: number;
-  penalty: ICountState[];
-  criteriaComment: ICommentState[];
+  penalty: CountState[];
+  criteriaComment: CommentState[];
 }
 
-export function useCriteriaState(): [ICriteriaState, ICriteriaSetState] {
-  const [countStar, setCountStar] = useState<ICountState[]>([]);
-  const [penalty, setPenalty] = useState<ICountState[]>([]);
+export function useCriteriaState(): [CriteriaState, CriteriaSetState] {
+  const [countStar, setCountStar] = useState<CountState[]>([]);
+  const [penalty, setPenalty] = useState<CountState[]>([]);
   const [criteriaData, setCriteriaData] = useState([] as CrossCheckCriteriaData[]);
   const [score, setScore] = useState(0);
-  const [criteriaComment, setComment] = useState<ICommentState[]>([]);
+  const [criteriaComment, setComment] = useState<CommentState[]>([]);
 
   return [
     { countStar, penalty, criteriaData, score, criteriaComment },
