@@ -7,9 +7,11 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { CourseTask } from './courseTask';
 import { Discipline } from './discipline';
+import { TaskCriteria } from './taskCriteria';
 
 export type TaskType =
   | 'jstask'
@@ -84,4 +86,8 @@ export class Task {
 
   @Column({ type: 'json', default: {} })
   attributes: Record<string, any>;
+
+  @OneToOne(() => TaskCriteria, (taskCriteria: TaskCriteria) => taskCriteria.taskId, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'criteriaId' })
+  criteria: TaskCriteria;
 }

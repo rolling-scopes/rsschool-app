@@ -34,6 +34,7 @@ import { StudentFeedback } from './student-feedback';
 import { Task } from './task';
 import { TaskArtefact } from './taskArtefact';
 import { TaskChecker } from './taskChecker';
+import { TaskCriteria } from './taskCriteria';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { TaskInterviewStudent } from './taskInterviewStudent';
 import { TaskResult } from './taskResult';
@@ -128,6 +129,7 @@ export const models = [
   Task,
   TaskArtefact,
   TaskChecker,
+  TaskCriteria,
   TaskInterviewResult,
   TaskInterviewStudent,
   TaskResult,

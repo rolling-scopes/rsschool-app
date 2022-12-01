@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { CourseTaskDtoTypeEnum } from 'api';
 import { DisciplineDto } from 'api';
+import { CriteriaData } from 'services/course';
 
 export type TaskType = CourseTaskDtoTypeEnum;
+
+interface IIdentifiers {
+  id: number;
+}
 
 export interface Task {
   id: number;
@@ -11,6 +16,7 @@ export interface Task {
   name: string;
   descriptionUrl: string | null;
   description: string | null;
+  identifiers: IIdentifiers[];
   githubPrRequired: boolean | null;
   type: TaskType;
   githubRepoName: string;
@@ -41,5 +47,24 @@ export class TaskService {
   async createTask(data: Partial<Task>) {
     const result = await axios.post<{ data: Task }>(`/api/task/`, data);
     return result.data.data;
+  }
+
+  async createCriteriaForCourseTask(taskId: number, data: CriteriaData[]) {
+    const result = await axios.post<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`, {
+      criteria: data,
+    });
+    return result.data;
+  }
+
+  async getCriteriaForCourseTask(taskId: number) {
+    const result = await axios.get<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`);
+    return result.data.criteria;
+  }
+
+  async updateCriteriaForCourseTask(taskId: number, data: CriteriaData[]) {
+    const result = await axios.patch<{ criteria: CriteriaData[] }>(`/api/v2/task/${taskId}/criteria`, {
+      criteria: data,
+    });
+    return result.data;
   }
 }
