@@ -97,19 +97,18 @@ function Page(props: CoursePageProps) {
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
     setScore(data.score);
-    if (data.criteria) {
-      setCriteriaData(data.criteria);
-      const newCountState = data.criteria
-        .filter(item => item.type.toLowerCase() === TaskType.Subtask)
-        .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-      setCountStar(newCountState as CountState[]);
-      const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
-      setComment(newCommentState as CommentState[]);
-      const newPenalty = data.criteria
-        .filter(item => item.type.toLowerCase() === TaskType.Penalty)
-        .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-      setPenalty(newPenalty as CountState[]);
-    }
+    if (!data.criteria) return;
+    setCriteriaData(data.criteria);
+    const newCountState = data.criteria
+      .filter(item => item.type.toLowerCase() === TaskType.Subtask)
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setCountStar(newCountState as CountState[]);
+    const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
+    setComment(newCommentState as CommentState[]);
+    const newPenalty = data.criteria
+      .filter(item => item.type.toLowerCase() === TaskType.Penalty)
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setPenalty(newPenalty as CountState[]);
   };
 
   const checkPoints = () => criteriaData.filter(item => item.type.toLowerCase() === 'subtask').map(item => item.type);
