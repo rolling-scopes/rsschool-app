@@ -226,6 +226,7 @@ function generateCourseData(
       score: idx + 20,
       tag: 'test',
       descriptionUrl: '',
+      crossCheckEndDate: '2020-02-01T21:00:00.000Z',
     };
   });
 }

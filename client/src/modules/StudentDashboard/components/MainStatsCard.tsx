@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { TrophyOutlined, FireOutlined } from '@ant-design/icons';
-import { Card, Typography } from 'antd';
+import { Card, Typography, Image } from 'antd';
+import CommonCard from './CommonDashboardCard';
 
 const DEFAULT_POSITION = 999999;
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 type Props = {
   isActive: boolean;
@@ -14,48 +15,50 @@ type Props = {
   totalStudentsCount: number;
 };
 
-interface IStyle {
-  [key: string]: React.CSSProperties;
-}
-
 export function MainStatsCard({ totalScore, position, maxCourseScore, totalStudentsCount }: Props) {
   const currentPositionText = `${position}${totalStudentsCount ? ` / ${totalStudentsCount}` : ''}`;
   const positionText = position >= DEFAULT_POSITION ? 'New' : currentPositionText;
   const totalScoreText = `${totalScore}${maxCourseScore ? ` / ${maxCourseScore}` : ''}`;
-  const { gridStyle, contentColStyle, contentDivStyle, contentPStyle, iconStyle, textStyle } = STYLE;
+  const { gridStyle, contentColStyle, contentDivStyle, iconStyle, textStyle } = STYLE;
 
   return (
-    <Card
-      title={
-        <Title level={2} ellipsis={true} style={{ fontSize: 16, marginBottom: 0 }}>
-          Your stats
-        </Title>
-      }
+    <CommonCard
+      title="Your stats"
       bodyStyle={{ padding: 0 }}
-    >
-      <Card.Grid hoverable={false} style={gridStyle}>
-        <div style={contentColStyle}>
-          <div style={contentDivStyle}>
-            <p style={contentPStyle}>
-              <TrophyOutlined style={iconStyle} />
-              Position
-            </p>
-            <Text style={textStyle}>{positionText}</Text>
-          </div>
-          <div style={contentDivStyle}>
-            <p style={contentPStyle}>
-              <FireOutlined style={iconStyle} />
-              Total Score
-            </p>
-            <Text style={textStyle}>{totalScoreText}</Text>
-          </div>
-        </div>
-      </Card.Grid>
-    </Card>
+      content={
+        <>
+          <Card.Grid hoverable={false} style={gridStyle}>
+            <Image preview={false} src="/static/images/im-fine.svg" />
+          </Card.Grid>
+          <Card.Grid hoverable={false} style={gridStyle}>
+            <div style={contentColStyle}>
+              <div style={contentDivStyle}>
+                <Text type="secondary">
+                  <TrophyOutlined style={iconStyle} />
+                  Position
+                </Text>
+                <Text strong style={textStyle}>
+                  {positionText}
+                </Text>
+              </div>
+              <div style={contentDivStyle}>
+                <Text type="secondary">
+                  <FireOutlined style={iconStyle} />
+                  Total Score
+                </Text>
+                <Text strong style={textStyle}>
+                  {totalScoreText}
+                </Text>
+              </div>
+            </div>
+          </Card.Grid>
+        </>
+      }
+    />
   );
 }
 
-const STYLE: IStyle = {
+const STYLE: Record<string, React.CSSProperties> = {
   contentDivStyle: {
     minWidth: 106,
     maxHeight: 58,
@@ -70,6 +73,7 @@ const STYLE: IStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
   },
   contentColStyle: {
     width: '100%',
@@ -81,13 +85,6 @@ const STYLE: IStyle = {
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  contentPStyle: {
-    marginBottom: 8,
-    textAlign: 'center',
-    fontSize: '14px',
-    lineHeight: '22px',
-    color: 'rgba(0, 0, 0, 0.45)',
-  },
   iconStyle: {
     marginRight: 8,
   },
@@ -95,6 +92,5 @@ const STYLE: IStyle = {
     fontSize: '20px',
     lineHeight: '28px',
     textAlign: 'center',
-    color: '#000000',
   },
 };
