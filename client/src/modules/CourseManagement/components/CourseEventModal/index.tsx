@@ -1,13 +1,12 @@
-import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { CourseEventDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { isNumber } from 'lodash';
 import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useAsync } from 'react-use';
 import { Event, EventService } from 'services/event';
 import { UserService } from 'services/user';
@@ -25,14 +24,9 @@ const userService = new UserService();
 
 export function CourseEventModal(props: Props) {
   const { data, onCancel } = props;
-  const [isNewEvent, setIsNewEvent] = useState<boolean>(false);
   const [form] = Form.useForm();
 
-  const handleModalSubmit = async (values: any) => {
-    console.log('🚀 ~ file: index.tsx ~ line 22 ~ handleModalSubmit ~ values', values, isNewEvent);
-  };
-
-  const loadUsers = async (searchText: string) => {
+  const loadUsers = (searchText: string) => {
     return userService.searchUser(searchText);
   };
 
@@ -48,6 +42,10 @@ export function CourseEventModal(props: Props) {
     },
     [events],
   );
+
+  const handleModalSubmit = async (values: any) => {
+    submitEvent(values, events);
+  };
 
   const typesList = EVENT_TYPES;
   const entityTypes = typesList.map(tag => {
@@ -68,17 +66,7 @@ export function CourseEventModal(props: Props) {
       cancel={onCancel}
     >
       <Form.Item name="event" label="Event" rules={[{ required: true, message: 'Please select a event' }]}>
-        <Select
-          maxTagCount={1}
-          mode="tags"
-          filterOption={filterOption}
-          showSearch
-          placeholder="Please select a event"
-          onChange={value => {
-            setIsNewEvent(isNumber(value.at(-1)) ? false : true);
-            form.setFieldValue('event', value.at(-1));
-          }}
-        >
+        <Select maxTagCount={1} mode="tags" filterOption={filterOption} showSearch placeholder="Please select a event">
           {events.map((event: Event) => (
             <Option key={event.id}>{event.name}</Option>
           ))}
@@ -156,4 +144,35 @@ export function CourseEventModal(props: Props) {
       </Form.Item>
     </ModalForm>
   );
+}
+
+const submitTemplateEvent = async (values: any, eventTemplates: Event[]) => {
+  const currentTemplateEvent = eventTemplates.find(el => el.id === +values.event[0] && el.name !== values.event[0]);
+  const templateEventData = {
+    name: currentTemplateEvent ? currentTemplateEvent.name : values.event[0],
+    type: values.type,
+    descriptionUrl: values.descriptionUrl,
+    description: values.description,
+  } as Partial<Event>;
+
+  if (!currentTemplateEvent) {
+    try {
+      const res = await eventService.createEvent(templateEventData);
+      return res.id;
+    } catch (error) {
+      message.error('Failed to create event template. Please try later.');
+    }
+  } else {
+    try {
+      await eventService.updateEvent(currentTemplateEvent.id, templateEventData);
+      return currentTemplateEvent.id;
+    } catch (error) {
+      message.error('Failed to update event template. Please try later.');
+    }
+  }
+};
+
+async function submitEvent(values: any, eventTemplates: Event[]): Promise<void> {
+  const eventTemplateId = await submitTemplateEvent(values, eventTemplates);
+  if (!eventTemplateId) return;
 }
