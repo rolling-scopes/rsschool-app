@@ -488,7 +488,16 @@
       "get": {
         "operationId": "getInterviews",
         "summary": "",
-        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "disabled", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          {
+            "name": "types",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2019,10 +2028,13 @@
           "id": { "type": "number" },
           "type": { "type": "string" },
           "name": { "type": "string" },
-          "startDate": { "type": "object" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "attributes": { "type": "object" }
         },
-        "required": ["id", "type", "name", "startDate", "attributes"]
+        "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
       "AvailableStudentDto": {
         "type": "object",
