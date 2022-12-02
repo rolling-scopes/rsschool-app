@@ -22,6 +22,7 @@ import {
   CrossCheckCriteriaForm,
   CommentState,
   CountState,
+  TaskType,
 } from '../../../components/CrossCheck/CrossCheckCriteriaForm';
 import { omit } from 'lodash';
 
@@ -76,15 +77,17 @@ function Page(props: CoursePageProps) {
         }))
       : result.messages;
 
-    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => ({
-      dateTime,
-      comment,
-      score,
-      criteria,
-      id: result.id,
-      author: !anonymous ? result.author : null,
-      messages: index === 0 ? messages : [],
-    }));
+    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => {
+      return {
+        dateTime,
+        comment,
+        score,
+        criteria,
+        id: result.id,
+        author: !anonymous ? result.author : null,
+        messages: index === 0 ? messages : [],
+      };
+    });
 
     setState({ loading: false, data: solutionReviews ?? [] });
     if (result !== null) {
@@ -94,15 +97,16 @@ function Page(props: CoursePageProps) {
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
     setScore(data.score);
+    if (!data.criteria) return;
     setCriteriaData(data.criteria);
     const newCountState = data.criteria
-      .filter(item => item.type.toLowerCase() === 'subtask')
+      .filter(item => item.type.toLowerCase() === TaskType.Subtask)
       .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
     setCountStar(newCountState as CountState[]);
     const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
     setComment(newCommentState as CommentState[]);
     const newPenalty = data.criteria
-      .filter(item => item.type.toLowerCase() === 'penalty')
+      .filter(item => item.type.toLowerCase() === TaskType.Penalty)
       .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
     setPenalty(newPenalty as CountState[]);
   };
