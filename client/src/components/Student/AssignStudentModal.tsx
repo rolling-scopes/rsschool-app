@@ -70,7 +70,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
               Assign Student to <Text underline>{mentorGithuId}</Text>
             </>
           }
-          visible={isModalOpened}
+          open={isModalOpened}
           onOk={this.addStudent}
           onCancel={this.reset}
         >

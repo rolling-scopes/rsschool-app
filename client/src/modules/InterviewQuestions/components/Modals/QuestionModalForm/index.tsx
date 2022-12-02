@@ -66,7 +66,7 @@ export function QuestionsModalForm(props: Props) {
   return (
     <Modal
       title={question ? 'Edit question' : 'Add question'}
-      visible={isVisible}
+      open={isVisible}
       onCancel={onCancel}
       onOk={submitQuestion}
     >

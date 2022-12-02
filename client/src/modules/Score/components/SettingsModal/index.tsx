@@ -38,7 +38,7 @@ export function SettingsModal(props: Props) {
   return (
     <Modal
       title="Columns visibility"
-      visible={isVisible}
+      open={isVisible}
       onOk={onOkHandle}
       onCancel={onCancel}
       footer={[

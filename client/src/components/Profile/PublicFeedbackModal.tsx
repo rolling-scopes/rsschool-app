@@ -20,7 +20,7 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
     return (
       <Modal
         title="Public Feedback"
-        visible={this.props.isVisible}
+        open={this.props.isVisible}
         onCancel={this.props.onHide}
         footer={null}
         width={'80%'}

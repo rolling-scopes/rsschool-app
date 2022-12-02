@@ -39,7 +39,7 @@ export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, dis
   return (
     <Modal
       title={discipline ? 'Edit discipline' : 'Add discipline'}
-      visible={isModalVisible}
+      open={isModalVisible}
       onCancel={onCancel}
       onOk={submitForm}
     >

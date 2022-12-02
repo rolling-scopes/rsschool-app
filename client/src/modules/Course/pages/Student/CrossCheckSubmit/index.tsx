@@ -238,7 +238,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                     </Button>
                     <Modal
                       title="Cancel submission"
-                      visible={isModalVisible}
+                      open={isModalVisible}
                       onOk={handleCancellation}
                       onCancel={cancelModal}
                       okButtonProps={{ disabled: buttonDisabled }}

@@ -22,7 +22,7 @@ const ProfileSettingsModal = ({
   return (
     <Modal
       title={settingsTitle ?? 'Profile information'}
-      visible={isSettingsVisible}
+      open={isSettingsVisible}
       okText="Save"
       onOk={onSave}
       okButtonProps={{ disabled: isSaveDisabled }}

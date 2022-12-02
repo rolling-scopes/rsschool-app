@@ -14,12 +14,12 @@ describe('CoreJSIviewsCard', () => {
             {
               answer: true,
               questionText: 'test',
-              questionId: 'test',
+              questionId: 'test1',
             },
             {
               answer: false,
               questionText: 'test',
-              questionId: 'test',
+              questionId: 'test2',
             },
           ],
           interviewer: {

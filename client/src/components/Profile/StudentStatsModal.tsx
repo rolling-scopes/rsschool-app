@@ -22,7 +22,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
     return (
       <Modal
         title={`${courseFullName} statistics`}
-        visible={this.props.isVisible}
+        open={this.props.isVisible}
         onCancel={this.props.onHide}
         footer={null}
         width={'80%'}
