@@ -6,7 +6,9 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseArrayPipe,
   ParseIntPipe,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +18,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
@@ -23,6 +26,7 @@ import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
 import { InterviewsService } from './interviews.service';
+import { TaskType } from '@entities/task';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
@@ -36,9 +40,18 @@ export class InterviewsController {
   @ApiOkResponse({ type: [InterviewDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
+  @ApiQuery({ name: 'disabled', required: false })
+  @ApiQuery({ name: 'types', required: false })
   @ApiOperation({ operationId: 'getInterviews' })
-  public async getInterviews(@Param('courseId', ParseIntPipe) courseId: number) {
-    const data = await this.courseTasksService.getAll(courseId);
+  public async getInterviews(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query('disabled') disabled?: boolean,
+    @Query('types', new ParseArrayPipe({ optional: true })) types?: string[],
+  ) {
+    const data = await this.courseTasksService.getAll(courseId, {
+      disabled,
+      types: types as TaskType[],
+    });
     return data.map(item => new InterviewDto(item));
   }
 
