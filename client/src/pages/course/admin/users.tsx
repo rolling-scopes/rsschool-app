@@ -112,7 +112,7 @@ function Page(props: Props) {
         <Modal
           width={800}
           style={{ top: 20 }}
-          visible={true}
+          open={true}
           onCancel={() => setGroupModalData(null)}
           onOk={() => handleGroupModalSubmit(selectedGroups!)}
           okButtonProps={{ disabled: !selectedGroups }}

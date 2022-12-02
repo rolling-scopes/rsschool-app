@@ -82,7 +82,7 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
       </Row>
       <Modal
         title={`Bad checkers in ${checkType}`}
-        visible={isModalVisible}
+        open={isModalVisible}
         width={1250}
         style={{ top: 20 }}
         onCancel={handleCancel}

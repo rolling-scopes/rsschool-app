@@ -47,7 +47,7 @@ class PreScreeningIviewModal extends React.PureComponent<Props> {
     return (
       <Modal
         title={`${courseFullName} Pre-Screening Interview Feedback`}
-        visible={isVisible}
+        open={isVisible}
         onCancel={onHide}
         footer={null}
         width={'80%'}
