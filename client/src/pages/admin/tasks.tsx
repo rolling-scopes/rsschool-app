@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table } from 'antd';
+import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider } from 'antd';
 import withSession, { Session } from 'components/withSession';
 import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
@@ -13,6 +13,14 @@ import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { DisciplineDto, DisciplinesApi } from 'api';
+import { CriteriaData } from 'services/course';
+import {
+  UploadCriteriaJSON,
+  AddCriteriaForCrossCheck,
+  ExportJSONButton,
+  addKeyAndIndex,
+  EditableTable,
+} from 'modules/CrossCheck';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -27,6 +35,7 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
+  const [dataCriteria, setDataCriteria] = useState<CriteriaData[]>([]);
 
   const { loading } = useAsync(async () => {
     const [tasks, { data: disciplines }] = await Promise.all([service.getTasks(), disciplinesApi.getDisciplines()]);
@@ -35,11 +44,14 @@ function Page(props: Props) {
   }, [modalData]);
 
   const handleAddItem = () => {
+    setDataCriteria([]);
     setModalData({});
     setModalAction('create');
   };
 
-  const handleEditItem = (record: Task) => {
+  const handleEditItem = async (record: Task) => {
+    const criteria = await service.getCriteriaForCourseTask(record.id);
+    criteria ? setDataCriteria(criteria) : setDataCriteria([]);
     setModalData(prepareValues(record));
     setModalAction('update');
   };
@@ -54,8 +66,15 @@ function Page(props: Props) {
         const record = createRecord(values);
         if (modalAction === 'update') {
           await service.updateTask(modalData!.id!, record);
+          if (await service.getCriteriaForCourseTask(modalData!.id!)) {
+            await service.updateCriteriaForCourseTask(modalData!.id!, dataCriteria);
+          } else {
+            await service.createCriteriaForCourseTask(modalData!.id!, dataCriteria);
+          }
         } else {
-          await service.createTask(record);
+          const task = await service.createTask(record);
+          const taskId = task.identifiers[0].id;
+          await service.createCriteriaForCourseTask(taskId, dataCriteria);
         }
         setModalData(null);
       } catch (e) {
@@ -64,10 +83,22 @@ function Page(props: Props) {
         setModalLoading(false);
       }
     },
-    [modalData, modalAction, modalLoading],
+    [modalData, modalAction, modalLoading, dataCriteria],
   );
 
   const renderModal = useCallback(() => {
+    const addCriteria = (criteria: CriteriaData) => {
+      const newDataCriteria = [...dataCriteria, criteria];
+      setDataCriteria(addKeyAndIndex(newDataCriteria));
+    };
+
+    const addJSONtoCriteria = (criteria: string) => {
+      const oldCriteria = dataCriteria;
+      const addingCriteria = JSON.parse(criteria);
+      const newCriteria = [...oldCriteria, ...addingCriteria];
+      setDataCriteria(addKeyAndIndex(newCriteria));
+    };
+
     const allTags = union(...data.map(d => d.tags || []));
     const allSkills = union(
       data
@@ -81,7 +112,10 @@ function Page(props: Props) {
         data={modalData}
         title="Task"
         submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
+        cancel={() => {
+          setModalData(null);
+          setDataCriteria([]);
+        }}
         onChange={setModalValues}
         getInitialValues={getInitialValues}
         loading={modalLoading}
@@ -163,7 +197,20 @@ function Page(props: Props) {
           </Col>
         </Row>
         <Collapse>
-          <Collapse.Panel header="Github" key="1" forceRender>
+          <Collapse.Panel header="Criteria For Cross-Check Task" key="1" forceRender>
+            <Form.Item label="Criteria For Cross-Check">
+              <UploadCriteriaJSON onLoad={addJSONtoCriteria} />
+            </Form.Item>
+            <AddCriteriaForCrossCheck onCreate={addCriteria} />
+            {dataCriteria.length !== 0 ? (
+              <>
+                <Divider />
+                <EditableTable dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
+                <ExportJSONButton dataCriteria={dataCriteria} />
+              </>
+            ) : null}
+          </Collapse.Panel>
+          <Collapse.Panel header="Github" key="2" forceRender>
             <Form.Item name="githubPrRequired" label="" valuePropName="checked">
               <Checkbox>Pull Request required</Checkbox>
             </Form.Item>
@@ -174,7 +221,7 @@ function Page(props: Props) {
               <Input placeholder="task1" />
             </Form.Item>
           </Collapse.Panel>
-          <Collapse.Panel header="JSON Attributes" key="2" forceRender>
+          <Collapse.Panel header="JSON Attributes" key="3" forceRender>
             <Form.Item
               name="attributes"
               rules={[
@@ -190,7 +237,7 @@ function Page(props: Props) {
         </Collapse>
       </ModalForm>
     );
-  }, [modalData, modalValues, modalLoading, handleModalSubmit]);
+  }, [modalData, modalValues, modalLoading, handleModalSubmit, dataCriteria]);
 
   return (
     <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>

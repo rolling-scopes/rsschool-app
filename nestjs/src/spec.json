@@ -1441,6 +1441,52 @@
         },
         "tags": ["gratitudes"]
       }
+    },
+    "/task/{taskId}/criteria": {
+      "get": {
+        "operationId": "getTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      },
+      "post": {
+        "operationId": "createTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      },
+      "patch": {
+        "operationId": "updateTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -2880,6 +2926,16 @@
           }
         },
         "required": ["name", "id"]
+      },
+      "CriteriaDto": {
+        "type": "object",
+        "properties": { "max": { "type": "number" }, "type": { "type": "string" }, "text": { "type": "string" } },
+        "required": ["max", "type", "text"]
+      },
+      "TaskCriteriaDto": {
+        "type": "object",
+        "properties": { "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CriteriaDto" } } },
+        "required": ["criteria"]
       }
     }
   }

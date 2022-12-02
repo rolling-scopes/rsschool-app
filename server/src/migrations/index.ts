@@ -33,6 +33,7 @@ import { Disciplines1661107174477 } from './1661107174477-Disciplines';
 import { NotificationCategory1661616212488 } from './1661616212488-NotificationCategory';
 import { CourseTask1662275601017 } from './1662275601017-CourseTask';
 import { CourseEvent1664183799115 } from './1664183799115-CourseEvent';
+import { TaskCriteria1666348642811 } from './1666348642811-TaskCriteria';
 import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionResult';
 
 export const migrations = [
@@ -71,5 +72,6 @@ export const migrations = [
   NotificationCategory1661616212488,
   CourseTask1662275601017,
   CourseEvent1664183799115,
+  TaskCriteria1666348642811,
   TaskSolutionResult1666621080327,
 ];

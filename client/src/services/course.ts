@@ -16,6 +16,7 @@ import {
   CourseTaskDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
+import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -46,6 +47,7 @@ export type SolutionReviewType = {
   id: number;
   dateTime: number | null;
   comment: string;
+  criteria?: CrossCheckCriteriaData[];
   author: {
     id: number;
     name: string;
@@ -371,6 +373,7 @@ export class CourseService {
       anonymous: boolean;
       review: CrossCheckReview[];
       comments: CrossCheckComment[];
+      criteria: CrossCheckCriteriaData[];
     },
   ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
@@ -385,13 +388,19 @@ export class CourseService {
       anonymous: boolean;
       studentId: number;
       checkerId: number;
+      historicalScores: {
+        score: number;
+        comment: string;
+        dateTime: number;
+        anonymous: boolean;
+        criteria: CrossCheckCriteriaData[];
+      }[];
       author: {
         id: number;
         name: string;
         discord: Discord | null;
         githubId: string;
       };
-      historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
       messages: CrossCheckMessage[];
     } | null;
   }
@@ -730,4 +739,16 @@ export interface TaskSolution {
   review?: CrossCheckReview[];
   comments?: CrossCheckComment[];
   studentId: number;
+}
+
+export interface CriteriaData {
+  key: string;
+  max?: number;
+  text: string;
+  type: string;
+  index: number;
+}
+
+export interface IAddCriteriaForCrossCheck {
+  onCreate: (data: CriteriaData) => void;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Alert, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
+import { Alert, Button, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
 import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
@@ -11,6 +11,8 @@ import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
+import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
+import { CrossCheckCriteriaModal } from 'components/CrossCheck/criteria/CrossCheckCriteriaModal';
 
 const { Text } = Typography;
 
@@ -44,7 +46,15 @@ function SolutionReview(props: SolutionReviewProps) {
     currentRole,
     maxScore,
   } = props;
-  const { id, dateTime, author, comment, score, messages } = review;
+  const { id, dateTime, author, comment, score, messages, criteria } = review;
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModaldata] = useState<CrossCheckCriteriaData[]>([]);
+
+  const showModal = (modalData: CrossCheckCriteriaData[]) => {
+    setIsModalVisible(true);
+    setModaldata(modalData);
+  };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
@@ -94,6 +104,7 @@ function SolutionReview(props: SolutionReviewProps) {
 
   return (
     <Spin spinning={loading}>
+      <CrossCheckCriteriaModal modalInfo={modalData} isModalVisible={isModalVisible} showModal={setIsModalVisible} />
       <Row style={{ margin: '8px 0' }}>
         <Col span={24}>
           <Divider style={{ margin: 0 }} />
@@ -149,10 +160,14 @@ function SolutionReview(props: SolutionReviewProps) {
                   </Col>
                 </Row>
 
-                <Row style={{ marginBottom: 24 }}>
+                <Row style={{ marginBottom: 10 }}>
                   <Text style={{ fontSize: 12, lineHeight: '12px' }} type="secondary">
                     maximum score: {maxScore ?? 'unknown'}
                   </Text>
+                </Row>
+
+                <Row style={{ marginBottom: 10 }}>
+                  {!!criteria?.length && <Button onClick={() => showModal(criteria)}>Show detailed feedback</Button>}
                 </Row>
 
                 <Row>

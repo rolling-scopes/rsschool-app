@@ -79,7 +79,7 @@ export function RepositoryCard(props: Props) {
                     </Text>
                   </div>
                 )}
-                <Button style={{ marginBottom: 7 }} type="primary" onClick={handleSubmit}>
+                <Button style={{ marginBottom: 7 }} type={url ? 'default' : 'primary'} onClick={handleSubmit}>
                   {url ? 'Fix repository' : 'Create repository'}
                 </Button>
               </Col>

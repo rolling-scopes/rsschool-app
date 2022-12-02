@@ -9,6 +9,7 @@ import { queryStudentByGithubId } from './course.service';
 import { createName, getUserByGithubId } from './user.service';
 import { CrossCheckRepository } from '../repositories/crossCheck.repository';
 import { UserRepository } from '../repositories/user.repository';
+import { CrossCheckCriteriaData } from '../models/taskSolutionResult';
 
 export interface CrossCheckSolution {
   url: string;
@@ -116,10 +117,10 @@ export class CrossCheckService {
     studentId: number,
     checkerId: number,
     data: CrossCheckSubmitResult,
-    params: { userId: number },
+    params: { userId: number; criteria: CrossCheckCriteriaData[] },
   ) {
     const { userId } = params;
-    const historicalResult = { ...data, authorId: userId, dateTime: Date.now() };
+    const historicalResult = { ...data, criteria: params.criteria, authorId: userId, dateTime: Date.now() };
 
     const repository = getRepository(TaskSolutionResult);
     const existing = await getTaskSolutionResult(studentId, checkerId, this.courseTaskId);
