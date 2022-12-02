@@ -1,133 +1,126 @@
-import {
-  ClockCircleOutlined,
-  EyeInvisibleTwoTone,
-  EyeInvisibleFilled,
-  EyeTwoTone,
-  EyeFilled,
-  EditOutlined,
-  EditFilled,
-} from '@ant-design/icons';
-import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { Button, Checkbox, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
-import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { useRouter } from 'next/router';
+import { EyeInvisibleFilled, EyeFilled } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, message, Row } from 'antd';
+import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
-import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
+import { markdownLabel } from 'components/Forms/PreparedComment';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
+import { CrossCheckHistory } from 'components/CrossCheck/CrossCheckHistory';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { getQueryString } from 'utils/queryParams-utils';
+import { CourseService, CrossCheckMessageAuthorRole, SolutionReviewType } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { CrossCheckStatus } from 'services/course';
+import { TaskService } from 'services/task';
+import { useCriteriaState } from '../../../components/CrossCheck/hooks/useCriteriaState';
+import {
+  CrossCheckCriteriaForm,
+  CommentState,
+  CountState,
+  TaskType,
+} from '../../../components/CrossCheck/CrossCheckCriteriaForm';
+import { omit } from 'lodash';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
-type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
-const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
-
-function CrossCheckHistory(props: {
-  githubId: string | null;
-  courseId: number;
-  courseTaskId: number | null;
-  maxScore: number | undefined;
-  setHistoricalCommentSelected: Dispatch<SetStateAction<string>>;
-}) {
-  if (props.githubId == null || props.courseTaskId == null) {
-    return null;
-  }
-  const githubId = props.githubId;
-  const courseTaskId = props.courseTaskId;
-
-  const [state, setState] = useState({ loading: false, data: [] as HistoryItem[] });
-
-  const loadStudentScoreHistory = async (githubId: string) => {
-    const courseService = new CourseService(props.courseId);
-    setState({ loading: true, data: [] });
-    const result = await courseService.getTaskSolutionResult(githubId, courseTaskId);
-    setState({ loading: false, data: result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [] });
-  };
-
-  useEffect(() => {
-    loadStudentScoreHistory(githubId);
-  }, [githubId]);
-
-  const handleClickAmendButton = (historicalComment: string) => {
-    const commentWithoutMarkdownLabel = historicalComment.slice(markdownLabel.length);
-    props.setHistoricalCommentSelected(commentWithoutMarkdownLabel);
-  };
-
-  return (
-    <Spin spinning={state.loading}>
-      <Typography.Title style={{ marginTop: 24 }} level={4}>
-        History
-      </Typography.Title>
-      <Timeline>
-        {state.data.map((historyItem, i) => (
-          <Timeline.Item
-            key={i}
-            color={i === 0 ? 'green' : 'gray'}
-            dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
-          >
-            <div>{formatDateTime(historyItem.dateTime)}</div>
-            <div>
-              <ScoreIcon maxScore={props.maxScore} score={historyItem.score} isOutdatedScore={!!i} />{' '}
-              <Typography.Text>{historyItem.score}</Typography.Text>
-            </div>
-            <div>
-              {historyItem.anonymous ? (
-                <>
-                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is hidden</Typography.Text>
-                </>
-              ) : (
-                <>
-                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
-                  <Typography.Text>Your name is visible</Typography.Text>
-                </>
-              )}
-              <Typography.Text>{}</Typography.Text>
-            </div>
-            <div>
-              <PreparedComment text={historyItem.comment} />
-            </div>
-            <div>
-              <Button
-                size="middle"
-                type={i === 0 ? 'primary' : 'default'}
-                htmlType="button"
-                icon={i === 0 ? <EditFilled /> : <EditOutlined />}
-                onClick={() => handleClickAmendButton(historyItem.comment)}
-              >
-                Amend
-              </Button>
-            </div>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    </Spin>
-  );
-}
+const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 
 function Page(props: CoursePageProps) {
+  const router = useRouter();
+  const queryTaskId = router.query.taskId ? +router.query.taskId : null;
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [courseTaskId, setCourseTaskId] = useState<number | null>(null);
+  const [courseTaskId, setCourseTaskId] = useState<number | null>(queryTaskId);
+  const [criteriaId, setCriteriaId] = useState<number | null>(null);
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
   const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
+  const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
+
+  const [
+    { countStar, penalty, criteriaData, score, criteriaComment },
+    { setCountStar, setPenalty, setCriteriaData, setScore, setComment },
+  ] = useCriteriaState();
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const taskServise = new TaskService();
 
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
+
+  const loadStudentScoreHistory = async (githubId: string) => {
+    const taskCriteriaData = await taskServise.getCriteriaForCourseTask(criteriaId as number);
+    setCriteriaData(taskCriteriaData ?? []);
+    resetCriterias();
+    setState({ loading: true, data: [] });
+    const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
+
+    if (!result) {
+      return setState({ loading: false, data: [] });
+    }
+
+    const sortedData = result.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+
+    const messages = result.anonymous
+      ? result.messages.map(message => ({
+          ...message,
+          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+        }))
+      : result.messages;
+
+    const solutionReviews = sortedData.map(({ dateTime, comment, score, anonymous, criteria }, index) => {
+      return {
+        dateTime,
+        comment,
+        score,
+        criteria,
+        id: result.id,
+        author: !anonymous ? result.author : null,
+        messages: index === 0 ? messages : [],
+      };
+    });
+
+    setState({ loading: false, data: solutionReviews ?? [] });
+    if (result !== null) {
+      loadInitialCriteria(solutionReviews[0]);
+    }
+  };
+
+  const loadInitialCriteria = (data: SolutionReviewType) => {
+    setScore(data.score);
+    if (!data.criteria) return;
+    setCriteriaData(data.criteria);
+    const newCountState = data.criteria
+      .filter(item => item.type.toLowerCase() === TaskType.Subtask)
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setCountStar(newCountState as CountState[]);
+    const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
+    setComment(newCommentState as CommentState[]);
+    const newPenalty = data.criteria
+      .filter(item => item.type.toLowerCase() === TaskType.Penalty)
+      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
+    setPenalty(newPenalty as CountState[]);
+  };
+
+  const checkPoints = () => criteriaData.filter(item => item.type.toLowerCase() === 'subtask').map(item => item.type);
+
+  const notFilledCriteriaWarning = () =>
+    message.warning(`You have not checked all the items (${countStar.length}/${checkPoints().length})`);
+
+  useEffect(() => {
+    if (queryTaskId && courseTasks.length) {
+      handleTaskChange(queryTaskId);
+    }
+  }, [queryTaskId, courseTasks]);
 
   useEffect(() => {
     if (historicalCommentSelected !== '') {
@@ -136,28 +129,53 @@ function Page(props: CoursePageProps) {
     }
   }, [historicalCommentSelected]);
 
+  const resetCriterias = () => {
+    setCountStar([]);
+    setComment([]);
+    setPenalty([]);
+    setScore(0);
+  };
+
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
       return;
     }
 
+    if (checkPoints().length !== countStar.length) {
+      return notFilledCriteriaWarning();
+    }
+
     try {
       setLoading(true);
+      const criteria = arrayForCrossCheckSubmit();
+      criteria.map(item => {
+        if (!item.point) {
+          item.point = 0;
+        }
+      });
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
-        score: values.score,
+        score,
         comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
         review: [],
+        criteria,
       });
       message.success('The review has been submitted. Thanks!');
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
+      resetCriterias();
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
     }
   };
+
+  function selectTask(value: number) {
+    const query = { ...router.query, taskId: value };
+    const url = `${router.route}${getQueryString(query)}`;
+    router.replace(url);
+  }
 
   const handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
@@ -169,6 +187,7 @@ function Page(props: CoursePageProps) {
     const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatus.Distributed;
     setAssignments(assignments);
     setCourseTaskId(courseTask.id);
+    setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
     form.resetFields(['githubId']);
@@ -177,6 +196,7 @@ function Page(props: CoursePageProps) {
   const handleStudentChange = (githubId: string) => {
     setGithubId(githubId as string);
     form.setFieldsValue({ githubId });
+    loadStudentScoreHistory(githubId);
   };
 
   const handleUsernameVisibilityChange = () => {
@@ -186,6 +206,23 @@ function Page(props: CoursePageProps) {
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
   const maxScore = courseTask?.maxScore;
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
+
+  function arrayForCrossCheckSubmit() {
+    const arrayPoints = countStar.concat(penalty);
+    criteriaData?.forEach(item => {
+      const arrayPoint = arrayPoints.find(point => point.key === item.key);
+      const arrayComment = criteriaComment.find(comment => comment.key === item.key);
+      if (arrayPoint) {
+        item.point = arrayPoint.point;
+      }
+      if (arrayComment) {
+        item.textComment = arrayComment.textComment;
+      }
+    });
+    return criteriaData;
+  }
+
+  const maxScoreForTask = courseTasks.find(item => item.id === courseTaskId)?.maxScore as number;
 
   return (
     <PageLayout
@@ -197,7 +234,12 @@ function Page(props: CoursePageProps) {
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect data={courseTasks} groupBy="crossCheckDeadline" onChange={handleTaskChange} />
+            <CourseTaskSelect
+              data={courseTasks}
+              groupBy="crossCheckDeadline"
+              onChange={selectTask}
+              defaultValue={courseTaskId}
+            />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
               <UserSearch
                 keyField="githubId"
@@ -207,7 +249,20 @@ function Page(props: CoursePageProps) {
               />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
-            <ScoreInput courseTask={courseTask} />
+            {!!githubId && (
+              <CrossCheckCriteriaForm
+                countStar={countStar}
+                setCountStar={setCountStar}
+                criteriaData={criteriaData}
+                setTotalPoints={setScore}
+                totalPoints={score}
+                setPenalty={setPenalty}
+                penalty={penalty}
+                criteriaComment={criteriaComment}
+                setComment={setComment}
+                maxScoreForTask={maxScoreForTask}
+              />
+            )}
             <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
@@ -224,16 +279,18 @@ function Page(props: CoursePageProps) {
                 icon={<EyeInvisibleFilled />}
                 disabled={submissionDisabled}
               >
-                Submit review as Student1
+                Submit review as Reviewer1
               </Button>
             )}
           </Form>
         </Col>
         <Col {...colSizes}>
           <CrossCheckHistory
-            githubId={githubId}
-            courseId={props.course.id}
+            state={state}
             courseTaskId={courseTaskId}
+            courseId={props.course.id}
+            sessionId={props.session.id}
+            sessionGithubId={props.session.githubId}
             maxScore={maxScore}
             setHistoricalCommentSelected={setHistoricalCommentSelected}
           />

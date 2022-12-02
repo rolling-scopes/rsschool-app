@@ -21,7 +21,7 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
   const feedback = await taskResultsService.getTaskSolutionFeedback(student.id, courseTaskId);
   const response = {
     url: feedback.url,
-    comments: feedback.comments,
+    reviews: feedback.reviews,
   };
   setResponse(ctx, OK, response);
 };

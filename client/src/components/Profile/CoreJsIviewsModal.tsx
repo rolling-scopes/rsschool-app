@@ -20,7 +20,7 @@ class CoreJsIviewsModal extends React.PureComponent<Props> {
     return (
       <Modal
         title={`${courseFullName} CoreJS Interview Feedback`}
-        visible={isVisible}
+        open={isVisible}
         onCancel={onHide}
         footer={null}
         width={'80%'}

@@ -96,7 +96,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
           completed: mentor.stageInterviews?.filter(s => s.isCompleted).length ?? 0,
         },
         interviews: {
-          total: mentor.taskChecker?.filter(tc => tc.courseTask.type === 'interview').length,
+          total: mentor.taskChecker?.filter(tc => tc.courseTask?.type === 'interview').length,
           completed: mentor.interviewResults?.length ?? 0,
         },
         taskResultsStats: {

@@ -22,8 +22,8 @@ export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void
     render: (_v, _r, idx) => idx + 1,
   },
   {
-    key: TaskSolutionsTableColumnKey.Name,
-    title: TaskSolutionsTableColumnName.Name,
+    key: TaskSolutionsTableColumnKey.Student,
+    title: TaskSolutionsTableColumnName.Student,
     dataIndex: 'studentName',
     render: renderName,
     responsive: DISPLAY_TABLE_BREAKPOINTS,

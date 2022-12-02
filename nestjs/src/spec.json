@@ -306,6 +306,18 @@
         "tags": ["mentors"]
       }
     },
+    "/mentors/{mentorId}/course/{courseId}/random-task": {
+      "get": {
+        "operationId": "getRandomTask",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "tags": ["mentors"]
+      }
+    },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",
@@ -476,7 +488,16 @@
       "get": {
         "operationId": "getInterviews",
         "summary": "",
-        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "disabled", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          {
+            "name": "types",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1420,6 +1441,52 @@
         },
         "tags": ["gratitudes"]
       }
+    },
+    "/task/{taskId}/criteria": {
+      "get": {
+        "operationId": "getTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      },
+      "post": {
+        "operationId": "createTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      },
+      "patch": {
+        "operationId": "updateTaskCriteria",
+        "summary": "",
+        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
+          }
+        },
+        "tags": ["criteria"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -1961,10 +2028,13 @@
           "id": { "type": "number" },
           "type": { "type": "string" },
           "name": { "type": "string" },
-          "startDate": { "type": "object" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "attributes": { "type": "object" }
         },
-        "required": ["id", "type", "name", "startDate", "attributes"]
+        "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
       "AvailableStudentDto": {
         "type": "object",
@@ -2856,6 +2926,16 @@
           }
         },
         "required": ["name", "id"]
+      },
+      "CriteriaDto": {
+        "type": "object",
+        "properties": { "max": { "type": "number" }, "type": { "type": "string" }, "text": { "type": "string" } },
+        "required": ["max", "type", "text"]
+      },
+      "TaskCriteriaDto": {
+        "type": "object",
+        "properties": { "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CriteriaDto" } } },
+        "required": ["criteria"]
       }
     }
   }

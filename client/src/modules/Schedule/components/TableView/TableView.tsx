@@ -2,7 +2,14 @@ import { Col, Form, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { dateSorter, getColumnSearchProps, scoreRenderer, weightRenderer } from 'components/Table';
+import {
+  coloredDateRenderer,
+  dateSorter,
+  getColumnSearchProps,
+  renderTask,
+  scoreRenderer,
+  weightRenderer,
+} from 'components/Table';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,
@@ -16,7 +23,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import moment from 'moment-timezone';
-import { statusRenderer, renderTagWithStyle, coloredDateRenderer } from './renderers';
+import { statusRenderer, renderTagWithStyle } from './renderers';
 import { FilterValue } from 'antd/lib/table/interface';
 
 const getColumns = ({
@@ -42,15 +49,7 @@ const getColumns = ({
       key: ColumnKey.Name,
       title: ColumnName.Name,
       dataIndex: 'name',
-      render: (value: string, row: CourseScheduleItemDto) => {
-        if (!row.descriptionUrl) return value;
-
-        return (
-          <a target="_blank" href={row.descriptionUrl}>
-            {value}
-          </a>
-        );
-      },
+      render: renderTask,
       filteredValue: filteredInfo.name || null,
       ...getColumnSearchProps('name'),
     },

@@ -62,7 +62,7 @@ export function CategoryModalForm(props: Props) {
   return (
     <Modal
       title={category ? 'Edit category' : 'Add category'}
-      visible={isVisible}
+      open={isVisible}
       onCancel={onCancel}
       onOk={submitCategory}
     >

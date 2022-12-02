@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StageInterviewFeedbackJson } from '@common/models';
@@ -8,6 +8,7 @@ import { TaskInterviewStudent } from '@entities/taskInterviewStudent';
 import { UsersService } from 'src/users/users.service';
 import { StageInterviewStudent, Student } from '@entities/index';
 import { AvailableStudentDto } from './dto/available-student.dto';
+import { TaskType } from '@entities/task';
 
 @Injectable()
 export class InterviewsService {
@@ -21,9 +22,16 @@ export class InterviewsService {
     readonly userService: UsersService,
   ) {}
 
-  public getAll(courseId: number) {
+  public getAll(
+    courseId: number,
+    filter: {
+      disabled?: boolean;
+      types?: TaskType[];
+    },
+  ) {
+    const { disabled, types = ['interview'] } = filter;
     return this.courseTaskRepository.find({
-      where: { courseId, type: 'interview' },
+      where: { courseId, type: In(types), disabled },
       relations: ['task'],
     });
   }

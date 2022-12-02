@@ -2217,10 +2217,28 @@ export interface InterviewDto {
     'name': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof InterviewDto
      */
-    'startDate': object;
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'descriptionUrl': string;
     /**
      * 
      * @type {object}
@@ -6249,10 +6267,12 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterviews: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getInterviews: async (courseId: number, disabled?: boolean, types?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getInterviews', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/interviews`
@@ -6267,6 +6287,14 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (disabled !== undefined) {
+                localVarQueryParameter['disabled'] = disabled;
+            }
+
+            if (types) {
+                localVarQueryParameter['types'] = types;
+            }
 
 
     
@@ -6314,11 +6342,13 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInterviews(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviews(courseId, options);
+        async getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviews(courseId, disabled, types, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -6354,11 +6384,13 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterviews(courseId: number, options?: any): AxiosPromise<Array<InterviewDto>> {
-            return localVarFp.getInterviews(courseId, options).then((request) => request(axios, basePath));
+        getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: any): AxiosPromise<Array<InterviewDto>> {
+            return localVarFp.getInterviews(courseId, disabled, types, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6397,12 +6429,14 @@ export class CoursesInterviewsApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
+     * @param {boolean} [disabled] 
+     * @param {Array<string>} [types] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesInterviewsApi
      */
-    public getInterviews(courseId: number, options?: AxiosRequestConfig) {
-        return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    public getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, disabled, types, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8404,6 +8438,43 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRandomTask: async (mentorId: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mentorId' is not null or undefined
+            assertParamExists('getRandomTask', 'mentorId', mentorId)
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getRandomTask', 'courseId', courseId)
+            const localVarPath = `/mentors/{mentorId}/course/{courseId}/random-task`
+                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)))
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8446,6 +8517,17 @@ export const MentorsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorStudents(mentorId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRandomTask(mentorId, courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -8484,6 +8566,16 @@ export const MentorsApiFactory = function (configuration?: Configuration, basePa
          */
         getMentorStudents(mentorId: number, options?: any): AxiosPromise<Array<MentorStudentDto>> {
             return localVarFp.getMentorStudents(mentorId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRandomTask(mentorId: number, courseId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.getRandomTask(mentorId, courseId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8528,6 +8620,18 @@ export class MentorsApi extends BaseAPI {
      */
     public getMentorStudents(mentorId: number, options?: AxiosRequestConfig) {
         return MentorsApiFp(this.configuration).getMentorStudents(mentorId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} mentorId 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MentorsApi
+     */
+    public getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
+        return MentorsApiFp(this.configuration).getRandomTask(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

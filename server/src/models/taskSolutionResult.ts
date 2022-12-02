@@ -12,12 +12,41 @@ import { Student } from './student';
 import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
 
+export interface CrossCheckCriteriaData {
+  key: number;
+  max?: number;
+  text: string;
+  type: string;
+  point?: number;
+  comment?: string;
+}
+
 type ScoreRecord = {
   score: number;
   dateTime: number;
   comment: string;
   authorId: number;
+  criteria?: CrossCheckCriteriaData[];
 };
+
+export interface CrossCheckMessageAuthor {
+  id: number;
+  githubId: string;
+}
+
+export enum CrossCheckMessageAuthorRole {
+  Reviewer = 'reviewer',
+  Student = 'student',
+}
+
+export interface CrossCheckMessage {
+  timestamp: string;
+  content: string;
+  author: CrossCheckMessageAuthor | null;
+  role: CrossCheckMessageAuthorRole;
+  isReviewerRead: boolean;
+  isStudentRead: boolean;
+}
 
 @Entity()
 @Unique(['courseTaskId', 'studentId', 'checkerId'])
@@ -65,4 +94,7 @@ export class TaskSolutionResult {
 
   @Column({ type: 'json', default: [] })
   review: TaskSolutionReview[];
+
+  @Column({ type: 'json', default: [] })
+  messages: CrossCheckMessage[];
 }

@@ -1,11 +1,15 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-import { TaskSolution, CourseTask, TaskSolutionResult } from '../models';
+import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
-import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
+import { CrossCheckMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
+import { Discord } from '../../../common/models';
+import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
+import { createName, getUserByGithubId } from './user.service';
 import { CrossCheckRepository } from '../repositories/crossCheck.repository';
 import { UserRepository } from '../repositories/user.repository';
+import { CrossCheckCriteriaData } from '../models/taskSolutionResult';
 
 export interface CrossCheckSolution {
   url: string;
@@ -113,10 +117,10 @@ export class CrossCheckService {
     studentId: number,
     checkerId: number,
     data: CrossCheckSubmitResult,
-    params: { userId: number },
+    params: { userId: number; criteria: CrossCheckCriteriaData[] },
   ) {
     const { userId } = params;
-    const historicalResult = { ...data, authorId: userId, dateTime: Date.now() };
+    const historicalResult = { ...data, criteria: params.criteria, authorId: userId, dateTime: Date.now() };
 
     const repository = getRepository(TaskSolutionResult);
     const existing = await getTaskSolutionResult(studentId, checkerId, this.courseTaskId);
@@ -135,6 +139,7 @@ export class CrossCheckService {
         checkerId: checkerId,
         courseTaskId: this.courseTaskId,
         historicalScores: [historicalResult],
+        messages: [],
         ...data,
       });
     }
@@ -143,10 +148,18 @@ export class CrossCheckService {
   public async getResult(
     studentId: number,
     checkerId: number,
+    checkerGithubId: string,
   ): Promise<
     | (CrossCheckReviewResult & {
+        author: {
+          id: number;
+          name: string;
+          discord: Discord | null;
+          githubId: string;
+        };
         comments?: TaskSolutionComment[];
         historicalScores: TaskSolutionResult['historicalScores'];
+        messages: CrossCheckMessage[];
       })
     | null
   > {
@@ -173,6 +186,8 @@ export class CrossCheckService {
       comments.map(c => c.authorId).filter(c => c),
     );
 
+    const checkerData = await getUserByGithubId(checkerGithubId);
+
     comments = comments.map(c => ({
       ...c,
       authorGithubId:
@@ -188,8 +203,66 @@ export class CrossCheckService {
       review: reviewResult.review,
       checkerId,
       studentId,
+      author: {
+        id: checkerData?.id ?? 0,
+        name: createName({
+          firstName: checkerData?.firstName ?? '',
+          lastName: checkerData?.lastName ?? '',
+        }),
+        githubId: checkerGithubId,
+        discord: checkerData?.discord ?? null,
+      },
       comments,
       historicalScores: reviewResult.historicalScores ?? [],
+      messages: reviewResult.messages,
     };
+  }
+
+  public async saveMessage(
+    taskSolutionResultId: number,
+    data: { content: string; role: CrossCheckMessageAuthorRole },
+    params: { user: IUserSession },
+  ) {
+    const { user } = params;
+
+    const message: CrossCheckMessage = {
+      ...data,
+      timestamp: new Date().toISOString(),
+      author: {
+        id: user.id,
+        githubId: user.githubId,
+      },
+      isReviewerRead: data.role === CrossCheckMessageAuthorRole.Reviewer,
+      isStudentRead: data.role === CrossCheckMessageAuthorRole.Student,
+    };
+
+    const repository = getRepository(TaskSolutionResult);
+    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      messages.push(message);
+      await repository.update(taskSolutionResultById.id, { messages });
+    }
+  }
+
+  public async updateMessage(taskSolutionResultId: number, data: { role: CrossCheckMessageAuthorRole }) {
+    const { role } = data;
+
+    const repository = getRepository(TaskSolutionResult);
+    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      const updatedMessages = messages.map(message => ({
+        ...message,
+        isReviewerRead: CrossCheckMessageAuthorRole.Reviewer === role ? true : message.isReviewerRead,
+        isStudentRead: CrossCheckMessageAuthorRole.Student === role ? true : message.isStudentRead,
+      }));
+
+      await repository.update(taskSolutionResultById.id, { messages: updatedMessages });
+    }
   }
 }
