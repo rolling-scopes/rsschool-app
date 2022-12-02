@@ -6267,10 +6267,12 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterviews: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getInterviews: async (courseId: number, disabled?: boolean, types?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getInterviews', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/interviews`
@@ -6285,6 +6287,14 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (disabled !== undefined) {
+                localVarQueryParameter['disabled'] = disabled;
+            }
+
+            if (types) {
+                localVarQueryParameter['types'] = types;
+            }
 
 
     
@@ -6332,11 +6342,13 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInterviews(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviews(courseId, options);
+        async getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviews(courseId, disabled, types, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -6372,11 +6384,13 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} courseId 
+         * @param {boolean} [disabled] 
+         * @param {Array<string>} [types] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInterviews(courseId: number, options?: any): AxiosPromise<Array<InterviewDto>> {
-            return localVarFp.getInterviews(courseId, options).then((request) => request(axios, basePath));
+        getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: any): AxiosPromise<Array<InterviewDto>> {
+            return localVarFp.getInterviews(courseId, disabled, types, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6415,12 +6429,14 @@ export class CoursesInterviewsApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
+     * @param {boolean} [disabled] 
+     * @param {Array<string>} [types] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesInterviewsApi
      */
-    public getInterviews(courseId: number, options?: AxiosRequestConfig) {
-        return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    public getInterviews(courseId: number, disabled?: boolean, types?: Array<string>, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, disabled, types, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
