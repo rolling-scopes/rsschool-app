@@ -68,7 +68,7 @@ export function CrossCheckHistory(props: Props) {
               </Row>
 
               <Row>
-                <Col>
+                <Col span={24}>
                   <SolutionReview
                     sessionId={props.sessionId}
                     sessionGithubId={props.sessionGithubId}

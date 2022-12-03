@@ -120,7 +120,7 @@ function SolutionReview(props: SolutionReviewProps) {
       )}
 
       <Row style={{ margin: '16px 0' }}>
-        <Col>
+        <Col span={24}>
           <Comment
             avatar={
               <UserAvatar
