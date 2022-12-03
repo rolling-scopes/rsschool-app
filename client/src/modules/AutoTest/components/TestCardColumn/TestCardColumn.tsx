@@ -1,10 +1,10 @@
 import { Space, Tag, Typography } from 'antd';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type TestCardColumnProps = {
   isTag?: boolean;
   label: string;
-  value: string;
+  value: string | ReactNode;
 };
 
 const { Text } = Typography;

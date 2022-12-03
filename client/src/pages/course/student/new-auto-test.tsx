@@ -1,4 +1,3 @@
-import withCourseData from 'components/withCourseData';
 import { SessionProvider } from 'modules/Course/contexts';
 import { AutoTests } from 'modules/AutoTest/components';
 import { CourseRole } from 'components/withSession';
@@ -27,10 +26,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     }
 
     const courseId = course.id;
-    const { data: tasks } = await new CoursesTasksApi(getApiConfiguration(token)).getCourseTasks(
-      courseId,
-      'inprogress',
-    );
+    const { data: tasks } = await new CoursesTasksApi(getApiConfiguration(token)).getCourseTasksDetailed(courseId);
 
     const courseTasks = tasks.filter(
       task => task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest && task.type !== CourseTaskDtoTypeEnum.Test,

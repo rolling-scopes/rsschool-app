@@ -1,26 +1,38 @@
 import { Button, Card, Col, Divider, Row, Typography } from 'antd';
 import React from 'react';
-import { CourseTaskDto } from 'api';
-import { TestDeadlineDate } from '..';
-import TestCardColumn from '../TestCardColumn/TestCardColumn';
+import { CourseTaskDetailedDto } from 'api';
+import { TestDeadlineDate, TestCardColumn } from '..';
+import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { parseCourseTask } from '../../utils/parseCourseTask';
 
 const { Title, Text } = Typography;
 
-function TestCard({ name, studentStartDate, studentEndDate }: CourseTaskDto) {
+interface TestCardProps {
+  courseTask: CourseTaskDetailedDto;
+  attempts: Verification[];
+  courseId: number;
+}
+
+function TestCard({ courseTask: origin, attempts, courseId }: TestCardProps) {
+  const courseTask = parseCourseTask(origin);
+
+  const { maxAttemptsNumber = 0 } = (courseTask.publicAttributes as SelfEducationPublicAttributes) ?? {};
+  const attemptsLeft = maxAttemptsNumber - attempts.length;
+
   return (
     <Card
       title={
         <Title level={5} ellipsis={true}>
-          {name}
+          {courseTask.name}
         </Title>
       }
-      extra={<TestDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
+      extra={<TestDeadlineDate startDate={courseTask.studentStartDate} endDate={courseTask.studentEndDate} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Text>
             You can submit your solution as many times as you need before the deadline. Without fines. After the
-            deadline, the submission will be closed.. Read more
+            deadline, the submission will be closed.
           </Text>
         </Col>
         <Col span={24}>
@@ -33,10 +45,10 @@ function TestCard({ name, studentStartDate, studentEndDate }: CourseTaskDto) {
           <TestCardColumn label="Status" value="Uncompleted" isTag={true} />
         </Col>
         <Col span={8}>
-          <TestCardColumn label="Attempts" value="2 attempts left" />
+          <TestCardColumn label="Attempts" value={`${attemptsLeft} left`} />
         </Col>
         <Col span={8}>
-          <TestCardColumn label="Score" value="-" />
+          <TestCardColumn label="Score" value={<>&ndash;</>} />
         </Col>
       </Row>
     </Card>
