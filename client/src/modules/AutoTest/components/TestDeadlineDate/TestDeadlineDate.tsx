@@ -34,8 +34,8 @@ function TestDeadlineDate({ startDate, endDate, score = 0 }: Props): JSX.Element
     return 'secondary';
   }
 
-  const start = dateWithTimeZoneRenderer(timezone, 'MMM DD HH:mm')(startDate);
-  const end = dateWithTimeZoneRenderer(timezone, 'MMM DD HH:mm')(endDate);
+  const start = dateWithTimeZoneRenderer(timezone, 'MMM DD')(startDate);
+  const end = dateWithTimeZoneRenderer(timezone, 'MMM DD')(endDate);
 
   return (
     <Space wrap style={{ justifyContent: 'end' }}>

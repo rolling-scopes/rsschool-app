@@ -6,7 +6,7 @@ import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from '../../utils/parseCourseTask';
 import moment from 'moment';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface TestCardProps {
   courseTask: CourseTaskDetailedDto;
@@ -39,47 +39,61 @@ function getStatus(startDate: string, endDate: string, score?: number | null) {
 }
 
 function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps) {
-  const courseTask = parseCourseTask(origin);
+  const { name, studentStartDate, studentEndDate, publicAttributes } = parseCourseTask(origin);
 
-  const { maxAttemptsNumber = 0 } = (courseTask.publicAttributes as SelfEducationPublicAttributes) ?? {};
+  const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
   const attemptsLeft = maxAttemptsNumber - verifications.length;
 
   const score = verifications.at(-1)?.score ?? null;
+
+  const columns = [
+    {
+      label: 'Status',
+      value: getStatus(studentStartDate, studentEndDate, score),
+    },
+    {
+      label: 'Attempts',
+      value: `${attemptsLeft} left`,
+    },
+    {
+      label: 'Score',
+      value: score !== null ? score : <>&ndash;</>,
+    },
+  ];
 
   return (
     <Card
       title={
         <Title level={5} ellipsis={true}>
-          {courseTask.name}
+          {name}
         </Title>
       }
-      extra={<TestDeadlineDate startDate={courseTask.studentStartDate} endDate={courseTask.studentEndDate} />}
+      extra={<TestDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <Text>
+          <Paragraph
+            ellipsis={{
+              expandable: true,
+              rows: 3,
+              symbol: "Read more"
+            }}
+          >
             You can submit your solution as many times as you need before the deadline. Without fines. After the
             deadline, the submission will be closed.
-          </Text>
+          </Paragraph>
         </Col>
         <Col span={24}>
           <Button type="primary">View details</Button>
         </Col>
       </Row>
       <Divider />
-      <Row gutter={16}>
-        <Col span={8}>
-          <TestCardColumn
-            label="Status"
-            value={getStatus(courseTask.studentStartDate, courseTask.studentEndDate, score)}
-          />
-        </Col>
-        <Col span={8}>
-          <TestCardColumn label="Attempts" value={`${attemptsLeft} left`} />
-        </Col>
-        <Col span={8}>
-          <TestCardColumn label="Score" value={score !== null ? score : <>&ndash;</>} />
-        </Col>
+      <Row gutter={8}>
+        {columns.map(item => (
+          <Col flex="auto" key={item.label}>
+            <TestCardColumn {...item} />
+          </Col>
+        ))}
       </Row>
     </Card>
   );
