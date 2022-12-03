@@ -21,7 +21,7 @@ const RESPONSIVE_COLUMNS: ColProps = {
   xxl: 6,
 };
 
-function getAttempts(verifications: Verification[], courseTaskId: number): Verification[] {
+function getTaskVerifications(verifications: Verification[], courseTaskId: number): Verification[] {
   return verifications.filter(v => v.courseTaskId === courseTaskId);
 }
 
@@ -46,7 +46,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
             <TestCard
               courseTask={courseTask}
-              attempts={getAttempts(verifications, courseTask.id)}
+              verifications={getTaskVerifications(verifications, courseTask.id)}
               courseId={course.id}
             />
           </Col>

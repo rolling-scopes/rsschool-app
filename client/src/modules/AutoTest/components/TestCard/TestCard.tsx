@@ -9,15 +9,17 @@ const { Title, Text } = Typography;
 
 interface TestCardProps {
   courseTask: CourseTaskDetailedDto;
-  attempts: Verification[];
+  verifications: Verification[];
   courseId: number;
 }
 
-function TestCard({ courseTask: origin, attempts, courseId }: TestCardProps) {
+function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps) {
   const courseTask = parseCourseTask(origin);
 
   const { maxAttemptsNumber = 0 } = (courseTask.publicAttributes as SelfEducationPublicAttributes) ?? {};
-  const attemptsLeft = maxAttemptsNumber - attempts.length;
+  const attemptsLeft = maxAttemptsNumber - verifications.length;
+
+  const score = verifications.at(-1)?.score ?? null;
 
   return (
     <Card
@@ -48,7 +50,7 @@ function TestCard({ courseTask: origin, attempts, courseId }: TestCardProps) {
           <TestCardColumn label="Attempts" value={`${attemptsLeft} left`} />
         </Col>
         <Col span={8}>
-          <TestCardColumn label="Score" value={<>&ndash;</>} />
+          <TestCardColumn label="Score" value={score !== null ? score : <>&ndash;</>} />
         </Col>
       </Row>
     </Card>
