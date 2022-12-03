@@ -2,6 +2,7 @@ import { Button, Card, Col, Divider, Row, Space, Tag, Typography } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 import React from 'react';
 import moment from 'moment';
+import TestCardColumn from '../TestCardColumn/TestCardColumn';
 
 const { Title, Text } = Typography;
 
@@ -38,22 +39,13 @@ function TestCard() {
       <Divider />
       <Row gutter={16}>
         <Col span={8}>
-          <Space direction="vertical">
-            <Text>Status</Text>
-            <Tag>Uncompleted</Tag>
-          </Space>
+          <TestCardColumn label="Status" value="Uncompleted" isTag={true} />
         </Col>
         <Col span={8}>
-          <Space direction="vertical">
-            <Text type="secondary">Attempts</Text>
-            <Text>2 attempts left</Text>
-          </Space>
+          <TestCardColumn label="Attempts" value="2 attempts left" />
         </Col>
         <Col span={8}>
-          <Space direction="vertical">
-            <Text type="secondary">Score</Text>
-            <Text>&mdash;</Text>
-          </Space>
+          <TestCardColumn label="Score" value="-" />
         </Col>
       </Row>
     </Card>
