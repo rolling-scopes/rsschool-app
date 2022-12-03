@@ -1,29 +1,20 @@
-import { Button, Card, Col, Divider, Row, Space, Tag, Typography } from 'antd';
-import { CalendarOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Row, Typography } from 'antd';
 import React from 'react';
-import moment from 'moment';
+import { CourseTaskDto } from 'api';
+import { TestDeadlineDate } from '..';
 import TestCardColumn from '../TestCardColumn/TestCardColumn';
 
 const { Title, Text } = Typography;
 
-function TestCard() {
+function TestCard({ name, studentStartDate, studentEndDate }: CourseTaskDto) {
   return (
     <Card
       title={
         <Title level={5} ellipsis={true}>
-          Test name
+          {name}
         </Title>
       }
-      extra={
-        <Space wrap style={{ justifyContent: 'end' }}>
-          <Text type="secondary">
-            <CalendarOutlined />
-          </Text>
-          <Text type="secondary">
-            {moment().format('MMM DD')} &ndash; {moment().add(7, 'd').format('MMM DD')}
-          </Text>
-        </Space>
-      }
+      extra={<TestDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
