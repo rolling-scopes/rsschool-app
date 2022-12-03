@@ -143,13 +143,11 @@ function SolutionReview(props: SolutionReviewProps) {
                   </Col>
                 </Row>
 
-                {dateTime && (
-                  <Row>
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      {formatDateTime(dateTime)}
-                    </Text>
-                  </Row>
-                )}
+                <Row>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {formatDateTime(dateTime)}
+                  </Text>
+                </Row>
 
                 <Row gutter={4} align="middle" style={{ marginTop: 8 }}>
                   <Col>

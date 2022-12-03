@@ -207,7 +207,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
           discord: c.checker.user.discord,
         }
       : null;
-    const [{ criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+    const [{ dateTime, criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
     const messages = !c.anonymous
       ? c.messages
       : c.messages.map(message => ({
@@ -215,10 +215,10 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
           author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
         }));
     return {
+      dateTime,
       author,
       messages,
       id: c.id,
-      dateTime: null,
       comment: c.comment,
       score: c.score,
       criteria,

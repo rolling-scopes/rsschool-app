@@ -45,7 +45,7 @@ export type CrossCheckMessage = {
 
 export type SolutionReviewType = {
   id: number;
-  dateTime: number | null;
+  dateTime: number;
   comment: string;
   criteria?: CrossCheckCriteriaData[];
   author: {
