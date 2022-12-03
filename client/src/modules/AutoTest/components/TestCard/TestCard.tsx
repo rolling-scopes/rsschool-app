@@ -1,9 +1,10 @@
-import { Button, Card, Col, Divider, Row, Typography } from 'antd';
+import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDto } from 'api';
 import { TestDeadlineDate, TestCardColumn } from '..';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from '../../utils/parseCourseTask';
+import moment from 'moment';
 
 const { Title, Text } = Typography;
 
@@ -11,6 +12,30 @@ interface TestCardProps {
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
   courseId: number;
+}
+
+enum Status {
+  Uncompleted = 'Uncompleted',
+  Missed = 'Missed',
+  Completed = 'Completed',
+}
+
+function getStatus(startDate: string, endDate: string, score?: number | null) {
+  const now = moment();
+  const start = moment(startDate);
+  const end = moment(endDate);
+
+  if (now.isBetween(start, end)) {
+    return <Tag color="default">{Status.Uncompleted}</Tag>;
+  }
+
+  if (now.isAfter(end) && score) {
+    return <Tag color="success">{Status.Completed}</Tag>;
+  }
+
+  if (now.isAfter(end) && !score) {
+    return <Tag color="error">{Status.Missed}</Tag>;
+  }
 }
 
 function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps) {
@@ -44,7 +69,10 @@ function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps
       <Divider />
       <Row gutter={16}>
         <Col span={8}>
-          <TestCardColumn label="Status" value="Uncompleted" isTag={true} />
+          <TestCardColumn
+            label="Status"
+            value={getStatus(courseTask.studentStartDate, courseTask.studentEndDate, score)}
+          />
         </Col>
         <Col span={8}>
           <TestCardColumn label="Attempts" value={`${attemptsLeft} left`} />
