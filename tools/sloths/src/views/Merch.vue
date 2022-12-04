@@ -19,6 +19,7 @@
           alt="image"
           object-fit="contain"
           class="merch__image"
+          crossOrigin="anonymous"
           @click="updImage(index)"
         />
       </div>
@@ -157,8 +158,11 @@ export default defineComponent({
     };
   },
 
-  async mounted() {
+  beforeMount() {
     this.getImages();
+  },
+
+  async mounted() {
     const loaded = this.loadStore();
 
     const { canvas } = this.$refs;
