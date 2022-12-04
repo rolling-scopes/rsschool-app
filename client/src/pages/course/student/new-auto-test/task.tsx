@@ -1,7 +1,7 @@
 import { SessionProvider } from 'modules/Course/contexts';
 import { Task } from 'modules/AutoTest/components';
 import { CourseRole } from 'components/withSession';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { CoursePageProps } from 'services/models';
 
 function Page(props: CoursePageProps) {
