@@ -11,6 +11,7 @@
           alt="images"
           object-fit="contain"
           class="meme__image"
+          crossOrigin="anonymous"
           @click="updateImage(index)"
         />
       </div>
