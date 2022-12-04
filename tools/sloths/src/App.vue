@@ -69,16 +69,15 @@ export default defineComponent({
     this.header = 'modal.header.alert';
     this.message = '';
     this.$i18n.locale = 'en';
-  },
-
-  async mounted() {
     this.isLoad = true;
-    try {
-      await this.getStickers();
-      await this.getCleaned();
-    } finally {
-      this.isLoad = false;
-    }
+    (async () => {
+      try {
+        await this.getStickers();
+        await this.getCleaned();
+      } finally {
+        this.isLoad = false;
+      }
+    })();
   },
 
   methods: {
