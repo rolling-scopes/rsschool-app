@@ -19,6 +19,7 @@
           alt="image"
           object-fit="contain"
           class="merch__image"
+          crossOrigin="anonymous"
           @click="updImage(index)"
         />
       </div>
