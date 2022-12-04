@@ -1,5 +1,5 @@
 import { SessionProvider } from 'modules/Course/contexts';
-import { AutoTests } from 'modules/AutoTest/components';
+import { AutoTests, AutoTestsProps } from 'modules/AutoTest/components';
 import { CourseRole } from 'components/withSession';
 import { GetServerSideProps } from 'next';
 import { CoursesTasksApi, CourseTaskDtoTypeEnum, CreateCourseTaskDtoCheckerEnum, ProfileCourseDto } from 'api';
@@ -7,7 +7,6 @@ import { getTokenFromContext } from 'utils/server';
 import { noAccessResponse, notAuthorizedResponse } from 'modules/Course/data';
 import { UserService } from 'services/user';
 import { getApiConfiguration } from 'utils/axios';
-import { AutoTestsProps } from '../../../modules/AutoTest/components/AutoTests/AutoTests';
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
   try {

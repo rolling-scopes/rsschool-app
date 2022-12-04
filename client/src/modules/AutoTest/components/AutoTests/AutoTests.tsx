@@ -47,7 +47,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
             <TestCard
               courseTask={courseTask}
               verifications={getVerificationsByTask(verifications, courseTask.id)}
-              courseId={course.id}
+              courseAlias={course.alias}
             />
           </Col>
         ))}

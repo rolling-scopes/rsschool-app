@@ -21,7 +21,7 @@ function TestDeadlineDate({ startDate, endDate, score = 0 }: Props): JSX.Element
     const end = moment(endDate);
 
     const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
-    const isDeadlineMissed = now >= end && end.diff(now, 'hours') >= -24 && !score;
+    const isDeadlineMissed = now >= end && !score;
 
     if (isDeadlineMissed) {
       return 'danger';

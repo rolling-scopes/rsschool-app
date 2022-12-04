@@ -5,13 +5,15 @@ import { TestDeadlineDate, TestCardColumn } from '..';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from '../../utils/parseCourseTask';
 import moment from 'moment';
+import Link from 'next/link';
+import * as routes from 'services/routes';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 interface TestCardProps {
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
-  courseId: number;
+  courseAlias: string;
 }
 
 enum Status {
@@ -38,8 +40,8 @@ function getStatus(startDate: string, endDate: string, score?: number | null) {
   }
 }
 
-function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps) {
-  const { name, studentStartDate, studentEndDate, publicAttributes } = parseCourseTask(origin);
+function TestCard({ courseTask: origin, verifications, courseAlias }: TestCardProps) {
+  const { id, name, studentStartDate, studentEndDate, publicAttributes } = parseCourseTask(origin);
 
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
   const attemptsLeft = maxAttemptsNumber - verifications.length;
@@ -76,7 +78,7 @@ function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps
             ellipsis={{
               expandable: true,
               rows: 3,
-              symbol: "Read more"
+              symbol: 'Read more',
             }}
           >
             You can submit your solution as many times as you need before the deadline. Without fines. After the
@@ -84,7 +86,9 @@ function TestCard({ courseTask: origin, verifications, courseId }: TestCardProps
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Button type="primary">View details</Button>
+          <Link href={routes.getAutoTestRoute(courseAlias, id)}>
+            <Button type="primary">View details</Button>
+          </Link>
         </Col>
       </Row>
       <Divider />
