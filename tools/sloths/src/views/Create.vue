@@ -148,9 +148,11 @@ export default defineComponent({
     };
   },
 
-  async mounted() {
+  beforeMount() {
     this.getImages();
+  },
 
+  async mounted() {
     const loaded = this.loadStore();
 
     const { canvas } = this.$refs;
