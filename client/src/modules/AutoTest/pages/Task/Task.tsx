@@ -6,9 +6,11 @@ import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useAsync } from 'react-use';
-import { CourseService, Verification } from 'services/course';
+import { CourseService, SelfEducationPublicAttributes, Verification } from 'services/course';
 import { ColumnType } from 'antd/lib/table';
 import { getAutoTestRoute } from 'services/routes';
+import { useLoading } from 'components/useLoading';
+import { dateWithTimeZoneRenderer } from 'components/Table';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -16,22 +18,37 @@ export interface AutoTestTaskProps extends CoursePageProps {
 
 const { Title, Text, Link } = Typography;
 
-function getColumns(): ColumnType<Verification>[] {
+function getColumns(maxScore: number): ColumnType<Verification>[] {
   return [
     {
       key: 'date-time',
       title: 'Date / Time',
       dataIndex: 'createdDate',
+      render: createdDate => {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(createdDate);
+      },
     },
     {
       key: 'score',
       title: 'Score / Max',
       dataIndex: 'score',
+      render: score => {
+        return (
+          <Text>
+            {score ?? 0} / {maxScore}
+          </Text>
+        );
+      },
     },
     {
       key: 'accuracy',
       title: 'Accuracy',
-      dataIndex: 'id',
+      render: (_, row: Verification) => {
+        const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
+        const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
+        return accuracyNumber ?? 'N/A';
+      },
     },
     {
       key: 'details',
@@ -42,22 +59,25 @@ function getColumns(): ColumnType<Verification>[] {
 }
 
 function Task({ course, task }: AutoTestTaskProps) {
+  const { maxAttemptsNumber, tresholdPercentage } = (task.publicAttributes as SelfEducationPublicAttributes) || {};
+
   const { githubId } = useContext(SessionContext);
   const courseService = useMemo(() => new CourseService(course.id), []);
-
-  const maxAttempts = 2;
-  const attempts = 0;
-
+  const [loading, withLoading] = useLoading(false);
   const [verifications, setVerifications] = useState<Verification[]>([]);
+  const attempts = useMemo(() => maxAttemptsNumber - verifications?.length ?? 0, [verifications?.length]);
 
-  useAsync(async () => {
-    try {
-      const verifications = await courseService.getTaskVerifications();
-      setVerifications(verifications);
-    } catch (error) {
-      message.error(error);
-    }
-  }, []);
+  useAsync(
+    withLoading(async () => {
+      try {
+        const verifications = await courseService.getTaskVerifications();
+        setVerifications(verifications);
+      } catch (error) {
+        message.error(error);
+      }
+    }),
+    [],
+  );
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
@@ -84,7 +104,7 @@ function Task({ course, task }: AutoTestTaskProps) {
           <Alert
             showIcon
             type="info"
-            message={`You must score at least 70% of points to pass. You have only ${maxAttempts} attempts.`}
+            message={`You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`}
           />
         </Col>
         <Col span={24}>
@@ -102,11 +122,11 @@ function Task({ course, task }: AutoTestTaskProps) {
               cancelSort: undefined,
             }}
             pagination={false}
-            columns={getColumns()}
+            columns={getColumns(task.maxScore)}
             dataSource={verifications}
             size="middle"
             rowKey="id"
-            loading={false}
+            loading={loading}
           />
         </Col>
         <Col>

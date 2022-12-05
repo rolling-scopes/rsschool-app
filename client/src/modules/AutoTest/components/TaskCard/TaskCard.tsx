@@ -37,7 +37,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
   const attemptsLeft = maxAttemptsNumber - verifications.length;
 
-  const score = verifications.at(-1)?.score ?? null;
+  const score = verifications.at(0)?.score ?? null;
 
   const columns = [
     {
