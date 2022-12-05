@@ -1,9 +1,8 @@
 import { CoursesInterviewsApi, InterviewDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { InteviewCard } from './components/InterviewCard';
 
@@ -12,7 +11,10 @@ export function Interviews(props: CoursePageProps) {
   const [loading, withLoading] = useLoading();
 
   const loadData = async () => {
-    const { data } = await new CoursesInterviewsApi().getInterviews(props.course.id);
+    const { data } = await new CoursesInterviewsApi().getInterviews(props.course.id, false, [
+      'interview',
+      'stage-interview',
+    ]);
     setInterviews(data);
   };
 

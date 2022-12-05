@@ -17,32 +17,32 @@ export function RegistrationNotice(props: {
 
   return (
     <>
-    <Alert
-      message="Registration period"
-      icon={<InfoCircleTwoTone />}
-      showIcon
-      description={
-        <>
-          <Typography.Text>
+      <Alert
+        message="Registration period"
+        icon={<InfoCircleTwoTone />}
+        showIcon
+        description={
+          <>
+            <Typography.Text>
               Students’ registration for {name} continues until {moment(startDate).format('DD MMM hh:mm')}. You can
               change <a onClick={showMentorOptions}>mentoring options</a> till this date.
-          </Typography.Text>
-          <div className="icon-mentor" />
+            </Typography.Text>
+            <div className="icon-mentor" />
           </>
         }
         type="info"
         closable
       />
-          <style jsx>{`
-            .icon-mentor {
-              background-image: url(/static/svg/mentor.svg);
-              background-position: center;
-              background-size: contain;
-              width: 129px;
-              height: 170px;
-              margin: 10px auto;
-            }
-          `}</style>
-        </>
+      <style jsx>{`
+        .icon-mentor {
+          background-image: url(/static/svg/mentor.svg);
+          background-position: center;
+          background-size: contain;
+          width: 129px;
+          height: 170px;
+          margin: 10px auto;
+        }
+      `}</style>
+    </>
   );
 }
