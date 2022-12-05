@@ -87,7 +87,7 @@ export function SchedulePage(props: PageProps) {
         </StatusTabs>
         <TableView settings={settings} data={data} statusFilter={selectedTab} />
         <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
-        <CourseEventModal data={courseEvent} onCancel={() => setCourseEvent(null)} />
+        <CourseEventModal data={courseEvent} onCancel={() => setCourseEvent(null)} courseId={props.course.id} />
         <CoursesListModal
           okText="Copy"
           data={copyModal}

@@ -71,13 +71,13 @@ export function SettingsPanel({
             </Button>
           </Col>
         ) : null}
-        {isCourseManager ? (
+        {/* {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
               {SettingsButtons.Event}
             </Button>
           </Col>
-        ) : null}
+        ) : null} */}
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
