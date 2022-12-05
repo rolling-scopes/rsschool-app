@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import { CourseService, AllStudents, AssignedStudent } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { isMentor, isCourseManager, isCourseSupervisor, isPowerUser } from 'domain/user';
-import { CoursesTasksApi, CourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CoursesTasksApi, CourseTaskDto, CourseTaskDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
 
 const courseTasksApi = new CoursesTasksApi();
 
@@ -106,7 +106,8 @@ const isCheckedByAssigned = (task: CourseTaskDto) => task.checker === CreateCour
 const isNotAutoChecked = (task: CourseTaskDto) => task.checker !== CreateCourseTaskDtoCheckerEnum.AutoTest;
 const isCheckedByTaskOwner = (task: CourseTaskDto) => task.checker === CreateCourseTaskDtoCheckerEnum.TaskOwner;
 const hasStudentEndDate = (task: CourseTaskDto) => Boolean(task.studentEndDate);
-const isNotInterview = (task: CourseTaskDto) => task.type !== 'interview';
+const isNotInterview = (task: CourseTaskDto) =>
+  task.type !== CourseTaskDtoTypeEnum.Interview && task.type !== CourseTaskDtoTypeEnum.StageInterview;
 
 const isTaskOwner = (userId: number) => (task?: CourseTaskDto) => {
   return task?.taskOwner?.id === userId;
