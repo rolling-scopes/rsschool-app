@@ -1,62 +1,21 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
-import { Row, Col, Typography, Space, Button, Alert, Table, message } from 'antd';
+import { Row, Col, Typography, Space, Button, Alert, message } from 'antd';
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useAsync } from 'react-use';
 import { CourseService, SelfEducationPublicAttributes, Verification } from 'services/course';
-import { ColumnType } from 'antd/lib/table';
 import { getAutoTestRoute } from 'services/routes';
 import { useLoading } from 'components/useLoading';
-import { dateWithTimeZoneRenderer } from 'components/Table';
+import { VerificationsTable } from 'modules/AutoTest/components';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
 }
 
 const { Title, Text, Link } = Typography;
-
-function getColumns(maxScore: number): ColumnType<Verification>[] {
-  return [
-    {
-      key: 'date-time',
-      title: 'Date / Time',
-      dataIndex: 'createdDate',
-      render: createdDate => {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        return dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(createdDate);
-      },
-    },
-    {
-      key: 'score',
-      title: 'Score / Max',
-      dataIndex: 'score',
-      render: score => {
-        return (
-          <Text>
-            {score ?? 0} / {maxScore}
-          </Text>
-        );
-      },
-    },
-    {
-      key: 'accuracy',
-      title: 'Accuracy',
-      render: (_, row: Verification) => {
-        const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
-        const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
-        return accuracyNumber ?? 'N/A';
-      },
-    },
-    {
-      key: 'details',
-      title: 'Details',
-      dataIndex: 'details',
-    },
-  ];
-}
 
 function Task({ course, task }: AutoTestTaskProps) {
   const { maxAttemptsNumber, tresholdPercentage } = (task.publicAttributes as SelfEducationPublicAttributes) || {};
@@ -114,20 +73,7 @@ function Task({ course, task }: AutoTestTaskProps) {
           </Space>
         </Col>
         <Col span={24}>
-          <Table
-            locale={{
-              // disable default tooltips on sortable columns
-              triggerDesc: undefined,
-              triggerAsc: undefined,
-              cancelSort: undefined,
-            }}
-            pagination={false}
-            columns={getColumns(task.maxScore)}
-            dataSource={verifications}
-            size="middle"
-            rowKey="id"
-            loading={loading}
-          />
+          <VerificationsTable maxScore={task.maxScore} verifications={verifications} loading={loading} />
         </Col>
         <Col>
           <Space>
