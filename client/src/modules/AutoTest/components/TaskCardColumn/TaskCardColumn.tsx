@@ -1,14 +1,14 @@
-import { Space, Tag, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import React, { ReactNode } from 'react';
 
-type TestCardColumnProps = {
+type TaskCardColumnProps = {
   label: string;
   value: ReactNode;
 };
 
 const { Text } = Typography;
 
-function TestCardColumn({ label, value }: TestCardColumnProps) {
+function TaskCardColumn({ label, value }: TaskCardColumnProps) {
   return (
     <Space direction="vertical">
       <Text type="secondary">{label}</Text>
@@ -17,4 +17,4 @@ function TestCardColumn({ label, value }: TestCardColumnProps) {
   );
 }
 
-export default TestCardColumn;
+export default TaskCardColumn;

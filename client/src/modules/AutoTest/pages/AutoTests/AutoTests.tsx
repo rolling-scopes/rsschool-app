@@ -2,12 +2,12 @@ import React, { useContext, useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
 import { SessionContext } from 'modules/Course/contexts';
-import { TestCard } from '..';
+import { TaskCard } from 'modules/AutoTest/components';
 import { Col, message, Row } from 'antd';
 import { CourseTaskDetailedDto } from 'api';
 import { ColProps } from 'antd/lib/grid';
 import { useAsync } from 'react-use';
-import { CourseService, Verification } from '../../../../services/course';
+import { CourseService, Verification } from 'services/course';
 
 export interface AutoTestsProps extends CoursePageProps {
   courseTasks: CourseTaskDetailedDto[];
@@ -44,7 +44,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
       <Row gutter={[24, 24]}>
         {courseTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TestCard
+            <TaskCard
               courseTask={courseTask}
               verifications={getVerificationsByTask(verifications, courseTask.id)}
               courseAlias={course.alias}

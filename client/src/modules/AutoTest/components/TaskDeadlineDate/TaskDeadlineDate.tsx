@@ -7,13 +7,13 @@ import { BaseType } from 'antd/lib/typography/Base';
 
 const { Text } = Typography;
 
-type Props = {
+type TaskDeadlineDateProps = {
   startDate: string;
   endDate: string;
   score?: number;
 };
 
-function TestDeadlineDate({ startDate, endDate, score = 0 }: Props): JSX.Element {
+function TaskDeadlineDate({ startDate, endDate, score = 0 }: TaskDeadlineDateProps): JSX.Element {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   function getTextType(): BaseType {
@@ -49,4 +49,4 @@ function TestDeadlineDate({ startDate, endDate, score = 0 }: Props): JSX.Element
   );
 }
 
-export default TestDeadlineDate;
+export default TaskDeadlineDate;

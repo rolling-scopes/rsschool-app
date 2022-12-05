@@ -1,16 +1,16 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDto } from 'api';
-import { TestDeadlineDate, TestCardColumn } from '..';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from '../../utils/parseCourseTask';
 import moment from 'moment';
 import Link from 'next/link';
 import * as routes from 'services/routes';
+import { TaskCardColumn, TaskDeadlineDate } from '..';
 
 const { Title, Paragraph } = Typography;
 
-interface TestCardProps {
+interface TaskCardProps {
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
   courseAlias: string;
@@ -40,7 +40,7 @@ function getStatus(startDate: string, endDate: string, score?: number | null) {
   }
 }
 
-function TestCard({ courseTask: origin, verifications, courseAlias }: TestCardProps) {
+function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, publicAttributes } = parseCourseTask(origin);
 
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
@@ -70,7 +70,7 @@ function TestCard({ courseTask: origin, verifications, courseAlias }: TestCardPr
           {name}
         </Title>
       }
-      extra={<TestDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
+      extra={<TaskDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
@@ -95,7 +95,7 @@ function TestCard({ courseTask: origin, verifications, courseAlias }: TestCardPr
       <Row gutter={8}>
         {columns.map(item => (
           <Col flex="auto" key={item.label}>
-            <TestCardColumn {...item} />
+            <TaskCardColumn {...item} />
           </Col>
         ))}
       </Row>
@@ -103,4 +103,4 @@ function TestCard({ courseTask: origin, verifications, courseAlias }: TestCardPr
   );
 }
 
-export default TestCard;
+export default TaskCard;
