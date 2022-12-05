@@ -1,11 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
-import { Row, Col, Typography, Space, Button, Alert } from 'antd';
+import { Row, Col, Typography, Space, Button, Alert, Table, message } from 'antd';
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import { useAsync } from 'react-use';
+import { CourseService, Verification } from '../../../../services/course';
+import { ColumnType } from 'antd/lib/table';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -13,10 +16,48 @@ export interface AutoTestTaskProps extends CoursePageProps {
 
 const { Title, Text, Link } = Typography;
 
+function getColumns(): ColumnType<Verification>[] {
+  return [
+    {
+      key: 'date-time',
+      title: 'Date / Time',
+      dataIndex: 'createdDate',
+    },
+    {
+      key: 'score',
+      title: 'Score / Max',
+      dataIndex: 'score',
+    },
+    {
+      key: 'accuracy',
+      title: 'Accuracy',
+      dataIndex: 'id',
+    },
+    {
+      key: 'details',
+      title: 'Details',
+      dataIndex: 'details',
+    },
+  ];
+}
+
 function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const router = useRouter();
+  const courseService = useMemo(() => new CourseService(course.id), []);
+
   const attempts = 0;
+
+  const [verifications, setVerifications] = useState<Verification[]>([]);
+
+  useAsync(async () => {
+    try {
+      const verifications = await courseService.getTaskVerifications();
+      setVerifications(verifications);
+    } catch (error) {
+      message.error(error);
+    }
+  }, []);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
@@ -52,7 +93,22 @@ function Task({ course, task }: AutoTestTaskProps) {
             <Text>{`${attempts} attempts left`}</Text>
           </Space>
         </Col>
-        <Col span={24}>Table</Col>
+        <Col span={24}>
+          <Table
+            locale={{
+              // disable default tooltips on sortable columns
+              triggerDesc: undefined,
+              triggerAsc: undefined,
+              cancelSort: undefined,
+            }}
+            pagination={false}
+            columns={getColumns()}
+            dataSource={verifications}
+            size="middle"
+            rowKey="id"
+            loading={false}
+          />
+        </Col>
         <Col>
           <Space>
             <Button type="primary">Start test</Button>
