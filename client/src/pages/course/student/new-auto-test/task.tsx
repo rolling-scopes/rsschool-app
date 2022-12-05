@@ -1,10 +1,13 @@
 import { SessionProvider } from 'modules/Course/contexts';
 import { CourseRole } from 'components/withSession';
-import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import { CoursePageProps } from 'services/models';
-import {Task} from 'modules/AutoTest/pages';
+import { getCourseProps, noAccessResponse } from 'modules/Course/data/getCourseProps';
+import { AutoTestTaskProps, Task } from 'modules/AutoTest/pages';
+import { GetServerSideProps } from 'next';
+import { CoursesTasksApi } from 'api';
+import { getApiConfiguration } from 'utils/axios';
+import { getTokenFromContext } from 'utils/server';
 
-function Page(props: CoursePageProps) {
+function Page(props: AutoTestTaskProps) {
   return (
     <SessionProvider allowedRoles={[CourseRole.Student]} course={props.course}>
       <Task {...props} />
@@ -12,6 +15,32 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export { getServerSideProps };
+export const getServerSideProps: GetServerSideProps<AutoTestTaskProps> = async ctx => {
+  const courseTaskId = ctx.query.courseTaskId;
+  const token = getTokenFromContext(ctx);
+  const result = (await getCourseProps(ctx)) as any;
+
+  if (!result.props) {
+    return noAccessResponse;
+  }
+
+  try {
+    const course = result.props.course;
+    if (course) {
+      const { data: task } = await new CoursesTasksApi(getApiConfiguration(token)).getCourseTask(
+        course.id,
+        Number(courseTaskId),
+      );
+
+      return {
+        props: { course, task },
+      };
+    }
+
+    return noAccessResponse;
+  } catch (error) {
+    return noAccessResponse;
+  }
+};
 
 export default Page;

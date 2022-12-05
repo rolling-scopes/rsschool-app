@@ -7,6 +7,7 @@ import { noAccessResponse, notAuthorizedResponse } from 'modules/Course/data';
 import { UserService } from 'services/user';
 import { getApiConfiguration } from 'utils/axios';
 import { AutoTests, AutoTestsProps } from 'modules/AutoTest/pages';
+import moment from 'moment';
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
   try {
@@ -27,9 +28,11 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     const courseId = course.id;
     const { data: tasks } = await new CoursesTasksApi(getApiConfiguration(token)).getCourseTasksDetailed(courseId);
 
-    const courseTasks = tasks.filter(
-      task => task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest && task.type !== CourseTaskDtoTypeEnum.Test,
-    );
+    const courseTasks = tasks
+      .filter(
+        task => task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest && task.type !== CourseTaskDtoTypeEnum.Test,
+      )
+      .sort((a, b) => moment(b.studentEndDate).diff(a.studentEndDate));
 
     return {
       props: { course, courseTasks },
