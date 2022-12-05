@@ -2,8 +2,8 @@ import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDto } from 'api';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
-import { parseCourseTask } from '../../utils/parseCourseTask';
-import moment from 'moment';
+import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
+import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
 import Link from 'next/link';
 import * as routes from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
@@ -16,27 +16,18 @@ interface TaskCardProps {
   courseAlias: string;
 }
 
-enum Status {
-  Uncompleted = 'Uncompleted',
-  Missed = 'Missed',
-  Completed = 'Completed',
-}
+function getStatusTag(endDate: string, score?: number | null) {
+  const status = getStatusByDate(endDate, score);
 
-function getStatus(startDate: string, endDate: string, score?: number | null) {
-  const now = moment();
-  const start = moment(startDate);
-  const end = moment(endDate);
-
-  if (now.isBetween(start, end)) {
-    return <Tag color="default">{Status.Uncompleted}</Tag>;
-  }
-
-  if (now.isAfter(end) && score) {
-    return <Tag color="success">{Status.Completed}</Tag>;
-  }
-
-  if (now.isAfter(end) && !score) {
-    return <Tag color="error">{Status.Missed}</Tag>;
+  switch (status) {
+    case AutoTestTaskStatus.Completed:
+      return <Tag color="success">{status}</Tag>;
+    case AutoTestTaskStatus.Missed:
+      return <Tag color="error">{status}</Tag>;
+    case AutoTestTaskStatus.Uncompleted:
+      return <Tag color="default">{status}</Tag>;
+    default:
+      return;
   }
 }
 
@@ -51,7 +42,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
   const columns = [
     {
       label: 'Status',
-      value: getStatus(studentStartDate, studentEndDate, score),
+      value: getStatusTag(studentEndDate, score),
     },
     {
       label: 'Attempts',
