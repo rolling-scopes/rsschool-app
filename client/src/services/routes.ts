@@ -26,10 +26,12 @@ export const getExpelRoute = (course: string): UrlObject => {
   };
 };
 
-export const getAutoTestRoute = (course: string, courseTaskId: number): UrlObject => ({
+export const getAutoTestTaskRoute = (course: string, courseTaskId: number): UrlObject => ({
   pathname: '/course/student/new-auto-test/task',
   query: {
     course,
     courseTaskId,
   },
 });
+
+export const getAutoTestRoute = (alias: string): string => `/course/student/new-auto-test?course=${alias}`;

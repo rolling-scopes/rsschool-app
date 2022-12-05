@@ -5,7 +5,7 @@ import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
 import Link from 'next/link';
-import * as routes from 'services/routes';
+import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 
 const { Title, Paragraph } = Typography;
@@ -77,7 +77,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Link href={routes.getAutoTestRoute(courseAlias, id)}>
+          <Link href={getAutoTestTaskRoute(courseAlias, id)}>
             <Button type="primary">View details</Button>
           </Link>
         </Col>

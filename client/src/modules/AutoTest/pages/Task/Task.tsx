@@ -5,10 +5,10 @@ import { Row, Col, Typography, Space, Button, Alert, Table, message } from 'antd
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/router';
 import { useAsync } from 'react-use';
-import { CourseService, Verification } from '../../../../services/course';
+import { CourseService, Verification } from 'services/course';
 import { ColumnType } from 'antd/lib/table';
+import { getAutoTestRoute } from 'services/routes';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -43,9 +43,9 @@ function getColumns(): ColumnType<Verification>[] {
 
 function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
-  const router = useRouter();
   const courseService = useMemo(() => new CourseService(course.id), []);
 
+  const maxAttempts = 2;
   const attempts = 0;
 
   const [verifications, setVerifications] = useState<Verification[]>([]);
@@ -61,13 +61,13 @@ function Task({ course, task }: AutoTestTaskProps) {
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
-      <Row style={{ background: 'white', margin: '-15px -16px 24px', padding: 24 }}>
+      <Row style={{ background: 'white', margin: '-15px -16px 24px', padding: '16px 24px' }}>
         <Col span={24}>
           <Title level={3}>
-            <Space>
-              <Button type="link" onClick={() => router.back()}>
+            <Space size={24}>
+              <Link href={getAutoTestRoute(course.alias)}>
                 <ArrowLeftOutlined />
-              </Button>
+              </Link>
               {task.name}
             </Space>
           </Title>
@@ -84,7 +84,7 @@ function Task({ course, task }: AutoTestTaskProps) {
           <Alert
             showIcon
             type="info"
-            message="You must score at least 70% of points to pass. You have only 2 attempts."
+            message={`You must score at least 70% of points to pass. You have only ${maxAttempts} attempts.`}
           />
         </Col>
         <Col span={24}>
