@@ -35,7 +35,7 @@ export function RegistrationNotice(props: {
       />
       <style jsx>{`
         .icon-mentor {
-          background-image: url(/static/svg/mentor.svg);
+          background-image: url(https://cdn.rs.school/sloths/cleaned/mentor-new.svg);
           background-position: center;
           background-size: contain;
           width: 129px;
