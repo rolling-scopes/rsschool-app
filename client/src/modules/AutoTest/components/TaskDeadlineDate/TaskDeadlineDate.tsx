@@ -7,7 +7,7 @@ import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest/utils/getS
 
 const { Text } = Typography;
 
-type TaskDeadlineDateProps = {
+export type TaskDeadlineDateProps = {
   startDate: string;
   endDate: string;
   score?: number;
@@ -19,6 +19,8 @@ function getTextType(endDate: string, score: number): BaseType {
   switch (status) {
     case AutoTestTaskStatus.Missed:
       return 'danger';
+    case AutoTestTaskStatus.DeadlineSoon:
+      return 'warning';
     default:
       return 'secondary';
   }
@@ -37,7 +39,7 @@ function TaskDeadlineDate({ startDate, endDate, score = 0 }: TaskDeadlineDatePro
         <CalendarOutlined />
       </Text>
       <Text type={type}>
-        {start} &ndash; {end}
+        {start} &mdash; {end}
       </Text>
     </Space>
   );

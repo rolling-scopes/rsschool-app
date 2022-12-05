@@ -10,7 +10,7 @@ import { TaskCardColumn, TaskDeadlineDate } from '..';
 
 const { Title, Paragraph } = Typography;
 
-interface TaskCardProps {
+export interface TaskCardProps {
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
   courseAlias: string;
@@ -24,10 +24,8 @@ function getStatusTag(endDate: string, score?: number | null) {
       return <Tag color="success">{status}</Tag>;
     case AutoTestTaskStatus.Missed:
       return <Tag color="error">{status}</Tag>;
-    case AutoTestTaskStatus.Uncompleted:
-      return <Tag color="default">{status}</Tag>;
     default:
-      return;
+      return <Tag color="default">{AutoTestTaskStatus.Uncompleted}</Tag>;
   }
 }
 
@@ -37,7 +35,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
   const attemptsLeft = maxAttemptsNumber - verifications.length;
 
-  const score = verifications.at(0)?.score ?? null;
+  const score = verifications?.[0]?.score ?? null;
 
   const columns = [
     {
