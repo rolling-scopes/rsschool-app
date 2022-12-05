@@ -18,12 +18,13 @@ export interface AutoTestTaskProps extends CoursePageProps {
 const { Title, Text, Link } = Typography;
 
 function Task({ course, task }: AutoTestTaskProps) {
-  const { maxAttemptsNumber, tresholdPercentage } = (task.publicAttributes as SelfEducationPublicAttributes) || {};
+  const { name, publicAttributes, descriptionUrl, maxScore } = task;
+  const { maxAttemptsNumber, tresholdPercentage } = (publicAttributes as SelfEducationPublicAttributes) || {};
 
   const { githubId } = useContext(SessionContext);
-  const courseService = useMemo(() => new CourseService(course.id), []);
   const [loading, withLoading] = useLoading(false);
   const [verifications, setVerifications] = useState<Verification[]>([]);
+  const courseService = useMemo(() => new CourseService(course.id), []);
   const attempts = useMemo(() => maxAttemptsNumber - verifications?.length ?? 0, [verifications?.length]);
 
   useAsync(
@@ -47,14 +48,14 @@ function Task({ course, task }: AutoTestTaskProps) {
               <Link href={getAutoTestRoute(course.alias)}>
                 <ArrowLeftOutlined />
               </Link>
-              {task.name}
+              {name}
             </Space>
           </Title>
         </Col>
         <Col span={24}>
           <Space>
             <Text type="secondary">Description: </Text>
-            <Link href={task.descriptionUrl}>{task.descriptionUrl}</Link>
+            <Link href={descriptionUrl}>{descriptionUrl}</Link>
           </Space>
         </Col>
       </Row>
@@ -73,7 +74,7 @@ function Task({ course, task }: AutoTestTaskProps) {
           </Space>
         </Col>
         <Col span={24}>
-          <VerificationsTable maxScore={task.maxScore} verifications={verifications} loading={loading} />
+          <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
         </Col>
         <Col>
           <Space>
