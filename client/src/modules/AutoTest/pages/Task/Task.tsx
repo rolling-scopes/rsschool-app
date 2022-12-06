@@ -9,8 +9,8 @@ import { useAsync } from 'react-use';
 import { CourseService, SelfEducationPublicAttributes, Verification } from 'services/course';
 import { getAutoTestRoute } from 'services/routes';
 import { useLoading } from 'components/useLoading';
-import { VerificationsTable } from 'modules/AutoTest/components';
-import { getAttemptsLeftMessage } from '../../utils/getAttemptsLeftMessage';
+import { Exercise, VerificationsTable } from 'modules/AutoTest/components';
+import { getAttemptsLeftMessage } from 'modules/AutoTest/utils/getAttemptsLeftMessage';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -26,6 +26,7 @@ function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
   const [verifications, setVerifications] = useState<Verification[]>([]);
+  const [isTableVisible, setIsTableVisible] = useState(true);
   const courseService = useMemo(() => new CourseService(course.id), []);
   const attempts = useMemo(() => maxAttemptsNumber - verifications?.length ?? 0, [verifications?.length]);
 
@@ -40,6 +41,8 @@ function Task({ course, task }: AutoTestTaskProps) {
     }),
     [],
   );
+
+  const startTask = () => setIsTableVisible(false);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
@@ -64,28 +67,38 @@ function Task({ course, task }: AutoTestTaskProps) {
         </Col>
       </Row>
       <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
-        <Col span={24}>
-          <Alert
-            showIcon
-            type="info"
-            message={`You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`}
-          />
-        </Col>
-        <Col span={24}>
-          <Space>
-            <Text type="secondary">Attempts:</Text>
-            <Text>{getAttemptsLeftMessage(attempts, strictAttemptsMode)}</Text>
-          </Space>
-        </Col>
-        <Col span={24}>
-          <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
-        </Col>
-        <Col>
-          <Space>
-            <Button type="primary">Start test</Button>
-            <Button>Answers</Button>
-          </Space>
-        </Col>
+        {isTableVisible ? (
+          <>
+            <Col span={24}>
+              <Alert
+                showIcon
+                type="info"
+                message={`You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`}
+              />
+            </Col>
+            <Col span={24}>
+              <Space>
+                <Text type="secondary">Attempts:</Text>
+                <Text>{getAttemptsLeftMessage(attempts, strictAttemptsMode)}</Text>
+              </Space>
+            </Col>
+            <Col span={24}>
+              <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
+            </Col>
+            <Col>
+              <Space>
+                <Button type="primary" onClick={startTask}>
+                  Start test
+                </Button>
+                <Button>Answers</Button>
+              </Space>
+            </Col>
+          </>
+        ) : (
+          <Col span={12}>
+            <Exercise courseTask={task} githubId={githubId} verifications={verifications} />
+          </Col>
+        )}
       </Row>
     </PageLayout>
   );
