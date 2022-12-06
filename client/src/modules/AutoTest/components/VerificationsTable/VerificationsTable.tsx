@@ -76,7 +76,7 @@ function getColumns(maxScore: number): ColumnType<Verification>[] {
   ];
 }
 
-type VerificationsTableProps = {
+export type VerificationsTableProps = {
   maxScore: number;
   verifications: Verification[];
   loading: boolean;
