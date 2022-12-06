@@ -10,6 +10,7 @@ import { CourseService, SelfEducationPublicAttributes, Verification } from 'serv
 import { getAutoTestRoute } from 'services/routes';
 import { useLoading } from 'components/useLoading';
 import { VerificationsTable } from 'modules/AutoTest/components';
+import { getAttemptsLeftMessage } from '../../utils/getAttemptsLeftMessage';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -19,7 +20,8 @@ const { Title, Text, Link } = Typography;
 
 function Task({ course, task }: AutoTestTaskProps) {
   const { name, publicAttributes, descriptionUrl, maxScore } = task;
-  const { maxAttemptsNumber, tresholdPercentage } = (publicAttributes as SelfEducationPublicAttributes) || {};
+  const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode } =
+    (publicAttributes as SelfEducationPublicAttributes) || {};
 
   const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
@@ -55,7 +57,9 @@ function Task({ course, task }: AutoTestTaskProps) {
         <Col span={24}>
           <Space>
             <Text type="secondary">Description: </Text>
-            <Link href={descriptionUrl}>{descriptionUrl}</Link>
+            <Link href={descriptionUrl} target="_blank">
+              {descriptionUrl}
+            </Link>
           </Space>
         </Col>
       </Row>
@@ -70,7 +74,7 @@ function Task({ course, task }: AutoTestTaskProps) {
         <Col span={24}>
           <Space>
             <Text type="secondary">Attempts:</Text>
-            <Text>{`${attempts} attempts left`}</Text>
+            <Text>{getAttemptsLeftMessage(attempts, strictAttemptsMode)}</Text>
           </Space>
         </Col>
         <Col span={24}>
