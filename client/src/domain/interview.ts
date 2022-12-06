@@ -1,4 +1,5 @@
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
+import moment from 'moment';
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
   switch (value) {
@@ -24,3 +25,9 @@ export enum InterviewStatus {
 }
 
 export const stageInterviewType = 'stage-interview';
+
+export function isInterviewRegistrationInProgess(interviewStartDate: string) {
+  const startDate = moment(interviewStartDate).subtract(2, 'weeks');
+
+  return moment().isBetween(startDate, interviewStartDate);
+}

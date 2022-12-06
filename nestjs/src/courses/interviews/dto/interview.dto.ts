@@ -38,7 +38,7 @@ export class InterviewDto {
   endDate: string;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   description?: string;
 
   @IsString()
