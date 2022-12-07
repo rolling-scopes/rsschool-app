@@ -87,26 +87,26 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
           {isPanelOpen && (
             <>
               <Row>
-                <Col span={24}>
-                  {isPreviewVisible && (
+                {isPreviewVisible && (
+                  <Col span={24}>
                     <Text>
                       <ReactMarkdown rehypePlugins={[remarkGfm]}>{inputValue}</ReactMarkdown>
                     </Text>
-                  )}
+                  </Col>
+                )}
 
-                  {!isPreviewVisible && (
-                    <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
-                      <Input.TextArea
-                        ref={inputRef}
-                        rows={3}
-                        showCount
-                        maxLength={512}
-                        placeholder="Leave a message"
-                        style={{ maxWidth: 512 }}
-                        onChange={handleChangeInput}
-                      />
-                    </Form.Item>
-                  )}
+                <Col span={24} hidden={isPreviewVisible}>
+                  <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
+                    <Input.TextArea
+                      ref={inputRef}
+                      rows={3}
+                      showCount
+                      maxLength={512}
+                      placeholder="Leave a message"
+                      style={{ maxWidth: 512 }}
+                      onChange={handleChangeInput}
+                    />
+                  </Form.Item>
                 </Col>
               </Row>
 
