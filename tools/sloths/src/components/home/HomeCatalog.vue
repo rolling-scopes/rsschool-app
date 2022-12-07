@@ -42,14 +42,14 @@ export default defineComponent({
   top: 50%;
   transform: translate(0, -50%);
   z-index: 2;
-  background: no-repeat center center / contain url('./img/home/catalog-up.svg');
+  background: no-repeat center center / contain url('/img/home/catalog-up.svg');
 }
 
 .home-catalog_down {
   bottom: 50%;
   transform: translate(0, 50%);
   z-index: 3;
-  background: no-repeat center center / contain url('./img/home/catalog-down.svg');
+  background: no-repeat center center / contain url('/img/home/catalog-down.svg');
 }
 
 .home-catalog__name {

@@ -2232,7 +2232,7 @@ export interface InterviewDto {
      * @type {string}
      * @memberof InterviewDto
      */
-    'description': string;
+    'description': string | null;
     /**
      * 
      * @type {string}
