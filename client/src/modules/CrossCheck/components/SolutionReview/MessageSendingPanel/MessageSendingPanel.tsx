@@ -1,7 +1,12 @@
-import { MessageFilled } from '@ant-design/icons';
-import { Button, Col, Comment, Form, Input, Row } from 'antd';
+import { useState, useRef, useEffect, KeyboardEvent, ChangeEvent } from 'react';
+import { MessageFilled, SendOutlined } from '@ant-design/icons';
+import { Button, Col, Comment, Form, Input, InputRef, Row, Typography } from 'antd';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
+
+const { Text } = Typography;
 
 export type MessageSendingPanelProps = {
   sessionId: number;
@@ -13,6 +18,39 @@ export type MessageSendingPanelProps = {
 
 function MessageSendingPanel(props: MessageSendingPanelProps) {
   const { author, sessionId, sessionGithubId, currentRole, areContactsVisible } = props;
+  const inputRef = useRef<InputRef>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isPanelOpen) {
+      inputRef.current?.focus({
+        cursor: 'end',
+      });
+    }
+  }, [isPanelOpen]);
+
+  const handleEnterButton = (event: KeyboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setIsPanelOpen(true);
+  };
+
+  const handleSubmit = () => {
+    setInputValue('');
+  };
+
+  const changePanelOpenness = () => {
+    setIsPanelOpen(previous => !previous);
+  };
+
+  const changePreviewVisibility = () => {
+    setIsPreviewVisible(previous => !previous);
+  };
+
+  const handleChangeInput = ({ target }: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(target.value);
+  };
 
   return (
     <Comment
@@ -30,21 +68,75 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
       }
       content={
         <>
-          <Row>
-            <Col span={24}>
-              <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
-                <Input.TextArea rows={3} showCount maxLength={512} style={{ maxWidth: 512 }} />
-              </Form.Item>
-            </Col>
-          </Row>
+          {!isPanelOpen && (
+            <Row>
+              <Col span={24}>
+                <Input
+                  type="text"
+                  maxLength={0}
+                  placeholder="Leave a message"
+                  suffix={<SendOutlined />}
+                  onClick={changePanelOpenness}
+                  onPressEnter={handleEnterButton}
+                  style={{ maxWidth: 512 }}
+                />
+              </Col>
+            </Row>
+          )}
 
-          <Row>
-            <Col>
-              <Button htmlType="submit" icon={<MessageFilled />} type="primary">
-                Send message
-              </Button>
-            </Col>
-          </Row>
+          {isPanelOpen && (
+            <>
+              <Row>
+                <Col span={24}>
+                  {isPreviewVisible && (
+                    <Text>
+                      <ReactMarkdown rehypePlugins={[remarkGfm]}>{inputValue}</ReactMarkdown>
+                    </Text>
+                  )}
+
+                  {!isPreviewVisible && (
+                    <Form.Item name="content" rules={[{ required: true, message: 'Please enter message' }]}>
+                      <Input.TextArea
+                        ref={inputRef}
+                        rows={3}
+                        showCount
+                        maxLength={512}
+                        placeholder="Leave a message"
+                        style={{ maxWidth: 512 }}
+                        onChange={handleChangeInput}
+                      />
+                    </Form.Item>
+                  )}
+                </Col>
+              </Row>
+
+              <Row style={{ marginBottom: 4 }}>
+                <Col>
+                  <Text type="secondary">notification of messages: off</Text>
+                </Col>
+              </Row>
+
+              <Row gutter={[8, 8]}>
+                <Col>
+                  <Button htmlType="submit" icon={<MessageFilled />} type="primary" onClick={handleSubmit}>
+                    Send message
+                  </Button>
+                </Col>
+
+                <Col>
+                  <Button type="default" danger onClick={changePanelOpenness}>
+                    Cancel
+                  </Button>
+                </Col>
+
+                <Col>
+                  <Button type="default" onClick={changePreviewVisibility}>
+                    {isPreviewVisible ? 'Write' : 'Preview'}
+                  </Button>
+                </Col>
+              </Row>
+            </>
+          )}
         </>
       }
     />
