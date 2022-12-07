@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Row, Col, Space, Typography } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';
@@ -8,7 +8,7 @@ const { Title, Text, Link } = Typography;
 type TaskDescriptionProps = {
   courseAlias: string;
   name: string;
-  descriptionUrl: string;
+  descriptionUrl?: string;
 };
 
 function TaskDescription({ courseAlias, name, descriptionUrl }: TaskDescriptionProps) {
@@ -24,16 +24,18 @@ function TaskDescription({ courseAlias, name, descriptionUrl }: TaskDescriptionP
           </Space>
         </Title>
       </Col>
-      <Col span={24}>
-        <Space>
-          <Text type="secondary">Description: </Text>
-          <Link href={descriptionUrl} target="_blank">
-            {descriptionUrl}
-          </Link>
-        </Space>
-      </Col>
+      {descriptionUrl ? (
+        <Col span={24}>
+          <Space>
+            <Text type="secondary">Description: </Text>
+            <Link href={descriptionUrl} target="_blank">
+              {descriptionUrl}
+            </Link>
+          </Space>
+        </Col>
+      ) : null}
     </Row>
   );
 }
 
-export default TaskDescription;
+export default memo(TaskDescription);

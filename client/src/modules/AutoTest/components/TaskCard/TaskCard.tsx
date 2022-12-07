@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
-import React from 'react';
-import { CourseTaskDetailedDto } from 'api';
+import React, { useMemo } from 'react';
+import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
@@ -30,7 +30,12 @@ function getStatusTag(endDate: string, score?: number | null) {
 }
 
 function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, publicAttributes } = parseCourseTask(origin);
+  const { id, name, studentStartDate, studentEndDate, publicAttributes, type } = parseCourseTask(origin);
+
+  const hasExplanation = useMemo(
+    () => type === CourseTaskDetailedDtoTypeEnum.Codewars || type === CourseTaskDetailedDtoTypeEnum.Jstask,
+    [type],
+  );
 
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
   const attemptsLeft = maxAttemptsNumber - verifications.length;
@@ -70,8 +75,12 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
               symbol: 'Read more',
             }}
           >
-            You can submit your solution as many times as you need before the deadline. Without fines. After the
-            deadline, the submission will be closed.
+            {hasExplanation ? (
+              <>
+                You can submit your solution as many times as you need before the deadline. Without fines. After the
+                deadline, the submission will be closed.
+              </>
+            ) : null}
           </Paragraph>
         </Col>
         <Col span={24}>
