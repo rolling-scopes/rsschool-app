@@ -2,8 +2,7 @@ import { Button, Col, Row } from 'antd';
 import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import React, { useMemo, useState } from 'react';
-// import { ManageEventModalForm } from '../ManageEventModalForm';
+import React, { useMemo } from 'react';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { AdditionalActions } from '../AdditionalActions';
 import { buildMenuItem } from './helpers';
@@ -40,17 +39,7 @@ export function SettingsPanel({
   settings,
   calendarToken,
   tags,
-  refreshData,
 }: SettingsPanelProps) {
-  // const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
-  // const [editableRecord, setEditableRecord] = useState(null);
-
-  // const openManageEventModal = () => setIsManageEventModalOpen(true);
-  // const closeManageEventModal = () => {
-  //   setEditableRecord(null);
-  //   setIsManageEventModalOpen(false);
-  // };
-
   const additionalMenuItems = useMemo(
     () =>
       [
@@ -71,13 +60,6 @@ export function SettingsPanel({
             </Button>
           </Col>
         ) : null}
-        {/* {isCourseManager ? (
-          <Col>
-            <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
-              {SettingsButtons.Event}
-            </Button>
-          </Col>
-        ) : null} */}
         {isCourseManager ? (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
@@ -101,16 +83,6 @@ export function SettingsPanel({
           </Col>
         )}
       </Row>
-      {/* {isManageEventModalOpen && (
-        <ManageEventModalForm
-          courseId={courseId}
-          visible={isManageEventModalOpen}
-          editableRecord={editableRecord}
-          handleCancel={closeManageEventModal}
-          refreshData={refreshData}
-          settings={settings}
-        />
-      )} */}
     </>
   );
 }
