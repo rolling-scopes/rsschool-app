@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, KeyboardEvent, ChangeEvent } from 'react';
+import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { MessageFilled, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Comment, Form, Input, InputRef, Row, Typography } from 'antd';
+import { Button, Col, Comment, Form, FormInstance, Input, InputRef, Row, Typography } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
@@ -11,15 +11,17 @@ const { Text } = Typography;
 export type MessageSendingPanelProps = {
   sessionId: number;
   sessionGithubId: string;
+  form: FormInstance;
   author: CrossCheckMessageAuthor | null;
   currentRole: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };
 
 function MessageSendingPanel(props: MessageSendingPanelProps) {
-  const { author, sessionId, sessionGithubId, currentRole, areContactsVisible } = props;
+  const { sessionId, sessionGithubId, form, author, currentRole, areContactsVisible } = props;
+
+  const inputValue = Form.useWatch('content', form);
   const inputRef = useRef<InputRef>(null);
-  const [inputValue, setInputValue] = useState<string>('');
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
 
@@ -36,20 +38,12 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
     setIsPanelOpen(true);
   };
 
-  const handleSubmit = () => {
-    setInputValue('');
-  };
-
   const changePanelOpenness = () => {
     setIsPanelOpen(previous => !previous);
   };
 
   const changePreviewVisibility = () => {
     setIsPreviewVisible(previous => !previous);
-  };
-
-  const handleChangeInput = ({ target }: ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(target.value);
   };
 
   return (
@@ -104,7 +98,6 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
                       maxLength={512}
                       placeholder="Leave a message"
                       style={{ maxWidth: 512 }}
-                      onChange={handleChangeInput}
                     />
                   </Form.Item>
                 </Col>
@@ -118,7 +111,7 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
 
               <Row gutter={[8, 8]}>
                 <Col>
-                  <Button htmlType="submit" icon={<MessageFilled />} type="primary" onClick={handleSubmit}>
+                  <Button type="primary" htmlType="submit" icon={<MessageFilled />}>
                     Send message
                   </Button>
                 </Col>
