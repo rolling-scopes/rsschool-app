@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Alert, Row, Typography } from 'antd';
+import { Alert, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
@@ -23,14 +23,21 @@ function Coding({ courseTask, githubId }: CodingProps) {
 
   if (courseTask.type === CourseTaskDetailedDtoTypeEnum.Codewars) {
     return (
-      <Paragraph>
-        Please use the next username in your{' '}
-        <Link href={codewarsLink} target="_blank">
-          codewars profile
-        </Link>
-        : <Text strong>{codewarsUsername}</Text>
-        <CopyToClipboardButton value={codewarsUsername} />
-      </Paragraph>
+      <>
+        <Paragraph>
+          Please use the next username in your{' '}
+          <Link href={codewarsLink} target="_blank">
+            codewars profile
+          </Link>
+          :
+        </Paragraph>
+        <Paragraph>
+          <Space>
+            <Text strong>{codewarsUsername}</Text>
+            <CopyToClipboardButton value={codewarsUsername} />
+          </Space>
+        </Paragraph>
+      </>
     );
   }
 

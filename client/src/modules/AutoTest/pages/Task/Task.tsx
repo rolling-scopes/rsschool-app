@@ -9,13 +9,14 @@ import { CourseService, Verification } from 'services/course';
 import { useLoading } from 'components/useLoading';
 import { Exercise, TaskDescription } from 'modules/AutoTest/components';
 import { VerificationInformation } from '../../components/VerificationInformation/VerificationInformation';
+import { getVerificationsByTask } from '../../utils/getVerificationsByTask';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
 }
 
 function Task({ course, task }: AutoTestTaskProps) {
-  const { name, descriptionUrl } = task;
+  const { name, descriptionUrl, id } = task;
 
   // TODO: recheck githubId and use from context instead
   const { githubId } = useContext(SessionContext);
@@ -28,7 +29,8 @@ function Task({ course, task }: AutoTestTaskProps) {
     withLoading(async () => {
       try {
         const verifications = await courseService.getTaskVerifications();
-        setVerifications(verifications);
+        const taskVerifications = getVerificationsByTask(verifications, id);
+        setVerifications(taskVerifications);
       } catch (error) {
         message.error(error);
       }

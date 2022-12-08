@@ -8,6 +8,7 @@ import { CourseTaskDetailedDto } from 'api';
 import { ColProps } from 'antd/lib/grid';
 import { useAsync } from 'react-use';
 import { CourseService, Verification } from 'services/course';
+import { getVerificationsByTask } from '../../utils/getVerificationsByTask';
 
 export interface AutoTestsProps extends CoursePageProps {
   courseTasks: CourseTaskDetailedDto[];
@@ -20,10 +21,6 @@ const RESPONSIVE_COLUMNS: ColProps = {
   xl: 8,
   xxl: 6,
 };
-
-function getVerificationsByTask(verifications: Verification[], courseTaskId: number): Verification[] {
-  return verifications.filter(v => v.courseTaskId === courseTaskId);
-}
 
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const { githubId } = useContext(SessionContext);
