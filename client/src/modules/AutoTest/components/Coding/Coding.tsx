@@ -4,7 +4,7 @@ import React from 'react';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 
-type CodingProps = {
+export type CodingProps = {
   courseTask: CourseTaskDetailedDto;
   githubId: string;
 };
@@ -37,9 +37,13 @@ function Coding({ courseTask, githubId }: CodingProps) {
   return (
     <Row>
       {courseTask.type === CourseTaskDetailedDtoTypeEnum.Jstask ? (
-        <Alert showIcon type="warning">
-          Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16.
-        </Alert>
+        <Paragraph>
+          <Alert
+            showIcon
+            type="warning"
+            message="Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16."
+          />
+        </Paragraph>
       ) : null}
       <Paragraph>
         The system will run tests in the following repository and will update the score based on the result:
