@@ -18,7 +18,6 @@ const courseTask = {
 const PROPS_MOCK: TaskCardProps = {
   course: { alias: 'course-alias', id: 100 } as Course,
   courseTask,
-  verifications: [],
 };
 
 describe('TaskCard', () => {

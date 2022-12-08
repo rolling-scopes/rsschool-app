@@ -1,7 +1,7 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { SelfEducationPublicAttributes } from 'services/course';
 import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
 import Link from 'next/link';
@@ -14,7 +14,6 @@ const { Title, Paragraph } = Typography;
 
 export interface TaskCardProps {
   courseTask: CourseTaskDetailedDto;
-  verifications: Verification[];
   course: Course;
 }
 
