@@ -64,7 +64,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
           {name}
         </Title>
       }
-      extra={<TaskDeadlineDate startDate={studentStartDate} endDate={studentEndDate} />}
+      extra={<TaskDeadlineDate startDate={studentStartDate} endDate={studentEndDate} score={score} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>

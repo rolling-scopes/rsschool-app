@@ -1,6 +1,6 @@
 import { Space, Typography } from 'antd';
-import { CalendarOutlined } from '@ant-design/icons';
-import React, { useMemo } from 'react';
+import { CalendarOutlined, SwapRightOutlined } from '@ant-design/icons';
+import React, { memo, useMemo } from 'react';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import { BaseType } from 'antd/lib/typography/Base';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest/utils/getStatusByDate';
@@ -11,6 +11,7 @@ export type TaskDeadlineDateProps = {
   startDate: string;
   endDate: string;
   score?: number;
+  format?: string;
 };
 
 function getTextType(endDate: string, score: number): BaseType {
@@ -26,12 +27,12 @@ function getTextType(endDate: string, score: number): BaseType {
   }
 }
 
-function TaskDeadlineDate({ startDate, endDate, score = 0 }: TaskDeadlineDateProps): JSX.Element {
+function TaskDeadlineDate({ startDate, endDate, score = 0, format = 'MMM DD' }: TaskDeadlineDateProps): JSX.Element {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const type = useMemo(() => getTextType(endDate, score), [endDate, score]);
 
-  const start = dateWithTimeZoneRenderer(timezone, 'MMM DD')(startDate);
-  const end = dateWithTimeZoneRenderer(timezone, 'MMM DD')(endDate);
+  const start = dateWithTimeZoneRenderer(timezone, format)(startDate);
+  const end = dateWithTimeZoneRenderer(timezone, format)(endDate);
 
   return (
     <Space wrap style={{ justifyContent: 'end' }}>
@@ -39,10 +40,10 @@ function TaskDeadlineDate({ startDate, endDate, score = 0 }: TaskDeadlineDatePro
         <CalendarOutlined />
       </Text>
       <Text type={type}>
-        {start} &mdash; {end}
+        {start} <SwapRightOutlined /> {end}
       </Text>
     </Space>
   );
 }
 
-export default TaskDeadlineDate;
+export default memo(TaskDeadlineDate);

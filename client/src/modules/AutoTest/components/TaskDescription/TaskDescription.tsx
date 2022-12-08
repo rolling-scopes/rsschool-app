@@ -1,20 +1,24 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Row, Col, Space, Typography } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';
+import { TaskDeadlineDate } from '..';
+import { CourseTaskDetailedDto } from '../../../../api';
 
 const { Title, Text, Link } = Typography;
 
 type TaskDescriptionProps = {
   courseAlias: string;
-  name: string;
-  descriptionUrl?: string;
+  score: number;
+  courseTask: CourseTaskDetailedDto;
 };
 
-function TaskDescription({ courseAlias, name, descriptionUrl }: TaskDescriptionProps) {
+function TaskDescription({ courseAlias, courseTask, score }: TaskDescriptionProps) {
+  const { descriptionUrl, name, studentStartDate, studentEndDate } = courseTask;
+
   return (
     <Row style={{ background: 'white', margin: '-15px -16px 24px', padding: '16px 24px' }}>
-      <Col span={24}>
+      <Col flex="auto">
         <Title level={3}>
           <Space size={24}>
             <Link href={getAutoTestRoute(courseAlias)}>
@@ -23,6 +27,14 @@ function TaskDescription({ courseAlias, name, descriptionUrl }: TaskDescriptionP
             {name}
           </Space>
         </Title>
+      </Col>
+      <Col flex="none">
+        <TaskDeadlineDate
+          startDate={studentStartDate}
+          endDate={studentEndDate}
+          score={score}
+          format="YYYY-MM-DD HH:mm"
+        />
       </Col>
       {descriptionUrl ? (
         <Col span={24}>
@@ -38,4 +50,4 @@ function TaskDescription({ courseAlias, name, descriptionUrl }: TaskDescriptionP
   );
 }
 
-export default memo(TaskDescription);
+export default TaskDescription;
