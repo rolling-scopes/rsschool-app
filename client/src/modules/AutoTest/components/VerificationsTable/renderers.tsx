@@ -1,4 +1,4 @@
-import { Space, Table, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
@@ -8,8 +8,9 @@ import { Verification } from 'services/course';
 
 const { Text, Link } = Typography;
 
-const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['md'];
-const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs', 'sm'];
+const DISPLAY_ALL: Breakpoint[] = ['sm'];
+const DISPLAY_ACCURACY: Breakpoint[] = ['md'];
+const DISPLAY_MOBILE: Breakpoint[] = ['xs'];
 
 type Metadata = {
   id: string;
@@ -24,20 +25,20 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
       key: 'date-time',
       title: 'Date / Time',
       dataIndex: 'createdDate',
-      responsive: DISPLAY_TABLE_BREAKPOINTS,
+      responsive: DISPLAY_ALL,
       render: renderDate,
     },
     {
       key: 'score',
       title: 'Score / Max',
       dataIndex: 'score',
-      responsive: DISPLAY_TABLE_BREAKPOINTS,
+      responsive: DISPLAY_ALL,
       render: renderScore(maxScore),
     },
     {
       key: 'accuracy',
       title: 'Accuracy',
-      responsive: DISPLAY_TABLE_BREAKPOINTS,
+      responsive: DISPLAY_ACCURACY,
       render: (_, row: Verification) => {
         const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
         const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
@@ -48,14 +49,14 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
       key: 'details',
       title: 'Details',
       dataIndex: 'details',
-      responsive: DISPLAY_TABLE_BREAKPOINTS,
+      responsive: DISPLAY_ALL,
       render: renderDetails,
     },
     {
       key: 'details',
       title: 'Details',
       render: renderMobileRow(maxScore),
-      responsive: DISPLAY_TABLE_MOBILE_BREAKPOINT,
+      responsive: DISPLAY_MOBILE,
     },
   ];
 }

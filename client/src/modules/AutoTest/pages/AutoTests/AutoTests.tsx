@@ -1,14 +1,12 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
 import { SessionContext } from 'modules/Course/contexts';
 import { TaskCard } from 'modules/AutoTest/components';
-import { Col, message, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { CourseTaskDetailedDto } from 'api';
 import { ColProps } from 'antd/lib/grid';
-import { useAsync } from 'react-use';
-import { CourseService, Verification } from 'services/course';
-import { getVerificationsByTask } from '../../utils/getVerificationsByTask';
+import { useCourseTaskVerifications } from '../../hooks/useCourseTaskVerifications';
 
 export interface AutoTestsProps extends CoursePageProps {
   courseTasks: CourseTaskDetailedDto[];
@@ -24,28 +22,14 @@ const RESPONSIVE_COLUMNS: ColProps = {
 
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const { githubId } = useContext(SessionContext);
-  const courseService = useMemo(() => new CourseService(course.id), []);
-  const [verifications, setVerifications] = useState<Verification[]>([]);
-
-  useAsync(async () => {
-    try {
-      const verifications = await courseService.getTaskVerifications();
-      setVerifications(verifications);
-    } catch (error) {
-      message.error(error);
-    }
-  }, []);
+  const { loading, verifications } = useCourseTaskVerifications(course.id);
 
   return (
-    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
+    <PageLayout loading={loading} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
       <Row gutter={[24, 24]}>
         {courseTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TaskCard
-              courseTask={courseTask}
-              verifications={getVerificationsByTask(verifications, courseTask.id)}
-              courseAlias={course.alias}
-            />
+            <TaskCard courseTask={courseTask} verifications={verifications} courseAlias={course.alias} />
           </Col>
         ))}
       </Row>

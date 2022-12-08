@@ -14,7 +14,7 @@ type VerificationInformationProps = {
 
 const { Text } = Typography;
 
-export function VerificationInformation({
+ function VerificationInformation({
   courseTask,
   verifications,
   loading,
@@ -64,3 +64,5 @@ export function VerificationInformation({
     </Row>
   );
 }
+
+export default VerificationInformation;
