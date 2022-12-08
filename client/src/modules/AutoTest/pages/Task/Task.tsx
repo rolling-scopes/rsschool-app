@@ -22,7 +22,7 @@ function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
   const [verifications, setVerifications] = useState<Verification[]>([]);
-  const [isTableVisible, setIsTableVisible] = useState(true);
+  const [isExerciseVisible, setIsExerciseVisible] = useState(false);
   const courseService = useMemo(() => new CourseService(course.id), []);
 
   useAsync(
@@ -38,21 +38,18 @@ function Task({ course, task }: AutoTestTaskProps) {
     [],
   );
 
-  const startTask = () => setIsTableVisible(false);
+  const startTask = () => setIsExerciseVisible(true);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
       <TaskDescription courseAlias={course.alias} descriptionUrl={descriptionUrl} name={name} />
-      {isTableVisible ? (
-        <VerificationInformation
-          courseTask={task}
-          loading={loading}
-          startTask={startTask}
-          verifications={verifications}
-        />
-      ) : (
-        <Exercise courseTask={task} githubId={githubId} verifications={verifications} />
-      )}
+      <VerificationInformation
+        courseTask={task}
+        loading={loading}
+        startTask={startTask}
+        verifications={verifications}
+      />
+      {isExerciseVisible && <Exercise courseTask={task} githubId={githubId} verifications={verifications} />}
     </PageLayout>
   );
 }

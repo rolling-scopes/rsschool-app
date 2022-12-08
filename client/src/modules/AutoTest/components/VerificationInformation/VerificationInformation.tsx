@@ -31,7 +31,17 @@ export function VerificationInformation({
         <Alert
           showIcon
           type="info"
-          message={`You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`}
+          message={
+            <>
+              <Text>
+                You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
+                attempts.
+              </Text>{' '}
+              {!strictAttemptsMode && (
+                <Text strong>After limit attempts is over you can get only half of a score.</Text>
+              )}
+            </>
+          }
         />
       </Col>
       <Col span={24}>

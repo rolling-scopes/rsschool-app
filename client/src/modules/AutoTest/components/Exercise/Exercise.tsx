@@ -2,7 +2,7 @@ import React from 'react';
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Verification } from 'services/course';
-import { Col, Row } from 'antd';
+import { Col, Form, Row } from 'antd';
 
 type ExerciseProps = {
   githubId: string;
@@ -11,6 +11,8 @@ type ExerciseProps = {
 };
 
 function Exercise({ githubId, courseTask, verifications }: ExerciseProps) {
+  const [form] = Form.useForm();
+
   const getExercise = () => {
     switch (courseTask?.type) {
       case CourseTaskDetailedDtoTypeEnum.Jstask:
@@ -29,7 +31,11 @@ function Exercise({ githubId, courseTask, verifications }: ExerciseProps) {
 
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
-      <Col span={12}>{getExercise()}</Col>
+      <Col xs={24} lg={18} xl={12}>
+        <Form form={form} layout="vertical" requiredMark={false}>
+          {getExercise()}
+        </Form>
+      </Col>
     </Row>
   );
 }
