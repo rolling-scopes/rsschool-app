@@ -1,22 +1,20 @@
-import { Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
+import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { CreateCourseEventDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { omit } from 'lodash';
 import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
-import moment from 'moment';
 import { useCallback } from 'react';
 import { useAsync } from 'react-use';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseEvent } from 'services/course';
 import { Event, EventService } from 'services/event';
-import { formatTimezoneToUTC } from 'services/formatter';
 import { UserService } from 'services/user';
 import { urlPattern } from 'services/validators';
+import { getInitialValues, submitEvent } from './formState';
 
 const { Option } = Select;
+const { Title } = Typography;
 
 type Props = {
   data: Partial<CourseEvent>;
@@ -75,7 +73,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
       cancel={onCancel}
     >
       {data.event?.id ? (
-        data.event.name
+        <Title level={4}>{data.event.name}</Title>
       ) : (
         <Form.Item name="event" label="Event" rules={[{ required: true, message: 'Please select a event' }]}>
           <Select
@@ -172,82 +170,4 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
       </Form.Item>
     </ModalForm>
   );
-}
-
-const submitTemplateEvent = async (values: any, eventTemplate?: Event) => {
-  const templateEventData = {
-    name: eventTemplate ? eventTemplate?.name : values.event,
-    type: values.type,
-    descriptionUrl: values.descriptionUrl,
-    description: values.description,
-  } as Partial<Event>;
-
-  if (!eventTemplate) {
-    try {
-      const res = await eventService.createEvent(templateEventData);
-      return res.id;
-    } catch (error) {
-      message.error('Failed to create event template. Please try later.');
-    }
-  } else {
-    try {
-      await eventService.updateEvent(eventTemplate.id, templateEventData);
-      return eventTemplate.id;
-    } catch (error) {
-      message.error('Failed to update event template. Please try later.');
-    }
-  }
-};
-
-const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDto => {
-  const record = {
-    eventId: eventTemplateId,
-    special: values.special ? values.special.join(',') : '',
-    dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
-    endTime: values.endTime ? formatTimezoneToUTC(values.endTime, values.timeZone) : undefined,
-    place: values.place || null,
-    organizer: values.organizerId ? { id: values.organizerId } : undefined,
-  };
-  return record;
-};
-
-async function submitEvent(
-  values: any,
-  eventTemplates: Event[],
-  courseId: number,
-  editableRecord?: Partial<CourseEvent>,
-): Promise<void> {
-  const currentEventTemplate = editableRecord?.event ?? eventTemplates.find(el => el.id === +values.event);
-  const eventTemplateId = await submitTemplateEvent(values, currentEventTemplate);
-  if (!eventTemplateId) return;
-  const serviceCourse = new CourseService(courseId);
-  const record = createRecord(eventTemplateId, values);
-  if (editableRecord?.id) {
-    try {
-      await serviceCourse.updateCourseEvent(editableRecord.id, omit(record, 'eventId'));
-    } catch (error) {
-      message.error('Failed to update event. Please try later.');
-    }
-  } else {
-    try {
-      await serviceCourse.createCourseEvent(record);
-    } catch (error) {
-      message.error('Failed to create event. Please try later.');
-    }
-  }
-}
-
-function getInitialValues(modalData: Partial<CourseEvent>) {
-  const timeZone = 'UTC';
-  return {
-    ...modalData,
-    type: modalData.event?.type,
-    descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
-    description: modalData.event?.description ? modalData.event.description : '',
-    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
-    endTime: modalData.endTime ? moment.tz(modalData.endTime, timeZone) : null,
-    organizerId: modalData.organizer ? modalData.organizer.id : undefined,
-    special: modalData.special ? modalData.special.split(',') : [],
-    timeZone,
-  };
 }
