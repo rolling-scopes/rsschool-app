@@ -7,13 +7,15 @@ import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/get
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
+import { useCourseTaskVerifications } from '../../hooks/useCourseTaskVerifications';
+import { Course } from 'services/models';
 
 const { Title, Paragraph } = Typography;
 
 export interface TaskCardProps {
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
-  courseAlias: string;
+  course: Course;
 }
 
 function getStatusTag(endDate: string, score?: number | null) {
@@ -29,16 +31,19 @@ function getStatusTag(endDate: string, score?: number | null) {
   }
 }
 
-function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardProps) {
+function TaskCard({ courseTask: origin, course }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, publicAttributes, type } = parseCourseTask(origin);
+  const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
 
+  const { verifications } = useCourseTaskVerifications(course.id, id);
   const hasExplanation = useMemo(
     () => type === CourseTaskDetailedDtoTypeEnum.Codewars || type === CourseTaskDetailedDtoTypeEnum.Jstask,
     [type],
   );
-
-  const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
-  const attemptsLeft = maxAttemptsNumber - verifications.length;
+  const attemptsLeft = useMemo(
+    () => maxAttemptsNumber - verifications?.length,
+    [maxAttemptsNumber, verifications?.length],
+  );
 
   const score = verifications?.[0]?.score ?? null;
 
@@ -84,7 +89,7 @@ function TaskCard({ courseTask: origin, verifications, courseAlias }: TaskCardPr
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Link href={getAutoTestTaskRoute(courseAlias, id)}>
+          <Link href={getAutoTestTaskRoute(course.alias, id)}>
             <Button type="primary">View details</Button>
           </Link>
         </Col>

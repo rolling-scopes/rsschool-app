@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { TaskCard, TaskCardProps } from '..';
 import { CourseTaskDetailedDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { Course } from 'services/models';
 
 const courseTask = {
   name: 'Course Task',
@@ -15,7 +16,7 @@ const courseTask = {
 } as CourseTaskDetailedDto;
 
 const PROPS_MOCK: TaskCardProps = {
-  courseAlias: 'course-alias',
+  course: { alias: 'course-alias', id: 100 } as Course,
   courseTask,
   verifications: [],
 };
