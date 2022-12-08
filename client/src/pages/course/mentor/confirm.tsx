@@ -1,8 +1,6 @@
-import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
-import { FormInstance } from 'antd/lib/form';
+import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
 import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
-import { StudentSearch } from 'components/StudentSearch';
 import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
@@ -11,6 +9,7 @@ import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
+import { MentorOptions } from 'components/MentorOptions';
 
 const { Link } = Typography;
 
@@ -166,7 +165,11 @@ function Page(props: { session: Session; courseAlias?: string }) {
     );
   }
 
-  return <PageLayoutSimple {...pageProps}>{renderForm(form, mentorData, handleSubmit, course)}</PageLayoutSimple>;
+  return (
+    <PageLayoutSimple {...pageProps}>
+      <MentorOptions form={form} mentorData={mentorData} handleSubmit={handleSubmit} course={course} />
+    </PageLayoutSimple>
+  );
 }
 
 const SuccessComponent = () => {
@@ -188,60 +191,5 @@ const SuccessComponent = () => {
   );
   return <Result status="success" title={titleCmp} />;
 };
-
-function renderForm(form: FormInstance, mentorData: any, handleSubmit: (values: any) => Promise<void>, course: Course) {
-  return (
-    <>
-      <Typography.Paragraph>
-        We kindly ask you confirm your desire to be mentor in {course.name} course. Just in case, you can change your
-        preference below and select student which you want to mentor
-      </Typography.Paragraph>
-      <Typography.Paragraph>
-        Мы просим вас подтвердить свое желание быть ментором в {course.name} курсе. На всякий случай, вы можете изменить
-        наши настройки ниже и указать студентов, которых вы хотели бы менторить.
-      </Typography.Paragraph>
-      <Form initialValues={mentorData} style={{ marginTop: 32 }} form={form} onFinish={handleSubmit} layout="vertical">
-        <Form.Item
-          name="maxStudentsLimit"
-          label="How many students are you ready to mentor per course?"
-          rules={[{ required: true, message: 'Please select students count' }]}
-        >
-          <Select style={{ width: 200 }} placeholder="Students count...">
-            <Select.Option value={2}>2</Select.Option>
-            <Select.Option value={3}>3</Select.Option>
-            <Select.Option value={4}>4</Select.Option>
-            <Select.Option value={5}>5</Select.Option>
-            <Select.Option value={6}>6</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          name="preferedStudentsLocation"
-          label="Preferred students location"
-          help="We will use this information to distribute students"
-          rules={[{ required: true, message: 'Please select a prefered location option' }]}
-        >
-          <Select placeholder="Select a prefered option...">
-            <Select.Option value={'any'}>Any city or country</Select.Option>
-            <Select.Option value={'country'}>My country only</Select.Option>
-            <Select.Option value={'city'}>My city only</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          help="If you want to be a mentor of particular students"
-          name="students"
-          label="Predefined students (if any)"
-        >
-          <StudentSearch onlyStudentsWithoutMentorShown={true} labelInValue courseId={course.id} mode="multiple" />
-        </Form.Item>
-
-        <Button style={{ marginTop: 32 }} size="large" type="primary" htmlType="submit">
-          Confirm
-        </Button>
-      </Form>
-    </>
-  );
-}
 
 export default withSession(Page);

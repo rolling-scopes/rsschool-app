@@ -11,6 +11,7 @@
           alt="images"
           object-fit="contain"
           class="meme__image"
+          crossOrigin="anonymous"
           @click="updateImage(index)"
         />
       </div>
@@ -147,9 +148,11 @@ export default defineComponent({
     };
   },
 
-  async mounted() {
+  beforeMount() {
     this.getImages();
+  },
 
+  async mounted() {
     const loaded = this.loadStore();
 
     const { canvas } = this.$refs;
