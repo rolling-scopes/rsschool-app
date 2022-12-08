@@ -1,23 +1,17 @@
-import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
+import { Button, message, Popconfirm, Select, Table } from 'antd';
 import moment from 'moment';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { omit } from 'lodash';
-import { CommentInput, ModalForm } from 'components/Forms';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
-import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
-import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { UserService } from 'services/user';
-import { urlPattern } from 'services/validators';
 import { TIMEZONES } from '../../../configs/timezones';
+import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
 
 type Props = CoursePageProps;
 
@@ -28,13 +22,10 @@ const timeZoneRenderer = (timeZone: string) => (value: string) => {
 function Page(props: Props) {
   const courseId = props.course.id;
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  const userService = new UserService();
+  const [modalData, setModalData] = useState<Partial<CourseEvent> | null>(null);
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [data, setData] = useState([] as CourseEvent[]);
   const [events, setEvents] = useState([] as Event[]);
-  const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
-  const [modalAction, setModalAction] = useState('update');
-  const [modalLoading, setModalLoading] = useState(false);
 
   const { loading } = useAsync(async () => {
     const [data, events] = await Promise.all([service.getCourseEvents(), new EventService().getEvents()]);
@@ -51,20 +42,6 @@ function Page(props: Props) {
     setData(data);
   };
 
-  const loadUsers = async (searchText: string) => {
-    return userService.searchUser(searchText);
-  };
-
-  const handleAddItem = () => {
-    setModalData({});
-    setModalAction('create');
-  };
-
-  const handleEditItem = (record: CourseEvent) => {
-    setModalData(record);
-    setModalAction('update');
-  };
-
   const handleDeleteItem = async (id: number) => {
     try {
       await service.deleteCourseEvent(id);
@@ -74,90 +51,22 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (values: FormData) => {
-    try {
-      setModalLoading(true);
-      const data = createRecord(values);
-      modalAction === 'update'
-        ? await service.updateCourseEvent(modalData!.id!, omit(data, 'eventId'))
-        : await service.createCourseEvent(data);
-
-      await refreshData();
-      setModalData(null);
-    } catch {
-      message.error('An error occurred. Please try later.');
-    } finally {
-      setModalLoading(false);
-    }
+  const handleAddEvent = () => {
+    setModalData({});
   };
 
-  const renderModal = (modalData: Partial<CourseEvent> | null) => {
-    return (
-      <ModalForm
-        getInitialValues={getInitialValues}
-        data={modalData}
-        title="Course Event"
-        submit={handleModalSubmit}
-        loading={modalLoading}
-        cancel={() => setModalData(null)}
-      >
-        <Form.Item name="eventId" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
-          <Select
-            showSearch
-            placeholder="Please select an event"
-            optionFilterProp={'children'}
-            filterOption={(input, option) =>
-              option && (option.children as any).toLowerCase().includes(input.toLowerCase())
-            }
-          >
-            {events.map(event => (
-              <Select.Option key={event.id} value={event.id}>
-                {event.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="timeZone" label="TimeZone">
-          <Select placeholder="Please select a timezone">
-            {TIMEZONES.map(tz => (
-              <Select.Option key={tz} value={tz}>
-                {/* there is no 'Europe / Kyiv' time zone at the moment */}
-                {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="dateTime"
-          label="Start Date and Time"
-          rules={[{ required: true, message: 'Please enter date and time' }]}
-        >
-          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-        <Form.Item name="endTime" label="End Date and Time">
-          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-        <Form.Item name="place" label="Place">
-          <Input />
-        </Form.Item>
-        <Form.Item name="organizerId" label="Organizer">
-          <UserSearch defaultValues={modalData?.organizer ? [modalData.organizer] : []} searchFn={loadUsers} />
-        </Form.Item>
-        <Form.Item
-          name="broadcastUrl"
-          label="Broadcast URL"
-          rules={[{ pattern: urlPattern, message: 'Enter valid url' }]}
-        >
-          <Input />
-        </Form.Item>
-        <CommentInput notRequired />
-      </ModalForm>
-    );
+  const handleEditEvent = (event: Partial<CourseEvent>) => {
+    setModalData(event);
+  };
+
+  const handleEventSubmit = async () => {
+    setModalData(null);
+    refreshData();
   };
 
   return (
     <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
-      <Button type="primary" onClick={handleAddItem}>
+      <Button type="primary" onClick={handleAddEvent}>
         Add Event
       </Button>
       <Select
@@ -179,16 +88,27 @@ function Page(props: Props) {
         pagination={false}
         size="small"
         dataSource={data}
-        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events })}
+        columns={getColumns(handleEditEvent, handleDeleteItem, { timeZone, events })}
       />
-      {renderModal(modalData!)}
+      {modalData && (
+        <CourseEventModal
+          data={modalData}
+          onSubmit={handleEventSubmit}
+          onCancel={() => setModalData(null)}
+          courseId={courseId}
+        />
+      )}
     </AdminPageLayout>
   );
 }
 
 export default withCourseData(withSession(Page));
 
-function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events }: any) {
+function getColumns(
+  handleEditItem: (event: Partial<CourseEvent>) => void,
+  handleDeleteItem: any,
+  { timeZone, events }: any,
+) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -229,30 +149,3 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
     },
   ];
 }
-
-function createRecord(values: FormData) {
-  const data = {
-    place: values.place,
-    dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
-    endTime: values.endTime ? formatTimezoneToUTC(values.endTime, values.timeZone) : undefined,
-    eventId: values.eventId,
-    comment: values.comment,
-
-    coordinator: values.coordinator,
-    organizerId: values.organizerId || undefined,
-    broadcastUrl: values.broadcastUrl,
-  };
-  return data;
-}
-
-function getInitialValues(modalData: Partial<CourseEvent>) {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return {
-    ...modalData,
-    timeZone,
-    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
-    endTime: modalData.endTime ? moment.tz(modalData.dateTime, timeZone) : null,
-  };
-}
-
-type FormData = CourseEvent & { timeZone: string };

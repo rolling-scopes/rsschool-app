@@ -3,7 +3,7 @@ import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from 
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useMemo, useState } from 'react';
-import { ManageEventModalForm } from '../ManageEventModalForm';
+// import { ManageEventModalForm } from '../ManageEventModalForm';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { AdditionalActions } from '../AdditionalActions';
 import { buildMenuItem } from './helpers';
@@ -42,14 +42,14 @@ export function SettingsPanel({
   tags,
   refreshData,
 }: SettingsPanelProps) {
-  const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
-  const [editableRecord, setEditableRecord] = useState(null);
+  // const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
+  // const [editableRecord, setEditableRecord] = useState(null);
 
-  const openManageEventModal = () => setIsManageEventModalOpen(true);
-  const closeManageEventModal = () => {
-    setEditableRecord(null);
-    setIsManageEventModalOpen(false);
-  };
+  // const openManageEventModal = () => setIsManageEventModalOpen(true);
+  // const closeManageEventModal = () => {
+  //   setEditableRecord(null);
+  //   setIsManageEventModalOpen(false);
+  // };
 
   const additionalMenuItems = useMemo(
     () =>
@@ -101,7 +101,7 @@ export function SettingsPanel({
           </Col>
         )}
       </Row>
-      {isManageEventModalOpen && (
+      {/* {isManageEventModalOpen && (
         <ManageEventModalForm
           courseId={courseId}
           visible={isManageEventModalOpen}
@@ -110,7 +110,7 @@ export function SettingsPanel({
           refreshData={refreshData}
           settings={settings}
         />
-      )}
+      )} */}
     </>
   );
 }

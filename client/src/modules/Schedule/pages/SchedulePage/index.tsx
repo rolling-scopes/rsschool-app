@@ -1,5 +1,12 @@
 import { Alert } from 'antd';
-import { CourseDto, CoursesScheduleApi, CoursesScheduleIcalApi, CoursesTasksApi, CreateCourseTaskDto } from 'api';
+import {
+  CourseDto,
+  CourseEventDto,
+  CoursesScheduleApi,
+  CoursesScheduleIcalApi,
+  CoursesTasksApi,
+  CreateCourseTaskDto,
+} from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
@@ -25,7 +32,7 @@ export function SchedulePage(props: PageProps) {
   const session = useContext(SessionContext);
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
-  const [courseEvent, setCourseEvent] = useState<null | Record<string, any>>(null);
+  const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
@@ -34,6 +41,11 @@ export function SchedulePage(props: PageProps) {
   const handleSubmit = async (record: CreateCourseTaskDto) => {
     await courseTaskApi.createCourseTask(props.course.id, record);
     setCourseTask(null);
+    refreshData();
+  };
+
+  const handleEventSubmit = () => {
+    setCourseEvent(null);
     refreshData();
   };
 
@@ -87,7 +99,14 @@ export function SchedulePage(props: PageProps) {
         </StatusTabs>
         <TableView settings={settings} data={data} statusFilter={selectedTab} />
         <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
-        <CourseEventModal data={courseEvent} onCancel={() => setCourseEvent(null)} courseId={props.course.id} />
+        {courseEvent && (
+          <CourseEventModal
+            data={courseEvent}
+            onSubmit={handleEventSubmit}
+            onCancel={() => setCourseEvent(null)}
+            courseId={props.course.id}
+          />
+        )}
         <CoursesListModal
           okText="Copy"
           data={copyModal}

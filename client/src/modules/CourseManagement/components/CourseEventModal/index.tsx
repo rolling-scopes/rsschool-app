@@ -1,14 +1,16 @@
 import { Col, DatePicker, Form, Input, message, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { CourseEventDto, CreateCourseEventDto } from 'api';
+import { CreateCourseEventDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
 import { EVENT_TYPES } from 'data/eventTypes';
+import { omit } from 'lodash';
 import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
+import moment from 'moment';
 import { useCallback } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
+import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { UserService } from 'services/user';
@@ -17,15 +19,16 @@ import { urlPattern } from 'services/validators';
 const { Option } = Select;
 
 type Props = {
-  data: Partial<CourseEventDto> | null;
+  data: Partial<CourseEvent>;
   onCancel: () => void;
+  onSubmit: () => void;
   courseId: number;
 };
 
 const eventService = new EventService();
 const userService = new UserService();
 
-export function CourseEventModal({ data, onCancel, courseId }: Props) {
+export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) {
   const [form] = Form.useForm();
 
   const loadUsers = (searchText: string) => {
@@ -39,14 +42,17 @@ export function CourseEventModal({ data, onCancel, courseId }: Props) {
       if (!input) {
         return false;
       }
-      const event: Event | undefined = events.find(e => e.id === option?.value);
+      const event: Event | undefined = events.find(e => {
+        return e.id === +option?.value;
+      });
       return event?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [events],
   );
 
   const handleModalSubmit = async (values: any) => {
-    submitEvent(values, events, false, courseId);
+    await submitEvent(values, events, courseId, data);
+    onSubmit();
   };
 
   const typesList = EVENT_TYPES;
@@ -62,31 +68,38 @@ export function CourseEventModal({ data, onCancel, courseId }: Props) {
     <ModalForm
       form={form}
       loading={loading}
+      getInitialValues={getInitialValues}
       data={data}
       title="Course Event"
       submit={handleModalSubmit}
       cancel={onCancel}
     >
-      <Form.Item name="event" label="Event" rules={[{ required: true, message: 'Please select a event' }]}>
-        <Select
-          maxTagCount={1}
-          mode="tags"
-          filterOption={filterOption}
-          showSearch
-          placeholder="Please select a event"
-          onChange={value => {
-            const [currentEvent] = value;
-            form.setFieldValue('event', currentEvent);
-            const currentTemplateEvent = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
-            form.setFieldValue('description', currentTemplateEvent?.description);
-            form.setFieldValue('descriptionUrl', currentTemplateEvent?.descriptionUrl);
-          }}
-        >
-          {events.map((event: Event) => (
-            <Option key={event.id}>{event.name}</Option>
-          ))}
-        </Select>
-      </Form.Item>
+      {data.event?.id ? (
+        data.event.name
+      ) : (
+        <Form.Item name="event" label="Event" rules={[{ required: true, message: 'Please select a event' }]}>
+          <Select
+            mode="tags"
+            maxTagCount={1}
+            filterOption={filterOption}
+            showSearch
+            placeholder="Please select a event"
+            onChange={value => {
+              const currentEvent = value.at(-1);
+              form.setFieldValue('event', currentEvent);
+              const currentEventTemplate = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
+              form.setFieldValue('description', currentEventTemplate?.description);
+              form.setFieldValue('descriptionUrl', currentEventTemplate?.descriptionUrl);
+              form.setFieldValue('type', currentEventTemplate?.type);
+            }}
+          >
+            {events.map((event: Event) => (
+              <Option key={event.id}>{event.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )}
+
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
         <Select>{entityTypes}</Select>
       </Form.Item>
@@ -99,7 +112,7 @@ export function CourseEventModal({ data, onCancel, courseId }: Props) {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name="timeZone" label="TimeZone" rules={[{ required: true, message: 'Please select a time zone' }]}>
+      <Form.Item name="timeZone" label="TimeZone">
         <Select placeholder="Please select a timezone">
           {TIMEZONES.map(tz => (
             <Option key={tz} value={tz}>
@@ -155,22 +168,21 @@ export function CourseEventModal({ data, onCancel, courseId }: Props) {
       </Form.Item>
 
       <Form.Item name="place" label="Place">
-        <Input style={{ minWidth: 250 }} />
+        <Input />
       </Form.Item>
     </ModalForm>
   );
 }
 
-const submitTemplateEvent = async (values: any, eventTemplates: Event[]) => {
-  const currentTemplateEvent = eventTemplates.find(el => el.id === +values.event[0] && el.name !== values.event[0]);
+const submitTemplateEvent = async (values: any, eventTemplate?: Event) => {
   const templateEventData = {
-    name: currentTemplateEvent ? currentTemplateEvent.name : values.event[0],
+    name: eventTemplate ? eventTemplate?.name : values.event,
     type: values.type,
     descriptionUrl: values.descriptionUrl,
     description: values.description,
   } as Partial<Event>;
 
-  if (!currentTemplateEvent) {
+  if (!eventTemplate) {
     try {
       const res = await eventService.createEvent(templateEventData);
       return res.id;
@@ -179,8 +191,8 @@ const submitTemplateEvent = async (values: any, eventTemplates: Event[]) => {
     }
   } else {
     try {
-      await eventService.updateEvent(currentTemplateEvent.id, templateEventData);
-      return currentTemplateEvent.id;
+      await eventService.updateEvent(eventTemplate.id, templateEventData);
+      return eventTemplate.id;
     } catch (error) {
       message.error('Failed to update event template. Please try later.');
     }
@@ -200,18 +212,42 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
 };
 
 async function submitEvent(
-  values: Event,
+  values: any,
   eventTemplates: Event[],
-  isUpdateMode: boolean,
   courseId: number,
+  editableRecord?: Partial<CourseEvent>,
 ): Promise<void> {
-  const eventTemplateId = await submitTemplateEvent(values, eventTemplates);
+  const currentEventTemplate = editableRecord?.event ?? eventTemplates.find(el => el.id === +values.event);
+  const eventTemplateId = await submitTemplateEvent(values, currentEventTemplate);
   if (!eventTemplateId) return;
   const serviceCourse = new CourseService(courseId);
   const record = createRecord(eventTemplateId, values);
-  if (isUpdateMode) {
-    return;
+  if (editableRecord?.id) {
+    try {
+      await serviceCourse.updateCourseEvent(editableRecord.id, omit(record, 'eventId'));
+    } catch (error) {
+      message.error('Failed to update event. Please try later.');
+    }
   } else {
-    await serviceCourse.createCourseEvent(record);
+    try {
+      await serviceCourse.createCourseEvent(record);
+    } catch (error) {
+      message.error('Failed to create event. Please try later.');
+    }
   }
+}
+
+function getInitialValues(modalData: Partial<CourseEvent>) {
+  const timeZone = 'UTC';
+  return {
+    ...modalData,
+    type: modalData.event?.type,
+    descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
+    description: modalData.event?.description ? modalData.event.description : '',
+    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
+    endTime: modalData.endTime ? moment.tz(modalData.endTime, timeZone) : null,
+    organizerId: modalData.organizer ? modalData.organizer.id : undefined,
+    special: modalData.special ? modalData.special.split(',') : [],
+    timeZone,
+  };
 }
