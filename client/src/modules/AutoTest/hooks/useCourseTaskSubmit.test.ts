@@ -1,9 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { useCourseTaskSubmit } from './useCourseTaskSubmit';
+import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
 import { FilesService } from 'services/files';
 import { CourseService } from 'services/course';
 import { act } from 'react-dom/test-utils';
+import { AxiosError } from 'axios';
+import { notification } from 'antd';
 
 jest.mock('services/files');
 jest.mock('services/course');
@@ -11,14 +13,13 @@ jest.mock('services/course');
 const uploadFileMock = jest.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
 (FilesService as jest.Mock).mockImplementation(() => ({ uploadFile: uploadFileMock }));
 
-const COURSE_ID_MOCK = 100;
 const FILE_VALUE_MOCK = {
   upload: {
     file: {
       originFileObj: new File([new Blob(['blob-blob'])], 'file-name'),
     },
   },
-};
+} as IpynbFile;
 const SELF_EDUCATION_MOCK = { ['answer-0']: 1, ['answer-1']: 2 };
 
 const CODING_RESULT = {
@@ -33,80 +34,84 @@ const SELF_EDUCATION_RESULT = [
 const IPYNB_RESULT = { s3Key: expect.any(String), taskName: 'course_task_ipynb' };
 
 describe('useCourseTaskSubmit', () => {
-  describe('collectData', () => {
-    it.each`
-      type                                           | values                 | result
-      ${CourseTaskDetailedDtoTypeEnum.Ipynb}         | ${FILE_VALUE_MOCK}     | ${IPYNB_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${SELF_EDUCATION_MOCK} | ${SELF_EDUCATION_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Codewars}      | ${{}}                  | ${CODEWARS_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Jstask}        | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Kotlintask}    | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Objctask}      | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Cvmarkdown}    | ${{}}                  | ${{}}
-      ${CourseTaskDetailedDtoTypeEnum.Cvhtml}        | ${{}}                  | ${{}}
-    `(
-      'should return data for $type',
-      async ({ type, values, result }: { type: CourseTaskDetailedDtoTypeEnum; values: any; result: any }) => {
-        const courseTask = generateCourseTask(type);
-        const { collectData } = renderUseCourseTaskSubmit(courseTask);
+  it.each`
+    type                                           | values                 | result
+    ${CourseTaskDetailedDtoTypeEnum.Ipynb}         | ${FILE_VALUE_MOCK}     | ${IPYNB_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${SELF_EDUCATION_MOCK} | ${SELF_EDUCATION_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Codewars}      | ${{}}                  | ${CODEWARS_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Jstask}        | ${{}}                  | ${CODING_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Kotlintask}    | ${{}}                  | ${CODING_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Objctask}      | ${{}}                  | ${CODING_RESULT}
+    ${CourseTaskDetailedDtoTypeEnum.Cvmarkdown}    | ${{}}                  | ${{}}
+    ${CourseTaskDetailedDtoTypeEnum.Cvhtml}        | ${{}}                  | ${{}}
+  `(
+    'should post task verification for $type',
+    async ({ type, values, result }: { type: CourseTaskDetailedDtoTypeEnum; values: any; result: any }) => {
+      const postTaskVerificationMock = jest.fn().mockResolvedValueOnce(() => ({ courseTask: { type } }));
+      (CourseService as jest.Mock).mockImplementationOnce(() => ({ postTaskVerification: postTaskVerificationMock }));
 
-        const data = await collectData(values);
+      const courseTask = generateCourseTask(type);
+      const { submit } = renderUseCourseTaskSubmit(courseTask);
 
-        expect(data).toStrictEqual(result);
-      },
-    );
+      await act(async () => {
+        await submit(values);
+      });
 
-    it(`should trigger file upload when task is ${CourseTaskDetailedDtoTypeEnum.Ipynb}`, async () => {
-      const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Ipynb);
-      const { collectData } = renderUseCourseTaskSubmit(courseTask);
+      expect(postTaskVerificationMock).toHaveBeenCalledWith(courseTask.id, result);
+    },
+  );
 
-      await collectData(FILE_VALUE_MOCK);
+  it(`should trigger file upload when task is ${CourseTaskDetailedDtoTypeEnum.Ipynb}`, async () => {
+    const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Ipynb);
+    const { submit } = renderUseCourseTaskSubmit(courseTask);
 
-      expect(uploadFileMock).toHaveBeenCalled();
+    await act(async () => {
+      await submit(FILE_VALUE_MOCK);
     });
+
+    expect(uploadFileMock).toHaveBeenCalled();
   });
 
-  describe('submit', () => {
-    it.each`
-      type                                           | values                 | result
-      ${CourseTaskDetailedDtoTypeEnum.Ipynb}         | ${FILE_VALUE_MOCK}     | ${IPYNB_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${SELF_EDUCATION_MOCK} | ${SELF_EDUCATION_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Codewars}      | ${{}}                  | ${CODEWARS_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Jstask}        | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Kotlintask}    | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Objctask}      | ${{}}                  | ${CODING_RESULT}
-      ${CourseTaskDetailedDtoTypeEnum.Cvmarkdown}    | ${{}}                  | ${{}}
-      ${CourseTaskDetailedDtoTypeEnum.Cvhtml}        | ${{}}                  | ${{}}
-    `(
-      'should post task verification for $type',
-      async ({ type, values, result }: { type: CourseTaskDetailedDtoTypeEnum; values: any; result: any }) => {
-        const postTaskVerificationMock = jest.fn().mockImplementationOnce(() => ({ courseTask: { type } }));
-        (CourseService as jest.Mock).mockImplementationOnce(() => ({ postTaskVerification: postTaskVerificationMock }));
+  it.each`
+    statusCode | message
+    ${401}     | ${'Your authorization token has expired. You need to re-login in the application.'}
+    ${429}     | ${'Please wait. You will be able to submit your task again when the current verification is completed.'}
+    ${423}     | ${'Please reload page. This task was expired for submit.'}
+    ${500}     | ${'An error occurred. Please try later.'}
+  `(
+    'should trigger error notification when request failed and status code is $statusCode',
+    async ({ statusCode, message }: { statusCode: number; message: string }) => {
+      const error = generateAxiosError(statusCode);
+      const notificationMock = jest.fn();
+      jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValue(error);
+      jest.spyOn(notification, 'error').mockImplementationOnce(() => notificationMock);
 
-        const courseTask = generateCourseTask(type);
-        const { submit } = renderUseCourseTaskSubmit(courseTask);
+      const courseTask = generateCourseTask();
+      const { submit } = renderUseCourseTaskSubmit(courseTask);
 
-        await act(async () => {
-          await submit(values);
-        });
+      await act(async () => {
+        await submit({});
+      });
 
-        expect(postTaskVerificationMock).toHaveBeenCalledWith(courseTask.id, result);
-      },
-    );
-
-    // TODO: test errors
-  });
+      expect(notification.error).toHaveBeenCalledWith({
+        message,
+        duration: statusCode === 401 ? null : undefined,
+      });
+    },
+  );
 });
 
 function renderUseCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
   const {
     result: { current },
-  } = renderHook(() => useCourseTaskSubmit(COURSE_ID_MOCK, courseTask));
+  } = renderHook(() => useCourseTaskSubmit(100, courseTask));
 
   return { ...current };
 }
 
-function generateCourseTask(type: CourseTaskDetailedDtoTypeEnum): CourseTaskDetailedDto {
+function generateCourseTask(
+  type: CourseTaskDetailedDtoTypeEnum = CourseTaskDetailedDtoTypeEnum.Jstask,
+): CourseTaskDetailedDto {
   return {
     id: 10,
     name: `Course task ${type}`,
@@ -116,4 +121,13 @@ function generateCourseTask(type: CourseTaskDetailedDtoTypeEnum): CourseTaskDeta
     githubRepoName: 'github-repo-name',
     sourceGithubRepoUrl: 'source-github-repo-url',
   } as CourseTaskDetailedDto;
+}
+
+function generateAxiosError(code: number): AxiosError {
+  return {
+    isAxiosError: true,
+    response: {
+      status: code,
+    },
+  } as AxiosError;
 }

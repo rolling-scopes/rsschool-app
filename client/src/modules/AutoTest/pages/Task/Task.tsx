@@ -28,7 +28,9 @@ function Task({ course, task }: AutoTestTaskProps) {
         startTask={startTask}
         verifications={verifications}
       />
-      {isExerciseVisible && <Exercise courseTask={task} githubId={githubId} verifications={verifications} />}
+      {isExerciseVisible && (
+        <Exercise courseId={course.id} courseTask={task} githubId={githubId} verifications={verifications} />
+      )}
     </PageLayout>
   );
 }

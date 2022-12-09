@@ -1,4 +1,4 @@
-import { Form, message, notification } from 'antd';
+import { Form, notification } from 'antd';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
@@ -7,22 +7,33 @@ import { CourseService, SelfEducationPublicAttributes } from 'services/course';
 import { AxiosError } from 'axios';
 import { isExpelledStudent } from '../../../domain/user';
 import { SessionContext } from '../../Course/contexts';
+import { InternalUploadFile } from 'antd/lib/upload/interface';
+
+type SelfEducationValues = Record<string, number>;
+export type IpynbFile = { upload: { file: InternalUploadFile } };
+type FormValues = SelfEducationValues | IpynbFile;
+
+function isIpynbFile(item: unknown): item is IpynbFile {
+  return !!item && typeof item === 'object' && 'upload' in item;
+}
 
 export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDetailedDto) {
   const session = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormValues>();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   // TODO: values types
-  const uploadIpynbFile = async (values: any) => {
-    const filesService = new FilesService();
-    const fileData = await readFile(values.upload.file);
-    const { s3Key } = await filesService.uploadFile('', fileData);
-    return s3Key;
+  const uploadIpynbFile = async (values: FormValues): Promise<string | undefined> => {
+    if (isIpynbFile(values)) {
+      const filesService = new FilesService();
+      const fileData = await readFile(values.upload.file);
+      const { s3Key } = await filesService.uploadFile('', fileData);
+      return s3Key;
+    }
   };
 
-  const collectData = async (values: any) => {
+  const getData = async (values: FormValues) => {
     switch (courseTask.type) {
       case CourseTaskDetailedDtoTypeEnum.Ipynb: {
         const s3Key = await uploadIpynbFile(values);
@@ -65,9 +76,6 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDeta
   };
 
   const getError = (error: AxiosError<any>): string => {
-    const { oneAttemptPerNumberOfHours, maxAttemptsNumber } = (courseTask?.publicAttributes ??
-      {}) as SelfEducationPublicAttributes;
-
     switch (error.response?.status) {
       case 401:
         return 'Your authorization token has expired. You need to re-login in the application.';
@@ -82,14 +90,14 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDeta
         if (isExpelledStudent(session, courseId)) {
           return 'This task can only be submitted by active students.';
         } else {
-          const attempts =
-            !!oneAttemptPerNumberOfHours &&
-            `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
-              oneAttemptPerNumberOfHours !== 1 && 's'
+          const { oneAttemptPerNumberOfHours: oneAttemptPerHours, maxAttemptsNumber = 0 } =
+            (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
+          const timeLimitedAttempts =
+            !!oneAttemptPerHours &&
+            `You can submit this task not more than one time per ${oneAttemptPerHours} hour${
+              oneAttemptPerHours !== 1 && 's'
             }.`;
-          return `You can submit this task only ${
-            maxAttemptsNumber || 0
-          } times. ${attempts} For now your attempts limit is over!`;
+          return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
         }
       }
 
@@ -99,10 +107,10 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDeta
   };
 
   // TODO: values types
-  const submit = async (values: any) => {
+  const submit = async (values: FormValues) => {
     setLoading(true);
 
-    const data = await collectData(values);
+    const data = await getData(values);
 
     if (!data) {
       return;
@@ -114,22 +122,25 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDeta
       } = await courseService.postTaskVerification(courseTask.id, data);
 
       if (type === CourseTaskDetailedDtoTypeEnum.Selfeducation) {
-        message.success('The task has been submitted.');
+        notification.success({ message: 'The task has been submitted.' });
       } else {
-        message.success('The task has been submitted for verification and it will be checked soon.');
+        notification.success({ message: 'The task has been submitted for verification and it will be checked soon.' });
       }
-    } catch (error) {
+    } catch (e) {
+      const error = e as AxiosError<any>;
       const message = getError(error as AxiosError<any>);
-      // TODO: different types of warning
+
       notification.error({
-        message: message,
+        message,
+        // notification will never be closed automatically when status is 401
+        duration: error.response?.status === 401 ? null : undefined,
       });
     } finally {
       setLoading(false);
     }
   };
 
-  return { form, loading, collectData, submit };
+  return { form, loading, submit };
 }
 
 function readFile(file: any) {

@@ -2,16 +2,18 @@ import React from 'react';
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Verification } from 'services/course';
-import { Col, Form, Row } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
+import { useCourseTaskSubmit } from '../../hooks/useCourseTaskSubmit';
 
 type ExerciseProps = {
   githubId: string;
+  courseId: number;
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
 };
 
-function Exercise({ githubId, courseTask, verifications }: ExerciseProps) {
-  const [form] = Form.useForm();
+function Exercise({ githubId, courseId, courseTask, verifications }: ExerciseProps) {
+  const { form, loading, submit } = useCourseTaskSubmit(courseId, courseTask);
 
   const getExercise = () => {
     switch (courseTask?.type) {
@@ -32,8 +34,13 @@ function Exercise({ githubId, courseTask, verifications }: ExerciseProps) {
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
       <Col xs={24} lg={18} xl={12}>
-        <Form form={form} layout="vertical" requiredMark={false}>
+        <Form form={form} layout="vertical" requiredMark={false} onFinish={submit}>
           {getExercise()}
+          <Row>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Row>
         </Form>
       </Col>
     </Row>
