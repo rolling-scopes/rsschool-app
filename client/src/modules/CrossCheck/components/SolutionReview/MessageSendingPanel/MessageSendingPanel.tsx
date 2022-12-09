@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { MessageFilled, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Comment, Form, FormInstance, Input, InputRef, Row, Typography } from 'antd';
+import { Button, Col, Comment, Form, Input, InputRef, Row, Typography } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
@@ -11,15 +11,15 @@ const { Text } = Typography;
 export type MessageSendingPanelProps = {
   sessionId: number;
   sessionGithubId: string;
-  form: FormInstance;
   author: CrossCheckMessageAuthor | null;
   currentRole: CrossCheckMessageAuthorRole;
   areContactsVisible: boolean;
 };
 
 function MessageSendingPanel(props: MessageSendingPanelProps) {
-  const { sessionId, sessionGithubId, form, author, currentRole, areContactsVisible } = props;
+  const { sessionId, sessionGithubId, author, currentRole, areContactsVisible } = props;
 
+  const form = Form.useFormInstance();
   const inputValue = Form.useWatch('content', form);
   const inputRef = useRef<InputRef>(null);
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);

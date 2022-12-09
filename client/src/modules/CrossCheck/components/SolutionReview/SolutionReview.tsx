@@ -200,7 +200,6 @@ function SolutionReview(props: SolutionReviewProps) {
                     <MessageSendingPanel
                       sessionId={sessionId}
                       sessionGithubId={sessionGithubId}
-                      form={form}
                       author={author}
                       currentRole={currentRole}
                       areContactsVisible={settings.areContactsVisible}
