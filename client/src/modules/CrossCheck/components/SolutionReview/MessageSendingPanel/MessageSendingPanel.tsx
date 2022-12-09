@@ -84,7 +84,9 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
                 {isPreviewVisible && (
                   <Col span={24}>
                     <Text>
-                      <ReactMarkdown rehypePlugins={[remarkGfm]}>{inputValue}</ReactMarkdown>
+                      <ReactMarkdown rehypePlugins={[remarkGfm]}>
+                        {inputValue === '' ? 'Nothing to preview' : inputValue}
+                      </ReactMarkdown>
                     </Text>
                   </Col>
                 )}
