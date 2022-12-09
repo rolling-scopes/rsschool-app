@@ -1,10 +1,18 @@
-import { Form } from 'antd';
+import { Form, message, notification } from 'antd';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import snakeCase from 'lodash/snakeCase';
+import { useContext, useMemo, useState } from 'react';
 import { FilesService } from 'services/files';
+import { CourseService, SelfEducationPublicAttributes } from 'services/course';
+import { AxiosError } from 'axios';
+import { isExpelledStudent } from '../../../domain/user';
+import { SessionContext } from '../../Course/contexts';
 
-export function useCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
+export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDetailedDto) {
+  const session = useContext(SessionContext);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   // TODO: values types
   const uploadIpynbFile = async (values: any) => {
@@ -28,7 +36,7 @@ export function useCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
         return Object.entries(values)
           .filter(([key]) => /answer/.test(key))
           .map(([key, value]) => {
-            const [, index] = key.match(/answer-(.*)$/) || [];
+            const [, index = 0] = key.match(/answer-(.*)$/) || [];
             return { index: Number(index), value };
           });
       }
@@ -56,7 +64,72 @@ export function useCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
     }
   };
 
-  return { form, collectData };
+  const getError = (error: AxiosError<any>): string => {
+    const { oneAttemptPerNumberOfHours, maxAttemptsNumber } = (courseTask?.publicAttributes ??
+      {}) as SelfEducationPublicAttributes;
+
+    switch (error.response?.status) {
+      case 401:
+        return 'Your authorization token has expired. You need to re-login in the application.';
+
+      case 429:
+        return 'Please wait. You will be able to submit your task again when the current verification is completed.';
+
+      case 423:
+        return 'Please reload page. This task was expired for submit.';
+
+      case 403: {
+        if (isExpelledStudent(session, courseId)) {
+          return 'This task can only be submitted by active students.';
+        } else {
+          const attempts =
+            !!oneAttemptPerNumberOfHours &&
+            `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
+              oneAttemptPerNumberOfHours !== 1 && 's'
+            }.`;
+          return `You can submit this task only ${
+            maxAttemptsNumber || 0
+          } times. ${attempts} For now your attempts limit is over!`;
+        }
+      }
+
+      default:
+        return 'An error occurred. Please try later.';
+    }
+  };
+
+  // TODO: values types
+  const submit = async (values: any) => {
+    setLoading(true);
+
+    const data = await collectData(values);
+
+    if (!data) {
+      return;
+    }
+
+    try {
+      const {
+        courseTask: { type },
+      } = await courseService.postTaskVerification(courseTask.id, data);
+
+      if (type === CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+        message.success('The task has been submitted.');
+      } else {
+        message.success('The task has been submitted for verification and it will be checked soon.');
+      }
+    } catch (error) {
+      const message = getError(error as AxiosError<any>);
+      // TODO: different types of warning
+      notification.error({
+        message: message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { form, loading, collectData, submit };
 }
 
 function readFile(file: any) {
