@@ -1,13 +1,14 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
-import React, { useMemo } from 'react';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import React from 'react';
+import { CourseTaskDetailedDto } from 'api';
+import { Verification } from 'services/course';
 import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from 'services/models';
+import { useAttemptsMessage } from '../../hooks/useAttemptsMessage';
 
 const { Title, Paragraph } = Typography;
 
@@ -31,17 +32,8 @@ function getStatusTag(endDate: string, score?: number | null) {
 }
 
 function TaskCard({ courseTask: origin, course, verifications }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, publicAttributes, type } = parseCourseTask(origin);
-  const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
-
-  const hasExplanation = useMemo(
-    () => type === CourseTaskDetailedDtoTypeEnum.Codewars || type === CourseTaskDetailedDtoTypeEnum.Jstask,
-    [type],
-  );
-  const attemptsLeft = useMemo(
-    () => maxAttemptsNumber - verifications?.length,
-    [maxAttemptsNumber, verifications?.length],
-  );
+  const { id, name, studentStartDate, studentEndDate } = parseCourseTask(origin);
+  const { attemptsCount, explanation } = useAttemptsMessage(origin, verifications);
 
   const score = verifications?.[0]?.score ?? null;
 
@@ -52,7 +44,7 @@ function TaskCard({ courseTask: origin, course, verifications }: TaskCardProps) 
     },
     {
       label: 'Attempts',
-      value: `${attemptsLeft} left`,
+      value: `${attemptsCount} left`,
     },
     {
       label: 'Score',
@@ -78,12 +70,7 @@ function TaskCard({ courseTask: origin, course, verifications }: TaskCardProps) 
               symbol: 'Read more',
             }}
           >
-            {hasExplanation ? (
-              <>
-                You can submit your solution as many times as you need before the deadline. Without fines. After the
-                deadline, the submission will be closed.
-              </>
-            ) : null}
+            {explanation}
           </Paragraph>
         </Col>
         <Col span={24}>

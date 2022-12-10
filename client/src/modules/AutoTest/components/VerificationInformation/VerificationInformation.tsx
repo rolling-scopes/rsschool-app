@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Row, Col, Space, Button, Alert, Typography } from 'antd';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { Verification } from 'services/course';
 import { VerificationsTable } from 'modules/AutoTest/components';
-import { getAttemptsLeftMessage } from 'modules/AutoTest/utils/getAttemptsLeftMessage';
-import { CourseTaskDetailedDto } from '../../../../api';
+import { CourseTaskDetailedDto } from 'api';
+import { useAttemptsMessage } from '../../hooks/useAttemptsMessage';
 
 type VerificationInformationProps = {
   courseTask: CourseTaskDetailedDto;
@@ -14,40 +14,19 @@ type VerificationInformationProps = {
 
 const { Text } = Typography;
 
- function VerificationInformation({
-  courseTask,
-  verifications,
-  loading,
-  startTask,
-}: VerificationInformationProps): any {
-  const { publicAttributes, maxScore } = courseTask;
-  const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode } =
-    (publicAttributes as SelfEducationPublicAttributes) || {};
-  const attempts = useMemo(() => maxAttemptsNumber - verifications?.length ?? 0, [verifications?.length]);
+function VerificationInformation({ courseTask, verifications, loading, startTask }: VerificationInformationProps): any {
+  const { maxScore } = courseTask;
+  const { explanation, attemptsLeftMessage } = useAttemptsMessage(courseTask, verifications);
 
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
       <Col span={24}>
-        <Alert
-          showIcon
-          type="info"
-          message={
-            <>
-              <Text>
-                You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
-                attempts.
-              </Text>{' '}
-              {!strictAttemptsMode && (
-                <Text strong>After limit attempts is over you can get only half of a score.</Text>
-              )}
-            </>
-          }
-        />
+        <Alert showIcon type="info" message={explanation} />
       </Col>
       <Col span={24}>
         <Space>
           <Text type="secondary">Attempts:</Text>
-          <Text>{getAttemptsLeftMessage(attempts, strictAttemptsMode)}</Text>
+          <Text>{attemptsLeftMessage}</Text>
         </Space>
       </Col>
       <Col span={24}>
