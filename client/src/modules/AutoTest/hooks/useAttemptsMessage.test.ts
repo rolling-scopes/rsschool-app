@@ -42,27 +42,27 @@ describe('useAttemptsMessage', () => {
   );
 
   it.each`
-    strictAttemptsMode | type                                           | expected
-    ${true}            | ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
-    ${false}           | ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
-    ${undefined}       | ${CourseTaskDetailedDtoTypeEnum.Jstask}        | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
-    ${undefined}       | ${CourseTaskDetailedDtoTypeEnum.Codewars}      | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
+    strictAttemptsMode | maxAttemptsNumber | tresholdPercentage | expected
+    ${true}            | ${MAX_ATTEMPTS}   | ${90}              | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
+    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
+    ${undefined}       | ${undefined}      | ${undefined}       | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
   `(
-    'should return explanation when task type is $type and strict mode is $strictAttemptsMode',
+    'should return explanation when strict mode is $strictAttemptsMode, max attempts number is $maxAttemptsNumber and threshold percentage is $tresholdPercentage',
     ({
       strictAttemptsMode,
+      maxAttemptsNumber,
+      tresholdPercentage,
       expected,
-      type,
     }: {
       strictAttemptsMode: boolean;
+      maxAttemptsNumber: number;
+      tresholdPercentage: number;
       expected: string;
-      type: CourseTaskDetailedDtoTypeEnum;
     }) => {
       const task = {
-        type,
         publicAttributes: {
-          maxAttemptsNumber: MAX_ATTEMPTS,
-          tresholdPercentage: 90,
+          maxAttemptsNumber,
+          tresholdPercentage,
           strictAttemptsMode,
         },
       } as CourseTaskDetailedDto;

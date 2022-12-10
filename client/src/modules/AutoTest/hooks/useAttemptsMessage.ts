@@ -13,18 +13,17 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
   }, [maxAttemptsNumber, verifications?.length]);
 
   const explanation = useMemo(() => {
-    if (type === CourseTaskDetailedDtoTypeEnum.Codewars || type === CourseTaskDetailedDtoTypeEnum.Jstask) {
-      return 'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.';
+    if (tresholdPercentage && maxAttemptsNumber) {
+      let str = `You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`;
+
+      if (strictAttemptsMode) {
+        str += ' After limit attempts is over you can get only half of a score.';
+      }
+
+      return str;
     }
 
-    let str = `You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`;
-
-    if (strictAttemptsMode) {
-      str += ' After limit attempts is over you can get only half of a score.';
-    }
-
-    // TODO: fix You must score at least undefined% of points to pass. You have only undefined attempts.
-    return str;
+    return 'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.';
   }, [maxAttemptsNumber, tresholdPercentage, strictAttemptsMode]);
 
   const attemptsLeftMessage = useMemo(() => {
