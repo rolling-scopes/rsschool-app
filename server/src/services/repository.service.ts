@@ -88,12 +88,12 @@ export class RepositoryService {
     try {
       const hooks = await github.rest.repos.listWebhooks({ owner, repo });
       if (hooks.data.length > 0) {
-        this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
+        this.logger?.info(`[${owner}/${repo}] webhook already exist`);
         return;
       }
       await this.createWebhook(github, owner, repo);
     } catch (e) {
-      this.logger?.error(`[${owner}/${repo}] failed to add webhoo`, e);
+      this.logger?.error(`[${owner}/${repo}] failed to add webhook`, e);
     }
   }
 
@@ -151,7 +151,7 @@ export class RepositoryService {
 
   private async inviteStudent(owner: string, repo: string, githubId: string) {
     try {
-      await this.github.rest.repos.addCollaborator({ owner, repo, username: githubId });
+      await this.github.rest.repos.addCollaborator({ owner, repo, username: githubId, permission: 'maintain' });
     } catch (err) {
       const error = err as RequestError;
       if (error.status === 422) {
