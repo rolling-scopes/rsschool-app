@@ -3,7 +3,7 @@ import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/compone
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Verification } from 'services/course';
 import { Button, Col, Form, Row } from 'antd';
-import { useCourseTaskSubmit } from '../../hooks/useCourseTaskSubmit';
+import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 
 type ExerciseProps = {
   githubId: string;

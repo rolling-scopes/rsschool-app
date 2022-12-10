@@ -3,7 +3,7 @@ import { Row, Col, Space, Typography } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';
 import { TaskDeadlineDate } from '..';
-import { CourseTaskDetailedDto } from '../../../../api';
+import { CourseTaskDetailedDto } from 'api';
 
 const { Title, Text, Link } = Typography;
 

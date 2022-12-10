@@ -4,7 +4,7 @@ import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
 import { Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
-import { useCourseTaskVerifications } from '../../hooks/useCourseTaskVerifications';
+import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;

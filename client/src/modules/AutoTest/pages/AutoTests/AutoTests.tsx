@@ -6,7 +6,7 @@ import { TaskCard } from 'modules/AutoTest/components';
 import { Col, Row } from 'antd';
 import { CourseTaskDetailedDto } from 'api';
 import { ColProps } from 'antd/lib/grid';
-import { useCourseTaskVerifications } from '../../hooks/useCourseTaskVerifications';
+import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
 
 export interface AutoTestsProps extends CoursePageProps {
   courseTasks: CourseTaskDetailedDto[];

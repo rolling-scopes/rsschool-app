@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from 'services/models';
-import { useAttemptsMessage } from 'modules/AutoTest/hooks/useAttemptsMessage';
+import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 
 const { Title, Paragraph } = Typography;
 

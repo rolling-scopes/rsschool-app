@@ -3,7 +3,7 @@ import { Row, Col, Space, Button, Alert, Typography } from 'antd';
 import { Verification } from 'services/course';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDto } from 'api';
-import { useAttemptsMessage } from '../../hooks/useAttemptsMessage';
+import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 
 type VerificationInformationProps = {
   courseTask: CourseTaskDetailedDto;
