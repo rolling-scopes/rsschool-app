@@ -14,7 +14,7 @@ function Task({ course, task }: AutoTestTaskProps) {
   // TODO: recheck githubId and use from context instead
   const { githubId } = useContext(SessionContext);
   const [isExerciseVisible, setIsExerciseVisible] = useState(false);
-  const { loading, verifications } = useCourseTaskVerifications(course.id, task.id);
+  const { loading, verifications, reloadVerifications } = useCourseTaskVerifications(course.id, task.id);
   const score = useMemo(() => verifications?.[0]?.score ?? null, [verifications]);
 
   const startTask = () => setIsExerciseVisible(true);
@@ -29,7 +29,13 @@ function Task({ course, task }: AutoTestTaskProps) {
         verifications={verifications}
       />
       {isExerciseVisible && (
-        <Exercise courseId={course.id} courseTask={task} githubId={githubId} verifications={verifications} />
+        <Exercise
+          courseId={course.id}
+          courseTask={task}
+          githubId={githubId}
+          verifications={verifications}
+          reloadVerifications={reloadVerifications}
+        />
       )}
     </PageLayout>
   );

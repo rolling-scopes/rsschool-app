@@ -10,10 +10,11 @@ type ExerciseProps = {
   courseId: number;
   courseTask: CourseTaskDetailedDto;
   verifications: Verification[];
+  reloadVerifications: () => void;
 };
 
-function Exercise({ githubId, courseId, courseTask, verifications }: ExerciseProps) {
-  const { form, loading, submit } = useCourseTaskSubmit(courseId, courseTask);
+function Exercise({ githubId, courseId, courseTask, verifications, reloadVerifications }: ExerciseProps) {
+  const { form, loading, submit } = useCourseTaskSubmit(courseId, courseTask, reloadVerifications);
 
   const getExercise = () => {
     switch (courseTask?.type) {
@@ -36,8 +37,8 @@ function Exercise({ githubId, courseId, courseTask, verifications }: ExercisePro
       <Col xs={24} lg={18} xl={12}>
         <Form form={form} layout="vertical" requiredMark={false} onFinish={submit}>
           {getExercise()}
-          <Row>
-            <Button type="primary" htmlType="submit">
+          <Row justify="center">
+            <Button loading={loading} type="primary" htmlType="submit">
               Submit
             </Button>
           </Row>

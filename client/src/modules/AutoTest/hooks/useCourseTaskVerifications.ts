@@ -1,19 +1,17 @@
 import { message } from 'antd';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, Verification } from 'services/course';
 
-export function useCourseTaskVerifications(
-  courseId: number,
-  courseTaskId?: number,
-) {
+export function useCourseTaskVerifications(courseId: number, courseTaskId?: number) {
+  const [needsReload, setNeedsReload] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), []);
 
   const {
     loading,
     value: allVerifications = [],
     error,
-  } = useAsync(async () => await courseService.getTaskVerifications(), []);
+  } = useAsync(async () => await courseService.getTaskVerifications(), [needsReload]);
 
   function filterVerifications(verifications: Verification[], taskId: number): any {
     return verifications?.filter((v: Verification) => v.courseTaskId === taskId);
@@ -27,6 +25,10 @@ export function useCourseTaskVerifications(
     return allVerifications;
   }, [allVerifications, courseTaskId]);
 
+  function reloadVerifications() {
+    setNeedsReload(!needsReload);
+  }
+
   if (error) {
     message.error(error);
   }
@@ -35,5 +37,6 @@ export function useCourseTaskVerifications(
     verifications: taskVerifications,
     loading,
     filterVerifications,
+    reloadVerifications,
   };
 }

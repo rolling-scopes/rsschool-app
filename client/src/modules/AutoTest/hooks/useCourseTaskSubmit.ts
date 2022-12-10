@@ -17,7 +17,11 @@ function isIpynbFile(item: unknown): item is IpynbFile {
   return !!item && typeof item === 'object' && 'upload' in item;
 }
 
-export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDetailedDto) {
+export function useCourseTaskSubmit(
+  courseId: number,
+  courseTask: CourseTaskDetailedDto,
+  reloadVerifications: () => void,
+) {
   const session = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm<FormValues>();
@@ -137,6 +141,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskDeta
       });
     } finally {
       setLoading(false);
+      reloadVerifications();
     }
   };
 
