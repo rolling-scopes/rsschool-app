@@ -46,7 +46,7 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
     return 'Limit of "free" attempts is over. Now you can get only half of a score.';
   }, [attemptsCount, strictAttemptsMode]);
 
-  const allowSubmit = useMemo(() => {
+  const allowStartTask = useMemo(() => {
     if (!strictAttemptsMode) {
       return true;
     }
@@ -60,6 +60,6 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
     attemptsCount,
     explanation,
     attemptsLeftMessage,
-    allowSubmit,
+    allowStartTask,
   };
 }

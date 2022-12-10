@@ -112,7 +112,7 @@ describe('useAttemptsMessage', () => {
         strictAttemptsMode: false,
       },
     } as CourseTaskDetailedDto;
-    const { allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+    const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
       expect(allowSubmit).toBeTruthy();
   })
@@ -124,7 +124,7 @@ describe('useAttemptsMessage', () => {
         strictAttemptsMode: true,
       },
     } as CourseTaskDetailedDto;
-    const { allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+    const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
       expect(allowSubmit).toBeFalsy();
   })

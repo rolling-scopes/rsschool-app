@@ -16,7 +16,7 @@ const { Text } = Typography;
 
 function VerificationInformation({ courseTask, verifications, loading, startTask }: VerificationInformationProps): any {
   const { maxScore } = courseTask;
-  const { explanation, attemptsLeftMessage, allowSubmit } = useAttemptsMessage(courseTask, verifications);
+  const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask, verifications);
 
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
@@ -36,7 +36,7 @@ function VerificationInformation({ courseTask, verifications, loading, startTask
       </Col>
       <Col>
         <Space>
-          <Button type="primary" onClick={startTask} disabled={!allowSubmit}>
+          <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
             Start test
           </Button>
         </Space>
