@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-hooks';
 import { Verification } from 'services/course';
 import { useCourseTaskVerifications } from './useCourseTaskVerifications';
 import * as reactUse from 'react-use';
@@ -41,4 +41,16 @@ describe('useCourseTaskVerifications', () => {
       expect(result.current.verifications).toHaveLength(expectedLength);
     },
   );
+
+  it('should reload verifications', async () => {
+    const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
+    jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
+    const { result } = renderHook(() => useCourseTaskVerifications(10, 100));
+
+    await act(async () => {
+      await result.current.reloadVerifications();
+    });
+
+    expect(asyncMock).toHaveBeenCalled();
+  });
 });
