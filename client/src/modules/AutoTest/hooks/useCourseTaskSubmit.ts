@@ -8,6 +8,7 @@ import { AxiosError } from 'axios';
 import { isExpelledStudent } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
+import { useBeforeUnload } from 'react-use';
 
 type SelfEducationValues = Record<string, number>;
 export type IpynbFile = { upload: { file: InternalUploadFile } };
@@ -24,8 +25,11 @@ export function useCourseTaskSubmit(
 ) {
   const session = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
+  const [isModified, setIsModified] = useState(false);
   const [form] = Form.useForm<FormValues>();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+
+  useBeforeUnload(isModified, 'You have changes in test. Do you really want to close this page?');
 
   // TODO: values types
   const uploadIpynbFile = async (values: FormValues): Promise<string | undefined> => {
@@ -94,13 +98,11 @@ export function useCourseTaskSubmit(
         if (isExpelledStudent(session, courseId)) {
           return 'This task can only be submitted by active students.';
         } else {
-          const { oneAttemptPerNumberOfHours: oneAttemptPerHours, maxAttemptsNumber = 0 } =
-            (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
-          const timeLimitedAttempts =
-            !!oneAttemptPerHours &&
-            `You can submit this task not more than one time per ${oneAttemptPerHours} hour${
-              oneAttemptPerHours !== 1 && 's'
-            }.`;
+          const { oneAttemptPerNumberOfHours, maxAttemptsNumber = 0 } = (courseTask?.publicAttributes ??
+            {}) as SelfEducationPublicAttributes;
+          const timeLimitedAttempts = oneAttemptPerNumberOfHours
+            ? `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hours.`
+            : '';
           return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
         }
       }
@@ -130,6 +132,9 @@ export function useCourseTaskSubmit(
       } else {
         notification.success({ message: 'The task has been submitted for verification and it will be checked soon.' });
       }
+
+      reloadVerifications();
+      setIsModified(false);
     } catch (e) {
       const error = e as AxiosError<any>;
       const message = getError(error as AxiosError<any>);
@@ -141,11 +146,14 @@ export function useCourseTaskSubmit(
       });
     } finally {
       setLoading(false);
-      reloadVerifications();
     }
   };
 
-  return { form, loading, submit };
+  const change = () => {
+    setIsModified(true);
+  };
+
+  return { form, loading, submit, change };
 }
 
 function readFile(file: any) {

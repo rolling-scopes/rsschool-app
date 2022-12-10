@@ -6,9 +6,11 @@ import { CourseService } from 'services/course';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
 import { notification } from 'antd';
+import * as UserUtils from 'domain/user';
 
 jest.mock('services/files');
 jest.mock('services/course');
+jest.mock('domain/user');
 
 const uploadFileMock = jest.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
 (FilesService as jest.Mock).mockImplementation(() => ({ uploadFile: uploadFileMock }));
@@ -72,45 +74,79 @@ describe('useCourseTaskSubmit', () => {
     expect(uploadFileMock).toHaveBeenCalled();
   });
 
-  it.each`
-    statusCode | message
-    ${401}     | ${'Your authorization token has expired. You need to re-login in the application.'}
-    ${429}     | ${'Please wait. You will be able to submit your task again when the current verification is completed.'}
-    ${423}     | ${'Please reload page. This task was expired for submit.'}
-    ${500}     | ${'An error occurred. Please try later.'}
-  `(
-    'should trigger error notification when request failed and status code is $statusCode',
-    async ({ statusCode, message }: { statusCode: number; message: string }) => {
-      const error = generateAxiosError(statusCode);
-      const notificationMock = jest.fn();
-      jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValue(error);
-      jest.spyOn(notification, 'error').mockImplementationOnce(() => notificationMock);
+  describe('when request failed', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
 
-      const courseTask = generateCourseTask();
-      const { submit } = renderUseCourseTaskSubmit(courseTask);
+    it.each`
+      statusCode | message
+      ${401}     | ${'Your authorization token has expired. You need to re-login in the application.'}
+      ${429}     | ${'Please wait. You will be able to submit your task again when the current verification is completed.'}
+      ${423}     | ${'Please reload page. This task was expired for submit.'}
+      ${500}     | ${'An error occurred. Please try later.'}
+    `(
+      'and status code is $statusCode should trigger error notification',
+      async ({ statusCode, message }: { statusCode: number; message: string }) => {
+        const error = generateAxiosError(statusCode);
+        const notificationMock = jest.fn();
+        jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValueOnce(error);
+        jest.spyOn(notification, 'error').mockImplementationOnce(() => notificationMock);
 
-      await act(async () => {
-        await submit({});
-      });
+        const courseTask = generateCourseTask();
+        const { submit } = renderUseCourseTaskSubmit(courseTask);
 
-      expect(notification.error).toHaveBeenCalledWith({
-        message,
-        duration: statusCode === 401 ? null : undefined,
-      });
-    },
-  );
+        await act(async () => {
+          await submit({});
+        });
+
+        expect(notification.error).toHaveBeenCalledWith({
+          message,
+          duration: statusCode === 401 ? null : undefined,
+        });
+      },
+    );
+
+    it.each`
+      isExpelled | perHour      | message
+      ${true}    | ${undefined} | ${'This task can only be submitted by active students.'}
+      ${false}   | ${undefined} | ${'You can submit this task only 4 times.  For now your attempts limit is over!'}
+      ${false}   | ${1}         | ${'You can submit this task only 4 times. You can submit this task not more than one time per 1 hours. For now your attempts limit is over!'}
+    `(
+      `and status code is 403 should trigger error notification`,
+      async ({ isExpelled, perHour, message }: { isExpelled: boolean; perHour: number; message: string }) => {
+        const error = generateAxiosError(403);
+        jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
+        jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValueOnce(error);
+        jest.spyOn(notification, 'error').mockImplementationOnce(() => jest.fn());
+
+        const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Jstask, perHour);
+        const { submit } = renderUseCourseTaskSubmit(courseTask);
+
+        await act(async () => {
+          await submit({});
+        });
+
+        expect(notification.error).toHaveBeenCalledWith({
+          message,
+          duration: undefined,
+        });
+      },
+    );
+  });
 });
 
 function renderUseCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
   const {
     result: { current },
-  } = renderHook(() => useCourseTaskSubmit(100, courseTask));
+  } = renderHook(() => useCourseTaskSubmit(100, courseTask, jest.fn()));
 
   return { ...current };
 }
 
 function generateCourseTask(
   type: CourseTaskDetailedDtoTypeEnum = CourseTaskDetailedDtoTypeEnum.Jstask,
+  oneAttemptPerNumberOfHours?: number,
 ): CourseTaskDetailedDto {
   return {
     id: 10,
@@ -120,6 +156,10 @@ function generateCourseTask(
     studentEndDate: '2022-10-10T00:00.000Z',
     githubRepoName: 'github-repo-name',
     sourceGithubRepoUrl: 'source-github-repo-url',
+    publicAttributes: {
+      maxAttemptsNumber: 4,
+      oneAttemptPerNumberOfHours,
+    },
   } as CourseTaskDetailedDto;
 }
 
