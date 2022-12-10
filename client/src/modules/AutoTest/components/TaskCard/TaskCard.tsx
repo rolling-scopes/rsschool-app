@@ -1,13 +1,12 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { SelfEducationPublicAttributes } from 'services/course';
+import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
 import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
-import { useCourseTaskVerifications } from '../../hooks/useCourseTaskVerifications';
 import { Course } from 'services/models';
 
 const { Title, Paragraph } = Typography;
@@ -15,6 +14,7 @@ const { Title, Paragraph } = Typography;
 export interface TaskCardProps {
   courseTask: CourseTaskDetailedDto;
   course: Course;
+  verifications: Verification[];
 }
 
 function getStatusTag(endDate: string, score?: number | null) {
@@ -30,11 +30,10 @@ function getStatusTag(endDate: string, score?: number | null) {
   }
 }
 
-function TaskCard({ courseTask: origin, course }: TaskCardProps) {
+function TaskCard({ courseTask: origin, course, verifications }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, publicAttributes, type } = parseCourseTask(origin);
   const { maxAttemptsNumber = 0 } = (publicAttributes as SelfEducationPublicAttributes) ?? {};
 
-  const { verifications } = useCourseTaskVerifications(course.id, id);
   const hasExplanation = useMemo(
     () => type === CourseTaskDetailedDtoTypeEnum.Codewars || type === CourseTaskDetailedDtoTypeEnum.Jstask,
     [type],

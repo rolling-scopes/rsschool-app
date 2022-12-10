@@ -22,13 +22,18 @@ const RESPONSIVE_COLUMNS: ColProps = {
 
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const { githubId } = useContext(SessionContext);
+  const { verifications, filterVerifications } = useCourseTaskVerifications(course.id);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
       <Row gutter={[24, 24]}>
         {courseTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TaskCard courseTask={courseTask} course={course} />
+            <TaskCard
+              courseTask={courseTask}
+              course={course}
+              verifications={filterVerifications(verifications, courseTask.id)}
+            />
           </Col>
         ))}
       </Row>

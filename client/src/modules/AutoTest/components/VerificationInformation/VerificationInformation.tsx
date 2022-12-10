@@ -58,7 +58,6 @@ const { Text } = Typography;
           <Button type="primary" onClick={startTask}>
             Start test
           </Button>
-          <Button>Answers</Button>
         </Space>
       </Col>
     </Row>

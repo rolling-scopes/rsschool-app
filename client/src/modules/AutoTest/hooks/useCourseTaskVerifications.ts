@@ -6,7 +6,7 @@ import { CourseService, Verification } from 'services/course';
 export function useCourseTaskVerifications(
   courseId: number,
   courseTaskId?: number,
-): { verifications: Verification[]; loading: boolean } {
+) {
   const courseService = useMemo(() => new CourseService(courseId), []);
 
   const {
@@ -15,9 +15,13 @@ export function useCourseTaskVerifications(
     error,
   } = useAsync(async () => await courseService.getTaskVerifications(), []);
 
+  function filterVerifications(verifications: Verification[], taskId: number): any {
+    return verifications?.filter((v: Verification) => v.courseTaskId === taskId);
+  }
+
   const taskVerifications = useMemo(() => {
     if (courseTaskId) {
-      return allVerifications?.filter((v: Verification) => v.courseTaskId === courseTaskId);
+      return filterVerifications(allVerifications, courseTaskId);
     }
 
     return allVerifications;
@@ -30,5 +34,6 @@ export function useCourseTaskVerifications(
   return {
     verifications: taskVerifications,
     loading,
+    filterVerifications,
   };
 }
