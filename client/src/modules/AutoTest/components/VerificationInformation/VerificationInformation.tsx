@@ -16,25 +16,27 @@ const { Text } = Typography;
 
 function VerificationInformation({ courseTask, verifications, loading, startTask }: VerificationInformationProps): any {
   const { maxScore } = courseTask;
-  const { explanation, attemptsLeftMessage } = useAttemptsMessage(courseTask, verifications);
+  const { explanation, attemptsLeftMessage, allowSubmit } = useAttemptsMessage(courseTask, verifications);
 
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
       <Col span={24}>
         <Alert showIcon type="info" message={explanation} />
       </Col>
-      <Col span={24}>
-        <Space>
-          <Text type="secondary">Attempts:</Text>
-          <Text>{attemptsLeftMessage}</Text>
-        </Space>
-      </Col>
+      {attemptsLeftMessage && (
+        <Col span={24}>
+          <Space>
+            <Text type="secondary">Attempts:</Text>
+            <Text>{attemptsLeftMessage}</Text>
+          </Space>
+        </Col>
+      )}
       <Col span={24}>
         <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
       </Col>
       <Col>
         <Space>
-          <Button type="primary" onClick={startTask}>
+          <Button type="primary" onClick={startTask} disabled={!allowSubmit}>
             Start test
           </Button>
         </Space>

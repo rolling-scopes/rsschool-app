@@ -26,7 +26,11 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
     return 'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.';
   }, [maxAttemptsNumber, tresholdPercentage, strictAttemptsMode]);
 
-  const attemptsLeftMessage = useMemo(() => {
+  const attemptsLeftMessage = useMemo((): string | undefined => {
+    if (type !== CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+      return;
+    }
+
     if (attemptsCount === 1) {
       return `Only 1 attempt left. Be careful, It's your last attempt!`;
     }
@@ -42,9 +46,20 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
     return 'Limit of "free" attempts is over. Now you can get only half of a score.';
   }, [attemptsCount, strictAttemptsMode]);
 
+  const allowSubmit = useMemo(() => {
+    if (!strictAttemptsMode) {
+      return true;
+    }
+
+    if (strictAttemptsMode && !attemptsCount) {
+      return false;
+    }
+  }, [strictAttemptsMode]);
+
   return {
     attemptsCount,
     explanation,
     attemptsLeftMessage,
+    allowSubmit,
   };
 }

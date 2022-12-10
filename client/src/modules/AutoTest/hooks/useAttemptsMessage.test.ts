@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Verification } from 'services/course';
-import { CourseTaskDetailedDto } from 'api';
+import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
 
 const MAX_ATTEMPTS = 4;
@@ -73,23 +73,27 @@ describe('useAttemptsMessage', () => {
   );
 
   it.each`
-    strictAttemptsMode | verificationsCount | expected
-    ${undefined}       | ${3}               | ${"Only 1 attempt left. Be careful, It's your last attempt!"}
-    ${undefined}       | ${2}               | ${'2 attempts left.'}
-    ${true}            | ${4}               | ${'You have no more attempts.'}
-    ${undefined}       | ${4}               | ${'Limit of "free" attempts is over. Now you can get only half of a score.'}
+    type                                           | strictAttemptsMode | verificationsCount | expected
+    ${CourseTaskDetailedDtoTypeEnum.Jstask}        | ${undefined}       | ${3}               | ${undefined}
+    ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${undefined}       | ${3}               | ${"Only 1 attempt left. Be careful, It's your last attempt!"}
+    ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${undefined}       | ${2}               | ${'2 attempts left.'}
+    ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${true}            | ${4}               | ${'You have no more attempts.'}
+    ${CourseTaskDetailedDtoTypeEnum.Selfeducation} | ${undefined}       | ${4}               | ${'Limit of "free" attempts is over. Now you can get only half of a score.'}
   `(
     `should return left attempts count message when verifications count is $verificationsCount and max attempts is ${MAX_ATTEMPTS}`,
     ({
+      type,
       verificationsCount,
       strictAttemptsMode,
       expected,
     }: {
+      type: CourseTaskDetailedDtoTypeEnum;
       verificationsCount: number;
       strictAttemptsMode: boolean;
       expected: string;
     }) => {
       const task = {
+        type,
         publicAttributes: {
           maxAttemptsNumber: MAX_ATTEMPTS,
           strictAttemptsMode,
@@ -100,4 +104,28 @@ describe('useAttemptsMessage', () => {
       expect(attemptsLeftMessage).toBe(expected);
     },
   );
+
+  it('should allow submit when strict mode is false and attempts count is 0', () => {
+    const task = {
+      publicAttributes: {
+        maxAttemptsNumber: MAX_ATTEMPTS,
+        strictAttemptsMode: false,
+      },
+    } as CourseTaskDetailedDto;
+    const { allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+
+      expect(allowSubmit).toBeTruthy();
+  })
+  
+  it('should not allow submit when strict mode is true and attempts count is 0', () => {
+    const task = {
+      publicAttributes: {
+        maxAttemptsNumber: MAX_ATTEMPTS,
+        strictAttemptsMode: true,
+      },
+    } as CourseTaskDetailedDto;
+    const { allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+
+      expect(allowSubmit).toBeFalsy();
+  })
 });
