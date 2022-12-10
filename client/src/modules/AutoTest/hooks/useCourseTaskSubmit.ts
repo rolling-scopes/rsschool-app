@@ -5,8 +5,8 @@ import { useContext, useMemo, useState } from 'react';
 import { FilesService } from 'services/files';
 import { CourseService, SelfEducationPublicAttributes } from 'services/course';
 import { AxiosError } from 'axios';
-import { isExpelledStudent } from '../../../domain/user';
-import { SessionContext } from '../../Course/contexts';
+import { isExpelledStudent } from 'domain/user';
+import { SessionContext } from 'modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 
 type SelfEducationValues = Record<string, number>;

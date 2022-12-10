@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { Verification } from 'services/course';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDto } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
 
 const MAX_ATTEMPTS = 4;
