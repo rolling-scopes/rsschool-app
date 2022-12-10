@@ -6,7 +6,6 @@
   - [Submission of tasks in the RS School App](platform/tasks.md)
   - [Cross-check](platform/cross-check-flow.md)
   - [Notifications](platform/notifications.md)
-  - [The allocation of students into teams](platform/team-allocation.md)
   - [CV](platform/cv.md)
   - [Typical problems](platform/typical-problems.md)
 - Mentoring
