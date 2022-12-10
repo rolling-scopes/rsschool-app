@@ -4,7 +4,7 @@ import { SelfEducationPublicAttributes, Verification } from 'services/course';
 
 export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
   const { publicAttributes, type } = courseTask;
-  const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode } =
+  const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, oneAttemptPerNumberOfHours } =
     (publicAttributes as SelfEducationPublicAttributes) || {};
 
   const attemptsCount = useMemo(() => {
@@ -18,6 +18,10 @@ export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verificati
 
       if (strictAttemptsMode) {
         str += ' After limit attempts is over you can get only half of a score.';
+      }
+
+      if (oneAttemptPerNumberOfHours) {
+        str += ` You have only one attempt per ${oneAttemptPerNumberOfHours} hours.`;
       }
 
       return str;

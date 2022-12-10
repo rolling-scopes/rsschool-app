@@ -42,21 +42,24 @@ describe('useAttemptsMessage', () => {
   );
 
   it.each`
-    strictAttemptsMode | maxAttemptsNumber | tresholdPercentage | expected
-    ${true}            | ${MAX_ATTEMPTS}   | ${90}              | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
-    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
-    ${undefined}       | ${undefined}      | ${undefined}       | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
+    strictAttemptsMode | maxAttemptsNumber | tresholdPercentage | oneAttemptPerNumberOfHours | expected
+    ${true}            | ${MAX_ATTEMPTS}   | ${90}              | ${undefined}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
+    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${undefined}               | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
+    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${1}                       | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
+    ${undefined}       | ${undefined}      | ${undefined}       | ${undefined}               | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
   `(
     'should return explanation when strict mode is $strictAttemptsMode, max attempts number is $maxAttemptsNumber and threshold percentage is $tresholdPercentage',
     ({
       strictAttemptsMode,
       maxAttemptsNumber,
       tresholdPercentage,
+      oneAttemptPerNumberOfHours,
       expected,
     }: {
       strictAttemptsMode: boolean;
       maxAttemptsNumber: number;
       tresholdPercentage: number;
+      oneAttemptPerNumberOfHours: number;
       expected: string;
     }) => {
       const task = {
@@ -64,6 +67,7 @@ describe('useAttemptsMessage', () => {
           maxAttemptsNumber,
           tresholdPercentage,
           strictAttemptsMode,
+          oneAttemptPerNumberOfHours,
         },
       } as CourseTaskDetailedDto;
       const { explanation } = renderUseAttemptsMessage({ task });
@@ -114,9 +118,9 @@ describe('useAttemptsMessage', () => {
     } as CourseTaskDetailedDto;
     const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
-      expect(allowSubmit).toBeTruthy();
-  })
-  
+    expect(allowSubmit).toBeTruthy();
+  });
+
   it('should not allow submit when strict mode is true and attempts count is 0', () => {
     const task = {
       publicAttributes: {
@@ -126,6 +130,6 @@ describe('useAttemptsMessage', () => {
     } as CourseTaskDetailedDto;
     const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
-      expect(allowSubmit).toBeFalsy();
-  })
+    expect(allowSubmit).toBeFalsy();
+  });
 });
