@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { Verification } from 'services/course';
+import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
 
@@ -42,33 +42,16 @@ describe('useAttemptsMessage', () => {
   );
 
   it.each`
-    strictAttemptsMode | maxAttemptsNumber | tresholdPercentage | oneAttemptPerNumberOfHours | expected
-    ${true}            | ${MAX_ATTEMPTS}   | ${90}              | ${undefined}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
-    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${undefined}               | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
-    ${false}           | ${MAX_ATTEMPTS}   | ${90}              | ${1}                       | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
-    ${undefined}       | ${undefined}      | ${undefined}       | ${undefined}               | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
+    publicAttributes                                                                              | expected
+    ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
+    ${{ strictAttemptsMode: false, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}     | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
+    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 1 }} | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
+    ${{ maxAttemptsNumber: undefined, tresholdPercentage: undefined }}                            | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
   `(
-    'should return explanation when strict mode is $strictAttemptsMode, max attempts number is $maxAttemptsNumber and threshold percentage is $tresholdPercentage',
-    ({
-      strictAttemptsMode,
-      maxAttemptsNumber,
-      tresholdPercentage,
-      oneAttemptPerNumberOfHours,
-      expected,
-    }: {
-      strictAttemptsMode: boolean;
-      maxAttemptsNumber: number;
-      tresholdPercentage: number;
-      oneAttemptPerNumberOfHours: number;
-      expected: string;
-    }) => {
+    `should return explanation when ${JSON.stringify(`$publicAttributes`)}`,
+    ({ publicAttributes, expected }: { publicAttributes: SelfEducationPublicAttributes; expected: string }) => {
       const task = {
-        publicAttributes: {
-          maxAttemptsNumber,
-          tresholdPercentage,
-          strictAttemptsMode,
-          oneAttemptPerNumberOfHours,
-        },
+        publicAttributes,
       } as CourseTaskDetailedDto;
       const { explanation } = renderUseAttemptsMessage({ task });
 
