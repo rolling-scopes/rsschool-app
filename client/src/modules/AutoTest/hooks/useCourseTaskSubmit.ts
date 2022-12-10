@@ -31,7 +31,6 @@ export function useCourseTaskSubmit(
 
   useBeforeUnload(isModified, 'You have changes in test. Do you really want to close this page?');
 
-  // TODO: values types
   const uploadIpynbFile = async (values: FormValues): Promise<string | undefined> => {
     if (isIpynbFile(values)) {
       const filesService = new FilesService();
@@ -112,7 +111,6 @@ export function useCourseTaskSubmit(
     }
   };
 
-  // TODO: values types
   const submit = async (values: FormValues) => {
     setLoading(true);
 

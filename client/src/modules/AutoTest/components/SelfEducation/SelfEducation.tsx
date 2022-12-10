@@ -1,8 +1,14 @@
 import { Typography, Form, Row, Checkbox, Radio } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CourseTaskDetailedDto } from 'api';
-import { Verification, SelfEducationQuestionWithIndex, SelfEducationPublicAttributes } from 'services/course';
+import {
+  Verification,
+  SelfEducationQuestionWithIndex,
+  SelfEducationPublicAttributes,
+  SelfEducationQuestion,
+} from 'services/course';
+import shuffle from 'lodash/shuffle';
 
 type SelfEducationProps = {
   courseTask: CourseTaskDetailedDto;
@@ -23,17 +29,23 @@ function formatMilliseconds(ms: number) {
   return moment.utc(ms).format('HH:mm:ss');
 }
 
-function SelfEducation({ courseTask, verifications }: SelfEducationProps) {
-  const pubAtts = (courseTask?.publicAttributes ?? {}) as Record<string, any>;
-  const questions = (pubAtts.questions as SelfEducationQuestionWithIndex[]) || [];
-  const { maxAttemptsNumber = 0, oneAttemptPerNumberOfHours = 0 } = pubAtts as SelfEducationPublicAttributes;
+function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQuestionWithIndex[] {
+  const questionsWithIndex = questions.map((question, index) => ({ ...question, index }));
+  return shuffle(questionsWithIndex);
+}
 
+function SelfEducation({ courseTask, verifications }: SelfEducationProps) {
+  const publicAttributes = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
+  const { maxAttemptsNumber = 0, oneAttemptPerNumberOfHours = 0, questions } = publicAttributes;
   const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId);
   const attemptsLeft = maxAttemptsNumber - attempts.length;
   const [lastAttempt] = attempts;
   const lastAttemptTime = lastAttempt?.createdDate;
+  // TODO: check timeToTheNextSubmit
   const timeToTheNextSubmit = getTimeToTheNextSubmit(oneAttemptPerNumberOfHours, lastAttemptTime);
   const isSubmitAllowed = timeToTheNextSubmit === 0;
+
+  const randomQuestions = useMemo(() => getRandomQuestions(questions), [questions?.length]);
 
   // TODO: review and move to proper place
   function renderInfo() {
@@ -61,15 +73,15 @@ function SelfEducation({ courseTask, verifications }: SelfEducationProps) {
   return (
     <>
       {renderInfo()}
-      {questions.map(({ question, answers, multiple, questionImage, answersType }, idx) => {
-        const questionIndex = idx + 1;
+      {randomQuestions.map(({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
+        const questionNumber = idx + 1;
         return (
           <Form.Item
             key={questionIndex}
             label={
               <Row>
                 <Title level={5}>
-                  {questionIndex}. {question}
+                  {questionNumber}. {question}
                 </Title>
                 {questionImage && (
                   <img
@@ -88,12 +100,12 @@ function SelfEducation({ courseTask, verifications }: SelfEducationProps) {
           >
             {multiple ? (
               <Checkbox.Group>
-                {answers.map((answer, index) => (
-                  <Row key={index}>
-                    <Checkbox value={index}>
+                {answers.map((answer, answerIndex) => (
+                  <Row key={answerIndex}>
+                    <Checkbox value={answerIndex}>
                       {answersType === 'image' ? (
                         <>
-                          ({index + 1}){' '}
+                          ({answerIndex + 1}){' '}
                           <img
                             src={answer}
                             style={{

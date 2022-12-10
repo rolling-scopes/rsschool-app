@@ -2,13 +2,12 @@ import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDto } from 'api';
 import { Verification } from 'services/course';
-import { parseCourseTask } from 'modules/AutoTest/utils/parseCourseTask';
-import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest//utils/getStatusByDate';
+import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest/utils/getStatusByDate';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from 'services/models';
-import { useAttemptsMessage } from '../../hooks/useAttemptsMessage';
+import { useAttemptsMessage } from 'modules/AutoTest/hooks/useAttemptsMessage';
 
 const { Title, Paragraph } = Typography;
 
@@ -31,9 +30,9 @@ function getStatusTag(endDate: string, score?: number | null) {
   }
 }
 
-function TaskCard({ courseTask: origin, course, verifications }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate } = parseCourseTask(origin);
-  const { attemptsCount, explanation } = useAttemptsMessage(origin, verifications);
+function TaskCard({ courseTask, course, verifications }: TaskCardProps) {
+  const { id, name, studentStartDate, studentEndDate } = courseTask;
+  const { attemptsCount, explanation } = useAttemptsMessage(courseTask, verifications);
 
   const score = verifications?.[0]?.score ?? null;
 
