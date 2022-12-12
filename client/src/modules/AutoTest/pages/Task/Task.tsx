@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
@@ -15,13 +15,12 @@ function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const [isExerciseVisible, setIsExerciseVisible] = useState(false);
   const { loading, reloadVerifications, task: courseTask } = useCourseTaskVerifications(course.id, task);
-  const score = useMemo(() => courseTask?.verifications?.[0]?.score ?? null, [courseTask?.verifications]);
 
   const startTask = () => setIsExerciseVisible(true);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
-      <TaskDescription courseAlias={course.alias} courseTask={courseTask} score={score} />
+      <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
       <VerificationInformation
         courseTask={courseTask}
         loading={loading}

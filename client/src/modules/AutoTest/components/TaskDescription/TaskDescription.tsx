@@ -10,11 +10,10 @@ const { Title, Text, Link } = Typography;
 type TaskDescriptionProps = {
   courseTask: CourseTaskVerifications;
   courseAlias: string;
-  score?: number;
 };
 
-function TaskDescription({ courseAlias, courseTask, score }: TaskDescriptionProps) {
-  const { descriptionUrl, name, studentStartDate, studentEndDate } = courseTask;
+function TaskDescription({ courseAlias, courseTask }: TaskDescriptionProps) {
+  const { descriptionUrl, name, studentStartDate, studentEndDate, state } = courseTask;
 
   return (
     <Row style={{ background: 'white', margin: '-15px -16px 24px', padding: '16px 24px' }}>
@@ -32,7 +31,7 @@ function TaskDescription({ courseAlias, courseTask, score }: TaskDescriptionProp
         <TaskDeadlineDate
           startDate={studentStartDate}
           endDate={studentEndDate}
-          score={score}
+          state={state}
           format="YYYY-MM-DD HH:mm"
         />
       </Col>
