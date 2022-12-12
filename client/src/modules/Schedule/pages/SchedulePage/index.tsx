@@ -1,5 +1,12 @@
 import { Alert } from 'antd';
-import { CourseDto, CoursesScheduleApi, CoursesScheduleIcalApi, CoursesTasksApi, CreateCourseTaskDto } from 'api';
+import {
+  CourseDto,
+  CourseEventDto,
+  CoursesScheduleApi,
+  CoursesScheduleIcalApi,
+  CoursesTasksApi,
+  CreateCourseTaskDto,
+} from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
@@ -7,6 +14,7 @@ import { SessionContext } from 'modules/Course/contexts';
 import { PageProps } from 'modules/Course/data/getCourseProps';
 import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
+import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
 import { SettingsPanel } from 'modules/Schedule/components/SettingsPanel';
 import { TableView } from 'modules/Schedule/components/TableView';
 import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
@@ -24,6 +32,7 @@ export function SchedulePage(props: PageProps) {
   const session = useContext(SessionContext);
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
+  const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
@@ -35,6 +44,11 @@ export function SchedulePage(props: PageProps) {
     refreshData();
   };
 
+  const handleEventSubmit = () => {
+    setCourseEvent(null);
+    refreshData();
+  };
+
   const handleCopyFromSubmit = async (record: Pick<CourseDto, 'id'>) => {
     await courseScheduleApi.copySchedule(props.course.id, { copyFromCourseId: record.id });
     setCopyModal(null);
@@ -43,6 +57,10 @@ export function SchedulePage(props: PageProps) {
 
   const handleCreateCourseTask = () => {
     setCourseTask({});
+  };
+
+  const handleCreateCourseEvent = () => {
+    setCourseEvent({});
   };
 
   const {
@@ -68,6 +86,7 @@ export function SchedulePage(props: PageProps) {
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
+            onCreateCourseEvent={handleCreateCourseEvent}
             onCopyFromCourse={() => setCopyModal({})}
             isCourseManager={isManager}
             courseId={props.course.id}
@@ -80,6 +99,14 @@ export function SchedulePage(props: PageProps) {
         </StatusTabs>
         <TableView settings={settings} data={data} statusFilter={selectedTab} />
         <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
+        {courseEvent && (
+          <CourseEventModal
+            data={courseEvent}
+            onSubmit={handleEventSubmit}
+            onCancel={() => setCourseEvent(null)}
+            courseId={props.course.id}
+          />
+        )}
         <CoursesListModal
           okText="Copy"
           data={copyModal}

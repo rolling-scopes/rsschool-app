@@ -35,8 +35,11 @@ export const createPostRoute =
   async (ctx: Router.RouterContext) => {
     const { id, createdDate, ...data } = ctx.request.body;
     try {
-      const result = await getRepository(entity).insert(data);
-      setResponse(ctx, OK, result);
+      const {
+        identifiers: [identifier],
+      } = await getRepository(entity).insert(data);
+
+      setResponse(ctx, OK, { id: identifier.id });
     } catch (e) {
       if (logger) {
         logger.error(e.message);
