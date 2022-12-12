@@ -7,12 +7,18 @@ import { CourseTaskVerifications } from '../../types';
 type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;
   loading: boolean;
+  isTableVisible: boolean;
   startTask: () => void;
 };
 
 const { Text } = Typography;
 
-function VerificationInformation({ courseTask, loading, startTask }: VerificationInformationProps): any {
+function VerificationInformation({
+  courseTask,
+  loading,
+  isTableVisible,
+  startTask,
+}: VerificationInformationProps): any {
   const { maxScore, verifications } = courseTask;
   const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask);
 
@@ -29,16 +35,20 @@ function VerificationInformation({ courseTask, loading, startTask }: Verificatio
           </Space>
         </Col>
       )}
-      <Col span={24}>
-        <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
-      </Col>
-      <Col>
-        <Space>
-          <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
-            Start test
-          </Button>
-        </Space>
-      </Col>
+      {isTableVisible && (
+        <>
+          <Col span={24}>
+            <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
+          </Col>
+          <Col>
+            <Space>
+              <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
+                Start test
+              </Button>
+            </Space>
+          </Col>
+        </>
+      )}
     </Row>
   );
 }

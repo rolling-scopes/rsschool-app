@@ -25,6 +25,7 @@ function Task({ course, task }: AutoTestTaskProps) {
       <VerificationInformation
         courseTask={courseTask}
         loading={loading}
+        isTableVisible={!isExerciseVisible}
         startTask={startTask}
       />
       {isExerciseVisible && (

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Alert, Row, Space, Typography } from 'antd';
+import { Alert, Space, Typography } from 'antd';
 import React from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
@@ -43,7 +43,7 @@ function Coding({ courseTask, githubId }: CodingProps) {
   }
 
   return (
-    <Row>
+    <>
       {courseTask.type === CourseTaskDetailedDtoTypeEnum.Jstask ? (
         <Paragraph>
           <Alert
@@ -61,7 +61,7 @@ function Coding({ courseTask, githubId }: CodingProps) {
           {repoUrl}
         </a>
       </Paragraph>
-    </Row>
+    </>
   );
 }
 
