@@ -1,7 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
+import { CourseTaskVerifications } from '../../types';
 
 const MAX_ATTEMPTS = 4;
 function renderUseAttemptsMessage({
@@ -9,18 +10,19 @@ function renderUseAttemptsMessage({
   task,
 }: {
   verificationsCount?: number;
-  task?: CourseTaskDetailedDto;
+  task?: CourseTaskVerifications;
 }) {
+  const verifications = new Array(verificationsCount).fill({}) as Verification[];
   const courseTask = {
     publicAttributes: {
       maxAttemptsNumber: MAX_ATTEMPTS,
     },
-  } as CourseTaskDetailedDto;
-  const verifications = new Array(verificationsCount).fill({}) as Verification[];
+    verifications,
+  } as CourseTaskVerifications;
 
   const {
     result: { current },
-  } = renderHook(() => useAttemptsMessage(task ?? courseTask, verifications));
+  } = renderHook(() => useAttemptsMessage(({ ...task, verifications } as CourseTaskVerifications) ?? courseTask));
 
   return { ...current };
 }
@@ -52,7 +54,7 @@ describe('useAttemptsMessage', () => {
     ({ publicAttributes, expected }: { publicAttributes: SelfEducationPublicAttributes; expected: string }) => {
       const task = {
         publicAttributes,
-      } as CourseTaskDetailedDto;
+      } as CourseTaskVerifications;
       const { explanation } = renderUseAttemptsMessage({ task });
 
       expect(explanation).toBe(expected);
@@ -85,7 +87,7 @@ describe('useAttemptsMessage', () => {
           maxAttemptsNumber: MAX_ATTEMPTS,
           strictAttemptsMode,
         },
-      } as CourseTaskDetailedDto;
+      } as CourseTaskVerifications;
       const { attemptsLeftMessage } = renderUseAttemptsMessage({ task, verificationsCount });
 
       expect(attemptsLeftMessage).toBe(expected);
@@ -98,7 +100,7 @@ describe('useAttemptsMessage', () => {
         maxAttemptsNumber: MAX_ATTEMPTS,
         strictAttemptsMode: false,
       },
-    } as CourseTaskDetailedDto;
+    } as CourseTaskVerifications;
     const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
     expect(allowSubmit).toBeTruthy();
@@ -110,7 +112,7 @@ describe('useAttemptsMessage', () => {
         maxAttemptsNumber: MAX_ATTEMPTS,
         strictAttemptsMode: true,
       },
-    } as CourseTaskDetailedDto;
+    } as CourseTaskVerifications;
     const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
     expect(allowSubmit).toBeFalsy();

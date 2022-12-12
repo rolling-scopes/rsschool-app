@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
 import { FilesService } from 'services/files';
 import { CourseService } from 'services/course';
@@ -7,6 +7,7 @@ import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
 import { notification } from 'antd';
 import * as UserUtils from 'domain/user';
+import { CourseTaskVerifications } from '../../types';
 
 jest.mock('services/files');
 jest.mock('services/course');
@@ -136,7 +137,7 @@ describe('useCourseTaskSubmit', () => {
   });
 });
 
-function renderUseCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
+function renderUseCourseTaskSubmit(courseTask: CourseTaskVerifications) {
   const {
     result: { current },
   } = renderHook(() => useCourseTaskSubmit(100, courseTask, jest.fn()));
@@ -147,7 +148,7 @@ function renderUseCourseTaskSubmit(courseTask: CourseTaskDetailedDto) {
 function generateCourseTask(
   type: CourseTaskDetailedDtoTypeEnum = CourseTaskDetailedDtoTypeEnum.Jstask,
   oneAttemptPerNumberOfHours?: number,
-): CourseTaskDetailedDto {
+): CourseTaskVerifications {
   return {
     id: 10,
     name: `Course task ${type}`,
@@ -160,7 +161,7 @@ function generateCourseTask(
       maxAttemptsNumber: 4,
       oneAttemptPerNumberOfHours,
     },
-  } as CourseTaskDetailedDto;
+  } as CourseTaskVerifications;
 }
 
 function generateAxiosError(code: number): AxiosError {

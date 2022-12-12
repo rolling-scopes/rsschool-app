@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { TaskCard, TaskCardProps } from '..';
-import { CourseTaskDetailedDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { Course } from 'services/models';
+import { CourseTaskVerifications } from '../../types';
 
 const courseTask = {
   name: 'Course Task',
@@ -13,12 +14,11 @@ const courseTask = {
   publicAttributes: {
     maxAttemptsNumber: 2,
   },
-} as CourseTaskDetailedDto;
+} as CourseTaskVerifications;
 
 const PROPS_MOCK: TaskCardProps = {
   course: { alias: 'course-alias', id: 100 } as Course,
   courseTask,
-  verifications: [],
 };
 
 describe('TaskCard', () => {

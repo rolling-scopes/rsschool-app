@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseTaskVerifications } from '../../types';
 import Coding, { CodingProps } from './Coding';
 
 function renderCoding(type: CourseTaskDetailedDtoTypeEnum) {
@@ -15,7 +16,7 @@ function renderCoding(type: CourseTaskDetailedDtoTypeEnum) {
     publicAttributes: {
       maxAttemptsNumber: 2,
     },
-  } as CourseTaskDetailedDto;
+  } as CourseTaskVerifications;
 
   const props: CodingProps = {
     courseTask,
