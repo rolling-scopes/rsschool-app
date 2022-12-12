@@ -22,7 +22,7 @@ const RESPONSIVE_COLUMNS: ColProps = {
 
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const { githubId } = useContext(SessionContext);
-  const { verifications, filterVerifications } = useCourseTaskVerifications(course.id);
+  const { verifications, filterVerifications } = useCourseTaskVerifications(course.id, undefined, courseTasks);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>

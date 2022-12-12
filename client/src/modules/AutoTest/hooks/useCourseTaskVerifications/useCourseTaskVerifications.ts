@@ -2,8 +2,14 @@ import { message } from 'antd';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, Verification } from 'services/course';
+import { CourseTaskDetailedDto } from '../../../../api';
+import { mapTo } from '../../utils/map';
 
-export function useCourseTaskVerifications(courseId: number, courseTaskId?: number) {
+export function useCourseTaskVerifications(
+  courseId: number,
+  courseTaskId?: number,
+  courseTasks?: CourseTaskDetailedDto[],
+) {
   const [needsReload, setNeedsReload] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), []);
 
@@ -24,6 +30,10 @@ export function useCourseTaskVerifications(courseId: number, courseTaskId?: numb
 
     return allVerifications;
   }, [allVerifications, courseTaskId]);
+
+  // TODO: refactor for Array and single item of course task
+  const tasks = useMemo(() => courseTasks?.map(ct => mapTo(ct, allVerifications)), [courseTasks, allVerifications]);
+  console.log(tasks);
 
   function reloadVerifications() {
     setNeedsReload(!needsReload);
