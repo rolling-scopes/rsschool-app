@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { SelfEducationPublicAttributes } from 'services/course';
 import { CourseTaskVerifications } from '../../types';
 
 export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   const { publicAttributes, type, verifications } = courseTask;
   const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, oneAttemptPerNumberOfHours } =
-    (publicAttributes as SelfEducationPublicAttributes) || {};
+    publicAttributes || {};
 
   const attemptsCount = useMemo((): number => {
-    const leftCount = maxAttemptsNumber - verifications?.length;
+    const leftCount = maxAttemptsNumber - (verifications?.length || 0);
     return leftCount > 0 ? leftCount : 0;
   }, [maxAttemptsNumber, verifications?.length]);
 

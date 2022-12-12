@@ -13,16 +13,20 @@ function renderUseAttemptsMessage({
   task?: CourseTaskVerifications;
 }) {
   const verifications = new Array(verificationsCount).fill({}) as Verification[];
-  const courseTask = {
+  let courseTask = {
     publicAttributes: {
       maxAttemptsNumber: MAX_ATTEMPTS,
     },
     verifications,
   } as CourseTaskVerifications;
 
+  if (task) {
+    courseTask = { ...task, verifications };
+  }
+
   const {
     result: { current },
-  } = renderHook(() => useAttemptsMessage(({ ...task, verifications } as CourseTaskVerifications) ?? courseTask));
+  } = renderHook(() => useAttemptsMessage(courseTask));
 
   return { ...current };
 }

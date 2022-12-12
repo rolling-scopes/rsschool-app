@@ -21,7 +21,7 @@ function getState({ studentEndDate, resultsCount }: CourseTaskDetailedDto): Cour
 function getStatus(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
   const { studentEndDate, resultsCount, publicAttributes } = courseTask;
   const { maxAttemptsNumber } = (publicAttributes as SelfEducationPublicAttributes) || {};
-  const leftCount = maxAttemptsNumber - verifications?.length;
+  const leftCount = maxAttemptsNumber - (verifications?.length || 0);
   const attemptsLeft = leftCount > 0 ? leftCount : 0;
   const now = moment();
   const end = moment(studentEndDate);

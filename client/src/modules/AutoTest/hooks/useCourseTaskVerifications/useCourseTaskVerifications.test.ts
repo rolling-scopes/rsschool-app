@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import { Verification } from 'services/course';
 import { useCourseTaskVerifications } from './useCourseTaskVerifications';
 import * as reactUse from 'react-use';
+import { CourseTaskDetailedDto } from 'api';
 
 const VERIFICATIONS_MOCK: Verification[] = [
   {
@@ -20,32 +21,25 @@ const VERIFICATIONS_MOCK: Verification[] = [
 
 describe('useCourseTaskVerifications', () => {
   it.each`
-    verifications         | courseTaskId | expectedLength
-    ${[]}                 | ${undefined} | ${0}
-    ${VERIFICATIONS_MOCK} | ${undefined} | ${4}
-    ${VERIFICATIONS_MOCK} | ${100}       | ${2}
+    verifications         | expectedLength
+    ${[]}                 | ${0}
+    ${VERIFICATIONS_MOCK} | ${2}
   `(
-    'should return $expectedLength verifications when courseTaskId is $courseTaskId',
-    async ({
-      verifications,
-      courseTaskId,
-      expectedLength,
-    }: {
-      verifications: Verification[];
-      courseTaskId: number;
-      expectedLength: number;
-    }) => {
+    'should return $expectedLength verifications',
+    async ({ verifications, expectedLength }: { verifications: Verification[]; expectedLength: number }) => {
       jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(() => ({ value: verifications, loading: false }));
-      const { result } = renderHook(() => useCourseTaskVerifications(10, courseTaskId));
+      const courseTask = { id: 100 } as CourseTaskDetailedDto;
+      const { result } = renderHook(() => useCourseTaskVerifications(10, courseTask));
 
-      expect(result.current.verifications).toHaveLength(expectedLength);
+      expect(result.current.task.verifications).toHaveLength(expectedLength);
     },
   );
 
   it('should reload verifications', async () => {
     const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
     jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
-    const { result } = renderHook(() => useCourseTaskVerifications(10, 100));
+    const courseTask = { id: 100 } as CourseTaskDetailedDto;
+    const { result } = renderHook(() => useCourseTaskVerifications(10, courseTask));
 
     await act(async () => {
       await result.current.reloadVerifications();

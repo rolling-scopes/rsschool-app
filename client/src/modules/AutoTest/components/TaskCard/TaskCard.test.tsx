@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { TaskCard, TaskCardProps } from '..';
 import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { Course } from 'services/models';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskState, CourseTaskVerifications } from '../../types';
 
 const courseTask = {
   name: 'Course Task',
@@ -11,6 +11,7 @@ const courseTask = {
   checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
   id: 10,
   descriptionUrl: 'description-url',
+  state: CourseTaskState.Missed,
   publicAttributes: {
     maxAttemptsNumber: 2,
   },
@@ -27,7 +28,7 @@ describe('TaskCard', () => {
     ${'task name'}      | ${courseTask.name}
     ${'start date'}     | ${'Sep 10'}
     ${'end date'}       | ${'Oct 10'}
-    ${'status'}         | ${'Missed'}
+    ${'state'}         | ${'Missed'}
     ${'attempts count'} | ${'2 left'}
     ${'score'}          | ${'–'}
   `('should render $prop', ({ value }: { value: string }) => {
