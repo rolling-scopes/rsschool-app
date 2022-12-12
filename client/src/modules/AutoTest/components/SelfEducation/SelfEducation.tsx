@@ -1,18 +1,15 @@
 import { Typography, Form, Row, Checkbox, Radio } from 'antd';
 import moment from 'moment';
 import React, { useMemo } from 'react';
-import { CourseTaskDetailedDto } from 'api';
 import {
-  Verification,
   SelfEducationQuestionWithIndex,
-  SelfEducationPublicAttributes,
   SelfEducationQuestion,
 } from 'services/course';
 import shuffle from 'lodash/shuffle';
+import { CourseTaskVerifications } from '../../types';
 
 type SelfEducationProps = {
-  courseTask: CourseTaskDetailedDto;
-  verifications: Verification[];
+  courseTask: CourseTaskVerifications;
 };
 
 const { Paragraph, Text, Title } = Typography;
@@ -34,10 +31,10 @@ function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQu
   return shuffle(questionsWithIndex);
 }
 
-function SelfEducation({ courseTask, verifications }: SelfEducationProps) {
-  const publicAttributes = (courseTask?.publicAttributes ?? {}) as SelfEducationPublicAttributes;
-  const { maxAttemptsNumber = 0, oneAttemptPerNumberOfHours = 0, questions } = publicAttributes;
-  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId);
+function SelfEducation({ courseTask }: SelfEducationProps) {
+  const { publicAttributes, verifications } = courseTask;
+  const { maxAttemptsNumber = 0, oneAttemptPerNumberOfHours = 0, questions } = publicAttributes || {};
+  const attempts = verifications;
   const attemptsLeft = maxAttemptsNumber - attempts.length;
   const [lastAttempt] = attempts;
   const lastAttemptTime = lastAttempt?.createdDate;

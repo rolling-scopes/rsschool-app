@@ -1,5 +1,5 @@
 import { Form, notification } from 'antd';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
 import { FilesService } from 'services/files';
@@ -9,6 +9,7 @@ import { isExpelledStudent } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
+import { CourseTaskVerifications } from '../../types';
 
 type SelfEducationValues = Record<string, number>;
 export type IpynbFile = { upload: { file: InternalUploadFile } };
@@ -20,7 +21,7 @@ function isIpynbFile(item: unknown): item is IpynbFile {
 
 export function useCourseTaskSubmit(
   courseId: number,
-  courseTask: CourseTaskDetailedDto,
+  courseTask: CourseTaskVerifications,
   reloadVerifications: () => void,
 ) {
   const session = useContext(SessionContext);

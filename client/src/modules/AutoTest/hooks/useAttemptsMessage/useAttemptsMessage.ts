@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { SelfEducationPublicAttributes } from 'services/course';
+import { CourseTaskVerifications } from '../../types';
 
-export function useAttemptsMessage(courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
-  const { publicAttributes, type } = courseTask;
+export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
+  const { publicAttributes, type, verifications } = courseTask;
   const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, oneAttemptPerNumberOfHours } =
     (publicAttributes as SelfEducationPublicAttributes) || {};
 

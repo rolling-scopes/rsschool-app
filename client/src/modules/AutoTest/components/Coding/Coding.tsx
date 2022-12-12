@@ -1,11 +1,12 @@
 import crypto from 'crypto';
 import { Alert, Row, Space, Typography } from 'antd';
 import React from 'react';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
+import { CourseTaskVerifications } from '../../types';
 
 export type CodingProps = {
-  courseTask: CourseTaskDetailedDto;
+  courseTask: CourseTaskVerifications;
   githubId: string;
 };
 

@@ -1,22 +1,20 @@
 import React from 'react';
 import { Row, Col, Space, Button, Alert, Typography } from 'antd';
-import { Verification } from 'services/course';
 import { VerificationsTable } from 'modules/AutoTest/components';
-import { CourseTaskDetailedDto } from 'api';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
+import { CourseTaskVerifications } from '../../types';
 
 type VerificationInformationProps = {
-  courseTask: CourseTaskDetailedDto;
-  verifications: Verification[];
+  courseTask: CourseTaskVerifications;
   loading: boolean;
   startTask: () => void;
 };
 
 const { Text } = Typography;
 
-function VerificationInformation({ courseTask, verifications, loading, startTask }: VerificationInformationProps): any {
-  const { maxScore } = courseTask;
-  const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask, verifications);
+function VerificationInformation({ courseTask, loading, startTask }: VerificationInformationProps): any {
+  const { maxScore, verifications } = courseTask;
+  const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask);
 
   return (
     <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">

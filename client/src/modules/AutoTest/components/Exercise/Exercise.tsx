@@ -1,19 +1,18 @@
 import React from 'react';
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
-import { CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum } from 'api';
-import { Verification } from 'services/course';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Button, Col, Form, Row } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
+import { CourseTaskVerifications } from '../../types';
 
 type ExerciseProps = {
   githubId: string;
   courseId: number;
-  courseTask: CourseTaskDetailedDto;
-  verifications: Verification[];
+  courseTask: CourseTaskVerifications;
   reloadVerifications: () => void;
 };
 
-function Exercise({ githubId, courseId, courseTask, verifications, reloadVerifications }: ExerciseProps) {
+function Exercise({ githubId, courseId, courseTask, reloadVerifications }: ExerciseProps) {
   const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, reloadVerifications);
 
   const getExercise = () => {
@@ -26,7 +25,7 @@ function Exercise({ githubId, courseId, courseTask, verifications, reloadVerific
       case CourseTaskDetailedDtoTypeEnum.Ipynb:
         return <JupyterNotebook />;
       case CourseTaskDetailedDtoTypeEnum.Selfeducation:
-        return <SelfEducation courseTask={courseTask} verifications={verifications} />;
+        return <SelfEducation courseTask={courseTask} />;
       default:
         return null;
     }

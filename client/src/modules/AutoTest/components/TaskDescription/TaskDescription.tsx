@@ -3,14 +3,14 @@ import { Row, Col, Space, Typography } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';
 import { TaskDeadlineDate } from '..';
-import { CourseTaskDetailedDto } from 'api';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 const { Title, Text, Link } = Typography;
 
 type TaskDescriptionProps = {
+  courseTask: CourseTaskVerifications;
   courseAlias: string;
-  score: number;
-  courseTask: CourseTaskDetailedDto;
+  score?: number;
 };
 
 function TaskDescription({ courseAlias, courseTask, score }: TaskDescriptionProps) {
