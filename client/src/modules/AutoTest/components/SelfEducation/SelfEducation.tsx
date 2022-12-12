@@ -1,10 +1,7 @@
 import { Typography, Form, Row, Checkbox, Radio } from 'antd';
 import moment from 'moment';
 import React, { useMemo } from 'react';
-import {
-  SelfEducationQuestionWithIndex,
-  SelfEducationQuestion,
-} from 'services/course';
+import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
 import { CourseTaskVerifications } from '../../types';
 

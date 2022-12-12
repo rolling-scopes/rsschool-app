@@ -28,7 +28,7 @@ describe('TaskCard', () => {
     ${'task name'}      | ${courseTask.name}
     ${'start date'}     | ${'Sep 10'}
     ${'end date'}       | ${'Oct 10'}
-    ${'state'}         | ${'Missed'}
+    ${'state'}          | ${'Missed'}
     ${'attempts count'} | ${'2 left'}
     ${'score'}          | ${'–'}
   `('should render $prop', ({ value }: { value: string }) => {
