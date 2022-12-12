@@ -62,6 +62,15 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
     );
   });
 
+  const onEventChange = (value: any) => {
+    const currentEvent = value.at(-1);
+    form.setFieldValue('event', currentEvent);
+    const currentEventTemplate = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
+    form.setFieldValue('description', currentEventTemplate?.description);
+    form.setFieldValue('descriptionUrl', currentEventTemplate?.descriptionUrl);
+    form.setFieldValue('type', currentEventTemplate?.type);
+  };
+
   return (
     <ModalForm
       form={form}
@@ -82,14 +91,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
             filterOption={filterOption}
             showSearch
             placeholder="Please select a event"
-            onChange={value => {
-              const currentEvent = value.at(-1);
-              form.setFieldValue('event', currentEvent);
-              const currentEventTemplate = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
-              form.setFieldValue('description', currentEventTemplate?.description);
-              form.setFieldValue('descriptionUrl', currentEventTemplate?.descriptionUrl);
-              form.setFieldValue('type', currentEventTemplate?.type);
-            }}
+            onChange={onEventChange}
           >
             {events.map((event: Event) => (
               <Option key={event.id}>{event.name}</Option>
