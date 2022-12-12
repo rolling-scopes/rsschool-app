@@ -1,1 +1,0 @@
-export { ManageEventModalForm } from './ManageEventModalForm';

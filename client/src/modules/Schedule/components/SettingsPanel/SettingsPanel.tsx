@@ -2,8 +2,7 @@ import { Button, Col, Row } from 'antd';
 import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import React, { useMemo, useState } from 'react';
-import { ManageEventModalForm } from '../ManageEventModalForm';
+import React, { useMemo } from 'react';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { AdditionalActions } from '../AdditionalActions';
 import { buildMenuItem } from './helpers';
@@ -17,6 +16,7 @@ export interface SettingsPanelProps {
   tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
   onCreateCourseTask: () => void;
+  onCreateCourseEvent: () => void;
   onCopyFromCourse: () => void;
 }
 
@@ -32,23 +32,14 @@ export enum SettingsButtons {
 export function SettingsPanel({
   isCourseManager,
   onCreateCourseTask,
+  onCreateCourseEvent,
   onCopyFromCourse,
   courseId,
   courseAlias,
   settings,
   calendarToken,
   tags,
-  refreshData,
 }: SettingsPanelProps) {
-  const [isManageEventModalOpen, setIsManageEventModalOpen] = useState(false);
-  const [editableRecord, setEditableRecord] = useState(null);
-
-  const openManageEventModal = () => setIsManageEventModalOpen(true);
-  const closeManageEventModal = () => {
-    setEditableRecord(null);
-    setIsManageEventModalOpen(false);
-  };
-
   const additionalMenuItems = useMemo(
     () =>
       [
@@ -64,7 +55,7 @@ export function SettingsPanel({
       <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
         {isCourseManager ? (
           <Col>
-            <Button type="primary" icon={<PlusOutlined />} onClick={openManageEventModal}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
               {SettingsButtons.Event}
             </Button>
           </Col>
@@ -92,16 +83,6 @@ export function SettingsPanel({
           </Col>
         )}
       </Row>
-      {isManageEventModalOpen && (
-        <ManageEventModalForm
-          courseId={courseId}
-          visible={isManageEventModalOpen}
-          editableRecord={editableRecord}
-          handleCancel={closeManageEventModal}
-          refreshData={refreshData}
-          settings={settings}
-        />
-      )}
     </>
   );
 }
