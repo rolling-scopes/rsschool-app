@@ -8,7 +8,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, oneAttemptPerNumberOfHours } =
     (publicAttributes as SelfEducationPublicAttributes) || {};
 
-  const attemptsCount = useMemo(() => {
+  const attemptsCount = useMemo((): number => {
     const leftCount = maxAttemptsNumber - verifications?.length;
     return leftCount > 0 ? leftCount : 0;
   }, [maxAttemptsNumber, verifications?.length]);

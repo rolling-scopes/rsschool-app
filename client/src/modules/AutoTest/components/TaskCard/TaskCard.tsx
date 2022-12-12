@@ -1,45 +1,40 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
-import { CourseTaskDetailedDto } from 'api';
-import { Verification } from 'services/course';
-import getStatusByDate, { AutoTestTaskStatus } from 'modules/AutoTest/utils/getStatusByDate';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from 'services/models';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
+import { CourseTaskState, CourseTaskVerifications } from '../../types';
 
 const { Title, Paragraph } = Typography;
 
 export interface TaskCardProps {
-  courseTask: CourseTaskDetailedDto;
+  courseTask: CourseTaskVerifications;
   course: Course;
-  verifications: Verification[];
 }
 
-function getStatusTag(endDate: string, score?: number | null) {
-  const status = getStatusByDate(endDate, score);
-
-  switch (status) {
-    case AutoTestTaskStatus.Completed:
-      return <Tag color="success">{status}</Tag>;
-    case AutoTestTaskStatus.Missed:
-      return <Tag color="error">{status}</Tag>;
+function getStatusTag(state: CourseTaskState) {
+  switch (state) {
+    case CourseTaskState.Completed:
+      return <Tag color="success">{state}</Tag>;
+    case CourseTaskState.Missed:
+      return <Tag color="error">{state}</Tag>;
     default:
-      return <Tag color="default">{AutoTestTaskStatus.Uncompleted}</Tag>;
+      return <Tag color="default">{CourseTaskState.Uncompleted}</Tag>;
   }
 }
 
-function TaskCard({ courseTask, course, verifications }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate } = courseTask;
-  const { attemptsCount, explanation } = useAttemptsMessage(courseTask, verifications);
+function TaskCard({ courseTask, course }: TaskCardProps) {
+  const { id, name, studentStartDate, studentEndDate, verifications, state } = courseTask;
+  const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
 
   const score = verifications?.[0]?.score ?? null;
 
   const columns = [
     {
       label: 'Status',
-      value: getStatusTag(studentEndDate, score),
+      value: getStatusTag(state),
     },
     {
       label: 'Attempts',
@@ -58,7 +53,7 @@ function TaskCard({ courseTask, course, verifications }: TaskCardProps) {
           {name}
         </Title>
       }
-      extra={<TaskDeadlineDate startDate={studentStartDate} endDate={studentEndDate} score={score} />}
+      extra={<TaskDeadlineDate startDate={studentStartDate} endDate={studentEndDate} state={state} />}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>

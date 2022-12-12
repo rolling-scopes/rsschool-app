@@ -37,6 +37,7 @@ function getStatus(courseTask: CourseTaskDetailedDto, verifications: Verificatio
   return CourseTaskStatus.Available;
 }
 
+// TODO: refactor nestjs models to return CourseTaskVerifications from server
 export function mapTo(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskVerifications {
   const taskVerifications = verifications.filter(v => v.courseTaskId === courseTask.id);
 

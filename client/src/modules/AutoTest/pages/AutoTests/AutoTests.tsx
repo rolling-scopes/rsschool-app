@@ -29,7 +29,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
       <Row gutter={[24, 24]}>
         {tasks?.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TaskCard courseTask={courseTask} course={course} verifications={courseTask.verifications} />
+            <TaskCard courseTask={courseTask} course={course} />
           </Col>
         ))}
       </Row>
