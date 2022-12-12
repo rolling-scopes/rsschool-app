@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { CourseTaskVerifications } from '../../types';
+import moment from 'moment';
 
 export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
-  const { publicAttributes, type, verifications } = courseTask;
+  const { publicAttributes, type, verifications, studentEndDate } = courseTask;
   const { maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, oneAttemptPerNumberOfHours } =
     publicAttributes || {};
 
@@ -11,6 +12,13 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     const leftCount = maxAttemptsNumber - (verifications?.length || 0);
     return leftCount > 0 ? leftCount : 0;
   }, [maxAttemptsNumber, verifications?.length]);
+
+  const isDeadlinePassed = useMemo(() => {
+    const now = moment();
+    const endDate = moment(studentEndDate);
+
+    return now.isAfter(endDate);
+  }, [studentEndDate]);
 
   const explanation = useMemo(() => {
     if (tresholdPercentage && maxAttemptsNumber) {
@@ -31,7 +39,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   }, [maxAttemptsNumber, tresholdPercentage, strictAttemptsMode]);
 
   const attemptsLeftMessage = useMemo((): string | undefined => {
-    if (type !== CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+    if (type !== CourseTaskDetailedDtoTypeEnum.Selfeducation || isDeadlinePassed) {
       return;
     }
 
@@ -51,14 +59,12 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   }, [attemptsCount, strictAttemptsMode]);
 
   const allowStartTask = useMemo(() => {
-    if (!strictAttemptsMode) {
-      return true;
-    }
-
-    if (strictAttemptsMode && !attemptsCount) {
+    if (isDeadlinePassed || (strictAttemptsMode && !attemptsCount)) {
       return false;
     }
-  }, [strictAttemptsMode]);
+
+    return true;
+  }, [strictAttemptsMode, attemptsCount, isDeadlinePassed]);
 
   return {
     attemptsCount,
