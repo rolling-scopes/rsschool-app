@@ -14,10 +14,7 @@ export interface AutoTestTaskProps extends CoursePageProps {
 function Task({ course, task }: AutoTestTaskProps) {
   // TODO: recheck githubId and use from context instead
   const { githubId } = useContext(SessionContext);
-  const [isExerciseVisible, setIsExerciseVisible] = useState(false);
-  const { loading, reloadVerifications, task: courseTask } = useCourseTaskVerifications(course.id, task);
-
-  const startTask = () => setIsExerciseVisible(true);
+  const { loading, reloadVerifications, task: courseTask, startTask, isExerciseVisible } = useCourseTaskVerifications(course.id, task);
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>

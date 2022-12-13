@@ -11,6 +11,8 @@ function isCourseTasksArray(item: unknown): item is CourseTaskDetailedDto[] {
 
 export function useCourseTaskVerifications(courseId: number, item: CourseTaskDetailedDto | CourseTaskDetailedDto[]) {
   const [needsReload, setNeedsReload] = useState(false);
+  const [isExerciseVisible, setIsExerciseVisible] = useState(false);
+
   const courseService = useMemo(() => new CourseService(courseId), []);
 
   const {
@@ -31,7 +33,10 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
 
   function reloadVerifications() {
     setNeedsReload(!needsReload);
+    setIsExerciseVisible(!isExerciseVisible);
   }
+
+  const startTask = () => setIsExerciseVisible(true);
 
   if (error) {
     message.error(error);
@@ -41,6 +46,8 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
     task,
     tasks,
     loading,
+    isExerciseVisible,
     reloadVerifications,
+    startTask,
   };
 }
