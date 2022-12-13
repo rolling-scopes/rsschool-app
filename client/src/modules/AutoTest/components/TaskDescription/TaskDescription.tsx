@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Col, Space, Typography } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';

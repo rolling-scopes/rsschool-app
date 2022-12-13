@@ -1,4 +1,3 @@
-import React from 'react';
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Button, Col, Form, Row } from 'antd';

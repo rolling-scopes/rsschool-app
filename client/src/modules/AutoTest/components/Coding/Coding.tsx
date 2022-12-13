@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import { Alert, Space, Typography } from 'antd';
-import React from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskVerifications } from '../../types';

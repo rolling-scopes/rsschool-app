@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Col, Space, Button, Alert, Typography } from 'antd';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';

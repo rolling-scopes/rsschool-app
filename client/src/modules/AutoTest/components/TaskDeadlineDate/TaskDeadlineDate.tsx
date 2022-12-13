@@ -1,6 +1,6 @@
 import { Space, Typography } from 'antd';
 import { CalendarOutlined, SwapRightOutlined } from '@ant-design/icons';
-import React, { memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseTaskState } from '../../types';

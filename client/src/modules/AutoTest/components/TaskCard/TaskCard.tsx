@@ -1,5 +1,4 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
-import React from 'react';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';

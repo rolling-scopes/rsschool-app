@@ -1,5 +1,5 @@
 import { Table } from 'antd';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Verification } from 'services/course';
 import { getColumns } from './renderers';
 

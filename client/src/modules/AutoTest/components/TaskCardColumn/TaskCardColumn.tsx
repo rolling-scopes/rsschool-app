@@ -1,5 +1,5 @@
 import { Space, Typography } from 'antd';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 type TaskCardColumnProps = {
   label: string;

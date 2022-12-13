@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
 import { SessionContext } from 'modules/Course/contexts';

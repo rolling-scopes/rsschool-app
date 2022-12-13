@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
