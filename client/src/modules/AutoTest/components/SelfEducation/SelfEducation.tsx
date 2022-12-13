@@ -24,7 +24,7 @@ function formatMilliseconds(ms: number) {
 }
 
 function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQuestionWithIndex[] {
-  const questionsWithIndex = questions.map((question, index) => ({ ...question, index }));
+  const questionsWithIndex = questions?.map((question, index) => ({ ...question, index }));
   return shuffle(questionsWithIndex);
 }
 
@@ -67,7 +67,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   return (
     <>
       {renderInfo()}
-      {randomQuestions.map(({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
+      {randomQuestions?.map(({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
         const questionNumber = idx + 1;
         return (
           <Form.Item
@@ -94,7 +94,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
           >
             {multiple ? (
               <Checkbox.Group>
-                {answers.map((answer, answerIndex) => (
+                {answers?.map((answer, answerIndex) => (
                   <Row key={answerIndex}>
                     <Checkbox value={answerIndex}>
                       {answersType === 'image' ? (
@@ -118,7 +118,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
               </Checkbox.Group>
             ) : (
               <Radio.Group>
-                {answers.map((answer, index) => (
+                {answers?.map((answer, index) => (
                   <Row key={index}>
                     <Radio value={index}>
                       {answersType === 'image' ? (
