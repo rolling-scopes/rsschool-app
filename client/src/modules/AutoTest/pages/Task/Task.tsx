@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
@@ -12,9 +12,18 @@ export interface AutoTestTaskProps extends CoursePageProps {
 
 // TODO: Add "Answers" functionality
 function Task({ course, task }: AutoTestTaskProps) {
-  // TODO: recheck githubId and use from context instead
   const { githubId } = useContext(SessionContext);
-  const { loading, reloadVerifications, task: courseTask, startTask, isExerciseVisible } = useCourseTaskVerifications(course.id, task);
+  const {
+    loading,
+    task: courseTask,
+    isExerciseVisible,
+    startTask,
+    finishTask,
+  } = useCourseTaskVerifications(course.id, task);
+
+  if (!courseTask) {
+    return null;
+  }
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
@@ -26,12 +35,7 @@ function Task({ course, task }: AutoTestTaskProps) {
         startTask={startTask}
       />
       {isExerciseVisible && (
-        <Exercise
-          courseId={course.id}
-          courseTask={courseTask}
-          githubId={githubId}
-          reloadVerifications={reloadVerifications}
-        />
+        <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
       )}
     </PageLayout>
   );

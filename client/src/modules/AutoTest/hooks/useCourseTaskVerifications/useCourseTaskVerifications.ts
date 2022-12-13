@@ -9,6 +9,10 @@ function isCourseTasksArray(item: unknown): item is CourseTaskDetailedDto[] {
   return !!item && Array.isArray(item);
 }
 
+function isCourseTask(item: unknown): item is CourseTaskDetailedDto {
+  return !!item && typeof item === 'object' && 'id' in item;
+}
+
 export function useCourseTaskVerifications(courseId: number, item: CourseTaskDetailedDto | CourseTaskDetailedDto[]) {
   const [needsReload, setNeedsReload] = useState(false);
   const [isExerciseVisible, setIsExerciseVisible] = useState(false);
@@ -28,15 +32,19 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
   }, [item, allVerifications]);
 
   const task = useMemo(() => {
-    return mapTo(item as CourseTaskDetailedDto, allVerifications);
+    if (isCourseTask(item)) {
+      return mapTo(item, allVerifications);
+    }
   }, [item, allVerifications]);
 
-  function reloadVerifications() {
-    setNeedsReload(!needsReload);
-    setIsExerciseVisible(!isExerciseVisible);
+  function startTask() {
+    setIsExerciseVisible(true);
   }
 
-  const startTask = () => setIsExerciseVisible(true);
+  function finishTask() {
+    setNeedsReload(!needsReload);
+    setIsExerciseVisible(false);
+  }
 
   if (error) {
     message.error(error);
@@ -47,7 +55,7 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
     tasks,
     loading,
     isExerciseVisible,
-    reloadVerifications,
     startTask,
+    finishTask,
   };
 }

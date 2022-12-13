@@ -8,11 +8,11 @@ type ExerciseProps = {
   githubId: string;
   courseId: number;
   courseTask: CourseTaskVerifications;
-  reloadVerifications: () => void;
+  finishTask: () => void;
 };
 
-function Exercise({ githubId, courseId, courseTask, reloadVerifications }: ExerciseProps) {
-  const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, reloadVerifications);
+function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps) {
+  const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, finishTask);
 
   const getExercise = () => {
     switch (courseTask?.type) {

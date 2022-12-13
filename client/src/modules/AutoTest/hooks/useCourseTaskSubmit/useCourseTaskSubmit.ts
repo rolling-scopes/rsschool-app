@@ -22,7 +22,7 @@ function isIpynbFile(item: unknown): item is IpynbFile {
 export function useCourseTaskSubmit(
   courseId: number,
   courseTask: CourseTaskVerifications,
-  reloadVerifications: () => void,
+  finishTask: () => void,
 ) {
   const session = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
@@ -132,7 +132,7 @@ export function useCourseTaskSubmit(
         notification.success({ message: 'The task has been submitted for verification and it will be checked soon.' });
       }
 
-      reloadVerifications();
+      finishTask();
       setIsModified(false);
     } catch (e) {
       const error = e as AxiosError<any>;

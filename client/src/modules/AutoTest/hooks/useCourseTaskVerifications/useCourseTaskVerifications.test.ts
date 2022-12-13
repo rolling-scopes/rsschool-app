@@ -19,6 +19,12 @@ const VERIFICATIONS_MOCK: Verification[] = [
   },
 ] as Verification[];
 
+function renderUseCourseTaskVerifications(courseTask: CourseTaskDetailedDto | CourseTaskDetailedDto[]) {
+  const { result } = renderHook(() => useCourseTaskVerifications(10, courseTask));
+
+  return { ...result.current };
+}
+
 describe('useCourseTaskVerifications', () => {
   it.each`
     verifications         | expectedLength
@@ -29,22 +35,37 @@ describe('useCourseTaskVerifications', () => {
     async ({ verifications, expectedLength }: { verifications: Verification[]; expectedLength: number }) => {
       jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(() => ({ value: verifications, loading: false }));
       const courseTask = { id: 100 } as CourseTaskDetailedDto;
-      const { result } = renderHook(() => useCourseTaskVerifications(10, courseTask));
 
-      expect(result.current.task.verifications).toHaveLength(expectedLength);
+      const { task } = renderUseCourseTaskVerifications(courseTask);
+
+      expect(task?.verifications).toHaveLength(expectedLength);
     },
   );
 
-  it('should reload verifications', async () => {
+  it('should reload verifications when task is finished', async () => {
     const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
     jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
     const courseTask = { id: 100 } as CourseTaskDetailedDto;
-    const { result } = renderHook(() => useCourseTaskVerifications(10, courseTask));
+
+    const { finishTask } = renderUseCourseTaskVerifications(courseTask);
 
     await act(async () => {
-      await result.current.reloadVerifications();
+      await finishTask();
     });
 
     expect(asyncMock).toHaveBeenCalled();
+  });
+
+  it('should hide exercise when task is finished', async () => {
+    const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
+    jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
+    const courseTask = { id: 100 } as CourseTaskDetailedDto;
+    const { finishTask, isExerciseVisible } = renderUseCourseTaskVerifications(courseTask);
+
+    await act(async () => {
+      await finishTask();
+    });
+
+    expect(isExerciseVisible).toBeFalsy();
   });
 });
