@@ -19,11 +19,7 @@ function isIpynbFile(item: unknown): item is IpynbFile {
   return !!item && typeof item === 'object' && 'upload' in item;
 }
 
-export function useCourseTaskSubmit(
-  courseId: number,
-  courseTask: CourseTaskVerifications,
-  finishTask: () => void,
-) {
+export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVerifications, finishTask: () => void) {
   const session = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
   const [isModified, setIsModified] = useState(false);
