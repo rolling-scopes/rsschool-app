@@ -21,7 +21,6 @@ const RESPONSIVE_COLUMNS: ColProps = {
   xxl: 6,
 };
 
-// TODO: Status tabs
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const { githubId } = useContext(SessionContext);
   const { tasks } = useCourseTaskVerifications(course.id, courseTasks);
