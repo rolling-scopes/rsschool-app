@@ -1,4 +1,4 @@
-import { Col, Row, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import { useMemo } from 'react';
 import { CourseTaskStatus } from 'modules/AutoTest/types';
 import { tabsRenderer } from './renderers';

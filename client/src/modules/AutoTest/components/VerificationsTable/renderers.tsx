@@ -66,7 +66,7 @@ function renderDetails(value: string, row: Verification) {
     return (
       <>
         <Title level={5}>{value}</Title>
-        <Space direction="vertical" align='start'>
+        <Space direction="vertical" align="start">
           {(row?.metadata as Metadata[])?.map(({ id, url, name, completed }, index: number) => (
             <Link key={id} href={url} target="_blank">
               {completed ? (
