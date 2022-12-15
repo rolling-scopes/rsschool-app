@@ -37,7 +37,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
     }
   };
 
-  const getData = async (values: FormValues) => {
+  const getSubmitData = async (values: FormValues) => {
     switch (courseTask.type) {
       case CourseTaskDetailedDtoTypeEnum.Ipynb: {
         const s3Key = await uploadIpynbFile(values);
@@ -111,7 +111,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
   const submit = async (values: FormValues) => {
     setLoading(true);
 
-    const data = await getData(values);
+    const data = await getSubmitData(values);
 
     if (!data) {
       return;
