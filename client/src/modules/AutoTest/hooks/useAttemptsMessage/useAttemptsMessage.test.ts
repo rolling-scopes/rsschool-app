@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 const MAX_ATTEMPTS = 4;
 function renderUseAttemptsMessage({

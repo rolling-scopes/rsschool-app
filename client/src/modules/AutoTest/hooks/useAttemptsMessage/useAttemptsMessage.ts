@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import moment from 'moment';
 
 export function useAttemptsMessage(courseTask: CourseTaskVerifications) {

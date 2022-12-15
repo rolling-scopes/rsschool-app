@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { TaskCard } from '..';
 import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { Course } from 'services/models';
-import { CourseTaskState, CourseTaskVerifications } from '../../types';
+import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
 
 const COURSE_MOCK = { alias: 'course-alias', id: 100 } as Course;
 

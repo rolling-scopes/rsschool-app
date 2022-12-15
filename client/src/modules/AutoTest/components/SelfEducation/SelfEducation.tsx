@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 type SelfEducationProps = {
   courseTask: CourseTaskVerifications;
