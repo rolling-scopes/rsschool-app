@@ -47,6 +47,15 @@ describe('useAttemptsMessage', () => {
     },
   );
 
+  it('should return left attempts count equal to -1 when max attempts was not provided', () => {
+    const task = {
+      type: CourseTaskDetailedDtoTypeEnum.Jstask,
+    } as CourseTaskVerifications;
+    const { attemptsCount } = renderUseAttemptsMessage({ task });
+
+    expect(attemptsCount).toBe(-1);
+  });
+
   it.each`
     publicAttributes                                                                              | expected
     ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}

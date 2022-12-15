@@ -4,37 +4,45 @@ import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { Course } from 'services/models';
 import { CourseTaskState, CourseTaskVerifications } from '../../types';
 
-const courseTask = {
-  name: 'Course Task',
-  studentStartDate: '2022-09-10 12:00',
-  studentEndDate: '2022-10-10 12:00',
-  checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
-  id: 10,
-  descriptionUrl: 'description-url',
-  state: CourseTaskState.Missed,
-  publicAttributes: {
-    maxAttemptsNumber: 2,
-  },
-} as CourseTaskVerifications;
-
-const PROPS_MOCK: TaskCardProps = {
-  course: { alias: 'course-alias', id: 100 } as Course,
-  courseTask,
-};
+const COURSE_MOCK = { alias: 'course-alias', id: 100 } as Course;
 
 describe('TaskCard', () => {
   it.each`
     prop                | value
-    ${'task name'}      | ${courseTask.name}
+    ${'task name'}      | ${'Course Task'}
     ${'start date'}     | ${'Sep 10'}
     ${'end date'}       | ${'Oct 10'}
     ${'state'}          | ${'Missed'}
     ${'attempts count'} | ${'2 left'}
     ${'score'}          | ${'–'}
   `('should render $prop', ({ value }: { value: string }) => {
-    render(<TaskCard {...PROPS_MOCK} />);
+    const courseTask = generateCourseTask(2);
+    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
 
     const element = screen.getByText(new RegExp(value, 'i'));
     expect(element).toBeInTheDocument();
   });
+
+  it('should render attempts count as "No limits" when max attempts were not provided', () => {
+    const courseTask = generateCourseTask();
+    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
+
+    const element = screen.getByText(/No limits/i);
+    expect(element).toBeInTheDocument();
+  });
 });
+
+function generateCourseTask(maxAttemptsNumber?: number): CourseTaskVerifications {
+  return {
+    name: 'Course Task',
+    studentStartDate: '2022-09-10 12:00',
+    studentEndDate: '2022-10-10 12:00',
+    checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
+    id: 10,
+    descriptionUrl: 'description-url',
+    state: CourseTaskState.Missed,
+    publicAttributes: {
+      maxAttemptsNumber,
+    },
+  } as CourseTaskVerifications;
+}

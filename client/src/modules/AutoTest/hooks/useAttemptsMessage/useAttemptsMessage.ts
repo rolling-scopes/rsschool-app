@@ -9,8 +9,12 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     publicAttributes || {};
 
   const attemptsCount = useMemo((): number => {
-    const leftCount = maxAttemptsNumber - (verifications?.length || 0);
-    return leftCount > 0 ? leftCount : 0;
+    if (maxAttemptsNumber) {
+      const leftCount = maxAttemptsNumber - (verifications?.length || 0);
+      return leftCount > 0 ? leftCount : 0;
+    }
+
+    return -1;
   }, [maxAttemptsNumber, verifications?.length]);
 
   const isDeadlinePassed = useMemo(() => {
