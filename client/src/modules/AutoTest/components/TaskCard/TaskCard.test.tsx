@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { TaskCard, TaskCardProps } from '..';
+import { TaskCard } from '..';
 import { CreateCourseTaskDtoCheckerEnum } from 'api';
 import { Course } from 'services/models';
 import { CourseTaskState, CourseTaskVerifications } from '../../types';
