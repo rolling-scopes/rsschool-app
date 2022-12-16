@@ -42,7 +42,7 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
       render: (_, row: Verification) => {
         const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
         const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
-        return accuracyNumber ?? 'N/A';
+        return accuracyNumber ?? '–';
       },
     },
     {
