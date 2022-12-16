@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import moment from 'moment';
 import { TaskDeadlineDate, TaskDeadlineDateProps } from '..';
-import { CourseTaskState } from '../../types';
+import { CourseTaskState } from 'modules/AutoTest/types';
 
 describe('TaskDeadlineDate', () => {
   it.each`

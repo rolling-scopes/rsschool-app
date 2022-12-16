@@ -9,7 +9,7 @@ import { isExpelledStudent } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 type SelfEducationValues = Record<string, number>;
 export type IpynbFile = { upload: { file: InternalUploadFile } };

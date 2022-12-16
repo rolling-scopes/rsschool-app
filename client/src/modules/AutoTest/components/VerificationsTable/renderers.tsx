@@ -6,7 +6,7 @@ import { CheckSquareTwoTone, CloseSquareTwoTone } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { Verification } from 'services/course';
 
-const { Text, Link } = Typography;
+const { Text, Link, Title } = Typography;
 
 const DISPLAY_ALL: Breakpoint[] = ['sm'];
 const DISPLAY_ACCURACY: Breakpoint[] = ['md'];
@@ -42,7 +42,7 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
       render: (_, row: Verification) => {
         const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
         const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
-        return accuracyNumber ?? 'N/A';
+        return accuracyNumber ?? '–';
       },
     },
     {
@@ -65,8 +65,8 @@ function renderDetails(value: string, row: Verification) {
   if (row?.courseTask?.type === CourseTaskDetailedDtoTypeEnum.Codewars) {
     return (
       <>
-        <Text>{value}</Text>
-        <Space>
+        <Title level={5}>{value}</Title>
+        <Space direction="vertical" align="start">
           {(row?.metadata as Metadata[])?.map(({ id, url, name, completed }, index: number) => (
             <Link key={id} href={url} target="_blank">
               {completed ? (

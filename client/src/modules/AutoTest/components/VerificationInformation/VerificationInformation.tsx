@@ -1,7 +1,7 @@
 import { Row, Col, Space, Button, Alert, Typography } from 'antd';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;

@@ -7,6 +7,8 @@ export enum CourseTaskStatus {
   Done = 'Done',
 }
 
+export const COURSE_TASK_STATUSES = Object.entries(CourseTaskStatus).map(([key, value]) => ({ key, value }));
+
 export enum CourseTaskState {
   Uncompleted = 'Uncompleted',
   Missed = 'Missed',

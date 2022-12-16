@@ -7,7 +7,7 @@ import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
 import { notification } from 'antd';
 import * as UserUtils from 'domain/user';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 jest.mock('services/files');
 jest.mock('services/course');

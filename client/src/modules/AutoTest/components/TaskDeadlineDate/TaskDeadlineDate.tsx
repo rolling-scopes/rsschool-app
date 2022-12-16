@@ -3,7 +3,7 @@ import { CalendarOutlined, SwapRightOutlined } from '@ant-design/icons';
 import { memo, useMemo } from 'react';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseTaskState } from '../../types';
+import { CourseTaskState } from 'modules/AutoTest/types';
 
 const { Text } = Typography;
 

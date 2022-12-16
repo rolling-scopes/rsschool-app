@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { Alert, Space, Typography } from 'antd';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 export type CodingProps = {
   courseTask: CourseTaskVerifications;

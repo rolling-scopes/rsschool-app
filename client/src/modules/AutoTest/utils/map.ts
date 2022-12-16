@@ -7,7 +7,7 @@ function getState({ studentEndDate, resultsCount }: CourseTaskDetailedDto): Cour
   const now = moment();
   const end = moment(studentEndDate);
 
-  if (resultsCount) {
+  if (resultsCount > 0) {
     return CourseTaskState.Completed;
   }
 
