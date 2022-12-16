@@ -2,17 +2,23 @@ import { renderHook } from '@testing-library/react-hooks';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import moment from 'moment';
 
 const MAX_ATTEMPTS = 4;
 function renderUseAttemptsMessage({
   verificationsCount = 0,
   task,
+  verificationCreatedDate,
 }: {
   verificationsCount?: number;
   task?: CourseTaskVerifications;
+  verificationCreatedDate?: string;
 }) {
-  const verifications = new Array(verificationsCount).fill({}) as Verification[];
+  const verifications = new Array(verificationsCount).fill({
+    createdDate: moment(verificationCreatedDate).add(2, 'h').format(),
+  }) as Verification[];
+
   let courseTask = {
     publicAttributes: {
       maxAttemptsNumber: MAX_ATTEMPTS,
@@ -47,21 +53,39 @@ describe('useAttemptsMessage', () => {
     },
   );
 
+  it('should return left attempts count equal to Infinity when max attempts was not provided', () => {
+    const task = {
+      type: CourseTaskDetailedDtoTypeEnum.Jstask,
+    } as CourseTaskVerifications;
+    const { attemptsCount } = renderUseAttemptsMessage({ task });
+
+    expect(attemptsCount).toBe(Infinity);
+  });
+
   it.each`
-    publicAttributes                                                                              | expected
-    ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
-    ${{ strictAttemptsMode: false, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}     | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
-    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 1 }} | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
-    ${{ maxAttemptsNumber: undefined, tresholdPercentage: undefined }}                            | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
+    publicAttributes                                                                              | verificationsCount | expected
+    ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
+    ${{ strictAttemptsMode: false, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}     | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
+    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 1 }} | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
+    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 2 }} | ${1}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 2 hours. Next submit is possible in'}
+    ${{ maxAttemptsNumber: undefined, tresholdPercentage: undefined }}                            | ${0}               | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
   `(
     `should return explanation when ${JSON.stringify(`$publicAttributes`)}`,
-    ({ publicAttributes, expected }: { publicAttributes: SelfEducationPublicAttributes; expected: string }) => {
+    ({
+      publicAttributes,
+      verificationsCount,
+      expected,
+    }: {
+      publicAttributes: SelfEducationPublicAttributes;
+      verificationsCount: number;
+      expected: string;
+    }) => {
       const task = {
         publicAttributes,
       } as CourseTaskVerifications;
-      const { explanation } = renderUseAttemptsMessage({ task });
+      const { explanation } = renderUseAttemptsMessage({ task, verificationsCount });
 
-      expect(explanation).toBe(expected);
+      expect(explanation).toMatch(new RegExp(expected, 'i'));
     },
   );
 
@@ -98,27 +122,77 @@ describe('useAttemptsMessage', () => {
     },
   );
 
-  it('should allow submit when strict mode is false and attempts count is 0', () => {
-    const task = {
-      publicAttributes: {
-        maxAttemptsNumber: MAX_ATTEMPTS,
-        strictAttemptsMode: false,
-      },
-    } as CourseTaskVerifications;
-    const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+  describe('should allow to start task', () => {
+    it('when strict mode is false and attempts count is 0', () => {
+      const task = {
+        publicAttributes: {
+          maxAttemptsNumber: MAX_ATTEMPTS,
+          strictAttemptsMode: false,
+        },
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
-    expect(allowSubmit).toBeTruthy();
-  });
+      expect(allowStartTask).toBeTruthy();
+    });
 
-  it('should not allow submit when strict mode is true and attempts count is 0', () => {
-    const task = {
-      publicAttributes: {
-        maxAttemptsNumber: MAX_ATTEMPTS,
-        strictAttemptsMode: true,
-      },
-    } as CourseTaskVerifications;
-    const { allowStartTask: allowSubmit } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+    it('when deadline has not passed', () => {
+      const task = {
+        studentEndDate: moment().add(7, 'd').format(),
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
-    expect(allowSubmit).toBeFalsy();
+      expect(allowStartTask).toBeTruthy();
+    });
+
+    it('when attempts per hours are not over', () => {
+      const task = {
+        studentEndDate: moment().add(7, 'd').format(),
+        publicAttributes: {
+          oneAttemptPerNumberOfHours: 1,
+        },
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({
+        task,
+        verificationsCount: 1,
+        verificationCreatedDate: moment().subtract(4, 'h').format(),
+      });
+
+      expect(allowStartTask).toBeTruthy();
+    });
+
+    describe('should not allow to start task', () => {
+      it('when strict mode is true and attempts count is 0', () => {
+        const task = {
+          publicAttributes: {
+            maxAttemptsNumber: MAX_ATTEMPTS,
+            strictAttemptsMode: true,
+          },
+        } as CourseTaskVerifications;
+        const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+
+        expect(allowStartTask).toBeFalsy();
+      });
+
+      it('when deadline has passed', () => {
+        const task = {
+          studentEndDate: '1970-01-01T00:00:00.000Z',
+        } as CourseTaskVerifications;
+        const { allowStartTask } = renderUseAttemptsMessage({ task });
+
+        expect(allowStartTask).toBeFalsy();
+      });
+
+      it('when attempts per hours are over', () => {
+        const task = {
+          studentEndDate: moment().add(7, 'd').format(),
+          publicAttributes: {
+            oneAttemptPerNumberOfHours: 3,
+          },
+        } as CourseTaskVerifications;
+        const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: 1 });
+
+        expect(allowStartTask).toBeFalsy();
+      });
+    });
   });
 });

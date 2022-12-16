@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import Coding, { CodingProps } from './Coding';
 
 function renderCoding(type: CourseTaskDetailedDtoTypeEnum) {

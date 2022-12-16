@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { CourseTaskVerifications } from '../../types';
+import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import moment from 'moment';
 
 export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
@@ -9,8 +9,12 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     publicAttributes || {};
 
   const attemptsCount = useMemo((): number => {
-    const leftCount = maxAttemptsNumber - (verifications?.length || 0);
-    return leftCount > 0 ? leftCount : 0;
+    if (maxAttemptsNumber) {
+      const leftCount = maxAttemptsNumber - (verifications?.length || 0);
+      return leftCount > 0 ? leftCount : 0;
+    }
+
+    return Infinity;
   }, [maxAttemptsNumber, verifications?.length]);
 
   const isDeadlinePassed = useMemo(() => {
@@ -19,6 +23,23 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
 
     return now.isAfter(endDate);
   }, [studentEndDate]);
+
+  const timeToNextSubmit = useMemo((): number => {
+    const [lastAttempt] = verifications || [];
+    const lastAttemptTime = lastAttempt?.createdDate;
+
+    if (oneAttemptPerNumberOfHours && lastAttemptTime) {
+      const diff = moment(lastAttemptTime).diff(moment().subtract(oneAttemptPerNumberOfHours, 'hour'));
+
+      if (diff < 0) {
+        return 0;
+      }
+
+      return diff;
+    }
+
+    return 0;
+  }, [oneAttemptPerNumberOfHours, verifications]);
 
   const explanation = useMemo(() => {
     if (tresholdPercentage && maxAttemptsNumber) {
@@ -32,11 +53,15 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
         str += ` You have only one attempt per ${oneAttemptPerNumberOfHours} hours.`;
       }
 
+      if (timeToNextSubmit !== 0 && attemptsCount > 0) {
+        str += ` Next submit is possible in ${moment.utc(timeToNextSubmit).format('HH:mm:ss')}`;
+      }
+
       return str;
     }
 
     return 'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.';
-  }, [maxAttemptsNumber, tresholdPercentage, strictAttemptsMode]);
+  }, [maxAttemptsNumber, tresholdPercentage, strictAttemptsMode, timeToNextSubmit]);
 
   const attemptsLeftMessage = useMemo((): string | undefined => {
     if (type !== CourseTaskDetailedDtoTypeEnum.Selfeducation || isDeadlinePassed) {
@@ -59,7 +84,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   }, [attemptsCount, strictAttemptsMode]);
 
   const allowStartTask = useMemo(() => {
-    if (isDeadlinePassed || (strictAttemptsMode && !attemptsCount)) {
+    if (isDeadlinePassed || !!timeToNextSubmit || (strictAttemptsMode && !attemptsCount)) {
       return false;
     }
 

@@ -38,7 +38,7 @@ function TaskDescription({ courseAlias, courseTask }: TaskDescriptionProps) {
         <Col span={24}>
           <Space>
             <Text type="secondary">Description: </Text>
-            <Link href={descriptionUrl} target="_blank">
+            <Link href={descriptionUrl} target="_blank" style={{ wordBreak: 'break-word' }}>
               {descriptionUrl}
             </Link>
           </Space>
