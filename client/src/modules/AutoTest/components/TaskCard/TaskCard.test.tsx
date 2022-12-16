@@ -23,7 +23,7 @@ describe('TaskCard', () => {
     expect(element).toBeInTheDocument();
   });
 
-  it('should render attempts count as "No limits" when max attempts were not provided', () => {
+  it('should render attempts count as "No limits" when max attempts was not provided', () => {
     const courseTask = generateCourseTask();
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
 

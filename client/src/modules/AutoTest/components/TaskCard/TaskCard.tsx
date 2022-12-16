@@ -37,7 +37,7 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
     },
     {
       label: 'Attempts',
-      value: attemptsCount >= 0 ? `${attemptsCount} left` : 'No limits',
+      value: isFinite(attemptsCount) ? `${attemptsCount} left` : 'No limits',
     },
     {
       label: 'Score',
