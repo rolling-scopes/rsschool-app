@@ -1,4 +1,4 @@
-import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Typography } from 'antd';
+import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
 import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
@@ -27,6 +27,7 @@ const taskService = new TaskService();
 export function CourseTaskModal(props: Props) {
   const { data } = props;
   const [changes, setChanges] = useState({} as Record<string, any>);
+  const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 
   const { loading, value: tasks = [] } = useAsync(() => taskService.getTasks(), []);
 
@@ -38,8 +39,21 @@ export function CourseTaskModal(props: Props) {
     return userService.searchUser(searchText);
   };
 
+  const isInvalidCrossCheckDuration = (startDate: string, endDate: string) => {
+    const MIN_CROSSCHECK_DURATION = 3 * 24;
+    return moment.duration(moment(endDate).diff(moment(startDate))).asHours() < MIN_CROSSCHECK_DURATION;
+  };
+
   const handleModalSubmit = async (values: any) => {
     const record = createRecord(values);
+    if (
+      record.checker === 'crossCheck' &&
+      isInvalidCrossCheckDuration(record.studentEndDate, record.crossCheckEndDate ?? '')
+    ) {
+      message.error('The minimum duration of a cross-check is 3 days.');
+      setIsInvalidCrossCheckEndDate(true);
+      return;
+    }
     props.onSubmit(record);
   };
 
@@ -156,7 +170,9 @@ export function CourseTaskModal(props: Props) {
               <Form.Item
                 name="crossCheckEndDate"
                 label="Cross-Check End Date"
+                validateStatus={isInvalidCrossCheckEndDate ? 'error' : undefined}
                 rules={[{ required: true, message: 'Please enter cross-check end date' }]}
+                tooltip="Cross-Check End Date must be later than the End Date of the task. The minimum duration of a cross-check is 3 days. Distribution to the cross check will be done automatically at 23:59 UTC on the selected date"
               >
                 <DatePicker format="YYYY-MM-DD" />
               </Form.Item>
