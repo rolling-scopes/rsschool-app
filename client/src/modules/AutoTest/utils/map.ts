@@ -3,34 +3,32 @@ import moment from 'moment';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '../types';
 
-function getState({ studentEndDate, resultsCount }: CourseTaskDetailedDto): CourseTaskState {
+function getState({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskState {
   const now = moment();
   const end = moment(studentEndDate);
+  const attemptsCount = verifications?.length || 0;
 
-  if (resultsCount > 0) {
+  if (attemptsCount > 0) {
     return CourseTaskState.Completed;
   }
 
-  if (now.isAfter(end) && !resultsCount) {
+  if (now.isAfter(end) && !attemptsCount) {
     return CourseTaskState.Missed;
   }
 
   return CourseTaskState.Uncompleted;
 }
 
-function getStatus(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
-  const { studentEndDate, resultsCount, publicAttributes } = courseTask;
-  const { maxAttemptsNumber } = (publicAttributes as SelfEducationPublicAttributes) || {};
-  const leftCount = maxAttemptsNumber - (verifications?.length || 0);
-  const attemptsLeft = leftCount > 0 ? leftCount : 0;
+function getStatus({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
+  const attemptsCount = verifications?.length || 0;
   const now = moment();
   const end = moment(studentEndDate);
 
-  if (now.isAfter(end) && !resultsCount) {
+  if (now.isAfter(end) && !attemptsCount) {
     return CourseTaskStatus.Missed;
   }
 
-  if (now.isAfter(end) && (resultsCount || !attemptsLeft)) {
+  if (now.isAfter(end) && attemptsCount) {
     return CourseTaskStatus.Done;
   }
 
@@ -43,7 +41,7 @@ export function mapTo(courseTask: CourseTaskDetailedDto, verifications: Verifica
 
   return {
     ...courseTask,
-    state: getState(courseTask),
+    state: getState(courseTask, taskVerifications),
     status: getStatus(courseTask, taskVerifications),
     publicAttributes: courseTask.publicAttributes as SelfEducationPublicAttributes,
     verifications: taskVerifications,
