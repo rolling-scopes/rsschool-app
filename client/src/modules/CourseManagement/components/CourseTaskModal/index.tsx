@@ -40,7 +40,8 @@ export function CourseTaskModal(props: Props) {
   };
 
   const isInvalidCrossCheckDuration = (startDate: string, endDate: string) => {
-    const MIN_CROSSCHECK_DURATION = 3 * 24;
+    const MIN_CROSSCHECK_DAYS_COUNT = 3;
+    const MIN_CROSSCHECK_DURATION = MIN_CROSSCHECK_DAYS_COUNT * 24;
     return moment.duration(moment(endDate).diff(moment(startDate))).asHours() < MIN_CROSSCHECK_DURATION;
   };
 
