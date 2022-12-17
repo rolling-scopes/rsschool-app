@@ -120,7 +120,7 @@ function SolutionReview(props: SolutionReviewProps) {
       )}
 
       <Row style={{ margin: '16px 0' }}>
-        <Col>
+        <Col span={24}>
           <Comment
             avatar={
               <UserAvatar
@@ -143,13 +143,11 @@ function SolutionReview(props: SolutionReviewProps) {
                   </Col>
                 </Row>
 
-                {dateTime && (
-                  <Row>
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      {formatDateTime(dateTime)}
-                    </Text>
-                  </Row>
-                )}
+                <Row>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {formatDateTime(dateTime)}
+                  </Text>
+                </Row>
 
                 <Row gutter={4} align="middle" style={{ marginTop: 8 }}>
                   <Col>
