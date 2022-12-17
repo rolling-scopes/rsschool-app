@@ -41,10 +41,8 @@ export function AdminSider(props: Props) {
             {adminMenuItems.map(item => (
               <Menu.Item key={item.key}>
                 <Link prefetch={false} href={item.href}>
-                  <a>
-                    {item.icon}
-                    <span>{item.name}</span>
-                  </a>
+                  {item.icon}
+                  <span>{item.name}</span>
                 </Link>
               </Menu.Item>
             ))}
@@ -55,10 +53,8 @@ export function AdminSider(props: Props) {
             {courseManagementMenuItems.map(item => (
               <Menu.Item key={item.key}>
                 <Link prefetch={false} href={item.href}>
-                  <a>
-                    {item.icon}
-                    <span>{item.name}</span>
-                  </a>
+                  {item.icon}
+                  <span>{item.name}</span>
                 </Link>
               </Menu.Item>
             ))}

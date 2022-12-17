@@ -98,7 +98,7 @@ export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: E
 
         {!isPreview && (
           <div className="button__close">
-            <Link prefetch={false} href={`/course/schedule?course=${alias}`}>
+            <Link prefetch={false} href={`/course/schedule?course=${alias}`} legacyBehavior>
               <a>
                 <Button icon={<CloseOutlined />} />
               </a>

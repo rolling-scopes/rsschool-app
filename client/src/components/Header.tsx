@@ -74,7 +74,7 @@ export function Header({ title, courseName, username }: Props) {
         }}
       >
         <Space size={24}>
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <a>
               <img
                 style={{ height: 30 }}

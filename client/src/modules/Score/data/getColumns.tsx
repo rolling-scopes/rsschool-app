@@ -59,7 +59,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       sorter: 'name',
       render: (value, record) => (
         <Link prefetch={false} href={`/profile?githubId=${record.githubId}`}>
-          <a>{value}</a>
+          {value}
         </Link>
       ),
       ...getSearchProps('name'),
@@ -109,7 +109,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       defaultFilteredValue: mentor ? (isArray(mentor) ? mentor : [mentor]) : undefined,
       render: (value: string) => (
         <Link prefetch={false} href={`/profile?githubId=${value}`}>
-          <a>{value}</a>
+          {value}
         </Link>
       ),
       ...getSearchProps('mentor.githubId'),

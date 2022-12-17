@@ -104,9 +104,7 @@ export function HomePage(props: Props) {
                   renderItem={linkInfo => (
                     <List.Item key={linkInfo.url}>
                       <Link prefetch={false} href={linkInfo.url}>
-                        <a>
-                          {linkInfo.icon} {linkInfo.name}
-                        </a>
+                        {linkInfo.icon} {linkInfo.name}
                       </Link>
                     </List.Item>
                   )}
