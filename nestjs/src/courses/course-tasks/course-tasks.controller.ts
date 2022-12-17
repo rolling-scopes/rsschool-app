@@ -42,8 +42,7 @@ export class CourseTasksController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getCourseTasksDetailed' })
-  @UseGuards(CourseGuard, RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @UseGuards(CourseGuard)
   public async getAllExtended(
     @Req() _: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
