@@ -130,7 +130,7 @@ function Page(props: CoursePageProps) {
       if (crossCheckPairs.length) {
         message.success('Cross-Check distrubtion has been created');
       } else {
-        message.warn('Cross-check pairs were not created because there are no submitted solutions');
+        message.warning('Cross-check pairs were not created because there are no submitted solutions');
       }
     } catch (e) {
       message.error('An error occurred.');

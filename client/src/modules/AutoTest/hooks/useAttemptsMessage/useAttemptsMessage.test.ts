@@ -1,9 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import moment from 'moment';
+import moment from 'dayjs';
 
 const MAX_ATTEMPTS = 4;
 function renderUseAttemptsMessage({

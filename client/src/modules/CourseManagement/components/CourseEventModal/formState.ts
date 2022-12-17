@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { omit } from 'lodash';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { CourseEvent, CourseService } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
 
@@ -79,8 +79,8 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
     type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
-    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
-    endTime: modalData.endTime ? moment.tz(modalData.endTime, timeZone) : null,
+    dateTime: modalData.dateTime ? dayjs.utc(modalData.dateTime, timeZone) : null,
+    endTime: modalData.endTime ? dayjs.utc(modalData.endTime, timeZone) : null,
     organizerId: modalData.organizer ? modalData.organizer.id : undefined,
     special: modalData.special ? modalData.special.split(',') : [],
     timeZone,

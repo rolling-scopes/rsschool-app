@@ -1,5 +1,5 @@
 import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { transformFieldsData } from './transformFieldsData';
 
 const mockFieldsData = {
@@ -11,7 +11,7 @@ const mockFieldsData = {
   locations: 'Minsk Belarus, Some Other, Some Another, Willbe Removed',
   name: 'John Doe',
   notes: 'Some notes',
-  startFrom: moment('2022-09-24'),
+  startFrom: dayjs('2022-09-24'),
   fullTime: true,
   phone: '+1111111111111',
   email: 'example@gmail.com',

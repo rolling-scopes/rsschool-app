@@ -2,7 +2,7 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTag, tagsRenderer } from 'components/Table';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
 import Link from 'next/link';
 import React from 'react';
 import { CourseEvent } from 'services/course';
@@ -33,7 +33,7 @@ export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: E
         {dateTime && (
           <Row justify="center" align="middle" gutter={[40, 8]}>
             <Col>
-              <Title level={3}>{moment(dateTime).format('MMM Do YYYY HH:mm')}</Title>
+              <Title level={3}>{dayjs(dateTime).format('MMM Do YYYY HH:mm')}</Title>
             </Col>
           </Row>
         )}

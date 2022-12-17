@@ -1,12 +1,16 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import moment from 'moment';
-import { Typography, Comment, Tooltip, Avatar, Badge } from 'antd';
+import dayjs from 'dayjs';
+import { Typography, Tooltip, Avatar, Badge } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from 'common/models/profile';
 import { GithubAvatar } from 'components/GithubAvatar';
+import relative from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relative);
 
 const { Text, Paragraph } = Typography;
 
@@ -117,8 +121,8 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                     </>
                   }
                   datetime={
-                    <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
-                      <span>{moment(feedbackDate).fromNow()}</span>
+                    <Tooltip title={dayjs(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
+                      <span>{dayjs(feedbackDate).fromNow()}</span>
                     </Tooltip>
                   }
                 />

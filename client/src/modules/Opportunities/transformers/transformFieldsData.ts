@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { AllDataToSubmit } from 'modules/Opportunities/models';
 
 const LOCATIONS_COUNT = 3;
@@ -30,7 +30,7 @@ export const transformFieldsData = (data: AllDataToSubmit) => ({
   locations: getTopLocations(data.locations, LOCATIONS_COUNT),
   githubUsername: nullifyConditional(data.githubUsername),
   website: nullifyConditional(data.website),
-  startFrom: data.startFrom && moment(data.startFrom).format('YYYY-MM-DD'),
+  startFrom: data.startFrom && dayjs(data.startFrom).format('YYYY-MM-DD'),
   fullTime: data.fullTime,
   visibleCourses: data.visibleCourses,
 });

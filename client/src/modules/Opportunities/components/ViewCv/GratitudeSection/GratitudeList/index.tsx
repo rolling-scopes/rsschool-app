@@ -1,5 +1,5 @@
 import { Button, Col, List, Tooltip, Typography } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useState, useMemo } from 'react';
 import { GratitudeDto } from 'api';
 
@@ -31,7 +31,7 @@ export function GratitudeList({ feedback, showCount }: Props) {
     () =>
       feedbackToShow?.map(feedback => {
         const { comment, date } = feedback;
-        const feedbackDate = moment(date);
+        const feedbackDate = dayjs(date);
         return {
           comment,
           dateFormatted: feedbackDate.format('YYYY-MM-DD HH:mm:ss'),

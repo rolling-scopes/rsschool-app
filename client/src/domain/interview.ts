@@ -1,5 +1,7 @@
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import between from 'dayjs/plugin/isBetween';
+dayjs.extend(between);
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
   switch (value) {
@@ -27,9 +29,9 @@ export enum InterviewStatus {
 export const stageInterviewType = 'stage-interview';
 
 export function isInterviewRegistrationInProgess(interviewStartDate: string) {
-  const startDate = moment(interviewStartDate).subtract(2, 'weeks');
+  const startDate = dayjs(interviewStartDate).subtract(2, 'weeks');
 
-  return moment().isBetween(startDate, interviewStartDate);
+  return dayjs().isBetween(startDate, interviewStartDate);
 }
 
 export function isInterviewStarted(interviewStartDate: string) {

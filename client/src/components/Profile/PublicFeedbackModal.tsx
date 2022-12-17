@@ -1,7 +1,8 @@
 import * as React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { PublicFeedback } from 'common/models/profile';
-import { Typography, Comment, Tooltip, Modal, Row, Col } from 'antd';
+import { Typography, Tooltip, Modal, Row, Col } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import { GithubAvatar } from 'components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
@@ -44,8 +45,8 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
                   </>
                 }
                 datetime={
-                  <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
-                    <span>{moment(feedbackDate).fromNow()}</span>
+                  <Tooltip title={dayjs(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
+                    <span>{dayjs(feedbackDate).fromNow()}</span>
                   </Tooltip>
                 }
               />

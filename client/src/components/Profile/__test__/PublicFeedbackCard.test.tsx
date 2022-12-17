@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import PublicFeedbackCard from '../PublicFeedbackCard';
 
-jest.mock('moment', () => (value: any) => ({
+jest.mock('dayjs', () => (value: any) => ({
   format() {
     return value;
   },

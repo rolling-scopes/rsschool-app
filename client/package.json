@@ -23,14 +23,14 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
+    "@ant-design/compatible": "5.1.1",
     "@ant-design/plots": "1.2.2",
     "antd": "5.0.7",
     "axios": "0.27.2",
     "cookie": "0.5.0",
     "csvtojson": "2.0.10",
+    "dayjs": "1.11.7",
     "lodash": "4.17.21",
-    "moment": "2.29.4",
-    "moment-timezone": "0.5.37",
     "next": "13.0.7",
     "react": "18.2.0",
     "react-color": "2.19.3",
