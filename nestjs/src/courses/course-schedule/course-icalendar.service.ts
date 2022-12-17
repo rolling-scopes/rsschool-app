@@ -6,7 +6,7 @@ import ical from 'ical-generator';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import * as timezone from 'dayjs/plugin/timezone';
-import { CourseScheduleItem } from './course-schedule.service';
+import { CourseScheduleItem, CourseScheduleItemTag } from './course-schedule.service';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,13 +33,15 @@ export class CourseICalendarService {
     });
 
     for (const item of data) {
+      // CrossCheck has two events: submit and review and they have the same task id. iCal requires unique id for each event.
+      const id = item.tag === CourseScheduleItemTag.CrossCheckReview ? `${item.id}-1` : item.id;
       const endDate = item.endDate || new Date(item.startDate.getTime() + 1000 * 60 * 60);
       icalData.createEvent({
         start: dayjs.utc(item.startDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
         end: dayjs.utc(endDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
         summary: item.name,
         description: this.buildDescription(item),
-        id: item.id,
+        id,
         alarms: [],
         organizer: item.organizer ? { name: item.organizer?.name ?? '' } : undefined,
         url: item.descriptionUrl ?? undefined,
