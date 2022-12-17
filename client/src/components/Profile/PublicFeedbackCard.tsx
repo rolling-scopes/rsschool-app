@@ -1,6 +1,5 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import dayjs from 'dayjs';
 import { Typography, Tooltip, Avatar, Badge } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import CommonCard from './CommonCard';
@@ -8,6 +7,7 @@ import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from 'common/models/profile';
 import { GithubAvatar } from 'components/GithubAvatar';
+import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relative);

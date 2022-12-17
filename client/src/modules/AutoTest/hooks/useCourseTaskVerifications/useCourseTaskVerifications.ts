@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CourseTaskDetailedDto } from 'api';
@@ -50,9 +50,11 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
     setNeedsReload(!needsReload);
   }
 
-  if (error) {
-    message.error(error.message);
-  }
+  useEffect(() => {
+    if (error?.message) {
+      message.error(error.message);
+    }
+  }, [error?.message]);
 
   return {
     task,

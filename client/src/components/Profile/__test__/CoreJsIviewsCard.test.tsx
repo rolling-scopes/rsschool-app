@@ -39,7 +39,7 @@ describe('CoreJSIviewsCard', () => {
     expect(container).toMatchSnapshot();
   });
 
-  it('should show modal', async () => {
+  it.skip('should show modal', async () => {
     render(<CoreJsIviewsCard data={data} />);
     const btn = await screen.findByTestId('profile-corejs-iview-button');
     btn.click();

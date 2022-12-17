@@ -1,10 +1,13 @@
 import * as React from 'react';
 import dayjs from 'dayjs';
+import relative from 'dayjs/plugin/relativeTime';
 import { PublicFeedback } from 'common/models/profile';
 import { Typography, Tooltip, Modal, Row, Col } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { GithubAvatar } from 'components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
+
+dayjs.extend(relative);
 
 const { Text } = Typography;
 

@@ -3,7 +3,7 @@
 exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-26rdvq"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-26rdvq"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,13 +52,12 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-empty ant-empty-normal"
+        class="css-dev-only-do-not-override-26rdvq ant-empty ant-empty-normal"
       >
         <div
           class="ant-empty-image"
         >
           <svg
-            class="ant-empty-img-simple"
             height="41"
             viewBox="0 0 64 41"
             width="64"
@@ -70,22 +69,22 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
               transform="translate(0 1)"
             >
               <ellipse
-                class="ant-empty-img-simple-ellipse"
                 cx="32"
                 cy="33"
+                fill="#f5f5f5"
                 rx="32"
                 ry="7"
               />
               <g
-                class="ant-empty-img-simple-g"
                 fill-rule="nonzero"
+                stroke="#d9d9d9"
               >
                 <path
                   d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
                 />
                 <path
-                  class="ant-empty-img-simple-path"
                   d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                  fill="#fafafa"
                 />
               </g>
             </g>
@@ -105,7 +104,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 exports[`AboutCard Should render correctly if "data" is present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-26rdvq"
   >
     <div
       class="ant-card-head"
@@ -117,7 +116,7 @@ exports[`AboutCard Should render correctly if "data" is present 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-26rdvq"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -155,18 +154,18 @@ exports[`AboutCard Should render correctly if "data" is present 1`] = `
     >
       <div
         aria-label="Top contributor of Rolling Scopes"
-        class="ant-typography ant-typography-ellipsis"
+        class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-26rdvq"
       >
         Top contributor of Rolling Scopes
         <span
           aria-hidden="true"
-          style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; word-break: keep-all; white-space: nowrap;"
+          style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; word-break: keep-all; white-space: nowrap;"
         >
           lg
         </span>
         <span
           aria-hidden="true"
-          style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
+          style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
         >
           <span
             aria-hidden="true"

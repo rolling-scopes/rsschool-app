@@ -2,15 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import PublicFeedbackCard from '../PublicFeedbackCard';
 
-jest.mock('dayjs', () => (value: any) => ({
-  format() {
-    return value;
-  },
-  fromNow() {
-    return 'fromNow';
-  },
-}));
-
 describe('PublicFeedbackCard', () => {
   const data = [
     {
@@ -76,6 +67,8 @@ describe('PublicFeedbackCard', () => {
   ];
 
   it('should render correctly', () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2019-01-01'));
     const { container } = render(<PublicFeedbackCard data={data} />);
     expect(container).toMatchSnapshot();
   });

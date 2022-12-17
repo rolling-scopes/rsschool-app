@@ -1,5 +1,5 @@
 import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
-import { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs';
 
 export interface CourseData {
   locationName: string;

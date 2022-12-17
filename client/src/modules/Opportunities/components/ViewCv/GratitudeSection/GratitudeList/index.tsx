@@ -1,7 +1,10 @@
 import { Button, Col, List, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useState, useMemo } from 'react';
 import { GratitudeDto } from 'api';
+
+dayjs.extend(relativeTime);
 
 const { Text, Paragraph } = Typography;
 

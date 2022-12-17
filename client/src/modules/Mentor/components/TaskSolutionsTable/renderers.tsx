@@ -4,7 +4,7 @@ import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modul
 import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from 'api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Text, Link } = Typography;
 
@@ -134,8 +134,8 @@ function renderMobile(row: MentorDashboardDto) {
 }
 
 function renderDate(value: string, { endDate, resultScore }: MentorDashboardDto) {
-  const now = moment();
-  const end = moment(endDate);
+  const now = dayjs();
+  const end = dayjs(endDate);
   const color = end.diff(now, 'hours') < 48 && !resultScore ? 'warning' : undefined;
   const text = dateWithTimeZoneRenderer(TIMEZONE, FORMAT)(value);
 

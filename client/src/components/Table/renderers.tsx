@@ -58,7 +58,7 @@ export function shortDateTimeRenderer(value: string) {
 }
 
 export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (value: string) =>
-  value ? dayjs(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format(format) : '';
+  value ? dayjs(value).tz(timeZone).format(format) : '';
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
