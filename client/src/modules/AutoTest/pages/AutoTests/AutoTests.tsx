@@ -31,7 +31,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
 
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
-      <Row gutter={48} style={{ background: 'white', marginTop: -15, marginBottom: 24 }}>
+      <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24 }}>
         <Col span={24}>
           <StatusTabs statuses={statuses} activeTab={activeTab} onTabChange={setActiveTab} />
         </Col>
