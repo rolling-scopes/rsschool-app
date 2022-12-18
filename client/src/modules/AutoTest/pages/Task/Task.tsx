@@ -19,6 +19,7 @@ function Task({ course, task }: AutoTestTaskProps) {
     isExerciseVisible,
     startTask,
     finishTask,
+    reload,
   } = useCourseTaskVerifications(course.id, task);
 
   if (!courseTask) {
@@ -33,6 +34,7 @@ function Task({ course, task }: AutoTestTaskProps) {
         loading={loading}
         isTableVisible={!isExerciseVisible}
         startTask={startTask}
+        reload={reload}
       />
       {isExerciseVisible && (
         <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />

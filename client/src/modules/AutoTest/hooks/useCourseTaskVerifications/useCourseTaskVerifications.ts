@@ -42,12 +42,16 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
   }
 
   function finishTask() {
-    setNeedsReload(!needsReload);
+    reload();
     setIsExerciseVisible(false);
   }
 
+  function reload() {
+    setNeedsReload(!needsReload);
+  }
+
   if (error) {
-    message.error(error);
+    message.error(error.message);
   }
 
   return {
@@ -57,5 +61,6 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
     isExerciseVisible,
     startTask,
     finishTask,
+    reload,
   };
 }

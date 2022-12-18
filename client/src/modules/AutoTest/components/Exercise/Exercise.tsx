@@ -31,8 +31,8 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
   };
 
   return (
-    <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
-      <Col xs={24} lg={18} xl={12}>
+    <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
+      <Col>
         <Form form={form} layout="vertical" requiredMark={false} onFinish={submit} onChange={change}>
           {getExercise()}
           <Row justify="center">

@@ -30,7 +30,10 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
 
     const courseTasks = tasks
       .filter(
-        task => task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest && task.type !== CourseTaskDtoTypeEnum.Test,
+        task =>
+          task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest &&
+          task.type !== CourseTaskDtoTypeEnum.Test &&
+          moment().isSameOrAfter(task.studentStartDate, 'd'),
       )
       .sort((a, b) => moment(b.studentEndDate).diff(a.studentEndDate));
 
