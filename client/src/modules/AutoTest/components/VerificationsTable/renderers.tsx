@@ -74,9 +74,10 @@ function renderDetails(value: string, row: Verification) {
               ) : (
                 <CloseSquareTwoTone twoToneColor="#ff4d4f" />
               )}
-              <Text>
+              <>
+                {' '}
                 {index}.{name}
-              </Text>
+              </>
             </Link>
           ))}
         </Space>

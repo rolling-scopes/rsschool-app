@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Alert, Space, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
@@ -43,15 +43,11 @@ function Coding({ courseTask, githubId }: CodingProps) {
 
   return (
     <>
-      {courseTask.type === CourseTaskDetailedDtoTypeEnum.Jstask ? (
-        <Paragraph>
-          <Alert
-            showIcon
-            type="warning"
-            message="Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16."
-          />
+      {courseTask.type === CourseTaskDetailedDtoTypeEnum.Jstask && (
+        <Paragraph type="warning" strong>
+          Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16.
         </Paragraph>
-      ) : null}
+      )}
       <Paragraph>
         The system will run tests in the following repository and will update the score based on the result:
       </Paragraph>
