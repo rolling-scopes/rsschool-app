@@ -17,12 +17,20 @@ import {
   CriteriaDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
-import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
   Distributed = 'distributed',
   Completed = 'completed',
+}
+
+export interface CrossCheckCriteriaData {
+  key: string;
+  max?: number;
+  text: string;
+  type: string;
+  point?: number;
+  textComment?: string;
 }
 
 export interface CrossCheckMessageAuthor {

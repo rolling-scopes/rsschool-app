@@ -5,6 +5,7 @@ import SubtaskCriteria from './criteria/SubtaskCriteria';
 import TitleCriteria from './criteria/TitleCriteria';
 import PenaltyCriteria from './criteria/PenaltyCriteria';
 import { omit } from 'lodash';
+import { CrossCheckCriteriaData } from 'services/course';
 
 export enum TaskType {
   Title = 'title',
@@ -15,15 +16,6 @@ export enum TaskType {
 enum HasPenalty {
   Yes = 'yes',
   No = 'no',
-}
-
-export interface CrossCheckCriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: string;
-  point?: number;
-  textComment?: string;
 }
 
 export interface CountState {

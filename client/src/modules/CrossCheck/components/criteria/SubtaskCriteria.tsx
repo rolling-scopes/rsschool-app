@@ -1,8 +1,7 @@
-import React from 'react';
-import { Rate, Typography } from 'antd';
-import { Input } from 'antd';
+import { Input, Rate, Typography } from 'antd';
+import { CrossCheckCriteriaData } from 'services/course';
 
-import { CrossCheckCriteriaData, CommentState, CountState } from '../CrossCheckCriteriaForm';
+import { CommentState, CountState } from '../CrossCheckCriteriaForm';
 
 const { TextArea } = Input;
 interface SubtaskCriteriaProps {
