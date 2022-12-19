@@ -39,7 +39,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
         </Button>
       </div>
     ),
-    filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
       if (value == null) {
         return false;

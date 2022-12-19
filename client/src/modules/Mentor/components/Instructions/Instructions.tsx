@@ -20,7 +20,7 @@ function Instructions() {
               <Meta
                 title={
                   <Space>
-                    <Badge count={idx + 1} style={{ backgroundColor: '#1890FF' }} />
+                    <Badge count={idx + 1} style={{ backgroundColor: '#1677ff' }} />
                     {s.title}
                   </Space>
                 }
