@@ -19,7 +19,7 @@ class MentorStatsModal extends React.Component<Props> {
     const { courseName, students } = stats;
 
     return (
-      <Modal title={`${courseName} statistics`} visible={isVisible} onCancel={onHide} footer={null} width={'80%'}>
+      <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
         <Row gutter={[16, 16]}>
           {students?.map(({ name, githubId, isExpelled, totalScore, repoUrl }) => {
             const profile = `/profile?githubId=${githubId}`;

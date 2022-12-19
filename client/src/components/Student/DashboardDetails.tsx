@@ -33,7 +33,7 @@ export function DashboardDetails(props: Props) {
         placement="right"
         closable={false}
         onClose={props.onClose}
-        visible={!!details}
+        open={!!details}
       >
         <div className="student-details-actions">
           {props.courseManagerOrSupervisor && (
