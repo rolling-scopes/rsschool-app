@@ -1,14 +1,14 @@
-import { CriteriaData } from 'services/course';
 import { FileOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { CriteriaDto } from 'api';
 import _ from 'lodash';
 
 interface Props {
-  dataCriteria: CriteriaData[];
+  dataCriteria: CriteriaDto[];
 }
 
 export function ExportJSONButton({ dataCriteria }: Props) {
-  const removeKeyAndIndex = (criteria: CriteriaData[]) => {
+  const removeKeyAndIndex = (criteria: CriteriaDto[]) => {
     return criteria.map(item => _.omit(item, ['key', 'index']));
   };
 

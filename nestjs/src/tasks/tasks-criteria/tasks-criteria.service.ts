@@ -8,7 +8,7 @@ import { TaskCriteriaDto } from './dto/task-criteria.dto';
 import { CriteriaDto } from './dto/criteria.dto';
 
 @Injectable()
-export class TaskCriteriaService {
+export class TasksCriteriaService {
   constructor(
     @InjectRepository(TaskCriteria)
     private readonly taskCriteriaRepository: Repository<TaskCriteria>,

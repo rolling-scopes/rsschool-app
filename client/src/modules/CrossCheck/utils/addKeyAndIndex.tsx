@@ -1,9 +1,9 @@
-import { CriteriaData } from 'services/course';
+import { CriteriaDto } from 'api';
 
-export const addKeyAndIndex = (array: CriteriaData[]): CriteriaData[] => {
-  return array.map((item, index) => {
-    item.key = index.toString();
-    item.index = index;
-    return item;
-  });
+export const addKeyAndIndex = (array: CriteriaDto[]): CriteriaDto[] => {
+  return array.map((item, index) => ({
+    ...item,
+    key: index.toString(),
+    index,
+  }));
 };

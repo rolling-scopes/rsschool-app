@@ -28,6 +28,7 @@ import { GratitudesModule } from './gratitudes';
 import { CloudApiModule } from './cloud-api/cloud-api.module';
 import { TaskCriteriaModule } from './task/task-criteria/task-criteria.module';
 import { EventsModule } from './events/events.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { EventsModule } from './events/events.module';
     CloudApiModule,
     TaskCriteriaModule,
     EventsModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

@@ -1442,7 +1442,64 @@
         "tags": ["gratitudes"]
       }
     },
-    "/task/{taskId}/criteria": {
+    "/tasks": {
+      "post": {
+        "operationId": "createTask",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTaskDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskDto" } } }
+          }
+        },
+        "tags": ["tasks"]
+      },
+      "get": {
+        "operationId": "getTasks",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskDto" } } }
+            }
+          }
+        },
+        "tags": ["tasks"]
+      }
+    },
+    "/tasks/{id}": {
+      "delete": {
+        "operationId": "deleteTask",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["tasks"]
+      },
+      "patch": {
+        "operationId": "updateTask",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTaskDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskDto" } } }
+          }
+        },
+        "tags": ["tasks"]
+      }
+    },
+    "/tasks/{taskId}/criteria": {
       "get": {
         "operationId": "getTaskCriteria",
         "summary": "",
@@ -1453,7 +1510,7 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
-        "tags": ["criteria"]
+        "tags": ["tasks-criteria"]
       },
       "post": {
         "operationId": "createTaskCriteria",
@@ -1469,7 +1526,7 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
-        "tags": ["criteria"]
+        "tags": ["tasks-criteria"]
       },
       "patch": {
         "operationId": "updateTaskCriteria",
@@ -1485,7 +1542,7 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
-        "tags": ["criteria"]
+        "tags": ["tasks-criteria"]
       }
     },
     "/events": {
@@ -2986,10 +3043,126 @@
         },
         "required": ["name", "id"]
       },
+      "CreateTaskDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "attributes": { "type": "object" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" },
+          "githubRepoName": { "type": "string" },
+          "sourceGithubRepoUrl": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "githubPrRequired": { "type": "boolean" },
+          "type": { "type": "string" },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": [
+          "name",
+          "attributes",
+          "descriptionUrl",
+          "description",
+          "githubRepoName",
+          "sourceGithubRepoUrl",
+          "disciplineId",
+          "githubPrRequired",
+          "type",
+          "skills",
+          "tags"
+        ]
+      },
+      "TaskDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "jstask",
+              "kotlintask",
+              "objctask",
+              "htmltask",
+              "ipynb",
+              "selfeducation",
+              "codewars",
+              "test",
+              "codejam",
+              "interview",
+              "stage-interview",
+              "cv:html",
+              "cv:markdown"
+            ]
+          },
+          "name": { "type": "string" },
+          "id": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" },
+          "githubRepoName": { "type": "string" },
+          "sourceGithubRepoUrl": { "type": "string" },
+          "discipline": { "$ref": "#/components/schemas/IdNameDto" },
+          "githubPrRequired": { "type": "boolean" },
+          "createdDate": { "type": "string" },
+          "updatedDate": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "attributes": { "type": "object" }
+        },
+        "required": [
+          "type",
+          "name",
+          "id",
+          "descriptionUrl",
+          "description",
+          "githubRepoName",
+          "sourceGithubRepoUrl",
+          "discipline",
+          "githubPrRequired",
+          "createdDate",
+          "updatedDate",
+          "tags",
+          "skills",
+          "attributes"
+        ]
+      },
+      "UpdateTaskDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "attributes": { "type": "object" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" },
+          "githubRepoName": { "type": "string" },
+          "sourceGithubRepoUrl": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "githubPrRequired": { "type": "boolean" },
+          "type": { "type": "string" },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": [
+          "name",
+          "attributes",
+          "descriptionUrl",
+          "description",
+          "githubRepoName",
+          "sourceGithubRepoUrl",
+          "disciplineId",
+          "githubPrRequired",
+          "type",
+          "skills",
+          "tags"
+        ]
+      },
       "CriteriaDto": {
         "type": "object",
-        "properties": { "max": { "type": "number" }, "type": { "type": "string" }, "text": { "type": "string" } },
-        "required": ["max", "type", "text"]
+        "properties": {
+          "max": { "type": "number" },
+          "type": { "type": "string" },
+          "text": { "type": "string" },
+          "key": { "type": "string" },
+          "index": { "type": "number" }
+        },
+        "required": ["type", "text", "key", "index"]
       },
       "TaskCriteriaDto": {
         "type": "object",

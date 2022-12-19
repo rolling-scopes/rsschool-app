@@ -5,15 +5,13 @@ import { union } from 'lodash';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
-import { DisciplineDto, DisciplinesApi } from 'api';
-import { CriteriaData } from 'services/course';
+import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import {
   UploadCriteriaJSON,
   AddCriteriaForCrossCheck,
@@ -24,21 +22,26 @@ import {
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
-type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
-const service = new TaskService();
+type ModalData = (Partial<Omit<TaskDto, 'attributes'>> & { attributes?: string }) | null;
+
+const tasksApi = new TasksApi();
+const criteriaApi = new TasksCriteriaApi();
 const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as Task[]);
+  const [data, setData] = useState([] as TaskDto[]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
-  const [dataCriteria, setDataCriteria] = useState<CriteriaData[]>([]);
+  const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
 
   const { loading } = useAsync(async () => {
-    const [tasks, { data: disciplines }] = await Promise.all([service.getTasks(), disciplinesApi.getDisciplines()]);
+    const [{ data: tasks }, { data: disciplines }] = await Promise.all([
+      tasksApi.getTasks(),
+      disciplinesApi.getDisciplines(),
+    ]);
     setData(tasks);
     setDisciplines(disciplines || []);
   }, [modalData]);
@@ -49,9 +52,9 @@ function Page(props: Props) {
     setModalAction('create');
   };
 
-  const handleEditItem = async (record: Task) => {
-    const criteria = await service.getCriteriaForCourseTask(record.id);
-    criteria ? setDataCriteria(criteria) : setDataCriteria([]);
+  const handleEditItem = async (record: TaskDto) => {
+    const { data } = await criteriaApi.getTaskCriteria(record.id);
+    setDataCriteria(data.criteria ?? []);
     setModalData(prepareValues(record));
     setModalAction('update');
   };
@@ -65,16 +68,15 @@ function Page(props: Props) {
         setModalLoading(true);
         const record = createRecord(values);
         if (modalAction === 'update') {
-          await service.updateTask(modalData!.id!, record);
-          if (await service.getCriteriaForCourseTask(modalData!.id!)) {
-            await service.updateCriteriaForCourseTask(modalData!.id!, dataCriteria);
+          await tasksApi.updateTask(modalData!.id!, record);
+          if (await criteriaApi.getTaskCriteria(modalData!.id!)) {
+            await criteriaApi.updateTaskCriteria(modalData!.id!, { criteria: dataCriteria });
           } else {
-            await service.createCriteriaForCourseTask(modalData!.id!, dataCriteria);
+            await criteriaApi.createTaskCriteria(modalData!.id!, { criteria: dataCriteria });
           }
         } else {
-          const task = await service.createTask(record);
-          const taskId = task.identifiers[0].id;
-          await service.createCriteriaForCourseTask(taskId, dataCriteria);
+          const { data: task } = await tasksApi.createTask(record);
+          await criteriaApi.createTaskCriteria(task.id, { criteria: dataCriteria });
         }
         setModalData(null);
       } catch (e) {
@@ -87,7 +89,7 @@ function Page(props: Props) {
   );
 
   const renderModal = useCallback(() => {
-    const addCriteria = (criteria: CriteriaData) => {
+    const addCriteria = (criteria: CriteriaDto) => {
       const newDataCriteria = [...dataCriteria, criteria];
       setDataCriteria(addKeyAndIndex(newDataCriteria));
     };
@@ -260,7 +262,7 @@ function Page(props: Props) {
 }
 
 function createRecord(values: any) {
-  const data: Partial<Task> = {
+  const data: CreateTaskDto = {
     type: values.type,
     name: values.name,
     githubPrRequired: !!values.githubPrRequired,
@@ -276,7 +278,7 @@ function createRecord(values: any) {
   return data;
 }
 
-function prepareValues(modalData: Task) {
+function prepareValues(modalData: TaskDto) {
   if (!modalData) {
     return modalData;
   }
@@ -295,13 +297,13 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: stringSorter<Task>('name'),
+      sorter: stringSorter<TaskDto>('name'),
       ...getColumnSearchProps('name'),
     },
     {
       title: 'Discipline',
       dataIndex: ['discipline', 'name'],
-      sorter: stringSorter<Task>('discipline'),
+      sorter: stringSorter<TaskDto>('discipline'),
     },
     {
       title: 'Tags',
@@ -316,7 +318,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Type',
       dataIndex: 'type',
-      sorter: stringSorter<Task>('type'),
+      sorter: stringSorter<TaskDto>('type'),
     },
     {
       title: 'Description URL',
@@ -342,12 +344,12 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_: any, record: Task) => <a onClick={() => handleEditItem(record)}>Edit</a>,
+      render: (_: any, record: TaskDto) => <a onClick={() => handleEditItem(record)}>Edit</a>,
     },
   ];
 }
 
-function getInitialValues(modalData: Partial<Task>) {
+function getInitialValues(modalData: Partial<TaskDto>) {
   return { ...modalData, discipline: modalData.discipline?.name };
 }
 

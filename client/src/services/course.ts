@@ -14,6 +14,7 @@ import {
   Discord,
   CourseTaskDto,
   EventDto,
+  CriteriaDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
@@ -741,14 +742,6 @@ export interface TaskSolution {
   studentId: number;
 }
 
-export interface CriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: string;
-  index: number;
-}
-
 export interface IAddCriteriaForCrossCheck {
-  onCreate: (data: CriteriaData) => void;
+  onCreate: (data: CriteriaDto) => void;
 }
