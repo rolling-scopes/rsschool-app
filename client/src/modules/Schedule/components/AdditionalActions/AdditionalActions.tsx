@@ -1,9 +1,10 @@
-import { Button, Dropdown, Menu, Space } from 'antd';
+import { Button, Dropdown, Menu, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import React from 'react';
 import { buildExportLink, buildICalendarLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
+import { useCopyToClipboard } from 'react-use';
 
 export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
@@ -25,6 +26,8 @@ const AdditionalActions = ({
   courseAlias,
   onCopyFromCourse,
 }: AdditionalActionsProps) => {
+  const [, copyToClipboard] = useCopyToClipboard();
+
   const onExport = () => {
     window.location.href = buildExportLink(courseId, timezone);
   };
@@ -43,9 +46,18 @@ const AdditionalActions = ({
     }
   };
 
+  function onCalendarCopyLink() {
+    const link = buildICalendarLink(courseId, calendarToken, timezone);
+    copyToClipboard(`${window.document.location.origin}${link}`);
+    message.success('Copied to clipboard');
+  }
+
   const handleMenuItemClick: MenuItemClickHandler = item => {
     switch (item.key) {
-      case SettingsButtons.Calendar:
+      case SettingsButtons.CopyLink:
+        onCalendarCopyLink();
+        break;
+      case SettingsButtons.Download:
         onCalendarDownload();
         break;
       case SettingsButtons.Export:

@@ -12,6 +12,7 @@ const PROPS_MOCK: SettingsPanelProps = {
   tags: [],
   onCreateCourseTask: jest.fn(),
   onCopyFromCourse: jest.fn(),
+  onCreateCourseEvent: jest.fn(),
   refreshData: jest.fn(),
 };
 
@@ -52,7 +53,8 @@ describe('SettingsPanel', () => {
 
   it.each`
     item                        | prop                 | condition
-    ${SettingsButtons.Calendar} | ${'calendarToken'}   | ${'calendar token was not provided'}
+    ${SettingsButtons.CopyLink} | ${'calendarToken'}   | ${'calendar token was not provided'}
+    ${SettingsButtons.Download} | ${'calendarToken'}   | ${'calendar token was not provided'}
     ${SettingsButtons.Export}   | ${'isCourseManager'} | ${'user is not a course manager'}
     ${SettingsButtons.Copy}     | ${'isCourseManager'} | ${'user is not a course manager'}
   `(

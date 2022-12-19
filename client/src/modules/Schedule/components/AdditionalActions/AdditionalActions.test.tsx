@@ -26,7 +26,7 @@ describe('AdditionalActions', () => {
     fireEvent.click(moreBtn);
 
     const menuItems = await screen.findAllByRole('menuitem');
-    expect(menuItems).toHaveLength(3);
+    expect(menuItems).toHaveLength(4);
   });
 
   it('should call onCopyFromCourse when "Copy from" action was clicked', async () => {
@@ -40,12 +40,12 @@ describe('AdditionalActions', () => {
     expect(PROPS_MOCK.onCopyFromCourse).toHaveBeenCalled();
   });
 
-  it('should call onCalendarDownload when "iCal Link" action was clicked', async () => {
+  it('should call onCalendarCopyLink when "Copy iCal Link" action was clicked', async () => {
     render(<AdditionalActions {...PROPS_MOCK} />);
     const moreBtn = screen.getByRole('button', { name: /more/i });
     fireEvent.click(moreBtn);
 
-    const calendarBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Calendar, 'i') });
+    const calendarBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.CopyLink, 'i') });
     fireEvent.click(calendarBtn);
 
     expect(buildICalendarLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.calendarToken, PROPS_MOCK.timezone);
@@ -65,7 +65,8 @@ describe('AdditionalActions', () => {
 
 function generateMenuItems(): MenuItemType[] {
   return [
-    buildMenuItem(SettingsButtons.Calendar, <></>, true),
+    buildMenuItem(SettingsButtons.CopyLink, <></>, true),
+    buildMenuItem(SettingsButtons.Download, <></>, true),
     buildMenuItem(SettingsButtons.Export, <></>, true),
     buildMenuItem(SettingsButtons.Copy, <></>, true),
   ];
