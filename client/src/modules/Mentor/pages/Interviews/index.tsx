@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursePageProps } from 'services/models';
 import { InteviewCard } from './components/InterviewCard';
+import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 
 export function Interviews(props: CoursePageProps) {
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
@@ -22,11 +23,13 @@ export function Interviews(props: CoursePageProps) {
 
   return (
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
-      <div className="container">
-        {interviews.map(interview => (
-          <InteviewCard interview={interview} key={interview.id} />
-        ))}
-      </div>
+      <MentorOptionsProvider course={props.course} session={props.session}>
+        <div className="container">
+          {interviews.map(interview => (
+            <InteviewCard interview={interview} key={interview.id} />
+          ))}
+        </div>
+      </MentorOptionsProvider>
       <style jsx>{`
         .container {
           display: flex;
