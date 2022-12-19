@@ -255,6 +255,7 @@ export class CourseScheduleService {
       const { id, createdDate, updatedDate, ...newCourseEvent } = courseEvent;
       newCourseEvent.courseId = toCourseId;
       newCourseEvent.dateTime = this.adjustDate(newCourseEvent.dateTime, timeDiff);
+      newCourseEvent.endTime = this.adjustDate(newCourseEvent.endTime, timeDiff);
       newCourseEvent.date = null;
       newCourseEvent.time = null;
       await this.courseEventRepository.save(newCourseEvent);

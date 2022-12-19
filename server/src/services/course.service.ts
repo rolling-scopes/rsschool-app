@@ -697,6 +697,9 @@ function shiftDate(date: string, shift: number, format: string): string {
 function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
   delete event.id;
   event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  if (event.endTime) {
+    event.endTime = shiftDate(event.endTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  }
   event.courseId = courseId;
 }
 
