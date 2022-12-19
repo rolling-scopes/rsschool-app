@@ -74,15 +74,13 @@ export function Header({ title, courseName, username }: Props) {
         }}
       >
         <Space size={24}>
-          <Link href="/" legacyBehavior>
-            <a>
-              <img
-                style={{ height: 30 }}
-                className="header-logo"
-                src="/static/images/logo-rsschool3.png"
-                alt="Rolling Scopes School Logo"
-              />
-            </a>
+          <Link href="/">
+            <img
+              style={{ height: 30 }}
+              className="header-logo"
+              src="/static/images/logo-rsschool3.png"
+              alt="Rolling Scopes School Logo"
+            />
           </Link>
           <SolidarityUkraine />
         </Space>

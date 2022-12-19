@@ -1,6 +1,5 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined, SearchOutlined, ToolOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
-import SubMenu from 'antd/lib/menu/SubMenu';
+import { Layout, Menu, MenuProps } from 'antd';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Link from 'next/link';
@@ -10,10 +9,28 @@ import { Course } from 'services/models';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 const { Sider } = Layout;
 
+type MenuItem = Required<MenuProps>['items'][number];
+
 type Props = { session: Session; courses: Course[]; activeCourse?: Course | null };
 
 enum LocalStorage {
   IsSiderCollapsed = 'isSiderCollapsed',
+}
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: 'group',
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
 }
 
 export function AdminSider(props: Props) {
@@ -32,35 +49,55 @@ export function AdminSider(props: Props) {
     style: { fontSize: '20px', display: 'block', lineHeight: '30px', padding: '20px 32px' },
   };
 
+  const getMenuItems = () => {
+    const menuItems: MenuItem[] = [];
+    if (adminMenuItems.length) {
+      menuItems.push(
+        getItem(
+          'Admin area',
+          'adminArea',
+          <SearchOutlined />,
+          adminMenuItems.map(item =>
+            getItem(
+              <Menu.Item key={item.key}>
+                <Link prefetch={false} href={item.href}>
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              </Menu.Item>,
+              item.key,
+            ),
+          ),
+        ),
+      );
+    }
+    if (courseManagementMenuItems.length) {
+      menuItems.push(
+        getItem(
+          'Course management',
+          'courseManagement',
+          <ToolOutlined />,
+          adminMenuItems.map(item =>
+            getItem(
+              <Menu.Item key={item.key}>
+                <Link prefetch={false} href={item.href}>
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              </Menu.Item>,
+              item.key,
+            ),
+          ),
+        ),
+      );
+    }
+    return menuItems;
+  };
+
   return (
     <Sider trigger={null} collapsible collapsed={isSiderCollapsed} theme="light" width={220}>
       {isSiderCollapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
-      <Menu mode="inline">
-        {adminMenuItems.length ? (
-          <SubMenu key="adminArea" icon={<SearchOutlined />} title="Admin area">
-            {adminMenuItems.map(item => (
-              <Menu.Item key={item.key}>
-                <Link prefetch={false} href={item.href}>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              </Menu.Item>
-            ))}
-          </SubMenu>
-        ) : null}
-        {courseManagementMenuItems.length ? (
-          <SubMenu key="courseManagement" icon={<ToolOutlined />} title="Course management">
-            {courseManagementMenuItems.map(item => (
-              <Menu.Item key={item.key}>
-                <Link prefetch={false} href={item.href}>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              </Menu.Item>
-            ))}
-          </SubMenu>
-        ) : null}
-      </Menu>
+      <Menu mode="inline" items={getMenuItems()}></Menu>
     </Sider>
   );
 }
