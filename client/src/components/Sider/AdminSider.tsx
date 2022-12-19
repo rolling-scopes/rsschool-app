@@ -77,7 +77,7 @@ export function AdminSider(props: Props) {
           'Course management',
           'courseManagement',
           <ToolOutlined />,
-          adminMenuItems.map(item =>
+          courseManagementMenuItems.map(item =>
             getItem(
               <Menu.Item key={item.key}>
                 <Link prefetch={false} href={item.href}>
