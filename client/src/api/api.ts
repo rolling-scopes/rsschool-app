@@ -1619,6 +1619,31 @@ export interface CreateUserGroupDto {
 /**
  * 
  * @export
+ * @interface CriteriaDto
+ */
+export interface CriteriaDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CriteriaDto
+     */
+    'max': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CriteriaDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CriteriaDto
+     */
+    'text': string;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckPairDto
  */
 export interface CrossCheckPairDto {
@@ -1820,6 +1845,66 @@ export interface Education {
      */
     'graduationYear': number;
 }
+/**
+ * 
+ * @export
+ * @interface EventDto
+ */
+export interface EventDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventDto
+     */
+    'descriptionUrl': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventDto
+     */
+    'description': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventDto
+     */
+    'type': EventDtoTypeEnum;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof EventDto
+     */
+    'discipline': IdNameDto | null;
+}
+
+export const EventDtoTypeEnum = {
+    LectureOnline: 'lecture_online',
+    LectureOffline: 'lecture_offline',
+    LectureMixed: 'lecture_mixed',
+    LectureSelfStudy: 'lecture_self_study',
+    Warmup: 'warmup',
+    Info: 'info',
+    Workshop: 'workshop',
+    Meetup: 'meetup',
+    CrossCheckDeadline: 'cross_check_deadline',
+    Webinar: 'webinar',
+    Special: 'special'
+} as const;
+
+export type EventDtoTypeEnum = typeof EventDtoTypeEnum[keyof typeof EventDtoTypeEnum];
+
 /**
  * 
  * @export
@@ -3639,6 +3724,19 @@ export const StudentFeedbackDtoEnglishLevelEnum = {
 
 export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
+/**
+ * 
+ * @export
+ * @interface TaskCriteriaDto
+ */
+export interface TaskCriteriaDto {
+    /**
+     * 
+     * @type {Array<CriteriaDto>}
+     * @memberof TaskCriteriaDto
+     */
+    'criteria': Array<CriteriaDto>;
+}
 /**
  * 
  * @export
@@ -7572,6 +7670,251 @@ export class CoursesTasksApi extends BaseAPI {
 
 
 /**
+ * CriteriaApi - axios parameter creator
+ * @export
+ */
+export const CriteriaApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskCriteria: async (taskId: number, taskCriteriaDto: TaskCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('createTaskCriteria', 'taskId', taskId)
+            // verify required parameter 'taskCriteriaDto' is not null or undefined
+            assertParamExists('createTaskCriteria', 'taskCriteriaDto', taskCriteriaDto)
+            const localVarPath = `/task/{taskId}/criteria`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCriteriaDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTaskCriteria: async (taskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getTaskCriteria', 'taskId', taskId)
+            const localVarPath = `/task/{taskId}/criteria`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskCriteria: async (taskId: number, taskCriteriaDto: TaskCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('updateTaskCriteria', 'taskId', taskId)
+            // verify required parameter 'taskCriteriaDto' is not null or undefined
+            assertParamExists('updateTaskCriteria', 'taskCriteriaDto', taskCriteriaDto)
+            const localVarPath = `/task/{taskId}/criteria`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCriteriaDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CriteriaApi - functional programming interface
+ * @export
+ */
+export const CriteriaApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CriteriaApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCriteriaDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskCriteria(taskId, taskCriteriaDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTaskCriteria(taskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCriteriaDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskCriteria(taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCriteriaDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskCriteria(taskId, taskCriteriaDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CriteriaApi - factory interface
+ * @export
+ */
+export const CriteriaApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CriteriaApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: any): AxiosPromise<TaskCriteriaDto> {
+            return localVarFp.createTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTaskCriteria(taskId: number, options?: any): AxiosPromise<TaskCriteriaDto> {
+            return localVarFp.getTaskCriteria(taskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {TaskCriteriaDto} taskCriteriaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: any): AxiosPromise<TaskCriteriaDto> {
+            return localVarFp.updateTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CriteriaApi - object-oriented interface
+ * @export
+ * @class CriteriaApi
+ * @extends {BaseAPI}
+ */
+export class CriteriaApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} taskId 
+     * @param {TaskCriteriaDto} taskCriteriaDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CriteriaApi
+     */
+    public createTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig) {
+        return CriteriaApiFp(this.configuration).createTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} taskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CriteriaApi
+     */
+    public getTaskCriteria(taskId: number, options?: AxiosRequestConfig) {
+        return CriteriaApiFp(this.configuration).getTaskCriteria(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} taskId 
+     * @param {TaskCriteriaDto} taskCriteriaDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CriteriaApi
+     */
+    public updateTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig) {
+        return CriteriaApiFp(this.configuration).updateTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * DisciplinesApi - axios parameter creator
  * @export
  */
@@ -8155,6 +8498,100 @@ export class DiscordServersApi extends BaseAPI {
      */
     public updateDiscordServer(id: number, updateDiscordServerDto: UpdateDiscordServerDto, options?: AxiosRequestConfig) {
         return DiscordServersApiFp(this.configuration).updateDiscordServer(id, updateDiscordServerDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * EventsApi - axios parameter creator
+ * @export
+ */
+export const EventsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEvents: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EventsApi - functional programming interface
+ * @export
+ */
+export const EventsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getEvents(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EventDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEvents(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * EventsApi - factory interface
+ * @export
+ */
+export const EventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EventsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEvents(options?: any): AxiosPromise<Array<EventDto>> {
+            return localVarFp.getEvents(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EventsApi - object-oriented interface
+ * @export
+ * @class EventsApi
+ * @extends {BaseAPI}
+ */
+export class EventsApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventsApi
+     */
+    public getEvents(options?: AxiosRequestConfig) {
+        return EventsApiFp(this.configuration).getEvents(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

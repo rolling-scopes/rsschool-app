@@ -13,11 +13,6 @@ export interface Event {
   disciplineId: number;
 }
 export class EventService {
-  async getEvents() {
-    const result = await axios.get<{ data: Event[] }>(`/api/events`);
-    return result.data.data.sort((a, b) => b.id - a.id);
-  }
-
   async getEvent(id: string) {
     const result = await axios.get<{ data: Event }>(`/api/event/${id}`);
     return result.data.data;
