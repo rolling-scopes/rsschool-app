@@ -123,7 +123,7 @@ const links: LinkData[] = [
   {
     name: 'Auto-Test',
     icon: <PlayCircleTwoTone twoToneColor="#7f00ff" />,
-    getUrl: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
+    getUrl: (course: Course) => `/course/student/new-auto-test?course=${course.alias}`,
     access: some(isActiveStudent, isCourseManager),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
