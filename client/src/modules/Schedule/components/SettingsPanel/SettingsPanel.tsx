@@ -1,5 +1,11 @@
 import { Button, Col, Row } from 'antd';
-import { PlusOutlined, CalendarOutlined, FileExcelOutlined, CopyOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  CalendarOutlined,
+  CloudDownloadOutlined,
+  FileExcelOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useMemo } from 'react';
@@ -23,8 +29,9 @@ export interface SettingsPanelProps {
 export enum SettingsButtons {
   Event = 'Event',
   Task = 'Task',
-  Calendar = 'iCal Link',
-  Export = 'Export',
+  CopyLink = 'Copy iCal Link',
+  Download = 'Download iCal',
+  Export = 'Export Excel',
   Copy = 'Copy from',
   More = 'More',
 }
@@ -43,7 +50,8 @@ export function SettingsPanel({
   const additionalMenuItems = useMemo(
     () =>
       [
-        buildMenuItem(SettingsButtons.Calendar, <CalendarOutlined />, !!calendarToken),
+        buildMenuItem(SettingsButtons.CopyLink, <CalendarOutlined />, !!calendarToken),
+        buildMenuItem(SettingsButtons.Download, <CloudDownloadOutlined />, !!calendarToken),
         buildMenuItem(SettingsButtons.Export, <FileExcelOutlined />, isCourseManager),
         buildMenuItem(SettingsButtons.Copy, <CopyOutlined />, isCourseManager),
       ].filter(Boolean),
