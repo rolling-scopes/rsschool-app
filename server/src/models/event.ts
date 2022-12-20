@@ -17,13 +17,13 @@ export class Event {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: string;
+  createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: string;
+  updatedDate: Date;
 
   @DeleteDateColumn()
-  deletedDate: string;
+  deletedDate: Date;
 
   @Column()
   name: string;
