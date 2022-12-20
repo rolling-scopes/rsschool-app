@@ -17,16 +17,16 @@ export class EventDto {
   public id: number;
 
   @ApiProperty()
-  name: string;
+  public name: string;
 
   @ApiProperty({ nullable: true, type: String })
-  descriptionUrl: string | null;
+  public descriptionUrl: string | null;
 
   @ApiProperty({ nullable: true, type: String })
-  description: string | null;
+  public description: string | null;
 
   @ApiProperty({ enum: EventType })
-  type: EventType;
+  public type: EventType;
 
   @ApiProperty({ type: IdNameDto, nullable: true })
   public discipline: IdNameDto | null;
