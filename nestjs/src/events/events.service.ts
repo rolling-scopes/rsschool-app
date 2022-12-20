@@ -13,4 +13,8 @@ export class EventsService {
   public async findAll() {
     return this.repository.find({ order: { updatedDate: 'DESC' }, relations: ['discipline'] });
   }
+
+  public async remove(id: number) {
+    await this.repository.softDelete(id);
+  }
 }

@@ -49,7 +49,7 @@ function Page(props: Props) {
 
   const handleDeleteItem = async (id: number) => {
     try {
-      await eventService.deleteEvent(id);
+      await eventsApi.deleteEvent(id);
       const { data } = await eventsApi.getEvents();
       setData(data);
     } catch {

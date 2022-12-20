@@ -35,6 +35,7 @@ import { CourseTask1662275601017 } from './1662275601017-CourseTask';
 import { CourseEvent1664183799115 } from './1664183799115-CourseEvent';
 import { TaskCriteria1666348642811 } from './1666348642811-TaskCriteria';
 import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionResult';
+import { Event1671565186190 } from './1671565186190-Event';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -74,4 +75,5 @@ export const migrations = [
   CourseEvent1664183799115,
   TaskCriteria1666348642811,
   TaskSolutionResult1666621080327,
+  Event1671565186190,
 ];

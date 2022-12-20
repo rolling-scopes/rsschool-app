@@ -1505,6 +1505,15 @@
         },
         "tags": ["events"]
       }
+    },
+    "/events/{id}": {
+      "delete": {
+        "operationId": "deleteEvent",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["events"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },

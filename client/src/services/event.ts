@@ -27,9 +27,4 @@ export class EventService {
     const result = await axios.post<{ data: Event }>(`/api/event`, data);
     return result.data.data;
   }
-
-  async deleteEvent(id: number) {
-    const result = await axios.delete<{ data: Event }>(`/api/event/${id}`);
-    return result.data.data;
-  }
 }

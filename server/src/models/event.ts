@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  DeleteDateColumn,
 } from 'typeorm';
 import { CourseEvent } from './courseEvent';
 import { Discipline } from './discipline';
@@ -16,10 +17,13 @@ export class Event {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
+
+  @DeleteDateColumn()
+  deletedDate: string;
 
   @Column()
   name: string;
