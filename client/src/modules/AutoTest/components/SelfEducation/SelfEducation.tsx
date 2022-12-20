@@ -16,9 +16,12 @@ function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQu
 }
 
 function SelfEducation({ courseTask }: SelfEducationProps) {
-  const { questions } = courseTask.publicAttributes || {};
+  const { questions, numberOfQuestions } = courseTask.publicAttributes || {};
 
-  const randomQuestions = useMemo(() => getRandomQuestions(questions), [questions?.length]);
+  const randomQuestions = useMemo(
+    () => (getRandomQuestions(questions) || []).slice(0, numberOfQuestions),
+    [questions?.length, numberOfQuestions],
+  );
 
   return (
     <>
