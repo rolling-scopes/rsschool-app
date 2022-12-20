@@ -9,15 +9,12 @@ import { EventDto } from './dto';
 @UseGuards(DefaultGuard, RoleGuard)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
+
   @Get('/')
   @ApiOperation({ operationId: 'getEvents' })
   @ApiOkResponse({ type: [EventDto] })
   public async findAll() {
-    try {
-      const events = await this.eventsService.findAll();
-      return events.map(event => new EventDto(event));
-    } catch (error) {
-      console.log(error);
-    }
+    const events = await this.eventsService.findAll();
+    return events.map(event => new EventDto(event));
   }
 }

@@ -10,7 +10,7 @@ export class EventsService {
     private repository: Repository<Event>,
   ) {}
 
-  findAll() {
+  public async findAll() {
     return this.repository.find({ order: { updatedDate: 'DESC' }, relations: ['discipline'] });
   }
 }
