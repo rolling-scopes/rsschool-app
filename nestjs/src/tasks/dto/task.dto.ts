@@ -3,20 +3,20 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IdNameDto } from 'src/core/dto';
 
 export class TaskDto {
-  constructor(discipline: Task) {
-    this.id = discipline.id;
-    this.name = discipline.name;
-    this.descriptionUrl = discipline.descriptionUrl;
-    this.description = discipline.description;
-    this.githubRepoName = discipline.githubRepoName;
-    this.sourceGithubRepoUrl = discipline.sourceGithubRepoUrl;
-    this.discipline = discipline.discipline ? new IdNameDto(discipline) : null;
-    this.githubPrRequired = discipline.githubPrRequired;
-    this.tags = discipline.tags;
-    this.skills = discipline.skills;
-    this.attributes = discipline.attributes;
-    this.createdDate = discipline.createdDate;
-    this.updatedDate = discipline.updatedDate;
+  constructor(task: Task) {
+    this.id = task.id;
+    this.name = task.name;
+    this.descriptionUrl = task.descriptionUrl;
+    this.description = task.description;
+    this.githubRepoName = task.githubRepoName;
+    this.sourceGithubRepoUrl = task.sourceGithubRepoUrl;
+    this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
+    this.githubPrRequired = task.githubPrRequired;
+    this.tags = task.tags;
+    this.skills = task.skills;
+    this.attributes = task.attributes;
+    this.createdDate = task.createdDate;
+    this.updatedDate = task.updatedDate;
   }
 
   @ApiProperty({ enum: TaskType })
