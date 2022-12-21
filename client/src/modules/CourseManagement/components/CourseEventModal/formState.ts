@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { CreateCourseEventDto } from 'api';
+import { CreateCourseEventDto, EventDto } from 'api';
 import { omit } from 'lodash';
 import moment from 'moment';
 import { CourseEvent, CourseService } from 'services/course';
@@ -20,7 +20,7 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
   return record;
 };
 
-const submitTemplateEvent = async (values: any, eventTemplate?: Event) => {
+const submitTemplateEvent = async (values: any, eventTemplate?: EventDto) => {
   const templateEventData = {
     name: eventTemplate ? eventTemplate?.name : values.event,
     type: values.type,
@@ -47,12 +47,12 @@ const submitTemplateEvent = async (values: any, eventTemplate?: Event) => {
 
 export async function submitEvent(
   values: any,
-  eventTemplates: Event[],
+  eventTemplates: EventDto[],
   courseId: number,
   editableRecord?: Partial<CourseEvent>,
 ): Promise<void> {
   const currentEventTemplate = editableRecord?.event ?? eventTemplates.find(el => el.id === +values.event);
-  const eventTemplateId = await submitTemplateEvent(values, currentEventTemplate);
+  const eventTemplateId = await submitTemplateEvent(values, currentEventTemplate as EventDto);
   if (!eventTemplateId) return;
   const serviceCourse = new CourseService(courseId);
   const record = createRecord(eventTemplateId, values);

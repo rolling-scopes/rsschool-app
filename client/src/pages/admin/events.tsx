@@ -10,23 +10,25 @@ import { useAsync } from 'react-use';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { DisciplineDto, DisciplinesApi } from 'api';
+import { DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
+import { ColumnsType } from 'antd/lib/table';
 
 const { Content } = Layout;
 
 type Props = { session: Session; courses: Course[] };
 const eventService = new EventService();
+const eventsApi = new EventsApi();
 const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as Event[]);
+  const [data, setData] = useState<EventDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
-  const [modalData, setModalData] = useState(null as Partial<Event> | null);
+  const [modalData, setModalData] = useState<Partial<EventDto> | null>(null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = async () => {
-    const [events, { data: disciplines }] = await Promise.all([
-      eventService.getEvents(),
+    const [{ data: events }, { data: disciplines }] = await Promise.all([
+      eventsApi.getEvents(),
       disciplinesApi.getDisciplines(),
     ]);
     setData(events);
@@ -40,15 +42,15 @@ function Page(props: Props) {
     setModalAction('create');
   };
 
-  const handleEditItem = (record: Event) => {
+  const handleEditItem = (record: EventDto) => {
     setModalData(record);
     setModalAction('update');
   };
 
   const handleDeleteItem = async (id: number) => {
     try {
-      await eventService.deleteEvent(id);
-      const data = await eventService.getEvents();
+      await eventsApi.deleteEvent(id);
+      const { data } = await eventsApi.getEvents();
       setData(data);
     } catch {
       message.error('Failed to delete item. Please try later.');
@@ -129,7 +131,7 @@ function Page(props: Props) {
           dataSource={data}
           pagination={{ pageSize: 100 }}
           rowKey="id"
-          columns={getColumns(handleEditItem, handleDeleteItem)}
+          columns={getColumns(handleEditItem, handleDeleteItem) as ColumnsType<EventDto>}
         />
       </Content>
       {renderModal()}

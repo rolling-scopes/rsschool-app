@@ -27,6 +27,7 @@ import { UsersNotificationsModule } from './users-notifications';
 import { GratitudesModule } from './gratitudes';
 import { CloudApiModule } from './cloud-api/cloud-api.module';
 import { TaskCriteriaModule } from './task/task-criteria/task-criteria.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { TaskCriteriaModule } from './task/task-criteria/task-criteria.module';
     GratitudesModule,
     CloudApiModule,
     TaskCriteriaModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
