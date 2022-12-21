@@ -15,6 +15,6 @@ export class EventsService {
   }
 
   public async remove(id: number) {
-    await this.repository.softDelete(id);
+    await this.repository.delete(id);
   }
 }
