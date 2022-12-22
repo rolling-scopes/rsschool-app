@@ -93,7 +93,12 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item required name="disciplineId" label="Discipline">
+        <Form.Item
+          required
+          name="disciplineId"
+          label="Discipline"
+          rules={[{ required: true, message: 'Please select a discipline' }]}
+        >
           <Select>
             {disciplines.map(({ id, name }) => (
               <Select.Option key={id} value={id}>

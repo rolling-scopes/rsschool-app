@@ -14,7 +14,7 @@ export class CreateEventDto {
   public type: EventType;
 
   @IsNumber()
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty()
   public disciplineId: number;
 

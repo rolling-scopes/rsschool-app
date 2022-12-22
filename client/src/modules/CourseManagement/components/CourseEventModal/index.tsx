@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { EventsApi } from 'api';
+import { DisciplinesApi, EventsApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
@@ -24,6 +24,7 @@ type Props = {
 };
 
 const eventsApi = new EventsApi();
+const disciplineApi = new DisciplinesApi();
 const userService = new UserService();
 
 export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) {
@@ -33,23 +34,34 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
     return userService.searchUser(searchText);
   };
 
-  const { loading, value: events = [] } = useAsync(async () => (await eventsApi.getEvents()).data, []);
+  const loadData = async () => {
+    const [{ data: events = [] }, { data: disciplines = [] }] = await Promise.all([
+      eventsApi.getEvents(),
+      disciplineApi.getDisciplines(),
+    ]);
+    return {
+      events,
+      disciplines,
+    };
+  };
+
+  const { loading, value: dataValue = { events: [], disciplines: [] } } = useAsync(loadData, []);
 
   const filterOption = useCallback(
     (input, option) => {
       if (!input) {
         return false;
       }
-      const event = events.find(e => {
+      const event = dataValue.events.find(e => {
         return e.id === +option?.value;
       });
       return event?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
-    [events],
+    [dataValue.events],
   );
 
   const handleModalSubmit = async (values: any) => {
-    await submitEvent(values, events, courseId, data);
+    await submitEvent(values, dataValue?.events, courseId, data);
     onSubmit();
   };
 
@@ -65,7 +77,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
   const onEventChange = (value: any) => {
     const currentEvent = value.at(-1);
     form.setFieldValue('event', currentEvent);
-    const currentEventTemplate = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
+    const currentEventTemplate = dataValue.events.find(el => el.id === +currentEvent && el.name !== currentEvent);
     form.setFieldValue('description', currentEventTemplate?.description);
     form.setFieldValue('descriptionUrl', currentEventTemplate?.descriptionUrl);
     form.setFieldValue('type', currentEventTemplate?.type);
@@ -93,7 +105,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
             placeholder="Please select a event"
             onChange={onEventChange}
           >
-            {events.map(event => (
+            {dataValue.events.map(event => (
               <Option key={event.id}>{event.name}</Option>
             ))}
           </Select>
@@ -102,6 +114,20 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
         <Select>{entityTypes}</Select>
+      </Form.Item>
+      <Form.Item
+        required
+        name="disciplineId"
+        label="Discipline"
+        rules={[{ required: true, message: 'Please select a discipline' }]}
+      >
+        <Select>
+          {dataValue.disciplines.map(({ id, name }) => (
+            <Select.Option key={id} value={id}>
+              {name}
+            </Select.Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item name="special" label="Special">
         <Select mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>

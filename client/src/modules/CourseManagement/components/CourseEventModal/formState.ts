@@ -25,6 +25,7 @@ const submitTemplateEvent = async (values: any, eventTemplate?: EventDto) => {
     type: values.type,
     descriptionUrl: values.descriptionUrl,
     description: values.description,
+    disciplineId: values.disciplineId,
   } as CreateEventDto;
 
   if (!eventTemplate) {
