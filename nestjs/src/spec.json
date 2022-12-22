@@ -1504,9 +1504,41 @@
           }
         },
         "tags": ["events"]
+      },
+      "post": {
+        "operationId": "createEvent",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateEventDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
+          }
+        },
+        "tags": ["events"]
       }
     },
     "/events/{id}": {
+      "patch": {
+        "operationId": "updateEvent",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateEventDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
+          }
+        },
+        "tags": ["events"]
+      },
       "delete": {
         "operationId": "deleteEvent",
         "summary": "",
@@ -2990,6 +3022,28 @@
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
         },
         "required": ["id", "name", "descriptionUrl", "description", "type", "discipline"]
+      },
+      "CreateEventDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
+      },
+      "UpdateEventDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
       }
     }
   }
