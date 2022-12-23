@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { EyeInvisibleFilled, EyeFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row } from 'antd';
-import { CourseTaskSelect } from 'components/Forms';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
@@ -53,16 +53,21 @@ function Page(props: CoursePageProps) {
   ] = useCriteriaState();
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const taskServise = new TaskService();
+  const taskService = new TaskService();
 
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
-    const taskCriteriaData = await taskServise.getCriteriaForCourseTask(criteriaId as number);
+    setState({ loading: true, data: [] });
+
+    const [taskCriteriaData, result] = await Promise.all([
+      taskService.getCriteriaForCourseTask(criteriaId as number),
+      courseService.getTaskSolutionResult(githubId, courseTaskId as number),
+    ]);
+
     setCriteriaData(taskCriteriaData ?? []);
     resetCriterias();
-    setState({ loading: true, data: [] });
-    const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
+    form.resetFields(['comment']);
 
     if (!result) {
       return setState({ loading: false, data: [] });
@@ -89,10 +94,13 @@ function Page(props: CoursePageProps) {
       };
     });
 
-    setState({ loading: false, data: solutionReviews ?? [] });
+    const activeSolutionReview = solutionReviews[0];
+
+    form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
     if (result !== null) {
-      loadInitialCriteria(solutionReviews[0]);
+      loadInitialCriteria(activeSolutionReview);
     }
+    setState({ loading: false, data: solutionReviews ?? [] });
   };
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
@@ -133,7 +141,7 @@ function Page(props: CoursePageProps) {
     setCountStar([]);
     setComment([]);
     setPenalty([]);
-    setScore(0);
+    setScore(undefined);
   };
 
   const handleSubmit = async (values: any) => {
@@ -154,7 +162,7 @@ function Page(props: CoursePageProps) {
         }
       });
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
-        score,
+        score: values.score,
         comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
@@ -190,7 +198,7 @@ function Page(props: CoursePageProps) {
     setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
-    form.resetFields(['githubId']);
+    form.resetFields(['score', 'comment', 'githubId']);
   };
 
   const handleStudentChange = (githubId: string) => {
@@ -222,8 +230,6 @@ function Page(props: CoursePageProps) {
     return criteriaData;
   }
 
-  const maxScoreForTask = courseTasks.find(item => item.id === courseTaskId)?.maxScore as number;
-
   return (
     <PageLayout
       loading={loading}
@@ -254,15 +260,14 @@ function Page(props: CoursePageProps) {
                 countStar={countStar}
                 setCountStar={setCountStar}
                 criteriaData={criteriaData}
-                setTotalPoints={setScore}
                 totalPoints={score}
                 setPenalty={setPenalty}
                 penalty={penalty}
                 criteriaComment={criteriaComment}
                 setComment={setComment}
-                maxScoreForTask={maxScoreForTask}
               />
             )}
+            <ScoreInput courseTask={courseTask} />
             <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>

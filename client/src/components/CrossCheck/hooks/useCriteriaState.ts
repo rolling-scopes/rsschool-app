@@ -5,7 +5,7 @@ import { CrossCheckCriteriaData, CommentState, CountState } from 'components/Cro
 interface CriteriaSetState {
   setCountStar: (newCount: CountState[]) => void;
   setCriteriaData: (newCriteria: CrossCheckCriteriaData[]) => void;
-  setScore: (newPoint: number) => void;
+  setScore: (newPoint?: number) => void;
   setPenalty: (newPenalty: CountState[]) => void;
   setComment: (newComment: CommentState[]) => void;
 }
@@ -13,7 +13,7 @@ interface CriteriaSetState {
 interface CriteriaState {
   countStar: CountState[];
   criteriaData: CrossCheckCriteriaData[];
-  score: number;
+  score?: number;
   penalty: CountState[];
   criteriaComment: CommentState[];
 }
@@ -22,7 +22,7 @@ export function useCriteriaState(): [CriteriaState, CriteriaSetState] {
   const [countStar, setCountStar] = useState<CountState[]>([]);
   const [penalty, setPenalty] = useState<CountState[]>([]);
   const [criteriaData, setCriteriaData] = useState([] as CrossCheckCriteriaData[]);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState<number | undefined>(undefined);
   const [criteriaComment, setComment] = useState<CommentState[]>([]);
 
   return [
