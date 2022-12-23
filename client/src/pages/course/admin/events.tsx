@@ -8,10 +8,10 @@ import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { CourseEvent, CourseService } from 'services/course';
-import { Event, EventService } from 'services/event';
 import { CoursePageProps } from 'services/models';
 import { TIMEZONES } from '../../../configs/timezones';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
+import { EventDto, EventsApi } from 'api';
 
 type Props = CoursePageProps;
 
@@ -19,16 +19,18 @@ const timeZoneRenderer = (timeZone: string) => (value: string) => {
   return value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 };
 
+const eventsApi = new EventsApi();
+
 function Page(props: Props) {
   const courseId = props.course.id;
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [modalData, setModalData] = useState<Partial<CourseEvent> | null>(null);
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [data, setData] = useState([] as CourseEvent[]);
-  const [events, setEvents] = useState([] as Event[]);
+  const [events, setEvents] = useState<EventDto[]>([]);
 
   const { loading } = useAsync(async () => {
-    const [data, events] = await Promise.all([service.getCourseEvents(), new EventService().getEvents()]);
+    const [data, { data: events }] = await Promise.all([service.getCourseEvents(), eventsApi.getEvents()]);
     setData(data);
     setEvents(events);
   }, [courseId]);

@@ -23,11 +23,13 @@ export function CourseSelector(props: Props) {
       defaultValue={course.id}
       onChange={onChangeCourse}
     >
-      {courses.map(course => (
-        <Select.Option style={getStatusCss(course)} key={course.id} value={course.id}>
-          <CourseIcon course={course} /> {course.name} {getStatus(course)}
-        </Select.Option>
-      ))}
+      {[...courses]
+        .sort((a, b) => Number(a.completed) - Number(b.completed))
+        .map(course => (
+          <Select.Option style={getStatusCss(course)} key={course.id} value={course.id}>
+            <CourseIcon course={course} /> {course.name} {getStatus(course)}
+          </Select.Option>
+        ))}
     </Select>
   );
 }

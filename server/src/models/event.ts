@@ -16,10 +16,10 @@ export class Event {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: Date;
 
   @Column()
   name: string;

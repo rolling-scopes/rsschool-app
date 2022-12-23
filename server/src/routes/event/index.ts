@@ -2,7 +2,7 @@ import { BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { Event } from '../../models';
-import { createGetRoute, createPostRoute, createPutRoute, createDeleteRoute } from '../common';
+import { createGetRoute, createPostRoute, createPutRoute } from '../common';
 import { anyCourseManagerGuard } from '../guards';
 import { setResponse } from '../utils';
 
@@ -22,7 +22,6 @@ export function lectureRoute(logger: ILogger) {
   router.get('/:id', anyCourseManagerGuard, validateTaskId, createGetRoute(Event, logger));
   router.post('/', anyCourseManagerGuard, createPostRoute(Event, logger));
   router.put('/:id', anyCourseManagerGuard, validateTaskId, createPutRoute(Event, logger));
-  router.delete('/:id', anyCourseManagerGuard, validateTaskId, createDeleteRoute(Event, logger));
 
   return router;
 }

@@ -1,5 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { EventsApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
@@ -8,7 +9,6 @@ import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
 import { useCallback } from 'react';
 import { useAsync } from 'react-use';
 import { CourseEvent } from 'services/course';
-import { Event, EventService } from 'services/event';
 import { UserService } from 'services/user';
 import { urlPattern } from 'services/validators';
 import { getInitialValues, submitEvent } from './formState';
@@ -23,7 +23,7 @@ type Props = {
   courseId: number;
 };
 
-const eventService = new EventService();
+const eventsApi = new EventsApi();
 const userService = new UserService();
 
 export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) {
@@ -33,14 +33,14 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
     return userService.searchUser(searchText);
   };
 
-  const { loading, value: events = [] } = useAsync(() => eventService.getEvents(), []);
+  const { loading, value: events = [] } = useAsync(async () => (await eventsApi.getEvents()).data, []);
 
   const filterOption = useCallback(
     (input, option) => {
       if (!input) {
         return false;
       }
-      const event: Event | undefined = events.find(e => {
+      const event = events.find(e => {
         return e.id === +option?.value;
       });
       return event?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
@@ -93,7 +93,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
             placeholder="Please select a event"
             onChange={onEventChange}
           >
-            {events.map((event: Event) => (
+            {events.map(event => (
               <Option key={event.id}>{event.name}</Option>
             ))}
           </Select>
