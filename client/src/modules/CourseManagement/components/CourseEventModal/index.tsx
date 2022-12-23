@@ -45,23 +45,22 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
     };
   };
 
-  const { loading, value: dataValue = { events: [], disciplines: [] } } = useAsync(loadData, []);
-
+  const { loading, value: { events = [], disciplines = [] } = {} } = useAsync(loadData, []);
   const filterOption = useCallback(
     (input, option) => {
       if (!input) {
         return false;
       }
-      const event = dataValue.events.find(e => {
+      const event = events.find(e => {
         return e.id === +option?.value;
       });
       return event?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
-    [dataValue.events],
+    [events],
   );
 
   const handleModalSubmit = async (values: any) => {
-    await submitEvent(values, dataValue?.events, courseId, data);
+    await submitEvent(values, events, courseId, data);
     onSubmit();
   };
 
@@ -77,7 +76,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
   const onEventChange = (value: any) => {
     const currentEvent = value.at(-1);
     form.setFieldValue('event', currentEvent);
-    const currentEventTemplate = dataValue.events.find(el => el.id === +currentEvent && el.name !== currentEvent);
+    const currentEventTemplate = events.find(el => el.id === +currentEvent && el.name !== currentEvent);
     form.setFieldValue('description', currentEventTemplate?.description);
     form.setFieldValue('descriptionUrl', currentEventTemplate?.descriptionUrl);
     form.setFieldValue('type', currentEventTemplate?.type);
@@ -105,7 +104,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
             placeholder="Please select a event"
             onChange={onEventChange}
           >
-            {dataValue.events.map(event => (
+            {events.map(event => (
               <Option key={event.id}>{event.name}</Option>
             ))}
           </Select>
@@ -122,7 +121,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         rules={[{ required: true, message: 'Please select a discipline' }]}
       >
         <Select>
-          {dataValue.disciplines.map(({ id, name }) => (
+          {disciplines.map(({ id, name }) => (
             <Select.Option key={id} value={id}>
               {name}
             </Select.Option>
