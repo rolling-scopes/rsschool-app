@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class TeamDistribution1671889279986 implements MigrationInterface {
-  name = 'TeamDistribution1671889279986';
+export class TeamDistribution1671890959118 implements MigrationInterface {
+  name = 'TeamDistribution1671890959118';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "distributionStartDate" TIMESTAMP WITH TIME ZONE, "distributionEndDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "distributionStartDate" TIMESTAMP WITH TIME ZONE, "distributionEndDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, "minStudents" integer, "maxStudents" integer, CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(`CREATE INDEX "IDX_951e2b89c3a2b4554516409cfb" ON "team_distribution" ("courseId") `);
     await queryRunner.query(

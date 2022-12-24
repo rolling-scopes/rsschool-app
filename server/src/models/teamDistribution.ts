@@ -45,4 +45,10 @@ export class TeamDistribution {
 
   @ManyToMany(_ => Student, student => student.teamDistribution)
   students: Student[];
+
+  @Column({ nullable: true })
+  minStudents: number;
+
+  @Column({ nullable: true })
+  maxStudents: number;
 }
