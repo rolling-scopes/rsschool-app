@@ -9,6 +9,8 @@ import {
   OneToOne,
   Index,
   Unique,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
@@ -19,6 +21,7 @@ import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './student-feedback';
 import { StageInterview } from './stageInterview';
+import { TeamDistribution } from './teamDistribution';
 
 @Entity()
 @Unique(['courseId', 'userId'])
@@ -133,4 +136,8 @@ export class Student {
 
   @Column({ nullable: true, default: true })
   mentoring: boolean;
+
+  @ManyToMany(_ => TeamDistribution, teamDistribution => teamDistribution.students)
+  @JoinTable()
+  teamDistribution: TeamDistribution[];
 }

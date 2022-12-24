@@ -15,6 +15,7 @@ import { TaskResult } from './taskResult';
 import { User } from './user';
 import { Course } from './course';
 import { TaskSolution } from './taskSolution';
+import { TeamDistribution } from './teamDistribution';
 
 export enum Checker {
   AutoTest = 'auto-test',
@@ -118,4 +119,8 @@ export class CourseTask {
 
   @Column({ type: 'simple-json', nullable: true })
   validations: Record<CourseTaskValidation, boolean> | null;
+
+  @ManyToOne(_ => TeamDistribution, teamDistribution => teamDistribution.courseTasks)
+  @JoinColumn()
+  teamDistribution: TeamDistribution;
 }
