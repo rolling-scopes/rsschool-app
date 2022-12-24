@@ -12,6 +12,7 @@ import {
 import { Course } from './course';
 import { CourseTask } from './courseTask';
 import { Student } from './student';
+import { Team } from './team';
 
 @Entity()
 export class TeamDistribution {
@@ -32,13 +33,16 @@ export class TeamDistribution {
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
-  distributionStartDate: null | Date | string;
+  distributionStartDate: null | Date;
 
   @Column({ type: 'timestamptz', nullable: true })
-  distributionEndDate: null | Date | string;
+  distributionEndDate: null | Date;
 
   @Column()
   name: string;
+
+  @Column({ nullable: true })
+  description: string;
 
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)
   courseTasks: CourseTask[];
@@ -57,4 +61,7 @@ export class TeamDistribution {
 
   @Column()
   isStrictStudentsCount: boolean;
+
+  @OneToMany(_ => Team, team => team.teamDistribution)
+  teams: Team[];
 }

@@ -22,6 +22,7 @@ import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './student-feedback';
 import { StageInterview } from './stageInterview';
 import { TeamDistribution } from './teamDistribution';
+import { Team } from './team';
 
 @Entity()
 @Unique(['courseId', 'userId'])
@@ -140,4 +141,8 @@ export class Student {
   @ManyToMany(_ => TeamDistribution, teamDistribution => teamDistribution.students)
   @JoinTable()
   teamDistribution: TeamDistribution[];
+
+  @ManyToMany(_ => Team, team => team.students)
+  @JoinTable()
+  teams: Team[];
 }
