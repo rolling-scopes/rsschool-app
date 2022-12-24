@@ -51,4 +51,10 @@ export class TeamDistribution {
 
   @Column({ nullable: true })
   maxStudents: number;
+
+  @Column({ nullable: true })
+  studentsCount: number;
+
+  @Column()
+  isStrictStudentsCount: boolean;
 }
