@@ -62,6 +62,9 @@ export class TeamDistribution {
   @Column()
   isStrictStudentsCount: boolean;
 
+  @Column({ nullable: true })
+  minTotalScore: number;
+
   @OneToMany(_ => Team, team => team.teamDistribution)
   teams: Team[];
 }

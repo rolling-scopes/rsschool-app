@@ -19,4 +19,10 @@ export class Team {
 
   @ManyToMany(_ => Student, student => student.teams)
   students: Student[];
+
+  @Column({ nullable: true })
+  chatLink: string;
+
+  @Column({ nullable: true })
+  password: string;
 }

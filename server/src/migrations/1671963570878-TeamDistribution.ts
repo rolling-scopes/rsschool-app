@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class TeamDistribution1671911802558 implements MigrationInterface {
-  name = 'TeamDistribution1671911802558';
+export class TeamDistribution1671963570878 implements MigrationInterface {
+  name = 'TeamDistribution1671963570878';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "event" RENAME COLUMN "discipline" TO "disciplineId"`);
@@ -12,10 +12,10 @@ export class TeamDistribution1671911802558 implements MigrationInterface {
       `CREATE TABLE "task_criteria" ("taskId" integer NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "criteria" jsonb NOT NULL DEFAULT '[]', CONSTRAINT "PK_6de018b8a8dbe8845ffe811ad20" PRIMARY KEY ("taskId"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "team" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying, "teamDistributionId" integer, CONSTRAINT "PK_f57d8293406df4af348402e4b74" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "team" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying, "chatLink" character varying, "password" character varying, "teamDistributionId" integer, CONSTRAINT "PK_f57d8293406df4af348402e4b74" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "distributionStartDate" TIMESTAMP WITH TIME ZONE, "distributionEndDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, "description" character varying, "minStudents" integer, "maxStudents" integer, "studentsCount" integer, "isStrictStudentsCount" boolean NOT NULL, CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "distributionStartDate" TIMESTAMP WITH TIME ZONE, "distributionEndDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, "description" character varying, "minStudents" integer, "maxStudents" integer, "studentsCount" integer, "isStrictStudentsCount" boolean NOT NULL, "minTotalScore" integer, CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(`CREATE INDEX "IDX_951e2b89c3a2b4554516409cfb" ON "team_distribution" ("courseId") `);
     await queryRunner.query(
