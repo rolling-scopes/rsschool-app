@@ -173,7 +173,7 @@ export function CourseTaskModal(props: Props) {
                 label="Cross-Check End Date"
                 validateStatus={isInvalidCrossCheckEndDate ? 'error' : undefined}
                 rules={[{ required: true, message: 'Please enter cross-check end date' }]}
-                tooltip="Cross-Check End Date must be later than the End Date of the task. The minimum duration of a cross-check is 3 days. Distribution to the cross check will be done automatically at 23:59 UTC on the selected date"
+                tooltip="Cross-Check End Date must be later than the End Date of the task. The minimum duration of a cross-check is 3 days. The cross-check will be completed at 23:59 UTC on the chosen day."
               >
                 <DatePicker format="YYYY-MM-DD" />
               </Form.Item>
