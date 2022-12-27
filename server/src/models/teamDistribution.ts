@@ -50,13 +50,13 @@ export class TeamDistribution {
   @ManyToMany(_ => Student, student => student.teamDistribution)
   students: Student[];
 
-  @Column({ nullable: true, default: 2 })
+  @Column({ default: 2 })
   minStudents: number;
 
-  @Column({ nullable: true })
+  @Column({ default: 4 })
   maxStudents: number;
 
-  @Column({ nullable: true, default: 3 })
+  @Column({ default: 3 })
   studentsCount: number;
 
   @Column({ default: true })

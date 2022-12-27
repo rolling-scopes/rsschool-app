@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class TeamDistribution1672141430404 implements MigrationInterface {
-  name = 'TeamDistribution1672141430404';
+export class TeamDistribution1672142743107 implements MigrationInterface {
+  name = 'TeamDistribution1672142743107';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE "team" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "chatLink" character varying NOT NULL, "password" character varying NOT NULL, "teamDistributionId" integer, CONSTRAINT "PK_f57d8293406df4af348402e4b74" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "startDate" TIMESTAMP WITH TIME ZONE, "endDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, "description" character varying NOT NULL, "minStudents" integer DEFAULT '2', "maxStudents" integer, "studentsCount" integer DEFAULT '3', "strictStudentsCount" boolean NOT NULL DEFAULT true, "minTotalScore" integer NOT NULL DEFAULT '0', CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "team_distribution" ("id" SERIAL NOT NULL, "createdDate" TIMESTAMP NOT NULL DEFAULT now(), "updatedDate" TIMESTAMP NOT NULL DEFAULT now(), "courseId" integer, "startDate" TIMESTAMP WITH TIME ZONE, "endDate" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, "description" character varying NOT NULL, "minStudents" integer NOT NULL DEFAULT '2', "maxStudents" integer NOT NULL DEFAULT '4', "studentsCount" integer NOT NULL DEFAULT '3', "strictStudentsCount" boolean NOT NULL DEFAULT true, "minTotalScore" integer NOT NULL DEFAULT '0', CONSTRAINT "PK_432a4b1c8bfacae59140f6fcaf8" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(`CREATE INDEX "IDX_951e2b89c3a2b4554516409cfb" ON "team_distribution" ("courseId") `);
     await queryRunner.query(
