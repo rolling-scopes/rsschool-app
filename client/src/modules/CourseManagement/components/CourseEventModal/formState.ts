@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
+import { EVENT_TYPES } from 'data/eventTypes';
 import { omit } from 'lodash';
 import moment from 'moment';
 import { CourseEvent, CourseService } from 'services/course';
@@ -75,7 +76,7 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
   const timeZone = 'UTC';
   return {
     ...modalData,
-    type: modalData.event?.type,
+    type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
     dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,

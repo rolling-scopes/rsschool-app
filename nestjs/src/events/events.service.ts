@@ -16,8 +16,7 @@ export class EventsService {
   }
 
   public async create(data: CreateEventDto) {
-    const { id } = await this.repository.save(data);
-    return this.repository.findOneByOrFail({ id });
+    return this.repository.save(data);
   }
 
   public async update(id: number, data: UpdateEventDto) {
