@@ -14,15 +14,15 @@ export class Team {
   @JoinColumn()
   teamDistribution: TeamDistribution;
 
-  @Column({ nullable: true })
+  @Column()
   description: string;
 
   @ManyToMany(() => Student, student => student.teams)
   students: Student[];
 
-  @Column({ nullable: true })
+  @Column()
   chatLink: string;
 
-  @Column({ nullable: true })
+  @Column()
   password: string;
 }

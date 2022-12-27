@@ -33,15 +33,15 @@ export class TeamDistribution {
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
-  distributionStartDate: null | Date;
+  startDate: null | Date;
 
   @Column({ type: 'timestamptz', nullable: true })
-  distributionEndDate: null | Date;
+  endDate: null | Date;
 
   @Column()
   name: string;
 
-  @Column({ nullable: true })
+  @Column()
   description: string;
 
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)
@@ -50,19 +50,19 @@ export class TeamDistribution {
   @ManyToMany(_ => Student, student => student.teamDistribution)
   students: Student[];
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 2 })
   minStudents: number;
 
   @Column({ nullable: true })
   maxStudents: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 3 })
   studentsCount: number;
 
-  @Column()
-  isStrictStudentsCount: boolean;
+  @Column({ default: true })
+  strictStudentsCount: boolean;
 
-  @Column({ nullable: true })
+  @Column({ default: 0 })
   minTotalScore: number;
 
   @OneToMany(() => Team, team => team.teamDistribution)

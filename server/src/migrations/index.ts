@@ -35,7 +35,7 @@ import { CourseTask1662275601017 } from './1662275601017-CourseTask';
 import { CourseEvent1664183799115 } from './1664183799115-CourseEvent';
 import { TaskCriteria1666348642811 } from './1666348642811-TaskCriteria';
 import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionResult';
-import { TeamDistribution1671963570878 } from './1671963570878-TeamDistribution';
+import { TeamDistribution1672141430404 } from './1672141430404-TeamDistribution';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -75,5 +75,5 @@ export const migrations = [
   CourseEvent1664183799115,
   TaskCriteria1666348642811,
   TaskSolutionResult1666621080327,
-  TeamDistribution1671963570878,
+  TeamDistribution1672141430404,
 ];
