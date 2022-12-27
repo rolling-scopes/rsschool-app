@@ -10,14 +10,14 @@ export class Team {
   @Column()
   name: string;
 
-  @ManyToOne(_ => TeamDistribution, teamDistribution => teamDistribution.teams)
+  @ManyToOne(() => TeamDistribution, teamDistribution => teamDistribution.teams)
   @JoinColumn()
   teamDistribution: TeamDistribution;
 
   @Column({ nullable: true })
   description: string;
 
-  @ManyToMany(_ => Student, student => student.teams)
+  @ManyToMany(() => Student, student => student.teams)
   students: Student[];
 
   @Column({ nullable: true })

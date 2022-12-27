@@ -65,6 +65,6 @@ export class TeamDistribution {
   @Column({ nullable: true })
   minTotalScore: number;
 
-  @OneToMany(_ => Team, team => team.teamDistribution)
+  @OneToMany(() => Team, team => team.teamDistribution)
   teams: Team[];
 }

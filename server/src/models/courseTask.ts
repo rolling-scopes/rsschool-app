@@ -120,7 +120,7 @@ export class CourseTask {
   @Column({ type: 'simple-json', nullable: true })
   validations: Record<CourseTaskValidation, boolean> | null;
 
-  @ManyToOne(_ => TeamDistribution, teamDistribution => teamDistribution.courseTasks)
+  @ManyToOne(() => TeamDistribution, teamDistribution => teamDistribution.courseTasks)
   @JoinColumn()
   teamDistribution: TeamDistribution;
 }

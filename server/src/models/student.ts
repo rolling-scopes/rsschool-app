@@ -138,11 +138,11 @@ export class Student {
   @Column({ nullable: true, default: true })
   mentoring: boolean;
 
-  @ManyToMany(_ => TeamDistribution, teamDistribution => teamDistribution.students)
+  @ManyToMany(() => TeamDistribution, teamDistribution => teamDistribution.students)
   @JoinTable()
   teamDistribution: TeamDistribution[];
 
-  @ManyToMany(_ => Team, team => team.students)
+  @ManyToMany(() => Team, team => team.students)
   @JoinTable()
   teams: Team[];
 }
