@@ -1,5 +1,4 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
@@ -14,6 +13,7 @@ import {
   StudentsScoreApi,
   Discord,
   CourseTaskDto,
+  EventDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
@@ -110,7 +110,7 @@ export interface CourseTaskDetails extends CourseTaskDto {
 
 export interface CourseEvent {
   id: number;
-  event: Event;
+  event: EventDto;
   date?: string;
   time?: string;
   dateTime: string;
