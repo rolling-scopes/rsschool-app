@@ -1,5 +1,5 @@
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Table, Tag } from 'antd';
+import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Table } from 'antd';
 import { ModalForm } from 'components/Forms';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -262,11 +262,11 @@ function filterData(
   );
 }
 
-function renderTagWithCopyButton(value: string, color: string | undefined, alias: string) {
+function renderTagWithCopyButton(value: string, alias: string) {
   const link = `${window.location.origin}/course/mentor/confirm?course=${alias}`;
   return (
     <>
-      {colorTagRenderer(value, color)} <CopyToClipboardButton value={link} type="link" />
+      {colorTagRenderer(value)} <CopyToClipboardButton value={link} type="link" />
     </>
   );
 }
@@ -281,9 +281,7 @@ function renderPreselectedCourses(courses: Course[]) {
             alias: courses.find(c => c.id === v)?.alias ?? '',
             color: record.courses.includes(v) ? '#87d068' : undefined,
           }))
-          .map(v =>
-            v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.color, v.alias),
-          )}
+          .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)))}
       </>
     );
   };
