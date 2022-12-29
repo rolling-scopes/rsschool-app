@@ -43,6 +43,8 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { UserGroup } from './userGroup';
+import { TeamDistribution } from './teamDistribution';
+import { Team } from './team';
 
 export * from './session';
 export {
@@ -89,6 +91,8 @@ export {
   TaskSolutionChecker,
   TaskSolutionResult,
   TaskVerification,
+  Team,
+  TeamDistribution,
   User,
   UserGroup,
 };
@@ -137,6 +141,8 @@ export const models = [
   TaskSolutionChecker,
   TaskSolutionResult,
   TaskVerification,
+  Team,
+  TeamDistribution,
   User,
   UserGroup,
 ];
