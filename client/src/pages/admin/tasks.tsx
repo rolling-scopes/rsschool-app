@@ -29,10 +29,10 @@ const criteriaApi = new TasksCriteriaApi();
 const disciplinesApi = new DisciplinesApi();
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as TaskDto[]);
+  const [data, setData] = useState<TaskDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
-  const [modalData, setModalData] = useState(null as ModalData);
+  const [modalData, setModalData] = useState<ModalData>(null);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
