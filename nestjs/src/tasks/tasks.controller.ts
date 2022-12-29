@@ -11,7 +11,7 @@ export class TasksController {
   constructor(private readonly service: TasksService) {}
 
   @Post('/')
-  @RequiredRoles([CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   @ApiOperation({ operationId: 'createTask' })
   @ApiOkResponse({ type: TaskDto })
   public async create(@Body() dto: CreateTaskDto) {
