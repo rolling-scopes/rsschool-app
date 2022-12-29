@@ -48,6 +48,7 @@ import {
   CourseICalendarController,
 } from './course-schedule';
 import { CoreModule } from 'src/core/core.module';
+import { TeamDistributionModule } from './team-distribution/team-distribution.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { CoreModule } from 'src/core/core.module';
     CoreModule,
     UsersModule,
     UsersNotificationsModule,
+    TeamDistributionModule,
   ],
   controllers: [
     FeedbacksController,

@@ -32,16 +32,16 @@ export class TeamDistribution {
   @Index()
   courseId: number;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  startDate: null | Date;
+  @Column({ type: 'timestamptz' })
+  startDate: Date;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  endDate: null | Date;
+  @Column({ type: 'timestamptz' })
+  endDate: Date;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)

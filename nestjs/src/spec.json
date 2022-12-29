@@ -965,6 +965,24 @@
         "tags": ["auth"]
       }
     },
+    "/courses/{courseId}/team-distribution": {
+      "post": {
+        "operationId": "createTeamDistribution",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDistributionDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
     "/profile/{username}/courses": {
       "get": {
         "operationId": "getUserCourses",
@@ -2387,6 +2405,27 @@
         "type": "object",
         "properties": { "channelId": { "type": "string" }, "externalId": { "type": "string" } },
         "required": ["channelId", "externalId"]
+      },
+      "CreateTeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "startDate", "endDate", "description"]
+      },
+      "TeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["id", "name", "startDate", "endDate", "description"]
       },
       "ProfileCourseDto": {
         "type": "object",

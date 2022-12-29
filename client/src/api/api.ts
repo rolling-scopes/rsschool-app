@@ -1631,6 +1631,37 @@ export type CreateStudentFeedbackDtoEnglishLevelEnum = typeof CreateStudentFeedb
 /**
  * 
  * @export
+ * @interface CreateTeamDistributionDto
+ */
+export interface CreateTeamDistributionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'description': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateUserGroupDto
  */
 export interface CreateUserGroupDto {
@@ -3817,6 +3848,43 @@ export interface TaskSolutionDto {
      * @memberof TaskSolutionDto
      */
     'url': string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamDistributionDto
+ */
+export interface TeamDistributionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'description': string;
 }
 /**
  * 
@@ -11317,6 +11385,116 @@ export class StudentsScoreApi extends BaseAPI {
      */
     public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
         return StudentsScoreApiFp(this.configuration).getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * TeamDistributionApi - axios parameter creator
+ * @export
+ */
+export const TeamDistributionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeamDistribution: async (courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTeamDistribution', 'courseId', courseId)
+            // verify required parameter 'createTeamDistributionDto' is not null or undefined
+            assertParamExists('createTeamDistribution', 'createTeamDistributionDto', createTeamDistributionDto)
+            const localVarPath = `/courses/{courseId}/team-distribution`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamDistributionDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamDistributionApi - functional programming interface
+ * @export
+ */
+export const TeamDistributionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamDistributionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTeamDistribution(courseId, createTeamDistributionDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * TeamDistributionApi - factory interface
+ * @export
+ */
+export const TeamDistributionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamDistributionApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: any): AxiosPromise<TeamDistributionDto> {
+            return localVarFp.createTeamDistribution(courseId, createTeamDistributionDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamDistributionApi - object-oriented interface
+ * @export
+ * @class TeamDistributionApi
+ * @extends {BaseAPI}
+ */
+export class TeamDistributionApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).createTeamDistribution(courseId, createTeamDistributionDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
