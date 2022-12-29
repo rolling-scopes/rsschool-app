@@ -9,6 +9,7 @@ export class CreateTaskDto {
   name: string;
 
   @ApiProperty()
+  @IsOptional()
   attributes: Record<string, any>;
 
   @IsString()
