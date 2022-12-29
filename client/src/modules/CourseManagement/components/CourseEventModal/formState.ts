@@ -1,12 +1,12 @@
 import { message } from 'antd';
-import { CreateCourseEventDto, EventDto } from 'api';
+import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
+import { EVENT_TYPES } from 'data/eventTypes';
 import { omit } from 'lodash';
 import moment from 'moment';
 import { CourseEvent, CourseService } from 'services/course';
-import { Event, EventService } from 'services/event';
 import { formatTimezoneToUTC } from 'services/formatter';
 
-const eventService = new EventService();
+const eventsApi = new EventsApi();
 
 const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDto => {
   const record = {
@@ -26,19 +26,20 @@ const submitTemplateEvent = async (values: any, eventTemplate?: EventDto) => {
     type: values.type,
     descriptionUrl: values.descriptionUrl,
     description: values.description,
-  } as Partial<Event>;
+    disciplineId: values.disciplineId,
+  } as CreateEventDto;
 
   if (!eventTemplate) {
     try {
-      const res = await eventService.createEvent(templateEventData);
-      return res.id;
+      const res = await eventsApi.createEvent(templateEventData);
+      return res.data.id;
     } catch (error) {
       message.error('Failed to create event template. Please try later.');
     }
   } else {
     try {
-      await eventService.updateEvent(eventTemplate.id, templateEventData);
-      return eventTemplate.id;
+      const res = await eventsApi.updateEvent(eventTemplate.id, templateEventData);
+      return res.data.id;
     } catch (error) {
       message.error('Failed to update event template. Please try later.');
     }
@@ -75,7 +76,7 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
   const timeZone = 'UTC';
   return {
     ...modalData,
-    type: modalData.event?.type,
+    type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
     dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,

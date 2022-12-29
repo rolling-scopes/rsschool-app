@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { EventsApi } from 'api';
+import { DisciplinesApi, EventsApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
@@ -24,6 +24,7 @@ type Props = {
 };
 
 const eventsApi = new EventsApi();
+const disciplineApi = new DisciplinesApi();
 const userService = new UserService();
 
 export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) {
@@ -33,8 +34,18 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
     return userService.searchUser(searchText);
   };
 
-  const { loading, value: events = [] } = useAsync(async () => (await eventsApi.getEvents()).data, []);
+  const loadData = async () => {
+    const [{ data: events = [] }, { data: disciplines = [] }] = await Promise.all([
+      eventsApi.getEvents(),
+      disciplineApi.getDisciplines(),
+    ]);
+    return {
+      events,
+      disciplines,
+    };
+  };
 
+  const { loading, value: { events = [], disciplines = [] } = {} } = useAsync(loadData, []);
   const filterOption = useCallback(
     (input, option) => {
       if (!input) {
@@ -102,6 +113,20 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
         <Select>{entityTypes}</Select>
+      </Form.Item>
+      <Form.Item
+        required
+        name="disciplineId"
+        label="Discipline"
+        rules={[{ required: true, message: 'Please select a discipline' }]}
+      >
+        <Select>
+          {disciplines.map(({ id, name }) => (
+            <Select.Option key={id} value={id}>
+              {name}
+            </Select.Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item name="special" label="Special">
         <Select mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>

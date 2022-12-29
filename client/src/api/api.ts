@@ -1518,6 +1518,43 @@ export interface CreateDiscordServerDto {
 /**
  * 
  * @export
+ * @interface CreateEventDto
+ */
+export interface CreateEventDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateEventDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateEventDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateEventDto
+     */
+    'disciplineId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateEventDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateEventDto
+     */
+    'description': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateGratitudeDto
  */
 export interface CreateGratitudeDto {
@@ -4110,6 +4147,43 @@ export interface UpdateDiscordServerDto {
      * @memberof UpdateDiscordServerDto
      */
     'mentorsChatUrl': string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateEventDto
+ */
+export interface UpdateEventDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateEventDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateEventDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateEventDto
+     */
+    'disciplineId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateEventDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateEventDto
+     */
+    'description': string;
 }
 /**
  * 
@@ -8510,6 +8584,41 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {CreateEventDto} createEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEvent: async (createEventDto: CreateEventDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createEventDto' is not null or undefined
+            assertParamExists('createEvent', 'createEventDto', createEventDto)
+            const localVarPath = `/events`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createEventDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8570,6 +8679,45 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateEventDto} updateEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEvent: async (id: number, updateEventDto: UpdateEventDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateEvent', 'id', id)
+            // verify required parameter 'updateEventDto' is not null or undefined
+            assertParamExists('updateEvent', 'updateEventDto', updateEventDto)
+            const localVarPath = `/events/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateEventDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8580,6 +8728,16 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
 export const EventsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {CreateEventDto} createEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createEvent(createEventDto: CreateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createEvent(createEventDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {number} id 
@@ -8599,6 +8757,17 @@ export const EventsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getEvents(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateEventDto} updateEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateEvent(id: number, updateEventDto: UpdateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateEvent(id, updateEventDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -8609,6 +8778,15 @@ export const EventsApiFp = function(configuration?: Configuration) {
 export const EventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = EventsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {CreateEventDto} createEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEvent(createEventDto: CreateEventDto, options?: any): AxiosPromise<EventDto> {
+            return localVarFp.createEvent(createEventDto, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {number} id 
@@ -8626,6 +8804,16 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
         getEvents(options?: any): AxiosPromise<Array<EventDto>> {
             return localVarFp.getEvents(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateEventDto} updateEventDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEvent(id: number, updateEventDto: UpdateEventDto, options?: any): AxiosPromise<EventDto> {
+            return localVarFp.updateEvent(id, updateEventDto, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -8636,6 +8824,17 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class EventsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateEventDto} createEventDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventsApi
+     */
+    public createEvent(createEventDto: CreateEventDto, options?: AxiosRequestConfig) {
+        return EventsApiFp(this.configuration).createEvent(createEventDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} id 
@@ -8655,6 +8854,18 @@ export class EventsApi extends BaseAPI {
      */
     public getEvents(options?: AxiosRequestConfig) {
         return EventsApiFp(this.configuration).getEvents(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateEventDto} updateEventDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventsApi
+     */
+    public updateEvent(id: number, updateEventDto: UpdateEventDto, options?: AxiosRequestConfig) {
+        return EventsApiFp(this.configuration).updateEvent(id, updateEventDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
