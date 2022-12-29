@@ -2412,9 +2412,24 @@
           "name": { "type": "string" },
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
-          "description": { "type": "string" }
+          "description": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
         },
-        "required": ["name", "startDate", "endDate", "description"]
+        "required": [
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
       },
       "TeamDistributionDto": {
         "type": "object",
@@ -2423,9 +2438,25 @@
           "name": { "type": "string" },
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
-          "description": { "type": "string" }
+          "description": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
         },
-        "required": ["id", "name", "startDate", "endDate", "description"]
+        "required": [
+          "id",
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
       },
       "ProfileCourseDto": {
         "type": "object",

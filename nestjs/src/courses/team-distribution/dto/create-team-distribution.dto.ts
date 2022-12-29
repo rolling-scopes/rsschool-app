@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateTeamDistributionDto {
   @IsString()
@@ -21,4 +21,31 @@ export class CreateTeamDistributionDto {
   @IsOptional()
   @ApiProperty()
   public description: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(2)
+  @ApiProperty()
+  public minStudents: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  public maxStudents: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(2)
+  @ApiProperty()
+  public studentsCount: number;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  @ApiProperty()
+  public strictStudentsCount: boolean;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  public minTotalScore: number;
 }

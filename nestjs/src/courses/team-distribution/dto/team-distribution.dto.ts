@@ -8,6 +8,11 @@ export class TeamDistributionDto {
     this.startDate = teamDistribution.startDate;
     this.endDate = teamDistribution.endDate;
     this.description = teamDistribution.description;
+    this.minStudents = teamDistribution.minStudents;
+    this.maxStudents = teamDistribution.maxStudents;
+    this.studentsCount = teamDistribution.studentsCount;
+    this.strictStudentsCount = teamDistribution.strictStudentsCount;
+    this.minTotalScore = teamDistribution.minTotalScore;
   }
 
   @ApiProperty()
@@ -24,4 +29,19 @@ export class TeamDistributionDto {
 
   @ApiProperty()
   public description: string;
+
+  @ApiProperty()
+  public minStudents: number;
+
+  @ApiProperty()
+  public maxStudents: number;
+
+  @ApiProperty()
+  public studentsCount: number;
+
+  @ApiProperty()
+  public strictStudentsCount: boolean;
+
+  @ApiProperty()
+  public minTotalScore: number;
 }

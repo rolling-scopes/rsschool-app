@@ -1658,6 +1658,36 @@ export interface CreateTeamDistributionDto {
      * @memberof CreateTeamDistributionDto
      */
     'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'minStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'maxStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'studentsCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateTeamDistributionDto
+     */
+    'strictStudentsCount': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'minTotalScore': number;
 }
 /**
  * 
@@ -3885,6 +3915,36 @@ export interface TeamDistributionDto {
      * @memberof TeamDistributionDto
      */
     'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'minStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'maxStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'studentsCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamDistributionDto
+     */
+    'strictStudentsCount': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'minTotalScore': number;
 }
 /**
  * 
