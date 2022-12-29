@@ -35,7 +35,7 @@ export class TasksController {
   }
 
   @Patch('/:id')
-  @RequiredRoles([CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   @ApiOperation({ operationId: 'updateTask' })
   @ApiOkResponse({ type: TaskDto })
   public async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTaskDto) {
