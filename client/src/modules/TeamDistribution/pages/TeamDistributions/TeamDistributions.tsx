@@ -7,6 +7,7 @@ import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
 import { Button } from 'antd';
 import { useAsync } from 'react-use';
+import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 
 const teamDistributionApi = new TeamDistributionApi();
 
@@ -49,6 +50,9 @@ function TeamDistributions({ session, course }: CoursePageProps) {
           Team Distribution
         </Button>
       )}
+      {distributions.length
+        ? distributions.map(distribution => <TeamDistributionCard distribution={distribution} />)
+        : null}
     </PageLayout>
   );
 }
