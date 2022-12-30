@@ -166,6 +166,7 @@ const createSelfeducationVerification = async ({
     score,
     details,
     status: 'completed',
+    // TODO: add new field for studentAnswers
   });
 
   const result = (await getRepository(TaskVerification).findOneBy({ id: identifier.id }))!;
