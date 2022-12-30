@@ -5,7 +5,7 @@ import { isCourseManager } from 'domain/user';
 import { CoursePageProps } from 'services/models';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 
@@ -17,9 +17,13 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
   const { loading } = useAsync(async () => {
-    const { data } = await teamDistributionApi.getCourseTeamDistributions(course.id);
-    setDistributions(data ?? []);
-  }, []);
+    try {
+      const { data } = await teamDistributionApi.getCourseTeamDistributions(course.id);
+      setDistributions(data ?? []);
+    } catch (error) {
+      message.error('Something went wrong, please try reloading the page later');
+    }
+  }, [course.id]);
 
   const handleCreateTeamDistribution = () => {
     setTeamDistribution({});

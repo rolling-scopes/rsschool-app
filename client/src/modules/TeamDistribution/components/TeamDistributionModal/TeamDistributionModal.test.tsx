@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import TeamDistributionModal from './TeamDistributionModal';
 
 describe('TeamDistributionModal', () => {
-  it('the Team size input fields render when strict student count is true', async () => {
+  it('should render team size input when strict student count is true', async () => {
     render(
       <TeamDistributionModal
         data={{ strictStudentsCount: true }}
@@ -18,7 +18,7 @@ describe('TeamDistributionModal', () => {
     ).toBeInTheDocument();
   });
 
-  it('the min and max student input fields not render when strict student count is trues', async () => {
+  it('should not render min and max student inputs when strict student count is true', async () => {
     render(
       <TeamDistributionModal
         data={{ strictStudentsCount: true }}
