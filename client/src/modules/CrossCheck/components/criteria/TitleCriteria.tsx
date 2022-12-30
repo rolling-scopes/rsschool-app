@@ -1,7 +1,6 @@
 import { Typography } from 'antd';
 import React from 'react';
-
-import { CrossCheckCriteriaData } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData } from 'services/course';
 
 interface TitleCriteriaProps {
   titleData: CrossCheckCriteriaData;

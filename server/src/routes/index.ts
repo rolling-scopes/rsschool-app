@@ -3,7 +3,6 @@ import Router from '@koa/router';
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseCrudRoute, courseRoute } from './course';
-import { coursesRoute } from './courses';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
 import { filesRoute } from './file';
@@ -16,7 +15,6 @@ import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
-import { lectureRoute } from './event';
 import { repositoryRoute } from './repository';
 import { interviewQuestionRoute } from './interviewQuestion';
 
@@ -47,7 +45,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, registryRouter(logger));
   applyRouter(router, courseRoute(logger));
   applyRouter(router, courseCrudRoute(logger));
-  applyRouter(router, coursesRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, taskResultRoute(logger));
@@ -61,7 +58,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));
-  applyRouter(router, lectureRoute(logger));
   applyRouter(router, repositoryRoute(logger));
 
   return { publicRouter: router };

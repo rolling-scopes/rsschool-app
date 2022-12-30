@@ -1,6 +1,6 @@
 import { Form, InputNumber, Input, Select } from 'antd';
+import { CriteriaDto } from 'api';
 import React from 'react';
-import { CriteriaData } from 'services/course';
 
 const { TextArea } = Input;
 
@@ -9,7 +9,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   dataIndex: string;
   title: any;
   inputType: 'max' | 'text' | 'description';
-  record: CriteriaData;
+  record: CriteriaDto;
   index: number;
   children: React.ReactNode;
 }

@@ -4,19 +4,17 @@ import { Session, withSession } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
+import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
 
 const { Content } = Layout;
 
 type Props = { session: Session; courses: Course[] };
-const eventService = new EventService();
 const eventsApi = new EventsApi();
 const disciplinesApi = new DisciplinesApi();
 
@@ -62,9 +60,9 @@ function Page(props: Props) {
       try {
         const record = createRecord(values);
         if (modalAction === 'update') {
-          await eventService.updateEvent(modalData!.id!, record);
+          await eventsApi.updateEvent(modalData!.id!, record);
         } else {
-          await eventService.createEvent(record);
+          await eventsApi.createEvent(record);
         }
         setModalData(null);
         await loadData();
@@ -95,7 +93,12 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item required name="disciplineId" label="Discipline">
+        <Form.Item
+          required
+          name="disciplineId"
+          label="Discipline"
+          rules={[{ required: true, message: 'Please select a discipline' }]}
+        >
           <Select>
             {disciplines.map(({ id, name }) => (
               <Select.Option key={id} value={id}>
@@ -140,7 +143,7 @@ function Page(props: Props) {
 }
 
 function createRecord(values: any) {
-  const data: Partial<Event> = {
+  const data: CreateEventDto = {
     name: values.name,
     description: values.description,
     descriptionUrl: values.descriptionUrl,
@@ -159,7 +162,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: stringSorter<Event>('name'),
+      sorter: stringSorter<EventDto>('name'),
       ...getColumnSearchProps('name'),
     },
     {
@@ -183,7 +186,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Actions',
       dataIndex: 'actions',
       width: 100,
-      render: (_: any, record: Event) => (
+      render: (_: any, record: EventDto) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
@@ -202,8 +205,8 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
   ];
 }
 
-function getInitialValues(modalData: Partial<Event>) {
-  return { ...modalData, discipline: modalData.discipline?.name };
+function getInitialValues(modalData: Partial<EventDto>) {
+  return { ...modalData, disciplineId: modalData.discipline?.id };
 }
 
 export { getServerSideProps };

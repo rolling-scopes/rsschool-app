@@ -1,5 +1,4 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
@@ -14,14 +13,24 @@ import {
   StudentsScoreApi,
   Discord,
   CourseTaskDto,
+  EventDto,
+  CriteriaDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
-import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
   Distributed = 'distributed',
   Completed = 'completed',
+}
+
+export interface CrossCheckCriteriaData {
+  key: string;
+  max?: number;
+  text: string;
+  type: string;
+  point?: number;
+  textComment?: string;
 }
 
 export interface CrossCheckMessageAuthor {
@@ -110,7 +119,7 @@ export interface CourseTaskDetails extends CourseTaskDto {
 
 export interface CourseEvent {
   id: number;
-  event: Event;
+  event: EventDto;
   date?: string;
   time?: string;
   dateTime: string;
@@ -741,14 +750,6 @@ export interface TaskSolution {
   studentId: number;
 }
 
-export interface CriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: string;
-  index: number;
-}
-
 export interface IAddCriteriaForCrossCheck {
-  onCreate: (data: CriteriaData) => void;
+  onCreate: (data: CriteriaDto) => void;
 }

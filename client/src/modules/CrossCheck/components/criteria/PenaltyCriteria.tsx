@@ -1,7 +1,8 @@
 import React from 'react';
 import { Radio, Typography } from 'antd';
 
-import { CrossCheckCriteriaData, CountState } from '../CrossCheckCriteriaForm';
+import { CountState } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData } from 'services/course';
 
 const { Text } = Typography;
 const { Group } = Radio;

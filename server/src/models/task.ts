@@ -8,35 +8,40 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
+  DeleteDateColumn,
 } from 'typeorm';
 import { CourseTask } from './courseTask';
 import { Discipline } from './discipline';
 import { TaskCriteria } from './taskCriteria';
 
-export type TaskType =
-  | 'jstask'
-  | 'kotlintask'
-  | 'objctask'
-  | 'htmltask'
-  | 'ipynb'
-  | 'selfeducation'
-  | 'codewars'
-  | 'test'
-  | 'codejam'
-  | 'interview'
-  | 'stage-interview'
-  | 'cv:html'
-  | 'cv:markdown';
+export enum TaskType {
+  JSTask = 'jstask',
+  KotlinTask = 'kotlintask',
+  ObjcTask = 'objctask',
+  HtmlTask = 'htmltask',
+  IPynb = 'ipynb',
+  SelfEducation = 'selfeducation',
+  Codewars = 'codewars',
+  Test = 'test',
+  CodeJam = 'codejam',
+  Interview = 'interview',
+  StageInterview = 'stage-interview',
+  CVHtml = 'cv:html',
+  CVMarkdown = 'cv:markdown',
+}
 
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
+
+  @DeleteDateColumn()
+  deletedDate: string;
 
   @Column()
   name: string;

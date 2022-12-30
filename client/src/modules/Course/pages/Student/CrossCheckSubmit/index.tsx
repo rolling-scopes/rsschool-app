@@ -1,8 +1,8 @@
 import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
-import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
-import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
+import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
+import { SubmittedStatus } from 'modules/CrossCheck/components/SubmittedStatus';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';

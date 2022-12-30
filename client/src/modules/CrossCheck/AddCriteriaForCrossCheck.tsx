@@ -1,5 +1,5 @@
 import { Button, Form, InputNumber, Select, Input, message } from 'antd';
-import { TaskType } from 'components/CrossCheck/CrossCheckCriteriaForm';
+import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import React, { useState } from 'react';
 import { IAddCriteriaForCrossCheck } from 'services/course';
 
