@@ -5,6 +5,7 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { GithubUserLink } from 'components/GithubUserLink';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer } from 'components/Table';
 import { useLoading } from 'components/useLoading';
+import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { Session, withSession } from 'components/withSession';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -106,6 +107,18 @@ function Page(props: Props) {
     };
   }
 
+  async function resendConfirmation(record: any) {
+    try {
+      setModalLoading(true);
+      await mentorRegistryService.updateMentor(record!.githubId, getInitialValues(record));
+      loadData();
+    } catch (e) {
+      message.error('An error occurred. Please try again later.');
+    } finally {
+      setModalLoading(false);
+    }
+  }
+
   return (
     <AdminPageLayout session={props.session} title="Mentor Registry" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
@@ -202,7 +215,8 @@ function Page(props: Props) {
                 render: (_: any, record: any) => (
                   <>
                     <a onClick={() => setModalData(record)}>Edit</a> <br />
-                    <a onClick={() => cancelMentor(record.githubId)}>Cancel</a>
+                    <a onClick={() => cancelMentor(record.githubId)}>Cancel</a> <br />
+                    <a onClick={() => resendConfirmation(record)}>Re-send</a>
                   </>
                 ),
               },
@@ -248,6 +262,15 @@ function filterData(
   );
 }
 
+function renderTagWithCopyButton(value: string, alias: string) {
+  const link = `${window.location.origin}/course/mentor/confirm?course=${alias}`;
+  return (
+    <>
+      {colorTagRenderer(value)} <CopyToClipboardButton value={link} type="link" />
+    </>
+  );
+}
+
 function renderPreselectedCourses(courses: Course[]) {
   return (values: number[], record: any) => {
     return (
@@ -255,9 +278,10 @@ function renderPreselectedCourses(courses: Course[]) {
         {values
           .map(v => ({
             value: courses.find(c => c.id === v)?.name ?? v.toString(),
+            alias: courses.find(c => c.id === v)?.alias ?? '',
             color: record.courses.includes(v) ? '#87d068' : undefined,
           }))
-          .map(v => colorTagRenderer(v.value, v.color))}
+          .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)))}
       </>
     );
   };
