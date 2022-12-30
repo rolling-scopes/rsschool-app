@@ -1,36 +1,37 @@
-import { useRouter } from 'next/router';
-import { EyeInvisibleFilled, EyeFilled } from '@ant-design/icons';
+import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Row } from 'antd';
+import { TasksCriteriaApi } from 'api';
 import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
-import { AssignmentLink, CrossCheckAssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
-import { CrossCheckHistory } from 'components/CrossCheck/CrossCheckHistory';
 import { PageLayout } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { useEffect, useMemo, useState } from 'react';
-import { useAsync, useLocalStorage } from 'react-use';
-import { getQueryString } from 'utils/queryParams-utils';
-import { CourseService, CrossCheckMessageAuthorRole, SolutionReviewType } from 'services/course';
-import { CoursePageProps } from 'services/models';
-import { CrossCheckStatus } from 'services/course';
-import { TaskService } from 'services/task';
-import { useCriteriaState } from '../../../components/CrossCheck/hooks/useCriteriaState';
+import { omit } from 'lodash';
+import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import {
-  CrossCheckCriteriaForm,
   CommentState,
   CountState,
+  CrossCheckCriteriaForm,
   TaskType,
-} from '../../../components/CrossCheck/CrossCheckCriteriaForm';
-import { omit } from 'lodash';
+} from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
+import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
+import { useCriteriaState } from 'modules/CrossCheck/hooks/useCriteriaState';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
+import { useAsync, useLocalStorage } from 'react-use';
+import { CourseService, CrossCheckMessageAuthorRole, CrossCheckStatus, SolutionReviewType } from 'services/course';
+import { CoursePageProps } from 'services/models';
+import { getQueryString } from 'utils/queryParams-utils';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
+
+const criteriaApi = new TasksCriteriaApi();
 
 function Page(props: CoursePageProps) {
   const router = useRouter();
@@ -53,13 +54,12 @@ function Page(props: CoursePageProps) {
   ] = useCriteriaState();
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const taskServise = new TaskService();
 
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
-    const taskCriteriaData = await taskServise.getCriteriaForCourseTask(criteriaId as number);
-    setCriteriaData(taskCriteriaData ?? []);
+    const { data } = await criteriaApi.getTaskCriteria(criteriaId as number);
+    setCriteriaData(data.criteria ?? []);
     resetCriterias();
     setState({ loading: true, data: [] });
     const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);

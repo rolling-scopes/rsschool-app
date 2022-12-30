@@ -14,14 +14,23 @@ import {
   Discord,
   CourseTaskDto,
   EventDto,
+  CriteriaDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
-import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
   Distributed = 'distributed',
   Completed = 'completed',
+}
+
+export interface CrossCheckCriteriaData {
+  key: string;
+  max?: number;
+  text: string;
+  type: string;
+  point?: number;
+  textComment?: string;
 }
 
 export interface CrossCheckMessageAuthor {
@@ -741,14 +750,6 @@ export interface TaskSolution {
   studentId: number;
 }
 
-export interface CriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: string;
-  index: number;
-}
-
 export interface IAddCriteriaForCrossCheck {
-  onCreate: (data: CriteriaData) => void;
+  onCreate: (data: CriteriaDto) => void;
 }

@@ -4,6 +4,8 @@ interface Criteria {
   max?: number;
   type: 'title' | 'subtask' | 'penalty';
   text: string;
+  key: string;
+  index: number;
 }
 
 @Entity()

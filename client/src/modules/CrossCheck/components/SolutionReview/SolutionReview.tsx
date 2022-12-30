@@ -1,18 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { Alert, Button, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
-import { CourseService, SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
-import { formatDateTime } from 'services/formatter';
-import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
-import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
-import { StudentContacts } from 'components/CrossCheck/StudentContacts';
-import { UserAvatar } from './UserAvatar';
-import { Username } from './Username';
+import { ScoreIcon } from 'components/Icons/ScoreIcon';
+import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  CourseService,
+  CrossCheckCriteriaData,
+  CrossCheckMessageAuthorRole,
+  SolutionReviewType,
+} from 'services/course';
+import { formatDateTime } from 'services/formatter';
+import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
+import { StudentContacts } from '../StudentContacts';
+import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
-import { CrossCheckCriteriaData } from 'components/CrossCheck/CrossCheckCriteriaForm';
-import { CrossCheckCriteriaModal } from 'components/CrossCheck/criteria/CrossCheckCriteriaModal';
+import { UserAvatar } from './UserAvatar';
+import { Username } from './Username';
 
 const { Text } = Typography;
 

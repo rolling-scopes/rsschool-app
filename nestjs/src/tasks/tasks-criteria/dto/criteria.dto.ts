@@ -2,9 +2,9 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CriteriaDto {
-  @IsOptional()
   @IsNumber()
-  @ApiProperty()
+  @IsOptional()
+  @ApiProperty({ required: false })
   max?: number;
 
   @IsNotEmpty()
@@ -16,4 +16,12 @@ export class CriteriaDto {
   @IsString()
   @ApiProperty()
   text: string;
+
+  @IsString()
+  @ApiProperty()
+  key: string;
+
+  @IsNumber()
+  @ApiProperty()
+  index: number;
 }

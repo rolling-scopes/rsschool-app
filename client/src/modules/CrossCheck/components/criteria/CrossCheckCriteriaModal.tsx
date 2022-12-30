@@ -1,6 +1,6 @@
 import { Modal, Typography } from 'antd';
-
-import { CrossCheckCriteriaData, TaskType } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData } from 'services/course';
+import { TaskType } from '../CrossCheckCriteriaForm';
 
 const { Text, Title } = Typography;
 

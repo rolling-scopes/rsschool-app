@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { CrossCheckCriteriaData } from 'services/course';
 
-import { CrossCheckCriteriaData, CommentState, CountState } from 'components/CrossCheck/CrossCheckCriteriaForm';
+import { CommentState, CountState } from '../components/CrossCheckCriteriaForm';
 
 interface CriteriaSetState {
   setCountStar: (newCount: CountState[]) => void;

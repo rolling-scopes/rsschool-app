@@ -29,7 +29,7 @@ export class InterviewsService {
       types?: TaskType[];
     },
   ) {
-    const { disabled, types = ['interview'] } = filter;
+    const { disabled, types = [TaskType.Interview] } = filter;
     return this.courseTaskRepository.find({
       where: { courseId, type: In(types), disabled },
       relations: ['task'],
