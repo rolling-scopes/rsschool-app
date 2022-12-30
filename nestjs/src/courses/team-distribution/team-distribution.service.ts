@@ -20,7 +20,14 @@ export class TeamDistributionService {
       order: {
         startDate: 'ASC',
       },
-      cache: 60 * 1000,
     });
+  }
+
+  public async update(id: number, teamDistribution: Partial<TeamDistribution>) {
+    return this.repository.update(id, teamDistribution);
+  }
+
+  public async remove(id: number) {
+    await this.repository.delete(id);
   }
 }

@@ -10,7 +10,7 @@ import { formatTimezoneToUTC } from 'services/formatter';
 type Props = {
   data: Partial<TeamDistributionDto>;
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
   courseId: number;
 };
 
@@ -60,10 +60,14 @@ const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => 
   return record;
 };
 
-const submitTeamDistribution = async (courseId: number, values: Partial<FormState>): Promise<void> => {
+const submitTeamDistribution = async (courseId: number, values: Partial<FormState>, id?: number): Promise<void> => {
   try {
     const record = createRecord(values);
-    await teamDistributionApi.createTeamDistribution(courseId, record);
+    if (id) {
+      await teamDistributionApi.updateTeamDistribution(courseId, id, record);
+    } else {
+      await teamDistributionApi.createTeamDistribution(courseId, record);
+    }
   } catch (error) {
     message.error('Failed to create team distribution. Please try later.');
   }
@@ -76,8 +80,8 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
   });
 
   const handleModalSubmit = async (values: Partial<FormState>) => {
-    await submitTeamDistribution(courseId, values);
-    onSubmit();
+    await submitTeamDistribution(courseId, values, data.id);
+    await onSubmit();
   };
 
   return (

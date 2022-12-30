@@ -999,6 +999,32 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}": {
+      "delete": {
+        "operationId": "deleteTeamDistribution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["team distribution"]
+      },
+      "put": {
+        "operationId": "updateTeamDistribution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDistributionDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["team distribution"]
+      }
+    },
     "/profile/{username}/courses": {
       "get": {
         "operationId": "getUserCourses",
@@ -2466,6 +2492,33 @@
         },
         "required": [
           "id",
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "descriptionUrl",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
+      },
+      "UpdateTeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
+        },
+        "required": [
           "name",
           "startDate",
           "endDate",

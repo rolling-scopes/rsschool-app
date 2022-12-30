@@ -16,21 +16,37 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
-  const { loading } = useAsync(async () => {
+  const loadData = async () => {
     try {
       const { data } = await teamDistributionApi.getCourseTeamDistributions(course.id);
-      setDistributions(data ?? []);
+      setDistributions(data);
     } catch (error) {
       message.error('Something went wrong, please try reloading the page later');
     }
-  }, [course.id]);
+  };
+
+  const { loading } = useAsync(loadData, [course.id]);
 
   const handleCreateTeamDistribution = () => {
     setTeamDistribution({});
   };
 
-  const handleTeamDistributionSubmit = () => {
+  const handleEditTeamDistribution = (distribution: TeamDistributionDto) => {
+    setTeamDistribution(distribution);
+  };
+
+  const handleTeamDistributionSubmit = async () => {
     setTeamDistribution(null);
+    await loadData();
+  };
+
+  const handleDeleteTeamDistribution = async (distributionId: number) => {
+    try {
+      await teamDistributionApi.deleteTeamDistribution(course.id, distributionId);
+      await loadData();
+    } catch (error) {
+      message.error('Failed to delete team distribution. Please try later.');
+    }
   };
 
   return (
@@ -55,7 +71,14 @@ function TeamDistributions({ session, course }: CoursePageProps) {
         </Button>
       )}
       {distributions.length
-        ? distributions.map(distribution => <TeamDistributionCard distribution={distribution} />)
+        ? distributions.map(distribution => (
+            <TeamDistributionCard
+              distribution={distribution}
+              isManager={isManager}
+              onDelete={handleDeleteTeamDistribution}
+              onEdit={handleEditTeamDistribution}
+            />
+          ))
         : null}
     </PageLayout>
   );
