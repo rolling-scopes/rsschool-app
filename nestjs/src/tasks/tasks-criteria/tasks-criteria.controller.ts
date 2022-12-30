@@ -1,15 +1,15 @@
 import { Controller, Get, Body, Patch, Param, UseGuards, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { TaskCriteriaService } from './task-criteria.service';
+import { TasksCriteriaService } from './tasks-criteria.service';
 import { TaskCriteriaDto } from './dto/task-criteria.dto';
 import { DefaultGuard, RoleGuard, RequiredRoles, Role, CourseRole } from '../../auth';
 
-@Controller('task/:taskId/criteria')
-@ApiTags('criteria')
+@Controller('tasks/:taskId/criteria')
+@ApiTags('tasks-criteria')
 @UseGuards(DefaultGuard, RoleGuard)
-export class TaskCriteriaController {
-  constructor(private readonly taskCriteriaService: TaskCriteriaService) {}
+export class TasksCriteriaController {
+  constructor(private readonly taskCriteriaService: TasksCriteriaService) {}
 
   @Get()
   @ApiOperation({ operationId: 'getTaskCriteria' })
