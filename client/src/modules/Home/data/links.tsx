@@ -10,7 +10,7 @@ import {
   PlayCircleTwoTone,
   StopTwoTone,
   AppstoreOutlined,
-  UsergroupAddOutlined,
+  // UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
