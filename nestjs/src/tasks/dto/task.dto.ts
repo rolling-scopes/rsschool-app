@@ -6,6 +6,7 @@ export class TaskDto {
   constructor(task: Task) {
     this.id = task.id;
     this.name = task.name;
+    this.type = task.type;
     this.descriptionUrl = task.descriptionUrl;
     this.description = task.description;
     this.githubRepoName = task.githubRepoName;

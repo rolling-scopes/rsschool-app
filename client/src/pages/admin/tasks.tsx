@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Sel
 import withSession, { Session } from 'components/withSession';
 import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { githubRepoUrl, urlPattern } from 'services/validators';
@@ -38,6 +38,8 @@ function Page(props: Props) {
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
 
   const { loading } = useAsync(async () => {
+    if (modalData) return;
+
     const [{ data: tasks }, { data: disciplines }] = await Promise.all([
       tasksApi.getTasks(),
       disciplinesApi.getDisciplines(),
@@ -101,13 +103,17 @@ function Page(props: Props) {
       setDataCriteria(addKeyAndIndex(newCriteria));
     };
 
-    const allTags = union(...data.map(d => d.tags || []));
-    const allSkills = union(
-      data
-        .map(d => d.skills || [])
-        .concat(SKILLS)
-        .flat()
-        .sort(),
+    const allTags = useMemo(() => union(...data.map(d => d.tags || [])), [data]);
+    const allSkills = useMemo(
+      () =>
+        union(
+          data
+            .map(d => d.skills || [])
+            .concat(SKILLS)
+            .flat()
+            .sort(),
+        ),
+      [data],
     );
     return (
       <ModalForm
@@ -142,7 +148,7 @@ function Page(props: Props) {
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item required name="disciplineId" label="Discipline">
+            <Form.Item required name="discipline" label="Discipline">
               <Select>
                 {disciplines.map(({ id, name }) => (
                   <Select.Option key={id} value={id}>
@@ -272,7 +278,7 @@ function createRecord(values: any) {
     description: values.description,
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
-    disciplineId: values.disciplineId,
+    disciplineId: values.discipline,
     attributes: JSON.parse(values.attributes ?? '{}'),
   };
   return data;
@@ -350,7 +356,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<TaskDto>) {
-  return { ...modalData, discipline: modalData.discipline?.name };
+  return { ...modalData, discipline: modalData.discipline?.id };
 }
 
 export { getServerSideProps };

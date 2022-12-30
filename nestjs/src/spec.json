@@ -1442,6 +1442,65 @@
         "tags": ["gratitudes"]
       }
     },
+    "/events": {
+      "get": {
+        "operationId": "getEvents",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EventDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["events"]
+      },
+      "post": {
+        "operationId": "createEvent",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateEventDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
+          }
+        },
+        "tags": ["events"]
+      }
+    },
+    "/events/{id}": {
+      "patch": {
+        "operationId": "updateEvent",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateEventDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
+          }
+        },
+        "tags": ["events"]
+      },
+      "delete": {
+        "operationId": "deleteEvent",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["events"]
+      }
+    },
     "/tasks": {
       "post": {
         "operationId": "createTask",
@@ -1543,65 +1602,6 @@
           }
         },
         "tags": ["tasks-criteria"]
-      }
-    },
-    "/events": {
-      "get": {
-        "operationId": "getEvents",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EventDto" } }
-              }
-            }
-          }
-        },
-        "tags": ["events"]
-      },
-      "post": {
-        "operationId": "createEvent",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateEventDto" } } }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
-          }
-        },
-        "tags": ["events"]
-      }
-    },
-    "/events/{id}": {
-      "patch": {
-        "operationId": "updateEvent",
-        "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateEventDto" } } }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
-          }
-        },
-        "tags": ["events"]
-      },
-      "delete": {
-        "operationId": "deleteEvent",
-        "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": { "200": { "description": "" } },
-        "tags": ["events"]
       }
     }
   },
@@ -3043,6 +3043,55 @@
         },
         "required": ["name", "id"]
       },
+      "EventDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "descriptionUrl": { "type": "string", "nullable": true },
+          "description": { "type": "string", "nullable": true },
+          "type": {
+            "type": "string",
+            "enum": [
+              "lecture_online",
+              "lecture_offline",
+              "lecture_mixed",
+              "lecture_self_study",
+              "warmup",
+              "info",
+              "workshop",
+              "meetup",
+              "cross_check_deadline",
+              "webinar",
+              "special"
+            ]
+          },
+          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+        },
+        "required": ["id", "name", "descriptionUrl", "description", "type", "discipline"]
+      },
+      "CreateEventDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
+      },
+      "UpdateEventDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
+      },
       "CreateTaskDto": {
         "type": "object",
         "properties": {
@@ -3168,55 +3217,6 @@
         "type": "object",
         "properties": { "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CriteriaDto" } } },
         "required": ["criteria"]
-      },
-      "EventDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "descriptionUrl": { "type": "string", "nullable": true },
-          "description": { "type": "string", "nullable": true },
-          "type": {
-            "type": "string",
-            "enum": [
-              "lecture_online",
-              "lecture_offline",
-              "lecture_mixed",
-              "lecture_self_study",
-              "warmup",
-              "info",
-              "workshop",
-              "meetup",
-              "cross_check_deadline",
-              "webinar",
-              "special"
-            ]
-          },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
-        },
-        "required": ["id", "name", "descriptionUrl", "description", "type", "discipline"]
-      },
-      "CreateEventDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "type": { "type": "string" },
-          "disciplineId": { "type": "number" },
-          "descriptionUrl": { "type": "string" },
-          "description": { "type": "string" }
-        },
-        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
-      },
-      "UpdateEventDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "type": { "type": "string" },
-          "disciplineId": { "type": "number" },
-          "descriptionUrl": { "type": "string" },
-          "description": { "type": "string" }
-        },
-        "required": ["name", "type", "disciplineId", "descriptionUrl", "description"]
       }
     }
   }
