@@ -58,14 +58,16 @@ function Page(props: CoursePageProps) {
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
+    if (!criteriaId || !courseTaskId) return;
+
     setState({ loading: true, data: [] });
 
-    const [taskCriteriaData, result] = await Promise.all([
-      criteriaApi.getTaskCriteria(criteriaId as number),
-      courseService.getTaskSolutionResult(githubId, courseTaskId as number),
+    const [{ data: taskCriteriaData }, result] = await Promise.all([
+      criteriaApi.getTaskCriteria(criteriaId),
+      courseService.getTaskSolutionResult(githubId, courseTaskId),
     ]);
 
-    setCriteriaData(taskCriteriaData.data.criteria ?? []);
+    setCriteriaData(taskCriteriaData.criteria ?? []);
     resetCriterias();
     form.resetFields(['comment']);
 
@@ -94,12 +96,10 @@ function Page(props: CoursePageProps) {
       };
     });
 
-    const activeSolutionReview = solutionReviews[0];
+    const [activeSolutionReview] = solutionReviews;
 
     form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
-    if (result !== null) {
-      loadInitialCriteria(activeSolutionReview);
-    }
+    loadInitialCriteria(activeSolutionReview);
     setState({ loading: false, data: solutionReviews ?? [] });
   };
 

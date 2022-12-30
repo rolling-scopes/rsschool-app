@@ -58,17 +58,15 @@ export function CrossCheckCriteriaForm({
   }, [totalPoints]);
 
   useEffect(() => {
-    if (criteriaData.length === 0) return;
+    if (!criteriaData.length) return;
 
-    const sumPoints = +countStar
-      .map(item => item.point)
-      .reduce((prev, next) => prev + next, 0)
-      .toFixed(1);
-    const sumPenalty = penalty.map(item => item.point).reduce((prev, next) => prev + next, 0);
-    let finalPoints = sumPoints + sumPenalty;
-    finalPoints = finalPoints > 0 ? finalPoints : 0;
+    const scorePoints = +countStar.reduce((acc, next) => acc + next.point, 0).toFixed(1);
+    const penaltyPoints = penalty.reduce((acc, next) => acc + next.point, 0);
 
-    form.setFieldValue('score', finalPoints);
+    const totalScore = scorePoints + penaltyPoints;
+    const finalScore = totalScore > 0 ? totalScore : 0;
+
+    form.setFieldValue('score', finalScore);
   }, [countStar, penalty]);
 
   function updateCountStar(event: number, max: number, key: string) {
