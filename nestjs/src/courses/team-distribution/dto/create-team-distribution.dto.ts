@@ -22,6 +22,11 @@ export class CreateTeamDistributionDto {
   @ApiProperty()
   public description: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  public descriptionUrl: string;
+
   @IsNumber()
   @IsNotEmpty()
   @Min(2)

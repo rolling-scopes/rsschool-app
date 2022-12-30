@@ -10,6 +10,7 @@ import {
   PlayCircleTwoTone,
   StopTwoTone,
   AppstoreOutlined,
+  UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
@@ -132,6 +133,13 @@ const links: LinkData[] = [
     icon: <StopTwoTone twoToneColor="red" />,
     getUrl: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: every(isMentor),
+    courseAccess: everyCourse(isCourseNotCompleted),
+  },
+  {
+    name: 'Team Distributions (Beta)',
+    icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
+    getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
+    access: some(isCourseManager),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
 ];

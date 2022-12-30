@@ -981,6 +981,22 @@
           }
         },
         "tags": ["team distribution"]
+      },
+      "get": {
+        "operationId": "getCourseTeamDistributions",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["team distribution"]
       }
     },
     "/profile/{username}/courses": {
@@ -2413,6 +2429,7 @@
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "minStudents": { "type": "number" },
           "maxStudents": { "type": "number" },
           "studentsCount": { "type": "number" },
@@ -2424,6 +2441,7 @@
           "startDate",
           "endDate",
           "description",
+          "descriptionUrl",
           "minStudents",
           "maxStudents",
           "studentsCount",
@@ -2439,6 +2457,7 @@
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "minStudents": { "type": "number" },
           "maxStudents": { "type": "number" },
           "studentsCount": { "type": "number" },
@@ -2451,6 +2470,7 @@
           "startDate",
           "endDate",
           "description",
+          "descriptionUrl",
           "minStudents",
           "maxStudents",
           "studentsCount",

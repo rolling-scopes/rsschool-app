@@ -14,19 +14,13 @@ export class TeamDistributionService {
     return this.repository.save(data);
   }
 
-  // findAll() {
-  //   return `This action returns all teamDistribution`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} teamDistribution`;
-  // }
-
-  // update(id: number, updateTeamDistributionDto: UpdateTeamDistributionDto) {
-  //   return `This action updates a #${id} teamDistribution`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} teamDistribution`;
-  // }
+  public async findByCourseId(courseId: number) {
+    return this.repository.find({
+      where: { courseId },
+      order: {
+        startDate: 'ASC',
+      },
+      cache: 60 * 1000,
+    });
+  }
 }

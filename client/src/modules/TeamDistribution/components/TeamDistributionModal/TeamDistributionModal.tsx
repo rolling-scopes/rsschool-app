@@ -23,7 +23,7 @@ const { Option } = Select;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-export function getInitialValues(data: Partial<TeamDistributionDto>) {
+function getInitialValues(data: Partial<TeamDistributionDto>) {
   const timeZone = 'UTC';
   return {
     ...data,
@@ -55,6 +55,7 @@ const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => 
     maxStudents: values.maxStudents ?? 4,
     studentsCount: values.studentsCount ?? 3,
     minTotalScore: values.minTotalScore ?? 0,
+    descriptionUrl: values.descriptionUrl ?? '',
   };
   return record;
 };
@@ -68,7 +69,7 @@ const submitTeamDistribution = async (courseId: number, values: Partial<FormStat
   }
 };
 
-export function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Props) {
+export default function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Props) {
   const [form] = Form.useForm<Partial<FormState>>();
   const [changes, setChanges] = useState<Record<string, boolean>>({
     strictStudentsCount: data.strictStudentsCount ?? true,
@@ -107,7 +108,7 @@ export function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Pr
         </Col>
         <Col span={6}>
           <Form.Item name="timeZone" label="TimeZone">
-            <Select defaultValue="UTC" placeholder="Please select a timezone">
+            <Select placeholder="Please select a timezone">
               {TIMEZONES.map(tz => (
                 <Option key={tz} value={tz}>
                   {/* there is no 'Europe / Kyiv' time zone at the moment */}
@@ -118,8 +119,8 @@ export function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Pr
           </Form.Item>
         </Col>
       </Row>
-      <Form.Item name="strictStudentsCount" label="Fixed team size">
-        <Switch defaultChecked={data.strictStudentsCount ?? true} />
+      <Form.Item name="strictStudentsCount" label="Fixed team size" valuePropName="checked">
+        <Switch />
       </Form.Item>
       {changes.strictStudentsCount === true ? (
         <Form.Item
@@ -152,6 +153,9 @@ export function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Pr
       </Form.Item>
       <Form.Item name="description" label="Description">
         <TextArea />
+      </Form.Item>
+      <Form.Item name="descriptionUrl" label="Description Url">
+        <Input />
       </Form.Item>
     </ModalForm>
   );

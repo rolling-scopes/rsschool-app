@@ -2,7 +2,7 @@ import { ProfileCourseDto } from 'api';
 import withSession from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
 import { noAccessResponse, notAuthorizedResponse } from 'modules/Course/data';
-import { TeamDistribution } from 'modules/TeamDistribution/pages/TeamDistribution';
+import { TeamDistributions } from 'modules/TeamDistribution/pages/TeamDistributions';
 import { GetServerSideProps } from 'next';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
 function Page(props: CoursePageProps) {
   return (
     <SessionProvider course={props.course}>
-      <TeamDistribution {...props} />
+      <TeamDistributions {...props} />
     </SessionProvider>
   );
 }

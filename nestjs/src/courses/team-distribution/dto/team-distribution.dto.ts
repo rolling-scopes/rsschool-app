@@ -13,6 +13,7 @@ export class TeamDistributionDto {
     this.studentsCount = teamDistribution.studentsCount;
     this.strictStudentsCount = teamDistribution.strictStudentsCount;
     this.minTotalScore = teamDistribution.minTotalScore;
+    this.descriptionUrl = teamDistribution.descriptionUrl;
   }
 
   @ApiProperty()
@@ -29,6 +30,9 @@ export class TeamDistributionDto {
 
   @ApiProperty()
   public description: string;
+
+  @ApiProperty()
+  public descriptionUrl: string;
 
   @ApiProperty()
   public minStudents: number;

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, ParseIntPipe, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, ParseIntPipe, Param, Get } from '@nestjs/common';
 import { TeamDistributionService } from './team-distribution.service';
 import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,23 +20,11 @@ export class TeamDistributionController {
     return new TeamDistributionDto(data);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.teamDistributionService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.teamDistributionService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTeamDistributionDto: UpdateTeamDistributionDto) {
-  //   return this.teamDistributionService.update(+id, updateTeamDistributionDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.teamDistributionService.remove(+id);
-  // }
+  @Get('/')
+  @ApiOkResponse({ type: [TeamDistributionDto] })
+  @ApiOperation({ operationId: 'getCourseTeamDistributions' })
+  public async getCourseTeamDistributions(@Param('courseId', ParseIntPipe) courseId: number) {
+    const data = await this.teamDistributionService.findByCourseId(courseId);
+    return data.map(el => new TeamDistributionDto(el));
+  }
 }

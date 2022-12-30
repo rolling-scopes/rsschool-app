@@ -44,6 +44,9 @@ export class TeamDistribution {
   @Column({ default: '' })
   description: string;
 
+  @Column({ default: '' })
+  descriptionUrl: string;
+
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)
   courseTasks: CourseTask[];
 
