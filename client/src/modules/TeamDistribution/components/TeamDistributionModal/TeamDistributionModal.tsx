@@ -6,6 +6,7 @@ import { TIMEZONES } from 'configs/timezones';
 import moment, { Moment } from 'moment';
 import { useState } from 'react';
 import { formatTimezoneToUTC } from 'services/formatter';
+import { urlPattern } from 'services/validators';
 
 type Props = {
   data: Partial<TeamDistributionDto>;
@@ -158,7 +159,11 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
       <Form.Item name="description" label="Description">
         <TextArea />
       </Form.Item>
-      <Form.Item name="descriptionUrl" label="Description Url">
+      <Form.Item
+        name="descriptionUrl"
+        label="Description Url"
+        rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
+      >
         <Input />
       </Form.Item>
     </ModalForm>
