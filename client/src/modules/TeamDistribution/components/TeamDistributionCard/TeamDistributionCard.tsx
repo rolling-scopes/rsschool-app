@@ -17,7 +17,6 @@ export default function TeamDistributionCard({ distribution, isManager, onDelete
   return (
     <Card
       style={{ marginTop: 24 }}
-      key={distribution.id}
       title={distribution.name}
       extra={<DistributionPeriod startDate={distribution.startDate} endDate={distribution.endDate} />}
       actions={

@@ -80,6 +80,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
               isManager={isManager}
               onDelete={handleDeleteTeamDistribution}
               onEdit={handleEditTeamDistribution}
+              key={distribution.id}
             />
           ))
         : null}
