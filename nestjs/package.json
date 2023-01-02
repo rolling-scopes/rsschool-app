@@ -63,7 +63,7 @@
     "typeorm": "0.3.7"
   },
   "devDependencies": {
-    "@nestjs/cli": "9.0.0",
+    "@nestjs/cli": "9.1.8",
     "@nestjs/schematics": "9.0.1",
     "@nestjs/testing": "9.0.11",
     "@openapitools/openapi-generator-cli": "2.5.1",
