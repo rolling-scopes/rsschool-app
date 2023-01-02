@@ -11,7 +11,7 @@ type Props = {
   onEdit: (distribution: TeamDistributionDto) => void;
 };
 
-export default function TeamDistributionModal({ distribution, isManager, onDelete, onEdit }: Props) {
+export default function TeamDistributionCard({ distribution, isManager, onDelete, onEdit }: Props) {
   const mobileView = useMedia('(max-width: 720px)');
 
   return (
