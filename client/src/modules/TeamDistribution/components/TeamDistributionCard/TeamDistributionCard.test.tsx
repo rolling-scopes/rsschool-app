@@ -98,7 +98,7 @@ describe('TeamDistributionCard', () => {
     expect(screen.getByRole('link', { name: /read more/i })).toBeInTheDocument();
   });
 
-  it('not should render read more link when distribution has descriptionUrl', () => {
+  it('should not render read more link when distribution has descriptionUrl', () => {
     render(
       <TeamDistributionCard
         distribution={{ ...distribution, descriptionUrl: '' }}
