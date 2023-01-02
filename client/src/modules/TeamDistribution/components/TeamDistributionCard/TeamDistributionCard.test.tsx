@@ -14,7 +14,7 @@ const mockOnDelete = jest.fn(() => Promise.resolve());
 const mockOnEdit = jest.fn();
 
 describe('TeamDistributionCard', () => {
-  it('renders the distribution name and description', () => {
+  it('should render the distribution name and description', () => {
     render(
       <TeamDistributionCard
         distribution={distribution}
@@ -28,7 +28,7 @@ describe('TeamDistributionCard', () => {
     expect(screen.getByText(distribution.description)).toBeInTheDocument();
   });
 
-  it('renders the distribution period when given start and end dates', () => {
+  it('should render the distribution period', () => {
     render(
       <TeamDistributionCard
         distribution={distribution}
@@ -42,7 +42,7 @@ describe('TeamDistributionCard', () => {
     expect(screen.getByText(/2022-01-31/)).toBeInTheDocument();
   });
 
-  it('renders the edit and delete buttons for managers', () => {
+  it('should render the edit and delete buttons for managers', () => {
     render(
       <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
     );
@@ -51,7 +51,7 @@ describe('TeamDistributionCard', () => {
     expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
   });
 
-  it('does not render the edit and delete buttons for non-managers', () => {
+  it('should not render the edit and delete buttons for non-managers', () => {
     render(
       <TeamDistributionCard
         distribution={distribution}
@@ -65,7 +65,7 @@ describe('TeamDistributionCard', () => {
     expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
   });
 
-  it('calls the onDelete function when the delete button is clicked', () => {
+  it('should call the onDelete function when the delete button is clicked', () => {
     render(
       <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
     );
@@ -75,7 +75,7 @@ describe('TeamDistributionCard', () => {
     expect(mockOnDelete).toHaveBeenCalledWith(distribution.id);
   });
 
-  it('calls the onEdit function when the edit button is clicked', () => {
+  it('should call the onEdit function when the edit button is clicked', () => {
     render(
       <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
     );
