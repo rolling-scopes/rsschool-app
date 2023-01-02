@@ -2,6 +2,7 @@ import { Button, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TeamDistributionDto } from 'api';
 import { DistributionPeriod } from './DistributionPeriod';
+import { useMedia } from 'react-use';
 
 type Props = {
   distribution: TeamDistributionDto;
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export default function TeamDistributionModal({ distribution, isManager, onDelete, onEdit }: Props) {
+  const mobileView = useMedia('(max-width: 720px)');
+
   return (
     <Card
       style={{ marginTop: 24 }}
@@ -21,10 +24,10 @@ export default function TeamDistributionModal({ distribution, isManager, onDelet
         isManager
           ? [
               <Button key="edit" icon={<EditOutlined />} onClick={() => onEdit(distribution)}>
-                Edit Team Distribution
+                {!mobileView && 'Edit Team Distribution'}
               </Button>,
               <Button key="delete" icon={<DeleteOutlined />} onClick={() => onDelete(distribution.id)}>
-                Delete Team Distribution
+                {!mobileView && 'Delete Team Distribution'}
               </Button>,
             ]
           : undefined
