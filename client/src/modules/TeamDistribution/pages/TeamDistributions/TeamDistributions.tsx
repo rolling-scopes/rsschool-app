@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageLayout } from 'components/PageLayout';
-import { isCourseManager } from 'domain/user';
+import { isActiveStudent, isCourseManager } from 'domain/user';
 import { CoursePageProps } from 'services/models';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
 import { Button, message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
+import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
 
 const teamDistributionApi = new TeamDistributionApi();
 
@@ -15,6 +16,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   const [teamDistribution, setTeamDistribution] = useState<Partial<TeamDistributionDto> | null>(null);
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
+  const isStudent = useMemo(() => isActiveStudent(session, course.id), [session, course.id]);
 
   const loadData = async () => {
     try {
@@ -70,6 +72,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
           Team Distribution
         </Button>
       )}
+      {isStudent && <WelcomeCard />}
       {distributions.length
         ? distributions.map(distribution => (
             <TeamDistributionCard
