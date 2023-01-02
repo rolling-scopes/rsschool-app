@@ -34,6 +34,14 @@ export default function TeamDistributionCard({ distribution, isManager, onDelete
       }
     >
       {distribution.description}
+      {distribution.descriptionUrl && (
+        <>
+          <br />
+          <a href={distribution.descriptionUrl} target="_blank">
+            Read more
+          </a>
+        </>
+      )}
     </Card>
   );
 }

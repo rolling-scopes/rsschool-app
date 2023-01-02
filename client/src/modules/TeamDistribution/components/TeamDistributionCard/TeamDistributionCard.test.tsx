@@ -8,6 +8,7 @@ const distribution = {
   startDate: '2022-01-01',
   endDate: '2022-01-31',
   description: 'This is the first team distribution.',
+  descriptionUrl: 'http://example.com',
 } as TeamDistributionDto;
 
 const mockOnDelete = jest.fn(() => Promise.resolve());
@@ -83,5 +84,29 @@ describe('TeamDistributionCard', () => {
     fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     expect(mockOnEdit).toHaveBeenCalledWith(distribution);
+  });
+
+  it('should render read more link when distribution has descriptionUrl', () => {
+    render(
+      <TeamDistributionCard
+        distribution={distribution}
+        isManager={false}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+      />,
+    );
+    expect(screen.getByRole('link', { name: /read more/i })).toBeInTheDocument();
+  });
+
+  it('not should render read more link when distribution has descriptionUrl', () => {
+    render(
+      <TeamDistributionCard
+        distribution={{ ...distribution, descriptionUrl: '' }}
+        isManager={false}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+      />,
+    );
+    expect(screen.queryByRole('link', { name: /read more/i })).not.toBeInTheDocument();
   });
 });
