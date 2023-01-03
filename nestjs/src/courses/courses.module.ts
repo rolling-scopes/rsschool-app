@@ -21,6 +21,7 @@ import {
   TaskInterviewResult,
   User,
   TaskInterviewStudent,
+  TeamDistribution,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -48,6 +49,8 @@ import {
   CourseICalendarController,
 } from './course-schedule';
 import { CoreModule } from 'src/core/core.module';
+import { TeamDistributionController } from './team-distribution/team-distribution.controller';
+import { TeamDistributionService } from './team-distribution/team-distribution.service';
 
 @Module({
   imports: [
@@ -71,6 +74,7 @@ import { CoreModule } from 'src/core/core.module';
       TaskResult,
       TaskInterviewResult,
       TaskInterviewStudent,
+      TeamDistribution,
     ]),
     CoreModule,
     UsersModule,
@@ -91,6 +95,7 @@ import { CoreModule } from 'src/core/core.module';
     TaskSolutionsController,
     CourseScheduleController,
     CourseICalendarController,
+    TeamDistributionController,
   ],
   providers: [
     CourseTasksService,
@@ -109,6 +114,7 @@ import { CoreModule } from 'src/core/core.module';
     TaskSolutionsService,
     CourseScheduleService,
     CourseICalendarService,
+    TeamDistributionService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })
