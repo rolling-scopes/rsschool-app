@@ -29,12 +29,25 @@ export class TeamDistributionService {
     if (student == null || student.isExpelled) {
       return registrationStatusEnum.Unavailable;
     }
+
     const currTimestampUTC = Date.now();
     const distributionStartDate = distribution.startDate.getTime();
     if (currTimestampUTC < distributionStartDate) {
       return registrationStatusEnum.Future;
     }
-    return registrationStatusEnum.Available;
+
+    //tbd: add status completed
+
+    const distributionEndDate = distribution.endDate.getTime();
+    if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
+      return registrationStatusEnum.Available;
+    }
+
+    if (currTimestampUTC > distributionEndDate) {
+      return registrationStatusEnum.Closed;
+    }
+
+    return registrationStatusEnum.Unavailable;
   }
 
   public async findByCourseId(courseId: number, student: Student | null) {
