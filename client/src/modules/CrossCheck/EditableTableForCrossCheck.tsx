@@ -1,15 +1,15 @@
 import { Form, Table, Typography, Popconfirm } from 'antd';
 import React, { useState } from 'react';
 import { SaveOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { CriteriaData } from 'services/course';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { MenuOutlined } from '@ant-design/icons';
 import { arrayMoveImmutable } from './utils/arrayMoveImmutable';
 import { SortableElement, SortableHandle, SortableContainer } from 'react-sortable-hoc';
+import { CriteriaDto } from 'api';
 
 interface IEditableTableProps {
-  dataCriteria: CriteriaData[];
-  setDataCriteria: (data: CriteriaData[]) => void;
+  dataCriteria: CriteriaDto[];
+  setDataCriteria: (data: CriteriaDto[]) => void;
 }
 interface CriteriaIndex {
   oldIndex: number;
@@ -45,9 +45,9 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     return <SortableItem index={index} {...restProps} />;
   };
 
-  const isEditing = (record: CriteriaData) => record.key === editingKey;
+  const isEditing = (record: CriteriaDto) => record.key === editingKey;
 
-  const edit = (record: Partial<CriteriaData> & { key: React.Key }) => {
+  const edit = (record: Partial<CriteriaDto> & { key: React.Key }) => {
     form.setFieldsValue({ type: '', text: '', ...record });
     setEditingKey(record.key);
   };
@@ -58,7 +58,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const save = async (key: React.Key) => {
-    const row = (await form.validateFields()) as CriteriaData;
+    const row = (await form.validateFields()) as CriteriaDto;
 
     const newData = [...dataCriteria];
     const index = newData.findIndex(item => key === item.key);
@@ -107,7 +107,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       title: 'Action',
       dataIndex: 'action',
       width: '10%',
-      render: (_: any, record: CriteriaData) => {
+      render: (_: any, record: CriteriaDto) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
@@ -137,7 +137,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     }
     return {
       ...col,
-      onCell: (record: CriteriaData) => ({
+      onCell: (record: CriteriaDto) => ({
         record,
         inputType: col.dataIndex === 'max' ? 'max' : col.dataIndex === 'type' ? 'text' : 'description',
         dataIndex: col.dataIndex,

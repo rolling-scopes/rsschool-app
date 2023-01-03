@@ -1,5 +1,5 @@
 import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
-import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum, TaskDto, TasksApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
@@ -10,7 +10,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
-import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
 
 const { Option } = Select;
@@ -22,14 +21,15 @@ type Props = {
 };
 
 const userService = new UserService();
-const taskService = new TaskService();
+const taskApi = new TasksApi();
 
 export function CourseTaskModal(props: Props) {
   const { data } = props;
   const [changes, setChanges] = useState({} as Record<string, any>);
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 
-  const { loading, value: tasks = [] } = useAsync(() => taskService.getTasks(), []);
+  const { loading, value: tasksResponse } = useAsync(() => taskApi.getTasks(), []);
+  const tasks = tasksResponse?.data ?? [];
 
   useEffect(() => {
     setChanges(data ? { ...data, changes } : {});
@@ -68,7 +68,7 @@ export function CourseTaskModal(props: Props) {
       if (!input) {
         return false;
       }
-      const task: Task | undefined = tasks.find(t => t.id === option?.value);
+      const task = tasks.find(t => t.id === option?.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
@@ -86,7 +86,7 @@ export function CourseTaskModal(props: Props) {
     >
       <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
         <Select filterOption={filterOption} showSearch placeholder="Please select a task">
-          {tasks.map((task: Task) => (
+          {tasks.map((task: TaskDto) => (
             <Option key={task.id} value={task.id}>
               {task.name} {tagsRenderer(task.tags)}
             </Option>

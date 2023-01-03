@@ -5,6 +5,7 @@ import { courseService, userService } from '../services';
 import { InterviewInfo } from './interview.repository';
 import { createInterviews } from '../rules/interviews';
 import { queryMentorByGithubId, queryStudentByGithubId } from '../services/course.service';
+import { TaskType } from '../models/task';
 
 @EntityRepository(StageInterview)
 export class StageInterviewRepository extends AbstractRepository<StageInterview> {
@@ -76,7 +77,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
 
   public async create(courseId: number, studentGithubId: string, interviewerGithubId: string) {
     const courseTask = await getRepository(CourseTask).findOne({
-      where: { courseId, type: 'stage-interview', disabled: false },
+      where: { courseId, type: TaskType.StageInterview, disabled: false },
     });
 
     const [student, interviewer] = await Promise.all([
@@ -150,7 +151,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async createAutomatically(courseId: number, noRegistration: boolean = false) {
-    const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: 'stage-interview' } })!;
+    const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: TaskType.StageInterview } })!;
     if (courseTask == null) {
       return [];
     }

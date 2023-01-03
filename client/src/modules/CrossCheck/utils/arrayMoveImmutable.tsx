@@ -1,6 +1,6 @@
-import { CriteriaData } from 'services/course';
+import { CriteriaDto } from 'api';
 
-export function arrayMoveMutable(array: CriteriaData[], fromIndex: number, toIndex: number) {
+export function arrayMoveMutable(array: CriteriaDto[], fromIndex: number, toIndex: number) {
   const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;
 
   if (startIndex >= 0 && startIndex < array.length) {
@@ -11,7 +11,7 @@ export function arrayMoveMutable(array: CriteriaData[], fromIndex: number, toInd
   }
 }
 
-export function arrayMoveImmutable(array: CriteriaData[], fromIndex: number, toIndex: number) {
+export function arrayMoveImmutable(array: CriteriaDto[], fromIndex: number, toIndex: number) {
   const arrayCopy = [...array];
   arrayMoveMutable(arrayCopy, fromIndex, toIndex);
   return arrayCopy;
