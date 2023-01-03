@@ -4103,6 +4103,12 @@ export interface TeamDistributionDto {
      * @type {string}
      * @memberof TeamDistributionDto
      */
+    'registrationStatus': TeamDistributionDtoRegistrationStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
     'startDate': string;
     /**
      * 
@@ -4153,6 +4159,17 @@ export interface TeamDistributionDto {
      */
     'minTotalScore': number;
 }
+
+export const TeamDistributionDtoRegistrationStatusEnum = {
+    Available: 'available',
+    Unavailable: 'unavailable',
+    Future: 'future',
+    Completed: 'completed',
+    Closed: 'closed'
+} as const;
+
+export type TeamDistributionDtoRegistrationStatusEnum = typeof TeamDistributionDtoRegistrationStatusEnum[keyof typeof TeamDistributionDtoRegistrationStatusEnum];
+
 /**
  * 
  * @export

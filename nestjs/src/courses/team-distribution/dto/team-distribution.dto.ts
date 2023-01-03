@@ -1,8 +1,9 @@
 import { TeamDistribution } from '@entities/teamDistribution';
 import { ApiProperty } from '@nestjs/swagger';
+import { registrationStatusEnum } from '../team-distribution.service';
 
 export class TeamDistributionDto {
-  constructor(teamDistribution: TeamDistribution) {
+  constructor(teamDistribution: TeamDistribution & { registrationStatus?: string }) {
     this.id = teamDistribution.id;
     this.name = teamDistribution.name;
     this.startDate = teamDistribution.startDate;
@@ -14,6 +15,7 @@ export class TeamDistributionDto {
     this.strictStudentsCount = teamDistribution.strictStudentsCount;
     this.minTotalScore = teamDistribution.minTotalScore;
     this.descriptionUrl = teamDistribution.descriptionUrl;
+    this.registrationStatus = teamDistribution.registrationStatus ?? null;
   }
 
   @ApiProperty()
@@ -21,6 +23,9 @@ export class TeamDistributionDto {
 
   @ApiProperty()
   public name: string;
+
+  @ApiProperty({ enum: registrationStatusEnum })
+  registrationStatus: string | null;
 
   @ApiProperty()
   public startDate: Date;

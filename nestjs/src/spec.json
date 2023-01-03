@@ -740,6 +740,66 @@
         "tags": ["courses schedule ical"]
       }
     },
+    "/courses/{courseId}/team-distribution": {
+      "post": {
+        "operationId": "createTeamDistribution",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDistributionDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
+      },
+      "get": {
+        "operationId": "getCourseTeamDistributions",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{id}": {
+      "delete": {
+        "operationId": "deleteTeamDistribution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["team distribution"]
+      },
+      "put": {
+        "operationId": "updateTeamDistribution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDistributionDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["team distribution"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -963,66 +1023,6 @@
         },
         "responses": { "201": { "description": "" } },
         "tags": ["auth"]
-      }
-    },
-    "/courses/{courseId}/team-distribution": {
-      "post": {
-        "operationId": "createTeamDistribution",
-        "summary": "",
-        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDistributionDto" } } }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
-          }
-        },
-        "tags": ["team distribution"]
-      },
-      "get": {
-        "operationId": "getCourseTeamDistributions",
-        "summary": "",
-        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionDto" } }
-              }
-            }
-          }
-        },
-        "tags": ["team distribution"]
-      }
-    },
-    "/courses/{courseId}/team-distribution/{id}": {
-      "delete": {
-        "operationId": "deleteTeamDistribution",
-        "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
-        "responses": { "200": { "description": "" } },
-        "tags": ["team distribution"]
-      },
-      "put": {
-        "operationId": "updateTeamDistribution",
-        "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDistributionDto" } } }
-        },
-        "responses": { "200": { "description": "" } },
-        "tags": ["team distribution"]
       }
     },
     "/profile/{username}/courses": {
@@ -2398,6 +2398,94 @@
         "properties": { "token": { "type": "string" } },
         "required": ["token"]
       },
+      "CreateTeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
+        },
+        "required": [
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "descriptionUrl",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
+      },
+      "TeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "registrationStatus": {
+            "type": "string",
+            "enum": ["available", "unavailable", "future", "completed", "closed"]
+          },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
+        },
+        "required": [
+          "id",
+          "name",
+          "registrationStatus",
+          "startDate",
+          "endDate",
+          "description",
+          "descriptionUrl",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
+      },
+      "UpdateTeamDistributionDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" },
+          "minTotalScore": { "type": "number" }
+        },
+        "required": [
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "descriptionUrl",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount",
+          "minTotalScore"
+        ]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",
@@ -2504,89 +2592,6 @@
         "type": "object",
         "properties": { "channelId": { "type": "string" }, "externalId": { "type": "string" } },
         "required": ["channelId", "externalId"]
-      },
-      "CreateTeamDistributionDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "startDate": { "format": "date-time", "type": "string" },
-          "endDate": { "format": "date-time", "type": "string" },
-          "description": { "type": "string" },
-          "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
-          "minTotalScore": { "type": "number" }
-        },
-        "required": [
-          "name",
-          "startDate",
-          "endDate",
-          "description",
-          "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
-          "minTotalScore"
-        ]
-      },
-      "TeamDistributionDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "startDate": { "format": "date-time", "type": "string" },
-          "endDate": { "format": "date-time", "type": "string" },
-          "description": { "type": "string" },
-          "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
-          "minTotalScore": { "type": "number" }
-        },
-        "required": [
-          "id",
-          "name",
-          "startDate",
-          "endDate",
-          "description",
-          "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
-          "minTotalScore"
-        ]
-      },
-      "UpdateTeamDistributionDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "startDate": { "format": "date-time", "type": "string" },
-          "endDate": { "format": "date-time", "type": "string" },
-          "description": { "type": "string" },
-          "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
-          "minTotalScore": { "type": "number" }
-        },
-        "required": [
-          "name",
-          "startDate",
-          "endDate",
-          "description",
-          "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
-          "minTotalScore"
-        ]
       },
       "ProfileCourseDto": {
         "type": "object",

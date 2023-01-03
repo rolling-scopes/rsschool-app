@@ -21,6 +21,7 @@ import {
   TaskInterviewResult,
   User,
   TaskInterviewStudent,
+  TeamDistribution,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -48,7 +49,8 @@ import {
   CourseICalendarController,
 } from './course-schedule';
 import { CoreModule } from 'src/core/core.module';
-import { TeamDistributionModule } from './team-distribution/team-distribution.module';
+import { TeamDistributionController } from './team-distribution/team-distribution.controller';
+import { TeamDistributionService } from './team-distribution/team-distribution.service';
 
 @Module({
   imports: [
@@ -72,11 +74,11 @@ import { TeamDistributionModule } from './team-distribution/team-distribution.mo
       TaskResult,
       TaskInterviewResult,
       TaskInterviewStudent,
+      TeamDistribution,
     ]),
     CoreModule,
     UsersModule,
     UsersNotificationsModule,
-    TeamDistributionModule,
   ],
   controllers: [
     FeedbacksController,
@@ -93,6 +95,7 @@ import { TeamDistributionModule } from './team-distribution/team-distribution.mo
     TaskSolutionsController,
     CourseScheduleController,
     CourseICalendarController,
+    TeamDistributionController,
   ],
   providers: [
     CourseTasksService,
@@ -111,6 +114,7 @@ import { TeamDistributionModule } from './team-distribution/team-distribution.mo
     TaskSolutionsService,
     CourseScheduleService,
     CourseICalendarService,
+    TeamDistributionService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

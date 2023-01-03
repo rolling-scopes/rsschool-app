@@ -1,15 +1,20 @@
-import { Controller, Post, Body, UseGuards, ParseIntPipe, Param, Get, Delete, Put } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, ParseIntPipe, Param, Get, Delete, Put, Req } from '@nestjs/common';
 import { TeamDistributionService } from './team-distribution.service';
 import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
+import { StudentsService } from '../students';
+import { Student } from '@entities/index';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
 @UseGuards(DefaultGuard, CourseGuard)
 export class TeamDistributionController {
-  constructor(private readonly teamDistributionService: TeamDistributionService) {}
+  constructor(
+    private readonly teamDistributionService: TeamDistributionService,
+    private readonly studentsService: StudentsService,
+  ) {}
   @Post('/')
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDistributionDto })
@@ -23,8 +28,16 @@ export class TeamDistributionController {
   @Get('/')
   @ApiOkResponse({ type: [TeamDistributionDto] })
   @ApiOperation({ operationId: 'getCourseTeamDistributions' })
-  public async getCourseTeamDistributions(@Param('courseId', ParseIntPipe) courseId: number) {
-    const data = await this.teamDistributionService.findByCourseId(courseId);
+  public async getCourseTeamDistributions(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
+    const studentId = req.user.courses[courseId]?.studentId;
+    let student: Student | null = null;
+    if (studentId) {
+      student = await this.studentsService.getById(studentId);
+    }
+    const data = await this.teamDistributionService.findByCourseId(courseId, student);
     return data.map(el => new TeamDistributionDto(el));
   }
 
