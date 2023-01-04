@@ -37,6 +37,7 @@ import { TaskCriteria1666348642811 } from './1666348642811-TaskCriteria';
 import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionResult';
 import { TeamDistribution1672142743107 } from './1672142743107-TeamDistribution';
 import { Tasks1671475396333 } from './1671475396333-Tasks';
+import { TeamDistribution1672386450861 } from './1672386450861-TeamDistribution';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -77,5 +78,6 @@ export const migrations = [
   TaskCriteria1666348642811,
   TaskSolutionResult1666621080327,
   TeamDistribution1672142743107,
+  TeamDistribution1672386450861,
   Tasks1671475396333,
 ];
