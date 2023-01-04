@@ -1704,6 +1704,73 @@ export interface CreateTaskDto {
 /**
  * 
  * @export
+ * @interface CreateTeamDistributionDto
+ */
+export interface CreateTeamDistributionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDistributionDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'minStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'maxStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'studentsCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateTeamDistributionDto
+     */
+    'strictStudentsCount': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDistributionDto
+     */
+    'minTotalScore': number;
+}
+/**
+ * 
+ * @export
  * @interface CreateUserGroupDto
  */
 export interface CreateUserGroupDto {
@@ -4016,6 +4083,96 @@ export interface TaskSolutionDto {
 /**
  * 
  * @export
+ * @interface TeamDistributionDto
+ */
+export interface TeamDistributionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'registrationStatus': TeamDistributionDtoRegistrationStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDistributionDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'minStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'maxStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'studentsCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamDistributionDto
+     */
+    'strictStudentsCount': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDistributionDto
+     */
+    'minTotalScore': number;
+}
+
+export const TeamDistributionDtoRegistrationStatusEnum = {
+    Available: 'available',
+    Unavailable: 'unavailable',
+    Future: 'future',
+    Completed: 'completed',
+    Closed: 'closed'
+} as const;
+
+export type TeamDistributionDtoRegistrationStatusEnum = typeof TeamDistributionDtoRegistrationStatusEnum[keyof typeof TeamDistributionDtoRegistrationStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface UpdateCourseDto
  */
 export interface UpdateCourseDto {
@@ -4662,6 +4819,73 @@ export interface UpdateTaskDto {
      * @memberof UpdateTaskDto
      */
     'tags': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateTeamDistributionDto
+ */
+export interface UpdateTeamDistributionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'minStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'maxStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'studentsCount': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'strictStudentsCount': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTeamDistributionDto
+     */
+    'minTotalScore': number;
 }
 /**
  * 
@@ -11879,6 +12103,328 @@ export class TasksCriteriaApi extends BaseAPI {
      */
     public updateTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig) {
         return TasksCriteriaApiFp(this.configuration).updateTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * TeamDistributionApi - axios parameter creator
+ * @export
+ */
+export const TeamDistributionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeamDistribution: async (courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTeamDistribution', 'courseId', courseId)
+            // verify required parameter 'createTeamDistributionDto' is not null or undefined
+            assertParamExists('createTeamDistribution', 'createTeamDistributionDto', createTeamDistributionDto)
+            const localVarPath = `/courses/{courseId}/team-distribution`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamDistributionDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTeamDistribution: async (courseId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('deleteTeamDistribution', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteTeamDistribution', 'id', id)
+            const localVarPath = `/courses/{courseId}/team-distribution/{id}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTeamDistributions: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseTeamDistributions', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/team-distribution`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {UpdateTeamDistributionDto} updateTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTeamDistribution: async (courseId: number, id: number, updateTeamDistributionDto: UpdateTeamDistributionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('updateTeamDistribution', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateTeamDistribution', 'id', id)
+            // verify required parameter 'updateTeamDistributionDto' is not null or undefined
+            assertParamExists('updateTeamDistribution', 'updateTeamDistributionDto', updateTeamDistributionDto)
+            const localVarPath = `/courses/{courseId}/team-distribution/{id}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTeamDistributionDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamDistributionApi - functional programming interface
+ * @export
+ */
+export const TeamDistributionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamDistributionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTeamDistribution(courseId, createTeamDistributionDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteTeamDistribution(courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeamDistribution(courseId, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseTeamDistributions(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDistributionDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTeamDistributions(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {UpdateTeamDistributionDto} updateTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateTeamDistribution(courseId: number, id: number, updateTeamDistributionDto: UpdateTeamDistributionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTeamDistribution(courseId, id, updateTeamDistributionDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * TeamDistributionApi - factory interface
+ * @export
+ */
+export const TeamDistributionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamDistributionApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: any): AxiosPromise<TeamDistributionDto> {
+            return localVarFp.createTeamDistribution(courseId, createTeamDistributionDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTeamDistribution(courseId: number, id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteTeamDistribution(courseId, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTeamDistributions(courseId: number, options?: any): AxiosPromise<Array<TeamDistributionDto>> {
+            return localVarFp.getCourseTeamDistributions(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {UpdateTeamDistributionDto} updateTeamDistributionDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTeamDistribution(courseId: number, id: number, updateTeamDistributionDto: UpdateTeamDistributionDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateTeamDistribution(courseId, id, updateTeamDistributionDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamDistributionApi - object-oriented interface
+ * @export
+ * @class TeamDistributionApi
+ * @extends {BaseAPI}
+ */
+export class TeamDistributionApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CreateTeamDistributionDto} createTeamDistributionDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public createTeamDistribution(courseId: number, createTeamDistributionDto: CreateTeamDistributionDto, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).createTeamDistribution(courseId, createTeamDistributionDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public deleteTeamDistribution(courseId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).deleteTeamDistribution(courseId, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public getCourseTeamDistributions(courseId: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).getCourseTeamDistributions(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} id 
+     * @param {UpdateTeamDistributionDto} updateTeamDistributionDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public updateTeamDistribution(courseId: number, id: number, updateTeamDistributionDto: UpdateTeamDistributionDto, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).updateTeamDistribution(courseId, id, updateTeamDistributionDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
