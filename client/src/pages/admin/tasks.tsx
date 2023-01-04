@@ -71,7 +71,8 @@ function Page(props: Props) {
         const record = createRecord(values);
         if (modalAction === 'update') {
           await tasksApi.updateTask(modalData!.id!, record);
-          if (await criteriaApi.getTaskCriteria(modalData!.id!)) {
+          const { data } = await criteriaApi.getTaskCriteria(modalData!.id!);
+          if (data.criteria) {
             await criteriaApi.updateTaskCriteria(modalData!.id!, { criteria: dataCriteria });
           } else {
             await criteriaApi.createTaskCriteria(modalData!.id!, { criteria: dataCriteria });
