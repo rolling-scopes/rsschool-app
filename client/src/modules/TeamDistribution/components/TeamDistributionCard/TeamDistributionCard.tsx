@@ -2,7 +2,7 @@ import { Button, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TeamDistributionDto } from 'api';
 import { DistributionPeriod } from './DistributionPeriod';
-import { RegistrySection } from './RegistrySection';
+import { Actions } from './Actions';
 import { useMedia } from 'react-use';
 
 type Props = {
@@ -11,9 +11,17 @@ type Props = {
   onDelete: (id: number) => Promise<void>;
   onEdit: (distribution: TeamDistributionDto) => void;
   onRegister: (distributionId: number) => Promise<void>;
+  onDeleteRegister: (distributionId: number) => Promise<void>;
 };
 
-export default function TeamDistributionCard({ distribution, isManager, onDelete, onEdit, onRegister }: Props) {
+export default function TeamDistributionCard({
+  distribution,
+  isManager,
+  onDelete,
+  onEdit,
+  onRegister,
+  onDeleteRegister,
+}: Props) {
   const mobileView = useMedia('(max-width: 720px)');
 
   return (
@@ -41,7 +49,7 @@ export default function TeamDistributionCard({ distribution, isManager, onDelete
           Read more
         </a>
       )}
-      <RegistrySection distribution={distribution} onRegister={onRegister} />
+      <Actions distribution={distribution} onRegister={onRegister} onDeleteRegister={onDeleteRegister} />
     </Card>
   );
 }

@@ -83,4 +83,21 @@ export class TeamDistributionController {
       await this.studentsService.addTeamDistributionToStudent(studentId, teamDistribution);
     }
   }
+
+  @Delete('/:id/registry')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamDistributionDto })
+  @ApiOperation({ operationId: 'teamDistributionDeleteRegistry' })
+  @RequiredRoles([CourseRole.Student])
+  public async deleteRegistry(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const teamDistribution = await this.teamDistributionService.getById(id);
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (studentId) {
+      await this.studentsService.deleteTeamDistributionFromStudent(studentId, teamDistribution);
+    }
+  }
 }

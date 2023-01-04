@@ -31,6 +31,13 @@ export class StudentsService {
     await this.studentRepository.save(student);
   }
 
+  public async deleteTeamDistributionFromStudent(studentId: number, teamDistribution: TeamDistribution) {
+    const student = await this.getStudentWithTeamDistributions(studentId);
+    if (student == null) throw new NotFoundException();
+    student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistribution.id);
+    await this.studentRepository.save(student);
+  }
+
   public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
     const student = await this.studentRepository.findOneBy({ id: studentId });
     if (student == null) {

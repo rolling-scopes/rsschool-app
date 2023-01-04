@@ -52,6 +52,16 @@ function TeamDistributions({ session, course }: CoursePageProps) {
     }
   };
 
+  const handleDeleteRegister = async (distributionId: number) => {
+    try {
+      await teamDistributionApi.teamDistributionDeleteRegistry(course.id, distributionId);
+      await loadData();
+      message.success('Registration canceled.');
+    } catch (error) {
+      message.error('Cancellation of registration failed. Please try again later');
+    }
+  };
+
   const handleDeleteTeamDistribution = async (distributionId: number) => {
     try {
       await teamDistributionApi.deleteTeamDistribution(course.id, distributionId);
@@ -88,6 +98,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
           ? distributions.map(distribution => (
               <TeamDistributionCard
                 onRegister={handleRegister}
+                onDeleteRegister={handleDeleteRegister}
                 distribution={distribution}
                 isManager={isManager}
                 onDelete={handleDeleteTeamDistribution}
