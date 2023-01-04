@@ -10,7 +10,7 @@ import {
   PlayCircleTwoTone,
   StopTwoTone,
   AppstoreOutlined,
-  // UsergroupAddOutlined,
+  UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
@@ -135,13 +135,13 @@ const links: LinkData[] = [
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
-  // {
-  //   name: 'Team Distributions (Beta)',
-  //   icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
-  //   getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
-  //   access: some(isCourseManager),
-  //   courseAccess: everyCourse(isCourseNotCompleted),
-  // },
+  {
+    name: 'Team Distributions (Beta)',
+    icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
+    getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
+    access: some(isCourseManager),
+    courseAccess: everyCourse(isCourseNotCompleted),
+  },
 ];
 
 export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {

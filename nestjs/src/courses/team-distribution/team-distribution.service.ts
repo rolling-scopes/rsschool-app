@@ -36,7 +36,9 @@ export class TeamDistributionService {
       return registrationStatusEnum.Future;
     }
 
-    //tbd: add status completed
+    if (student.teamDistribution.find(el => el.id === distribution.id)) {
+      return registrationStatusEnum.Completed;
+    }
 
     const distributionEndDate = distribution.endDate.getTime();
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
@@ -58,6 +60,10 @@ export class TeamDistributionService {
       },
     });
     return data.map(el => ({ ...el, registrationStatus: this.getDistributionStatus(el, student) }));
+  }
+
+  public getById(id: number) {
+    return this.repository.findOneOrFail({ where: { id } });
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

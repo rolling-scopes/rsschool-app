@@ -35,7 +35,7 @@ export class TeamDistributionController {
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
     if (studentId) {
-      student = await this.studentsService.getById(studentId);
+      student = await this.studentsService.getStudentWithTeamDistributions(studentId);
     }
     const data = await this.teamDistributionService.findByCourseId(courseId, student);
     return data.map(el => new TeamDistributionDto(el));
@@ -65,5 +65,22 @@ export class TeamDistributionController {
       id: id,
       ...dto,
     });
+  }
+
+  @Post('/:id/registry')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamDistributionDto })
+  @ApiOperation({ operationId: 'teamDistributionRegistry' })
+  @RequiredRoles([CourseRole.Student])
+  public async registry(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const teamDistribution = await this.teamDistributionService.getById(id);
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (studentId) {
+      await this.studentsService.addTeamDistributionToStudent(studentId, teamDistribution);
+    }
   }
 }
