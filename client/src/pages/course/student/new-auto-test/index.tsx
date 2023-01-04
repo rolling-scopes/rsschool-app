@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
 
 function Page(props: AutoTestsProps) {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Student]} course={props.course}>
+    <SessionProvider course={props.course}>
       <AutoTests {...props} />
     </SessionProvider>
   );
