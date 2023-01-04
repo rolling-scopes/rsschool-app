@@ -97,10 +97,9 @@ function Page(props: Props) {
       setDataCriteria(addKeyAndIndex(newDataCriteria));
     };
 
-    const addJSONtoCriteria = (criteria: string) => {
+    const addJSONtoCriteria = (criteria: CriteriaDto[]) => {
       const oldCriteria = dataCriteria;
-      const addingCriteria = JSON.parse(criteria);
-      const newCriteria = [...oldCriteria, ...addingCriteria];
+      const newCriteria = [...oldCriteria, ...criteria];
       setDataCriteria(addKeyAndIndex(newCriteria));
     };
 
