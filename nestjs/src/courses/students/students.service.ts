@@ -1,5 +1,5 @@
 import { Student } from '@entities/student';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { Repository } from 'typeorm';
@@ -24,14 +24,23 @@ export class StudentsService {
     return student;
   }
 
-  public async addTeamDistributionToStudent(studentId: number, teamDistribution: TeamDistribution) {
+  public async addStudentToTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
     const student = await this.getStudentWithTeamDistributions(studentId);
+    const currTimestampUTC = Date.now();
+    const distributionStartDate = teamDistribution.startDate.getTime();
+    const distributionEndDate = teamDistribution.endDate.getTime();
     if (student == null) throw new NotFoundException();
+    if (currTimestampUTC < distributionStartDate || currTimestampUTC > distributionEndDate) {
+      throw new BadRequestException();
+    }
+    if (student.totalScore < teamDistribution.minTotalScore) {
+      throw new BadRequestException('Number of points is less than the input threshold for distribution');
+    }
     student.teamDistribution = [...student.teamDistribution, teamDistribution];
     await this.studentRepository.save(student);
   }
 
-  public async deleteTeamDistributionFromStudent(studentId: number, teamDistribution: TeamDistribution) {
+  public async deleteStudentFromTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
     const student = await this.getStudentWithTeamDistributions(studentId);
     if (student == null) throw new NotFoundException();
     student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistribution.id);

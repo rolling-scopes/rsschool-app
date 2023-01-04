@@ -42,6 +42,16 @@ export function Actions({ distribution, onRegister, onDeleteRegister }: Props) {
     });
   };
 
+  const renderRegistrationCancelSection = () => (
+    <>
+      You can{' '}
+      <Link type="danger" underline onClick={handleCancel}>
+        Cancel
+      </Link>{' '}
+      registration before {dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate)}
+    </>
+  );
+
   switch (distribution.registrationStatus) {
     case TeamDistributionDtoRegistrationStatusEnum.Future:
       return (
@@ -73,12 +83,17 @@ export function Actions({ distribution, onRegister, onDeleteRegister }: Props) {
               Registered
             </Button>
             <Text type="secondary">
-              You can{' '}
-              <Link type="danger" underline onClick={handleCancel}>
-                Cancel
-              </Link>{' '}
-              registration before 2022-12-01 05:00 UTC
+              {moment() > moment(distribution.endDate) ? 'Registration is closed' : renderRegistrationCancelSection()}
             </Text>
+          </Space>
+        </Row>
+      );
+    case TeamDistributionDtoRegistrationStatusEnum.Closed:
+      return (
+        <Row style={{ marginTop: 16 }}>
+          <Space size={24}>
+            <Button disabled>Register</Button>
+            <Text type="secondary">Registration is closed</Text>
           </Space>
         </Row>
       );

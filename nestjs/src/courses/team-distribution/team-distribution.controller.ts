@@ -80,7 +80,7 @@ export class TeamDistributionController {
     const teamDistribution = await this.teamDistributionService.getById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.studentsService.addTeamDistributionToStudent(studentId, teamDistribution);
+      await this.studentsService.addStudentToTeamDistribution(studentId, teamDistribution);
     }
   }
 
@@ -97,7 +97,7 @@ export class TeamDistributionController {
     const teamDistribution = await this.teamDistributionService.getById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.studentsService.deleteTeamDistributionFromStudent(studentId, teamDistribution);
+      await this.studentsService.deleteStudentFromTeamDistribution(studentId, teamDistribution);
     }
   }
 }

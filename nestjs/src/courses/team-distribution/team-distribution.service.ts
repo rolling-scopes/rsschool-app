@@ -26,7 +26,7 @@ export class TeamDistributionService {
   }
 
   private getDistributionStatus(distribution: TeamDistribution, student: Student | null) {
-    if (student == null || student.isExpelled) {
+    if (student == null || student.isExpelled || distribution.minTotalScore > student.totalScore) {
       return registrationStatusEnum.Unavailable;
     }
 
