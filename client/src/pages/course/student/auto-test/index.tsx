@@ -1,5 +1,4 @@
 import { SessionProvider } from 'modules/Course/contexts';
-import { CourseRole } from 'components/withSession';
 import { GetServerSideProps } from 'next';
 import { CoursesTasksApi, CourseTaskDtoTypeEnum, CreateCourseTaskDtoCheckerEnum, ProfileCourseDto } from 'api';
 import { getTokenFromContext } from 'utils/server';

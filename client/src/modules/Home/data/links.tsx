@@ -16,6 +16,7 @@ import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
 import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent } from 'domain/user';
+import { getAutoTestRoute } from 'services/routes';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -124,7 +125,7 @@ const links: LinkData[] = [
   {
     name: 'Auto-Test',
     icon: <PlayCircleTwoTone twoToneColor="#7f00ff" />,
-    getUrl: (course: Course) => `/course/student/new-auto-test?course=${course.alias}`,
+    getUrl: (course: Course) => getAutoTestRoute(course.alias),
     access: some(isActiveStudent, isCourseManager),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
