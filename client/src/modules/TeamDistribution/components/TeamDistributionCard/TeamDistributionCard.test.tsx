@@ -13,6 +13,8 @@ const distribution = {
 
 const mockOnDelete = jest.fn(() => Promise.resolve());
 const mockOnEdit = jest.fn();
+const onRegister = jest.fn();
+const onDeleteRegister = jest.fn();
 
 describe('TeamDistributionCard', () => {
   it('should render the distribution name and description', () => {
@@ -22,6 +24,8 @@ describe('TeamDistributionCard', () => {
         isManager={false}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
       />,
     );
 
@@ -36,6 +40,8 @@ describe('TeamDistributionCard', () => {
         isManager={false}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
       />,
     );
 
@@ -45,7 +51,14 @@ describe('TeamDistributionCard', () => {
 
   it('should render the edit and delete buttons for managers', () => {
     render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
+      <TeamDistributionCard
+        distribution={distribution}
+        isManager={true}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
+      />,
     );
 
     expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
@@ -59,6 +72,8 @@ describe('TeamDistributionCard', () => {
         isManager={false}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
       />,
     );
 
@@ -68,7 +83,14 @@ describe('TeamDistributionCard', () => {
 
   it('should call the onDelete function when the delete button is clicked', () => {
     render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
+      <TeamDistributionCard
+        distribution={distribution}
+        isManager={true}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
+      />,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /delete/i }));
@@ -78,7 +100,14 @@ describe('TeamDistributionCard', () => {
 
   it('should call the onEdit function when the edit button is clicked', () => {
     render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
+      <TeamDistributionCard
+        distribution={distribution}
+        isManager={true}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
+      />,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /edit/i }));
@@ -93,18 +122,22 @@ describe('TeamDistributionCard', () => {
         isManager={false}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
       />,
     );
     expect(screen.getByRole('link', { name: /read more/i })).toBeInTheDocument();
   });
 
-  it('should not render read more link when distribution has descriptionUrl', () => {
+  it('should not render read more link when distribution has not descriptionUrl', () => {
     render(
       <TeamDistributionCard
         distribution={{ ...distribution, descriptionUrl: '' }}
         isManager={false}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
+        onDeleteRegister={onDeleteRegister}
+        onRegister={onRegister}
       />,
     );
     expect(screen.queryByRole('link', { name: /read more/i })).not.toBeInTheDocument();

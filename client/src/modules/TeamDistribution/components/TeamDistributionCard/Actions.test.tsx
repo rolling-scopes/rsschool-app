@@ -77,4 +77,50 @@ describe('Actions', () => {
     const cancel = screen.getByText(/cancel/i);
     expect(cancel).toBeInTheDocument();
   });
+
+  it('should render a disabled register button when the distribution is in the future', () => {
+    const futureDistribution = {
+      ...distribution,
+      registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Future,
+    };
+    render(
+      <Actions distribution={futureDistribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />,
+    );
+
+    const registerButton = screen.getByRole('button', {
+      name: /register/i,
+    });
+    expect(registerButton).toBeInTheDocument();
+    expect(registerButton).toBeDisabled();
+  });
+
+  it('should render a disabled register button and displays "Registration is closed" text when the distribution is closed', () => {
+    const closedDistribution = {
+      ...distribution,
+      registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Closed,
+    };
+    render(
+      <Actions distribution={closedDistribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />,
+    );
+
+    const registerButton = screen.getByRole('button', {
+      name: /register/i,
+    });
+    expect(registerButton).toBeInTheDocument();
+    expect(registerButton).toBeDisabled();
+    expect(screen.getByText('Registration is closed')).toBeInTheDocument();
+  });
+
+  it('should render a warning text when the end date is within 48 hours of the current time', () => {
+    const soonEndingDistribution = { ...distribution };
+    render(
+      <Actions
+        distribution={soonEndingDistribution}
+        onRegister={mockOnRegister}
+        onDeleteRegister={mockOnDeleteRegister}
+      />,
+    );
+
+    expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
+  });
 });
