@@ -151,11 +151,16 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async createAutomatically(courseId: number, noRegistration: boolean = false) {
-    const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: TaskType.StageInterview } })!;
-    if (courseTask == null) {
+    const courseTasks = await getRepository(CourseTask).find({
+      where: { courseId, type: TaskType.StageInterview, disabled: false },
+    });
+    if (courseTasks.length === 0) {
       return [];
     }
-
+    if (courseTasks.length > 1) {
+      throw new Error('More than one stage interview task');
+    }
+    const [courseTask] = courseTasks;
     const mentors = await courseService.getMentorsWithStudents(courseId);
 
     const students = noRegistration
