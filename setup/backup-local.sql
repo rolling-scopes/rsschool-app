@@ -5,7 +5,7 @@
 -- Dumped from database version 12.8 (Debian 12.8-1.pgdg110+1)
 -- Dumped by pg_dump version 13.3
 
--- Started on 2023-01-05 10:44:30
+-- Started on 2023-01-05 14:58:11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2659,6 +2659,8 @@ ALTER TABLE ONLY public.user_group ALTER COLUMN id SET DEFAULT nextval('public.u
 -- Data for Name: alert; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.alert (id, "createdDate", "updatedDate", text, "courseId", enabled, type) FROM stdin;
+\.
 
 
 --
@@ -2667,6 +2669,8 @@ ALTER TABLE ONLY public.user_group ALTER COLUMN id SET DEFAULT nextval('public.u
 -- Data for Name: certificate; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.certificate (id, "createdDate", "updatedDate", "publicId", "studentId", "s3Bucket", "s3Key", "issueDate") FROM stdin;
+\.
 
 
 --
@@ -2675,6 +2679,8 @@ ALTER TABLE ONLY public.user_group ALTER COLUMN id SET DEFAULT nextval('public.u
 -- Data for Name: consent; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.consent (id, "createdDate", "updatedDate", "channelValue", "channelType", "optIn", username) FROM stdin;
+\.
 
 
 --
@@ -2683,22 +2689,11 @@ ALTER TABLE ONLY public.user_group ALTER COLUMN id SET DEFAULT nextval('public.u
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.course VALUES (11, '2019-08-27 07:36:13.565873', '2020-03-13 15:39:41.477995', 'RS 2019 Q3', NULL, 'javascript', 'JavaScript', NULL, 'rs-2019-q3', true, 'RS 2019 Q3', NULL, false, '2019-09-09 07:35:20.981+00', '2020-01-31 07:35:20.981+00', 'Rolling Scopes School 2019 Q3', NULL, false, NULL, NULL, true, true, NULL, NULL);
-INSERT INTO public.course VALUES (13, '2019-10-21 08:05:31.068833', '2020-04-06 15:14:44.116961', 'RS 2020 Q1', NULL, 'javascript', 'JavaScript', NULL, 'rs-2020-q1', false, 'Javascript / Frontend Курс.
-Вводное занятие - 2 февраля
-Организационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.
-
-Вебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.
-Рекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. 
-
-Если у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! 
-Запись вебинара будет размещена на канале в открытом доступе.
-
-Описание тренинга
-Основной сайт: https://rs.school/js/
-
-Подробная информация о школе:  https://docs.rs.school', NULL, false, '2020-02-02 09:01:56.398+00', '2020-07-31 08:01:56.398+00', 'Rolling Scopes School 2020 Q1: JavaScript/Front-end', '2020-04-15 08:40:46.24+00', false, NULL, NULL, true, true, NULL, NULL);
-INSERT INTO public.course VALUES (23, '2020-02-25 09:28:08.842897', '2023-01-02 07:51:09.233678', 'TEST COURSE', NULL, 'javascript', 'JavaScript', NULL, 'test-course', false, 'TEST COURSE', NULL, false, '2021-05-31 00:00:00+00', '2023-06-30 00:00:00+00', 'TEST COURSE', '2024-01-31 07:50:49.213+00', false, 2, NULL, true, true, NULL, 1);
+COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId") FROM stdin;
+11	2019-08-27 07:36:13.565873	2020-03-13 15:39:41.477995	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	\N	f	2019-09-09 07:35:20.981+00	2020-01-31 07:35:20.981+00	Rolling Scopes School 2019 Q3	\N	f	\N	\N	t	t	\N	\N
+13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N
+23	2020-02-25 09:28:08.842897	2021-07-28 20:44:30.259905	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	\N	f	2021-05-31 21:00:00+00	2023-06-30 21:00:00+00	TEST COURSE	\N	t	2	\N	t	t	\N	\N
+\.
 
 
 --
@@ -2707,75 +2702,77 @@ INSERT INTO public.course VALUES (23, '2020-02-25 09:28:08.842897', '2023-01-02 
 -- Data for Name: course_event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.course_event VALUES (2, '2019-09-18 13:27:50.246961', '2019-09-29 22:36:05.391483', 2, 11, NULL, '2019-09-13', '20:00:00+03', 'Youtube Live', 'Sergey Shalyapin', '', 3961, NULL, 'https://www.youtube.com/watch?v=2iCgf03rx1I', '2019-09-13 17:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (10, '2019-09-19 08:06:38.306347', '2019-09-29 22:36:37.450973', 10, 11, NULL, '2019-09-23', '12:00:41+03', 'Discord >> announcement', 'Dzianis Sheka', NULL, 1328, NULL, NULL, '2019-09-23 09:00:41+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (32, '2019-10-15 11:39:32.584641', '2019-10-15 11:48:54.960496', 34, 11, NULL, '2019-11-05', '18:00:47+02', 'Youtube Live', NULL, NULL, 2444, NULL, NULL, '2019-11-05 16:00:47+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (9, '2019-09-19 08:01:19.744354', '2019-09-29 22:36:52.324181', 9, 11, NULL, '2019-09-25', '20:00:39+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-09-25 17:00:39+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (31, '2019-10-15 11:34:38.555567', '2019-10-15 11:49:16.569959', 33, 11, NULL, '2019-11-04', '18:00:58+02', 'Youtube Live', NULL, NULL, 1090, NULL, NULL, '2019-11-04 16:00:58+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (28, '2019-10-14 14:01:29.842633', '2019-10-15 11:49:46.776533', 30, 11, NULL, '2019-10-26', '06:00:16+02', 'Youtube Live', NULL, NULL, 1328, NULL, NULL, '2019-10-26 04:00:16+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (8, '2019-09-19 07:56:40.52603', '2019-09-29 22:37:40.366214', 8, 11, NULL, '2019-09-23', '19:00:52+03', 'Youtube Live', 'Anton Bely, Pavel Razuvalov', NULL, 2444, NULL, NULL, '2019-09-23 16:00:52+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (11, '2019-09-19 08:15:42.170571', '2019-09-29 22:37:44.992841', 11, 11, NULL, '2019-09-27', '20:00:54+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-09-27 17:00:54+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (12, '2019-09-19 08:25:12.648501', '2019-09-29 22:37:58.19294', 12, 11, NULL, '2019-09-30', '20:00:25+03', 'Youtube Live', 'Viktoriya Vorozhun', NULL, 2693, NULL, NULL, '2019-09-30 17:00:25+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (13, '2019-09-19 08:27:16.85243', '2019-09-29 22:38:11.029827', 13, 11, NULL, '2019-10-01', '20:00:32+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-01 17:00:32+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (14, '2019-09-19 08:58:14.462505', '2019-09-29 22:38:15.108254', 14, 11, NULL, '2019-10-02', '20:00:20+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-02 17:00:20+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (15, '2019-09-19 09:01:29.234793', '2019-09-29 22:38:18.967522', 15, 11, NULL, '2019-10-04', '20:00:18+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-04 17:00:18+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (16, '2019-09-19 09:04:00.058482', '2019-09-29 22:38:24.161396', 16, 11, NULL, '2019-10-07', '20:00:52+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-07 17:00:52+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (17, '2019-09-19 09:10:34.094844', '2019-09-29 22:38:30.112146', 17, 11, NULL, '2019-10-09', '20:00:19+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-09 17:00:19+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (20, '2019-09-19 09:18:06.890022', '2019-09-29 22:38:43.832965', 20, 11, NULL, '2019-10-11', '20:00:11+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-11 17:00:11+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (18, '2019-09-19 09:15:26.553437', '2019-09-29 22:38:50.345041', 18, 11, NULL, '2019-10-10', '19:00:17+03', 'Youtube Live', 'Anton Bely', NULL, 2444, NULL, NULL, '2019-10-10 16:00:17+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (19, '2019-09-19 09:16:44.454815', '2019-09-29 22:39:00.633497', 19, 11, NULL, '2019-10-14', '19:00:17+03', 'Youtube Live', 'Anton Bely', NULL, 2444, NULL, NULL, '2019-10-14 16:00:17+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (21, '2019-09-19 09:20:29.557356', '2019-09-29 22:39:11.116858', 21, 11, NULL, '2019-10-15', '20:00:42+03', 'Youtube Live', 'Dzianis Sheka', NULL, 1328, NULL, NULL, '2019-10-15 17:00:42+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (22, '2019-09-19 09:27:50.542211', '2019-09-29 22:39:18.865932', 22, 11, NULL, '2019-10-16', '20:00:03+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-10-16 17:00:03+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (23, '2019-09-19 09:32:15.883718', '2019-09-29 22:39:31.265399', 23, 11, NULL, '2019-10-18', '21:00:27+03', 'Youtube Live', 'Dzmitry Varabei', NULL, 2084, NULL, NULL, '2019-10-18 18:00:27+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (25, '2019-10-14 13:38:33.036547', '2019-10-14 13:42:06.839216', 27, 11, NULL, '2019-10-23', NULL, 'Self-Studying', NULL, '', NULL, NULL, 'https://www.youtube.com/watch?v=CAvqa6Lj_Rg&list=PLe--kalBDwjj81fKdWlvpLsizajSAK-lh&index=18', '2019-10-23 06:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (26, '2019-10-14 13:51:28.629935', '2019-10-14 13:51:28.629935', 28, 11, NULL, '2019-10-25', '18:00:11+02', 'Youtube Live', NULL, NULL, 6776, NULL, NULL, '2019-10-25 16:00:11+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (27, '2019-10-14 13:52:21.215211', '2019-10-14 13:53:05.258274', 29, 11, NULL, '2019-10-25', '19:00:11+02', 'Youtube Live', NULL, NULL, 6776, NULL, NULL, '2019-10-25 17:00:11+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (29, '2019-10-14 14:10:56.691953', '2019-10-14 14:10:56.691953', 31, 11, NULL, '2019-10-28', NULL, 'Self-Studying', NULL, NULL, NULL, NULL, 'https://www.youtube.com/watch?v=H0XScE08hy8', '2019-10-28 06:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (40, '2019-10-15 12:03:50.220574', '2019-10-15 12:03:50.220574', 41, 11, NULL, '2019-11-25', '18:00:11+02', 'Youtube Live', NULL, NULL, 2612, NULL, NULL, '2019-11-25 16:00:11+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (41, '2019-10-15 12:05:11.008733', '2019-10-15 12:05:11.008733', 42, 11, NULL, '2019-11-27', NULL, 'Self-Studying', NULL, NULL, NULL, NULL, NULL, '2019-11-27 06:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (7, '2019-09-19 07:53:46.050222', '2019-09-29 13:41:51.301574', 7, 11, NULL, '2019-09-21', '19:00:19+03', 'Twich', 'Viktor Kovalev', NULL, 4749, NULL, NULL, '2019-09-21 16:00:19+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (6, '2019-09-18 13:38:43.043751', '2019-09-29 13:39:46.636834', 6, 11, NULL, '2019-09-20', '20:00:00+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-09-20 17:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (5, '2019-09-18 13:36:41.630053', '2019-09-29 13:39:56.720457', 5, 11, NULL, '2019-09-18', '19:00:00+03', 'Youtube Live', 'Anton Bely', NULL, 2444, NULL, NULL, '2019-09-18 16:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (3, '2019-09-18 13:29:31.396492', '2019-09-29 13:39:36.356333', 3, 11, NULL, '2019-09-14', '19:00:00+03', 'Twich', 'Viktor Kovalev', NULL, 4749, NULL, NULL, '2019-09-14 16:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (1, '2019-09-18 13:25:10.446065', '2019-09-29 13:39:03.156556', 1, 11, NULL, '2019-09-11', '20:00:00+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-09-11 17:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (24, '2019-09-20 08:13:05.071726', '2019-09-29 22:35:36.7697', 24, 11, NULL, '2019-09-09', '19:00:20+03', 'Youtube Live', 'Dzmitry Varabei', NULL, 2084, NULL, NULL, '2019-09-09 16:00:20+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (30, '2019-10-14 14:14:48.89067', '2019-10-29 11:02:52.806588', 32, 11, NULL, '2019-10-30', '17:00:34+01', 'Youtube Live', NULL, NULL, 2549, NULL, '', '2019-10-30 16:00:34+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (56, '2019-11-13 07:58:22.70613', '2019-11-20 10:30:55.29591', 37, 11, NULL, '2019-11-14', '17:00:09+01', 'Youtube Live', NULL, 'Part 2', 4476, NULL, NULL, '2019-11-14 16:00:09+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (34, '2019-10-15 11:47:37.525411', '2019-10-15 11:48:07.708192', 36, 11, NULL, '2019-11-11', NULL, 'Self-Studying', NULL, NULL, NULL, NULL, NULL, '2019-11-11 06:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (52, '2019-10-15 13:48:04.643143', '2019-10-15 13:48:04.643143', 49, 11, NULL, '2019-12-18', '21:00:24+02', 'Youtube Live', NULL, NULL, 1328, NULL, NULL, '2019-12-18 19:00:24+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (54, '2019-10-16 09:35:26.303099', '2019-10-16 09:38:41.390559', 51, 11, NULL, '2020-01-10', '21:00:30+02', 'Youtube Live', NULL, '"Monday Mentor"', 1328, NULL, NULL, '2020-01-10 19:00:30+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (53, '2019-10-16 08:55:38.580672', '2019-10-16 09:38:47.92149', 50, 11, NULL, '2019-12-30', '21:00:18+02', 'Youtube Live', NULL, '"Monday Mentor"', 1328, NULL, NULL, '2019-12-30 19:00:18+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (43, '2019-10-15 13:19:27.167531', '2019-10-16 09:39:12.634215', 44, 11, NULL, '2019-12-09', '18:00:39+02', 'Youtube Live', NULL, '"Monday Mentor"', 2612, NULL, NULL, '2019-12-09 16:00:39+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (55, '2019-10-17 08:39:24.313773', '2019-10-17 08:59:37.788018', 52, 11, NULL, '2019-10-22', '07:00:49+02', 'Discord >> announcement', NULL, NULL, 1328, NULL, NULL, '2019-10-22 05:00:49+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (33, '2019-10-15 11:41:49.437101', '2019-11-04 08:05:30.353745', 35, 11, NULL, '2019-11-06', NULL, '', NULL, NULL, NULL, NULL, NULL, '2019-11-06 06:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (57, '2019-11-13 10:00:57.263816', '2019-11-13 10:00:57.263816', 38, 11, NULL, '2019-11-15', '17:00:13+01', NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-15 16:00:13+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (45, '2019-10-15 13:22:46.522679', '2019-11-19 10:24:53.907876', 45, 11, NULL, '2019-12-10', '18:00:23+01', 'Youtube Live', NULL, 'Andre Gloukhmantchouk', NULL, NULL, NULL, '2019-12-10 17:00:23+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (37, '2019-10-15 11:57:45.893502', '2019-11-13 10:16:05.257876', 39, 11, NULL, '2019-11-19', '20:00:59+01', 'Youtube Live', NULL, NULL, 1328, NULL, NULL, '2019-11-19 19:00:59+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (58, '2019-11-13 10:41:26.703281', '2019-11-13 10:41:26.703281', 40, 11, NULL, '2019-11-19', '17:00:35+01', NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-19 16:00:35+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (59, '2019-11-13 10:45:10.752653', '2019-11-13 10:45:10.752653', 53, 11, NULL, '2019-11-20', '17:00:59+01', 'Imaguru', NULL, NULL, NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-11-20 16:00:59+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (61, '2019-11-13 15:03:10.873277', '2019-11-13 15:03:10.873277', 55, 11, NULL, '2019-11-21', '19:00:58+01', 'Discord >> announcement', NULL, 'Optional test without score and deadline', 1328, NULL, NULL, '2019-11-21 18:00:58+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (51, '2019-10-15 13:46:51.156727', '2019-11-14 08:04:43.997755', 46, 11, NULL, '2019-12-20', '17:00:03+01', 'Imaguru + Youtube Live', NULL, 'https://community-z.com/events/rss2019q3-presentations-5', NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-12-20 16:00:03+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (50, '2019-10-15 13:46:25.188954', '2019-11-14 08:05:21.714914', 46, 11, NULL, '2019-12-19', '17:00:03+01', 'Imaguru + Youtube Live', NULL, 'https://community-z.com/events/rss2019q3-presentations-4', NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-12-19 16:00:03+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (49, '2019-10-15 13:45:26.160284', '2019-11-14 08:05:57.063452', 46, 11, NULL, '2019-12-17', '17:00:03+01', 'Imaguru + Youtube Live', NULL, 'https://community-z.com/events/rss2019q3-presentations-3', NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-12-17 16:00:03+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (46, '2019-10-15 13:38:17.289871', '2019-11-14 08:06:34.523225', 46, 11, NULL, '2019-12-12', '17:00:08+01', '', NULL, 'https://community-z.com/events/rss2019q3-presentations-2', NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-12-12 16:00:08+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (62, '2019-11-14 08:08:21.712392', '2019-11-14 08:08:40.889422', 46, 11, NULL, '2019-12-11', '17:00:18+01', 'Imaguru + Youtube Live', NULL, 'https://community-z.com/events/rss2019q3-presentations-1', NULL, NULL, 'https://www.youtube.com/user/ImaguruHub/videos', '2019-12-11 16:00:18+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (47, '2019-10-15 13:40:23.348495', '2019-11-19 10:25:27.58625', 47, 11, NULL, '2019-12-13', '18:00:40+01', 'Youtube Live', NULL, 'Andre Gloukhmantchouk', NULL, NULL, NULL, '2019-12-13 17:00:40+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (60, '2019-11-13 14:32:00.780799', '2019-11-19 08:46:13.282679', 54, 11, NULL, '2019-11-21', '06:00:43+01', 'Discord >> announcement', NULL, 'Optional test without score and deadline', 1328, NULL, NULL, '2019-11-21 05:00:43+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (63, '2019-11-19 13:03:55.859842', '2019-11-19 13:03:55.859842', 56, 11, NULL, '2019-12-23', '18:00:20+01', 'Youtube Live', NULL, NULL, 1328, NULL, 'https://www.youtube.com/c/RollingScopesSchool', '2019-12-23 17:00:20+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (35, '2019-10-15 11:52:24.439929', '2019-11-20 10:30:47.532359', 37, 11, NULL, '2019-11-13', '17:00:37+01', 'Youtube Live', NULL, 'Part 1', 4476, NULL, NULL, '2019-11-13 16:00:37+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (4, '2019-09-18 13:32:30.103621', '2019-09-29 22:36:22.6367', 4, 11, NULL, '2019-09-16', '20:00:00+03', 'Youtube Live', 'Sergey Shalyapin', NULL, 3961, NULL, NULL, '2019-09-16 17:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (64, '2019-11-20 10:31:56.663441', '2019-11-20 10:31:56.663441', 37, 11, NULL, '2019-11-26', '17:00:32+01', 'Youtube Live', NULL, 'Part 3', 4476, NULL, NULL, '2019-11-26 16:00:32+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (65, '2019-11-20 10:46:52.962706', '2019-11-20 10:46:52.962706', 57, 11, NULL, '2019-12-16', '17:00:37+01', 'Youtube Live', NULL, NULL, 1328, NULL, NULL, '2019-12-16 16:00:37+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (66, '2019-11-20 11:06:19.515961', '2019-11-20 11:06:19.515961', 59, 11, NULL, '2020-01-31', '07:00:31+01', NULL, NULL, NULL, NULL, NULL, NULL, '2020-01-31 06:00:31+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (365, '2021-05-24 07:20:56.788715', '2021-05-24 07:20:56.788715', 184, 23, NULL, NULL, NULL, 'YouTube', NULL, NULL, 2084, NULL, NULL, '2021-05-27 14:00:52.55+00', '', 2, NULL);
-INSERT INTO public.course_event VALUES (366, '2021-06-22 11:42:36.951384', '2021-06-22 11:42:36.951384', 185, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-06-24 14:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (367, '2021-06-22 14:07:40.909358', '2021-06-22 14:07:40.909358', 186, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-07-25 21:59:15.201+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (372, '2021-06-25 11:17:49.097994', '2021-07-02 14:10:23.571015', 189, 23, NULL, NULL, NULL, 'YouTube', NULL, NULL, 2084, NULL, NULL, '2021-07-06 15:30:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (375, '2021-06-30 12:43:57.602426', '2021-07-01 07:32:06.927318', 192, 23, NULL, NULL, NULL, 'youtube', NULL, NULL, 2084, NULL, NULL, '2021-07-01 16:30:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (398, '2021-07-05 20:58:39.710814', '2021-07-07 15:21:56.684306', 201, 23, NULL, NULL, NULL, 'youtube', NULL, NULL, 2084, NULL, NULL, '2021-07-08 15:00:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (399, '2021-07-06 09:39:48.224795', '2021-07-08 06:13:01.681283', 202, 23, NULL, NULL, NULL, NULL, NULL, NULL, 2084, NULL, NULL, '2021-07-12 23:59:04.648+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (409, '2021-07-16 11:12:11.214905', '2021-07-22 05:33:46.72208', 212, 23, NULL, NULL, NULL, NULL, NULL, NULL, 2084, NULL, NULL, '2021-07-24 23:59:00+00', '', NULL, NULL);
-INSERT INTO public.course_event VALUES (410, '2021-07-20 13:47:53.823319', '2021-07-20 13:49:26.410219', 213, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-07-24 23:59:00+00', '', NULL, NULL);
+COPY public.course_event (id, "createdDate", "updatedDate", "eventId", "courseId", "stageId", date, "time", place, coordinator, comment, "organizerId", "detailsUrl", "broadcastUrl", "dateTime", special, duration, "endTime") FROM stdin;
+2	2019-09-18 13:27:50.246961	2019-09-29 22:36:05.391483	2	11	\N	2019-09-13	20:00:00+03	Youtube Live	Sergey Shalyapin		3961	\N	https://www.youtube.com/watch?v=2iCgf03rx1I	2019-09-13 17:00:00+00		\N	\N
+10	2019-09-19 08:06:38.306347	2019-09-29 22:36:37.450973	10	11	\N	2019-09-23	12:00:41+03	Discord >> announcement	Dzianis Sheka	\N	1328	\N	\N	2019-09-23 09:00:41+00		\N	\N
+32	2019-10-15 11:39:32.584641	2019-10-15 11:48:54.960496	34	11	\N	2019-11-05	18:00:47+02	Youtube Live	\N	\N	2444	\N	\N	2019-11-05 16:00:47+00		\N	\N
+9	2019-09-19 08:01:19.744354	2019-09-29 22:36:52.324181	9	11	\N	2019-09-25	20:00:39+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-09-25 17:00:39+00		\N	\N
+31	2019-10-15 11:34:38.555567	2019-10-15 11:49:16.569959	33	11	\N	2019-11-04	18:00:58+02	Youtube Live	\N	\N	1090	\N	\N	2019-11-04 16:00:58+00		\N	\N
+28	2019-10-14 14:01:29.842633	2019-10-15 11:49:46.776533	30	11	\N	2019-10-26	06:00:16+02	Youtube Live	\N	\N	1328	\N	\N	2019-10-26 04:00:16+00		\N	\N
+8	2019-09-19 07:56:40.52603	2019-09-29 22:37:40.366214	8	11	\N	2019-09-23	19:00:52+03	Youtube Live	Anton Bely, Pavel Razuvalov	\N	2444	\N	\N	2019-09-23 16:00:52+00		\N	\N
+11	2019-09-19 08:15:42.170571	2019-09-29 22:37:44.992841	11	11	\N	2019-09-27	20:00:54+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-09-27 17:00:54+00		\N	\N
+12	2019-09-19 08:25:12.648501	2019-09-29 22:37:58.19294	12	11	\N	2019-09-30	20:00:25+03	Youtube Live	Viktoriya Vorozhun	\N	2693	\N	\N	2019-09-30 17:00:25+00		\N	\N
+13	2019-09-19 08:27:16.85243	2019-09-29 22:38:11.029827	13	11	\N	2019-10-01	20:00:32+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-01 17:00:32+00		\N	\N
+14	2019-09-19 08:58:14.462505	2019-09-29 22:38:15.108254	14	11	\N	2019-10-02	20:00:20+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-02 17:00:20+00		\N	\N
+15	2019-09-19 09:01:29.234793	2019-09-29 22:38:18.967522	15	11	\N	2019-10-04	20:00:18+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-04 17:00:18+00		\N	\N
+16	2019-09-19 09:04:00.058482	2019-09-29 22:38:24.161396	16	11	\N	2019-10-07	20:00:52+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-07 17:00:52+00		\N	\N
+17	2019-09-19 09:10:34.094844	2019-09-29 22:38:30.112146	17	11	\N	2019-10-09	20:00:19+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-09 17:00:19+00		\N	\N
+20	2019-09-19 09:18:06.890022	2019-09-29 22:38:43.832965	20	11	\N	2019-10-11	20:00:11+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-11 17:00:11+00		\N	\N
+18	2019-09-19 09:15:26.553437	2019-09-29 22:38:50.345041	18	11	\N	2019-10-10	19:00:17+03	Youtube Live	Anton Bely	\N	2444	\N	\N	2019-10-10 16:00:17+00		\N	\N
+19	2019-09-19 09:16:44.454815	2019-09-29 22:39:00.633497	19	11	\N	2019-10-14	19:00:17+03	Youtube Live	Anton Bely	\N	2444	\N	\N	2019-10-14 16:00:17+00		\N	\N
+21	2019-09-19 09:20:29.557356	2019-09-29 22:39:11.116858	21	11	\N	2019-10-15	20:00:42+03	Youtube Live	Dzianis Sheka	\N	1328	\N	\N	2019-10-15 17:00:42+00		\N	\N
+22	2019-09-19 09:27:50.542211	2019-09-29 22:39:18.865932	22	11	\N	2019-10-16	20:00:03+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-10-16 17:00:03+00		\N	\N
+23	2019-09-19 09:32:15.883718	2019-09-29 22:39:31.265399	23	11	\N	2019-10-18	21:00:27+03	Youtube Live	Dzmitry Varabei	\N	2084	\N	\N	2019-10-18 18:00:27+00		\N	\N
+25	2019-10-14 13:38:33.036547	2019-10-14 13:42:06.839216	27	11	\N	2019-10-23	\N	Self-Studying	\N		\N	\N	https://www.youtube.com/watch?v=CAvqa6Lj_Rg&list=PLe--kalBDwjj81fKdWlvpLsizajSAK-lh&index=18	2019-10-23 06:00:00+00		\N	\N
+26	2019-10-14 13:51:28.629935	2019-10-14 13:51:28.629935	28	11	\N	2019-10-25	18:00:11+02	Youtube Live	\N	\N	6776	\N	\N	2019-10-25 16:00:11+00		\N	\N
+27	2019-10-14 13:52:21.215211	2019-10-14 13:53:05.258274	29	11	\N	2019-10-25	19:00:11+02	Youtube Live	\N	\N	6776	\N	\N	2019-10-25 17:00:11+00		\N	\N
+29	2019-10-14 14:10:56.691953	2019-10-14 14:10:56.691953	31	11	\N	2019-10-28	\N	Self-Studying	\N	\N	\N	\N	https://www.youtube.com/watch?v=H0XScE08hy8	2019-10-28 06:00:00+00		\N	\N
+40	2019-10-15 12:03:50.220574	2019-10-15 12:03:50.220574	41	11	\N	2019-11-25	18:00:11+02	Youtube Live	\N	\N	2612	\N	\N	2019-11-25 16:00:11+00		\N	\N
+41	2019-10-15 12:05:11.008733	2019-10-15 12:05:11.008733	42	11	\N	2019-11-27	\N	Self-Studying	\N	\N	\N	\N	\N	2019-11-27 06:00:00+00		\N	\N
+7	2019-09-19 07:53:46.050222	2019-09-29 13:41:51.301574	7	11	\N	2019-09-21	19:00:19+03	Twich	Viktor Kovalev	\N	4749	\N	\N	2019-09-21 16:00:19+00		\N	\N
+6	2019-09-18 13:38:43.043751	2019-09-29 13:39:46.636834	6	11	\N	2019-09-20	20:00:00+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-09-20 17:00:00+00		\N	\N
+5	2019-09-18 13:36:41.630053	2019-09-29 13:39:56.720457	5	11	\N	2019-09-18	19:00:00+03	Youtube Live	Anton Bely	\N	2444	\N	\N	2019-09-18 16:00:00+00		\N	\N
+3	2019-09-18 13:29:31.396492	2019-09-29 13:39:36.356333	3	11	\N	2019-09-14	19:00:00+03	Twich	Viktor Kovalev	\N	4749	\N	\N	2019-09-14 16:00:00+00		\N	\N
+1	2019-09-18 13:25:10.446065	2019-09-29 13:39:03.156556	1	11	\N	2019-09-11	20:00:00+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-09-11 17:00:00+00		\N	\N
+24	2019-09-20 08:13:05.071726	2019-09-29 22:35:36.7697	24	11	\N	2019-09-09	19:00:20+03	Youtube Live	Dzmitry Varabei	\N	2084	\N	\N	2019-09-09 16:00:20+00		\N	\N
+30	2019-10-14 14:14:48.89067	2019-10-29 11:02:52.806588	32	11	\N	2019-10-30	17:00:34+01	Youtube Live	\N	\N	2549	\N		2019-10-30 16:00:34+00		\N	\N
+56	2019-11-13 07:58:22.70613	2019-11-20 10:30:55.29591	37	11	\N	2019-11-14	17:00:09+01	Youtube Live	\N	Part 2	4476	\N	\N	2019-11-14 16:00:09+00		\N	\N
+34	2019-10-15 11:47:37.525411	2019-10-15 11:48:07.708192	36	11	\N	2019-11-11	\N	Self-Studying	\N	\N	\N	\N	\N	2019-11-11 06:00:00+00		\N	\N
+52	2019-10-15 13:48:04.643143	2019-10-15 13:48:04.643143	49	11	\N	2019-12-18	21:00:24+02	Youtube Live	\N	\N	1328	\N	\N	2019-12-18 19:00:24+00		\N	\N
+54	2019-10-16 09:35:26.303099	2019-10-16 09:38:41.390559	51	11	\N	2020-01-10	21:00:30+02	Youtube Live	\N	"Monday Mentor"	1328	\N	\N	2020-01-10 19:00:30+00		\N	\N
+53	2019-10-16 08:55:38.580672	2019-10-16 09:38:47.92149	50	11	\N	2019-12-30	21:00:18+02	Youtube Live	\N	"Monday Mentor"	1328	\N	\N	2019-12-30 19:00:18+00		\N	\N
+43	2019-10-15 13:19:27.167531	2019-10-16 09:39:12.634215	44	11	\N	2019-12-09	18:00:39+02	Youtube Live	\N	"Monday Mentor"	2612	\N	\N	2019-12-09 16:00:39+00		\N	\N
+55	2019-10-17 08:39:24.313773	2019-10-17 08:59:37.788018	52	11	\N	2019-10-22	07:00:49+02	Discord >> announcement	\N	\N	1328	\N	\N	2019-10-22 05:00:49+00		\N	\N
+33	2019-10-15 11:41:49.437101	2019-11-04 08:05:30.353745	35	11	\N	2019-11-06	\N		\N	\N	\N	\N	\N	2019-11-06 06:00:00+00		\N	\N
+57	2019-11-13 10:00:57.263816	2019-11-13 10:00:57.263816	38	11	\N	2019-11-15	17:00:13+01	\N	\N	\N	\N	\N	\N	2019-11-15 16:00:13+00		\N	\N
+45	2019-10-15 13:22:46.522679	2019-11-19 10:24:53.907876	45	11	\N	2019-12-10	18:00:23+01	Youtube Live	\N	Andre Gloukhmantchouk	\N	\N	\N	2019-12-10 17:00:23+00		\N	\N
+37	2019-10-15 11:57:45.893502	2019-11-13 10:16:05.257876	39	11	\N	2019-11-19	20:00:59+01	Youtube Live	\N	\N	1328	\N	\N	2019-11-19 19:00:59+00		\N	\N
+58	2019-11-13 10:41:26.703281	2019-11-13 10:41:26.703281	40	11	\N	2019-11-19	17:00:35+01	\N	\N	\N	\N	\N	\N	2019-11-19 16:00:35+00		\N	\N
+59	2019-11-13 10:45:10.752653	2019-11-13 10:45:10.752653	53	11	\N	2019-11-20	17:00:59+01	Imaguru	\N	\N	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-11-20 16:00:59+00		\N	\N
+61	2019-11-13 15:03:10.873277	2019-11-13 15:03:10.873277	55	11	\N	2019-11-21	19:00:58+01	Discord >> announcement	\N	Optional test without score and deadline	1328	\N	\N	2019-11-21 18:00:58+00		\N	\N
+51	2019-10-15 13:46:51.156727	2019-11-14 08:04:43.997755	46	11	\N	2019-12-20	17:00:03+01	Imaguru + Youtube Live	\N	https://community-z.com/events/rss2019q3-presentations-5	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-12-20 16:00:03+00		\N	\N
+50	2019-10-15 13:46:25.188954	2019-11-14 08:05:21.714914	46	11	\N	2019-12-19	17:00:03+01	Imaguru + Youtube Live	\N	https://community-z.com/events/rss2019q3-presentations-4	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-12-19 16:00:03+00		\N	\N
+49	2019-10-15 13:45:26.160284	2019-11-14 08:05:57.063452	46	11	\N	2019-12-17	17:00:03+01	Imaguru + Youtube Live	\N	https://community-z.com/events/rss2019q3-presentations-3	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-12-17 16:00:03+00		\N	\N
+46	2019-10-15 13:38:17.289871	2019-11-14 08:06:34.523225	46	11	\N	2019-12-12	17:00:08+01		\N	https://community-z.com/events/rss2019q3-presentations-2	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-12-12 16:00:08+00		\N	\N
+62	2019-11-14 08:08:21.712392	2019-11-14 08:08:40.889422	46	11	\N	2019-12-11	17:00:18+01	Imaguru + Youtube Live	\N	https://community-z.com/events/rss2019q3-presentations-1	\N	\N	https://www.youtube.com/user/ImaguruHub/videos	2019-12-11 16:00:18+00		\N	\N
+47	2019-10-15 13:40:23.348495	2019-11-19 10:25:27.58625	47	11	\N	2019-12-13	18:00:40+01	Youtube Live	\N	Andre Gloukhmantchouk	\N	\N	\N	2019-12-13 17:00:40+00		\N	\N
+60	2019-11-13 14:32:00.780799	2019-11-19 08:46:13.282679	54	11	\N	2019-11-21	06:00:43+01	Discord >> announcement	\N	Optional test without score and deadline	1328	\N	\N	2019-11-21 05:00:43+00		\N	\N
+63	2019-11-19 13:03:55.859842	2019-11-19 13:03:55.859842	56	11	\N	2019-12-23	18:00:20+01	Youtube Live	\N	\N	1328	\N	https://www.youtube.com/c/RollingScopesSchool	2019-12-23 17:00:20+00		\N	\N
+35	2019-10-15 11:52:24.439929	2019-11-20 10:30:47.532359	37	11	\N	2019-11-13	17:00:37+01	Youtube Live	\N	Part 1	4476	\N	\N	2019-11-13 16:00:37+00		\N	\N
+4	2019-09-18 13:32:30.103621	2019-09-29 22:36:22.6367	4	11	\N	2019-09-16	20:00:00+03	Youtube Live	Sergey Shalyapin	\N	3961	\N	\N	2019-09-16 17:00:00+00		\N	\N
+64	2019-11-20 10:31:56.663441	2019-11-20 10:31:56.663441	37	11	\N	2019-11-26	17:00:32+01	Youtube Live	\N	Part 3	4476	\N	\N	2019-11-26 16:00:32+00		\N	\N
+65	2019-11-20 10:46:52.962706	2019-11-20 10:46:52.962706	57	11	\N	2019-12-16	17:00:37+01	Youtube Live	\N	\N	1328	\N	\N	2019-12-16 16:00:37+00		\N	\N
+66	2019-11-20 11:06:19.515961	2019-11-20 11:06:19.515961	59	11	\N	2020-01-31	07:00:31+01	\N	\N	\N	\N	\N	\N	2020-01-31 06:00:31+00		\N	\N
+365	2021-05-24 07:20:56.788715	2021-05-24 07:20:56.788715	184	23	\N	\N	\N	YouTube	\N	\N	2084	\N	\N	2021-05-27 14:00:52.55+00		2	\N
+366	2021-06-22 11:42:36.951384	2021-06-22 11:42:36.951384	185	23	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-06-24 14:00:00+00		\N	\N
+367	2021-06-22 14:07:40.909358	2021-06-22 14:07:40.909358	186	23	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-07-25 21:59:15.201+00		\N	\N
+372	2021-06-25 11:17:49.097994	2021-07-02 14:10:23.571015	189	23	\N	\N	\N	YouTube	\N	\N	2084	\N	\N	2021-07-06 15:30:00+00		\N	\N
+375	2021-06-30 12:43:57.602426	2021-07-01 07:32:06.927318	192	23	\N	\N	\N	youtube	\N	\N	2084	\N	\N	2021-07-01 16:30:00+00		\N	\N
+398	2021-07-05 20:58:39.710814	2021-07-07 15:21:56.684306	201	23	\N	\N	\N	youtube	\N	\N	2084	\N	\N	2021-07-08 15:00:00+00		\N	\N
+399	2021-07-06 09:39:48.224795	2021-07-08 06:13:01.681283	202	23	\N	\N	\N	\N	\N	\N	2084	\N	\N	2021-07-12 23:59:04.648+00		\N	\N
+409	2021-07-16 11:12:11.214905	2021-07-22 05:33:46.72208	212	23	\N	\N	\N	\N	\N	\N	2084	\N	\N	2021-07-24 23:59:00+00		\N	\N
+410	2021-07-20 13:47:53.823319	2021-07-20 13:49:26.410219	213	23	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-07-24 23:59:00+00		\N	\N
+\.
 
 
 --
@@ -2784,6 +2781,8 @@ INSERT INTO public.course_event VALUES (410, '2021-07-20 13:47:53.823319', '2021
 -- Data for Name: course_manager; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.course_manager (id, "createdDate", "updatedDate", "courseId", "userId") FROM stdin;
+\.
 
 
 --
@@ -2792,161 +2791,163 @@ INSERT INTO public.course_event VALUES (410, '2021-07-20 13:47:53.823319', '2021
 -- Data for Name: course_task; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.course_task VALUES (387, '2020-02-24 06:42:44.772736', '2020-02-25 10:28:14.611904', NULL, NULL, 54, 434, 0.1, 'taskOwner', 587, '2020-02-22 15:00:00+00', '2020-02-23 15:00:00+00', 13, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (426, '2020-03-31 11:04:53.472383', '2020-03-31 11:04:53.472383', NULL, NULL, 100, 129, 0.01, 'auto-test', NULL, '2020-03-30 20:59:00+00', '2020-04-25 20:59:00+00', 13, NULL, 'codewars:stage2', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (399, '2020-03-02 13:25:46.327431', '2020-03-17 08:04:28.635812', NULL, NULL, 100, 421, 0.2, 'mentor', 2103, '2020-03-02 13:25:00+00', '2020-03-22 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (383, '2020-02-19 15:19:31.540441', '2020-03-22 19:02:59.763044', NULL, NULL, 100, 472, 0.2, 'mentor', 2103, '2020-02-19 15:19:00+00', '2020-03-23 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (321, '2019-10-15 12:42:42.1037', '2019-10-15 12:43:35.36623', NULL, NULL, 100, 435, 0.5, 'taskOwner', 3961, '2019-10-06 00:00:00+00', '2019-10-08 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (337, '2019-11-13 08:21:59.44239', '2019-11-19 08:47:29.701909', NULL, NULL, 100, 446, 1, 'mentor', 1328, '2019-11-14 17:00:00+00', '2019-11-18 20:49:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (348, '2019-11-19 10:52:33.333176', '2019-11-19 10:52:33.333176', NULL, NULL, 100, 350, 1, 'mentor', 1328, '2019-12-23 17:00:00+00', '2020-01-02 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (350, '2019-11-20 10:40:56.936083', '2020-01-20 20:56:08.618894', NULL, NULL, 280, 448, 0.7, 'mentor', 1328, '2019-11-03 08:00:00+00', '2019-12-18 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (346, '2019-11-19 09:32:03.882014', '2020-01-20 21:16:18.023264', NULL, NULL, 100, 349, 5, 'assigned', NULL, '2020-01-08 15:00:00+00', '2020-01-20 15:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (342, '2019-11-18 07:49:09.892108', '2020-01-29 10:07:18.716975', NULL, NULL, 100, 447, 1, 'mentor', NULL, '2020-01-28 10:07:00+00', '2020-02-20 10:07:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (302, '2019-09-19 10:04:08.320328', '2019-11-20 21:51:46.684981', NULL, NULL, 100, 423, 0.02, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (306, '2019-09-20 09:59:01.071936', '2019-11-20 21:52:10.896805', NULL, NULL, 100, 428, 0.01, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (309, '2019-09-22 09:57:59.933548', '2019-11-20 21:52:27.065892', NULL, NULL, 100, 429, 0.04, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (315, '2019-09-30 08:20:14.840054', '2019-11-20 21:54:03.067127', NULL, NULL, 100, 434, 0.01, 'taskOwner', 2032, '2019-09-28 00:00:00+00', '2019-09-28 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (318, '2019-10-06 11:21:27.376684', '2019-11-20 21:54:20.53693', NULL, NULL, 100, 437, 0.01, 'mentor', NULL, '2019-09-16 00:00:00+00', '2019-09-22 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (388, '2020-02-24 06:43:57.26983', '2020-02-25 10:28:23.927547', NULL, NULL, 50, 432, 0.1, 'taskOwner', 2480, '2020-02-22 15:00:00+00', '2020-02-23 15:00:00+00', 13, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (374, '2020-02-15 14:44:37.656023', '2020-03-12 07:20:40.425622', NULL, NULL, 100, 467, 0.2, 'mentor', 5481, '2020-02-15 14:00:00+00', '2020-03-22 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (380, '2020-02-19 15:16:59.219399', '2020-03-22 19:08:34.853331', NULL, NULL, 100, 475, 0.2, 'mentor', 2103, '2020-02-19 15:15:00+00', '2020-03-23 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (408, '2020-03-15 23:12:19.237073', '2020-03-30 07:23:21.073835', NULL, NULL, 100, 484, 1, 'taskOwner', 2084, '2020-03-22 21:00:00+00', '2020-04-11 20:59:00+00', 13, NULL, 'stage-interview', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (430, '2020-04-04 18:29:20.218081', '2020-04-04 19:44:07.634629', NULL, NULL, 100, 435, 0.1, 'auto-test', 3961, '2020-04-02 19:00:00+00', '2020-04-05 20:59:00+00', 13, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (303, '2019-09-19 10:04:35.673232', '2019-11-20 21:51:53.750426', NULL, NULL, 100, 422, 0.03, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (343, '2019-11-19 08:57:16.511397', '2019-11-26 06:57:02.144395', NULL, NULL, 100, 246, 1, 'taskOwner', 2612, '2019-11-23 09:00:00+00', '2019-11-23 13:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (401, '2020-03-09 08:21:51.143582', '2020-03-10 08:46:07.22067', NULL, NULL, 100, 433, 0.1, 'taskOwner', 3961, '2020-03-08 19:00:00+00', '2020-03-08 19:00:00+00', 13, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (417, '2020-03-21 19:19:58.863021', '2020-03-21 19:19:58.863021', NULL, NULL, 100, 484, 1, 'mentor', NULL, '2019-09-30 21:00:00+00', '2019-11-30 21:00:00+00', 11, NULL, 'stage-interview', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (381, '2020-02-19 15:17:32.07091', '2020-03-22 19:09:12.677292', NULL, NULL, 100, 474, 0.2, 'mentor', 2103, '2020-02-19 15:17:00+00', '2020-03-23 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (397, '2020-03-02 13:24:09.075432', '2020-03-22 19:12:20.05552', NULL, NULL, 100, 426, 0.2, 'mentor', 2103, '2020-03-20 13:20:00+00', '2020-03-22 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (423, '2020-03-31 10:19:16.141261', '2020-04-06 07:07:06.10971', NULL, NULL, 110, 444, 0.7, 'mentor', 1090, '2020-03-23 21:00:00+00', '2020-04-07 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (300, '2019-09-17 08:15:35.715649', '2020-04-06 10:49:35.519015', NULL, NULL, 100, 417, 0.01, 'mentor', NULL, '2019-09-09 00:00:00+00', '2019-09-19 00:00:00+00', 11, NULL, 'htmlcssacademy', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (344, '2019-11-19 09:04:18.469854', '2019-11-28 17:17:02.674641', NULL, NULL, 128, 129, 1, 'mentor', NULL, '2019-09-09 08:00:00+00', '2019-11-24 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (327, '2019-10-28 07:42:02.903354', '2019-11-15 12:34:30.259197', NULL, NULL, 100, 418, 1, 'mentor', NULL, '2019-09-20 17:00:00+00', '2019-09-29 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (331, '2019-11-04 08:15:10.985127', '2019-11-15 12:37:57.067586', NULL, NULL, 110, 444, 1, 'mentor', NULL, '2019-11-01 16:00:00+00', '2019-11-06 20:39:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (354, '2019-12-07 14:35:20.567268', '2019-12-11 16:33:41.983256', NULL, NULL, 60, 96, 1, 'jury', 2084, '2019-12-07 12:31:00+00', '2019-12-28 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (313, '2019-09-30 08:17:27.15297', '2019-11-20 21:53:55.352852', NULL, NULL, 100, 432, 0.01, 'taskOwner', 2480, '2019-09-22 00:00:00+00', '2019-09-22 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (316, '2019-09-30 08:22:03.026072', '2019-11-20 21:54:11.847779', NULL, NULL, 100, 433, 0.05, 'taskOwner', 2032, '2019-09-26 00:00:00+00', '2019-09-26 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (319, '2019-10-13 13:51:52.830672', '2019-11-20 21:55:14.344517', NULL, NULL, 100, 439, 0.3, 'mentor', 1328, '2019-10-13 00:00:00+00', '2019-10-20 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (310, '2019-09-22 09:58:21.070871', '2019-11-20 21:52:32.957984', NULL, NULL, 100, 430, 0.04, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (325, '2019-10-27 12:09:53.130143', '2019-11-15 12:31:01.943109', NULL, NULL, 50, 442, 1, 'mentor', NULL, '2019-10-24 17:00:00+00', '2019-10-27 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (307, '2019-09-20 09:59:22.00868', '2019-11-20 21:52:16.13903', NULL, NULL, 100, 427, 0.04, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (369, '2020-02-02 03:55:35.429745', '2020-03-12 07:11:39.495304', NULL, NULL, 100, 437, 0.1, 'mentor', NULL, '2020-02-02 01:54:00+00', '2020-02-16 20:59:00+00', 13, NULL, 'cv:markdown', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (373, '2020-02-09 18:18:59.381025', '2020-03-12 07:13:13.223671', NULL, NULL, 60, 465, 0.2, 'mentor', NULL, '2020-02-01 21:00:00+00', '2020-03-15 20:59:00+00', 13, NULL, 'codewars:stage1', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (368, '2020-02-01 20:13:13.966515', '2020-03-12 07:10:32.0252', NULL, NULL, 100, 417, 0.1, 'mentor', 2032, '2020-02-02 09:00:00+00', '2020-02-23 20:59:00+00', 13, NULL, 'htmlcssacademy', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (336, '2019-11-13 07:47:34.232721', '2019-11-15 12:40:11.757945', NULL, NULL, 120, 445, 1, 'mentor', 1328, '2019-11-08 05:00:00+00', '2019-11-11 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (328, '2019-10-28 07:48:01.625307', '2019-11-15 12:42:26.150687', NULL, NULL, 100, 443, 1, 'mentor', NULL, '2019-10-01 17:00:00+00', '2019-12-01 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (345, '2019-11-19 09:23:27.67568', '2019-12-23 21:01:53.560053', NULL, NULL, 100, 83, 1, 'mentor', 2032, '2019-11-30 17:00:00+00', '2019-12-24 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (320, '2019-10-13 13:52:22.151208', '2019-11-16 13:10:56.094496', NULL, NULL, 100, 438, 0.3, 'mentor', 1328, '2019-10-13 00:00:00+00', '2019-10-20 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (349, '2019-11-19 11:04:25.743014', '2020-01-14 08:52:31.860422', NULL, NULL, 450, 352, 1, 'assigned', 1328, '2019-12-18 19:00:00+00', '2020-01-08 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (347, '2019-11-19 10:18:28.401575', '2019-11-19 10:18:28.401575', NULL, NULL, 100, 351, 1, 'taskOwner', 2612, '2019-12-07 09:00:00+00', '2019-12-07 13:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (332, '2019-11-05 11:51:40.950343', '2019-11-19 10:21:01.444201', NULL, NULL, 120, 89, 1, 'mentor', NULL, '2019-11-03 21:00:00+00', '2019-12-08 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (351, '2019-11-20 11:37:02.922582', '2019-11-20 11:37:02.922582', NULL, NULL, 100, 407, 1, 'mentor', NULL, '2020-01-01 08:00:00+00', '2020-01-17 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (367, '2020-01-19 16:51:46.691809', '2020-01-19 16:51:46.691809', NULL, NULL, 100, 88, 1, 'taskOwner', 1328, '2020-01-18 21:00:00+00', '2020-01-19 21:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (301, '2019-09-17 13:42:41.220995', '2019-11-20 21:51:18.507183', NULL, NULL, 100, 421, 0.02, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (304, '2019-09-20 09:45:08.623688', '2019-11-20 21:51:58.821689', NULL, NULL, 100, 424, 0.05, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (305, '2019-09-20 09:45:31.423306', '2019-11-20 21:52:03.967525', NULL, NULL, 100, 425, 0.03, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (308, '2019-09-20 09:59:54.237603', '2019-11-20 21:52:21.418289', NULL, NULL, 100, 426, 0.02, 'mentor', NULL, '2019-09-23 00:00:00+00', '2019-10-19 00:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (382, '2020-02-19 15:18:06.945157', '2020-03-22 19:03:14.201634', NULL, NULL, 100, 473, 0.2, 'mentor', 2103, '2020-02-19 15:17:00+00', '2020-03-23 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (370, '2020-02-02 04:03:10.255065', '2020-03-12 07:11:48.755187', NULL, NULL, 100, 84, 0.1, 'autoTest', NULL, '2020-02-02 02:02:00+00', '2020-02-18 20:59:00+00', 13, NULL, 'cv:html', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (398, '2020-03-02 13:24:43.551181', '2020-03-17 08:05:11.649945', NULL, NULL, 100, 424, 0.5, 'mentor', 2103, '2020-03-02 13:24:00+00', '2020-03-22 20:59:00+00', 13, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (718, '2020-02-24 06:43:57.27', '2020-12-19 07:08:38.178221', NULL, NULL, 50, 432, 0.2, 'taskOwner', 2084, '2021-03-19 15:00:00+00', '2021-03-20 15:00:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (719, '2020-03-15 23:12:19.237', '2021-05-17 17:21:40.075257', NULL, NULL, 50, 484, 1, 'taskOwner', 2084, '2021-05-04 00:00:00+00', '2021-05-18 23:59:00+00', 23, NULL, 'stage-interview', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (720, '2020-02-19 15:16:59.219', '2021-03-06 09:11:06.762852', NULL, NULL, 100, 475, 0.05, 'auto-test', 2084, '2021-02-28 21:59:00+00', '2021-03-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (721, '2020-03-02 13:25:46.327', '2021-03-06 09:11:43.622874', NULL, NULL, 100, 421, 0.05, 'mentor', 2084, '2021-02-28 21:59:00+00', '2021-03-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (722, '2020-02-19 15:19:31.54', '2021-03-06 09:12:16.168284', NULL, NULL, 100, 472, 0.05, 'mentor', 2084, '2021-02-28 21:59:00+00', '2021-03-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (723, '2020-03-02 13:24:09.075', '2020-12-27 07:57:56.442267', NULL, NULL, 100, 426, 0.1, 'mentor', 2084, '2021-04-06 13:20:00+00', '2021-04-18 21:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (724, '2020-02-19 15:17:32.071', '2021-03-06 09:28:28.111453', NULL, NULL, 100, 474, 0.05, 'mentor', 2084, '2021-02-28 23:59:00+00', '2021-03-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (725, '2020-02-19 15:18:06.945', '2021-03-06 09:28:56.637451', NULL, NULL, 100, 473, 0.05, 'mentor', 2084, '2021-02-28 23:59:00+00', '2021-03-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (726, '2020-02-02 04:03:10.255', '2021-03-06 09:05:38.409628', NULL, NULL, 100, 84, 0.1, 'autoTest', NULL, '2021-02-27 03:02:00+00', '2021-03-08 23:59:00+00', 23, NULL, 'cv:html', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (727, '2020-03-09 08:21:51.144', '2020-12-19 07:08:30.734975', NULL, NULL, 100, 433, 0.2, 'taskOwner', 2084, '2021-04-03 19:00:00+00', '2021-04-03 19:00:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (728, '2020-09-09 16:31:08.778', '2020-12-27 07:05:14.675656', NULL, NULL, 100, 568, 0.1, 'auto-test', 2084, '2021-03-02 20:59:00+00', '2021-04-25 20:59:00+00', 23, NULL, 'selfeducation', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (729, '2020-09-09 16:32:20.373', '2020-12-27 07:05:25.568066', NULL, NULL, 100, 567, 0.1, 'auto-test', 2084, '2021-03-02 20:00:00+00', '2021-04-25 20:59:00+00', 23, NULL, 'selfeducation', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (730, '2020-09-09 16:33:07.413', '2020-12-27 07:05:31.951659', NULL, NULL, 100, 569, 0.1, 'auto-test', 2084, '2021-03-02 20:59:00+00', '2021-04-25 20:59:00+00', 23, NULL, 'selfeducation', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (731, '2020-02-15 14:44:37.656', '2021-03-30 05:41:33.668199', NULL, NULL, 100, 467, 0.5, 'mentor', 2084, '2021-01-20 16:00:00+00', '2021-03-30 22:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (732, '2020-02-09 18:18:59.381', '2020-12-19 07:08:19.25978', NULL, NULL, 60, 465, 1, 'mentor', NULL, '2021-02-26 19:00:00+00', '2021-04-04 20:59:00+00', 23, NULL, 'codewars:stage1', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (733, '2020-02-02 03:55:35.43', '2021-03-06 09:04:46.985011', NULL, NULL, 100, 437, 0.1, 'auto-test', NULL, '2021-02-27 02:54:00+00', '2021-03-08 23:59:00+00', 23, NULL, 'cv:markdown', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (734, '2020-02-24 06:42:44.773', '2020-12-19 07:06:44.394231', NULL, NULL, 100, 434, 0.2, 'taskOwner', 2084, '2021-03-13 15:00:00+00', '2021-03-14 15:00:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (736, '2020-09-28 15:59:54.118', '2020-12-14 11:25:09.139521', NULL, NULL, 210, 577, 0.2, 'mentor', NULL, '2021-04-26 01:59:00+00', '2021-05-10 23:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (740, '2020-11-20 07:16:10.732', '2020-12-14 11:24:43.632522', NULL, NULL, 210, 500, 0.2, 'mentor', NULL, '2021-05-10 06:15:00+00', '2021-05-31 23:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (743, '2020-11-03 15:25:45.804', '2020-12-19 07:07:17.139765', NULL, NULL, 128, 129, 0.2, 'auto-test', NULL, '2021-04-27 23:59:00+00', '2021-05-17 23:59:00+00', 23, NULL, 'codewars', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (745, '2020-11-20 07:22:07.672', '2020-12-14 11:24:35.798531', NULL, NULL, 210, 584, 0.2, 'mentor', NULL, '2021-05-10 06:21:00+00', '2021-05-31 23:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (747, '2020-11-30 08:13:18.401', '2020-12-14 11:24:26.882041', NULL, NULL, 100, 83, 0.5, 'auto-test', 2084, '2021-05-24 08:12:00+00', '2021-06-07 22:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (748, '2020-11-29 19:28:52.429', '2020-12-14 11:24:54.693418', NULL, NULL, 100, 229, 0.1, 'taskOwner', 2084, '2021-05-22 15:00:00+00', '2021-05-23 15:00:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (749, '2020-12-01 14:39:15.604', '2020-12-14 11:24:51.175695', NULL, NULL, 120, 89, 1, 'mentor', NULL, '2021-04-23 23:59:00+00', '2021-05-25 23:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (750, '2020-12-04 09:25:44.758', '2020-12-14 11:24:47.561727', NULL, NULL, 76, 531, 0.149999999999999, 'taskOwner', 2084, '2021-05-28 18:00:00+00', '2021-05-30 18:00:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (751, '2020-12-09 12:07:23.808', '2020-12-14 11:24:13.461012', NULL, NULL, 10, 349, 10, 'mentor', 2084, '2021-06-07 00:00:00+00', '2021-06-21 23:59:00+00', 23, NULL, 'interview', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (752, '2020-12-11 12:22:20.579', '2020-12-14 11:24:23.203131', NULL, NULL, 280, 589, 0.2, 'mentor', NULL, '2021-06-01 12:21:00+00', '2021-06-17 00:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (764, '2020-12-19 13:05:37.532114', '2021-03-16 04:44:14.87901', NULL, NULL, 15, 592, 1, 'auto-test', 2084, '2021-02-28 13:04:00+00', '2021-03-09 00:59:00+00', 23, NULL, 'codewars', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (766, '2020-12-26 18:38:03.97028', '2021-03-06 09:02:07.383585', NULL, NULL, 100, 595, 0.1, 'auto-test', 2084, '2020-12-25 21:59:00+00', '2021-03-08 23:59:00+00', 23, NULL, 'selfeducation', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (767, '2020-12-26 18:38:48.344647', '2021-03-06 09:02:35.081732', NULL, NULL, 100, 596, 0.1, 'auto-test', 2084, '2020-12-25 21:59:00+00', '2021-03-08 23:59:00+00', 23, NULL, 'selfeducation', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (768, '2020-12-26 18:39:33.065223', '2021-03-06 09:03:26.018831', NULL, NULL, 100, 597, 0.1, 'auto-test', 2084, '2020-12-25 21:59:00+00', '2021-03-08 23:59:00+00', 23, NULL, 'selfeducation', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (833, '2021-03-02 11:27:43.699601', '2021-03-08 09:16:47.157628', NULL, NULL, 100, 615, 0, 'mentor', 2084, '2021-03-01 22:59:00+00', '2021-03-14 22:59:00+00', 23, NULL, 'test', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (845, '2021-03-16 04:27:15.526178', '2021-03-30 05:41:07.113384', NULL, NULL, 65, 465, 0.5, 'auto-test', 2084, '2021-03-16 05:22:00+00', '2021-03-30 22:59:00+00', 23, NULL, 'codewars', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (864, '2021-04-02 16:07:20.055716', '2021-04-02 16:07:20.055716', NULL, NULL, 100, 432, 0.1, 'taskOwner', 2084, '2021-04-02 16:00:00+00', '2021-04-04 16:00:00+00', 23, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (866, '2021-04-05 15:41:10.480048', '2021-04-07 11:36:23.008047', NULL, NULL, 100, 639, 0.149999999999999, 'auto-test', NULL, '2021-04-06 00:00:00+00', '2021-04-12 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (871, '2021-04-11 09:24:28.636388', '2021-04-11 09:24:28.636388', NULL, NULL, 100, 433, 0.1, 'auto-test', 2084, '2021-04-10 09:10:00+00', '2021-04-11 09:10:00+00', 23, NULL, 'test', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (888, '2021-04-19 15:25:43.189874', '2021-04-29 07:10:23.047691', NULL, NULL, 50, 484, 1, 'taskOwner', 2084, '2021-05-04 23:59:00+00', '2021-05-18 23:59:00+00', 23, NULL, 'stage-interview', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (891, '2021-04-20 07:59:31.355572', '2021-04-20 08:00:02.758902', NULL, NULL, 100, 641, 0.1, 'auto-test', 2084, '2021-04-20 08:00:00+00', '2021-04-26 23:59:00+00', 23, NULL, 'selfeducation', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (913, '2021-05-04 13:42:38.3986', '2021-05-07 11:39:02.702583', NULL, NULL, 128, 129, 0.5, 'auto-test', 2084, '2021-05-04 15:42:00+00', '2021-05-31 23:59:00+00', 23, NULL, 'codewars', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (916, '2021-05-07 11:44:06.354446', '2021-05-07 11:44:06.354446', NULL, NULL, 81, 671, 0.5, 'auto-test', 2084, '2021-05-07 14:00:00+00', '2021-05-31 23:59:00+00', 23, NULL, 'codewars', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (924, '2021-05-20 12:03:27.067163', '2021-05-20 12:03:27.067163', NULL, NULL, 200, 677, 1, 'auto-test', 2084, '2021-03-23 20:00:00+00', '2021-04-23 23:59:00+00', 23, NULL, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (928, '2021-05-26 14:04:17.496156', '2021-05-26 14:05:56.930802', NULL, NULL, 160, 679, 1, 'mentor', 2084, '2021-05-11 00:01:00+00', '2021-05-31 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (929, '2021-05-26 14:30:24.6811', '2021-06-13 13:50:58.160679', NULL, NULL, 150, 680, 1, 'mentor', 2084, '2021-06-01 23:59:00+00', '2021-06-16 23:59:00+00', 23, NULL, 'JS task', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (945, '2021-06-01 07:37:00.990005', '2021-06-01 07:37:00.990005', NULL, NULL, 120, 89, 1, 'mentor', 2084, '2021-05-21 10:36:00+00', '2021-06-21 23:59:00+00', 23, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (946, '2021-06-01 07:41:10.17798', '2021-06-01 07:41:10.17798', NULL, NULL, 50, 96, 1, 'jury', 2084, '2021-06-22 10:39:00+00', '2021-06-28 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (959, '2021-06-05 07:43:45.453015', '2021-07-20 16:03:20.793296', NULL, NULL, 10, 349, 10, 'mentor', 2084, '2021-06-17 23:59:00+00', '2021-07-26 23:59:00+00', 23, NULL, 'interview', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (976, '2021-06-22 14:41:23.614155', '2021-06-29 13:01:39.053409', NULL, NULL, 360, 693, 1, 'mentor', 2084, '2021-06-17 00:00:00+00', '2021-07-19 23:59:00+00', 23, NULL, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (977, '2021-06-22 14:42:01.434232', '2021-06-27 14:55:32.785863', NULL, NULL, 360, 692, 1, 'mentor', 2084, '2021-06-17 00:00:00+00', '2021-07-07 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (979, '2021-06-23 09:54:07.833539', '2021-07-26 21:01:38.322408', NULL, NULL, 715, 697, 1, 'taskOwner', 2084, '2021-06-30 00:00:00+00', '2021-07-19 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (981, '2021-06-23 09:57:51.078547', '2021-07-17 12:45:15.908329', NULL, NULL, 355, 696, 1, 'mentor', 2084, '2021-07-08 00:00:00+00', '2021-07-15 23:59:00+00', 23, NULL, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (431, '2022-03-27 11:50:14.908491', '2022-03-27 11:50:14.908491', NULL, NULL, 100, 498, 1, 'mentor', NULL, '2022-03-27 11:50:00+00', '2022-03-31 11:50:00+00', 23, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (410, '2020-03-16 12:51:21.596135', '2020-03-31 11:05:14.454307', NULL, NULL, 100, 485, 0.01, 'crossCheck', 3961, '2020-03-10 16:00:00+00', '2020-03-30 20:59:00+00', 13, 4, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (353, '2019-12-03 16:51:35.631349', '2019-12-03 16:51:35.631349', NULL, NULL, 100, 450, 1, 'crossCheck', NULL, '2019-09-30 21:00:00+00', '2019-12-01 20:59:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (424, '2020-03-31 10:21:55.660987', '2020-03-31 10:21:55.660987', NULL, NULL, 75, 493, 0.3, 'crossCheck', 1090, '2020-03-24 20:59:00+00', '2020-04-07 20:59:00+00', 13, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (356, '2019-12-16 09:41:27.698435', '2019-12-24 10:13:38.728977', NULL, NULL, 210, 452, 0.3, 'crossCheck', 606, '2019-12-03 07:39:00+00', '2019-12-22 21:00:00+00', 11, NULL, NULL, false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (425, '2020-03-31 10:25:14.33142', '2020-03-31 10:25:14.33142', NULL, NULL, 100, 494, 0.1, 'crossCheck', 1090, '2020-03-26 20:59:00+00', '2020-04-07 20:59:00+00', 13, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (386, '2020-02-21 10:26:08.19839', '2020-09-24 18:52:15.030419', NULL, NULL, 100, 476, 1, 'crossCheck', 677, '2020-02-11 16:00:00+00', '2020-03-11 20:59:00+00', 13, 1, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (735, '2020-09-28 15:55:30.264', '2020-12-14 11:25:14.054069', NULL, NULL, 60, 573, 1, 'crossCheck', 2084, '2021-04-19 23:59:00+00', '2021-04-26 23:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (737, '2020-09-28 16:02:42.88', '2020-12-14 11:25:04.586605', NULL, NULL, 170, 494, 0.8, 'crossCheck', NULL, '2021-04-26 00:59:00+00', '2021-05-10 23:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (738, '2020-10-15 15:45:25.182', '2020-12-19 07:07:37.406537', NULL, NULL, 50, 572, 1, 'crossCheck', NULL, '2021-04-12 14:00:00+00', '2021-04-21 20:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (739, '2020-09-19 08:04:36.752', '2020-12-19 07:07:06.937443', NULL, NULL, 100, 570, 0.5, 'crossCheck', 2084, '2021-03-08 19:59:00+00', '2021-03-17 20:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (741, '2020-09-28 15:44:17.135', '2020-12-19 07:07:46.233906', NULL, NULL, 100, 576, 1, 'crossCheck', 2084, '2021-03-22 20:59:00+00', '2021-04-19 18:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (742, '2020-09-21 11:23:02.753', '2020-12-19 07:08:07.900162', NULL, NULL, 40, 571, 1, 'crossCheck', 2084, '2021-03-15 10:22:00+00', '2021-04-08 21:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (746, '2020-11-20 07:27:41.543', '2020-12-14 11:24:32.174007', NULL, NULL, 170, 585, 0.8, 'crossCheck', NULL, '2021-05-10 06:27:00+00', '2021-05-31 23:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (753, '2020-12-11 12:23:16.641', '2020-12-14 11:24:19.601754', NULL, NULL, 240, 590, 0.8, 'crossCheck', NULL, '2021-06-01 12:22:00+00', '2021-06-17 00:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (763, '2020-12-19 13:03:24.071742', '2020-12-20 17:50:47.299196', NULL, NULL, 100, 593, 0.2, 'crossCheck', NULL, '2021-02-28 12:00:00+00', '2021-03-14 20:59:00+00', 23, 4, 'cv:html', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (765, '2020-12-19 13:07:08.321506', '2020-12-20 17:50:54.307731', NULL, NULL, 50, 594, 0.5, 'crossCheck', NULL, '2021-02-28 12:06:00+00', '2021-03-14 20:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (821, '2021-02-28 09:07:38.664142', '2021-03-06 09:06:02.437103', NULL, NULL, 100, 593, 0.2, 'crossCheck', 2084, '2021-02-28 10:00:00+00', '2021-03-08 23:59:00+00', 23, 4, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (841, '2021-03-07 16:23:23.776238', '2021-03-07 16:23:23.776238', NULL, NULL, 50, 594, 0.5, 'crossCheck', 2084, '2021-02-28 16:22:00+00', '2021-03-15 23:59:00+00', 23, 4, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (846, '2021-03-16 04:33:39.267072', '2021-03-22 19:29:25.192617', NULL, NULL, 50, 625, 1, 'crossCheck', 2084, '2021-03-16 04:32:00+00', '2021-03-23 01:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (853, '2021-03-29 09:21:34.603711', '2021-04-06 07:55:48.280397', NULL, NULL, 45, 630, 1, 'crossCheck', 2084, '2021-03-23 01:59:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (854, '2021-03-29 20:04:59.336453', '2021-05-20 12:08:18.903322', NULL, NULL, 80, 631, 1, 'crossCheck', 2084, '2021-03-23 19:00:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (855, '2021-03-29 20:05:01.298383', '2021-05-20 12:08:24.067047', NULL, NULL, 80, 632, 1, 'crossCheck', 2084, '2021-03-24 00:00:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (856, '2021-03-29 20:05:04.039062', '2021-05-20 12:08:28.287282', NULL, NULL, 80, 633, 1, 'crossCheck', 2084, '2021-03-23 19:00:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (857, '2021-03-29 20:05:05.992341', '2021-05-20 12:08:32.894051', NULL, NULL, 80, 634, 1, 'crossCheck', 2084, '2021-03-24 00:59:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (858, '2021-03-29 20:05:08.056901', '2021-05-20 12:08:38.903202', NULL, NULL, 80, 635, 1, 'crossCheck', 2084, '2021-03-23 19:00:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (859, '2021-03-29 20:05:09.938253', '2021-05-20 12:08:43.683559', NULL, NULL, 80, 636, 1, 'crossCheck', 2084, '2021-03-23 19:00:00+00', '2021-04-06 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (872, '2021-04-12 08:19:58.924614', '2021-04-19 18:00:57.980059', NULL, NULL, 100, 642, 1, 'crossCheck', 2084, '2021-04-09 15:00:00+00', '2021-04-19 23:59:00+00', 23, 4, 'htmltask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (882, '2021-04-18 16:15:04.361321', '2021-05-20 12:08:50.387079', NULL, NULL, 40, 645, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (883, '2021-04-18 16:15:41.93413', '2021-05-20 12:08:55.719784', NULL, NULL, 40, 646, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (884, '2021-04-18 16:16:24.075893', '2021-05-20 12:09:00.206885', NULL, NULL, 40, 647, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (885, '2021-04-18 16:17:18.716694', '2021-05-20 12:09:04.763147', NULL, NULL, 40, 648, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (886, '2021-04-18 16:18:01.426812', '2021-05-20 12:09:08.62373', NULL, NULL, 40, 649, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (887, '2021-04-18 16:18:36.220548', '2021-05-20 12:09:12.541483', NULL, NULL, 40, 650, 1, 'crossCheck', 2084, '2021-04-18 19:15:00+00', '2021-04-20 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (890, '2021-04-20 07:25:12.840047', '2021-04-20 07:25:12.840047', NULL, NULL, 60, 652, 1, 'crossCheck', 2084, '2021-04-20 10:23:00+00', '2021-04-26 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (907, '2021-05-04 12:48:38.401297', '2021-05-20 12:09:16.982884', NULL, NULL, 80, 664, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (908, '2021-05-04 12:48:40.48278', '2021-05-20 12:09:21.390411', NULL, NULL, 80, 665, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (909, '2021-05-04 12:48:42.458949', '2021-05-20 12:09:25.327968', NULL, NULL, 80, 666, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (910, '2021-05-04 12:48:44.805426', '2021-05-20 12:09:29.619037', NULL, NULL, 80, 667, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (911, '2021-05-04 12:48:47.087144', '2021-05-20 12:09:35.059152', NULL, NULL, 80, 668, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (912, '2021-05-04 12:48:50.871115', '2021-05-20 12:09:40.298413', NULL, NULL, 80, 669, 1, 'crossCheck', 2084, '2021-04-20 20:20:00+00', '2021-05-09 23:59:00+00', 23, 4, 'htmltask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (927, '2021-05-24 07:28:24.474899', '2021-06-01 17:05:25.323429', NULL, NULL, 110, 396, 1, 'crossCheck', 2084, '2021-05-11 00:00:00+00', '2021-06-01 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (967, '2021-06-11 08:06:12.698836', '2021-06-13 13:51:19.609064', NULL, NULL, 190, 688, 1, 'crossCheck', 2084, '2021-06-01 23:59:00+00', '2021-06-16 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (972, '2021-06-20 16:42:18.069437', '2021-06-27 14:54:54.598599', NULL, NULL, 275, 690, 1, 'crossCheck', 2084, '2021-06-16 23:59:00+00', '2021-07-07 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (973, '2021-06-20 16:44:52.184361', '2021-06-28 23:15:32.104315', NULL, NULL, 275, 691, 1, 'crossCheck', 2084, '2021-06-16 23:59:00+00', '2021-07-19 23:59:00+00', 23, 4, 'jstask', true, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (978, '2021-06-22 14:47:29.005674', '2021-07-28 09:44:54.70492', NULL, NULL, 480, 695, 1, 'crossCheck', 2084, '2021-06-30 00:00:00+00', '2021-07-19 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (980, '2021-06-23 09:56:42.176771', '2021-07-09 06:19:59.834533', NULL, NULL, 205, 698, 1, 'crossCheck', 2084, '2021-07-08 00:00:00+00', '2021-07-15 23:59:00+00', 23, 4, 'jstask', false, NULL, NULL, NULL, 'initial', NULL);
-INSERT INTO public.course_task VALUES (432, '2023-01-05 09:26:24.846169', '2023-01-05 09:33:56.458716', NULL, NULL, 100, 736, 1, 'crossCheck', NULL, '2023-01-04 00:00:00+00', '2023-01-05 23:59:00+00', 23, 2, 'jstask', false, '2024-01-31 23:59:00+00', NULL, '{}', 'initial', NULL);
+COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "mentorEndDate", "maxScore", "taskId", "scoreWeight", checker, "taskOwnerId", "studentStartDate", "studentEndDate", "courseId", "pairsCount", type, disabled, "crossCheckEndDate", "submitText", validations, "crossCheckStatus", "teamDistributionId") FROM stdin;
+387	2020-02-24 06:42:44.772736	2020-02-25 10:28:14.611904	\N	\N	54	434	0.1	taskOwner	587	2020-02-22 15:00:00+00	2020-02-23 15:00:00+00	13	\N	test	f	\N	\N	\N	initial	\N
+426	2020-03-31 11:04:53.472383	2020-03-31 11:04:53.472383	\N	\N	100	129	0.01	auto-test	\N	2020-03-30 20:59:00+00	2020-04-25 20:59:00+00	13	\N	codewars:stage2	f	\N	\N	\N	initial	\N
+399	2020-03-02 13:25:46.327431	2020-03-17 08:04:28.635812	\N	\N	100	421	0.2	mentor	2103	2020-03-02 13:25:00+00	2020-03-22 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+383	2020-02-19 15:19:31.540441	2020-03-22 19:02:59.763044	\N	\N	100	472	0.2	mentor	2103	2020-02-19 15:19:00+00	2020-03-23 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+321	2019-10-15 12:42:42.1037	2019-10-15 12:43:35.36623	\N	\N	100	435	0.5	taskOwner	3961	2019-10-06 00:00:00+00	2019-10-08 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+337	2019-11-13 08:21:59.44239	2019-11-19 08:47:29.701909	\N	\N	100	446	1	mentor	1328	2019-11-14 17:00:00+00	2019-11-18 20:49:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+348	2019-11-19 10:52:33.333176	2019-11-19 10:52:33.333176	\N	\N	100	350	1	mentor	1328	2019-12-23 17:00:00+00	2020-01-02 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+350	2019-11-20 10:40:56.936083	2020-01-20 20:56:08.618894	\N	\N	280	448	0.7	mentor	1328	2019-11-03 08:00:00+00	2019-12-18 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+346	2019-11-19 09:32:03.882014	2020-01-20 21:16:18.023264	\N	\N	100	349	5	assigned	\N	2020-01-08 15:00:00+00	2020-01-20 15:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+342	2019-11-18 07:49:09.892108	2020-01-29 10:07:18.716975	\N	\N	100	447	1	mentor	\N	2020-01-28 10:07:00+00	2020-02-20 10:07:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+302	2019-09-19 10:04:08.320328	2019-11-20 21:51:46.684981	\N	\N	100	423	0.02	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+306	2019-09-20 09:59:01.071936	2019-11-20 21:52:10.896805	\N	\N	100	428	0.01	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+309	2019-09-22 09:57:59.933548	2019-11-20 21:52:27.065892	\N	\N	100	429	0.04	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+315	2019-09-30 08:20:14.840054	2019-11-20 21:54:03.067127	\N	\N	100	434	0.01	taskOwner	2032	2019-09-28 00:00:00+00	2019-09-28 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+318	2019-10-06 11:21:27.376684	2019-11-20 21:54:20.53693	\N	\N	100	437	0.01	mentor	\N	2019-09-16 00:00:00+00	2019-09-22 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+388	2020-02-24 06:43:57.26983	2020-02-25 10:28:23.927547	\N	\N	50	432	0.1	taskOwner	2480	2020-02-22 15:00:00+00	2020-02-23 15:00:00+00	13	\N	test	f	\N	\N	\N	initial	\N
+374	2020-02-15 14:44:37.656023	2020-03-12 07:20:40.425622	\N	\N	100	467	0.2	mentor	5481	2020-02-15 14:00:00+00	2020-03-22 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+380	2020-02-19 15:16:59.219399	2020-03-22 19:08:34.853331	\N	\N	100	475	0.2	mentor	2103	2020-02-19 15:15:00+00	2020-03-23 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+408	2020-03-15 23:12:19.237073	2020-03-30 07:23:21.073835	\N	\N	100	484	1	taskOwner	2084	2020-03-22 21:00:00+00	2020-04-11 20:59:00+00	13	\N	stage-interview	f	\N	\N	\N	initial	\N
+430	2020-04-04 18:29:20.218081	2020-04-04 19:44:07.634629	\N	\N	100	435	0.1	auto-test	3961	2020-04-02 19:00:00+00	2020-04-05 20:59:00+00	13	\N	test	f	\N	\N	\N	initial	\N
+303	2019-09-19 10:04:35.673232	2019-11-20 21:51:53.750426	\N	\N	100	422	0.03	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+343	2019-11-19 08:57:16.511397	2019-11-26 06:57:02.144395	\N	\N	100	246	1	taskOwner	2612	2019-11-23 09:00:00+00	2019-11-23 13:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+401	2020-03-09 08:21:51.143582	2020-03-10 08:46:07.22067	\N	\N	100	433	0.1	taskOwner	3961	2020-03-08 19:00:00+00	2020-03-08 19:00:00+00	13	\N	test	f	\N	\N	\N	initial	\N
+417	2020-03-21 19:19:58.863021	2020-03-21 19:19:58.863021	\N	\N	100	484	1	mentor	\N	2019-09-30 21:00:00+00	2019-11-30 21:00:00+00	11	\N	stage-interview	f	\N	\N	\N	initial	\N
+381	2020-02-19 15:17:32.07091	2020-03-22 19:09:12.677292	\N	\N	100	474	0.2	mentor	2103	2020-02-19 15:17:00+00	2020-03-23 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+397	2020-03-02 13:24:09.075432	2020-03-22 19:12:20.05552	\N	\N	100	426	0.2	mentor	2103	2020-03-20 13:20:00+00	2020-03-22 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+423	2020-03-31 10:19:16.141261	2020-04-06 07:07:06.10971	\N	\N	110	444	0.7	mentor	1090	2020-03-23 21:00:00+00	2020-04-07 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+300	2019-09-17 08:15:35.715649	2020-04-06 10:49:35.519015	\N	\N	100	417	0.01	mentor	\N	2019-09-09 00:00:00+00	2019-09-19 00:00:00+00	11	\N	htmlcssacademy	f	\N	\N	\N	initial	\N
+344	2019-11-19 09:04:18.469854	2019-11-28 17:17:02.674641	\N	\N	128	129	1	mentor	\N	2019-09-09 08:00:00+00	2019-11-24 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+327	2019-10-28 07:42:02.903354	2019-11-15 12:34:30.259197	\N	\N	100	418	1	mentor	\N	2019-09-20 17:00:00+00	2019-09-29 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+331	2019-11-04 08:15:10.985127	2019-11-15 12:37:57.067586	\N	\N	110	444	1	mentor	\N	2019-11-01 16:00:00+00	2019-11-06 20:39:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+354	2019-12-07 14:35:20.567268	2019-12-11 16:33:41.983256	\N	\N	60	96	1	jury	2084	2019-12-07 12:31:00+00	2019-12-28 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+313	2019-09-30 08:17:27.15297	2019-11-20 21:53:55.352852	\N	\N	100	432	0.01	taskOwner	2480	2019-09-22 00:00:00+00	2019-09-22 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+316	2019-09-30 08:22:03.026072	2019-11-20 21:54:11.847779	\N	\N	100	433	0.05	taskOwner	2032	2019-09-26 00:00:00+00	2019-09-26 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+319	2019-10-13 13:51:52.830672	2019-11-20 21:55:14.344517	\N	\N	100	439	0.3	mentor	1328	2019-10-13 00:00:00+00	2019-10-20 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+310	2019-09-22 09:58:21.070871	2019-11-20 21:52:32.957984	\N	\N	100	430	0.04	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+325	2019-10-27 12:09:53.130143	2019-11-15 12:31:01.943109	\N	\N	50	442	1	mentor	\N	2019-10-24 17:00:00+00	2019-10-27 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+307	2019-09-20 09:59:22.00868	2019-11-20 21:52:16.13903	\N	\N	100	427	0.04	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+369	2020-02-02 03:55:35.429745	2020-03-12 07:11:39.495304	\N	\N	100	437	0.1	mentor	\N	2020-02-02 01:54:00+00	2020-02-16 20:59:00+00	13	\N	cv:markdown	f	\N	\N	\N	initial	\N
+373	2020-02-09 18:18:59.381025	2020-03-12 07:13:13.223671	\N	\N	60	465	0.2	mentor	\N	2020-02-01 21:00:00+00	2020-03-15 20:59:00+00	13	\N	codewars:stage1	f	\N	\N	\N	initial	\N
+368	2020-02-01 20:13:13.966515	2020-03-12 07:10:32.0252	\N	\N	100	417	0.1	mentor	2032	2020-02-02 09:00:00+00	2020-02-23 20:59:00+00	13	\N	htmlcssacademy	f	\N	\N	\N	initial	\N
+336	2019-11-13 07:47:34.232721	2019-11-15 12:40:11.757945	\N	\N	120	445	1	mentor	1328	2019-11-08 05:00:00+00	2019-11-11 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+328	2019-10-28 07:48:01.625307	2019-11-15 12:42:26.150687	\N	\N	100	443	1	mentor	\N	2019-10-01 17:00:00+00	2019-12-01 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+345	2019-11-19 09:23:27.67568	2019-12-23 21:01:53.560053	\N	\N	100	83	1	mentor	2032	2019-11-30 17:00:00+00	2019-12-24 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+320	2019-10-13 13:52:22.151208	2019-11-16 13:10:56.094496	\N	\N	100	438	0.3	mentor	1328	2019-10-13 00:00:00+00	2019-10-20 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+349	2019-11-19 11:04:25.743014	2020-01-14 08:52:31.860422	\N	\N	450	352	1	assigned	1328	2019-12-18 19:00:00+00	2020-01-08 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+347	2019-11-19 10:18:28.401575	2019-11-19 10:18:28.401575	\N	\N	100	351	1	taskOwner	2612	2019-12-07 09:00:00+00	2019-12-07 13:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+332	2019-11-05 11:51:40.950343	2019-11-19 10:21:01.444201	\N	\N	120	89	1	mentor	\N	2019-11-03 21:00:00+00	2019-12-08 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+351	2019-11-20 11:37:02.922582	2019-11-20 11:37:02.922582	\N	\N	100	407	1	mentor	\N	2020-01-01 08:00:00+00	2020-01-17 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+367	2020-01-19 16:51:46.691809	2020-01-19 16:51:46.691809	\N	\N	100	88	1	taskOwner	1328	2020-01-18 21:00:00+00	2020-01-19 21:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+301	2019-09-17 13:42:41.220995	2019-11-20 21:51:18.507183	\N	\N	100	421	0.02	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+304	2019-09-20 09:45:08.623688	2019-11-20 21:51:58.821689	\N	\N	100	424	0.05	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+305	2019-09-20 09:45:31.423306	2019-11-20 21:52:03.967525	\N	\N	100	425	0.03	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+308	2019-09-20 09:59:54.237603	2019-11-20 21:52:21.418289	\N	\N	100	426	0.02	mentor	\N	2019-09-23 00:00:00+00	2019-10-19 00:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+382	2020-02-19 15:18:06.945157	2020-03-22 19:03:14.201634	\N	\N	100	473	0.2	mentor	2103	2020-02-19 15:17:00+00	2020-03-23 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+370	2020-02-02 04:03:10.255065	2020-03-12 07:11:48.755187	\N	\N	100	84	0.1	autoTest	\N	2020-02-02 02:02:00+00	2020-02-18 20:59:00+00	13	\N	cv:html	f	\N	\N	\N	initial	\N
+398	2020-03-02 13:24:43.551181	2020-03-17 08:05:11.649945	\N	\N	100	424	0.5	mentor	2103	2020-03-02 13:24:00+00	2020-03-22 20:59:00+00	13	\N	jstask	f	\N	\N	\N	initial	\N
+718	2020-02-24 06:43:57.27	2020-12-19 07:08:38.178221	\N	\N	50	432	0.2	taskOwner	2084	2021-03-19 15:00:00+00	2021-03-20 15:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+719	2020-03-15 23:12:19.237	2021-05-17 17:21:40.075257	\N	\N	50	484	1	taskOwner	2084	2021-05-04 00:00:00+00	2021-05-18 23:59:00+00	23	\N	stage-interview	f	\N	\N	\N	initial	\N
+720	2020-02-19 15:16:59.219	2021-03-06 09:11:06.762852	\N	\N	100	475	0.05	auto-test	2084	2021-02-28 21:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+721	2020-03-02 13:25:46.327	2021-03-06 09:11:43.622874	\N	\N	100	421	0.05	mentor	2084	2021-02-28 21:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+722	2020-02-19 15:19:31.54	2021-03-06 09:12:16.168284	\N	\N	100	472	0.05	mentor	2084	2021-02-28 21:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+723	2020-03-02 13:24:09.075	2020-12-27 07:57:56.442267	\N	\N	100	426	0.1	mentor	2084	2021-04-06 13:20:00+00	2021-04-18 21:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+724	2020-02-19 15:17:32.071	2021-03-06 09:28:28.111453	\N	\N	100	474	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+725	2020-02-19 15:18:06.945	2021-03-06 09:28:56.637451	\N	\N	100	473	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+726	2020-02-02 04:03:10.255	2021-03-06 09:05:38.409628	\N	\N	100	84	0.1	autoTest	\N	2021-02-27 03:02:00+00	2021-03-08 23:59:00+00	23	\N	cv:html	f	\N	\N	\N	initial	\N
+727	2020-03-09 08:21:51.144	2020-12-19 07:08:30.734975	\N	\N	100	433	0.2	taskOwner	2084	2021-04-03 19:00:00+00	2021-04-03 19:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+728	2020-09-09 16:31:08.778	2020-12-27 07:05:14.675656	\N	\N	100	568	0.1	auto-test	2084	2021-03-02 20:59:00+00	2021-04-25 20:59:00+00	23	\N	selfeducation	t	\N	\N	\N	initial	\N
+729	2020-09-09 16:32:20.373	2020-12-27 07:05:25.568066	\N	\N	100	567	0.1	auto-test	2084	2021-03-02 20:00:00+00	2021-04-25 20:59:00+00	23	\N	selfeducation	t	\N	\N	\N	initial	\N
+730	2020-09-09 16:33:07.413	2020-12-27 07:05:31.951659	\N	\N	100	569	0.1	auto-test	2084	2021-03-02 20:59:00+00	2021-04-25 20:59:00+00	23	\N	selfeducation	t	\N	\N	\N	initial	\N
+731	2020-02-15 14:44:37.656	2021-03-30 05:41:33.668199	\N	\N	100	467	0.5	mentor	2084	2021-01-20 16:00:00+00	2021-03-30 22:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+732	2020-02-09 18:18:59.381	2020-12-19 07:08:19.25978	\N	\N	60	465	1	mentor	\N	2021-02-26 19:00:00+00	2021-04-04 20:59:00+00	23	\N	codewars:stage1	t	\N	\N	\N	initial	\N
+733	2020-02-02 03:55:35.43	2021-03-06 09:04:46.985011	\N	\N	100	437	0.1	auto-test	\N	2021-02-27 02:54:00+00	2021-03-08 23:59:00+00	23	\N	cv:markdown	f	\N	\N	\N	initial	\N
+734	2020-02-24 06:42:44.773	2020-12-19 07:06:44.394231	\N	\N	100	434	0.2	taskOwner	2084	2021-03-13 15:00:00+00	2021-03-14 15:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+736	2020-09-28 15:59:54.118	2020-12-14 11:25:09.139521	\N	\N	210	577	0.2	mentor	\N	2021-04-26 01:59:00+00	2021-05-10 23:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+740	2020-11-20 07:16:10.732	2020-12-14 11:24:43.632522	\N	\N	210	500	0.2	mentor	\N	2021-05-10 06:15:00+00	2021-05-31 23:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+743	2020-11-03 15:25:45.804	2020-12-19 07:07:17.139765	\N	\N	128	129	0.2	auto-test	\N	2021-04-27 23:59:00+00	2021-05-17 23:59:00+00	23	\N	codewars	t	\N	\N	\N	initial	\N
+745	2020-11-20 07:22:07.672	2020-12-14 11:24:35.798531	\N	\N	210	584	0.2	mentor	\N	2021-05-10 06:21:00+00	2021-05-31 23:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+747	2020-11-30 08:13:18.401	2020-12-14 11:24:26.882041	\N	\N	100	83	0.5	auto-test	2084	2021-05-24 08:12:00+00	2021-06-07 22:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+748	2020-11-29 19:28:52.429	2020-12-14 11:24:54.693418	\N	\N	100	229	0.1	taskOwner	2084	2021-05-22 15:00:00+00	2021-05-23 15:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+749	2020-12-01 14:39:15.604	2020-12-14 11:24:51.175695	\N	\N	120	89	1	mentor	\N	2021-04-23 23:59:00+00	2021-05-25 23:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+750	2020-12-04 09:25:44.758	2020-12-14 11:24:47.561727	\N	\N	76	531	0.149999999999999	taskOwner	2084	2021-05-28 18:00:00+00	2021-05-30 18:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+751	2020-12-09 12:07:23.808	2020-12-14 11:24:13.461012	\N	\N	10	349	10	mentor	2084	2021-06-07 00:00:00+00	2021-06-21 23:59:00+00	23	\N	interview	t	\N	\N	\N	initial	\N
+752	2020-12-11 12:22:20.579	2020-12-14 11:24:23.203131	\N	\N	280	589	0.2	mentor	\N	2021-06-01 12:21:00+00	2021-06-17 00:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+764	2020-12-19 13:05:37.532114	2021-03-16 04:44:14.87901	\N	\N	15	592	1	auto-test	2084	2021-02-28 13:04:00+00	2021-03-09 00:59:00+00	23	\N	codewars	f	\N	\N	\N	initial	\N
+766	2020-12-26 18:38:03.97028	2021-03-06 09:02:07.383585	\N	\N	100	595	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
+767	2020-12-26 18:38:48.344647	2021-03-06 09:02:35.081732	\N	\N	100	596	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
+768	2020-12-26 18:39:33.065223	2021-03-06 09:03:26.018831	\N	\N	100	597	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
+833	2021-03-02 11:27:43.699601	2021-03-08 09:16:47.157628	\N	\N	100	615	0	mentor	2084	2021-03-01 22:59:00+00	2021-03-14 22:59:00+00	23	\N	test	t	\N	\N	\N	initial	\N
+845	2021-03-16 04:27:15.526178	2021-03-30 05:41:07.113384	\N	\N	65	465	0.5	auto-test	2084	2021-03-16 05:22:00+00	2021-03-30 22:59:00+00	23	\N	codewars	f	\N	\N	\N	initial	\N
+864	2021-04-02 16:07:20.055716	2021-04-02 16:07:20.055716	\N	\N	100	432	0.1	taskOwner	2084	2021-04-02 16:00:00+00	2021-04-04 16:00:00+00	23	\N	test	f	\N	\N	\N	initial	\N
+866	2021-04-05 15:41:10.480048	2021-04-07 11:36:23.008047	\N	\N	100	639	0.149999999999999	auto-test	\N	2021-04-06 00:00:00+00	2021-04-12 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+871	2021-04-11 09:24:28.636388	2021-04-11 09:24:28.636388	\N	\N	100	433	0.1	auto-test	2084	2021-04-10 09:10:00+00	2021-04-11 09:10:00+00	23	\N	test	f	\N	\N	\N	initial	\N
+888	2021-04-19 15:25:43.189874	2021-04-29 07:10:23.047691	\N	\N	50	484	1	taskOwner	2084	2021-05-04 23:59:00+00	2021-05-18 23:59:00+00	23	\N	stage-interview	t	\N	\N	\N	initial	\N
+891	2021-04-20 07:59:31.355572	2021-04-20 08:00:02.758902	\N	\N	100	641	0.1	auto-test	2084	2021-04-20 08:00:00+00	2021-04-26 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
+913	2021-05-04 13:42:38.3986	2021-05-07 11:39:02.702583	\N	\N	128	129	0.5	auto-test	2084	2021-05-04 15:42:00+00	2021-05-31 23:59:00+00	23	\N	codewars	t	\N	\N	\N	initial	\N
+916	2021-05-07 11:44:06.354446	2021-05-07 11:44:06.354446	\N	\N	81	671	0.5	auto-test	2084	2021-05-07 14:00:00+00	2021-05-31 23:59:00+00	23	\N	codewars	f	\N	\N	\N	initial	\N
+924	2021-05-20 12:03:27.067163	2021-05-20 12:03:27.067163	\N	\N	200	677	1	auto-test	2084	2021-03-23 20:00:00+00	2021-04-23 23:59:00+00	23	\N	htmltask	f	\N	\N	\N	initial	\N
+928	2021-05-26 14:04:17.496156	2021-05-26 14:05:56.930802	\N	\N	160	679	1	mentor	2084	2021-05-11 00:01:00+00	2021-05-31 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+929	2021-05-26 14:30:24.6811	2021-06-13 13:50:58.160679	\N	\N	150	680	1	mentor	2084	2021-06-01 23:59:00+00	2021-06-16 23:59:00+00	23	\N	JS task	f	\N	\N	\N	initial	\N
+945	2021-06-01 07:37:00.990005	2021-06-01 07:37:00.990005	\N	\N	120	89	1	mentor	2084	2021-05-21 10:36:00+00	2021-06-21 23:59:00+00	23	\N	\N	f	\N	\N	\N	initial	\N
+946	2021-06-01 07:41:10.17798	2021-06-01 07:41:10.17798	\N	\N	50	96	1	jury	2084	2021-06-22 10:39:00+00	2021-06-28 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+959	2021-06-05 07:43:45.453015	2021-07-20 16:03:20.793296	\N	\N	10	349	10	mentor	2084	2021-06-17 23:59:00+00	2021-07-26 23:59:00+00	23	\N	interview	f	\N	\N	\N	initial	\N
+976	2021-06-22 14:41:23.614155	2021-06-29 13:01:39.053409	\N	\N	360	693	1	mentor	2084	2021-06-17 00:00:00+00	2021-07-19 23:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
+977	2021-06-22 14:42:01.434232	2021-06-27 14:55:32.785863	\N	\N	360	692	1	mentor	2084	2021-06-17 00:00:00+00	2021-07-07 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+979	2021-06-23 09:54:07.833539	2021-07-26 21:01:38.322408	\N	\N	715	697	1	taskOwner	2084	2021-06-30 00:00:00+00	2021-07-19 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+981	2021-06-23 09:57:51.078547	2021-07-17 12:45:15.908329	\N	\N	355	696	1	mentor	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+431	2022-03-27 11:50:14.908491	2022-03-27 11:50:14.908491	\N	\N	100	498	1	mentor	\N	2022-03-27 11:50:00+00	2022-03-31 11:50:00+00	23	\N	\N	f	\N	\N	\N	initial	\N
+410	2020-03-16 12:51:21.596135	2020-03-31 11:05:14.454307	\N	\N	100	485	0.01	crossCheck	3961	2020-03-10 16:00:00+00	2020-03-30 20:59:00+00	13	4	htmltask	f	\N	\N	\N	initial	\N
+353	2019-12-03 16:51:35.631349	2019-12-03 16:51:35.631349	\N	\N	100	450	1	crossCheck	\N	2019-09-30 21:00:00+00	2019-12-01 20:59:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+424	2020-03-31 10:21:55.660987	2020-03-31 10:21:55.660987	\N	\N	75	493	0.3	crossCheck	1090	2020-03-24 20:59:00+00	2020-04-07 20:59:00+00	13	4	jstask	f	\N	\N	\N	initial	\N
+356	2019-12-16 09:41:27.698435	2019-12-24 10:13:38.728977	\N	\N	210	452	0.3	crossCheck	606	2019-12-03 07:39:00+00	2019-12-22 21:00:00+00	11	\N	\N	f	\N	\N	\N	initial	\N
+425	2020-03-31 10:25:14.33142	2020-03-31 10:25:14.33142	\N	\N	100	494	0.1	crossCheck	1090	2020-03-26 20:59:00+00	2020-04-07 20:59:00+00	13	4	jstask	f	\N	\N	\N	initial	\N
+386	2020-02-21 10:26:08.19839	2020-09-24 18:52:15.030419	\N	\N	100	476	1	crossCheck	677	2020-02-11 16:00:00+00	2020-03-11 20:59:00+00	13	1	htmltask	f	\N	\N	\N	initial	\N
+735	2020-09-28 15:55:30.264	2020-12-14 11:25:14.054069	\N	\N	60	573	1	crossCheck	2084	2021-04-19 23:59:00+00	2021-04-26 23:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+737	2020-09-28 16:02:42.88	2020-12-14 11:25:04.586605	\N	\N	170	494	0.8	crossCheck	\N	2021-04-26 00:59:00+00	2021-05-10 23:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+738	2020-10-15 15:45:25.182	2020-12-19 07:07:37.406537	\N	\N	50	572	1	crossCheck	\N	2021-04-12 14:00:00+00	2021-04-21 20:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+739	2020-09-19 08:04:36.752	2020-12-19 07:07:06.937443	\N	\N	100	570	0.5	crossCheck	2084	2021-03-08 19:59:00+00	2021-03-17 20:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+741	2020-09-28 15:44:17.135	2020-12-19 07:07:46.233906	\N	\N	100	576	1	crossCheck	2084	2021-03-22 20:59:00+00	2021-04-19 18:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+742	2020-09-21 11:23:02.753	2020-12-19 07:08:07.900162	\N	\N	40	571	1	crossCheck	2084	2021-03-15 10:22:00+00	2021-04-08 21:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+746	2020-11-20 07:27:41.543	2020-12-14 11:24:32.174007	\N	\N	170	585	0.8	crossCheck	\N	2021-05-10 06:27:00+00	2021-05-31 23:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+753	2020-12-11 12:23:16.641	2020-12-14 11:24:19.601754	\N	\N	240	590	0.8	crossCheck	\N	2021-06-01 12:22:00+00	2021-06-17 00:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+763	2020-12-19 13:03:24.071742	2020-12-20 17:50:47.299196	\N	\N	100	593	0.2	crossCheck	\N	2021-02-28 12:00:00+00	2021-03-14 20:59:00+00	23	4	cv:html	t	\N	\N	\N	initial	\N
+765	2020-12-19 13:07:08.321506	2020-12-20 17:50:54.307731	\N	\N	50	594	0.5	crossCheck	\N	2021-02-28 12:06:00+00	2021-03-14 20:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+821	2021-02-28 09:07:38.664142	2021-03-06 09:06:02.437103	\N	\N	100	593	0.2	crossCheck	2084	2021-02-28 10:00:00+00	2021-03-08 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
+841	2021-03-07 16:23:23.776238	2021-03-07 16:23:23.776238	\N	\N	50	594	0.5	crossCheck	2084	2021-02-28 16:22:00+00	2021-03-15 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
+846	2021-03-16 04:33:39.267072	2021-03-22 19:29:25.192617	\N	\N	50	625	1	crossCheck	2084	2021-03-16 04:32:00+00	2021-03-23 01:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+853	2021-03-29 09:21:34.603711	2021-04-06 07:55:48.280397	\N	\N	45	630	1	crossCheck	2084	2021-03-23 01:59:00+00	2021-04-06 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
+854	2021-03-29 20:04:59.336453	2021-05-20 12:08:18.903322	\N	\N	80	631	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+855	2021-03-29 20:05:01.298383	2021-05-20 12:08:24.067047	\N	\N	80	632	1	crossCheck	2084	2021-03-24 00:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+856	2021-03-29 20:05:04.039062	2021-05-20 12:08:28.287282	\N	\N	80	633	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+857	2021-03-29 20:05:05.992341	2021-05-20 12:08:32.894051	\N	\N	80	634	1	crossCheck	2084	2021-03-24 00:59:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+858	2021-03-29 20:05:08.056901	2021-05-20 12:08:38.903202	\N	\N	80	635	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+859	2021-03-29 20:05:09.938253	2021-05-20 12:08:43.683559	\N	\N	80	636	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+872	2021-04-12 08:19:58.924614	2021-04-19 18:00:57.980059	\N	\N	100	642	1	crossCheck	2084	2021-04-09 15:00:00+00	2021-04-19 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
+882	2021-04-18 16:15:04.361321	2021-05-20 12:08:50.387079	\N	\N	40	645	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+883	2021-04-18 16:15:41.93413	2021-05-20 12:08:55.719784	\N	\N	40	646	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+884	2021-04-18 16:16:24.075893	2021-05-20 12:09:00.206885	\N	\N	40	647	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+885	2021-04-18 16:17:18.716694	2021-05-20 12:09:04.763147	\N	\N	40	648	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+886	2021-04-18 16:18:01.426812	2021-05-20 12:09:08.62373	\N	\N	40	649	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+887	2021-04-18 16:18:36.220548	2021-05-20 12:09:12.541483	\N	\N	40	650	1	crossCheck	2084	2021-04-18 19:15:00+00	2021-04-20 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+890	2021-04-20 07:25:12.840047	2021-04-20 07:25:12.840047	\N	\N	60	652	1	crossCheck	2084	2021-04-20 10:23:00+00	2021-04-26 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+907	2021-05-04 12:48:38.401297	2021-05-20 12:09:16.982884	\N	\N	80	664	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+908	2021-05-04 12:48:40.48278	2021-05-20 12:09:21.390411	\N	\N	80	665	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+909	2021-05-04 12:48:42.458949	2021-05-20 12:09:25.327968	\N	\N	80	666	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+910	2021-05-04 12:48:44.805426	2021-05-20 12:09:29.619037	\N	\N	80	667	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+911	2021-05-04 12:48:47.087144	2021-05-20 12:09:35.059152	\N	\N	80	668	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+912	2021-05-04 12:48:50.871115	2021-05-20 12:09:40.298413	\N	\N	80	669	1	crossCheck	2084	2021-04-20 20:20:00+00	2021-05-09 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+927	2021-05-24 07:28:24.474899	2021-06-01 17:05:25.323429	\N	\N	110	396	1	crossCheck	2084	2021-05-11 00:00:00+00	2021-06-01 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+967	2021-06-11 08:06:12.698836	2021-06-13 13:51:19.609064	\N	\N	190	688	1	crossCheck	2084	2021-06-01 23:59:00+00	2021-06-16 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+972	2021-06-20 16:42:18.069437	2021-06-27 14:54:54.598599	\N	\N	275	690	1	crossCheck	2084	2021-06-16 23:59:00+00	2021-07-07 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+973	2021-06-20 16:44:52.184361	2021-06-28 23:15:32.104315	\N	\N	275	691	1	crossCheck	2084	2021-06-16 23:59:00+00	2021-07-19 23:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
+978	2021-06-22 14:47:29.005674	2021-07-28 09:44:54.70492	\N	\N	480	695	1	crossCheck	2084	2021-06-30 00:00:00+00	2021-07-19 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+980	2021-06-23 09:56:42.176771	2021-07-09 06:19:59.834533	\N	\N	205	698	1	crossCheck	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+432	2023-01-05 13:38:46.8989	2023-01-05 13:38:46.8989	\N	\N	100	529	1	crossCheck	\N	2023-01-01 00:08:00+00	2025-01-31 23:59:00+00	23	2	jstask	f	2025-02-28 23:59:00+00	\N	{}	initial	\N
+\.
 
 
 --
@@ -2955,6 +2956,8 @@ INSERT INTO public.course_task VALUES (432, '2023-01-05 09:26:24.846169', '2023-
 -- Data for Name: course_user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId", "isManager", "isJuryActivist", "isSupervisor") FROM stdin;
+\.
 
 
 --
@@ -2963,6 +2966,8 @@ INSERT INTO public.course_task VALUES (432, '2023-01-05 09:26:24.846169', '2023-
 -- Data for Name: cv; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.cv (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", expires, "militaryService", "englishLevel", "avatarLink", "desiredPosition", notes, phone, email, skype, telegram, linkedin, location, "githubUsername", website) FROM stdin;
+\.
 
 
 --
@@ -2971,7 +2976,10 @@ INSERT INTO public.course_task VALUES (432, '2023-01-05 09:26:24.846169', '2023-
 -- Data for Name: discipline; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.discipline VALUES (1, '2023-01-02 07:50:20.85756', '2023-01-02 07:50:20.85756', NULL, 'JavaScript');
+COPY public.discipline (id, created_date, updated_date, deleted_date, name) FROM stdin;
+1	2023-01-05 13:39:38.114526	2023-01-05 13:39:38.114526	\N	JavaScript
+2	2023-01-05 13:39:46.631615	2023-01-05 13:39:46.631615	\N	React
+\.
 
 
 --
@@ -2980,7 +2988,9 @@ INSERT INTO public.discipline VALUES (1, '2023-01-02 07:50:20.85756', '2023-01-0
 -- Data for Name: discord_server; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.discord_server VALUES (2, '2021-07-28 20:43:54.177877', '2021-07-28 20:43:54.177877', 'CoreJS', 'https://example.com', 'https://t.me');
+COPY public.discord_server (id, "createdDate", "updatedDate", name, "gratitudeUrl", "mentorsChatUrl") FROM stdin;
+2	2021-07-28 20:43:54.177877	2021-07-28 20:43:54.177877	CoreJS	https://example.com	https://t.me
+\.
 
 
 --
@@ -2989,175 +2999,173 @@ INSERT INTO public.discord_server VALUES (2, '2021-07-28 20:43:54.177877', '2021
 -- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.event VALUES (1, '2019-09-12 09:03:02.219291', '2019-09-12 09:03:02.219291', 'Browsers and IDEs + FAQ', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/html-css-basics.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (5, '2019-09-12 09:05:27.226044', '2019-09-12 09:05:27.226044', 'Git Basics', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/git.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (6, '2019-09-12 09:08:12.602314', '2019-09-12 09:08:12.602314', 'Photoshop and Figma for Web Developers', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/photoshop-basics.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (3, '2019-09-12 09:04:42.695298', '2019-09-12 09:09:17.59549', 'RSSchool для гуманитария. Выпуск №1', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rsschool_for_humanities.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (7, '2019-09-12 09:09:38.948815', '2019-09-12 09:09:38.948815', 'RSSchool для гуманитария. Выпуск №2', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rsschool_for_humanities.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (8, '2019-09-12 09:23:12.401849', '2019-09-12 09:23:12.401849', 'Разбор теста и таска по Git. FAQ ', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-cv.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (9, '2019-09-19 07:59:24.096881', '2019-09-19 07:59:24.096881', 'HTML&CSS. Responsive', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (10, '2019-09-19 08:05:36.969405', '2019-09-19 08:05:36.969405', 'Выдача алгоритмических заданий Stage#1', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (11, '2019-09-19 08:14:45.141279', '2019-09-19 08:14:45.141279', 'HTML&CSS. Best Practices.', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (2, '2019-09-12 09:03:32.223067', '2019-09-19 08:18:20.690872', 'HTML&CSS. Basics + FAQ', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/html-css-basics.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (12, '2019-09-19 08:23:21.884826', '2019-09-19 08:23:21.884826', 'Preprocessors. Sass', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (13, '2019-09-19 08:26:27.077797', '2019-09-19 08:26:27.077797', 'Разбор теста по HTML&CSS', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (14, '2019-09-19 08:31:20.979391', '2019-09-19 08:31:20.979391', 'Advanced HTML&CSS. BEM', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (16, '2019-09-19 09:02:38.77527', '2019-09-19 09:02:38.77527', 'JS Intro', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-intro.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (17, '2019-09-19 09:07:16.559406', '2019-09-19 09:07:16.559406', 'JS Data Types', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-data-types.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (18, '2019-09-19 09:11:18.941673', '2019-09-19 09:11:18.941673', 'JS Arrays', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (20, '2019-09-19 09:12:16.974124', '2019-09-19 09:12:16.974124', 'JavaScript DOM', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (21, '2019-09-19 09:19:37.484274', '2019-09-19 09:19:37.484274', 'Разбор алгоритмических заданий Stage#1', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (22, '2019-09-19 09:26:59.759546', '2019-09-19 09:26:59.759546', 'JS Events', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (23, '2019-09-19 09:30:16.440205', '2019-09-19 09:30:16.440205', 'Результаты первого этапа. Ответы на вопросы. Планы на второй этап', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (24, '2019-09-20 08:11:06.308753', '2019-09-20 08:11:06.308753', 'Course overview', 'https://docs.rs.school/#/', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (15, '2019-09-19 09:00:03.042423', '2019-09-20 08:25:06.472219', 'Advanced HTML&CSS. Animations', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (19, '2019-09-19 09:11:47.471902', '2019-09-20 13:18:49.343646', 'Data Structures in JavaScript', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (27, '2019-10-14 13:35:10.786219', '2019-10-14 13:38:25.576464', 'NPM & Node.js Basics', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rs-online-development.md', '', 'lecture', NULL);
-INSERT INTO public.event VALUES (28, '2019-10-14 13:48:15.522269', '2019-10-14 13:48:59.712154', 'JS Scope', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-scope.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (30, '2019-10-14 13:59:15.547123', '2019-10-14 13:59:15.547123', 'CodeJam Canvas. Q&A', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (31, '2019-10-14 14:09:36.422681', '2019-10-14 14:09:36.422681', 'Chrome DevTools', 'https://developers.google.com/web/tools/chrome-devtools/javascript/', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (32, '2019-10-14 14:13:18.279154', '2019-10-14 14:13:18.279154', 'JS Functions. Part 2', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-functions-part-two.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (29, '2019-10-14 13:48:50.052181', '2019-10-14 14:13:26.039738', 'JS Functions. Part 1', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-functions.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (36, '2019-10-15 11:46:57.892947', '2019-10-15 11:46:57.892947', 'Inheritance in JavaScript. ES6 Classes.', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/inheritance-in-js-and-es6-classes.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (42, '2019-10-15 12:04:38.891898', '2019-10-15 12:04:38.891898', 'Webpack. Assets management. Project Structure.', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/webpack.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (43, '2019-10-15 12:05:48.213974', '2019-10-15 12:05:48.213974', 'YouTube Bootstrap', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (41, '2019-10-15 12:03:06.56827', '2019-10-15 13:02:52.918044', 'JS Test Retro', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (39, '2019-10-15 11:56:46.945285', '2019-10-15 13:03:02.676299', ' Code Jam "DRAW API" Retro. FAQ Promises & http', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (38, '2019-10-15 11:53:52.332397', '2019-11-13 09:57:07.382732', 'Event Loop. Animation', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/event-loop-and-animations.md', NULL, 'lecture_self_study', NULL);
-INSERT INTO public.event VALUES (44, '2019-10-15 13:18:35.530519', '2019-10-15 13:18:35.530519', 'Interview Q&A / Stage#2 Lectures Test. Retro', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (45, '2019-10-15 13:20:19.465082', '2019-10-15 13:39:15.779199', 'TDD, Unit Tests, Quality control. Part 1', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (47, '2019-10-15 13:39:23.817166', '2019-10-15 13:39:23.817166', 'TDD, Unit Tests, Quality control. Part 2', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (48, '2019-10-15 13:42:59.192228', '2019-10-15 13:42:59.192228', 'Task "YouTube" Retro', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (49, '2019-10-15 13:47:21.601106', '2019-10-15 13:47:21.601106', 'Piskel bootstrap', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (50, '2019-10-16 08:52:16.041267', '2019-10-16 08:52:16.041267', 'Code refactoring in the context of ''Piskel clone'' task', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/refactoring.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (51, '2019-10-16 09:34:30.248464', '2019-10-16 09:34:30.248464', 'Unit tests', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (35, '2019-10-15 11:41:04.360314', '2019-11-04 08:03:24.3041', 'JS Callbacks & Promises & async/await', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/promises-game-dev.md', NULL, 'lecture_self_study', NULL);
-INSERT INTO public.event VALUES (33, '2019-10-15 11:32:41.327741', '2019-11-04 08:25:48.618847', 'Code Jam "Virtual Keyboard" Retro. DOM FAQ', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (34, '2019-10-15 11:38:40.662901', '2019-11-04 08:40:42.114517', 'ES6 Variables features. ESLint. Airbnb JavaScript Style Guide', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/es6.md', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (40, '2019-10-15 11:59:11.696371', '2019-11-13 10:39:39.24538', 'Modules in JS', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-modules.md', NULL, 'lecture_self_study', NULL);
-INSERT INTO public.event VALUES (46, '2019-10-15 13:36:34.293902', '2019-11-04 08:47:16.223906', 'Presentation. Grand Final', NULL, '', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (53, '2019-11-13 10:43:47.792601', '2019-11-13 10:43:47.792601', 'RS School Meetup', 'https://community-z.com/events/rss2019q3-meetup1', NULL, 'meetup', NULL);
-INSERT INTO public.event VALUES (52, '2019-10-17 08:38:23.683982', '2019-11-13 14:29:26.085033', 'Test: DOM, DOM Events', NULL, 'This test is without score and deadline.', 'warmup', NULL);
-INSERT INTO public.event VALUES (37, '2019-10-15 11:51:25.290004', '2019-11-20 10:17:12.401905', 'Network communication', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/http.md', NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (54, '2019-11-13 14:27:35.085726', '2019-11-13 14:32:36.477144', 'Test: http, https2, ajax', '', '', 'warmup', NULL);
-INSERT INTO public.event VALUES (55, '2019-11-13 14:59:57.236829', '2019-11-13 14:59:57.236829', 'Test: JS basics', NULL, NULL, 'warmup', NULL);
-INSERT INTO public.event VALUES (56, '2019-11-19 13:01:09.061065', '2019-11-19 13:01:09.061065', 'CodeJam "Animation Player". Intro', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (57, '2019-11-20 10:45:11.804413', '2019-11-20 10:48:32.730569', 'Task "Fancy Weather". Retro', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (59, '2019-11-20 11:05:11.612965', '2019-11-20 11:05:11.612965', 'Feedback on Mentors', 'https://app.rs.school/gratitude?course=rs-2019-q3', NULL, 'info', NULL);
-INSERT INTO public.event VALUES (63, '2020-02-17 08:36:47.634937', '2020-02-17 08:36:47.634937', 'Angular course intro. TypeScript & Angular basics', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (64, '2020-02-17 08:37:21.305157', '2020-02-17 08:37:21.305157', 'Angular. Components', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (65, '2020-02-17 08:37:43.212378', '2020-02-17 08:37:43.212378', 'Angular. Directives & Pipes', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (66, '2020-02-17 08:38:23.367356', '2020-02-17 08:38:23.367356', 'Angular. Task #1 review', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (4, '2019-09-12 09:04:58.808458', '2020-03-23 10:47:18.744158', 'HTML&CSS Basics', NULL, NULL, 'lecture', NULL);
-INSERT INTO public.event VALUES (67, '2020-02-17 08:39:33.33246', '2020-02-17 08:39:33.33246', 'Angular. Modules & Services', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (68, '2020-02-17 08:39:41.807016', '2020-02-17 08:39:41.807016', 'Angular. Routing', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (69, '2020-02-17 08:39:56.469453', '2020-02-17 08:39:56.469453', 'Angular. Task #2 review', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (70, '2020-02-17 08:40:12.090089', '2020-02-17 08:40:12.090089', 'Angular. RxJS & Observables', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (72, '2020-02-17 08:40:24.125896', '2020-02-17 08:40:24.125896', 'Angular. HTTP', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (73, '2020-02-17 08:40:37.099773', '2020-02-17 08:40:37.099773', 'Angular. Task #3 review', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (74, '2020-02-17 08:40:51.31546', '2020-02-17 08:40:51.31546', 'Angular. Redux & NgRx', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (75, '2020-02-17 08:42:30.658576', '2020-02-17 08:42:30.658576', 'Angular. CodeJam "Culture Portal". Intro', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (76, '2020-02-17 08:42:41.662791', '2020-02-17 08:42:41.662791', 'Angular. Unit testing', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (78, '2020-02-17 12:36:52.791254', '2020-02-17 12:36:52.791254', 'Git for Android developers', 'https://www.youtube.com/watch?v=J1tDWhbf-Gs', NULL, 'lecture_self_study', NULL);
-INSERT INTO public.event VALUES (79, '2020-02-17 12:39:28.042076', '2020-02-26 11:02:46.29792', 'Java for Android developers', 'https://www.youtube.com/watch?v=XsbCDeCA9p0', 'Java (syntax, base data types, Object class and methods, GC)', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (124, '2020-02-27 20:45:01.821927', '2020-02-27 20:45:01.821927', 'Angular. Task #4 review', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (80, '2020-02-17 12:40:54.525405', '2020-03-11 11:45:16.464869', 'Kotlin for Android developers', 'https://www.youtube.com/watch?v=mbA8EQZSjTk', 'Kotlin (syntax, base data types, differencies form Java)', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (81, '2020-02-17 12:42:37.911916', '2020-03-11 11:50:46.082372', 'Collections for Android developers', 'https://www.youtube.com/watch?v=6HHLqP0_spk', 'Collections(Array, Lists, Queue, Set, HashMap, TreeMap, ArrayMap, SparceArray, boxing, mutable and immutable)', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (82, '2020-02-17 12:44:59.94523', '2020-03-11 11:55:59.980381', 'Advanced Java and Kotlin for Android developers', 'https://www.youtube.com/watch?v=mh6LV9aBypo', 'Generics. Static and Dynamic binding. Generics in Kotlin. (SOLID, Clean Code).', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (83, '2020-02-17 12:49:12.081105', '2020-03-11 12:03:58.296963', 'Base Android Components Overview', 'https://www.youtube.com/watch?v=KINkdbIfwdU', 'App Manifest (Data Backup, Permissions, App Components overview)', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (125, '2020-03-19 09:18:54.244884', '2020-03-19 09:18:54.244884', '[iOS] Quiz', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (126, '2020-06-08 16:27:06.413013', '2020-06-08 16:29:35.410611', '[iOS] Multithreading basics, NSOperation/GCD overview full functionality (part 1)', NULL, 'Multithreading', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (127, '2020-06-08 16:30:18.594107', '2020-06-08 16:30:18.594107', '[iOS] Multithreading basics, NSOperation/GCD overview full functionality (part 2)', NULL, 'Multithreading', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (128, '2020-06-08 16:35:16.780715', '2020-06-08 16:35:16.780715', '[iOS] App Sandbox and Bundle, NSUserDefaults, read/writing to file', NULL, 'App Sandbox and Bundle, NSUserDefaults, read/writing to file', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (129, '2020-06-08 16:35:53.342328', '2020-06-08 16:35:53.342328', '[iOS] Networking (CRUD, JSON, XML), NSURLSession', NULL, 'Networking (CRUD, JSON, XML), NSURLSession', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (130, '2020-06-08 16:36:22.196423', '2020-06-08 16:36:22.196423', '[iOS] Animations (UIView animation, CALayer animation ...)', NULL, 'Animations (UIView animation, CALayer animation ...)', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (131, '2020-06-08 16:36:47.014748', '2020-06-08 16:36:47.014748', '[iOS] Unit Tests (OCMock, XCTest)', NULL, 'Unit Tests (OCMock, XCTest)', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (132, '2020-06-08 16:37:12.751094', '2020-06-08 16:37:12.751094', '[iOS] SQLLite', NULL, 'SQLLite', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (133, '2020-06-08 16:37:35.982116', '2020-06-08 16:37:35.982116', '[iOS] Core Data', NULL, 'Core Data', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (134, '2020-06-08 16:38:01.843965', '2020-06-08 16:38:01.843965', '[iOS] CocoaPods', NULL, 'CocoaPods', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (136, '2020-06-08 16:40:17.139789', '2020-07-24 07:20:19.886061', '[iOS, Android] Patterns part2, (Adaptor, Bridge, Decorator, Facade, Proxy, MVP)', 'https://youtu.be/Dh1ktKpq9Fc', 'Adaptor, Bridge, Decorator, Facade, Proxy, MVP', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (137, '2020-06-08 16:41:04.611035', '2021-04-17 22:16:20.70863', '[iOS, Android] Patterns part1, (Factory Method, Abstact Factory,  Bulder, Singleton,  MVC)', 'https://www.youtube.com/watch?v=oMjzSNIbkg8', 'Factory Method, Abstact Factory,  Bulder, Singleton,  MVC', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (138, '2020-06-08 16:41:38.872838', '2020-08-04 19:40:39.79378', '[iOS, Android] Patterns part3, (Observer, Strategy, Command, State, MVVM)', 'https://youtu.be/dbdqeZ17E-4', 'Observer, Strategy, Command, State, MVVM', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (139, '2020-06-08 16:42:23.750115', '2020-07-30 14:20:12.261478', '[iOS, Android] Patterns part4, Inversion of Control (dependency injection, Service Locator), GRASP', 'https://www.youtube.com/watch?v=lKX_jw052Yk&feature=youtu.be', 'dependency injection, Service Locator, GRASP', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (140, '2020-06-08 18:45:58.708297', '2020-06-09 10:20:02.88197', '[Android] Storage Part 1 (FileStorage, FileProvider, External and Internal Storage, SharedPreferencies, PreferenceFragment)', 'https://www.youtube.com/watch?v=y9pRcpRb9aE', NULL, 'lecture_self_study', NULL);
-INSERT INTO public.event VALUES (141, '2020-06-08 18:46:10.614889', '2020-06-08 18:46:10.614889', '[iOS] Swift, part 1 (Initialization, property, types, class)', NULL, 'Swift, part 1', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (142, '2020-06-08 18:46:25.265151', '2020-06-11 11:57:49.773017', '[Android] Storage Part 2(SQLite, pain of Cursor)', 'https://www.youtube.com/watch?v=latY2xfh2OY', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (143, '2020-06-08 18:46:50.319888', '2020-06-08 18:46:50.319888', '[iOS] Swift, part 2 (Enums, Protocols, Extensions)', NULL, 'Swift, part 2', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (144, '2020-06-08 18:47:48.716992', '2020-06-08 18:47:48.716992', '[iOS] Swift, part 3 (Collections, Closures)', NULL, 'Swift, part 3', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (145, '2020-06-08 18:48:42.307624', '2020-06-08 18:48:42.307624', '[iOS] Swift,  part 4 (Generics)', NULL, 'Swift,  part 4', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (146, '2020-06-08 18:48:59.453278', '2020-06-16 11:02:49.978649', '[Android] Storage Part 3(ORM: ORMLite, GreenDao)', 'https://www.youtube.com/watch?v=fcJvn5MpBoY&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (147, '2020-06-08 18:49:18.177322', '2020-06-08 18:49:18.177322', '[iOS] Swift, part 5 (Error handling, ARC, Access levels)', NULL, 'Swift, part 5', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (148, '2020-06-08 18:50:11.211062', '2020-06-08 18:50:11.211062', '[iOS] Swift, part 6 (UnitTests, UITests)', NULL, 'Swift, part 6', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (149, '2020-06-08 18:51:07.115575', '2020-07-07 14:31:49.785689', '[Android] Demo: Creating settings screen with PreferenceFragment', 'https://www.youtube.com/watch?v=lcPO4sPUmQ0&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (150, '2020-06-08 18:53:19.739061', '2020-06-23 14:43:24.657466', '[Android] Storage Part 4 (Realm, NoSQL, Firebase database, Firestore)', 'https://www.youtube.com/watch?v=RiQ0Fq9drpQ&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (151, '2020-06-08 18:54:32.119471', '2020-06-25 14:43:07.646511', '[Android] Storage Part 5 (Room and LiveData overview)', 'https://www.youtube.com/watch?v=rSt4vlCr06k&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (152, '2020-06-08 18:56:38.906763', '2020-06-30 14:01:23.917011', '[Android] Demo: Firestore', 'https://www.youtube.com/watch?v=Zu_GLyYD_Zk&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (153, '2020-06-08 18:58:27.500847', '2020-07-02 09:17:56.488663', '[Android] Networking (CRUD, JSON, XML), HttpUrlConnection, OkHttp', 'https://www.youtube.com/watch?v=8MvM47n3inw&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (154, '2020-06-08 18:59:56.539253', '2020-07-07 14:27:16.387969', '[Android] REST, Retrofit, Gson, Moshi, GraphQL overview', 'https://www.youtube.com/watch?v=7qI-W6qI8T4&feature=youtu.be', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (155, '2020-06-08 19:01:19.319504', '2020-07-09 10:55:59.44469', '[Android] Quality Assurance (Detekt, ktlint, AndroidLint, SonarQube, CI basics)', 'https://youtu.be/csWGsOK2xYk', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (156, '2020-06-08 19:04:43.156329', '2020-07-14 14:58:47.045131', '[Android] Demo: Working on the real project', 'https://www.youtube.com/watch?v=TTm_z64fWlk', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (157, '2020-06-08 19:12:19.91916', '2020-07-16 17:00:25.594532', '[Android] Build Configuration (Gradle, groovy vs kotlin, settings, BuildType, BuildFlavor, Plugins, buildSrc)', 'https://youtu.be/B4qoxeGSPOs', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (158, '2020-06-08 19:19:32.3009', '2020-08-04 20:20:43.827678', '[Android] DI (Dagger2, Koin)', 'https://youtu.be/aMwpHwLrxpE', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (159, '2020-06-08 19:20:29.24446', '2020-08-23 13:33:39.790374', '[Android] Clean Architecture, ViewModel and LiveData(MVVM by Google)', 'https://www.youtube.com/watch?v=v6xPnjZAL2U', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (160, '2020-06-08 19:21:44.853351', '2020-08-23 13:34:39.408732', '[Android] ReactiveX, RxJava, RxKotlin, Reaktive', 'https://www.youtube.com/watch?v=Q3e5R6KN1EM', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (161, '2020-06-08 19:23:04.841744', '2020-08-23 13:35:11.981109', '[Android] Kotlin Coroutines and Flow', 'https://www.youtube.com/watch?v=SLW2sm4YA_4', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (162, '2020-06-08 19:25:45.83293', '2020-09-22 08:18:37.263457', '[Android] Android Architecture Components(Lifecycle, Navigation, WorkManager, PagingLibrary, Preference)', 'https://www.youtube.com/watch?v=kShzWyBMjf4&feature=youtu.be&ab_channel=RollingScopesSchool', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (163, '2020-06-08 19:26:46.002742', '2020-09-22 08:51:58.883544', '[Android] Tests (Junit, Mockito, Mockk, Spek2, Espresso)', 'https://youtu.be/4LIgv91S8G8', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (164, '2020-07-21 16:55:08.461138', '2020-07-21 16:55:55.005421', '[iOS, Android] Working on the real project', NULL, 'CD/CI, Scrum, TDD....', 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (165, '2020-07-27 10:31:38.167381', '2021-07-10 22:05:56.133842', 'Angular. HTTP', NULL, NULL, 'workshop', NULL);
-INSERT INTO public.event VALUES (166, '2020-08-05 09:25:59.634529', '2020-08-05 09:25:59.634529', 'Angular. Task #5 review', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (167, '2021-01-18 20:30:53.435008', '2021-01-18 20:30:53.435008', 'Angular. Final task "RS Lang". Intro', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (168, '2021-04-17 21:16:46.854068', '2021-07-27 21:10:20.762053', '[iOS] Swift: Fundamentals, part1 (Classes, Structs, Init, Deinit)', 'https://youtu.be/bbDZ3vBjq-s', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (169, '2021-04-17 21:18:00.021065', '2021-07-27 21:10:33.318624', '[iOS] Swift: Fundamentals, part2 (Protocols, Extensions, Access control)', 'https://youtu.be/Zem7azTDTfA', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (170, '2021-04-17 21:19:09.995838', '2021-07-27 21:10:48.661699', '[iOS] Swift: Enum, Optionals, Properties', 'https://youtu.be/ecBhz5YITG4', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (171, '2021-04-17 21:20:01.309681', '2021-07-27 21:10:59.643765', '[iOS] Swift: Collections', 'https://youtu.be/N0HDxnj8zuo', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (172, '2021-04-17 21:21:04.644787', '2021-07-27 21:11:52.391729', '[iOS] Swift: Type casting, Nesting types, Opaque type', 'https://youtu.be/skD3iO-l6Lw', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (173, '2021-04-17 21:21:32.675193', '2021-07-27 21:11:34.326737', '[iOS] Swift: Closures', 'https://youtu.be/DqqrkbU6Csc', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (174, '2021-04-17 21:21:57.787204', '2021-07-27 21:12:05.272894', '[iOS] Swift: Generics', 'https://youtu.be/OkvvfNuhRrM', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (175, '2021-04-17 21:22:21.683772', '2021-07-27 21:12:16.2674', '[iOS] Swift: ARC, Error handling', 'https://youtu.be/I520sje9g7M', NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (176, '2021-04-17 21:32:33.51823', '2021-07-27 21:18:02.98113', '[iOS] Stage 1', 'https://youtu.be/NjE4LVIcpQI', NULL, 'info', NULL);
-INSERT INTO public.event VALUES (177, '2021-04-17 21:32:52.407919', '2021-04-17 21:32:52.407919', '[iOS] Stage 2', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (178, '2021-04-17 21:33:08.809654', '2021-04-17 21:33:08.809654', '[iOS] Stage 3', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (179, '2021-04-17 22:07:11.429289', '2021-04-17 22:07:11.429289', '[iOS] Unit Tests (ObjC: OCMock, XCTest, Swift: Quick, Nimble)', NULL, NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (180, '2021-04-17 22:11:36.745265', '2021-04-17 22:11:36.745265', '[iOS] CocoaPods, Swift Package Manager (SPM)', NULL, NULL, 'lecture_mixed', NULL);
-INSERT INTO public.event VALUES (181, '2021-04-17 22:19:11.535059', '2021-04-17 22:19:11.535059', '[iOS] Assessment period', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (182, '2021-04-18 17:22:05.305628', '2021-04-18 17:22:05.305628', '[iOS] Final Task - Assessment', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (183, '2021-04-18 17:24:53.506302', '2021-04-18 17:24:53.506302', '[iOS] Result (Summarize)', NULL, NULL, 'info', NULL);
-INSERT INTO public.event VALUES (184, '2021-05-24 07:20:56.730632', '2021-05-24 07:20:56.730632', 'Software design principles. SOLID', 'https://www.youtube.com/rollingscopesschool', 'a.        Single Responsibility Principle 
-b.        Open-Closed Principle
-c.        Liskov Substitution Principle 
-d.        Interface Segregation Principle 
-e.        Dependency Inversion Principle', 'Online Lecture', NULL);
-INSERT INTO public.event VALUES (185, '2021-06-22 11:41:18.759195', '2021-06-22 11:41:18.759195', 'Q&A: Шахматы + English for kids', 'https://youtube.com', 'Ответы на вопросы по новому заданию', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (186, '2021-06-22 14:07:40.862461', '2021-06-22 14:07:40.862461', 'Выдача сертификатов stage#2', 'https://docs.rs.school/#/rs-school-certificate', NULL, 'Info', NULL);
-INSERT INTO public.event VALUES (187, '2021-06-25 08:57:13.764023', '2021-07-23 10:09:43.479324', 'Знакомство с RS School и профессией "JS/Front-end разработчик"', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0/modules/js-fe-developer', NULL, 'Online Lecture', NULL);
-INSERT INTO public.event VALUES (188, '2021-06-25 11:09:37.325536', '2021-07-13 17:03:02.123734', 'Q&A Stage#0', 'https://docs.google.com/spreadsheets/d/1QXlD5uknJLDjYmPcRhSqaKAw8VACwypvGOuXy-MFaYs/edit#gid=0', NULL, 'Online Lecture', NULL);
-INSERT INTO public.event VALUES (189, '2021-06-25 11:17:15.225806', '2021-06-25 11:17:15.225806', 'NodeJS. Live Coding', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (190, '2021-06-29 07:21:48.844085', '2021-06-29 07:22:21.456235', 'Chrome Dev Tools и VS Code', 'https://github.com/rolling-scopes-school/tasks/tree/roadmap/stage0/modules/basic-tools', NULL, 'Online Lecture', NULL);
-INSERT INTO public.event VALUES (191, '2021-06-30 12:27:36.94908', '2021-06-30 12:27:36.94908', 'Stage#0. Неделя #1', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-1', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (192, '2021-06-30 12:43:17.150567', '2021-06-30 12:43:17.150567', 'Refactoring Lecture', NULL, NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (193, '2021-07-01 14:03:58.0844', '2021-07-01 14:03:58.0844', 'Stage#0. Неделя #2', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-2', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (194, '2021-07-01 14:04:43.442034', '2021-07-01 14:04:43.442034', 'Stage#0. Неделя #3', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-3', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (195, '2021-07-01 14:05:29.684334', '2021-07-01 14:05:29.684334', 'Stage#0. Неделя #4', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-4', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (196, '2021-07-01 14:06:12.526154', '2021-07-01 14:06:12.526154', 'Stage#0. Неделя #5', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-5', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (197, '2021-07-01 14:08:08.564507', '2021-07-01 14:08:08.564507', 'Stage#0. Неделя #6', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-6', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (198, '2021-07-01 14:08:56.268658', '2021-07-01 14:08:56.268658', 'Stage#0. Неделя #7', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-7', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (199, '2021-07-01 14:10:04.277781', '2021-07-01 14:10:04.277781', 'Stage#0. Неделя #8', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-8', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (200, '2021-07-01 14:11:13.939302', '2021-07-01 14:13:55.089393', 'Stage#0. Неделя #9', 'https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-9', NULL, 'Self-studying', NULL);
-INSERT INTO public.event VALUES (201, '2021-07-05 20:57:07.500082', '2021-07-07 15:21:56.6395', 'Node.js Basic', 'https://youtube.com', NULL, 'lecture_online', NULL);
-INSERT INTO public.event VALUES (202, '2021-07-06 09:38:49.342292', '2021-07-08 06:13:01.627643', 'Cross-Check deadline: English for kids S1E1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md', NULL, 'Cross-Check deadline', NULL);
-INSERT INTO public.event VALUES (204, '2021-07-13 02:28:26.44619', '2021-07-27 02:50:11.112532', 'React Stream. Components', 'https://docs.google.com/document/d/1WLWjBiVMjsVADf5FWFYfPObQOrLD1624h5etyafCfr8/edit?usp=sharing', 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1qSfNHkOLqK6XXliXJDbY5QL7c9reWYrsxNaTPZjgQ4o/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (205, '2021-07-13 02:29:41.009407', '2021-07-27 03:37:03.415482', 'React Stream. Forms', 'https://docs.google.com/document/d/1C490mF-CzPkr2552nDcj3W3NJmrzXJKFBSs4C_Vg_cM/edit?usp=sharing', 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1wvdN5bmMcnXM_sc4l5NmOvrgM428fCf17PcwwH996Dg/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (206, '2021-07-13 02:30:59.860857', '2021-07-13 02:30:59.860857', 'React Stream. API', NULL, 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/10WdCIZj6u2dLJm1Nn7UYt5rznLds42mxsjjJLJpYxvk/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (207, '2021-07-13 02:32:06.692641', '2021-07-27 03:48:48.693306', 'React Stream. Redux', 'https://docs.google.com/document/d/11SOrFH5RSSmSaJia5XbeD02hJVwY5fsc1PJwEbOXg_A/edit?usp=sharing', 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1uxAgIrKso99fhi3svvIeWMTlyrLRByJhOTC0ttAMxeM/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (208, '2021-07-13 02:33:12.930287', '2021-07-27 03:46:43.586183', 'React Stream. Routing', 'https://docs.google.com/document/d/1SrT0rl-YG0cMheXgHsI3H2u8hCKCImEYiFvQsnOw9Q8/edit?usp=sharing', 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/14czN-v9qQMKfRGfwHHiFki0pA8kgRUKw3dd_7ZW8jyA/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (209, '2021-07-13 02:34:19.795533', '2021-07-13 02:34:19.795533', 'React Stream. Testing', NULL, 'Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1z5_B3-UA3R4-GtTm2hnqMEPBSDmkcZbd6sVsKLVzI5w/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (210, '2021-07-13 02:42:32.368104', '2021-07-13 02:42:32.368104', 'React Streaming. SSR', NULL, 'Questions: https://docs.google.com/spreadsheets/d/1z4B3WLStS0UME0ok-Prm2KUPc_fFVS34Q7dJALI3E64/edit?usp=sharing', 'lecture_online', NULL);
-INSERT INTO public.event VALUES (211, '2021-07-13 18:54:42.565201', '2021-07-16 13:18:08.778557', 'Git for beginners', NULL, 'Introduction to Git', 'Online Lecture', NULL);
-INSERT INTO public.event VALUES (212, '2021-07-16 11:12:11.167369', '2021-07-16 11:12:44.404702', 'Cross-Check deadline: English for kids S1E2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md', NULL, 'Cross-Check deadline', NULL);
-INSERT INTO public.event VALUES (213, '2021-07-20 13:47:14.868153', '2021-07-20 13:49:26.368869', 'Cross-check deadline: Chess S1E2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md', NULL, 'Cross-Check deadline', NULL);
-INSERT INTO public.event VALUES (135, '2022-03-27 12:11:38.539172', '2022-03-27 12:11:38.539172', '11', 'https://hello.com', NULL, 'Offline Lecture', NULL);
-INSERT INTO public.event VALUES (203, '2022-03-27 12:12:46.314579', '2022-03-27 12:12:46.314579', '11', 'https://hello.com', NULL, 'Offline Lecture', NULL);
+COPY public.event (id, "createdDate", "updatedDate", name, "descriptionUrl", description, type, "disciplineId") FROM stdin;
+1	2019-09-12 09:03:02.219291	2019-09-12 09:03:02.219291	Browsers and IDEs + FAQ	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/html-css-basics.md	\N	lecture	\N
+5	2019-09-12 09:05:27.226044	2019-09-12 09:05:27.226044	Git Basics	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/git.md	\N	lecture	\N
+6	2019-09-12 09:08:12.602314	2019-09-12 09:08:12.602314	Photoshop and Figma for Web Developers	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/photoshop-basics.md	\N	lecture	\N
+3	2019-09-12 09:04:42.695298	2019-09-12 09:09:17.59549	RSSchool для гуманитария. Выпуск №1	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rsschool_for_humanities.md	\N	lecture	\N
+7	2019-09-12 09:09:38.948815	2019-09-12 09:09:38.948815	RSSchool для гуманитария. Выпуск №2	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rsschool_for_humanities.md	\N	lecture	\N
+8	2019-09-12 09:23:12.401849	2019-09-12 09:23:12.401849	Разбор теста и таска по Git. FAQ 	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-cv.md	\N	lecture	\N
+9	2019-09-19 07:59:24.096881	2019-09-19 07:59:24.096881	HTML&CSS. Responsive	\N	\N	lecture	\N
+10	2019-09-19 08:05:36.969405	2019-09-19 08:05:36.969405	Выдача алгоритмических заданий Stage#1	\N	\N	lecture	\N
+11	2019-09-19 08:14:45.141279	2019-09-19 08:14:45.141279	HTML&CSS. Best Practices.	\N	\N	lecture	\N
+2	2019-09-12 09:03:32.223067	2019-09-19 08:18:20.690872	HTML&CSS. Basics + FAQ	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/html-css-basics.md	\N	lecture	\N
+12	2019-09-19 08:23:21.884826	2019-09-19 08:23:21.884826	Preprocessors. Sass	\N	\N	lecture	\N
+13	2019-09-19 08:26:27.077797	2019-09-19 08:26:27.077797	Разбор теста по HTML&CSS	\N	\N	lecture	\N
+14	2019-09-19 08:31:20.979391	2019-09-19 08:31:20.979391	Advanced HTML&CSS. BEM	\N	\N	lecture	\N
+16	2019-09-19 09:02:38.77527	2019-09-19 09:02:38.77527	JS Intro	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-intro.md	\N	lecture	\N
+17	2019-09-19 09:07:16.559406	2019-09-19 09:07:16.559406	JS Data Types	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-data-types.md	\N	lecture	\N
+18	2019-09-19 09:11:18.941673	2019-09-19 09:11:18.941673	JS Arrays	\N	\N	lecture	\N
+20	2019-09-19 09:12:16.974124	2019-09-19 09:12:16.974124	JavaScript DOM	\N	\N	lecture	\N
+21	2019-09-19 09:19:37.484274	2019-09-19 09:19:37.484274	Разбор алгоритмических заданий Stage#1	\N	\N	lecture	\N
+22	2019-09-19 09:26:59.759546	2019-09-19 09:26:59.759546	JS Events	\N	\N	lecture	\N
+23	2019-09-19 09:30:16.440205	2019-09-19 09:30:16.440205	Результаты первого этапа. Ответы на вопросы. Планы на второй этап	\N	\N	lecture	\N
+24	2019-09-20 08:11:06.308753	2019-09-20 08:11:06.308753	Course overview	https://docs.rs.school/#/	\N	lecture	\N
+15	2019-09-19 09:00:03.042423	2019-09-20 08:25:06.472219	Advanced HTML&CSS. Animations	\N	\N	lecture	\N
+19	2019-09-19 09:11:47.471902	2019-09-20 13:18:49.343646	Data Structures in JavaScript	\N	\N	lecture	\N
+27	2019-10-14 13:35:10.786219	2019-10-14 13:38:25.576464	NPM & Node.js Basics	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/rs-online-development.md		lecture	\N
+28	2019-10-14 13:48:15.522269	2019-10-14 13:48:59.712154	JS Scope	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-scope.md	\N	lecture	\N
+30	2019-10-14 13:59:15.547123	2019-10-14 13:59:15.547123	CodeJam Canvas. Q&A	\N	\N	lecture	\N
+31	2019-10-14 14:09:36.422681	2019-10-14 14:09:36.422681	Chrome DevTools	https://developers.google.com/web/tools/chrome-devtools/javascript/	\N	lecture	\N
+32	2019-10-14 14:13:18.279154	2019-10-14 14:13:18.279154	JS Functions. Part 2	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-functions-part-two.md	\N	lecture	\N
+29	2019-10-14 13:48:50.052181	2019-10-14 14:13:26.039738	JS Functions. Part 1	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-functions.md	\N	lecture	\N
+36	2019-10-15 11:46:57.892947	2019-10-15 11:46:57.892947	Inheritance in JavaScript. ES6 Classes.	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/inheritance-in-js-and-es6-classes.md	\N	lecture	\N
+42	2019-10-15 12:04:38.891898	2019-10-15 12:04:38.891898	Webpack. Assets management. Project Structure.	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/webpack.md	\N	lecture	\N
+43	2019-10-15 12:05:48.213974	2019-10-15 12:05:48.213974	YouTube Bootstrap	\N	\N	lecture	\N
+41	2019-10-15 12:03:06.56827	2019-10-15 13:02:52.918044	JS Test Retro	\N	\N	lecture	\N
+39	2019-10-15 11:56:46.945285	2019-10-15 13:03:02.676299	 Code Jam "DRAW API" Retro. FAQ Promises & http	\N	\N	lecture	\N
+38	2019-10-15 11:53:52.332397	2019-11-13 09:57:07.382732	Event Loop. Animation	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/event-loop-and-animations.md	\N	lecture_self_study	\N
+44	2019-10-15 13:18:35.530519	2019-10-15 13:18:35.530519	Interview Q&A / Stage#2 Lectures Test. Retro	\N	\N	lecture	\N
+45	2019-10-15 13:20:19.465082	2019-10-15 13:39:15.779199	TDD, Unit Tests, Quality control. Part 1	\N	\N	lecture	\N
+47	2019-10-15 13:39:23.817166	2019-10-15 13:39:23.817166	TDD, Unit Tests, Quality control. Part 2	\N	\N	lecture	\N
+48	2019-10-15 13:42:59.192228	2019-10-15 13:42:59.192228	Task "YouTube" Retro	\N	\N	lecture	\N
+49	2019-10-15 13:47:21.601106	2019-10-15 13:47:21.601106	Piskel bootstrap	\N	\N	lecture	\N
+50	2019-10-16 08:52:16.041267	2019-10-16 08:52:16.041267	Code refactoring in the context of 'Piskel clone' task	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/refactoring.md	\N	lecture	\N
+51	2019-10-16 09:34:30.248464	2019-10-16 09:34:30.248464	Unit tests	\N	\N	lecture	\N
+35	2019-10-15 11:41:04.360314	2019-11-04 08:03:24.3041	JS Callbacks & Promises & async/await	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/promises-game-dev.md	\N	lecture_self_study	\N
+33	2019-10-15 11:32:41.327741	2019-11-04 08:25:48.618847	Code Jam "Virtual Keyboard" Retro. DOM FAQ	\N	\N	lecture	\N
+34	2019-10-15 11:38:40.662901	2019-11-04 08:40:42.114517	ES6 Variables features. ESLint. Airbnb JavaScript Style Guide	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/es6.md	\N	lecture_online	\N
+40	2019-10-15 11:59:11.696371	2019-11-13 10:39:39.24538	Modules in JS	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/js-modules.md	\N	lecture_self_study	\N
+46	2019-10-15 13:36:34.293902	2019-11-04 08:47:16.223906	Presentation. Grand Final	\N		lecture_mixed	\N
+53	2019-11-13 10:43:47.792601	2019-11-13 10:43:47.792601	RS School Meetup	https://community-z.com/events/rss2019q3-meetup1	\N	meetup	\N
+52	2019-10-17 08:38:23.683982	2019-11-13 14:29:26.085033	Test: DOM, DOM Events	\N	This test is without score and deadline.	warmup	\N
+37	2019-10-15 11:51:25.290004	2019-11-20 10:17:12.401905	Network communication	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/http.md	\N	lecture	\N
+54	2019-11-13 14:27:35.085726	2019-11-13 14:32:36.477144	Test: http, https2, ajax			warmup	\N
+55	2019-11-13 14:59:57.236829	2019-11-13 14:59:57.236829	Test: JS basics	\N	\N	warmup	\N
+56	2019-11-19 13:01:09.061065	2019-11-19 13:01:09.061065	CodeJam "Animation Player". Intro	\N	\N	lecture_online	\N
+57	2019-11-20 10:45:11.804413	2019-11-20 10:48:32.730569	Task "Fancy Weather". Retro	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md	\N	lecture_online	\N
+59	2019-11-20 11:05:11.612965	2019-11-20 11:05:11.612965	Feedback on Mentors	https://app.rs.school/gratitude?course=rs-2019-q3	\N	info	\N
+63	2020-02-17 08:36:47.634937	2020-02-17 08:36:47.634937	Angular course intro. TypeScript & Angular basics	\N	\N	lecture_online	\N
+64	2020-02-17 08:37:21.305157	2020-02-17 08:37:21.305157	Angular. Components	\N	\N	lecture_online	\N
+65	2020-02-17 08:37:43.212378	2020-02-17 08:37:43.212378	Angular. Directives & Pipes	\N	\N	lecture_online	\N
+66	2020-02-17 08:38:23.367356	2020-02-17 08:38:23.367356	Angular. Task #1 review	\N	\N	lecture_online	\N
+4	2019-09-12 09:04:58.808458	2020-03-23 10:47:18.744158	HTML&CSS Basics	\N	\N	lecture	\N
+67	2020-02-17 08:39:33.33246	2020-02-17 08:39:33.33246	Angular. Modules & Services	\N	\N	lecture_online	\N
+68	2020-02-17 08:39:41.807016	2020-02-17 08:39:41.807016	Angular. Routing	\N	\N	lecture_online	\N
+69	2020-02-17 08:39:56.469453	2020-02-17 08:39:56.469453	Angular. Task #2 review	\N	\N	lecture_online	\N
+70	2020-02-17 08:40:12.090089	2020-02-17 08:40:12.090089	Angular. RxJS & Observables	\N	\N	lecture_online	\N
+72	2020-02-17 08:40:24.125896	2020-02-17 08:40:24.125896	Angular. HTTP	\N	\N	lecture_online	\N
+73	2020-02-17 08:40:37.099773	2020-02-17 08:40:37.099773	Angular. Task #3 review	\N	\N	lecture_online	\N
+74	2020-02-17 08:40:51.31546	2020-02-17 08:40:51.31546	Angular. Redux & NgRx	\N	\N	lecture_online	\N
+75	2020-02-17 08:42:30.658576	2020-02-17 08:42:30.658576	Angular. CodeJam "Culture Portal". Intro	\N	\N	lecture_online	\N
+76	2020-02-17 08:42:41.662791	2020-02-17 08:42:41.662791	Angular. Unit testing	\N	\N	lecture_online	\N
+78	2020-02-17 12:36:52.791254	2020-02-17 12:36:52.791254	Git for Android developers	https://www.youtube.com/watch?v=J1tDWhbf-Gs	\N	lecture_self_study	\N
+79	2020-02-17 12:39:28.042076	2020-02-26 11:02:46.29792	Java for Android developers	https://www.youtube.com/watch?v=XsbCDeCA9p0	Java (syntax, base data types, Object class and methods, GC)	lecture_online	\N
+124	2020-02-27 20:45:01.821927	2020-02-27 20:45:01.821927	Angular. Task #4 review	\N	\N	lecture_online	\N
+80	2020-02-17 12:40:54.525405	2020-03-11 11:45:16.464869	Kotlin for Android developers	https://www.youtube.com/watch?v=mbA8EQZSjTk	Kotlin (syntax, base data types, differencies form Java)	lecture_online	\N
+81	2020-02-17 12:42:37.911916	2020-03-11 11:50:46.082372	Collections for Android developers	https://www.youtube.com/watch?v=6HHLqP0_spk	Collections(Array, Lists, Queue, Set, HashMap, TreeMap, ArrayMap, SparceArray, boxing, mutable and immutable)	lecture_online	\N
+82	2020-02-17 12:44:59.94523	2020-03-11 11:55:59.980381	Advanced Java and Kotlin for Android developers	https://www.youtube.com/watch?v=mh6LV9aBypo	Generics. Static and Dynamic binding. Generics in Kotlin. (SOLID, Clean Code).	lecture_online	\N
+83	2020-02-17 12:49:12.081105	2020-03-11 12:03:58.296963	Base Android Components Overview	https://www.youtube.com/watch?v=KINkdbIfwdU	App Manifest (Data Backup, Permissions, App Components overview)	lecture_online	\N
+125	2020-03-19 09:18:54.244884	2020-03-19 09:18:54.244884	[iOS] Quiz	\N	\N	info	\N
+126	2020-06-08 16:27:06.413013	2020-06-08 16:29:35.410611	[iOS] Multithreading basics, NSOperation/GCD overview full functionality (part 1)	\N	Multithreading	lecture_mixed	\N
+127	2020-06-08 16:30:18.594107	2020-06-08 16:30:18.594107	[iOS] Multithreading basics, NSOperation/GCD overview full functionality (part 2)	\N	Multithreading	lecture_mixed	\N
+128	2020-06-08 16:35:16.780715	2020-06-08 16:35:16.780715	[iOS] App Sandbox and Bundle, NSUserDefaults, read/writing to file	\N	App Sandbox and Bundle, NSUserDefaults, read/writing to file	lecture_mixed	\N
+129	2020-06-08 16:35:53.342328	2020-06-08 16:35:53.342328	[iOS] Networking (CRUD, JSON, XML), NSURLSession	\N	Networking (CRUD, JSON, XML), NSURLSession	lecture_mixed	\N
+130	2020-06-08 16:36:22.196423	2020-06-08 16:36:22.196423	[iOS] Animations (UIView animation, CALayer animation ...)	\N	Animations (UIView animation, CALayer animation ...)	lecture_mixed	\N
+131	2020-06-08 16:36:47.014748	2020-06-08 16:36:47.014748	[iOS] Unit Tests (OCMock, XCTest)	\N	Unit Tests (OCMock, XCTest)	lecture_mixed	\N
+132	2020-06-08 16:37:12.751094	2020-06-08 16:37:12.751094	[iOS] SQLLite	\N	SQLLite	lecture_mixed	\N
+133	2020-06-08 16:37:35.982116	2020-06-08 16:37:35.982116	[iOS] Core Data	\N	Core Data	lecture_mixed	\N
+134	2020-06-08 16:38:01.843965	2020-06-08 16:38:01.843965	[iOS] CocoaPods	\N	CocoaPods	lecture_mixed	\N
+136	2020-06-08 16:40:17.139789	2020-07-24 07:20:19.886061	[iOS, Android] Patterns part2, (Adaptor, Bridge, Decorator, Facade, Proxy, MVP)	https://youtu.be/Dh1ktKpq9Fc	Adaptor, Bridge, Decorator, Facade, Proxy, MVP	lecture_mixed	\N
+137	2020-06-08 16:41:04.611035	2021-04-17 22:16:20.70863	[iOS, Android] Patterns part1, (Factory Method, Abstact Factory,  Bulder, Singleton,  MVC)	https://www.youtube.com/watch?v=oMjzSNIbkg8	Factory Method, Abstact Factory,  Bulder, Singleton,  MVC	lecture_mixed	\N
+138	2020-06-08 16:41:38.872838	2020-08-04 19:40:39.79378	[iOS, Android] Patterns part3, (Observer, Strategy, Command, State, MVVM)	https://youtu.be/dbdqeZ17E-4	Observer, Strategy, Command, State, MVVM	lecture_mixed	\N
+139	2020-06-08 16:42:23.750115	2020-07-30 14:20:12.261478	[iOS, Android] Patterns part4, Inversion of Control (dependency injection, Service Locator), GRASP	https://www.youtube.com/watch?v=lKX_jw052Yk&feature=youtu.be	dependency injection, Service Locator, GRASP	lecture_mixed	\N
+140	2020-06-08 18:45:58.708297	2020-06-09 10:20:02.88197	[Android] Storage Part 1 (FileStorage, FileProvider, External and Internal Storage, SharedPreferencies, PreferenceFragment)	https://www.youtube.com/watch?v=y9pRcpRb9aE	\N	lecture_self_study	\N
+141	2020-06-08 18:46:10.614889	2020-06-08 18:46:10.614889	[iOS] Swift, part 1 (Initialization, property, types, class)	\N	Swift, part 1	lecture_mixed	\N
+142	2020-06-08 18:46:25.265151	2020-06-11 11:57:49.773017	[Android] Storage Part 2(SQLite, pain of Cursor)	https://www.youtube.com/watch?v=latY2xfh2OY	\N	lecture_online	\N
+143	2020-06-08 18:46:50.319888	2020-06-08 18:46:50.319888	[iOS] Swift, part 2 (Enums, Protocols, Extensions)	\N	Swift, part 2	lecture_mixed	\N
+144	2020-06-08 18:47:48.716992	2020-06-08 18:47:48.716992	[iOS] Swift, part 3 (Collections, Closures)	\N	Swift, part 3	lecture_mixed	\N
+145	2020-06-08 18:48:42.307624	2020-06-08 18:48:42.307624	[iOS] Swift,  part 4 (Generics)	\N	Swift,  part 4	lecture_mixed	\N
+146	2020-06-08 18:48:59.453278	2020-06-16 11:02:49.978649	[Android] Storage Part 3(ORM: ORMLite, GreenDao)	https://www.youtube.com/watch?v=fcJvn5MpBoY&feature=youtu.be	\N	lecture_online	\N
+147	2020-06-08 18:49:18.177322	2020-06-08 18:49:18.177322	[iOS] Swift, part 5 (Error handling, ARC, Access levels)	\N	Swift, part 5	lecture_mixed	\N
+148	2020-06-08 18:50:11.211062	2020-06-08 18:50:11.211062	[iOS] Swift, part 6 (UnitTests, UITests)	\N	Swift, part 6	lecture_mixed	\N
+149	2020-06-08 18:51:07.115575	2020-07-07 14:31:49.785689	[Android] Demo: Creating settings screen with PreferenceFragment	https://www.youtube.com/watch?v=lcPO4sPUmQ0&feature=youtu.be	\N	lecture_online	\N
+150	2020-06-08 18:53:19.739061	2020-06-23 14:43:24.657466	[Android] Storage Part 4 (Realm, NoSQL, Firebase database, Firestore)	https://www.youtube.com/watch?v=RiQ0Fq9drpQ&feature=youtu.be	\N	lecture_online	\N
+151	2020-06-08 18:54:32.119471	2020-06-25 14:43:07.646511	[Android] Storage Part 5 (Room and LiveData overview)	https://www.youtube.com/watch?v=rSt4vlCr06k&feature=youtu.be	\N	lecture_online	\N
+152	2020-06-08 18:56:38.906763	2020-06-30 14:01:23.917011	[Android] Demo: Firestore	https://www.youtube.com/watch?v=Zu_GLyYD_Zk&feature=youtu.be	\N	lecture_online	\N
+153	2020-06-08 18:58:27.500847	2020-07-02 09:17:56.488663	[Android] Networking (CRUD, JSON, XML), HttpUrlConnection, OkHttp	https://www.youtube.com/watch?v=8MvM47n3inw&feature=youtu.be	\N	lecture_online	\N
+154	2020-06-08 18:59:56.539253	2020-07-07 14:27:16.387969	[Android] REST, Retrofit, Gson, Moshi, GraphQL overview	https://www.youtube.com/watch?v=7qI-W6qI8T4&feature=youtu.be	\N	lecture_online	\N
+155	2020-06-08 19:01:19.319504	2020-07-09 10:55:59.44469	[Android] Quality Assurance (Detekt, ktlint, AndroidLint, SonarQube, CI basics)	https://youtu.be/csWGsOK2xYk	\N	lecture_online	\N
+156	2020-06-08 19:04:43.156329	2020-07-14 14:58:47.045131	[Android] Demo: Working on the real project	https://www.youtube.com/watch?v=TTm_z64fWlk	\N	lecture_online	\N
+157	2020-06-08 19:12:19.91916	2020-07-16 17:00:25.594532	[Android] Build Configuration (Gradle, groovy vs kotlin, settings, BuildType, BuildFlavor, Plugins, buildSrc)	https://youtu.be/B4qoxeGSPOs	\N	lecture_online	\N
+158	2020-06-08 19:19:32.3009	2020-08-04 20:20:43.827678	[Android] DI (Dagger2, Koin)	https://youtu.be/aMwpHwLrxpE	\N	lecture_online	\N
+159	2020-06-08 19:20:29.24446	2020-08-23 13:33:39.790374	[Android] Clean Architecture, ViewModel and LiveData(MVVM by Google)	https://www.youtube.com/watch?v=v6xPnjZAL2U	\N	lecture_online	\N
+160	2020-06-08 19:21:44.853351	2020-08-23 13:34:39.408732	[Android] ReactiveX, RxJava, RxKotlin, Reaktive	https://www.youtube.com/watch?v=Q3e5R6KN1EM	\N	lecture_online	\N
+161	2020-06-08 19:23:04.841744	2020-08-23 13:35:11.981109	[Android] Kotlin Coroutines and Flow	https://www.youtube.com/watch?v=SLW2sm4YA_4	\N	lecture_online	\N
+162	2020-06-08 19:25:45.83293	2020-09-22 08:18:37.263457	[Android] Android Architecture Components(Lifecycle, Navigation, WorkManager, PagingLibrary, Preference)	https://www.youtube.com/watch?v=kShzWyBMjf4&feature=youtu.be&ab_channel=RollingScopesSchool	\N	lecture_online	\N
+163	2020-06-08 19:26:46.002742	2020-09-22 08:51:58.883544	[Android] Tests (Junit, Mockito, Mockk, Spek2, Espresso)	https://youtu.be/4LIgv91S8G8	\N	lecture_online	\N
+164	2020-07-21 16:55:08.461138	2020-07-21 16:55:55.005421	[iOS, Android] Working on the real project	\N	CD/CI, Scrum, TDD....	lecture_mixed	\N
+165	2020-07-27 10:31:38.167381	2021-07-10 22:05:56.133842	Angular. HTTP	\N	\N	workshop	\N
+166	2020-08-05 09:25:59.634529	2020-08-05 09:25:59.634529	Angular. Task #5 review	\N	\N	lecture_online	\N
+167	2021-01-18 20:30:53.435008	2021-01-18 20:30:53.435008	Angular. Final task "RS Lang". Intro	\N	\N	lecture_online	\N
+168	2021-04-17 21:16:46.854068	2021-07-27 21:10:20.762053	[iOS] Swift: Fundamentals, part1 (Classes, Structs, Init, Deinit)	https://youtu.be/bbDZ3vBjq-s	\N	lecture_mixed	\N
+169	2021-04-17 21:18:00.021065	2021-07-27 21:10:33.318624	[iOS] Swift: Fundamentals, part2 (Protocols, Extensions, Access control)	https://youtu.be/Zem7azTDTfA	\N	lecture_mixed	\N
+170	2021-04-17 21:19:09.995838	2021-07-27 21:10:48.661699	[iOS] Swift: Enum, Optionals, Properties	https://youtu.be/ecBhz5YITG4	\N	lecture_mixed	\N
+171	2021-04-17 21:20:01.309681	2021-07-27 21:10:59.643765	[iOS] Swift: Collections	https://youtu.be/N0HDxnj8zuo	\N	lecture_mixed	\N
+172	2021-04-17 21:21:04.644787	2021-07-27 21:11:52.391729	[iOS] Swift: Type casting, Nesting types, Opaque type	https://youtu.be/skD3iO-l6Lw	\N	lecture_mixed	\N
+173	2021-04-17 21:21:32.675193	2021-07-27 21:11:34.326737	[iOS] Swift: Closures	https://youtu.be/DqqrkbU6Csc	\N	lecture_mixed	\N
+174	2021-04-17 21:21:57.787204	2021-07-27 21:12:05.272894	[iOS] Swift: Generics	https://youtu.be/OkvvfNuhRrM	\N	lecture_mixed	\N
+176	2021-04-17 21:32:33.51823	2021-07-27 21:18:02.98113	[iOS] Stage 1	https://youtu.be/NjE4LVIcpQI	\N	info	\N
+177	2021-04-17 21:32:52.407919	2021-04-17 21:32:52.407919	[iOS] Stage 2	\N	\N	info	\N
+178	2021-04-17 21:33:08.809654	2021-04-17 21:33:08.809654	[iOS] Stage 3	\N	\N	info	\N
+179	2021-04-17 22:07:11.429289	2021-04-17 22:07:11.429289	[iOS] Unit Tests (ObjC: OCMock, XCTest, Swift: Quick, Nimble)	\N	\N	lecture_mixed	\N
+180	2021-04-17 22:11:36.745265	2021-04-17 22:11:36.745265	[iOS] CocoaPods, Swift Package Manager (SPM)	\N	\N	lecture_mixed	\N
+181	2021-04-17 22:19:11.535059	2021-04-17 22:19:11.535059	[iOS] Assessment period	\N	\N	info	\N
+182	2021-04-18 17:22:05.305628	2021-04-18 17:22:05.305628	[iOS] Final Task - Assessment	\N	\N	info	\N
+183	2021-04-18 17:24:53.506302	2021-04-18 17:24:53.506302	[iOS] Result (Summarize)	\N	\N	info	\N
+184	2021-05-24 07:20:56.730632	2021-05-24 07:20:56.730632	Software design principles. SOLID	https://www.youtube.com/rollingscopesschool	a.        Single Responsibility Principle \nb.        Open-Closed Principle\nc.        Liskov Substitution Principle \nd.        Interface Segregation Principle \ne.        Dependency Inversion Principle	Online Lecture	\N
+185	2021-06-22 11:41:18.759195	2021-06-22 11:41:18.759195	Q&A: Шахматы + English for kids	https://youtube.com	Ответы на вопросы по новому заданию	lecture_online	\N
+186	2021-06-22 14:07:40.862461	2021-06-22 14:07:40.862461	Выдача сертификатов stage#2	https://docs.rs.school/#/rs-school-certificate	\N	Info	\N
+187	2021-06-25 08:57:13.764023	2021-07-23 10:09:43.479324	Знакомство с RS School и профессией "JS/Front-end разработчик"	https://github.com/rolling-scopes-school/tasks/tree/master/stage0/modules/js-fe-developer	\N	Online Lecture	\N
+188	2021-06-25 11:09:37.325536	2021-07-13 17:03:02.123734	Q&A Stage#0	https://docs.google.com/spreadsheets/d/1QXlD5uknJLDjYmPcRhSqaKAw8VACwypvGOuXy-MFaYs/edit#gid=0	\N	Online Lecture	\N
+189	2021-06-25 11:17:15.225806	2021-06-25 11:17:15.225806	NodeJS. Live Coding	\N	\N	lecture_online	\N
+190	2021-06-29 07:21:48.844085	2021-06-29 07:22:21.456235	Chrome Dev Tools и VS Code	https://github.com/rolling-scopes-school/tasks/tree/roadmap/stage0/modules/basic-tools	\N	Online Lecture	\N
+191	2021-06-30 12:27:36.94908	2021-06-30 12:27:36.94908	Stage#0. Неделя #1	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-1	\N	Self-studying	\N
+192	2021-06-30 12:43:17.150567	2021-06-30 12:43:17.150567	Refactoring Lecture	\N	\N	lecture_online	\N
+193	2021-07-01 14:03:58.0844	2021-07-01 14:03:58.0844	Stage#0. Неделя #2	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-2	\N	Self-studying	\N
+194	2021-07-01 14:04:43.442034	2021-07-01 14:04:43.442034	Stage#0. Неделя #3	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-3	\N	Self-studying	\N
+195	2021-07-01 14:05:29.684334	2021-07-01 14:05:29.684334	Stage#0. Неделя #4	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-4	\N	Self-studying	\N
+196	2021-07-01 14:06:12.526154	2021-07-01 14:06:12.526154	Stage#0. Неделя #5	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-5	\N	Self-studying	\N
+197	2021-07-01 14:08:08.564507	2021-07-01 14:08:08.564507	Stage#0. Неделя #6	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-6	\N	Self-studying	\N
+198	2021-07-01 14:08:56.268658	2021-07-01 14:08:56.268658	Stage#0. Неделя #7	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-7	\N	Self-studying	\N
+199	2021-07-01 14:10:04.277781	2021-07-01 14:10:04.277781	Stage#0. Неделя #8	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-8	\N	Self-studying	\N
+200	2021-07-01 14:11:13.939302	2021-07-01 14:13:55.089393	Stage#0. Неделя #9	https://github.com/rolling-scopes-school/tasks/tree/master/stage0#%D0%BD%D0%B5%D0%B4%D0%B5%D0%BB%D1%8F-9	\N	Self-studying	\N
+201	2021-07-05 20:57:07.500082	2021-07-07 15:21:56.6395	Node.js Basic	https://youtube.com	\N	lecture_online	\N
+202	2021-07-06 09:38:49.342292	2021-07-08 06:13:01.627643	Cross-Check deadline: English for kids S1E1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md	\N	Cross-Check deadline	\N
+204	2021-07-13 02:28:26.44619	2021-07-27 02:50:11.112532	React Stream. Components	https://docs.google.com/document/d/1WLWjBiVMjsVADf5FWFYfPObQOrLD1624h5etyafCfr8/edit?usp=sharing	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1qSfNHkOLqK6XXliXJDbY5QL7c9reWYrsxNaTPZjgQ4o/edit?usp=sharing	lecture_online	\N
+205	2021-07-13 02:29:41.009407	2021-07-27 03:37:03.415482	React Stream. Forms	https://docs.google.com/document/d/1C490mF-CzPkr2552nDcj3W3NJmrzXJKFBSs4C_Vg_cM/edit?usp=sharing	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1wvdN5bmMcnXM_sc4l5NmOvrgM428fCf17PcwwH996Dg/edit?usp=sharing	lecture_online	\N
+206	2021-07-13 02:30:59.860857	2021-07-13 02:30:59.860857	React Stream. API	\N	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/10WdCIZj6u2dLJm1Nn7UYt5rznLds42mxsjjJLJpYxvk/edit?usp=sharing	lecture_online	\N
+175	2021-04-17 21:22:21.683772	2023-01-05 13:56:02.585537	[iOS] Swift: ARC, Error handling	https://youtu.be/I520sje9g7M	\N	lecture_mixed	1
+207	2021-07-13 02:32:06.692641	2021-07-27 03:48:48.693306	React Stream. Redux	https://docs.google.com/document/d/11SOrFH5RSSmSaJia5XbeD02hJVwY5fsc1PJwEbOXg_A/edit?usp=sharing	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1uxAgIrKso99fhi3svvIeWMTlyrLRByJhOTC0ttAMxeM/edit?usp=sharing	lecture_online	\N
+208	2021-07-13 02:33:12.930287	2021-07-27 03:46:43.586183	React Stream. Routing	https://docs.google.com/document/d/1SrT0rl-YG0cMheXgHsI3H2u8hCKCImEYiFvQsnOw9Q8/edit?usp=sharing	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/14czN-v9qQMKfRGfwHHiFki0pA8kgRUKw3dd_7ZW8jyA/edit?usp=sharing	lecture_online	\N
+209	2021-07-13 02:34:19.795533	2021-07-13 02:34:19.795533	React Stream. Testing	\N	Spreadsheet for questions: https://docs.google.com/spreadsheets/d/1z5_B3-UA3R4-GtTm2hnqMEPBSDmkcZbd6sVsKLVzI5w/edit?usp=sharing	lecture_online	\N
+210	2021-07-13 02:42:32.368104	2021-07-13 02:42:32.368104	React Streaming. SSR	\N	Questions: https://docs.google.com/spreadsheets/d/1z4B3WLStS0UME0ok-Prm2KUPc_fFVS34Q7dJALI3E64/edit?usp=sharing	lecture_online	\N
+211	2021-07-13 18:54:42.565201	2021-07-16 13:18:08.778557	Git for beginners	\N	Introduction to Git	Online Lecture	\N
+212	2021-07-16 11:12:11.167369	2021-07-16 11:12:44.404702	Cross-Check deadline: English for kids S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md	\N	Cross-Check deadline	\N
+213	2021-07-20 13:47:14.868153	2021-07-20 13:49:26.368869	Cross-check deadline: Chess S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md	\N	Cross-Check deadline	\N
+135	2022-03-27 12:11:38.539172	2022-03-27 12:11:38.539172	11	https://hello.com	\N	Offline Lecture	\N
+203	2022-03-27 12:12:46.314579	2022-03-27 12:12:46.314579	11	https://hello.com	\N	Offline Lecture	\N
+\.
 
 
 --
@@ -3166,6 +3174,8 @@ INSERT INTO public.event VALUES (203, '2022-03-27 12:12:46.314579', '2022-03-27 
 -- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.feedback (id, "createdDate", "updatedDate", "badgeId", "fromUserId", "toUserId", "courseId", comment) FROM stdin;
+\.
 
 
 --
@@ -3174,8 +3184,9 @@ INSERT INTO public.event VALUES (203, '2022-03-27 12:12:46.314579', '2022-03-27 
 -- Data for Name: history; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.history VALUES (1, '2023-01-05 09:26:24.86279', '2023-01-05 09:26:24.86279', 'course_task', 432, 'insert', '{"studentStartDate":"2023-01-04 00:00+00:00","studentEndDate":"2023-01-05 23:59+00:00","crossCheckEndDate":"2023-01-21 23:59+00:00","taskId":736,"checker":"crossCheck","scoreWeight":1,"maxScore":100,"type":"jstask","pairsCount":2,"validations":{},"courseId":23,"id":432,"createdDate":"2023-01-05T09:26:24.846Z","updatedDate":"2023-01-05T09:26:24.846Z","disabled":false,"crossCheckStatus":"initial"}', NULL);
-INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 09:33:56.442521', 'course_task', 432, 'update', '{"studentStartDate":"2023-01-04 00:00+00:00","studentEndDate":"2023-01-05 23:59+00:00","crossCheckEndDate":"2024-01-31 23:59+00:00","taskId":736,"checker":"crossCheck","scoreWeight":1,"maxScore":100,"type":"jstask","pairsCount":2,"submitText":null,"validations":{},"courseId":23,"id":432}', '{"id":432,"createdDate":"2023-01-05T09:26:24.846Z","updatedDate":"2023-01-05T09:26:24.846Z","taskId":736,"courseId":23,"studentStartDate":"2023-01-04T00:00:00.000Z","studentEndDate":"2023-01-05T23:59:00.000Z","crossCheckEndDate":"2023-01-21T23:59:00.000Z","mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":1,"checker":"crossCheck","taskOwnerId":null,"pairsCount":2,"type":"jstask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":{}}');
+COPY public.history (id, "createdDate", "updatedDate", event, "entityId", operation, update, previous) FROM stdin;
+1	2023-01-05 13:38:46.908011	2023-01-05 13:38:46.908011	course_task	432	insert	{"studentStartDate":"2023-01-01 00:08+00:00","studentEndDate":"2025-01-31 23:59+00:00","crossCheckEndDate":"2025-02-28 23:59+00:00","taskId":529,"checker":"crossCheck","scoreWeight":1,"maxScore":100,"type":"jstask","pairsCount":2,"validations":{},"courseId":23,"id":432,"createdDate":"2023-01-05T13:38:46.898Z","updatedDate":"2023-01-05T13:38:46.898Z","disabled":false,"crossCheckStatus":"initial"}	\N
+\.
 
 
 --
@@ -3184,6 +3195,8 @@ INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 
 -- Data for Name: interview_question; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.interview_question (id, "createdDate", "updatedDate", title, question) FROM stdin;
+\.
 
 
 --
@@ -3192,6 +3205,8 @@ INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 
 -- Data for Name: interview_question_categories_interview_question_category; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.interview_question_categories_interview_question_category ("interviewQuestionId", "interviewQuestionCategoryId") FROM stdin;
+\.
 
 
 --
@@ -3200,6 +3215,8 @@ INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 
 -- Data for Name: interview_question_category; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.interview_question_category (id, "createdDate", "updatedDate", name) FROM stdin;
+\.
 
 
 --
@@ -3208,6 +3225,8 @@ INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 
 -- Data for Name: login_state; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.login_state (id, "createdDate", data, "userId", expires) FROM stdin;
+\.
 
 
 --
@@ -3216,14 +3235,16 @@ INSERT INTO public.history VALUES (2, '2023-01-05 09:33:56.442521', '2023-01-05 
 -- Data for Name: mentor; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.mentor VALUES (1266, '2020-04-06 15:39:35.609875', '2020-04-06 15:39:35.609875', NULL, 13, 2595, NULL, false);
-INSERT INTO public.mentor VALUES (1267, '2020-04-06 15:39:40.768722', '2020-04-06 15:39:40.768722', NULL, 13, 2612, NULL, false);
-INSERT INTO public.mentor VALUES (1268, '2020-04-06 15:39:46.991811', '2020-04-06 15:39:46.991811', NULL, 13, 2084, NULL, false);
-INSERT INTO public.mentor VALUES (1269, '2020-04-06 15:39:51.547456', '2020-04-06 15:39:51.547456', NULL, 13, 2032, NULL, false);
-INSERT INTO public.mentor VALUES (1272, '2020-04-06 15:39:35.609875', '2020-04-06 15:39:35.609875', NULL, 23, 2595, NULL, false);
-INSERT INTO public.mentor VALUES (1273, '2020-04-06 15:39:40.768722', '2020-04-06 15:39:40.768722', NULL, 23, 2612, NULL, false);
-INSERT INTO public.mentor VALUES (1274, '2020-04-06 15:39:46.991811', '2020-04-06 15:39:46.991811', NULL, 23, 2084, NULL, false);
-INSERT INTO public.mentor VALUES (1275, '2020-04-06 15:39:51.547456', '2020-04-06 15:39:51.547456', NULL, 23, 2032, NULL, false);
+COPY public.mentor (id, "createdDate", "updatedDate", "maxStudentsLimit", "courseId", "userId", "studentsPreference", "isExpelled") FROM stdin;
+1266	2020-04-06 15:39:35.609875	2020-04-06 15:39:35.609875	\N	13	2595	\N	f
+1267	2020-04-06 15:39:40.768722	2020-04-06 15:39:40.768722	\N	13	2612	\N	f
+1268	2020-04-06 15:39:46.991811	2020-04-06 15:39:46.991811	\N	13	2084	\N	f
+1269	2020-04-06 15:39:51.547456	2020-04-06 15:39:51.547456	\N	13	2032	\N	f
+1272	2020-04-06 15:39:35.609875	2020-04-06 15:39:35.609875	\N	23	2595	\N	f
+1273	2020-04-06 15:39:40.768722	2020-04-06 15:39:40.768722	\N	23	2612	\N	f
+1274	2020-04-06 15:39:46.991811	2020-04-06 15:39:46.991811	\N	23	2084	\N	f
+1275	2020-04-06 15:39:51.547456	2020-04-06 15:39:51.547456	\N	23	2032	\N	f
+\.
 
 
 --
@@ -3232,6 +3253,8 @@ INSERT INTO public.mentor VALUES (1275, '2020-04-06 15:39:51.547456', '2020-04-0
 -- Data for Name: mentor_registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.mentor_registry (id, "userId", "preferedCourses", "maxStudentsLimit", "englishMentoring", "preferedStudentsLocation", "createdDate", "updatedDate", "technicalMentoring", "preselectedCourses", canceled, "languagesMentoring") FROM stdin;
+\.
 
 
 --
@@ -3240,46 +3263,48 @@ INSERT INTO public.mentor VALUES (1275, '2020-04-06 15:39:51.547456', '2020-04-0
 -- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.migrations VALUES (1, 1630340371992, 'UserMigration1630340371992');
-INSERT INTO public.migrations VALUES (2, 1630341383942, 'TaskResult1630341383942');
-INSERT INTO public.migrations VALUES (3, 1630342025950, 'StudentMigration1630342025950');
-INSERT INTO public.migrations VALUES (4, 1630342266002, 'UserMigration1630342266002');
-INSERT INTO public.migrations VALUES (5, 1630347897950, 'StudentMigration1630347897950');
-INSERT INTO public.migrations VALUES (6, 1632333725126, 'ResumeMigration1632333725126');
-INSERT INTO public.migrations VALUES (7, 1635365797478, 'User1635365797478');
-INSERT INTO public.migrations VALUES (8, 1637591194886, 'StageInterview1637591194886');
-INSERT INTO public.migrations VALUES (9, 1639418471577, 'Indicies1639418471577');
-INSERT INTO public.migrations VALUES (10, 1638302439645, 'CourseMigration1638302439645');
-INSERT INTO public.migrations VALUES (11, 1639427578702, 'Update1639427578702');
-INSERT INTO public.migrations VALUES (12, 1639502600339, 'Student1639502600339');
-INSERT INTO public.migrations VALUES (13, 1642884123347, 'ResumeSelectCourses1642884123347');
-INSERT INTO public.migrations VALUES (14, 1643481312933, 'Task1643481312933');
-INSERT INTO public.migrations VALUES (15, 1643550350939, 'LoginState1643550350939');
-INSERT INTO public.migrations VALUES (16, 1643926895264, 'Notifications1643926895264');
-INSERT INTO public.migrations VALUES (17, 1644695410918, 'NotificationConnection1644695410918');
-INSERT INTO public.migrations VALUES (18, 1645364514538, 'RepositoryEvent1645364514538');
-INSERT INTO public.migrations VALUES (19, 1645654601903, 'Opportunitites1645654601903');
-INSERT INTO public.migrations VALUES (20, 1647175301446, 'TaskSolutionConstraint1647175301446');
-INSERT INTO public.migrations VALUES (21, 1647550751147, 'NotificationType1647550751147');
-INSERT INTO public.migrations VALUES (22, 1647885219936, 'LoginStateUserId1647885219936');
-INSERT INTO public.migrations VALUES (23, 1647103154082, 'CrossCheckScheduling1647103154082');
-INSERT INTO public.migrations VALUES (24, 1649505252996, 'CourseLogo1649505252996');
-INSERT INTO public.migrations VALUES (25, 1649868994688, 'CourseLogo1649868994688');
-INSERT INTO public.migrations VALUES (26, 1650652882300, 'DiscordChannel1650652882300');
-INSERT INTO public.migrations VALUES (27, 1652870756742, 'Resume1652870756742');
-INSERT INTO public.migrations VALUES (28, 1656326258991, 'History1656326258991');
-INSERT INTO public.migrations VALUES (29, 1661034658479, 'Feedback1661034658479');
-INSERT INTO public.migrations VALUES (30, 1661087975938, 'Discipline1661087975938');
-INSERT INTO public.migrations VALUES (31, 1661106736439, 'Disciplines1661106736439');
-INSERT INTO public.migrations VALUES (32, 1661107174477, 'Disciplines1661107174477');
-INSERT INTO public.migrations VALUES (33, 1661616212488, 'NotificationCategory1661616212488');
-INSERT INTO public.migrations VALUES (34, 1662275601017, 'CourseTask1662275601017');
-INSERT INTO public.migrations VALUES (35, 1664183799115, 'CourseEvent1664183799115');
-INSERT INTO public.migrations VALUES (36, 1666348642811, 'TaskCriteria1666348642811');
-INSERT INTO public.migrations VALUES (37, 1666621080327, 'TaskSolutionResult1666621080327');
-INSERT INTO public.migrations VALUES (38, 1672142743107, 'TeamDistribution1672142743107');
-INSERT INTO public.migrations VALUES (39, 1672386450861, 'TeamDistribution1672386450861');
-INSERT INTO public.migrations VALUES (40, 1671475396333, 'Tasks1671475396333');
+COPY public.migrations (id, "timestamp", name) FROM stdin;
+1	1630340371992	UserMigration1630340371992
+2	1630341383942	TaskResult1630341383942
+3	1630342025950	StudentMigration1630342025950
+4	1630342266002	UserMigration1630342266002
+5	1630347897950	StudentMigration1630347897950
+6	1632333725126	ResumeMigration1632333725126
+7	1635365797478	User1635365797478
+8	1637591194886	StageInterview1637591194886
+9	1639418471577	Indicies1639418471577
+10	1638302439645	CourseMigration1638302439645
+11	1639427578702	Update1639427578702
+12	1639502600339	Student1639502600339
+13	1642884123347	ResumeSelectCourses1642884123347
+14	1643481312933	Task1643481312933
+15	1643550350939	LoginState1643550350939
+16	1643926895264	Notifications1643926895264
+17	1644695410918	NotificationConnection1644695410918
+18	1645364514538	RepositoryEvent1645364514538
+19	1645654601903	Opportunitites1645654601903
+20	1647175301446	TaskSolutionConstraint1647175301446
+21	1647550751147	NotificationType1647550751147
+22	1647885219936	LoginStateUserId1647885219936
+23	1647103154082	CrossCheckScheduling1647103154082
+24	1649505252996	CourseLogo1649505252996
+25	1649868994688	CourseLogo1649868994688
+26	1650652882300	DiscordChannel1650652882300
+27	1652870756742	Resume1652870756742
+28	1656326258991	History1656326258991
+29	1661034658479	Feedback1661034658479
+30	1661087975938	Discipline1661087975938
+31	1661106736439	Disciplines1661106736439
+32	1661107174477	Disciplines1661107174477
+33	1661616212488	NotificationCategory1661616212488
+34	1662275601017	CourseTask1662275601017
+35	1664183799115	CourseEvent1664183799115
+36	1666348642811	TaskCriteria1666348642811
+37	1666621080327	TaskSolutionResult1666621080327
+38	1671475396333	Tasks1671475396333
+39	1672142743107	TeamDistribution1672142743107
+40	1672386450861	TeamDistribution1672386450861
+\.
 
 
 --
@@ -3288,8 +3313,10 @@ INSERT INTO public.migrations VALUES (40, 1671475396333, 'Tasks1671475396333');
 -- Data for Name: notification; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.notification VALUES ('mentorRegistrationApproval', 'Mentor registration approval', '2022-02-18 21:19:53.292291', '2022-02-18 21:19:53.292291', 'mentor', false, NULL);
-INSERT INTO public.notification VALUES ('taskGrade', 'Task grade received', '2022-02-18 21:19:53.292291', '2022-02-18 21:19:53.292291', 'student', false, NULL);
+COPY public.notification (id, name, "createdDate", "updatedDate", type, enabled, "parentId") FROM stdin;
+mentorRegistrationApproval	Mentor registration approval	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291	mentor	f	\N
+taskGrade	Task grade received	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291	student	f	\N
+\.
 
 
 --
@@ -3298,9 +3325,11 @@ INSERT INTO public.notification VALUES ('taskGrade', 'Task grade received', '202
 -- Data for Name: notification_channel; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.notification_channel VALUES ('email', '2022-02-18 21:19:53.292291', '2022-02-18 21:19:53.292291');
-INSERT INTO public.notification_channel VALUES ('telegram', '2022-02-18 21:19:53.292291', '2022-02-18 21:19:53.292291');
-INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.690709', '2022-12-30 07:46:56.690709');
+COPY public.notification_channel (id, "createdDate", "updatedDate") FROM stdin;
+email	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291
+telegram	2022-02-18 21:19:53.292291	2022-02-18 21:19:53.292291
+discord	2023-01-05 13:36:47.089725	2023-01-05 13:36:47.089725
+\.
 
 
 --
@@ -3309,6 +3338,8 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: notification_channel_settings; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.notification_channel_settings ("notificationId", "createdDate", "updatedDate", "channelId", template) FROM stdin;
+\.
 
 
 --
@@ -3317,6 +3348,8 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: notification_user_connection; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.notification_user_connection ("userId", "createdDate", "updatedDate", "channelId", "externalId", enabled) FROM stdin;
+\.
 
 
 --
@@ -3325,6 +3358,8 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: notification_user_settings; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.notification_user_settings ("notificationId", "createdDate", "updatedDate", enabled, "userId", "channelId") FROM stdin;
+\.
 
 
 --
@@ -3333,6 +3368,8 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: private_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.private_feedback (id, comment, "createdDate", "updatedDate", "courseId", "fromUserId", "toUserId") FROM stdin;
+\.
 
 
 --
@@ -3341,6 +3378,8 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: profile_permissions; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.profile_permissions (id, "createdDate", "updatedDate", "userId", "isProfileVisible", "isAboutVisible", "isEducationVisible", "isEnglishVisible", "isEmailVisible", "isTelegramVisible", "isSkypeVisible", "isPhoneVisible", "isContactsNotesVisible", "isLinkedInVisible", "isPublicFeedbackVisible", "isMentorStatsVisible", "isStudentStatsVisible") FROM stdin;
+\.
 
 
 --
@@ -3349,10 +3388,11 @@ INSERT INTO public.notification_channel VALUES ('discord', '2022-12-30 07:46:56.
 -- Data for Name: registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.registry VALUES (8953, 'student', 'approved', '2020-04-06 15:15:02.782811', '2020-04-06 15:15:02.782811', 11563, 13, '{}');
-INSERT INTO public.registry VALUES (8954, 'student', 'approved', '2020-04-06 15:30:27.1162', '2020-04-06 15:30:27.1162', 677, 13, '{}');
-INSERT INTO public.registry VALUES (8955, 'student', 'approved', '2020-04-06 15:31:44.431228', '2020-04-06 15:31:44.431228', 1090, 13, '{}');
-INSERT INTO public.registry VALUES (8956, 'student', 'approved', '2023-01-02 07:51:17.217188', '2023-01-02 07:51:17.217188', 2595, 23, '{}');
+COPY public.registry (id, type, status, "createdDate", "updatedDate", "userId", "courseId", attributes) FROM stdin;
+8953	student	approved	2020-04-06 15:15:02.782811	2020-04-06 15:15:02.782811	11563	13	{}
+8954	student	approved	2020-04-06 15:30:27.1162	2020-04-06 15:30:27.1162	677	13	{}
+8955	student	approved	2020-04-06 15:31:44.431228	2020-04-06 15:31:44.431228	1090	13	{}
+\.
 
 
 --
@@ -3361,6 +3401,8 @@ INSERT INTO public.registry VALUES (8956, 'student', 'approved', '2023-01-02 07:
 -- Data for Name: repository_event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdDate", "updatedDate", "userId") FROM stdin;
+\.
 
 
 --
@@ -3369,6 +3411,8 @@ INSERT INTO public.registry VALUES (8956, 'student', 'approved', '2023-01-02 07:
 -- Data for Name: resume; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.resume (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", expires, "militaryService", "englishLevel", "avatarLink", "desiredPosition", notes, phone, email, skype, telegram, linkedin, locations, "githubUsername", website, "isHidden", "visibleCourses", uuid, "userId", "updatedDate") FROM stdin;
+\.
 
 
 --
@@ -3377,6 +3421,8 @@ INSERT INTO public.registry VALUES (8956, 'student', 'approved', '2023-01-02 07:
 -- Data for Name: stage; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.stage (id, "createdDate", "updatedDate", name, "courseId", status, "startDate", "endDate") FROM stdin;
+\.
 
 
 --
@@ -3385,9 +3431,11 @@ INSERT INTO public.registry VALUES (8956, 'student', 'approved', '2023-01-02 07:
 -- Data for Name: stage_interview; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.stage_interview VALUES (10687, '2020-04-07 20:27:20.124459', '2020-04-07 20:27:20.124459', 14327, 1266, NULL, false, NULL, NULL, 13, 408, false);
-INSERT INTO public.stage_interview VALUES (10688, '2020-04-07 20:27:41.249823', '2020-04-07 20:27:41.249823', 14329, 1266, NULL, false, NULL, NULL, 13, 408, false);
-INSERT INTO public.stage_interview VALUES (10689, '2020-04-07 20:28:00.755084', '2020-04-07 21:07:08.374015', 14329, 1266, NULL, true, 'noButGoodCandidate', true, 13, 408, false);
+COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "mentorId", "stageId", "isCompleted", decision, "isGoodCandidate", "courseId", "courseTaskId", "isCanceled") FROM stdin;
+10687	2020-04-07 20:27:20.124459	2020-04-07 20:27:20.124459	14327	1266	\N	f	\N	\N	13	408	f
+10688	2020-04-07 20:27:41.249823	2020-04-07 20:27:41.249823	14329	1266	\N	f	\N	\N	13	408	f
+10689	2020-04-07 20:28:00.755084	2020-04-07 21:07:08.374015	14329	1266	\N	t	noButGoodCandidate	t	13	408	f
+\.
 
 
 --
@@ -3396,7 +3444,9 @@ INSERT INTO public.stage_interview VALUES (10689, '2020-04-07 20:28:00.755084', 
 -- Data for Name: stage_interview_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.stage_interview_feedback VALUES (1234, '2020-04-07 21:07:08.363918', '2020-04-07 21:07:08.363918', 10689, '{"skills":{"htmlCss":{"level":3},"dataStructures":{"array":3,"stack":4},"common":{"binaryNumber":4,"sortingAndSearchAlgorithms":3}},"programmingTask":{"resolved":1,"codeWritingLevel":3},"english":{"levelStudentOpinion":9,"levelMentorOpinion":8},"resume":{"verdict":"noButGoodCandidate","comment":"test"}}');
+COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageInterviewId", json) FROM stdin;
+1234	2020-04-07 21:07:08.363918	2020-04-07 21:07:08.363918	10689	{"skills":{"htmlCss":{"level":3},"dataStructures":{"array":3,"stack":4},"common":{"binaryNumber":4,"sortingAndSearchAlgorithms":3}},"programmingTask":{"resolved":1,"codeWritingLevel":3},"english":{"levelStudentOpinion":9,"levelMentorOpinion":8},"resume":{"verdict":"noButGoodCandidate","comment":"test"}}
+\.
 
 
 --
@@ -3405,8 +3455,9 @@ INSERT INTO public.stage_interview_feedback VALUES (1234, '2020-04-07 21:07:08.3
 -- Data for Name: stage_interview_student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.stage_interview_student VALUES (1091, '2020-04-07 21:16:20.362338', '2020-04-07 21:16:20.362338', 14329, 13);
-INSERT INTO public.stage_interview_student VALUES (1092, '2023-01-04 08:06:59.152621', '2023-01-04 08:06:59.152621', 14347, 23);
+COPY public.stage_interview_student (id, "createdDate", "updatedDate", "studentId", "courseId") FROM stdin;
+1091	2020-04-07 21:16:20.362338	2020-04-07 21:16:20.362338	14329	13
+\.
 
 
 --
@@ -3415,27 +3466,28 @@ INSERT INTO public.stage_interview_student VALUES (1092, '2023-01-04 08:06:59.15
 -- Data for Name: student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.student VALUES (14329, '2020-04-06 15:31:44.421341', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 1090, NULL, NULL, NULL, NULL, false, 32, '2020-04-06 15:31:44.388+00', NULL, NULL, '2021-07-28 21:28:00.058+00', NULL, 1, 0, NULL, true);
-INSERT INTO public.student VALUES (14327, '2020-04-06 15:15:02.77565', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 11563, 1266, NULL, NULL, NULL, false, 0, '2020-04-06 15:15:02.757+00', NULL, NULL, NULL, NULL, 2, 0, NULL, true);
-INSERT INTO public.student VALUES (14331, '2020-04-06 15:33:59.694437', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2098, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 3, 0, NULL, true);
-INSERT INTO public.student VALUES (14332, '2020-04-06 15:34:04.8008', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2103, 1267, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 4, 0, NULL, true);
-INSERT INTO public.student VALUES (14333, '2020-04-06 15:34:09.064514', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2115, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 5, 0, NULL, true);
-INSERT INTO public.student VALUES (14335, '2020-04-06 15:34:19.221853', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2480, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 6, 0, NULL, true);
-INSERT INTO public.student VALUES (14334, '2020-04-06 15:34:17.983101', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2277, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 7, 0, NULL, true);
-INSERT INTO public.student VALUES (14336, '2020-04-06 15:39:07.779618', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2549, 1266, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 8, 0, NULL, true);
-INSERT INTO public.student VALUES (14330, '2020-04-06 15:33:53.058912', '2021-07-28 21:28:00.086033', false, NULL, false, false, NULL, NULL, 13, 2089, 1266, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 9, 0, NULL, true);
-INSERT INTO public.student VALUES (14328, '2020-04-06 15:30:27.104695', '2021-07-28 21:28:00.086033', true, 'test', false, false, NULL, NULL, 13, 677, 1268, NULL, NULL, NULL, false, 0, '2020-04-06 15:30:27.091+00', '2020-04-07 13:34:01.397+00', NULL, NULL, NULL, 10, 0, NULL, true);
-INSERT INTO public.student VALUES (14340, '2020-04-06 15:33:53.058912', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2089, 1266, NULL, NULL, NULL, false, 1585, '1970-01-01 00:00:00+00', NULL, NULL, '2021-07-28 21:28:00.124+00', NULL, 1, 0, NULL, true);
-INSERT INTO public.student VALUES (14337, '2020-04-06 15:15:02.77565', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 11563, 1266, NULL, NULL, NULL, false, 620, '2020-04-06 15:15:02.757+00', NULL, NULL, '2021-07-28 21:28:00.123+00', NULL, 2, 0, NULL, true);
-INSERT INTO public.student VALUES (14346, '2020-04-06 15:39:07.779618', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2549, 1266, NULL, NULL, NULL, false, 560, '1970-01-01 00:00:00+00', NULL, NULL, '2021-07-28 21:28:00.124+00', NULL, 3, 0, NULL, true);
-INSERT INTO public.student VALUES (14341, '2020-04-06 15:33:59.694437', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2098, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 4, 0, NULL, true);
-INSERT INTO public.student VALUES (14342, '2020-04-06 15:34:04.8008', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2103, 1267, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 5, 0, NULL, true);
-INSERT INTO public.student VALUES (14343, '2020-04-06 15:34:09.064514', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2115, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 6, 0, NULL, true);
-INSERT INTO public.student VALUES (14345, '2020-04-06 15:34:19.221853', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2480, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 7, 0, NULL, true);
-INSERT INTO public.student VALUES (14339, '2020-04-06 15:31:44.421341', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 1090, NULL, NULL, NULL, NULL, false, 0, '2020-04-06 15:31:44.388+00', NULL, NULL, NULL, NULL, 8, 0, NULL, true);
-INSERT INTO public.student VALUES (14344, '2020-04-06 15:34:17.983101', '2021-07-28 21:28:00.146524', false, NULL, false, false, NULL, NULL, 23, 2277, NULL, NULL, NULL, NULL, false, 0, '1970-01-01 00:00:00+00', NULL, NULL, NULL, NULL, 9, 0, NULL, true);
-INSERT INTO public.student VALUES (14338, '2020-04-06 15:30:27.104695', '2021-07-28 21:28:00.146524', true, 'test', false, false, NULL, NULL, 23, 677, 1268, NULL, NULL, NULL, false, 0, '2020-04-06 15:30:27.091+00', '2020-04-07 13:34:01.397+00', NULL, NULL, NULL, 10, 0, NULL, true);
-INSERT INTO public.student VALUES (14347, '2023-01-02 07:51:17.183759', '2023-01-04 13:01:11.090963', false, 'Re-joined course', false, false, NULL, NULL, 23, 2595, NULL, NULL, NULL, NULL, false, 0, '2023-01-02 07:51:17.18+00', NULL, NULL, NULL, NULL, 999999, 0, NULL, true);
+COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingReason", "courseCompleted", "isTopPerformer", "preferedMentorGithubId", "readyFullTime", "courseId", "userId", "mentorId", "cvUrl", "hiredById", "hiredByName", "isFailed", "totalScore", "startDate", "endDate", repository, "totalScoreChangeDate", "repositoryLastActivityDate", rank, "crossCheckScore", "unassigningComment", mentoring) FROM stdin;
+14329	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	1090	\N	\N	\N	\N	f	32	2020-04-06 15:31:44.388+00	\N	\N	2021-07-28 21:28:00.058+00	\N	1	0	\N	t
+14327	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	11563	1266	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N	\N	2	0	\N	t
+14331	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	3	0	\N	t
+14332	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N	t
+14333	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0	\N	t
+14335	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0	\N	t
+14334	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N	t
+14336	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2549	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	8	0	\N	t
+14330	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2089	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0	\N	t
+14328	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.086033	t	test	f	f	\N	\N	13	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0	\N	t
+14340	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2089	1266	\N	\N	\N	f	1585	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	1	0	\N	t
+14337	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	11563	1266	\N	\N	\N	f	620	2020-04-06 15:15:02.757+00	\N	\N	2021-07-28 21:28:00.123+00	\N	2	0	\N	t
+14346	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2549	1266	\N	\N	\N	f	560	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	3	0	\N	t
+14341	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N	t
+14342	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0	\N	t
+14343	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0	\N	t
+14345	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N	t
+14339	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	1090	\N	\N	\N	\N	f	0	2020-04-06 15:31:44.388+00	\N	\N	\N	\N	8	0	\N	t
+14344	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0	\N	t
+14338	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.146524	t	test	f	f	\N	\N	23	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0	\N	t
+\.
 
 
 --
@@ -3444,6 +3496,8 @@ INSERT INTO public.student VALUES (14347, '2023-01-02 07:51:17.183759', '2023-01
 -- Data for Name: student_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.student_feedback (id, created_date, updated_date, deleted_date, student_id, mentor_id, content, recommendation, english_level, author_id) FROM stdin;
+\.
 
 
 --
@@ -3452,7 +3506,8 @@ INSERT INTO public.student VALUES (14347, '2023-01-02 07:51:17.183759', '2023-01
 -- Data for Name: student_team_distribution_team_distribution; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.student_team_distribution_team_distribution VALUES (14347, 13);
+COPY public.student_team_distribution_team_distribution ("studentId", "teamDistributionId") FROM stdin;
+\.
 
 
 --
@@ -3461,6 +3516,8 @@ INSERT INTO public.student_team_distribution_team_distribution VALUES (14347, 13
 -- Data for Name: student_teams_team; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.student_teams_team ("studentId", "teamId") FROM stdin;
+\.
 
 
 --
@@ -3469,415 +3526,413 @@ INSERT INTO public.student_team_distribution_team_distribution VALUES (14347, 13
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.task VALUES (441, '2019-10-16 15:05:31.176646', '2019-10-16 15:05:31.176646', 'Technical screening 2', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/technical-screening.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (413, '2019-08-29 10:57:34.732592', '2019-11-11 18:19:01.013044', 'ST JS Test', 'http://learn.javascript.ru/', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (448, '2019-11-20 10:39:10.274681', '2019-11-20 10:39:10.274681', 'Fancy Weather', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md', NULL, 'manual', true, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (445, '2019-11-13 07:46:32.194939', '2019-12-03 14:41:40.672641', 'Code Jam "Palette"', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-palette/codejam-palette_en.md', NULL, 'manual', true, false, false, NULL, NULL, 'codejam', 'codejam,canvas,dom', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (451, '2019-12-11 17:17:25.352869', '2019-12-11 17:17:25.352869', 'Async-extra', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (454, '2019-12-16 10:37:14.018926', '2019-12-16 10:37:14.018926', 'Typical Arrays Problems', 'https://github.com/Shastel/typical-arrays-problems', NULL, 'auto', false, false, false, 'typical-arrays-problems', 'https://github.com/Shastel/typical-arrays-problems', 'jstask', 'epam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (457, '2019-12-16 10:38:57.10798', '2019-12-16 10:38:57.10798', 'Human Readable Number', 'https://github.com/Shastel/human-readable-number', NULL, 'auto', false, false, false, 'human-readable-number', 'https://github.com/Shastel/human-readable-number', 'jstask', 'epam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (460, '2019-12-20 08:53:52.921362', '2019-12-20 08:53:52.921362', 're:bind', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (417, '2019-09-17 07:09:54.066212', '2020-02-02 09:07:48.746248', 'HTML/CSS Self Education', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-1/HTML-CSS-self-ru.md', NULL, 'auto', false, false, false, NULL, NULL, 'htmlcssacademy', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (462, '2020-02-07 08:05:04.999374', '2020-02-07 08:05:04.999374', 'Songbird', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (466, '2020-02-11 08:49:28.691804', '2020-02-11 08:49:28.691804', 'ios Test', 'https://test.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (468, '2020-02-17 08:27:20.358749', '2020-02-17 08:28:49.855244', 'Angular. Intro', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/intro.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (471, '2020-02-17 09:19:10.05115', '2020-02-17 09:19:10.05115', 'Angular. RxJS & Observables. HTTP', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/rxjs-observables-http.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (475, '2020-02-19 15:14:40.900394', '2020-02-19 15:22:20.919668', 'Typical Arrays Problems', 'https://github.com/rolling-scopes-school/typical-arrays-problems/blob/master/README.md', NULL, 'auto', false, false, false, 'typical-arrays-problems', 'https://github.com/rolling-scopes-school/typical-arrays-problems', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (473, '2020-02-19 15:13:21.398993', '2020-02-19 15:22:34.391055', 'Human Readable Number', 'https://github.com/rolling-scopes-school/human-readable-number/blob/master/README.md', NULL, 'auto', false, false, false, 'human-readable-number', 'https://github.com/rolling-scopes-school/human-readable-number', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (478, '2020-02-26 06:55:13.604626', '2020-02-26 06:55:24.65169', 'FAKE TEST IOS', 'http://example.com', NULL, 'auto', false, false, false, 'test-solution', 'https://github.com/apalchys/test-solution', 'objctask', 'fake', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (480, '2020-03-02 06:32:37.242366', '2020-03-02 06:32:49.611475', 'React Culture Portal', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-culture-portal.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'portal,react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (477, '2020-02-25 23:21:08.16798', '2020-03-12 17:34:18.306073', 'FAKE TEST KOTLIN', 'http://example.com', NULL, 'auto', false, false, false, 'nadzeya', 'https://github.com/ziginsider/rs_task1', 'kotlintask', 'fake', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (483, '2020-03-15 15:29:20.69008', '2020-03-15 15:29:20.69008', 'Angular test', 'https://github.com/rolling-scopes-school/tasks/tree/master/tasks', NULL, 'auto', false, false, false, NULL, NULL, 'test', 'angular,Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (485, '2020-03-16 12:49:18.137702', '2020-03-16 12:49:18.137702', 'Singolo. DOM & Responsive ', 'https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/singolo', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (487, '2020-03-19 15:00:38.575898', '2020-03-19 15:04:07.496857', '[iOS] Quiz1', 'https://docs.google.com/forms/d/e/1FAIpQLSf4NwQRa2WbcjlcsDJI0kv62qJx0F0ltgapz0WczFrdBBSXug/viewform', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (416, '2019-09-10 08:14:33.753801', '2019-09-10 08:14:33.753801', 'UZ Custom lodash tests', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/10.-Custom-lodash-tests', NULL, 'manual', false, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (95, '2019-04-26 14:55:46.480357', '2019-08-14 10:45:30.750037', 'CJ "CSS QD"', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (442, '2019-10-27 12:08:46.726741', '2019-10-28 06:59:34.373416', 'Code Jam "Canvas"', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-canvas/codejam-canvas.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, 'stage2 ,canvas,codejam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (443, '2019-10-28 07:46:31.518101', '2019-11-01 14:30:13.900706', 'Repair Design Project. Difficulty Level 3', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level-3/repair-design-project/repair-design-project-en.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (486, '2020-03-18 12:10:57.111813', '2020-03-20 09:12:43.838469', 'Algorithms Part 1', 'https://github.com/rolling-scopes-school/rs.android-stage1-task1', NULL, 'auto', false, false, false, 'rs.android-stage1-task1', 'https://github.com/rolling-scopes-school/rs.android-stage1-task1', 'kotlintask', 'Android,Kotlin', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (446, '2019-11-13 08:16:07.288782', '2019-11-24 15:47:56.206248', 'Code Jam "Image API"', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-image-api/codejam-image-api_ru.md', NULL, 'manual', true, false, false, NULL, NULL, 'codejam', 'codejam,stage2 ', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (449, '2019-11-27 15:58:51.613495', '2019-11-27 15:58:51.613495', 'ST Checkpoint 1', 'https://app.rs.school/', NULL, 'manual', false, false, false, NULL, NULL, 'interview', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (402, '2019-08-14 10:35:12.012641', '2019-12-03 14:49:35.649926', 'Code Jam "Culture Portal"', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-culture-portal.md', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', 'codejam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (452, '2019-12-16 09:39:38.046401', '2019-12-16 09:39:38.046401', 'Fancy-weather Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (455, '2019-12-16 10:37:47.551919', '2019-12-16 10:37:47.551919', 'Reverse Int', 'https://github.com/Shastel/reverse-int', NULL, 'auto', false, false, false, 'reverse-int', 'https://github.com/Shastel/reverse-int', 'jstask', 'epam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (458, '2019-12-16 15:59:10.804471', '2019-12-16 15:59:10.804471', 'ST React App', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Things-APP', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (461, '2020-01-10 20:07:46.237318', '2020-01-10 20:07:46.237318', 'Angular Workshop', 'https://angular.io/', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (463, '2020-02-07 08:05:15.718038', '2020-02-07 08:05:15.718038', 'Songbird', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (464, '2020-02-07 08:05:57.730605', '2020-02-07 08:05:57.730605', 'Calculator', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/calculator.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (467, '2020-02-15 14:41:17.390262', '2020-02-16 08:44:46.403205', 'Basic JS', 'https://github.com/AlreadyBored/basic-js', NULL, 'auto', false, false, false, 'basic-js', 'https://github.com/AlreadyBored/basic-js', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (469, '2020-02-17 08:28:38.434548', '2020-02-17 08:28:54.065591', 'Angular. Components. Directives & Pipes', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/components-directives-pipes.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (474, '2020-02-19 15:13:59.744793', '2020-02-19 15:22:27.177884', 'Reverse Int', 'https://github.com/rolling-scopes-school/reverse-int/blob/master/README.md', NULL, 'auto', false, false, false, 'reverse-int', 'https://github.com/rolling-scopes-school/reverse-int', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (472, '2020-02-19 15:12:35.267242', '2020-02-19 15:22:41.830318', 'Towel Sort', 'https://github.com/rolling-scopes-school/towel-sort/blob/master/README.md', NULL, 'auto', false, false, false, 'towel-sort', 'https://github.com/rolling-scopes-school/towel-sort', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (476, '2020-02-21 10:24:38.588117', '2020-02-21 10:24:38.588117', 'Singolo', 'https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/singolo', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (479, '2020-03-02 06:25:15.661263', '2020-03-02 06:25:15.661263', 'Angular Culture Portal', 'https://github.com/rolling-scopes-school/tasks/blob/angular-2020Q1/tasks/angular/culture-portal.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'angular,portal', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (481, '2020-03-02 11:56:29.196388', '2020-03-02 11:56:29.196388', 'Data grid', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/datagrid.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (396, '2019-08-06 09:43:51.676522', '2019-08-06 09:43:51.676522', 'Match Match Game', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/match-match-game.md', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (400, '2019-08-06 09:55:49.176631', '2019-08-06 09:55:49.176631', 'React Redux', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/react-match-match-game.md', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (86, '2019-04-26 14:55:46.436642', '2019-08-14 10:45:50.369308', 'CJ "DOM, DOM Events"', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (398, '2019-08-06 09:52:41.754622', '2019-08-14 10:46:07.362506', 'CJ "Lodash Quick Draw"', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (82, '2019-04-26 14:55:46.414479', '2019-04-26 14:55:46.414479', 'HTML/CSS Test', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (85, '2019-04-26 14:55:46.431913', '2019-04-26 14:55:46.431913', 'Markup #1', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (88, '2019-04-26 14:55:46.446081', '2019-04-26 14:55:46.446081', 'RS Activist', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (91, '2019-04-26 14:55:46.460834', '2019-04-26 14:55:46.460834', 'Mentor Dashboard', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (92, '2019-04-26 14:55:46.465569', '2019-04-26 14:55:46.465569', 'CoreJS/Arrays Test', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (94, '2019-04-26 14:55:46.475554', '2019-04-26 14:55:46.475554', 'Game', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (97, '2019-04-26 14:55:46.49026', '2019-04-26 14:55:46.49026', 'DreamTeam', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (90, '2019-04-26 14:55:46.455449', '2019-04-26 14:55:46.45545', 'Code Jam "Scoreboard"', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (117, '2019-04-30 13:51:17.676745', '2019-05-14 10:55:17.676745', 'Hexal', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/markup_d1_Hexal.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (221, '2019-05-17 13:01:38.633934', '2019-05-17 13:01:38.633934', 'htmlCssBasics', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (224, '2019-05-17 13:01:38.650481', '2019-05-17 13:01:38.650481', 'layouts', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (222, '2019-05-17 13:01:38.639424', '2019-05-17 13:01:38.639424', 'floatExercise', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (223, '2019-05-17 13:01:38.644267', '2019-05-17 13:01:38.644267', 'positioning', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (225, '2019-05-17 13:01:38.655673', '2019-05-17 13:01:38.655673', 'workshop', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (226, '2019-05-17 13:01:38.660659', '2019-05-17 13:01:38.660659', 'responsive', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (227, '2019-05-17 13:01:38.666042', '2019-05-17 13:01:38.666042', 'formsWidgets', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (228, '2019-05-17 13:01:38.671159', '2019-05-17 13:01:38.671159', 'finalTask', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (231, '2019-05-17 13:01:38.686221', '2019-05-17 13:01:38.686221', 'doublyLinkedList', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (232, '2019-05-17 13:01:38.695428', '2019-05-17 13:01:38.695428', 'customJQuery', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (234, '2019-05-17 13:01:38.705612', '2019-05-17 13:01:38.705612', 'realJquery', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (235, '2019-05-17 13:01:38.71084', '2019-05-17 13:01:38.71084', 'wsc', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (236, '2019-05-17 13:01:38.715941', '2019-05-17 13:01:38.715941', 'noNameOne', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (237, '2019-05-17 13:01:38.720957', '2019-05-17 13:01:38.720957', 'noNameTwo', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (238, '2019-05-17 13:02:30.13361', '2019-05-17 13:02:30.13361', 'workHonor', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (240, '2019-05-17 13:02:30.15818', '2019-05-17 13:02:30.15818', 'cssQDTime', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (241, '2019-05-17 13:02:30.163081', '2019-05-17 13:02:30.163081', 'uiLab', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (242, '2019-05-17 13:02:30.168177', '2019-05-17 13:02:30.168177', 'flexbox', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (243, '2019-05-17 13:02:30.173271', '2019-05-17 13:02:30.173271', 'adaptive', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (244, '2019-05-17 13:02:30.184497', '2019-05-17 13:02:30.184497', 'cssTotal', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (245, '2019-05-17 13:02:30.190762', '2019-05-17 13:02:30.190762', 'workOnLessons', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (247, '2019-05-17 13:02:30.201713', '2019-05-17 13:02:30.201713', 'functionMake', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (248, '2019-05-17 13:02:30.207184', '2019-05-17 13:02:30.207184', 'wsc', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (249, '2019-05-17 13:02:30.212126', '2019-05-17 13:02:30.212126', 'gulp', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (250, '2019-05-17 13:02:30.217988', '2019-05-17 13:02:30.217988', 'honoiTower', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (251, '2019-05-17 13:02:30.223044', '2019-05-17 13:02:30.223044', 'animation', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (252, '2019-05-17 13:02:30.2279', '2019-05-17 13:02:30.2279', 'customJQuery', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (253, '2019-05-17 13:02:30.233767', '2019-05-17 13:02:30.233767', 'tdd', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (89, '2019-04-26 14:55:46.450715', '2019-05-27 08:35:37.359351', 'Presentation', NULL, NULL, 'manual', NULL, false, true, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (96, '2019-04-26 14:55:46.485433', '2019-05-27 08:39:44.221825', 'Offline Presentation', NULL, NULL, 'manual', NULL, true, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (351, '2019-06-05 11:51:12.229807', '2019-06-05 11:51:12.229807', 'Stage#2 Final Test', NULL, NULL, 'auto', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (369, '2019-06-26 13:24:39.790098', '2019-06-26 13:24:39.790098', 'youTube', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (387, '2019-07-08 13:30:12.12725', '2019-07-08 13:30:12.12725', 'Padawans', NULL, NULL, 'auto', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (388, '2019-07-08 13:31:46.251832', '2019-07-08 13:31:46.251832', 'UZ CV', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (389, '2019-07-08 13:32:18.083335', '2019-07-08 13:32:18.083335', 'UZ Read me', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (390, '2019-07-10 12:56:29.975418', '2019-07-10 12:56:29.975418', 'UZ Layout', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/2.-Layout', 'Create web page, strictly according to:
-
-Lambda restaurant layout
-
-Browser support: Google Chrome, Mozilla Firefox, Microsoft Edge.', 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (410, '2019-08-29 09:41:00.400898', '2019-08-29 10:08:08.993969', 'ST Chat', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Chat', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (407, '2019-08-29 09:32:17.606001', '2019-08-29 10:08:44.864627', 'ST Custom Lodash', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/3.-Custom-Lodash', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (230, '2019-05-17 13:01:38.681206', '2019-08-29 10:10:10.985834', 'ST JS Assignments', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/7.-JS-assignments', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (435, '2019-09-30 08:14:14.847165', '2019-10-15 12:40:10.75085', 'HTML/CSS Test Advanced', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/html-css-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (408, '2019-08-29 09:34:32.473242', '2019-08-29 10:08:34.054101', 'ST Cyclic menu', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/4.-Cyclic-menu', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (405, '2019-08-29 09:16:23.185166', '2019-08-29 10:09:04.204396', 'ST Auto Complete', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/1.-Auto-Complete', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (411, '2019-08-29 10:11:56.69667', '2019-08-29 10:11:56.69667', 'ST Catalogue. P.1 React Client', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/FINAL:-Catalogue.-P.1-React-Client', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (414, '2019-08-29 10:57:50.108237', '2019-08-29 10:57:50.108237', 'ST JS Test 2', 'http://learn.javascript.ru/', NULL, 'manual', false, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (397, '2019-08-06 09:46:51.573349', '2019-08-06 09:46:51.573349', 'CSS Recipes & Layouts', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/css-recipes-and-layouts.md', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (401, '2019-08-06 09:56:50.593508', '2019-08-06 09:56:50.593508', 'Game Refactoring', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/game-refactoring.md', NULL, 'auto', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (229, '2019-05-17 13:01:38.676219', '2019-08-06 09:59:19.619433', 'JS Test', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (122, '2019-04-30 14:11:11.94101', '2019-05-14 10:14:11.94101', 'Neutron Mail', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/markup-d2-NeutronMail-en.md', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (87, '2019-04-26 14:55:46.441332', '2019-05-14 10:56:46.441332', 'YouTube', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/youtube.md', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (404, '2019-08-29 08:12:24.073776', '2019-10-28 10:40:19.063008', 'ST Read me', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/0.-Readme', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (422, '2019-09-19 10:02:05.134479', '2019-11-01 14:31:29.943288', 'JS: Multiply', 'https://github.com/Shastel/multiply', NULL, 'auto', false, false, false, 'multiply', 'https://github.com/Shastel/multiply', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (484, '2020-03-15 23:11:23.55455', '2020-03-25 09:27:46.940288', 'Technical Screening', 'https://docs.rs.school/#/technical-screening', NULL, 'manual', false, false, false, NULL, NULL, 'stage-interview', 'interview', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (428, '2019-09-20 09:56:26.502967', '2019-11-08 11:44:12.440623', 'JS: JS-edu', 'https://github.com/davojta/js-edu', NULL, 'auto', false, false, false, 'js-edu', 'https://github.com/davojta/js-edu', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (431, '2019-09-24 08:20:14.453176', '2019-11-08 11:44:50.366453', 'JS: Unique ', 'https://github.com/Shastel/unique', NULL, 'auto', false, false, false, 'unique', 'https://github.com/Shastel/unique', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (349, '2019-05-28 15:21:16.311993', '2019-11-19 09:35:38.995602', 'CoreJS Interview ', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/interview-corejs.md', NULL, 'manual', false, false, false, NULL, NULL, 'interview', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (93, '2019-04-26 14:55:46.470595', '2019-11-19 09:53:57.574635', 'WebSocket Challenge', 'https://github.com/rolling-scopes-school/lectures/blob/master/lectures/websocket-challenge.md', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (350, '2019-06-03 06:50:19.575782', '2019-11-19 10:53:20.712051', 'CodeJam "Animation Player"', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/piskel-animation-player.md', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (352, '2019-06-21 07:22:11.052584', '2019-11-19 13:06:31.954741', 'Piskel-clone', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/piskel-clone.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (129, '2019-05-13 11:45:12.64168', '2020-03-09 11:46:32.445946', 'Codewars stage 2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars:stage2', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (220, '2019-05-17 13:01:38.627128', '2019-05-17 13:01:38.627128', 'workHonor', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (391, '2019-07-15 12:39:31.48174', '2019-07-15 12:39:31.48174', 'UZ Autocomplete', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/3.-Autocomplete', 'The task is to implement a custom createAutocomplete function', 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (392, '2019-07-17 14:41:10.098861', '2019-07-17 14:41:10.098861', 'UZ Codewars', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/4.-Codewars', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (394, '2019-07-30 09:47:10.177586', '2019-07-30 09:47:10.177586', 'UZ Javascript Classes & Inheritance', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/5.-Javascript-Classes-&-Inheritance', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (395, '2019-07-31 12:59:19.767726', '2019-07-31 12:59:19.767726', 'UZ Custom Lodash', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/8.-Custom-Lodash', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (246, '2019-05-17 13:02:30.196693', '2019-08-06 09:59:24.394646', 'JS Test', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (233, '2019-05-17 13:01:38.700498', '2019-08-06 11:08:43.462233', 'CSS QD', NULL, NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (403, '2019-08-22 09:35:28.567592', '2019-08-22 09:35:28.567592', 'UZ Cyclic menu', 'https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/9.-Cyclic-menu', NULL, 'manual', NULL, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (406, '2019-08-29 09:21:54.045655', '2019-08-29 10:08:53.337095', 'ST Javascript Classes & Inheritance', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/2.-Javascript-Classes-&-Inheritance', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (412, '2019-08-29 10:12:27.740479', '2019-08-29 10:12:27.740479', 'ST Catalogue. P.2 Angular Admin Client', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/FINAL:-Catalogue.-P.2-Angular-Admin-Client', NULL, 'manual', true, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (415, '2019-08-29 11:07:41.484385', '2019-08-29 11:07:41.484385', 'ST Bonus', 'https://github.com/rolling-scopes-school/docs/blob/master/rs-activist.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (434, '2019-09-30 08:09:29.61975', '2019-10-08 14:24:55.849506', 'RS School Test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-school-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (436, '2019-09-30 08:14:56.284783', '2019-10-08 07:05:43.425884', 'Git Test #2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-test.md	', NULL, 'manual', false, false, false, NULL, NULL, NULL, 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (433, '2019-09-30 08:05:43.034506', '2019-10-08 14:25:09.658362', 'HTML/CSS Test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/html-css-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (465, '2020-02-09 18:17:26.12848', '2020-02-09 18:17:26.12848', 'Codewars stage 1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars:stage1', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (432, '2019-09-30 08:03:38.411822', '2019-10-28 06:59:48.722431', 'Git Test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (418, '2019-09-17 07:20:20.07102', '2019-10-28 07:40:32.105112', 'Theyalow. Difficulty Level 1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level%201/theyalow/theyalow-en.md', NULL, 'manual', false, false, false, NULL, NULL, NULL, 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (439, '2019-10-13 13:50:38.385396', '2019-11-01 14:29:45.50486', 'Priority Queue', 'https://github.com/rolling-scopes-school/priority-queue', NULL, 'auto', false, false, false, 'priority-queue', 'https://github.com/rolling-scopes-school/priority-queue', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (424, '2019-09-20 09:40:16.65468', '2019-11-01 14:31:12.362038', 'JS: Expression Calculator', 'https://github.com/romacher/expression-calculator', NULL, 'auto', false, false, false, 'expression-calculator', 'https://github.com/romacher/expression-calculator', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (421, '2019-09-17 13:40:31.235798', '2019-11-01 14:31:18.390464', 'JS: Brackets', 'https://github.com/Shastel/brackets', NULL, 'auto', false, false, false, 'brackets', 'https://github.com/Shastel/brackets', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (423, '2019-09-19 10:02:37.126233', '2019-11-01 14:31:37.02801', 'JS: Zeros', 'https://github.com/Shastel/zeros', NULL, 'auto', false, false, false, 'zeros', 'https://github.com/Shastel/zeros', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (393, '2019-07-26 13:14:49.106312', '2019-11-07 09:21:44.562843', 'ST JS assignments', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/3.-JS-assignments', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (425, '2019-09-20 09:42:22.766447', '2019-11-08 11:43:53.046921', 'JS: Guessing-game', 'https://github.com/rolling-scopes-school/guessing-game', NULL, 'auto', false, false, false, 'guessing-game', 'https://github.com/rolling-scopes-school/guessing-game', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (426, '2019-09-20 09:54:01.865495', '2019-11-08 11:44:00.705846', 'JS: Morse-decoder', 'https://github.com/romacher/morse-decoder', NULL, 'auto', false, false, false, 'morse-decoder', 'https://github.com/romacher/morse-decoder', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (427, '2019-09-20 09:54:43.876086', '2019-11-08 11:44:06.756286', 'JS: Finite-state-machine', 'https://github.com/rolling-scopes-school/finite-state-machine', NULL, 'auto', false, false, false, 'finite-state-machine', 'https://github.com/rolling-scopes-school/finite-state-machine', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (429, '2019-09-22 09:55:22.942777', '2019-11-08 11:44:20.763439', 'JS: Tic Tac Toe', 'https://github.com/rolling-scopes-school/tic-tac-toe', NULL, 'auto', false, false, false, 'tic-tac-toe', 'https://github.com/rolling-scopes-school/tic-tac-toe', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (430, '2019-09-22 09:56:18.079947', '2019-11-08 11:45:10.648593', 'JS: Doubly Linked List', 'https://github.com/rolling-scopes-school/doubly-linked-list', NULL, 'auto', false, false, false, 'doubly-linked-list', 'https://github.com/rolling-scopes-school/doubly-linked-list', 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (409, '2019-08-29 09:37:01.324698', '2019-11-11 18:15:52.011347', 'ST Autocomplete UI', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/4.-Autocomplete-UI', NULL, 'manual', true, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (447, '2019-11-18 07:47:39.508556', '2019-11-18 07:47:39.508556', 'test-task', 'https://github.com/mikhama/test-task', NULL, 'auto', false, false, false, 'test-task', 'https://github.com/mikhama/test-task', 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (399, '2019-08-06 09:54:06.658655', '2019-12-03 14:49:49.549586', 'Code Jam "Hacktrain"', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/codejam-train.md', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (440, '2019-10-15 07:50:32.749775', '2019-11-19 09:34:34.605432', 'Technical screening', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/technical-screening.md', NULL, 'manual', false, false, false, NULL, NULL, 'interview', 'stage2 ', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (450, '2019-12-03 14:52:19.396399', '2019-12-03 14:52:19.396399', 'Portfolio', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-1/portfolio/portfolio-ru.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage2 ,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (83, '2019-04-26 14:55:46.421933', '2019-11-30 18:36:50.662322', 'CoreJS', 'https://github.com/mikhama/core-js-101', NULL, 'auto', true, false, false, 'core-js-101', 'https://github.com/mikhama/core-js-101', 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (128, '2019-05-02 09:41:43.371377', '2019-12-03 14:42:15.453094', 'Code Jam "Palette"', 'https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-pallete.md', NULL, 'manual', true, false, false, NULL, NULL, 'codejam', 'deprecated', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (444, '2019-11-04 08:12:31.634176', '2020-03-31 10:17:18.546617', 'Virtual Keyboard', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-virtual-keyboard.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (453, '2019-12-16 10:34:47.548986', '2019-12-16 10:34:47.548986', 'Temperature Converter', 'https://github.com/Shastel/temperature-converter', NULL, 'auto', false, false, false, 'temperature-converter', 'https://github.com/Shastel/temperature-converter', 'jstask', 'epam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (456, '2019-12-16 10:38:26.769964', '2019-12-16 10:38:26.769964', 'Towel Sort', 'https://github.com/Shastel/towel-sort', NULL, 'auto', false, false, false, 'towel-sort', 'https://github.com/Shastel/towel-sort', 'jstask', 'epam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (459, '2019-12-18 14:22:47.842869', '2019-12-18 14:22:47.842869', 'ST TDD', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (84, '2019-04-26 14:55:46.426978', '2020-02-10 18:45:57.803066', 'HTML, CSS & Git Basics', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-cv.md', NULL, 'auto', false, false, false, NULL, NULL, 'cv:html', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (437, '2019-10-06 11:20:27.617946', '2020-02-10 06:18:24.928919', 'Markdown & Git', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-markdown.md', NULL, 'auto', false, false, false, NULL, NULL, 'cv:markdown', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (470, '2020-02-17 08:29:28.43587', '2020-02-17 08:29:28.43587', 'Angular. Modules & Services. Routing', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/modules-services-routing.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (438, '2019-10-13 13:34:49.201156', '2020-03-23 10:57:07.262729', 'Sudoku', 'https://github.com/rolling-scopes-school/sudoku', NULL, 'auto', false, false, false, 'sudoku', 'https://github.com/rolling-scopes-school/sudoku', 'jstask', 'stage1,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (488, '2020-03-19 16:22:02.703098', '2020-03-24 16:19:06.071144', 'rs.ios.task2', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task2/blob/master/readme.md', NULL, 'auto', false, false, false, 'rs.ios-stage1-task2', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task2/', 'objctask', 'stage1', '{"targets":{"project":{"folder":"RSSchool_T2","xcodeproj":"RSSchool_T2.xcodeproj"},"tests":{"folder":"RSSchool_T2Tests","classes":["AbbreviationTests.m","BlocksTest.m","DatesTest.m","FibonacciNumbersTests.m","StringTransform.m","TimeInWordsTests.m"]}},"folder":"RSSchool_T2","details":"","descriptions":""}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (482, '2020-03-10 20:39:15.488061', '2020-03-24 16:20:39.287898', 'rs.ios.task1', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task1/', NULL, 'auto', false, false, false, 'rs.ios-stage1-task1', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task1/', 'objctask', 'stage1', '{"targets":{"project":{"folder":"RSSchool_T1","xcodeproj":"RSSchool_T1.xcodeproj"},"tests":{"folder":"RSSchool_T1Tests","classes":["BillCounterTests.m","HighestPalindromeTests.m","MiniMaxSumTests.m","StringParseTests.m","T1ArrayTests.m"]}},"folder":"RSSchool_T1","details":"","descriptions":""}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (489, '2020-03-26 10:35:21.765085', '2020-03-26 10:35:21.765085', 'Caesar cipher CLI tool', 'https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (490, '2020-03-26 14:29:07.41166', '2020-03-26 14:29:07.41166', 'HTML/Css(basic)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/css-recipes.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (492, '2020-03-31 09:33:53.140629', '2020-03-31 09:33:53.140629', 'Express REST service', 'https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md#task-2-express-rest-service', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (493, '2020-03-31 10:20:39.859981', '2020-03-31 10:20:39.859981', 'Virtual Keyboard Cross-Check', 'https://rolling-scopes-school.github.io/checklist/', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,js,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (494, '2020-03-31 10:23:52.389221', '2020-03-31 10:23:52.389221', 'Gem Puzzle Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-the-gem-puzzle.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,cross-check,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (495, '2020-04-01 08:43:01.126352', '2020-04-01 08:43:01.126352', '[Android] Quiz 1', 'https://docs.google.com/forms/d/e/1FAIpQLSdFHiOBHHDZpwztLq3rGYf7EzEQPw56I0HeYlqfg8BpB6leYg/viewform?usp=sf_link', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (491, '2020-03-30 09:57:08.558596', '2020-04-01 20:44:38.183195', 'rs.ios.task3.test', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task3/blob/master/readme.md', NULL, 'auto', false, false, false, 'rs.ios-stage1-task3', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task3', 'objctask', 'stage1', '{"targets":{"project":{"folder":"RSSchool_T3","xcodeproj":"RSSchool_T3.xcodeproj"},"tests":{"folder":"RSSchool_T3Tests","classes":["ArrayPrintTests.m","FullBinaryTreesTests.m"]},"uiTests":{"folder":"RSSchool_T3UITests","classes":["DateMachineTests.m"]}},"testReplacement":{"link":"git@github.com:rolling-scopes-school/rs.ios-stage1-private-tests.git","folder":"stage1-task3","replacement":[{"folder":"RSSchool_T3Tests","test":"ArrayPrintTests.m"},{"folder":"RSSchool_T3UITests","test":"DateMachineTests.m"}],"verify":[{"folder":"RSSchool_T3Tests","test":"FullBinaryTreesTests.m"}]},"folder":"RSSchool_T3","details":"Task3","descriptions":"Description task3"}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (496, '2020-04-02 17:01:12.759119', '2020-04-02 17:01:12.759119', 'Layout(Restaurant)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markup-1.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (497, '2020-04-02 18:49:24.244235', '2020-04-03 13:05:37.170103', 'rs.ios.task3', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task3.1/blob/master/README.md', NULL, 'auto', false, false, false, 'rs.ios-stage1-task3.1', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task3.1', 'objctask', 'stage1', '{"targets":{"project":{"folder":"RSSchool_T3","xcodeproj":"RSSchool_T3.xcodeproj"},"tests":{"folder":"RSSchool_T3Tests","classes":["T3_PolynomialTests.m","T3_CombinatorTests.m"]},"uiTests":{"folder":"RSSchool_T3UITests","classes":["RS_Task3_UICheckerUITests.m"]}},"folder":"RSSchool_T3","details":"Task3","descriptions":"Description task3"}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (500, '2020-04-09 10:03:10.874771', '2020-04-09 10:03:10.874771', 'English for kids', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (501, '2020-04-09 16:00:08.930182', '2021-06-22 09:18:19.384375', '[iOS] Quiz2', 'https://docs.google.com/forms/d/e/1FAIpQLSdLvcnvAofsQ1ETqDnwSjH3U2WQJgVvlG8pxVPV_ZfhBWDV9w/closedform', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (502, '2020-04-09 17:57:52.400972', '2020-04-09 17:57:52.400972', 'rs.ios.task4', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task4/blob/master/README.md', NULL, 'auto', false, false, false, 'rs.ios-stage1-task4', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task4', 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (503, '2020-04-10 18:12:45.707666', '2021-06-06 20:26:13.523668', 'Logging & Error Handling', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-5-logging--error-handling', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (504, '2020-04-14 05:44:38.302281', '2020-04-14 05:44:38.302281', 'Database MongoDB', 'https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md#task-4-database-mongodb', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (505, '2020-04-20 17:36:43.155586', '2021-06-27 20:09:25.924071', 'Authentication and JWT', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-8-authentification--jwt', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (506, '2020-04-20 19:44:07.04595', '2021-06-25 16:57:29.2666', '[Android] Quiz 2', 'https://forms.gle/KLLFbKsKneosrwpV9', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (507, '2020-04-24 09:12:59.277372', '2020-06-02 11:36:07.441843', 'SpeakIt', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/speakit.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (508, '2020-04-27 06:51:46.900545', '2020-04-27 06:51:46.900545', 'MovieSearch', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/movie-search.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (509, '2020-04-27 06:52:41.255486', '2020-04-27 06:52:41.255486', 'MovieSearch: Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/movie-search.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (510, '2020-04-29 06:04:23.576262', '2021-06-02 06:56:53.49812', 'Javascript Classes & Inheritance', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/javascript-classes-inheritance.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,Poland,rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (511, '2020-04-30 16:13:15.587124', '2020-04-30 16:13:15.587124', 'rs.ios.task5', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task5/blob/master/README.md', NULL, 'auto', false, false, false, 'rs.ios-stage1-task5', 'https://github.com/rolling-scopes-school/rs.ios-stage1-task5', 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (512, '2020-05-01 14:40:17.99012', '2021-07-02 09:12:24.068724', 'Algorithms Task 3', 'https://github.com/rolling-scopes-school/rs.android-2021-stage1-task3', NULL, 'auto', false, false, false, 'rs.android-2021-stage1-task3', 'https://github.com/rolling-scopes-school/rs.android-2021-stage1-task3', 'kotlintask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (513, '2020-05-03 19:35:27.599732', '2020-05-03 19:35:27.599732', 'ICanCodeJS', 'https://github.com/codenjoyme', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', 'stage2 ,codejam', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (514, '2020-05-05 17:07:38.151867', '2020-05-05 17:07:38.151867', 'JS-assignments', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js-assignments.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (515, '2020-05-11 14:15:10.391901', '2020-05-11 14:15:10.391901', '[iOS] Quiz 3', 'https://docs.google.com/forms/d/e/1FAIpQLSeb_To1WpYUWG_kfocuK5WfLLhL4MfXUn6AU0OVSEPt3ztXhw/viewform', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (516, '2020-05-13 13:39:03.279745', '2021-07-16 17:02:48.091094', '[Android] Quiz 3 Final', 'https://forms.gle/TTcLK8kLEWveR7BF9', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (517, '2020-05-14 18:49:07.427589', '2020-05-14 18:49:07.427589', 'Cyclic menu', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cyclic-menu.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (518, '2020-05-19 12:57:16.890419', '2020-05-19 12:57:16.890419', 'Virtual keyboard', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/virtual-keyboard/virtual-keyboard-en.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (519, '2020-05-28 20:05:20.202628', '2020-05-28 20:05:20.202628', 'Fancy-weather(en)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather(en).md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (520, '2020-06-02 11:28:16.858003', '2020-06-02 11:29:43.695887', 'English puzzle', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-puzzle.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (521, '2020-06-02 11:29:37.951145', '2020-06-02 11:29:52.45171', 'English puzzle: Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-puzzle.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,cross-check,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (522, '2020-06-07 17:14:36.355963', '2020-06-07 17:14:36.355963', 'CV', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-cv.md', NULL, 'manual', false, false, false, NULL, NULL, 'cv:html', 'Georgia', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (523, '2020-06-08 19:30:29.31376', '2020-06-08 19:30:29.31376', 'rs.ios.task6', 'https://github.com/rolling-scopes-school/rs.ios-stage2-task6/blob/master/README.md', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (524, '2020-06-08 19:31:03.111251', '2020-06-08 19:31:03.111251', 'rs.ios.task7', 'https://github.com/rolling-scopes-school/rs.ios-stage2-task7/blob/master/README.md', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (525, '2020-06-08 19:31:30.353779', '2020-06-08 19:31:30.353779', 'rs.ios.task8', 'https://github.com/rolling-scopes-school/rs.ios-stage2-task8/blob/master/README.md', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (526, '2020-06-08 19:55:04.118004', '2020-06-08 19:55:04.118004', '[iOS] Quiz 4', 'https://docs.google.com/forms/d/e/1FAIpQLSdc0z7shPfpCbcOlCyYggHqJqd01fiDYZCaif_kk7Azyt3ZxQ/viewform', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (527, '2020-06-08 19:56:23.355047', '2020-06-08 19:56:23.355047', '[iOS] Quiz 5', 'https://docs.google.com/forms/d/e/1FAIpQLScIUpMl0RSKJmve_4AID8owWgSUzAGWVZxPchfpvTRo-e1TZQ/viewform', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (528, '2020-06-09 12:05:43.593182', '2021-07-07 06:11:53.697552', 'Custom lodash(unit tests)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/custom-lodash(unit%20%20tests).md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland,rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (529, '2020-06-14 18:51:48.51346', '2020-06-14 18:51:48.51346', 'RS Lang. Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,cross-check,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (530, '2020-06-14 18:52:12.642677', '2020-06-14 18:52:12.642677', 'RS Lang. Presentation', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (531, '2020-06-15 18:55:01.118769', '2020-06-15 18:55:01.118769', 'Final JS Test', 'https://google.com', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (532, '2020-06-18 11:57:24.090653', '2020-06-18 11:57:24.090653', '[Android] Task 4 Storage', 'https://github.com/rolling-scopes-school/rs.android.task.4', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (533, '2020-07-02 17:22:29.052038', '2020-07-02 17:22:29.052038', 'Chat (React)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chat.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Poland,react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (534, '2020-07-17 08:55:25.910527', '2020-07-17 08:55:25.910527', '[Android] Task 5', 'https://github.com/rolling-scopes-school/Android-2020-Task-5', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (535, '2020-07-20 07:47:20.402571', '2020-07-20 07:47:48.182376', 'Angular YouTube client: Cross-Check', 'https://rolling-scopes-school.github.io/checklist/', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular,angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (536, '2020-07-22 08:08:14.64887', '2020-07-22 08:08:14.64887', 'RS CloneWars', 'https://github.com/rolling-scopes-school/tasks', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (537, '2020-07-25 09:04:32.443128', '2020-07-25 09:16:46.759794', '[Android] Task 6 MVP', 'https://github.com/rolling-scopes-school/rs.android.task.6', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (538, '2020-07-28 05:44:35.694818', '2020-07-28 06:09:53.982099', 'Codewars Test', 'https://github.com/rolling-scopes/rsschool-app', NULL, 'manual', false, false, false, NULL, NULL, 'codewars', 'react,codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (539, '2020-08-02 20:57:21.752305', '2020-08-05 10:27:49.213083', 'Codewars React', 'https://github.com/rolling-scopes-school/tasks/blob/f504966947a9f3e85a27f6401e7a6870f870f392/tasks/codewars-react.md', NULL, 'manual', false, false, false, NULL, NULL, 'codewars', 'react,codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (540, '2020-08-03 14:31:53.354433', '2020-08-03 14:31:53.354433', 'Interview(React)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-react.md', NULL, 'manual', false, false, false, NULL, NULL, 'interview', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (541, '2020-08-05 09:10:58.734646', '2020-08-05 09:10:58.734646', 'Angular. NgRX', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/NgRX.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular,angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (542, '2020-08-15 20:40:21.595491', '2020-08-15 20:41:37.149481', 'Schedule', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/schedule.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (543, '2020-08-15 20:42:00.436081', '2020-08-15 20:42:00.436081', 'X Check App', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/xcheck/xcheck.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (544, '2020-08-23 13:40:57.097441', '2020-08-23 13:40:57.097441', 'Mobile Hackathon', 'https://medium.com/mobilepeople/rolling-scopes-mobile-hackathon-results-9c96b4fb4211', NULL, 'manual', false, false, false, NULL, NULL, 'codejam', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (545, '2020-08-27 04:13:37.333538', '2020-08-27 04:13:37.333538', 'Task 1. Calculator', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-1-calculator-40', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (546, '2020-08-27 04:30:07.971139', '2020-10-06 14:37:51.758728', 'Codewars Basic', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (547, '2020-08-27 04:35:39.114632', '2020-08-27 04:35:39.114632', 'Simple Singolo', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/simple-singolo.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (548, '2020-08-27 14:34:07.755403', '2020-08-27 14:34:07.755403', 'HTML-basics', 'https://ru.code-basics.com/languages/html', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (549, '2020-08-27 14:34:39.873265', '2020-08-27 14:34:39.873265', 'CSS-basics', 'https://ru.code-basics.com/languages/css', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (550, '2020-08-27 14:35:10.167076', '2020-08-27 14:35:10.167076', 'JS-basics', 'https://ru.code-basics.com/languages/javascript', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (551, '2020-08-27 16:10:52.287849', '2020-08-27 16:10:52.287849', 'Task 2. Dynamic Landing Page', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-2-dynamic-landing-page-30', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (552, '2020-08-27 16:11:28.541996', '2020-08-27 16:11:28.541996', 'Task 3. Meditation App', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-3-meditation-app-20', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (553, '2020-08-27 16:11:57.491788', '2020-08-27 16:11:57.491788', 'Task 4. Drum Kit', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-4-drum-kit-20', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (554, '2020-08-27 16:12:27.5845', '2020-08-27 16:12:27.5845', 'Task 5. CSS Variables and JS', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-5-css-variables-and-js-20', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (593, '2020-12-19 12:47:59.940867', '2021-06-28 13:37:07.392607', 'CV. Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cv/html-css.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage0,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (555, '2020-08-27 16:12:54.861753', '2020-08-27 16:12:54.861753', 'Task 6. Flex Panel Gallery', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-6-flex-panel-gallery-10', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (556, '2020-08-27 16:13:19.737287', '2020-08-27 16:13:19.737287', 'Task 7. Fun with HTML5 Canvas', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-7-fun-with-html5-canvas-40', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (557, '2020-08-27 16:13:49.956984', '2020-08-27 16:13:49.956984', 'Task 8. Custom Video Player', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-8-custom-video-player-20', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (558, '2020-08-27 16:14:13.433263', '2020-08-27 16:14:13.433263', 'Task 9. Video Speed Controller', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-9-video-speed-controller-10', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (559, '2020-08-27 16:14:37.523502', '2020-08-27 16:14:37.523502', 'Task 10. Whack-A-Mole', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-10-whack-a-mole-40', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (560, '2020-08-27 16:15:04.873511', '2020-08-27 16:15:04.873511', 'Task 11. Virtual Keyboard', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-11-virtual-keyboard-40', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (561, '2020-08-27 16:15:27.500667', '2020-08-27 16:15:27.500667', 'Task 12. Chat on socket.io', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-12-chat-on-socketio-20', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (562, '2020-08-27 16:16:25.117143', '2020-10-05 17:32:25.450477', 'Codewars Basic-1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic-1.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (563, '2020-08-27 16:17:05.5464', '2020-10-05 17:24:40.436098', 'Codewars Basic-2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic-2.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (564, '2020-08-27 16:17:46.058557', '2020-08-27 16:17:46.058557', 'raindrops', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/raindrops.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (565, '2020-08-27 16:18:08.763424', '2020-08-27 16:18:08.763424', 'fancy-weather', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/fancy-weather.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (566, '2020-08-27 16:35:27.649926', '2020-08-27 16:35:27.649926', 'Portfolio', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/Portfolio.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (567, '2020-09-05 12:46:35.283775', '2020-10-19 10:11:31.643018', 'Self HTML Basics', 'https://ru.code-basics.com/languages/html', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (568, '2020-09-07 19:16:43.975374', '2020-10-19 10:11:24.138441', 'Self CSS Basics', 'https://ru.code-basics.com/languages/css', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'css', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (569, '2020-09-07 20:23:16.53491', '2020-10-19 10:11:13.239832', 'Self JS Basics', 'https://ru.code-basics.com/languages/javascript', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (570, '2020-09-19 08:01:33.992409', '2020-09-19 08:01:33.992409', 'webdev', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level-1/webdev/webdev-ru.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (571, '2020-09-21 11:21:05.630909', '2020-09-21 11:21:05.630909', 'Calculator', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/calculator.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage1,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (572, '2020-09-21 16:03:35.625542', '2020-09-21 16:03:35.625542', 'Momentum', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/momentum.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage1,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (573, '2020-09-21 16:04:10.12875', '2020-09-21 16:04:10.12875', 'Virtual Keyboard', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/virtual-keyboard.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage1,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (574, '2020-09-22 08:55:51.123185', '2021-07-16 17:01:41.593901', 'Android Final Quiz', 'https://forms.gle/TTcLK8kLEWveR7BF9', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage2 ,Android,Kotlin', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (575, '2020-09-26 12:58:24.834196', '2021-07-13 02:18:54.829974', 'React Team Task Presentation', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/schedule.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react,presentation', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (576, '2020-09-28 15:41:37.15626', '2020-09-28 15:45:51.670373', 'Shelter Cross-check', 'https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/shelter', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (577, '2020-09-28 15:57:47.386043', '2020-09-28 15:57:47.386043', 'Gem Puzzle', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/gem-pazzle/codejam-the-gem-puzzle.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (578, '2020-10-13 05:44:26.854548', '2020-10-13 05:44:26.854548', 'AWS_task1', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task1-cloud-introduction/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (579, '2020-10-19 08:18:56.59736', '2020-10-19 08:18:56.59736', 'AWS_task2', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task2-serve-spa-aws/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (580, '2020-10-26 11:34:32.421958', '2020-10-26 11:34:32.421958', 'AWS-task3', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task3-product-api/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (581, '2020-11-02 14:50:19.794867', '2020-11-02 14:50:19.794867', 'AWS-task4', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task4-rds/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check,nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (582, '2020-11-12 16:52:45.903122', '2020-11-12 16:52:45.903122', 'AWS_task5', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task5-import-to-s3/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (583, '2020-11-16 12:01:36.081559', '2020-11-16 12:01:36.081559', 'AWS-task6', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/tree/main/task6-sqs-sns', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check,js,nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (584, '2020-11-20 07:21:08.683763', '2020-11-20 07:21:08.683763', 'RS Селекторы', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-css.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (585, '2020-11-20 07:26:46.82712', '2020-11-20 07:26:46.82712', 'RS Селекторы:Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-css.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (586, '2020-11-24 09:22:01.197268', '2020-11-24 09:22:01.197268', 'AWs_task7', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task7-lambda%2Bcognito-authorization/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,js,cross-check,nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (587, '2020-12-01 12:57:37.039959', '2020-12-01 12:57:37.039959', 'AWS_task8', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task8-docker-elastic-beanstalk/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check,nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (588, '2020-12-08 20:21:00.816025', '2020-12-08 20:21:00.816025', 'AWS_task9', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task9-bff/task.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'aws ,cross-check,nodejs', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (589, '2020-12-11 12:19:08.377006', '2020-12-18 19:53:01.805815', 'COVID-19 Dashboard', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/covid-dashboard.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (590, '2020-12-11 12:20:12.955324', '2020-12-18 19:53:15.107973', 'COVID-19 Dashboard:Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/covid-dashboard.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (591, '2020-12-16 11:22:13.348836', '2020-12-16 11:22:13.348836', 'AWS_feedback_build_plan', 'https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/feedback_and_possible_plan.me', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'js,nodejs,aws', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (592, '2020-12-19 12:43:52.804419', '2021-05-19 02:54:47.307367', 'Codewars #0', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/codewars', NULL, 'auto', false, false, false, NULL, NULL, 'jstask', 'js,codewars,stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (594, '2020-12-19 12:49:31.14823', '2021-03-07 16:21:45.593427', 'Wildlife', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/wildlife', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage0,html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (595, '2020-12-26 18:31:32.147857', '2021-03-06 10:31:15.424715', 'HTML/CSS Test #0', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (596, '2020-12-26 18:32:46.338943', '2021-03-06 10:31:21.886056', 'JS Test #0', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (597, '2020-12-26 18:33:44.873478', '2021-06-30 16:38:02.096425', 'RSS Test', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (598, '2021-01-14 16:07:51.521813', '2021-01-14 16:07:51.521813', 'ST Extra curry', 'https://observablehq.com/@shastel/functions-and-arguments', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (599, '2021-01-16 07:15:35.629304', '2021-01-16 07:15:35.629304', 'RS Clone', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (600, '2021-01-18 20:37:27.531064', '2021-01-18 20:37:27.531064', 'Angular. RS Lang', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular-new/angular-rslang.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (601, '2021-01-18 20:44:09.805032', '2021-04-07 09:35:44.904556', 'Angular. RS Lang: Cross-Check', 'https://rs-lang-cross-check.netlify.app/', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (602, '2021-01-21 12:47:14.940104', '2021-01-21 12:47:14.940104', 'Test', 'https://github.com/yuliaHope/rsschool-api/tree/feature/S-9-implement-adding-task/client/src/components/Forms', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (603, '2021-01-21 17:00:47.237938', '2021-01-21 17:00:47.237938', '[EXTRA] Custom addEventListener', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/5.-%5BEXTRA%5D-Custom-addEventListener', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'ST', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (604, '2021-01-22 13:36:10.256772', '2021-01-24 12:53:00.085111', 'Pandas data manipulations', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/1_data_manipulations/Pandas_data_manipulations.ipynb', NULL, 'auto', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (605, '2021-02-01 14:35:31.761066', '2021-02-01 14:35:31.761066', '2 - Linear Regression and Visualization', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/2_linear_regression/seminar_and_homework.ipynb', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (606, '2021-02-01 16:45:01.840662', '2021-02-01 16:45:01.840662', 'ST Load', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Load', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'ST', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (607, '2021-02-03 16:51:09.09653', '2021-02-03 16:51:09.09653', 'Things 1', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/7.-Things-BE-v1', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'ST', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (608, '2021-02-11 08:44:07.456369', '2021-02-11 08:44:07.456369', '3 - Overfitting and Regularization', 'https://github.com/rolling-scopes-school/ml-intro/tree/2021/3_overfitting_regularization', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (609, '2021-02-13 18:01:57.191651', '2021-02-13 18:01:57.191651', 'RS Clone Presentation', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (610, '2021-02-15 10:58:06.20701', '2021-02-15 10:58:06.20701', '3- Quiz Overfitting and Regularization', 'https://docs.google.com/forms/d/e/1FAIpQLSe_QHNj_mHGQ3afxBLny2o3CeiE7kZbo41-Aco_gjbLq_J8_Q/viewform?usp=sf_link', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (611, '2021-02-15 17:32:15.694641', '2021-02-15 17:32:15.694641', '4 - Feature Engineering and Selection', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/4_feature_engineering_selection/feature_engineering_selection.ipynb', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (612, '2021-02-17 10:39:01.421981', '2021-02-17 10:39:01.421981', 'React Game', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-game.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (613, '2021-02-28 06:57:22.138546', '2021-02-28 11:51:23.17022', '5 - Classification Linear KNN (Part 1)', 'https://github.com/rolling-scopes-school/ml-intro/tree/2021/5_classification_linear_knn', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (614, '2021-03-01 10:33:03.991004', '2021-03-01 10:33:03.991004', '5 - Quiz Classification Linear KNN', 'https://docs.google.com/forms/d/e/1FAIpQLScJ3iEMm756uQq7JcNia9WMaUe6Dm1XkMjEHqKHrxgS6TLjpg/closedform', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (615, '2021-03-02 11:26:52.273548', '2021-03-02 11:26:52.273548', 'Номер макета Online Zoo', 'https://rolling-scopes-school.github.io/roadmap/#/stage1/tasks/online-zoo', NULL, 'manual', false, false, false, NULL, NULL, 'test', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (616, '2021-03-04 14:36:26.155447', '2021-03-04 14:36:26.155447', 'Travel App', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/travel-app.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (617, '2021-03-05 11:09:19.040392', '2021-03-05 11:09:19.040392', '5 - Classification Linear KNN (Part 2)', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/5_classification_linear_knn/seminar.ipynb', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (618, '2021-03-05 11:17:02.022234', '2021-03-05 11:17:02.022234', '6 - Trees and Ensembles', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/6_trees%20and%20ensembles/rf_classifier.ipynb', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Python,Pandas', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (619, '2021-03-05 11:18:59.536474', '2021-03-05 11:18:59.536474', '6 - Quiz Trees and Ensembles', 'https://forms.gle/QppfozwckCZMoPhC8', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (620, '2021-03-05 16:59:00.627541', '2021-03-05 16:59:00.627541', 'ST Last checkpoint', 'https://docs.google.com/spreadsheets/d/19G_U4gPsuC6L2NjGoanGRGU2-cc6y6b1y8iZcDMF2fI/edit?usp=sharing', NULL, 'manual', false, false, false, NULL, NULL, 'stage-interview', 'ST', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (621, '2021-03-06 16:09:14.287858', '2021-03-06 16:09:40.434646', '7 - Clustering and Dimensionality Reduction', 'https://github.com/rolling-scopes-school/ml-intro/blob/2021/7_clustering/clustering.ipynb', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Python,Pandas', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (622, '2021-03-06 16:13:05.067733', '2021-03-06 16:13:23.274674', '7 - Quiz Clustering and Dimensionality Reduction', 'https://forms.gle/bzBPEtnyuA347dJD7', NULL, 'manual', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (623, '2021-03-11 11:04:08.681819', '2021-03-11 11:04:08.681819', '[Test] Virtual Piano', 'https://github.com/rolling-scopes-school/stage1/blob/main/tasks/virtual-piano.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'test', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (624, '2021-03-12 18:25:36.803679', '2021-03-12 18:25:36.803679', 'Markdown & Git (EN)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-markdown.md', NULL, 'manual', false, false, false, NULL, NULL, 'cv:markdown', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (625, '2021-03-16 04:32:02.049634', '2021-03-22 08:10:06.849863', 'Virtual-piano', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/js-projects/virtual-piano', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (626, '2021-03-16 10:32:32.861577', '2021-03-16 11:47:39.420121', 'Git test (EN)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/test-git', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt,stage0,test', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (627, '2021-03-19 15:38:13.638778', '2021-03-19 15:38:13.638778', 'React. RS Lang', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-rslang.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (628, '2021-03-19 15:39:27.503723', '2021-07-13 02:18:41.256448', 'React. Team Task', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/tba.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (629, '2021-03-25 06:58:19.94643', '2021-03-25 06:58:19.94643', '8 - Quiz model evaluation and selection', 'https://forms.gle/zTMLDLiFCMXijrJC9', NULL, 'auto', false, false, false, NULL, NULL, 'test', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (630, '2021-03-29 09:18:15.128409', '2021-03-29 09:18:15.128409', 'Clean-code-s1e1', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/clean-code/clean-code-s1e1', NULL, 'manual', true, false, false, 'clean-code-s1e1', NULL, 'htmltask', 'stage1,html,clean-code', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (631, '2021-03-29 19:46:38.437531', '2021-04-18 16:08:11.754724', 'online-zoo-w-12-v-1', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (632, '2021-03-29 19:47:22.348097', '2021-04-18 16:08:03.65834', 'online-zoo-w-12-v-2', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (633, '2021-03-29 19:49:52.753381', '2021-04-18 16:07:55.984858', 'online-zoo-w-12-v-3', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (634, '2021-03-29 19:51:44.40457', '2021-04-18 16:07:43.996559', 'online-zoo-w-12-v-4', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (635, '2021-03-29 19:52:09.987412', '2021-04-18 16:07:33.660824', 'online-zoo-w-12-v-5', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (636, '2021-03-29 19:53:19.216383', '2021-04-18 16:07:24.592728', 'online-zoo-w-12-v-6', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (637, '2021-03-30 18:22:15.783273', '2021-07-13 07:27:31.217997', 'webdev (EN)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/webdev-en.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,rs-lt,rs-ge', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (638, '2021-04-01 13:43:15.969162', '2021-04-01 13:43:15.969162', 'Final competition', 'https://www.kaggle.com/c/rss-top-performers-prediction', NULL, 'manual', false, false, false, NULL, NULL, 'ipynb', 'Pandas,Python', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (639, '2021-04-01 14:29:52.270971', '2021-04-01 14:37:09.388365', 'ST 2021', 'https://github.com/rkhaslarov/rs-school-short-track-2021', NULL, 'auto', false, false, false, 'rs-school-short-track-2021', 'https://github.com/rkhaslarov/rs-school-short-track-2021', 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (640, '2021-04-03 10:32:13.92427', '2021-07-13 07:34:45.184634', 'Html/Css test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt,rs-ge', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (641, '2021-04-07 20:42:10.851958', '2021-04-22 12:21:36.749143', 'Clean-code: Test for generic principles', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tests/clean-code-generic-principles-test', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'clean-code,test,stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (642, '2021-04-12 06:51:48.539525', '2021-04-12 07:43:02.439332', 'Self-Introduction', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/self-introduction/self-introduction', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'cross-check,self-presentation,stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (643, '2021-04-13 08:16:49.145559', '2021-04-14 05:52:03.673776', 'Semantic. CSS3 test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (644, '2021-04-13 08:36:33.949389', '2021-07-21 07:16:52.562083', 'Flex / Grid test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt,rs-ge', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (645, '2021-04-18 16:09:38.619468', '2021-04-18 16:09:38.619468', 'online-zoo-w-34-v-1', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (646, '2021-04-18 16:10:17.054588', '2021-04-18 16:10:17.054588', 'online-zoo-w-34-v-2', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (647, '2021-04-18 16:10:46.756453', '2021-04-18 16:10:46.756453', 'online-zoo-w-34-v-3', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (648, '2021-04-18 16:11:15.864407', '2021-04-18 16:11:15.864407', 'online-zoo-w-34-v-4', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (649, '2021-04-18 16:11:48.247653', '2021-04-18 16:11:48.247653', 'online-zoo-w-34-v-5', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (650, '2021-04-18 16:12:18.705378', '2021-04-18 16:12:18.705378', 'online-zoo-w-34-v-6', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (651, '2021-04-19 17:07:46.148707', '2021-07-22 08:30:46.745826', 'theyalow (LT)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/theyalow-en(LT).md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'rs-lt,rs-ge', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (652, '2021-04-20 07:22:34.80059', '2021-04-20 07:22:34.80059', 'photo-filter', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/js-projects/photo-filter', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (653, '2021-04-27 17:54:11.564999', '2021-05-04 07:36:17.722256', 'JS Basics test', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (654, '2021-05-02 14:17:32.626997', '2021-05-02 14:53:39.585606', 'Debug in Node.js', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (655, '2021-05-02 14:18:45.971414', '2021-05-28 15:42:33.722491', 'Typescript basics', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-4-typescript-basics', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs,typescript,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (656, '2021-05-02 14:19:28.225416', '2021-06-06 20:25:53.6616', 'Docker Basics', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-6-docker-basics', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs,docker,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (657, '2021-05-02 14:20:16.880508', '2021-06-20 19:16:52.578078', 'PostgreSQL + Typeorm', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-7-postgresql--typeorm', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (658, '2021-05-02 14:20:42.825012', '2021-06-27 20:09:12.145094', 'Nest.js', 'https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-9-nestjs', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'nodejs,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (659, '2021-05-03 13:53:09.236679', '2021-05-06 15:57:35.606074', 'rs.ios.objc.task1', 'https://github.com/rolling-scopes-school/rs.ios.stage-task1/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task1', 'https://github.com/rolling-scopes-school/rs.ios.stage-task1', 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (660, '2021-05-03 13:54:27.780527', '2021-05-13 16:58:24.194514', 'rs.ios.objc.task2', 'https://github.com/rolling-scopes-school/rs.ios.stage-task2/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task2', 'https://github.com/rolling-scopes-school/rs.ios.stage-task2', 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (661, '2021-05-03 13:55:39.123913', '2021-05-20 14:39:27.068753', 'rs.ios.objc.task3', 'https://github.com/rolling-scopes-school/rs.ios.stage-task3/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task3', 'https://github.com/rolling-scopes-school/rs.ios.stage-task3', 'objctask', 'stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (662, '2021-05-03 16:10:49.681267', '2021-05-03 16:10:49.681267', 'test', 'http://www.google.com', NULL, 'manual', false, false, false, NULL, NULL, 'stage-interview', 'test', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (663, '2021-05-04 08:37:07.553302', '2021-05-07 14:34:18.073106', 'JS Functions test', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (664, '2021-05-04 12:37:05.984112', '2021-05-04 12:38:54.504325', 'online-zoo-w-56-v-1', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (665, '2021-05-04 12:37:39.756077', '2021-05-04 12:39:05.223097', 'online-zoo-w-56-v-2', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (666, '2021-05-04 12:38:10.637801', '2021-05-04 12:39:17.704872', 'online-zoo-w-56-v-3', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (667, '2021-05-04 12:38:38.846279', '2021-05-04 12:39:32.750323', 'online-zoo-w-56-v-4', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (668, '2021-05-04 12:39:52.288354', '2021-05-04 12:39:52.288354', 'online-zoo-w-56-v-5', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (669, '2021-05-04 12:41:25.656806', '2021-05-04 12:41:25.656806', 'online-zoo-w-56-v-6', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (670, '2021-05-06 10:30:29.740685', '2021-05-06 10:30:29.740685', 'JS Functions test part 2', 'https://example.com', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (671, '2021-05-07 11:31:44.518467', '2021-05-07 11:31:44.518467', 'Codewars #2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars2.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (672, '2021-05-13 08:22:31.158757', '2021-05-13 08:22:31.158757', 'Calculator(LT)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/calculator(LT).md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (673, '2021-05-16 13:31:42.307849', '2021-05-16 13:31:42.307849', 'ST Deep Copy', 'https://github.com/rolling-scopes-school/RS-Short-Track/wiki/2.-Deep-copy', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'ST', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (674, '2021-05-19 06:11:22.765584', '2021-05-19 06:11:22.765584', 'Interview(LT)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage1-interview(LT).md', NULL, 'manual', false, false, false, NULL, NULL, 'interview', 'rs-lt,stage1,interview', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (675, '2021-05-19 16:14:25.053477', '2021-05-19 16:14:25.053477', 'ST Checkpoint 1', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (676, '2021-05-20 05:51:02.732991', '2021-05-20 05:51:02.732991', 'DOM API', 'https://example.com', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (677, '2021-05-20 12:01:17.704883', '2021-05-20 12:01:17.704883', 'online-zoo', 'https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/online-zoo', NULL, 'auto', false, false, false, NULL, NULL, 'htmltask', 'stage1,online zoo,html,css,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (678, '2021-05-21 13:36:43.887646', '2021-05-21 13:36:43.887646', 'Android 2021 - Practice 1 - Randomizer', 'https://github.com/rolling-scopes-school/rsschool2021-Android-task-randomizer', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'Android,Kotlin,stage1', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (679, '2021-05-26 14:01:27.071863', '2021-05-26 14:01:27.071863', 'Match-Match Game', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/match-match-game.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,TypeScript', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (680, '2021-05-26 14:30:24.634918', '2021-05-26 14:30:24.634918', 'Async Race', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/async-race.md', NULL, 'manual', NULL, false, false, NULL, NULL, 'JS task', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (681, '2021-06-03 15:43:16.636933', '2021-06-10 17:00:13.376693', 'rs.ios.swift.task4', 'https://github.com/rolling-scopes-school/rs.ios.stage-task4/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task4', 'https://github.com/rolling-scopes-school/rs.ios.stage-task4', 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (682, '2021-06-03 17:00:30.151954', '2021-06-11 08:11:45.792399', 'Inheritance Test (LT)', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (683, '2021-06-08 15:08:20.85744', '2021-06-08 15:08:20.85744', 'ST Checkpoint 2', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (684, '2021-06-09 13:27:53.269173', '2021-06-09 13:27:53.269173', 'Android 2021 - Practice 2 - Quiz', 'https://github.com/rolling-scopes-school/rsschool2021-Android-task-quiz', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'stage1,Android,Kotlin,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (685, '2021-06-10 08:08:46.270232', '2021-06-10 08:09:09.092384', 'ST CRP course', 'https://www.udacity.com/course/website-performance-optimization--ud884', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'st', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (686, '2021-06-10 16:51:59.094555', '2021-06-10 17:05:58.337933', 'rs.ios.swift.task5', 'https://github.com/rolling-scopes-school/rs.ios.stage-task5/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task5', 'https://github.com/rolling-scopes-school/rs.ios.stage-task5', 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (687, '2021-06-10 18:57:54.547085', '2021-06-10 18:57:54.547085', 'Async test', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'rs-lt', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (688, '2021-06-11 08:03:40.16882', '2021-06-11 08:03:40.16882', 'Async Race. Cross-Check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/async-race.md#cross-check', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (689, '2021-06-17 16:48:43.28106', '2021-06-17 16:48:43.28106', 'rs.ios.swift.task6', 'https://github.com/rolling-scopes-school/rs.ios.stage-task6/blob/main/README.md', NULL, 'auto', false, false, false, 'rs.ios.stage-task6', 'https://github.com/rolling-scopes-school/rs.ios.stage-task6', 'objctask', 'stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (690, '2021-06-20 16:40:22.899085', '2021-06-22 14:18:21.578778', 'English for kids S1E1. Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,cross-check,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (691, '2021-06-20 16:43:38.061004', '2021-06-22 14:17:41.169677', 'Chess S1E1. Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-one.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,cross-check,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (692, '2021-06-21 13:42:46.349301', '2021-06-22 14:15:10.391564', 'English for kids S1E1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (693, '2021-06-21 13:43:09.688432', '2021-06-22 14:17:13.581254', 'Chess S1E1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-one.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (694, '2021-06-22 14:19:43.29645', '2021-06-22 14:19:43.29645', 'English for kids S1E2. Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage2 ,TypeScript,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (695, '2021-06-22 14:20:29.274537', '2021-06-24 18:43:34.398904', 'Chess S1E2. Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2 ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (696, '2021-06-22 14:22:03.421406', '2021-06-22 14:22:03.421406', 'English for kids S1E2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (697, '2021-06-23 09:50:14.00401', '2021-07-25 05:31:50.361822', 'Chess S1E2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (698, '2021-06-23 09:51:49.128203', '2021-06-23 09:51:49.128203', 'English for kids S1E2. Cross-check', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'TypeScript,stage2 ,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (699, '2021-06-29 14:04:45.230899', '2021-06-29 14:04:45.230899', 'rs.ios.crosscheck.task7', 'https://github.com/rolling-scopes-school/rs.ios.stage-task7', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage3', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (700, '2021-07-02 16:38:03.731078', '2021-07-02 16:38:03.731078', 'Codewars Data Types', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/data-types.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (701, '2021-07-02 16:47:46.456174', '2021-07-02 16:47:46.456174', 'Codewars Functions', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/functions.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (702, '2021-07-02 16:52:48.911494', '2021-07-02 16:52:48.911494', 'Codewars Objects & Arrays', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/objects-arrays.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (703, '2021-07-02 16:58:40.753701', '2021-07-02 16:58:40.753701', 'Codewars Algorithms-1', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/algorithms-1.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (704, '2021-07-02 17:04:13.971816', '2021-07-03 12:37:16.362491', 'Codewars Algorithms-2', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/algorithms-2.md', NULL, 'auto', false, false, false, NULL, NULL, 'codewars', 'codewars', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (705, '2021-07-04 19:19:47.54283', '2021-07-04 19:19:47.54283', 'Android 2021 - Practice 3 - Pomodoro', 'https://github.com/rolling-scopes-school/RSShool2021-Android-task-Pomodoro', NULL, 'manual', false, false, false, NULL, NULL, 'kotlintask', 'Android,Kotlin,stage1,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (706, '2021-07-05 08:13:38.447765', '2021-07-05 08:13:38.447765', '[ST] Checkpoint 3', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (707, '2021-07-05 12:36:27.332959', '2021-07-06 07:12:39.982334', 'Test HTML Basics [RU]', 'https://ru.code-basics.com/languages/html', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (708, '2021-07-06 21:03:43.537339', '2021-07-06 21:03:43.537339', 'HTML Quiz', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'html', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (709, '2021-07-06 21:04:36.087632', '2021-07-06 21:04:36.087632', 'CSS Quiz', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'css', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (710, '2021-07-06 21:05:14.935484', '2021-07-06 21:05:14.935484', 'JS Quiz', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (711, '2021-07-06 21:05:58.610129', '2021-07-06 21:06:08.839616', 'ReactJs Quiz', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (712, '2021-07-09 09:50:48.828546', '2021-07-09 09:50:48.828546', 'Angular Shop', 'https://github.com/rolling-scopes-school/tasks', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (713, '2021-07-09 09:53:06.989516', '2021-07-09 09:53:06.989516', 'Angular Shop. Cross-check', 'https://rs-lang-cross-check.netlify.app/', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'Angular', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (714, '2021-07-12 16:39:31.049741', '2021-07-12 16:39:31.049741', '[ST] Final checkpoint', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (715, '2021-07-13 01:56:27.706355', '2021-07-21 02:05:29.234568', 'React. Components', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-components.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (716, '2021-07-13 01:59:06.630799', '2021-07-13 01:59:06.630799', 'React. Forms', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-forms.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (717, '2021-07-13 01:59:57.193405', '2021-07-13 01:59:57.193405', 'React. Redux', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-redux.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (718, '2021-07-13 02:00:40.399879', '2021-07-13 02:00:40.399879', 'React. Routing', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-routing.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (719, '2021-07-13 02:01:22.630194', '2021-07-13 02:01:22.630194', 'React. API', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-api.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (720, '2021-07-13 02:02:18.901305', '2021-07-13 02:02:18.901305', 'React. Testing', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-testing.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (721, '2021-07-13 02:03:39.899612', '2021-07-13 02:03:39.899612', 'React. SSR*', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-ssr.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'react', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (722, '2021-07-13 11:51:08.864691', '2021-07-13 11:51:08.864691', 'Git Quiz', 'https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index', NULL, 'auto', false, false, false, NULL, NULL, 'selfeducation', 'git', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (723, '2021-07-15 07:00:13.193068', '2021-07-15 07:00:13.193068', 'English for kids( EN)', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-translated.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'rs-lt,rs-ge,stage2', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (724, '2021-07-15 07:18:55.566964', '2021-07-15 13:08:12.925631', 'Test CSS Basics [RU]', 'https://ru.code-basics.com/languages/css', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (725, '2021-07-15 16:07:15.120253', '2021-07-15 16:07:15.120253', 'rs.ios.crosscheck.task8', 'https://github.com/rolling-scopes-school/rs.ios.stage-task8', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage3', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (726, '2021-07-20 03:39:54.174636', '2021-07-20 03:39:54.174636', 'Museum', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/museum/museum.md', NULL, 'manual', false, false, false, NULL, NULL, 'htmltask', 'stage0,cross-check', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (727, '2021-07-20 07:20:25.761953', '2021-07-20 17:18:06.275459', 'Test Algorithms & Data structures', 'https://www.youtube.com/playlist?list=PLP-a1IHLCS7PqDf08LFIYCiTYY1CtoAkt', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'stage0,algorithms', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (728, '2021-07-22 07:59:30.138616', '2021-07-22 07:59:30.138616', '[UZ] RS-lang Backend', 'https://example.com', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', '', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (729, '2021-07-22 17:07:21.458164', '2021-07-22 17:39:29.902012', 'Drum Kit', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-1.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (730, '2021-07-22 17:08:05.196206', '2021-07-22 17:08:05.196206', 'JS Clock', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-2.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (731, '2021-07-22 17:08:44.272934', '2021-07-22 17:08:44.272934', 'Vertical Slider', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-3.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (732, '2021-07-22 17:09:31.573179', '2021-07-22 17:35:00.094133', 'Video Speed Controller', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-4.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (733, '2021-07-22 17:10:07.813794', '2021-07-22 17:10:07.813794', 'Photofilter', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-5.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (734, '2021-07-22 17:10:39.403863', '2021-07-22 17:41:32.343542', 'Whack-A-Mole', 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-6.md', NULL, 'manual', false, false, false, NULL, NULL, 'jstask', 'stage0,js', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (735, '2021-07-26 04:57:34.397304', '2021-07-27 07:39:38.807563', 'Test JS Basics [RU]', 'https://ru.code-basics.com/languages/javascript', NULL, 'manual', false, false, false, NULL, NULL, 'selfeducation', 'stage0', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (736, '2021-07-27 20:49:41.263593', '2021-07-27 20:49:41.263593', 'rs.ios.crosscheck.task9', 'https://github.com/rolling-scopes-school/rs.ios.stage-task9', NULL, 'manual', false, false, false, NULL, NULL, 'objctask', 'stage3', '{}', '', NULL, NULL, NULL);
-INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 11:50:14.892444', 'test', 'https://example.com', '', NULL, NULL, false, false, NULL, NULL, 'Kotlin task', '', '{}', '', NULL, NULL, NULL);
+COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", description, verification, "githubPrRequired", "useJury", "allowStudentArtefacts", "githubRepoName", "sourceGithubRepoUrl", type, tags, attributes, skills, "disciplineId", "criteriaId", "deletedDate") FROM stdin;
+441	2019-10-16 15:05:31.176646	2019-10-16 15:05:31.176646	Technical screening 2	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/technical-screening.md	\N	manual	f	f	f	\N	\N	\N		{}		\N	\N	\N
+413	2019-08-29 10:57:34.732592	2019-11-11 18:19:01.013044	ST JS Test	http://learn.javascript.ru/	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+448	2019-11-20 10:39:10.274681	2019-11-20 10:39:10.274681	Fancy Weather	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md	\N	manual	t	f	f	\N	\N	jstask		{}		\N	\N	\N
+445	2019-11-13 07:46:32.194939	2019-12-03 14:41:40.672641	Code Jam "Palette"	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-palette/codejam-palette_en.md	\N	manual	t	f	f	\N	\N	codejam	codejam,canvas,dom	{}		\N	\N	\N
+451	2019-12-11 17:17:25.352869	2019-12-11 17:17:25.352869	Async-extra	https://example.com	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+454	2019-12-16 10:37:14.018926	2019-12-16 10:37:14.018926	Typical Arrays Problems	https://github.com/Shastel/typical-arrays-problems	\N	auto	f	f	f	typical-arrays-problems	https://github.com/Shastel/typical-arrays-problems	jstask	epam	{}		\N	\N	\N
+457	2019-12-16 10:38:57.10798	2019-12-16 10:38:57.10798	Human Readable Number	https://github.com/Shastel/human-readable-number	\N	auto	f	f	f	human-readable-number	https://github.com/Shastel/human-readable-number	jstask	epam	{}		\N	\N	\N
+460	2019-12-20 08:53:52.921362	2019-12-20 08:53:52.921362	re:bind	https://example.com	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+417	2019-09-17 07:09:54.066212	2020-02-02 09:07:48.746248	HTML/CSS Self Education	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-1/HTML-CSS-self-ru.md	\N	auto	f	f	f	\N	\N	htmlcssacademy	stage1	{}		\N	\N	\N
+462	2020-02-07 08:05:04.999374	2020-02-07 08:05:04.999374	Songbird	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+466	2020-02-11 08:49:28.691804	2020-02-11 08:49:28.691804	ios Test	https://test.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+468	2020-02-17 08:27:20.358749	2020-02-17 08:28:49.855244	Angular. Intro	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/intro.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+471	2020-02-17 09:19:10.05115	2020-02-17 09:19:10.05115	Angular. RxJS & Observables. HTTP	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/rxjs-observables-http.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+475	2020-02-19 15:14:40.900394	2020-02-19 15:22:20.919668	Typical Arrays Problems	https://github.com/rolling-scopes-school/typical-arrays-problems/blob/master/README.md	\N	auto	f	f	f	typical-arrays-problems	https://github.com/rolling-scopes-school/typical-arrays-problems	jstask	stage1,algorithms	{}		\N	\N	\N
+473	2020-02-19 15:13:21.398993	2020-02-19 15:22:34.391055	Human Readable Number	https://github.com/rolling-scopes-school/human-readable-number/blob/master/README.md	\N	auto	f	f	f	human-readable-number	https://github.com/rolling-scopes-school/human-readable-number	jstask	stage1,algorithms	{}		\N	\N	\N
+478	2020-02-26 06:55:13.604626	2020-02-26 06:55:24.65169	FAKE TEST IOS	http://example.com	\N	auto	f	f	f	test-solution	https://github.com/apalchys/test-solution	objctask	fake	{}		\N	\N	\N
+480	2020-03-02 06:32:37.242366	2020-03-02 06:32:49.611475	React Culture Portal	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-culture-portal.md	\N	manual	f	f	f	\N	\N	jstask	portal,react	{}		\N	\N	\N
+477	2020-02-25 23:21:08.16798	2020-03-12 17:34:18.306073	FAKE TEST KOTLIN	http://example.com	\N	auto	f	f	f	nadzeya	https://github.com/ziginsider/rs_task1	kotlintask	fake	{}		\N	\N	\N
+483	2020-03-15 15:29:20.69008	2020-03-15 15:29:20.69008	Angular test	https://github.com/rolling-scopes-school/tasks/tree/master/tasks	\N	auto	f	f	f	\N	\N	test	angular,Angular	{}		\N	\N	\N
+485	2020-03-16 12:49:18.137702	2020-03-16 12:49:18.137702	Singolo. DOM & Responsive 	https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/singolo	\N	manual	f	f	f	\N	\N	htmltask	stage1	{}		\N	\N	\N
+487	2020-03-19 15:00:38.575898	2020-03-19 15:04:07.496857	[iOS] Quiz1	https://docs.google.com/forms/d/e/1FAIpQLSf4NwQRa2WbcjlcsDJI0kv62qJx0F0ltgapz0WczFrdBBSXug/viewform	\N	manual	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+416	2019-09-10 08:14:33.753801	2019-09-10 08:14:33.753801	UZ Custom lodash tests	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/10.-Custom-lodash-tests	\N	manual	f	f	f	\N	\N	\N		{}		\N	\N	\N
+95	2019-04-26 14:55:46.480357	2019-08-14 10:45:30.750037	CJ "CSS QD"	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+442	2019-10-27 12:08:46.726741	2019-10-28 06:59:34.373416	Code Jam "Canvas"	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-canvas/codejam-canvas.md	\N	manual	f	f	f	\N	\N	\N	stage2 ,canvas,codejam	{}		\N	\N	\N
+443	2019-10-28 07:46:31.518101	2019-11-01 14:30:13.900706	Repair Design Project. Difficulty Level 3	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level-3/repair-design-project/repair-design-project-en.md	\N	manual	f	f	f	\N	\N	\N	stage1	{}		\N	\N	\N
+486	2020-03-18 12:10:57.111813	2020-03-20 09:12:43.838469	Algorithms Part 1	https://github.com/rolling-scopes-school/rs.android-stage1-task1	\N	auto	f	f	f	rs.android-stage1-task1	https://github.com/rolling-scopes-school/rs.android-stage1-task1	kotlintask	Android,Kotlin	{}		\N	\N	\N
+446	2019-11-13 08:16:07.288782	2019-11-24 15:47:56.206248	Code Jam "Image API"	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/codejam-image-api/codejam-image-api_ru.md	\N	manual	t	f	f	\N	\N	codejam	codejam,stage2 	{}		\N	\N	\N
+449	2019-11-27 15:58:51.613495	2019-11-27 15:58:51.613495	ST Checkpoint 1	https://app.rs.school/	\N	manual	f	f	f	\N	\N	interview		{}		\N	\N	\N
+402	2019-08-14 10:35:12.012641	2019-12-03 14:49:35.649926	Code Jam "Culture Portal"	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-culture-portal.md	\N	manual	f	f	f	\N	\N	codejam	codejam	{}		\N	\N	\N
+452	2019-12-16 09:39:38.046401	2019-12-16 09:39:38.046401	Fancy-weather Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather.md	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+455	2019-12-16 10:37:47.551919	2019-12-16 10:37:47.551919	Reverse Int	https://github.com/Shastel/reverse-int	\N	auto	f	f	f	reverse-int	https://github.com/Shastel/reverse-int	jstask	epam	{}		\N	\N	\N
+458	2019-12-16 15:59:10.804471	2019-12-16 15:59:10.804471	ST React App	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Things-APP	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+461	2020-01-10 20:07:46.237318	2020-01-10 20:07:46.237318	Angular Workshop	https://angular.io/	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+463	2020-02-07 08:05:15.718038	2020-02-07 08:05:15.718038	Songbird	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+464	2020-02-07 08:05:57.730605	2020-02-07 08:05:57.730605	Calculator	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/calculator.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+467	2020-02-15 14:41:17.390262	2020-02-16 08:44:46.403205	Basic JS	https://github.com/AlreadyBored/basic-js	\N	auto	f	f	f	basic-js	https://github.com/AlreadyBored/basic-js	jstask	stage1,algorithms	{}		\N	\N	\N
+469	2020-02-17 08:28:38.434548	2020-02-17 08:28:54.065591	Angular. Components. Directives & Pipes	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/components-directives-pipes.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+474	2020-02-19 15:13:59.744793	2020-02-19 15:22:27.177884	Reverse Int	https://github.com/rolling-scopes-school/reverse-int/blob/master/README.md	\N	auto	f	f	f	reverse-int	https://github.com/rolling-scopes-school/reverse-int	jstask	stage1,algorithms	{}		\N	\N	\N
+472	2020-02-19 15:12:35.267242	2020-02-19 15:22:41.830318	Towel Sort	https://github.com/rolling-scopes-school/towel-sort/blob/master/README.md	\N	auto	f	f	f	towel-sort	https://github.com/rolling-scopes-school/towel-sort	jstask	stage1,algorithms	{}		\N	\N	\N
+476	2020-02-21 10:24:38.588117	2020-02-21 10:24:38.588117	Singolo	https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/singolo	\N	manual	f	f	f	\N	\N	htmltask	stage1,html	{}		\N	\N	\N
+479	2020-03-02 06:25:15.661263	2020-03-02 06:25:15.661263	Angular Culture Portal	https://github.com/rolling-scopes-school/tasks/blob/angular-2020Q1/tasks/angular/culture-portal.md	\N	manual	f	f	f	\N	\N	jstask	angular,portal	{}		\N	\N	\N
+481	2020-03-02 11:56:29.196388	2020-03-02 11:56:29.196388	Data grid	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/datagrid.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+396	2019-08-06 09:43:51.676522	2019-08-06 09:43:51.676522	Match Match Game	https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/match-match-game.md	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+400	2019-08-06 09:55:49.176631	2019-08-06 09:55:49.176631	React Redux	https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/react-match-match-game.md	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+86	2019-04-26 14:55:46.436642	2019-08-14 10:45:50.369308	CJ "DOM, DOM Events"	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+398	2019-08-06 09:52:41.754622	2019-08-14 10:46:07.362506	CJ "Lodash Quick Draw"	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+82	2019-04-26 14:55:46.414479	2019-04-26 14:55:46.414479	HTML/CSS Test	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+85	2019-04-26 14:55:46.431913	2019-04-26 14:55:46.431913	Markup #1	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+88	2019-04-26 14:55:46.446081	2019-04-26 14:55:46.446081	RS Activist	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+91	2019-04-26 14:55:46.460834	2019-04-26 14:55:46.460834	Mentor Dashboard	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+92	2019-04-26 14:55:46.465569	2019-04-26 14:55:46.465569	CoreJS/Arrays Test	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+94	2019-04-26 14:55:46.475554	2019-04-26 14:55:46.475554	Game	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+97	2019-04-26 14:55:46.49026	2019-04-26 14:55:46.49026	DreamTeam	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+90	2019-04-26 14:55:46.455449	2019-04-26 14:55:46.45545	Code Jam "Scoreboard"	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+117	2019-04-30 13:51:17.676745	2019-05-14 10:55:17.676745	Hexal	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/markup_d1_Hexal.md	\N	manual	f	f	f	\N	\N	\N		{}		\N	\N	\N
+221	2019-05-17 13:01:38.633934	2019-05-17 13:01:38.633934	htmlCssBasics	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+224	2019-05-17 13:01:38.650481	2019-05-17 13:01:38.650481	layouts	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+222	2019-05-17 13:01:38.639424	2019-05-17 13:01:38.639424	floatExercise	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+223	2019-05-17 13:01:38.644267	2019-05-17 13:01:38.644267	positioning	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+225	2019-05-17 13:01:38.655673	2019-05-17 13:01:38.655673	workshop	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+226	2019-05-17 13:01:38.660659	2019-05-17 13:01:38.660659	responsive	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+227	2019-05-17 13:01:38.666042	2019-05-17 13:01:38.666042	formsWidgets	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+228	2019-05-17 13:01:38.671159	2019-05-17 13:01:38.671159	finalTask	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+231	2019-05-17 13:01:38.686221	2019-05-17 13:01:38.686221	doublyLinkedList	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+232	2019-05-17 13:01:38.695428	2019-05-17 13:01:38.695428	customJQuery	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+234	2019-05-17 13:01:38.705612	2019-05-17 13:01:38.705612	realJquery	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+235	2019-05-17 13:01:38.71084	2019-05-17 13:01:38.71084	wsc	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+236	2019-05-17 13:01:38.715941	2019-05-17 13:01:38.715941	noNameOne	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+237	2019-05-17 13:01:38.720957	2019-05-17 13:01:38.720957	noNameTwo	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+238	2019-05-17 13:02:30.13361	2019-05-17 13:02:30.13361	workHonor	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+240	2019-05-17 13:02:30.15818	2019-05-17 13:02:30.15818	cssQDTime	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+241	2019-05-17 13:02:30.163081	2019-05-17 13:02:30.163081	uiLab	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+242	2019-05-17 13:02:30.168177	2019-05-17 13:02:30.168177	flexbox	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+243	2019-05-17 13:02:30.173271	2019-05-17 13:02:30.173271	adaptive	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+244	2019-05-17 13:02:30.184497	2019-05-17 13:02:30.184497	cssTotal	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+245	2019-05-17 13:02:30.190762	2019-05-17 13:02:30.190762	workOnLessons	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+247	2019-05-17 13:02:30.201713	2019-05-17 13:02:30.201713	functionMake	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+248	2019-05-17 13:02:30.207184	2019-05-17 13:02:30.207184	wsc	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+249	2019-05-17 13:02:30.212126	2019-05-17 13:02:30.212126	gulp	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+250	2019-05-17 13:02:30.217988	2019-05-17 13:02:30.217988	honoiTower	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+251	2019-05-17 13:02:30.223044	2019-05-17 13:02:30.223044	animation	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+252	2019-05-17 13:02:30.2279	2019-05-17 13:02:30.2279	customJQuery	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+253	2019-05-17 13:02:30.233767	2019-05-17 13:02:30.233767	tdd	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+89	2019-04-26 14:55:46.450715	2019-05-27 08:35:37.359351	Presentation	\N	\N	manual	\N	f	t	\N	\N	\N		{}		\N	\N	\N
+96	2019-04-26 14:55:46.485433	2019-05-27 08:39:44.221825	Offline Presentation	\N	\N	manual	\N	t	f	\N	\N	\N		{}		\N	\N	\N
+351	2019-06-05 11:51:12.229807	2019-06-05 11:51:12.229807	Stage#2 Final Test	\N	\N	auto	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+369	2019-06-26 13:24:39.790098	2019-06-26 13:24:39.790098	youTube	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+387	2019-07-08 13:30:12.12725	2019-07-08 13:30:12.12725	Padawans	\N	\N	auto	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+388	2019-07-08 13:31:46.251832	2019-07-08 13:31:46.251832	UZ CV	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+389	2019-07-08 13:32:18.083335	2019-07-08 13:32:18.083335	UZ Read me	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+390	2019-07-10 12:56:29.975418	2019-07-10 12:56:29.975418	UZ Layout	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/2.-Layout	Create web page, strictly according to:\n\nLambda restaurant layout\n\nBrowser support: Google Chrome, Mozilla Firefox, Microsoft Edge.	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+410	2019-08-29 09:41:00.400898	2019-08-29 10:08:08.993969	ST Chat	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Chat	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+407	2019-08-29 09:32:17.606001	2019-08-29 10:08:44.864627	ST Custom Lodash	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/3.-Custom-Lodash	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+230	2019-05-17 13:01:38.681206	2019-08-29 10:10:10.985834	ST JS Assignments	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/7.-JS-assignments	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+435	2019-09-30 08:14:14.847165	2019-10-15 12:40:10.75085	HTML/CSS Test Advanced	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/html-css-test.md	\N	auto	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+408	2019-08-29 09:34:32.473242	2019-08-29 10:08:34.054101	ST Cyclic menu	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/4.-Cyclic-menu	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+405	2019-08-29 09:16:23.185166	2019-08-29 10:09:04.204396	ST Auto Complete	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/1.-Auto-Complete	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+411	2019-08-29 10:11:56.69667	2019-08-29 10:11:56.69667	ST Catalogue. P.1 React Client	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/FINAL:-Catalogue.-P.1-React-Client	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+414	2019-08-29 10:57:50.108237	2019-08-29 10:57:50.108237	ST JS Test 2	http://learn.javascript.ru/	\N	manual	f	f	f	\N	\N	\N		{}		\N	\N	\N
+397	2019-08-06 09:46:51.573349	2019-08-06 09:46:51.573349	CSS Recipes & Layouts	https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/css-recipes-and-layouts.md	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+401	2019-08-06 09:56:50.593508	2019-08-06 09:56:50.593508	Game Refactoring	https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/game-refactoring.md	\N	auto	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+229	2019-05-17 13:01:38.676219	2019-08-06 09:59:19.619433	JS Test	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+122	2019-04-30 14:11:11.94101	2019-05-14 10:14:11.94101	Neutron Mail	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/markup-d2-NeutronMail-en.md	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+87	2019-04-26 14:55:46.441332	2019-05-14 10:56:46.441332	YouTube	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/youtube.md	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+404	2019-08-29 08:12:24.073776	2019-10-28 10:40:19.063008	ST Read me	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/0.-Readme	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+422	2019-09-19 10:02:05.134479	2019-11-01 14:31:29.943288	JS: Multiply	https://github.com/Shastel/multiply	\N	auto	f	f	f	multiply	https://github.com/Shastel/multiply	jstask	stage1	{}		\N	\N	\N
+484	2020-03-15 23:11:23.55455	2020-03-25 09:27:46.940288	Technical Screening	https://docs.rs.school/#/technical-screening	\N	manual	f	f	f	\N	\N	stage-interview	interview	{}		\N	\N	\N
+428	2019-09-20 09:56:26.502967	2019-11-08 11:44:12.440623	JS: JS-edu	https://github.com/davojta/js-edu	\N	auto	f	f	f	js-edu	https://github.com/davojta/js-edu	jstask	stage1	{}		\N	\N	\N
+431	2019-09-24 08:20:14.453176	2019-11-08 11:44:50.366453	JS: Unique 	https://github.com/Shastel/unique	\N	auto	f	f	f	unique	https://github.com/Shastel/unique	jstask	stage1	{}		\N	\N	\N
+349	2019-05-28 15:21:16.311993	2019-11-19 09:35:38.995602	CoreJS Interview 	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/interview-corejs.md	\N	manual	f	f	f	\N	\N	interview		{}		\N	\N	\N
+93	2019-04-26 14:55:46.470595	2019-11-19 09:53:57.574635	WebSocket Challenge	https://github.com/rolling-scopes-school/lectures/blob/master/lectures/websocket-challenge.md	\N	manual	f	f	f	\N	\N	codejam		{}		\N	\N	\N
+350	2019-06-03 06:50:19.575782	2019-11-19 10:53:20.712051	CodeJam "Animation Player"	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/piskel-animation-player.md	\N	manual	f	f	f	\N	\N	codejam		{}		\N	\N	\N
+352	2019-06-21 07:22:11.052584	2019-11-19 13:06:31.954741	Piskel-clone	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/piskel-clone.md	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+129	2019-05-13 11:45:12.64168	2020-03-09 11:46:32.445946	Codewars stage 2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars.md	\N	auto	f	f	f	\N	\N	codewars:stage2	codewars	{}		\N	\N	\N
+220	2019-05-17 13:01:38.627128	2019-05-17 13:01:38.627128	workHonor	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+391	2019-07-15 12:39:31.48174	2019-07-15 12:39:31.48174	UZ Autocomplete	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/3.-Autocomplete	The task is to implement a custom createAutocomplete function	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+392	2019-07-17 14:41:10.098861	2019-07-17 14:41:10.098861	UZ Codewars	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/4.-Codewars	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+394	2019-07-30 09:47:10.177586	2019-07-30 09:47:10.177586	UZ Javascript Classes & Inheritance	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/5.-Javascript-Classes-&-Inheritance	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+395	2019-07-31 12:59:19.767726	2019-07-31 12:59:19.767726	UZ Custom Lodash	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/8.-Custom-Lodash	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+246	2019-05-17 13:02:30.196693	2019-08-06 09:59:24.394646	JS Test	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+233	2019-05-17 13:01:38.700498	2019-08-06 11:08:43.462233	CSS QD	\N	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+403	2019-08-22 09:35:28.567592	2019-08-22 09:35:28.567592	UZ Cyclic menu	https://github.com/rolling-scopes-school/RS-Uzbekistan/wiki/9.-Cyclic-menu	\N	manual	\N	f	f	\N	\N	\N		{}		\N	\N	\N
+406	2019-08-29 09:21:54.045655	2019-08-29 10:08:53.337095	ST Javascript Classes & Inheritance	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/2.-Javascript-Classes-&-Inheritance	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+412	2019-08-29 10:12:27.740479	2019-08-29 10:12:27.740479	ST Catalogue. P.2 Angular Admin Client	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/FINAL:-Catalogue.-P.2-Angular-Admin-Client	\N	manual	t	f	f	\N	\N	\N		{}		\N	\N	\N
+415	2019-08-29 11:07:41.484385	2019-08-29 11:07:41.484385	ST Bonus	https://github.com/rolling-scopes-school/docs/blob/master/rs-activist.md	\N	manual	f	f	f	\N	\N	\N		{}		\N	\N	\N
+434	2019-09-30 08:09:29.61975	2019-10-08 14:24:55.849506	RS School Test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-school-test.md	\N	auto	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+436	2019-09-30 08:14:56.284783	2019-10-08 07:05:43.425884	Git Test #2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-test.md\t	\N	manual	f	f	f	\N	\N	\N	stage1	{}		\N	\N	\N
+433	2019-09-30 08:05:43.034506	2019-10-08 14:25:09.658362	HTML/CSS Test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/html-css-test.md	\N	auto	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+465	2020-02-09 18:17:26.12848	2020-02-09 18:17:26.12848	Codewars stage 1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars-stage-1.md	\N	auto	f	f	f	\N	\N	codewars:stage1	codewars	{}		\N	\N	\N
+432	2019-09-30 08:03:38.411822	2019-10-28 06:59:48.722431	Git Test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-test.md	\N	auto	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+418	2019-09-17 07:20:20.07102	2019-10-28 07:40:32.105112	Theyalow. Difficulty Level 1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level%201/theyalow/theyalow-en.md	\N	manual	f	f	f	\N	\N	\N	stage1	{}		\N	\N	\N
+439	2019-10-13 13:50:38.385396	2019-11-01 14:29:45.50486	Priority Queue	https://github.com/rolling-scopes-school/priority-queue	\N	auto	f	f	f	priority-queue	https://github.com/rolling-scopes-school/priority-queue	jstask	stage1,algorithms	{}		\N	\N	\N
+424	2019-09-20 09:40:16.65468	2019-11-01 14:31:12.362038	JS: Expression Calculator	https://github.com/romacher/expression-calculator	\N	auto	f	f	f	expression-calculator	https://github.com/romacher/expression-calculator	jstask	stage1	{}		\N	\N	\N
+421	2019-09-17 13:40:31.235798	2019-11-01 14:31:18.390464	JS: Brackets	https://github.com/Shastel/brackets	\N	auto	f	f	f	brackets	https://github.com/Shastel/brackets	jstask	stage1	{}		\N	\N	\N
+423	2019-09-19 10:02:37.126233	2019-11-01 14:31:37.02801	JS: Zeros	https://github.com/Shastel/zeros	\N	auto	f	f	f	zeros	https://github.com/Shastel/zeros	jstask	stage1	{}		\N	\N	\N
+393	2019-07-26 13:14:49.106312	2019-11-07 09:21:44.562843	ST JS assignments	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/3.-JS-assignments	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+425	2019-09-20 09:42:22.766447	2019-11-08 11:43:53.046921	JS: Guessing-game	https://github.com/rolling-scopes-school/guessing-game	\N	auto	f	f	f	guessing-game	https://github.com/rolling-scopes-school/guessing-game	jstask	stage1	{}		\N	\N	\N
+426	2019-09-20 09:54:01.865495	2019-11-08 11:44:00.705846	JS: Morse-decoder	https://github.com/romacher/morse-decoder	\N	auto	f	f	f	morse-decoder	https://github.com/romacher/morse-decoder	jstask	stage1	{}		\N	\N	\N
+427	2019-09-20 09:54:43.876086	2019-11-08 11:44:06.756286	JS: Finite-state-machine	https://github.com/rolling-scopes-school/finite-state-machine	\N	auto	f	f	f	finite-state-machine	https://github.com/rolling-scopes-school/finite-state-machine	jstask	stage1	{}		\N	\N	\N
+429	2019-09-22 09:55:22.942777	2019-11-08 11:44:20.763439	JS: Tic Tac Toe	https://github.com/rolling-scopes-school/tic-tac-toe	\N	auto	f	f	f	tic-tac-toe	https://github.com/rolling-scopes-school/tic-tac-toe	jstask	stage1	{}		\N	\N	\N
+430	2019-09-22 09:56:18.079947	2019-11-08 11:45:10.648593	JS: Doubly Linked List	https://github.com/rolling-scopes-school/doubly-linked-list	\N	auto	f	f	f	doubly-linked-list	https://github.com/rolling-scopes-school/doubly-linked-list	jstask	stage1	{}		\N	\N	\N
+409	2019-08-29 09:37:01.324698	2019-11-11 18:15:52.011347	ST Autocomplete UI	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/4.-Autocomplete-UI	\N	manual	t	f	f	\N	\N	jstask		{}		\N	\N	\N
+447	2019-11-18 07:47:39.508556	2019-11-18 07:47:39.508556	test-task	https://github.com/mikhama/test-task	\N	auto	f	f	f	test-task	https://github.com/mikhama/test-task	jstask		{}		\N	\N	\N
+399	2019-08-06 09:54:06.658655	2019-12-03 14:49:49.549586	Code Jam "Hacktrain"	https://github.com/rolling-scopes-school/tasks/blob/2018-Q1/tasks/codejam-train.md	\N	manual	f	f	f	\N	\N	codejam		{}		\N	\N	\N
+440	2019-10-15 07:50:32.749775	2019-11-19 09:34:34.605432	Technical screening	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/technical-screening.md	\N	manual	f	f	f	\N	\N	interview	stage2 	{}		\N	\N	\N
+450	2019-12-03 14:52:19.396399	2019-12-03 14:52:19.396399	Portfolio	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-1/portfolio/portfolio-ru.md	\N	manual	f	f	f	\N	\N	htmltask	stage2 ,html	{}		\N	\N	\N
+83	2019-04-26 14:55:46.421933	2019-11-30 18:36:50.662322	CoreJS	https://github.com/mikhama/core-js-101	\N	auto	t	f	f	core-js-101	https://github.com/mikhama/core-js-101	jstask		{}		\N	\N	\N
+128	2019-05-02 09:41:43.371377	2019-12-03 14:42:15.453094	Code Jam "Palette"	https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/codejam-pallete.md	\N	manual	t	f	f	\N	\N	codejam	deprecated	{}		\N	\N	\N
+444	2019-11-04 08:12:31.634176	2020-03-31 10:17:18.546617	Virtual Keyboard	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-virtual-keyboard.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,js	{}		\N	\N	\N
+453	2019-12-16 10:34:47.548986	2019-12-16 10:34:47.548986	Temperature Converter	https://github.com/Shastel/temperature-converter	\N	auto	f	f	f	temperature-converter	https://github.com/Shastel/temperature-converter	jstask	epam	{}		\N	\N	\N
+456	2019-12-16 10:38:26.769964	2019-12-16 10:38:26.769964	Towel Sort	https://github.com/Shastel/towel-sort	\N	auto	f	f	f	towel-sort	https://github.com/Shastel/towel-sort	jstask	epam	{}		\N	\N	\N
+459	2019-12-18 14:22:47.842869	2019-12-18 14:22:47.842869	ST TDD	https://example.com	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+84	2019-04-26 14:55:46.426978	2020-02-10 18:45:57.803066	HTML, CSS & Git Basics	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-cv.md	\N	auto	f	f	f	\N	\N	cv:html	stage1	{}		\N	\N	\N
+437	2019-10-06 11:20:27.617946	2020-02-10 06:18:24.928919	Markdown & Git	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-markdown.md	\N	auto	f	f	f	\N	\N	cv:markdown	stage1	{}		\N	\N	\N
+470	2020-02-17 08:29:28.43587	2020-02-17 08:29:28.43587	Angular. Modules & Services. Routing	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/modules-services-routing.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+438	2019-10-13 13:34:49.201156	2020-03-23 10:57:07.262729	Sudoku	https://github.com/rolling-scopes-school/sudoku	\N	auto	f	f	f	sudoku	https://github.com/rolling-scopes-school/sudoku	jstask	stage1,algorithms	{}		\N	\N	\N
+488	2020-03-19 16:22:02.703098	2020-03-24 16:19:06.071144	rs.ios.task2	https://github.com/rolling-scopes-school/rs.ios-stage1-task2/blob/master/readme.md	\N	auto	f	f	f	rs.ios-stage1-task2	https://github.com/rolling-scopes-school/rs.ios-stage1-task2/	objctask	stage1	{"targets":{"project":{"folder":"RSSchool_T2","xcodeproj":"RSSchool_T2.xcodeproj"},"tests":{"folder":"RSSchool_T2Tests","classes":["AbbreviationTests.m","BlocksTest.m","DatesTest.m","FibonacciNumbersTests.m","StringTransform.m","TimeInWordsTests.m"]}},"folder":"RSSchool_T2","details":"","descriptions":""}		\N	\N	\N
+482	2020-03-10 20:39:15.488061	2020-03-24 16:20:39.287898	rs.ios.task1	https://github.com/rolling-scopes-school/rs.ios-stage1-task1/	\N	auto	f	f	f	rs.ios-stage1-task1	https://github.com/rolling-scopes-school/rs.ios-stage1-task1/	objctask	stage1	{"targets":{"project":{"folder":"RSSchool_T1","xcodeproj":"RSSchool_T1.xcodeproj"},"tests":{"folder":"RSSchool_T1Tests","classes":["BillCounterTests.m","HighestPalindromeTests.m","MiniMaxSumTests.m","StringParseTests.m","T1ArrayTests.m"]}},"folder":"RSSchool_T1","details":"","descriptions":""}		\N	\N	\N
+489	2020-03-26 10:35:21.765085	2020-03-26 10:35:21.765085	Caesar cipher CLI tool	https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md	\N	manual	f	f	f	\N	\N	jstask	nodejs	{}		\N	\N	\N
+490	2020-03-26 14:29:07.41166	2020-03-26 14:29:07.41166	HTML/Css(basic)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/css-recipes.md	\N	manual	f	f	f	\N	\N	htmltask	Poland	{}		\N	\N	\N
+492	2020-03-31 09:33:53.140629	2020-03-31 09:33:53.140629	Express REST service	https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md#task-2-express-rest-service	\N	manual	f	f	f	\N	\N	jstask	nodejs	{}		\N	\N	\N
+493	2020-03-31 10:20:39.859981	2020-03-31 10:20:39.859981	Virtual Keyboard Cross-Check	https://rolling-scopes-school.github.io/checklist/	\N	manual	f	f	f	\N	\N	jstask	stage2 ,js,cross-check	{}		\N	\N	\N
+494	2020-03-31 10:23:52.389221	2020-03-31 10:23:52.389221	Gem Puzzle Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-the-gem-puzzle.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,cross-check,js	{}		\N	\N	\N
+495	2020-04-01 08:43:01.126352	2020-04-01 08:43:01.126352	[Android] Quiz 1	https://docs.google.com/forms/d/e/1FAIpQLSdFHiOBHHDZpwztLq3rGYf7EzEQPw56I0HeYlqfg8BpB6leYg/viewform?usp=sf_link	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+491	2020-03-30 09:57:08.558596	2020-04-01 20:44:38.183195	rs.ios.task3.test	https://github.com/rolling-scopes-school/rs.ios-stage1-task3/blob/master/readme.md	\N	auto	f	f	f	rs.ios-stage1-task3	https://github.com/rolling-scopes-school/rs.ios-stage1-task3	objctask	stage1	{"targets":{"project":{"folder":"RSSchool_T3","xcodeproj":"RSSchool_T3.xcodeproj"},"tests":{"folder":"RSSchool_T3Tests","classes":["ArrayPrintTests.m","FullBinaryTreesTests.m"]},"uiTests":{"folder":"RSSchool_T3UITests","classes":["DateMachineTests.m"]}},"testReplacement":{"link":"git@github.com:rolling-scopes-school/rs.ios-stage1-private-tests.git","folder":"stage1-task3","replacement":[{"folder":"RSSchool_T3Tests","test":"ArrayPrintTests.m"},{"folder":"RSSchool_T3UITests","test":"DateMachineTests.m"}],"verify":[{"folder":"RSSchool_T3Tests","test":"FullBinaryTreesTests.m"}]},"folder":"RSSchool_T3","details":"Task3","descriptions":"Description task3"}		\N	\N	\N
+496	2020-04-02 17:01:12.759119	2020-04-02 17:01:12.759119	Layout(Restaurant)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markup-1.md	\N	manual	f	f	f	\N	\N	htmltask	Poland	{}		\N	\N	\N
+497	2020-04-02 18:49:24.244235	2020-04-03 13:05:37.170103	rs.ios.task3	https://github.com/rolling-scopes-school/rs.ios-stage1-task3.1/blob/master/README.md	\N	auto	f	f	f	rs.ios-stage1-task3.1	https://github.com/rolling-scopes-school/rs.ios-stage1-task3.1	objctask	stage1	{"targets":{"project":{"folder":"RSSchool_T3","xcodeproj":"RSSchool_T3.xcodeproj"},"tests":{"folder":"RSSchool_T3Tests","classes":["T3_PolynomialTests.m","T3_CombinatorTests.m"]},"uiTests":{"folder":"RSSchool_T3UITests","classes":["RS_Task3_UICheckerUITests.m"]}},"folder":"RSSchool_T3","details":"Task3","descriptions":"Description task3"}		\N	\N	\N
+500	2020-04-09 10:03:10.874771	2020-04-09 10:03:10.874771	English for kids	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
+501	2020-04-09 16:00:08.930182	2021-06-22 09:18:19.384375	[iOS] Quiz2	https://docs.google.com/forms/d/e/1FAIpQLSdLvcnvAofsQ1ETqDnwSjH3U2WQJgVvlG8pxVPV_ZfhBWDV9w/closedform	\N	manual	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+502	2020-04-09 17:57:52.400972	2020-04-09 17:57:52.400972	rs.ios.task4	https://github.com/rolling-scopes-school/rs.ios-stage1-task4/blob/master/README.md	\N	auto	f	f	f	rs.ios-stage1-task4	https://github.com/rolling-scopes-school/rs.ios-stage1-task4	objctask	stage1	{}		\N	\N	\N
+503	2020-04-10 18:12:45.707666	2021-06-06 20:26:13.523668	Logging & Error Handling	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-5-logging--error-handling	\N	manual	f	f	f	\N	\N	jstask	nodejs	{}		\N	\N	\N
+504	2020-04-14 05:44:38.302281	2020-04-14 05:44:38.302281	Database MongoDB	https://github.com/rolling-scopes-school/nodejs-course-template/blob/master/TASKS.md#task-4-database-mongodb	\N	manual	f	f	f	\N	\N	jstask	nodejs	{}		\N	\N	\N
+505	2020-04-20 17:36:43.155586	2021-06-27 20:09:25.924071	Authentication and JWT	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-8-authentification--jwt	\N	manual	f	f	f	\N	\N	jstask	nodejs	{}		\N	\N	\N
+506	2020-04-20 19:44:07.04595	2021-06-25 16:57:29.2666	[Android] Quiz 2	https://forms.gle/KLLFbKsKneosrwpV9	\N	manual	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+507	2020-04-24 09:12:59.277372	2020-06-02 11:36:07.441843	SpeakIt	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/speakit.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,cross-check	{}		\N	\N	\N
+508	2020-04-27 06:51:46.900545	2020-04-27 06:51:46.900545	MovieSearch	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/movie-search.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
+509	2020-04-27 06:52:41.255486	2020-04-27 06:52:41.255486	MovieSearch: Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/movie-search.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,cross-check	{}		\N	\N	\N
+510	2020-04-29 06:04:23.576262	2021-06-02 06:56:53.49812	Javascript Classes & Inheritance	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/javascript-classes-inheritance.md	\N	manual	f	f	f	\N	\N	jstask	js,Poland,rs-lt	{}		\N	\N	\N
+511	2020-04-30 16:13:15.587124	2020-04-30 16:13:15.587124	rs.ios.task5	https://github.com/rolling-scopes-school/rs.ios-stage1-task5/blob/master/README.md	\N	auto	f	f	f	rs.ios-stage1-task5	https://github.com/rolling-scopes-school/rs.ios-stage1-task5	objctask	stage1	{}		\N	\N	\N
+512	2020-05-01 14:40:17.99012	2021-07-02 09:12:24.068724	Algorithms Task 3	https://github.com/rolling-scopes-school/rs.android-2021-stage1-task3	\N	auto	f	f	f	rs.android-2021-stage1-task3	https://github.com/rolling-scopes-school/rs.android-2021-stage1-task3	kotlintask	stage1	{}		\N	\N	\N
+513	2020-05-03 19:35:27.599732	2020-05-03 19:35:27.599732	ICanCodeJS	https://github.com/codenjoyme	\N	manual	f	f	f	\N	\N	codejam	stage2 ,codejam	{}		\N	\N	\N
+514	2020-05-05 17:07:38.151867	2020-05-05 17:07:38.151867	JS-assignments	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js-assignments.md	\N	manual	f	f	f	\N	\N	jstask	Poland	{}		\N	\N	\N
+515	2020-05-11 14:15:10.391901	2020-05-11 14:15:10.391901	[iOS] Quiz 3	https://docs.google.com/forms/d/e/1FAIpQLSeb_To1WpYUWG_kfocuK5WfLLhL4MfXUn6AU0OVSEPt3ztXhw/viewform	\N	manual	f	f	f	\N	\N	objctask	stage1	{}		\N	\N	\N
+516	2020-05-13 13:39:03.279745	2021-07-16 17:02:48.091094	[Android] Quiz 3 Final	https://forms.gle/TTcLK8kLEWveR7BF9	\N	manual	f	f	f	\N	\N	test	stage1	{}		\N	\N	\N
+517	2020-05-14 18:49:07.427589	2020-05-14 18:49:07.427589	Cyclic menu	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cyclic-menu.md	\N	manual	f	f	f	\N	\N	jstask	Poland	{}		\N	\N	\N
+518	2020-05-19 12:57:16.890419	2020-05-19 12:57:16.890419	Virtual keyboard	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/virtual-keyboard/virtual-keyboard-en.md	\N	manual	f	f	f	\N	\N	jstask	Poland	{}		\N	\N	\N
+519	2020-05-28 20:05:20.202628	2020-05-28 20:05:20.202628	Fancy-weather(en)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/fancy-weather(en).md	\N	manual	f	f	f	\N	\N	jstask	Poland	{}		\N	\N	\N
+520	2020-06-02 11:28:16.858003	2020-06-02 11:29:43.695887	English puzzle	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-puzzle.md	\N	manual	f	f	f	\N	\N	jstask	js,stage2	{}		\N	\N	\N
+521	2020-06-02 11:29:37.951145	2020-06-02 11:29:52.45171	English puzzle: Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-puzzle.md	\N	manual	f	f	f	\N	\N	jstask	js,cross-check,stage2	{}		\N	\N	\N
+522	2020-06-07 17:14:36.355963	2020-06-07 17:14:36.355963	CV	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codejam-cv.md	\N	manual	f	f	f	\N	\N	cv:html	Georgia	{}		\N	\N	\N
+523	2020-06-08 19:30:29.31376	2020-06-08 19:30:29.31376	rs.ios.task6	https://github.com/rolling-scopes-school/rs.ios-stage2-task6/blob/master/README.md	\N	manual	f	f	f	\N	\N	objctask	stage2	{}		\N	\N	\N
+524	2020-06-08 19:31:03.111251	2020-06-08 19:31:03.111251	rs.ios.task7	https://github.com/rolling-scopes-school/rs.ios-stage2-task7/blob/master/README.md	\N	manual	f	f	f	\N	\N	objctask	stage2	{}		\N	\N	\N
+525	2020-06-08 19:31:30.353779	2020-06-08 19:31:30.353779	rs.ios.task8	https://github.com/rolling-scopes-school/rs.ios-stage2-task8/blob/master/README.md	\N	manual	f	f	f	\N	\N	objctask	stage2	{}		\N	\N	\N
+526	2020-06-08 19:55:04.118004	2020-06-08 19:55:04.118004	[iOS] Quiz 4	https://docs.google.com/forms/d/e/1FAIpQLSdc0z7shPfpCbcOlCyYggHqJqd01fiDYZCaif_kk7Azyt3ZxQ/viewform	\N	manual	f	f	f	\N	\N	test	stage2	{}		\N	\N	\N
+527	2020-06-08 19:56:23.355047	2020-06-08 19:56:23.355047	[iOS] Quiz 5	https://docs.google.com/forms/d/e/1FAIpQLScIUpMl0RSKJmve_4AID8owWgSUzAGWVZxPchfpvTRo-e1TZQ/viewform	\N	manual	f	f	f	\N	\N	test	stage2	{}		\N	\N	\N
+528	2020-06-09 12:05:43.593182	2021-07-07 06:11:53.697552	Custom lodash(unit tests)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/custom-lodash(unit%20%20tests).md	\N	manual	f	f	f	\N	\N	jstask	Poland,rs-lt	{}		\N	\N	\N
+529	2020-06-14 18:51:48.51346	2020-06-14 18:51:48.51346	RS Lang. Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,cross-check,js	{}		\N	\N	\N
+530	2020-06-14 18:52:12.642677	2020-06-14 18:52:12.642677	RS Lang. Presentation	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,js	{}		\N	\N	\N
+531	2020-06-15 18:55:01.118769	2020-06-15 18:55:01.118769	Final JS Test	https://google.com	\N	manual	f	f	f	\N	\N	test	stage2	{}		\N	\N	\N
+532	2020-06-18 11:57:24.090653	2020-06-18 11:57:24.090653	[Android] Task 4 Storage	https://github.com/rolling-scopes-school/rs.android.task.4	\N	manual	f	f	f	\N	\N	kotlintask	stage2	{}		\N	\N	\N
+533	2020-07-02 17:22:29.052038	2020-07-02 17:22:29.052038	Chat (React)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chat.md	\N	manual	f	f	f	\N	\N	jstask	Poland,react	{}		\N	\N	\N
+534	2020-07-17 08:55:25.910527	2020-07-17 08:55:25.910527	[Android] Task 5	https://github.com/rolling-scopes-school/Android-2020-Task-5	\N	manual	f	f	f	\N	\N	kotlintask	stage2	{}		\N	\N	\N
+535	2020-07-20 07:47:20.402571	2020-07-20 07:47:48.182376	Angular YouTube client: Cross-Check	https://rolling-scopes-school.github.io/checklist/	\N	manual	f	f	f	\N	\N	jstask	Angular,angular	{}		\N	\N	\N
+536	2020-07-22 08:08:14.64887	2020-07-22 08:08:14.64887	RS CloneWars	https://github.com/rolling-scopes-school/tasks	\N	manual	f	f	f	\N	\N	test	stage2	{}		\N	\N	\N
+537	2020-07-25 09:04:32.443128	2020-07-25 09:16:46.759794	[Android] Task 6 MVP	https://github.com/rolling-scopes-school/rs.android.task.6	\N	manual	f	f	f	\N	\N	kotlintask	stage2	{}		\N	\N	\N
+538	2020-07-28 05:44:35.694818	2020-07-28 06:09:53.982099	Codewars Test	https://github.com/rolling-scopes/rsschool-app	\N	manual	f	f	f	\N	\N	codewars	react,codewars	{}		\N	\N	\N
+539	2020-08-02 20:57:21.752305	2020-08-05 10:27:49.213083	Codewars React	https://github.com/rolling-scopes-school/tasks/blob/f504966947a9f3e85a27f6401e7a6870f870f392/tasks/codewars-react.md	\N	manual	f	f	f	\N	\N	codewars	react,codewars	{}		\N	\N	\N
+540	2020-08-03 14:31:53.354433	2020-08-03 14:31:53.354433	Interview(React)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-react.md	\N	manual	f	f	f	\N	\N	interview		{}		\N	\N	\N
+541	2020-08-05 09:10:58.734646	2020-08-05 09:10:58.734646	Angular. NgRX	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular/NgRX.md	\N	manual	f	f	f	\N	\N	jstask	Angular,angular	{}		\N	\N	\N
+542	2020-08-15 20:40:21.595491	2020-08-15 20:41:37.149481	Schedule	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/schedule.md	\N	manual	f	f	f	\N	\N	jstask	react,js	{}		\N	\N	\N
+543	2020-08-15 20:42:00.436081	2020-08-15 20:42:00.436081	X Check App	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/xcheck/xcheck.md	\N	manual	f	f	f	\N	\N	jstask	react,js	{}		\N	\N	\N
+544	2020-08-23 13:40:57.097441	2020-08-23 13:40:57.097441	Mobile Hackathon	https://medium.com/mobilepeople/rolling-scopes-mobile-hackathon-results-9c96b4fb4211	\N	manual	f	f	f	\N	\N	codejam		{}		\N	\N	\N
+545	2020-08-27 04:13:37.333538	2020-08-27 04:13:37.333538	Task 1. Calculator	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-1-calculator-40	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+546	2020-08-27 04:30:07.971139	2020-10-06 14:37:51.758728	Codewars Basic	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+547	2020-08-27 04:35:39.114632	2020-08-27 04:35:39.114632	Simple Singolo	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/simple-singolo.md	\N	manual	f	f	f	\N	\N	htmltask	html	{}		\N	\N	\N
+548	2020-08-27 14:34:07.755403	2020-08-27 14:34:07.755403	HTML-basics	https://ru.code-basics.com/languages/html	\N	manual	f	f	f	\N	\N	htmltask	html	{}		\N	\N	\N
+549	2020-08-27 14:34:39.873265	2020-08-27 14:34:39.873265	CSS-basics	https://ru.code-basics.com/languages/css	\N	manual	f	f	f	\N	\N	htmltask	html	{}		\N	\N	\N
+550	2020-08-27 14:35:10.167076	2020-08-27 14:35:10.167076	JS-basics	https://ru.code-basics.com/languages/javascript	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+551	2020-08-27 16:10:52.287849	2020-08-27 16:10:52.287849	Task 2. Dynamic Landing Page	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-2-dynamic-landing-page-30	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+552	2020-08-27 16:11:28.541996	2020-08-27 16:11:28.541996	Task 3. Meditation App	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-3-meditation-app-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+553	2020-08-27 16:11:57.491788	2020-08-27 16:11:57.491788	Task 4. Drum Kit	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-4-drum-kit-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+554	2020-08-27 16:12:27.5845	2020-08-27 16:12:27.5845	Task 5. CSS Variables and JS	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-5-css-variables-and-js-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+593	2020-12-19 12:47:59.940867	2021-06-28 13:37:07.392607	CV. Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cv/html-css.md	\N	manual	f	f	f	\N	\N	htmltask	stage0,html	{}		\N	\N	\N
+555	2020-08-27 16:12:54.861753	2020-08-27 16:12:54.861753	Task 6. Flex Panel Gallery	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-6-flex-panel-gallery-10	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+556	2020-08-27 16:13:19.737287	2020-08-27 16:13:19.737287	Task 7. Fun with HTML5 Canvas	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-7-fun-with-html5-canvas-40	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+557	2020-08-27 16:13:49.956984	2020-08-27 16:13:49.956984	Task 8. Custom Video Player	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-8-custom-video-player-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+558	2020-08-27 16:14:13.433263	2020-08-27 16:14:13.433263	Task 9. Video Speed Controller	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-9-video-speed-controller-10	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+559	2020-08-27 16:14:37.523502	2020-08-27 16:14:37.523502	Task 10. Whack-A-Mole	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-10-whack-a-mole-40	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+560	2020-08-27 16:15:04.873511	2020-08-27 16:15:04.873511	Task 11. Virtual Keyboard	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-11-virtual-keyboard-40	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+561	2020-08-27 16:15:27.500667	2020-08-27 16:15:27.500667	Task 12. Chat on socket.io	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-12-chat-on-socketio-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+562	2020-08-27 16:16:25.117143	2020-10-05 17:32:25.450477	Codewars Basic-1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic-1.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+563	2020-08-27 16:17:05.5464	2020-10-05 17:24:40.436098	Codewars Basic-2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/codewars-basic-2.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+564	2020-08-27 16:17:46.058557	2020-08-27 16:17:46.058557	raindrops	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/raindrops.md	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+565	2020-08-27 16:18:08.763424	2020-08-27 16:18:08.763424	fancy-weather	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/fancy-weather.md	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+566	2020-08-27 16:35:27.649926	2020-08-27 16:35:27.649926	Portfolio	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/Portfolio.md	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
+567	2020-09-05 12:46:35.283775	2020-10-19 10:11:31.643018	Self HTML Basics	https://ru.code-basics.com/languages/html	\N	auto	f	f	f	\N	\N	selfeducation	html	{}		\N	\N	\N
+568	2020-09-07 19:16:43.975374	2020-10-19 10:11:24.138441	Self CSS Basics	https://ru.code-basics.com/languages/css	\N	auto	f	f	f	\N	\N	selfeducation	css	{}		\N	\N	\N
+569	2020-09-07 20:23:16.53491	2020-10-19 10:11:13.239832	Self JS Basics	https://ru.code-basics.com/languages/javascript	\N	auto	f	f	f	\N	\N	selfeducation	js	{}		\N	\N	\N
+570	2020-09-19 08:01:33.992409	2020-09-19 08:01:33.992409	webdev	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/markups/level-1/webdev/webdev-ru.md	\N	manual	f	f	f	\N	\N	htmltask	stage1,html	{}		\N	\N	\N
+571	2020-09-21 11:21:05.630909	2020-09-21 11:21:05.630909	Calculator	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/calculator.md	\N	manual	f	f	f	\N	\N	jstask	stage1,js	{}		\N	\N	\N
+572	2020-09-21 16:03:35.625542	2020-09-21 16:03:35.625542	Momentum	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/momentum.md	\N	manual	f	f	f	\N	\N	jstask	stage1,js	{}		\N	\N	\N
+573	2020-09-21 16:04:10.12875	2020-09-21 16:04:10.12875	Virtual Keyboard	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/ready-projects/virtual-keyboard.md	\N	manual	f	f	f	\N	\N	jstask	stage1,js	{}		\N	\N	\N
+574	2020-09-22 08:55:51.123185	2021-07-16 17:01:41.593901	Android Final Quiz	https://forms.gle/TTcLK8kLEWveR7BF9	\N	manual	f	f	f	\N	\N	test	stage2 ,Android,Kotlin	{}		\N	\N	\N
+575	2020-09-26 12:58:24.834196	2021-07-13 02:18:54.829974	React Team Task Presentation	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/schedule.md	\N	manual	f	f	f	\N	\N	jstask	react,presentation	{}		\N	\N	\N
+576	2020-09-28 15:41:37.15626	2020-09-28 15:45:51.670373	Shelter Cross-check	https://github.com/rolling-scopes-school/tasks/tree/master/tasks/markups/level-2/shelter	\N	manual	f	f	f	\N	\N	htmltask	stage1,html	{}		\N	\N	\N
+577	2020-09-28 15:57:47.386043	2020-09-28 15:57:47.386043	Gem Puzzle	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/gem-pazzle/codejam-the-gem-puzzle.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
+578	2020-10-13 05:44:26.854548	2020-10-13 05:44:26.854548	AWS_task1	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task1-cloud-introduction/task.md	\N	manual	f	f	f	\N	\N	jstask	aws	{}		\N	\N	\N
+579	2020-10-19 08:18:56.59736	2020-10-19 08:18:56.59736	AWS_task2	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task2-serve-spa-aws/task.md	\N	manual	f	f	f	\N	\N	jstask	aws	{}		\N	\N	\N
+580	2020-10-26 11:34:32.421958	2020-10-26 11:34:32.421958	AWS-task3	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task3-product-api/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check	{}		\N	\N	\N
+581	2020-11-02 14:50:19.794867	2020-11-02 14:50:19.794867	AWS-task4	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task4-rds/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check,nodejs	{}		\N	\N	\N
+582	2020-11-12 16:52:45.903122	2020-11-12 16:52:45.903122	AWS_task5	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task5-import-to-s3/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check,js	{}		\N	\N	\N
+583	2020-11-16 12:01:36.081559	2020-11-16 12:01:36.081559	AWS-task6	https://github.com/rolling-scopes-school/nodejs-aws-tasks/tree/main/task6-sqs-sns	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check,js,nodejs	{}		\N	\N	\N
+584	2020-11-20 07:21:08.683763	2020-11-20 07:21:08.683763	RS Селекторы	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-css.md	\N	manual	f	f	f	\N	\N	jstask	js,stage2	{}		\N	\N	\N
+585	2020-11-20 07:26:46.82712	2020-11-20 07:26:46.82712	RS Селекторы:Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rs-css.md	\N	manual	f	f	f	\N	\N	jstask	js,stage2	{}		\N	\N	\N
+586	2020-11-24 09:22:01.197268	2020-11-24 09:22:01.197268	AWs_task7	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task7-lambda%2Bcognito-authorization/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,js,cross-check,nodejs	{}		\N	\N	\N
+587	2020-12-01 12:57:37.039959	2020-12-01 12:57:37.039959	AWS_task8	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task8-docker-elastic-beanstalk/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check,nodejs	{}		\N	\N	\N
+588	2020-12-08 20:21:00.816025	2020-12-08 20:21:00.816025	AWS_task9	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task9-bff/task.md	\N	manual	f	f	f	\N	\N	jstask	aws ,cross-check,nodejs	{}		\N	\N	\N
+589	2020-12-11 12:19:08.377006	2020-12-18 19:53:01.805815	COVID-19 Dashboard	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/covid-dashboard.md	\N	manual	f	f	f	\N	\N	jstask	js,stage2	{}		\N	\N	\N
+590	2020-12-11 12:20:12.955324	2020-12-18 19:53:15.107973	COVID-19 Dashboard:Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/covid-dashboard.md	\N	manual	f	f	f	\N	\N	jstask	js,stage2	{}		\N	\N	\N
+591	2020-12-16 11:22:13.348836	2020-12-16 11:22:13.348836	AWS_feedback_build_plan	https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/feedback_and_possible_plan.me	\N	manual	f	f	f	\N	\N	jstask	js,nodejs,aws	{}		\N	\N	\N
+592	2020-12-19 12:43:52.804419	2021-05-19 02:54:47.307367	Codewars #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/codewars	\N	auto	f	f	f	\N	\N	jstask	js,codewars,stage0	{}		\N	\N	\N
+594	2020-12-19 12:49:31.14823	2021-03-07 16:21:45.593427	Wildlife	https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/wildlife	\N	manual	f	f	f	\N	\N	htmltask	stage0,html	{}		\N	\N	\N
+595	2020-12-26 18:31:32.147857	2021-03-06 10:31:15.424715	HTML/CSS Test #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
+596	2020-12-26 18:32:46.338943	2021-03-06 10:31:21.886056	JS Test #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
+597	2020-12-26 18:33:44.873478	2021-06-30 16:38:02.096425	RSS Test	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
+598	2021-01-14 16:07:51.521813	2021-01-14 16:07:51.521813	ST Extra curry	https://observablehq.com/@shastel/functions-and-arguments	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
+599	2021-01-16 07:15:35.629304	2021-01-16 07:15:35.629304	RS Clone	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
+600	2021-01-18 20:37:27.531064	2021-01-18 20:37:27.531064	Angular. RS Lang	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/angular-new/angular-rslang.md	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+601	2021-01-18 20:44:09.805032	2021-04-07 09:35:44.904556	Angular. RS Lang: Cross-Check	https://rs-lang-cross-check.netlify.app/	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+602	2021-01-21 12:47:14.940104	2021-01-21 12:47:14.940104	Test	https://github.com/yuliaHope/rsschool-api/tree/feature/S-9-implement-adding-task/client/src/components/Forms	\N	manual	f	f	f	\N	\N	kotlintask		{}		\N	\N	\N
+603	2021-01-21 17:00:47.237938	2021-01-21 17:00:47.237938	[EXTRA] Custom addEventListener	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/5.-%5BEXTRA%5D-Custom-addEventListener	\N	manual	f	f	f	\N	\N	jstask	ST	{}		\N	\N	\N
+604	2021-01-22 13:36:10.256772	2021-01-24 12:53:00.085111	Pandas data manipulations	https://github.com/rolling-scopes-school/ml-intro/blob/2021/1_data_manipulations/Pandas_data_manipulations.ipynb	\N	auto	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+605	2021-02-01 14:35:31.761066	2021-02-01 14:35:31.761066	2 - Linear Regression and Visualization	https://github.com/rolling-scopes-school/ml-intro/blob/2021/2_linear_regression/seminar_and_homework.ipynb	\N	manual	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+606	2021-02-01 16:45:01.840662	2021-02-01 16:45:01.840662	ST Load	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/6.-Load	\N	manual	f	f	f	\N	\N	jstask	ST	{}		\N	\N	\N
+607	2021-02-03 16:51:09.09653	2021-02-03 16:51:09.09653	Things 1	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/7.-Things-BE-v1	\N	manual	f	f	f	\N	\N	jstask	ST	{}		\N	\N	\N
+608	2021-02-11 08:44:07.456369	2021-02-11 08:44:07.456369	3 - Overfitting and Regularization	https://github.com/rolling-scopes-school/ml-intro/tree/2021/3_overfitting_regularization	\N	manual	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+609	2021-02-13 18:01:57.191651	2021-02-13 18:01:57.191651	RS Clone Presentation	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
+610	2021-02-15 10:58:06.20701	2021-02-15 10:58:06.20701	3- Quiz Overfitting and Regularization	https://docs.google.com/forms/d/e/1FAIpQLSe_QHNj_mHGQ3afxBLny2o3CeiE7kZbo41-Aco_gjbLq_J8_Q/viewform?usp=sf_link	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+611	2021-02-15 17:32:15.694641	2021-02-15 17:32:15.694641	4 - Feature Engineering and Selection	https://github.com/rolling-scopes-school/ml-intro/blob/2021/4_feature_engineering_selection/feature_engineering_selection.ipynb	\N	manual	f	f	f	\N	\N	ipynb		{}		\N	\N	\N
+612	2021-02-17 10:39:01.421981	2021-02-17 10:39:01.421981	React Game	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-game.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+613	2021-02-28 06:57:22.138546	2021-02-28 11:51:23.17022	5 - Classification Linear KNN (Part 1)	https://github.com/rolling-scopes-school/ml-intro/tree/2021/5_classification_linear_knn	\N	manual	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+614	2021-03-01 10:33:03.991004	2021-03-01 10:33:03.991004	5 - Quiz Classification Linear KNN	https://docs.google.com/forms/d/e/1FAIpQLScJ3iEMm756uQq7JcNia9WMaUe6Dm1XkMjEHqKHrxgS6TLjpg/closedform	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+615	2021-03-02 11:26:52.273548	2021-03-02 11:26:52.273548	Номер макета Online Zoo	https://rolling-scopes-school.github.io/roadmap/#/stage1/tasks/online-zoo	\N	manual	f	f	f	\N	\N	test	stage1,online zoo	{}		\N	\N	\N
+616	2021-03-04 14:36:26.155447	2021-03-04 14:36:26.155447	Travel App	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/travel-app.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+617	2021-03-05 11:09:19.040392	2021-03-05 11:09:19.040392	5 - Classification Linear KNN (Part 2)	https://github.com/rolling-scopes-school/ml-intro/blob/2021/5_classification_linear_knn/seminar.ipynb	\N	manual	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+618	2021-03-05 11:17:02.022234	2021-03-05 11:17:02.022234	6 - Trees and Ensembles	https://github.com/rolling-scopes-school/ml-intro/blob/2021/6_trees%20and%20ensembles/rf_classifier.ipynb	\N	manual	f	f	f	\N	\N	ipynb	Python,Pandas	{}		\N	\N	\N
+619	2021-03-05 11:18:59.536474	2021-03-05 11:18:59.536474	6 - Quiz Trees and Ensembles	https://forms.gle/QppfozwckCZMoPhC8	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+620	2021-03-05 16:59:00.627541	2021-03-05 16:59:00.627541	ST Last checkpoint	https://docs.google.com/spreadsheets/d/19G_U4gPsuC6L2NjGoanGRGU2-cc6y6b1y8iZcDMF2fI/edit?usp=sharing	\N	manual	f	f	f	\N	\N	stage-interview	ST	{}		\N	\N	\N
+621	2021-03-06 16:09:14.287858	2021-03-06 16:09:40.434646	7 - Clustering and Dimensionality Reduction	https://github.com/rolling-scopes-school/ml-intro/blob/2021/7_clustering/clustering.ipynb	\N	manual	f	f	f	\N	\N	ipynb	Python,Pandas	{}		\N	\N	\N
+622	2021-03-06 16:13:05.067733	2021-03-06 16:13:23.274674	7 - Quiz Clustering and Dimensionality Reduction	https://forms.gle/bzBPEtnyuA347dJD7	\N	manual	f	f	f	\N	\N	test		{}		\N	\N	\N
+623	2021-03-11 11:04:08.681819	2021-03-11 11:04:08.681819	[Test] Virtual Piano	https://github.com/rolling-scopes-school/stage1/blob/main/tasks/virtual-piano.md	\N	manual	f	f	f	\N	\N	jstask	test	{}		\N	\N	\N
+624	2021-03-12 18:25:36.803679	2021-03-12 18:25:36.803679	Markdown & Git (EN)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/git-markdown.md	\N	manual	f	f	f	\N	\N	cv:markdown	stage0	{}		\N	\N	\N
+625	2021-03-16 04:32:02.049634	2021-03-22 08:10:06.849863	Virtual-piano	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/js-projects/virtual-piano	\N	manual	f	f	f	\N	\N	jstask	stage1	{}		\N	\N	\N
+626	2021-03-16 10:32:32.861577	2021-03-16 11:47:39.420121	Git test (EN)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/test-git	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt,stage0,test	{}		\N	\N	\N
+627	2021-03-19 15:38:13.638778	2021-03-19 15:38:13.638778	React. RS Lang	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-rslang.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+628	2021-03-19 15:39:27.503723	2021-07-13 02:18:41.256448	React. Team Task	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/tba.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+629	2021-03-25 06:58:19.94643	2021-03-25 06:58:19.94643	8 - Quiz model evaluation and selection	https://forms.gle/zTMLDLiFCMXijrJC9	\N	auto	f	f	f	\N	\N	test		{}		\N	\N	\N
+630	2021-03-29 09:18:15.128409	2021-03-29 09:18:15.128409	Clean-code-s1e1	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/clean-code/clean-code-s1e1	\N	manual	t	f	f	clean-code-s1e1	\N	htmltask	stage1,html,clean-code	{}		\N	\N	\N
+631	2021-03-29 19:46:38.437531	2021-04-18 16:08:11.754724	online-zoo-w-12-v-1	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+632	2021-03-29 19:47:22.348097	2021-04-18 16:08:03.65834	online-zoo-w-12-v-2	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+633	2021-03-29 19:49:52.753381	2021-04-18 16:07:55.984858	online-zoo-w-12-v-3	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+634	2021-03-29 19:51:44.40457	2021-04-18 16:07:43.996559	online-zoo-w-12-v-4	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+635	2021-03-29 19:52:09.987412	2021-04-18 16:07:33.660824	online-zoo-w-12-v-5	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+636	2021-03-29 19:53:19.216383	2021-04-18 16:07:24.592728	online-zoo-w-12-v-6	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+637	2021-03-30 18:22:15.783273	2021-07-13 07:27:31.217997	webdev (EN)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/webdev-en.md	\N	manual	f	f	f	\N	\N	htmltask	stage1,rs-lt,rs-ge	{}		\N	\N	\N
+638	2021-04-01 13:43:15.969162	2021-04-01 13:43:15.969162	Final competition	https://www.kaggle.com/c/rss-top-performers-prediction	\N	manual	f	f	f	\N	\N	ipynb	Pandas,Python	{}		\N	\N	\N
+639	2021-04-01 14:29:52.270971	2021-04-01 14:37:09.388365	ST 2021	https://github.com/rkhaslarov/rs-school-short-track-2021	\N	auto	f	f	f	rs-school-short-track-2021	https://github.com/rkhaslarov/rs-school-short-track-2021	jstask		{}		\N	\N	\N
+640	2021-04-03 10:32:13.92427	2021-07-13 07:34:45.184634	Html/Css test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt,rs-ge	{}		\N	\N	\N
+641	2021-04-07 20:42:10.851958	2021-04-22 12:21:36.749143	Clean-code: Test for generic principles	https://rolling-scopes-school.github.io/stage0/#/stage1/tests/clean-code-generic-principles-test	\N	auto	f	f	f	\N	\N	selfeducation	clean-code,test,stage1	{}		\N	\N	\N
+642	2021-04-12 06:51:48.539525	2021-04-12 07:43:02.439332	Self-Introduction	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/self-introduction/self-introduction	\N	manual	f	f	f	\N	\N	htmltask	cross-check,self-presentation,stage1	{}		\N	\N	\N
+643	2021-04-13 08:16:49.145559	2021-04-14 05:52:03.673776	Semantic. CSS3 test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+644	2021-04-13 08:36:33.949389	2021-07-21 07:16:52.562083	Flex / Grid test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt,rs-ge	{}		\N	\N	\N
+645	2021-04-18 16:09:38.619468	2021-04-18 16:09:38.619468	online-zoo-w-34-v-1	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+646	2021-04-18 16:10:17.054588	2021-04-18 16:10:17.054588	online-zoo-w-34-v-2	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+647	2021-04-18 16:10:46.756453	2021-04-18 16:10:46.756453	online-zoo-w-34-v-3	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+648	2021-04-18 16:11:15.864407	2021-04-18 16:11:15.864407	online-zoo-w-34-v-4	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+649	2021-04-18 16:11:48.247653	2021-04-18 16:11:48.247653	online-zoo-w-34-v-5	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+650	2021-04-18 16:12:18.705378	2021-04-18 16:12:18.705378	online-zoo-w-34-v-6	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+651	2021-04-19 17:07:46.148707	2021-07-22 08:30:46.745826	theyalow (LT)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/theyalow-en(LT).md	\N	manual	f	f	f	\N	\N	htmltask	rs-lt,rs-ge	{}		\N	\N	\N
+652	2021-04-20 07:22:34.80059	2021-04-20 07:22:34.80059	photo-filter	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/js-projects/photo-filter	\N	manual	f	f	f	\N	\N	jstask	stage1	{}		\N	\N	\N
+653	2021-04-27 17:54:11.564999	2021-05-04 07:36:17.722256	JS Basics test	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/self-test.md	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+654	2021-05-02 14:17:32.626997	2021-05-02 14:53:39.585606	Debug in Node.js	https://example.com	\N	manual	f	f	f	\N	\N	jstask	nodejs,cross-check	{}		\N	\N	\N
+655	2021-05-02 14:18:45.971414	2021-05-28 15:42:33.722491	Typescript basics	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-4-typescript-basics	\N	manual	f	f	f	\N	\N	jstask	nodejs,typescript,cross-check	{}		\N	\N	\N
+656	2021-05-02 14:19:28.225416	2021-06-06 20:25:53.6616	Docker Basics	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-6-docker-basics	\N	manual	f	f	f	\N	\N	jstask	nodejs,docker,cross-check	{}		\N	\N	\N
+657	2021-05-02 14:20:16.880508	2021-06-20 19:16:52.578078	PostgreSQL + Typeorm	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-7-postgresql--typeorm	\N	manual	f	f	f	\N	\N	jstask	nodejs,cross-check	{}		\N	\N	\N
+658	2021-05-02 14:20:42.825012	2021-06-27 20:09:12.145094	Nest.js	https://github.com/rolling-scopes-school/basic-nodejs-2021Q2#task-9-nestjs	\N	manual	f	f	f	\N	\N	jstask	nodejs,cross-check	{}		\N	\N	\N
+659	2021-05-03 13:53:09.236679	2021-05-06 15:57:35.606074	rs.ios.objc.task1	https://github.com/rolling-scopes-school/rs.ios.stage-task1/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task1	https://github.com/rolling-scopes-school/rs.ios.stage-task1	objctask	stage1	{}		\N	\N	\N
+660	2021-05-03 13:54:27.780527	2021-05-13 16:58:24.194514	rs.ios.objc.task2	https://github.com/rolling-scopes-school/rs.ios.stage-task2/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task2	https://github.com/rolling-scopes-school/rs.ios.stage-task2	objctask	stage1	{}		\N	\N	\N
+661	2021-05-03 13:55:39.123913	2021-05-20 14:39:27.068753	rs.ios.objc.task3	https://github.com/rolling-scopes-school/rs.ios.stage-task3/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task3	https://github.com/rolling-scopes-school/rs.ios.stage-task3	objctask	stage1	{}		\N	\N	\N
+662	2021-05-03 16:10:49.681267	2021-05-03 16:10:49.681267	test	http://www.google.com	\N	manual	f	f	f	\N	\N	stage-interview	test	{}		\N	\N	\N
+663	2021-05-04 08:37:07.553302	2021-05-07 14:34:18.073106	JS Functions test	https://example.com	\N	manual	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+664	2021-05-04 12:37:05.984112	2021-05-04 12:38:54.504325	online-zoo-w-56-v-1	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-1	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+665	2021-05-04 12:37:39.756077	2021-05-04 12:39:05.223097	online-zoo-w-56-v-2	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-2	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+666	2021-05-04 12:38:10.637801	2021-05-04 12:39:17.704872	online-zoo-w-56-v-3	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-3	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+667	2021-05-04 12:38:38.846279	2021-05-04 12:39:32.750323	online-zoo-w-56-v-4	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-4	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+668	2021-05-04 12:39:52.288354	2021-05-04 12:39:52.288354	online-zoo-w-56-v-5	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-5	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+669	2021-05-04 12:41:25.656806	2021-05-04 12:41:25.656806	online-zoo-w-56-v-6	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/variant-6	\N	manual	f	f	f	\N	\N	htmltask	stage1,online zoo	{}		\N	\N	\N
+670	2021-05-06 10:30:29.740685	2021-05-06 10:30:29.740685	JS Functions test part 2	https://example.com	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+671	2021-05-07 11:31:44.518467	2021-05-07 11:31:44.518467	Codewars #2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars2.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+672	2021-05-13 08:22:31.158757	2021-05-13 08:22:31.158757	Calculator(LT)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/calculator(LT).md	\N	manual	f	f	f	\N	\N	jstask	rs-lt	{}		\N	\N	\N
+673	2021-05-16 13:31:42.307849	2021-05-16 13:31:42.307849	ST Deep Copy	https://github.com/rolling-scopes-school/RS-Short-Track/wiki/2.-Deep-copy	\N	manual	f	f	f	\N	\N	jstask	ST	{}		\N	\N	\N
+674	2021-05-19 06:11:22.765584	2021-05-19 06:11:22.765584	Interview(LT)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage1-interview(LT).md	\N	manual	f	f	f	\N	\N	interview	rs-lt,stage1,interview	{}		\N	\N	\N
+675	2021-05-19 16:14:25.053477	2021-05-19 16:14:25.053477	ST Checkpoint 1	https://example.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+676	2021-05-20 05:51:02.732991	2021-05-20 05:51:02.732991	DOM API	https://example.com	\N	auto	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+677	2021-05-20 12:01:17.704883	2021-05-20 12:01:17.704883	online-zoo	https://rolling-scopes-school.github.io/stage0/#/stage1/tasks/online-zoo/online-zoo	\N	auto	f	f	f	\N	\N	htmltask	stage1,online zoo,html,css,js	{}		\N	\N	\N
+678	2021-05-21 13:36:43.887646	2021-05-21 13:36:43.887646	Android 2021 - Practice 1 - Randomizer	https://github.com/rolling-scopes-school/rsschool2021-Android-task-randomizer	\N	manual	f	f	f	\N	\N	kotlintask	Android,Kotlin,stage1	{}		\N	\N	\N
+679	2021-05-26 14:01:27.071863	2021-05-26 14:01:27.071863	Match-Match Game	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/match-match-game.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,TypeScript	{}		\N	\N	\N
+680	2021-05-26 14:30:24.634918	2021-05-26 14:30:24.634918	Async Race	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/async-race.md	\N	manual	\N	f	f	\N	\N	JS task		{}		\N	\N	\N
+681	2021-06-03 15:43:16.636933	2021-06-10 17:00:13.376693	rs.ios.swift.task4	https://github.com/rolling-scopes-school/rs.ios.stage-task4/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task4	https://github.com/rolling-scopes-school/rs.ios.stage-task4	objctask	stage2	{}		\N	\N	\N
+682	2021-06-03 17:00:30.151954	2021-06-11 08:11:45.792399	Inheritance Test (LT)	https://example.com	\N	manual	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+683	2021-06-08 15:08:20.85744	2021-06-08 15:08:20.85744	ST Checkpoint 2	https://example.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+684	2021-06-09 13:27:53.269173	2021-06-09 13:27:53.269173	Android 2021 - Practice 2 - Quiz	https://github.com/rolling-scopes-school/rsschool2021-Android-task-quiz	\N	manual	f	f	f	\N	\N	kotlintask	stage1,Android,Kotlin,cross-check	{}		\N	\N	\N
+685	2021-06-10 08:08:46.270232	2021-06-10 08:09:09.092384	ST CRP course	https://www.udacity.com/course/website-performance-optimization--ud884	\N	manual	f	f	f	\N	\N	htmltask	st	{}		\N	\N	\N
+686	2021-06-10 16:51:59.094555	2021-06-10 17:05:58.337933	rs.ios.swift.task5	https://github.com/rolling-scopes-school/rs.ios.stage-task5/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task5	https://github.com/rolling-scopes-school/rs.ios.stage-task5	objctask	stage2	{}		\N	\N	\N
+687	2021-06-10 18:57:54.547085	2021-06-10 18:57:54.547085	Async test	https://example.com	\N	manual	f	f	f	\N	\N	selfeducation	rs-lt	{}		\N	\N	\N
+688	2021-06-11 08:03:40.16882	2021-06-11 08:03:40.16882	Async Race. Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/async-race.md#cross-check	\N	manual	f	f	f	\N	\N	jstask	stage2 ,cross-check	{}		\N	\N	\N
+689	2021-06-17 16:48:43.28106	2021-06-17 16:48:43.28106	rs.ios.swift.task6	https://github.com/rolling-scopes-school/rs.ios.stage-task6/blob/main/README.md	\N	auto	f	f	f	rs.ios.stage-task6	https://github.com/rolling-scopes-school/rs.ios.stage-task6	objctask	stage2	{}		\N	\N	\N
+690	2021-06-20 16:40:22.899085	2021-06-22 14:18:21.578778	English for kids S1E1. Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,cross-check,stage2	{}		\N	\N	\N
+691	2021-06-20 16:43:38.061004	2021-06-22 14:17:41.169677	Chess S1E1. Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-one.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,cross-check,stage2	{}		\N	\N	\N
+692	2021-06-21 13:42:46.349301	2021-06-22 14:15:10.391564	English for kids S1E1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2	{}		\N	\N	\N
+693	2021-06-21 13:43:09.688432	2021-06-22 14:17:13.581254	Chess S1E1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-one.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2	{}		\N	\N	\N
+694	2021-06-22 14:19:43.29645	2021-06-22 14:19:43.29645	English for kids S1E2. Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md	\N	manual	f	f	f	\N	\N	jstask	stage2 ,TypeScript,cross-check	{}		\N	\N	\N
+695	2021-06-22 14:20:29.274537	2021-06-24 18:43:34.398904	Chess S1E2. Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2 ,cross-check	{}		\N	\N	\N
+696	2021-06-22 14:22:03.421406	2021-06-22 14:22:03.421406	English for kids S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2	{}		\N	\N	\N
+697	2021-06-23 09:50:14.00401	2021-07-25 05:31:50.361822	Chess S1E2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/chess/codejam-chess-part-two.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2	{}		\N	\N	\N
+698	2021-06-23 09:51:49.128203	2021-06-23 09:51:49.128203	English for kids S1E2. Cross-check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-admin-panel.md	\N	manual	f	f	f	\N	\N	jstask	TypeScript,stage2 ,cross-check	{}		\N	\N	\N
+699	2021-06-29 14:04:45.230899	2021-06-29 14:04:45.230899	rs.ios.crosscheck.task7	https://github.com/rolling-scopes-school/rs.ios.stage-task7	\N	manual	f	f	f	\N	\N	objctask	stage3	{}		\N	\N	\N
+700	2021-07-02 16:38:03.731078	2021-07-02 16:38:03.731078	Codewars Data Types	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/data-types.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+701	2021-07-02 16:47:46.456174	2021-07-02 16:47:46.456174	Codewars Functions	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/functions.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+702	2021-07-02 16:52:48.911494	2021-07-02 16:52:48.911494	Codewars Objects & Arrays	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/objects-arrays.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+703	2021-07-02 16:58:40.753701	2021-07-02 16:58:40.753701	Codewars Algorithms-1	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/algorithms-1.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+704	2021-07-02 17:04:13.971816	2021-07-03 12:37:16.362491	Codewars Algorithms-2	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/codewars/algorithms-2.md	\N	auto	f	f	f	\N	\N	codewars	codewars	{}		\N	\N	\N
+705	2021-07-04 19:19:47.54283	2021-07-04 19:19:47.54283	Android 2021 - Practice 3 - Pomodoro	https://github.com/rolling-scopes-school/RSShool2021-Android-task-Pomodoro	\N	manual	f	f	f	\N	\N	kotlintask	Android,Kotlin,stage1,cross-check	{}		\N	\N	\N
+706	2021-07-05 08:13:38.447765	2021-07-05 08:13:38.447765	[ST] Checkpoint 3	https://example.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+707	2021-07-05 12:36:27.332959	2021-07-06 07:12:39.982334	Test HTML Basics [RU]	https://ru.code-basics.com/languages/html	\N	auto	f	f	f	\N	\N	selfeducation	html	{}		\N	\N	\N
+708	2021-07-06 21:03:43.537339	2021-07-06 21:03:43.537339	HTML Quiz	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	html	{}		\N	\N	\N
+709	2021-07-06 21:04:36.087632	2021-07-06 21:04:36.087632	CSS Quiz	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	css	{}		\N	\N	\N
+710	2021-07-06 21:05:14.935484	2021-07-06 21:05:14.935484	JS Quiz	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	js	{}		\N	\N	\N
+711	2021-07-06 21:05:58.610129	2021-07-06 21:06:08.839616	ReactJs Quiz	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	react	{}		\N	\N	\N
+712	2021-07-09 09:50:48.828546	2021-07-09 09:50:48.828546	Angular Shop	https://github.com/rolling-scopes-school/tasks	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+713	2021-07-09 09:53:06.989516	2021-07-09 09:53:06.989516	Angular Shop. Cross-check	https://rs-lang-cross-check.netlify.app/	\N	manual	f	f	f	\N	\N	jstask	Angular	{}		\N	\N	\N
+714	2021-07-12 16:39:31.049741	2021-07-12 16:39:31.049741	[ST] Final checkpoint	https://example.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+715	2021-07-13 01:56:27.706355	2021-07-21 02:05:29.234568	React. Components	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-components.md	\N	manual	f	f	f	\N	\N	jstask	react,js	{}		\N	\N	\N
+716	2021-07-13 01:59:06.630799	2021-07-13 01:59:06.630799	React. Forms	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-forms.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+717	2021-07-13 01:59:57.193405	2021-07-13 01:59:57.193405	React. Redux	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-redux.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+718	2021-07-13 02:00:40.399879	2021-07-13 02:00:40.399879	React. Routing	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-routing.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+719	2021-07-13 02:01:22.630194	2021-07-13 02:01:22.630194	React. API	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-api.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+720	2021-07-13 02:02:18.901305	2021-07-13 02:02:18.901305	React. Testing	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-testing.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+721	2021-07-13 02:03:39.899612	2021-07-13 02:03:39.899612	React. SSR*	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-ssr.md	\N	manual	f	f	f	\N	\N	jstask	react	{}		\N	\N	\N
+722	2021-07-13 11:51:08.864691	2021-07-13 11:51:08.864691	Git Quiz	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	git	{}		\N	\N	\N
+723	2021-07-15 07:00:13.193068	2021-07-15 07:00:13.193068	English for kids( EN)	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/english-for-kids-translated.md	\N	manual	f	f	f	\N	\N	jstask	rs-lt,rs-ge,stage2	{}		\N	\N	\N
+724	2021-07-15 07:18:55.566964	2021-07-15 13:08:12.925631	Test CSS Basics [RU]	https://ru.code-basics.com/languages/css	\N	manual	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
+725	2021-07-15 16:07:15.120253	2021-07-15 16:07:15.120253	rs.ios.crosscheck.task8	https://github.com/rolling-scopes-school/rs.ios.stage-task8	\N	manual	f	f	f	\N	\N	objctask	stage3	{}		\N	\N	\N
+726	2021-07-20 03:39:54.174636	2021-07-20 03:39:54.174636	Museum	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/museum/museum.md	\N	manual	f	f	f	\N	\N	htmltask	stage0,cross-check	{}		\N	\N	\N
+727	2021-07-20 07:20:25.761953	2021-07-20 17:18:06.275459	Test Algorithms & Data structures	https://www.youtube.com/playlist?list=PLP-a1IHLCS7PqDf08LFIYCiTYY1CtoAkt	\N	manual	f	f	f	\N	\N	selfeducation	stage0,algorithms	{}		\N	\N	\N
+728	2021-07-22 07:59:30.138616	2021-07-22 07:59:30.138616	[UZ] RS-lang Backend	https://example.com	\N	manual	f	f	f	\N	\N	jstask		{}		\N	\N	\N
+729	2021-07-22 17:07:21.458164	2021-07-22 17:39:29.902012	Drum Kit	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-1.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+730	2021-07-22 17:08:05.196206	2021-07-22 17:08:05.196206	JS Clock	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-2.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+731	2021-07-22 17:08:44.272934	2021-07-22 17:08:44.272934	Vertical Slider	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-3.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+732	2021-07-22 17:09:31.573179	2021-07-22 17:35:00.094133	Video Speed Controller	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-4.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+733	2021-07-22 17:10:07.813794	2021-07-22 17:10:07.813794	Photofilter	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-5.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+734	2021-07-22 17:10:39.403863	2021-07-22 17:41:32.343542	Whack-A-Mole	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/js30/js30-6.md	\N	manual	f	f	f	\N	\N	jstask	stage0,js	{}		\N	\N	\N
+735	2021-07-26 04:57:34.397304	2021-07-27 07:39:38.807563	Test JS Basics [RU]	https://ru.code-basics.com/languages/javascript	\N	manual	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
+736	2021-07-27 20:49:41.263593	2021-07-27 20:49:41.263593	rs.ios.crosscheck.task9	https://github.com/rolling-scopes-school/rs.ios.stage-task9	\N	manual	f	f	f	\N	\N	objctask	stage3	{}		\N	\N	\N
+498	2022-03-27 11:50:14.892444	2022-03-27 11:50:14.892444	test	https://example.com		\N	\N	f	f	\N	\N	Kotlin task		{}		\N	\N	\N
+\.
 
 
 --
@@ -3886,6 +3941,8 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_artefact; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_artefact (id, "createdDate", "updatedDate", "courseTaskId", "studentId", "videoUrl", "presentationUrl", comment) FROM stdin;
+\.
 
 
 --
@@ -3894,6 +3951,8 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_checker; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_checker (id, "createdDate", "updatedDate", "courseTaskId", "studentId", "mentorId") FROM stdin;
+\.
 
 
 --
@@ -3902,6 +3961,8 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_criteria; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_criteria ("taskId", "createdDate", "updatedDate", criteria) FROM stdin;
+\.
 
 
 --
@@ -3910,6 +3971,8 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_interview_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_interview_result (id, "createdDate", "updatedDate", "courseTaskId", "studentId", "mentorId", "formAnswers", score, comment) FROM stdin;
+\.
 
 
 --
@@ -3918,6 +3981,8 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_interview_student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_interview_student (id, "createdDate", "updatedDate", "studentId", "courseId", "courseTaskId") FROM stdin;
+\.
 
 
 --
@@ -3926,17 +3991,18 @@ INSERT INTO public.task VALUES (498, '2022-03-27 11:50:14.892444', '2022-03-27 1
 -- Data for Name: task_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.task_result VALUES (78642, '2021-07-28 21:18:25.107083', '2021-07-28 21:18:25.107083', NULL, NULL, 500, 'Very good task solution! I like it!', 14337, 979, '[{"authorId":2595,"score":500,"dateTime":1627507105089,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78643, '2021-07-28 21:18:35.624298', '2021-07-28 21:18:35.624298', NULL, NULL, 700, 'Very good task solution! I like it!', 14340, 979, '[{"authorId":2595,"score":700,"dateTime":1627507115622,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78644, '2021-07-28 21:18:45.007131', '2021-07-28 21:18:45.007131', NULL, NULL, 45, 'Very good task solution! I like it!', 14346, 929, '[{"authorId":2595,"score":45,"dateTime":1627507124998,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78645, '2021-07-28 21:18:57.747085', '2021-07-28 21:18:57.747085', NULL, NULL, 120, 'Very good task solution! I like it!', 14337, 945, '[{"authorId":2595,"score":120,"dateTime":1627507137729,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78646, '2021-07-28 21:19:25.513612', '2021-07-28 21:19:25.513612', NULL, NULL, 355, 'Very good task solution! I like it!', 14340, 981, '[{"authorId":2595,"score":355,"dateTime":1627507165497,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78647, '2021-07-28 21:19:35.132131', '2021-07-28 21:19:35.132131', NULL, NULL, 360, 'Very good task solution! I like it!', 14340, 977, '[{"authorId":2595,"score":360,"dateTime":1627507175130,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78648, '2021-07-28 21:19:42.924362', '2021-07-28 21:19:42.924362', NULL, NULL, 160, 'Very good task solution! I like it!', 14340, 928, '[{"authorId":2595,"score":160,"dateTime":1627507182916,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78649, '2021-07-28 21:19:58.344963', '2021-07-28 21:19:58.344963', NULL, NULL, 160, 'Very good task solution! I like it!', 14346, 928, '[{"authorId":2595,"score":160,"dateTime":1627507198326,"comment":"Very good task solution! I like it!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78650, '2021-07-28 21:21:53.845892', '2021-07-28 21:21:53.845892', NULL, NULL, 100, 'Very good task. I like it! Keep going!', 14340, 864, '[{"authorId":2595,"score":100,"dateTime":1627507313823,"comment":"Very good task. I like it! Keep going!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78651, '2021-07-28 21:22:01.000726', '2021-07-28 21:22:01.000726', NULL, NULL, 355, 'Very good task. I like it! Keep going!', 14346, 981, '[{"authorId":2595,"score":355,"dateTime":1627507320974,"comment":"Very good task. I like it! Keep going!"}]', '[]', 2595);
-INSERT INTO public.task_result VALUES (78652, '2023-01-04 11:51:51.531729', '2023-01-04 11:51:51.531729', NULL, NULL, 12, '', 14347, 979, '[{"authorId":2595,"score":12,"dateTime":1672833111524,"comment":""}]', '[]', 2595);
+COPY public.task_result (id, "createdDate", "updatedDate", "githubPrUrl", "githubRepoUrl", score, comment, "studentId", "courseTaskId", "historicalScores", "juryScores", "lastCheckerId") FROM stdin;
+78642	2021-07-28 21:18:25.107083	2021-07-28 21:18:25.107083	\N	\N	500	Very good task solution! I like it!	14337	979	[{"authorId":2595,"score":500,"dateTime":1627507105089,"comment":"Very good task solution! I like it!"}]	[]	2595
+78643	2021-07-28 21:18:35.624298	2021-07-28 21:18:35.624298	\N	\N	700	Very good task solution! I like it!	14340	979	[{"authorId":2595,"score":700,"dateTime":1627507115622,"comment":"Very good task solution! I like it!"}]	[]	2595
+78644	2021-07-28 21:18:45.007131	2021-07-28 21:18:45.007131	\N	\N	45	Very good task solution! I like it!	14346	929	[{"authorId":2595,"score":45,"dateTime":1627507124998,"comment":"Very good task solution! I like it!"}]	[]	2595
+78645	2021-07-28 21:18:57.747085	2021-07-28 21:18:57.747085	\N	\N	120	Very good task solution! I like it!	14337	945	[{"authorId":2595,"score":120,"dateTime":1627507137729,"comment":"Very good task solution! I like it!"}]	[]	2595
+78646	2021-07-28 21:19:25.513612	2021-07-28 21:19:25.513612	\N	\N	355	Very good task solution! I like it!	14340	981	[{"authorId":2595,"score":355,"dateTime":1627507165497,"comment":"Very good task solution! I like it!"}]	[]	2595
+78647	2021-07-28 21:19:35.132131	2021-07-28 21:19:35.132131	\N	\N	360	Very good task solution! I like it!	14340	977	[{"authorId":2595,"score":360,"dateTime":1627507175130,"comment":"Very good task solution! I like it!"}]	[]	2595
+78648	2021-07-28 21:19:42.924362	2021-07-28 21:19:42.924362	\N	\N	160	Very good task solution! I like it!	14340	928	[{"authorId":2595,"score":160,"dateTime":1627507182916,"comment":"Very good task solution! I like it!"}]	[]	2595
+78649	2021-07-28 21:19:58.344963	2021-07-28 21:19:58.344963	\N	\N	160	Very good task solution! I like it!	14346	928	[{"authorId":2595,"score":160,"dateTime":1627507198326,"comment":"Very good task solution! I like it!"}]	[]	2595
+78650	2021-07-28 21:21:53.845892	2021-07-28 21:21:53.845892	\N	\N	100	Very good task. I like it! Keep going!	14340	864	[{"authorId":2595,"score":100,"dateTime":1627507313823,"comment":"Very good task. I like it! Keep going!"}]	[]	2595
+78651	2021-07-28 21:22:01.000726	2021-07-28 21:22:01.000726	\N	\N	355	Very good task. I like it! Keep going!	14346	981	[{"authorId":2595,"score":355,"dateTime":1627507320974,"comment":"Very good task. I like it! Keep going!"}]	[]	2595
+\.
 
 
 --
@@ -3945,23 +4011,25 @@ INSERT INTO public.task_result VALUES (78652, '2023-01-04 11:51:51.531729', '202
 -- Data for Name: task_solution; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.task_solution VALUES (3330, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14327, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3331, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14328, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3332, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14329, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3333, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14330, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3334, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14331, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3335, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14332, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3336, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14333, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3337, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14334, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3338, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14335, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3339, '2020-09-24 18:55:43.0769', '2020-09-24 18:55:43.0769', 386, 14336, 'https://example.com', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3340, '2023-01-05 09:26:39.828087', '2023-01-05 09:26:39.828087', 432, 14347, 'http://localhost:3000/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3341, '2023-01-05 09:28:10.601338', '2023-01-05 09:28:10.601338', 432, 14340, 'https://app.rs.school/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3342, '2023-01-05 09:29:27.74967', '2023-01-05 09:29:27.74967', 432, 14337, 'http://localhost:3000/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3343, '2023-01-05 09:30:54.059754', '2023-01-05 09:30:54.059754', 432, 14346, 'https://app.rs.school/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3344, '2023-01-05 09:32:14.558403', '2023-01-05 09:32:14.558403', 432, 14341, 'http://localhost:3000/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3345, '2023-01-05 09:33:35.674968', '2023-01-05 09:33:35.674968', 432, 14342, 'https://app.rs.school/', '[]', '[]');
-INSERT INTO public.task_solution VALUES (3346, '2023-01-05 09:35:24.393744', '2023-01-05 09:35:24.393744', 432, 14343, 'http://localhost:3000/', '[]', '[]');
+COPY public.task_solution (id, "createdDate", "updatedDate", "courseTaskId", "studentId", url, review, comments) FROM stdin;
+3330	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14327	https://example.com	[]	[]
+3331	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14328	https://example.com	[]	[]
+3332	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14329	https://example.com	[]	[]
+3333	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14330	https://example.com	[]	[]
+3334	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14331	https://example.com	[]	[]
+3335	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14332	https://example.com	[]	[]
+3336	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14333	https://example.com	[]	[]
+3337	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14334	https://example.com	[]	[]
+3338	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14335	https://example.com	[]	[]
+3339	2020-09-24 18:55:43.0769	2020-09-24 18:55:43.0769	386	14336	https://example.com	[]	[]
+3340	2023-01-05 13:41:34.545376	2023-01-05 13:41:34.545376	432	14340	https://app.rs.school/	[]	[]
+3341	2023-01-05 13:42:54.419426	2023-01-05 13:42:54.419426	432	14337	https://app.rs.school/	[]	[]
+3342	2023-01-05 13:44:05.368637	2023-01-05 13:44:05.368637	432	14346	http://localhost:3000/	[]	[]
+3343	2023-01-05 13:51:43.867839	2023-01-05 13:51:43.867839	432	14341	http://localhost:3000/	[]	[]
+3344	2023-01-05 13:53:02.498051	2023-01-05 13:53:02.498051	432	14342	http://localhost:3000/	[]	[]
+3345	2023-01-05 13:54:22.519375	2023-01-05 13:54:22.519375	432	14343	https://app.rs.school/	[]	[]
+3346	2023-01-05 13:55:43.964933	2023-01-05 13:55:43.964933	432	14345	https://app.rs.school/	[]	[]
+\.
 
 
 --
@@ -3970,16 +4038,18 @@ INSERT INTO public.task_solution VALUES (3346, '2023-01-05 09:35:24.393744', '20
 -- Data for Name: task_solution_checker; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.task_solution_checker VALUES (11568, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3336, 14333, 14332);
-INSERT INTO public.task_solution_checker VALUES (11569, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3337, 14334, 14327);
-INSERT INTO public.task_solution_checker VALUES (11570, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3338, 14335, 14334);
-INSERT INTO public.task_solution_checker VALUES (11571, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3332, 14329, 14335);
-INSERT INTO public.task_solution_checker VALUES (11572, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3335, 14332, 14336);
-INSERT INTO public.task_solution_checker VALUES (11573, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3334, 14331, 14330);
-INSERT INTO public.task_solution_checker VALUES (11574, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3339, 14336, 14329);
-INSERT INTO public.task_solution_checker VALUES (11575, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3331, 14328, 14331);
-INSERT INTO public.task_solution_checker VALUES (11576, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3333, 14330, 14333);
-INSERT INTO public.task_solution_checker VALUES (11577, '2020-09-24 18:55:51.350257', '2020-09-24 18:55:51.350257', 386, 3330, 14327, 14328);
+COPY public.task_solution_checker (id, "createdDate", "updatedDate", "courseTaskId", "taskSolutionId", "studentId", "checkerId") FROM stdin;
+11568	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3336	14333	14332
+11569	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3337	14334	14327
+11570	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3338	14335	14334
+11571	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3332	14329	14335
+11572	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3335	14332	14336
+11573	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3334	14331	14330
+11574	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3339	14336	14329
+11575	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3331	14328	14331
+11576	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3333	14330	14333
+11577	2020-09-24 18:55:51.350257	2020-09-24 18:55:51.350257	386	3330	14327	14328
+\.
 
 
 --
@@ -3988,11 +4058,9 @@ INSERT INTO public.task_solution_checker VALUES (11577, '2020-09-24 18:55:51.350
 -- Data for Name: task_solution_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.task_solution_result VALUES (10812, '2020-09-24 18:57:05.786416', '2020-09-24 18:57:05.786416', 386, 14334, 14327, 50, '[{"score":50,"comment":"50 points.\n\n+10 - blah-blah-blah\n+20 - blah-blah-blah\n+30 - blah-blah-blah","anonymous":false,"authorId":11563,"dateTime":1600973825778}]', '50 points.
-
-+10 - blah-blah-blah
-+20 - blah-blah-blah
-+30 - blah-blah-blah', false, '[]', '[]');
+COPY public.task_solution_result (id, "createdDate", "updatedDate", "courseTaskId", "studentId", "checkerId", score, "historicalScores", comment, anonymous, review, messages) FROM stdin;
+10812	2020-09-24 18:57:05.786416	2020-09-24 18:57:05.786416	386	14334	14327	50	[{"score":50,"comment":"50 points.\\n\\n+10 - blah-blah-blah\\n+20 - blah-blah-blah\\n+30 - blah-blah-blah","anonymous":false,"authorId":11563,"dateTime":1600973825778}]	50 points.\n\n+10 - blah-blah-blah\n+20 - blah-blah-blah\n+30 - blah-blah-blah	f	[]	[]
+\.
 
 
 --
@@ -4001,6 +4069,8 @@ INSERT INTO public.task_solution_result VALUES (10812, '2020-09-24 18:57:05.7864
 -- Data for Name: task_verification; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.task_verification (id, "createdDate", "updatedDate", "studentId", "courseTaskId", details, status, score, metadata) FROM stdin;
+\.
 
 
 --
@@ -4009,6 +4079,8 @@ INSERT INTO public.task_solution_result VALUES (10812, '2020-09-24 18:57:05.7864
 -- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.team (id, name, description, "chatLink", password, "teamDistributionId") FROM stdin;
+\.
 
 
 --
@@ -4017,17 +4089,8 @@ INSERT INTO public.task_solution_result VALUES (10812, '2020-09-24 18:57:05.7864
 -- Data for Name: team_distribution; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public.team_distribution VALUES (12, '2023-01-04 13:32:55.453244', '2023-01-04 13:32:55.453244', 23, '2023-01-03 00:00:00+00', '2023-01-19 23:59:00+00', 'Shelter', '', 2, 4, 3, true, 0, '');
-INSERT INTO public.team_distribution VALUES (13, '2023-01-04 13:34:12.989779', '2023-01-04 13:34:12.989779', 23, '2023-01-03 00:00:00+00', '2023-01-31 23:59:00+00', 'test12', 'd sdfcvsdfv fccbfcgbdgfbjfdgbjd rtl;g erg df
-g fdsg
-dsf g
-dsf g
- dsf
-g
-sd fg
- dfg
-sd', 2, 4, 3, true, 0, '');
-INSERT INTO public.team_distribution VALUES (11, '2023-01-04 12:58:47.605922', '2023-01-05 08:05:59.137539', 23, '2023-01-06 00:00:00+00', '2023-01-07 23:59:00+00', 'Valery', '', 2, 4, 3, true, 0, '');
+COPY public.team_distribution (id, "createdDate", "updatedDate", "courseId", "startDate", "endDate", name, description, "minStudents", "maxStudents", "studentsCount", "strictStudentsCount", "minTotalScore", "descriptionUrl") FROM stdin;
+\.
 
 
 --
@@ -4036,6 +4099,8 @@ INSERT INTO public.team_distribution VALUES (11, '2023-01-04 12:58:47.605922', '
 -- Data for Name: typeorm_metadata; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.typeorm_metadata (type, database, schema, "table", name, value) FROM stdin;
+\.
 
 
 --
@@ -4044,36 +4109,38 @@ INSERT INTO public.team_distribution VALUES (11, '2023-01-04 12:58:47.605922', '
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-INSERT INTO public."user" VALUES (11564, 'dyexplode', '', '', '2022-02-18 22:02:49.245928', '2022-02-18 22:02:49.245928', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[]', '[]', NULL, NULL, NULL, '[]', NULL, NULL, NULL, 1645221769228, true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, NULL, '', '');
-INSERT INTO public."user" VALUES (11563, 'apalchys', '', '', '2020-04-06 15:12:34.19737', '2020-04-06 15:15:02.729722', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[]', '[]', NULL, NULL, NULL, '[]', NULL, false, NULL, 1586185954173, true, 'test@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '11563', 'github');
-INSERT INTO public."user" VALUES (2693, 'viktoriyavorozhun', NULL, NULL, '2019-04-24 13:42:45.500139', '2019-10-18 08:07:58.858658', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2693', 'github');
-INSERT INTO public."user" VALUES (2098, 'yauhenkavalchuk', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-11-12 11:22:33.350237', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567594678450, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2098', 'github');
-INSERT INTO public."user" VALUES (2103, 'shastel', NULL, NULL, '2019-04-17 11:41:21.396686', '2020-03-28 19:57:33.715031', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1566996696787, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2103', 'github');
-INSERT INTO public."user" VALUES (5481, 'alreadybored', NULL, NULL, '2019-09-09 17:27:41.909149', '2020-03-22 14:10:37.252351', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1568050061907, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '5481', 'github');
-INSERT INTO public."user" VALUES (2115, 'rootthelure', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-06-10 14:20:21.551616', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2115', 'github');
-INSERT INTO public."user" VALUES (2480, 'pavelrazuvalau', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-11-05 16:52:28.602784', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567072599465, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2480', 'github');
-INSERT INTO public."user" VALUES (2612, 'dmitryromaniuk', NULL, NULL, '2019-04-24 13:42:44.206396', '2019-12-26 08:27:30.060107', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2612', 'github');
-INSERT INTO public."user" VALUES (10031, 'artem-bagritsevich', NULL, NULL, '2020-02-11 08:38:35.202688', '2020-03-05 11:50:05.118784', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1581410315197, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '10031', 'github');
-INSERT INTO public."user" VALUES (2032, 'mikhama', NULL, NULL, '2019-04-17 11:41:21.396686', '2020-02-24 09:36:43.272628', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567578141812, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2032', 'github');
-INSERT INTO public."user" VALUES (1328, 'davojta', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-09-07 04:28:42.419938', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567830522415, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '1328', 'github');
-INSERT INTO public."user" VALUES (3961, 'sergeyshalyapin', NULL, NULL, '2019-05-15 14:49:46.402468', '2020-02-12 08:17:55.231843', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '3961', 'github');
-INSERT INTO public."user" VALUES (4476, 'abramenal', NULL, NULL, '2019-09-02 12:28:32.979516', '2020-03-01 21:13:30.351302', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1567427312977, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '4476', 'github');
-INSERT INTO public."user" VALUES (10130, 'sixtyxi', NULL, NULL, '2020-02-13 11:35:19.12045', '2020-02-13 11:35:19.12045', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1581593719117, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '10130', 'github');
-INSERT INTO public."user" VALUES (7485, 'rootical', NULL, NULL, '2019-12-19 12:07:57.161662', '2020-03-05 18:51:41.896803', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1576757277159, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '7485', 'github');
-INSERT INTO public."user" VALUES (606, 'irinainina', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-08-28 17:19:48.460791', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567012788456, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '606', 'github');
-INSERT INTO public."user" VALUES (6776, 'ksenia-mahilnaya', NULL, NULL, '2019-09-17 11:16:55.976071', '2019-09-17 12:19:51.740451', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1568719015974, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '6776', 'github');
-INSERT INTO public."user" VALUES (1090, 'pulya10c', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-09-13 10:21:35.108464', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567492440483, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '1090', 'github');
-INSERT INTO public."user" VALUES (4428, 'egngron', NULL, NULL, '2019-08-06 12:06:24.920343', '2019-08-06 12:06:24.920343', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '4428', 'github');
-INSERT INTO public."user" VALUES (4749, 'studentluffi', NULL, NULL, '2019-09-09 10:09:09.275849', '2019-09-09 10:09:28.91177', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, false, 'a1', 1568023749273, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '4749', 'github');
-INSERT INTO public."user" VALUES (587, 'sijioth', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-06-10 14:20:03.059291', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '587', 'github');
-INSERT INTO public."user" VALUES (2084, 'dzmitry-varabei', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-09-05 10:13:27.273815', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567678407268, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2084', 'github');
-INSERT INTO public."user" VALUES (2444, 'toshabely', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-08-22 11:56:20.531337', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2444', 'github');
-INSERT INTO public."user" VALUES (2277, 'anv21', NULL, NULL, '2019-04-17 11:41:21.396686', '2020-01-18 11:47:48.686227', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1567683807154, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2277', 'github');
-INSERT INTO public."user" VALUES (3493, 'humanamburu', NULL, NULL, '2019-04-25 06:42:53.208093', '2019-09-24 11:22:04.181665', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 0, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '3493', 'github');
-INSERT INTO public."user" VALUES (2549, 'kvtofan', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-09-24 14:56:49.229102', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1563521151921, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2549', 'github');
-INSERT INTO public."user" VALUES (2089, 'yuliahope', NULL, NULL, '2019-04-17 11:41:21.396686', '2019-08-29 11:15:32.412097', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1566418583423, true, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2089', 'github');
-INSERT INTO public."user" VALUES (677, 'amoebiusss', 'Test 1', 'Last Name', '2019-04-17 11:41:21.396686', '2020-04-06 15:30:27.059612', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, NULL, 'a1', 1568012639853, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '677', 'github');
-INSERT INTO public."user" VALUES (2595, 'anik188', NULL, NULL, '2019-04-24 13:42:43.967659', '2023-01-02 07:51:17.108113', NULL, NULL, 'm', NULL, NULL, 'Minsk', '12158', '[]', '[]', 'hello@epam.com', '+375297777777', 'hello@example.com', '[]', NULL, true, 'a1', 1567423260809, false, 'primary@example.com', 'pavel_durov', NULL, 'do not call me', 'i am a bad guy', NULL, NULL, 'Belarus', 'Minsk', false, NULL, NULL, NULL, '2595', 'github');
+COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "updatedDate", "firstNameNative", "lastNameNative", "tshirtSize", "tshirtFashion", "dateOfBirth", "locationName", "locationId", "educationHistory", "employmentHistory", "contactsEpamEmail", "contactsPhone", "contactsEmail", "externalAccounts", "epamApplicantId", activist, "englishLevel", "lastActivityTime", "isActive", "primaryEmail", "contactsTelegram", "contactsSkype", "contactsNotes", "aboutMyself", "contactsLinkedIn", "profilePermissionsId", "countryName", "cityName", "opportunitiesConsent", "cvLink", "militaryService", discord, "providerUserId", provider) FROM stdin;
+11564	dyexplode			2022-02-18 22:02:49.245928	2022-02-18 22:02:49.245928	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	\N	\N	1645221769228	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	f	\N	\N	\N		
+11563	apalchys			2020-04-06 15:12:34.19737	2020-04-06 15:15:02.729722	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	f	\N	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	f	\N	\N	\N	11563	github
+2693	viktoriyavorozhun	\N	\N	2019-04-24 13:42:45.500139	2019-10-18 08:07:58.858658	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2693	github
+2098	yauhenkavalchuk	\N	\N	2019-04-17 11:41:21.396686	2019-11-12 11:22:33.350237	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567594678450	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2098	github
+2103	shastel	\N	\N	2019-04-17 11:41:21.396686	2020-03-28 19:57:33.715031	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566996696787	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2103	github
+5481	alreadybored	\N	\N	2019-09-09 17:27:41.909149	2020-03-22 14:10:37.252351	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568050061907	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	5481	github
+2115	rootthelure	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:21.551616	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2115	github
+2480	pavelrazuvalau	\N	\N	2019-04-17 11:41:21.396686	2019-11-05 16:52:28.602784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567072599465	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2480	github
+2612	dmitryromaniuk	\N	\N	2019-04-24 13:42:44.206396	2019-12-26 08:27:30.060107	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2612	github
+10031	artem-bagritsevich	\N	\N	2020-02-11 08:38:35.202688	2020-03-05 11:50:05.118784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581410315197	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10031	github
+2032	mikhama	\N	\N	2019-04-17 11:41:21.396686	2020-02-24 09:36:43.272628	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567578141812	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2032	github
+1328	davojta	\N	\N	2019-04-17 11:41:21.396686	2019-09-07 04:28:42.419938	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567830522415	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1328	github
+3961	sergeyshalyapin	\N	\N	2019-05-15 14:49:46.402468	2020-02-12 08:17:55.231843	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3961	github
+4476	abramenal	\N	\N	2019-09-02 12:28:32.979516	2020-03-01 21:13:30.351302	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1567427312977	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4476	github
+10130	sixtyxi	\N	\N	2020-02-13 11:35:19.12045	2020-02-13 11:35:19.12045	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581593719117	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10130	github
+7485	rootical	\N	\N	2019-12-19 12:07:57.161662	2020-03-05 18:51:41.896803	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1576757277159	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	7485	github
+606	irinainina	\N	\N	2019-04-17 11:41:21.396686	2019-08-28 17:19:48.460791	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567012788456	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	606	github
+2595	anik188	\N	\N	2019-04-24 13:42:43.967659	2020-03-06 15:43:33.384469	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	t	a1	1567423260809	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2595	github
+6776	ksenia-mahilnaya	\N	\N	2019-09-17 11:16:55.976071	2019-09-17 12:19:51.740451	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568719015974	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	6776	github
+1090	pulya10c	\N	\N	2019-04-17 11:41:21.396686	2019-09-13 10:21:35.108464	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567492440483	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1090	github
+4428	egngron	\N	\N	2019-08-06 12:06:24.920343	2019-08-06 12:06:24.920343	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4428	github
+4749	studentluffi	\N	\N	2019-09-09 10:09:09.275849	2019-09-09 10:09:28.91177	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568023749273	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4749	github
+587	sijioth	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:03.059291	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	587	github
+2084	dzmitry-varabei	\N	\N	2019-04-17 11:41:21.396686	2019-09-05 10:13:27.273815	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567678407268	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2084	github
+2444	toshabely	\N	\N	2019-04-17 11:41:21.396686	2019-08-22 11:56:20.531337	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2444	github
+2277	anv21	\N	\N	2019-04-17 11:41:21.396686	2020-01-18 11:47:48.686227	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567683807154	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2277	github
+3493	humanamburu	\N	\N	2019-04-25 06:42:53.208093	2019-09-24 11:22:04.181665	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3493	github
+2549	kvtofan	\N	\N	2019-04-17 11:41:21.396686	2019-09-24 14:56:49.229102	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1563521151921	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2549	github
+2089	yuliahope	\N	\N	2019-04-17 11:41:21.396686	2019-08-29 11:15:32.412097	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566418583423	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2089	github
+677	amoebiusss	Test 1	Last Name	2019-04-17 11:41:21.396686	2020-04-06 15:30:27.059612	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1568012639853	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	677	github
+\.
 
 
 --
@@ -4082,6 +4149,8 @@ INSERT INTO public."user" VALUES (2595, 'anik188', NULL, NULL, '2019-04-24 13:42
 -- Data for Name: user_group; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
+COPY public.user_group (id, "createdDate", "updatedDate", name, users, roles) FROM stdin;
+\.
 
 
 --
@@ -4171,7 +4240,7 @@ SELECT pg_catalog.setval('public.cv_id_seq', 1, false);
 -- Name: discipline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.discipline_id_seq', 1, true);
+SELECT pg_catalog.setval('public.discipline_id_seq', 2, true);
 
 
 --
@@ -4207,7 +4276,7 @@ SELECT pg_catalog.setval('public.feedback_id_seq', 615, true);
 -- Name: history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.history_id_seq', 2, true);
+SELECT pg_catalog.setval('public.history_id_seq', 1, true);
 
 
 --
@@ -4279,7 +4348,7 @@ SELECT pg_catalog.setval('public.profile_permissions_id_seq', 115, true);
 -- Name: registry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.registry_id_seq', 8956, true);
+SELECT pg_catalog.setval('public.registry_id_seq', 8955, true);
 
 
 --
@@ -4333,7 +4402,7 @@ SELECT pg_catalog.setval('public.stage_interview_id_seq', 10689, true);
 -- Name: stage_interview_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.stage_interview_student_id_seq', 1092, true);
+SELECT pg_catalog.setval('public.stage_interview_student_id_seq', 1091, true);
 
 
 --
@@ -4351,7 +4420,7 @@ SELECT pg_catalog.setval('public.student_feedback_id_seq', 136, true);
 -- Name: student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.student_id_seq', 14347, true);
+SELECT pg_catalog.setval('public.student_id_seq', 14346, true);
 
 
 --
@@ -4405,7 +4474,7 @@ SELECT pg_catalog.setval('public.task_interview_student_id_seq', 1, false);
 -- Name: task_result_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.task_result_id_seq', 78652, true);
+SELECT pg_catalog.setval('public.task_result_id_seq', 78651, true);
 
 
 --
@@ -4450,7 +4519,7 @@ SELECT pg_catalog.setval('public.task_verification_id_seq', 55459, true);
 -- Name: team_distribution_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.team_distribution_id_seq', 13, true);
+SELECT pg_catalog.setval('public.team_distribution_id_seq', 1, false);
 
 
 --
@@ -6349,7 +6418,7 @@ ALTER TABLE ONLY public.feedback
     ADD CONSTRAINT "FK_fefc350f416e262e904dcf6b35e" FOREIGN KEY ("toUserId") REFERENCES public."user"(id);
 
 
--- Completed on 2023-01-05 10:44:30
+-- Completed on 2023-01-05 14:58:12
 
 --
 -- PostgreSQL database dump complete
