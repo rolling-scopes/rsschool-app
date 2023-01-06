@@ -1,4 +1,4 @@
-import { Typography, Form, Row, Checkbox, Radio } from 'antd';
+import { Typography, Form, Row, Checkbox, Radio, Col } from 'antd';
 import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
@@ -34,19 +34,23 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
               key={questionIndex}
               label={
                 <Row>
-                  <Title level={5}>
-                    {questionNumber}. {question}
-                  </Title>
-                  {questionImage && (
-                    <img
-                      src={questionImage}
-                      style={{
-                        width: '100%',
-                        maxWidth: '700px',
-                        marginBottom: '10px',
-                      }}
-                    />
-                  )}
+                  <Col>
+                    <Title level={5}>
+                      {questionNumber}. {question}
+                    </Title>
+                  </Col>
+                  <Col span={24}>
+                    {questionImage && (
+                      <img
+                        src={questionImage}
+                        style={{
+                          width: '100%',
+                          maxWidth: '700px',
+                          marginBottom: '10px',
+                        }}
+                      />
+                    )}
+                  </Col>
                 </Row>
               }
               name={`answer-${questionIndex}`}
