@@ -136,11 +136,13 @@ export class MentorsService {
   }
 
   private getStatus(mentorId: number, resultScore: number) {
-    if (!mentorId && !resultScore) {
+    // resultScore = 0 should be considered as result
+    const hasScore = resultScore !== null;
+    if (!mentorId && !hasScore) {
       return SolutionItemStatus.RandomTask;
     }
 
-    return resultScore ? SolutionItemStatus.Done : SolutionItemStatus.InReview;
+    return hasScore ? SolutionItemStatus.Done : SolutionItemStatus.InReview;
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
