@@ -23,7 +23,7 @@ describe('Actions', () => {
   });
 
   it('should render a register button when the distribution is available', () => {
-    render(<Actions distribution={distribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />);
+    render(<Actions distribution={distribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -31,8 +31,8 @@ describe('Actions', () => {
     expect(registerButton).toBeInTheDocument();
   });
 
-  it('should call onRegister when the register button is clicked', () => {
-    render(<Actions distribution={distribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />);
+  it('should call register when the register button is clicked', () => {
+    render(<Actions distribution={distribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -47,11 +47,7 @@ describe('Actions', () => {
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
     };
     render(
-      <Actions
-        distribution={completedDistribution}
-        onRegister={mockOnRegister}
-        onDeleteRegister={mockOnDeleteRegister}
-      />,
+      <Actions distribution={completedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
     );
 
     const registeredButton = screen.getByRole('button', {
@@ -67,11 +63,7 @@ describe('Actions', () => {
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
     };
     render(
-      <Actions
-        distribution={completedDistribution}
-        onRegister={mockOnRegister}
-        onDeleteRegister={mockOnDeleteRegister}
-      />,
+      <Actions distribution={completedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
     );
 
     const cancel = screen.getByText(/cancel/i);
@@ -84,7 +76,7 @@ describe('Actions', () => {
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Future,
     };
     render(
-      <Actions distribution={futureDistribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />,
+      <Actions distribution={futureDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
     );
 
     const registerButton = screen.getByRole('button', {
@@ -100,7 +92,7 @@ describe('Actions', () => {
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Closed,
     };
     render(
-      <Actions distribution={closedDistribution} onRegister={mockOnRegister} onDeleteRegister={mockOnDeleteRegister} />,
+      <Actions distribution={closedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
     );
 
     const registerButton = screen.getByRole('button', {
@@ -114,11 +106,7 @@ describe('Actions', () => {
   it('should render a warning text when the end date is within 48 hours of the current time', () => {
     const soonEndingDistribution = { ...distribution };
     render(
-      <Actions
-        distribution={soonEndingDistribution}
-        onRegister={mockOnRegister}
-        onDeleteRegister={mockOnDeleteRegister}
-      />,
+      <Actions distribution={soonEndingDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
     );
 
     expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
