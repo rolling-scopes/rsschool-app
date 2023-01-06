@@ -1,5 +1,4 @@
 import { SessionProvider } from 'modules/Course/contexts';
-import { CourseRole } from 'components/withSession';
 import { getCourseProps, noAccessResponse } from 'modules/Course/data/getCourseProps';
 import { AutoTestTaskProps, Task } from 'modules/AutoTest/pages';
 import { GetServerSideProps } from 'next';
@@ -9,7 +8,7 @@ import { getTokenFromContext } from 'utils/server';
 
 function Page(props: AutoTestTaskProps) {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Student]} course={props.course}>
+    <SessionProvider course={props.course}>
       <Task {...props} />
     </SessionProvider>
   );
