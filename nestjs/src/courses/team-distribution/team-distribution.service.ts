@@ -2,6 +2,7 @@ import { Student } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 
 export enum registrationStatusEnum {
@@ -30,8 +31,8 @@ export class TeamDistributionService {
       return registrationStatusEnum.Unavailable;
     }
 
-    const currTimestampUTC = Date.now();
-    const distributionStartDate = distribution.startDate.getTime();
+    const currTimestampUTC = dayjs();
+    const distributionStartDate = dayjs(distribution.startDate);
     if (currTimestampUTC < distributionStartDate) {
       return registrationStatusEnum.Future;
     }
@@ -40,7 +41,7 @@ export class TeamDistributionService {
       return registrationStatusEnum.Completed;
     }
 
-    const distributionEndDate = distribution.endDate.getTime();
+    const distributionEndDate = dayjs(distribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
       return registrationStatusEnum.Available;
     }

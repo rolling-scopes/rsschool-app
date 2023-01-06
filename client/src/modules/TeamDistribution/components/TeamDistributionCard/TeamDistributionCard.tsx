@@ -10,8 +10,8 @@ type Props = {
   isManager: boolean;
   onDelete: (id: number) => Promise<void>;
   onEdit: (distribution: TeamDistributionDto) => void;
-  onRegister: (distributionId: number) => Promise<void>;
-  onDeleteRegister: (distributionId: number) => Promise<void>;
+  register: (distributionId: number) => Promise<void>;
+  deleteRegister: (distributionId: number) => Promise<void>;
 };
 
 export default function TeamDistributionCard({
@@ -19,8 +19,8 @@ export default function TeamDistributionCard({
   isManager,
   onDelete,
   onEdit,
-  onRegister,
-  onDeleteRegister,
+  register,
+  deleteRegister,
 }: Props) {
   const mobileView = useMedia('(max-width: 720px)');
 
@@ -49,7 +49,7 @@ export default function TeamDistributionCard({
           Read more
         </a>
       )}
-      <Actions distribution={distribution} onRegister={onRegister} onDeleteRegister={onDeleteRegister} />
+      <Actions distribution={distribution} register={register} deleteRegister={deleteRegister} />
     </Card>
   );
 }

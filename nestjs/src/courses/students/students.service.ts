@@ -3,6 +3,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { Repository } from 'typeorm';
+import * as dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
 
 @Injectable()
@@ -26,11 +27,11 @@ export class StudentsService {
 
   public async addStudentToTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
     const student = await this.getStudentWithTeamDistributions(studentId);
-    const currTimestampUTC = Date.now();
-    const distributionStartDate = teamDistribution.startDate.getTime();
-    const distributionEndDate = teamDistribution.endDate.getTime();
+    const currentDate = dayjs();
+    const distributionStartDate = dayjs(teamDistribution.startDate);
+    const distributionEndDate = dayjs(teamDistribution.endDate);
     if (student == null) throw new NotFoundException();
-    if (currTimestampUTC < distributionStartDate || currTimestampUTC > distributionEndDate) {
+    if (currentDate < distributionStartDate || currentDate > distributionEndDate) {
       throw new BadRequestException();
     }
     if (student.totalScore < teamDistribution.minTotalScore) {

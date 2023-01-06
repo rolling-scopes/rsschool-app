@@ -97,8 +97,8 @@ function TeamDistributions({ session, course }: CoursePageProps) {
         {distributions.length
           ? distributions.map(distribution => (
               <TeamDistributionCard
-                onRegister={handleRegister}
-                onDeleteRegister={handleDeleteRegister}
+                register={handleRegister}
+                deleteRegister={handleDeleteRegister}
                 distribution={distribution}
                 isManager={isManager}
                 onDelete={handleDeleteTeamDistribution}
