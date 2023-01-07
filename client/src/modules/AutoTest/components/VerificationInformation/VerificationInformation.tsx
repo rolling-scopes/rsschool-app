@@ -4,7 +4,6 @@ import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { ReloadOutlined } from '@ant-design/icons';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import moment from 'moment';
 
 export type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;
