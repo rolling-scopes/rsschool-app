@@ -38,6 +38,7 @@ import { TaskSolutionResult1666621080327 } from './1666621080327-TaskSolutionRes
 import { TeamDistribution1672142743107 } from './1672142743107-TeamDistribution';
 import { Tasks1671475396333 } from './1671475396333-Tasks';
 import { TeamDistribution1672386450861 } from './1672386450861-TeamDistribution';
+import { VerificationAnswers1673088410406 } from './1673088410406-VerificationAnswers';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -80,4 +81,5 @@ export const migrations = [
   TeamDistribution1672142743107,
   TeamDistribution1672386450861,
   Tasks1671475396333,
+  VerificationAnswers1673088410406,
 ];

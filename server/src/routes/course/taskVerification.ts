@@ -7,6 +7,12 @@ import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { CourseTask, TaskVerification } from '../../models';
 
+type CorrectAnswer = {
+  index: number;
+  value: (number | number[])[];
+  isCorrect: boolean;
+};
+
 export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
 
@@ -158,6 +164,12 @@ const createSelfeducationVerification = async ({
     details += '. Attempts number was over, so score was divided by 2';
   }
 
+  const studentCorrectAnswers: CorrectAnswer[] = studentAnswers.map(({ index, value }) => ({
+    index,
+    value,
+    isCorrect: answers[index] === value,
+  }));
+
   const {
     identifiers: [identifier],
   } = await getRepository(TaskVerification).insert({
@@ -166,7 +178,7 @@ const createSelfeducationVerification = async ({
     score,
     details,
     status: 'completed',
-    // TODO: add new field for studentAnswers
+    answers: studentCorrectAnswers,
   });
 
   const result = (await getRepository(TaskVerification).findOneBy({ id: identifier.id }))!;
