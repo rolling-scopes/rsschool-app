@@ -91,10 +91,16 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     return true;
   }, [strictAttemptsMode, attemptsCount, isDeadlinePassed]);
 
+  const allowCheckAnswers = useMemo(
+    () => isDeadlinePassed && attemptsCount !== maxAttemptsNumber,
+    [isDeadlinePassed, attemptsCount, maxAttemptsNumber],
+  );
+
   return {
     attemptsCount,
     explanation,
     attemptsLeftMessage,
     allowStartTask,
+    allowCheckAnswers,
   };
 }

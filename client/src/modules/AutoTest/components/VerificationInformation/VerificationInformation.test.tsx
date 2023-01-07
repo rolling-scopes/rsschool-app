@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import { CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import VerificationInformation, { VerificationInformationProps } from './VerificationInformation';
-import moment from 'moment';
 
 function renderVerificationInformation({
   type,
@@ -63,21 +62,5 @@ describe('VerificationInformation', () => {
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });
     expect(answersButton).toBeInTheDocument();
-  });
-
-  it('should disable "Show answers" button when the deadline is not passed', () => {
-    const endDate = moment().add(7, 'd').format();
-    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
-
-    const answersButton = screen.getByRole('button', { name: /show answers/i });
-    expect(answersButton).toBeDisabled();
-  });
-
-  it('should not disable "Show answers" button when the deadline is passed', () => {
-    const endDate = moment().subtract(7, 'd').format();
-    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
-
-    const answersButton = screen.getByRole('button', { name: /show answers/i });
-    expect(answersButton).toBeEnabled();
   });
 });

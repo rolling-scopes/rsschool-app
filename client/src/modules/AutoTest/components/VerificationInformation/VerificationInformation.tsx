@@ -24,10 +24,9 @@ function VerificationInformation({
   reload,
 }: VerificationInformationProps): any {
   const { maxScore, verifications } = courseTask;
-  const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask);
+  const { explanation, attemptsLeftMessage, allowStartTask, allowCheckAnswers } = useAttemptsMessage(courseTask);
 
   const isSelfEducationTask = courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation;
-  const isShowAnswersDisabled = moment().isBefore(courseTask.studentEndDate);
 
   return (
     <>
@@ -63,7 +62,7 @@ function VerificationInformation({
           </Col>
           {isSelfEducationTask && (
             <Col>
-              <Button disabled={isShowAnswersDisabled}>Show answers</Button>
+              <Button disabled={!allowCheckAnswers}>Show answers</Button>
             </Col>
           )}
         </Row>
