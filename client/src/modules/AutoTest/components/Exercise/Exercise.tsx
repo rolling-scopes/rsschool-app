@@ -3,8 +3,9 @@ import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Button, Col, ColProps, Form, Row } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { useMemo } from 'react';
 
-type ExerciseProps = {
+export type ExerciseProps = {
   githubId: string;
   courseId: number;
   courseTask: CourseTaskVerifications;
@@ -24,6 +25,10 @@ function responsiveColumns(type: CourseTaskDetailedDtoTypeEnum): ColProps | unde
 }
 
 function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps) {
+  const isSelfEducationTask = useMemo(
+    () => courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation,
+    [courseTask.type],
+  );
   const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, finishTask);
 
   const getExercise = () => {
@@ -48,9 +53,16 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
         <Form form={form} layout="vertical" requiredMark={false} onFinish={submit} onChange={change}>
           {getExercise()}
           <Row justify="center">
-            <Button loading={loading} type="primary" htmlType="submit">
-              Submit
-            </Button>
+            <Col>
+              <Button loading={loading} type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Col>
+            {isSelfEducationTask && (
+              <Col>
+                <Button>Show answers</Button>
+              </Col>
+            )}
           </Row>
         </Form>
       </Col>
