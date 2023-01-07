@@ -7,12 +7,6 @@ import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { CourseTask, TaskVerification } from '../../models';
 
-type CorrectAnswer = {
-  index: number;
-  value: (number | number[])[];
-  isCorrect: boolean;
-};
-
 export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
 
@@ -139,14 +133,8 @@ const createSelfeducationVerification = async ({
 
   const rightAnswersCount = studentAnswers
     .map(({ index, value }) => {
-      const rightAnswer = String(answers[index])
-        .split(',')
-        .sort((a, b) => Number(a) - Number(b))
-        .join('');
-      const userAnswer = String(value)
-        .split(',')
-        .sort((a, b) => Number(a) - Number(b))
-        .join('');
+      const rightAnswer = sortAnswers(answers[index]);
+      const userAnswer = sortAnswers(value);
 
       return Number(rightAnswer === userAnswer);
     })
@@ -164,11 +152,16 @@ const createSelfeducationVerification = async ({
     details += '. Attempts number was over, so score was divided by 2';
   }
 
-  const studentCorrectAnswers: CorrectAnswer[] = studentAnswers.map(({ index, value }) => ({
-    index,
-    value,
-    isCorrect: answers[index] === value,
-  }));
+  const studentCorrectAnswers: CorrectAnswer[] = studentAnswers.map(({ index, value }) => {
+    const sortedAnswers = sortAnswers(answers[index]);
+    const sortedValues = sortAnswers(value);
+
+    return {
+      index,
+      value,
+      isCorrect: sortedAnswers === sortedValues,
+    };
+  });
 
   const {
     identifiers: [identifier],
@@ -191,6 +184,13 @@ const createSelfeducationVerification = async ({
 
   setResponse(ctx, OK, { ...result, courseTask: { type: courseTaskType } });
 };
+
+function sortAnswers(values: number | number[] | (number | number[])[]): string {
+  return String(values)
+    .split(',')
+    .sort((a, b) => Number(a) - Number(b))
+    .join('');
+}
 
 type VerificationEvent = {
   id: number;
@@ -230,4 +230,10 @@ type SelfEducationAttributes = {
     }[];
   };
   answers: (number | number[])[];
+};
+
+type CorrectAnswer = {
+  index: number;
+  value: (number | number[])[];
+  isCorrect: boolean;
 };
