@@ -50,4 +50,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
           AWS_DEFAULT_REGION: eu-central-1
         run: |
-          aws s3 cp dist s3://sloths.rs.school/ --recursive --cache-control "public,max-age=15552000,immutable"
+          aws s3 cp dist s3://sloths.rs.school/ --recursive --cache-control "public,max-age=3600,immutable"
