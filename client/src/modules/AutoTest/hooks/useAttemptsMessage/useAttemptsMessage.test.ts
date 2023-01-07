@@ -213,7 +213,7 @@ describe('useAttemptsMessage', () => {
           maxAttemptsNumber: 5,
         },
       } as CourseTaskVerifications;
-      const { allowCheckAnswers } = renderUseAttemptsMessage({ task });
+      const { allowCheckAnswers } = renderUseAttemptsMessage({ task, verificationsCount: 0 });
 
       expect(allowCheckAnswers).toBeFalsy();
     });
