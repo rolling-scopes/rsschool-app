@@ -1,4 +1,4 @@
-import { Row, Col, Space, Button, Alert, Typography } from 'antd';
+import { Row, Col, Space, Button, Alert, Typography, Tooltip } from 'antd';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
@@ -55,15 +55,20 @@ function VerificationInformation({
             <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
           </Col>
           <Col>
-            <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
-              Start test
-            </Button>
+            <Space size={16}>
+              <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
+                Start test
+              </Button>
+              {isSelfEducationTask && (
+                <Tooltip
+                  placement="top"
+                  title={allowCheckAnswers ? '' : 'Will be available after the deadline and at least 1 attempt'}
+                >
+                  <Button disabled={!allowCheckAnswers}>Show answers</Button>
+                </Tooltip>
+              )}
+            </Space>
           </Col>
-          {isSelfEducationTask && (
-            <Col>
-              <Button disabled={!allowCheckAnswers}>Show answers</Button>
-            </Col>
-          )}
         </Row>
       )}
     </>
