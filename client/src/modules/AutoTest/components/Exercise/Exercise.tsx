@@ -4,6 +4,7 @@ import { Button, Col, ColProps, Form, Row } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useMemo } from 'react';
+import moment from 'moment';
 
 export type ExerciseProps = {
   githubId: string;
@@ -25,11 +26,10 @@ function responsiveColumns(type: CourseTaskDetailedDtoTypeEnum): ColProps | unde
 }
 
 function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps) {
-  const isSelfEducationTask = useMemo(
-    () => courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation,
-    [courseTask.type],
-  );
   const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, finishTask);
+
+  const isSelfEducationTask = courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation;
+  const isShowAnswersDisabled = moment().isAfter(courseTask.studentEndDate);
 
   const getExercise = () => {
     switch (courseTask?.type) {
@@ -60,7 +60,7 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
             </Col>
             {isSelfEducationTask && (
               <Col>
-                <Button>Show answers</Button>
+                <Button disabled={isShowAnswersDisabled}>Show answers</Button>
               </Col>
             )}
           </Row>
