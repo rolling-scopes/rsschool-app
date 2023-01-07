@@ -3,8 +3,10 @@ import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { ReloadOutlined } from '@ant-design/icons';
+import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import moment from 'moment';
 
-type VerificationInformationProps = {
+export type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;
   loading: boolean;
   isTableVisible: boolean;
@@ -23,6 +25,9 @@ function VerificationInformation({
 }: VerificationInformationProps): any {
   const { maxScore, verifications } = courseTask;
   const { explanation, attemptsLeftMessage, allowStartTask } = useAttemptsMessage(courseTask);
+
+  const isSelfEducationTask = courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation;
+  const isShowAnswersDisabled = moment().isBefore(courseTask.studentEndDate);
 
   return (
     <>
@@ -56,6 +61,11 @@ function VerificationInformation({
               Start test
             </Button>
           </Col>
+          {isSelfEducationTask && (
+            <Col>
+              <Button disabled={isShowAnswersDisabled}>Show answers</Button>
+            </Col>
+          )}
         </Row>
       )}
     </>

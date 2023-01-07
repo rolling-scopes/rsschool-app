@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import VerificationInformation, { VerificationInformationProps } from './VerificationInformation';
 import moment from 'moment';
-import Exercise, { ExerciseProps } from './Exercise';
 
-function renderExercise({
+function renderVerificationInformation({
   type,
   studentEndDate = '2022-10-10 12:00',
 }: {
@@ -25,17 +25,18 @@ function renderExercise({
     },
   } as CourseTaskVerifications;
 
-  const props: ExerciseProps = {
+  const props: VerificationInformationProps = {
     courseTask,
-    courseId: 100,
-    githubId: 'github-id',
-    finishTask: jest.fn(),
+    isTableVisible: true,
+    loading: false,
+    reload: jest.fn(),
+    startTask: jest.fn(),
   };
 
-  return render(<Exercise {...props} />);
+  return render(<VerificationInformation {...props} />);
 }
 
-describe('Exercise', () => {
+describe('VerificationInformation', () => {
   it.each`
     type
     ${CourseTaskDetailedDtoTypeEnum.Codewars}
@@ -50,7 +51,7 @@ describe('Exercise', () => {
   `(
     'should not render "Show answers" button when task is $type',
     ({ type }: { type: CourseTaskDetailedDtoTypeEnum }) => {
-      renderExercise({ type });
+      renderVerificationInformation({ type });
 
       const answersButton = screen.queryByRole('button', { name: /show answers/i });
       expect(answersButton).not.toBeInTheDocument();
@@ -58,23 +59,23 @@ describe('Exercise', () => {
   );
 
   it('should render "Show answers" button when task is SelfEducation', () => {
-    renderExercise({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation });
+    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation });
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });
     expect(answersButton).toBeInTheDocument();
   });
 
-  it('should disable "Show answers" button when the deadline is passed', () => {
-    const endDate = moment().subtract(7, 'd').format();
-    renderExercise({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
+  it('should disable "Show answers" button when the deadline is not passed', () => {
+    const endDate = moment().add(7, 'd').format();
+    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });
     expect(answersButton).toBeDisabled();
   });
-  
-  it('should not disable "Show answers" button when the deadline is not passed', () => {
-    const endDate = moment().add(7, 'd').format();
-    renderExercise({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
+
+  it('should not disable "Show answers" button when the deadline is passed', () => {
+    const endDate = moment().subtract(7, 'd').format();
+    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Selfeducation, studentEndDate: endDate });
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });
     expect(answersButton).toBeEnabled();
