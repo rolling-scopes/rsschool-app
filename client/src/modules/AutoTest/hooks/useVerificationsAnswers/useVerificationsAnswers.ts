@@ -1,0 +1,35 @@
+import { message } from 'antd';
+import { useEffect, useState } from 'react';
+import { CourseTaskVerificationsApi, TaskVerificationAttemptDto } from 'api';
+import { AxiosError } from 'axios';
+
+export function useVerificationsAnswers(courseId: number, courseTaskId: number) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<AxiosError | null>(null);
+  const [answers, setAnswers] = useState<TaskVerificationAttemptDto[] | null>(null);
+
+  useEffect(() => {
+    if (error) {
+      message.error(error?.message);
+    }
+  }, [error]);
+
+  function showAnswers() {
+    async function loadData() {
+      setLoading(true);
+
+      try {
+        const result = await new CourseTaskVerificationsApi().getAnswers(courseId, courseTaskId);
+        setAnswers(result.data);
+      } catch (error) {
+        setError(error as AxiosError);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }
+
+  return { loading, answers, showAnswers };
+}

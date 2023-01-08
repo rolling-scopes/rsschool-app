@@ -6318,7 +6318,7 @@ export const CourseTaskVerificationsApiFp = function(configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAnswers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskVerificationAttemptDto>> {
+        async getAnswers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskVerificationAttemptDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAnswers(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6339,7 +6339,7 @@ export const CourseTaskVerificationsApiFactory = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnswers(courseId: number, courseTaskId: number, options?: any): AxiosPromise<TaskVerificationAttemptDto> {
+        getAnswers(courseId: number, courseTaskId: number, options?: any): AxiosPromise<Array<TaskVerificationAttemptDto>> {
             return localVarFp.getAnswers(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
     };

@@ -11,6 +11,7 @@ export type VerificationInformationProps = {
   isTableVisible: boolean;
   startTask: () => void;
   reload: () => void;
+  showAnswers: () => void;
 };
 
 const { Text } = Typography;
@@ -21,6 +22,7 @@ function VerificationInformation({
   isTableVisible,
   startTask,
   reload,
+  showAnswers,
 }: VerificationInformationProps): any {
   const { maxScore, verifications } = courseTask;
   const { explanation, attemptsLeftMessage, allowStartTask, allowCheckAnswers } = useAttemptsMessage(courseTask);
@@ -64,7 +66,10 @@ function VerificationInformation({
                   placement="top"
                   title={allowCheckAnswers ? '' : 'Will be available after the deadline and at least 1 attempt'}
                 >
-                  <Button disabled={!allowCheckAnswers}>Show answers</Button>
+                  {/* <Button disabled={!allowCheckAnswers} onClick={showAnswers}> */}
+                  <Button onClick={showAnswers}>
+                    Show answers
+                  </Button>
                 </Tooltip>
               )}
             </Space>

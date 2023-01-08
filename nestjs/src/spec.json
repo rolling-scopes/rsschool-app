@@ -812,7 +812,9 @@
           "200": {
             "description": "",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/TaskVerificationAttemptDto" } }
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskVerificationAttemptDto" } }
+              }
             }
           },
           "400": { "description": "" },

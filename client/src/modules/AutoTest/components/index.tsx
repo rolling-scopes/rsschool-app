@@ -9,3 +9,4 @@ export { default as JupyterNotebook } from './JupyterNotebook/JupyterNotebook';
 export { default as SelfEducation } from './SelfEducation/SelfEducation';
 export { default as VerificationInformation } from './VerificationInformation/VerificationInformation';
 export { default as StatusTabs } from './StatusTabs/StatusTabs';
+export { default as AttemptsAnswers } from './AttemptsAnswers/AttemptsAnswers';

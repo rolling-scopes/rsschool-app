@@ -10,7 +10,7 @@ export class TaskVerificationsController {
   constructor(private taskVerificationsService: TaskVerificationsService) {}
 
   @Get('/answers')
-  @ApiOkResponse({ type: TaskVerificationAttemptDto })
+  @ApiOkResponse({ type: [TaskVerificationAttemptDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getAnswers' })
@@ -27,6 +27,6 @@ export class TaskVerificationsController {
       throw new BadRequestException('You are not a student in this course');
     }
 
-    return this.taskVerificationsService.getAnswersByAttempts(courseTaskId);
+    return await this.taskVerificationsService.getAnswersByAttempts(courseTaskId);
   }
 }
