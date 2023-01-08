@@ -22,6 +22,7 @@ import {
   User,
   TaskInterviewStudent,
   TeamDistribution,
+  TaskVerification,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -77,6 +78,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
       TaskInterviewResult,
       TaskInterviewStudent,
       TeamDistribution,
+      TaskVerification,
     ]),
     CoreModule,
     UsersModule,

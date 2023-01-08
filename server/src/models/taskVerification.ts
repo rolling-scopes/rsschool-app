@@ -2,6 +2,14 @@ import { Entity, CreateDateColumn, ManyToOne, Column, UpdateDateColumn, PrimaryG
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
+export interface SelfEducationQuestion {
+  question: string;
+  answers: string[];
+  multiple: boolean;
+  questionImage?: string;
+  answersType?: 'image';
+}
+
 @Entity()
 export class TaskVerification {
   @PrimaryGeneratedColumn() id: number;
