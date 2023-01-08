@@ -4106,10 +4106,10 @@ export interface TaskVerificationAttemptDto {
     'score': number;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<object>}
      * @memberof TaskVerificationAttemptDto
      */
-    'questions': Array<string>;
+    'questions': Array<object>;
 }
 /**
  * 

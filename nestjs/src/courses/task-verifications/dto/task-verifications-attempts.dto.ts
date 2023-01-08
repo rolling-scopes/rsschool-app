@@ -1,9 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { TaskVerification, SelfEducationQuestionWithSelectedAnswers } from '@entities/taskVerification';
+import { TaskVerification } from '@entities/taskVerification';
+
+export class SelfEducationQuestionWithAnswers {
+  answers: string[];
+  selectedAnswers: (number | number[])[];
+  question: string;
+  multiple: boolean;
+  questionImage?: string | undefined;
+  answersType?: 'image' | undefined;
+}
 
 export class TaskVerificationAttemptDto {
-  constructor(taskVerification: TaskVerification, questions: SelfEducationQuestionWithSelectedAnswers[]) {
+  constructor(taskVerification: TaskVerification, questions: SelfEducationQuestionWithAnswers[]) {
     this.createdDate = taskVerification.createdDate;
     this.courseTaskId = taskVerification.courseTaskId;
     this.score = taskVerification.score;
@@ -25,7 +34,7 @@ export class TaskVerificationAttemptDto {
   @IsNumber()
   score: number;
 
-  @ApiProperty({ type: Array<Record<string, unknown>> })
+  @ApiProperty({ type: [SelfEducationQuestionWithAnswers] })
   @IsNotEmpty()
-  questions: SelfEducationQuestionWithSelectedAnswers[];
+  questions: SelfEducationQuestionWithAnswers[];
 }

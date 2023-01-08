@@ -2507,13 +2507,14 @@
           "minTotalScore"
         ]
       },
+      "SelfEducationQuestionWithAnswers": { "type": "object", "properties": {} },
       "TaskVerificationAttemptDto": {
         "type": "object",
         "properties": {
           "createdDate": { "type": "number" },
           "courseTaskId": { "type": "number" },
           "score": { "type": "number" },
-          "questions": { "type": "array", "items": { "type": "string" } }
+          "questions": { "type": "array", "items": { "$ref": "#/components/schemas/SelfEducationQuestionWithAnswers" } }
         },
         "required": ["createdDate", "courseTaskId", "score", "questions"]
       },
