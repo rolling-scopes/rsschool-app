@@ -10,6 +10,10 @@ export interface SelfEducationQuestion {
   answersType?: 'image';
 }
 
+export interface SelfEducationQuestionWithSelectedAnswers extends SelfEducationQuestion {
+  selectedAnswers: (number | number[])[];
+}
+
 @Entity()
 export class TaskVerification {
   @PrimaryGeneratedColumn() id: number;
@@ -47,7 +51,7 @@ export class TaskVerification {
   @Column({ type: 'json', default: [] })
   metadata: { path: string; md5: string }[];
 
-  @Column({ type: 'json', default: [] })
+  @Column({ type: 'json', default: [], select: false })
   answers: {
     index: number;
     value: (number | number[])[];
