@@ -185,7 +185,7 @@ const createSelfeducationVerification = async ({
   setResponse(ctx, OK, { ...result, courseTask: { type: courseTaskType } });
 };
 
-function sortAnswers(values: number | number[] | (number | number[])[]): string {
+function sortAnswers<T>(values: T): string {
   return String(values)
     .split(',')
     .sort((a, b) => Number(a) - Number(b))

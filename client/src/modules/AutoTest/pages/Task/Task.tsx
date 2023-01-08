@@ -10,7 +10,6 @@ export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
 }
 
-// TODO: Add "Answers" functionality
 function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const {
