@@ -2,6 +2,7 @@ import { Student } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 
 export enum registrationStatusEnum {
@@ -26,19 +27,21 @@ export class TeamDistributionService {
   }
 
   private getDistributionStatus(distribution: TeamDistribution, student: Student | null) {
-    if (student == null || student.isExpelled) {
+    if (student == null || student.isExpelled || distribution.minTotalScore > student.totalScore) {
       return registrationStatusEnum.Unavailable;
     }
 
-    const currTimestampUTC = Date.now();
-    const distributionStartDate = distribution.startDate.getTime();
+    const currTimestampUTC = dayjs();
+    const distributionStartDate = dayjs(distribution.startDate);
     if (currTimestampUTC < distributionStartDate) {
       return registrationStatusEnum.Future;
     }
 
-    //tbd: add status completed
+    if (student.teamDistribution.find(el => el.id === distribution.id)) {
+      return registrationStatusEnum.Completed;
+    }
 
-    const distributionEndDate = distribution.endDate.getTime();
+    const distributionEndDate = dayjs(distribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
       return registrationStatusEnum.Available;
     }
@@ -58,6 +61,10 @@ export class TeamDistributionService {
       },
     });
     return data.map(el => ({ ...el, registrationStatus: this.getDistributionStatus(el, student) }));
+  }
+
+  public getById(id: number) {
+    return this.repository.findOneOrFail({ where: { id } });
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

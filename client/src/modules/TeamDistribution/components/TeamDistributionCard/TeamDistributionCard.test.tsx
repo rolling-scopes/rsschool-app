@@ -13,63 +13,52 @@ const distribution = {
 
 const mockOnDelete = jest.fn(() => Promise.resolve());
 const mockOnEdit = jest.fn();
+const onRegister = jest.fn();
+const onDeleteRegister = jest.fn();
+
+function renderCard(distribution: TeamDistributionDto, isManager = false) {
+  return render(
+    <TeamDistributionCard
+      distribution={distribution}
+      isManager={isManager}
+      onDelete={mockOnDelete}
+      onEdit={mockOnEdit}
+      deleteRegister={onDeleteRegister}
+      register={onRegister}
+    />,
+  );
+}
 
 describe('TeamDistributionCard', () => {
   it('should render the distribution name and description', () => {
-    render(
-      <TeamDistributionCard
-        distribution={distribution}
-        isManager={false}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />,
-    );
-
+    renderCard(distribution);
     expect(screen.getByText(distribution.name)).toBeInTheDocument();
     expect(screen.getByText(distribution.description)).toBeInTheDocument();
   });
 
   it('should render the distribution period', () => {
-    render(
-      <TeamDistributionCard
-        distribution={distribution}
-        isManager={false}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />,
-    );
+    renderCard(distribution);
 
     expect(screen.getByText(/2022-01-01/)).toBeInTheDocument();
     expect(screen.getByText(/2022-01-31/)).toBeInTheDocument();
   });
 
   it('should render the edit and delete buttons for managers', () => {
-    render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
-    );
+    renderCard(distribution, true);
 
     expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
   });
 
   it('should not render the edit and delete buttons for non-managers', () => {
-    render(
-      <TeamDistributionCard
-        distribution={distribution}
-        isManager={false}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />,
-    );
+    renderCard(distribution);
 
     expect(screen.queryByRole('button', { name: /edit/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
   });
 
   it('should call the onDelete function when the delete button is clicked', () => {
-    render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
-    );
+    renderCard(distribution, true);
 
     fireEvent.click(screen.getByRole('button', { name: /delete/i }));
 
@@ -77,9 +66,7 @@ describe('TeamDistributionCard', () => {
   });
 
   it('should call the onEdit function when the edit button is clicked', () => {
-    render(
-      <TeamDistributionCard distribution={distribution} isManager={true} onDelete={mockOnDelete} onEdit={mockOnEdit} />,
-    );
+    renderCard(distribution, true);
 
     fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
@@ -87,26 +74,13 @@ describe('TeamDistributionCard', () => {
   });
 
   it('should render read more link when distribution has descriptionUrl', () => {
-    render(
-      <TeamDistributionCard
-        distribution={distribution}
-        isManager={false}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />,
-    );
+    renderCard(distribution);
+
     expect(screen.getByRole('link', { name: /read more/i })).toBeInTheDocument();
   });
 
-  it('should not render read more link when distribution has descriptionUrl', () => {
-    render(
-      <TeamDistributionCard
-        distribution={{ ...distribution, descriptionUrl: '' }}
-        isManager={false}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />,
-    );
+  it('should not render read more link when distribution has not descriptionUrl', () => {
+    renderCard({ ...distribution, descriptionUrl: '' });
     expect(screen.queryByRole('link', { name: /read more/i })).not.toBeInTheDocument();
   });
 });
