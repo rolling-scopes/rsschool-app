@@ -51,7 +51,7 @@ export class TeamDistribution {
   courseTasks: CourseTask[];
 
   @ManyToMany(_ => Student, student => student.teamDistribution)
-  students: Student[];
+  studentsWithoutTeam: Student[];
 
   @Column({ default: 2 })
   minStudents: number;

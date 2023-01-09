@@ -1,16 +1,20 @@
 import { Button, Modal, Row, Space, Typography } from 'antd';
+import Link from 'next/link';
 import { DownOutlined } from '@ant-design/icons';
 import { TextProps } from 'antd/lib/typography/Text';
 import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import moment from 'moment';
 
-const { Text, Link } = Typography;
+const { Text, Link: LinkButton } = Typography;
 
 type Props = {
   distribution: TeamDistributionDto;
   register: (distributionId: number) => Promise<void>;
   deleteRegister: (distributionId: number) => Promise<void>;
+  isManager: boolean;
+  courseAlias: string;
+  mobileView: boolean;
 };
 
 const getDateColor = (date: string): TextProps['type'] => {
@@ -22,7 +26,7 @@ const getDateColor = (date: string): TextProps['type'] => {
   if (isDeadlineSoon) return 'danger';
 };
 
-export function Actions({ distribution, register, deleteRegister }: Props) {
+export function Actions({ distribution, register, deleteRegister, isManager, courseAlias, mobileView }: Props) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const endDateText = dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate);
 
@@ -46,9 +50,9 @@ export function Actions({ distribution, register, deleteRegister }: Props) {
   const renderRegistrationCancelSection = () => (
     <>
       You can{' '}
-      <Link type="danger" underline onClick={handleCancel}>
+      <LinkButton type="danger" underline onClick={handleCancel}>
         Cancel
-      </Link>{' '}
+      </LinkButton>{' '}
       registration before {endDateText}
     </>
   );
@@ -95,9 +99,16 @@ export function Actions({ distribution, register, deleteRegister }: Props) {
     }
   };
 
-  return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable ? (
+  return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable || isManager ? (
     <Row style={{ marginTop: 16 }}>
-      <Space size={24}>{renderActions()}</Space>
+      <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
+        {(isManager || distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed) && (
+          <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
+            <Button type="link">Connect with teams</Button>
+          </Link>
+        )}
+        {renderActions()}
+      </Space>
     </Row>
   ) : null;
 }

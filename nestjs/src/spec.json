@@ -832,6 +832,18 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/detailed": {
+      "get": {
+        "operationId": "getCourseTeamDistributionDetailed",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["team distribution"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",

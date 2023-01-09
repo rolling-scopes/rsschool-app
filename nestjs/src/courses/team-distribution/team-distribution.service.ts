@@ -67,6 +67,27 @@ export class TeamDistributionService {
     return this.repository.findOneOrFail({ where: { id } });
   }
 
+  public async getStudentsWithoutTeam(id: number) {
+    return this.repository
+      .createQueryBuilder('teamDistribution')
+      .where({ id })
+      .leftJoin('teamDistribution.studentsWithoutTeam', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect([
+        'user.contactsTelegram',
+        'user.contactsSkype',
+        'user.contactsEmail',
+        'user.githubId',
+        'user.discord',
+        'user.firstName',
+        'user.lastName',
+        'user.cvLink',
+        'student.rank',
+        'student.totalScore',
+      ])
+      .getOneOrFail();
+  }
+
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {
     return this.repository.update(id, teamDistribution);
   }

@@ -100,4 +100,17 @@ export class TeamDistributionController {
       await this.studentsService.deleteStudentFromTeamDistribution(studentId, teamDistribution);
     }
   }
+
+  @Get('/:id/detailed')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse()
+  @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  public async getCourseTeamDistributionDetailed(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const [{ studentsWithoutTeam }] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
+    return { studentsWithoutTeam };
+  }
 }
