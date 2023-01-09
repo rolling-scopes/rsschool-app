@@ -800,6 +800,38 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/registry": {
+      "post": {
+        "operationId": "teamDistributionRegistry",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
+      },
+      "delete": {
+        "operationId": "teamDistributionDeleteRegistry",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",

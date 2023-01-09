@@ -42,6 +42,26 @@ function TeamDistributions({ session, course }: CoursePageProps) {
     await loadData();
   };
 
+  const handleRegister = async (distributionId: number) => {
+    try {
+      await teamDistributionApi.teamDistributionRegistry(course.id, distributionId);
+      await loadData();
+      message.success('Registration completed.');
+    } catch (error) {
+      message.error('Registration failed. Please try again later');
+    }
+  };
+
+  const handleDeleteRegister = async (distributionId: number) => {
+    try {
+      await teamDistributionApi.teamDistributionDeleteRegistry(course.id, distributionId);
+      await loadData();
+      message.success('Registration canceled.');
+    } catch (error) {
+      message.error('Cancellation of registration failed. Please try again later');
+    }
+  };
+
   const handleDeleteTeamDistribution = async (distributionId: number) => {
     try {
       await teamDistributionApi.deleteTeamDistribution(course.id, distributionId);
@@ -67,23 +87,27 @@ function TeamDistributions({ session, course }: CoursePageProps) {
           courseId={course.id}
         />
       )}
-      {isManager && (
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTeamDistribution}>
-          Team Distribution
-        </Button>
-      )}
-      {isStudent && <WelcomeCard />}
-      {distributions.length
-        ? distributions.map(distribution => (
-            <TeamDistributionCard
-              distribution={distribution}
-              isManager={isManager}
-              onDelete={handleDeleteTeamDistribution}
-              onEdit={handleEditTeamDistribution}
-              key={distribution.id}
-            />
-          ))
-        : null}
+      <div style={{ maxWidth: '1020px', margin: '0 auto' }}>
+        {isManager && (
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTeamDistribution}>
+            Team Distribution
+          </Button>
+        )}
+        {isStudent && <WelcomeCard />}
+        {distributions.length
+          ? distributions.map(distribution => (
+              <TeamDistributionCard
+                register={handleRegister}
+                deleteRegister={handleDeleteRegister}
+                distribution={distribution}
+                isManager={isManager}
+                onDelete={handleDeleteTeamDistribution}
+                onEdit={handleEditTeamDistribution}
+                key={distribution.id}
+              />
+            ))
+          : null}
+      </div>
     </PageLayout>
   );
 }
