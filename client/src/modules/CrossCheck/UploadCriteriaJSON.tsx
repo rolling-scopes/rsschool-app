@@ -4,13 +4,14 @@ import React from 'react';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { CriteriaDto } from 'api';
 import { TaskType } from './components/CrossCheckCriteriaForm';
+import { CrossCheckCriteriaType } from 'services/course';
 
 interface IUploadCriteriaJSON {
   onLoad: (data: CriteriaDto[]) => void;
 }
 
 export type CriteriaJSONType = {
-  type: string;
+  type: CrossCheckCriteriaType;
   max?: number;
   text?: string;
   title?: string;
@@ -37,7 +38,10 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
 
   return (
     <Upload data-testid="uploader" accept=".JSON" onChange={handleChange}>
-      <Button icon={<UploadOutlined />} title='required format: {"Type": "string", "Max": number, "Text": "string"}'>
+      <Button
+        icon={<UploadOutlined />}
+        title='required format: \n{ criteria: {"type": "string", "max": number, "text": "string"}}'
+      >
         Click to Upload Criteria (JSON)
       </Button>
     </Upload>

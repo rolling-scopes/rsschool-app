@@ -24,11 +24,12 @@ export enum CrossCheckStatus {
   Completed = 'completed',
 }
 
+export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
 export interface CrossCheckCriteriaData {
   key: string;
   max?: number;
   text: string;
-  type: string;
+  type: CrossCheckCriteriaType;
   point?: number;
   textComment?: string;
 }
@@ -154,7 +155,13 @@ export interface MentorWithContacts {
   phone: string;
 }
 
-export type CrossCheckCriteria = { type: string; title?: string; text?: string; max: number; criteriaId: string };
+export type CrossCheckCriteria = {
+  type: CrossCheckCriteriaType;
+  title?: string;
+  text?: string;
+  max: number;
+  criteriaId: string;
+};
 export type CrossCheckReview = { percentage: number; criteriaId: string };
 export type CrossCheckComment = {
   text: string;
