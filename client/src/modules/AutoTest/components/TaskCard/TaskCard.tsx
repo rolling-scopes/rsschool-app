@@ -6,7 +6,7 @@ import { Course } from 'services/models';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Link } = Typography;
 
 export interface TaskCardProps {
   courseTask: CourseTaskVerifications;
@@ -25,7 +25,7 @@ function getStatusTag(state: CourseTaskState) {
 }
 
 function TaskCard({ courseTask, course }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, verifications, state } = courseTask;
+  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl } = courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
 
   const score = verifications?.[0]?.score ?? null;
@@ -65,6 +65,9 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
           >
             {explanation}
           </Paragraph>
+        </Col>
+        <Col span={24}>
+          <Link href={descriptionUrl}>{descriptionUrl}</Link>
         </Col>
         <Col span={24}>
           <Link href={getAutoTestTaskRoute(course.alias, id)}>
