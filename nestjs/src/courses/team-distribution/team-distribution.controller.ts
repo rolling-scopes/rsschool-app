@@ -110,7 +110,7 @@ export class TeamDistributionController {
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const [teamDistribution] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
-    return new TeamDistributionDetailedDto(teamDistribution);
+    const [studentsWithoutTeam] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
+    return new TeamDistributionDetailedDto(studentsWithoutTeam);
   }
 }

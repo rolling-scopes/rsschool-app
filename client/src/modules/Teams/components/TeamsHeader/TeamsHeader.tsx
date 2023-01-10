@@ -10,16 +10,21 @@ type Props = {
 
 export default function TeamsHeader({ courseAlias }: Props) {
   return (
-    <Row justify="start" align="middle">
-      <Space size={12}>
-        <Link href={`team-distributions?course=${courseAlias}`}>
-          <ArrowLeftOutlined style={{ width: 27 }} />
-        </Link>
-        <Title level={4} style={{ marginBottom: 0 }}>
-          Teams
-        </Title>
-        <Text type="secondary">Distribution of participants per team</Text>
-      </Space>
-    </Row>
+    <Space direction="vertical" size={16}>
+      <Row justify="start" align="middle">
+        <Space size={12}>
+          <Link href={`team-distributions?course=${courseAlias}`}>
+            <ArrowLeftOutlined />
+          </Link>
+          <Title level={4} style={{ marginBottom: 0 }}>
+            Teams
+          </Title>
+          <Text type="secondary">Distribution of participants per team</Text>
+        </Space>
+      </Row>
+      <Title level={5} style={{ marginLeft: 27 }}>
+        The roles of team members are determined automatically.
+      </Title>
+    </Space>
   );
 }

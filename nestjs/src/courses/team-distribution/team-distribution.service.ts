@@ -68,7 +68,7 @@ export class TeamDistributionService {
   }
 
   public async getStudentsWithoutTeam(id: number) {
-    return this.repository
+    const { studentsWithoutTeam } = await this.repository
       .createQueryBuilder('teamDistribution')
       .where({ id })
       .leftJoin('teamDistribution.studentsWithoutTeam', 'student')
@@ -88,6 +88,7 @@ export class TeamDistributionService {
         'student.totalScore',
       ])
       .getOneOrFail();
+    return studentsWithoutTeam;
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

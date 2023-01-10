@@ -1,3 +1,4 @@
+import { Student } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { ApiProperty } from '@nestjs/swagger';
 import { registrationStatusEnum } from '../team-distribution.service';
@@ -57,10 +58,8 @@ export class TeamDistributionDto {
 }
 
 export class TeamDistributionDetailedDto {
-  constructor(teamDistribution: TeamDistribution) {
-    this.studentWithoutTeam = teamDistribution.studentsWithoutTeam.map(
-      student => new TeamDistributionStudentDto(student),
-    );
+  constructor(studentsWithoutTeam: Student[]) {
+    this.studentWithoutTeam = studentsWithoutTeam.map(student => new TeamDistributionStudentDto(student));
   }
 
   @ApiProperty()

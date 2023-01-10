@@ -13,7 +13,7 @@ type TabItem = {
   key: string;
 };
 
-export const labelRender = ({ count, label, key }: LabelItem, activeTab?: string): TabItem => {
+export const tabRenderer = ({ count, label, key }: LabelItem, activeTab?: string): TabItem => {
   const isTabActive = activeTab === key;
   return {
     key,

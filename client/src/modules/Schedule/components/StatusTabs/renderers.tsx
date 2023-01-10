@@ -1,7 +1,7 @@
 import { CourseScheduleItemDtoStatusEnum } from 'api';
 import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
 import { Status } from './StatusTabs';
-import { LabelItem, labelRender } from 'components/TabsWithCounter/renderers';
+import { LabelItem, tabRenderer } from 'components/TabsWithCounter/renderers';
 
 const tabsOrder = [
   ALL_TAB_KEY,
@@ -20,14 +20,8 @@ export const tabsRenderer = (statuses: Status[], activeTab?: string) => {
     count: statuses.length,
   };
 
-  return SCHEDULE_STATUSES.reduce(
-    (
-      acc: LabelItem[],
-      current: {
-        value: CourseScheduleItemDtoStatusEnum;
-        text: string;
-      },
-    ) => {
+  return SCHEDULE_STATUSES.reduce<LabelItem[]>(
+    (acc, current) => {
       const { text, value } = current;
 
       const newItem = {
@@ -40,5 +34,5 @@ export const tabsRenderer = (statuses: Status[], activeTab?: string) => {
     [initialItem],
   )
     .sort((prev, next) => tabsOrder.indexOf(prev.key) - tabsOrder.indexOf(next.key))
-    .map(item => labelRender(item, activeTab));
+    .map(item => tabRenderer(item, activeTab));
 };
