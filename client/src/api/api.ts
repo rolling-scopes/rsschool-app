@@ -4083,6 +4083,19 @@ export interface TaskSolutionDto {
 /**
  * 
  * @export
+ * @interface TeamDistributionDetailedDto
+ */
+export interface TeamDistributionDetailedDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TeamDistributionDetailedDto
+     */
+    'studentWithoutTeam': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface TeamDistributionDto
  */
 export interface TeamDistributionDto {
@@ -12415,7 +12428,7 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCourseTeamDistributionDetailed(courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getCourseTeamDistributionDetailed(courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDetailedDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTeamDistributionDetailed(courseId, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12500,7 +12513,7 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourseTeamDistributionDetailed(courseId: number, id: number, options?: any): AxiosPromise<void> {
+        getCourseTeamDistributionDetailed(courseId: number, id: number, options?: any): AxiosPromise<TeamDistributionDetailedDto> {
             return localVarFp.getCourseTeamDistributionDetailed(courseId, id, options).then((request) => request(axios, basePath));
         },
         /**

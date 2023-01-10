@@ -3,7 +3,7 @@ import { TeamDistributionService } from './team-distribution.service';
 import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
+import { TeamDistributionDetailedDto, TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
 
@@ -103,14 +103,14 @@ export class TeamDistributionController {
 
   @Get('/:id/detailed')
   @UseGuards(RoleGuard)
-  @ApiOkResponse()
+  @ApiOkResponse({ type: TeamDistributionDetailedDto })
   @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
   @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
   public async getCourseTeamDistributionDetailed(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const [{ studentsWithoutTeam }] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
-    return { studentsWithoutTeam };
+    const [teamDistribution] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
+    return new TeamDistributionDetailedDto(teamDistribution);
   }
 }

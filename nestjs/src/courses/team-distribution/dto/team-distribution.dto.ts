@@ -1,6 +1,7 @@
 import { TeamDistribution } from '@entities/teamDistribution';
 import { ApiProperty } from '@nestjs/swagger';
 import { registrationStatusEnum } from '../team-distribution.service';
+import { TeamDistributionStudentDto } from './team-distribution-student.dto';
 
 export class TeamDistributionDto {
   constructor(teamDistribution: TeamDistribution & { registrationStatus?: string }) {
@@ -53,4 +54,15 @@ export class TeamDistributionDto {
 
   @ApiProperty()
   public minTotalScore: number;
+}
+
+export class TeamDistributionDetailedDto {
+  constructor(teamDistribution: TeamDistribution) {
+    this.studentWithoutTeam = teamDistribution.studentsWithoutTeam.map(
+      student => new TeamDistributionStudentDto(student),
+    );
+  }
+
+  @ApiProperty()
+  public studentWithoutTeam: TeamDistributionStudentDto[];
 }

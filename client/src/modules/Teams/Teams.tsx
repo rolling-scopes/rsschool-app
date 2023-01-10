@@ -1,7 +1,9 @@
+import { Row } from 'antd';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
+import { TeamsHeader } from './components';
 
-function Teams({ session, course, teamDistributionId }: TeamsPageProps) {
+function Teams({ session, course }: TeamsPageProps) {
   return (
     <PageLayout
       loading={false}
@@ -10,7 +12,9 @@ function Teams({ session, course, teamDistributionId }: TeamsPageProps) {
       githubId={session.githubId}
       courseName={course.name}
     >
-      {teamDistributionId}
+      <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24, padding: '24px 24px 0' }}>
+        <TeamsHeader courseAlias={course.alias} />
+      </Row>
     </PageLayout>
   );
 }

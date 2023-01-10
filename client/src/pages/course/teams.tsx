@@ -3,18 +3,18 @@ import withSession from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
 import { CoursePageProps } from 'services/models';
 import { GetServerSideProps } from 'next';
-import { ProfileCourseDto, TeamDistributionApi } from 'api';
+import { ProfileCourseDto, TeamDistributionApi, TeamDistributionDetailedDto } from 'api';
 import { Teams } from 'modules/Teams';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
 
 export interface TeamsPageProps extends CoursePageProps {
-  teamDistributionId: string;
+  teamDistributionDetailed: TeamDistributionDetailedDto;
 }
 
 export const getServerSideProps: GetServerSideProps<{
   course: ProfileCourseDto;
-  teamDistributionId: string;
+  teamDistributionDetailed: TeamDistributionDetailedDto;
 }> = async ctx => {
   const courseProps = (await getCourseProps(ctx)) as any;
 
@@ -25,12 +25,12 @@ export const getServerSideProps: GetServerSideProps<{
   const token = getTokenFromContext(ctx);
   const teamDistributionApi = new TeamDistributionApi(getApiConfiguration(token));
   try {
-    await teamDistributionApi.getCourseTeamDistributionDetailed(
+    const { data } = await teamDistributionApi.getCourseTeamDistributionDetailed(
       courseProps.props.course.id,
       Number(teamDistributionId),
     );
     return {
-      props: { ...courseProps.props, teamDistributionId: teamDistributionId },
+      props: { ...courseProps.props, teamDistributionDetailed: data },
     };
   } catch (error) {
     return noAccessResponse;

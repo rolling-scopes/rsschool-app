@@ -840,7 +840,14 @@
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
-        "responses": { "200": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDetailedDto" } }
+            }
+          }
+        },
         "tags": ["team distribution"]
       }
     },
@@ -2529,6 +2536,11 @@
           "strictStudentsCount",
           "minTotalScore"
         ]
+      },
+      "TeamDistributionDetailedDto": {
+        "type": "object",
+        "properties": { "studentWithoutTeam": { "type": "array", "items": { "type": "string" } } },
+        "required": ["studentWithoutTeam"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
