@@ -58,6 +58,17 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
         <Col span={24}>
           <Paragraph
             ellipsis={{
+              expandable: false,
+              rows: 1,
+            }}
+          >
+            Task:{' '}
+            <Link href={descriptionUrl} target="_blank">
+              {descriptionUrl}
+            </Link>
+          </Paragraph>
+          <Paragraph
+            ellipsis={{
               expandable: true,
               rows: 3,
               symbol: 'Read more',
@@ -66,14 +77,9 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
             {explanation}
           </Paragraph>
         </Col>
-        <Col span={12}>
+        <Col span={24}>
           <Link href={getAutoTestTaskRoute(course.alias, id)}>
             <Button type="primary">View details</Button>
-          </Link>
-        </Col>
-        <Col span={12}>
-          <Link href={descriptionUrl} target="_blank">
-            <Button type="link">Description</Button>
           </Link>
         </Col>
       </Row>
