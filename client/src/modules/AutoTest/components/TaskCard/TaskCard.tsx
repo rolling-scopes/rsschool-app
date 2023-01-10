@@ -6,7 +6,7 @@ import { Course } from 'services/models';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
 
-const { Title, Paragraph, Link } = Typography;
+const { Title, Paragraph } = Typography;
 
 export interface TaskCardProps {
   courseTask: CourseTaskVerifications;
@@ -66,12 +66,14 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
             {explanation}
           </Paragraph>
         </Col>
-        <Col span={24}>
-          <Link href={descriptionUrl}>{descriptionUrl}</Link>
-        </Col>
-        <Col span={24}>
+        <Col span={12}>
           <Link href={getAutoTestTaskRoute(course.alias, id)}>
             <Button type="primary">View details</Button>
+          </Link>
+        </Col>
+        <Col span={12}>
+          <Link href={descriptionUrl} target="_blank">
+            <Button type="link">Description</Button>
           </Link>
         </Col>
       </Row>
