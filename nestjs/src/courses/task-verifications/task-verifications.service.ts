@@ -12,7 +12,7 @@ export class TaskVerificationsService {
   ) {}
 
   public async getAnswersByAttempts(courseTaskId: number): Promise<TaskVerificationAttemptDto[]> {
-    // TODO: check that deadline is passed
+    // TODO: check that deadline is passed and return error
     const taskVerifications = await this.taskVerificationRepository.find({
       select: ['createdDate', 'courseTaskId', 'score', 'answers', 'courseTask'],
       where: { courseTaskId },

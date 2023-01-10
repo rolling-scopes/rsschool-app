@@ -10,3 +10,4 @@ export { default as SelfEducation } from './SelfEducation/SelfEducation';
 export { default as VerificationInformation } from './VerificationInformation/VerificationInformation';
 export { default as StatusTabs } from './StatusTabs/StatusTabs';
 export { default as AttemptsAnswers } from './AttemptsAnswers/AttemptsAnswers';
+export { default as Question } from './Question/Question';
