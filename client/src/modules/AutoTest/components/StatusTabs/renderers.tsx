@@ -1,31 +1,18 @@
-import { Space } from 'antd';
-import { ReactNode } from 'react';
-import { CountBadge } from 'components/CountBadge';
 import { CourseTaskStatus, COURSE_TASK_STATUSES } from 'modules/AutoTest/types';
+import { LabelItem, labelRender } from 'components/TabsWithCounter/renderers';
 
-type Item = {
-  label: string;
-  key: string;
-  count: number;
-};
-
-type TabItem = {
-  label: ReactNode;
-  key: string;
-};
-
-export const tabsRenderer = (statuses: CourseTaskStatus[], activeTab?: string): TabItem[] => {
+export const tabsRenderer = (statuses: CourseTaskStatus[], activeTab?: string) => {
   return COURSE_TASK_STATUSES.reduce(
     (
-      acc: Item[],
+      acc: LabelItem[],
       current: {
         value: CourseTaskStatus;
         key: string;
       },
-    ): Item[] => {
+    ) => {
       const { key, value } = current;
 
-      const newItem: Item = {
+      const newItem = {
         label: value,
         key,
         count: statuses.filter(el => el === key).length || 0,
@@ -33,18 +20,5 @@ export const tabsRenderer = (statuses: CourseTaskStatus[], activeTab?: string): 
       return [...acc, newItem];
     },
     [],
-  ).map(({ count, key, label }) => {
-    const isTabActive = activeTab === key;
-    return {
-      key,
-      label: count ? (
-        <Space>
-          {label}
-          <CountBadge showZero count={count} status={isTabActive ? 'processing' : 'default'} />
-        </Space>
-      ) : (
-        label
-      ),
-    };
-  });
+  ).map(item => labelRender(item, activeTab));
 };

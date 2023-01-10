@@ -82,6 +82,8 @@ export class TeamDistributionService {
         'user.firstName',
         'user.lastName',
         'user.cvLink',
+        'user.cityName',
+        'user.countryName',
         'student.rank',
         'student.totalScore',
       ])

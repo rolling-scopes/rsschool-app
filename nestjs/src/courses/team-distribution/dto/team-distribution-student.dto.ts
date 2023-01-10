@@ -13,6 +13,7 @@ export class TeamDistributionStudentDto {
     this.githubId = student.user.githubId;
     this.rank = student.rank;
     this.totalScore = student.totalScore;
+    this.location = `${student.user.cityName}, ${student.user.countryName}`;
   }
 
   @ApiProperty()
@@ -38,4 +39,7 @@ export class TeamDistributionStudentDto {
 
   @ApiProperty()
   public totalScore: number;
+
+  @ApiProperty()
+  public location: string;
 }
