@@ -59,7 +59,7 @@ function VerificationInformation({
           <Col>
             <Space size={16}>
               <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
-                Start test
+                Start task
               </Button>
               {isSelfEducationTask && (
                 <Tooltip
