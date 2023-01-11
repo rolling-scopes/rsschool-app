@@ -13,7 +13,9 @@ export class TeamDistributionStudentDto {
     this.githubId = student.user.githubId;
     this.rank = student.rank;
     this.totalScore = student.totalScore;
-    this.location = `${student.user.cityName}, ${student.user.countryName}`;
+    this.location = `${student.user.cityName ? `${student.user.cityName},` : ''}${
+      student.user.countryName ? `${student.user.countryName}` : ''
+    }`;
   }
 
   @ApiProperty()

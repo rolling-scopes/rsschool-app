@@ -7,22 +7,22 @@ export class Team {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: '' })
   name: string;
 
   @ManyToOne(() => TeamDistribution, teamDistribution => teamDistribution.teams)
   @JoinColumn()
   teamDistribution: TeamDistribution;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
   @ManyToMany(() => Student, student => student.teams)
   students: Student[];
 
-  @Column()
+  @Column({ default: '' })
   chatLink: string;
 
-  @Column()
+  @Column({ default: '' })
   password: string;
 }

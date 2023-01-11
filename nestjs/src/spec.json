@@ -870,6 +870,27 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{distributionId}/team": {
+      "post": {
+        "operationId": "createTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2567,6 +2588,27 @@
           "distributedStudent": { "type": "boolean" }
         },
         "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
+      },
+      "CreateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["name", "description", "chatLink", "teamDistributionId"]
+      },
+      "TeamDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["id", "name", "chatLink", "description", "students"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

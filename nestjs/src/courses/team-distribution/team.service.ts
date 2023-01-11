@@ -19,4 +19,8 @@ export class TeamService {
       .andWhere('s.id IN (:...ids)', { ids: [studentId] })
       .getOne();
   }
+
+  public create(data: Partial<Team>) {
+    return this.repository.create(data);
+  }
 }

@@ -53,6 +53,7 @@ import { CoreModule } from 'src/core/core.module';
 import { TeamDistributionController } from './team-distribution/team-distribution.controller';
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
 import { TeamService } from './team-distribution/team.service';
+import { TeamController } from './team-distribution/team.controller';
 
 @Module({
   imports: [
@@ -99,6 +100,7 @@ import { TeamService } from './team-distribution/team.service';
     CourseScheduleController,
     CourseICalendarController,
     TeamDistributionController,
+    TeamController,
   ],
   providers: [
     CourseTasksService,

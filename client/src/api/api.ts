@@ -1771,6 +1771,37 @@ export interface CreateTeamDistributionDto {
 /**
  * 
  * @export
+ * @interface CreateTeamDto
+ */
+export interface CreateTeamDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDto
+     */
+    'chatLink': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTeamDto
+     */
+    'teamDistributionId': number;
+}
+/**
+ * 
+ * @export
  * @interface CreateUserGroupDto
  */
 export interface CreateUserGroupDto {
@@ -4207,6 +4238,43 @@ export const TeamDistributionDtoRegistrationStatusEnum = {
 
 export type TeamDistributionDtoRegistrationStatusEnum = typeof TeamDistributionDtoRegistrationStatusEnum[keyof typeof TeamDistributionDtoRegistrationStatusEnum];
 
+/**
+ * 
+ * @export
+ * @interface TeamDto
+ */
+export interface TeamDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDto
+     */
+    'chatLink': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TeamDto
+     */
+    'students': Array<string>;
+}
 /**
  * 
  * @export
@@ -12140,6 +12208,123 @@ export class TasksCriteriaApi extends BaseAPI {
      */
     public updateTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig) {
         return TasksCriteriaApiFp(this.configuration).updateTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * TeamApi - axios parameter creator
+ * @export
+ */
+export const TeamApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {CreateTeamDto} createTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam: async (courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTeam', 'courseId', courseId)
+            // verify required parameter 'distributionId' is not null or undefined
+            assertParamExists('createTeam', 'distributionId', distributionId)
+            // verify required parameter 'createTeamDto' is not null or undefined
+            assertParamExists('createTeam', 'createTeamDto', createTeamDto)
+            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTeamDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamApi - functional programming interface
+ * @export
+ */
+export const TeamApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {CreateTeamDto} createTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTeam(courseId, distributionId, createTeamDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * TeamApi - factory interface
+ * @export
+ */
+export const TeamApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {CreateTeamDto} createTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: any): AxiosPromise<TeamDto> {
+            return localVarFp.createTeam(courseId, distributionId, createTeamDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TeamApi - object-oriented interface
+ * @export
+ * @class TeamApi
+ * @extends {BaseAPI}
+ */
+export class TeamApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} distributionId 
+     * @param {CreateTeamDto} createTeamDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamApi
+     */
+    public createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: AxiosRequestConfig) {
+        return TeamApiFp(this.configuration).createTeam(courseId, distributionId, createTeamDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
