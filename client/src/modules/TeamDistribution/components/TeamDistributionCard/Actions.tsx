@@ -104,7 +104,7 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
       <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
         {(isManager || distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed) && (
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
-            <Button type="link">Connect with teams</Button>
+            <Button type="primary">Connect with teams</Button>
           </Link>
         )}
         {renderActions()}

@@ -3,9 +3,15 @@ import { TeamDistributionService } from './team-distribution.service';
 import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { TeamDistributionDetailedDto, TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
+import {
+  TeamDistributionDetailedDto,
+  TeamDistributionDto,
+  TeamDistributionStudentDto,
+  UpdateTeamDistributionDto,
+} from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
+import { TeamService } from './team.service';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -14,6 +20,7 @@ export class TeamDistributionController {
   constructor(
     private readonly teamDistributionService: TeamDistributionService,
     private readonly studentsService: StudentsService,
+    private readonly teamService: TeamService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
@@ -101,16 +108,35 @@ export class TeamDistributionController {
     }
   }
 
+  @Get('/:id/students')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: [Student] })
+  @ApiOperation({ operationId: 'getStudentsWithoutTeam' })
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  public async getStudentsWithoutTeam(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const studentsWithoutTeam = await this.teamDistributionService.getStudentsWithoutTeam(id);
+    return studentsWithoutTeam.map(st => new TeamDistributionStudentDto(st));
+  }
+
   @Get('/:id/detailed')
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDistributionDetailedDto })
   @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
   @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
   public async getCourseTeamDistributionDetailed(
-    @Param('courseId', ParseIntPipe) _: number,
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const [studentsWithoutTeam] = await Promise.all([this.teamDistributionService.getStudentsWithoutTeam(id)]);
-    return new TeamDistributionDetailedDto(studentsWithoutTeam);
+    const studentId = req.user.courses[courseId]?.studentId;
+    let team;
+    if (studentId) {
+      team = await this.teamService.getTeamByStudentId(studentId, id);
+    }
+    const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
+    return new TeamDistributionDetailedDto(distribution, team);
   }
 }

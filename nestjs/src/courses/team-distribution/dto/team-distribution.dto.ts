@@ -1,8 +1,7 @@
-import { Student } from '@entities/index';
+import { Team } from '@entities/team';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { ApiProperty } from '@nestjs/swagger';
 import { registrationStatusEnum } from '../team-distribution.service';
-import { TeamDistributionStudentDto } from './team-distribution-student.dto';
 
 export class TeamDistributionDto {
   constructor(teamDistribution: TeamDistribution & { registrationStatus?: string }) {
@@ -58,10 +57,26 @@ export class TeamDistributionDto {
 }
 
 export class TeamDistributionDetailedDto {
-  constructor(studentsWithoutTeam: Student[]) {
-    this.studentWithoutTeam = studentsWithoutTeam.map(student => new TeamDistributionStudentDto(student));
+  constructor(distribution: TeamDistribution, team?: Team | null) {
+    this.studentsCount = distribution.studentsWithoutTeam.length;
+    this.teamsCount = distribution.teams.length;
+    this.id = distribution.id;
+    this.name = distribution.name;
+    this.distributedStudent = !!team;
   }
 
   @ApiProperty()
-  public studentWithoutTeam: TeamDistributionStudentDto[];
+  public id: number;
+
+  @ApiProperty()
+  public name: string;
+
+  @ApiProperty()
+  public studentsCount: number;
+
+  @ApiProperty()
+  public teamsCount: number;
+
+  @ApiProperty()
+  public distributedStudent: boolean;
 }

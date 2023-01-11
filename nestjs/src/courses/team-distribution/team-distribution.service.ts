@@ -67,29 +67,36 @@ export class TeamDistributionService {
     return this.repository.findOneOrFail({ where: { id } });
   }
 
+  public getDistributionDetailedById(id: number) {
+    return this.repository.findOneOrFail({ where: { id }, relations: ['teams', 'studentsWithoutTeam'] });
+  }
+
   public async getStudentsWithoutTeam(id: number) {
     const { studentsWithoutTeam } = await this.repository
       .createQueryBuilder('teamDistribution')
       .where({ id })
       .leftJoin('teamDistribution.studentsWithoutTeam', 'student')
-      .innerJoin('student.user', 'user')
-      .addSelect([
-        'user.contactsTelegram',
-        'user.contactsSkype',
-        'user.contactsEmail',
-        'user.githubId',
-        'user.discord',
-        'user.firstName',
-        'user.lastName',
-        'user.cvLink',
-        'user.cityName',
-        'user.countryName',
-        'student.rank',
-        'student.totalScore',
-      ])
+      .orderBy('student.rank', 'ASC')
+      .addOrderBy('student.id', 'ASC')
+      .leftJoin('student.user', 'user')
+      .addSelect(this.getUserFields())
+      .addSelect(['student.rank', 'student.totalScore'])
       .getOneOrFail();
     return studentsWithoutTeam;
   }
+
+  private getUserFields = (modelName = 'user') => [
+    `${modelName}.contactsTelegram`,
+    `${modelName}.contactsSkype`,
+    `${modelName}.contactsEmail`,
+    `${modelName}.discord`,
+    `${modelName}.githubId`,
+    `${modelName}.firstName`,
+    `${modelName}.lastName`,
+    `${modelName}.cvLink`,
+    `${modelName}.cityName`,
+    `${modelName}.countryName`,
+  ];
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {
     return this.repository.update(id, teamDistribution);

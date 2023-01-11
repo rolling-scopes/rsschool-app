@@ -832,6 +832,25 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/students": {
+      "get": {
+        "operationId": "getStudentsWithoutTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Student" } } }
+            }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
     "/courses/{courseId}/team-distribution/{id}/detailed": {
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",
@@ -2537,10 +2556,17 @@
           "minTotalScore"
         ]
       },
+      "Student": { "type": "object", "properties": {} },
       "TeamDistributionDetailedDto": {
         "type": "object",
-        "properties": { "studentWithoutTeam": { "type": "array", "items": { "type": "string" } } },
-        "required": ["studentWithoutTeam"]
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "studentsCount": { "type": "number" },
+          "teamsCount": { "type": "number" },
+          "distributedStudent": { "type": "boolean" }
+        },
+        "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
