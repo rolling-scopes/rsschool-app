@@ -14,7 +14,7 @@ export class TeamDistributionStudentDto {
     this.rank = student.rank;
     this.totalScore = student.totalScore;
     this.location = `${student.user.cityName ? `${student.user.cityName},` : ''}${
-      student.user.countryName ? `${student.user.countryName}` : ''
+      student.user.countryName ? ` ${student.user.countryName}` : ''
     }`;
   }
 

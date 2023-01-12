@@ -10,6 +10,7 @@ export enum registrationStatusEnum {
   Unavailable = 'unavailable',
   Future = 'future',
   Completed = 'completed',
+  Distributed = 'distributed',
   Closed = 'closed',
 }
 
@@ -35,6 +36,10 @@ export class TeamDistributionService {
     const distributionStartDate = dayjs(distribution.startDate);
     if (currTimestampUTC < distributionStartDate) {
       return registrationStatusEnum.Future;
+    }
+
+    if (student.teams.find(el => el.teamDistributionId === distribution.id)) {
+      return registrationStatusEnum.Distributed;
     }
 
     if (student.teamDistribution.find(el => el.id === distribution.id)) {
@@ -70,33 +75,6 @@ export class TeamDistributionService {
   public getDistributionDetailedById(id: number) {
     return this.repository.findOneOrFail({ where: { id }, relations: ['teams', 'studentsWithoutTeam'] });
   }
-
-  public async getStudentsWithoutTeam(id: number) {
-    const { studentsWithoutTeam } = await this.repository
-      .createQueryBuilder('teamDistribution')
-      .where({ id })
-      .leftJoin('teamDistribution.studentsWithoutTeam', 'student')
-      .orderBy('student.rank', 'ASC')
-      .addOrderBy('student.id', 'ASC')
-      .leftJoin('student.user', 'user')
-      .addSelect(this.getUserFields())
-      .addSelect(['student.rank', 'student.totalScore'])
-      .getOneOrFail();
-    return studentsWithoutTeam;
-  }
-
-  private getUserFields = (modelName = 'user') => [
-    `${modelName}.contactsTelegram`,
-    `${modelName}.contactsSkype`,
-    `${modelName}.contactsEmail`,
-    `${modelName}.discord`,
-    `${modelName}.githubId`,
-    `${modelName}.firstName`,
-    `${modelName}.lastName`,
-    `${modelName}.cvLink`,
-    `${modelName}.cityName`,
-    `${modelName}.countryName`,
-  ];
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {
     return this.repository.update(id, teamDistribution);

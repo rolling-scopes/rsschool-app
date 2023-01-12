@@ -1,12 +1,14 @@
-import { Form, Input, Space, Typography } from 'antd';
+import { Form, Input, message, Space, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
-import { TeamApi, TeamDto } from 'api';
+import { CreateTeamDto, TeamApi, TeamDto } from 'api';
 import { urlPattern } from 'services/validators';
 
 type Props = {
-  data: Partial<TeamDto>;
   onCancel: () => void;
+  onSubmit: () => Promise<void>;
+  courseId: number;
+  distributionId: number;
 };
 
 const { Text } = Typography;
@@ -18,11 +20,25 @@ const layout = {
   wrapperCol: { span: 20 },
 };
 
-export default function TeamModal({ data, onCancel }: Props) {
+export default function TeamModal({ onCancel, onSubmit, courseId, distributionId }: Props) {
   const [form] = Form.useForm<Partial<TeamDto>>();
 
-  const handleModalSubmit = (values: Partial<TeamDto>) => {
-    return values;
+  const createRecord = (values: Partial<TeamDto>): CreateTeamDto => {
+    return {
+      name: values.name!,
+      description: values.description!,
+      chatLink: values.chatLink!,
+    };
+  };
+
+  const handleModalSubmit = async (values: Partial<TeamDto>) => {
+    try {
+      const record = createRecord(values);
+      await teamApi.createTeam(courseId, distributionId, record);
+    } catch (error) {
+      message.error('Failed to create team. Please try later.');
+    }
+    await onSubmit();
   };
 
   return (
@@ -31,8 +47,8 @@ export default function TeamModal({ data, onCancel }: Props) {
       width={756}
       open={true}
       title="Create team"
-      onOk={async e => {
-        e.preventDefault();
+      okText="Create"
+      onOk={async () => {
         const values = await form.validateFields().catch(() => null);
         if (values == null) {
           return;
@@ -44,7 +60,7 @@ export default function TeamModal({ data, onCancel }: Props) {
         form.resetFields();
       }}
     >
-      <Form {...layout} initialValues={data} form={form}>
+      <Form {...layout} form={form}>
         <Text>You're creating the team for solving a group task. Fill out the form to invite new members.</Text>
         <Form.Item
           style={{ marginTop: 16 }}

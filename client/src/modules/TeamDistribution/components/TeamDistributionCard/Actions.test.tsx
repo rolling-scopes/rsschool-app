@@ -114,20 +114,20 @@ describe('Actions', () => {
     expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
   });
 
-  it('should render Connect with teams button for managers', () => {
+  it('should render allocate a team button for managers', () => {
     renderActions(distribution, true);
 
     const registerButton = screen.getByRole('button', {
-      name: /connect with teams/i,
+      name: /allocate a team/i,
     });
     expect(registerButton).toBeInTheDocument();
   });
 
-  it('should render Connect with teams when registration status is completed', () => {
+  it('should render allocate a team when registration status is completed', () => {
     renderActions({ ...distribution, registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed });
 
     const registerButton = screen.getByRole('button', {
-      name: /connect with teams/i,
+      name: /allocate a team/i,
     });
     expect(registerButton).toBeInTheDocument();
   });

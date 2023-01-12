@@ -25,8 +25,16 @@ export class StudentsService {
     return student;
   }
 
+  public async getStudentDetailed(studentId: number) {
+    const student = await this.studentRepository.findOneOrFail({
+      where: { id: studentId },
+      relations: ['teams', 'teamDistribution', 'user'],
+    });
+    return student;
+  }
+
   public async addStudentToTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
-    const student = await this.getStudentWithTeamDistributions(studentId);
+    const student = await this.getStudentDetailed(studentId);
     const currentDate = dayjs();
     const distributionStartDate = dayjs(teamDistribution.startDate);
     const distributionEndDate = dayjs(teamDistribution.endDate);
@@ -36,6 +44,9 @@ export class StudentsService {
     }
     if (student.totalScore < teamDistribution.minTotalScore) {
       throw new BadRequestException('Number of points is less than the input threshold for distribution');
+    }
+    if (student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
+      throw new BadRequestException();
     }
     student.teamDistribution = [...student.teamDistribution, teamDistribution];
     await this.studentRepository.save(student);

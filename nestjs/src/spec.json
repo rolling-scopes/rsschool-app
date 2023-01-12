@@ -832,25 +832,6 @@
         "tags": ["team distribution"]
       }
     },
-    "/courses/{courseId}/team-distribution/{id}/students": {
-      "get": {
-        "operationId": "getStudentsWithoutTeam",
-        "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Student" } } }
-            }
-          }
-        },
-        "tags": ["team distribution"]
-      }
-    },
     "/courses/{courseId}/team-distribution/{id}/detailed": {
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",
@@ -871,6 +852,23 @@
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team": {
+      "get": {
+        "operationId": "getTeams",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDto" } } }
+            }
+          }
+        },
+        "tags": ["team"]
+      },
       "post": {
         "operationId": "createTeam",
         "summary": "",
@@ -882,12 +880,7 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDto" } } }
         },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["team"]
       }
     },
@@ -2523,7 +2516,7 @@
           "name": { "type": "string" },
           "registrationStatus": {
             "type": "string",
-            "enum": ["available", "unavailable", "future", "completed", "closed"]
+            "enum": ["available", "unavailable", "future", "completed", "distributed", "closed"]
           },
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
@@ -2577,7 +2570,6 @@
           "minTotalScore"
         ]
       },
-      "Student": { "type": "object", "properties": {} },
       "TeamDistributionDetailedDto": {
         "type": "object",
         "properties": {
@@ -2589,16 +2581,6 @@
         },
         "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
       },
-      "CreateTeamDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "chatLink": { "type": "string" },
-          "teamDistributionId": { "type": "number" }
-        },
-        "required": ["name", "description", "chatLink", "teamDistributionId"]
-      },
       "TeamDto": {
         "type": "object",
         "properties": {
@@ -2609,6 +2591,15 @@
           "students": { "type": "array", "items": { "type": "string" } }
         },
         "required": ["id", "name", "chatLink", "description", "students"]
+      },
+      "CreateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" }
+        },
+        "required": ["name", "description", "chatLink"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

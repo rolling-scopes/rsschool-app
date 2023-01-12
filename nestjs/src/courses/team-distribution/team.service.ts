@@ -10,17 +10,27 @@ export class TeamService {
     private repository: Repository<Team>,
   ) {}
 
-  public async getTeamByStudentId(studentId: number, distributionId: number) {
-    return this.repository
-      .createQueryBuilder('team')
-      .innerJoin('team.teamDistribution', 'td')
-      .leftJoin('team.students', 's')
-      .where('td."id" = :distributionId', { distributionId })
-      .andWhere('s.id IN (:...ids)', { ids: [studentId] })
-      .getOne();
+  private generatePassword(length = 6): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 
-  public create(data: Partial<Team>) {
-    return this.repository.create(data);
+  public async findByDistributionId(distributionId: number) {
+    const data = await this.repository.find({
+      where: { teamDistributionId: distributionId },
+      order: {
+        id: 'ASC',
+      },
+    });
+    return data;
+  }
+
+  public async create(data: Partial<Team>) {
+    const team = await this.repository.save({ ...data, password: this.generatePassword() });
+    return this.repository.findOneOrFail({ where: { id: team.id }, relations: ['students'] });
   }
 }

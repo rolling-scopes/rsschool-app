@@ -86,6 +86,12 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
             </Text>
           </>
         );
+      case TeamDistributionDtoRegistrationStatusEnum.Distributed:
+        return (
+          <Button icon={<DownOutlined />} disabled>
+            Registered
+          </Button>
+        );
       case TeamDistributionDtoRegistrationStatusEnum.Closed:
         return (
           <>
@@ -104,7 +110,7 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
       <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
         {(isManager || distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed) && (
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
-            <Button type="primary">Connect with teams</Button>
+            <Button type="primary">Allocate a team</Button>
           </Link>
         )}
         {renderActions()}

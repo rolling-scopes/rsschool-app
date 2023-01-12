@@ -140,7 +140,7 @@ const links: LinkData[] = [
     name: 'Team Distributions (Beta)',
     icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
-    access: some(isCourseManager),
+    access: some(isCourseManager, isActiveStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
 ];
