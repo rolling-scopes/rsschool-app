@@ -47,7 +47,7 @@ export class TeamDistributionController {
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
     if (studentId) {
-      student = await this.studentsService.getById(studentId);
+      student = await this.studentsService.getStudentDetailed(studentId);
     }
     const data = await this.teamDistributionService.findByCourseId(courseId, student);
     return data.map(el => new TeamDistributionDto(el));

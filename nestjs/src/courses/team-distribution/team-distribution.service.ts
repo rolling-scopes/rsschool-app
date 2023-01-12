@@ -38,11 +38,11 @@ export class TeamDistributionService {
       return registrationStatusEnum.Future;
     }
 
-    if (student.teams.find(el => el.teamDistributionId === distribution.id)) {
+    if (student.teams?.find(el => el.teamDistributionId === distribution.id)) {
       return registrationStatusEnum.Distributed;
     }
 
-    if (student.teamDistribution.find(el => el.id === distribution.id)) {
+    if (student.teamDistribution?.find(el => el.id === distribution.id)) {
       return registrationStatusEnum.Completed;
     }
 

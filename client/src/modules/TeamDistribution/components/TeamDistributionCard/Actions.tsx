@@ -108,7 +108,9 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
   return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable || isManager ? (
     <Row style={{ marginTop: 16 }}>
       <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
-        {(isManager || distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed) && (
+        {(isManager ||
+          distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed ||
+          distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Distributed) && (
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
             <Button type="primary">Allocate a team</Button>
           </Link>
