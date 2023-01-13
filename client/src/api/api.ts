@@ -4269,6 +4269,31 @@ export interface TeamDto {
      * @memberof TeamDto
      */
     'students': Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDto
+     */
+    'teamLeadId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamDto
+     */
+    'teamDistributionId': number;
+}
+/**
+ * 
+ * @export
+ * @interface TeamPasswordDto
+ */
+export interface TeamPasswordDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamPasswordDto
+     */
+    'password': string;
 }
 /**
  * 
@@ -12260,17 +12285,21 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {number} courseId 
          * @param {number} distributionId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeams: async (courseId: number, distributionId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTeamPassword: async (courseId: number, distributionId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('getTeams', 'courseId', courseId)
+            assertParamExists('getTeamPassword', 'courseId', courseId)
             // verify required parameter 'distributionId' is not null or undefined
-            assertParamExists('getTeams', 'distributionId', distributionId)
-            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team`
+            assertParamExists('getTeamPassword', 'distributionId', distributionId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getTeamPassword', 'id', id)
+            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team/{id}/password`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
-                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)));
+                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -12311,7 +12340,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createTeam(courseId, distributionId, createTeamDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12319,11 +12348,12 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} distributionId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTeams(courseId: number, distributionId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeams(courseId, distributionId, options);
+        async getTeamPassword(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamPasswordDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamPassword(courseId, distributionId, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12344,18 +12374,19 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: any): AxiosPromise<void> {
+        createTeam(courseId: number, distributionId: number, createTeamDto: CreateTeamDto, options?: any): AxiosPromise<TeamDto> {
             return localVarFp.createTeam(courseId, distributionId, createTeamDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} courseId 
          * @param {number} distributionId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeams(courseId: number, distributionId: number, options?: any): AxiosPromise<Array<TeamDto>> {
-            return localVarFp.getTeams(courseId, distributionId, options).then((request) => request(axios, basePath));
+        getTeamPassword(courseId: number, distributionId: number, id: number, options?: any): AxiosPromise<TeamPasswordDto> {
+            return localVarFp.getTeamPassword(courseId, distributionId, id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12384,12 +12415,13 @@ export class TeamApi extends BaseAPI {
      * 
      * @param {number} courseId 
      * @param {number} distributionId 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamApi
      */
-    public getTeams(courseId: number, distributionId: number, options?: AxiosRequestConfig) {
-        return TeamApiFp(this.configuration).getTeams(courseId, distributionId, options).then((request) => request(this.axios, this.basePath));
+    public getTeamPassword(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamApiFp(this.configuration).getTeamPassword(courseId, distributionId, id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

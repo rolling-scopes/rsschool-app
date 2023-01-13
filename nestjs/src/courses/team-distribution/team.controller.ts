@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
 import { CreateTeamDto } from './dto/create-team.dto';
-import { TeamDto } from './dto/team.dto';
+import { TeamDto, TeamPasswordDto } from './dto/team.dto';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamService } from './team.service';
 
@@ -18,22 +18,9 @@ export class TeamController {
     private readonly distributionService: TeamDistributionService,
   ) {}
 
-  @Get('/')
-  @UseGuards(RoleGuard)
-  @ApiOkResponse({ type: [TeamDto] })
-  @ApiOperation({ operationId: 'getTeams' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Student])
-  public async getTeams(
-    @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('distributionId', ParseIntPipe) distributionId: number,
-  ) {
-    const teams = await this.teamService.findByDistributionId(distributionId);
-    return teams.map(el => new TeamDto(el));
-  }
-
   @Post('/')
   @UseGuards(RoleGuard)
-  @ApiOkResponse()
+  @ApiOkResponse({ type: TeamDto })
   @ApiOperation({ operationId: 'createTeam' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
   public async create(
@@ -62,7 +49,26 @@ export class TeamController {
       await Promise.all(
         data.students.map(el => this.studentService.deleteStudentFromTeamDistribution(el.id, distribution)),
       );
-      console.log(data.students);
     }
+    return new TeamDto(data);
+  }
+
+  @Get('/:id/password')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamPasswordDto })
+  @ApiOperation({ operationId: 'getTeamPassword' })
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
+  public async getTeamPassword(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('distributionId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const team = await this.teamService.findById(id);
+    const studentId = req.user.courses[courseId]?.studentId;
+    const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
+
+    if (studentId !== team.teamLeadId && !isManager) throw new BadRequestException();
+    return new TeamPasswordDto(team);
   }
 }

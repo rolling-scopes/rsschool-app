@@ -1,9 +1,10 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Team1673511081875 implements MigrationInterface {
-  name = 'Team1673511081875';
+export class Team1673597606496 implements MigrationInterface {
+  name = 'Team1673597606496';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE "team" ADD "teamLeadId" integer`);
     await queryRunner.query(`ALTER TABLE "team" DROP CONSTRAINT "FK_79279baf9c5c6e3fb9baabbb5bd"`);
     await queryRunner.query(`ALTER TABLE "team" ALTER COLUMN "name" SET DEFAULT ''`);
     await queryRunner.query(`ALTER TABLE "team" ALTER COLUMN "teamDistributionId" SET NOT NULL`);
@@ -27,5 +28,6 @@ export class Team1673511081875 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "team" ADD CONSTRAINT "FK_79279baf9c5c6e3fb9baabbb5bd" FOREIGN KEY ("teamDistributionId") REFERENCES "team_distribution"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
+    await queryRunner.query(`ALTER TABLE "team" DROP COLUMN "teamLeadId"`);
   }
 }

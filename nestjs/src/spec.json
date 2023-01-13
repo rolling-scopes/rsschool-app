@@ -852,23 +852,6 @@
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team": {
-      "get": {
-        "operationId": "getTeams",
-        "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDto" } } }
-            }
-          }
-        },
-        "tags": ["team"]
-      },
       "post": {
         "operationId": "createTeam",
         "summary": "",
@@ -880,7 +863,30 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDto" } } }
         },
-        "responses": { "200": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/password": {
+      "get": {
+        "operationId": "getTeamPassword",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamPasswordDto" } } }
+          }
+        },
         "tags": ["team"]
       }
     },
@@ -2581,17 +2587,6 @@
         },
         "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
       },
-      "TeamDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "chatLink": { "type": "string" },
-          "description": { "type": "string" },
-          "students": { "type": "array", "items": { "type": "string" } }
-        },
-        "required": ["id", "name", "chatLink", "description", "students"]
-      },
       "CreateTeamDto": {
         "type": "object",
         "properties": {
@@ -2600,6 +2595,24 @@
           "chatLink": { "type": "string" }
         },
         "required": ["name", "description", "chatLink"]
+      },
+      "TeamDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "string" } },
+          "teamLeadId": { "type": "number" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+      },
+      "TeamPasswordDto": {
+        "type": "object",
+        "properties": { "password": { "type": "string" } },
+        "required": ["password"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

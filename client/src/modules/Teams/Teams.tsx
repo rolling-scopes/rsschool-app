@@ -5,19 +5,25 @@ import { TeamsPageProps } from 'pages/course/teams';
 import { TeamModal, TeamsHeader } from './components';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { isActiveStudent, isCourseManager } from 'domain/user';
-import { useMedia } from 'react-use';
-import { TeamDistributionApi } from 'api';
+import { useCopyToClipboard, useMedia } from 'react-use';
+import { CreateTeamDto, TeamApi, TeamDistributionApi } from 'api';
+import { showCreateTeamResultModal } from './utils/showCreateTeamResultModal';
 
 const { Title, Text } = Typography;
 
 const teamDistributionApi = new TeamDistributionApi();
+const teamApi = new TeamApi();
 
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const mobileView = useMedia('(max-width: 720px)');
+
   const [distribution, setDistribution] = useState(teamDistributionDetailed);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('teams');
+
+  const [, copyToClipboard] = useCopyToClipboard();
+
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const isStudent = useMemo(() => isActiveStudent(session, course.id), [session, course.id]);
 
@@ -48,9 +54,15 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     setShowTeamModal(true);
   };
 
-  const submitTeam = async () => {
-    await loadData();
-    setShowTeamModal(false);
+  const submitTeam = async (record: CreateTeamDto) => {
+    try {
+      const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
+      await loadData();
+      setShowTeamModal(false);
+      showCreateTeamResultModal(team, course.id, copyToClipboard);
+    } catch (error) {
+      message.error('Failed to create team. Please try later.');
+    }
   };
 
   return (
@@ -61,14 +73,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       githubId={session.githubId}
       courseName={course.name}
     >
-      {showTeamModal && (
-        <TeamModal
-          onSubmit={submitTeam}
-          onCancel={() => setShowTeamModal(false)}
-          courseId={course.id}
-          distributionId={distribution.id}
-        />
-      )}
+      {showTeamModal && <TeamModal onSubmit={submitTeam} onCancel={() => setShowTeamModal(false)} />}
       <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24, padding: '24px 24px 0' }}>
         <Space direction="vertical" size={12}>
           <TeamsHeader

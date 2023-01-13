@@ -1,26 +1,22 @@
-import { Form, Input, message, Space, Typography } from 'antd';
+import { Form, Input, Space, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
-import { CreateTeamDto, TeamApi, TeamDto } from 'api';
+import { CreateTeamDto, TeamDto } from 'api';
 import { urlPattern } from 'services/validators';
 
 type Props = {
   onCancel: () => void;
-  onSubmit: () => Promise<void>;
-  courseId: number;
-  distributionId: number;
+  onSubmit: (record: CreateTeamDto) => Promise<void>;
 };
 
 const { Text } = Typography;
-
-const teamApi = new TeamApi();
 
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 20 },
 };
 
-export default function TeamModal({ onCancel, onSubmit, courseId, distributionId }: Props) {
+export default function TeamModal({ onCancel, onSubmit }: Props) {
   const [form] = Form.useForm<Partial<TeamDto>>();
 
   const createRecord = (values: Partial<TeamDto>): CreateTeamDto => {
@@ -32,13 +28,8 @@ export default function TeamModal({ onCancel, onSubmit, courseId, distributionId
   };
 
   const handleModalSubmit = async (values: Partial<TeamDto>) => {
-    try {
-      const record = createRecord(values);
-      await teamApi.createTeam(courseId, distributionId, record);
-    } catch (error) {
-      message.error('Failed to create team. Please try later.');
-    }
-    await onSubmit();
+    const record = createRecord(values);
+    await onSubmit(record);
   };
 
   return (

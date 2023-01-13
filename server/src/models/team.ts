@@ -23,6 +23,9 @@ export class Team {
   @ManyToMany(() => Student, student => student.teams, { nullable: true })
   students: Student[];
 
+  @Column({ nullable: true })
+  teamLeadId: number;
+
   @Column({ default: '' })
   chatLink: string;
 
