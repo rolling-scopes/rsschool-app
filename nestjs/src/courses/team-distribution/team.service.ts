@@ -35,6 +35,6 @@ export class TeamService {
   }
 
   public async findById(id: number) {
-    return this.repository.findOneByOrFail({ id });
+    return this.repository.findOneOrFail({ where: { id }, relations: ['students', 'teamDistribution'] });
   }
 }

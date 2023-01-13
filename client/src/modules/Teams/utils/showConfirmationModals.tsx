@@ -5,8 +5,6 @@ import { TeamApi, TeamDto } from 'api';
 const { Title, Text } = Typography;
 
 export function showCreateTeamResultModal(team: TeamDto, courseId: number, copyToClipboard: (value: string) => void) {
-  const visible = true;
-
   const copyPassword = async (): Promise<void> => {
     const teamApi = new TeamApi();
     try {
@@ -29,9 +27,20 @@ export function showCreateTeamResultModal(team: TeamDto, courseId: number, copyT
     cancelText: 'Next',
     cancelButtonProps: { type: 'primary' },
     onOk: () => copyPassword(),
-    visible: visible,
     okText: 'Copy invitation password',
     okButtonProps: { type: 'default' },
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+  });
+}
+
+export function showJoinTeamResultModal(team: TeamDto) {
+  Modal.success({
+    title: <Title level={5}>Successfully joined to the {team.name}</Title>,
+    content: (
+      <div>
+        <Text type="secondary">{team.description}</Text>
+      </div>
+    ),
+    okText: 'Next',
   });
 }

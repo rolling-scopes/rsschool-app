@@ -2548,6 +2548,19 @@ export interface InterviewDto {
 /**
  * 
  * @export
+ * @interface JoinTeamDto
+ */
+export interface JoinTeamDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof JoinTeamDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
  * @interface LeaveCourseRequestDto
  */
 export interface LeaveCourseRequestDto {
@@ -12322,6 +12335,53 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
+         * @param {JoinTeamDto} joinTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        joinTeam: async (courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('joinTeam', 'courseId', courseId)
+            // verify required parameter 'distributionId' is not null or undefined
+            assertParamExists('joinTeam', 'distributionId', distributionId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('joinTeam', 'id', id)
+            // verify required parameter 'joinTeamDto' is not null or undefined
+            assertParamExists('joinTeam', 'joinTeamDto', joinTeamDto)
+            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team/{id}/join`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(joinTeamDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -12356,6 +12416,19 @@ export const TeamApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamPassword(courseId, distributionId, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
+         * @param {JoinTeamDto} joinTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.joinTeam(courseId, distributionId, id, joinTeamDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -12387,6 +12460,18 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          */
         getTeamPassword(courseId: number, distributionId: number, id: number, options?: any): AxiosPromise<TeamPasswordDto> {
             return localVarFp.getTeamPassword(courseId, distributionId, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
+         * @param {JoinTeamDto} joinTeamDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: any): AxiosPromise<TeamDto> {
+            return localVarFp.joinTeam(courseId, distributionId, id, joinTeamDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12422,6 +12507,20 @@ export class TeamApi extends BaseAPI {
      */
     public getTeamPassword(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig) {
         return TeamApiFp(this.configuration).getTeamPassword(courseId, distributionId, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} distributionId 
+     * @param {number} id 
+     * @param {JoinTeamDto} joinTeamDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamApi
+     */
+    public joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: AxiosRequestConfig) {
+        return TeamApiFp(this.configuration).joinTeam(courseId, distributionId, id, joinTeamDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

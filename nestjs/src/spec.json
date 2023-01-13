@@ -890,6 +890,28 @@
         "tags": ["team"]
       }
     },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/join": {
+      "post": {
+        "operationId": "joinTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2614,6 +2636,7 @@
         "properties": { "password": { "type": "string" } },
         "required": ["password"]
       },
+      "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",

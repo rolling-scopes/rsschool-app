@@ -4,6 +4,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
 import { CreateTeamDto } from './dto/create-team.dto';
+import { JoinTeamDto } from './dto/join-team.dto';
 import { TeamDto, TeamPasswordDto } from './dto/team.dto';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamService } from './team.service';
@@ -70,5 +71,32 @@ export class TeamController {
 
     if (studentId !== team.teamLeadId && !isManager) throw new BadRequestException();
     return new TeamPasswordDto(team);
+  }
+
+  @Post('/:id/join')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamDto })
+  @ApiOperation({ operationId: 'joinTeam' })
+  @RequiredRoles([CourseRole.Student])
+  public async joinTeam(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('distributionId', ParseIntPipe) distributionId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: JoinTeamDto,
+  ) {
+    const team = await this.teamService.findById(id);
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) throw new BadRequestException();
+    const student = await this.studentService.getStudentDetailed(studentId);
+    if (team.teamDistribution.strictStudentsCount && team.teamDistribution.studentsCount <= team.students.length + 1) {
+      throw new BadRequestException();
+    }
+    if (student.teams.find(t => t.teamDistributionId === team.teamDistributionId)) throw new BadRequestException();
+    if (!student.teamDistribution.find(td => td.id === distributionId)) throw new BadRequestException();
+    if (dto.password !== team.password) throw new BadRequestException('Invalid password');
+    await this.studentService.addStudentToTeam(studentId, team);
+    await this.studentService.deleteStudentFromTeamDistribution(studentId, team.teamDistribution);
+    return new TeamDto(team);
   }
 }

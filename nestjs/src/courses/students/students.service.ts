@@ -5,6 +5,7 @@ import { AuthUser, Role, CourseRole } from '../../auth';
 import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
+import { Team } from '@entities/team';
 
 @Injectable()
 export class StudentsService {
@@ -49,6 +50,12 @@ export class StudentsService {
       throw new BadRequestException();
     }
     student.teamDistribution = [...student.teamDistribution, teamDistribution];
+    await this.studentRepository.save(student);
+  }
+
+  public async addStudentToTeam(studentId: number, team: Team) {
+    const student = await this.getStudentDetailed(studentId);
+    student.teams = [...student.teams, team];
     await this.studentRepository.save(student);
   }
 

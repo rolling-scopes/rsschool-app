@@ -2,12 +2,12 @@ import { Button, Card, message, Row, Space, Tabs, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
-import { TeamModal, TeamsHeader } from './components';
+import { JoinTeamModal, TeamModal, TeamsHeader } from './components';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard, useMedia } from 'react-use';
-import { CreateTeamDto, TeamApi, TeamDistributionApi } from 'api';
-import { showCreateTeamResultModal } from './utils/showCreateTeamResultModal';
+import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDistributionApi } from 'api';
+import { showCreateTeamResultModal, showJoinTeamResultModal } from './utils/showConfirmationModals';
 
 const { Title, Text } = Typography;
 
@@ -19,6 +19,8 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
 
   const [distribution, setDistribution] = useState(teamDistributionDetailed);
   const [showTeamModal, setShowTeamModal] = useState(false);
+  const [showJoinTeamModal, setShowJointTeamModal] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('teams');
 
@@ -50,8 +52,23 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
-  const handleCreateTeam = async () => {
+  const handleCreateTeam = () => {
     setShowTeamModal(true);
+  };
+
+  const handleJoinTeam = () => {
+    setShowJointTeamModal(true);
+  };
+
+  const joinTeam = async (teamId: number, record: JoinTeamDto) => {
+    try {
+      const { data: team } = await teamApi.joinTeam(course.id, distribution.id, teamId, record);
+      await loadData();
+      setShowJointTeamModal(false);
+      showJoinTeamResultModal(team);
+    } catch (error) {
+      message.error('Failed to join to team. Please try later.');
+    }
   };
 
   const submitTeam = async (record: CreateTeamDto) => {
@@ -74,6 +91,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       courseName={course.name}
     >
       {showTeamModal && <TeamModal onSubmit={submitTeam} onCancel={() => setShowTeamModal(false)} />}
+      {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJointTeamModal(false)} />}
       <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24, padding: '24px 24px 0' }}>
         <Space direction="vertical" size={12}>
           <TeamsHeader
@@ -107,7 +125,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
                       View the list of available teams, find an exciting description. Done this? Ask a team lead to
                       share an invitation password to become a member of the greatest team
                     </Text>
-                    <Button>Join team</Button>
+                    <Button onClick={handleJoinTeam}>Join team</Button>
                   </Space>
                 </Card>
               )}
