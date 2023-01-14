@@ -6,22 +6,22 @@ import { JoinTeamModal, TeamModal, TeamsHeader } from './components';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard, useMedia } from 'react-use';
-import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDistributionApi } from 'api';
+import { CreateTeamDto, JoinTeamDto, TeamApi } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from './utils/showConfirmationModals';
+import { useDistribution } from './hooks';
 
 const { Title, Text } = Typography;
 
-const teamDistributionApi = new TeamDistributionApi();
 const teamApi = new TeamApi();
 
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const mobileView = useMedia('(max-width: 720px)');
 
-  const [distribution, setDistribution] = useState(teamDistributionDetailed);
+  const { distribution, loadDistribution, loading } = useDistribution(teamDistributionDetailed, course.id);
+
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showJoinTeamModal, setShowJointTeamModal] = useState(false);
 
-  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('teams');
 
   const [, copyToClipboard] = useCopyToClipboard();
@@ -40,18 +40,6 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     return tabs.map(el => tabRenderer(el, activeTab));
   }, [activeTab, distribution]);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await teamDistributionApi.getCourseTeamDistributionDetailed(course.id, Number(distribution.id));
-      setDistribution(data);
-    } catch (error) {
-      message.error('Something went wrong, please try reloading the page later');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleCreateTeam = () => {
     setShowTeamModal(true);
   };
@@ -63,7 +51,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const joinTeam = async (teamId: number, record: JoinTeamDto) => {
     try {
       const { data: team } = await teamApi.joinTeam(course.id, distribution.id, teamId, record);
-      await loadData();
+      await loadDistribution();
       setShowJointTeamModal(false);
       showJoinTeamResultModal(team);
     } catch (error) {
@@ -74,7 +62,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const submitTeam = async (record: CreateTeamDto) => {
     try {
       const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
-      await loadData();
+      await loadDistribution();
       setShowTeamModal(false);
       showCreateTeamResultModal(team, course.id, copyToClipboard);
     } catch (error) {
