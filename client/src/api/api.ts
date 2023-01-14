@@ -545,6 +545,12 @@ export interface ContactsDto {
      * @type {string}
      * @memberof ContactsDto
      */
+    'whatsApp'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsDto
+     */
     'telegram'?: string | null;
     /**
      * 
@@ -4677,6 +4683,12 @@ export interface UpdateProfileInfoDto {
      * @memberof UpdateProfileInfoDto
      */
     'contactsSkype'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileInfoDto
+     */
+    'contactsWhatsApp'?: string | null;
     /**
      * 
      * @type {string}

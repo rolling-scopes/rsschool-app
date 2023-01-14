@@ -32,7 +32,7 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
   const [displayValues, setDisplayValues] = useState(data);
   const [values, setValues] = useState(displayValues);
   const [hasError, setHasError] = useState(false);
-  const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = displayValues;
+  const { email, epamEmail, telegram, phone, skype, notes, linkedIn, whatsApp } = displayValues;
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
   const contacts: Contact[] = useMemo(
@@ -65,6 +65,11 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
         key: ContactsKeys.Skype,
       },
       {
+        name: 'WhatsApp',
+        value: whatsApp,
+        key: ContactsKeys.WhatsApp,
+      },
+      {
         name: 'Notes',
         value: notes,
         key: ContactsKeys.Notes,
@@ -81,7 +86,7 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
   const filledContacts = contacts.filter(({ value }: Contact) => value);
 
   const handleSave = async () => {
-    const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = values;
+    const { email, epamEmail, telegram, phone, skype, notes, linkedIn, whatsApp } = values;
     const updatedContacts: UpdateProfileInfoDto = {
       contactsEpamEmail: epamEmail,
       contactsEmail: email,
@@ -90,6 +95,7 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
       contactsSkype: skype,
       contactsNotes: notes,
       contactsLinkedIn: linkedIn,
+      contactsWhatsApp: whatsApp,
     };
 
     const isUpdated = await updateProfile(updatedContacts);

@@ -195,6 +195,7 @@ export interface UserFull extends UserBasic {
   employmentHistory: any[];
   contactsTelegram: string;
   contactsSkype: string;
+  contactsWhatsApp: string;
   contactsEmail: string;
   primaryEmail: string;
   contactsEpamEmail: string;
@@ -238,6 +239,7 @@ export const enum ContactsKeys {
   Telegram = 'telegram',
   Phone = 'phone',
   Skype = 'skype',
+  WhatsApp = 'whatsApp',
   Notes = 'notes',
   LinkedIn = 'linkedIn',
 }

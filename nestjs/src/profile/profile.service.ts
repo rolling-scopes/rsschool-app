@@ -153,6 +153,7 @@ export class ProfileService {
       contactsEmail,
       contactsNotes,
       contactsSkype,
+      contactsWhatsApp,
       contactsLinkedIn,
       contactsEpamEmail,
     } = profileInfo;
@@ -175,6 +176,7 @@ export class ProfileService {
           contactsEmail,
           contactsNotes,
           contactsSkype,
+          contactsWhatsApp,
           contactsLinkedIn,
           contactsEpamEmail,
         },
