@@ -9,8 +9,16 @@ type Props = {
 };
 
 export function HomeSummary({ summary, courseTasks }: Props) {
-  const { name, githubId, contactsEmail, contactsPhone, contactsSkype, contactsTelegram, contactsNotes } =
-    summary.mentor ?? {};
+  const {
+    name,
+    githubId,
+    contactsEmail,
+    contactsPhone,
+    contactsSkype,
+    contactsTelegram,
+    contactsNotes,
+    contactsWhatsApp,
+  } = summary.mentor ?? {};
   const tasksCount = summary.results.filter(r => r.score > 0).length;
   const totalTaskCount = courseTasks.length;
 
@@ -20,6 +28,7 @@ export function HomeSummary({ summary, courseTasks }: Props) {
     { label: 'Skype', value: contactsSkype },
     { label: 'Telegram', value: contactsTelegram },
     { label: 'Notes', value: contactsNotes },
+    { label: 'WhatsApp', value: contactsWhatsApp },
   ];
 
   return (

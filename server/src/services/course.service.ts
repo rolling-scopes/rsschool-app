@@ -54,7 +54,10 @@ export async function getCourseMentor(courseId: number, userId: number): Promise
 
 export interface MentorWithContacts
   extends MentorBasic,
-    Pick<User, 'contactsEmail' | 'contactsPhone' | 'contactsSkype' | 'contactsTelegram' | 'contactsNotes'> {}
+    Pick<
+      User,
+      'contactsEmail' | 'contactsPhone' | 'contactsSkype' | 'contactsTelegram' | 'contactsWhatsApp' | 'contactsNotes'
+    > {}
 
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number | null;
@@ -382,6 +385,7 @@ export async function getMentorWithContacts(mentorId: number): Promise<MentorWit
     ...mentor,
     contactsEmail: user.contactsEmail,
     contactsSkype: user.contactsSkype,
+    contactsWhatsApp: user.contactsWhatsApp,
     contactsTelegram: user.contactsTelegram,
     contactsNotes: user.contactsNotes,
     contactsPhone: null,
