@@ -1,6 +1,7 @@
 import { Team } from '@entities/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate } from 'src/core/paginate';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -36,5 +37,26 @@ export class TeamService {
 
   public async findById(id: number) {
     return this.repository.findOneOrFail({ where: { id }, relations: ['students', 'teamDistribution'] });
+  }
+
+  public async findByDistributionId(
+    distributionId: number,
+    {
+      page = 0,
+      limit = 10,
+    }: {
+      page: number;
+      limit: number;
+    },
+  ) {
+    const query = this.repository
+      .createQueryBuilder('team')
+      .where('team."teamDistributionId" = :distributionId', { distributionId })
+      .leftJoinAndSelect('team.students', 's')
+      .leftJoinAndSelect('s.user', 'u')
+      .orderBy('team.id', 'ASC');
+
+    const { items: teams, meta: paginationMeta } = await paginate(query, { page, limit });
+    return { teams, paginationMeta };
   }
 }

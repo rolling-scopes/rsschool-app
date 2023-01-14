@@ -4311,6 +4311,25 @@ export interface TeamPasswordDto {
 /**
  * 
  * @export
+ * @interface TeamsDto
+ */
+export interface TeamsDto {
+    /**
+     * 
+     * @type {Array<TeamDto>}
+     * @memberof TeamsDto
+     */
+    'content': Array<TeamDto>;
+    /**
+     * 
+     * @type {PaginationMetaDto}
+     * @memberof TeamsDto
+     */
+    'pagination': PaginationMetaDto;
+}
+/**
+ * 
+ * @export
  * @interface UpdateCourseDto
  */
 export interface UpdateCourseDto {
@@ -12339,6 +12358,57 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {number} courseId 
          * @param {number} distributionId 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTeams: async (courseId: number, distributionId: number, current: string, pageSize: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getTeams', 'courseId', courseId)
+            // verify required parameter 'distributionId' is not null or undefined
+            assertParamExists('getTeams', 'distributionId', distributionId)
+            // verify required parameter 'current' is not null or undefined
+            assertParamExists('getTeams', 'current', current)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('getTeams', 'pageSize', pageSize)
+            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
          * @param {number} id 
          * @param {JoinTeamDto} joinTeamDto 
          * @param {*} [options] Override http request option.
@@ -12420,6 +12490,19 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} distributionId 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTeams(courseId: number, distributionId: number, current: string, pageSize: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeams(courseId, distributionId, current, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
          * @param {number} id 
          * @param {JoinTeamDto} joinTeamDto 
          * @param {*} [options] Override http request option.
@@ -12460,6 +12543,18 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          */
         getTeamPassword(courseId: number, distributionId: number, id: number, options?: any): AxiosPromise<TeamPasswordDto> {
             return localVarFp.getTeamPassword(courseId, distributionId, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTeams(courseId: number, distributionId: number, current: string, pageSize: string, options?: any): AxiosPromise<TeamsDto> {
+            return localVarFp.getTeams(courseId, distributionId, current, pageSize, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12507,6 +12602,20 @@ export class TeamApi extends BaseAPI {
      */
     public getTeamPassword(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig) {
         return TeamApiFp(this.configuration).getTeamPassword(courseId, distributionId, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} distributionId 
+     * @param {string} current 
+     * @param {string} pageSize 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamApi
+     */
+    public getTeams(courseId: number, distributionId: number, current: string, pageSize: string, options?: AxiosRequestConfig) {
+        return TeamApiFp(this.configuration).getTeams(courseId, distributionId, current, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

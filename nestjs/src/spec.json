@@ -852,6 +852,23 @@
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team": {
+      "get": {
+        "operationId": "getTeams",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamsDto" } } }
+          }
+        },
+        "tags": ["team"]
+      },
       "post": {
         "operationId": "createTeam",
         "summary": "",
@@ -2609,15 +2626,6 @@
         },
         "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
       },
-      "CreateTeamDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "chatLink": { "type": "string" }
-        },
-        "required": ["name", "description", "chatLink"]
-      },
       "TeamDto": {
         "type": "object",
         "properties": {
@@ -2630,6 +2638,23 @@
           "teamDistributionId": { "type": "number" }
         },
         "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+      },
+      "TeamsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
+      "CreateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" }
+        },
+        "required": ["name", "description", "chatLink"]
       },
       "TeamPasswordDto": {
         "type": "object",

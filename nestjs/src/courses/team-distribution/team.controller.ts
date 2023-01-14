@@ -1,11 +1,23 @@
 import { Student } from '@entities/index';
-import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { JoinTeamDto } from './dto/join-team.dto';
-import { TeamDto, TeamPasswordDto } from './dto/team.dto';
+import { TeamDto, TeamPasswordDto, TeamsDto } from './dto/team.dto';
+import { TeamsQueryDto } from './dto/teams-query.dto';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamService } from './team.service';
 
@@ -18,6 +30,26 @@ export class TeamController {
     private readonly studentService: StudentsService,
     private readonly distributionService: TeamDistributionService,
   ) {}
+
+  @Get('/')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamsDto })
+  @ApiOperation({ operationId: 'getTeams' })
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
+  public async getTeams(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('distributionId', ParseIntPipe) distributionId: number,
+    @Query() query: TeamsQueryDto,
+  ) {
+    const page = parseInt(query.current);
+    const limit = parseInt(query.pageSize);
+    const { teams, paginationMeta } = await this.teamService.findByDistributionId(distributionId, {
+      page,
+      limit,
+    });
+
+    return new TeamsDto(teams, paginationMeta);
+  }
 
   @Post('/')
   @UseGuards(RoleGuard)
@@ -33,6 +65,7 @@ export class TeamController {
     const studentId = req.user.courses[courseId]?.studentId;
     const students: Student[] = [];
     const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
+
     if (studentId && !isManager) {
       const student = await this.studentService.getStudentDetailed(studentId);
       if (student.teams.find(t => t.teamDistributionId === distributionId)) {
@@ -45,12 +78,14 @@ export class TeamController {
       students,
       ...dto,
     });
+
     if (data.students.length) {
       const distribution = await this.distributionService.getById(distributionId);
       await Promise.all(
         data.students.map(el => this.studentService.deleteStudentFromTeamDistribution(el.id, distribution)),
       );
     }
+
     return new TeamDto(data);
   }
 

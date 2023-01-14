@@ -1,5 +1,7 @@
 import { Team } from '@entities/team';
 import { ApiProperty } from '@nestjs/swagger';
+import { PaginationMeta } from 'src/core/paginate';
+import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 import { TeamDistributionStudentDto } from './team-distribution-student.dto';
 
 export class TeamPasswordDto {
@@ -42,4 +44,17 @@ export class TeamDto {
 
   @ApiProperty()
   public teamDistributionId: number;
+}
+
+export class TeamsDto {
+  constructor(teams: Team[], paginationMeta: PaginationMeta) {
+    this.content = teams.map(t => new TeamDto(t));
+    this.pagination = new PaginationMetaDto(paginationMeta);
+  }
+
+  @ApiProperty({ type: [TeamDto] })
+  content: TeamDto[];
+
+  @ApiProperty({ type: PaginationMetaDto })
+  pagination: PaginationMetaDto;
 }
