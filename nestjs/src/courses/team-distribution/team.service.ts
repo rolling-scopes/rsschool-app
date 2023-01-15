@@ -42,7 +42,7 @@ export class TeamService {
   public async findByDistributionId(
     distributionId: number,
     {
-      page = 0,
+      page = 1,
       limit = 10,
     }: {
       page: number;
