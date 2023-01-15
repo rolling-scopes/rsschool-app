@@ -11,7 +11,6 @@ type Props = {
 
 const { Title, Text } = Typography;
 
-// TODO: deal with typings for Question
 function AttemptsAnswers({ attempts }: Props) {
   return (
     <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
@@ -40,6 +39,7 @@ function AttemptsAnswers({ attempts }: Props) {
                   </Text>
                 </Col>
               </Row>
+              {/* TODO: deal with typings for Question */}
               {attempt.questions.map((question: any, questionIdx) => (
                 <Question key={questionIdx} question={question} questionIndex={questionIdx} />
               ))}
