@@ -31,5 +31,9 @@ export function useVerificationsAnswers(courseId: number, courseTaskId: number) 
     loadData();
   }
 
-  return { loading, answers, showAnswers };
+  function hideAnswers() {
+    setAnswers(null);
+  }
+
+  return { loading, answers, showAnswers, hideAnswers };
 }

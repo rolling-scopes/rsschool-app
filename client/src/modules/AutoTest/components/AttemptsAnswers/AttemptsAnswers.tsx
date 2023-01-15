@@ -1,4 +1,4 @@
-import { Col, Row, Typography, Form, Space } from 'antd';
+import { Col, Row, Typography, Form, Space, Button } from 'antd';
 import { TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
 import moment from 'moment';
@@ -7,13 +7,19 @@ import { CalendarOutlined } from '@ant-design/icons';
 
 type Props = {
   attempts: TaskVerificationAttemptDto[];
+  hideAnswers: () => void;
 };
 
 const { Title, Text } = Typography;
 
-function AttemptsAnswers({ attempts }: Props) {
+function AttemptsAnswers({ attempts, hideAnswers }: Props) {
   return (
-    <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
+    <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
+      <Col span={24}>
+        <Row justify="center">
+          <Button onClick={hideAnswers}>Show table</Button>
+        </Row>
+      </Col>
       <Col xs={24} lg={18} xl={12}>
         <Form layout="vertical" requiredMark={false} disabled={true}>
           {attempts.map((attempt, idx) => (

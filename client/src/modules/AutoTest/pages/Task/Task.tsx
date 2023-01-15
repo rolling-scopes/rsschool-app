@@ -21,7 +21,7 @@ function Task({ course, task }: AutoTestTaskProps) {
     reload,
   } = useCourseTaskVerifications(course.id, task);
 
-  const { answers, showAnswers } = useVerificationsAnswers(course.id, task.id);
+  const { answers, showAnswers, hideAnswers } = useVerificationsAnswers(course.id, task.id);
 
   if (!courseTask) {
     return null;
@@ -30,18 +30,21 @@ function Task({ course, task }: AutoTestTaskProps) {
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
-      <VerificationInformation
-        courseTask={courseTask}
-        loading={loading}
-        isTableVisible={!isExerciseVisible && !answers}
-        startTask={startTask}
-        reload={reload}
-        showAnswers={showAnswers}
-      />
+      {!answers ? (
+        <VerificationInformation
+          courseTask={courseTask}
+          loading={loading}
+          isTableVisible={!isExerciseVisible}
+          startTask={startTask}
+          reload={reload}
+          showAnswers={showAnswers}
+        />
+      ) : (
+        <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers}/>
+      )}
       {isExerciseVisible && (
         <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
       )}
-      {!!answers && <AttemptsAnswers attempts={answers} />}
     </PageLayout>
   );
 }
