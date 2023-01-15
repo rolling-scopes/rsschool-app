@@ -103,9 +103,9 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
             isStudent={isStudent}
             distributedStudent={distribution.distributedStudent}
           />
-          {(isManager || !distribution.distributedStudent) && (
+          {isStudent && !distribution.distributedStudent && (
             <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
-              {(!distribution.distributedStudent || isManager) && (
+              {!distribution.distributedStudent && (
                 <Card
                   title={<Title level={5}>Are you going to be a leader completing a group task?</Title>}
                   style={{ backgroundColor: '#E6F7FF' }}
@@ -134,6 +134,11 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
                 </Card>
               )}
             </Space>
+          )}
+          {isManager && (
+            <Button type="primary" onClick={handleCreateTeam}>
+              Create team
+            </Button>
           )}
           <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />
         </Space>
