@@ -1,15 +1,14 @@
-import { Typography } from 'antd';
+import { Typography, Form, Row, Checkbox, Radio, Col } from 'antd';
 import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import { Question } from 'modules/AutoTest/components';
 
 type SelfEducationProps = {
   courseTask: CourseTaskVerifications;
 };
 
-const { Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQuestionWithIndex[] {
   const questionsWithIndex = questions?.map((question, index) => ({ ...question, index }));
@@ -27,9 +26,89 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   return (
     <>
       <Paragraph>To submit the task answer the questions.</Paragraph>
-      {randomQuestions?.map(({ index, ...question }, idx) => (
-        <Question question={question} questionIndex={index} questionNumber={idx + 1} />
-      ))}
+      {randomQuestions?.map(
+        ({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
+          const questionNumber = idx + 1;
+          return (
+            <Form.Item
+              key={questionIndex}
+              label={
+                <Row>
+                  <Col>
+                    <Title level={5}>
+                      {questionNumber}. {question}
+                    </Title>
+                  </Col>
+                  <Col span={24}>
+                    {questionImage && (
+                      <img
+                        src={questionImage}
+                        style={{
+                          width: '100%',
+                          maxWidth: '700px',
+                          marginBottom: '10px',
+                        }}
+                      />
+                    )}
+                  </Col>
+                </Row>
+              }
+              name={`answer-${questionIndex}`}
+              rules={[{ required: true, message: 'Please answer the question' }]}
+            >
+              {multiple ? (
+                <Checkbox.Group>
+                  {answers?.map((answer, answerIndex) => (
+                    <Row key={answerIndex}>
+                      <Checkbox value={answerIndex}>
+                        {answersType === 'image' ? (
+                          <>
+                            ({answerIndex + 1}){' '}
+                            <img
+                              src={answer}
+                              style={{
+                                width: '100%',
+                                maxWidth: '400px',
+                                marginBottom: '10px',
+                              }}
+                            />
+                          </>
+                        ) : (
+                          answer
+                        )}
+                      </Checkbox>
+                    </Row>
+                  ))}
+                </Checkbox.Group>
+              ) : (
+                <Radio.Group>
+                  {answers?.map((answer, index) => (
+                    <Row key={index}>
+                      <Radio value={index}>
+                        {answersType === 'image' ? (
+                          <>
+                            ({index + 1}){' '}
+                            <img
+                              src={answer}
+                              style={{
+                                width: '100%',
+                                maxWidth: '400px',
+                                marginBottom: '10px',
+                              }}
+                            />
+                          </>
+                        ) : (
+                          answer
+                        )}
+                      </Radio>
+                    </Row>
+                  ))}
+                </Radio.Group>
+              )}
+            </Form.Item>
+          );
+        },
+      )}
     </>
   );
 }
