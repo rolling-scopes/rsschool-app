@@ -2,13 +2,13 @@ import { Button, Card, message, Row, Space, Tabs, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
-import { JoinTeamModal, TeamModal, TeamsHeader } from './components';
+import { JoinTeamModal, TeamModal, TeamsHeader, TeamsSection } from '../components';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard, useMedia } from 'react-use';
 import { CreateTeamDto, JoinTeamDto, TeamApi } from 'api';
-import { showCreateTeamResultModal, showJoinTeamResultModal } from './utils/showConfirmationModals';
-import { useDistribution } from './hooks';
+import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
+import { useDistribution } from '../hooks';
 
 const { Title, Text } = Typography;
 
@@ -32,7 +32,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const tabs = useMemo(() => {
     const tabs = [
       { key: 'teams', label: 'Available teams', count: distribution.teamsCount },
-      { key: 'students', label: 'Students without team', count: distribution.studentsCount },
+      { key: 'students', label: 'Students without team', count: distribution.studentsWithoutTeamCount },
     ];
     if (distribution.distributedStudent) {
       tabs.push({ key: 'myTeam', label: 'My team', count: 0 });
@@ -70,6 +70,22 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
+  const contentRenderers = () => {
+    switch (activeTab) {
+      case 'teams':
+        return <TeamsSection distribution={distribution} courseId={course.id} />;
+
+      case 'students':
+        return 'Registered participants';
+
+      case 'myTeam':
+        return 'Team name';
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <PageLayout
       loading={loading}
@@ -80,7 +96,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     >
       {showTeamModal && <TeamModal onSubmit={submitTeam} onCancel={() => setShowTeamModal(false)} />}
       {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJointTeamModal(false)} />}
-      <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24, padding: '24px 24px 0' }}>
+      <Row gutter={24} style={{ background: 'white', marginTop: -15, padding: '24px 24px 0' }}>
         <Space direction="vertical" size={12}>
           <TeamsHeader
             courseAlias={course.alias}
@@ -121,6 +137,9 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
           )}
           <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />
         </Space>
+      </Row>
+      <Row gutter={24} style={{ background: 'white', padding: '24px', margin: 24 }}>
+        {contentRenderers()}
       </Row>
     </PageLayout>
   );

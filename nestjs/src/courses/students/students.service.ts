@@ -18,6 +18,16 @@ export class StudentsService {
     return this.studentRepository.findOneOrFail({ where: { id }, relations: ['user'] });
   }
 
+  public async getStudentsByTeamDistributionId(distributionId: number) {
+    const students = await this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoin('student.teamDistribution', 'td')
+      .where('td.id IN (:...id)', { ids: distributionId })
+      .innerJoinAndSelect('student.user', 'user')
+      .getMany();
+    return students;
+  }
+
   public async getStudentWithTeamDistributions(studentId: number) {
     const student = await this.studentRepository.findOne({
       where: { id: studentId },

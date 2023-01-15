@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class TeamDistributionStudentDto {
   constructor(student: Student) {
+    this.id = student.id;
     this.fullName = `${student.user.firstName} ${student.user.lastName}`;
     this.cvLink = student.user.cvLink ?? undefined;
     this.discord = student.user.discord
@@ -17,6 +18,9 @@ export class TeamDistributionStudentDto {
       student.user.countryName ? ` ${student.user.countryName}` : ''
     }`;
   }
+
+  @ApiProperty()
+  public id: number;
 
   @ApiProperty()
   public fullName: string;

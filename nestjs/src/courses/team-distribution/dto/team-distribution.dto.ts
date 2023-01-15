@@ -58,11 +58,15 @@ export class TeamDistributionDto {
 
 export class TeamDistributionDetailedDto {
   constructor(distribution: TeamDistribution, team?: Team | null) {
-    this.studentsCount = distribution.studentsWithoutTeam.length;
+    this.studentsWithoutTeamCount = distribution.studentsWithoutTeam.length;
     this.teamsCount = distribution.teams.length;
     this.id = distribution.id;
     this.name = distribution.name;
     this.distributedStudent = !!team;
+    this.minStudents = distribution.minStudents;
+    this.maxStudents = distribution.maxStudents;
+    this.studentsCount = distribution.studentsCount;
+    this.strictStudentsCount = distribution.strictStudentsCount;
   }
 
   @ApiProperty()
@@ -72,11 +76,23 @@ export class TeamDistributionDetailedDto {
   public name: string;
 
   @ApiProperty()
-  public studentsCount: number;
+  public studentsWithoutTeamCount: number;
 
   @ApiProperty()
   public teamsCount: number;
 
   @ApiProperty()
   public distributedStudent: boolean;
+
+  @ApiProperty()
+  public minStudents: number;
+
+  @ApiProperty()
+  public maxStudents: number;
+
+  @ApiProperty()
+  public studentsCount: number;
+
+  @ApiProperty()
+  public strictStudentsCount: boolean;
 }

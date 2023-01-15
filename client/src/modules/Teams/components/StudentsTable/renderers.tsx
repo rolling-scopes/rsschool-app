@@ -1,0 +1,70 @@
+import { Typography } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
+import { TeamDistributionStudentDto, TeamDto } from 'api';
+import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
+import { StarTwoTone } from '@ant-design/icons';
+
+const { Text, Link } = Typography;
+
+function renderName({ fullName, cvLink, id }: TeamDistributionStudentDto, teamLeadId?: number) {
+  return (
+    <Link target="_blank" href={cvLink}>
+      {fullName}
+      {id === teamLeadId && <StarTwoTone />}
+    </Link>
+  );
+}
+
+function renderGithub(_v: string, { githubId }: TeamDistributionStudentDto) {
+  return (
+    <Link target="_blank" href={`https://github.com/${githubId}`}>
+      {githubId}
+    </Link>
+  );
+}
+
+function renderPosition(_v: string, { rank }: TeamDistributionStudentDto) {
+  return <Text>{rank}</Text>;
+}
+
+function renderLocation(_v: string, { location }: TeamDistributionStudentDto) {
+  return <Text>{location}</Text>;
+}
+
+function renderDiscord(_v: string, { discord }: TeamDistributionStudentDto) {
+  return <Text>{discord}</Text>;
+}
+
+export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStudentDto> => [
+  {
+    key: StudentsTableColumnKey.Name,
+    title: StudentsTableColumnName.Name,
+    dataIndex: 'name',
+    render: (_v, t) => renderName(t, teamLeadId),
+  },
+  {
+    key: StudentsTableColumnKey.Position,
+    title: StudentsTableColumnName.Position,
+    dataIndex: 'rank',
+    align: 'right',
+    render: renderPosition,
+  },
+  {
+    key: StudentsTableColumnKey.Discord,
+    title: StudentsTableColumnName.Discord,
+    dataIndex: 'discord',
+    render: renderDiscord,
+  },
+  {
+    key: StudentsTableColumnKey.Github,
+    title: StudentsTableColumnName.Github,
+    dataIndex: 'github',
+    render: renderGithub,
+  },
+  {
+    key: StudentsTableColumnKey.Location,
+    title: StudentsTableColumnName.Location,
+    dataIndex: 'location',
+    render: renderLocation,
+  },
+];

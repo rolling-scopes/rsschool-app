@@ -14,10 +14,7 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
-import { CreateTeamDto } from './dto/create-team.dto';
-import { JoinTeamDto } from './dto/join-team.dto';
-import { TeamDto, TeamPasswordDto, TeamsDto } from './dto/team.dto';
-import { TeamsQueryDto } from './dto/teams-query.dto';
+import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, TeamsQueryDto } from './dto/';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamService } from './team.service';
 

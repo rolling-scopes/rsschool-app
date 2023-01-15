@@ -12,10 +12,15 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { TeamDistributionService } from './team-distribution.service';
-import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { TeamDistributionDetailedDto, TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
+import {
+  TeamDistributionDetailedDto,
+  TeamDistributionDto,
+  TeamDistributionStudentDto,
+  UpdateTeamDistributionDto,
+  CreateTeamDistributionDto,
+} from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
 
@@ -139,5 +144,18 @@ export class TeamDistributionController {
     }
     const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
     return new TeamDistributionDetailedDto(distribution, team);
+  }
+
+  @Get('/:id/students')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: [TeamDistributionStudentDto] })
+  @ApiOperation({ operationId: 'getStudentsWithoutTeam' })
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  public async getStudentsWithoutTeam(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const students = await this.studentsService.getStudentsByTeamDistributionId(id);
+    return students.map(s => new TeamDistributionStudentDto(s));
   }
 }

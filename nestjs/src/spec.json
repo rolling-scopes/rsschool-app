@@ -851,6 +851,27 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/students": {
+      "get": {
+        "operationId": "getStudentsWithoutTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
     "/courses/{courseId}/team-distribution/{distributionId}/team": {
       "get": {
         "operationId": "getTeams",
@@ -2620,11 +2641,52 @@
         "properties": {
           "id": { "type": "number" },
           "name": { "type": "string" },
-          "studentsCount": { "type": "number" },
+          "studentsWithoutTeamCount": { "type": "number" },
           "teamsCount": { "type": "number" },
-          "distributedStudent": { "type": "boolean" }
+          "distributedStudent": { "type": "boolean" },
+          "minStudents": { "type": "number" },
+          "maxStudents": { "type": "number" },
+          "studentsCount": { "type": "number" },
+          "strictStudentsCount": { "type": "boolean" }
         },
-        "required": ["id", "name", "studentsCount", "teamsCount", "distributedStudent"]
+        "required": [
+          "id",
+          "name",
+          "studentsWithoutTeamCount",
+          "teamsCount",
+          "distributedStudent",
+          "minStudents",
+          "maxStudents",
+          "studentsCount",
+          "strictStudentsCount"
+        ]
+      },
+      "TeamDistributionStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "fullName": { "type": "string" },
+          "cvLink": { "type": "string" },
+          "discord": { "type": "string" },
+          "telegram": { "type": "string" },
+          "email": { "type": "string" },
+          "githubId": { "type": "string" },
+          "rank": { "type": "number" },
+          "totalScore": { "type": "number" },
+          "location": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "cvLink",
+          "discord",
+          "telegram",
+          "email",
+          "githubId",
+          "rank",
+          "totalScore",
+          "location"
+        ]
       },
       "TeamDto": {
         "type": "object",
