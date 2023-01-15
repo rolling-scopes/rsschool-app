@@ -1,16 +1,17 @@
-import { Typography } from 'antd';
+import { Space, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { TeamDistributionStudentDto, TeamDto } from 'api';
+import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
-import { StarTwoTone } from '@ant-design/icons';
-
+import { TeamOutlined } from '@ant-design/icons';
 const { Text, Link } = Typography;
 
 function renderName({ fullName, cvLink, id }: TeamDistributionStudentDto, teamLeadId?: number) {
   return (
     <Link target="_blank" href={cvLink}>
-      {fullName}
-      {id === teamLeadId && <StarTwoTone />}
+      <Space size="small">
+        {fullName}
+        {id === teamLeadId && <TeamOutlined twoToneColor="#40A9FF" />}
+      </Space>
     </Link>
   );
 }

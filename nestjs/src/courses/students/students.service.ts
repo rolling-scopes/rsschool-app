@@ -22,8 +22,8 @@ export class StudentsService {
     const students = await this.studentRepository
       .createQueryBuilder('student')
       .leftJoin('student.teamDistribution', 'td')
-      .where('td.id IN (:...id)', { ids: distributionId })
       .innerJoinAndSelect('student.user', 'user')
+      .where('td.id IN (:...ids)', { ids: [distributionId] })
       .getMany();
     return students;
   }

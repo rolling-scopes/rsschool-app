@@ -1,7 +1,7 @@
 export enum TeamsTableColumnKey {
   Name = 'name',
   Description = 'description',
-  Members = 'task',
+  Members = 'members',
 }
 
 export enum TeamsTableColumnName {

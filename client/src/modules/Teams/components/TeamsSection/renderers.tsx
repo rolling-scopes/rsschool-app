@@ -38,7 +38,7 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
   },
   {
     key: TeamsTableColumnKey.Members,
-    title: TeamsTableColumnKey.Members,
+    title: TeamsTableColumnName.Members,
     dataIndex: 'solutionUrl',
     render: (_v, t) => renderMemberCount(t, distribution.studentsCount),
   },

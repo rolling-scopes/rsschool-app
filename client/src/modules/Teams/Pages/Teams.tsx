@@ -2,7 +2,7 @@ import { Button, Card, message, Row, Space, Tabs, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
-import { JoinTeamModal, TeamModal, TeamsHeader, TeamsSection } from '../components';
+import { JoinTeamModal, StudentsWithoutTeamSection, TeamModal, TeamsHeader, TeamsSection } from '../components';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard, useMedia } from 'react-use';
@@ -76,7 +76,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
         return <TeamsSection distribution={distribution} courseId={course.id} />;
 
       case 'students':
-        return 'Registered participants';
+        return <StudentsWithoutTeamSection distribution={distribution} courseId={course.id} />;
 
       case 'myTeam':
         return 'Team name';
@@ -105,7 +105,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
           />
           {(isManager || !distribution.distributedStudent) && (
             <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
-              {!distribution.distributedStudent && (
+              {(!distribution.distributedStudent || isManager) && (
                 <Card
                   title={<Title level={5}>Are you going to be a leader completing a group task?</Title>}
                   style={{ backgroundColor: '#E6F7FF' }}
@@ -138,9 +138,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
           <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />
         </Space>
       </Row>
-      <Row gutter={24} style={{ background: 'white', padding: '24px', margin: 24 }}>
-        {contentRenderers()}
-      </Row>
+      <Row style={{ background: 'white', padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
     </PageLayout>
   );
 }
