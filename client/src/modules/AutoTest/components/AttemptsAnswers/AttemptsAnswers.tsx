@@ -13,7 +13,7 @@ const { Title } = Typography;
 // TODO: deal with typings for Question
 function AttemptsAnswers({ answers }: Props) {
   return (
-    <Form layout="vertical" requiredMark={false}>
+    <Form layout="vertical" requiredMark={false} disabled={true}>
       <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
         <Col xs={24} lg={18} xl={12}>
           {answers.map((answer, idx) => (

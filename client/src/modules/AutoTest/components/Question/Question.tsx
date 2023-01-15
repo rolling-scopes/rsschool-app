@@ -20,6 +20,7 @@ function Question({
 }: Props): JSX.Element {
   const { question, questionImage, answers, answersType, multiple } = selfEducationQuestion;
   const Element = multiple ? Checkbox : Radio;
+  const isAnswerMode = mode === 'answer';
 
   return (
     <Form.Item
@@ -47,17 +48,18 @@ function Question({
       }
       name={`answer-${questionIndex}`}
       rules={[{ required: true, message: 'Please answer the question' }]}
+      valuePropName="checked"
     >
-      <Element.Group>
+      <Element.Group value={selectedAnswers as any}>
         {answers?.map((answer, answerIndex) => {
-          // TODO: double check that it is not question mode
-          // FIXME: not working
-          const checked = Array.isArray(selectedAnswers)
-            ? selectedAnswers?.includes(answerIndex)
-            : selectedAnswers === answerIndex;
+          const checked =
+            isAnswerMode && Array.isArray(selectedAnswers)
+              ? selectedAnswers?.includes(answerIndex)
+              : selectedAnswers === answerIndex;
+
           return (
             <Row key={answerIndex}>
-              <Element value={answerIndex} defaultChecked={checked} disabled={mode === 'answer'}>
+              <Element value={answerIndex} checked={checked}>
                 {answersType === 'image' ? (
                   <>
                     ({answerIndex + 1}){' '}
