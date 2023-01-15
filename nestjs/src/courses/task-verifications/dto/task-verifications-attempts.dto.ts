@@ -16,6 +16,7 @@ export class TaskVerificationAttemptDto {
     this.createdDate = taskVerification.createdDate;
     this.courseTaskId = taskVerification.courseTaskId;
     this.score = taskVerification.score;
+    this.maxScore = taskVerification.courseTask.maxScore;
     this.questions = questions;
   }
 
@@ -33,6 +34,11 @@ export class TaskVerificationAttemptDto {
   @IsNotEmpty()
   @IsNumber()
   score: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  maxScore: number;
 
   @ApiProperty({ type: [SelfEducationQuestionWithAnswers] })
   @IsNotEmpty()

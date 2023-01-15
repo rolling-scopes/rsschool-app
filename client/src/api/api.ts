@@ -4106,6 +4106,12 @@ export interface TaskVerificationAttemptDto {
     'score': number;
     /**
      * 
+     * @type {number}
+     * @memberof TaskVerificationAttemptDto
+     */
+    'maxScore': number;
+    /**
+     * 
      * @type {Array<object>}
      * @memberof TaskVerificationAttemptDto
      */

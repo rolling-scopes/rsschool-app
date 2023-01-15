@@ -2516,9 +2516,10 @@
           "createdDate": { "type": "number" },
           "courseTaskId": { "type": "number" },
           "score": { "type": "number" },
+          "maxScore": { "type": "number" },
           "questions": { "type": "array", "items": { "$ref": "#/components/schemas/SelfEducationQuestionWithAnswers" } }
         },
-        "required": ["createdDate", "courseTaskId", "score", "questions"]
+        "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

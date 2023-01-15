@@ -35,7 +35,9 @@ function AttemptsAnswers({ attempts }: Props) {
                 </Col>
                 <Col span={24}>
                   {/* TODO: add maxScore into endpoint */}
-                  <Text type="secondary">Score: {attempt.score} / 100</Text>
+                  <Text type="secondary">
+                    Score: {attempt.score} / {attempt.maxScore}
+                  </Text>
                 </Col>
               </Row>
               {attempt.questions.map((question: any, questionIdx) => (
