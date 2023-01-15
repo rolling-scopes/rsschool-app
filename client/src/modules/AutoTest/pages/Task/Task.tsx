@@ -41,7 +41,7 @@ function Task({ course, task }: AutoTestTaskProps) {
       {isExerciseVisible && (
         <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
       )}
-      {!!answers && <AttemptsAnswers answers={answers} />}
+      {!!answers && <AttemptsAnswers attempts={answers} />}
     </PageLayout>
   );
 }

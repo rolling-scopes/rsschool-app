@@ -3,24 +3,19 @@ import { SelfEducationQuestion } from 'services/course';
 
 const { Title } = Typography;
 
-type Props = {
-  question: SelfEducationQuestion;
-  questionIndex: number;
-  questionNumber: number;
-  selectedAnswers?: number | number[];
-  mode?: 'question' | 'answer';
+type QuestionWithSelectedAnswers = SelfEducationQuestion & {
+  selectedAnswers: number | number[];
 };
 
-function Question({
-  question: selfEducationQuestion,
-  questionIndex,
-  questionNumber,
-  selectedAnswers,
-  mode = 'question',
-}: Props): JSX.Element {
-  const { question, questionImage, answers, answersType, multiple } = selfEducationQuestion;
+type Props = {
+  question: QuestionWithSelectedAnswers;
+  questionIndex: number;
+};
+
+function Question({ question: selfEducationQuestion, questionIndex }: Props): JSX.Element {
+  const { question, questionImage, answers, answersType, multiple, selectedAnswers } = selfEducationQuestion;
   const Element = multiple ? Checkbox : Radio;
-  const isAnswerMode = mode === 'answer';
+  const questionNumber = questionIndex + 1;
 
   return (
     <Form.Item
@@ -47,15 +42,13 @@ function Question({
         </Row>
       }
       name={`answer-${questionIndex}`}
-      rules={[{ required: true, message: 'Please answer the question' }]}
       valuePropName="checked"
     >
       <Element.Group value={selectedAnswers as any}>
         {answers?.map((answer, answerIndex) => {
-          const checked =
-            isAnswerMode && Array.isArray(selectedAnswers)
-              ? selectedAnswers?.includes(answerIndex)
-              : selectedAnswers === answerIndex;
+          const checked = Array.isArray(selectedAnswers)
+            ? selectedAnswers?.includes(answerIndex)
+            : selectedAnswers === answerIndex;
 
           return (
             <Row key={answerIndex}>
