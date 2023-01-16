@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionDetailedDto, TeamDistributionStudentDto, TeamDto } from 'api';
-import { TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
+import { StudentsTableColumnKey, TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
 import StudentsTable from '../StudentsTable/StudentsTable';
 
 const { Text } = Typography;
@@ -46,6 +46,10 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
 
 export const expandedRowRender = (team: TeamDto) => {
   return (
-    <StudentsTable content={team.students as unknown as TeamDistributionStudentDto[]} teamLeadId={team.teamLeadId} />
+    <StudentsTable
+      content={team.students as unknown as TeamDistributionStudentDto[]}
+      teamLeadId={team.teamLeadId}
+      notVisibleColumn={[StudentsTableColumnKey.Email]}
+    />
   );
 };

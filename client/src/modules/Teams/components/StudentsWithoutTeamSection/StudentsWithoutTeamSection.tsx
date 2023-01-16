@@ -1,7 +1,7 @@
 import { Space, Typography } from 'antd';
 import { useState } from 'react';
 
-import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto, TeamDto } from 'api';
+import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
 

@@ -1,4 +1,4 @@
-import { Space, Tag, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
@@ -32,6 +32,10 @@ function renderLocation(_v: string, { location }: TeamDistributionStudentDto) {
   return <Text>{location}</Text>;
 }
 
+function renderEmail(_v: string, { email }: TeamDistributionStudentDto) {
+  return <Text>{email}</Text>;
+}
+
 function renderDiscord(_v: string, { discord }: TeamDistributionStudentDto) {
   return <Text>{discord}</Text>;
 }
@@ -49,6 +53,12 @@ export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStu
     dataIndex: 'rank',
     align: 'right',
     render: renderPosition,
+  },
+  {
+    key: StudentsTableColumnKey.Email,
+    title: StudentsTableColumnName.Email,
+    dataIndex: 'email',
+    render: renderEmail,
   },
   {
     key: StudentsTableColumnKey.Discord,
