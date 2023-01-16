@@ -15,6 +15,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     isSkypeVisible,
     isContactsNotesVisible,
     isLinkedInVisible,
+    isWhatsAppVisible,
   } = permissions;
 
   const query = await getRepository(User)
@@ -47,6 +48,10 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
 
   if (isSkypeVisible) {
     query.addSelect('"user"."contactsSkype" AS "contactsSkype"');
+  }
+
+  if (isWhatsAppVisible) {
+    query.addSelect('"user"."contactsWhatsApp" AS "contactsWhatsApp"');
   }
 
   if (isContactsNotesVisible) {
@@ -82,6 +87,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     contactsEmail = null,
     contactsTelegram = null,
     contactsSkype = null,
+    contactsWhatsApp = null,
     contactsNotes = null,
     contactsLinkedIn = null,
     aboutMyself = null,
@@ -110,6 +116,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
           telegram: contactsTelegram,
           notes: contactsNotes,
           linkedIn: contactsLinkedIn,
+          whatsApp: contactsWhatsApp,
         }
       : undefined,
   };

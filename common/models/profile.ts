@@ -55,6 +55,7 @@ export interface Contacts {
   telegram: string | null;
   notes: string | null;
   linkedIn: string | null;
+  whatsApp: string | null;
 }
 
 export interface Discord {
