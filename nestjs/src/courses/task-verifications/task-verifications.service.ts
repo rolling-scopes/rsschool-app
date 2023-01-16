@@ -38,23 +38,27 @@ export class TaskVerificationsService {
       },
     });
 
-    return taskVerifications.map(verification => {
-      const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
-        .filter(answer => !answer.isCorrect)
-        .map(answer => {
-          const taskQuestion = (verification.courseTask.task.attributes as any).public.questions[answer.index];
+    if (taskVerifications && taskVerifications.length > 0) {
+      return taskVerifications.map(verification => {
+        const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
+          .filter(answer => !answer.isCorrect)
+          .map(answer => {
+            const taskQuestion = (verification.courseTask.task.attributes as any).public.questions[answer.index];
 
-          return new SelfEducationQuestionSelectedAnswersDto({
-            answers: taskQuestion.answers,
-            selectedAnswers: answer.value,
-            multiple: taskQuestion.multiple,
-            question: taskQuestion.question,
-            answersType: taskQuestion.answersType,
-            questionImage: taskQuestion.questionImage,
+            return new SelfEducationQuestionSelectedAnswersDto({
+              answers: taskQuestion.answers,
+              selectedAnswers: answer.value,
+              multiple: taskQuestion.multiple,
+              question: taskQuestion.question,
+              answersType: taskQuestion.answersType,
+              questionImage: taskQuestion.questionImage,
+            });
           });
-        });
 
-      return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
-    });
+        return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
+      });
+    } else {
+      throw new BadRequestException('The answers cannot be checked if there were no attempts');
+    }
   }
 }
