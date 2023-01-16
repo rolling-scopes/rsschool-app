@@ -40,7 +40,7 @@ function Task({ course, task }: AutoTestTaskProps) {
           showAnswers={showAnswers}
         />
       ) : (
-        <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers}/>
+        <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers} />
       )}
       {isExerciseVisible && (
         <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
