@@ -2550,7 +2550,7 @@
           "multiple": { "type": "boolean" },
           "questionImage": { "type": "string" },
           "answersType": { "type": "string" },
-          "selectedAnswers": { "type": "array", "items": { "type": "string" } }
+          "selectedAnswers": { "type": "array", "items": { "type": "number" } }
         },
         "required": ["answers", "question", "multiple", "questionImage", "answersType", "selectedAnswers"]
       },

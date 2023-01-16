@@ -3681,10 +3681,10 @@ export interface SelfEducationQuestionSelectedAnswersDto {
     'answersType': string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<number>}
      * @memberof SelfEducationQuestionSelectedAnswersDto
      */
-    'selectedAnswers': Array<string>;
+    'selectedAnswers': Array<number>;
 }
 /**
  * 

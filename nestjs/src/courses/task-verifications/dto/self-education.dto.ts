@@ -31,6 +31,6 @@ export class SelfEducationQuestionSelectedAnswersDto extends SelfEducationQuesti
     this.selectedAnswers = question.selectedAnswers;
   }
 
-  @ApiProperty()
+  @ApiProperty({ type: [Number] })
   selectedAnswers: (number | number[])[];
 }

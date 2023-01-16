@@ -66,8 +66,7 @@ function VerificationInformation({
                   placement="top"
                   title={allowCheckAnswers ? '' : 'Will be available after the deadline and at least 1 attempt'}
                 >
-                  {/* <Button disabled={!allowCheckAnswers} onClick={showAnswers}> */}
-                  <Button onClick={showAnswers}>
+                  <Button disabled={!allowCheckAnswers} onClick={showAnswers}>
                     Show answers
                   </Button>
                 </Tooltip>
