@@ -28,7 +28,7 @@ export default function MyTeamSection({
 }: Props) {
   const myTeam = distribution.myTeam!;
 
-  const isTeamLead = useMemo(() => studentId === studentId, [studentId, distribution]);
+  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, distribution]);
   const [, copyToClipboard] = useCopyToClipboard();
 
   const copyChatLink = () => {
