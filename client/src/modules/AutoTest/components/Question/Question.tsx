@@ -1,14 +1,10 @@
 import { Typography, Form, Row, Checkbox, Radio, Col } from 'antd';
-import { SelfEducationQuestion } from 'services/course';
+import { SelfEducationQuestionSelectedAnswersDto } from 'api';
 
 const { Title } = Typography;
 
-type QuestionWithSelectedAnswers = SelfEducationQuestion & {
-  selectedAnswers: number | number[];
-};
-
 type Props = {
-  question: QuestionWithSelectedAnswers;
+  question: SelfEducationQuestionSelectedAnswersDto;
   questionIndex: number;
 };
 

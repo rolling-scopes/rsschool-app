@@ -1,5 +1,5 @@
 import { Col, Row, Typography, Form, Space, Button } from 'antd';
-import { TaskVerificationAttemptDto } from 'api';
+import { SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
 import moment from 'moment';
 import { Fragment } from 'react';
@@ -39,14 +39,13 @@ function AttemptsAnswers({ attempts, hideAnswers }: Props) {
                   </Text>
                 </Col>
                 <Col span={24}>
-                  {/* TODO: add maxScore into endpoint */}
                   <Text type="secondary">
                     Score: {attempt.score} / {attempt.maxScore}
                   </Text>
                 </Col>
               </Row>
               {/* TODO: deal with typings for Question */}
-              {attempt.questions.map((question: any, questionIdx) => (
+              {attempt.questions.map((question: SelfEducationQuestionSelectedAnswersDto, questionIdx) => (
                 <Question key={questionIdx} question={question} questionIndex={questionIdx} />
               ))}
             </Fragment>
