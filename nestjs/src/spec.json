@@ -832,6 +832,29 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
+      "get": {
+        "operationId": "getAnswers",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskVerificationAttemptDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["course task verifications"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
