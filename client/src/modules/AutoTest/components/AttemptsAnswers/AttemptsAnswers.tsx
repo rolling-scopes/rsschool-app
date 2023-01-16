@@ -1,5 +1,5 @@
 import { Col, Row, Typography, Form, Space, Button } from 'antd';
-import { SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from 'api';
+import { TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
 import moment from 'moment';
 import { Fragment } from 'react';
@@ -44,8 +44,7 @@ function AttemptsAnswers({ attempts, hideAnswers }: Props) {
                   </Text>
                 </Col>
               </Row>
-              {/* TODO: deal with typings for Question */}
-              {attempt.questions.map((question: SelfEducationQuestionSelectedAnswersDto, questionIdx) => (
+              {attempt.questions.map((question, questionIdx) => (
                 <Question key={questionIdx} question={question} questionIndex={questionIdx} />
               ))}
             </Fragment>
