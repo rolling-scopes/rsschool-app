@@ -2,10 +2,17 @@ import { message, Row } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
-import { JoinTeamModal, StudentsWithoutTeamSection, TeamModal, TeamsHeader, TeamsSection } from '../components';
+import {
+  JoinTeamModal,
+  MyTeamSection,
+  StudentsWithoutTeamSection,
+  TeamModal,
+  TeamsHeader,
+  TeamsSection,
+} from '../components';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
-import { CreateTeamDto, JoinTeamDto, TeamApi } from 'api';
+import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDto } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useDistribution } from '../hooks';
 
@@ -14,7 +21,7 @@ const teamApi = new TeamApi();
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const { distribution, loadDistribution, loading } = useDistribution(teamDistributionDetailed, course.id);
 
-  const [showTeamModal, setShowTeamModal] = useState(false);
+  const [teamData, setTeamData] = useState<Partial<TeamDto> | null>(null);
   const [showJoinTeamModal, setShowJointTeamModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState('teams');
@@ -23,9 +30,10 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
 
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const isStudent = useMemo(() => isActiveStudent(session, course.id), [session, course.id]);
+  const studentId = useMemo(() => session.courses[course.id]?.studentId, [session, course.id]);
 
   const handleCreateTeam = () => {
-    setShowTeamModal(true);
+    setTeamData({});
   };
 
   const handleJoinTeam = () => {
@@ -43,12 +51,16 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
-  const submitTeam = async (record: CreateTeamDto) => {
+  const submitTeam = async (record: CreateTeamDto, id?: number) => {
     try {
-      const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
+      if (id) {
+        await teamApi.updateTeam(course.id, distribution.id, id, record);
+      } else {
+        const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
+        showCreateTeamResultModal(team, course.id, copyToClipboard);
+      }
       await loadDistribution();
-      setShowTeamModal(false);
-      showCreateTeamResultModal(team, course.id, copyToClipboard);
+      setTeamData(null);
     } catch (error) {
       message.error('Failed to create team. Please try later.');
     }
@@ -63,7 +75,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
         return <StudentsWithoutTeamSection distribution={distribution} courseId={course.id} />;
 
       case 'myTeam':
-        return 'Team name';
+        return <MyTeamSection distribution={distribution} setTeamData={setTeamData} studentId={studentId} />;
 
       default:
         return null;
@@ -78,7 +90,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       githubId={session.githubId}
       courseName={course.name}
     >
-      {showTeamModal && <TeamModal onSubmit={submitTeam} onCancel={() => setShowTeamModal(false)} />}
+      {teamData && <TeamModal data={teamData} onSubmit={submitTeam} onCancel={() => setTeamData(null)} />}
       {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJointTeamModal(false)} />}
       <TeamsHeader
         courseAlias={course.alias}

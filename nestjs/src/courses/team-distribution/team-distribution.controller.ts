@@ -23,6 +23,7 @@ import {
   CreateTeamDistributionDto,
   StudentsWithoutTeamQueryDto,
   StudentsWithoutTeamDto,
+  TeamDto,
 } from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
@@ -148,6 +149,7 @@ export class TeamDistributionController {
       const data = student.teams.find(t => t.teamDistributionId === id);
       if (data) {
         team = await this.teamService.findByIdDetailed(data.id);
+        team = new TeamDto(team);
       }
     }
     const distribution = await this.teamDistributionService.getDistributionDetailedById(id);

@@ -7,3 +7,4 @@ export * from './team-distribution.dto';
 export * from './team.dto';
 export * from './teams-query.dto';
 export * from './update-team-distribution.dto';
+export * from './update-team-dto';

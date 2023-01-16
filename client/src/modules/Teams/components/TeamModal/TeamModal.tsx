@@ -5,8 +5,9 @@ import { CreateTeamDto, TeamDto } from 'api';
 import { urlPattern } from 'services/validators';
 
 type Props = {
+  data: Partial<TeamDto>;
   onCancel: () => void;
-  onSubmit: (record: CreateTeamDto) => Promise<void>;
+  onSubmit: (record: CreateTeamDto, id?: number) => Promise<void>;
 };
 
 const { Text } = Typography;
@@ -16,7 +17,7 @@ const layout = {
   wrapperCol: { span: 20 },
 };
 
-export default function TeamModal({ onCancel, onSubmit }: Props) {
+export default function TeamModal({ onCancel, onSubmit, data }: Props) {
   const [form] = Form.useForm<Partial<TeamDto>>();
 
   const createRecord = (values: Partial<TeamDto>): CreateTeamDto => {
@@ -29,7 +30,7 @@ export default function TeamModal({ onCancel, onSubmit }: Props) {
 
   const handleModalSubmit = async (values: Partial<TeamDto>) => {
     const record = createRecord(values);
-    await onSubmit(record);
+    await onSubmit(record, data?.id);
   };
 
   return (
@@ -37,8 +38,8 @@ export default function TeamModal({ onCancel, onSubmit }: Props) {
       style={{ top: 20 }}
       width={756}
       open={true}
-      title="Create team"
-      okText="Create"
+      title={data?.id ? 'Edit Team' : 'Create Team'}
+      okText={data?.id ? 'Edit' : 'Create'}
       onOk={async () => {
         const values = await form.validateFields().catch(() => null);
         if (values == null) {
@@ -51,7 +52,7 @@ export default function TeamModal({ onCancel, onSubmit }: Props) {
         form.resetFields();
       }}
     >
-      <Form {...layout} form={form}>
+      <Form {...layout} form={form} initialValues={data}>
         <Text>You're creating the team for solving a group task. Fill out the form to invite new members.</Text>
         <Form.Item
           style={{ marginTop: 16 }}

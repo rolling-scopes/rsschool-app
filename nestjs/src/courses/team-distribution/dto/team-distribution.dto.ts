@@ -1,6 +1,6 @@
-import { Team } from '@entities/team';
 import { TeamDistribution } from '@entities/teamDistribution';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 import { registrationStatusEnum } from '../team-distribution.service';
 import { TeamDto } from './team.dto';
 
@@ -57,13 +57,14 @@ export class TeamDistributionDto {
   public minTotalScore: number;
 }
 
+@ApiResponse({})
 export class TeamDistributionDetailedDto {
-  constructor(distribution: TeamDistribution, team?: Team | null) {
+  constructor(distribution: TeamDistribution, team?: TeamDto) {
     this.studentsWithoutTeamCount = distribution.studentsWithoutTeam.length;
     this.teamsCount = distribution.teams.length;
     this.id = distribution.id;
     this.name = distribution.name;
-    this.myTeam = team ? new TeamDto(team) : null;
+    this.myTeam = team;
     this.minStudents = distribution.minStudents;
     this.maxStudents = distribution.maxStudents;
     this.studentsCount = distribution.studentsCount;
@@ -83,7 +84,8 @@ export class TeamDistributionDetailedDto {
   public teamsCount: number;
 
   @ApiProperty()
-  public myTeam: TeamDto | null;
+  @IsOptional()
+  public myTeam?: TeamDto;
 
   @ApiProperty()
   public minStudents: number;

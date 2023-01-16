@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -14,7 +15,7 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
-import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, TeamsQueryDto } from './dto/';
+import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, TeamsQueryDto, UpdateTeamDto } from './dto/';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamService } from './team.service';
 
@@ -85,6 +86,19 @@ export class TeamController {
     }
 
     return new TeamDto(team);
+  }
+
+  @Patch('/:id')
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Student])
+  @ApiOperation({ operationId: 'updateTeam' })
+  @ApiOkResponse()
+  public async updateTeam(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('distributionId', ParseIntPipe) _distributionId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateTeamDto,
+  ) {
+    await this.teamService.update(id, dto);
   }
 
   @Get('/:id/password')

@@ -912,6 +912,23 @@
         "tags": ["team"]
       }
     },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}": {
+      "patch": {
+        "operationId": "updateTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["team"]
+      }
+    },
     "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/password": {
       "get": {
         "operationId": "getTeamPassword",
@@ -2639,6 +2656,19 @@
           "minTotalScore"
         ]
       },
+      "TeamDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "string" } },
+          "teamLeadId": { "type": "number" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+      },
       "TeamDistributionDetailedDto": {
         "type": "object",
         "properties": {
@@ -2646,7 +2676,7 @@
           "name": { "type": "string" },
           "studentsWithoutTeamCount": { "type": "number" },
           "teamsCount": { "type": "number" },
-          "myTeam": { "type": "object" },
+          "myTeam": { "$ref": "#/components/schemas/TeamDto" },
           "minStudents": { "type": "number" },
           "maxStudents": { "type": "number" },
           "studentsCount": { "type": "number" },
@@ -2691,19 +2721,6 @@
           "location"
         ]
       },
-      "TeamDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "chatLink": { "type": "string" },
-          "description": { "type": "string" },
-          "students": { "type": "array", "items": { "type": "string" } },
-          "teamLeadId": { "type": "number" },
-          "teamDistributionId": { "type": "number" }
-        },
-        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
-      },
       "TeamsDto": {
         "type": "object",
         "properties": {
@@ -2713,6 +2730,15 @@
         "required": ["content", "pagination"]
       },
       "CreateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" }
+        },
+        "required": ["name", "description", "chatLink"]
+      },
+      "UpdateTeamDto": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },

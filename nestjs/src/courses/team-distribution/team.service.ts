@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'src/core/paginate';
 import { Repository } from 'typeorm';
+import { UpdateTeamDto } from './dto';
 
 @Injectable()
 export class TeamService {
@@ -39,6 +40,10 @@ export class TeamService {
       .leftJoinAndSelect('team.students', 's')
       .leftJoinAndSelect('s.user', 'u')
       .getOneOrFail();
+  }
+
+  public async update(id: number, data: UpdateTeamDto) {
+    return this.repository.update(id, data);
   }
 
   public async findByDistributionId(distributionId: number, { page = 1, limit = 10 }) {
