@@ -2,6 +2,7 @@ import { Button, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TeamDistributionDto } from 'api';
 import { DistributionPeriod } from './DistributionPeriod';
+import { Actions } from './Actions';
 import { useMedia } from 'react-use';
 
 type Props = {
@@ -9,9 +10,18 @@ type Props = {
   isManager: boolean;
   onDelete: (id: number) => Promise<void>;
   onEdit: (distribution: TeamDistributionDto) => void;
+  register: (distributionId: number) => Promise<void>;
+  deleteRegister: (distributionId: number) => Promise<void>;
 };
 
-export default function TeamDistributionCard({ distribution, isManager, onDelete, onEdit }: Props) {
+export default function TeamDistributionCard({
+  distribution,
+  isManager,
+  onDelete,
+  onEdit,
+  register,
+  deleteRegister,
+}: Props) {
   const mobileView = useMedia('(max-width: 720px)');
 
   return (
@@ -34,13 +44,12 @@ export default function TeamDistributionCard({ distribution, isManager, onDelete
     >
       {distribution.description}
       {distribution.descriptionUrl && (
-        <>
-          <br />
-          <a href={distribution.descriptionUrl} target="_blank">
-            Read more
-          </a>
-        </>
+        <a href={distribution.descriptionUrl} target="_blank">
+          {' '}
+          Read more
+        </a>
       )}
+      <Actions distribution={distribution} register={register} deleteRegister={deleteRegister} />
     </Card>
   );
 }

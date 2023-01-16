@@ -8,7 +8,7 @@ export default function WelcomeCard() {
   return (
     <Card
       title={<Text style={{ color: '#fff' }}>Become a member of the team!</Text>}
-      style={{ marginTop: 24, backgroundColor: '#ff7875' }}
+      style={{ marginTop: 24, backgroundColor: '#539DE2' }}
     >
       <Row gutter={24} style={{ minHeight: '100px' }}>
         <Col span={!mobileView ? 12 : 24}>

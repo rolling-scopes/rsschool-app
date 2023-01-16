@@ -178,6 +178,11 @@ export class ContactsDto implements Contacts {
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
+  whatsApp: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
   telegram: string | null;
 
   @ApiProperty({ required: false, nullable: true, type: String })
@@ -290,6 +295,11 @@ export class UpdateProfileInfoDto {
   @IsOptional()
   @IsString()
   contactsSkype?: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  contactsWhatsApp?: string | null;
 
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()

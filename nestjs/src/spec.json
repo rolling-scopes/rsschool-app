@@ -800,27 +800,36 @@
         "tags": ["team distribution"]
       }
     },
-    "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
-      "get": {
-        "operationId": "getAnswers",
+    "/courses/{courseId}/team-distribution/{id}/registry": {
+      "post": {
+        "operationId": "teamDistributionRegistry",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
             "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskVerificationAttemptDto" } }
-              }
-            }
-          },
-          "400": { "description": "" },
-          "403": { "description": "" }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
         },
-        "tags": ["course task verifications"]
+        "tags": ["team distribution"]
+      },
+      "delete": {
+        "operationId": "teamDistributionDeleteRegistry",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
       }
     },
     "/users/notifications": {
@@ -2309,6 +2318,7 @@
           "email": { "type": "string", "nullable": true },
           "epamEmail": { "type": "string", "nullable": true },
           "skype": { "type": "string", "nullable": true },
+          "whatsApp": { "type": "string", "nullable": true },
           "telegram": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },
           "linkedIn": { "type": "string", "nullable": true },
@@ -2835,6 +2845,7 @@
           "contactsEmail": { "type": "string", "nullable": true },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "contactsSkype": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true },
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsNotes": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
