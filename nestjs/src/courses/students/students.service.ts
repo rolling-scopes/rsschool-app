@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Team } from '@entities/team';
+import { paginate } from 'src/core/paginate';
 
 @Injectable()
 export class StudentsService {
@@ -18,14 +19,15 @@ export class StudentsService {
     return this.studentRepository.findOneOrFail({ where: { id }, relations: ['user'] });
   }
 
-  public async getStudentsByTeamDistributionId(distributionId: number) {
-    const students = await this.studentRepository
+  public async getStudentsByTeamDistributionId(distributionId: number, { page = 1, limit = 10 }) {
+    const query = this.studentRepository
       .createQueryBuilder('student')
       .leftJoin('student.teamDistribution', 'td')
       .innerJoinAndSelect('student.user', 'user')
       .where('td.id IN (:...ids)', { ids: [distributionId] })
-      .getMany();
-    return students;
+      .orderBy('student.rank', 'ASC');
+    const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
+    return { students, paginationMeta };
   }
 
   public async getStudentWithTeamDistributions(studentId: number) {

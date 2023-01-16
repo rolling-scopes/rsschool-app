@@ -39,16 +39,7 @@ export class TeamService {
     return this.repository.findOneOrFail({ where: { id }, relations: ['students', 'teamDistribution'] });
   }
 
-  public async findByDistributionId(
-    distributionId: number,
-    {
-      page = 1,
-      limit = 10,
-    }: {
-      page: number;
-      limit: number;
-    },
-  ) {
+  public async findByDistributionId(distributionId: number, { page = 1, limit = 10 }) {
     const query = this.repository
       .createQueryBuilder('team')
       .where('team."teamDistributionId" = :distributionId', { distributionId })

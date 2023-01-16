@@ -1,5 +1,7 @@
 import { Student } from '@entities/index';
 import { ApiProperty } from '@nestjs/swagger';
+import { PaginationMeta } from 'src/core/paginate';
+import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 
 export class TeamDistributionStudentDto {
   constructor(student: Student) {
@@ -48,4 +50,17 @@ export class TeamDistributionStudentDto {
 
   @ApiProperty()
   public location: string;
+}
+
+export class StudentsWithoutTeamDto {
+  constructor(students: Student[], paginationMeta: PaginationMeta) {
+    this.content = students.map(s => new TeamDistributionStudentDto(s));
+    this.pagination = new PaginationMetaDto(paginationMeta);
+  }
+
+  @ApiProperty({ type: [TeamDistributionStudentDto] })
+  content: TeamDistributionStudentDto[];
+
+  @ApiProperty({ type: PaginationMetaDto })
+  pagination: PaginationMetaDto;
 }

@@ -10,6 +10,7 @@ import {
   Put,
   Req,
   ForbiddenException,
+  Query,
 } from '@nestjs/common';
 import { TeamDistributionService } from './team-distribution.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,6 +21,8 @@ import {
   TeamDistributionStudentDto,
   UpdateTeamDistributionDto,
   CreateTeamDistributionDto,
+  StudentsWithoutTeamQueryDto,
+  StudentsWithoutTeamDto,
 } from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
@@ -154,8 +157,15 @@ export class TeamDistributionController {
   public async getStudentsWithoutTeam(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
+    @Query() query: StudentsWithoutTeamQueryDto,
   ) {
-    const students = await this.studentsService.getStudentsByTeamDistributionId(id);
-    return students.map(s => new TeamDistributionStudentDto(s));
+    const page = parseInt(query.current);
+    const limit = parseInt(query.pageSize);
+    const { students, paginationMeta } = await this.studentsService.getStudentsByTeamDistributionId(id, {
+      page,
+      limit,
+    });
+
+    return new StudentsWithoutTeamDto(students, paginationMeta);
   }
 }

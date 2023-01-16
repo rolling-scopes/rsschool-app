@@ -1,6 +1,7 @@
 export * from './create-team-distribution.dto';
 export * from './create-team.dto';
 export * from './join-team.dto';
+export * from './students-without-team-query.dto';
 export * from './team-distribution-student.dto';
 export * from './team-distribution.dto';
 export * from './team.dto';

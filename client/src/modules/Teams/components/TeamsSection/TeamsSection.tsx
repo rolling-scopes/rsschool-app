@@ -1,4 +1,4 @@
-import { Space, Table, Typography } from 'antd';
+import { Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
 import { useState } from 'react';
 
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
@@ -23,21 +23,33 @@ const teamApi = new TeamApi();
 export default function TeamSection({ distribution, courseId }: Props) {
   const [teams, setTeams] = useState<TeamsState>({
     content: [],
-    pagination: { current: 1, pageSize: 100 },
+    pagination: { current: 1, pageSize: 10 },
   });
 
-  useAsync(async () => {
-    const { data } = await teamApi.getTeams(courseId, distribution.id, '1', '10');
+  const getTeams = async (pagination: TablePaginationConfig) => {
+    const { data } = await teamApi.getTeams(
+      courseId,
+      distribution.id,
+      String(pagination.current),
+      String(pagination.pageSize),
+    );
     setTeams({ ...teams, ...data });
-  }, [distribution]);
+  };
+
+  const handleChange: TableProps<TeamDto>['onChange'] = pagination => {
+    getTeams(pagination);
+  };
+
+  useAsync(async () => await getTeams(teams.pagination), [distribution]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
       <Title level={5}>{`${distribution.name} teams`}</Title>
       <Table<TeamDto>
         showHeader
-        pagination={{ ...teams.pagination }}
+        pagination={teams.pagination}
         rowKey="id"
+        onChange={handleChange}
         dataSource={teams.content}
         columns={getColumns(distribution)}
         expandable={{ expandedRowRender, rowExpandable: record => record.students.length > 0 }}

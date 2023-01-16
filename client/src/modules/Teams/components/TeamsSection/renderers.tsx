@@ -50,6 +50,7 @@ export const expandedRowRender = (team: TeamDto) => {
       content={team.students as unknown as TeamDistributionStudentDto[]}
       teamLeadId={team.teamLeadId}
       notVisibleColumn={[StudentsTableColumnKey.Email]}
+      pagination={false}
     />
   );
 };
