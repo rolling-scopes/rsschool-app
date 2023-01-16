@@ -20,7 +20,7 @@ export default function StudentsWithoutTeamSection({ distribution, courseId }: P
   useAsync(async () => {
     const { data } = await teamDistributionApi.getStudentsWithoutTeam(courseId, distribution.id);
     setStudents(data);
-  }, []);
+  }, [distribution]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>

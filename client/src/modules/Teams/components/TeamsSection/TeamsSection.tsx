@@ -29,7 +29,7 @@ export default function TeamSection({ distribution, courseId }: Props) {
   useAsync(async () => {
     const { data } = await teamApi.getTeams(courseId, distribution.id, '1', '10');
     setTeams({ ...teams, ...data });
-  }, []);
+  }, [distribution]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
@@ -40,7 +40,7 @@ export default function TeamSection({ distribution, courseId }: Props) {
         rowKey="id"
         dataSource={teams.content}
         columns={getColumns(distribution)}
-        expandable={{ expandedRowRender }}
+        expandable={{ expandedRowRender, rowExpandable: record => record.students.length > 0 }}
       />
     </Space>
   );
