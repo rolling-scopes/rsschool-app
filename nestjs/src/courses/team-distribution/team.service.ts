@@ -22,7 +22,7 @@ export class TeamService {
 
   public async create(data: Partial<Team>) {
     if (data.students?.length) {
-      const [lead] = data.students.sort();
+      const [lead] = data.students.sort((a, b) => a.rank - b.rank);
       data.teamLeadId = lead?.id;
     }
     const team = await this.repository.save({ ...data, password: this.generatePassword() });
