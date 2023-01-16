@@ -5,12 +5,12 @@ import { AxiosError } from 'axios';
 
 export function useVerificationsAnswers(courseId: number, courseTaskId: number) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [error, setError] = useState<AxiosError<any> | null>(null);
   const [answers, setAnswers] = useState<TaskVerificationAttemptDto[] | null>(null);
 
   useEffect(() => {
     if (error) {
-      message.error(error?.message);
+      message.error(error.response?.data?.message || error?.message);
     }
   }, [error]);
 
@@ -22,7 +22,7 @@ export function useVerificationsAnswers(courseId: number, courseTaskId: number) 
         const result = await new CourseTaskVerificationsApi().getAnswers(courseId, courseTaskId);
         setAnswers(result.data);
       } catch (error) {
-        setError(error as AxiosError);
+        setError(error as AxiosError<any>);
       } finally {
         setLoading(false);
       }

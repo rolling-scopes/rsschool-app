@@ -1,19 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskVerification } from '@entities/taskVerification';
+import { CourseTask } from '@entities/courseTask';
 import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
 import { SelfEducationQuestionSelectedAnswersDto } from './dto/self-education.dto';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class TaskVerificationsService {
   constructor(
     @InjectRepository(TaskVerification)
     readonly taskVerificationRepository: Repository<TaskVerification>,
+
+    @InjectRepository(CourseTask)
+    readonly courseTaskRepository: Repository<CourseTask>,
   ) {}
 
   public async getAnswersByAttempts(courseTaskId: number): Promise<TaskVerificationAttemptDto[]> {
-    // TODO: check that deadline is passed and return error
+    const courseTask = await this.courseTaskRepository.findOneOrFail({
+      where: { id: courseTaskId },
+    });
+
+    const now = dayjs();
+    const endDate = dayjs(courseTask?.studentEndDate);
+
+    if (now.isBefore(endDate)) {
+      throw new BadRequestException('The answers cannot be checked until the deadline has passed');
+    }
+
     const taskVerifications = await this.taskVerificationRepository.find({
       select: ['createdDate', 'courseTaskId', 'score', 'answers', 'courseTask'],
       where: { courseTaskId },
@@ -23,11 +38,11 @@ export class TaskVerificationsService {
       },
     });
 
-    return taskVerifications.map(tv => {
-      const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = tv.answers
+    return taskVerifications.map(verification => {
+      const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
         .filter(answer => !answer.isCorrect)
         .map(answer => {
-          const taskQuestion = (tv.courseTask.task.attributes as any).public.questions[answer.index];
+          const taskQuestion = (verification.courseTask.task.attributes as any).public.questions[answer.index];
 
           return new SelfEducationQuestionSelectedAnswersDto({
             answers: taskQuestion.answers,
@@ -39,7 +54,7 @@ export class TaskVerificationsService {
           });
         });
 
-      return new TaskVerificationAttemptDto(tv, questionsWithIncorrectAnswers);
+      return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
     });
   }
 }
