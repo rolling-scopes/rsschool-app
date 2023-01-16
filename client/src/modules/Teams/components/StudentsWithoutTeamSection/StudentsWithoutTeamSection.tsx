@@ -8,7 +8,6 @@ import { IPaginationInfo } from 'common/types/pagination';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
-  courseId: number;
 };
 
 type StudentsState = {
@@ -20,7 +19,7 @@ const { Title } = Typography;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-export default function StudentsWithoutTeamSection({ distribution, courseId }: Props) {
+export default function StudentsWithoutTeamSection({ distribution }: Props) {
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
@@ -28,7 +27,7 @@ export default function StudentsWithoutTeamSection({ distribution, courseId }: P
 
   const getStudents = async (pagination: TablePaginationConfig) => {
     const { data } = await teamDistributionApi.getStudentsWithoutTeam(
-      courseId,
+      distribution.courseId,
       distribution.id,
       String(pagination.current),
       String(pagination.pageSize),

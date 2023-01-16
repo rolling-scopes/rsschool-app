@@ -1,21 +1,10 @@
-import { message, Modal, notification, Typography } from 'antd';
+import { Modal, Typography } from 'antd';
 import { CheckCircleTwoTone } from '@ant-design/icons';
-import { TeamApi, TeamDto } from 'api';
+import { TeamDto } from 'api';
 
 const { Title, Text } = Typography;
 
-export function showCreateTeamResultModal(team: TeamDto, courseId: number, copyToClipboard: (value: string) => void) {
-  const copyPassword = async (): Promise<void> => {
-    const teamApi = new TeamApi();
-    try {
-      const { data } = await teamApi.getTeamPassword(courseId, team.teamDistributionId, team.id);
-      copyToClipboard(data.password);
-      notification.success({ message: 'Password copied to clipboard', duration: 2 });
-    } catch (error) {
-      message.error('Something went wrong. Please try again later.');
-    }
-  };
-
+export function showCreateTeamResultModal(team: TeamDto, copyPassword: (teamId: number) => Promise<void>) {
   Modal.confirm({
     title: <Title level={5}>{team.name} is created successfully</Title>,
     content: (
@@ -26,7 +15,7 @@ export function showCreateTeamResultModal(team: TeamDto, courseId: number, copyT
     ),
     cancelText: 'Next',
     cancelButtonProps: { type: 'primary' },
-    onOk: () => copyPassword(),
+    onOk: () => copyPassword(team.id),
     okText: 'Copy invitation password',
     okButtonProps: { type: 'default' },
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,

@@ -69,10 +69,14 @@ export class TeamDistributionDetailedDto {
     this.maxStudents = distribution.maxStudents;
     this.studentsCount = distribution.studentsCount;
     this.strictStudentsCount = distribution.strictStudentsCount;
+    this.courseId = distribution.courseId;
   }
 
   @ApiProperty()
   public id: number;
+
+  @ApiProperty()
+  public courseId: number;
 
   @ApiProperty()
   public name: string;

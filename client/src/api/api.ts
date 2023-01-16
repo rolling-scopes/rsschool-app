@@ -4138,6 +4138,12 @@ export interface TeamDistributionDetailedDto {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof TeamDistributionDetailedDto
+     */
+    'courseId': number;
+    /**
+     * 
      * @type {string}
      * @memberof TeamDistributionDetailedDto
      */
@@ -12585,6 +12591,47 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {number} courseId 
          * @param {number} distributionId 
          * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        leaveTeam: async (courseId: number, distributionId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('leaveTeam', 'courseId', courseId)
+            // verify required parameter 'distributionId' is not null or undefined
+            assertParamExists('leaveTeam', 'distributionId', distributionId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('leaveTeam', 'id', id)
+            const localVarPath = `/courses/{courseId}/team-distribution/{distributionId}/team/{id}/leave`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"distributionId"}}`, encodeURIComponent(String(distributionId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
          * @param {UpdateTeamDto} updateTeamDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12692,6 +12739,18 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @param {number} courseId 
          * @param {number} distributionId 
          * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async leaveTeam(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.leaveTeam(courseId, distributionId, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
          * @param {UpdateTeamDto} updateTeamDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12755,6 +12814,17 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          */
         joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: any): AxiosPromise<TeamDto> {
             return localVarFp.joinTeam(courseId, distributionId, id, joinTeamDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} distributionId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        leaveTeam(courseId: number, distributionId: number, id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.leaveTeam(courseId, distributionId, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12830,6 +12900,19 @@ export class TeamApi extends BaseAPI {
      */
     public joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: AxiosRequestConfig) {
         return TeamApiFp(this.configuration).joinTeam(courseId, distributionId, id, joinTeamDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} distributionId 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamApi
+     */
+    public leaveTeam(courseId: number, distributionId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamApiFp(this.configuration).leaveTeam(courseId, distributionId, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

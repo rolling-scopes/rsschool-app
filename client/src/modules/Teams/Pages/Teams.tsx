@@ -1,4 +1,4 @@
-import { message, Row } from 'antd';
+import { message, notification, Row } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { TeamsPageProps } from 'pages/course/teams';
@@ -51,13 +51,24 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
+  const copyPassword = async (teamId: number): Promise<void> => {
+    const teamApi = new TeamApi();
+    try {
+      const { data } = await teamApi.getTeamPassword(course.id, distribution.id, teamId);
+      copyToClipboard(data.password);
+      notification.success({ message: 'Password copied to clipboard', duration: 2 });
+    } catch (error) {
+      message.error('Something went wrong. Please try again later.');
+    }
+  };
+
   const submitTeam = async (record: CreateTeamDto, id?: number) => {
     try {
       if (id) {
         await teamApi.updateTeam(course.id, distribution.id, id, record);
       } else {
         const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
-        showCreateTeamResultModal(team, course.id, copyToClipboard);
+        showCreateTeamResultModal(team, copyPassword);
       }
       await loadDistribution();
       setTeamData(null);
@@ -69,13 +80,22 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const contentRenderers = () => {
     switch (activeTab) {
       case 'teams':
-        return <TeamsSection distribution={distribution} courseId={course.id} />;
+        return <TeamsSection distribution={distribution} />;
 
       case 'students':
-        return <StudentsWithoutTeamSection distribution={distribution} courseId={course.id} />;
+        return <StudentsWithoutTeamSection distribution={distribution} />;
 
       case 'myTeam':
-        return <MyTeamSection distribution={distribution} setTeamData={setTeamData} studentId={studentId} />;
+        return (
+          <MyTeamSection
+            distribution={distribution}
+            setTeamData={setTeamData}
+            studentId={studentId}
+            copyPassword={copyPassword}
+            reloadDistribution={loadDistribution}
+            setActiveTab={setActiveTab}
+          />
+        );
 
       default:
         return null;

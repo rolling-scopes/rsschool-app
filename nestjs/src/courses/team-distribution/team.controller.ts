@@ -132,9 +132,9 @@ export class TeamController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: JoinTeamDto,
   ) {
-    const team = await this.teamService.findById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) throw new BadRequestException();
+    const team = await this.teamService.findById(id);
     const student = await this.studentService.getStudentDetailed(studentId);
     if (team.teamDistribution.strictStudentsCount && team.teamDistribution.studentsCount <= team.students.length + 1) {
       throw new BadRequestException();
@@ -145,5 +145,23 @@ export class TeamController {
     await this.studentService.addStudentToTeam(studentId, team);
     await this.studentService.deleteStudentFromTeamDistribution(studentId, team.teamDistribution);
     return new TeamDto(team);
+  }
+
+  @Post('/:id/leave')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse()
+  @ApiOperation({ operationId: 'leaveTeam' })
+  @RequiredRoles([CourseRole.Student])
+  public async leaveTeam(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('distributionId', ParseIntPipe) distributionId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) throw new BadRequestException();
+    await this.studentService.deleteStudentFromTeam(studentId, id);
+    const teamDistribution = await this.distributionService.getById(distributionId);
+    await this.studentService.addStudentToTeamDistribution(studentId, teamDistribution);
   }
 }

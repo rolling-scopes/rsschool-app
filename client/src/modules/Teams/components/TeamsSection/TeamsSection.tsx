@@ -8,7 +8,6 @@ import { getColumns, expandedRowRender } from './renderers';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
-  courseId: number;
 };
 
 type TeamsState = {
@@ -20,7 +19,7 @@ const { Title } = Typography;
 
 const teamApi = new TeamApi();
 
-export default function TeamSection({ distribution, courseId }: Props) {
+export default function TeamSection({ distribution }: Props) {
   const [teams, setTeams] = useState<TeamsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
@@ -28,7 +27,7 @@ export default function TeamSection({ distribution, courseId }: Props) {
 
   const getTeams = async (pagination: TablePaginationConfig) => {
     const { data } = await teamApi.getTeams(
-      courseId,
+      distribution.courseId,
       distribution.id,
       String(pagination.current),
       String(pagination.pageSize),

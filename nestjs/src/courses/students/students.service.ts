@@ -51,7 +51,6 @@ export class StudentsService {
     const currentDate = dayjs();
     const distributionStartDate = dayjs(teamDistribution.startDate);
     const distributionEndDate = dayjs(teamDistribution.endDate);
-    if (student == null) throw new NotFoundException();
     if (currentDate < distributionStartDate || currentDate > distributionEndDate) {
       throw new BadRequestException();
     }
@@ -61,6 +60,12 @@ export class StudentsService {
     if (student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
       throw new BadRequestException();
     }
+    student.teamDistribution = [...student.teamDistribution, teamDistribution];
+    await this.studentRepository.save(student);
+  }
+
+  public async addStudentToDistributionWithoutVerification(studentId: number, teamDistribution: TeamDistribution) {
+    const student = await this.getStudentDetailed(studentId);
     student.teamDistribution = [...student.teamDistribution, teamDistribution];
     await this.studentRepository.save(student);
   }
@@ -75,6 +80,12 @@ export class StudentsService {
     const student = await this.getStudentWithTeamDistributions(studentId);
     if (student == null) throw new NotFoundException();
     student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistribution.id);
+    await this.studentRepository.save(student);
+  }
+
+  public async deleteStudentFromTeam(studentId: number, teamId: number) {
+    const student = await this.getStudentDetailed(studentId);
+    student.teams = student.teams.filter(el => el.id !== teamId);
     await this.studentRepository.save(student);
   }
 

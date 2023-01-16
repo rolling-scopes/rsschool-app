@@ -969,6 +969,19 @@
         "tags": ["team"]
       }
     },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/leave": {
+      "post": {
+        "operationId": "leaveTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["team"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2673,6 +2686,7 @@
         "type": "object",
         "properties": {
           "id": { "type": "number" },
+          "courseId": { "type": "number" },
           "name": { "type": "string" },
           "studentsWithoutTeamCount": { "type": "number" },
           "teamsCount": { "type": "number" },
@@ -2684,6 +2698,7 @@
         },
         "required": [
           "id",
+          "courseId",
           "name",
           "studentsWithoutTeamCount",
           "teamsCount",
