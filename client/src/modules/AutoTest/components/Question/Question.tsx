@@ -11,7 +11,6 @@ type Props = {
 function Question({ question: selfEducationQuestion, questionIndex }: Props): JSX.Element {
   const { question, questionImage, answers, answersType, multiple, selectedAnswers } = selfEducationQuestion;
   const Element = multiple ? Checkbox : Radio;
-  const questionNumber = questionIndex + 1;
 
   return (
     <Form.Item
@@ -19,9 +18,7 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
       label={
         <Row>
           <Col>
-            <Title level={5}>
-              {questionNumber}. {question}
-            </Title>
+            <Title level={5}>{question}</Title>
           </Col>
           <Col span={24}>
             {questionImage && (
