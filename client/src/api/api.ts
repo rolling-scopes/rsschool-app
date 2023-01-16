@@ -4156,10 +4156,10 @@ export interface TeamDistributionDetailedDto {
     'teamsCount': number;
     /**
      * 
-     * @type {boolean}
+     * @type {object}
      * @memberof TeamDistributionDetailedDto
      */
-    'distributedStudent': boolean;
+    'myTeam': object;
     /**
      * 
      * @type {number}

@@ -2,6 +2,7 @@ import { Team } from '@entities/team';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { ApiProperty } from '@nestjs/swagger';
 import { registrationStatusEnum } from '../team-distribution.service';
+import { TeamDto } from './team.dto';
 
 export class TeamDistributionDto {
   constructor(teamDistribution: TeamDistribution & { registrationStatus?: string }) {
@@ -62,7 +63,7 @@ export class TeamDistributionDetailedDto {
     this.teamsCount = distribution.teams.length;
     this.id = distribution.id;
     this.name = distribution.name;
-    this.distributedStudent = !!team;
+    this.myTeam = team ? new TeamDto(team) : null;
     this.minStudents = distribution.minStudents;
     this.maxStudents = distribution.maxStudents;
     this.studentsCount = distribution.studentsCount;
@@ -82,7 +83,7 @@ export class TeamDistributionDetailedDto {
   public teamsCount: number;
 
   @ApiProperty()
-  public distributedStudent: boolean;
+  public myTeam: TeamDto | null;
 
   @ApiProperty()
   public minStudents: number;

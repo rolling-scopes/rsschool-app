@@ -75,15 +75,16 @@ export class TeamController {
       students,
       ...dto,
     });
+    const team = await this.teamService.findByIdDetailed(data.id);
 
-    if (data.students.length) {
+    if (team.students.length) {
       const distribution = await this.distributionService.getById(distributionId);
       await Promise.all(
-        data.students.map(el => this.studentService.deleteStudentFromTeamDistribution(el.id, distribution)),
+        team.students.map(el => this.studentService.deleteStudentFromTeamDistribution(el.id, distribution)),
       );
     }
 
-    return new TeamDto(data);
+    return new TeamDto(team);
   }
 
   @Get('/:id/password')

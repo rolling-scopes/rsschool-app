@@ -25,18 +25,20 @@ export class TeamService {
       const [lead] = data.students.sort((a, b) => a.rank - b.rank);
       data.teamLeadId = lead?.id;
     }
-    const team = await this.repository.save({ ...data, password: this.generatePassword() });
-
-    return this.repository
-      .createQueryBuilder('team')
-      .where({ id: team.id })
-      .leftJoinAndSelect('team.students', 's')
-      .leftJoinAndSelect('s.user', 'u')
-      .getOneOrFail();
+    return this.repository.save({ ...data, password: this.generatePassword() });
   }
 
   public async findById(id: number) {
     return this.repository.findOneOrFail({ where: { id }, relations: ['students', 'teamDistribution'] });
+  }
+
+  public async findByIdDetailed(id: number) {
+    return this.repository
+      .createQueryBuilder('team')
+      .where({ id })
+      .leftJoinAndSelect('team.students', 's')
+      .leftJoinAndSelect('s.user', 'u')
+      .getOneOrFail();
   }
 
   public async findByDistributionId(distributionId: number, { page = 1, limit = 10 }) {

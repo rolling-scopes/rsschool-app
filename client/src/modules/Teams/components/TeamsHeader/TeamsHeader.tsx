@@ -36,7 +36,7 @@ export default function TeamsHeader({
       { key: 'teams', label: 'Available teams', count: distribution.teamsCount },
       { key: 'students', label: 'Students without team', count: distribution.studentsWithoutTeamCount },
     ];
-    if (distribution.distributedStudent) {
+    if (distribution.myTeam) {
       tabs.push({ key: 'myTeam', label: 'My team', count: 0 });
     }
     return tabs.map(el => tabRenderer(el, activeTab));
@@ -60,7 +60,7 @@ export default function TeamsHeader({
               {isStudent && (
                 <Space size={12}>
                   <Text type="secondary">My status:</Text>
-                  {distribution.distributedStudent ? (
+                  {distribution.myTeam ? (
                     <Tag icon={<ClockCircleOutlined />} color="green">
                       distributed
                     </Tag>
@@ -75,9 +75,9 @@ export default function TeamsHeader({
             The roles of team members are determined automatically.
           </Title>
         </Space>
-        {isStudent && !distribution.distributedStudent && (
+        {isStudent && !distribution.myTeam && (
           <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
-            {!distribution.distributedStudent && (
+            {!distribution.myTeam && (
               <Card
                 title={<Title level={5}>Are you going to be a leader completing a group task?</Title>}
                 style={{ backgroundColor: '#E6F7FF' }}
@@ -91,7 +91,7 @@ export default function TeamsHeader({
                 </Space>
               </Card>
             )}
-            {isStudent && !distribution.distributedStudent && (
+            {isStudent && !distribution.myTeam && (
               <Card
                 title={<Title level={5}>Have you found a great team to join?</Title>}
                 style={{ backgroundColor: '#E6F7FF' }}

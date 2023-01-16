@@ -26,6 +26,7 @@ import {
 } from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
+import { TeamService } from './team.service';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -34,6 +35,7 @@ export class TeamDistributionController {
   constructor(
     private readonly teamDistributionService: TeamDistributionService,
     private readonly studentsService: StudentsService,
+    private readonly teamService: TeamService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
@@ -143,7 +145,10 @@ export class TeamDistributionController {
       ) {
         throw new ForbiddenException();
       }
-      team = student.teams.find(t => t.teamDistributionId === id);
+      const data = student.teams.find(t => t.teamDistributionId === id);
+      if (data) {
+        team = await this.teamService.findByIdDetailed(data.id);
+      }
     }
     const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
     return new TeamDistributionDetailedDto(distribution, team);
