@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskVerification } from '@entities/taskVerification';
-import { SelfEducationQuestionWithAnswers, TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
+import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
+import { SelfEducationQuestionSelectedAnswersDto } from './dto/self-education.dto';
 
 @Injectable()
 export class TaskVerificationsService {
@@ -23,19 +24,19 @@ export class TaskVerificationsService {
     });
 
     return taskVerifications.map(tv => {
-      const questionsWithIncorrectAnswers: SelfEducationQuestionWithAnswers[] = tv.answers
+      const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = tv.answers
         .filter(answer => !answer.isCorrect)
         .map(answer => {
           const taskQuestion = (tv.courseTask.task.attributes as any).public.questions[answer.index];
 
-          return {
+          return new SelfEducationQuestionSelectedAnswersDto({
             answers: taskQuestion.answers,
             selectedAnswers: answer.value,
             multiple: taskQuestion.multiple,
             question: taskQuestion.question,
             answersType: taskQuestion.answersType,
             questionImage: taskQuestion.questionImage,
-          };
+          });
         });
 
       return new TaskVerificationAttemptDto(tv, questionsWithIncorrectAnswers);

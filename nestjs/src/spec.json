@@ -2509,7 +2509,18 @@
           "minTotalScore"
         ]
       },
-      "SelfEducationQuestionWithAnswers": { "type": "object", "properties": {} },
+      "SelfEducationQuestionSelectedAnswersDto": {
+        "type": "object",
+        "properties": {
+          "answers": { "type": "array", "items": { "type": "string" } },
+          "question": { "type": "string" },
+          "multiple": { "type": "boolean" },
+          "questionImage": { "type": "string" },
+          "answersType": { "type": "string" },
+          "selectedAnswers": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["answers", "question", "multiple", "questionImage", "answersType", "selectedAnswers"]
+      },
       "TaskVerificationAttemptDto": {
         "type": "object",
         "properties": {
@@ -2517,7 +2528,10 @@
           "courseTaskId": { "type": "number" },
           "score": { "type": "number" },
           "maxScore": { "type": "number" },
-          "questions": { "type": "array", "items": { "$ref": "#/components/schemas/SelfEducationQuestionWithAnswers" } }
+          "questions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SelfEducationQuestionSelectedAnswersDto" }
+          }
         },
         "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
       },

@@ -3640,6 +3640,49 @@ export interface ScoreStudentDto {
 /**
  * 
  * @export
+ * @interface SelfEducationQuestionSelectedAnswersDto
+ */
+export interface SelfEducationQuestionSelectedAnswersDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'answers': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'question': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'multiple': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'questionImage': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'answersType': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SelfEducationQuestionSelectedAnswersDto
+     */
+    'selectedAnswers': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface SendUserNotificationDto
  */
 export interface SendUserNotificationDto {
@@ -4112,10 +4155,10 @@ export interface TaskVerificationAttemptDto {
     'maxScore': number;
     /**
      * 
-     * @type {Array<object>}
+     * @type {Array<SelfEducationQuestionSelectedAnswersDto>}
      * @memberof TaskVerificationAttemptDto
      */
-    'questions': Array<object>;
+    'questions': Array<SelfEducationQuestionSelectedAnswersDto>;
 }
 /**
  * 
