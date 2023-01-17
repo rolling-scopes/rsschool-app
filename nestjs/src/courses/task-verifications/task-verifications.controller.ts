@@ -27,6 +27,6 @@ export class TaskVerificationsController {
       throw new BadRequestException('You are not a student in this course');
     }
 
-    return await this.taskVerificationsService.getAnswersByAttempts(courseTaskId);
+    return await this.taskVerificationsService.getAnswersByAttempts(courseTaskId, studentId);
   }
 }
