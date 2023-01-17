@@ -125,7 +125,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         </Col>
       </Row>
       <Form.Item name="strictStudentsCount" label="Fixed team size" valuePropName="checked">
-        <Switch disabled />
+        <Switch />
       </Form.Item>
       {changes.strictStudentsCount === true ? (
         <Form.Item
