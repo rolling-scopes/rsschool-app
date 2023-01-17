@@ -22,7 +22,6 @@ export class TaskVerificationsController {
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
-    console.log(studentId);
 
     if (!studentId) {
       throw new BadRequestException('You are not a student in this course');
