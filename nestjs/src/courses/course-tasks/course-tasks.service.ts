@@ -16,11 +16,25 @@ import * as dayjs from 'dayjs';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskType } from '@entities/task';
+import { CourseTaskVerificationsDto } from './dto/course-task-verifications.dto';
+import { TaskVerification } from '../../../../server/src/models';
 
 export enum Status {
   Started = 'started',
   InProgress = 'inprogress',
   Finished = 'finished',
+}
+
+export enum CourseTaskStatusEnum {
+  Available = 'Available',
+  Missed = 'Missed',
+  Done = 'Done',
+}
+
+export enum CourseTaskStateEnum {
+  Uncompleted = 'Uncompleted',
+  Missed = 'Missed',
+  Completed = 'Completed',
 }
 
 @Injectable()
@@ -67,7 +81,7 @@ export class CourseTasksService {
   }
 
   public async getAllDetailedVerifications(courseId: number, studentId: number) {
-    return await this.courseTaskRepository.find({
+    const data = await this.courseTaskRepository.find({
       relations: {
         task: true,
         taskVerifications: true,
@@ -86,6 +100,15 @@ export class CourseTasksService {
         studentEndDate: 'asc',
       },
     });
+
+    return data.map(
+      item =>
+        new CourseTaskVerificationsDto(
+          item,
+          this.getState(item.studentEndDate, item.taskVerifications),
+          this.getStatus(item.studentEndDate, item.taskVerifications),
+        ),
+    );
   }
 
   public getById(courseTaskId: number) {
@@ -167,5 +190,43 @@ export class CourseTasksService {
       id, // required to get right update in subscription
       disabled: true,
     });
+  }
+
+  private getState(
+    studentEndDate: string | Date | null,
+    verifications: TaskVerification[] | null,
+  ): CourseTaskStateEnum {
+    const now = dayjs();
+    const end = dayjs(studentEndDate);
+    const attemptsCount = verifications?.length || 0;
+
+    if (attemptsCount > 0) {
+      return CourseTaskStateEnum.Completed;
+    }
+
+    if (now.isAfter(end) && !attemptsCount) {
+      return CourseTaskStateEnum.Missed;
+    }
+
+    return CourseTaskStateEnum.Uncompleted;
+  }
+
+  private getStatus(
+    studentEndDate: string | Date | null,
+    verifications: TaskVerification[] | null,
+  ): CourseTaskStatusEnum {
+    const attemptsCount = verifications?.length || 0;
+    const now = dayjs();
+    const end = dayjs(studentEndDate);
+
+    if (now.isAfter(end) && !attemptsCount) {
+      return CourseTaskStatusEnum.Missed;
+    }
+
+    if (now.isAfter(end) && attemptsCount) {
+      return CourseTaskStatusEnum.Done;
+    }
+
+    return CourseTaskStatusEnum.Available;
   }
 }

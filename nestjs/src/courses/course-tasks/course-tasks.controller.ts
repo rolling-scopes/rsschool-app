@@ -81,8 +81,7 @@ export class CourseTasksController {
       throw new BadRequestException('You are not a student in this course');
     }
 
-    const data = await this.courseTasksService.getAllDetailedVerifications(courseId, studentId);
-    return data.map(item => new CourseTaskVerificationsDto(item));
+    return await this.courseTasksService.getAllDetailedVerifications(courseId, studentId);
   }
 
   @Get('/:courseTaskId')
