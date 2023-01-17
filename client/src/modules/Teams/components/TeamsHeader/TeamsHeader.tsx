@@ -1,4 +1,4 @@
-import { Button, Card, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { Button, Card, Col, Row, Space, Tabs, Tag, Typography } from 'antd';
 import { ArrowLeftOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { TeamDistributionDetailedDto } from 'api';
@@ -43,38 +43,35 @@ export default function TeamsHeader({
   }, [activeTab, distribution]);
 
   return (
-    <Row gutter={24} style={{ background: 'white', marginTop: -15, padding: '24px 24px 0' }}>
-      <Space direction="vertical" size={12}>
-        <Space direction="vertical" size={16}>
-          <Row justify="start" align="middle">
-            <Space size={24}>
+    <Row style={{ background: 'white', marginTop: -15, padding: '24px 24px 0' }}>
+      <Col>
+        <Row justify="start" align="middle">
+          <Space size={24}>
+            <Link href={`team-distributions?course=${courseAlias}`}>
+              <ArrowLeftOutlined />
+            </Link>
+            <Title level={4} style={{ marginBottom: 0 }}>
+              Teams
+            </Title>
+            <Text type="secondary">Distribution of participants per team</Text>
+            {isStudent && (
               <Space size={12}>
-                <Link href={`team-distributions?course=${courseAlias}`}>
-                  <ArrowLeftOutlined />
-                </Link>
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  Teams
-                </Title>
-                <Text type="secondary">Distribution of participants per team</Text>
+                <Text type="secondary">My status:</Text>
+                {distribution.myTeam ? (
+                  <Tag icon={<ClockCircleOutlined />} color="green">
+                    distributed
+                  </Tag>
+                ) : (
+                  <Tag icon={<ClockCircleOutlined />}>without team</Tag>
+                )}
               </Space>
-              {isStudent && (
-                <Space size={12}>
-                  <Text type="secondary">My status:</Text>
-                  {distribution.myTeam ? (
-                    <Tag icon={<ClockCircleOutlined />} color="green">
-                      distributed
-                    </Tag>
-                  ) : (
-                    <Tag icon={<ClockCircleOutlined />}>without team</Tag>
-                  )}
-                </Space>
-              )}
-            </Space>
-          </Row>
-          <Title level={5} style={{ marginLeft: 27 }}>
-            The roles of team members are determined automatically.
-          </Title>
-        </Space>
+            )}
+          </Space>
+        </Row>
+        <Title level={5} style={{ marginLeft: 27 }}>
+          The roles of team members are determined automatically.
+        </Title>
+
         {isStudent && !distribution.myTeam && (
           <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
             {!distribution.myTeam && (
@@ -113,7 +110,7 @@ export default function TeamsHeader({
           </Button>
         )}
         <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />
-      </Space>
+      </Col>
     </Row>
   );
 }
