@@ -26,7 +26,7 @@ export class TaskVerificationsService {
     const endDate = dayjs(courseTask?.studentEndDate);
 
     if (now.isBefore(endDate)) {
-      throw new BadRequestException('The answers cannot be checked until the deadline has passed');
+      throw new BadRequestException('The answers cannot be checked until the deadline has passed.');
     }
 
     const taskVerifications = await this.taskVerificationRepository.find({
@@ -39,6 +39,12 @@ export class TaskVerificationsService {
     });
 
     if (taskVerifications && taskVerifications.length > 0) {
+      const hasAnswers = taskVerifications.some(v => v.answers && v.answers.length > 0);
+
+      if (!hasAnswers) {
+        throw new BadRequestException('The answers are not available for this task.');
+      }
+
       return taskVerifications.map(verification => {
         const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
           .filter(answer => !answer.isCorrect)
@@ -58,7 +64,7 @@ export class TaskVerificationsService {
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });
     } else {
-      throw new BadRequestException('The answers cannot be checked if there were no attempts');
+      throw new BadRequestException('The answers cannot be checked if there were no attempts.');
     }
   }
 }
