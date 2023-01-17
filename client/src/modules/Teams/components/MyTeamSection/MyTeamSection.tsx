@@ -66,6 +66,7 @@ export default function MyTeamSection({
           </Button>
         </Space>
       </Row>
+      {/* openapi generate not correct interface for array students */}
       <StudentsTable content={myTeam.students as unknown as TeamDistributionStudentDto[]} pagination={false} />
     </Space>
   );

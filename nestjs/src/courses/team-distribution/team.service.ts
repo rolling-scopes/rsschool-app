@@ -29,16 +29,49 @@ export class TeamService {
     return this.repository.save({ ...data, password: this.generatePassword() });
   }
 
+  public async remove(id: number) {
+    await this.repository.delete(id);
+  }
+
   public async findById(id: number) {
     return this.repository.findOneOrFail({ where: { id }, relations: ['students', 'teamDistribution'] });
+  }
+
+  private getUserFields(modelName = 'user') {
+    return [
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.cvLink`,
+      `${modelName}.discord`,
+      `${modelName}.contactsTelegram`,
+      `${modelName}.contactsEmail`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+    ];
+  }
+
+  private getStudentsFields(modelName = 'student') {
+    return [`${modelName}.id`, `${modelName}.rank`, `${modelName}.totalScore`];
+  }
+
+  public getStudentsCountInTeam(id: number) {
+    return this.repository
+      .createQueryBuilder('team')
+      .where({ id })
+      .leftJoin('team.students', 's')
+      .select('COUNT(s.id)', 'studentsCount')
+      .getRawOne();
   }
 
   public async findByIdDetailed(id: number) {
     return this.repository
       .createQueryBuilder('team')
       .where({ id })
-      .leftJoinAndSelect('team.students', 's')
-      .leftJoinAndSelect('s.user', 'u')
+      .leftJoin('team.students', 's')
+      .leftJoin('s.user', 'u')
+      .addSelect(this.getStudentsFields('s'))
+      .addSelect(this.getUserFields('u'))
       .getOneOrFail();
   }
 
@@ -50,8 +83,10 @@ export class TeamService {
     const query = this.repository
       .createQueryBuilder('team')
       .where('team."teamDistributionId" = :distributionId', { distributionId })
-      .leftJoinAndSelect('team.students', 's')
-      .leftJoinAndSelect('s.user', 'u')
+      .leftJoin('team.students', 's')
+      .leftJoin('s.user', 'u')
+      .addSelect(this.getStudentsFields('s'))
+      .addSelect(this.getUserFields('u'))
       .orderBy('team.id', 'ASC');
 
     const { items: teams, meta: paginationMeta } = await paginate(query, { page, limit });

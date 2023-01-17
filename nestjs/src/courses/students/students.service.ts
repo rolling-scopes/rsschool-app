@@ -19,11 +19,26 @@ export class StudentsService {
     return this.studentRepository.findOneOrFail({ where: { id }, relations: ['user'] });
   }
 
+  private getUserFields(modelName = 'user') {
+    return [
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.cvLink`,
+      `${modelName}.discord`,
+      `${modelName}.contactsTelegram`,
+      `${modelName}.contactsEmail`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+    ];
+  }
+
   public async getStudentsByTeamDistributionId(distributionId: number, { page = 1, limit = 10 }) {
     const query = this.studentRepository
       .createQueryBuilder('student')
       .leftJoin('student.teamDistribution', 'td')
-      .innerJoinAndSelect('student.user', 'user')
+      .innerJoin('student.user', 'user')
+      .addSelect(this.getUserFields())
       .where('td.id IN (:...ids)', { ids: [distributionId] })
       .orderBy('student.rank', 'ASC');
     const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
@@ -46,26 +61,24 @@ export class StudentsService {
     return student;
   }
 
-  public async addStudentToTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
+  public async addStudentToTeamDistribution(
+    studentId: number,
+    teamDistribution: TeamDistribution,
+    withVerification = true,
+  ) {
     const student = await this.getStudentDetailed(studentId);
     const currentDate = dayjs();
     const distributionStartDate = dayjs(teamDistribution.startDate);
     const distributionEndDate = dayjs(teamDistribution.endDate);
-    if (currentDate < distributionStartDate || currentDate > distributionEndDate) {
+    if (withVerification && (currentDate < distributionStartDate || currentDate > distributionEndDate)) {
       throw new BadRequestException();
     }
-    if (student.totalScore < teamDistribution.minTotalScore) {
+    if (withVerification && student.totalScore < teamDistribution.minTotalScore) {
       throw new BadRequestException('Number of points is less than the input threshold for distribution');
     }
-    if (student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
+    if (withVerification && student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
       throw new BadRequestException();
     }
-    student.teamDistribution = [...student.teamDistribution, teamDistribution];
-    await this.studentRepository.save(student);
-  }
-
-  public async addStudentToDistributionWithoutVerification(studentId: number, teamDistribution: TeamDistribution) {
-    const student = await this.getStudentDetailed(studentId);
     student.teamDistribution = [...student.teamDistribution, teamDistribution];
     await this.studentRepository.save(student);
   }
