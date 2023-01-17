@@ -16,11 +16,9 @@ import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
 import { repositoryRoute } from './repository';
-import { interviewQuestionRoute } from './interviewQuestion';
 
 import { ILogger } from '../logger';
 import { courseMiddleware, userRolesMiddleware } from './middlewares';
-import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
 import { checksRoute } from './checks';
 
 export * from './logging';
@@ -54,8 +52,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, profileRoute(logger));
   applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
-  applyRouter(router, interviewQuestionRoute(logger));
-  applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));
   applyRouter(router, repositoryRoute(logger));
