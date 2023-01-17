@@ -17,7 +17,7 @@ export class TaskVerificationsService {
     readonly courseTaskRepository: Repository<CourseTask>,
   ) {}
 
-  public async getAnswersByAttempts(courseTaskId: number): Promise<TaskVerificationAttemptDto[]> {
+  public async getAnswersByAttempts(courseTaskId: number, studentId: number): Promise<TaskVerificationAttemptDto[]> {
     const courseTask = await this.courseTaskRepository.findOneOrFail({
       where: { id: courseTaskId },
     });
@@ -31,7 +31,7 @@ export class TaskVerificationsService {
 
     const taskVerifications = await this.taskVerificationRepository.find({
       select: ['createdDate', 'courseTaskId', 'score', 'answers', 'courseTask'],
-      where: { courseTaskId },
+      where: { courseTaskId, studentId },
       relations: ['courseTask', 'courseTask.task'],
       order: {
         createdDate: 'desc',
