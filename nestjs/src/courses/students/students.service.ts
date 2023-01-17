@@ -79,13 +79,13 @@ export class StudentsService {
     if (withVerification && student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
       throw new BadRequestException();
     }
-    student.teamDistribution = [...student.teamDistribution, teamDistribution];
+    student.teamDistribution.push(teamDistribution);
     await this.studentRepository.save(student);
   }
 
   public async addStudentToTeam(studentId: number, team: Team) {
     const student = await this.getStudentDetailed(studentId);
-    student.teams = [...student.teams, team];
+    student.teams.push(team);
     await this.studentRepository.save(student);
   }
 
