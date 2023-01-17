@@ -832,7 +832,27 @@
         "tags": ["team distribution"]
       }
     },
-    "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
+    "/courses/{courseId}/verifications": {
+      "get": {
+        "operationId": "getStudentTaskVerifications",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskVerification" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["course task verifications"]
+      }
+    },
+    "/courses/{courseId}/verifications/tasks/{courseTaskId}/answers": {
       "get": {
         "operationId": "getAnswers",
         "summary": "",
@@ -2542,6 +2562,7 @@
           "minTotalScore"
         ]
       },
+      "TaskVerification": { "type": "object", "properties": {} },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",
         "properties": {

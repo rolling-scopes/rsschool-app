@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskVerification } from '@entities/taskVerification';
-import { CourseTask } from '@entities/courseTask';
+import { Checker, CourseTask } from '@entities/courseTask';
 import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
 import { SelfEducationQuestionSelectedAnswersDto } from './dto/self-education.dto';
 import * as dayjs from 'dayjs';
@@ -66,5 +66,34 @@ export class TaskVerificationsService {
     } else {
       throw new BadRequestException('The answers cannot be checked if there were no attempts.');
     }
+  }
+
+  public async getStudentTaskVerifications(studentId: number) {
+    return await this.taskVerificationRepository.find({
+      select: {
+        courseTask: {
+          id: true,
+          type: true,
+          task: {
+            name: true,
+          },
+        },
+      },
+      relations: {
+        courseTask: {
+          task: true,
+        },
+      },
+      where: {
+        studentId,
+        courseTask: {
+          disabled: false,
+          checker: Checker.AutoTest,
+        },
+      },
+      order: {
+        updatedDate: 'DESC',
+      },
+    });
   }
 }
