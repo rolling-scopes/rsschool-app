@@ -16,6 +16,7 @@ import { User } from './user';
 import { Course } from './course';
 import { TaskSolution } from './taskSolution';
 import { TeamDistribution } from './teamDistribution';
+import { TaskVerification } from './taskVerification';
 
 export enum Checker {
   AutoTest = 'auto-test',
@@ -60,6 +61,11 @@ export class CourseTask {
 
   @OneToMany(_ => TaskSolution, (taskSolution: TaskSolution) => taskSolution.courseTask, { nullable: true })
   taskSolutions: TaskSolution[] | null;
+
+  @OneToMany(_ => TaskVerification, (taskVerification: TaskVerification) => taskVerification.courseTask, {
+    nullable: true,
+  })
+  taskVerifications: TaskVerification[] | null;
 
   @ManyToOne(_ => Course, { nullable: true })
   course: Course;

@@ -2,10 +2,20 @@ import { Checker, CourseTask } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository, FindOptionsWhere } from 'typeorm';
+import {
+  Between,
+  LessThan,
+  LessThanOrEqual,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+  FindOptionsWhere,
+  Not,
+} from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
+import { TaskType } from '@entities/task';
 
 export enum Status {
   Started = 'started',
@@ -53,6 +63,28 @@ export class CourseTasksService {
         resultsCount: Number(result?.resultsCount || 0),
         interviewResultsCount: Number(result?.interviewResultsCount || 0),
       };
+    });
+  }
+
+  public async getAllDetailedVerifications(courseId: number, studentId: number) {
+    return await this.courseTaskRepository.find({
+      relations: {
+        task: true,
+        taskVerifications: true,
+      },
+      where: {
+        courseId,
+        checker: Checker.AutoTest,
+        type: Not(TaskType.Test),
+        studentStartDate: LessThanOrEqual(dayjs().toISOString()),
+        disabled: false,
+        taskVerifications: {
+          studentId,
+        },
+      },
+      order: {
+        studentEndDate: 'asc',
+      },
     });
   }
 

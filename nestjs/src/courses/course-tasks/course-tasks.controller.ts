@@ -1,5 +1,18 @@
 import { CourseTask } from '@entities/courseTask';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -11,6 +24,7 @@ import {
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService, Status } from './course-tasks.service';
 import { CourseTaskDetailedDto, CourseTaskDto } from './dto';
+import { CourseTaskVerificationsDto } from './dto/course-task-verifications.dto';
 import { CreateCourseTaskDto } from './dto/create-course-task.dto';
 import { UpdateCourseTaskDto } from './dto/update-course-task.dto';
 
@@ -49,6 +63,26 @@ export class CourseTasksController {
   ): Promise<CourseTaskDto[]> {
     const data = await this.courseTasksService.getAllDetailed(courseId);
     return data.map(item => new CourseTaskDetailedDto(item));
+  }
+
+  @Get('/verifications')
+  @ApiOkResponse({ type: [CourseTaskVerificationsDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getCourseTasksVerifications' })
+  @UseGuards(CourseGuard)
+  public async getAllExtendedVerifications(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ): Promise<CourseTaskDto[]> {
+    const studentId = req.user.courses[courseId]?.studentId;
+
+    if (!studentId) {
+      throw new BadRequestException('You are not a student in this course');
+    }
+
+    const data = await this.courseTasksService.getAllDetailedVerifications(courseId, studentId);
+    return data.map(item => new CourseTaskVerificationsDto(item));
   }
 
   @Get('/:courseTaskId')

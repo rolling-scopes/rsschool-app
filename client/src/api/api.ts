@@ -1249,6 +1249,167 @@ export type CourseTaskDtoCheckerEnum = typeof CourseTaskDtoCheckerEnum[keyof typ
 /**
  * 
  * @export
+ * @interface CourseTaskVerificationsDto
+ */
+export interface CourseTaskVerificationsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'taskId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'type': CourseTaskVerificationsDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'checker': CourseTaskVerificationsDtoCheckerEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'studentStartDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'crossCheckEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'taskOwner': PersonDto | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'pairsCount': number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'crossCheckStatus': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'submitText': string | null;
+    /**
+     * 
+     * @type {Validations}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'validations': Validations | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'publicAttributes': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'githubRepoName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'sourceGithubRepoUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'resultsCount': number;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'verifications': Array<object> | null;
+}
+
+export const CourseTaskVerificationsDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskVerificationsDtoTypeEnum = typeof CourseTaskVerificationsDtoTypeEnum[keyof typeof CourseTaskVerificationsDtoTypeEnum];
+export const CourseTaskVerificationsDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseTaskVerificationsDtoCheckerEnum = typeof CourseTaskVerificationsDtoCheckerEnum[keyof typeof CourseTaskVerificationsDtoCheckerEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateActivityDto
  */
 export interface CreateActivityDto {
@@ -8032,6 +8193,39 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTasksVerifications: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseTasksVerifications', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/tasks/verifications`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -8251,6 +8445,16 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseTasksVerifications(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskVerificationsDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasksVerifications(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -8346,6 +8550,15 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getCourseTasksDetailed(courseId: number, options?: any): AxiosPromise<Array<CourseTaskDetailedDto>> {
             return localVarFp.getCourseTasksDetailed(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTasksVerifications(courseId: number, options?: any): AxiosPromise<Array<CourseTaskVerificationsDto>> {
+            return localVarFp.getCourseTasksVerifications(courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8451,6 +8664,17 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCourseTasksDetailed(courseId: number, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCourseTasksDetailed(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getCourseTasksVerifications(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCourseTasksVerifications(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -384,6 +384,26 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/tasks/verifications": {
+      "get": {
+        "operationId": "getCourseTasksVerifications",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskVerificationsDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/tasks/{courseTaskId}": {
       "get": {
         "operationId": "getCourseTask",
@@ -2139,6 +2159,77 @@
           "resultsCount"
         ]
       },
+      "TaskVerification": { "type": "object", "properties": {} },
+      "CourseTaskVerificationsDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "taskId": { "type": "number" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "jstask",
+              "kotlintask",
+              "objctask",
+              "htmltask",
+              "ipynb",
+              "selfeducation",
+              "codewars",
+              "test",
+              "codejam",
+              "interview",
+              "stage-interview",
+              "cv:html",
+              "cv:markdown"
+            ]
+          },
+          "name": { "type": "string" },
+          "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
+          "studentStartDate": { "type": "string" },
+          "studentEndDate": { "type": "string" },
+          "crossCheckEndDate": { "type": "string", "nullable": true },
+          "descriptionUrl": { "type": "string" },
+          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "maxScore": { "type": "number" },
+          "scoreWeight": { "type": "number" },
+          "pairsCount": { "type": "number", "nullable": true },
+          "crossCheckStatus": { "type": "string" },
+          "submitText": { "type": "string", "nullable": true },
+          "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] },
+          "publicAttributes": { "type": "object" },
+          "githubRepoName": { "type": "string" },
+          "sourceGithubRepoUrl": { "type": "string" },
+          "resultsCount": { "type": "number" },
+          "verifications": {
+            "nullable": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TaskVerification" }
+          }
+        },
+        "required": [
+          "id",
+          "taskId",
+          "type",
+          "name",
+          "checker",
+          "studentStartDate",
+          "studentEndDate",
+          "crossCheckEndDate",
+          "descriptionUrl",
+          "taskOwner",
+          "maxScore",
+          "scoreWeight",
+          "pairsCount",
+          "crossCheckStatus",
+          "submitText",
+          "validations",
+          "publicAttributes",
+          "githubRepoName",
+          "sourceGithubRepoUrl",
+          "resultsCount",
+          "verifications"
+        ]
+      },
       "CreateCourseTaskDto": {
         "type": "object",
         "properties": {
@@ -2562,7 +2653,6 @@
           "minTotalScore"
         ]
       },
-      "TaskVerification": { "type": "object", "properties": {} },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",
         "properties": {
