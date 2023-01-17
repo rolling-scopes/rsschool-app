@@ -14,7 +14,6 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
 
   return (
     <Form.Item
-      key={questionIndex}
       label={
         <Row>
           <Col>
