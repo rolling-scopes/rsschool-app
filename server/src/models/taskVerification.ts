@@ -38,4 +38,11 @@ export class TaskVerification {
 
   @Column({ type: 'json', default: [] })
   metadata: { path: string; md5: string }[];
+
+  @Column({ type: 'json', default: [], select: false })
+  answers: {
+    index: number;
+    value: (number | number[])[];
+    isCorrect: boolean;
+  }[];
 }

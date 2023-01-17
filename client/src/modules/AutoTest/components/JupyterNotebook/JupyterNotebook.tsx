@@ -8,7 +8,7 @@ function JupyterNotebook() {
 
   return (
     <Row>
-      <Form.Item name="upload">
+      <Form.Item name="upload" rules={[{ required: true, message: 'Please upload the file' }]}>
         <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
           <Button>
             <UploadOutlined /> Select Jupyter Notebook
