@@ -55,13 +55,14 @@ export class TeamService {
     return [`${modelName}.id`, `${modelName}.rank`, `${modelName}.totalScore`];
   }
 
-  public getStudentsCountInTeam(id: number) {
-    return this.repository
+  public async getStudentsCountInTeam(id: number) {
+    const { studentsCount } = await this.repository
       .createQueryBuilder('team')
       .where({ id })
       .leftJoin('team.students', 's')
       .select('COUNT(s.id)', 'studentsCount')
       .getRawOne();
+    return Number(studentsCount);
   }
 
   public async findByIdDetailed(id: number) {

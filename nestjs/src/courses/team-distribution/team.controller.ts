@@ -163,7 +163,7 @@ export class TeamController {
     await this.studentService.deleteStudentFromTeam(studentId, id);
     const teamDistribution = await this.distributionService.getById(distributionId);
     await this.studentService.addStudentToTeamDistribution(studentId, teamDistribution, false);
-    const { studentsCount } = await this.teamService.getStudentsCountInTeam(id);
-    if (studentsCount === '0') await this.teamService.remove(id);
+    const studentsCount = await this.teamService.getStudentsCountInTeam(id);
+    if (studentsCount === 0) await this.teamService.remove(id);
   }
 }

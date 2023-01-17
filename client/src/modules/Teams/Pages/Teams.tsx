@@ -22,7 +22,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const { distribution, loadDistribution, loading } = useDistribution(teamDistributionDetailed, course.id);
 
   const [teamData, setTeamData] = useState<Partial<TeamDto> | null>(null);
-  const [showJoinTeamModal, setShowJointTeamModal] = useState(false);
+  const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState('teams');
 
@@ -37,14 +37,14 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   };
 
   const handleJoinTeam = () => {
-    setShowJointTeamModal(true);
+    setShowJoinTeamModal(true);
   };
 
   const joinTeam = async (teamId: number, record: JoinTeamDto) => {
     try {
       const { data: team } = await teamApi.joinTeam(course.id, distribution.id, teamId, record);
       await loadDistribution();
-      setShowJointTeamModal(false);
+      setShowJoinTeamModal(false);
       showJoinTeamResultModal(team);
     } catch (error) {
       message.error('Failed to join to team. Please try later.');
@@ -111,7 +111,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       courseName={course.name}
     >
       {teamData && <TeamModal data={teamData} onSubmit={submitTeam} onCancel={() => setTeamData(null)} />}
-      {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJointTeamModal(false)} />}
+      {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJoinTeamModal(false)} />}
       <TeamsHeader
         courseAlias={course.alias}
         isManager={isManager}

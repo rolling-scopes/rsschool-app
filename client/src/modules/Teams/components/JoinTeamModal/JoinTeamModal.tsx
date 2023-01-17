@@ -24,7 +24,7 @@ export default function JoinTeamModal({ onCancel, onSubmit }: Props) {
     if (!password || !Number(id)) {
       return;
     } else {
-      await onSubmit(Number(id), { password: password });
+      await onSubmit(Number(id), { password });
     }
   };
 
@@ -57,7 +57,7 @@ export default function JoinTeamModal({ onCancel, onSubmit }: Props) {
           name="password"
           label="Team password"
           rules={[
-            { required: true, message: 'Please enter team name' },
+            { required: true, message: 'Please enter team password' },
             { message: 'Please enter valid password', pattern: passwordPattern },
           ]}
         >
