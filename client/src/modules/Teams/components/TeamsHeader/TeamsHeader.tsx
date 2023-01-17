@@ -72,7 +72,7 @@ export default function TeamsHeader({
           The roles of team members are determined automatically.
         </Title>
 
-        {isStudent && !distribution.myTeam && (
+        {!isManager && isStudent && !distribution.myTeam && (
           <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
             {!distribution.myTeam && (
               <Card

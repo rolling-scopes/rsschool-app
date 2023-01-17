@@ -21,15 +21,13 @@ describe('useDistribution', () => {
   });
 
   it('should set loading to false and update distribution when getCourseTeamDistributionDetailed is successful', async () => {
-    jest.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        statusText: 'OK',
-        headers: {},
-        config: {},
-        data: { ...mockDistributionData, name: 'new distribution' },
-      }),
-    );
+    jest.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockResolvedValue({
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+      data: { ...mockDistributionData, name: 'new distribution' },
+    });
     const { result } = renderHook(() => useDistribution(mockDistributionData, courseId));
 
     await act(async () => {

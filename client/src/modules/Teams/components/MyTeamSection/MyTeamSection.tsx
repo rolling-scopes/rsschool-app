@@ -49,17 +49,17 @@ export default function MyTeamSection({
         <Text type="secondary">{myTeam.description}</Text>
         {studentId === myTeam.teamLeadId && <EditTwoTone twoToneColor="#1890FF" onClick={() => setTeamData(myTeam)} />}
       </Space>
-      <Row justify="end" gutter={0}>
+      <Row justify="end">
         <Space size="small">
           {isTeamLead && (
-            <Button onClick={() => copyPassword(myTeam.id)} icon={<CopyOutlined />}>
-              Invitation password
-            </Button>
-          )}
-          {isTeamLead && (
-            <Button onClick={() => copyChatLink()} icon={<CopyOutlined />}>
-              Chat link
-            </Button>
+            <>
+              <Button onClick={() => copyPassword(myTeam.id)} icon={<CopyOutlined />}>
+                Invitation password
+              </Button>
+              <Button onClick={() => copyChatLink()} icon={<CopyOutlined />}>
+                Chat link
+              </Button>
+            </>
           )}
           <Button type="link" onClick={leaveTeam}>
             Leave Team

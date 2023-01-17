@@ -14,7 +14,6 @@ type Props = {
   deleteRegister: (distributionId: number) => Promise<void>;
   isManager: boolean;
   courseAlias: string;
-  mobileView: boolean;
 };
 
 const getDateColor = (date: string): TextProps['type'] => {
@@ -26,7 +25,7 @@ const getDateColor = (date: string): TextProps['type'] => {
   if (isDeadlineSoon) return 'danger';
 };
 
-export function Actions({ distribution, register, deleteRegister, isManager, courseAlias, mobileView }: Props) {
+export function Actions({ distribution, register, deleteRegister, isManager, courseAlias }: Props) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const endDateText = dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate);
 
@@ -107,7 +106,7 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
 
   return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable || isManager ? (
     <Row style={{ marginTop: 16 }}>
-      <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
+      <Space size={24} wrap>
         {(isManager ||
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed ||
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Distributed) && (

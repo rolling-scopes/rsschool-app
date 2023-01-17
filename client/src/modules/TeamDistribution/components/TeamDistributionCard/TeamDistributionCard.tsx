@@ -57,7 +57,6 @@ export default function TeamDistributionCard({
         register={register}
         deleteRegister={deleteRegister}
         courseAlias={courseAlias}
-        mobileView={mobileView}
       />
     </Card>
   );
