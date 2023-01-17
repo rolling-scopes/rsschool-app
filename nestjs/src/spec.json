@@ -982,6 +982,29 @@
         "tags": ["team"]
       }
     },
+    "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
+      "get": {
+        "operationId": "getAnswers",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TaskVerificationAttemptDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["course task verifications"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2768,6 +2791,32 @@
         "required": ["password"]
       },
       "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
+      "SelfEducationQuestionSelectedAnswersDto": {
+        "type": "object",
+        "properties": {
+          "answers": { "type": "array", "items": { "type": "string" } },
+          "question": { "type": "string" },
+          "multiple": { "type": "boolean" },
+          "questionImage": { "type": "string" },
+          "answersType": { "type": "string" },
+          "selectedAnswers": { "type": "array", "items": { "type": "number" } }
+        },
+        "required": ["answers", "question", "multiple", "questionImage", "answersType", "selectedAnswers"]
+      },
+      "TaskVerificationAttemptDto": {
+        "type": "object",
+        "properties": {
+          "createdDate": { "type": "number" },
+          "courseTaskId": { "type": "number" },
+          "score": { "type": "number" },
+          "maxScore": { "type": "number" },
+          "questions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SelfEducationQuestionSelectedAnswersDto" }
+          }
+        },
+        "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",

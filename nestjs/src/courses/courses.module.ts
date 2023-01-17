@@ -23,6 +23,7 @@ import {
   TaskInterviewStudent,
   TeamDistribution,
   Team,
+  TaskVerification,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -54,6 +55,8 @@ import { TeamDistributionController } from './team-distribution/team-distributio
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
 import { TeamService } from './team-distribution/team.service';
 import { TeamController } from './team-distribution/team.controller';
+import { TaskVerificationsController } from './task-verifications/task-verifications.controller';
+import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 
 @Module({
   imports: [
@@ -79,6 +82,7 @@ import { TeamController } from './team-distribution/team.controller';
       TaskInterviewStudent,
       TeamDistribution,
       Team,
+      TaskVerification,
     ]),
     CoreModule,
     UsersModule,
@@ -101,6 +105,7 @@ import { TeamController } from './team-distribution/team.controller';
     CourseICalendarController,
     TeamDistributionController,
     TeamController,
+    TaskVerificationsController,
   ],
   providers: [
     CourseTasksService,
@@ -121,6 +126,7 @@ import { TeamController } from './team-distribution/team.controller';
     CourseICalendarService,
     TeamDistributionService,
     TeamService,
+    TaskVerificationsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })
