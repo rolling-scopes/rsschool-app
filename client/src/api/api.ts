@@ -1378,6 +1378,18 @@ export interface CourseTaskVerificationsDto {
      * @memberof CourseTaskVerificationsDto
      */
     'verifications': Array<object> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'state': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'status': string;
 }
 
 export const CourseTaskVerificationsDtoTypeEnum = {

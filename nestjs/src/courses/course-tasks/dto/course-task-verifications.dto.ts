@@ -19,9 +19,9 @@ export class CourseTaskVerificationsDto extends CourseTaskDetailedDto {
   @ApiProperty({ type: [TaskVerification], nullable: true })
   verifications: TaskVerification[] | null;
 
-  @ApiProperty({ type: CourseTaskStateEnum })
+  @ApiProperty({ enum: CourseTaskStateEnum })
   state: CourseTaskStateEnum;
 
-  @ApiProperty({ type: CourseTaskStatusEnum })
+  @ApiProperty({ enum: CourseTaskStatusEnum })
   status: CourseTaskStatusEnum;
 }
