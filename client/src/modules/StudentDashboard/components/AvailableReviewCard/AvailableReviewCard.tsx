@@ -1,4 +1,4 @@
-import { Divider, Progress, Row, Typography } from 'antd';
+import { Col, Divider, Progress, Row, Typography } from 'antd';
 import { AvailableReviewStatsDto } from 'api';
 import CommonCard from '../CommonDashboardCard';
 
@@ -17,7 +17,7 @@ export function AvailableReviewCard({ availableReviews, courseAlias }: Props) {
           {availableReviews.length ? (
             <>
               {availableReviews.map((el, index) => (
-                <Row key={el.id} gutter={[0, 6]}>
+                <Row key={el.id} gutter={[0, 8]}>
                   <Link target={'_blank'} href={`./cross-check-review?course=${courseAlias}&taskId=${el.id}`}>
                     {el.name}
                   </Link>
