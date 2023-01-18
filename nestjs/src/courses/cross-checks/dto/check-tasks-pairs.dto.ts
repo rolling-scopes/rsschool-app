@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IdNameDto, PaginationDto, PersonDto } from 'src/core/dto';
-import { CrossCheckPair, Pagination } from '../cross-checks-pairs.service';
+import { CrossCheckPair, Pagination } from '../course-cross-checks.service';
 
 export class CrossCheckPairDto {
   constructor(pair: CrossCheckPair) {

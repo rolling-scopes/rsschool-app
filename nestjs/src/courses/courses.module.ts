@@ -39,7 +39,7 @@ import { InterviewsController, InterviewsService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
-import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
+import { CourseCrossCheckController, CourseCrossCheckService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
 import { ScoreController, ScoreService } from './score';
 import { TaskSolutionsController, TaskSolutionsService } from './task-solutions';
@@ -94,7 +94,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     InterviewsController,
     TasksController,
     CourseStatsController,
-    CrossCheckController,
+    CourseCrossCheckController,
     ScoreController,
     TaskSolutionsController,
     CourseScheduleController,
@@ -114,7 +114,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     InterviewsService,
     TasksService,
     CourseStatsService,
-    CrossCheckPairsService,
+    CourseCrossCheckService,
     ScoreService,
     TaskSolutionsService,
     CourseScheduleService,
