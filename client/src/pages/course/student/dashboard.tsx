@@ -20,6 +20,7 @@ import {
   NextEventCard,
   RepositoryCard,
   TaskStat,
+  AvailableReviewCard,
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
 import {
@@ -29,6 +30,7 @@ import {
   CoursesScheduleApi,
   CourseScheduleItemDto,
   CourseScheduleItemDtoStatusEnum,
+  AvailableReviewStatsDto,
 } from 'api';
 
 const coursesTasksApi = new CoursesTasksApi();
@@ -45,6 +47,7 @@ function Page(props: CoursePageProps) {
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseScheduleItemDto[]);
+  const [availableReviews, setAvailableReviews] = useState<AvailableReviewStatsDto[]>([]);
   const [tasksByStatus, setTasksByStatus] = useState(
     {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
   );
@@ -59,14 +62,21 @@ function Page(props: CoursePageProps) {
   useAsync(
     withLoading(async () => {
       const courseId = props.course.id;
-      const [studentSummary, { data: courseTasks }, statisticsCourses, courseStats, { data: scheduleTasks }] =
-        await Promise.all([
-          courseService.getStudentSummary(githubId),
-          coursesTasksApi.getCourseTasks(courseId),
-          userService.getProfileInfo(githubId),
-          coursesStatsApi.getCourseStats(courseId),
-          new CoursesScheduleApi().getSchedule(courseId),
-        ]);
+      const [
+        studentSummary,
+        { data: courseTasks },
+        statisticsCourses,
+        courseStats,
+        { data: scheduleTasks },
+        { data: availableReviews },
+      ] = await Promise.all([
+        courseService.getStudentSummary(githubId),
+        coursesTasksApi.getCourseTasks(courseId),
+        userService.getProfileInfo(githubId),
+        coursesStatsApi.getCourseStats(courseId),
+        new CoursesScheduleApi().getSchedule(courseId),
+        coursesTasksApi.getAvailableCrossCheckReviewStats(courseId),
+      ]);
 
       const nextEvents = scheduleTasks
         .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
@@ -80,6 +90,7 @@ function Page(props: CoursePageProps) {
       setCourseTasks(courseTasks);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
       setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
+      setAvailableReviews(availableReviews ?? []);
 
       setTasksByStatus(
         omitBy(
@@ -118,6 +129,7 @@ function Page(props: CoursePageProps) {
     ),
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
     <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
+    <AvailableReviewCard availableReviews={availableReviews} courseAlias={alias} />,
     <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard

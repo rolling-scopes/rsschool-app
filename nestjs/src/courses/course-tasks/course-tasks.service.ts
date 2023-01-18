@@ -1,4 +1,4 @@
-import { Checker, CourseTask } from '@entities/courseTask';
+import { Checker, CourseTask, CrossCheckStatus } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -134,6 +134,19 @@ export class CourseTasksService {
     return this.courseTaskRepository.update(id, {
       id, // required to get right update in subscription
       disabled: true,
+    });
+  }
+
+  public getAvailableCrossChecks(courseId: number) {
+    return this.courseTaskRepository.find({
+      where: { courseId, checker: Checker.CrossCheck, crossCheckStatus: CrossCheckStatus.Distributed },
+      relations: { task: true },
+      select: {
+        id: true,
+        task: {
+          name: true,
+        },
+      },
     });
   }
 }
