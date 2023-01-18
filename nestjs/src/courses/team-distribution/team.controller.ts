@@ -17,6 +17,7 @@ import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, R
 import { StudentsService } from '../students';
 import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, TeamsQueryDto, UpdateTeamDto } from './dto/';
 import { TeamDistributionService } from './team-distribution.service';
+import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
 
 @Controller('courses/:courseId/team-distribution/:distributionId/team')
@@ -89,6 +90,7 @@ export class TeamController {
   }
 
   @Patch('/:id')
+  @UseGuards(RoleGuard, TeamLeadOrCourseManagerGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Student])
   @ApiOperation({ operationId: 'updateTeam' })
   @ApiOkResponse()
@@ -164,6 +166,8 @@ export class TeamController {
     const teamDistribution = await this.distributionService.getById(distributionId);
     await this.studentService.addStudentToTeamDistribution(studentId, teamDistribution, false);
     const studentsCount = await this.teamService.getStudentsCountInTeam(id);
-    if (studentsCount === 0) await this.teamService.remove(id);
+    if (studentsCount === 0) {
+      await this.teamService.remove(id);
+    }
   }
 }

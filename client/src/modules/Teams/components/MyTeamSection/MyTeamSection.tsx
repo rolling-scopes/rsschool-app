@@ -47,7 +47,7 @@ export default function MyTeamSection({
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
         <Text type="secondary">{myTeam.description}</Text>
-        {studentId === myTeam.teamLeadId && <EditTwoTone twoToneColor="#1890FF" onClick={() => setTeamData(myTeam)} />}
+        {isTeamLead && <EditTwoTone twoToneColor="#1890FF" onClick={() => setTeamData(myTeam)} />}
       </Space>
       <Row justify="end">
         <Space size="small">
