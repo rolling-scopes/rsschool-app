@@ -183,14 +183,17 @@ export class CourseCrossCheckService {
       .andWhere('tsc."checkerId" = :studentId', { studentId })
       .getRawMany();
 
-    return tasks.map(t => {
-      const checks = res.filter(el => t.id === el.tsc_courseTaskId);
-      return {
-        name: t.task.name,
-        id: t.id,
-        checksCount: checks.length,
-        completedChecksCount: checks.filter(c => c.tsr_score !== null).length,
-      };
-    });
+    return tasks
+      .map(t => {
+        const checks = res.filter(el => t.id === el.tsc_courseTaskId);
+
+        return {
+          name: t.task.name,
+          id: t.id,
+          checksCount: checks.length,
+          completedChecksCount: checks.filter(c => c.tsr_score !== null).length,
+        };
+      })
+      .filter(el => el.checksCount !== 0);
   }
 }
