@@ -1,4 +1,4 @@
-import { Col, Divider, Progress, Row, Typography } from 'antd';
+import { Divider, Progress, Row, Typography } from 'antd';
 import { AvailableReviewStatsDto } from 'api';
 import CommonCard from '../CommonDashboardCard';
 
