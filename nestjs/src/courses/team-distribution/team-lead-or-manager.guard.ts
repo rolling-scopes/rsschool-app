@@ -12,13 +12,19 @@ export class TeamLeadOrCourseManagerGuard implements CanActivate {
     if (!courseId) {
       throw new UnauthorizedException();
     }
+    const isManager = request.user.isAdmin || request.user.courses[courseId]?.roles.includes(CourseRole.Manager);
+
+    if (isManager) {
+      return true;
+    }
+
     const studentId = request.user.courses[courseId]?.studentId;
     const teamId = Number(request.params.id);
 
     const team = await this.teamService.findById(teamId);
     const isTeamLead = team.teamLeadId === studentId;
-    const isManager = request.user.isAdmin || request.user.courses[courseId]?.roles.includes(CourseRole.Manager);
-    if (!(isTeamLead || isManager)) {
+
+    if (!isTeamLead) {
       throw new UnauthorizedException();
     }
 

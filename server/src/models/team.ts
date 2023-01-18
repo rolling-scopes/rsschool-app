@@ -7,7 +7,7 @@ export class Team {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: '' })
+  @Column()
   name: string;
 
   @ManyToOne(() => TeamDistribution)
@@ -26,9 +26,9 @@ export class Team {
   @Column({ nullable: true })
   teamLeadId: number;
 
-  @Column({ default: '' })
+  @Column({ nullable: true })
   chatLink: string;
 
-  @Column({ default: '' })
+  @Column()
   password: string;
 }
