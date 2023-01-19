@@ -609,6 +609,25 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/available-review-stats": {
+      "get": {
+        "operationId": "getAvailableCrossCheckReviewStats",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "403": { "description": "" },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/AvailableReviewStatsDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
@@ -2473,6 +2492,16 @@
           "pagination": { "$ref": "#/components/schemas/PaginationDto" }
         },
         "required": ["items", "pagination"]
+      },
+      "AvailableReviewStatsDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "id": { "type": "number" },
+          "checksCount": { "type": "number" },
+          "completedChecksCount": { "type": "number" }
+        },
+        "required": ["name", "id", "checksCount", "completedChecksCount"]
       },
       "MentorDto": {
         "type": "object",
