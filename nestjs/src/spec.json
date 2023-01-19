@@ -2801,18 +2801,20 @@
         "properties": {
           "name": { "type": "string" },
           "description": { "type": "string" },
-          "chatLink": { "type": "string" }
+          "chatLink": { "type": "string" },
+          "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink"]
+        "required": ["name", "description", "chatLink", "studentIds"]
       },
       "UpdateTeamDto": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
           "description": { "type": "string" },
-          "chatLink": { "type": "string" }
+          "chatLink": { "type": "string" },
+          "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink"]
+        "required": ["name", "description", "chatLink", "studentIds"]
       },
       "TeamPasswordDto": {
         "type": "object",

@@ -15,7 +15,7 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
-import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, UpdateTeamDto } from './dto/';
+import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, UpdateTeamDto, JoinTeamDtoRes } from './dto/';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
@@ -61,7 +61,7 @@ export class TeamController {
     @Body() dto: CreateTeamDto,
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
-    const students: Student[] = [];
+    let students: Student[] = [];
     const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
 
     if (studentId && !isManager) {
@@ -70,6 +70,21 @@ export class TeamController {
         throw new BadRequestException();
       }
       students.push(student);
+    }
+
+    if (isManager) {
+      students = await this.studentService.getStudentsWithTeamsAndDistribution(dto.studentIds);
+      if (students.length === 0) {
+        throw new BadRequestException();
+      }
+      if (
+        Number(students[0]?.teamDistribution.find(td => td.id === distributionId)?.strictTeamSize) <= students.length
+      ) {
+        throw new BadRequestException('The number of students in the team has been exceeded.');
+      }
+      if (students.find(st => st.teams.find(t => t.teamDistributionId === distributionId))) {
+        throw new BadRequestException('One of the students is already on the team for the current distribution');
+      }
     }
     const data = await this.teamService.create({
       teamDistributionId: distributionId,
@@ -123,7 +138,7 @@ export class TeamController {
 
   @Post('/:id/join')
   @UseGuards(RoleGuard)
-  @ApiOkResponse({ type: TeamDto })
+  @ApiOkResponse({ type: JoinTeamDto })
   @ApiOperation({ operationId: 'joinTeam' })
   @RequiredRoles([CourseRole.Student])
   public async joinTeam(
@@ -145,7 +160,7 @@ export class TeamController {
     if (dto.password !== team.password) throw new BadRequestException('Invalid password');
     await this.studentService.addStudentToTeam(studentId, team);
     await this.studentService.deleteStudentFromTeamDistribution(studentId, team.teamDistribution);
-    return new TeamDto(team);
+    return new JoinTeamDtoRes(team);
   }
 
   @Post('/:id/leave')
