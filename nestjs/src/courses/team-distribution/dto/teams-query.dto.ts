@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumberString } from 'class-validator';
 
 export class TeamsQueryDto {
   @ApiProperty()
-  @IsString()
+  @IsNumberString()
   public current: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNumberString()
   public pageSize: string;
 }

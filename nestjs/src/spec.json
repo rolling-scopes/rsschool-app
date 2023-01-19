@@ -2612,10 +2612,10 @@
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2624,10 +2624,10 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
@@ -2644,10 +2644,10 @@
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2658,10 +2658,10 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
@@ -2673,10 +2673,10 @@
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2685,10 +2685,10 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
@@ -2741,10 +2741,10 @@
           "studentsWithoutTeamCount": { "type": "number" },
           "teamsCount": { "type": "number" },
           "myTeam": { "$ref": "#/components/schemas/TeamDto" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" }
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" }
         },
         "required": [
           "id",
@@ -2753,10 +2753,10 @@
           "studentsWithoutTeamCount",
           "teamsCount",
           "myTeam",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount"
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode"
         ]
       },
       "TeamsDto": {

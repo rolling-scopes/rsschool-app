@@ -40,6 +40,8 @@ export class TeamController {
     @Param('distributionId', ParseIntPipe) distributionId: number,
     @Query() query: TeamsQueryDto,
   ) {
+    console.log('🚀 ~ file: team.controller.ts:43 ~ TeamController ~ query', typeof query.current);
+
     const page = parseInt(query.current);
     const limit = parseInt(query.pageSize);
     const { teams, paginationMeta } = await this.teamService.findByDistributionId(distributionId, {
@@ -138,7 +140,7 @@ export class TeamController {
     if (!studentId) throw new BadRequestException();
     const team = await this.teamService.findById(id);
     const student = await this.studentService.getStudentWithTeamsAndDistribution(studentId);
-    if (team.teamDistribution.strictStudentsCount && team.teamDistribution.studentsCount <= team.students.length + 1) {
+    if (team.teamDistribution.strictTeamSizeMode && team.teamDistribution.strictTeamSize <= team.students.length + 1) {
       throw new BadRequestException();
     }
     if (student.teams.find(t => t.teamDistributionId === team.teamDistributionId)) throw new BadRequestException();

@@ -22,7 +22,7 @@ const teamApi = new TeamApi();
 export default function TeamSection({ distribution }: Props) {
   const [teams, setTeams] = useState<TeamsState>({
     content: [],
-    pagination: { current: 1, pageSize: 10 },
+    pagination: { current: 1, pageSize: 1 },
   });
 
   const getTeams = async (pagination: TablePaginationConfig) => {

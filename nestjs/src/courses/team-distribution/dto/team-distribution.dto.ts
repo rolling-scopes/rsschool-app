@@ -11,10 +11,10 @@ export class TeamDistributionDto {
     this.startDate = teamDistribution.startDate;
     this.endDate = teamDistribution.endDate;
     this.description = teamDistribution.description;
-    this.minStudents = teamDistribution.minStudents;
-    this.maxStudents = teamDistribution.maxStudents;
-    this.studentsCount = teamDistribution.studentsCount;
-    this.strictStudentsCount = teamDistribution.strictStudentsCount;
+    this.minTeamSize = teamDistribution.minTeamSize;
+    this.maxTeamSize = teamDistribution.maxTeamSize;
+    this.strictTeamSize = teamDistribution.strictTeamSize;
+    this.strictTeamSizeMode = teamDistribution.strictTeamSizeMode;
     this.minTotalScore = teamDistribution.minTotalScore;
     this.descriptionUrl = teamDistribution.descriptionUrl;
     this.registrationStatus = teamDistribution.registrationStatus ?? null;
@@ -42,16 +42,16 @@ export class TeamDistributionDto {
   public descriptionUrl: string;
 
   @ApiProperty()
-  public minStudents: number;
+  public minTeamSize: number;
 
   @ApiProperty()
-  public maxStudents: number;
+  public maxTeamSize: number;
 
   @ApiProperty()
-  public studentsCount: number;
+  public strictTeamSize: number;
 
   @ApiProperty()
-  public strictStudentsCount: boolean;
+  public strictTeamSizeMode: boolean;
 
   @ApiProperty()
   public minTotalScore: number;
@@ -65,10 +65,10 @@ export class TeamDistributionDetailedDto {
     this.id = distribution.id;
     this.name = distribution.name;
     this.myTeam = team;
-    this.minStudents = distribution.minStudents;
-    this.maxStudents = distribution.maxStudents;
-    this.studentsCount = distribution.studentsCount;
-    this.strictStudentsCount = distribution.strictStudentsCount;
+    this.minTeamSize = distribution.minTeamSize;
+    this.maxTeamSize = distribution.maxTeamSize;
+    this.strictTeamSize = distribution.strictTeamSize;
+    this.strictTeamSizeMode = distribution.strictTeamSizeMode;
     this.courseId = distribution.courseId;
   }
 
@@ -92,14 +92,14 @@ export class TeamDistributionDetailedDto {
   public myTeam?: TeamDto;
 
   @ApiProperty()
-  public minStudents: number;
+  public minTeamSize: number;
 
   @ApiProperty()
-  public maxStudents: number;
+  public maxTeamSize: number;
 
   @ApiProperty()
-  public studentsCount: number;
+  public strictTeamSize: number;
 
   @ApiProperty()
-  public strictStudentsCount: boolean;
+  public strictTeamSizeMode: boolean;
 }

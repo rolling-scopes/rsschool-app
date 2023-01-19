@@ -54,16 +54,19 @@ export class TeamDistribution {
   studentsWithoutTeam: Student[];
 
   @Column({ default: 2 })
-  minStudents: number;
+  minTeamSize: number;
 
   @Column({ default: 4 })
-  maxStudents: number;
+  maxTeamSize: number;
 
   @Column({ default: 3 })
-  studentsCount: number;
+  strictTeamSize: number;
 
+  /* if strict mode is true the number of participants in the team is strictly equal to the number
+if strict mode is false the number of participants in the team from minTeamSize to maxTeamSize
+*/
   @Column({ default: true })
-  strictStudentsCount: boolean;
+  strictTeamSizeMode: boolean;
 
   @Column({ default: 0 })
   minTotalScore: number;

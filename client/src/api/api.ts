@@ -1748,25 +1748,25 @@ export interface CreateTeamDistributionDto {
      * @type {number}
      * @memberof CreateTeamDistributionDto
      */
-    'minStudents': number;
+    'minTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof CreateTeamDistributionDto
      */
-    'maxStudents': number;
+    'maxTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof CreateTeamDistributionDto
      */
-    'studentsCount': number;
+    'strictTeamSize': number;
     /**
      * 
      * @type {boolean}
      * @memberof CreateTeamDistributionDto
      */
-    'strictStudentsCount': boolean;
+    'strictTeamSizeMode': boolean;
     /**
      * 
      * @type {number}
@@ -4251,25 +4251,25 @@ export interface TeamDistributionDetailedDto {
      * @type {number}
      * @memberof TeamDistributionDetailedDto
      */
-    'minStudents': number;
+    'minTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof TeamDistributionDetailedDto
      */
-    'maxStudents': number;
+    'maxTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof TeamDistributionDetailedDto
      */
-    'studentsCount': number;
+    'strictTeamSize': number;
     /**
      * 
      * @type {boolean}
      * @memberof TeamDistributionDetailedDto
      */
-    'strictStudentsCount': boolean;
+    'strictTeamSizeMode': boolean;
 }
 /**
  * 
@@ -4324,25 +4324,25 @@ export interface TeamDistributionDto {
      * @type {number}
      * @memberof TeamDistributionDto
      */
-    'minStudents': number;
+    'minTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof TeamDistributionDto
      */
-    'maxStudents': number;
+    'maxTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof TeamDistributionDto
      */
-    'studentsCount': number;
+    'strictTeamSize': number;
     /**
      * 
      * @type {boolean}
      * @memberof TeamDistributionDto
      */
-    'strictStudentsCount': boolean;
+    'strictTeamSizeMode': boolean;
     /**
      * 
      * @type {number}
@@ -5207,25 +5207,25 @@ export interface UpdateTeamDistributionDto {
      * @type {number}
      * @memberof UpdateTeamDistributionDto
      */
-    'minStudents': number;
+    'minTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof UpdateTeamDistributionDto
      */
-    'maxStudents': number;
+    'maxTeamSize': number;
     /**
      * 
      * @type {number}
      * @memberof UpdateTeamDistributionDto
      */
-    'studentsCount': number;
+    'strictTeamSize': number;
     /**
      * 
      * @type {boolean}
      * @memberof UpdateTeamDistributionDto
      */
-    'strictStudentsCount': boolean;
+    'strictTeamSizeMode': boolean;
     /**
      * 
      * @type {number}

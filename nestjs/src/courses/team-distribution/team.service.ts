@@ -1,6 +1,7 @@
 import { Team } from '@entities/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { customAlphabet } from 'nanoid/async';
 import { paginate } from 'src/core/paginate';
 import { Repository } from 'typeorm';
 import { UpdateTeamDto } from './dto';
@@ -12,13 +13,10 @@ export class TeamService {
     private repository: Repository<Team>,
   ) {}
 
-  private generatePassword(length = 6): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
+  private async generatePassword(length = 6): Promise<string> {
+    const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', length);
+    const password = await nanoid();
+    return password;
   }
 
   public async create(data: Partial<Team>) {
@@ -26,7 +24,8 @@ export class TeamService {
       const [lead] = data.students.sort((a, b) => a.rank - b.rank);
       data.teamLeadId = lead?.id;
     }
-    return this.repository.save({ ...data, password: this.generatePassword() });
+    const password = await this.generatePassword();
+    return this.repository.save({ ...data, password });
   }
 
   public async remove(id: number) {
