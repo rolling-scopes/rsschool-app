@@ -65,7 +65,7 @@ export class TeamService {
     return Number(studentsCount);
   }
 
-  public async findByIdDetailed(id: number) {
+  public async findTeamWithStudentsById(id: number) {
     return this.repository
       .createQueryBuilder('team')
       .where({ id })

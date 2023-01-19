@@ -66,7 +66,7 @@ export class TeamController {
     const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
 
     if (studentId && !isManager) {
-      const student = await this.studentService.getStudentDetailed(studentId);
+      const student = await this.studentService.getStudentWithTeamsAndDistribution(studentId);
       if (student.teams.find(t => t.teamDistributionId === distributionId)) {
         throw new BadRequestException();
       }
@@ -77,7 +77,7 @@ export class TeamController {
       students,
       ...dto,
     });
-    const team = await this.teamService.findByIdDetailed(data.id);
+    const team = await this.teamService.findTeamWithStudentsById(data.id);
 
     if (team.students.length) {
       await this.studentService.deleteStudentsFromTeamDistribution(
@@ -137,7 +137,7 @@ export class TeamController {
     const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) throw new BadRequestException();
     const team = await this.teamService.findById(id);
-    const student = await this.studentService.getStudentDetailed(studentId);
+    const student = await this.studentService.getStudentWithTeamsAndDistribution(studentId);
     if (team.teamDistribution.strictStudentsCount && team.teamDistribution.studentsCount <= team.students.length + 1) {
       throw new BadRequestException();
     }

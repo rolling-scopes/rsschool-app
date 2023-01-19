@@ -53,7 +53,7 @@ export class StudentsService {
     return student;
   }
 
-  public async getStudentDetailed(studentId: number) {
+  public async getStudentWithTeamsAndDistribution(studentId: number) {
     const student = await this.studentRepository.findOneOrFail({
       where: { id: studentId },
       relations: ['teams', 'teamDistribution', 'user'],
@@ -66,7 +66,7 @@ export class StudentsService {
     teamDistribution: TeamDistribution,
     withVerification = true,
   ) {
-    const student = await this.getStudentDetailed(studentId);
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
     const currentDate = dayjs();
     const distributionStartDate = dayjs(teamDistribution.startDate);
     const distributionEndDate = dayjs(teamDistribution.endDate);
@@ -84,7 +84,7 @@ export class StudentsService {
   }
 
   public async addStudentToTeam(studentId: number, team: Team) {
-    const student = await this.getStudentDetailed(studentId);
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
     student.teams.push(team);
     await this.studentRepository.save(student);
   }
@@ -109,7 +109,7 @@ export class StudentsService {
   }
 
   public async deleteStudentFromTeam(studentId: number, teamId: number) {
-    const student = await this.getStudentDetailed(studentId);
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
     student.teams = student.teams.filter(el => el.id !== teamId);
     await this.studentRepository.save(student);
   }
