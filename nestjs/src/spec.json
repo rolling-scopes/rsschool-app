@@ -2692,6 +2692,33 @@
           "minTotalScore"
         ]
       },
+      "TeamDistributionStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "fullName": { "type": "string" },
+          "cvLink": { "type": "string" },
+          "discord": { "type": "string" },
+          "telegram": { "type": "string" },
+          "email": { "type": "string" },
+          "githubId": { "type": "string" },
+          "rank": { "type": "number" },
+          "totalScore": { "type": "number" },
+          "location": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "cvLink",
+          "discord",
+          "telegram",
+          "email",
+          "githubId",
+          "rank",
+          "totalScore",
+          "location"
+        ]
+      },
       "TeamDto": {
         "type": "object",
         "properties": {
@@ -2699,7 +2726,7 @@
           "name": { "type": "string" },
           "chatLink": { "type": "string" },
           "description": { "type": "string" },
-          "students": { "type": "array", "items": { "type": "string" } },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } },
           "teamLeadId": { "type": "number" },
           "teamDistributionId": { "type": "number" }
         },
@@ -2730,33 +2757,6 @@
           "maxStudents",
           "studentsCount",
           "strictStudentsCount"
-        ]
-      },
-      "TeamDistributionStudentDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "fullName": { "type": "string" },
-          "cvLink": { "type": "string" },
-          "discord": { "type": "string" },
-          "telegram": { "type": "string" },
-          "email": { "type": "string" },
-          "githubId": { "type": "string" },
-          "rank": { "type": "number" },
-          "totalScore": { "type": "number" },
-          "location": { "type": "string" }
-        },
-        "required": [
-          "id",
-          "fullName",
-          "cvLink",
-          "discord",
-          "telegram",
-          "email",
-          "githubId",
-          "rank",
-          "totalScore",
-          "location"
         ]
       },
       "TeamsDto": {

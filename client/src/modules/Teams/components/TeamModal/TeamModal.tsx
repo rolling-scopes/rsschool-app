@@ -20,11 +20,15 @@ const layout = {
 export default function TeamModal({ onCancel, onSubmit, data }: Props) {
   const [form] = Form.useForm<Partial<TeamDto>>();
 
-  const createRecord = (values: Partial<TeamDto>): CreateTeamDto => {
+  const createRecord = ({
+    name = 'Team name',
+    description = 'Team description',
+    chatLink = 'team chat',
+  }): CreateTeamDto => {
     return {
-      name: values.name!,
-      description: values.description!,
-      chatLink: values.chatLink!,
+      name: name,
+      description: description,
+      chatLink: chatLink,
     };
   };
 

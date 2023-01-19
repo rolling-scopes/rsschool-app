@@ -4461,10 +4461,10 @@ export interface TeamDto {
     'description': string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<TeamDistributionStudentDto>}
      * @memberof TeamDto
      */
-    'students': Array<string>;
+    'students': Array<TeamDistributionStudentDto>;
     /**
      * 
      * @type {number}

@@ -45,12 +45,9 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
 ];
 
 export const expandedRowRender = (team: TeamDto) => {
-  {
-    /* openapi generate not correct interface for array students */
-  }
   return (
     <StudentsTable
-      content={team.students as unknown as TeamDistributionStudentDto[]}
+      content={team.students}
       teamLeadId={team.teamLeadId}
       notVisibleColumn={[StudentsTableColumnKey.Email]}
       pagination={false}

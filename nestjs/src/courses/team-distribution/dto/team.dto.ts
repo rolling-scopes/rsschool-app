@@ -36,7 +36,7 @@ export class TeamDto {
   @ApiProperty()
   public description: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: [TeamDistributionStudentDto] })
   public students: TeamDistributionStudentDto[];
 
   @ApiProperty()
