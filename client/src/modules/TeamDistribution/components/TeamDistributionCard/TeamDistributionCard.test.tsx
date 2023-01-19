@@ -25,6 +25,7 @@ function renderCard(distribution: TeamDistributionDto, isManager = false) {
       onEdit={mockOnEdit}
       deleteRegister={onDeleteRegister}
       register={onRegister}
+      courseAlias="Test"
     />,
   );
 }

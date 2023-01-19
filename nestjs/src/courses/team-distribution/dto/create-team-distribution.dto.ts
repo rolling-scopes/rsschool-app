@@ -31,23 +31,23 @@ export class CreateTeamDistributionDto {
   @IsNotEmpty()
   @Min(2)
   @ApiProperty()
-  public minStudents: number;
+  public minTeamSize: number;
 
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  public maxStudents: number;
+  public maxTeamSize: number;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(2)
   @ApiProperty()
-  public studentsCount: number;
+  public strictTeamSize: number;
 
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty()
-  public strictStudentsCount: boolean;
+  public strictTeamSizeMode: boolean;
 
   @IsNumber()
   @IsNotEmpty()

@@ -22,6 +22,7 @@ import {
   User,
   TaskInterviewStudent,
   TeamDistribution,
+  Team,
   TaskVerification,
 } from '@entities/index';
 
@@ -52,6 +53,8 @@ import {
 import { CoreModule } from 'src/core/core.module';
 import { TeamDistributionController } from './team-distribution/team-distribution.controller';
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
+import { TeamService } from './team-distribution/team.service';
+import { TeamController } from './team-distribution/team.controller';
 import { TaskVerificationsController } from './task-verifications/task-verifications.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 
@@ -78,6 +81,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
       TaskInterviewResult,
       TaskInterviewStudent,
       TeamDistribution,
+      Team,
       TaskVerification,
     ]),
     CoreModule,
@@ -100,6 +104,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     CourseScheduleController,
     CourseICalendarController,
     TeamDistributionController,
+    TeamController,
     TaskVerificationsController,
   ],
   providers: [
@@ -120,6 +125,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     CourseScheduleService,
     CourseICalendarService,
     TeamDistributionService,
+    TeamService,
     TaskVerificationsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],

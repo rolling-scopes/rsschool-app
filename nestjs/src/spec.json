@@ -851,6 +851,156 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/detailed": {
+      "get": {
+        "operationId": "getCourseTeamDistributionDetailed",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDetailedDto" } }
+            }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{id}/students": {
+      "get": {
+        "operationId": "getStudentsWithoutTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team": {
+      "get": {
+        "operationId": "getTeams",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamsDto" } } }
+          }
+        },
+        "tags": ["team"]
+      },
+      "post": {
+        "operationId": "createTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTeamDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}": {
+      "patch": {
+        "operationId": "updateTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["team"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/password": {
+      "get": {
+        "operationId": "getTeamPassword",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamPasswordDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/join": {
+      "post": {
+        "operationId": "joinTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+          }
+        },
+        "tags": ["team"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/leave": {
+      "post": {
+        "operationId": "leaveTeam",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["team"]
+      }
+    },
     "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
       "get": {
         "operationId": "getAnswers",
@@ -2491,10 +2641,10 @@
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2503,10 +2653,10 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
@@ -2517,16 +2667,16 @@
           "name": { "type": "string" },
           "registrationStatus": {
             "type": "string",
-            "enum": ["available", "unavailable", "future", "completed", "closed"]
+            "enum": ["available", "unavailable", "future", "completed", "distributed", "closed"]
           },
           "startDate": { "format": "date-time", "type": "string" },
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2537,10 +2687,10 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
@@ -2552,10 +2702,10 @@
           "endDate": { "format": "date-time", "type": "string" },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
-          "minStudents": { "type": "number" },
-          "maxStudents": { "type": "number" },
-          "studentsCount": { "type": "number" },
-          "strictStudentsCount": { "type": "boolean" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" },
           "minTotalScore": { "type": "number" }
         },
         "required": [
@@ -2564,13 +2714,112 @@
           "endDate",
           "description",
           "descriptionUrl",
-          "minStudents",
-          "maxStudents",
-          "studentsCount",
-          "strictStudentsCount",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode",
           "minTotalScore"
         ]
       },
+      "TeamDistributionStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "fullName": { "type": "string" },
+          "cvLink": { "type": "string" },
+          "discord": { "type": "string" },
+          "telegram": { "type": "string" },
+          "email": { "type": "string" },
+          "githubId": { "type": "string" },
+          "rank": { "type": "number" },
+          "totalScore": { "type": "number" },
+          "location": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "cvLink",
+          "discord",
+          "telegram",
+          "email",
+          "githubId",
+          "rank",
+          "totalScore",
+          "location"
+        ]
+      },
+      "TeamDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } },
+          "teamLeadId": { "type": "number" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+      },
+      "TeamDistributionDetailedDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "courseId": { "type": "number" },
+          "name": { "type": "string" },
+          "studentsWithoutTeamCount": { "type": "number" },
+          "teamsCount": { "type": "number" },
+          "myTeam": { "$ref": "#/components/schemas/TeamDto" },
+          "minTeamSize": { "type": "number" },
+          "maxTeamSize": { "type": "number" },
+          "strictTeamSize": { "type": "number" },
+          "strictTeamSizeMode": { "type": "boolean" }
+        },
+        "required": [
+          "id",
+          "courseId",
+          "name",
+          "studentsWithoutTeamCount",
+          "teamsCount",
+          "myTeam",
+          "minTeamSize",
+          "maxTeamSize",
+          "strictTeamSize",
+          "strictTeamSizeMode"
+        ]
+      },
+      "TeamsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
+      "CreateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" }
+        },
+        "required": ["name", "description", "chatLink"]
+      },
+      "UpdateTeamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "chatLink": { "type": "string" }
+        },
+        "required": ["name", "description", "chatLink"]
+      },
+      "TeamPasswordDto": {
+        "type": "object",
+        "properties": { "password": { "type": "string" } },
+        "required": ["password"]
+      },
+      "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",
         "properties": {

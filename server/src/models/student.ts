@@ -138,7 +138,7 @@ export class Student {
   @Column({ nullable: true, default: true })
   mentoring: boolean;
 
-  @ManyToMany(() => TeamDistribution, teamDistribution => teamDistribution.students)
+  @ManyToMany(() => TeamDistribution, teamDistribution => teamDistribution.studentsWithoutTeam)
   @JoinTable()
   teamDistribution: TeamDistribution[];
 

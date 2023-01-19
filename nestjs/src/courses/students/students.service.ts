@@ -2,9 +2,11 @@ import { Student } from '@entities/student';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
+import { Team } from '@entities/team';
+import { paginate } from 'src/core/paginate';
 
 @Injectable()
 export class StudentsService {
@@ -17,6 +19,32 @@ export class StudentsService {
     return this.studentRepository.findOneOrFail({ where: { id }, relations: ['user'] });
   }
 
+  private getUserFields(modelName = 'user') {
+    return [
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.cvLink`,
+      `${modelName}.discord`,
+      `${modelName}.contactsTelegram`,
+      `${modelName}.contactsEmail`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+    ];
+  }
+
+  public async getStudentsByTeamDistributionId(distributionId: number, { page = 1, limit = 10 }) {
+    const query = this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoin('student.teamDistribution', 'td')
+      .innerJoin('student.user', 'user')
+      .addSelect(this.getUserFields())
+      .where('td.id IN (:...ids)', { ids: [distributionId] })
+      .orderBy('student.rank', 'ASC');
+    const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
+    return { students, paginationMeta };
+  }
+
   public async getStudentWithTeamDistributions(studentId: number) {
     const student = await this.studentRepository.findOne({
       where: { id: studentId },
@@ -25,19 +53,39 @@ export class StudentsService {
     return student;
   }
 
-  public async addStudentToTeamDistribution(studentId: number, teamDistribution: TeamDistribution) {
-    const student = await this.getStudentWithTeamDistributions(studentId);
+  public async getStudentWithTeamsAndDistribution(studentId: number) {
+    const student = await this.studentRepository.findOneOrFail({
+      where: { id: studentId },
+      relations: ['teams', 'teamDistribution', 'user'],
+    });
+    return student;
+  }
+
+  public async addStudentToTeamDistribution(
+    studentId: number,
+    teamDistribution: TeamDistribution,
+    withVerification = true,
+  ) {
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
     const currentDate = dayjs();
     const distributionStartDate = dayjs(teamDistribution.startDate);
     const distributionEndDate = dayjs(teamDistribution.endDate);
-    if (student == null) throw new NotFoundException();
-    if (currentDate < distributionStartDate || currentDate > distributionEndDate) {
+    if (withVerification && (currentDate < distributionStartDate || currentDate > distributionEndDate)) {
       throw new BadRequestException();
     }
-    if (student.totalScore < teamDistribution.minTotalScore) {
+    if (withVerification && student.totalScore < teamDistribution.minTotalScore) {
       throw new BadRequestException('Number of points is less than the input threshold for distribution');
     }
-    student.teamDistribution = [...student.teamDistribution, teamDistribution];
+    if (withVerification && student.teams.find(el => el.teamDistributionId === teamDistribution.id)) {
+      throw new BadRequestException();
+    }
+    student.teamDistribution.push(teamDistribution);
+    await this.studentRepository.save(student);
+  }
+
+  public async addStudentToTeam(studentId: number, team: Team) {
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
+    student.teams.push(team);
     await this.studentRepository.save(student);
   }
 
@@ -45,6 +93,24 @@ export class StudentsService {
     const student = await this.getStudentWithTeamDistributions(studentId);
     if (student == null) throw new NotFoundException();
     student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistribution.id);
+    await this.studentRepository.save(student);
+  }
+
+  public async deleteStudentsFromTeamDistribution(studentIds: number[], teamDistributionId: number) {
+    const students = await this.studentRepository.find({
+      where: { id: In(studentIds) },
+      relations: { teamDistribution: true },
+    });
+    const studentsWithoutDistribution = students.map(student => {
+      student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistributionId);
+      return student;
+    });
+    await Promise.all(studentsWithoutDistribution.map(s => this.studentRepository.save(s)));
+  }
+
+  public async deleteStudentFromTeam(studentId: number, teamId: number) {
+    const student = await this.getStudentWithTeamsAndDistribution(studentId);
+    student.teams = student.teams.filter(el => el.id !== teamId);
     await this.studentRepository.save(student);
   }
 

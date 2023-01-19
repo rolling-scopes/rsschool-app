@@ -100,6 +100,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
                 register={handleRegister}
                 deleteRegister={handleDeleteRegister}
                 distribution={distribution}
+                courseAlias={course.alias}
                 isManager={isManager}
                 onDelete={handleDeleteTeamDistribution}
                 onEdit={handleEditTeamDistribution}
