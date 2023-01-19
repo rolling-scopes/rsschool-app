@@ -139,7 +139,7 @@ export class CourseTasksService {
 
   public getAvailableCrossChecks(courseId: number) {
     return this.courseTaskRepository.find({
-      where: { courseId, checker: Checker.CrossCheck, crossCheckStatus: CrossCheckStatus.Distributed },
+      where: { courseId, checker: Checker.CrossCheck, crossCheckStatus: CrossCheckStatus.Distributed, disabled: false },
       relations: { task: true },
       select: {
         id: true,

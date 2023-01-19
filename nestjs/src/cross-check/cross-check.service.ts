@@ -71,7 +71,9 @@ export class CrossCheckService {
   }
 
   private async getCrossCheckTasks() {
-    const allCrossCheckTasks = await this.courseTaskRepository.find({ where: { checker: Checker.CrossCheck } });
+    const allCrossCheckTasks = await this.courseTaskRepository.find({
+      where: { checker: Checker.CrossCheck, disabled: false },
+    });
 
     return {
       tasksToStart: allCrossCheckTasks.filter(isTaskNeededToStart),
