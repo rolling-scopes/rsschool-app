@@ -6,7 +6,7 @@ describe('useModal', () => {
     const { result } = renderHook(() => useModal<{ id: number }>());
     expect(result.current.mode).toBe('create');
     expect(result.current.open).toBe(false);
-    expect(result.current.formData).toBe(null);
+    expect(result.current.formData).toBe(undefined);
   });
 
   it('should toggle the modal when toggle is called', () => {
@@ -39,6 +39,6 @@ describe('useModal', () => {
       result.current.toggle();
     });
     expect(result.current.mode).toBe('create');
-    expect(result.current.formData).toBe(null);
+    expect(result.current.formData).toBe(undefined);
   });
 });
