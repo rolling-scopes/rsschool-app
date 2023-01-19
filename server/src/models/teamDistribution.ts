@@ -62,7 +62,7 @@ export class TeamDistribution {
   @Column({ default: 3 })
   strictTeamSize: number;
 
-  /* if strict mode is true the number of participants in the team is strictly equal to the number
+  /* if strict mode is true the number of participants in the team is strictly equal to the strictTeamSize
 if strict mode is false the number of participants in the team from minTeamSize to maxTeamSize
 */
   @Column({ default: true })
