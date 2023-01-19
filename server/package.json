@@ -33,7 +33,7 @@
     "koa-session": "5.13.1",
     "koa-static": "5.0.0",
     "lodash": "4.17.21",
-    "luxon": "2.3.0",
+    "luxon": "2.5.2",
     "moment-timezone": "0.5.34",
     "node-cache": "5.1.2",
     "node-schedule": "2.0.0",
