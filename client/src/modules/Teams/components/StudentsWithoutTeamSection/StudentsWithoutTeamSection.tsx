@@ -1,4 +1,4 @@
-import { Space, TablePaginationConfig, TableProps, Typography } from 'antd';
+import { Space, TablePaginationConfig, Typography } from 'antd';
 import { useState } from 'react';
 
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
