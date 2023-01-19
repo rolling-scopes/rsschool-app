@@ -35,16 +35,12 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
     setStudents({ ...students, ...data });
   };
 
-  const handleChange: TableProps<TeamDistributionStudentDto>['onChange'] = pagination => {
-    getStudents(pagination);
-  };
-
   useAsync(async () => await getStudents(students.pagination), [distribution]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
       <Title level={5}>{`${distribution.name} teams`}</Title>
-      <StudentsTable content={students.content} pagination={students.pagination} handleChange={handleChange} />
+      <StudentsTable content={students.content} pagination={students.pagination} handleChange={getStudents} />
     </Space>
   );
 }

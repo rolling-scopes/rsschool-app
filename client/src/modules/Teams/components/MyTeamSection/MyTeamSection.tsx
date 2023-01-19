@@ -26,7 +26,11 @@ export default function MyTeamSection({
   reloadDistribution,
   setActiveTab,
 }: Props) {
-  const myTeam = distribution.myTeam!;
+  // This component is only available to students with a team.
+  if (!distribution.myTeam) {
+    return null;
+  }
+  const myTeam = distribution.myTeam;
 
   const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, distribution]);
   const [, copyToClipboard] = useCopyToClipboard();

@@ -80,9 +80,9 @@ export class TeamController {
     const team = await this.teamService.findByIdDetailed(data.id);
 
     if (team.students.length) {
-      const distribution = await this.distributionService.getById(distributionId);
-      await Promise.all(
-        team.students.map(el => this.studentService.deleteStudentFromTeamDistribution(el.id, distribution)),
+      await this.studentService.deleteStudentsFromTeamDistribution(
+        team.students.map(s => s.id),
+        distributionId,
       );
     }
 

@@ -2,7 +2,7 @@ import { Student } from '@entities/student';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Team } from '@entities/team';
@@ -94,6 +94,18 @@ export class StudentsService {
     if (student == null) throw new NotFoundException();
     student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistribution.id);
     await this.studentRepository.save(student);
+  }
+
+  public async deleteStudentsFromTeamDistribution(studentIds: number[], teamDistributionId: number) {
+    const students = await this.studentRepository.find({
+      where: { id: In(studentIds) },
+      relations: { teamDistribution: true },
+    });
+    const studentsWithoutDistribution = students.map(student => {
+      student.teamDistribution = student.teamDistribution.filter(el => el.id !== teamDistributionId);
+      return student;
+    });
+    await Promise.all(studentsWithoutDistribution.map(s => this.studentRepository.save(s)));
   }
 
   public async deleteStudentFromTeam(studentId: number, teamId: number) {
