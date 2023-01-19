@@ -29,8 +29,8 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
     const { data } = await teamDistributionApi.getStudentsWithoutTeam(
       distribution.courseId,
       distribution.id,
-      String(pagination.current),
-      String(pagination.pageSize),
+      pagination.current ?? 1,
+      pagination.pageSize ?? 10,
     );
     setStudents({ ...students, ...data });
   };

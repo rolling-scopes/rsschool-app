@@ -8,7 +8,6 @@ import {
   TeamDistributionStudentDto,
   UpdateTeamDistributionDto,
   CreateTeamDistributionDto,
-  StudentsWithoutTeamQueryDto,
   StudentsWithoutTeamDto,
   TeamDto,
 } from './dto';
@@ -144,13 +143,12 @@ export class TeamDistributionController {
   public async getStudentsWithoutTeam(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
-    @Query() query: StudentsWithoutTeamQueryDto,
+    @Query('pageSize') pageSize: number = 10,
+    @Query('current') current: number = 1,
   ) {
-    const page = parseInt(query.current);
-    const limit = parseInt(query.pageSize);
     const { students, paginationMeta } = await this.studentsService.getStudentsByTeamDistributionId(id, {
-      page,
-      limit,
+      page: current,
+      limit: pageSize,
     });
 
     return new StudentsWithoutTeamDto(students, paginationMeta);

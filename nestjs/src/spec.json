@@ -858,8 +858,8 @@
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
-          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } }
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
@@ -881,8 +881,8 @@
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
-          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } }
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {

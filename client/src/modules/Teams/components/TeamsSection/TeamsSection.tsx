@@ -29,8 +29,8 @@ export default function TeamSection({ distribution }: Props) {
     const { data } = await teamApi.getTeams(
       distribution.courseId,
       distribution.id,
-      String(pagination.current),
-      String(pagination.pageSize),
+      pagination.current ?? 1,
+      pagination.pageSize ?? 10,
     );
     setTeams({ ...teams, ...data });
   };

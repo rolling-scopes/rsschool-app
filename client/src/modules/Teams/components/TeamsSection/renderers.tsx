@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { TeamDistributionDetailedDto, TeamDistributionStudentDto, TeamDto } from 'api';
+import { TeamDistributionDetailedDto, TeamDto } from 'api';
 import { StudentsTableColumnKey, TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
 import StudentsTable from '../StudentsTable/StudentsTable';
 
@@ -40,7 +40,7 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
     key: TeamsTableColumnKey.Members,
     title: TeamsTableColumnName.Members,
     dataIndex: 'solutionUrl',
-    render: (_v, t) => renderMemberCount(t, distribution.studentsCount),
+    render: (_v, t) => renderMemberCount(t, distribution.strictTeamSize),
   },
 ];
 

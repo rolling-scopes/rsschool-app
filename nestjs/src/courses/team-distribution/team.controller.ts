@@ -15,7 +15,7 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../students';
-import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, TeamsQueryDto, UpdateTeamDto } from './dto/';
+import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, UpdateTeamDto } from './dto/';
 import { TeamDistributionService } from './team-distribution.service';
 import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
@@ -38,15 +38,12 @@ export class TeamController {
   public async getTeams(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) distributionId: number,
-    @Query() query: TeamsQueryDto,
+    @Query('pageSize') pageSize: number = 10,
+    @Query('current') current: number = 1,
   ) {
-    console.log('🚀 ~ file: team.controller.ts:43 ~ TeamController ~ query', typeof query.current);
-
-    const page = parseInt(query.current);
-    const limit = parseInt(query.pageSize);
     const { teams, paginationMeta } = await this.teamService.findByDistributionId(distributionId, {
-      page,
-      limit,
+      page: current,
+      limit: pageSize,
     });
 
     return new TeamsDto(teams, paginationMeta);

@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps<{
   course: ProfileCourseDto;
   teamDistributionDetailed: TeamDistributionDetailedDto;
 }> = async ctx => {
-  const courseProps = (await getCourseProps(ctx)) as any;
+  const courseProps = (await getCourseProps(ctx)) as { props?: { course: ProfileCourseDto } };
 
   if (!courseProps.props?.course) {
     return noAccessResponse;
