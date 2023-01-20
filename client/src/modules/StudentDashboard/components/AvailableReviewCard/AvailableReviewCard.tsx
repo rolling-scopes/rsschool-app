@@ -1,4 +1,4 @@
-import { Divider, Progress, Row, Typography } from 'antd';
+import { Divider, Empty, Progress, Row, Typography } from 'antd';
 import { AvailableReviewStatsDto } from 'api';
 import CommonCard from '../CommonDashboardCard';
 
@@ -30,7 +30,9 @@ export function AvailableReviewCard({ availableReviews, courseAlias }: Props) {
               ))}
             </>
           ) : (
-            <Text>At the moment, there are no tasks available for review.</Text>
+            <Empty>
+              <Text>At the moment, there are no tasks available for review</Text>
+            </Empty>
           )}
         </>
       }
