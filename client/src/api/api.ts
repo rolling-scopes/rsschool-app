@@ -5514,6 +5514,12 @@ export interface UpdateUserDto {
      * @memberof UpdateUserDto
      */
     'aboutMyself'?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdateUserDto
+     */
+    'languages'?: Array<string> | null;
 }
 /**
  * 

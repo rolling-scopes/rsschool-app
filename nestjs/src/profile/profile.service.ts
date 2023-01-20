@@ -58,6 +58,7 @@ export class ProfileService {
       contactsLinkedIn,
       contactsEpamEmail,
       aboutMyself,
+      languages,
     } = userDto;
 
     await this.userRepository
@@ -77,6 +78,7 @@ export class ProfileService {
         contactsLinkedIn,
         contactsEpamEmail,
         aboutMyself,
+        languages,
       })
       .returning('*')
       .where('id = :id', { id: userId })

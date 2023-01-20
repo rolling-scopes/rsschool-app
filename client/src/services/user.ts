@@ -207,6 +207,7 @@ export interface UserFull extends UserBasic {
   tshirtSize: string;
   countryName: string;
   cityName: string;
+  languages: string[];
 }
 
 export interface ProfileResponse {

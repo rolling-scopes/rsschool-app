@@ -1,7 +1,10 @@
 import { Location } from 'common/models';
 import { UserFull } from 'services/user';
 
-export function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, checkedList: number[]) {
+export function getInitialValues(
+  { countryName, cityName, languages, ...initialData }: Partial<UserFull>,
+  checkedList: number[],
+) {
   const location =
     countryName &&
     cityName &&
@@ -15,6 +18,7 @@ export function getInitialValues({ countryName, cityName, ...initialData }: Part
     preferedCourses: checkedList,
     englishMentoring: false,
     technicalMentoring: [],
+    languagesMentoring: languages ?? [],
   };
 }
 

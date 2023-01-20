@@ -116,6 +116,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           contactsNotes: data.contactsNotes,
           contactsPhone: data.contactsPhone,
           aboutMyself: data.aboutMyself,
+          languages: languagesMentoring,
         };
 
         const requests = [profileApi.updateUser(userModel), cdnService.registerMentor(registryModel)];

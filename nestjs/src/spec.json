@@ -3074,7 +3074,8 @@
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },
-          "aboutMyself": { "type": "string", "nullable": true }
+          "aboutMyself": { "type": "string", "nullable": true },
+          "languages": { "nullable": true, "type": "array", "items": { "type": "string" } }
         }
       },
       "PublicVisibilitySettings": {
