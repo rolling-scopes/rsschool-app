@@ -9,7 +9,7 @@ const { Text, Title } = Typography;
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
-  setTeamData: React.Dispatch<React.SetStateAction<Partial<TeamDto> | null>>;
+  toggleTeamModal: (data?: Partial<TeamDto> | undefined) => void;
   studentId?: number;
   copyPassword: (teamId: number) => Promise<void>;
   reloadDistribution: () => Promise<void>;
@@ -20,7 +20,7 @@ const teamApi = new TeamApi();
 
 export default function MyTeamSection({
   distribution,
-  setTeamData,
+  toggleTeamModal,
   studentId,
   copyPassword,
   reloadDistribution,
@@ -51,7 +51,7 @@ export default function MyTeamSection({
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
         <Text type="secondary">{myTeam.description}</Text>
-        {isTeamLead && <EditTwoTone twoToneColor="#1890FF" onClick={() => setTeamData(myTeam)} />}
+        {isTeamLead && <EditTwoTone twoToneColor="#1890FF" onClick={() => toggleTeamModal(myTeam)} />}
       </Space>
       <Row justify="end">
         <Space size="small">

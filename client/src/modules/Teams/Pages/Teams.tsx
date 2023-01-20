@@ -14,14 +14,14 @@ import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDto } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
-import { useDistribution } from '../hooks';
+import { useDistribution, useModal } from '../hooks';
 
 const teamApi = new TeamApi();
 
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const { distribution, loadDistribution, loading } = useDistribution(teamDistributionDetailed, course.id);
+  const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModal<Partial<TeamDto>>();
 
-  const [teamData, setTeamData] = useState<Partial<TeamDto> | null>(null);
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState('teams');
@@ -33,7 +33,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const studentId = useMemo(() => session.courses[course.id]?.studentId, [session, course.id]);
 
   const handleCreateTeam = () => {
-    setTeamData({});
+    toggleTeamModal();
   };
 
   const handleJoinTeam = () => {
@@ -71,7 +71,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
         showCreateTeamResultModal(team, copyPassword);
       }
       await loadDistribution();
-      setTeamData(null);
+      toggleTeamModal();
     } catch (error) {
       message.error('Failed to create team. Please try later.');
     }
@@ -89,7 +89,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
         return (
           <MyTeamSection
             distribution={distribution}
-            setTeamData={setTeamData}
+            toggleTeamModal={toggleTeamModal}
             studentId={studentId}
             copyPassword={copyPassword}
             reloadDistribution={loadDistribution}
@@ -110,7 +110,17 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       githubId={session.githubId}
       courseName={course.name}
     >
-      {teamData && <TeamModal data={teamData} onSubmit={submitTeam} onCancel={() => setTeamData(null)} />}
+      {openTeamModal && (
+        <TeamModal
+          mode={mode}
+          isManager={isManager}
+          data={teamData}
+          onSubmit={submitTeam}
+          onCancel={toggleTeamModal}
+          maxStudentsCount={distribution.strictTeamSize}
+          courseId={distribution.courseId}
+        />
+      )}
       {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJoinTeamModal(false)} />}
       <TeamsHeader
         courseAlias={course.alias}

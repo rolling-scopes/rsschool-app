@@ -61,6 +61,13 @@ export class StudentsService {
     return student;
   }
 
+  public async getStudentsWithTeamsAndDistribution(studentIds: number[]) {
+    return this.studentRepository.find({
+      where: { id: In(studentIds) },
+      relations: ['teams', 'teamDistribution', 'user'],
+    });
+  }
+
   public async addStudentToTeamDistribution(
     studentId: number,
     teamDistribution: TeamDistribution,

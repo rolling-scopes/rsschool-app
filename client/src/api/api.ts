@@ -1829,6 +1829,12 @@ export interface CreateTeamDto {
      * @memberof CreateTeamDto
      */
     'chatLink': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateTeamDto
+     */
+    'studentIds': Array<number>;
 }
 /**
  * 
@@ -5288,6 +5294,12 @@ export interface UpdateTeamDto {
      * @memberof UpdateTeamDto
      */
     'chatLink': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateTeamDto
+     */
+    'studentIds': Array<number>;
 }
 /**
  * 

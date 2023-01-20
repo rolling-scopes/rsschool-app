@@ -1,13 +1,18 @@
-import { Form, Input, Space, Typography } from 'antd';
+import { Form, Input, message, Space, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDto, TeamDto } from 'api';
+import { StudentSearch } from 'components/StudentSearch';
 import { urlPattern } from 'services/validators';
 
 type Props = {
-  data: Partial<TeamDto>;
+  data?: Partial<TeamDto>;
+  isManager: boolean;
   onCancel: () => void;
   onSubmit: (record: CreateTeamDto, id?: number) => Promise<void>;
+  maxStudentsCount: number;
+  courseId: number;
+  mode: 'create' | 'edit';
 };
 
 const { Text } = Typography;
@@ -17,24 +22,36 @@ const layout = {
   wrapperCol: { span: 20 },
 };
 
-export default function TeamModal({ onCancel, onSubmit, data }: Props) {
-  const [form] = Form.useForm<Partial<TeamDto>>();
+export default function TeamModal({ onCancel, onSubmit, data, courseId, isManager, maxStudentsCount, mode }: Props) {
+  const [form] = Form.useForm<CreateTeamDto>();
 
   const createRecord = ({
     name = 'Team name',
     description = 'Team description',
     chatLink = 'team chat',
+    studentIds = [] as number[],
   }): CreateTeamDto => {
     return {
       name: name,
       description: description,
       chatLink: chatLink,
+      studentIds: studentIds ?? undefined,
     };
   };
 
-  const handleModalSubmit = async (values: Partial<TeamDto>) => {
+  const handleModalSubmit = async (values: CreateTeamDto) => {
     const record = createRecord(values);
     await onSubmit(record, data?.id);
+  };
+
+  const handleChangeStudents = (value: number[]) => {
+    if (value.length <= maxStudentsCount) {
+      form.setFieldsValue({
+        studentIds: value,
+      });
+    } else {
+      message.warning(`You can only select a maximum of ${maxStudentsCount} students.`);
+    }
   };
 
   return (
@@ -42,8 +59,8 @@ export default function TeamModal({ onCancel, onSubmit, data }: Props) {
       style={{ top: 20 }}
       width={756}
       open={true}
-      title={data?.id ? 'Edit Team' : 'Create Team'}
-      okText={data?.id ? 'Edit' : 'Create'}
+      title={mode === 'edit' ? 'Edit Team' : 'Create Team'}
+      okText={mode === 'edit' ? 'Edit' : 'Create'}
       onOk={async () => {
         const values = await form.validateFields().catch(() => null);
         if (values == null) {
@@ -91,6 +108,24 @@ export default function TeamModal({ onCancel, onSubmit, data }: Props) {
         >
           <Input />
         </Form.Item>
+        {isManager && (
+          <Form.Item
+            name="studentIds"
+            rules={[
+              { required: true, message: 'Please select students' },
+              {
+                validator: (_, value) =>
+                  value.length <= maxStudentsCount
+                    ? Promise.resolve()
+                    : Promise.reject(`You can only select a maximum of ${maxStudentsCount} students.`),
+                message: `You can only select a maximum of ${maxStudentsCount} students.`,
+              },
+            ]}
+            label="Students"
+          >
+            <StudentSearch onChange={handleChangeStudents as any} keyField="id" courseId={courseId} mode="multiple" />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );

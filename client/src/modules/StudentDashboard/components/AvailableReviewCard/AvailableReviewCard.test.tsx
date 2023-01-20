@@ -43,6 +43,6 @@ describe('AvailableReviewCard', () => {
     const availableReviews: AvailableReviewStatsDto[] = [];
     render(<AvailableReviewCard availableReviews={availableReviews} courseAlias={courseAlias} />);
     expect(screen.getByText('Cross-check [Review]')).toBeInTheDocument();
-    expect(screen.getByText('At the moment, there are no tasks available for review.')).toBeInTheDocument();
+    expect(screen.getByText('At the moment, there are no tasks available for review')).toBeInTheDocument();
   });
 });
