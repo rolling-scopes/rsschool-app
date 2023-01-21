@@ -1,12 +1,12 @@
-import { Button, Form, FormInstance, Select, Typography } from 'antd';
+import { Button, Form, FormInstance, Select } from 'antd';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { StudentSearch } from './StudentSearch';
 
-type Options = {
-  preselectedCourses: number[];
+export type Options = {
   maxStudentsLimit: number;
   preferedStudentsLocation: PreferredStudentsLocation;
-  preferredCourses: number[];
+  students?: { value: number }[];
+  preselectedStudents?: { id: number; githubId: string; name: string }[];
 };
 
 export function MentorOptions({
@@ -14,18 +14,16 @@ export function MentorOptions({
   mentorData,
   form,
   handleSubmit,
+  showSubmitButton = true,
 }: {
   form: FormInstance;
   mentorData: Options | null;
-  handleSubmit: (values: Options) => Promise<void>;
+  handleSubmit?: (values: Options) => Promise<void>;
   course: { id: number; name: string };
+  showSubmitButton?: boolean;
 }) {
   return (
     <>
-      <Typography.Paragraph>
-        We kindly ask you confirm your desire to be mentor in {course.name} course. Just in case, you can change your
-        preference below and select student which you want to mentor
-      </Typography.Paragraph>
       <Form
         initialValues={mentorData ?? undefined}
         style={{ marginTop: 32 }}
@@ -65,12 +63,20 @@ export function MentorOptions({
           name="students"
           label="Predefined students (if any)"
         >
-          <StudentSearch onlyStudentsWithoutMentorShown={true} labelInValue courseId={course.id} mode="multiple" />
+          <StudentSearch
+            defaultValues={mentorData?.preselectedStudents}
+            onlyStudentsWithoutMentorShown={true}
+            labelInValue
+            courseId={course.id}
+            mode="multiple"
+          />
         </Form.Item>
 
-        <Button style={{ marginTop: 32 }} size="large" type="primary" htmlType="submit">
-          Confirm
-        </Button>
+        {showSubmitButton && (
+          <Button style={{ marginTop: 32 }} size="large" type="primary" htmlType="submit">
+            Confirm
+          </Button>
+        )}
       </Form>
     </>
   );

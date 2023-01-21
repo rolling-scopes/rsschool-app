@@ -1,8 +1,25 @@
-import { Controller, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { MentorsService } from '.';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
+import { MentorOptionsDto } from './dto/mentor-options.dto';
 import { MentorStudentDto } from './dto/mentor-student.dto';
 
 @Controller('mentors')
@@ -10,6 +27,31 @@ import { MentorStudentDto } from './dto/mentor-student.dto';
 @UseGuards(DefaultGuard, RoleGuard)
 export class MentorsController {
   constructor(private mentorsService: MentorsService) {}
+
+  @Get('/:mentorId/course/:courseId/options')
+  @ApiOperation({ operationId: 'getMentorOptions' })
+  @ApiOkResponse({ type: MentorOptionsDto })
+  @ApiForbiddenResponse()
+  @ApiNotFoundResponse()
+  @RequiredRoles([CourseRole.Mentor])
+  public async getMentoroptions(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const courseMentorId = req.user.courses[courseId]?.mentorId;
+    if (courseMentorId !== mentorId) {
+      throw new ForbiddenException();
+    }
+
+    const mentor = await this.mentorsService.getMentorOptions(mentorId);
+
+    if (!mentor) {
+      throw new NotFoundException();
+    }
+
+    return new MentorOptionsDto(mentor);
+  }
 
   @Get('/:mentorId/students')
   @ApiOperation({ operationId: 'getMentorStudents' })

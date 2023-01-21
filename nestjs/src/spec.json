@@ -250,6 +250,25 @@
         "tags": ["students"]
       }
     },
+    "/mentors/{mentorId}/course/{courseId}/options": {
+      "get": {
+        "operationId": "getMentorOptions",
+        "summary": "",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorOptionsDto" } } }
+          },
+          "403": { "description": "" },
+          "404": { "description": "" }
+        },
+        "tags": ["mentors"]
+      }
+    },
     "/mentors/{mentorId}/students": {
       "get": {
         "operationId": "getMentorStudents",
@@ -982,7 +1001,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDto" } } }
           }
         },
         "tags": ["team"]
@@ -2107,6 +2126,20 @@
           "rank": { "type": "number" }
         },
         "required": ["name", "githubId", "id", "active", "cityName", "countryName", "totalScore", "rank"]
+      },
+      "StudentsDto": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
+        "required": ["id", "githubId", "name"]
+      },
+      "MentorOptionsDto": {
+        "type": "object",
+        "properties": {
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string", "enum": ["any", "country", "city"] },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentsDto" } }
+        },
+        "required": ["maxStudentsLimit", "preferedStudentsLocation", "students"]
       },
       "StudentFeedback": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "MentorStudentDto": {
