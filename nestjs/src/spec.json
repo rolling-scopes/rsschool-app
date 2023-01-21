@@ -1001,7 +1001,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDto" } } }
           }
         },
         "tags": ["team"]

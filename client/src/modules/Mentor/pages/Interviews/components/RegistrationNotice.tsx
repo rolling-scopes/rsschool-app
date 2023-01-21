@@ -1,7 +1,7 @@
 import { Alert, Typography } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import moment from 'moment';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { isInterviewRegistrationInProgess, stageInterviewType } from 'domain/interview';
 import { InterviewDto } from 'api';
 import { MentorOptionsContext } from './MentorPreferencesModal';

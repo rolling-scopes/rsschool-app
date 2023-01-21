@@ -5,6 +5,8 @@ import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
 
+type StudentInput = Student & { user: { githubId: string; firstName: string; lastName: string } };
+
 class StudentsDto {
   @ApiProperty()
   @IsNumber()
@@ -18,7 +20,7 @@ class StudentsDto {
   @IsString()
   name: string;
 
-  constructor(student: Student & { user: { githubId: string; firstName: string; lastName: string } }) {
+  constructor(student: StudentInput) {
     this.id = student.id;
     this.githubId = student.user.githubId;
     this.name = PersonDto.getName(student.user);
@@ -29,7 +31,7 @@ class StudentsDto {
 export class MentorOptionsDto {
   constructor(
     mentor: Omit<Mentor, 'students'> & {
-      students: (Student & { user: { githubId: string; firstName: string; lastName: string } })[];
+      students: StudentInput[];
     },
   ) {
     this.maxStudentsLimit = mentor.maxStudentsLimit;
