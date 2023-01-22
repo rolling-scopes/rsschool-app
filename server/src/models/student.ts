@@ -21,8 +21,8 @@ import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './student-feedback';
 import { StageInterview } from './stageInterview';
-import { TeamDistribution } from './teamDistribution';
 import { Team } from './team';
+import { TeamDistributionStudent } from './teamDistributionStudent';
 
 @Entity()
 @Unique(['courseId', 'userId'])
@@ -138,11 +138,10 @@ export class Student {
   @Column({ nullable: true, default: true })
   mentoring: boolean;
 
-  @ManyToMany(() => TeamDistribution, teamDistribution => teamDistribution.studentsWithoutTeam)
-  @JoinTable()
-  teamDistribution: TeamDistribution[];
-
   @ManyToMany(() => Team, team => team.students)
   @JoinTable()
   teams: Team[];
+
+  @OneToMany(() => TeamDistributionStudent, teamDistributionStudent => teamDistributionStudent.student)
+  teamDistributionStudents: TeamDistributionStudent[];
 }

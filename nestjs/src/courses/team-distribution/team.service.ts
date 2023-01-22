@@ -1,4 +1,4 @@
-import { Team } from '@entities/index';
+import { Student, Team } from '@entities/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { customAlphabet } from 'nanoid/async';
@@ -70,8 +70,10 @@ export class TeamService {
       .where({ id })
       .leftJoin('team.students', 's')
       .leftJoin('s.user', 'u')
+      .leftJoin('u.resume', 'r')
       .addSelect(this.getStudentsFields('s'))
       .addSelect(this.getUserFields('u'))
+      .addSelect('r.uuid')
       .getOneOrFail();
   }
 
@@ -85,11 +87,28 @@ export class TeamService {
       .where('team."teamDistributionId" = :distributionId', { distributionId })
       .leftJoin('team.students', 's')
       .leftJoin('s.user', 'u')
+      .leftJoin('u.resume', 'r')
+      .addSelect('r.uuid')
       .addSelect(this.getStudentsFields('s'))
       .addSelect(this.getUserFields('u'))
       .orderBy('team.id', 'ASC');
 
     const { items: teams, meta: paginationMeta } = await paginate(query, { page, limit });
     return { teams, paginationMeta };
+  }
+
+  public async deleteStudentFromTeam(teamId: number, studentId: number) {
+    const team = await this.findTeamWithStudentsById(teamId);
+    team.students = team.students.filter(s => s.id !== studentId);
+    if (team.teamLeadId === studentId) {
+      const [lead] = team.students.sort((a, b) => a.rank - b.rank);
+      team.teamLeadId = lead?.id ?? 0;
+    }
+    await this.repository.save(team);
+  }
+
+  public async addStudentToTeam(team: Team, student: Student) {
+    team.students.push(student);
+    await this.repository.save(team);
   }
 }

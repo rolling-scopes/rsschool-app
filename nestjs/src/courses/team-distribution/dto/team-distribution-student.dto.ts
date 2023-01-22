@@ -6,7 +6,7 @@ import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 export class TeamDistributionStudentDto {
   constructor(student: Student) {
     this.id = student.id;
-    this.fullName = `${student.user.firstName} ${student.user.lastName}`;
+    this.fullName = `${student.user.firstName ?? ''} ${student.user.lastName ?? ''}`;
     this.cvLink = student.user.cvLink ?? undefined;
     this.discord = student.user.discord
       ? `${student.user.discord.username}#${student.user.discord.discriminator}`
@@ -19,6 +19,7 @@ export class TeamDistributionStudentDto {
     this.location = `${student.user.cityName ? `${student.user.cityName},` : ''}${
       student.user.countryName ? ` ${student.user.countryName}` : ''
     }`;
+    this.cvUuid = student.user.resume?.at(0)?.uuid ?? undefined;
   }
 
   @ApiProperty()
@@ -50,6 +51,9 @@ export class TeamDistributionStudentDto {
 
   @ApiProperty()
   public location: string;
+
+  @ApiProperty()
+  public cvUuid?: string;
 }
 
 export class StudentsWithoutTeamDto {

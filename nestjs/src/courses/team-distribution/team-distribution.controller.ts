@@ -11,10 +11,10 @@ import {
   StudentsWithoutTeamDto,
   TeamDto,
 } from './dto';
-import { StudentsService } from '../students';
-import { Student } from '@entities/index';
 import { TeamService } from './team.service';
 import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
+import { TeamDistributionStudentService } from './team-distribution-student.service';
+import { Student } from '@entities/index';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -22,8 +22,8 @@ import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
 export class TeamDistributionController {
   constructor(
     private readonly teamDistributionService: TeamDistributionService,
-    private readonly studentsService: StudentsService,
     private readonly teamService: TeamService,
+    private readonly teamDistributionStudentService: TeamDistributionStudentService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
@@ -42,13 +42,23 @@ export class TeamDistributionController {
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
   ) {
+    const data = await this.teamDistributionService.findByCourseId(courseId);
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
     if (studentId) {
-      student = await this.studentsService.getStudentWithTeamsAndDistribution(studentId);
+      student = await this.teamDistributionStudentService.getStudentWithRelations(studentId, {
+        user: true,
+        teams: true,
+        teamDistributionStudents: {
+          teamDistribution: true,
+        },
+      });
     }
-    const data = await this.teamDistributionService.findByCourseId(courseId, student);
-    return data.map(el => new TeamDistributionDto(el));
+    const teamDistributionsWithStatus = data.map(td =>
+      this.teamDistributionService.addStatusToDistribution(td, student),
+    );
+
+    return teamDistributionsWithStatus.map(el => new TeamDistributionDto(el));
   }
 
   @Delete('/:id')
@@ -90,7 +100,7 @@ export class TeamDistributionController {
     const teamDistribution = await this.teamDistributionService.getById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.studentsService.addStudentToTeamDistribution(studentId, teamDistribution);
+      await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution);
     }
   }
 
@@ -104,10 +114,9 @@ export class TeamDistributionController {
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const teamDistribution = await this.teamDistributionService.getById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.studentsService.deleteStudentFromTeamDistribution(studentId, teamDistribution);
+      await this.teamDistributionStudentService.deleteStudentFromTeamDistribution(studentId, id);
     }
   }
 
@@ -123,8 +132,12 @@ export class TeamDistributionController {
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
     let team;
+
     if (studentId) {
-      const student = await this.studentsService.getStudentWithTeamsAndDistribution(studentId);
+      const student = await this.teamDistributionStudentService.getStudentWithRelations(studentId, {
+        teams: true,
+        user: true,
+      });
       const data = student.teams.find(t => t.teamDistributionId === id);
       if (data) {
         team = await this.teamService.findTeamWithStudentsById(data.id);
@@ -146,7 +159,7 @@ export class TeamDistributionController {
     @Query('pageSize') pageSize: number = 10,
     @Query('current') current: number = 1,
   ) {
-    const { students, paginationMeta } = await this.studentsService.getStudentsByTeamDistributionId(id, {
+    const { students, paginationMeta } = await this.teamDistributionStudentService.getStudentsByTeamDistributionId(id, {
       page: current,
       limit: pageSize,
     });

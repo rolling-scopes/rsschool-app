@@ -12,8 +12,12 @@ export class JoinTeamDto {
 export class JoinTeamDtoRes {
   constructor(team: Team) {
     this.name = team.name;
+    this.description = team.description;
   }
 
   @ApiProperty()
   public name: string;
+
+  @ApiProperty()
+  public description: string;
 }

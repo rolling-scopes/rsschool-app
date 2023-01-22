@@ -7,12 +7,11 @@ import {
   Index,
   ManyToOne,
   OneToMany,
-  ManyToMany,
 } from 'typeorm';
 import { Course } from './course';
 import { CourseTask } from './courseTask';
-import { Student } from './student';
 import { Team } from './team';
+import { TeamDistributionStudent } from './teamDistributionStudent';
 
 @Entity()
 export class TeamDistribution {
@@ -50,9 +49,6 @@ export class TeamDistribution {
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)
   courseTasks: CourseTask[];
 
-  @ManyToMany(_ => Student, student => student.teamDistribution)
-  studentsWithoutTeam: Student[];
-
   @Column({ default: 2 })
   minTeamSize: number;
 
@@ -73,4 +69,7 @@ if strict mode is false the number of participants in the team from minTeamSize 
 
   @OneToMany(() => Team, team => team.teamDistribution)
   teams: Team[];
+
+  @OneToMany(() => TeamDistributionStudent, teamDistributionStudent => teamDistributionStudent.teamDistribution)
+  teamDistributionStudents: TeamDistributionStudent[];
 }

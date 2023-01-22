@@ -982,7 +982,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDtoRes" } } }
           }
         },
         "tags": ["team"]
@@ -2733,7 +2733,8 @@
           "githubId": { "type": "string" },
           "rank": { "type": "number" },
           "totalScore": { "type": "number" },
-          "location": { "type": "string" }
+          "location": { "type": "string" },
+          "cvUuid": { "type": "string" }
         },
         "required": [
           "id",
@@ -2745,7 +2746,8 @@
           "githubId",
           "rank",
           "totalScore",
-          "location"
+          "location",
+          "cvUuid"
         ]
       },
       "TeamDto": {
@@ -2804,7 +2806,7 @@
           "chatLink": { "type": "string" },
           "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink", "studentIds"]
+        "required": ["name", "description", "chatLink"]
       },
       "UpdateTeamDto": {
         "type": "object",
@@ -2814,7 +2816,7 @@
           "chatLink": { "type": "string" },
           "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink", "studentIds"]
+        "required": ["name", "description", "chatLink"]
       },
       "TeamPasswordDto": {
         "type": "object",
@@ -2822,6 +2824,11 @@
         "required": ["password"]
       },
       "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
+      "JoinTeamDtoRes": {
+        "type": "object",
+        "properties": { "name": { "type": "string" }, "description": { "type": "string" } },
+        "required": ["name", "description"]
+      },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",
         "properties": {
