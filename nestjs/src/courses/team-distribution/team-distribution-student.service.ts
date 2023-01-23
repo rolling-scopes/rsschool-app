@@ -100,13 +100,14 @@ export class TeamDistributionStudentService {
   public async addStudentToTeamDistribution(
     studentId: number,
     teamDistribution: TeamDistribution,
+    courseId: number,
     withVerification = true,
   ) {
     if (withVerification) {
       this.verifyDateWithinDistributionPeriod(teamDistribution.startDate, teamDistribution.endDate);
     }
     const record = await this.repository.findOne({
-      where: { studentId, teamDistributionId: teamDistribution.id },
+      where: { studentId, courseId, teamDistributionId: teamDistribution.id },
     });
 
     if (record?.active || record?.distributed) {

@@ -100,7 +100,7 @@ export class TeamDistributionController {
     const teamDistribution = await this.teamDistributionService.getById(id);
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution);
+      await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution, courseId);
     }
   }
 
