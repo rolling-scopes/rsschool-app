@@ -2747,6 +2747,40 @@ export interface MentorDto {
 /**
  * 
  * @export
+ * @interface MentorOptionsDto
+ */
+export interface MentorOptionsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorOptionsDto
+     */
+    'maxStudentsLimit': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorOptionsDto
+     */
+    'preferedStudentsLocation': MentorOptionsDtoPreferedStudentsLocationEnum;
+    /**
+     * 
+     * @type {Array<StudentsDto>}
+     * @memberof MentorOptionsDto
+     */
+    'students': Array<StudentsDto>;
+}
+
+export const MentorOptionsDtoPreferedStudentsLocationEnum = {
+    Any: 'any',
+    Country: 'country',
+    City: 'city'
+} as const;
+
+export type MentorOptionsDtoPreferedStudentsLocationEnum = typeof MentorOptionsDtoPreferedStudentsLocationEnum[keyof typeof MentorOptionsDtoPreferedStudentsLocationEnum];
+
+/**
+ * 
+ * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -4056,6 +4090,31 @@ export const StudentFeedbackDtoEnglishLevelEnum = {
 
 export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
+/**
+ * 
+ * @export
+ * @interface StudentsDto
+ */
+export interface StudentsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentsDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentsDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentsDto
+     */
+    'name': string;
+}
 /**
  * 
  * @export
@@ -9976,6 +10035,43 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorOptions: async (mentorId: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mentorId' is not null or undefined
+            assertParamExists('getMentorOptions', 'mentorId', mentorId)
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMentorOptions', 'courseId', courseId)
+            const localVarPath = `/mentors/{mentorId}/course/{courseId}/options`
+                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)))
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} mentorId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10078,6 +10174,17 @@ export const MentorsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMentorOptions(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MentorOptionsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorOptions(mentorId, courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} mentorId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10125,6 +10232,16 @@ export const MentorsApiFactory = function (configuration?: Configuration, basePa
          */
         getMentorDashboardData(mentorId: number, courseId: number, options?: any): AxiosPromise<Array<MentorDashboardDto>> {
             return localVarFp.getMentorDashboardData(mentorId, courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} mentorId 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorOptions(mentorId: number, courseId: number, options?: any): AxiosPromise<MentorOptionsDto> {
+            return localVarFp.getMentorOptions(mentorId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10177,6 +10294,18 @@ export class MentorsApi extends BaseAPI {
      */
     public getMentorDashboardData(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
         return MentorsApiFp(this.configuration).getMentorDashboardData(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} mentorId 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MentorsApi
+     */
+    public getMentorOptions(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
+        return MentorsApiFp(this.configuration).getMentorOptions(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
