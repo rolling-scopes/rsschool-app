@@ -183,11 +183,12 @@ export class TeamDistributionStudentService {
       .leftJoin('user.resume', 'resume')
       .addSelect('resume.uuid')
       .addSelect(this.getUserFields())
-      .where('tds.id = :id', { id: distributionId })
+      .where('tds.teamDistributionId = :teamDistributionId', { teamDistributionId: distributionId })
       .andWhere('tds.active = true')
       .andWhere('tds.distributed = false')
       .orderBy('student.rank', 'ASC');
     const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
+
     return { students, paginationMeta };
   }
 
