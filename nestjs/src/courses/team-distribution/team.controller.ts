@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { TeamDto, TeamPasswordDto, TeamsDto, JoinTeamDto, CreateTeamDto, JoinTeamDtoRes, UpdateTeamDto } from './dto/';
+import { TeamDto, TeamPasswordDto, TeamsDto, CreateTeamDto, TeamInfoDto, UpdateTeamDto, JoinTeamDto } from './dto/';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
@@ -133,7 +133,7 @@ export class TeamController {
 
   @Post('/:id/join')
   @UseGuards(RoleGuard)
-  @ApiOkResponse({ type: JoinTeamDtoRes })
+  @ApiOkResponse({ type: TeamInfoDto })
   @ApiOperation({ operationId: 'joinTeam' })
   @RequiredRoles([CourseRole.Student])
   public async joinTeam(
@@ -160,7 +160,7 @@ export class TeamController {
     }
     await this.teamService.addStudentToTeam(team, teamDistributionStudent.student);
     await this.teamDistributionStudentService.markStudentAsDistributed(studentId, teamDistributionId);
-    return new JoinTeamDtoRes(team);
+    return new TeamInfoDto(team);
   }
 
   @Post('/:id/leave')

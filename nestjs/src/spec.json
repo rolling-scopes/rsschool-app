@@ -1001,7 +1001,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDtoRes" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamInfoDto" } } }
           }
         },
         "tags": ["team"]
@@ -2790,11 +2790,11 @@
           "name": { "type": "string" },
           "chatLink": { "type": "string" },
           "description": { "type": "string" },
-          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } },
           "teamLeadId": { "type": "number" },
-          "teamDistributionId": { "type": "number" }
+          "teamDistributionId": { "type": "number" },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } }
         },
-        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+        "required": ["id", "name", "chatLink", "description", "teamLeadId", "teamDistributionId", "students"]
       },
       "TeamDistributionDetailedDto": {
         "type": "object",
@@ -2857,10 +2857,17 @@
         "required": ["password"]
       },
       "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
-      "JoinTeamDtoRes": {
+      "TeamInfoDto": {
         "type": "object",
-        "properties": { "name": { "type": "string" }, "description": { "type": "string" } },
-        "required": ["name", "description"]
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "teamLeadId": { "type": "number" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["id", "name", "chatLink", "description", "teamLeadId", "teamDistributionId"]
       },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",

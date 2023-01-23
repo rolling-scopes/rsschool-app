@@ -1,6 +1,6 @@
 import { Modal, Typography } from 'antd';
 import { CheckCircleTwoTone } from '@ant-design/icons';
-import { JoinTeamDto, JoinTeamDtoRes, TeamDto } from 'api';
+import { TeamInfoDto, TeamDto } from 'api';
 
 const { Title, Text } = Typography;
 
@@ -22,7 +22,7 @@ export function showCreateTeamResultModal(team: TeamDto, copyPassword: (teamId: 
   });
 }
 
-export function showJoinTeamResultModal(team: JoinTeamDtoRes) {
+export function showJoinTeamResultModal(team: TeamInfoDto) {
   Modal.success({
     title: <Title level={5}>Successfully joined to the {team.name}</Title>,
     content: (

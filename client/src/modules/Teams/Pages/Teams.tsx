@@ -12,7 +12,7 @@ import {
 } from '../components';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
-import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDto } from 'api';
+import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useDistribution, useModal } from '../hooks';
 

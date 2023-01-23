@@ -1,12 +1,13 @@
 import { Student } from '@entities/index';
 import { ApiProperty } from '@nestjs/swagger';
+import { PersonDto } from 'src/core/dto';
 import { PaginationMeta } from 'src/core/paginate';
 import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 
 export class TeamDistributionStudentDto {
   constructor(student: Student) {
     this.id = student.id;
-    this.fullName = `${student.user.firstName ?? ''} ${student.user.lastName ?? ''}`;
+    this.fullName = PersonDto.getName({ firstName: student.user.firstName, lastName: student.user.lastName });
     this.cvLink = student.user.cvLink ?? undefined;
     this.discord = student.user.discord
       ? `${student.user.discord.username}#${student.user.discord.discriminator}`

@@ -2604,25 +2604,6 @@ export interface JoinTeamDto {
 /**
  * 
  * @export
- * @interface JoinTeamDtoRes
- */
-export interface JoinTeamDtoRes {
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinTeamDtoRes
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinTeamDtoRes
-     */
-    'description': string;
-}
-/**
- * 
- * @export
  * @interface LeaveCourseRequestDto
  */
 export interface LeaveCourseRequestDto {
@@ -4582,12 +4563,6 @@ export interface TeamDto {
     'description': string;
     /**
      * 
-     * @type {Array<TeamDistributionStudentDto>}
-     * @memberof TeamDto
-     */
-    'students': Array<TeamDistributionStudentDto>;
-    /**
-     * 
      * @type {number}
      * @memberof TeamDto
      */
@@ -4596,6 +4571,55 @@ export interface TeamDto {
      * 
      * @type {number}
      * @memberof TeamDto
+     */
+    'teamDistributionId': number;
+    /**
+     * 
+     * @type {Array<TeamDistributionStudentDto>}
+     * @memberof TeamDto
+     */
+    'students': Array<TeamDistributionStudentDto>;
+}
+/**
+ * 
+ * @export
+ * @interface TeamInfoDto
+ */
+export interface TeamInfoDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamInfoDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamInfoDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamInfoDto
+     */
+    'chatLink': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamInfoDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamInfoDto
+     */
+    'teamLeadId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamInfoDto
      */
     'teamDistributionId': number;
 }
@@ -13178,7 +13202,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JoinTeamDtoRes>> {
+        async joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamInfoDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.joinTeam(courseId, distributionId, id, joinTeamDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13260,7 +13284,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: any): AxiosPromise<JoinTeamDtoRes> {
+        joinTeam(courseId: number, distributionId: number, id: number, joinTeamDto: JoinTeamDto, options?: any): AxiosPromise<TeamInfoDto> {
             return localVarFp.joinTeam(courseId, distributionId, id, joinTeamDto, options).then((request) => request(axios, basePath));
         },
         /**
