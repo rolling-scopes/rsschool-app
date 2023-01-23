@@ -53,9 +53,9 @@ function Page(props: CoursePageProps) {
             </Checkbox>
             <Popconfirm
               onConfirm={() => createInterviews()}
-              title="Do you want to create interview pairs for not distribute students?"
+              title="Do you want to create interview pairs for not distributed students?"
             >
-              <Button onClick={createInterviews}>Create Interview Pairs</Button>
+              <Button>Create Interview Pairs</Button>
             </Popconfirm>
           </div>
         ) : null}
