@@ -22,6 +22,7 @@ export const corejs2Template: InterviewTemplate = {
   <li>Page Lifecycle - up to 5 points</li>
   <li>Web Storage API & cookies - up to 5 points</li>
   <li>Typescript - up to 10 points</li>
+  <li>Testing (optional) - up to 5 points</li>
   </ul>
   <br/>
   `,
@@ -182,6 +183,15 @@ export const corejs2Template: InterviewTemplate = {
         { id: 2155, name: 'generic types (concept)' },
         { id: 2156, name: 'utitily types (optional)' },
         { id: 2157, name: 'typeguards (optional)' },
+      ],
+    },
+    {
+      id: 2160,
+      name: 'Testing (optional)',
+      description: '5 points',
+      questions: [
+        { id: 2161, name: 'Testing Types' },
+        { id: 2162, name: 'Test Pyramid' },
       ],
     },
   ],
