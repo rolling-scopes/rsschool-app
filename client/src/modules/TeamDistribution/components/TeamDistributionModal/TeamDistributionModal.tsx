@@ -36,10 +36,10 @@ function getInitialValues(data: Partial<TeamDistributionDto>) {
           ]
         : null,
     timeZone,
-    strictStudentsCount: data.strictStudentsCount ?? true,
-    minStudents: data.minStudents ?? 2,
-    maxStudents: data.maxStudents ?? 4,
-    studentsCount: data.studentsCount ?? 3,
+    strictTeamSizeMode: data.strictTeamSizeMode ?? true,
+    minTeamSize: data.minTeamSize ?? 2,
+    maxTeamSize: data.maxTeamSize ?? 4,
+    strictTeamSize: data.strictTeamSize ?? 3,
     minTotalScore: data.minTotalScore ?? 0,
   };
 }
@@ -51,10 +51,10 @@ const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => 
     description: values.description ?? '',
     startDate: formatTimezoneToUTC(startDate!, values.timeZone!),
     endDate: formatTimezoneToUTC(endDate!, values.timeZone!),
-    strictStudentsCount: values.strictStudentsCount!,
-    minStudents: values.minStudents ?? 2,
-    maxStudents: values.maxStudents ?? 4,
-    studentsCount: values.studentsCount ?? 3,
+    strictTeamSizeMode: values.strictTeamSizeMode!,
+    minTeamSize: values.minTeamSize ?? 2,
+    maxTeamSize: values.maxTeamSize ?? 4,
+    strictTeamSize: values.strictTeamSize ?? 3,
     minTotalScore: values.minTotalScore ?? 0,
     descriptionUrl: values.descriptionUrl ?? '',
   };
@@ -77,7 +77,7 @@ const submitTeamDistribution = async (courseId: number, values: Partial<FormStat
 export default function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Props) {
   const [form] = Form.useForm<Partial<FormState>>();
   const [changes, setChanges] = useState<Record<string, boolean>>({
-    strictStudentsCount: data.strictStudentsCount ?? true,
+    strictTeamSizeMode: data.strictTeamSizeMode ?? true,
   });
 
   const handleModalSubmit = async (values: Partial<FormState>) => {
@@ -89,7 +89,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
     <ModalForm
       form={form}
       data={data}
-      onChange={values => setChanges({ strictStudentsCount: values.strictStudentsCount })}
+      onChange={values => setChanges({ strictTeamSizeMode: values.strictTeamSizeMode })}
       title="Team Distribution"
       submit={handleModalSubmit}
       cancel={onCancel}
@@ -124,12 +124,12 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
           </Form.Item>
         </Col>
       </Row>
-      <Form.Item name="strictStudentsCount" label="Fixed team size" valuePropName="checked">
+      <Form.Item name="strictTeamSizeMode" label="Fixed team size" valuePropName="checked">
         <Switch />
       </Form.Item>
-      {changes.strictStudentsCount === true ? (
+      {changes.strictTeamSizeMode === true ? (
         <Form.Item
-          name="studentsCount"
+          name="strictTeamSize"
           label="Team size"
           rules={[{ required: true, message: 'Please enter team size' }]}
         >
@@ -138,14 +138,14 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
       ) : (
         <Space>
           <Form.Item
-            name="minStudents"
+            name="minTeamSize"
             label="Minimum Team size"
             rules={[{ required: true, message: 'Please enter minimum team size' }]}
           >
             <InputNumber min={2} />
           </Form.Item>
           <Form.Item
-            name="maxStudents"
+            name="maxTeamSize"
             label="Maximum Team size"
             rules={[{ required: true, message: 'Please enter maximum team size' }]}
           >

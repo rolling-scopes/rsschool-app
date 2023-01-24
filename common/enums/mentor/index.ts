@@ -1,4 +1,4 @@
-export const enum PreferredStudentsLocation {
+export enum PreferredStudentsLocation {
   ANY = 'any',
   COUNTRY = 'country',
   CITY = 'city',

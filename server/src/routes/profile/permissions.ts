@@ -44,6 +44,7 @@ export interface Permissions {
   isEmailVisible: boolean;
   isTelegramVisible: boolean;
   isSkypeVisible: boolean;
+  isWhatsAppVisible: boolean;
   isPhoneVisible: boolean;
   isContactsNotesVisible: boolean;
   isLinkedInVisible: boolean;
@@ -180,6 +181,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isEmailVisible: false,
     isTelegramVisible: false,
     isSkypeVisible: false,
+    isWhatsAppVisible: false,
     isPhoneVisible: false,
     isContactsNotesVisible: false,
     isLinkedInVisible: false,
@@ -199,6 +201,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
         'isTelegramVisible',
         'isSkypeVisible',
         'isPhoneVisible',
+        'isWhatsAppVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
       ].includes(permission) &&
@@ -209,9 +212,14 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
 
   const defaultAccessToContacts = (permission: string, role?: RelationRole) => {
     return (
-      ['isEmailVisible', 'isTelegramVisible', 'isSkypeVisible', 'isPhoneVisible', 'isContactsNodesVisible'].includes(
-        permission,
-      ) &&
+      [
+        'isEmailVisible',
+        'isWhatsAppVisible',
+        'isTelegramVisible',
+        'isSkypeVisible',
+        'isPhoneVisible',
+        'isContactsNodesVisible',
+      ].includes(permission) &&
       role &&
       ['student'].includes(role)
     );

@@ -1,11 +1,5 @@
 import { Session } from 'components/withSession';
-import {
-  StudentBasic as CommonStudentBasic,
-  DiscordServer,
-  UserGroup,
-  InterviewQuestion,
-  InterviewQuestionCategory,
-} from 'common/models';
+import { StudentBasic as CommonStudentBasic, DiscordServer, UserGroup } from 'common/models';
 import type { ProfileCourseDto } from 'api';
 
 export type Course = ProfileCourseDto;
@@ -13,8 +7,6 @@ export type StudentBasic = CommonStudentBasic;
 
 export type { DiscordServer };
 export type { UserGroup };
-export type { InterviewQuestion };
-export type { InterviewQuestionCategory };
 
 export interface Mentor {
   lastName: string;
