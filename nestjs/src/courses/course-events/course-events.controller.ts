@@ -24,7 +24,7 @@ export class CourseEventsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'createCourseEvent' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async createCourseTask(@Param('courseId', ParseIntPipe) courseId: number, @Body() dto: CreateCourseEventDto) {
     const result = await this.courseEventsService.createCourseEvent({
       courseId,
@@ -39,7 +39,7 @@ export class CourseEventsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'updateCourseEvent' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async updateCourseTask(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseEventId', ParseIntPipe) courseEventId: number,
@@ -58,7 +58,7 @@ export class CourseEventsController {
   @ApiBadRequestResponse()
   @ApiParam({ name: 'courseId' })
   @ApiOperation({ operationId: 'deleteCourseEvent' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async deleteCourseEvent(@Param('courseEventId', ParseIntPipe) courseEventId: number) {
     await this.courseEventsService.deleteCourseEvent(courseEventId);
   }
