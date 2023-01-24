@@ -1,15 +1,18 @@
 import { Alert, Typography } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import moment from 'moment';
-import React from 'react';
-import { isInterviewRegistrationInProgess } from 'domain/interview';
+import { useContext } from 'react';
+import { isInterviewRegistrationInProgess, stageInterviewType } from 'domain/interview';
+import { InterviewDto } from 'api';
+import { MentorOptionsContext } from './MentorPreferencesModal';
 
-export function RegistrationNotice(props: {
-  name: string;
-  startDate: string;
-  showMentorOptions: (e: React.MouseEvent) => void;
-}) {
-  const { startDate, showMentorOptions, name } = props;
+export function RegistrationNotice(props: { interview: InterviewDto; startDate: string }) {
+  const { startDate, interview } = props;
+  const { showMentorOptions: openMentorOptions } = useContext(MentorOptionsContext);
+
+  if (interview.type !== stageInterviewType) {
+    return null;
+  }
 
   if (!isInterviewRegistrationInProgess(startDate)) {
     return null;
@@ -24,20 +27,20 @@ export function RegistrationNotice(props: {
         description={
           <>
             <Typography.Text>
-              Students’ registration for {name} continues until {moment(startDate).format('DD MMM hh:mm')}. You can
-              change <a onClick={showMentorOptions}>mentoring options</a> till this date.
+              Students’ registration for {interview.name} continues until {moment(startDate).format('DD MMM hh:mm')}.
+              You can change <a onClick={showMentorOptions}>mentoring options</a> till this date.
             </Typography.Text>
             <div className="icon-mentor" />
           </>
         }
         type="info"
-        closable
       />
       <style jsx>{`
         .icon-mentor {
           background-image: url(https://cdn.rs.school/sloths/cleaned/mentor-new.svg);
           background-position: center;
           background-size: contain;
+          background-repeat: no-repeat;
           width: 129px;
           height: 170px;
           margin: 10px auto;
@@ -45,4 +48,9 @@ export function RegistrationNotice(props: {
       `}</style>
     </>
   );
+
+  function showMentorOptions(e: React.MouseEvent) {
+    e.stopPropagation();
+    openMentorOptions();
+  }
 }

@@ -10,6 +10,7 @@ export enum registrationStatusEnum {
   Unavailable = 'unavailable',
   Future = 'future',
   Completed = 'completed',
+  Distributed = 'distributed',
   Closed = 'closed',
 }
 
@@ -37,7 +38,11 @@ export class TeamDistributionService {
       return registrationStatusEnum.Future;
     }
 
-    if (student.teamDistribution.find(el => el.id === distribution.id)) {
+    if (student.teams?.find(el => el.teamDistributionId === distribution.id)) {
+      return registrationStatusEnum.Distributed;
+    }
+
+    if (student.teamDistribution?.find(el => el.id === distribution.id)) {
       return registrationStatusEnum.Completed;
     }
 
@@ -65,6 +70,10 @@ export class TeamDistributionService {
 
   public getById(id: number) {
     return this.repository.findOneOrFail({ where: { id } });
+  }
+
+  public getDistributionDetailedById(id: number) {
+    return this.repository.findOneOrFail({ where: { id }, relations: ['teams', 'studentsWithoutTeam'] });
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

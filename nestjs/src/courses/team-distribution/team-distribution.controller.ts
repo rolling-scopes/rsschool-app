@@ -1,11 +1,20 @@
-import { Controller, Post, Body, UseGuards, ParseIntPipe, Param, Get, Delete, Put, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, ParseIntPipe, Param, Get, Delete, Put, Req, Query } from '@nestjs/common';
 import { TeamDistributionService } from './team-distribution.service';
-import { CreateTeamDistributionDto } from './dto/create-team-distribution.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { TeamDistributionDto, UpdateTeamDistributionDto } from './dto';
+import {
+  TeamDistributionDetailedDto,
+  TeamDistributionDto,
+  TeamDistributionStudentDto,
+  UpdateTeamDistributionDto,
+  CreateTeamDistributionDto,
+  StudentsWithoutTeamDto,
+  TeamDto,
+} from './dto';
 import { StudentsService } from '../students';
 import { Student } from '@entities/index';
+import { TeamService } from './team.service';
+import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -14,6 +23,7 @@ export class TeamDistributionController {
   constructor(
     private readonly teamDistributionService: TeamDistributionService,
     private readonly studentsService: StudentsService,
+    private readonly teamService: TeamService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
@@ -35,7 +45,7 @@ export class TeamDistributionController {
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
     if (studentId) {
-      student = await this.studentsService.getStudentWithTeamDistributions(studentId);
+      student = await this.studentsService.getStudentWithTeamsAndDistribution(studentId);
     }
     const data = await this.teamDistributionService.findByCourseId(courseId, student);
     return data.map(el => new TeamDistributionDto(el));
@@ -99,5 +109,48 @@ export class TeamDistributionController {
     if (studentId) {
       await this.studentsService.deleteStudentFromTeamDistribution(studentId, teamDistribution);
     }
+  }
+
+  @Get('/:id/detailed')
+  @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
+  @ApiOkResponse({ type: TeamDistributionDetailedDto })
+  @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  public async getCourseTeamDistributionDetailed(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const studentId = req.user.courses[courseId]?.studentId;
+    let team;
+    if (studentId) {
+      const student = await this.studentsService.getStudentWithTeamsAndDistribution(studentId);
+      const data = student.teams.find(t => t.teamDistributionId === id);
+      if (data) {
+        team = await this.teamService.findTeamWithStudentsById(data.id);
+        team = new TeamDto(team);
+      }
+    }
+    const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
+    return new TeamDistributionDetailedDto(distribution, team);
+  }
+
+  @Get('/:id/students')
+  @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
+  @ApiOkResponse({ type: [TeamDistributionStudentDto] })
+  @ApiOperation({ operationId: 'getStudentsWithoutTeam' })
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  public async getStudentsWithoutTeam(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('pageSize') pageSize: number = 10,
+    @Query('current') current: number = 1,
+  ) {
+    const { students, paginationMeta } = await this.studentsService.getStudentsByTeamDistributionId(id, {
+      page: current,
+      limit: pageSize,
+    });
+
+    return new StudentsWithoutTeamDto(students, paginationMeta);
   }
 }

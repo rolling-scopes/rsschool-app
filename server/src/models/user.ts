@@ -156,6 +156,9 @@ export class User {
   contactsLinkedIn: string | null;
 
   @Column({ type: String, nullable: true })
+  contactsWhatsApp: string | null;
+
+  @Column({ type: String, nullable: true })
   aboutMyself: string | null;
 
   @Column({

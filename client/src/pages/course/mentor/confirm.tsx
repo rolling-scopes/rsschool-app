@@ -167,6 +167,10 @@ function Page(props: { session: Session; courseAlias?: string }) {
 
   return (
     <PageLayoutSimple {...pageProps}>
+      <Typography.Paragraph>
+        We kindly ask you confirm your desire to be mentor in {course.name} course. Just in case, you can change your
+        preference below and select student which you want to mentor
+      </Typography.Paragraph>
       <MentorOptions form={form} mentorData={mentorData} handleSubmit={handleSubmit} course={course} />
     </PageLayoutSimple>
   );

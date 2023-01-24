@@ -5,12 +5,25 @@ import { Actions } from './Actions';
 const mockOnRegister = jest.fn();
 const mockOnDeleteRegister = jest.fn();
 
-const distribution: TeamDistributionDto = {
+const distribution = {
   id: 1,
   startDate: '2022-01-01T00:00:00Z',
   endDate: '2022-01-03T00:00:00Z',
   registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Available,
 } as TeamDistributionDto;
+
+function renderActions(distribution: TeamDistributionDto, isManager = false) {
+  return render(
+    <Actions
+      distribution={distribution}
+      register={mockOnRegister}
+      deleteRegister={mockOnDeleteRegister}
+      isManager={isManager}
+      courseAlias="test"
+      mobileView={false}
+    />,
+  );
+}
 
 describe('Actions', () => {
   beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2022-01-02')));
@@ -23,7 +36,7 @@ describe('Actions', () => {
   });
 
   it('should render a register button when the distribution is available', () => {
-    render(<Actions distribution={distribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />);
+    renderActions(distribution);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -32,7 +45,7 @@ describe('Actions', () => {
   });
 
   it('should call register when the register button is clicked', () => {
-    render(<Actions distribution={distribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />);
+    renderActions(distribution);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -46,9 +59,7 @@ describe('Actions', () => {
       ...distribution,
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
     };
-    render(
-      <Actions distribution={completedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
-    );
+    renderActions(completedDistribution);
 
     const registeredButton = screen.getByRole('button', {
       name: /registered/i,
@@ -62,9 +73,7 @@ describe('Actions', () => {
       ...distribution,
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
     };
-    render(
-      <Actions distribution={completedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
-    );
+    renderActions(completedDistribution);
 
     const cancel = screen.getByText(/cancel/i);
     expect(cancel).toBeInTheDocument();
@@ -75,9 +84,7 @@ describe('Actions', () => {
       ...distribution,
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Future,
     };
-    render(
-      <Actions distribution={futureDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
-    );
+    renderActions(futureDistribution);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -91,9 +98,7 @@ describe('Actions', () => {
       ...distribution,
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Closed,
     };
-    render(
-      <Actions distribution={closedDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
-    );
+    renderActions(closedDistribution);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
@@ -104,11 +109,26 @@ describe('Actions', () => {
   });
 
   it('should render a warning text when the end date is within 48 hours of the current time', () => {
-    const soonEndingDistribution = { ...distribution };
-    render(
-      <Actions distribution={soonEndingDistribution} register={mockOnRegister} deleteRegister={mockOnDeleteRegister} />,
-    );
+    renderActions(distribution);
 
     expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
+  });
+
+  it('should render allocate a team button for managers', () => {
+    renderActions(distribution, true);
+
+    const registerButton = screen.getByRole('button', {
+      name: /allocate a team/i,
+    });
+    expect(registerButton).toBeInTheDocument();
+  });
+
+  it('should render allocate a team when registration status is completed', () => {
+    renderActions({ ...distribution, registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed });
+
+    const registerButton = screen.getByRole('button', {
+      name: /allocate a team/i,
+    });
+    expect(registerButton).toBeInTheDocument();
   });
 });

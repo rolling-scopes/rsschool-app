@@ -44,6 +44,7 @@ export class ContactsDto implements Contacts {
     this.phone = contacts.phone || null;
     this.email = contacts.email || null;
     this.skype = contacts.skype || null;
+    this.whatsApp = contacts.whatsApp || null;
     this.telegram = contacts.telegram || null;
     this.notes = contacts.notes || null;
     this.linkedIn = contacts.linkedIn || null;
@@ -68,6 +69,11 @@ export class ContactsDto implements Contacts {
   @IsOptional()
   @IsString()
   skype: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  whatsApp: string | null;
 
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()

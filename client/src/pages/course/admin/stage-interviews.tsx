@@ -1,4 +1,4 @@
-import { Button, Row, Table, Checkbox } from 'antd';
+import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
@@ -46,17 +46,22 @@ function Page(props: CoursePageProps) {
       courses={[props.course]}
     >
       <Row style={{ marginBottom: 16 }} justify="space-between">
-        <Button type="primary" onClick={() => setModal(true)}>
-          Create
-        </Button>
         {courseManagerRole ? (
           <div>
             <Checkbox checked={noRegistration} onChange={e => setNoRegistration(e.target.checked)}>
               No Registration
             </Checkbox>
-            <Button onClick={createInterviews}>Create Interviews</Button>
+            <Popconfirm
+              onConfirm={() => createInterviews()}
+              title="Do you want to create interview pairs for not distributed students?"
+            >
+              <Button>Create Interview Pairs</Button>
+            </Popconfirm>
           </div>
         ) : null}
+        <Button type="primary" onClick={() => setModal(true)}>
+          Create interview
+        </Button>
       </Row>
 
       <Table

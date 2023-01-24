@@ -43,10 +43,10 @@ export function ModalForm(props: Props) {
     >
       <Spin spinning={props.loading ?? false}>
         <Form
+          layout="vertical"
           onValuesChange={() => props.onChange?.(form.getFieldsValue())}
           form={form}
           initialValues={initialValues}
-          layout="vertical"
         >
           {props.children}
         </Form>

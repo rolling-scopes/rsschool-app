@@ -742,6 +742,7 @@ export interface StudentSummary {
         contactsSkype?: string;
         contactsTelegram?: string;
         contactsNotes?: string;
+        contactsWhatsApp?: string;
       })
     | null;
   rank: number;

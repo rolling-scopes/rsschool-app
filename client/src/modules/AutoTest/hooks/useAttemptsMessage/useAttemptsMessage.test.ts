@@ -159,40 +159,77 @@ describe('useAttemptsMessage', () => {
 
       expect(allowStartTask).toBeTruthy();
     });
+  });
 
-    describe('should not allow to start task', () => {
-      it('when strict mode is true and attempts count is 0', () => {
-        const task = {
-          publicAttributes: {
-            maxAttemptsNumber: MAX_ATTEMPTS,
-            strictAttemptsMode: true,
-          },
-        } as CourseTaskVerifications;
-        const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
+  describe('should not allow to start task', () => {
+    it('when strict mode is true and attempts count is 0', () => {
+      const task = {
+        publicAttributes: {
+          maxAttemptsNumber: MAX_ATTEMPTS,
+          strictAttemptsMode: true,
+        },
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
-        expect(allowStartTask).toBeFalsy();
-      });
+      expect(allowStartTask).toBeFalsy();
+    });
 
-      it('when deadline has passed', () => {
-        const task = {
-          studentEndDate: '1970-01-01T00:00:00.000Z',
-        } as CourseTaskVerifications;
-        const { allowStartTask } = renderUseAttemptsMessage({ task });
+    it('when deadline has passed', () => {
+      const task = {
+        studentEndDate: '1970-01-01T00:00:00.000Z',
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({ task });
 
-        expect(allowStartTask).toBeFalsy();
-      });
+      expect(allowStartTask).toBeFalsy();
+    });
 
-      it('when attempts per hours are over', () => {
-        const task = {
-          studentEndDate: moment().add(7, 'd').format(),
-          publicAttributes: {
-            oneAttemptPerNumberOfHours: 3,
-          },
-        } as CourseTaskVerifications;
-        const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: 1 });
+    it('when attempts per hours are over', () => {
+      const task = {
+        studentEndDate: moment().add(7, 'd').format(),
+        publicAttributes: {
+          oneAttemptPerNumberOfHours: 3,
+        },
+      } as CourseTaskVerifications;
+      const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: 1 });
 
-        expect(allowStartTask).toBeFalsy();
-      });
+      expect(allowStartTask).toBeFalsy();
+    });
+  });
+
+  describe('should not allow to check answers', () => {
+    it('when deadline is not passed', () => {
+      const task = {
+        studentEndDate: moment().add(7, 'd').format(),
+      } as CourseTaskVerifications;
+      const { allowCheckAnswers } = renderUseAttemptsMessage({ task });
+
+      expect(allowCheckAnswers).toBeFalsy();
+    });
+
+    it('when deadline is passed and attempts were not taken', () => {
+      const task = {
+        studentEndDate: moment().subtract(7, 'd').format(),
+        publicAttributes: {
+          maxAttemptsNumber: 5,
+        },
+      } as CourseTaskVerifications;
+      const { allowCheckAnswers } = renderUseAttemptsMessage({ task, verificationsCount: 0 });
+
+      expect(allowCheckAnswers).toBeFalsy();
+    });
+  });
+
+  describe('should allow to check answers', () => {
+    it('when deadline is passed and attempts were taken', () => {
+      const task = {
+        studentEndDate: moment().subtract(7, 'd').format(),
+        publicAttributes: {
+          maxAttemptsNumber: 5,
+        },
+      } as CourseTaskVerifications;
+      const { allowCheckAnswers } = renderUseAttemptsMessage({ task, verificationsCount: 3 });
+
+      expect(allowCheckAnswers).toBeTruthy();
     });
   });
 });

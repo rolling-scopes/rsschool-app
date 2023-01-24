@@ -5,7 +5,7 @@ describe('TeamDistributionModal', () => {
   it('should render team size input when strict student count is true', async () => {
     render(
       <TeamDistributionModal
-        data={{ strictStudentsCount: true }}
+        data={{ strictTeamSizeMode: true }}
         onCancel={jest.fn()}
         courseId={123}
         onSubmit={jest.fn()}
@@ -21,7 +21,7 @@ describe('TeamDistributionModal', () => {
   it('should not render min and max student inputs when strict student count is true', async () => {
     render(
       <TeamDistributionModal
-        data={{ strictStudentsCount: true }}
+        data={{ strictTeamSizeMode: true }}
         onCancel={jest.fn()}
         courseId={123}
         onSubmit={jest.fn()}

@@ -3,14 +3,13 @@ import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext } from 'modules/Course/contexts';
-import { Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
-import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
+import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
+import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
 }
 
-// TODO: Add "Answers" functionality
 function Task({ course, task }: AutoTestTaskProps) {
   const { githubId } = useContext(SessionContext);
   const {
@@ -22,6 +21,8 @@ function Task({ course, task }: AutoTestTaskProps) {
     reload,
   } = useCourseTaskVerifications(course.id, task);
 
+  const { answers, showAnswers, hideAnswers } = useVerificationsAnswers(course.id, task.id);
+
   if (!courseTask) {
     return null;
   }
@@ -29,13 +30,18 @@ function Task({ course, task }: AutoTestTaskProps) {
   return (
     <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
-      <VerificationInformation
-        courseTask={courseTask}
-        loading={loading}
-        isTableVisible={!isExerciseVisible}
-        startTask={startTask}
-        reload={reload}
-      />
+      {!answers ? (
+        <VerificationInformation
+          courseTask={courseTask}
+          loading={loading}
+          isTableVisible={!isExerciseVisible}
+          startTask={startTask}
+          reload={reload}
+          showAnswers={showAnswers}
+        />
+      ) : (
+        <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers} />
+      )}
       {isExerciseVisible && (
         <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
       )}
