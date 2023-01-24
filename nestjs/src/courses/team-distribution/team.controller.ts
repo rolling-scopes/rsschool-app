@@ -158,8 +158,7 @@ export class TeamController {
     if (teamDistributionStudent.distributed || !teamDistributionStudent.active) {
       throw new BadRequestException();
     }
-    await this.teamService.addStudentToTeam(team, teamDistributionStudent.student);
-    await this.teamDistributionStudentService.markStudentAsDistributed(studentId, teamDistributionId);
+    await this.teamService.addStudentToTeam(team, teamDistributionStudent.student, teamDistributionId);
     return new TeamInfoDto(team);
   }
 
@@ -176,11 +175,10 @@ export class TeamController {
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) throw new BadRequestException();
-    await this.teamService.deleteStudentFromTeam(id, studentId);
+    await this.teamService.deleteStudentFromTeam(id, studentId, teamDistributionId);
     const studentsCount = await this.teamService.getStudentsCountInTeam(id);
     if (studentsCount === 0) {
       await this.teamService.remove(id);
     }
-    await this.teamDistributionStudentService.markStudentAsNotDistributed(studentId, teamDistributionId);
   }
 }

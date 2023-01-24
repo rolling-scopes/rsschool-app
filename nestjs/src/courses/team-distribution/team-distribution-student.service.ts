@@ -146,14 +146,6 @@ export class TeamDistributionStudentService {
     await this.repository.update(record.id, { distributed: true });
   }
 
-  public async markStudentAsNotDistributed(studentId: number, teamDistributionId: number) {
-    const record = await this.repository.findOne({
-      where: { studentId, teamDistributionId },
-    });
-    if (record == null) throw new NotFoundException();
-    await this.repository.update(record.id, { distributed: false });
-  }
-
   public async markStudentsAsDistributed(studentIds: number[], teamDistributionId: number) {
     const records = await this.repository.find({
       where: { studentId: In(studentIds), teamDistributionId },
