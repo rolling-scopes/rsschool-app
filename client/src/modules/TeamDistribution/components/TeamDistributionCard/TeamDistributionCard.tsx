@@ -12,6 +12,7 @@ type Props = {
   onEdit: (distribution: TeamDistributionDto) => void;
   register: (distributionId: number) => Promise<void>;
   deleteRegister: (distributionId: number) => Promise<void>;
+  courseAlias: string;
 };
 
 export default function TeamDistributionCard({
@@ -21,6 +22,7 @@ export default function TeamDistributionCard({
   onEdit,
   register,
   deleteRegister,
+  courseAlias,
 }: Props) {
   const mobileView = useMedia('(max-width: 720px)');
 
@@ -49,7 +51,13 @@ export default function TeamDistributionCard({
           Read more
         </a>
       )}
-      <Actions distribution={distribution} register={register} deleteRegister={deleteRegister} />
+      <Actions
+        isManager={isManager}
+        distribution={distribution}
+        register={register}
+        deleteRegister={deleteRegister}
+        courseAlias={courseAlias}
+      />
     </Card>
   );
 }

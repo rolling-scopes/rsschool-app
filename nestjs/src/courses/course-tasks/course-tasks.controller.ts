@@ -116,7 +116,7 @@ export class CourseTasksController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'updateCourseTask' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async updateCourseTask(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
@@ -134,7 +134,7 @@ export class CourseTasksController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'deleteCourseTask' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async deleteCourseTask(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,

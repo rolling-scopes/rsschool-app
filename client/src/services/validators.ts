@@ -14,3 +14,5 @@ export const githubRepoUrl = /https:\/\/github.com\/(\w|\d|-)+\/(\w|\d|-)+/gi;
 
 export const udemyCertificateId = /^UC-/g;
 export const notUrlPattern = /^((?!\/).)*$/g;
+
+export const passwordPattern = /^\d+_[a-zA-Z0-9]+$/;

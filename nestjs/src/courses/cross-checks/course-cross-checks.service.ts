@@ -28,6 +28,13 @@ export type Pagination = {
   totalPages: number;
 };
 
+export type AvailableCrossCheckStats = {
+  name: string;
+  id: number;
+  checksCount: number;
+  completedChecksCount: number;
+};
+
 enum FilterField {
   Checker = 'checker',
   Student = 'student',
@@ -61,7 +68,7 @@ const orderFieldMapping: Record<OrderField, string> = {
 };
 
 @Injectable()
-export class CrossCheckPairsService {
+export class CourseCrossCheckService {
   constructor(
     @InjectRepository(TaskSolutionChecker)
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
@@ -158,5 +165,35 @@ export class CrossCheckPairsService {
         totalPages: Math.ceil(total / pagination.pageSize),
       },
     };
+  }
+
+  public async getAvailableCrossChecksStats(
+    tasks: CourseTask[],
+    studentId: number,
+  ): Promise<AvailableCrossCheckStats[]> {
+    const res = await this.taskSolutionCheckerRepository
+      .createQueryBuilder('tsc')
+      .leftJoin(
+        TaskSolutionResult,
+        'tsr',
+        'tsr."courseTaskId" = tsc."courseTaskId" AND tsr."studentId" = tsc."studentId" AND tsr."checkerId" = tsc."checkerId"',
+      )
+      .addSelect(['tsr.score'])
+      .where('tsc.courseTaskId IN (:...ids)', { ids: tasks.map(i => i.id) })
+      .andWhere('tsc."checkerId" = :studentId', { studentId })
+      .getRawMany();
+
+    return tasks
+      .map(t => {
+        const checks = res.filter(el => t.id === el.tsc_courseTaskId);
+
+        return {
+          name: t.task.name,
+          id: t.id,
+          checksCount: checks.length,
+          completedChecksCount: checks.filter(c => c.tsr_score !== null).length,
+        };
+      })
+      .filter(el => el.checksCount !== 0);
   }
 }

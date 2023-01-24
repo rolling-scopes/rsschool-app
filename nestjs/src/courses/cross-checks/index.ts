@@ -1,2 +1,2 @@
-export * from './cross-checks.controller';
-export * from './cross-checks-pairs.service';
+export * from './course-cross-checks.controller';
+export * from './course-cross-checks.service';

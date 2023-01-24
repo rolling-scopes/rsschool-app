@@ -191,4 +191,28 @@ export class MentorsService {
 
     throw new NotFoundException();
   }
+
+  public async getMentorOptions(mentorId: number) {
+    return this.mentorsRepository.findOne({
+      where: { id: mentorId },
+      select: {
+        students: {
+          id: true,
+          user: {
+            githubId: true,
+          },
+        },
+      },
+      relations: {
+        students: {
+          user: true,
+        },
+      },
+    }) as Promise<
+      | (Omit<Mentor, 'students'> & {
+          students: (Student & { user: { githubId: string; firstName: string; lastName: string } })[];
+        })
+      | null
+    >;
+  }
 }

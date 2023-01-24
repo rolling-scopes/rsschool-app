@@ -22,6 +22,7 @@ import {
   User,
   TaskInterviewStudent,
   TeamDistribution,
+  Team,
   TaskVerification,
 } from '@entities/index';
 
@@ -39,7 +40,7 @@ import { InterviewsController, InterviewsService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
-import { CrossCheckController, CrossCheckPairsService } from './cross-checks';
+import { CourseCrossCheckController, CourseCrossCheckService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
 import { ScoreController, ScoreService } from './score';
 import { TaskSolutionsController, TaskSolutionsService } from './task-solutions';
@@ -52,6 +53,8 @@ import {
 import { CoreModule } from 'src/core/core.module';
 import { TeamDistributionController } from './team-distribution/team-distribution.controller';
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
+import { TeamService } from './team-distribution/team.service';
+import { TeamController } from './team-distribution/team.controller';
 import { TaskVerificationsController } from './task-verifications/task-verifications.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 
@@ -78,6 +81,7 @@ import { TaskVerificationsService } from './task-verifications/task-verification
       TaskInterviewResult,
       TaskInterviewStudent,
       TeamDistribution,
+      Team,
       TaskVerification,
     ]),
     CoreModule,
@@ -94,12 +98,13 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     InterviewsController,
     TasksController,
     CourseStatsController,
-    CrossCheckController,
+    CourseCrossCheckController,
     ScoreController,
     TaskSolutionsController,
     CourseScheduleController,
     CourseICalendarController,
     TeamDistributionController,
+    TeamController,
     TaskVerificationsController,
   ],
   providers: [
@@ -114,12 +119,13 @@ import { TaskVerificationsService } from './task-verifications/task-verification
     InterviewsService,
     TasksService,
     CourseStatsService,
-    CrossCheckPairsService,
+    CourseCrossCheckService,
     ScoreService,
     TaskSolutionsService,
     CourseScheduleService,
     CourseICalendarService,
     TeamDistributionService,
+    TeamService,
     TaskVerificationsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],

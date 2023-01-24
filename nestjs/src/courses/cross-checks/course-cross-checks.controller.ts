@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   DefaultValuePipe,
   Get,
@@ -6,18 +7,24 @@ import {
   ParseEnumPipe,
   ParseIntPipe,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
-import { CrossCheckPairsService, OrderField, OrderDirection } from './cross-checks-pairs.service';
-import { CrossCheckPairResponseDto } from './dto/check-tasks-pairs.dto';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { CourseTasksService } from '../course-tasks';
+import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
+import { CrossCheckPairResponseDto } from './dto';
+import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 
 @Controller('courses/:courseId/cross-checks')
 @ApiTags('courses tasks')
 @UseGuards(DefaultGuard, CourseGuard)
-export class CrossCheckController {
-  constructor(private crossCheckPairsService: CrossCheckPairsService) {}
+export class CourseCrossCheckController {
+  constructor(
+    private crossCheckPairsService: CourseCrossCheckService,
+    private courseTasksService: CourseTasksService,
+  ) {}
 
   @Get('/pairs')
   @ApiOperation({ operationId: 'getCrossCheckPairs' })
@@ -29,7 +36,7 @@ export class CrossCheckController {
   @ApiQuery({ name: 'student', required: false })
   @ApiQuery({ name: 'url', required: false })
   @ApiQuery({ name: 'task', required: false })
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   @UseGuards(DefaultGuard, RoleGuard)
   public async getPairs(
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -50,5 +57,23 @@ export class CrossCheckController {
       { orderBy, orderDirection },
     );
     return new CrossCheckPairResponseDto(items, pagination);
+  }
+
+  @Get('/available-review-stats')
+  @ApiOperation({ operationId: 'getAvailableCrossCheckReviewStats' })
+  @ApiForbiddenResponse()
+  @ApiResponse({ type: [AvailableReviewStatsDto] })
+  @RequiredRoles([CourseRole.Student])
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getAvailableCrossCheckReviewStats(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) throw new BadRequestException();
+    const crossChecks = await this.courseTasksService.getAvailableCrossChecks(courseId);
+    if (crossChecks.length === 0) return [];
+    const res = await this.crossCheckPairsService.getAvailableCrossChecksStats(crossChecks, studentId);
+    return res.map(e => new AvailableReviewStatsDto(e));
   }
 }

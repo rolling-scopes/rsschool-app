@@ -3,11 +3,7 @@ import { RegistrationNotice } from './RegistrationNotice';
 
 export function InterviewDetails(props: { interview: InterviewDto }) {
   const { interview } = props;
-  const { startDate, name } = interview;
+  const { startDate } = interview;
 
-  return <RegistrationNotice name={name} startDate={startDate} showMentorOptions={showMentorOptions} />;
-
-  function showMentorOptions(e: React.MouseEvent) {
-    e.stopPropagation();
-  }
+  return <RegistrationNotice interview={interview} startDate={startDate} />;
 }
