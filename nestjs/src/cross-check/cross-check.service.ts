@@ -28,7 +28,7 @@ export class CrossCheckService {
     await this.initCrossCheckAction(tasksToFinish, 'completion');
   }
 
-  private getInitalDataForRequest() {
+  private getInitialDataForRequest() {
     const { username, password } = this.conf.users.root;
     const host = this.conf.host;
 
@@ -48,7 +48,7 @@ export class CrossCheckService {
   }
 
   private async initCrossCheckAction(courseTasks: CourseTask[], action: 'distribution' | 'completion') {
-    const { host, auth } = this.getInitalDataForRequest();
+    const { host, auth } = this.getInitialDataForRequest();
     const baseurl = `${host}/api/course`;
 
     const courseTaskRequests$ = from(courseTasks).pipe(
@@ -71,7 +71,9 @@ export class CrossCheckService {
   }
 
   private async getCrossCheckTasks() {
-    const allCrossCheckTasks = await this.courseTaskRepository.find({ where: { checker: Checker.CrossCheck } });
+    const allCrossCheckTasks = await this.courseTaskRepository.find({
+      where: { checker: Checker.CrossCheck, disabled: false },
+    });
 
     return {
       tasksToStart: allCrossCheckTasks.filter(isTaskNeededToStart),

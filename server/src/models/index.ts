@@ -11,8 +11,6 @@ import { Event } from './event';
 import { ExternalAccount, User } from './user';
 import { Feedback } from './feedback';
 import { History } from './history';
-import { InterviewQuestion } from './interviewQuestion';
-import { InterviewQuestionCategory } from './interviewQuestionCategory';
 import { LoginState } from './loginState';
 import { Mentor } from './mentor';
 import { MentorRegistry } from './mentorRegistry';
@@ -61,8 +59,6 @@ export {
   Event,
   ExternalAccount,
   Feedback,
-  InterviewQuestion,
-  InterviewQuestionCategory,
   LoginState,
   Mentor,
   MentorRegistry,
@@ -110,8 +106,6 @@ export const models = [
   Event,
   Feedback,
   History,
-  InterviewQuestion,
-  InterviewQuestionCategory,
   LoginState,
   Mentor,
   MentorRegistry,

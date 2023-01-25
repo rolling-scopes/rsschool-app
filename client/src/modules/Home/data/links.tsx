@@ -10,11 +10,13 @@ import {
   PlayCircleTwoTone,
   StopTwoTone,
   AppstoreOutlined,
+  // UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
 import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent } from 'domain/user';
+import { getAutoTestRoute } from 'services/routes';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -123,7 +125,7 @@ const links: LinkData[] = [
   {
     name: 'Auto-Test',
     icon: <PlayCircleTwoTone twoToneColor="#7f00ff" />,
-    getUrl: (course: Course) => `/course/student/new-auto-test?course=${course.alias}`,
+    getUrl: (course: Course) => getAutoTestRoute(course.alias),
     access: some(isActiveStudent, isCourseManager),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
@@ -134,6 +136,13 @@ const links: LinkData[] = [
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
+  // {
+  //   name: 'Team Distributions (Beta)',
+  //   icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
+  //   getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
+  //   access: some(isCourseManager, isActiveStudent),
+  //   courseAccess: everyCourse(isCourseNotCompleted),
+  // },
 ];
 
 export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {

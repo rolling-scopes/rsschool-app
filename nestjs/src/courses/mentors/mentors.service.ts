@@ -136,11 +136,13 @@ export class MentorsService {
   }
 
   private getStatus(mentorId: number, resultScore: number) {
-    if (!mentorId && !resultScore) {
+    // resultScore = 0 should be considered as result
+    const hasScore = resultScore !== null;
+    if (!mentorId && !hasScore) {
       return SolutionItemStatus.RandomTask;
     }
 
-    return resultScore ? SolutionItemStatus.Done : SolutionItemStatus.InReview;
+    return hasScore ? SolutionItemStatus.Done : SolutionItemStatus.InReview;
   }
 
   public async getStudentsTasks(mentorId: number, courseId: number): Promise<MentorDashboardDto[]> {
@@ -188,5 +190,29 @@ export class MentorsService {
     }
 
     throw new NotFoundException();
+  }
+
+  public async getMentorOptions(mentorId: number) {
+    return this.mentorsRepository.findOne({
+      where: { id: mentorId },
+      select: {
+        students: {
+          id: true,
+          user: {
+            githubId: true,
+          },
+        },
+      },
+      relations: {
+        students: {
+          user: true,
+        },
+      },
+    }) as Promise<
+      | (Omit<Mentor, 'students'> & {
+          students: (Student & { user: { githubId: string; firstName: string; lastName: string } })[];
+        })
+      | null
+    >;
   }
 }

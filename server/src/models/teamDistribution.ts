@@ -32,35 +32,41 @@ export class TeamDistribution {
   @Index()
   courseId: number;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  startDate: null | Date;
+  @Column({ type: 'timestamptz' })
+  startDate: Date;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  endDate: null | Date;
+  @Column({ type: 'timestamptz' })
+  endDate: Date;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
+
+  @Column({ default: '' })
+  descriptionUrl: string;
 
   @OneToMany(_ => CourseTask, courseTask => courseTask.teamDistribution)
   courseTasks: CourseTask[];
 
   @ManyToMany(_ => Student, student => student.teamDistribution)
-  students: Student[];
+  studentsWithoutTeam: Student[];
 
   @Column({ default: 2 })
-  minStudents: number;
+  minTeamSize: number;
 
   @Column({ default: 4 })
-  maxStudents: number;
+  maxTeamSize: number;
 
   @Column({ default: 3 })
-  studentsCount: number;
+  strictTeamSize: number;
 
+  /* if strict mode is true the number of participants in the team is strictly equal to the strictTeamSize
+if strict mode is false the number of participants in the team from minTeamSize to maxTeamSize
+*/
   @Column({ default: true })
-  strictStudentsCount: boolean;
+  strictTeamSizeMode: boolean;
 
   @Column({ default: 0 })
   minTotalScore: number;

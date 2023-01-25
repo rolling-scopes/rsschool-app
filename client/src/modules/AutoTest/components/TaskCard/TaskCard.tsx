@@ -25,7 +25,7 @@ function getStatusTag(state: CourseTaskState) {
 }
 
 function TaskCard({ courseTask, course }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, verifications, state } = courseTask;
+  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl } = courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
 
   const score = verifications?.[0]?.score ?? null;
@@ -56,6 +56,17 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
+          <Paragraph
+            ellipsis={{
+              expandable: false,
+              rows: 1,
+            }}
+          >
+            Task:{' '}
+            <Link href={descriptionUrl} target="_blank">
+              {descriptionUrl}
+            </Link>
+          </Paragraph>
           <Paragraph
             ellipsis={{
               expandable: true,

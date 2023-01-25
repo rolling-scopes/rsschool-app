@@ -72,13 +72,6 @@ const adminMenuItems: AdminMenuItemsData[] = [
     href: '/admin/courses',
     access: session => isAdmin(session) || isAnyCourseManager(session),
   },
-  // {
-  //   name: 'Interview questions',
-  //   key: 'interviewQuestions',
-  //   icon: <QuestionOutlined />,
-  //   href: '/admin/interview-questions',
-  //   access: session => isAdmin(session) || isAnyCoursePowerUser(session),
-  // },
   {
     name: 'Tasks',
     key: 'tasks',
