@@ -178,14 +178,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      # - name: Restore Docker layers
-      #   uses: actions/cache@v2
-      #   if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-single-buildx
+      - name: Restore Docker layers
+        uses: actions/cache@v2
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -237,9 +237,10 @@ jobs:
         run: npm run build:lambda
 
       - name: Package Сlient
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
+          platforms: linux/amd64
           context: ./client
           file: ./client/Dockerfile.lambda
           push: true
@@ -260,9 +261,10 @@ jobs:
           output: server/.env
 
       - name: Package Server
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
+          platforms: linux/amd64
           context: ./server
           file: ./server/Dockerfile.lambda
           push: true
@@ -283,9 +285,10 @@ jobs:
           output: nestjs/.env
 
       - name: Package Nestjs
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
+          platforms: linux/amd64
           context: ./nestjs
           file: ./nestjs/Dockerfile.lambda
           push: true
