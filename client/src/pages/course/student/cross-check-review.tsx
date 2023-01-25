@@ -48,7 +48,6 @@ function Page(props: CoursePageProps) {
   const [githubId, setGithubId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
-  const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
   const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
 
@@ -133,13 +132,6 @@ function Page(props: CoursePageProps) {
       handleTaskChange(queryTaskId);
     }
   }, [queryTaskId, courseTasks]);
-
-  useEffect(() => {
-    if (historicalCommentSelected !== '') {
-      form.setFieldsValue({ comment: historicalCommentSelected });
-      setHistoricalCommentSelected('');
-    }
-  }, [historicalCommentSelected]);
 
   const resetCriterias = () => {
     setCountStar([]);
@@ -283,7 +275,7 @@ function Page(props: CoursePageProps) {
               />
             )}
             <ScoreInput courseTask={courseTask} />
-            <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
+            <MarkdownInput />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
             </Form.Item>
@@ -312,7 +304,6 @@ function Page(props: CoursePageProps) {
             sessionId={props.session.id}
             sessionGithubId={props.session.githubId}
             maxScore={maxScore}
-            setHistoricalCommentSelected={setHistoricalCommentSelected}
           />
         </Col>
       </Row>

@@ -21,7 +21,6 @@ import { Username } from './Username';
 const { Text } = Typography;
 
 export type SolutionReviewProps = {
-  children?: JSX.Element;
   sessionId: number;
   sessionGithubId: string;
   courseId: number;
@@ -37,7 +36,6 @@ export type SolutionReviewProps = {
 
 function SolutionReview(props: SolutionReviewProps) {
   const {
-    children,
     sessionId,
     sessionGithubId,
     courseId,
@@ -182,8 +180,6 @@ function SolutionReview(props: SolutionReviewProps) {
               </>
             }
           >
-            {children}
-
             {messages.map((message, index) => (
               <Row key={index} style={{ margin: '16px 0' }}>
                 <Col>

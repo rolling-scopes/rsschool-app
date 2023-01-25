@@ -1,22 +1,11 @@
-import { useEffect } from 'react';
 import { Input, Form, Button, Typography } from 'antd';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-type Props = {
-  historicalCommentSelected: string;
-};
-
-export default function MarkdownInput({ historicalCommentSelected }: Props) {
+export default function MarkdownInput() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [text, setText] = useState('');
-
-  useEffect(() => {
-    if (historicalCommentSelected !== '') {
-      setText(historicalCommentSelected);
-    }
-  }, [historicalCommentSelected]);
 
   const toggleView = () => {
     setPreviewVisible(!previewVisible);
