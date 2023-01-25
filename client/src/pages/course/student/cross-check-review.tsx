@@ -1,10 +1,11 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, message, Row } from 'antd';
+import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
 import { TasksCriteriaApi } from 'api';
 import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
+import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
@@ -29,6 +30,8 @@ enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
 }
 
+const { Text } = Typography;
+
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 
 const criteriaApi = new TasksCriteriaApi();
@@ -38,7 +41,8 @@ function Page(props: CoursePageProps) {
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
   const [form] = Form.useForm();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, withLoading] = useLoading(false);
+  const [modal, contextHolder] = Modal.useModal();
   const [courseTaskId, setCourseTaskId] = useState<number | null>(queryTaskId);
   const [criteriaId, setCriteriaId] = useState<number | null>(null);
   const [githubId, setGithubId] = useState<string | null>(null);
@@ -136,17 +140,8 @@ function Page(props: CoursePageProps) {
     setScore(0);
   };
 
-  const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
-      return;
-    }
-
-    if (checkPoints().length !== countStar.length) {
-      return notFilledCriteriaWarning();
-    }
-
+  const submitReview = withLoading(async values => {
     try {
-      setLoading(true);
       const criteria = arrayForCrossCheckSubmit();
       criteria.map(item => {
         if (!item.point) {
@@ -166,8 +161,27 @@ function Page(props: CoursePageProps) {
       resetCriterias();
     } catch (e) {
       message.error('An error occured. Please try later.');
-    } finally {
-      setLoading(false);
+    }
+  });
+
+  const handleSubmit = async (values: any) => {
+    if (!values.githubId || loading) {
+      return;
+    }
+
+    if (checkPoints().length !== countStar.length) {
+      return notFilledCriteriaWarning();
+    }
+
+    if (score !== 0) {
+      await submitReview(values);
+    } else {
+      modal.confirm({
+        onOk: () => submitReview(values),
+        okText: 'Yes',
+        cancelText: 'No',
+        content: <Text>Are you sure you want to submit a review with a score of 0 points?</Text>,
+      });
     }
   };
 
@@ -231,6 +245,7 @@ function Page(props: CoursePageProps) {
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
+      {contextHolder}
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
