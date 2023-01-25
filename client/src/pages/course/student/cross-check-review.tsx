@@ -50,7 +50,10 @@ function Page(props: CoursePageProps) {
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
   const [historicalCommentSelected, setHistoricalCommentSelected] = useState<string>(form.getFieldValue('comment'));
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
-  const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
+  const [state, setState] = useState<{ loading: boolean; data: SolutionReviewType[] }>({
+    loading: false,
+    data: [],
+  });
 
   const [
     { countStar, penalty, criteriaData, score, criteriaComment },
@@ -168,7 +171,7 @@ function Page(props: CoursePageProps) {
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
       resetCriterias();
     } catch (e) {
-      message.error('An error occured. Please try later.');
+      message.error('An error occurred. Please try later.');
     }
   });
 
@@ -212,6 +215,7 @@ function Page(props: CoursePageProps) {
     setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
+    setState({ loading: false, data: [] });
     form.resetFields(['score', 'comment', 'githubId']);
   };
 
