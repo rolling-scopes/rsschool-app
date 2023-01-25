@@ -178,14 +178,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Restore Docker layers
-        uses: actions/cache@v2
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-single-buildx
+      # - name: Restore Docker layers
+      #   uses: actions/cache@v2
+      #   if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-single-buildx
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
