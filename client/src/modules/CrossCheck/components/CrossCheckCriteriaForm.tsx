@@ -32,7 +32,6 @@ export interface CriteriaFormProps {
   countStar: CountState[];
   setCountStar: (newCount: CountState[]) => void;
   criteriaData: CrossCheckCriteriaData[];
-  totalPoints?: number;
   penalty: CountState[];
   setPenalty: (newPenalty: CountState[]) => void;
   criteriaComment: CommentState[];
@@ -43,7 +42,6 @@ export function CrossCheckCriteriaForm({
   countStar,
   setCountStar,
   criteriaData,
-  totalPoints,
   penalty,
   setPenalty,
   criteriaComment,
@@ -52,10 +50,6 @@ export function CrossCheckCriteriaForm({
   const form = Form.useFormInstance();
   const penaltyData: CrossCheckCriteriaData[] =
     criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty).map(item => omit(item, ['point'])) ?? [];
-
-  useEffect(() => {
-    form.setFieldValue('score', totalPoints);
-  }, [totalPoints]);
 
   useEffect(() => {
     if (!criteriaData.length) return;

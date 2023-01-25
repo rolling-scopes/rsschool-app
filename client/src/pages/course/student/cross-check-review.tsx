@@ -56,8 +56,8 @@ function Page(props: CoursePageProps) {
   });
 
   const [
-    { countStar, penalty, criteriaData, score, criteriaComment },
-    { setCountStar, setPenalty, setCriteriaData, setScore, setComment },
+    { countStar, penalty, criteriaData, criteriaComment },
+    { setCountStar, setPenalty, setCriteriaData, setComment },
   ] = useCriteriaState();
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -76,7 +76,7 @@ function Page(props: CoursePageProps) {
 
     setCriteriaData(taskCriteriaData.criteria ?? []);
     resetCriterias();
-    form.resetFields(['comment']);
+    form.resetFields(['comment', 'score']);
 
     if (!result) {
       return setState({ loading: false, data: [] });
@@ -111,7 +111,7 @@ function Page(props: CoursePageProps) {
   };
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
-    setScore(data.score);
+    form.setFieldValue('score', data.score);
     if (!data.criteria) return;
     setCriteriaData(data.criteria);
     const newCountState = data.criteria
@@ -148,7 +148,6 @@ function Page(props: CoursePageProps) {
     setCountStar([]);
     setComment([]);
     setPenalty([]);
-    setScore(undefined);
   };
 
   const submitReview = withLoading(async values => {
@@ -279,7 +278,6 @@ function Page(props: CoursePageProps) {
                 countStar={countStar}
                 setCountStar={setCountStar}
                 criteriaData={criteriaData}
-                totalPoints={score}
                 setPenalty={setPenalty}
                 penalty={penalty}
                 criteriaComment={criteriaComment}
