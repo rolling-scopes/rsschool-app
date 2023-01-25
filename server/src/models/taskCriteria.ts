@@ -1,8 +1,14 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
+export enum CrossCheckCriteriaType {
+  Title = 'title',
+  Subtask = 'subtask',
+  Penalty = 'penalty',
+}
+
 interface Criteria {
   max?: number;
-  type: 'title' | 'subtask' | 'penalty';
+  type: CrossCheckCriteriaType;
   text: string;
   key: string;
   index: number;

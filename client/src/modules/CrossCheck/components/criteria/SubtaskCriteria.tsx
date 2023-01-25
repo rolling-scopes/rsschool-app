@@ -51,7 +51,7 @@ export default function SubtaskCriteria({
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <Rate
             value={(criteriaScore / (subtaskData.max as number)) * NUMBER_OF_STARS}
-            allowClear={false}
+            allowClear
             allowHalf
             defaultValue={0}
             count={5}

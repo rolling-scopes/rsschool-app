@@ -71,7 +71,8 @@ function Page(props: Props) {
         const record = createRecord(values);
         if (modalAction === 'update') {
           await tasksApi.updateTask(modalData!.id!, record);
-          if (await criteriaApi.getTaskCriteria(modalData!.id!)) {
+          const { data } = await criteriaApi.getTaskCriteria(modalData!.id!);
+          if (data.criteria) {
             await criteriaApi.updateTaskCriteria(modalData!.id!, { criteria: dataCriteria });
           } else {
             await criteriaApi.createTaskCriteria(modalData!.id!, { criteria: dataCriteria });
@@ -96,10 +97,9 @@ function Page(props: Props) {
       setDataCriteria(addKeyAndIndex(newDataCriteria));
     };
 
-    const addJSONtoCriteria = (criteria: string) => {
+    const addJSONtoCriteria = (criteria: CriteriaDto[]) => {
       const oldCriteria = dataCriteria;
-      const addingCriteria = JSON.parse(criteria);
-      const newCriteria = [...oldCriteria, ...addingCriteria];
+      const newCriteria = [...oldCriteria, ...criteria];
       setDataCriteria(addKeyAndIndex(newCriteria));
     };
 
@@ -148,7 +148,11 @@ function Page(props: Props) {
         </Row>
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item required name="discipline" label="Discipline">
+            <Form.Item
+              name="discipline"
+              label="Discipline"
+              rules={[{ required: true, message: 'Please select a discipline' }]}
+            >
               <Select>
                 {disciplines.map(({ id, name }) => (
                   <Select.Option key={id} value={id}>
