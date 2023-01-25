@@ -181,7 +181,7 @@ function Page(props: CoursePageProps) {
       return notFilledCriteriaWarning();
     }
 
-    if (score !== 0) {
+    if (values.score !== 0) {
       await submitReview(values);
     } else {
       modal.confirm({
