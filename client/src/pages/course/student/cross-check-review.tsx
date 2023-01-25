@@ -178,8 +178,8 @@ function Page(props: CoursePageProps) {
     } else {
       modal.confirm({
         onOk: () => submitReview(values),
-        okText: 'Yes',
-        cancelText: 'No',
+        okText: 'Yes, submit',
+        cancelText: 'Change score',
         content: <Text>Are you sure you want to submit a review with a score of 0 points?</Text>,
       });
     }
