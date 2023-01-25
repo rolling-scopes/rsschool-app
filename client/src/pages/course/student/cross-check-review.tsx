@@ -1,7 +1,7 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
 import { TasksCriteriaApi } from 'api';
-import { CourseTaskSelect } from 'components/Forms';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
@@ -62,11 +62,18 @@ function Page(props: CoursePageProps) {
   const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
-    const { data } = await criteriaApi.getTaskCriteria(criteriaId as number);
-    setCriteriaData(data.criteria ?? []);
-    resetCriterias();
+    if (!criteriaId || !courseTaskId) return;
+
     setState({ loading: true, data: [] });
-    const result = await courseService.getTaskSolutionResult(githubId, courseTaskId as number);
+
+    const [{ data: taskCriteriaData }, result] = await Promise.all([
+      criteriaApi.getTaskCriteria(criteriaId),
+      courseService.getTaskSolutionResult(githubId, courseTaskId),
+    ]);
+
+    setCriteriaData(taskCriteriaData.criteria ?? []);
+    resetCriterias();
+    form.resetFields(['comment']);
 
     if (!result) {
       return setState({ loading: false, data: [] });
@@ -93,10 +100,11 @@ function Page(props: CoursePageProps) {
       };
     });
 
+    const [activeSolutionReview] = solutionReviews;
+
+    form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
+    loadInitialCriteria(activeSolutionReview);
     setState({ loading: false, data: solutionReviews ?? [] });
-    if (result !== null) {
-      loadInitialCriteria(solutionReviews[0]);
-    }
   };
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
@@ -137,7 +145,7 @@ function Page(props: CoursePageProps) {
     setCountStar([]);
     setComment([]);
     setPenalty([]);
-    setScore(0);
+    setScore(undefined);
   };
 
   const submitReview = withLoading(async values => {
@@ -149,7 +157,7 @@ function Page(props: CoursePageProps) {
         }
       });
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
-        score,
+        score: values.score,
         comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
@@ -204,7 +212,7 @@ function Page(props: CoursePageProps) {
     setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
-    form.resetFields(['githubId']);
+    form.resetFields(['score', 'comment', 'githubId']);
   };
 
   const handleStudentChange = (githubId: string) => {
@@ -235,8 +243,6 @@ function Page(props: CoursePageProps) {
     });
     return criteriaData;
   }
-
-  const maxScoreForTask = courseTasks.find(item => item.id === courseTaskId)?.maxScore as number;
 
   return (
     <PageLayout
@@ -269,15 +275,14 @@ function Page(props: CoursePageProps) {
                 countStar={countStar}
                 setCountStar={setCountStar}
                 criteriaData={criteriaData}
-                setTotalPoints={setScore}
                 totalPoints={score}
                 setPenalty={setPenalty}
                 penalty={penalty}
                 criteriaComment={criteriaComment}
                 setComment={setComment}
-                maxScoreForTask={maxScoreForTask}
               />
             )}
+            <ScoreInput courseTask={courseTask} />
             <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>

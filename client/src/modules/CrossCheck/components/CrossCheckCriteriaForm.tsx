@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Typography, InputNumber } from 'antd';
+import { useEffect } from 'react';
+import { Typography, Form } from 'antd';
 
 import SubtaskCriteria from './criteria/SubtaskCriteria';
 import TitleCriteria from './criteria/TitleCriteria';
@@ -32,13 +32,11 @@ export interface CriteriaFormProps {
   countStar: CountState[];
   setCountStar: (newCount: CountState[]) => void;
   criteriaData: CrossCheckCriteriaData[];
-  totalPoints: number;
-  setTotalPoints: (newPoint: number) => void;
+  totalPoints?: number;
   penalty: CountState[];
   setPenalty: (newPenalty: CountState[]) => void;
   criteriaComment: CommentState[];
   setComment: (newComment: CommentState[]) => void;
-  maxScoreForTask: number;
 }
 
 export function CrossCheckCriteriaForm({
@@ -46,30 +44,30 @@ export function CrossCheckCriteriaForm({
   setCountStar,
   criteriaData,
   totalPoints,
-  setTotalPoints,
   penalty,
   setPenalty,
   criteriaComment,
   setComment,
-  maxScoreForTask,
 }: CriteriaFormProps) {
+  const form = Form.useFormInstance();
   const penaltyData: CrossCheckCriteriaData[] =
     criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty).map(item => omit(item, ['point'])) ?? [];
 
-  function calculateTotalPoints() {
-    return useMemo(() => {
-      const sumPoints = +countStar
-        .map(item => item.point)
-        .reduce((prev, next) => prev + next, 0)
-        .toFixed(1);
-      const sumPenalty = penalty.map(item => item.point).reduce((prev, next) => prev + next, 0);
-      const finalPoints = sumPoints + sumPenalty;
-      setTotalPoints(finalPoints > 0 ? finalPoints : 0);
-      return finalPoints > 0 ? finalPoints : 0;
-    }, [countStar, penalty]);
-  }
+  useEffect(() => {
+    form.setFieldValue('score', totalPoints);
+  }, [totalPoints]);
 
-  const calculationResultPoints = calculateTotalPoints();
+  useEffect(() => {
+    if (!criteriaData.length) return;
+
+    const scorePoints = +countStar.reduce((acc, next) => acc + next.point, 0).toFixed(1);
+    const penaltyPoints = penalty.reduce((acc, next) => acc + next.point, 0);
+
+    const totalScore = scorePoints + penaltyPoints;
+    const finalScore = totalScore > 0 ? totalScore : 0;
+
+    form.setFieldValue('score', finalScore);
+  }, [countStar, penalty]);
 
   function updateCountStar(event: number, max: number, key: string) {
     if (countStar.find(item => item.key === key)) {
@@ -85,10 +83,6 @@ export function CrossCheckCriteriaForm({
     } else {
       setPenalty([...penalty, { key, point: value === HasPenalty.Yes ? max : 0 }]);
     }
-  }
-
-  function changeFinalScore(value: number) {
-    setTotalPoints(value > 0 ? value : 0);
   }
 
   function updateComment(value: string, key: string) {
@@ -133,17 +127,6 @@ export function CrossCheckCriteriaForm({
             ))}
           </>
         )}
-      </div>
-
-      <div style={{ margin: '10px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <Typography.Title level={4}>{`Score (Max ${maxScoreForTask} points) `}</Typography.Title>
-        <InputNumber
-          min={0}
-          max={maxScoreForTask}
-          value={totalPoints === calculationResultPoints ? calculationResultPoints : totalPoints}
-          onChange={changeFinalScore}
-          size={'middle'}
-        />
       </div>
     </div>
   );
