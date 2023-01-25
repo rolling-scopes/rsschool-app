@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CrossCheckCriteriaType } from '@entities/taskCriteria';
 
 export class CriteriaDto {
   @IsNumber()
@@ -8,9 +9,9 @@ export class CriteriaDto {
   max?: number;
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  type: 'title' | 'subtask' | 'penalty';
+  @IsEnum(CrossCheckCriteriaType)
+  @ApiProperty({ enum: CrossCheckCriteriaType })
+  type: CrossCheckCriteriaType;
 
   @IsNotEmpty()
   @IsString()

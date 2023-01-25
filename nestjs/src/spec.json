@@ -3750,7 +3750,7 @@
         "type": "object",
         "properties": {
           "max": { "type": "number" },
-          "type": { "type": "string" },
+          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
           "text": { "type": "string" },
           "key": { "type": "string" },
           "index": { "type": "number" }

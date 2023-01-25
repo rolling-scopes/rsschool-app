@@ -1878,7 +1878,7 @@ export interface CriteriaDto {
      * @type {string}
      * @memberof CriteriaDto
      */
-    'type': string;
+    'type': CriteriaDtoTypeEnum;
     /**
      * 
      * @type {string}
@@ -1898,6 +1898,15 @@ export interface CriteriaDto {
      */
     'index': number;
 }
+
+export const CriteriaDtoTypeEnum = {
+    Title: 'title',
+    Subtask: 'subtask',
+    Penalty: 'penalty'
+} as const;
+
+export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof CriteriaDtoTypeEnum];
+
 /**
  * 
  * @export

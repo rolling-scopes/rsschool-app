@@ -1,14 +1,14 @@
 import { Button, Form, InputNumber, Select, Input, message } from 'antd';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import React, { useState } from 'react';
-import { IAddCriteriaForCrossCheck } from 'services/course';
+import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 
 const { Item } = Form;
 const { TextArea } = Input;
 const { Option } = Select;
 
 export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck) => {
-  const [type, setType] = useState('');
+  const [type, setType] = useState<CrossCheckCriteriaType>('title');
   const [max, setMax] = useState(0);
   const [maxPenalty, setMaxPenalty] = useState(0);
   const [text, setText] = useState('');
@@ -50,7 +50,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setMaxPenalty(value);
   }
 
-  function changeType(value: string) {
+  function changeType(value: CrossCheckCriteriaType) {
     setType(value);
   }
 
