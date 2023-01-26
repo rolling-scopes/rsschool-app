@@ -68,7 +68,11 @@ export class TaskVerificationsService {
     }
   }
 
-  public async getStudentTaskVerifications(studentId: number) {
+  public async getStudentTaskVerifications(studentId: number, courseTaskId: number) {
+    if (!studentId) {
+      throw new BadRequestException('You are not a student in this course');
+    }
+
     return await this.taskVerificationRepository.find({
       select: {
         courseTask: {
@@ -87,6 +91,7 @@ export class TaskVerificationsService {
       where: {
         studentId,
         courseTask: {
+          id: courseTaskId,
           disabled: false,
           checker: Checker.AutoTest,
         },
