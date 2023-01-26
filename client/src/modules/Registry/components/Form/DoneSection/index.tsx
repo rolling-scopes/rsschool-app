@@ -1,4 +1,4 @@
-import { Card, Image, Row, Typography } from 'antd';
+import { Card, Image, Row, Skeleton, Typography } from 'antd';
 import { SUCCESS_TEXT } from 'modules/Registry/constants';
 
 const { Title, Paragraph } = Typography;
@@ -29,6 +29,9 @@ export function DoneSection() {
           preview={false}
           src="https://cdn.rs.school/sloths/stickers/slothzy/image.png"
           alt="slothzy"
+          width={406}
+          height={366}
+          placeholder={<Skeleton.Image style={{ width: 406, height: 366 }} />}
         />
       </Row>
       <Row style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
