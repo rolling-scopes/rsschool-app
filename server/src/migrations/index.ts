@@ -41,6 +41,7 @@ import { TeamDistribution1672386450861 } from './1672386450861-TeamDistribution'
 import { TaskVerification1673090827105 } from './1673090827105-TaskVerification';
 import { User1673692838338 } from './1673692838338-User';
 import { Team1674128274839 } from './1674128274839-Team';
+import { Resume1674755854609 } from './1674755854609-Resume';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -86,4 +87,5 @@ export const migrations = [
   TaskVerification1673090827105,
   User1673692838338,
   Team1674128274839,
+  Resume1674755854609,
 ];
