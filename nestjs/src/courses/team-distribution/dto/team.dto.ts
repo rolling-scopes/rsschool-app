@@ -13,13 +13,12 @@ export class TeamPasswordDto {
   public password: string;
 }
 
-export class TeamDto {
+export class TeamInfoDto {
   constructor(team: Team) {
     this.id = team.id;
     this.name = team.name;
     this.chatLink = team.chatLink;
     this.description = team.description;
-    this.students = team.students.map(st => new TeamDistributionStudentDto(st));
     this.teamLeadId = team.teamLeadId;
     this.teamDistributionId = team.teamDistributionId;
   }
@@ -36,14 +35,21 @@ export class TeamDto {
   @ApiProperty()
   public description: string;
 
-  @ApiProperty({ type: [TeamDistributionStudentDto] })
-  public students: TeamDistributionStudentDto[];
-
   @ApiProperty()
   public teamLeadId: number;
 
   @ApiProperty()
   public teamDistributionId: number;
+}
+
+export class TeamDto extends TeamInfoDto {
+  constructor(team: Team) {
+    super(team);
+    this.students = team.students.map(st => new TeamDistributionStudentDto(st));
+  }
+
+  @ApiProperty({ type: [TeamDistributionStudentDto] })
+  public students: TeamDistributionStudentDto[];
 }
 
 export class TeamsDto {

@@ -43,6 +43,7 @@ import { TaskVerification } from './taskVerification';
 import { UserGroup } from './userGroup';
 import { TeamDistribution } from './teamDistribution';
 import { Team } from './team';
+import { TeamDistributionStudent } from './teamDistributionStudent';
 
 export * from './session';
 export {
@@ -89,6 +90,7 @@ export {
   TaskVerification,
   Team,
   TeamDistribution,
+  TeamDistributionStudent,
   User,
   UserGroup,
 };
@@ -137,6 +139,7 @@ export const models = [
   TaskVerification,
   Team,
   TeamDistribution,
+  TeamDistributionStudent,
   User,
   UserGroup,
 ];

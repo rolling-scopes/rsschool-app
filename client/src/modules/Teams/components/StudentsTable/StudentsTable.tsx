@@ -10,9 +10,17 @@ type Props = {
   notVisibleColumn?: StudentsTableColumnKey[];
   pagination: false | TablePaginationConfig;
   handleChange?: TableProps<TeamDistributionStudentDto>['onChange'];
+  loading?: boolean;
 };
 
-export default function StudentsTable({ content, teamLeadId, notVisibleColumn = [], pagination, handleChange }: Props) {
+export default function StudentsTable({
+  content,
+  teamLeadId,
+  notVisibleColumn = [],
+  pagination,
+  handleChange,
+  loading,
+}: Props) {
   const columns = useMemo(
     () => getColumns(teamLeadId).filter(el => !notVisibleColumn.includes(el.key as StudentsTableColumnKey)),
     [notVisibleColumn, teamLeadId],
@@ -26,6 +34,7 @@ export default function StudentsTable({ content, teamLeadId, notVisibleColumn = 
       onChange={handleChange}
       rowKey="id"
       pagination={pagination}
+      loading={loading}
     />
   );
 }

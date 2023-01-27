@@ -19,61 +19,64 @@ export class TeamDistributionService {
   constructor(
     @InjectRepository(TeamDistribution)
     private repository: Repository<TeamDistribution>,
-    @InjectRepository(Student)
-    readonly studentRepository: Repository<Student>,
   ) {}
 
   public async create(data: Partial<TeamDistribution>) {
     return this.repository.save(data);
   }
 
-  private getDistributionStatus(distribution: TeamDistribution, student: Student | null) {
+  public addStatusToDistribution(distribution: TeamDistribution, student: Student | null) {
     if (student == null || student.isExpelled || distribution.minTotalScore > student.totalScore) {
-      return registrationStatusEnum.Unavailable;
+      return { ...distribution, registrationStatus: registrationStatusEnum.Unavailable };
     }
 
     const currTimestampUTC = dayjs();
     const distributionStartDate = dayjs(distribution.startDate);
     if (currTimestampUTC < distributionStartDate) {
-      return registrationStatusEnum.Future;
+      return { ...distribution, registrationStatus: registrationStatusEnum.Future };
     }
 
-    if (student.teams?.find(el => el.teamDistributionId === distribution.id)) {
-      return registrationStatusEnum.Distributed;
+    if (student.teamDistributionStudents?.find(el => el.teamDistributionId === distribution.id)?.distributed) {
+      return { ...distribution, registrationStatus: registrationStatusEnum.Distributed };
     }
 
-    if (student.teamDistribution?.find(el => el.id === distribution.id)) {
-      return registrationStatusEnum.Completed;
+    if (student.teamDistributionStudents?.find(el => el.teamDistributionId === distribution.id)?.active) {
+      return { ...distribution, registrationStatus: registrationStatusEnum.Completed };
     }
 
     const distributionEndDate = dayjs(distribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
-      return registrationStatusEnum.Available;
+      return { ...distribution, registrationStatus: registrationStatusEnum.Available };
     }
 
     if (currTimestampUTC > distributionEndDate) {
-      return registrationStatusEnum.Closed;
+      return { ...distribution, registrationStatus: registrationStatusEnum.Closed };
     }
 
-    return registrationStatusEnum.Unavailable;
+    return { ...distribution, registrationStatus: registrationStatusEnum.Unavailable };
   }
 
-  public async findByCourseId(courseId: number, student: Student | null) {
-    const data = await this.repository.find({
+  public async findByCourseId(courseId: number) {
+    return this.repository.find({
       where: { courseId },
       order: {
         startDate: 'ASC',
       },
     });
-    return data.map(el => ({ ...el, registrationStatus: this.getDistributionStatus(el, student) }));
   }
 
   public getById(id: number) {
     return this.repository.findOneOrFail({ where: { id } });
   }
 
-  public getDistributionDetailedById(id: number) {
-    return this.repository.findOneOrFail({ where: { id }, relations: ['teams', 'studentsWithoutTeam'] });
+  public async getDistributionDetailedById(id: number) {
+    const teamDistribution = await this.repository.findOneOrFail({
+      where: {
+        id,
+      },
+      relations: ['teams', 'teamDistributionStudents'],
+    });
+    return teamDistribution;
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {
