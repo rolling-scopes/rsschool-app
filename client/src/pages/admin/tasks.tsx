@@ -115,6 +115,7 @@ function Page(props: Props) {
         ),
       [data],
     );
+
     return (
       <ModalForm
         data={modalData}
