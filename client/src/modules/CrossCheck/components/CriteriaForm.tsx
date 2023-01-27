@@ -159,6 +159,7 @@ export function CriteriaForm(props: Props) {
                       ?.filter(c => c.criteriaId === item.criteriaId)
                       .map(c => (
                         <Comment
+                          key={c.criteriaId}
                           author={c.authorGithubId}
                           avatar={<GithubAvatar githubId={c.authorGithubId} size={32} />}
                           content={<p>{c.text || '-'}</p>}
