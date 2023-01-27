@@ -26,6 +26,7 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'react/display-name': 0,
     'react/no-unescaped-entities': 0,
+    'react/no-unknown-property': [2, { ignore: ['jsx'] }],
   },
   overrides: [
     {
