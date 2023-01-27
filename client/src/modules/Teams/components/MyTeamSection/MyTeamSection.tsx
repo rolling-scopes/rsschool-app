@@ -1,6 +1,6 @@
 import { Button, notification, Row, Space, Typography } from 'antd';
 import { EditTwoTone, CopyOutlined } from '@ant-design/icons';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { useCopyToClipboard } from 'react-use';
@@ -26,13 +26,9 @@ export default function MyTeamSection({
   reloadDistribution,
   setActiveTab,
 }: Props) {
-  // This component is only available to students with a team.
-  if (!distribution.myTeam) {
-    return null;
-  }
   const myTeam = distribution.myTeam;
 
-  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, distribution]);
+  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, myTeam.teamLeadId]);
   const [, copyToClipboard] = useCopyToClipboard();
 
   const copyChatLink = () => {
@@ -46,7 +42,7 @@ export default function MyTeamSection({
     await reloadDistribution();
   };
 
-  return (
+  return distribution.myTeam ? (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
@@ -72,5 +68,5 @@ export default function MyTeamSection({
       </Row>
       <StudentsTable content={myTeam.students} pagination={false} />
     </Space>
-  );
+  ) : null;
 }
