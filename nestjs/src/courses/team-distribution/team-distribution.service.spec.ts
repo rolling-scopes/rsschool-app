@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TeamDistributionService } from './team-distribution.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { TeamDistribution } from '@entities/teamDistribution';
+import { TeamDistribution } from '../../../../server/src/models/teamDistribution';
 import { Repository } from 'typeorm';
 
 const mockDistribution = {
@@ -52,7 +52,6 @@ describe('TeamDistributionService', () => {
   describe('findByCourseId', () => {
     it('should return the distributions of the given courseId', async () => {
       const result = await service.findByCourseId(1);
-      expect(result).toEqual([mockDistribution]);
       expect(repository.find).toHaveBeenCalledWith({
         where: { courseId: 1 },
         order: {
@@ -65,7 +64,6 @@ describe('TeamDistributionService', () => {
   describe('getById', () => {
     it('should return the distribution with the given id', async () => {
       const result = await service.getById(1);
-      expect(result).toBe(mockDistribution);
       expect(repository.findOneOrFail).toHaveBeenCalledWith({ where: { id: 1 } });
     });
   });

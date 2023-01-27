@@ -20,7 +20,7 @@ export class TeamDistributionStudentDto {
     this.location = `${student.user.cityName ? `${student.user.cityName},` : ''}${
       student.user.countryName ? ` ${student.user.countryName}` : ''
     }`;
-    this.cvUuid = student.user.resume?.at(0)?.uuid ?? undefined;
+    this.cvUuid = student.user.resume?.find(e => e.userId === student.user.id)?.uuid ?? undefined;
   }
 
   @ApiProperty()
