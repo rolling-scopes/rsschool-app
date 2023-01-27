@@ -5,9 +5,9 @@ import { GithubAvatar } from 'components/GithubAvatar';
 
 import { CrossCheckCriteria, CrossCheckComment } from 'services/course';
 
-function RateIcon(props: { index: number; value: number }) {
-  const color = props.index + 1 <= props.value ? colors[props.index] : '#aaa';
-  switch (props.index) {
+function RateIcon({ index, value }: { index: number; value: number }) {
+  const color = index + 1 <= value ? colors[index] : '#aaa';
+  switch (index) {
     case 0:
       return <FrownTwoTone style={{ fontSize: 20 }} twoToneColor={color} />;
     case 1:
@@ -41,53 +41,43 @@ type Props = {
   reviewComments: CrossCheckComment[];
 };
 
-export function CriteriaForm(props: Props) {
-  const { criteria, selfReview } = props;
-
-  if (!criteria) {
-    return null;
-  }
-
-  const hasSelfReview = props.selfReview != null;
+export function CriteriaForm({ authorId, comments, reviewComments, criteria, onChange, selfReview, value }: Props) {
+  const hasSelfReview = selfReview != null;
 
   const onReviewCriteria = useCallback(
     (criteriaId: string, percentage: number) => {
-      const newReview: Review[] = props.criteria
+      const newReview: Review[] = criteria
         .filter(d => d.type != 'title')
         .map(d => ({
           criteriaId: d.criteriaId,
           percentage:
-            criteriaId === d.criteriaId
-              ? percentage
-              : props.value?.find(v => v.criteriaId === d.criteriaId)?.percentage ?? 0,
+            criteriaId === d.criteriaId ? percentage : value?.find(v => v.criteriaId === d.criteriaId)?.percentage ?? 0,
         }));
-      props.onChange?.(newReview, props.reviewComments);
+      onChange?.(newReview, reviewComments);
     },
-    [props.value, props.onChange],
+    [criteria, onChange, reviewComments, value],
   );
 
   const onReviewCommentChange = useCallback(
     (criteriaId: string, text: string) => {
-      const newComments: CrossCheckComment[] = props.criteria
+      const newComments: CrossCheckComment[] = criteria
         .filter(d => d.type != 'title')
         .map(d => {
-          const comment = props.reviewComments?.find(
-            v => v.authorId === props.authorId && v.criteriaId === d.criteriaId,
-          );
+          const comment = reviewComments?.find(v => v.authorId === authorId && v.criteriaId === d.criteriaId);
           return {
-            authorId: props.authorId,
+            authorId: authorId,
             timestamp: comment?.timestamp ?? Date.now(),
             criteriaId: d.criteriaId,
             text: criteriaId === d.criteriaId ? text : comment?.text ?? '',
           };
         })
         .filter(c => c.text);
-      props.onChange?.(props.value ?? [], newComments);
+      onChange?.(value ?? [], newComments);
     },
-    [props.value, props.onChange],
+    [criteria, onChange, value, reviewComments, authorId],
   );
 
-  return (
+  return criteria && criteria.length > 0 ? (
     <>
       {criteria.map((item, i) => {
         if (item.type === 'title') {
@@ -99,7 +89,7 @@ export function CriteriaForm(props: Props) {
             </div>
           );
         }
-        const currentReview = props.value?.find(r => r.criteriaId === item.criteriaId) ?? {
+        const currentReview = value?.find(r => r.criteriaId === item.criteriaId) ?? {
           criteriaId: item.criteriaId,
           percentage: 0,
         };
@@ -125,8 +115,8 @@ export function CriteriaForm(props: Props) {
                   </div>
                   <div>
                     <Rate
-                      character={(props: { index: number; value: number; focused: boolean }) => (
-                        <RateIcon value={props.value} index={props.index} />
+                      character={({ index, value }: { index: number; value: number }) => (
+                        <RateIcon key={index} value={value} index={index} />
                       )}
                       onChange={value => onReviewCriteria(item.criteriaId, convertValueToPercentage(value))}
                       value={convertPercentageToValue(currentReview.percentage)}
@@ -155,7 +145,7 @@ export function CriteriaForm(props: Props) {
                     <Typography.Title level={5}>Comments</Typography.Title>
                   </div>
                   <div>
-                    {props.comments
+                    {comments
                       ?.filter(c => c.criteriaId === item.criteriaId)
                       .map(c => (
                         <Comment
@@ -178,7 +168,7 @@ export function CriteriaForm(props: Props) {
         );
       })}
     </>
-  );
+  ) : null;
 }
 
 function convertPercentageToValue(percentage: number) {
