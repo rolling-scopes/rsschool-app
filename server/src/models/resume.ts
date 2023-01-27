@@ -3,10 +3,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Index,
-  ManyToOne,
   Generated,
   UpdateDateColumn,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { LanguageLevel } from './data';
 import { User } from './user';
@@ -27,7 +27,7 @@ export class Resume {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ nullable: true })
+  @Column()
   @Index()
   userId: number | null;
 
