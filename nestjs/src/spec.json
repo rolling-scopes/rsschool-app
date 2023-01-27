@@ -1001,7 +1001,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JoinTeamDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamInfoDto" } } }
           }
         },
         "tags": ["team"]
@@ -2766,7 +2766,8 @@
           "githubId": { "type": "string" },
           "rank": { "type": "number" },
           "totalScore": { "type": "number" },
-          "location": { "type": "string" }
+          "location": { "type": "string" },
+          "cvUuid": { "type": "string" }
         },
         "required": [
           "id",
@@ -2778,7 +2779,8 @@
           "githubId",
           "rank",
           "totalScore",
-          "location"
+          "location",
+          "cvUuid"
         ]
       },
       "TeamDto": {
@@ -2788,11 +2790,11 @@
           "name": { "type": "string" },
           "chatLink": { "type": "string" },
           "description": { "type": "string" },
-          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } },
           "teamLeadId": { "type": "number" },
-          "teamDistributionId": { "type": "number" }
+          "teamDistributionId": { "type": "number" },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/TeamDistributionStudentDto" } }
         },
-        "required": ["id", "name", "chatLink", "description", "students", "teamLeadId", "teamDistributionId"]
+        "required": ["id", "name", "chatLink", "description", "teamLeadId", "teamDistributionId", "students"]
       },
       "TeamDistributionDetailedDto": {
         "type": "object",
@@ -2837,7 +2839,7 @@
           "chatLink": { "type": "string" },
           "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink", "studentIds"]
+        "required": ["name", "description", "chatLink"]
       },
       "UpdateTeamDto": {
         "type": "object",
@@ -2847,7 +2849,7 @@
           "chatLink": { "type": "string" },
           "studentIds": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["name", "description", "chatLink", "studentIds"]
+        "required": ["name", "description", "chatLink"]
       },
       "TeamPasswordDto": {
         "type": "object",
@@ -2855,6 +2857,18 @@
         "required": ["password"]
       },
       "JoinTeamDto": { "type": "object", "properties": { "password": { "type": "string" } }, "required": ["password"] },
+      "TeamInfoDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "chatLink": { "type": "string" },
+          "description": { "type": "string" },
+          "teamLeadId": { "type": "number" },
+          "teamDistributionId": { "type": "number" }
+        },
+        "required": ["id", "name", "chatLink", "description", "teamLeadId", "teamDistributionId"]
+      },
       "SelfEducationQuestionSelectedAnswersDto": {
         "type": "object",
         "properties": {

@@ -70,7 +70,7 @@ export default function MyTeamSection({
           </Button>
         </Space>
       </Row>
-      <StudentsTable content={myTeam.students} pagination={false} />
+      <StudentsTable content={myTeam.students} pagination={false} teamLeadId={myTeam.teamLeadId} />
     </Space>
   );
 }

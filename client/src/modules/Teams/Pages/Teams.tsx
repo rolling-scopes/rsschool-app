@@ -12,14 +12,18 @@ import {
 } from '../components';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
-import { CreateTeamDto, JoinTeamDto, TeamApi, TeamDto } from 'api';
+import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useDistribution, useModal } from '../hooks';
 
 const teamApi = new TeamApi();
 
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
-  const { distribution, loadDistribution, loading } = useDistribution(teamDistributionDetailed, course.id);
+  const {
+    distribution,
+    loadDistribution,
+    loading: loadingDistribution,
+  } = useDistribution(teamDistributionDetailed, course.id);
   const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModal<Partial<TeamDto>>();
 
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
@@ -104,7 +108,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
 
   return (
     <PageLayout
-      loading={loading}
+      loading={loadingDistribution}
       title="RS Teams"
       background="#F0F2F5"
       githubId={session.githubId}

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateTeamDto {
@@ -17,7 +17,7 @@ export class CreateTeamDto {
   @ApiProperty()
   public chatLink: string;
 
+  @ApiPropertyOptional({ type: [Number] })
   @IsOptional()
-  @ApiProperty({ type: [Number] })
-  public studentIds: number[];
+  public studentIds?: number[];
 }
