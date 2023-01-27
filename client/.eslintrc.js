@@ -27,6 +27,7 @@ module.exports = {
     'react/display-name': 0,
     'react/no-unescaped-entities': 0,
     'react/no-unknown-property': [2, { ignore: ['jsx', 'global'] }],
+    'react/jsx-no-target-blank': 0,
   },
   overrides: [
     {
