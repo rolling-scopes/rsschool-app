@@ -1,6 +1,6 @@
 import { Typography, Form, Radio } from 'antd';
 import { EXTRAS, LABELS } from 'modules/Registry/constants';
-import { FormCard } from '../FormCard';
+import { FormCard } from 'modules/Registry/components';
 
 const { Title } = Typography;
 

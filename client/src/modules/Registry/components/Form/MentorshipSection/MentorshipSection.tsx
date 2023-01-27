@@ -1,9 +1,7 @@
 import { DisciplineDto } from 'api';
 import { Course } from 'services/models';
 import css from 'styled-jsx/css';
-import { AdditionalInfo } from '../../AdditionalInfo';
-import { Disciplines } from '../../Disciplines';
-import { Preferences } from '../../Preferences';
+import { Preferences, Disciplines, AdditionalInfo } from 'modules/Registry/components';
 
 type Props = {
   checkedList: number[];

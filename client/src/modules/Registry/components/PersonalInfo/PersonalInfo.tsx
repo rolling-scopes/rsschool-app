@@ -1,7 +1,7 @@
 import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from 'common/models';
-import { FormCard } from '../FormCard';
+import { FormCard } from 'modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
 import { LocationSelect } from 'components/Forms';

@@ -1,7 +1,7 @@
 import { Form, Checkbox, Row, Empty, Typography } from 'antd';
 import { DisciplineDto } from 'api';
 import { LABELS, VALIDATION_RULES } from 'modules/Registry/constants';
-import { FormCard } from '../FormCard';
+import { FormCard } from 'modules/Registry/components';
 
 type Props = {
   disciplines: DisciplineDto[];

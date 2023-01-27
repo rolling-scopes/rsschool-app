@@ -1,7 +1,7 @@
 import { Alert, Button, Form, Input, Typography } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { emailPattern, phonePattern } from 'services/validators';
-import { FormCard } from '../FormCard';
+import { FormCard } from 'modules/Registry/components';
 
 const { Title, Paragraph } = Typography;
 

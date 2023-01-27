@@ -3,7 +3,7 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { Form } from 'antd';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
 import { Course } from 'services/models';
-import { AdditionalInfo } from './index';
+import { AdditionalInfo } from './AdditionalInfo';
 
 const preferedCourses = [
   {

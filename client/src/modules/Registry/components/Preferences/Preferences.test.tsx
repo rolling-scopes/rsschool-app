@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { LABELS } from 'modules/Registry/constants';
-import { Preferences } from './index';
+import { Preferences } from './Preferences';
 
 const setup = () =>
   render(

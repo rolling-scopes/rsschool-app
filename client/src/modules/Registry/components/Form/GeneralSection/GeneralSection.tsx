@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import css from 'styled-jsx/css';
 import { Location } from 'common/models';
-import { PersonalInfo } from '../../PersonalInfo';
-import { ContactInfo } from '../../ContactInfo';
+import { PersonalInfo, ContactInfo } from 'modules/Registry/components';
 
 type Props = {
   location: Location | null;

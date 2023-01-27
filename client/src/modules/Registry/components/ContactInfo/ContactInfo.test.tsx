@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
-import { ContactInfo } from './index';
+import { ContactInfo } from './ContactInfo';
 
 const mockValues = {
   contactsTelegram: 'telegram',

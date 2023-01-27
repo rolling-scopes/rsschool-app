@@ -10,7 +10,7 @@ import {
 } from 'modules/Registry/constants';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
-import { FormCard } from '../FormCard';
+import { FormCard } from 'modules/Registry/components';
 
 type Props = {
   checkedList: number[];
