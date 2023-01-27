@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Sel
 import withSession, { Session } from 'components/withSession';
 import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { githubRepoUrl, urlPattern } from 'services/validators';
@@ -34,7 +34,7 @@ function Page(props: Props) {
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState<ModalData>(null);
   const [modalAction, setModalAction] = useState('update');
-  const [modalValues, setModalValues] = useState<any>({});
+  const [, setModalValues] = useState<any>({});
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
 
   const { loading } = useAsync(async () => {
@@ -103,17 +103,13 @@ function Page(props: Props) {
       setDataCriteria(addKeyAndIndex(newCriteria));
     };
 
-    const allTags = useMemo(() => union(...data.map(d => d.tags || [])), [data]);
-    const allSkills = useMemo(
-      () =>
-        union(
-          data
-            .map(d => d.skills || [])
-            .concat(SKILLS)
-            .flat()
-            .sort(),
-        ),
-      [data],
+    const allTags = union(...data.map(d => d.tags || []));
+    const allSkills = union(
+      data
+        .map(d => d.skills || [])
+        .concat(SKILLS)
+        .flat()
+        .sort(),
     );
     return (
       <ModalForm
@@ -249,7 +245,7 @@ function Page(props: Props) {
         </Collapse>
       </ModalForm>
     );
-  }, [modalData, modalValues, modalLoading, handleModalSubmit, dataCriteria]);
+  }, [data, modalData, handleModalSubmit, modalLoading, disciplines, dataCriteria]);
 
   return (
     <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
