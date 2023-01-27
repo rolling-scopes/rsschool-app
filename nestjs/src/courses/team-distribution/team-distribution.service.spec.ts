@@ -51,7 +51,7 @@ describe('TeamDistributionService', () => {
 
   describe('findByCourseId', () => {
     it('should return the distributions of the given courseId', async () => {
-      const result = await service.findByCourseId(1);
+      await service.findByCourseId(1);
       expect(repository.find).toHaveBeenCalledWith({
         where: { courseId: 1 },
         order: {
@@ -63,7 +63,7 @@ describe('TeamDistributionService', () => {
 
   describe('getById', () => {
     it('should return the distribution with the given id', async () => {
-      const result = await service.getById(1);
+      await service.getById(1);
       expect(repository.findOneOrFail).toHaveBeenCalledWith({ where: { id: 1 } });
     });
   });
