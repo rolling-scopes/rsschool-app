@@ -1,6 +1,6 @@
 import { Button, notification, Row, Space, Typography } from 'antd';
 import { EditTwoTone, CopyOutlined } from '@ant-design/icons';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { useCopyToClipboard } from 'react-use';
