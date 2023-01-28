@@ -171,7 +171,11 @@ export class TeamDistributionService {
     teamDistributionId: number,
   ) {
     const randomTeamsCount = Math.ceil(teamDistributionStudent.length / teamSize);
-    const passwords = await Promise.all(Array(randomTeamsCount).map(_ => this.teamService.generatePassword()));
+    const passwords = await Promise.all(
+      Array(randomTeamsCount)
+        .fill(6)
+        .map(e => this.teamService.generatePassword(e)),
+    );
     const teams: Pick<Team, 'name' | 'students' | 'description' | 'password' | 'teamDistributionId'>[] = Array(
       randomTeamsCount,
     )
@@ -195,7 +199,10 @@ export class TeamDistributionService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.save(Team, teams);
+      await queryRunner.manager.save(
+        Team,
+        teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id })),
+      );
       await queryRunner.manager.save(
         TeamDistributionStudent,
         teamDistributionStudent.map(s => ({ ...s, distributed: true })),
