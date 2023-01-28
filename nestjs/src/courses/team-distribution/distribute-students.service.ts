@@ -93,13 +93,8 @@ export class DistributeStudentsService {
     }
   }
 
-  private async createRandomTeams(
-    teamDistributionStudent: TeamDistributionStudent[],
-    teamSize: number,
-    teamDistributionId: number,
-  ) {
-    const randomTeamsCount = Math.ceil(teamDistributionStudent.length / teamSize);
-
+  private async createInitialTeams(studentsCount: number, teamSize: number, teamDistributionId: number) {
+    const randomTeamsCount = Math.ceil(studentsCount / teamSize);
     const teams: Pick<Team, 'name' | 'students' | 'description' | 'password' | 'teamDistributionId'>[] =
       await Promise.all(
         Array(randomTeamsCount)
@@ -115,7 +110,17 @@ export class DistributeStudentsService {
             };
           }),
       );
+    return teams;
+  }
 
+  private async createRandomTeams(
+    teamDistributionStudent: TeamDistributionStudent[],
+    teamSize: number,
+    teamDistributionId: number,
+  ) {
+    const teams = await this.createInitialTeams(teamDistributionStudent.length, teamSize, teamDistributionId);
+
+    // Assign students to teams
     teamDistributionStudent.forEach((el, index) => {
       const roundDistribution = Math.floor(index / teamSize) + 1;
       const teamForStudentIndex =
@@ -124,6 +129,8 @@ export class DistributeStudentsService {
       const team = teams.at(teamForStudentIndex);
       team?.students?.push(el.student);
     });
+
+    // Save teams and teamDistributionStudent
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
