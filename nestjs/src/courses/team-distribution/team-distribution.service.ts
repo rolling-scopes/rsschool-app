@@ -171,22 +171,23 @@ export class TeamDistributionService {
     teamDistributionId: number,
   ) {
     const randomTeamsCount = Math.ceil(teamDistributionStudent.length / teamSize);
-    const passwords = await Promise.all(
-      Array(randomTeamsCount)
-        .fill(6)
-        .map(e => this.teamService.generatePassword(e)),
-    );
-    const teams: Pick<Team, 'name' | 'students' | 'description' | 'password' | 'teamDistributionId'>[] = Array(
-      randomTeamsCount,
-    )
-      .fill({})
-      .map((_, index) => ({
-        name: `Random team #${index + 1}`,
-        students: [],
-        description: 'This team was created by random distribution.',
-        password: passwords[index] ?? '123456',
-        teamDistributionId: teamDistributionId,
-      }));
+
+    const teams: Pick<Team, 'name' | 'students' | 'description' | 'password' | 'teamDistributionId'>[] =
+      await Promise.all(
+        Array(randomTeamsCount)
+          .fill({})
+          .map(async (_, index) => {
+            const password = await this.teamService.generatePassword();
+            return {
+              name: `Random team #${index + 1}`,
+              students: [],
+              description: 'This team was created by random distribution.',
+              password,
+              teamDistributionId,
+            };
+          }),
+      );
+
     teamDistributionStudent.forEach((el, index) => {
       const roundDistribution = Math.floor(index / teamSize) + 1;
       const teamForStudentIndex =
