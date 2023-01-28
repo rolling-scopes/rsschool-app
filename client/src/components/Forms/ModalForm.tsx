@@ -16,10 +16,12 @@ type Props = {
 };
 
 export function ModalForm(props: Props) {
+  const antForm = Form.useForm()[0];
+  const form = props.form || antForm;
+
   if (props.data == null) {
     return null;
   }
-  const form = props.form || Form.useForm()[0];
   const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
   return (
     <Modal
