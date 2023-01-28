@@ -3,7 +3,6 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TeamDistributionDto } from 'api';
 import { DistributionPeriod } from './DistributionPeriod';
 import { Actions } from './Actions';
-import { useMedia } from 'react-use';
 
 type Props = {
   distribution: TeamDistributionDto;
@@ -24,8 +23,6 @@ export default function TeamDistributionCard({
   deleteRegister,
   courseAlias,
 }: Props) {
-  const mobileView = useMedia('(max-width: 720px)');
-
   return (
     <Card
       style={{ marginTop: 24 }}
@@ -34,12 +31,8 @@ export default function TeamDistributionCard({
       actions={
         isManager
           ? [
-              <Button key="edit" icon={<EditOutlined />} onClick={() => onEdit(distribution)}>
-                {!mobileView && 'Edit Team Distribution'}
-              </Button>,
-              <Button key="delete" icon={<DeleteOutlined />} onClick={() => onDelete(distribution.id)}>
-                {!mobileView && 'Delete Team Distribution'}
-              </Button>,
+              <Button key="edit" icon={<EditOutlined />} onClick={() => onEdit(distribution)} />,
+              <Button key="delete" icon={<DeleteOutlined />} onClick={() => onDelete(distribution.id)} />,
             ]
           : undefined
       }
