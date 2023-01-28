@@ -12,11 +12,10 @@ type Props = {
 };
 
 export const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
+  const [form] = Form.useForm();
   const { courses, visibleCourses } = props;
 
   if (!courses?.length) return <Typography.Text>No courses to show</Typography.Text>;
-
-  const [form] = Form.useForm();
 
   const data = courses.reduce((acc: Record<string, boolean>, { id }) => {
     acc[id] = visibleCourses.includes(id);

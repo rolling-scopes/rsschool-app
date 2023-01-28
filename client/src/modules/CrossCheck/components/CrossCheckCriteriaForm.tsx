@@ -123,7 +123,7 @@ export function CrossCheckCriteriaForm({
           <>
             <Typography.Title level={4}>Penalty</Typography.Title>
             {penaltyData?.map((task: CrossCheckCriteriaData) => (
-              <PenaltyCriteria penaltyData={task} updatePenalty={updatePenalty} penaltyCount={penalty} />
+              <PenaltyCriteria key={task.key} penaltyData={task} updatePenalty={updatePenalty} penaltyCount={penalty} />
             ))}
           </>
         )}
