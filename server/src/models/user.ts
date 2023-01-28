@@ -19,7 +19,7 @@ import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
 import { CourseUser } from './courseUser';
-import { NotificationUserConnection } from '.';
+import { NotificationUserConnection, Resume } from '.';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -169,6 +169,9 @@ export class User {
 
   @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.user, { nullable: true })
   mentors: Mentor[] | null;
+
+  @OneToMany(() => Resume, (resume: Resume) => resume.user, { nullable: true })
+  resume: Resume[] | null;
 
   @OneToMany(_ => Student, (student: Student) => student.user, { nullable: true })
   students: Student[] | null;

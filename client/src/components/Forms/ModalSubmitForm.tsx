@@ -29,11 +29,12 @@ export function ModalSubmitForm({
   errorText,
   open,
 }: Props) {
+  const [form] = Form.useForm();
+
   if (data == null) {
     return null;
   }
 
-  const [form] = Form.useForm();
   const initialValues = getInitialValues ? getInitialValues?.(data) : data;
 
   function onSubmit(): ((e: React.MouseEvent<HTMLElement, MouseEvent>) => void) | undefined {

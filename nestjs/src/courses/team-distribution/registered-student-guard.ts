@@ -1,10 +1,10 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { CourseRole, CurrentRequest } from 'src/auth';
-import { StudentsService } from '../students';
+import { TeamDistributionStudentService } from './team-distribution-student.service';
 
 @Injectable()
 export class RegisteredStudentOrManagerGuard implements CanActivate {
-  constructor(private studentsService: StudentsService) {}
+  constructor(private teamDistributionStudentService: TeamDistributionStudentService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const [request] = context.getArgs<[CurrentRequest]>();
@@ -19,11 +19,12 @@ export class RegisteredStudentOrManagerGuard implements CanActivate {
       return true;
     }
 
-    const student = await this.studentsService.getStudentWithTeamsAndDistribution(studentId);
-    const distribution = student.teamDistribution.find(d => d.id === distributionId);
-    const team = student.teams.find(t => t.teamDistributionId === distributionId);
+    const registration = await this.teamDistributionStudentService.getTeamDistributionStudent(
+      studentId,
+      distributionId,
+    );
 
-    if (!team && !distribution) {
+    if (!registration?.active && !registration?.distributed) {
       throw new UnauthorizedException();
     }
 

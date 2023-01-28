@@ -1,18 +1,31 @@
-import { Space, Typography } from 'antd';
+import { Space, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
 import { TeamOutlined } from '@ant-design/icons';
 const { Text, Link } = Typography;
 
-function renderName({ fullName, cvLink, id }: TeamDistributionStudentDto, teamLeadId?: number) {
-  return (
-    <Link target="_blank" href={cvLink}>
+function renderName({ fullName, cvUuid, id }: TeamDistributionStudentDto, teamLeadId?: number) {
+  return cvUuid ? (
+    <Link target="_blank" href={`${window.location.origin}/cv/${cvUuid}`}>
       <Space size="small">
         {fullName}
-        {id === teamLeadId && <TeamOutlined twoToneColor="#40A9FF" />}
+        {id === teamLeadId && (
+          <Tag color="blue">
+            <TeamOutlined color="white" />
+          </Tag>
+        )}
       </Space>
     </Link>
+  ) : (
+    <Space size="small">
+      {fullName}
+      {id === teamLeadId && (
+        <Tag color="blue">
+          <TeamOutlined color="white" />
+        </Tag>
+      )}
+    </Space>
   );
 }
 
