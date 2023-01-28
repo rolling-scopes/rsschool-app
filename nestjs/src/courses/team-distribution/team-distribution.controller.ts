@@ -15,6 +15,7 @@ import { TeamService } from './team.service';
 import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { Student } from '@entities/index';
+import { DistributeStudentsService } from './distribute-students.service';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -24,6 +25,7 @@ export class TeamDistributionController {
     private readonly teamDistributionService: TeamDistributionService,
     private readonly teamService: TeamService,
     private readonly teamDistributionStudentService: TeamDistributionStudentService,
+    private readonly distributeStudentsService: DistributeStudentsService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
@@ -176,6 +178,6 @@ export class TeamDistributionController {
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    await this.teamDistributionService.distributeStudents(id);
+    await this.distributeStudentsService.distributeStudents(id);
   }
 }
