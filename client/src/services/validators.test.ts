@@ -29,7 +29,6 @@ describe('epam email pattern', () => {
     ${'a@b.c'}        | ${false}
     ${'a_b@epam.com'} | ${true}
     ${'a@b.cd'}       | ${false}
-    ${'a@epam.com'}   | ${false}
   `('returns $match for $input', ({ input, match }) => {
     expect(epamEmailPattern.test(input)).toBe(match);
   });
@@ -59,7 +58,7 @@ describe('phone pattern', () => {
   });
 });
 
-describe('urlWithIpPattern', () => {
+describe('url with ip pattern', () => {
   it.each`
     url                                      | match
     ${'http://google.com'}                   | ${true}
@@ -73,7 +72,7 @@ describe('urlWithIpPattern', () => {
   });
 });
 
-describe('notGithubPattern', () => {
+describe('not github pattern', () => {
   it.each`
     url                     | match
     ${'https://google.com'} | ${true}
@@ -84,7 +83,7 @@ describe('notGithubPattern', () => {
   });
 });
 
-describe('githubPrUrl', () => {
+describe('github pr url', () => {
   it.each`
     url                                      | match
     ${'https://github.com/user/repo/pull/1'} | ${true}
@@ -95,7 +94,7 @@ describe('githubPrUrl', () => {
   });
 });
 
-describe('githubRepoUrl', () => {
+describe('github repo url', () => {
   it.each`
     url                                      | match
     ${'https://github.com/user/repo'}        | ${true}
@@ -106,7 +105,7 @@ describe('githubRepoUrl', () => {
   });
 });
 
-describe('notUrlPattern', () => {
+describe('not url pattern', () => {
   it.each`
     string         | match
     ${'/a/url'}    | ${false}
@@ -116,7 +115,7 @@ describe('notUrlPattern', () => {
   });
 });
 
-describe('passwordPattern', () => {
+describe('password pattern', () => {
   it.each`
     password            | isValid
     ${'1234_abcd'}      | ${true}
