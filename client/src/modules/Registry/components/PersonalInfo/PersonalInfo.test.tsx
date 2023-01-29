@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
 import { PersonalInfo } from './PersonalInfo';
@@ -11,30 +11,25 @@ const mockValues = {
   contactsEpamEmail: 'john_doe@epam.com',
 };
 
-const setup = () =>
+type Values = typeof mockValues | Record<string, unknown>;
+
+const renderPersonalInfo = (values: Values = mockValues) =>
   render(
-    <Form initialValues={mockValues}>
+    <Form role="form" initialValues={values}>
       <PersonalInfo location={null} setLocation={jest.fn()} />
     </Form>,
   );
 
 describe('PersonalInfo', () => {
-  afterEach(() => {
-    cleanup();
-  });
+  test.each(
+    Object.values(mockValues)
+      .filter(Boolean)
+      .map(value => ({ value })),
+  )('should render form item with $value value', async ({ value }) => {
+    renderPersonalInfo();
 
-  test('should render form items with proper values', async () => {
-    setup();
-
-    const firstName = await screen.findByDisplayValue(mockValues.firstName);
-    const lastName = await screen.findByDisplayValue(mockValues.lastName);
-    const primaryEmail = await screen.findByDisplayValue(mockValues.primaryEmail);
-    const contactsEpamEmail = await screen.findByDisplayValue(mockValues.contactsEpamEmail);
-
-    expect(firstName).toBeInTheDocument();
-    expect(lastName).toBeInTheDocument();
-    expect(primaryEmail).toBeInTheDocument();
-    expect(contactsEpamEmail).toBeInTheDocument();
+    const item = await screen.findByDisplayValue(value as string);
+    expect(item).toBeInTheDocument();
   });
 
   test.each`
@@ -44,13 +39,14 @@ describe('PersonalInfo', () => {
     ${LABELS.primaryEmail}
     ${LABELS.epamEmail}
   `('should render field with $label label', async ({ label }) => {
-    setup();
+    renderPersonalInfo();
+
     const fieldLabel = await screen.findByLabelText(label);
     expect(fieldLabel).toBeInTheDocument();
   });
 
   test('should render field with location label', async () => {
-    setup();
+    renderPersonalInfo();
     const fieldLabel = await screen.findByText(LABELS.location);
     expect(fieldLabel).toBeInTheDocument();
   });
@@ -62,105 +58,52 @@ describe('PersonalInfo', () => {
     ${PLACEHOLDERS.email}
     ${PLACEHOLDERS.epamEmail}
   `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    setup();
+    renderPersonalInfo();
+
     const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
     expect(fieldPlaceholder).toBeInTheDocument();
   });
 
-  test('should render error message on wrong email input', async () => {
-    setup();
+  test.each`
+    placeholder               | message
+    ${PLACEHOLDERS.email}     | ${ERROR_MESSAGES.email}
+    ${PLACEHOLDERS.epamEmail} | ${ERROR_MESSAGES.epamEmail}
+    ${PLACEHOLDERS.firstName} | ${ERROR_MESSAGES.inEnglish('First name')}
+    ${PLACEHOLDERS.lastName}  | ${ERROR_MESSAGES.inEnglish('Last name')}
+  `('should not render $message error message on valid input', async ({ placeholder, message }) => {
+    renderPersonalInfo();
 
-    const wrongEmail = 'test';
-
-    const emailInput = await screen.findByPlaceholderText(PLACEHOLDERS.email);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.email);
-    expect(emailInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(emailInput, {
-      target: {
-        value: wrongEmail,
-      },
-    });
-
-    expect(emailInput).toHaveValue(wrongEmail);
-
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.email);
-    expect(errorMessage).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText(placeholder);
+    const errorMessage = screen.queryByText(message);
+    expect(input).toBeInTheDocument();
+    expect(errorMessage).not.toBeInTheDocument();
   });
 
-  test('should render error message on wrong EPAM email input', async () => {
-    setup();
+  test.each`
+    placeholder               | value              | message
+    ${PLACEHOLDERS.email}     | ${'test'}          | ${ERROR_MESSAGES.email}
+    ${PLACEHOLDERS.epamEmail} | ${'test@epam.com'} | ${ERROR_MESSAGES.epamEmail}
+    ${PLACEHOLDERS.firstName} | ${'Róża'}          | ${ERROR_MESSAGES.inEnglish('First name')}
+    ${PLACEHOLDERS.lastName}  | ${'Wójcik'}        | ${ERROR_MESSAGES.inEnglish('Last name')}
+  `('should render $message error message on invalid input', async ({ placeholder, value, message }) => {
+    renderPersonalInfo();
 
-    const wrongEmail = 'test@test.com';
+    const input = await screen.findByPlaceholderText(placeholder);
 
-    const emailInput = await screen.findByPlaceholderText(PLACEHOLDERS.epamEmail);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.epamEmail);
-    expect(emailInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(emailInput, {
+    fireEvent.change(input, {
       target: {
-        value: wrongEmail,
+        value,
       },
     });
 
-    expect(emailInput).toHaveValue(wrongEmail);
+    expect(input).toHaveValue(value);
 
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.epamEmail);
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  test('should render error message on wrong first name input', async () => {
-    setup();
-
-    const wrongName = 'Джон';
-
-    const nameInput = await screen.findByPlaceholderText(PLACEHOLDERS.firstName);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.inEnglish('First name'));
-    expect(nameInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(nameInput, {
-      target: {
-        value: wrongName,
-      },
-    });
-
-    expect(nameInput).toHaveValue(wrongName);
-
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.inEnglish('First name'));
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  test('should render error message on wrong last name input', async () => {
-    setup();
-
-    const wrongName = 'Доу';
-
-    const nameInput = await screen.findByPlaceholderText(PLACEHOLDERS.lastName);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.inEnglish('Last name'));
-    expect(nameInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(nameInput, {
-      target: {
-        value: wrongName,
-      },
-    });
-
-    expect(nameInput).toHaveValue(wrongName);
-
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.inEnglish('Last name'));
+    const errorMessage = await screen.findByText(message);
     expect(errorMessage).toBeInTheDocument();
   });
 
   test('should render error messages only on required fields', async () => {
-    render(
-      <Form role="form" name="test" initialValues={{}}>
-        <PersonalInfo location={null} setLocation={jest.fn()} />
-      </Form>,
-    );
+    renderPersonalInfo({});
 
     const form = screen.getByRole('form');
     fireEvent.submit(form);

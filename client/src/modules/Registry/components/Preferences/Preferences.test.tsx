@@ -1,9 +1,9 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { LABELS } from 'modules/Registry/constants';
 import { Preferences } from './Preferences';
 
-const setup = () =>
+const renderPreferences = () =>
   render(
     <Form>
       <Preferences />
@@ -11,17 +11,15 @@ const setup = () =>
   );
 
 describe('Preferences', () => {
-  afterEach(() => {
-    cleanup();
-  });
+  test.each`
+    value
+    ${2}
+    ${'any'}
+  `('should render form item with $value value', async ({ value }) => {
+    renderPreferences();
 
-  test('should render form items with proper values', async () => {
-    setup();
-
-    const limit = await screen.findByDisplayValue(2);
-    const location = await screen.findByDisplayValue('any');
-    expect(limit).toBeInTheDocument();
-    expect(location).toBeInTheDocument();
+    const item = await screen.findByDisplayValue(value);
+    expect(item).toBeInTheDocument();
   });
 
   test.each`
@@ -29,7 +27,8 @@ describe('Preferences', () => {
     ${LABELS.studentsCount}
     ${LABELS.studentsLocation}
   `('should render field with $label label', async ({ label }) => {
-    setup();
+    renderPreferences();
+
     const fieldLabel = await screen.findByTitle(label);
     expect(fieldLabel).toBeInTheDocument();
   });

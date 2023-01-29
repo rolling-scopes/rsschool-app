@@ -14,23 +14,20 @@ const mockDisciplines = [
 ] as DisciplineDto[];
 
 describe('Disciplines', () => {
-  test('should render form item with proper values', async () => {
+  test.each(mockDisciplines)('should render form item with $name value', async ({ name }) => {
     render(
       <Form>
         <Disciplines disciplines={mockDisciplines} />
       </Form>,
     );
 
-    const js = await screen.findByDisplayValue(mockDisciplines[0].name);
-    const ts = await screen.findByDisplayValue(mockDisciplines[1].name);
-
-    expect(js).toBeInTheDocument();
-    expect(ts).toBeInTheDocument();
+    const item = await screen.findByDisplayValue(name);
+    expect(item).toBeInTheDocument();
   });
 
   test(`should render field with "${LABELS.disciplines}" label`, async () => {
     render(
-      <Form name="test">
+      <Form>
         <Disciplines disciplines={mockDisciplines} />
       </Form>,
     );
@@ -41,7 +38,7 @@ describe('Disciplines', () => {
 
   test("should render <Empty /> when there's no disciplines", async () => {
     render(
-      <Form name="test">
+      <Form>
         <Disciplines disciplines={[]} />
       </Form>,
     );

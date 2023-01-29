@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { ContactInfo } from './ContactInfo';
@@ -12,7 +12,7 @@ const mockValues = {
   contactsNotes: 'notes',
 };
 
-const setup = () =>
+const renderContactInfo = () =>
   render(
     <Form initialValues={mockValues}>
       <ContactInfo />
@@ -20,39 +20,25 @@ const setup = () =>
   );
 
 describe('ContactInfo', () => {
-  afterEach(() => {
-    cleanup();
-  });
+  test.each(Object.values(mockValues).map(value => ({ value })))(
+    'should render form item with $value value',
+    async ({ value }) => {
+      renderContactInfo();
 
-  test('should render form items with proper values', async () => {
-    setup();
-
-    const telegram = await screen.findByDisplayValue(mockValues.contactsTelegram);
-    const skype = await screen.findByDisplayValue(mockValues.contactsSkype);
-    const whatsApp = await screen.findByDisplayValue(mockValues.contactsWhatsApp);
-    const email = await screen.findByDisplayValue(mockValues.contactsEmail);
-    const phone = await screen.findByDisplayValue(mockValues.contactsPhone);
-    const notes = await screen.findByDisplayValue(mockValues.contactsNotes);
-
-    expect(telegram).toBeInTheDocument();
-    expect(skype).toBeInTheDocument();
-    expect(whatsApp).toBeInTheDocument();
-    expect(email).toBeInTheDocument();
-    expect(phone).toBeInTheDocument();
-    expect(notes).toBeInTheDocument();
-  });
+      const item = await screen.findByDisplayValue(value);
+      expect(item).toBeInTheDocument();
+    },
+  );
 
   test('should render Continue button', async () => {
-    setup();
+    renderContactInfo();
 
-    const button = await screen.findByRole('button');
-
+    const button = await screen.findByRole('button', { name: /continue/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('Continue');
   });
 
   test('should render Telegram bot link', async () => {
-    setup();
+    renderContactInfo();
 
     const link = await screen.findByRole('link');
     expect(link).toBeInTheDocument();
@@ -68,7 +54,8 @@ describe('ContactInfo', () => {
     ${LABELS.phone}
     ${LABELS.notes}
   `('should render field with $label label', async ({ label }) => {
-    setup();
+    renderContactInfo();
+
     const fieldLabel = await screen.findByLabelText(label);
     expect(fieldLabel).toBeInTheDocument();
   });
@@ -82,52 +69,43 @@ describe('ContactInfo', () => {
     ${PLACEHOLDERS.phone}
     ${PLACEHOLDERS.notes}
   `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    setup();
+    renderContactInfo();
+
     const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
     expect(fieldPlaceholder).toBeInTheDocument();
   });
 
-  test('should render error message on wrong email input', async () => {
-    setup();
+  test.each`
+    placeholder           | message
+    ${PLACEHOLDERS.email} | ${ERROR_MESSAGES.email}
+    ${PLACEHOLDERS.phone} | ${ERROR_MESSAGES.phone}
+  `('should not render $message error message on valid input', async ({ placeholder, message }) => {
+    renderContactInfo();
 
-    const wrongEmail = 'test';
-
-    const emailInput = await screen.findByPlaceholderText(PLACEHOLDERS.email);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.email);
-    expect(emailInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(emailInput, {
-      target: {
-        value: wrongEmail,
-      },
-    });
-
-    expect(emailInput).toHaveValue(wrongEmail);
-
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.email);
-    expect(errorMessage).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText(placeholder);
+    const errorMessage = screen.queryByText(message);
+    expect(input).toBeInTheDocument();
+    expect(errorMessage).not.toBeInTheDocument();
   });
 
-  test('should render error message on wrong phone input', async () => {
-    setup();
+  test.each`
+    placeholder           | value          | message
+    ${PLACEHOLDERS.email} | ${'test'}      | ${ERROR_MESSAGES.email}
+    ${PLACEHOLDERS.phone} | ${String(123)} | ${ERROR_MESSAGES.phone}
+  `('should render $message error message on invalid input', async ({ placeholder, value, message }) => {
+    renderContactInfo();
 
-    const wrongPhone = '123';
+    const input = await screen.findByPlaceholderText(placeholder);
 
-    const phoneInput = await screen.findByPlaceholderText(PLACEHOLDERS.phone);
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.phone);
-    expect(phoneInput).toBeInTheDocument();
-    expect(noErrorMessage).not.toBeInTheDocument();
-
-    fireEvent.change(phoneInput, {
+    fireEvent.change(input, {
       target: {
-        value: wrongPhone,
+        value,
       },
     });
 
-    expect(phoneInput).toHaveValue(wrongPhone);
+    expect(input).toHaveValue(value);
 
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.phone);
+    const errorMessage = await screen.findByText(message);
     expect(errorMessage).toBeInTheDocument();
   });
 });

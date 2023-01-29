@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-unnecessary-act */
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
 import { Course } from 'services/models';
@@ -27,7 +27,7 @@ const previousHandler = jest.fn();
 const submitHandler = jest.fn();
 const submitFailedHandler = jest.fn();
 
-const setup = (values: Values) =>
+const renderAdditionalInfo = (values: Values) =>
   render(
     <Form initialValues={values} onFinish={submitHandler} onFinishFailed={submitFailedHandler}>
       <AdditionalInfo courses={preferedCourses} checkedList={[1]} onPrevious={previousHandler} />
@@ -37,59 +37,72 @@ const setup = (values: Values) =>
 describe('AdditionalInfo', () => {
   afterEach(() => {
     jest.clearAllMocks();
-    cleanup();
   });
 
   test('should call previousHandler', async () => {
-    setup(mockValues);
-    const button = await screen.findByText('Previous');
+    renderAdditionalInfo(mockValues);
 
+    const button = await screen.findByText('Previous');
     expect(button).toBeInTheDocument();
+
     fireEvent.click(button);
 
-    expect(previousHandler).toHaveBeenCalledTimes(1);
+    expect(previousHandler).toHaveBeenCalled();
   });
 
   test('should call submitHandler', async () => {
-    setup(mockValues);
-    const button = await screen.findByText('Submit');
+    renderAdditionalInfo(mockValues);
 
+    const button = await screen.findByText('Submit');
     expect(button).toBeInTheDocument();
+
     await act(async () => {
       fireEvent.click(button);
     });
 
-    expect(submitHandler).toHaveBeenCalledTimes(1);
+    expect(submitHandler).toHaveBeenCalled();
     expect(submitFailedHandler).not.toHaveBeenCalled();
   });
 
   test('should call submitFailedHandler', async () => {
-    setup({ ...mockValues, dataProcessing: 0 });
-    const button = await screen.findByText('Submit');
+    renderAdditionalInfo({ ...mockValues, dataProcessing: 0 });
 
+    const button = await screen.findByText('Submit');
     expect(button).toBeInTheDocument();
+
     await act(async () => {
       fireEvent.click(button);
     });
 
     expect(submitHandler).not.toHaveBeenCalled();
-    expect(submitFailedHandler).toHaveBeenCalledTimes(1);
+    expect(submitFailedHandler).toHaveBeenCalled();
   });
 
-  test('should render error message on unchecked data processing', async () => {
-    setup(mockValues);
+  test('should render checkbox', async () => {
+    renderAdditionalInfo(mockValues);
 
     const checkbox = await screen.findByRole('checkbox');
-    const noErrorMessage = screen.queryByText(ERROR_MESSAGES.shouldAgree);
     expect(checkbox).toBeInTheDocument();
+  });
+
+  test('should not render error message when checkbox is selected', async () => {
+    renderAdditionalInfo(mockValues);
+
+    const checkbox = await screen.findByRole('checkbox');
+    const errorMessage = screen.queryByText(ERROR_MESSAGES.shouldAgree);
     expect(checkbox).toBeChecked();
-    expect(noErrorMessage).not.toBeInTheDocument();
+    expect(errorMessage).not.toBeInTheDocument();
+  });
+
+  test('should render error message when checkbox is not selected', async () => {
+    renderAdditionalInfo(mockValues);
+
+    const checkbox = await screen.findByRole('checkbox');
 
     fireEvent.click(checkbox);
 
-    expect(checkbox).not.toBeChecked();
-
     const errorMessage = await screen.findByText(ERROR_MESSAGES.shouldAgree);
+    expect(checkbox).not.toBeChecked();
     expect(errorMessage).toBeInTheDocument();
   });
 });
