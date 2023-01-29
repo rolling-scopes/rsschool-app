@@ -44,7 +44,7 @@ export default function WelcomeCard({ isManager, handleCreateTeamDistribution }:
         {isManager && (
           <Col>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTeamDistribution}>
-              Team Distribution
+              Add a new distribution
             </Button>
           </Col>
         )}
