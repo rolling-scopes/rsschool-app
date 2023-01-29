@@ -49,11 +49,14 @@ function Page(props: CoursePageProps) {
   const [assignments, setAssignments] = useState<AssignmentLink[]>([]);
   const [submissionDisabled, setSubmissionDisabled] = useState<boolean>(true);
   const [isUsernameVisible = false, setIsUsernameVisible] = useLocalStorage<boolean>(LocalStorage.IsUsernameVisible);
-  const [state, setState] = useState({ loading: false, data: [] as SolutionReviewType[] });
+  const [state, setState] = useState<{ loading: boolean; data: SolutionReviewType[] }>({
+    loading: false,
+    data: [],
+  });
 
   const [
-    { countStar, penalty, criteriaData, score, criteriaComment },
-    { setCountStar, setPenalty, setCriteriaData, setScore, setComment },
+    { countStar, penalty, criteriaData, criteriaComment },
+    { setCountStar, setPenalty, setCriteriaData, setComment },
   ] = useCriteriaState();
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -72,7 +75,7 @@ function Page(props: CoursePageProps) {
 
     setCriteriaData(taskCriteriaData.criteria ?? []);
     resetCriterias();
-    form.resetFields(['comment']);
+    form.resetFields(['comment', 'score']);
 
     if (!result) {
       return setState({ loading: false, data: [] });
@@ -107,7 +110,7 @@ function Page(props: CoursePageProps) {
   };
 
   const loadInitialCriteria = (data: SolutionReviewType) => {
-    setScore(data.score);
+    form.setFieldValue('score', data.score);
     if (!data.criteria) return;
     setCriteriaData(data.criteria);
     const newCountState = data.criteria
@@ -137,7 +140,6 @@ function Page(props: CoursePageProps) {
     setCountStar([]);
     setComment([]);
     setPenalty([]);
-    setScore(undefined);
   };
 
   const submitReview = withLoading(async values => {
@@ -160,7 +162,7 @@ function Page(props: CoursePageProps) {
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
       resetCriterias();
     } catch (e) {
-      message.error('An error occured. Please try later.');
+      message.error('An error occurred. Please try later.');
     }
   });
 
@@ -204,6 +206,7 @@ function Page(props: CoursePageProps) {
     setCriteriaId(courseTask.taskId);
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
+    setState({ loading: false, data: [] });
     form.resetFields(['score', 'comment', 'githubId']);
   };
 
@@ -267,7 +270,6 @@ function Page(props: CoursePageProps) {
                 countStar={countStar}
                 setCountStar={setCountStar}
                 criteriaData={criteriaData}
-                totalPoints={score}
                 setPenalty={setPenalty}
                 penalty={penalty}
                 criteriaComment={criteriaComment}

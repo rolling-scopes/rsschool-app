@@ -35,7 +35,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
       name: name,
       description: description,
       chatLink: chatLink,
-      studentIds: studentIds ?? undefined,
+      studentIds: isManager ? studentIds : undefined,
     };
   };
 

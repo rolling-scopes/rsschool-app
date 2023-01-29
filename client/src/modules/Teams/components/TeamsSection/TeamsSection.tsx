@@ -5,6 +5,7 @@ import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import { useAsync } from 'react-use';
 import { IPaginationInfo } from 'common/types/pagination';
 import { getColumns, expandedRowRender } from './renderers';
+import { useLoading } from 'components/useLoading';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
@@ -24,8 +25,9 @@ export default function TeamSection({ distribution }: Props) {
     content: [],
     pagination: { current: 1, pageSize: 10 },
   });
+  const [loading, withLoading] = useLoading(false);
 
-  const getTeams = async (pagination: TablePaginationConfig) => {
+  const getTeams = withLoading(async (pagination: TablePaginationConfig) => {
     const { data } = await teamApi.getTeams(
       distribution.courseId,
       distribution.id,
@@ -33,7 +35,7 @@ export default function TeamSection({ distribution }: Props) {
       pagination.current ?? 1,
     );
     setTeams({ ...teams, ...data });
-  };
+  });
 
   const handleChange: TableProps<TeamDto>['onChange'] = pagination => {
     getTeams(pagination);
@@ -52,6 +54,7 @@ export default function TeamSection({ distribution }: Props) {
         dataSource={teams.content}
         columns={getColumns(distribution)}
         expandable={{ expandedRowRender, rowExpandable: record => record.students.length > 0 }}
+        loading={loading}
       />
     </Space>
   );

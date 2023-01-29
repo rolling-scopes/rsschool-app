@@ -1,5 +1,6 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Table } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -162,18 +163,20 @@ function Page(props: CoursePageProps) {
         size="small"
         dataSource={data}
         columns={getColumns(getDropdownMenu)}
+        scroll={{ x: 1020, y: 'calc(100vh - 260px)' }}
       />
       <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
     </AdminPageLayout>
   );
 }
 
-function getColumns(getDropdownMenu: (record: CourseTaskDto) => any) {
+function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsType<CourseTaskDto> {
   return [
-    { title: 'Id', dataIndex: 'id' },
+    { title: 'Id', dataIndex: 'id', fixed: 'left' },
     {
       title: 'Name',
       dataIndex: 'name',
+      fixed: 'left',
     },
     { title: 'Scores Count', dataIndex: 'resultsCount' },
     {

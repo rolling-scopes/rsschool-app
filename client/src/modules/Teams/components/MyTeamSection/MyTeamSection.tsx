@@ -26,13 +26,9 @@ export default function MyTeamSection({
   reloadDistribution,
   setActiveTab,
 }: Props) {
-  // This component is only available to students with a team.
-  if (!distribution.myTeam) {
-    return null;
-  }
   const myTeam = distribution.myTeam;
 
-  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, distribution]);
+  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, myTeam.teamLeadId]);
   const [, copyToClipboard] = useCopyToClipboard();
 
   const copyChatLink = () => {
@@ -46,7 +42,7 @@ export default function MyTeamSection({
     await reloadDistribution();
   };
 
-  return (
+  return distribution.myTeam ? (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
@@ -70,7 +66,7 @@ export default function MyTeamSection({
           </Button>
         </Space>
       </Row>
-      <StudentsTable content={myTeam.students} pagination={false} />
+      <StudentsTable content={myTeam.students} pagination={false} teamLeadId={myTeam.teamLeadId} />
     </Space>
-  );
+  ) : null;
 }

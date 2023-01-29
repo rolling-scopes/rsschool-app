@@ -10,6 +10,8 @@ module.exports = {
     'plugin:jest-dom/recommended',
     'plugin:testing-library/dom',
     'plugin:jest/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
   ],
   env: {
     browser: true,
@@ -21,6 +23,11 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 0,
     'no-console': ['error', { allow: ['warn', 'error'] }],
     '@next/next/no-img-element': 0,
+    'react/react-in-jsx-scope': 0,
+    'react/display-name': 0,
+    'react/no-unescaped-entities': 0,
+    'react/no-unknown-property': [2, { ignore: ['jsx', 'global', 'p-id'] }],
+    'react/jsx-no-target-blank': 0,
   },
   overrides: [
     {
@@ -29,4 +36,9 @@ module.exports = {
       extends: ['plugin:testing-library/react'],
     },
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };

@@ -105,7 +105,7 @@ function Page(props: Props) {
     );
   };
 
-  const renderGroupModal = (modalData: UserGroupDto[]) => {
+  const GroupModal = ({ modalData }: { modalData: UserGroupDto[] }) => {
     const [selectedGroups, setSelectedGroups] = useState<UserGroup[] | null>(null);
     return (
       groupModalData && (
@@ -184,7 +184,7 @@ function Page(props: Props) {
         columns={getColumns(handleEditItem)}
       />
       {renderUserModal(userModalData!)}
-      {renderGroupModal(groupModalData!)}
+      <GroupModal modalData={groupModalData!} />
     </AdminPageLayout>
   );
 }
