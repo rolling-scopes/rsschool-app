@@ -1,4 +1,4 @@
-import { Team, TeamDistributionStudent } from '@entities/index';
+import { Student, Team, TeamDistributionStudent } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,27 +25,22 @@ export class DistributeStudentsService {
     return teams.reduce((acc, curr) => acc + teamSize - curr.students.length, 0);
   }
 
-  private async removeTeams(smallTeams: Team[], teamDistributionId: number, courseId: number) {
+  private async modifyTeams(
+    teams: Partial<Team>[],
+    teamDistributionStudents: TeamDistributionStudent[],
+    removeTeams = false,
+  ) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-    const studentIds = smallTeams.flatMap(el => el.students.map(s => s.id));
     try {
-      await queryRunner.manager.save(
-        Team,
-        smallTeams.map(t => ({ ...t, students: [] })),
-      );
-      await queryRunner.manager.remove(Team, smallTeams);
-      const teamDistributionStudents = await this.teamDistributionStudentService.getTeamDistributionStudents(
-        studentIds,
-        teamDistributionId,
-        courseId,
-      );
-      await queryRunner.manager.save(
-        TeamDistributionStudent,
-        teamDistributionStudents.map(el => ({ ...el, distributed: false })),
-      );
-
+      await Promise.all([
+        queryRunner.manager.save(Team, teams),
+        queryRunner.manager.save(TeamDistributionStudent, teamDistributionStudents),
+      ]);
+      if (removeTeams) {
+        await queryRunner.manager.remove(Team, teams);
+      }
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -53,6 +48,20 @@ export class DistributeStudentsService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  private async removeTeams(teams: Team[], teamDistributionId: number, courseId: number) {
+    const studentIds = teams.flatMap(el => el.students.map(s => s.id));
+    const teamDistributionStudents = await this.teamDistributionStudentService.getTeamDistributionStudents(
+      studentIds,
+      teamDistributionId,
+      courseId,
+    );
+    await this.modifyTeams(
+      teams.map(t => ({ ...t, students: [] })),
+      teamDistributionStudents.map(el => ({ ...el, distributed: false })),
+      true,
+    );
   }
 
   private async addStudentsToAvailableTeams(
@@ -74,23 +83,10 @@ export class DistributeStudentsService {
       }
       capacity--;
     }
-
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager.save(Team, teams);
-      await queryRunner.manager.save(
-        TeamDistributionStudent,
-        distributedStudents.map(s => ({ ...s, distributed: true })),
-      );
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException();
-    } finally {
-      await queryRunner.release();
-    }
+    await this.modifyTeams(
+      teams,
+      distributedStudents.map(el => ({ ...el, distributed: true })),
+    );
   }
 
   private async createInitialTeams(studentsCount: number, teamSize: number, teamDistributionId: number) {
@@ -114,42 +110,49 @@ export class DistributeStudentsService {
   }
 
   private async createRandomTeams(
-    teamDistributionStudent: TeamDistributionStudent[],
+    teamDistributionStudents: TeamDistributionStudent[],
     teamSize: number,
     teamDistributionId: number,
   ) {
-    const teams = await this.createInitialTeams(teamDistributionStudent.length, teamSize, teamDistributionId);
+    const teams = await this.createInitialTeams(teamDistributionStudents.length, teamSize, teamDistributionId);
 
     // Assign students to teams
-    teamDistributionStudent.forEach((el, index) => {
-      const roundDistribution = Math.floor(index / teamSize) + 1;
-      const teamForStudentIndex =
-        roundDistribution % 2 === 0 ? -1 * Math.floor(index % teamSize) - 1 : Math.floor(index % teamSize);
+    const countDistributionRounds = Math.ceil(teamDistributionStudents.length / teamSize);
 
-      const team = teams.at(teamForStudentIndex);
-      team?.students?.push(el.student);
-    });
+    if (countDistributionRounds >= teamSize) {
+      for (let draftPosition = 1; draftPosition <= teams.length; draftPosition++) {
+        const students: Student[] = [];
+
+        for (let round = 1; round <= countDistributionRounds; round++) {
+          let draftPick;
+
+          if (round % 2 === 0) {
+            draftPick = round * teams.length - draftPosition + 1;
+          } else {
+            draftPick = (round - 1) * teams.length + draftPosition;
+          }
+          if (teamDistributionStudents.at(draftPick - 1)) {
+            students.push(teamDistributionStudents.at(draftPick - 1)!.student);
+          }
+        }
+        teams.at(draftPosition - 1)?.students.push(...students);
+      }
+    } else {
+      const shuffledStudents = shuffle(teamDistributionStudents);
+      while (shuffledStudents.length > 0) {
+        const team = teams.find(el => el.students.length < teamSize);
+        const teamDistributionStudent = shuffledStudents.pop();
+        if (teamDistributionStudent && team) {
+          team?.students.push(teamDistributionStudent.student);
+        }
+      }
+    }
 
     // Save teams and teamDistributionStudent
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager.save(
-        Team,
-        teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id })),
-      );
-      await queryRunner.manager.save(
-        TeamDistributionStudent,
-        teamDistributionStudent.map(s => ({ ...s, distributed: true })),
-      );
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException();
-    } finally {
-      await queryRunner.release();
-    }
+    await this.modifyTeams(
+      teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id })),
+      teamDistributionStudents.map(s => ({ ...s, distributed: true })),
+    );
   }
 
   public async distributeStudents(teamDistributionId: number) {
@@ -171,7 +174,6 @@ export class DistributeStudentsService {
       studentsWithoutTeam = await this.teamDistributionStudentService.getStudentsForDistribute(teamDistributionId);
       teamsCapacity = this.getTeamCapacity(availableTeams, teamDistribution.strictTeamSize);
     }
-
     if (teamsCapacity !== 0) {
       await this.addStudentsToAvailableTeams(
         availableTeams,
@@ -181,6 +183,7 @@ export class DistributeStudentsService {
       );
       studentsWithoutTeam = await this.teamDistributionStudentService.getStudentsForDistribute(teamDistributionId);
     }
+
     if (studentsWithoutTeam.length) {
       await this.createRandomTeams(studentsWithoutTeam, teamDistribution.strictTeamSize, teamDistributionId);
     }
