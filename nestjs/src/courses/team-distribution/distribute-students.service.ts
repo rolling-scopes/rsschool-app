@@ -116,36 +116,34 @@ export class DistributeStudentsService {
   ) {
     const teams = await this.createInitialTeams(teamDistributionStudents.length, teamSize, teamDistributionId);
 
-    // Assign students to teams
-    const countDistributionRounds = Math.ceil(teamDistributionStudents.length / teamSize);
-
-    if (countDistributionRounds >= teamSize) {
-      for (let draftPosition = 1; draftPosition <= teams.length; draftPosition++) {
+    // Check if the number of teams is less than the team size
+    if (teams.length < teamSize) {
+      // If so, assign all students to the teams, making sure not to exceed the team size
+      const shuffledStudents = shuffle(teamDistributionStudents);
+      shuffledStudents.forEach(el => {
+        const team = teams.find(el => el.students.length < teamSize);
+        if (team) {
+          team?.students.push(el.student);
+        }
+      });
+    } else {
+      // If not, proceed with the draft-style distribution
+      const countDistributionRounds = Math.ceil(teamDistributionStudents.length / teamSize);
+      teams.forEach((team, i) => {
         const students: Student[] = [];
-
         for (let round = 1; round <= countDistributionRounds; round++) {
           let draftPick;
-
           if (round % 2 === 0) {
-            draftPick = round * teams.length - draftPosition + 1;
+            draftPick = round * teams.length - i;
           } else {
-            draftPick = (round - 1) * teams.length + draftPosition;
+            draftPick = (round - 1) * teams.length + (i + 1);
           }
-          if (teamDistributionStudents.at(draftPick - 1)) {
-            students.push(teamDistributionStudents.at(draftPick - 1)!.student);
+          if (teamDistributionStudents[draftPick - 1]) {
+            students.push(teamDistributionStudents[draftPick - 1]!.student);
           }
         }
-        teams.at(draftPosition - 1)?.students.push(...students);
-      }
-    } else {
-      const shuffledStudents = shuffle(teamDistributionStudents);
-      while (shuffledStudents.length > 0) {
-        const team = teams.find(el => el.students.length < teamSize);
-        const teamDistributionStudent = shuffledStudents.pop();
-        if (teamDistributionStudent && team) {
-          team?.students.push(teamDistributionStudent.student);
-        }
-      }
+        team.students.push(...students);
+      });
     }
 
     // Save teams and teamDistributionStudent
