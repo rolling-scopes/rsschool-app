@@ -25,7 +25,8 @@ export function Consents({
   const hasEmail = !!email?.enabled;
   const hasTelegram = !!telegram?.enabled;
   const hasDiscord = !!discord?.enabled || true;
-  const hasContacts = hasEmail && hasTelegram && hasDiscord;
+
+  if (hasEmail && hasTelegram && hasDiscord) return null;
 
   const emailAdded = email?.value;
   const emailVerified = email?.enabled;
@@ -38,7 +39,7 @@ export function Consents({
     }
   }, []);
 
-  return !hasContacts ? (
+  return (
     <Space direction="vertical" style={{ width: '100%' }}>
       {!hasTelegram && (
         <Alert
@@ -76,5 +77,5 @@ export function Consents({
         <EmailConfirmation connection={email} sendConfirmationEmail={sendEmailConfirmationLink} />
       )}
     </Space>
-  ) : null;
+  );
 }

@@ -87,7 +87,7 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
         style={{ top: 20 }}
         onCancel={handleCancel}
         footer={[
-          <Button key="cancel" type="primary" onClick={handleCancel}>
+          <Button type="primary" onClick={handleCancel}>
             Cancel
           </Button>,
         ]}

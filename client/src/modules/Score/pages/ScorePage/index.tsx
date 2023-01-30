@@ -12,6 +12,10 @@ import { CoursePageProps } from 'services/models';
 const { Text } = Typography;
 
 export function ScorePage(props: CoursePageProps) {
+  if (!props.course) {
+    return <CourseNoAccess />;
+  }
+
   const router = useRouter();
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
@@ -21,15 +25,13 @@ export function ScorePage(props: CoursePageProps) {
   const handleActiveOnlyChange = () => setActiveOnly(!activeOnly);
 
   const handleExportCsv = useCallback(
-    () => (window.location.href = getExportCsvUrl(props.course?.id, cityName, mentor)),
-    [cityName, mentor, props.course?.id],
+    () => (window.location.href = getExportCsvUrl(props.course.id, cityName, mentor)),
+    [cityName, mentor, props.course.id],
   );
 
   const csvEnabled = isExportEnabled(props);
 
-  return !props.course ? (
-    <CourseNoAccess />
-  ) : (
+  return (
     <CoursePageLayout course={props.course} title="Score" githubId={props.session.githubId} loading={loading}>
       <Row style={{ margin: '8px 0' }} justify="space-between">
         <div>

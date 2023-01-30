@@ -32,7 +32,6 @@ export function Students(props: CourseOnlyPageProps) {
           const [feedback] = student.feedbacks;
           return (
             <Card
-              key={student.githubId}
               style={{ marginBottom: 32 }}
               headStyle={{ border: 'none' }}
               size="small"
