@@ -21,6 +21,7 @@ export class TasksController {
 
   @Get('/')
   @ApiOperation({ operationId: 'getTasks' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   @ApiOkResponse({ type: [TaskDto] })
   public async getAll() {
     const items = await this.service.getAll();
