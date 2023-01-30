@@ -40,6 +40,7 @@ describe('english name pattern', () => {
     ${'abc'}  | ${true}
     ${'abc#'} | ${false}
     ${'abć'}  | ${false}
+    ${'абв'}  | ${false}
   `('returns $match for $input', ({ input, match }) => {
     expect(englishNamePattern.test(input)).toBe(match);
   });
@@ -124,7 +125,7 @@ describe('password pattern', () => {
     ${'1234abcd'}       | ${false}
     ${'1234_abcd_efgh'} | ${false}
     ${'abc_1a2w'}       | ${false}
-  `('password "$password" should be $isValid', ({ password, isValid }) => {
+  `('returns $isValid for $password', ({ password, isValid }) => {
     expect(password.match(passwordPattern) !== null).toBe(isValid);
   });
 });
