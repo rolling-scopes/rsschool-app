@@ -6,17 +6,13 @@ import { GratitudeDto } from 'api';
 const { Text, Paragraph } = Typography;
 
 type Props = {
-  feedback: GratitudeDto[];
+  feedback?: GratitudeDto[];
   showCount: number;
 };
 
 export function GratitudeList({ feedback, showCount }: Props) {
-  if (!feedback.length) {
-    return null;
-  }
-
-  const feedbackPartial = feedback.slice(0, showCount);
-  const expansionNeeded = feedback.length > showCount;
+  const feedbackPartial = feedback?.slice(0, showCount);
+  const expansionNeeded = Number(feedback?.length) > showCount;
 
   const [feedbackToShow, setFeedbackToShow] = useState(feedbackPartial);
   const [allFeedbackVisible, setAllFeedbackVisible] = useState(!expansionNeeded);
@@ -33,7 +29,7 @@ export function GratitudeList({ feedback, showCount }: Props) {
 
   const dataSource = useMemo(
     () =>
-      feedbackToShow.map(feedback => {
+      feedbackToShow?.map(feedback => {
         const { comment, date } = feedback;
         const feedbackDate = moment(date);
         return {
@@ -45,7 +41,7 @@ export function GratitudeList({ feedback, showCount }: Props) {
     [feedbackToShow],
   );
 
-  return (
+  return feedback?.length && feedback.length > 0 ? (
     <div>
       <List
         header={<Text strong>Recent Feedback</Text>}
@@ -77,5 +73,5 @@ export function GratitudeList({ feedback, showCount }: Props) {
           </Button>
         ))}
     </div>
-  );
+  ) : null;
 }
