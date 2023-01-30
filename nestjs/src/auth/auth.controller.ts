@@ -11,6 +11,8 @@ import { GithubStrategy } from './strategies/github.strategy';
 import * as dayjs from 'dayjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
+const COOKIE_DOMAIN = isDev ? undefined : 'rs.school';
+const COOKIE_PATH = '/';
 const twoDaysMs = 1000 * 60 * 60 * 24 * 2;
 
 @Controller('auth')
@@ -36,7 +38,7 @@ export class AuthController {
         expires: new Date(Date.now() + twoDaysMs),
         httpOnly: true,
         secure: true,
-        domain: isDev ? undefined : 'rs.school',
+        domain: COOKIE_DOMAIN,
         sameSite: 'none',
       });
 
@@ -58,7 +60,7 @@ export class AuthController {
   @Get('github/logout')
   @ApiOperation({ operationId: 'githubLogout' })
   githubLogout(@Res() res: Response) {
-    res.clearCookie(JWT_COOKIE_NAME);
+    res.clearCookie(JWT_COOKIE_NAME, { domain: COOKIE_DOMAIN, path: COOKIE_PATH });
     res.redirect('/login');
   }
 
