@@ -89,11 +89,10 @@ export class DistributeStudentsService {
     );
   }
 
-  private async createInitialTeams(studentsCount: number, teamSize: number, teamDistributionId: number) {
-    const randomTeamsCount = Math.ceil(studentsCount / teamSize);
+  private async createInitialTeams(teamsCount: number, teamDistributionId: number) {
     const teams: Pick<Team, 'name' | 'students' | 'description' | 'password' | 'teamDistributionId'>[] =
       await Promise.all(
-        Array(randomTeamsCount)
+        Array(teamsCount)
           .fill({})
           .map(async (_, index) => {
             const password = await this.teamService.generatePassword();
@@ -114,10 +113,10 @@ export class DistributeStudentsService {
     teamSize: number,
     teamDistributionId: number,
   ) {
-    const teams = await this.createInitialTeams(teamDistributionStudents.length, teamSize, teamDistributionId);
-
-    // Check if the number of teams is less than the team size
-    if (teams.length < teamSize) {
+    const neededTeamsCount = Math.ceil(teamDistributionStudents.length / teamSize);
+    const teams = await this.createInitialTeams(neededTeamsCount, teamDistributionId);
+    // Note: The Snake Draft algorithm may not work correctly if the number of required teams is less than the team size.
+    if (neededTeamsCount < teamSize) {
       // If so, assign all students to the teams, making sure not to exceed the team size
       const shuffledStudents = shuffle(teamDistributionStudents);
       shuffledStudents.forEach(el => {
@@ -127,7 +126,13 @@ export class DistributeStudentsService {
         }
       });
     } else {
-      // If not, proceed with the draft-style distribution
+      /*
+      If not, proceed with the snake draft style distribution
+Snake Draft Algorithm:
+The pick order is reversed each round.
+If you have the first pick in round one, you will have the last pick in round two and the first pick in round three, and so on.
+This helps balance the distribution of talent among the teams, allowing each team to get a chance to pick early and late in each round.
+*/
       const countDistributionRounds = Math.ceil(teamDistributionStudents.length / teamSize);
       teams.forEach((team, i) => {
         const students: Student[] = [];
@@ -147,10 +152,9 @@ export class DistributeStudentsService {
     }
 
     // Save teams and teamDistributionStudent
-    await this.modifyTeams(
-      teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id })),
-      teamDistributionStudents.map(s => ({ ...s, distributed: true })),
-    );
+    const updatedTeams = teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id }));
+    const distributedStudents = teamDistributionStudents.map(s => ({ ...s, distributed: true }));
+    await this.modifyTeams(updatedTeams, distributedStudents);
   }
 
   public async distributeStudents(teamDistributionId: number) {
