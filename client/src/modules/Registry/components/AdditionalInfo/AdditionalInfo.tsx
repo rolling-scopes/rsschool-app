@@ -1,4 +1,4 @@
-import { Form, Select, Tag, Input, Checkbox, Space, Button, Typography } from 'antd';
+import { Form, Select, Tag, Input, Checkbox, Button, Typography, Row, Col } from 'antd';
 import { CourseIcon } from 'components/Icons';
 import { LANGUAGES } from 'data/languages';
 import {
@@ -18,12 +18,31 @@ type Props = {
   onPrevious: () => void;
 };
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+
+const formItemLayout = {
+  labelCol: {
+    sm: { span: 16, offset: 4 },
+    md: { span: 7, offset: 0 },
+  },
+  wrapperCol: {
+    sm: { span: 16, offset: 4 },
+    md: { span: 10, offset: 0 },
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: { span: 12, offset: 0 },
+    sm: { span: 16, offset: 4 },
+    md: { span: 10, offset: 7 },
+  },
+};
 
 export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
   return (
     <FormCard title={<Title level={5}>Additional information</Title>}>
-      <Form.Item name="preferedCourses" label={LABELS.courses} labelAlign="right" requiredMark="optional">
+      <Form.Item {...formItemLayout} name="preferedCourses" label={LABELS.courses} requiredMark="optional">
         <Select
           mode="multiple"
           value={checkedList}
@@ -40,9 +59,9 @@ export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
         />
       </Form.Item>
       <Form.Item
+        {...formItemLayout}
         name="languagesMentoring"
         label={LABELS.languages}
-        labelAlign="right"
         rules={VALIDATION_RULES}
         required
       >
@@ -55,10 +74,11 @@ export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
           }))}
         />
       </Form.Item>
-      <Form.Item name="aboutMyself" label={LABELS.aboutYourself} labelAlign="right">
+      <Form.Item {...formItemLayout} name="aboutMyself" label={LABELS.aboutYourself}>
         <Input.TextArea rows={6} placeholder={PLACEHOLDERS.aboutYourself} />
       </Form.Item>
       <Form.Item
+        {...tailFormItemLayout}
         name="dataProcessing"
         valuePropName="checked"
         rules={[
@@ -68,17 +88,23 @@ export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
           },
         ]}
       >
-        <Checkbox style={{ color: 'rgba(0, 0, 0, 0.45)' }}>{DATA_PROCESSING_TEXT}</Checkbox>
+        <Checkbox>
+          <Text type="secondary">{DATA_PROCESSING_TEXT}</Text>
+        </Checkbox>
       </Form.Item>
-      <Form.Item className="buttons">
-        <Space>
-          <Button size="large" type="default" onClick={onPrevious}>
-            Previous
-          </Button>
-          <Button size="large" type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Space>
+      <Form.Item {...tailFormItemLayout} className="buttons">
+        <Row justify="end" gutter={16}>
+          <Col>
+            <Button size="large" type="default" onClick={onPrevious}>
+              Previous
+            </Button>
+          </Col>
+          <Col>
+            <Button size="large" type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Col>
+        </Row>
       </Form.Item>
     </FormCard>
   );

@@ -1,12 +1,12 @@
-import { Form, message, Row, Steps, Typography } from 'antd';
+import { Col, Form, Grid, message, Row, Space, Steps, Typography } from 'antd';
+import { FormLayout } from 'antd/lib/form/Form';
+import { useCallback, useEffect, useState } from 'react';
+import { useAsync, useUpdate } from 'react-use';
 import { CourseDto, DisciplineDto, DisciplinesApi, ProfileApi } from 'api';
 import { Location } from 'common/models';
 import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
-import css from 'styled-jsx/css';
 import { MentorshipSection, DoneSection, GeneralSection, Footer } from 'modules/Registry/components';
-import { useCallback, useEffect, useState } from 'react';
-import { useAsync, useUpdate } from 'react-use';
 import { CdnService } from 'services/cdn';
 import type { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
@@ -19,7 +19,8 @@ export type Props = {
 };
 
 const { Step } = Steps;
-const { Title, Paragraph } = Typography;
+const { Title, Text } = Typography;
+const { useBreakpoint } = Grid;
 
 const cdnService = new CdnService();
 const userService = new UserService();
@@ -36,6 +37,10 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const [initialData, setInitialData] = useState<Partial<UserFull> | null>(null);
   const [currentStep, setCurrentSteps] = useState(0);
   const [resume, setResume] = useState<FormData | undefined>();
+  const { xs, sm, md, lg, xl, xxl } = useBreakpoint();
+  const largeScreenSizes = [md, lg, xl, xxl];
+  const isSmallScreen = xs || (sm && !largeScreenSizes.some(Boolean));
+  const formLayout: FormLayout = isSmallScreen ? 'vertical' : 'horizontal';
 
   const update = useUpdate();
 
@@ -153,71 +158,64 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
     { title: 'Done', content: <DoneSection /> },
   ];
 
+  const formItemLayout = {
+    labelCol: {
+      sm: { offset: 4 },
+      md: { span: 6, offset: 0 },
+      xl: { span: 8, offset: 0 },
+    },
+    wrapperCol: {
+      sm: { span: 16, offset: 4 },
+      md: { span: 12, offset: 0 },
+      xl: { span: 8, offset: 0 },
+    },
+  };
+
   return (
     <RegistrationPageLayout loading={loading} githubId={props.session.githubId}>
       {resume ? (
-        <Form
-          layout="horizontal"
-          form={form}
-          initialValues={resume}
-          onChange={update}
-          onFinish={handleSubmit}
-          onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
-          style={{ width: '100%' }}
-        >
-          <Row
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%',
-              maxWidth: '960px',
-              margin: '0 auto',
-              padding: '24px 0',
-              gap: '24px',
-            }}
-          >
-            <Row style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Title
-                level={1}
-                style={{
-                  marginBottom: '12px',
-                  color: 'rgba(0, 0, 0, 0.85)',
-                }}
-              >
-                Mentors registration
-              </Title>
-              <Paragraph
-                style={{
-                  marginBottom: 0,
-                  color: 'rgba(0, 0, 0, 0.45)',
-                }}
-              >
-                Free courses from the developer community
-              </Paragraph>
-            </Row>
-            <Row
-              style={{
-                margin: '0 auto',
-                padding: '16px 60px',
-                height: '64px',
-                width: '100%',
-                maxWidth: '960px',
-                background: '#FFFFFF',
-                borderRadius: '2px',
-              }}
+        <Row justify="center" style={{ paddingBlock: 24 }}>
+          <Col xs={24} lg={18} xl={18} xxl={14}>
+            <Form
+              {...formItemLayout}
+              layout={formLayout}
+              form={form}
+              initialValues={resume}
+              onChange={update}
+              onFinish={handleSubmit}
+              scrollToFirstError
+              onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
             >
-              <Steps current={currentStep} responsive={false}>
-                {steps.map(item => (
-                  <Step key={item.title} title={item.title} />
-                ))}
-              </Steps>
-            </Row>
-            {steps[currentStep].content}
-            <Footer />
-          </Row>
-          <style jsx>{styles}</style>
-        </Form>
+              <Row justify="center" gutter={[0, 24]}>
+                <Col>
+                  <Space direction="vertical" align="center" size={0}>
+                    <Title>Mentors registration</Title>
+                    <Text type="secondary">Free courses from the developer community</Text>
+                  </Space>
+                </Col>
+                <Col
+                  span={24}
+                  style={{
+                    background: '#FFFFFF',
+                    borderRadius: 2,
+                    paddingBlock: 16,
+                    paddingInline: 60,
+                  }}
+                >
+                  <Steps current={currentStep} responsive={false}>
+                    {steps.map(item => (
+                      <Step key={item.title} title={xs ? null : item.title} />
+                    ))}
+                  </Steps>
+                </Col>
+                <Col span={24}>{steps[currentStep].content}</Col>
+                <Col span={24} flex="none">
+                  <Footer />
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+        </Row>
       ) : null}
     </RegistrationPageLayout>
   );
@@ -230,12 +228,3 @@ function getActiveCourses(courses: CourseDto[], courseAlias?: string) {
         .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
 }
-
-const styles = css`
-  @media (max-width: 532px) {
-    :global(.ant-steps-item-title) {
-      width: 0;
-      color: transparent !important;
-    }
-  }
-`;

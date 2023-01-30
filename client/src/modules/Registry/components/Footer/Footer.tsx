@@ -1,5 +1,4 @@
-import { Image, Space, Typography } from 'antd';
-import css from 'styled-jsx/css';
+import { Col, Image, Row, Typography } from 'antd';
 
 const copyrights = `Copyright © The Rolling Scopes ${new Date().getFullYear()}`;
 const logos = [
@@ -19,27 +18,19 @@ const logos = [
 
 export function Footer() {
   return (
-    <>
-      <footer>
-        <Space align="center" size={40} style={{ height: '32px' }}>
-          {logos.map(({ src, alt }) => (
-            <Image key={alt} preview={false} src={src} alt={alt} />
-          ))}
-        </Space>
-        <Typography.Paragraph style={{ color: 'rgba(0, 0, 0, 0.45)', margin: 0 }}>{copyrights}</Typography.Paragraph>
-      </footer>
-      <style jsx>{styles}</style>
-    </>
+    <footer>
+      <Row style={{ maxWidth: 232, paddingBlock: 36 }} gutter={[0, 10]}>
+        <Col span={24}>
+          <Row justify="space-between" align="middle" style={{ height: 32, paddingInline: 5.5 }}>
+            {logos.map(({ src, alt }) => (
+              <Image key={alt} preview={false} src={src} alt={alt} />
+            ))}
+          </Row>
+        </Col>
+        <Col span={24}>
+          <Typography.Text type="secondary">{copyrights}</Typography.Text>
+        </Col>
+      </Row>
+    </footer>
   );
 }
-
-const styles = css`
-  footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 36px 0;
-  }
-`;

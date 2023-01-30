@@ -18,7 +18,6 @@ export function PersonalInfo({ location, setLocation }: Props) {
     <FormCard title={<Title level={5}>Personal information</Title>}>
       <Form.Item
         label={LABELS.firstName}
-        labelAlign="right"
         name="firstName"
         rules={[{ required: true, pattern: englishNamePattern, message: ERROR_MESSAGES.inEnglish('First name') }]}
         extra={EXTRAS.inEnglish}
@@ -27,7 +26,6 @@ export function PersonalInfo({ location, setLocation }: Props) {
       </Form.Item>
       <Form.Item
         label={LABELS.lastName}
-        labelAlign="right"
         name="lastName"
         rules={[{ pattern: englishNamePattern, message: ERROR_MESSAGES.inEnglish('Last name') }]}
       >
@@ -36,7 +34,6 @@ export function PersonalInfo({ location, setLocation }: Props) {
       <Form.Item
         label={LABELS.location}
         tooltip={TOOLTIPS.locationMentor}
-        labelAlign="right"
         name="location"
         rules={[{ required: true, message: ERROR_MESSAGES.location }]}
         valuePropName={'location'}
@@ -46,7 +43,6 @@ export function PersonalInfo({ location, setLocation }: Props) {
       <Form.Item
         label={LABELS.primaryEmail}
         tooltip={TOOLTIPS.primaryEmail}
-        labelAlign="right"
         name="primaryEmail"
         rules={[{ required: true, pattern: emailPattern, message: ERROR_MESSAGES.email }]}
       >
@@ -55,7 +51,6 @@ export function PersonalInfo({ location, setLocation }: Props) {
       <Form.Item
         label={LABELS.epamEmail}
         tooltip={TOOLTIPS.epamEmail}
-        labelAlign="right"
         name="contactsEpamEmail"
         rules={[{ pattern: epamEmailPattern, message: ERROR_MESSAGES.epamEmail }]}
       >

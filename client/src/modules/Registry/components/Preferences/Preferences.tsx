@@ -20,13 +20,24 @@ const locations = [
   },
 ];
 
+const formItemLayout = {
+  labelCol: {
+    sm: { span: 16, offset: 4 },
+    md: { span: 7, offset: 0 },
+  },
+  wrapperCol: {
+    sm: { span: 16, offset: 4 },
+    md: { span: 10, offset: 0 },
+  },
+};
+
 export function Preferences() {
   return (
     <FormCard title={<Title level={5}>Preferences about students</Title>}>
       <Form.Item
+        {...formItemLayout}
         name="maxStudentsLimit"
         label={LABELS.studentsCount}
-        labelAlign="right"
         initialValue={2}
         extra={EXTRAS.readyToMentor}
       >
@@ -38,7 +49,7 @@ export function Preferences() {
           ))}
         </Radio.Group>
       </Form.Item>
-      <Form.Item name="preferedStudentsLocation" label={LABELS.studentsLocation} initialValue="any">
+      <Form.Item {...formItemLayout} name="preferedStudentsLocation" label={LABELS.studentsLocation} initialValue="any">
         <Radio.Group>
           {locations.map(({ value, label }) => (
             <Radio key={value} value={value}>
