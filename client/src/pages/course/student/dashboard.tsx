@@ -128,9 +128,9 @@ function Page(props: CoursePageProps) {
       />
     ),
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard key="next-event-card" nextEvents={nextEvents} courseAlias={alias} />,
-    <AvailableReviewCard key="available-review-card" availableReviews={availableReviews} courseAlias={alias} />,
-    <MentorCard key="mentor-card" courseId={props.course.id} mentor={studentSummary?.mentor} />,
+    <NextEventCard nextEvents={nextEvents} courseAlias={alias} />,
+    <AvailableReviewCard availableReviews={availableReviews} courseAlias={alias} />,
+    <MentorCard courseId={props.course.id} mentor={studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}

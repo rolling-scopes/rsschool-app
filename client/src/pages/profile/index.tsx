@@ -198,12 +198,7 @@ export class ProfilePage extends React.Component<Props, State> {
       profile?.generalInfo && (
         <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />
       ),
-      <AboutCard
-        key="about-card"
-        data={aboutMyself}
-        isEditingModeEnabled={isProfileOwner}
-        updateProfile={this.updateProfile}
-      />,
+      <AboutCard data={aboutMyself} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />,
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo?.educationHistory || []}

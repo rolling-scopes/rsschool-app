@@ -89,9 +89,7 @@ function Page(props: Props) {
         <Form.Item name="type" label="Event Type" rules={[{ required: true, message: 'Please select a type' }]}>
           <Select>
             {EVENT_TYPES.map(({ name, id }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
+              <Select.Option value={id}>{name}</Select.Option>
             ))}
           </Select>
         </Form.Item>
