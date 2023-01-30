@@ -28,7 +28,7 @@ export function CrossCheckCriteriaModal({ modalInfo, isModalVisible, showModal }
       {modalInfo
         ?.filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Subtask)
         .map(criteriaItem => (
-          <div style={{ border: '1px solid #F5F5F5', margin: '24px 0', paddingBottom: '14px' }}>
+          <div key={criteriaItem.key} style={{ border: '1px solid #F5F5F5', margin: '24px 0', paddingBottom: '14px' }}>
             <div
               style={{
                 display: 'block',
@@ -62,6 +62,7 @@ export function CrossCheckCriteriaModal({ modalInfo, isModalVisible, showModal }
           <Title level={4}>Penalty</Title>
           {penaltyData?.map(criteriaItem => (
             <div
+              key={criteriaItem.key}
               style={{
                 display: 'inline-block',
                 width: '100%',
