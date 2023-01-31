@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
 import { PageLayout } from 'components/PageLayout';
-import { isActiveStudent, isCourseManager } from 'domain/user';
+import { isCourseManager } from 'domain/user';
 import { CoursePageProps } from 'services/models';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
-import { Button, message } from 'antd';
+import { message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
@@ -16,7 +15,6 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   const [teamDistribution, setTeamDistribution] = useState<Partial<TeamDistributionDto> | null>(null);
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
-  const isStudent = useMemo(() => isActiveStudent(session, course.id), [session, course.id]);
 
   const loadData = async () => {
     try {
@@ -88,12 +86,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
         />
       )}
       <div style={{ maxWidth: '1020px', margin: '0 auto' }}>
-        {isManager && (
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTeamDistribution}>
-            Team Distribution
-          </Button>
-        )}
-        {isStudent && <WelcomeCard />}
+        <WelcomeCard isManager={isManager} handleCreateTeamDistribution={handleCreateTeamDistribution} />
         {distributions.length
           ? distributions.map(distribution => (
               <TeamDistributionCard

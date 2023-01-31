@@ -59,6 +59,7 @@ import { TeamController } from './team-distribution/team.controller';
 import { TaskVerificationsController } from './task-verifications/task-verifications.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 import { TeamDistributionStudentService } from './team-distribution/team-distribution-student.service';
+import { DistributeStudentsService } from './team-distribution/distribute-students.service';
 
 @Module({
   imports: [
@@ -130,6 +131,7 @@ import { TeamDistributionStudentService } from './team-distribution/team-distrib
     TeamDistributionService,
     TeamDistributionStudentService,
     TeamService,
+    DistributeStudentsService,
     TaskVerificationsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],

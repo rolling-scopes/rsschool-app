@@ -1,18 +1,24 @@
-import { Card, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useMedia } from 'react-use';
 
 const { Text } = Typography;
 
-export default function WelcomeCard() {
-  const mobileView = useMedia('(max-width: 720px)');
+type Props = {
+  isManager: boolean;
+  handleCreateTeamDistribution: () => void;
+};
+
+export default function WelcomeCard({ isManager, handleCreateTeamDistribution }: Props) {
+  const mobileView = useMedia('(max-width: 768px)');
   return (
     <Card
-      title={<Text style={{ color: '#fff' }}>Become a member of the team!</Text>}
-      style={{ marginTop: 24, backgroundColor: '#539DE2' }}
+      title={<Text>{isManager ? 'Create student teams to solve group tasks!' : 'Become a member of the team!'}</Text>}
+      style={{ marginTop: 24, backgroundColor: '#D6E4FF' }}
     >
-      <Row gutter={24} style={{ minHeight: '100px' }}>
-        <Col span={!mobileView ? 12 : 24}>
-          <Text style={{ color: '#fff' }}>
+      <Row gutter={[24, 12]} style={{ minHeight: '100px' }}>
+        <Col sm={24} md={12}>
+          <Text>
             Group task – it is a possibility to unite with your colleagues to develop the best solutions, and to gain
             knowledge and skills.
             <br /> To become a member of a team, you can create your own team or join an existing team. If you don't
@@ -20,7 +26,7 @@ export default function WelcomeCard() {
           </Text>
         </Col>
         {!mobileView && (
-          <Col span={12} style={{ position: 'relative', display: 'flex', justifyContent: 'end', paddingRight: '24px' }}>
+          <Col md={12} style={{ position: 'relative', display: 'flex', justifyContent: 'end', paddingRight: '24px' }}>
             <div
               style={{
                 backgroundImage: `url(https://cdn.rs.school/sloths/stickers/welcome/image.png)`,
@@ -33,6 +39,13 @@ export default function WelcomeCard() {
                 width: '240px',
               }}
             />
+          </Col>
+        )}
+        {isManager && (
+          <Col>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTeamDistribution}>
+              Add a new distribution
+            </Button>
           </Col>
         )}
       </Row>

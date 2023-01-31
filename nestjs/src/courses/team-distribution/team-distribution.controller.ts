@@ -15,6 +15,7 @@ import { TeamService } from './team.service';
 import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { Student } from '@entities/index';
+import { DistributeStudentsService } from './distribute-students.service';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -24,12 +25,13 @@ export class TeamDistributionController {
     private readonly teamDistributionService: TeamDistributionService,
     private readonly teamService: TeamService,
     private readonly teamDistributionStudentService: TeamDistributionStudentService,
+    private readonly distributeStudentsService: DistributeStudentsService,
   ) {}
   @Post('/')
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDistributionDto })
   @ApiOperation({ operationId: 'createTeamDistribution' })
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   public async create(@Param('courseId', ParseIntPipe) courseId: number, @Body() dto: CreateTeamDistributionDto) {
     const data = await this.teamDistributionService.create({ courseId, ...dto });
     return new TeamDistributionDto(data);
@@ -64,7 +66,7 @@ export class TeamDistributionController {
   @Delete('/:id')
   @UseGuards(RoleGuard)
   @ApiOkResponse()
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   @ApiOperation({ operationId: 'deleteTeamDistribution' })
   public async delete(@Param('courseId', ParseIntPipe) _: number, @Param('id', ParseIntPipe) id: number) {
     return this.teamDistributionService.remove(id);
@@ -72,7 +74,7 @@ export class TeamDistributionController {
 
   @Put('/:id')
   @UseGuards(RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   @ApiOkResponse()
   @ApiOperation({ operationId: 'updateTeamDistribution' })
   public async update(
@@ -124,7 +126,7 @@ export class TeamDistributionController {
   @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
   @ApiOkResponse({ type: TeamDistributionDetailedDto })
   @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
-  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin], true)
   public async getCourseTeamDistributionDetailed(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -152,7 +154,7 @@ export class TeamDistributionController {
   @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
   @ApiOkResponse({ type: [TeamDistributionStudentDto] })
   @ApiOperation({ operationId: 'getStudentsWithoutTeam' })
-  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin], true)
   public async getStudentsWithoutTeam(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
@@ -165,5 +167,17 @@ export class TeamDistributionController {
     });
 
     return new StudentsWithoutTeamDto(students, paginationMeta);
+  }
+
+  @Post('/:id/distribution')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse()
+  @ApiOperation({ operationId: 'distributeStudentsToTeam' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async distributeStudentsToTeam(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.distributeStudentsService.distributeStudents(id);
   }
 }

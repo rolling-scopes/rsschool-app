@@ -51,10 +51,11 @@ export class TeamDistributionStudentService {
     studentIds: number[],
     registeredStudents: TeamDistributionStudent[],
     teamDistributionId: number,
+    courseId: number,
   ) {
     if (registeredStudents.length !== studentIds.length) {
       const notRegisteredStudentIds = studentIds.filter(id => !registeredStudents.find(el => el.studentId === id));
-      await this.addStudentsToTeamDistribution(notRegisteredStudentIds, teamDistributionId);
+      await this.addStudentsToTeamDistribution(notRegisteredStudentIds, teamDistributionId, courseId);
     }
   }
 
@@ -70,11 +71,7 @@ export class TeamDistributionStudentService {
 
     const registeredStudents = await this.getTeamDistributionStudents(studentIds, teamDistributionId, courseId);
 
-    await this.verifyRegisteredStudents(studentIds, registeredStudents, teamDistributionId);
-    if (registeredStudents.length !== studentIds.length) {
-      const notRegisteredStudentIds = studentIds.filter(id => !registeredStudents.find(el => el.studentId === id));
-      await this.addStudentsToTeamDistribution(notRegisteredStudentIds, teamDistributionId);
-    }
+    await this.verifyRegisteredStudents(studentIds, registeredStudents, teamDistributionId, courseId);
     return students;
   }
 
@@ -84,8 +81,8 @@ export class TeamDistributionStudentService {
     });
   }
 
-  public async addStudentsToTeamDistribution(studentIds: number[], teamDistributionId: number) {
-    await this.repository.save(studentIds.map(id => ({ studentId: id, teamDistributionId })));
+  public async addStudentsToTeamDistribution(studentIds: number[], teamDistributionId: number, courseId: number) {
+    await this.repository.save(studentIds.map(id => ({ studentId: id, teamDistributionId, courseId })));
   }
 
   private verifyDateWithinDistributionPeriod(startDate: Date, endDate: Date) {
@@ -190,5 +187,23 @@ export class TeamDistributionStudentService {
       relations: relations,
     });
     return student;
+  }
+
+  public async getStudentsForDistribute(distributionId: number) {
+    return this.repository.find({
+      where: {
+        teamDistributionId: distributionId,
+        active: true,
+        distributed: false,
+      },
+      relations: {
+        student: true,
+      },
+      order: {
+        student: {
+          rank: 'DESC',
+        },
+      },
+    });
   }
 }
