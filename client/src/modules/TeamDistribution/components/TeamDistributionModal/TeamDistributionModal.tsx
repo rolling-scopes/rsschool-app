@@ -3,9 +3,11 @@ import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TIMEZONES } from 'configs/timezones';
-import moment, { Moment } from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { urlPattern } from 'services/validators';
+
+import 'dayjs/plugin/timezone';
 
 type Props = {
   data?: TeamDistributionDto;
@@ -23,7 +25,7 @@ const formLayoutProps = {
 
 interface FormState extends TeamDistributionDto {
   timeZone: string;
-  range: Moment[];
+  range: Dayjs[];
 }
 
 const { Option } = Select;
@@ -37,8 +39,8 @@ function getInitialValues(data: TeamDistributionDto) {
     range:
       data.startDate && data.endDate
         ? [
-            data.startDate ? moment.tz(data.startDate, timeZone) : null,
-            data.endDate ? moment.tz(data.endDate, timeZone) : null,
+            data.startDate ? dayjs.tz(data.startDate, timeZone) : null,
+            data.endDate ? dayjs.tz(data.endDate, timeZone) : null,
           ]
         : null,
     timeZone,
@@ -128,7 +130,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         >
           <DatePicker.RangePicker
             format="YYYY-MM-DD HH:mm"
-            showTime={{ format: 'HH:mm', defaultValue: [moment().hour(0).minute(0), moment().hour(23).minute(59)] }}
+            showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
           />
         </Form.Item>
         <Form.Item

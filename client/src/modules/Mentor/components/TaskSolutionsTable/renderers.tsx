@@ -1,5 +1,4 @@
-import { ColumnsType } from 'antd/lib/table';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
 import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
@@ -8,10 +7,12 @@ import dayjs from 'dayjs';
 
 const { Text, Link } = Typography;
 
+type Breakpoint = ColumnType<MentorDashboardDto>['responsive'];
+
 const FORMAT = 'YYYY-MM-DD HH:mm';
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['sm'];
-const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs'];
+const DISPLAY_TABLE_BREAKPOINTS: Breakpoint = ['sm'];
+const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint = ['xs'];
 
 export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void): ColumnsType<MentorDashboardDto> => [
   {
