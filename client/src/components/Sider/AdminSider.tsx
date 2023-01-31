@@ -1,4 +1,7 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined, SearchOutlined, ToolOutlined } from '@ant-design/icons';
+import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
+import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
+import SearchOutlined from '@ant-design/icons/SearchOutlined';
+import ToolOutlined from '@ant-design/icons/ToolOutlined';
 import { Layout, Menu, MenuProps } from 'antd';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';

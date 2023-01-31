@@ -1,11 +1,9 @@
-import {
-  CheckCircleFilled,
-  ChromeOutlined,
-  GithubOutlined,
-  MinusCircleOutlined,
-  YoutubeOutlined,
-  InfoCircleOutlined,
-} from '@ant-design/icons';
+import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
+import ChromeOutlined from '@ant-design/icons/ChromeOutlined';
+import GithubOutlined from '@ant-design/icons/GithubOutlined';
+import MinusCircleOutlined from '@ant-design/icons/MinusCircleOutlined';
+import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum } from 'api';

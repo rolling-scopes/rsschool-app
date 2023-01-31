@@ -1,4 +1,4 @@
-import { StarTwoTone } from '@ant-design/icons';
+import StarTwoTone from '@ant-design/icons/StarTwoTone';
 
 enum Score {
   Outdated = 'gray',

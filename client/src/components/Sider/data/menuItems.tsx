@@ -1,15 +1,13 @@
-import {
-  HomeOutlined,
-  GlobalOutlined,
-  AppstoreAddOutlined,
-  AlertOutlined,
-  BellOutlined,
-  UserOutlined,
-  IdcardFilled,
-  TeamOutlined,
-  ProfileFilled,
-  NotificationFilled,
-} from '@ant-design/icons';
+import AlertOutlined from '@ant-design/icons/AlertOutlined';
+import AppstoreAddOutlined from '@ant-design/icons/AppstoreAddOutlined';
+import BellOutlined from '@ant-design/icons/BellOutlined';
+import GlobalOutlined from '@ant-design/icons/GlobalOutlined';
+import HomeOutlined from '@ant-design/icons/HomeOutlined';
+import IdcardFilled from '@ant-design/icons/IdcardFilled';
+import NotificationFilled from '@ant-design/icons/NotificationFilled';
+import ProfileFilled from '@ant-design/icons/ProfileFilled';
+import TeamOutlined from '@ant-design/icons/TeamOutlined';
+import UserOutlined from '@ant-design/icons/UserOutlined';
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
