@@ -18,6 +18,7 @@ import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
+import { AvailableLanguages } from '../../../common/enums/available-languages';
 import { CourseUser } from './courseUser';
 import { NotificationUserConnection, Resume } from '.';
 
@@ -110,8 +111,8 @@ export class User {
   @Column({ type: String, nullable: true })
   englishLevel: EnglishLevel | null;
 
-  @Column('text', { array: true, default: [] })
-  languages: string[];
+  @Column({ type: 'enum', enum: AvailableLanguages, array: true, default: [] })
+  languages: AvailableLanguages[];
 
   @Column({
     type: 'json',

@@ -1,6 +1,6 @@
 import { Form, Select, Tag, Input, Checkbox, Button, Typography, Row, Col } from 'antd';
+import { AvailableLanguages } from 'api';
 import { CourseIcon } from 'components/Icons';
-import { LANGUAGES } from 'data/languages';
 import {
   DATA_PROCESSING_TEXT,
   ERROR_MESSAGES,
@@ -39,6 +39,8 @@ const tailFormItemLayout = {
   },
 };
 
+const languages = Object.values(AvailableLanguages).sort();
+
 export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
   return (
     <FormCard title={<Title level={5}>Additional information</Title>}>
@@ -68,9 +70,9 @@ export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
         <Select
           mode="multiple"
           placeholder={PLACEHOLDERS.languages}
-          options={LANGUAGES.map(({ name }) => ({
-            label: name,
-            value: name,
+          options={languages.map(language => ({
+            label: language,
+            value: language,
           }))}
         />
       </Form.Item>

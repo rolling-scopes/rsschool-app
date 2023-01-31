@@ -43,7 +43,7 @@ import { User1673692838338 } from './1673692838338-User';
 import { Team1674128274839 } from './1674128274839-Team';
 import { TeamDistributionStudent1674377676805 } from './1674377676805-TeamDistributionStudent';
 import { Resume1674755854609 } from './1674755854609-Resume';
-import { User1674647633786 } from './1674647633786-User';
+import { User1675182702772 } from './1675182702772-User';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -91,5 +91,5 @@ export const migrations = [
   Team1674128274839,
   TeamDistributionStudent1674377676805,
   Resume1674755854609,
-  User1674647633786,
+  User1675182702772,
 ];

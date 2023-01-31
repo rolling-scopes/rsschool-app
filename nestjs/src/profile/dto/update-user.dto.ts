@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
+import { AvailableLanguages } from '@common/enums/available-languages';
 
 export class UpdateUserDto {
   @ApiProperty({ required: false, nullable: true })
@@ -77,9 +78,9 @@ export class UpdateUserDto {
   @IsString()
   aboutMyself?: string;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ enum: AvailableLanguages, enumName: 'AvailableLanguages', isArray: true, required: false })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  languages?: string[];
+  @IsEnum(AvailableLanguages, { each: true })
+  languages?: AvailableLanguages[];
 }
