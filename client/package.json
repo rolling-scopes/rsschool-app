@@ -44,7 +44,6 @@
     "use-places-autocomplete": "3.0.0"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "13.1.6",
     "@playwright/test": "1.30.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
@@ -61,6 +60,7 @@
     "@typescript-eslint/parser": "5.50.0",
     "dotenv": "16.0.3",
     "eslint": "8.33.0",
+    "eslint-config-next": "^13.1.6",
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-jest-dom": "4.0.3",
     "eslint-plugin-testing-library": "5.10.0",

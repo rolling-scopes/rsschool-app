@@ -117,7 +117,7 @@ export function CriteriaForm({ authorId, comments, reviewComments, criteria, onC
                   <div>
                     <Rate
                       character={props => (
-                        <RateIcon key={props.index} value={props.value ?? 0} index={props.index ?? 0} />
+                        <RateIcon key={props.index ?? 0} value={props.value ?? 0} index={props.index ?? 0} />
                       )}
                       onChange={value => onReviewCriteria(item.criteriaId, convertValueToPercentage(value))}
                       value={convertPercentageToValue(currentReview.percentage)}
