@@ -1,13 +1,20 @@
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 import css from 'styled-jsx/css';
 import { InterviewPeriod } from './InterviewPeriod';
 import { useState } from 'react';
 import { InterviewDetails } from './InterviewDetails';
 import { InterviewDto } from 'api';
+import { Course } from 'services/models';
+import { MentorInterview } from 'services/course';
 
-export function InteviewCard(props: { interview: InterviewDto }) {
-  const { interview } = props;
-  const { name, startDate, endDate, id, descriptionUrl, description } = interview;
+export function InteviewCard(props: {
+  interview: InterviewDto;
+  course: Course;
+  students: MentorInterview[];
+  fetchStudentInterviews: () => Promise<void>;
+}) {
+  const { interview, course, students, fetchStudentInterviews } = props;
+  const { name, startDate, endDate, id, description } = interview;
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -17,27 +24,28 @@ export function InteviewCard(props: { interview: InterviewDto }) {
       title={name}
       extra={<InterviewPeriod startDate={startDate} endDate={endDate} />}
       key={id}
-      onClick={() => setIsExpanded(!isExpanded)}
     >
       {description && <p>{description}</p>}
-      <p>
-        <a target="_blank" onClick={readMore} href={descriptionUrl}>
-          Read more
-        </a>
-      </p>
-      {isExpanded && <InterviewDetails interview={interview} />}
+      <Button type="link" onClick={() => setIsExpanded(!isExpanded)}>
+        Read more
+      </Button>
+      {isExpanded && (
+        <InterviewDetails
+          interview={interview}
+          course={course}
+          students={students}
+          fetchStudentInterviews={fetchStudentInterviews}
+        />
+      )}
       {containerCss.styles}
     </Card>
   );
 }
 
-function readMore(e: React.MouseEvent) {
-  e.stopPropagation();
-}
-
 const containerCss = css.resolve`
   div {
     margin-bottom: 16px;
+    pointer: default;
   }
 
   div:last-child {

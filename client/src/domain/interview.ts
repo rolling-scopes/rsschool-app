@@ -31,3 +31,29 @@ export function isInterviewRegistrationInProgess(interviewStartDate: string) {
 
   return moment().isBetween(startDate, interviewStartDate);
 }
+
+export function isInterviewStarted(interviewStartDate: string) {
+  return moment().isAfter(moment(interviewStartDate));
+}
+
+export function getInterviewFeedbackUrl({
+  courseAlias,
+  interviewName,
+  studentGithubId,
+  template,
+}: {
+  courseAlias: string;
+  studentGithubId: string;
+  template?: string | null;
+  interviewName: string;
+}) {
+  if (!isTechnicalScreening(interviewName)) {
+    return `/course/interview/${template}/feedback?course=${courseAlias}&githubId=${studentGithubId}`;
+  }
+
+  return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
+}
+
+export function isTechnicalScreening(name: string) {
+  return name.includes('Technical Screening');
+}
