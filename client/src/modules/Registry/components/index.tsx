@@ -8,4 +8,3 @@ export * from './Disciplines/Disciplines';
 export * from './Footer/Footer';
 export * from './FormCard/FormCard';
 export * from './Preferences/Preferences';
-export * from './ArrowIcon/ArrowIcon';

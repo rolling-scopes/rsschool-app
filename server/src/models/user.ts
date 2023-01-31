@@ -18,9 +18,9 @@ import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
-import { AvailableLanguages } from '../../../common/enums/available-languages';
 import { CourseUser } from './courseUser';
 import { NotificationUserConnection, Resume } from '.';
+import { AvailableLanguages } from './data';
 
 export interface EducationRecord {
   graduationYear: number;

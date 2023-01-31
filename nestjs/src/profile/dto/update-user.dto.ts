@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
-import { AvailableLanguages } from '@common/enums/available-languages';
+import { AvailableLanguages } from '@entities/data';
 
 export class UpdateUserDto {
   @ApiProperty({ required: false, nullable: true })
