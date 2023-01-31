@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileApi, ProfileDto, ProfileInfoDto, UsersNotificationsApi } from 'api';
+import { AvailableLanguages, ProfileApi, ProfileDto, ProfileInfoDto, UsersNotificationsApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -207,7 +207,7 @@ export interface UserFull extends UserBasic {
   tshirtSize: string;
   countryName: string;
   cityName: string;
-  languages: string[];
+  languages: AvailableLanguages[];
 }
 
 export interface ProfileResponse {
