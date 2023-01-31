@@ -29,7 +29,6 @@ const taskApi = new TasksApi();
 
 export function CourseTaskModal(props: Props) {
   const { data } = props;
-  console.log(data?.id);
   const [changes, setChanges] = useState({} as Record<string, any>);
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 

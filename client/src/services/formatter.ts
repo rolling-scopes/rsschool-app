@@ -21,8 +21,8 @@ export function formatDateTime(value: string | number) {
   return dayjs(value).format('YYYY-MM-DD HH:mm');
 }
 
-export function formatTimezoneToUTC(value: dayjs.ConfigType, zone: string) {
-  return dayjs(value).tz(zone, true).utc().format('YYYY-MM-DD HH:mmZ');
+export function formatTimezoneToUTC(value: dayjs.ConfigType, zone = 'UTC') {
+  return dayjs(value).tz(zone, true).utc().format();
 }
 
 export function formatTime(value: string) {

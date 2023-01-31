@@ -39,10 +39,7 @@ function getInitialValues(data: TeamDistributionDto) {
     ...data,
     range:
       data.startDate && data.endDate
-        ? [
-            data.startDate ? dayjs.tz(data.startDate, timeZone) : null,
-            data.endDate ? dayjs.tz(data.endDate, timeZone) : null,
-          ]
+        ? [data.startDate ? dayjs.utc(data.startDate) : null, data.endDate ? dayjs.utc(data.endDate) : null]
         : null,
     timeZone,
     strictTeamSizeMode: data.strictTeamSizeMode ?? true,
@@ -51,8 +48,8 @@ function getInitialValues(data: TeamDistributionDto) {
   };
 }
 
-const createRecord = (values: FormState): CreateTeamDistributionDto => {
-  const [startDate, endDate] = values.range;
+const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => {
+  const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
   const record = {
     name: values.name!,
     description: values.description ?? '',
@@ -130,7 +127,6 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
           rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
         >
           <DatePicker.RangePicker
-            format="YYYY-MM-DD HH:mm"
             showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
           />
         </Form.Item>
