@@ -179,8 +179,10 @@ export class ScoreService {
         : [];
 
       const user = student.user;
+
       const resumeUuid = student.user.resume?.find(r => r.userId === user.id)?.uuid;
       const cvLink = resumeUuid ? `${config.host}/cv/${resumeUuid}` : '';
+
       const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
         .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
         .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
