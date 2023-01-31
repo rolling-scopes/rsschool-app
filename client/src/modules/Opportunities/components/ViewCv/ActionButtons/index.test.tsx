@@ -38,30 +38,30 @@ describe('ActionButtons', () => {
     expect(mockSwitchView).toHaveBeenCalled();
   });
 
-  test('should copy to clipboard by click on Share button if url is provided', () => {
+  test('should copy to clipboard by click on Share button if url is provided', async () => {
     render(<ActionButtons url={mockUrl} isExpired={false} switchView={mockSwitchView} />);
 
     const shareButton = screen.getByRole('button', { name: /share/i });
 
     fireEvent.click(shareButton);
 
-    // const successNotification = screen.getByText('Copied to clipboard');
+    const successNotification = await screen.findByText('Copied to clipboard');
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
-    // expect(successNotification).toBeInTheDocument();
+    expect(successNotification).toBeInTheDocument();
   });
 
-  test('should not to clipboard by click on Share button if url is not provided', () => {
+  test('should not to clipboard by click on Share button if url is not provided', async () => {
     render(<ActionButtons isExpired={false} switchView={mockSwitchView} />);
 
     const shareButton = screen.getByRole('button', { name: /share/i });
 
     fireEvent.click(shareButton);
 
-    // const successNotification = screen.queryByText('Copied to clipboard');
+    const successNotification = await screen.findByText('Copied to clipboard');
 
     expect(mockCopyToClipboard).not.toHaveBeenCalled();
-    // expect(successNotification).toBeInTheDocument();
+    expect(successNotification).toBeInTheDocument();
   });
 
   test('should disable Share button should if CV is expired', () => {

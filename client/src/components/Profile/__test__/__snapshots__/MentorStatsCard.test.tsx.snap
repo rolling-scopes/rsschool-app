@@ -3,7 +3,7 @@
 exports[`MentorStatsCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-26rdvq"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-ixblex"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-26rdvq"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-ixblex"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -53,7 +53,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
           Mentored Students:
            
           <span
-            class="ant-typography css-dev-only-do-not-override-26rdvq"
+            class="ant-typography css-dev-only-do-not-override-ixblex"
             style="font-size: 18px;"
           >
             <strong>
@@ -65,7 +65,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
           Courses as Mentor:
            
           <span
-            class="ant-typography css-dev-only-do-not-override-26rdvq"
+            class="ant-typography css-dev-only-do-not-override-ixblex"
             style="font-size: 18px;"
           >
             <strong>
@@ -75,10 +75,10 @@ exports[`MentorStatsCard should render correctly 1`] = `
         </p>
       </div>
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-26rdvq"
+        class="ant-list ant-list-split css-dev-only-do-not-override-ixblex"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-26rdvq"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-ixblex"
         >
           <div
             class="ant-spin-container"
@@ -97,7 +97,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
                     style="font-size: 20px; margin-bottom: 5px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-26rdvq"
+                      class="ant-typography css-dev-only-do-not-override-ixblex"
                     >
                       <strong>
                         rs-2020-q1
@@ -121,7 +121,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
                     style="margin-bottom: 5px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-26rdvq"
+                      class="ant-typography css-dev-only-do-not-override-ixblex"
                     >
                       <strong>
                         rs-2018-q1
@@ -131,7 +131,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-26rdvq ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-ixblex ant-btn-dashed"
                   style="margin-left: 16px;"
                   type="button"
                 >

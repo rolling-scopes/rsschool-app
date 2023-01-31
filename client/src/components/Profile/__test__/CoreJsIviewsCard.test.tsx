@@ -39,11 +39,12 @@ describe('CoreJSIviewsCard', () => {
     expect(container).toMatchSnapshot();
   });
 
-  it.skip('should show modal', async () => {
+  it('should show modal', async () => {
     render(<CoreJsIviewsCard data={data} />);
+
     const btn = await screen.findByTestId('profile-corejs-iview-button');
     btn.click();
-    const modal = screen.queryByTestId('profile-corejs-iviews-modal-table');
+    const modal = await screen.findByTestId('profile-corejs-iviews-modal-table');
     expect(modal).toBeInTheDocument();
   });
 });

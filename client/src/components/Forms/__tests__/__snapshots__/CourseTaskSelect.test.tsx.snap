@@ -4,16 +4,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-26rdvq"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-26rdvq"
+        class="ant-form-item css-dev-only-do-not-override-ixblex"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-26rdvq"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
           >
             <label
               class="ant-form-item-required"
@@ -24,7 +24,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
           >
             <div
               class="ant-form-item-control-input"
@@ -34,7 +34,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-26rdvq ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -106,7 +106,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
   >
     <div>
       <div
-        class="ant-select-dropdown css-dev-only-do-not-override-26rdvq"
+        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
         style="opacity: 0; min-width: 0; width: 0px;"
       >
         <div>
@@ -380,16 +380,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-26rdvq"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-26rdvq"
+        class="ant-form-item css-dev-only-do-not-override-ixblex"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-26rdvq"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
           >
             <label
               class="ant-form-item-required"
@@ -400,7 +400,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
           >
             <div
               class="ant-form-item-control-input"
@@ -410,7 +410,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-26rdvq ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -483,7 +483,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
   >
     <div>
       <div
-        class="ant-select-dropdown css-dev-only-do-not-override-26rdvq"
+        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
         style="opacity: 0; min-width: 0; width: 0px;"
       >
         <div>
@@ -715,16 +715,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-26rdvq"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-26rdvq"
+        class="ant-form-item css-dev-only-do-not-override-ixblex"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-26rdvq"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
           >
             <label
               class="ant-form-item-required"
@@ -735,7 +735,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-26rdvq"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
           >
             <div
               class="ant-form-item-control-input"
@@ -745,7 +745,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-26rdvq ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -817,7 +817,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
   >
     <div>
       <div
-        class="ant-select-dropdown css-dev-only-do-not-override-26rdvq"
+        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
         style="opacity: 0; min-width: 0; width: 0px;"
       >
         <div>

@@ -3,7 +3,7 @@
 exports[`CommonCardWithSettingsModal Should render correctly if just basic props are present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-26rdvq"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-ixblex"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`CommonCardWithSettingsModal Should render correctly if just basic props
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-26rdvq"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-ixblex"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -63,7 +63,7 @@ exports[`CommonCardWithSettingsModal Should render correctly if just basic props
 exports[`CommonCardWithSettingsModal Should render correctly if null content is passed and editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-26rdvq"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-ixblex"
   >
     <div
       class="ant-card-head"
@@ -75,7 +75,7 @@ exports[`CommonCardWithSettingsModal Should render correctly if null content is 
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-26rdvq"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-ixblex"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -93,7 +93,7 @@ exports[`CommonCardWithSettingsModal Should render correctly if null content is 
       class="ant-card-body"
     >
       <div
-        class="css-dev-only-do-not-override-26rdvq ant-empty ant-empty-normal"
+        class="css-dev-only-do-not-override-ixblex ant-empty ant-empty-normal"
       >
         <div
           class="ant-empty-image"

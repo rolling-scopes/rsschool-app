@@ -3,7 +3,7 @@ import { Layout, Menu, MenuProps } from 'antd';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, ReactNode, Key } from 'react';
 import { useLocalStorage } from 'react-use';
 import { Course } from 'services/models';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
@@ -17,20 +17,8 @@ enum LocalStorage {
   IsSiderCollapsed = 'isSiderCollapsed',
 }
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group',
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
+function getItem(label: ReactNode, key: Key, icon?: ReactNode, children?: MenuItem[], type?: 'group'): MenuItem {
+  return { key, icon, children, label, type };
 }
 
 export function AdminSider(props: Props) {
