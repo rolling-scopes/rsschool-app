@@ -7,7 +7,7 @@ const mockOnDeleteRegister = jest.fn();
 
 const distribution = {
   id: 1,
-  startDate: '2022-01-01T00:00:00Z',
+  startDate: '2021-12-31T00:00:00Z',
   endDate: '2022-01-03T00:00:00Z',
   registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Available,
 } as TeamDistributionDto;
@@ -20,7 +20,6 @@ function renderActions(distribution: TeamDistributionDto, isManager = false) {
       deleteRegister={mockOnDeleteRegister}
       isManager={isManager}
       courseAlias="test"
-      mobileView={false}
     />,
   );
 }
@@ -77,6 +76,18 @@ describe('Actions', () => {
 
     const cancel = screen.getByText(/cancel/i);
     expect(cancel).toBeInTheDocument();
+  });
+
+  it('should render a Registration is closed text when the distribution is completed and end date passed', () => {
+    const completedDistribution = {
+      ...distribution,
+      endDate: '2022-01-01T00:00:00Z',
+      registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
+    };
+    renderActions(completedDistribution);
+
+    const text = screen.getByText(/registration is closed/i);
+    expect(text).toBeInTheDocument();
   });
 
   it('should render a disabled register button when the distribution is in the future', () => {

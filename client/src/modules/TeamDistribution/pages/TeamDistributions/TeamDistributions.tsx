@@ -8,12 +8,18 @@ import { message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
+import { useModal } from 'hooks';
 
 const teamDistributionApi = new TeamDistributionApi();
 
 function TeamDistributions({ session, course }: CoursePageProps) {
-  const [teamDistribution, setTeamDistribution] = useState<Partial<TeamDistributionDto> | null>(null);
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);
+  const {
+    open: openTeamDistributionModal,
+    toggle: toggleTeamDistributionModal,
+    formData: teamDistributionData,
+  } = useModal<Partial<TeamDistributionDto>>();
+
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
   const loadData = async () => {
@@ -28,15 +34,15 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   const { loading } = useAsync(loadData, [course.id]);
 
   const handleCreateTeamDistribution = () => {
-    setTeamDistribution({});
+    toggleTeamDistributionModal();
   };
 
   const handleEditTeamDistribution = (distribution: TeamDistributionDto) => {
-    setTeamDistribution(distribution);
+    toggleTeamDistributionModal(distribution);
   };
 
   const handleTeamDistributionSubmit = async () => {
-    setTeamDistribution(null);
+    toggleTeamDistributionModal();
     await loadData();
   };
 
@@ -77,11 +83,11 @@ function TeamDistributions({ session, course }: CoursePageProps) {
       githubId={session.githubId}
       courseName={course.name}
     >
-      {teamDistribution && (
+      {openTeamDistributionModal && (
         <TeamDistributionModal
-          data={teamDistribution}
+          data={teamDistributionData}
           onSubmit={handleTeamDistributionSubmit}
-          onCancel={() => setTeamDistribution(null)}
+          onCancel={() => toggleTeamDistributionModal()}
           courseId={course.id}
         />
       )}

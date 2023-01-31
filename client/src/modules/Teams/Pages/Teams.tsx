@@ -14,8 +14,9 @@ import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
-import { useDistribution, useModal } from '../hooks';
 import { useLoading } from 'components/useLoading';
+import { useDistribution } from '../hooks';
+import { useModal } from 'hooks';
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
