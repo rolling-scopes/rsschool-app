@@ -8,7 +8,6 @@ import { times } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseTaskDetails } from 'services/course';
-import { formatTimezoneToUTC } from 'services/formatter';
 import { UserService } from 'services/user';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -30,6 +29,7 @@ const taskApi = new TasksApi();
 
 export function CourseTaskModal(props: Props) {
   const { data } = props;
+  console.log(data?.id);
   const [changes, setChanges] = useState({} as Record<string, any>);
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 
@@ -137,14 +137,13 @@ export function CourseTaskModal(props: Props) {
             rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
           >
             <DatePicker.RangePicker
-              format="YYYY-MM-DD HH:mm"
               showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
             />
           </Form.Item>
         </Col>
         <Col span={6}>
           <Form.Item name="timeZone" label="TimeZone">
-            <Select defaultValue="UTC" placeholder="Please select a timezone">
+            <Select defaultValue="UTC">
               <Option value="UTC">UTC</Option>
             </Select>
           </Form.Item>
@@ -180,7 +179,7 @@ export function CourseTaskModal(props: Props) {
                 rules={[{ required: true, message: 'Please enter cross-check end date' }]}
                 tooltip="Cross-Check End Date must be later than the End Date of the task. The minimum duration of a cross-check is 3 days. The cross-check will be completed at 23:59 UTC on the chosen day."
               >
-                <DatePicker format="YYYY-MM-DD" />
+                <DatePicker />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -212,13 +211,13 @@ export function CourseTaskModal(props: Props) {
 }
 
 function createRecord(values: any): CreateCourseTaskDto {
-  const [startDate, endDate] = values.range;
+  const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
+  const crossCheckEndDate = values.crossCheckEndDate as dayjs.Dayjs | null;
+
   const data = {
-    studentStartDate: formatTimezoneToUTC(startDate, values.timeZone),
-    studentEndDate: formatTimezoneToUTC(endDate, values.timeZone),
-    crossCheckEndDate: values.crossCheckEndDate
-      ? formatTimezoneToUTC(values.crossCheckEndDate.set({ hour: 23, minute: 59 }), values.timeZone)
-      : undefined,
+    studentStartDate: startDate.utc().format(),
+    studentEndDate: endDate.utc().format(),
+    crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).format() : undefined,
     taskId: values.taskId,
     taskOwnerId: values.taskOwner?.id,
     checker: values.checker,
@@ -233,22 +232,21 @@ function createRecord(values: any): CreateCourseTaskDto {
 }
 
 function getInitialValues(modalData: Partial<CourseTaskDetails>) {
-  const timeZone = 'UTC';
-
-  return {
+  const data = {
     ...modalData,
-    timeZone,
+    timeZone: 'UTC',
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
     maxScore: modalData.maxScore || 100,
     scoreWeight: modalData.scoreWeight ?? 1,
-    crossCheckEndDate: modalData.crossCheckEndDate ? dayjs.utc(modalData.crossCheckEndDate, timeZone) : null,
+    crossCheckEndDate: modalData.crossCheckEndDate ? dayjs.utc(modalData.crossCheckEndDate) : null,
     range:
       modalData.studentStartDate && modalData.studentEndDate
         ? [
-            modalData.studentStartDate ? dayjs.utc(modalData.studentStartDate, timeZone) : null,
-            modalData.studentEndDate ? dayjs.utc(modalData.studentEndDate, timeZone) : null,
+            modalData.studentStartDate ? dayjs.utc(modalData.studentStartDate) : null,
+            modalData.studentEndDate ? dayjs.utc(modalData.studentEndDate) : null,
           ]
         : null,
     checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
   };
+  return data;
 }

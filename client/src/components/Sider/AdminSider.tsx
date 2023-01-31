@@ -3,9 +3,11 @@ import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import ToolOutlined from '@ant-design/icons/ToolOutlined';
 import { Layout, Menu, MenuProps } from 'antd';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Link from 'next/link';
+import Router from 'next/router';
 import { useMemo, ReactNode, Key } from 'react';
 import { useLocalStorage } from 'react-use';
 import { Course } from 'services/models';
@@ -18,10 +20,6 @@ type Props = { session: Session; courses: Course[]; activeCourse?: Course | null
 
 enum LocalStorage {
   IsSiderCollapsed = 'isSiderCollapsed',
-}
-
-function getItem(label: ReactNode, key: Key, icon?: ReactNode, children?: MenuItem[], type?: 'group'): MenuItem {
-  return { key, icon, children, label, type };
 }
 
 export function AdminSider(props: Props) {
@@ -43,44 +41,30 @@ export function AdminSider(props: Props) {
   const getMenuItems = () => {
     const menuItems: MenuItem[] = [];
     if (adminMenuItems.length) {
-      menuItems.push(
-        getItem(
-          'Admin area',
-          'adminArea',
-          <SearchOutlined />,
-          adminMenuItems.map(item =>
-            getItem(
-              <Menu.Item key={item.key}>
-                <Link prefetch={false} href={item.href}>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              </Menu.Item>,
-              item.key,
-            ),
-          ),
-        ),
-      );
+      menuItems.push({
+        key: 'adminArea',
+        label: 'Admin area',
+        type: 'group',
+        children: adminMenuItems.map(item => ({
+          key: item.key,
+          label: item.name,
+          icon: item.icon,
+          onClick: () => Router.push(item.href),
+        })),
+      });
     }
     if (courseManagementMenuItems.length) {
-      menuItems.push(
-        getItem(
-          'Course management',
-          'courseManagement',
-          <ToolOutlined />,
-          courseManagementMenuItems.map(item =>
-            getItem(
-              <Menu.Item key={item.key}>
-                <Link prefetch={false} href={item.href}>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              </Menu.Item>,
-              item.key,
-            ),
-          ),
-        ),
-      );
+      menuItems.push({
+        key: 'courseManagement',
+        label: 'Course Management',
+        type: 'group',
+        children: courseManagementMenuItems.map(item => ({
+          key: item.key,
+          label: item.name,
+          icon: item.icon,
+          onClick: () => Router.push(item.href),
+        })),
+      });
     }
     return menuItems;
   };
