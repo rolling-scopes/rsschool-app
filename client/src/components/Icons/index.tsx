@@ -6,3 +6,6 @@ export * from './HealthMask';
 export * from './LinkedInIcon';
 export * from './ScoreIcon';
 export * from './TelegramIcon';
+export * from './GitHubLogoIcon';
+export * from './EpamLogoIcon';
+export * from './RSLogoIcon';

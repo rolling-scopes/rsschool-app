@@ -1,5 +1,5 @@
-/* eslint-disable testing-library/no-unnecessary-act */
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
 import { Course } from 'services/models';
@@ -39,13 +39,15 @@ describe('AdditionalInfo', () => {
     jest.clearAllMocks();
   });
 
+  const user = userEvent.setup();
+
   test('should call previousHandler', async () => {
     renderAdditionalInfo(mockValues);
 
     const button = await screen.findByText('Previous');
     expect(button).toBeInTheDocument();
 
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(previousHandler).toHaveBeenCalled();
   });
@@ -56,9 +58,7 @@ describe('AdditionalInfo', () => {
     const button = await screen.findByText('Submit');
     expect(button).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    await user.click(button);
 
     expect(submitHandler).toHaveBeenCalled();
     expect(submitFailedHandler).not.toHaveBeenCalled();
@@ -70,9 +70,7 @@ describe('AdditionalInfo', () => {
     const button = await screen.findByText('Submit');
     expect(button).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    await user.click(button);
 
     expect(submitHandler).not.toHaveBeenCalled();
     expect(submitFailedHandler).toHaveBeenCalled();
@@ -99,7 +97,7 @@ describe('AdditionalInfo', () => {
 
     const checkbox = await screen.findByRole('checkbox');
 
-    fireEvent.click(checkbox);
+    await user.click(checkbox);
 
     const errorMessage = await screen.findByText(ERROR_MESSAGES.shouldAgree);
     expect(checkbox).not.toBeChecked();

@@ -38,7 +38,7 @@ export function Disciplines({ disciplines }: Props) {
           >
             <Row justify="space-between" gutter={[0, 8]}>
               {disciplines.map(({ name }) => (
-                <Col span={12}>
+                <Col span={12} key={name}>
                   <Checkbox value={name}>{name}</Checkbox>
                 </Col>
               ))}
