@@ -16,6 +16,7 @@ type Props = {
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
   handleCreateTeam: () => void;
+  handleDistributeStudents: () => void;
   handleJoinTeam: () => void;
 };
 
@@ -26,6 +27,7 @@ export default function TeamsHeader({
   isManager,
   activeTab,
   handleCreateTeam,
+  handleDistributeStudents,
   handleJoinTeam,
   setActiveTab,
 }: Props) {
@@ -105,9 +107,18 @@ export default function TeamsHeader({
           </Space>
         )}
         {isManager && (
-          <Button type="primary" onClick={handleCreateTeam}>
-            Create team
-          </Button>
+          <Row gutter={24}>
+            <Col>
+              <Button type="primary" onClick={handleCreateTeam}>
+                Create team
+              </Button>
+            </Col>
+            <Col>
+              <Button type="primary" onClick={handleDistributeStudents}>
+                Distribute students
+              </Button>
+            </Col>
+          </Row>
         )}
         <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />
       </Col>

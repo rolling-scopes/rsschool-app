@@ -32,7 +32,7 @@ export class TeamController {
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamsDto })
   @ApiOperation({ operationId: 'getTeams' })
-  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async getTeams(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) distributionId: number,
@@ -51,7 +51,7 @@ export class TeamController {
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDto })
   @ApiOperation({ operationId: 'createTeam' })
-  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async create(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -100,7 +100,7 @@ export class TeamController {
 
   @Patch('/:id')
   @UseGuards(RoleGuard, TeamLeadOrCourseManagerGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Student])
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Student], true)
   @ApiOperation({ operationId: 'updateTeam' })
   @ApiOkResponse()
   public async updateTeam(
@@ -116,7 +116,7 @@ export class TeamController {
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamPasswordDto })
   @ApiOperation({ operationId: 'getTeamPassword' })
-  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async getTeamPassword(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,

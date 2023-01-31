@@ -12,11 +12,13 @@ import {
 } from '../components';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
-import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto } from 'api';
+import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useDistribution, useModal } from '../hooks';
+import { useLoading } from 'components/useLoading';
 
 const teamApi = new TeamApi();
+const teamDistributionApi = new TeamDistributionApi();
 
 function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const {
@@ -25,6 +27,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     loading: loadingDistribution,
   } = useDistribution(teamDistributionDetailed, course.id);
   const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModal<Partial<TeamDto>>();
+  const [loading, withLoading] = useLoading(false);
 
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
 
@@ -38,6 +41,19 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
 
   const handleCreateTeam = () => {
     toggleTeamModal();
+  };
+
+  const distributeStudentsToTeam = withLoading(async () => {
+    try {
+      await teamDistributionApi.distributeStudentsToTeam(course.id, distribution.id);
+    } catch (error) {
+      message.error('Failed to distribute students to team. Please try later.');
+    }
+  });
+
+  const handleDistributeStudents = async () => {
+    await distributeStudentsToTeam();
+    await loadDistribution();
   };
 
   const handleJoinTeam = () => {
@@ -108,7 +124,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
 
   return (
     <PageLayout
-      loading={loadingDistribution}
+      loading={loadingDistribution || loading}
       title="RS Teams"
       background="#F0F2F5"
       githubId={session.githubId}
@@ -134,6 +150,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
         distribution={distribution}
         setActiveTab={setActiveTab}
         handleCreateTeam={handleCreateTeam}
+        handleDistributeStudents={handleDistributeStudents}
         handleJoinTeam={handleJoinTeam}
       />
       <Row style={{ background: 'white', padding: '24px', margin: 24 }}>{contentRenderers()}</Row>

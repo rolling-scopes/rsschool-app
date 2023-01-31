@@ -56,7 +56,7 @@ export default function MyTeamSection({
               <Button onClick={() => copyPassword(myTeam.id)} icon={<CopyOutlined />}>
                 Invitation password
               </Button>
-              <Button onClick={() => copyChatLink()} icon={<CopyOutlined />}>
+              <Button onClick={() => copyChatLink()} icon={<CopyOutlined />} disabled={!myTeam.chatLink}>
                 Chat link
               </Button>
             </>

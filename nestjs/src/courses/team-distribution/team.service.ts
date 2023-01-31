@@ -16,7 +16,7 @@ export class TeamService {
     private dataSource: DataSource,
   ) {}
 
-  private async generatePassword(length = 6): Promise<string> {
+  public async generatePassword(length = 6): Promise<string> {
     const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', length);
     const password = await nanoid();
     return password;
@@ -148,5 +148,14 @@ export class TeamService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  public async getTeamsAvailableForDistribute(teamDistributionId: number, teamSize: number) {
+    const res = await this.repository
+      .createQueryBuilder('team')
+      .where('team."teamDistributionId" = :teamDistributionId', { teamDistributionId })
+      .leftJoinAndSelect('team.students', 'students')
+      .getMany();
+    return res.filter(t => t.students.length < teamSize).sort((a, b) => a.students.length - b.students.length);
   }
 }
