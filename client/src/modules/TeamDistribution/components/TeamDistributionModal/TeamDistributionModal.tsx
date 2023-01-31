@@ -6,8 +6,9 @@ import { TIMEZONES } from 'configs/timezones';
 import dayjs, { Dayjs } from 'dayjs';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { urlPattern } from 'services/validators';
+import timezone from 'dayjs/plugin/timezone';
 
-import 'dayjs/plugin/timezone';
+dayjs.extend(timezone);
 
 type Props = {
   data?: TeamDistributionDto;

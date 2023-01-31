@@ -7,7 +7,9 @@ import { UserService } from 'services/user';
 import { getApiConfiguration } from 'utils/axios';
 import { AutoTests, AutoTestsProps } from 'modules/AutoTest/pages';
 import dayjs from 'dayjs';
-import 'dayjs/plugin/isSameOrAfter';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrAfter);
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
   try {

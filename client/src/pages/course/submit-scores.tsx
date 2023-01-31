@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { withSession } from 'components/withSession';

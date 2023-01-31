@@ -2,13 +2,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
-import {
-  EyeOutlined,
-  LogoutOutlined,
-  QuestionCircleFilled,
-  SolutionOutlined,
-  NotificationOutlined,
-} from '@ant-design/icons';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
+import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
+import QuestionCircleFilled from '@ant-design/icons/QuestionCircleFilled';
+import SolutionOutlined from '@ant-design/icons/SolutionOutlined';
+import NotificationOutlined from '@ant-design/icons/NotificationOutlined';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
 

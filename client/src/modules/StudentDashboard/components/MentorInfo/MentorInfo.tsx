@@ -1,7 +1,8 @@
 import { Col, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { MentorBasic } from 'common/models';
-import { EnvironmentFilled, GithubFilled } from '@ant-design/icons';
+import GithubFilled from '@ant-design/icons/GithubFilled';
+import EnvironmentFilled from '@ant-design/icons/EnvironmentFilled';
 import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Text, Link } = Typography;

@@ -1,5 +1,5 @@
 import { ColumnType } from 'antd/lib/table';
-import { SettingFilled } from '@ant-design/icons';
+import SettingFilled from '@ant-design/icons/SettingFilled';
 import { Typography } from 'antd';
 import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
