@@ -259,6 +259,19 @@ export interface ApproveMentorDto {
 /**
  * 
  * @export
+ * @interface Attributes
+ */
+export interface Attributes {
+    /**
+     * 
+     * @type {string}
+     * @memberof Attributes
+     */
+    'template': string | null;
+}
+/**
+ * 
+ * @export
  * @interface AuthConnectionDto
  */
 export interface AuthConnectionDto {
@@ -2604,10 +2617,10 @@ export interface InterviewDto {
     'descriptionUrl': string;
     /**
      * 
-     * @type {object}
+     * @type {Attributes}
      * @memberof InterviewDto
      */
-    'attributes': object;
+    'attributes': Attributes;
 }
 /**
  * 
