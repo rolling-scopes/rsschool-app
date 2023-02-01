@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const prodConfig = require('./next.config.prod');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: true,
+});
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -24,4 +27,4 @@ const nextConfig = {
   },
   swcMinify: true,
 };
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

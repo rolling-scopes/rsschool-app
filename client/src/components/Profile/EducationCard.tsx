@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import { Typography, List, Input, Button } from 'antd';
 import { ReadOutlined, FileAddOutlined, DeleteOutlined } from '@ant-design/icons';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { Education, UpdateProfileInfoDto } from 'api';
 

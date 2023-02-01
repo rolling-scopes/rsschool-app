@@ -44,6 +44,7 @@
     "use-places-autocomplete": "3.0.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.1.6",
     "@playwright/test": "1.30.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",

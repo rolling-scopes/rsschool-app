@@ -4,7 +4,7 @@ import { Typography } from 'antd';
 import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
-import { isArray } from 'lodash';
+import isArray from 'lodash/isArray';
 import Link from 'next/link';
 
 const { Text } = Typography;

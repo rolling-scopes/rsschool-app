@@ -4,7 +4,7 @@ import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import { TASK_TYPES } from 'data/taskTypes';
-import { times } from 'lodash';
+import times from 'lodash/times';
 import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseTaskDetails } from 'services/course';

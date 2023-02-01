@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import dayjs from 'dayjs';
 import { CourseEvent, CourseService } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';

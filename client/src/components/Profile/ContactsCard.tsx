@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { List, Typography } from 'antd';
 import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { UpdateProfileInfoDto } from 'api';
 import { Contacts } from 'common/models/profile';
 import { NotificationChannel } from 'modules/Notifications/services/notifications';

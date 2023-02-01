@@ -6,7 +6,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import csv from 'csvtojson';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';

@@ -1,6 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 let searchInput: any;
 export function getColumnSearchProps(dataIndex: string | string[], label?: string) {
