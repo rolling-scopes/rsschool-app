@@ -1,9 +1,9 @@
 import { Button, Row, Space, Typography } from 'antd';
-import { UserSwitchOutlined } from '@ant-design/icons';
+import { UserSwitchOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useMemo, useState } from 'react';
 import { MentorInterview } from 'services/course';
 import { InterviewDto } from 'api';
-import { isTechnicalScreening } from 'domain/interview';
+import { getInterviewWaitList, isTechnicalScreening } from 'domain/interview';
 import { SelectMentorModal } from './SelectMentorModal';
 import { useAsyncFn } from 'react-use';
 import { CourseService } from 'services/course';
@@ -14,17 +14,19 @@ export function InterviewsSummary({
   interview,
   courseId,
   reloadList,
+  courseAlias,
 }: {
   interview: InterviewDto;
   interviews: MentorInterview[];
   toggleDetails: () => void;
   courseId: number;
+  courseAlias: string;
   reloadList: () => Promise<void>;
 }) {
   const totalCompleted = useMemo(() => interviews.filter(interview => interview.completed).length, [interviews]);
   const canTransfer = useMemo(
     () => interviews.some(studentInterview => !studentInterview.completed && isTechnicalScreening(interview.name)),
-    [interview.name],
+    [interview.name, interviews],
   );
   const [showTransfer, setShowTransfer] = useState(false);
 
@@ -45,6 +47,9 @@ export function InterviewsSummary({
         </Button>
       </Row>
       <Space size={'small'}>
+        <Button icon={<UserAddOutlined />} href={getInterviewWaitList(courseAlias, interview.id)}>
+          Add student
+        </Button>
         {canTransfer && (
           <Button icon={<UserSwitchOutlined />} onClick={() => setShowTransfer(true)}>
             Transfer student

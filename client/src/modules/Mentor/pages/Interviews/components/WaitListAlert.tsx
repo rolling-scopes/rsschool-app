@@ -1,6 +1,7 @@
 import { Alert, Typography } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import Link from 'next/link';
+import { getInterviewWaitList } from 'domain/interview';
 
 export function WaitListAlert({
   courseAlias,
@@ -13,7 +14,7 @@ export function WaitListAlert({
   return (
     <div className="wait-list-alert">
       <Alert
-        closable={false}
+        closable
         message="Do you want to interview more students?"
         icon={<InfoCircleTwoTone />}
         showIcon
@@ -21,7 +22,7 @@ export function WaitListAlert({
           <>
             <Typography.Text onClick={e => e?.stopPropagation()}>
               Excellent candidates are waiting for their mentor. Please check the{' '}
-              <Link href={`/course/mentor/interview-wait-list?course=${courseAlias}&interviewId=${interviewId}`}>
+              <Link href={getInterviewWaitList(courseAlias, interviewId)}>
                 <a>students' waitlist. </a>
               </Link>
             </Typography.Text>

@@ -57,3 +57,6 @@ export function getInterviewFeedbackUrl({
 export function isTechnicalScreening(name: string) {
   return name.includes('Technical Screening');
 }
+
+export const getInterviewWaitList = (courseAlias: string, interviewId: number) =>
+  `/course/mentor/interview-wait-list?course=${courseAlias}&interviewId=${interviewId}`;
