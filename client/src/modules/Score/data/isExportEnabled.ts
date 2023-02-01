@@ -1,6 +1,6 @@
 import { CoursePageProps } from 'services/models';
-import { CourseRole } from 'components/withSession';
 import { isCourseManager } from 'domain/user';
+import { CourseRole } from 'services/models';
 
 export function isExportEnabled(props: CoursePageProps) {
   const { session } = props;

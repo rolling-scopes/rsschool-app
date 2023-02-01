@@ -9,7 +9,7 @@ import { UserSearch } from 'components/UserSearch';
 import { Session, withSession } from 'components/withSession';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 
 const { Content } = Layout;
@@ -20,7 +20,7 @@ enum ModalAction {
   create = 'create',
 }
 
-const roles = ['manager', 'supervisor'];
+const roles = [CourseRole.Manager, CourseRole.Supervisor];
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
   manager: 'volcano',

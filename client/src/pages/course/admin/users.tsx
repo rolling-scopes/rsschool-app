@@ -8,7 +8,7 @@ import withCourseData from 'components/withCourseData';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseUser } from 'services/course';
-import { CoursePageProps, UserGroup } from 'services/models';
+import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -16,6 +16,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 type Props = CoursePageProps;
 
 const userGroupService = new UserGroupApi();
+const userService = new UserService();
 
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
@@ -25,7 +26,6 @@ const rolesColors: Record<string, string> = {
 function Page(props: Props) {
   const courseId = props.course.id;
 
-  const userService = new UserService();
   const [loading, setLoading] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
@@ -98,6 +98,11 @@ function Page(props: Props) {
           <Col span={8}>
             <Form.Item name="isSupervisor" valuePropName="checked">
               <Checkbox>Supervisor</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="isDementor" valuePropName="checked">
+              <Checkbox>Dementor</Checkbox>
             </Form.Item>
           </Col>
         </Row>
@@ -210,6 +215,11 @@ function getColumns(handleEditItem: any) {
       render: boolIconRenderer,
     },
     {
+      title: 'Dementor',
+      dataIndex: 'isDementor',
+      render: boolIconRenderer,
+    },
+    {
       title: 'Actions',
       dataIndex: 'actions',
       render: (_: any, record: CourseUser) => (
@@ -226,6 +236,7 @@ function createRecord(values: any) {
     githubId: values.githubId,
     isManager: values.isManager,
     isSupervisor: values.isSupervisor,
+    isDementor: values.isDementor,
   };
   return data;
 }
@@ -234,11 +245,12 @@ function createRecords(groups: UserGroupDto[]) {
   const data = groups.reduce((users, group) => {
     group.users.forEach(({ id }) => {
       users[id] = users[id] ?? {};
-      users[id].isManager = users[id].isManager || group.roles.includes('manager');
-      users[id].isSupervisor = users[id].isSupervisor || group.roles.includes('supervisor');
+      users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
+      users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
+      users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
     });
     return users;
-  }, {} as Record<string, { isManager: boolean; isSupervisor: boolean }>);
+  }, {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean }>);
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
 

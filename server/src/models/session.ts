@@ -12,12 +12,13 @@ export interface CourseInfo {
   roles: CourseRole[];
 }
 
-export const enum CourseRole {
+export enum CourseRole {
   TaskOwner = 'taskOwner',
   Manager = 'manager',
   Supervisor = 'supervisor',
   Student = 'student',
   Mentor = 'mentor',
+  Dementor = 'dementor',
 }
 
 function hasRole(user?: IUserSession, courseId?: number, role?: CourseRole) {

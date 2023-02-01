@@ -1,5 +1,6 @@
-import { CourseRole, Session } from 'components/withSession';
+import { Session } from 'components/withSession';
 import { keys } from 'lodash';
+import { CourseRole } from 'services/models';
 
 function hasRole(session: Session, courseId: number, role: CourseRole) {
   return session.courses[courseId]?.roles.includes(role) ?? false;

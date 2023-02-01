@@ -1,4 +1,5 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { CourseRole } from './session';
 
 @Entity()
 export class UserGroup {
@@ -17,5 +18,5 @@ export class UserGroup {
   users: number[];
 
   @Column('text', { array: true })
-  roles: string[];
+  roles: CourseRole[];
 }

@@ -1,7 +1,7 @@
-import { CourseRole } from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
 import { getCourseProps as getServerSideProps, PageProps } from 'modules/Course/data/getCourseProps';
 import { Students } from 'modules/Mentor/pages/Students';
+import { CourseRole } from 'services/models';
 
 export { getServerSideProps };
 
