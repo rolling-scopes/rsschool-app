@@ -1,4 +1,5 @@
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
+import { CourseRole } from 'services/models';
 import { SessionProvider } from 'modules/Course/contexts';
 import { MentorDashboard } from 'modules/Mentor/components';
 import { GetServerSideProps } from 'next';

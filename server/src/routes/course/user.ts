@@ -9,7 +9,9 @@ import { RouterContext } from '../guards';
 interface Roles {
   isManager: boolean;
   isSupervisor: boolean;
+  isDementor: boolean;
 }
+
 interface User extends Roles {
   userId: number;
 }
@@ -34,8 +36,8 @@ export const putUsers = (_?: ILogger) => async (ctx: RouterContext) => {
 
   if (usersToUpdate.length) {
     await Promise.all(
-      usersToUpdate.map(({ userId, isManager, isSupervisor }) =>
-        getRepository(CourseUser).update({ userId }, { isManager, isSupervisor }),
+      usersToUpdate.map(({ userId, isManager, isSupervisor, isDementor }) =>
+        getRepository(CourseUser).update({ userId }, { isManager, isSupervisor, isDementor }),
       ),
     );
   }
@@ -60,12 +62,12 @@ export const putUser = (_?: ILogger) => async (ctx: RouterContext) => {
     setResponse(ctx, BAD_REQUEST);
     return;
   }
-  const { isManager = false, isSupervisor = false }: Roles = ctx.request.body;
+  const { isManager = false, isSupervisor = false, isDementor = false }: Roles = ctx.request.body;
   const existing = await getRepository(CourseUser).findOne({ where: { courseId, userId: user.id } });
   if (existing == null) {
-    await getRepository(CourseUser).insert({ courseId, userId: user.id, isManager, isSupervisor });
+    await getRepository(CourseUser).insert({ courseId, userId: user.id, isManager, isSupervisor, isDementor });
   } else {
-    await getRepository(CourseUser).update(existing.id, { isManager, isSupervisor });
+    await getRepository(CourseUser).update(existing.id, { isManager, isSupervisor, isDementor });
   }
 
   setResponse(ctx, OK);

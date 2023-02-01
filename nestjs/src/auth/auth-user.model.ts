@@ -1,5 +1,6 @@
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
+import { CourseRole } from '@entities/session';
 import type { AuthDetails } from './auth.service';
 
 export enum Role {
@@ -7,15 +8,9 @@ export enum Role {
   User = 'user',
 }
 
-export type CourseRoles = Record<string, CourseRole[]>;
+export { CourseRole };
 
-export enum CourseRole {
-  TaskOwner = 'taskOwner',
-  Manager = 'manager',
-  Supervisor = 'supervisor',
-  Student = 'student',
-  Mentor = 'mentor',
-}
+export type CourseRoles = Record<string, CourseRole[]>;
 
 export interface CourseInfo {
   mentorId?: number;
@@ -42,7 +37,7 @@ export class AuthUser {
       const info = courses[student.courseId] ?? { roles: [] };
       info.studentId = student.id;
       info.roles.push(CourseRole.Student);
-      info.isExpelled = student.isExpelled ?? undefined;
+      info.isExpelled = student.isExpelled || undefined;
       courses[student.courseId] = info;
     });
     user.mentors?.forEach(mentor => {
@@ -77,29 +72,28 @@ export class AuthUser {
     taskOwner: CourseTask[],
   ) {
     return courseUsers
-      .flatMap(u => {
+      .flatMap(({ courseId, isDementor, isManager, isSupervisor }) => {
         const result: { courseId: number; role: CourseRole }[] = [];
-        if (u.isManager) {
-          result.push({ courseId: u.courseId, role: CourseRole.Manager });
+        if (isManager) {
+          result.push({ courseId, role: CourseRole.Manager });
         }
-        if (u.isSupervisor) {
-          result.push({ courseId: u.courseId, role: CourseRole.Supervisor });
+        if (isSupervisor) {
+          result.push({ courseId, role: CourseRole.Supervisor });
+        }
+        if (isDementor) {
+          result.push({ courseId, role: CourseRole.Dementor });
         }
         return result;
       })
-      .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.TaskOwner })))
-      .reduce((acc, item) => {
-        if (!acc[item.courseId]) {
-          acc[item.courseId] = { roles: [] };
+      .concat(taskOwner.map(({ courseId }) => ({ courseId, role: CourseRole.TaskOwner })))
+      .reduce((acc, { courseId, role }) => {
+        if (!acc[courseId]) {
+          acc[courseId] = { roles: [] };
         }
-        if (!acc[item.courseId]?.roles.includes(item.role)) {
-          acc[item.courseId]?.roles.push(item.role);
+        if (!acc[courseId]?.roles.includes(role)) {
+          acc[courseId]?.roles.push(role);
         }
         return acc;
       }, courseInfo);
-  }
-
-  public static getCourseDistinctRoles(user: AuthUser) {
-    return [...new Set(Object.values(user.roles))];
   }
 }

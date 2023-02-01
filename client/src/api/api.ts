@@ -1859,8 +1859,20 @@ export interface CreateUserGroupDto {
      * @type {Array<string>}
      * @memberof CreateUserGroupDto
      */
-    'roles': Array<string>;
+    'roles': Array<CreateUserGroupDtoRolesEnum>;
 }
+
+export const CreateUserGroupDtoRolesEnum = {
+    TaskOwner: 'taskOwner',
+    Manager: 'manager',
+    Supervisor: 'supervisor',
+    Student: 'student',
+    Mentor: 'mentor',
+    Dementor: 'dementor'
+} as const;
+
+export type CreateUserGroupDtoRolesEnum = typeof CreateUserGroupDtoRolesEnum[keyof typeof CreateUserGroupDtoRolesEnum];
+
 /**
  * 
  * @export
@@ -5532,8 +5544,20 @@ export interface UpdateUserGroupDto {
      * @type {Array<string>}
      * @memberof UpdateUserGroupDto
      */
-    'roles': Array<string>;
+    'roles': Array<UpdateUserGroupDtoRolesEnum>;
 }
+
+export const UpdateUserGroupDtoRolesEnum = {
+    TaskOwner: 'taskOwner',
+    Manager: 'manager',
+    Supervisor: 'supervisor',
+    Student: 'student',
+    Mentor: 'mentor',
+    Dementor: 'dementor'
+} as const;
+
+export type UpdateUserGroupDtoRolesEnum = typeof UpdateUserGroupDtoRolesEnum[keyof typeof UpdateUserGroupDtoRolesEnum];
+
 /**
  * 
  * @export
@@ -5619,8 +5643,20 @@ export interface UserGroupDto {
      * @type {Array<string>}
      * @memberof UserGroupDto
      */
-    'roles': Array<string>;
+    'roles': Array<UserGroupDtoRolesEnum>;
 }
+
+export const UserGroupDtoRolesEnum = {
+    TaskOwner: 'taskOwner',
+    Manager: 'manager',
+    Supervisor: 'supervisor',
+    Student: 'student',
+    Mentor: 'mentor',
+    Dementor: 'dementor'
+} as const;
+
+export type UserGroupDtoRolesEnum = typeof UserGroupDtoRolesEnum[keyof typeof UserGroupDtoRolesEnum];
+
 /**
  * 
  * @export

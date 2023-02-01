@@ -3546,7 +3546,13 @@
         "properties": {
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "type": "number" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["name", "users", "roles"]
       },
@@ -3561,7 +3567,13 @@
           "id": { "type": "number" },
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "$ref": "#/components/schemas/UserDto" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["id", "name", "users", "roles"]
       },
@@ -3570,7 +3582,13 @@
         "properties": {
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "type": "number" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["name", "users", "roles"]
       },

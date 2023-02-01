@@ -1,4 +1,5 @@
-import { CourseRole, Session } from 'components/withSession';
+import { Session } from 'components/withSession';
+import { CourseRole } from 'services/models';
 import * as user from './user';
 
 describe('User', () => {
