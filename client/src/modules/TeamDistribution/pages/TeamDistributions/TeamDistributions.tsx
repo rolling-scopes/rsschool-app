@@ -93,6 +93,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
       )}
       <div style={{ maxWidth: '1020px', margin: '0 auto' }}>
         <WelcomeCard isManager={isManager} handleCreateTeamDistribution={handleCreateTeamDistribution} />
+
         {distributions.length
           ? distributions.map(distribution => (
               <TeamDistributionCard

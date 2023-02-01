@@ -15,8 +15,8 @@ type Props = {
 };
 
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 20 },
+  labelCol: { span: 8 },
+  wrapperCol: { span: 24 },
 };
 
 interface FormState extends TeamDistributionDto {
