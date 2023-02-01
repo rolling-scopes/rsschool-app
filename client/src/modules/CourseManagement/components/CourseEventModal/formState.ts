@@ -2,9 +2,13 @@ import { message } from 'antd';
 import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
 import { EVENT_TYPES } from 'data/eventTypes';
 import omit from 'lodash/omit';
-import dayjs from 'dayjs';
 import { CourseEvent, CourseService } from 'services/course';
-import { formatTimezoneToUTC } from 'services/formatter';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const eventsApi = new EventsApi();
 
@@ -12,8 +16,8 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
   const record = {
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
-    dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
-    endTime: values.endTime ? formatTimezoneToUTC(values.endTime, values.timeZone) : undefined,
+    dateTime: values.dateTime ? dayjs.tz(values.dateTime, values.timeZone).utc().format() : undefined,
+    endTime: values.endTime ? dayjs.tz(values.endTime, values.timeZone).utc().format() : undefined,
     place: values.place || null,
     organizer: values.taskOwner?.id ? { id: values.taskOwner?.id } : undefined,
   };
@@ -79,8 +83,8 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
     type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
-    dateTime: modalData.dateTime ? dayjs.utc(modalData.dateTime, timeZone) : null,
-    endTime: modalData.endTime ? dayjs.utc(modalData.endTime, timeZone) : null,
+    dateTime: modalData.dateTime ? dayjs.utc(modalData.dateTime) : null,
+    endTime: modalData.endTime ? dayjs.utc(modalData.endTime) : null,
     organizerId: modalData.organizer ? modalData.organizer.id : undefined,
     special: modalData.special ? modalData.special.split(',') : [],
     timeZone,

@@ -4,16 +4,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-mxhywb"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-ixblex"
+        class="ant-form-item css-dev-only-do-not-override-mxhywb"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
           >
             <label
               class="ant-form-item-required"
@@ -24,7 +24,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
           >
             <div
               class="ant-form-item-control-input"
@@ -34,7 +34,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-mxhywb ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -101,273 +101,269 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
       </div>
     </form>
   </div>
-  <div
-    style="position: absolute; top: 0px; left: 0px; width: 100%;"
-  >
-    <div>
-      <div
-        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
-        style="opacity: 0; min-width: 0; width: 0px;"
-      >
-        <div>
+  <div>
+    <div
+      class="ant-select-dropdown css-dev-only-do-not-override-mxhywb ant-select-dropdown-placement-bottomLeft"
+      style="left: -1000vw; top: -1000vh; box-sizing: border-box; min-width: 0; width: 0px;"
+    >
+      <div>
+        <div
+          id="courseTaskId_list"
+          role="listbox"
+          style="height: 0px; width: 0px; overflow: hidden;"
+        >
           <div
-            id="courseTaskId_list"
-            role="listbox"
-            style="height: 0px; width: 0px; overflow: hidden;"
+            aria-selected="false"
+            id="courseTaskId_list_0"
+            role="presentation"
+          />
+          <div
+            aria-selected="false"
+            id="courseTaskId_list_1"
+            role="option"
           >
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_0"
-              role="presentation"
-            />
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_1"
-              role="option"
-            >
-              434
-            </div>
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_2"
-              role="option"
-            >
-              450
-            </div>
+            434
           </div>
           <div
-            class="rc-virtual-list"
-            style="position: relative;"
+            aria-selected="false"
+            id="courseTaskId_list_2"
+            role="option"
+          >
+            450
+          </div>
+        </div>
+        <div
+          class="rc-virtual-list"
+          style="position: relative;"
+        >
+          <div
+            class="rc-virtual-list-holder"
+            style="max-height: 274px; overflow-y: hidden;"
           >
             <div
-              class="rc-virtual-list-holder"
-              style="max-height: 274px; overflow-y: hidden;"
+              style="height: 288px; position: relative; overflow: hidden;"
             >
               <div
-                style="height: 288px; position: relative; overflow: hidden;"
+                class="rc-virtual-list-holder-inner"
+                style="display: flex; flex-direction: column; transform: translateY(0px); position: absolute; left: 0px; right: 0px; top: 0px;"
               >
                 <div
-                  class="rc-virtual-list-holder-inner"
-                  style="display: flex; flex-direction: column; transform: translateY(0px); position: absolute; left: 0px; right: 0px; top: 0px;"
+                  class="ant-select-item ant-select-item-group"
+                  title="Review (2)"
+                >
+                  Review (2)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
                 >
                   <div
-                    class="ant-select-item ant-select-item-group"
-                    title="Review (2)"
+                    class="ant-select-item-option-content"
                   >
-                    Review (2)
-                  </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
+                    <span
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(255, 77, 79);"
                     >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(255, 77, 79);"
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
                       >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      Async Race
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    Async Race
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
+                    <span
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(250, 173, 20);"
                     >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(250, 173, 20);"
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
                       >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      Fancy-weather Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    Fancy-weather Cross-Check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  class="ant-select-item ant-select-item-group"
+                  title="Unknown (2)"
+                >
+                  Unknown (2)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    class="ant-select-item ant-select-item-group"
-                    title="Unknown (2)"
+                    class="ant-select-item-option-content"
                   >
-                    Unknown (2)
+                     
+                    Virtual-piano
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Virtual-piano
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Clean-code-s1e1
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  class="ant-select-item ant-select-item-group"
+                  title="Future (2)"
+                >
+                  Future (2)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Clean-code-s1e1
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Shelter Cross-check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    class="ant-select-item ant-select-item-group"
-                    title="Future (2)"
+                    class="ant-select-item-option-content"
                   >
-                    Future (2)
+                     
+                    Virtual Keyboard Cross-Check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  class="ant-select-item ant-select-item-group"
+                  title="Expired (2)"
+                >
+                  Expired (2)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Shelter Cross-check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Wildlife
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Virtual Keyboard Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    CV. Cross-Check
                   </div>
-                  <div
-                    class="ant-select-item ant-select-item-group"
-                    title="Expired (2)"
-                  >
-                    Expired (2)
-                  </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Wildlife
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
-                  </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      CV. Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
-                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            class="rc-virtual-list-scrollbar rc-virtual-list-scrollbar-show"
+            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute;"
+          >
             <div
-              class="rc-virtual-list-scrollbar rc-virtual-list-scrollbar-show"
-              style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute;"
-            >
-              <div
-                class="rc-virtual-list-scrollbar-thumb"
-                style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
-              />
-            </div>
+              class="rc-virtual-list-scrollbar-thumb"
+              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
+            />
           </div>
         </div>
       </div>
@@ -380,16 +376,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-mxhywb"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-ixblex"
+        class="ant-form-item css-dev-only-do-not-override-mxhywb"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
           >
             <label
               class="ant-form-item-required"
@@ -400,7 +396,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
           >
             <div
               class="ant-form-item-control-input"
@@ -410,7 +406,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-mxhywb ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -478,231 +474,227 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
       ,
     </form>
   </div>
-  <div
-    style="position: absolute; top: 0px; left: 0px; width: 100%;"
-  >
-    <div>
-      <div
-        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
-        style="opacity: 0; min-width: 0; width: 0px;"
-      >
-        <div>
+  <div>
+    <div
+      class="ant-select-dropdown css-dev-only-do-not-override-mxhywb ant-select-dropdown-placement-bottomLeft"
+      style="left: -1000vw; top: -1000vh; box-sizing: border-box; min-width: 0; width: 0px;"
+    >
+      <div>
+        <div
+          id="courseTaskId_list"
+          role="listbox"
+          style="height: 0px; width: 0px; overflow: hidden;"
+        >
           <div
-            id="courseTaskId_list"
-            role="listbox"
-            style="height: 0px; width: 0px; overflow: hidden;"
+            aria-selected="false"
+            id="courseTaskId_list_0"
+            role="presentation"
+          />
+          <div
+            aria-selected="false"
+            id="courseTaskId_list_1"
+            role="option"
           >
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_0"
-              role="presentation"
-            />
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_1"
-              role="option"
-            >
-              451
-            </div>
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_2"
-              role="option"
-            >
-              764
-            </div>
+            451
           </div>
           <div
-            class="rc-virtual-list"
-            style="position: relative;"
+            aria-selected="false"
+            id="courseTaskId_list_2"
+            role="option"
           >
-            <div
-              class="rc-virtual-list-holder"
-              style="max-height: 274px; overflow-y: hidden;"
-            >
-              <div>
+            764
+          </div>
+        </div>
+        <div
+          class="rc-virtual-list"
+          style="position: relative;"
+        >
+          <div
+            class="rc-virtual-list-holder"
+            style="max-height: 274px; overflow-y: hidden;"
+          >
+            <div>
+              <div
+                class="rc-virtual-list-holder-inner"
+                style="display: flex; flex-direction: column;"
+              >
                 <div
-                  class="rc-virtual-list-holder-inner"
-                  style="display: flex; flex-direction: column;"
+                  class="ant-select-item ant-select-item-group"
+                  title="Active (4)"
+                >
+                  Active (4)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
                 >
                   <div
-                    class="ant-select-item ant-select-item-group"
-                    title="Active (4)"
+                    class="ant-select-item-option-content"
                   >
-                    Active (4)
-                  </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(255, 77, 79);"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      Codewars Algorithms-2
-                    </div>
                     <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
-                  </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(255, 77, 79);"
                     >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(255, 77, 79);"
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
                       >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      Codewars #0
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    Codewars Algorithms-2
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(255, 77, 79);"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      React. Testing
-                    </div>
                     <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(255, 77, 79);"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    Codewars #0
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                      <span
-                        aria-label="clock-circle"
-                        class="anticon anticon-clock-circle"
-                        role="img"
-                        style="font-size: 14px; color: rgb(255, 77, 79);"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          data-icon="clock-circle"
-                          fill="currentColor"
-                          focusable="false"
-                          height="1em"
-                          viewBox="64 64 896 896"
-                          width="1em"
-                        >
-                          <path
-                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                          />
-                          <path
-                            d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
-                          />
-                        </svg>
-                      </span>
-                       
-                      Test Algorithms & Data structures
-                    </div>
                     <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(255, 77, 79);"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    React. Testing
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
+                  <div
+                    class="ant-select-item-option-content"
+                  >
+                    <span
+                      aria-label="clock-circle"
+                      class="anticon anticon-clock-circle"
+                      role="img"
+                      style="font-size: 14px; color: rgb(255, 77, 79);"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="clock-circle"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                        />
+                        <path
+                          d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+                        />
+                      </svg>
+                    </span>
+                     
+                    Test Algorithms & Data structures
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            class="rc-virtual-list-scrollbar"
+            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
+          >
             <div
-              class="rc-virtual-list-scrollbar"
-              style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
-            >
-              <div
-                class="rc-virtual-list-scrollbar-thumb"
-                style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
-              />
-            </div>
+              class="rc-virtual-list-scrollbar-thumb"
+              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
+            />
           </div>
         </div>
       </div>
@@ -715,16 +707,16 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
 <body>
   <div>
     <form
-      class="ant-form ant-form-horizontal css-dev-only-do-not-override-ixblex"
+      class="ant-form ant-form-horizontal css-dev-only-do-not-override-mxhywb"
     >
       <div
-        class="ant-form-item css-dev-only-do-not-override-ixblex"
+        class="ant-form-item css-dev-only-do-not-override-mxhywb"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-ixblex"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
           >
             <label
               class="ant-form-item-required"
@@ -735,7 +727,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-ixblex"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
           >
             <div
               class="ant-form-item-control-input"
@@ -745,7 +737,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
               >
                 <div
                   aria-required="true"
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-ixblex ant-select-single ant-select-show-arrow ant-select-open"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-mxhywb ant-select-single ant-select-show-arrow ant-select-open"
                 >
                   <div
                     class="ant-select-selector"
@@ -812,207 +804,203 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
       </div>
     </form>
   </div>
-  <div
-    style="position: absolute; top: 0px; left: 0px; width: 100%;"
-  >
-    <div>
-      <div
-        class="ant-select-dropdown css-dev-only-do-not-override-ixblex"
-        style="opacity: 0; min-width: 0; width: 0px;"
-      >
-        <div>
+  <div>
+    <div
+      class="ant-select-dropdown css-dev-only-do-not-override-mxhywb ant-select-dropdown-placement-bottomLeft"
+      style="left: -1000vw; top: -1000vh; box-sizing: border-box; min-width: 0; width: 0px;"
+    >
+      <div>
+        <div
+          id="courseTaskId_list"
+          role="listbox"
+          style="height: 0px; width: 0px; overflow: hidden;"
+        >
           <div
-            id="courseTaskId_list"
-            role="listbox"
-            style="height: 0px; width: 0px; overflow: hidden;"
+            aria-selected="false"
+            id="courseTaskId_list_0"
+            role="presentation"
+          />
+          <div
+            aria-selected="false"
+            id="courseTaskId_list_1"
+            role="option"
           >
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_0"
-              role="presentation"
-            />
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_1"
-              role="option"
-            >
-              438
-            </div>
-            <div
-              aria-selected="false"
-              id="courseTaskId_list_2"
-              role="option"
-            >
-              441
-            </div>
+            438
           </div>
           <div
-            class="rc-virtual-list"
-            style="position: relative;"
+            aria-selected="false"
+            id="courseTaskId_list_2"
+            role="option"
           >
-            <div
-              class="rc-virtual-list-holder"
-              style="max-height: 274px; overflow-y: hidden;"
-            >
-              <div>
+            441
+          </div>
+        </div>
+        <div
+          class="rc-virtual-list"
+          style="position: relative;"
+        >
+          <div
+            class="rc-virtual-list-holder"
+            style="max-height: 274px; overflow-y: hidden;"
+          >
+            <div>
+              <div
+                class="rc-virtual-list-holder-inner"
+                style="display: flex; flex-direction: column;"
+              >
                 <div
-                  class="rc-virtual-list-holder-inner"
-                  style="display: flex; flex-direction: column;"
+                  class="ant-select-item ant-select-item-group"
+                  title="All tasks (8)"
+                >
+                  All tasks (8)
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
                 >
                   <div
-                    class="ant-select-item ant-select-item-group"
-                    title="All tasks (8)"
+                    class="ant-select-item-option-content"
                   >
-                    All tasks (8)
+                     
+                    Shelter Cross-check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped ant-select-item-option-active"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Shelter Cross-check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Virtual Keyboard Cross-Check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Virtual Keyboard Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Fancy-weather Cross-Check
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Fancy-weather Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Async Race
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Async Race
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Clean-code-s1e1
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Clean-code-s1e1
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Virtual-piano
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Virtual-piano
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    Wildlife
                   </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
+                </div>
+                <div
+                  aria-selected="false"
+                  class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                >
                   <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
+                    class="ant-select-item-option-content"
                   >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      Wildlife
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
+                     
+                    CV. Cross-Check
                   </div>
-                  <div
-                    aria-selected="false"
-                    class="ant-select-item ant-select-item-option ant-select-item-option-grouped"
-                  >
-                    <div
-                      class="ant-select-item-option-content"
-                    >
-                       
-                      CV. Cross-Check
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="ant-select-item-option-state"
-                      style="user-select: none;"
-                      unselectable="on"
-                    />
-                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-item-option-state"
+                    style="user-select: none;"
+                    unselectable="on"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            class="rc-virtual-list-scrollbar"
+            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
+          >
             <div
-              class="rc-virtual-list-scrollbar"
-              style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
-            >
-              <div
-                class="rc-virtual-list-scrollbar-thumb"
-                style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
-              />
-            </div>
+              class="rc-virtual-list-scrollbar-thumb"
+              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
+            />
           </div>
         </div>
       </div>

@@ -188,7 +188,9 @@ const ReviewTaskData: CourseTaskDto[] = [
     pairsCount: 2,
     submitText: null,
     taskOwner: null,
-    validations: {},
+    validations: {
+      githubIdInUrl: false,
+    },
   },
   {
     id: 450,
@@ -206,7 +208,9 @@ const ReviewTaskData: CourseTaskDto[] = [
     pairsCount: 2,
     submitText: null,
     taskOwner: null,
-    validations: {},
+    validations: {
+      githubIdInUrl: false,
+    },
   },
 ];
 
@@ -227,7 +231,9 @@ const expiredTaskData: CourseTaskDto[] = [
     pairsCount: 4,
     submitText: null,
     taskOwner: null,
-    validations: {},
+    validations: {
+      githubIdInUrl: false,
+    },
   },
   {
     id: 841,
@@ -245,7 +251,9 @@ const expiredTaskData: CourseTaskDto[] = [
     pairsCount: 4,
     submitText: null,
     taskOwner: null,
-    validations: {},
+    validations: {
+      githubIdInUrl: false,
+    },
   },
 ];
 

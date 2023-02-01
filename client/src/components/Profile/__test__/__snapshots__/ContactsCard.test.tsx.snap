@@ -3,7 +3,7 @@
 exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-ixblex"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-mxhywb"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-ixblex"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-mxhywb"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -49,10 +49,10 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-ixblex"
+        class="ant-list ant-list-split css-dev-only-do-not-override-mxhywb"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-ixblex"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-mxhywb"
         >
           <div
             class="ant-spin-container"
@@ -64,7 +64,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     EPAM E-mail
@@ -78,7 +78,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     E-mail
@@ -92,7 +92,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Telegram
@@ -106,7 +106,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Phone
@@ -120,7 +120,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Skype
@@ -134,7 +134,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Notes
@@ -148,7 +148,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     LinkedIn
@@ -175,7 +175,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
 exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-ixblex"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-mxhywb"
   >
     <div
       class="ant-card-head"
@@ -187,7 +187,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-ixblex"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-mxhywb"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -241,10 +241,10 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-ixblex"
+        class="ant-list ant-list-split css-dev-only-do-not-override-mxhywb"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-ixblex"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-mxhywb"
         >
           <div
             class="ant-spin-container"
@@ -256,7 +256,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     EPAM E-mail
@@ -270,7 +270,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     E-mail
@@ -280,7 +280,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                  
                 vasya@tut.by
                 <div
-                  class="ant-alert ant-alert-error ant-alert-no-icon css-dev-only-do-not-override-ixblex"
+                  class="ant-alert ant-alert-error ant-alert-no-icon css-dev-only-do-not-override-mxhywb"
                   data-show="true"
                   role="alert"
                 >
@@ -307,7 +307,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Phone
@@ -321,7 +321,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-ixblex"
+                  class="ant-typography css-dev-only-do-not-override-mxhywb"
                 >
                   <strong>
                     Skype

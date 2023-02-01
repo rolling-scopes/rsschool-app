@@ -9,7 +9,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
     <div
       aria-busy="true"
       aria-live="polite"
-      class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-ixblex"
+      class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-mxhywb"
       style="font-size: 20px;"
     >
       <span

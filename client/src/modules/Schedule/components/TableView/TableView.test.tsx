@@ -6,6 +6,7 @@ import {
   CourseScheduleItemDto,
   CourseScheduleItemDtoStatusEnum as StatusEnum,
   CourseScheduleItemDtoTagEnum as TagsEnum,
+  CourseScheduleItemDtoTypeEnum,
 } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
@@ -212,6 +213,7 @@ function generateCourseData(
   return new Array(count).fill({}).map((_, idx) => {
     return {
       id: idx,
+      type: CourseScheduleItemDtoTypeEnum.CourseTask,
       name: `Course Item ${idx}`,
       startDate: '2020-02-01T21:00:00.000Z',
       endDate: '2020-03-15T20:59:00.000Z',

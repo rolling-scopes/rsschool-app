@@ -35,7 +35,7 @@ export function isInterviewRegistrationInProgess(interviewStartDate: string) {
 }
 
 export function isInterviewStarted(interviewStartDate: string) {
-  return moment().isAfter(moment(interviewStartDate));
+  return dayjs().isAfter(dayjs(interviewStartDate));
 }
 
 export function getInterviewFeedbackUrl({
