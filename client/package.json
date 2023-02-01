@@ -17,7 +17,7 @@
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "jest --silent",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --silent",
     "test:watch": "jest --watch",
     "test:e2e": "npx playwright test",
     "coverage": "jest --coverage"
