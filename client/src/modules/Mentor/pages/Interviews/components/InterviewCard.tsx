@@ -1,7 +1,6 @@
 import { Button, Card } from 'antd';
 import css from 'styled-jsx/css';
 import { InterviewPeriod } from './InterviewPeriod';
-import { useState } from 'react';
 import { InterviewDetails } from './InterviewDetails';
 import { InterviewDto } from 'api';
 import { Course } from 'services/models';
@@ -14,8 +13,7 @@ export function InteviewCard(props: {
   fetchStudentInterviews: () => Promise<void>;
 }) {
   const { interview, course, students, fetchStudentInterviews } = props;
-  const { name, startDate, endDate, id, description } = interview;
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { name, startDate, endDate, id, description, descriptionUrl } = interview;
 
   return (
     <Card
@@ -26,18 +24,17 @@ export function InteviewCard(props: {
       key={id}
     >
       {description && <p>{description}</p>}
-      <Button type="link" onClick={() => setIsExpanded(!isExpanded)}>
+      <Button type="link" href={descriptionUrl} target="_blank" className={linkCss.className}>
         Read more
       </Button>
-      {isExpanded && (
-        <InterviewDetails
-          interview={interview}
-          course={course}
-          students={students}
-          fetchStudentInterviews={fetchStudentInterviews}
-        />
-      )}
+      <InterviewDetails
+        interview={interview}
+        course={course}
+        students={students}
+        fetchStudentInterviews={fetchStudentInterviews}
+      />
       {containerCss.styles}
+      {linkCss.styles}
     </Card>
   );
 }
@@ -50,5 +47,11 @@ const containerCss = css.resolve`
 
   div:last-child {
     margin-bottom: 0;
+  }
+`;
+
+const linkCss = css.resolve`
+  a {
+    padding-left: 0;
   }
 `;

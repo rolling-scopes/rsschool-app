@@ -44,6 +44,7 @@ export function StudentsList(props: StudentsListProps) {
           courseId={course.id}
           toggleDetails={() => setIsExpanded(!isExpanded)}
           reloadList={reloadList}
+          courseAlias={course.alias}
         />
         {isExpanded && (
           <div>
