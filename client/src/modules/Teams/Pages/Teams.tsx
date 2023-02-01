@@ -16,7 +16,7 @@ import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } fro
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
-import { useModal } from 'hooks';
+import { useModalForm } from 'hooks';
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
@@ -27,7 +27,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     loadDistribution,
     loading: loadingDistribution,
   } = useDistribution(teamDistributionDetailed, course.id);
-  const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModal<Partial<TeamDto>>();
+  const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModalForm<Partial<TeamDto>>();
   const [loading, withLoading] = useLoading(false);
 
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);

@@ -8,7 +8,7 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { urlPattern } from 'services/validators';
 
 type Props = {
-  data?: Partial<TeamDistributionDto>;
+  data?: TeamDistributionDto;
   onCancel: () => void;
   onSubmit: () => Promise<void>;
   courseId: number;
@@ -28,35 +28,31 @@ const { Option } = Select;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-function getInitialValues(data?: Partial<TeamDistributionDto>) {
+function getInitialValues(data: TeamDistributionDto) {
   const timeZone = 'UTC';
   return {
-    name: data?.name,
-    description: data?.description,
-    descriptionUrl: data?.descriptionUrl,
+    ...data,
     range:
-      data?.startDate && data.endDate
+      data.startDate && data.endDate
         ? [
             data.startDate ? moment.tz(data.startDate, timeZone) : null,
             data.endDate ? moment.tz(data.endDate, timeZone) : null,
           ]
         : null,
     timeZone,
-    strictTeamSizeMode: data?.strictTeamSizeMode ?? true,
-    minTeamSize: data?.minTeamSize ?? 2,
-    maxTeamSize: data?.maxTeamSize ?? 4,
-    strictTeamSize: data?.strictTeamSize ?? 3,
-    minTotalScore: data?.minTotalScore ?? 0,
+    strictTeamSizeMode: data.strictTeamSizeMode ?? true,
+    strictTeamSize: data.strictTeamSize ?? 3,
+    minTotalScore: data.minTotalScore ?? 0,
   };
 }
 
-const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => {
-  const [startDate, endDate] = values.range!;
+const createRecord = (values: FormState): CreateTeamDistributionDto => {
+  const [startDate, endDate] = values.range;
   const record = {
     name: values.name!,
     description: values.description ?? '',
-    startDate: formatTimezoneToUTC(startDate!, values.timeZone!),
-    endDate: formatTimezoneToUTC(endDate!, values.timeZone!),
+    startDate: formatTimezoneToUTC(startDate, values.timeZone),
+    endDate: formatTimezoneToUTC(endDate, values.timeZone),
     strictTeamSizeMode: values.strictTeamSizeMode ?? true,
     minTeamSize: values.minTeamSize ?? 2,
     maxTeamSize: values.maxTeamSize ?? 4,
@@ -67,7 +63,7 @@ const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => 
   return record;
 };
 
-const submitTeamDistribution = async (courseId: number, values: Partial<FormState>, id?: number): Promise<void> => {
+const submitTeamDistribution = async (courseId: number, values: FormState, id?: number): Promise<void> => {
   try {
     const record = createRecord(values);
     if (id) {
@@ -81,8 +77,8 @@ const submitTeamDistribution = async (courseId: number, values: Partial<FormStat
 };
 
 export default function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Props) {
-  const [form] = Form.useForm<Partial<FormState>>();
-  const handleModalSubmit = async (values: Partial<FormState>) => {
+  const [form] = Form.useForm<FormState>();
+  const handleModalSubmit = async (values: FormState) => {
     await submitTeamDistribution(courseId, values, data?.id);
     await onSubmit();
   };
@@ -104,7 +100,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         form.resetFields();
       }}
     >
-      <Form {...layout} form={form} initialValues={getInitialValues(data)}>
+      <Form {...layout} form={form} initialValues={data ? getInitialValues(data) : undefined}>
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
           <Input />
         </Form.Item>
@@ -131,11 +127,12 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         <Form.Item
           name="strictTeamSize"
           label="Team size"
+          initialValue={3}
           rules={[{ required: true, message: 'Please enter team size' }]}
         >
           <InputNumber min={2} />
         </Form.Item>
-        <Form.Item name="minTotalScore" label="Minimum passing score">
+        <Form.Item initialValue={0} name="minTotalScore" label="Minimum passing score">
           <InputNumber min={0} />
         </Form.Item>
         <Form.Item name="description" label="Description">

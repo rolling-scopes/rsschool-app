@@ -8,7 +8,7 @@ import { message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
-import { useModal } from 'hooks';
+import { useModalForm } from 'hooks';
 
 const teamDistributionApi = new TeamDistributionApi();
 
@@ -18,7 +18,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
     open: openTeamDistributionModal,
     toggle: toggleTeamDistributionModal,
     formData: teamDistributionData,
-  } = useModal<Partial<TeamDistributionDto>>();
+  } = useModalForm<TeamDistributionDto>();
 
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
