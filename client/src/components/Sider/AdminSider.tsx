@@ -1,14 +1,10 @@
 import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
 import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
-import SearchOutlined from '@ant-design/icons/SearchOutlined';
-import ToolOutlined from '@ant-design/icons/ToolOutlined';
 import { Layout, Menu, MenuProps } from 'antd';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
-import Link from 'next/link';
 import Router from 'next/router';
-import { useMemo, ReactNode, Key } from 'react';
+import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
 import { Course } from 'services/models';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
