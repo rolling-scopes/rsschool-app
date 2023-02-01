@@ -1,3 +1,4 @@
+import { CourseRole } from '@entities/session';
 import { UserGroup } from '@entities/userGroup';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
@@ -42,7 +43,7 @@ export class UserGroupDto {
   @IsArray()
   users: UserDto[];
 
-  @ApiProperty()
+  @ApiProperty({ enum: CourseRole, isArray: true })
   @IsArray()
-  roles: string[];
+  roles: CourseRole[];
 }

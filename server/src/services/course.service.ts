@@ -568,6 +568,7 @@ export async function getUsers(courseId: number) {
     githubId: r.user.githubId,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
+    isDementor: r.isDementor,
   }));
 }
 

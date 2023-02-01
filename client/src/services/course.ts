@@ -147,6 +147,7 @@ export interface CourseUser {
   courseId: number;
   isManager: boolean;
   isSupervisor: boolean;
+  isDementor: boolean;
 }
 
 export interface MentorWithContacts {

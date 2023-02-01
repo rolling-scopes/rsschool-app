@@ -1,4 +1,4 @@
-import { CourseRole } from 'components/withSession';
+import { CourseRole } from 'services/models';
 import { SessionProvider } from 'modules/Course/contexts';
 import { getCourseProps } from 'modules/Course/data';
 import { StudentFeedback } from 'modules/Mentor/pages/StudentFeedback';

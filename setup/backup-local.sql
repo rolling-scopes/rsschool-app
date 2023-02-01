@@ -1961,6 +1961,46 @@ ALTER SEQUENCE public.team_distribution_id_seq OWNED BY public.team_distribution
 
 
 --
+-- Name: team_distribution_student; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.team_distribution_student (
+    id integer NOT NULL,
+    "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "studentId" integer NOT NULL,
+    "courseId" integer,
+    "teamDistributionId" integer NOT NULL,
+    distributed boolean DEFAULT false NOT NULL,
+    active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.team_distribution_student OWNER TO rs_master;
+
+--
+-- Name: team_distribution_student_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
+--
+
+CREATE SEQUENCE public.team_distribution_student_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.team_distribution_student_id_seq OWNER TO rs_master;
+
+--
+-- Name: team_distribution_student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
+--
+
+ALTER SEQUENCE public.team_distribution_student_id_seq OWNED BY public.team_distribution_student.id;
+
+
+--
 -- Name: team_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -2403,6 +2443,13 @@ ALTER TABLE ONLY public.team_distribution ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: team_distribution_student id; Type: DEFAULT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student ALTER COLUMN id SET DEFAULT nextval('public.team_distribution_student_id_seq'::regclass);
+
+
+--
 -- Name: user id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -2605,7 +2652,6 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 722	2020-02-19 15:19:31.54	2021-03-06 09:12:16.168284	\N	\N	100	472	0.05	mentor	2084	2021-02-28 21:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
 723	2020-03-02 13:24:09.075	2020-12-27 07:57:56.442267	\N	\N	100	426	0.1	mentor	2084	2021-04-06 13:20:00+00	2021-04-18 21:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
 724	2020-02-19 15:17:32.071	2021-03-06 09:28:28.111453	\N	\N	100	474	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
-725	2020-02-19 15:18:06.945	2021-03-06 09:28:56.637451	\N	\N	100	473	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-15 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
 726	2020-02-02 04:03:10.255	2021-03-06 09:05:38.409628	\N	\N	100	84	0.1	autoTest	\N	2021-02-27 03:02:00+00	2021-03-08 23:59:00+00	23	\N	cv:html	f	\N	\N	\N	initial	\N
 727	2020-03-09 08:21:51.144	2020-12-19 07:08:30.734975	\N	\N	100	433	0.2	taskOwner	2084	2021-04-03 19:00:00+00	2021-04-03 19:00:00+00	23	\N	test	t	\N	\N	\N	initial	\N
 728	2020-09-09 16:31:08.778	2020-12-27 07:05:14.675656	\N	\N	100	568	0.1	auto-test	2084	2021-03-02 20:59:00+00	2021-04-25 20:59:00+00	23	\N	selfeducation	t	\N	\N	\N	initial	\N
@@ -2626,7 +2672,6 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 751	2020-12-09 12:07:23.808	2020-12-14 11:24:13.461012	\N	\N	10	349	10	mentor	2084	2021-06-07 00:00:00+00	2021-06-21 23:59:00+00	23	\N	interview	t	\N	\N	\N	initial	\N
 752	2020-12-11 12:22:20.579	2020-12-14 11:24:23.203131	\N	\N	280	589	0.2	mentor	\N	2021-06-01 12:21:00+00	2021-06-17 00:59:00+00	23	\N	jstask	t	\N	\N	\N	initial	\N
 764	2020-12-19 13:05:37.532114	2021-03-16 04:44:14.87901	\N	\N	15	592	1	auto-test	2084	2021-02-28 13:04:00+00	2021-03-09 00:59:00+00	23	\N	codewars	f	\N	\N	\N	initial	\N
-766	2020-12-26 18:38:03.97028	2021-03-06 09:02:07.383585	\N	\N	100	595	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
 767	2020-12-26 18:38:48.344647	2021-03-06 09:02:35.081732	\N	\N	100	596	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
 768	2020-12-26 18:39:33.065223	2021-03-06 09:03:26.018831	\N	\N	100	597	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-08 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
 833	2021-03-02 11:27:43.699601	2021-03-08 09:16:47.157628	\N	\N	100	615	0	mentor	2084	2021-03-01 22:59:00+00	2021-03-14 22:59:00+00	23	\N	test	t	\N	\N	\N	initial	\N
@@ -2665,11 +2710,11 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 753	2020-12-11 12:23:16.641	2020-12-14 11:24:19.601754	\N	\N	240	590	0.8	crossCheck	\N	2021-06-01 12:22:00+00	2021-06-17 00:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
 763	2020-12-19 13:03:24.071742	2020-12-20 17:50:47.299196	\N	\N	100	593	0.2	crossCheck	\N	2021-02-28 12:00:00+00	2021-03-14 20:59:00+00	23	4	cv:html	t	\N	\N	\N	initial	\N
 765	2020-12-19 13:07:08.321506	2020-12-20 17:50:54.307731	\N	\N	50	594	0.5	crossCheck	\N	2021-02-28 12:06:00+00	2021-03-14 20:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
-821	2021-02-28 09:07:38.664142	2021-03-06 09:06:02.437103	\N	\N	100	593	0.2	crossCheck	2084	2021-02-28 10:00:00+00	2021-03-08 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
 841	2021-03-07 16:23:23.776238	2021-03-07 16:23:23.776238	\N	\N	50	594	0.5	crossCheck	2084	2021-02-28 16:22:00+00	2021-03-15 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
-846	2021-03-16 04:33:39.267072	2021-03-22 19:29:25.192617	\N	\N	50	625	1	crossCheck	2084	2021-03-16 04:32:00+00	2021-03-23 01:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
 853	2021-03-29 09:21:34.603711	2021-04-06 07:55:48.280397	\N	\N	45	630	1	crossCheck	2084	2021-03-23 01:59:00+00	2021-04-06 23:59:00+00	23	4	htmltask	f	\N	\N	\N	initial	\N
 854	2021-03-29 20:04:59.336453	2021-05-20 12:08:18.903322	\N	\N	80	631	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
+846	2021-03-16 04:33:39.267072	2023-01-31 20:08:42.176458	\N	\N	100	473	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-19 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+766	2020-12-26 18:38:03.97028	2023-01-31 20:09:55.304166	\N	\N	100	595	0.1	auto-test	2084	2020-12-25 21:59:00+00	2021-03-10 23:59:00+00	23	\N	selfeducation	f	\N	\N	\N	initial	\N
 855	2021-03-29 20:05:01.298383	2021-05-20 12:08:24.067047	\N	\N	80	632	1	crossCheck	2084	2021-03-24 00:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
 856	2021-03-29 20:05:04.039062	2021-05-20 12:08:28.287282	\N	\N	80	633	1	crossCheck	2084	2021-03-23 19:00:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
 857	2021-03-29 20:05:05.992341	2021-05-20 12:08:32.894051	\N	\N	80	634	1	crossCheck	2084	2021-03-24 00:59:00+00	2021-04-06 23:59:00+00	23	4	htmltask	t	\N	\N	\N	initial	\N
@@ -2695,6 +2740,8 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 973	2021-06-20 16:44:52.184361	2021-06-28 23:15:32.104315	\N	\N	275	691	1	crossCheck	2084	2021-06-16 23:59:00+00	2021-07-19 23:59:00+00	23	4	jstask	t	\N	\N	\N	initial	\N
 978	2021-06-22 14:47:29.005674	2021-07-28 09:44:54.70492	\N	\N	480	695	1	crossCheck	2084	2021-06-30 00:00:00+00	2021-07-19 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
 980	2021-06-23 09:56:42.176771	2021-07-09 06:19:59.834533	\N	\N	205	698	1	crossCheck	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
+725	2020-02-19 15:18:06.945	2023-01-31 20:06:50.347384	\N	\N	100	473	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-17 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
+821	2021-02-28 09:07:38.664142	2023-01-31 20:16:09.773572	\N	\N	100	593	0.2	crossCheck	2084	2021-02-28 10:00:00+00	2021-03-09 23:59:00+00	23	4	htmltask	f	2023-01-18 23:59:00+00	\N	{}	initial	\N
 \.
 
 
@@ -2917,6 +2964,11 @@ COPY public.feedback (id, "createdDate", "updatedDate", "badgeId", "fromUserId",
 --
 
 COPY public.history (id, "createdDate", "updatedDate", event, "entityId", operation, update, previous) FROM stdin;
+1	2023-01-31 20:05:46.630426	2023-01-31 20:05:46.630426	course_task	821	update	{"studentStartDate":"2021-02-28 10:00+00:00","studentEndDate":"2021-03-09 23:59+00:00","crossCheckEndDate":"2023-01-17 22:05+00:00","taskId":593,"taskOwnerId":2084,"checker":"crossCheck","scoreWeight":0.2,"maxScore":100,"type":"htmltask","pairsCount":4,"submitText":null,"validations":{},"courseId":23,"id":821}	{"id":821,"createdDate":"2021-02-28T09:07:38.664Z","updatedDate":"2021-03-06T09:06:02.437Z","taskId":593,"courseId":23,"studentStartDate":"2021-02-28T10:00:00.000Z","studentEndDate":"2021-03-08T23:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.2,"checker":"crossCheck","taskOwnerId":2084,"pairsCount":4,"type":"htmltask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
+2	2023-01-31 20:06:50.33724	2023-01-31 20:06:50.33724	course_task	725	update	{"studentStartDate":"2021-02-28 23:59+00:00","studentEndDate":"2021-03-17 23:59+00:00","taskId":473,"taskOwnerId":2084,"checker":"mentor","scoreWeight":0.05,"maxScore":100,"type":"jstask","courseId":23,"id":725}	{"id":725,"createdDate":"2020-02-19T15:18:06.945Z","updatedDate":"2021-03-06T09:28:56.637Z","taskId":473,"courseId":23,"studentStartDate":"2021-02-28T23:59:00.000Z","studentEndDate":"2021-03-15T23:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.05,"checker":"mentor","taskOwnerId":2084,"pairsCount":null,"type":"jstask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
+3	2023-01-31 20:08:42.169821	2023-01-31 20:08:42.169821	course_task	846	update	{"studentStartDate":"2021-02-28 23:59+00:00","studentEndDate":"2021-03-19 23:59+00:00","taskId":473,"taskOwnerId":2084,"checker":"mentor","scoreWeight":0.05,"maxScore":100,"type":"jstask","courseId":23,"id":846}	{"id":846,"createdDate":"2021-03-16T04:33:39.267Z","updatedDate":"2021-03-22T19:29:25.192Z","taskId":625,"courseId":23,"studentStartDate":"2021-03-16T04:32:00.000Z","studentEndDate":"2021-03-23T01:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":50,"scoreWeight":1,"checker":"crossCheck","taskOwnerId":2084,"pairsCount":4,"type":"jstask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
+4	2023-01-31 20:09:55.297027	2023-01-31 20:09:55.297027	course_task	766	update	{"studentStartDate":"2020-12-25 21:59+00:00","studentEndDate":"2021-03-10 23:59+00:00","taskId":595,"taskOwnerId":2084,"checker":"auto-test","scoreWeight":0.1,"maxScore":100,"type":"selfeducation","courseId":23,"id":766}	{"id":766,"createdDate":"2020-12-26T18:38:03.970Z","updatedDate":"2021-03-06T09:02:07.383Z","taskId":595,"courseId":23,"studentStartDate":"2020-12-25T21:59:00.000Z","studentEndDate":"2021-03-08T23:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.1,"checker":"auto-test","taskOwnerId":2084,"pairsCount":null,"type":"selfeducation","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
+5	2023-01-31 20:16:09.766741	2023-01-31 20:16:09.766741	course_task	821	update	{"studentStartDate":"2021-02-28T10:00:00Z","studentEndDate":"2021-03-09T23:59:00Z","crossCheckEndDate":"2023-01-18T23:59:00Z","taskId":593,"taskOwnerId":2084,"checker":"crossCheck","scoreWeight":0.2,"maxScore":100,"type":"htmltask","pairsCount":4,"submitText":null,"validations":{},"courseId":23,"id":821}	{"id":821,"createdDate":"2021-02-28T09:07:38.664Z","updatedDate":"2023-01-31T20:05:46.644Z","taskId":593,"courseId":23,"studentStartDate":"2021-02-28T10:00:00.000Z","studentEndDate":"2021-03-09T23:59:00.000Z","crossCheckEndDate":"2023-01-17T22:05:00.000Z","mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.2,"checker":"crossCheck","taskOwnerId":2084,"pairsCount":4,"type":"htmltask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":{}}
 \.
 
 
@@ -3025,6 +3077,7 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 42	1673692838338	User1673692838338
 43	1674128274839	Team1674128274839
 44	1674755854609	Resume1674755854609
+45	1674377676805	TeamDistributionStudent1674377676805
 \.
 
 
@@ -3433,6 +3486,7 @@ COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", desc
 553	2020-08-27 16:11:57.491788	2020-08-27 16:11:57.491788	Task 4. Drum Kit	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-4-drum-kit-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
 554	2020-08-27 16:12:27.5845	2020-08-27 16:12:27.5845	Task 5. CSS Variables and JS	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-5-css-variables-and-js-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
 593	2020-12-19 12:47:59.940867	2021-06-28 13:37:07.392607	CV. Cross-Check	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/cv/html-css.md	\N	manual	f	f	f	\N	\N	htmltask	stage0,html	{}		\N	\N	\N
+596	2020-12-26 18:32:46.338943	2021-03-06 10:31:21.886056	JS Test #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
 555	2020-08-27 16:12:54.861753	2020-08-27 16:12:54.861753	Task 6. Flex Panel Gallery	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-6-flex-panel-gallery-10	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
 556	2020-08-27 16:13:19.737287	2020-08-27 16:13:19.737287	Task 7. Fun with HTML5 Canvas	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-7-fun-with-html5-canvas-40	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
 557	2020-08-27 16:13:49.956984	2020-08-27 16:13:49.956984	Task 8. Custom Video Player	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-0/projects.md#task-8-custom-video-player-20	\N	manual	f	f	f	\N	\N	jstask	js	{}		\N	\N	\N
@@ -3473,7 +3527,6 @@ COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", desc
 592	2020-12-19 12:43:52.804419	2021-05-19 02:54:47.307367	Codewars #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/codewars	\N	auto	f	f	f	\N	\N	jstask	js,codewars,stage0	{}		\N	\N	\N
 594	2020-12-19 12:49:31.14823	2021-03-07 16:21:45.593427	Wildlife	https://rolling-scopes-school.github.io/stage0/#/stage0/tasks/wildlife	\N	manual	f	f	f	\N	\N	htmltask	stage0,html	{}		\N	\N	\N
 595	2020-12-26 18:31:32.147857	2021-03-06 10:31:15.424715	HTML/CSS Test #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
-596	2020-12-26 18:32:46.338943	2021-03-06 10:31:21.886056	JS Test #0	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
 597	2020-12-26 18:33:44.873478	2021-06-30 16:38:02.096425	RSS Test	https://rolling-scopes-school.github.io/stage0/#/stage0/tests/index	\N	auto	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
 598	2021-01-14 16:07:51.521813	2021-01-14 16:07:51.521813	ST Extra curry	https://observablehq.com/@shastel/functions-and-arguments	\N	manual	f	f	f	\N	\N	jstask	st	{}		\N	\N	\N
 599	2021-01-16 07:15:35.629304	2021-01-16 07:15:35.629304	RS Clone	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md	\N	manual	f	f	f	\N	\N	jstask	stage2	{}		\N	\N	\N
@@ -3746,6 +3799,14 @@ COPY public.team_distribution (id, "createdDate", "updatedDate", "courseId", "st
 
 
 --
+-- Data for Name: team_distribution_student; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.team_distribution_student (id, "createdDate", "updatedDate", "studentId", "courseId", "teamDistributionId", distributed, active) FROM stdin;
+\.
+
+
+--
 -- Data for Name: typeorm_metadata; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -3758,7 +3819,6 @@ COPY public.typeorm_metadata (type, database, schema, "table", name, value) FROM
 --
 
 COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "updatedDate", "firstNameNative", "lastNameNative", "tshirtSize", "tshirtFashion", "dateOfBirth", "locationName", "locationId", "educationHistory", "employmentHistory", "contactsEpamEmail", "contactsPhone", "contactsEmail", "externalAccounts", "epamApplicantId", activist, "englishLevel", "lastActivityTime", "isActive", "primaryEmail", "contactsTelegram", "contactsSkype", "contactsNotes", "aboutMyself", "contactsLinkedIn", "profilePermissionsId", "countryName", "cityName", "opportunitiesConsent", "cvLink", "militaryService", discord, "providerUserId", provider, "contactsWhatsApp") FROM stdin;
-11564	dyexplode			2022-02-18 22:02:49.245928	2022-02-18 22:02:49.245928	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	\N	\N	1645221769228	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	f	\N	\N	\N			\N
 11563	apalchys			2020-04-06 15:12:34.19737	2020-04-06 15:15:02.729722	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	f	\N	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	f	\N	\N	\N	11563	github	\N
 2693	viktoriyavorozhun	\N	\N	2019-04-24 13:42:45.500139	2019-10-18 08:07:58.858658	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2693	github	\N
 2098	yauhenkavalchuk	\N	\N	2019-04-17 11:41:21.396686	2019-11-12 11:22:33.350237	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567594678450	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2098	github	\N
@@ -3894,7 +3954,7 @@ SELECT pg_catalog.setval('public.feedback_id_seq', 615, true);
 -- Name: history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.history_id_seq', 1, false);
+SELECT pg_catalog.setval('public.history_id_seq', 5, true);
 
 
 --
@@ -3929,7 +3989,7 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 44, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 45, true);
 
 
 --
@@ -4087,6 +4147,13 @@ SELECT pg_catalog.setval('public.team_distribution_id_seq', 1, false);
 
 
 --
+-- Name: team_distribution_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
+--
+
+SELECT pg_catalog.setval('public.team_distribution_student_id_seq', 1, false);
+
+
+--
 -- Name: team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -4104,7 +4171,7 @@ SELECT pg_catalog.setval('public.user_group_id_seq', 1, false);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 11566, true);
+SELECT pg_catalog.setval('public.user_id_seq', 11567, true);
 
 
 --
@@ -4380,6 +4447,14 @@ ALTER TABLE ONLY public.interview_question
 
 
 --
+-- Name: team_distribution_student PK_8a75ed7468b867aef47a7320188; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student
+    ADD CONSTRAINT "PK_8a75ed7468b867aef47a7320188" PRIMARY KEY (id);
+
+
+--
 -- Name: migrations PK_8c82d7f526340ab734260ea46be; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4625,6 +4700,14 @@ ALTER TABLE ONLY public.task
 
 ALTER TABLE ONLY public.task_interview_student
     ADD CONSTRAINT "UQ_9b70aaee77ce73e847688838e7e" UNIQUE ("studentId", "courseId", "courseTaskId");
+
+
+--
+-- Name: team_distribution_student UQ_a1c39af9e449474f6495b634cd5; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student
+    ADD CONSTRAINT "UQ_a1c39af9e449474f6495b634cd5" UNIQUE ("studentId", "courseId", "teamDistributionId");
 
 
 --
@@ -5290,6 +5373,14 @@ ALTER TABLE ONLY public.task_checker
 
 
 --
+-- Name: team_distribution_student FK_552eb86c51b2449e2665ad7be0f; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student
+    ADD CONSTRAINT "FK_552eb86c51b2449e2665ad7be0f" FOREIGN KEY ("studentId") REFERENCES public.student(id);
+
+
+--
 -- Name: task_result FK_5565a1f41896ecd29591b239ef5; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -5311,6 +5402,14 @@ ALTER TABLE ONLY public.task_checker
 
 ALTER TABLE ONLY public.course_event
     ADD CONSTRAINT "FK_5aa0fd2863ab6cc52828525649c" FOREIGN KEY ("eventId") REFERENCES public.event(id);
+
+
+--
+-- Name: team_distribution_student FK_5b0eb057a06b5fafb89edefd358; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student
+    ADD CONSTRAINT "FK_5b0eb057a06b5fafb89edefd358" FOREIGN KEY ("courseId") REFERENCES public.course(id);
 
 
 --
@@ -5463,6 +5562,14 @@ ALTER TABLE ONLY public.notification_user_connection
 
 ALTER TABLE ONLY public.task
     ADD CONSTRAINT "FK_91f8c79680ddb1486f56128a9d6" FOREIGN KEY ("criteriaId") REFERENCES public.task_criteria("taskId") ON DELETE CASCADE;
+
+
+--
+-- Name: team_distribution_student FK_92af6f1f2345cb39398cea4748a; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.team_distribution_student
+    ADD CONSTRAINT "FK_92af6f1f2345cb39398cea4748a" FOREIGN KEY ("teamDistributionId") REFERENCES public.team_distribution(id);
 
 
 --

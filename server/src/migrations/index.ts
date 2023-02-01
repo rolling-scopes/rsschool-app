@@ -44,6 +44,7 @@ import { Team1674128274839 } from './1674128274839-Team';
 import { TeamDistributionStudent1674377676805 } from './1674377676805-TeamDistributionStudent';
 import { Resume1674755854609 } from './1674755854609-Resume';
 import { User1675182702772 } from './1675182702772-User';
+import { UserGroup1675245424426 } from './1675245424426-UserGroup';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -92,4 +93,5 @@ export const migrations = [
   TeamDistributionStudent1674377676805,
   Resume1674755854609,
   User1675182702772,
+  UserGroup1675245424426,
 ];
