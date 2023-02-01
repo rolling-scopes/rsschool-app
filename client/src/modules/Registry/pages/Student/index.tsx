@@ -6,7 +6,12 @@ import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
 import { Info } from 'modules/Registry/components/Info';
 import { NoCourses } from 'modules/Registry/components/NoCourses';
-import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_EPAM_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
+import {
+  DEFAULT_ROW_GUTTER,
+  TEXT_EMAIL_TOOLTIP,
+  TEXT_EPAM_EMAIL_TOOLTIP,
+  TEXT_LOCATION_STUDENT_TOOLTIP,
+} from 'modules/Registry/constants';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useUpdate } from 'react-use';
