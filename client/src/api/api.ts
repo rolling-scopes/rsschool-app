@@ -278,45 +278,6 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
- * @enum {string}
- */
-
-export const AvailableLanguages = {
-    English: 'English',
-    Chinese: 'Chinese',
-    Hindi: 'Hindi',
-    Spanish: 'Spanish',
-    French: 'French',
-    Arabic: 'Arabic',
-    Bengali: 'Bengali',
-    Russian: 'Russian',
-    Portuguese: 'Portuguese',
-    Indonesian: 'Indonesian',
-    Urdu: 'Urdu',
-    Japanese: 'Japanese',
-    German: 'German',
-    Punjabi: 'Punjabi',
-    Telugu: 'Telugu',
-    Turkish: 'Turkish',
-    Korean: 'Korean',
-    Marathi: 'Marathi',
-    Kyrgyz: 'Kyrgyz',
-    Kazakh: 'Kazakh',
-    Uzbek: 'Uzbek',
-    Georgian: 'Georgian',
-    Polish: 'Polish',
-    Lithuanian: 'Lithuanian',
-    Latvian: 'Latvian',
-    Belarusian: 'Belarusian',
-    Ukrainian: 'Ukrainian'
-} as const;
-
-export type AvailableLanguages = typeof AvailableLanguages[keyof typeof AvailableLanguages];
-
-
-/**
- * 
- * @export
  * @interface AvailableReviewStatsDto
  */
 export interface AvailableReviewStatsDto {
@@ -5555,11 +5516,44 @@ export interface UpdateUserDto {
     'aboutMyself'?: string | null;
     /**
      * 
-     * @type {Array<AvailableLanguages>}
+     * @type {Array<string>}
      * @memberof UpdateUserDto
      */
-    'languages'?: Array<AvailableLanguages>;
+    'languages'?: Array<UpdateUserDtoLanguagesEnum>;
 }
+
+export const UpdateUserDtoLanguagesEnum = {
+    English: 'English',
+    Chinese: 'Chinese',
+    Hindi: 'Hindi',
+    Spanish: 'Spanish',
+    French: 'French',
+    Arabic: 'Arabic',
+    Bengali: 'Bengali',
+    Russian: 'Russian',
+    Portuguese: 'Portuguese',
+    Indonesian: 'Indonesian',
+    Urdu: 'Urdu',
+    Japanese: 'Japanese',
+    German: 'German',
+    Punjabi: 'Punjabi',
+    Telugu: 'Telugu',
+    Turkish: 'Turkish',
+    Korean: 'Korean',
+    Marathi: 'Marathi',
+    Kyrgyz: 'Kyrgyz',
+    Kazakh: 'Kazakh',
+    Uzbek: 'Uzbek',
+    Georgian: 'Georgian',
+    Polish: 'Polish',
+    Lithuanian: 'Lithuanian',
+    Latvian: 'Latvian',
+    Belarusian: 'Belarusian',
+    Ukrainian: 'Ukrainian'
+} as const;
+
+export type UpdateUserDtoLanguagesEnum = typeof UpdateUserDtoLanguagesEnum[keyof typeof UpdateUserDtoLanguagesEnum];
+
 /**
  * 
  * @export

@@ -1,5 +1,5 @@
 import { Form, Select, Tag, Input, Checkbox, Button, Typography, Row, Col } from 'antd';
-import { AvailableLanguages } from 'api';
+import { UpdateUserDtoLanguagesEnum } from 'api';
 import { CourseIcon } from 'components/Icons';
 import {
   DATA_PROCESSING_TEXT,
@@ -39,7 +39,7 @@ const tailFormItemLayout = {
   },
 };
 
-const languages = Object.values(AvailableLanguages).sort();
+const languages = Object.values(UpdateUserDtoLanguagesEnum).sort();
 
 export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
   return (

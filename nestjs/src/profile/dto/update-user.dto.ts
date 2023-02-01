@@ -78,7 +78,11 @@ export class UpdateUserDto {
   @IsString()
   aboutMyself?: string;
 
-  @ApiProperty({ enum: AvailableLanguages, enumName: 'AvailableLanguages', isArray: true, required: false })
+  @ApiProperty({
+    enum: AvailableLanguages,
+    isArray: true,
+    required: false,
+  })
   @IsOptional()
   @IsArray()
   @IsEnum(AvailableLanguages, { each: true })

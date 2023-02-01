@@ -3069,38 +3069,6 @@
           "discipline"
         ]
       },
-      "AvailableLanguages": {
-        "type": "string",
-        "enum": [
-          "English",
-          "Chinese",
-          "Hindi",
-          "Spanish",
-          "French",
-          "Arabic",
-          "Bengali",
-          "Russian",
-          "Portuguese",
-          "Indonesian",
-          "Urdu",
-          "Japanese",
-          "German",
-          "Punjabi",
-          "Telugu",
-          "Turkish",
-          "Korean",
-          "Marathi",
-          "Kyrgyz",
-          "Kazakh",
-          "Uzbek",
-          "Georgian",
-          "Polish",
-          "Lithuanian",
-          "Latvian",
-          "Belarusian",
-          "Ukrainian"
-        ]
-      },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
@@ -3119,7 +3087,41 @@
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },
           "aboutMyself": { "type": "string", "nullable": true },
-          "languages": { "type": "array", "items": { "$ref": "#/components/schemas/AvailableLanguages" } }
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "English",
+                "Chinese",
+                "Hindi",
+                "Spanish",
+                "French",
+                "Arabic",
+                "Bengali",
+                "Russian",
+                "Portuguese",
+                "Indonesian",
+                "Urdu",
+                "Japanese",
+                "German",
+                "Punjabi",
+                "Telugu",
+                "Turkish",
+                "Korean",
+                "Marathi",
+                "Kyrgyz",
+                "Kazakh",
+                "Uzbek",
+                "Georgian",
+                "Polish",
+                "Lithuanian",
+                "Latvian",
+                "Belarusian",
+                "Ukrainian"
+              ]
+            }
+          }
         }
       },
       "PublicVisibilitySettings": {
