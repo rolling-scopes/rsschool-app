@@ -276,15 +276,17 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
               <Row gutter={DEFAULT_ROW_GUTTER}>
                 <Col xs={24} sm={24} md={20} lg={20} xl={20} style={{ marginBottom: 16 }}>
                   <Row>
-                    <Typography.Title level={5}>
-                      EPAM E-mail <Info title={TEXT_EPAM_EMAIL_TOOLTIP} />
-                    </Typography.Title>
-                  </Row>
-                  <Row>
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Item
+                        label={
+                          <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                            EPAM E-mail
+                          </Typography.Title>
+                        }
+                        tooltip={TEXT_EPAM_EMAIL_TOOLTIP}
                         name="contactsEpamEmail"
                         rules={[{ pattern: epamEmailPattern, message: 'Please enter a valid EPAM email' }]}
+                        requiredMark="optional"
                       >
                         <Input placeholder="first_last@epam.com" />
                       </Form.Item>
