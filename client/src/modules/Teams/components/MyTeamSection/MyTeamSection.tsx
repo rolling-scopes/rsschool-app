@@ -28,16 +28,16 @@ export default function MyTeamSection({
 }: Props) {
   const myTeam = distribution.myTeam;
 
-  const isTeamLead = useMemo(() => studentId === myTeam.teamLeadId, [studentId, myTeam.teamLeadId]);
+  const isTeamLead = useMemo(() => studentId === myTeam?.teamLeadId, [studentId, myTeam?.teamLeadId]);
   const [, copyToClipboard] = useCopyToClipboard();
 
   const copyChatLink = () => {
-    copyToClipboard(myTeam.chatLink);
+    copyToClipboard(myTeam?.chatLink);
     notification.success({ message: 'Chat link copied to clipboard', duration: 2 });
   };
 
   const leaveTeam = async () => {
-    await teamApi.leaveTeam(distribution.courseId, distribution.id, myTeam.id);
+    await teamApi.leaveTeam(distribution.courseId, distribution.id, myTeam?.id);
     setActiveTab('teams');
     await reloadDistribution();
   };

@@ -101,7 +101,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const contentRenderers = () => {
     switch (activeTab) {
       case 'teams':
-        return <TeamsSection distribution={distribution} />;
+        return <TeamsSection distribution={distribution} toggleTeamModal={toggleTeamModal} isManager={isManager} />;
 
       case 'students':
         return <StudentsWithoutTeamSection distribution={distribution} />;

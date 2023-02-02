@@ -58,6 +58,7 @@ export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStu
     key: StudentsTableColumnKey.Name,
     title: StudentsTableColumnName.Name,
     dataIndex: 'name',
+    width: '20%',
     render: (_v, t) => renderName(t, teamLeadId),
   },
   {
@@ -65,30 +66,35 @@ export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStu
     title: StudentsTableColumnName.Position,
     dataIndex: 'rank',
     align: 'right',
+    width: '10%',
     render: renderPosition,
   },
   {
     key: StudentsTableColumnKey.Email,
     title: StudentsTableColumnName.Email,
     dataIndex: 'email',
+    width: '10%',
     render: renderEmail,
   },
   {
     key: StudentsTableColumnKey.Discord,
     title: StudentsTableColumnName.Discord,
     dataIndex: 'discord',
+    width: '10%',
     render: renderDiscord,
   },
   {
     key: StudentsTableColumnKey.Github,
     title: StudentsTableColumnName.Github,
     dataIndex: 'github',
+    width: '10%',
     render: renderGithub,
   },
   {
     key: StudentsTableColumnKey.Location,
     title: StudentsTableColumnName.Location,
     dataIndex: 'location',
+    width: '20%',
     render: renderLocation,
   },
 ];

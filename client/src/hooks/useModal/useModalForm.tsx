@@ -13,7 +13,7 @@ export const useModalForm = <T,>() => {
       setMode('create');
       setFormData(undefined);
     }
-    setOpen(!open);
+    setOpen(prev => !prev);
   };
 
   return { mode, open, formData, toggle };

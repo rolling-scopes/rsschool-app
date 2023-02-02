@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionDetailedDto, TeamDto } from 'api';
 import { StudentsTableColumnKey, TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
@@ -22,7 +22,23 @@ function renderMemberCount({ students }: TeamDto, membersCount: number) {
   );
 }
 
-export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsType<TeamDto> => [
+function renderAction(onEditTeam: () => void) {
+  return (
+    <Button
+      type="link"
+      onClick={() => {
+        onEditTeam();
+      }}
+    >
+      Edit team
+    </Button>
+  );
+}
+
+export const getColumns = (
+  distribution: TeamDistributionDetailedDto,
+  toggleTeamModal: (data?: Partial<TeamDto> | undefined) => void,
+): ColumnsType<TeamDto> => [
   {
     key: TeamsTableColumnKey.Name,
     title: TeamsTableColumnName.Name,
@@ -39,8 +55,13 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
   {
     key: TeamsTableColumnKey.Members,
     title: TeamsTableColumnName.Members,
-    dataIndex: 'solutionUrl',
+    dataIndex: 'students',
     render: (_v, t) => renderMemberCount(t, distribution.strictTeamSize),
+  },
+  {
+    key: TeamsTableColumnKey.Action,
+    title: TeamsTableColumnName.Action,
+    render: (_v, t) => renderAction(() => toggleTeamModal(t)),
   },
 ];
 

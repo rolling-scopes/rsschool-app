@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, InputNumber, message, Select } from 'antd';
+import { DatePicker, Form, Input, InputNumber, message, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
@@ -13,6 +13,8 @@ type Props = {
   onSubmit: () => Promise<void>;
   courseId: number;
 };
+
+const { Text } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
@@ -101,10 +103,14 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
       }}
     >
       <Form {...layout} form={form} initialValues={data ? getInitialValues(data) : undefined}>
+        <Text strong>
+          You are {!data ? 'creating' : 'editing'} a group distribution event. Fill out the form to add it to the
+          schedule.
+        </Text>
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="timeZone" label="TimeZone">
+        <Form.Item name="timeZone" label="TimeZone" initialValue="UTC">
           <Select placeholder="Please select a timezone">
             {TIMEZONES.map(tz => (
               <Option key={tz} value={tz}>
@@ -116,7 +122,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         </Form.Item>
         <Form.Item
           name="range"
-          label="Start Date - End Date"
+          label="Pre-distribution period"
           rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
         >
           <DatePicker.RangePicker
@@ -129,6 +135,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
           label="Team size"
           initialValue={3}
           rules={[{ required: true, message: 'Please enter team size' }]}
+          extra="Please select the number of team members"
         >
           <InputNumber min={2} />
         </Form.Item>

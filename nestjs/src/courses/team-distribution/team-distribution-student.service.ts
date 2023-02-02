@@ -41,8 +41,8 @@ export class TeamDistributionStudentService {
     }
   }
 
-  private verifyStudentTeams(students: Student[], teamDistributionId: number) {
-    if (students.find(st => st.teams.find(t => t.teamDistributionId === teamDistributionId))) {
+  private verifyStudentTeams(students: Student[], teamDistributionId: number, teamId?: number) {
+    if (students.find(st => st.teams.find(t => t.teamDistributionId === teamDistributionId && t.id !== teamId))) {
       throw new BadRequestException('One of the students is already on the team for the current distribution');
     }
   }
@@ -59,7 +59,12 @@ export class TeamDistributionStudentService {
     }
   }
 
-  public async getStudentsForCreateTeamByManager(studentIds: number[], teamDistributionId: number, courseId: number) {
+  public async getStudentsForTeamByManager(
+    studentIds: number[],
+    teamDistributionId: number,
+    courseId: number,
+    teamId?: number,
+  ) {
     const students = await this.getStudentsWithTeams(studentIds);
     if (students.length === 0) {
       throw new BadRequestException();
@@ -67,7 +72,7 @@ export class TeamDistributionStudentService {
     const teamDistribution = await this.getDistributionById(teamDistributionId);
 
     this.verifyTeamSize(students, teamDistribution.strictTeamSize);
-    this.verifyStudentTeams(students, teamDistributionId);
+    this.verifyStudentTeams(students, teamDistributionId, teamId);
 
     const registeredStudents = await this.getTeamDistributionStudents(studentIds, teamDistributionId, courseId);
 
@@ -143,11 +148,15 @@ export class TeamDistributionStudentService {
     await this.repository.update(record.id, { distributed: true });
   }
 
-  public async markStudentsAsDistributed(studentIds: number[], teamDistributionId: number) {
+  public async findByStudentIds(studentIds: number[], teamDistributionId: number) {
     const records = await this.repository.find({
       where: { studentId: In(studentIds), teamDistributionId },
     });
-    this.repository.save(records.map(e => ({ ...e, distributed: true })));
+    return records;
+  }
+
+  public async saveTeamDistributionStudents(teamDistributionStudents: TeamDistributionStudent[]) {
+    return this.repository.save(teamDistributionStudents);
   }
 
   private getUserFields(modelName = 'user') {

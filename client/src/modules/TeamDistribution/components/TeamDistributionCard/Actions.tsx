@@ -111,7 +111,7 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed ||
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Distributed) && (
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
-            <Button type="primary">Allocate a team</Button>
+            <Button type="primary">Connect with teams</Button>
           </Link>
         )}
         {renderActions()}

@@ -3,8 +3,8 @@ import { ArrowLeftOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { TeamDistributionDetailedDto } from 'api';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
-import { useMedia } from 'react-use';
 import { Dispatch, SetStateAction, useMemo } from 'react';
+import { ActionCard } from './ActionCard';
 
 const { Title, Text } = Typography;
 
@@ -31,8 +31,6 @@ export default function TeamsHeader({
   handleJoinTeam,
   setActiveTab,
 }: Props) {
-  const mobileView = useMedia('(max-width: 720px)');
-
   const tabs = useMemo(() => {
     const tabs = [
       { key: 'teams', label: 'Available teams', count: distribution.teamsCount },
@@ -46,7 +44,7 @@ export default function TeamsHeader({
 
   return (
     <Row style={{ background: 'white', marginTop: -15, padding: '24px 24px 0' }}>
-      <Col>
+      <Col span={24}>
         <Row justify="start" align="middle">
           <Space size={24}>
             <Link href={`team-distributions?course=${courseAlias}`}>
@@ -75,49 +73,41 @@ export default function TeamsHeader({
         </Title>
 
         {!isManager && isStudent && !distribution.myTeam && (
-          <Space size={24} direction={mobileView ? 'vertical' : 'horizontal'}>
+          <Row gutter={[24, 12]}>
             {!distribution.myTeam && (
-              <Card
-                title={<Title level={5}>Are you going to be a leader completing a group task?</Title>}
-                style={{ backgroundColor: '#E6F7FF' }}
-              >
-                <Space size={12} direction="vertical">
-                  <Text type="secondary">
-                    Create the team, compose a description and provide a link to a team chat. You’ll get an invitation
-                    password to share with your team members. Being a leader is honorable and responsible
-                  </Text>
-                  <Button onClick={handleCreateTeam}>Create team</Button>
-                </Space>
-              </Card>
+              <ActionCard
+                title="Are you going to be a leader completing a group task?"
+                text="Create the team, compose a description and provide a link to a team chat. You’ll get an invitation
+                      password to share with your team members. Being a leader is honorable and responsible"
+                buttonCaption="Create team"
+                onClick={handleCreateTeam}
+              />
             )}
             {isStudent && !distribution.myTeam && (
-              <Card
-                title={<Title level={5}>Have you found a great team to join?</Title>}
-                style={{ backgroundColor: '#E6F7FF' }}
-              >
-                <Space size={12} direction="vertical">
-                  <Text type="secondary">
-                    View the list of available teams, find an exciting description. Done this? Ask a team lead to share
-                    an invitation password to become a member of the greatest team
-                  </Text>
-                  <Button onClick={handleJoinTeam}>Join team</Button>
-                </Space>
-              </Card>
+              <ActionCard
+                title="Have you found a great team to join?"
+                text="View the list of available teams, find an exciting description. Done this? Ask a team lead to
+                      share an invitation password to become a member of the greatest team"
+                buttonCaption="Join team"
+                onClick={handleJoinTeam}
+              />
             )}
-          </Space>
+          </Row>
         )}
         {isManager && (
-          <Row gutter={24}>
-            <Col>
-              <Button type="primary" onClick={handleCreateTeam}>
-                Create team
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" onClick={handleDistributeStudents}>
-                Distribute students
-              </Button>
-            </Col>
+          <Row gutter={[24, 12]}>
+            <ActionCard
+              title="Team management"
+              text="You can manage unformed teams, combine small of them or create specific team manually"
+              buttonCaption="Create team"
+              onClick={handleCreateTeam}
+            />
+            <ActionCard
+              title="Student distribution"
+              text="All registered students will be grouped into teams according to the distribution settings specified"
+              buttonCaption="Distribute students"
+              onClick={handleDistributeStudents}
+            />
           </Row>
         )}
         <Tabs tabBarStyle={{ marginBottom: 0 }} activeKey={activeTab} items={tabs} onChange={setActiveTab} />

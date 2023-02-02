@@ -2,12 +2,14 @@ export enum TeamsTableColumnKey {
   Name = 'name',
   Description = 'description',
   Members = 'members',
+  Action = 'action',
 }
 
 export enum TeamsTableColumnName {
   Name = 'Team name',
   Description = 'Description',
   Members = 'Members count',
+  Action = 'Action',
 }
 
 export enum StudentsTableColumnKey {
