@@ -16,8 +16,6 @@ import { Registry } from './registry';
 import { Discipline } from './discipline';
 
 @Entity()
-@Index('discordServerId')
-@Index('alias')
 export class Course {
   @PrimaryGeneratedColumn() id: number;
 
@@ -33,6 +31,7 @@ export class Course {
   @Column()
   fullName: string;
 
+  @Index()
   @Column({ unique: true })
   alias: string;
 
@@ -75,6 +74,7 @@ export class Course {
   @ManyToOne(_ => DiscordServer, (discordServer: DiscordServer) => discordServer.courses, { nullable: true })
   discordServer: DiscordServer;
 
+  @Index()
   @Column({ nullable: true })
   discordServerId: number;
 
