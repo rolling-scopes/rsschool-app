@@ -3,6 +3,7 @@ export enum TeamsTableColumnKey {
   Description = 'description',
   Members = 'members',
   Action = 'action',
+  Team = 'team',
 }
 
 export enum TeamsTableColumnName {
@@ -10,6 +11,7 @@ export enum TeamsTableColumnName {
   Description = 'Description',
   Members = 'Members count',
   Action = 'Action',
+  Team = 'Team',
 }
 
 export enum StudentsTableColumnKey {
@@ -19,6 +21,8 @@ export enum StudentsTableColumnKey {
   Discord = 'discord',
   Github = 'github',
   Location = 'location',
+  Contacts = 'contacts',
+  Student = 'student',
 }
 
 export enum StudentsTableColumnName {
@@ -28,4 +32,6 @@ export enum StudentsTableColumnName {
   Discord = 'Discord',
   Github = 'GitHub',
   Location = 'Location',
+  Contacts = 'Contacts',
+  Student = 'Student',
 }
