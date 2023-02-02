@@ -4,8 +4,7 @@ import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
 import { Footer } from 'modules/Registry/components';
 import type { Course } from 'services/models';
-import { useMentorData } from 'modules/Registry/hooks/useMentorData';
-import { useFormProps } from 'modules/Registry/hooks/useFormProps';
+import { useMentorData, useFormProps } from 'modules/Registry/hooks';
 
 export type Props = {
   courses?: Course[];

@@ -1,21 +1,22 @@
 import { Typography, Form, Radio } from 'antd';
 import { EXTRAS, LABELS } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
+import { MentorOptionsDtoPreferedStudentsLocationEnum } from 'api';
 
 const { Title } = Typography;
 
 const studentsLimits = [2, 3, 4, 5, 6];
 const locations = [
   {
-    value: 'any',
+    value: MentorOptionsDtoPreferedStudentsLocationEnum.Any,
     label: 'Anywhere',
   },
   {
-    value: 'country',
+    value: MentorOptionsDtoPreferedStudentsLocationEnum.Country,
     label: 'My country only',
   },
   {
-    value: 'city',
+    value: MentorOptionsDtoPreferedStudentsLocationEnum.City,
     label: 'My city only',
   },
 ];
@@ -34,13 +35,7 @@ const formItemLayout = {
 export function Preferences() {
   return (
     <FormCard title={<Title level={5}>Preferences about students</Title>}>
-      <Form.Item
-        {...formItemLayout}
-        name="maxStudentsLimit"
-        label={LABELS.studentsCount}
-        initialValue={2}
-        extra={EXTRAS.readyToMentor}
-      >
+      <Form.Item {...formItemLayout} name="maxStudentsLimit" label={LABELS.studentsCount} extra={EXTRAS.readyToMentor}>
         <Radio.Group>
           {studentsLimits.map(elem => (
             <Radio key={elem} value={elem}>
@@ -49,7 +44,7 @@ export function Preferences() {
           ))}
         </Radio.Group>
       </Form.Item>
-      <Form.Item {...formItemLayout} name="preferedStudentsLocation" label={LABELS.studentsLocation} initialValue="any">
+      <Form.Item {...formItemLayout} name="preferedStudentsLocation" label={LABELS.studentsLocation}>
         <Radio.Group>
           {locations.map(({ value, label }) => (
             <Radio key={value} value={value}>

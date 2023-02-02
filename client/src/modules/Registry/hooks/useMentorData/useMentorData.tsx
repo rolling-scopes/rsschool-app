@@ -1,15 +1,21 @@
 import { message } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
-import { CourseDto, DisciplineDto, DisciplinesApi, ProfileApi } from 'api';
+import {
+  CourseDto,
+  DisciplineDto,
+  DisciplinesApi,
+  MentorOptionsDtoPreferedStudentsLocationEnum,
+  ProfileApi,
+} from 'api';
 import { Location } from 'common/models';
 import { CdnService } from 'services/cdn';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { GeneralSection, MentorshipSection, DoneSection } from 'modules/Registry/components';
-import { ERROR_MESSAGES } from '../constants';
+import { ERROR_MESSAGES } from 'modules/Registry/constants';
 
-type FormData = ReturnType<typeof getInitialValues>;
+export type FormData = ReturnType<typeof getInitialValues>;
 
 const cdnService = new CdnService();
 const userService = new UserService();
@@ -66,7 +72,7 @@ export function useMentorData(courseAlias?: string) {
   };
 
   const handleSubmit = useCallback(
-    async (model: any) => {
+    async (model: FormData) => {
       const data = { ...resume, ...model };
       setResume(data);
       if (!currentStep) {
@@ -92,8 +98,8 @@ export function useMentorData(courseAlias?: string) {
         };
 
         const userModel = {
-          cityName: location?.cityName,
-          countryName: location?.countryName,
+          cityName: location ? location.cityName : '',
+          countryName: location ? location.countryName : '',
           firstName: data.firstName,
           lastName: data.lastName,
           primaryEmail: data.primaryEmail,
@@ -167,6 +173,9 @@ function getInitialValues(
     englishMentoring: false,
     technicalMentoring: [],
     languagesMentoring: languages ?? [],
+    preferedStudentsLocation:
+      MentorOptionsDtoPreferedStudentsLocationEnum.Any as MentorOptionsDtoPreferedStudentsLocationEnum,
+    maxStudentsLimit: 2,
   };
 }
 
