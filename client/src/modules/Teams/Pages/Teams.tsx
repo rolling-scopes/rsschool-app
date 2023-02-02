@@ -130,6 +130,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       background="#F0F2F5"
       githubId={session.githubId}
       courseName={course.name}
+      withMargin={false}
     >
       {openTeamModal && (
         <TeamModal

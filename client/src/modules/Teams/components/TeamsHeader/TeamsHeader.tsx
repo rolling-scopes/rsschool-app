@@ -43,7 +43,7 @@ export default function TeamsHeader({
   }, [activeTab, distribution]);
 
   return (
-    <Row style={{ background: 'white', marginTop: -15, padding: '24px 24px 0' }}>
+    <Row style={{ background: 'white', padding: '24px 24px 0' }}>
       <Col span={24}>
         <Row justify="start" align="middle">
           <Space size={24}>
