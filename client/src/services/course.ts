@@ -1,6 +1,5 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
-import { sortTasksByEndDate } from 'services/rules';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
@@ -692,12 +691,6 @@ export interface Interview {
   template: string | null;
 }
 
-export interface StudentProfile {
-  courseId: number;
-  totalScore: number;
-  mentor: MentorWithContacts | null;
-}
-
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number;
 }
@@ -762,3 +755,16 @@ export interface TaskSolution {
 export interface IAddCriteriaForCrossCheck {
   onCreate: (data: CriteriaDto) => void;
 }
+
+const sortTasksByEndDate = (a: CourseTaskDetails, b: CourseTaskDetails) => {
+  if (!b.studentEndDate && a.studentEndDate) {
+    return -1;
+  }
+  if (!a.studentEndDate && b.studentEndDate) {
+    return 1;
+  }
+  if (!a.studentEndDate && !b.studentEndDate) {
+    return 0;
+  }
+  return new Date(a.studentEndDate!).getTime() - new Date(b.studentEndDate!).getTime();
+};
