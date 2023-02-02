@@ -20,7 +20,7 @@ enum ModalAction {
   create = 'create',
 }
 
-const roles = [CourseRole.Manager, CourseRole.Supervisor];
+const roles = [CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor];
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
   manager: 'volcano',

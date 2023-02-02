@@ -12,6 +12,7 @@ import {
   isStudent,
   isTaskOwner,
   isSupervisor,
+  isDementor,
 } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
@@ -51,6 +52,7 @@ export const userGuards = (user: IUserSession) => {
     isAnyManager: () => isAnyManager(user),
     isAnySupervisor: () => isAnySupervisor(user),
     isManager: (courseId: number) => isManager(user, courseId),
+    isDementor: (courseId: number) => isDementor(user, courseId),
     isMentor: (courseId: number) => isMentor(user, courseId),
     isAnyMentor: () => isAnyMentor(user),
     isStudent: (courseId: number) => isStudent(user, courseId),
@@ -103,6 +105,27 @@ export const courseMentorGuard: Router.Middleware<{}, RouterContext> = async (
     if (
       guards.isLoggedIn(ctx) &&
       (guards.isMentor(courseId) || guards.isSupervisor(courseId) || guards.isPowerUser(courseId))
+    ) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const courseMentorOrDementorGuard: Router.Middleware<{}, RouterContext> = async (
+  ctx: RouterContext,
+  next: () => Promise<void>,
+) => {
+  ctx.params.courseId = Number(ctx.params.courseId);
+  const user = ctx.state.user;
+  if (user) {
+    const guards = userGuards(user);
+    const { courseId } = ctx.params;
+    if (
+      (guards.isLoggedIn(ctx) &&
+        (guards.isMentor(courseId) || guards.isSupervisor(courseId) || guards.isPowerUser(courseId))) ||
+      guards.isDementor(courseId)
     ) {
       await next();
       return;
@@ -220,6 +243,23 @@ export const courseSupervisorGuard = async (ctx: RouterContext, next: () => Prom
     const guards = userGuards(user);
     const { courseId } = ctx.params;
     if (guards.isLoggedIn(ctx) && (guards.isPowerUser(courseId) || guards.isSupervisor(courseId))) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const courseSupervisorOrDementorGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+  const user = ctx.state.user;
+  ctx.params.courseId = Number(ctx.params.courseId);
+  if (user) {
+    const guards = userGuards(user);
+    const { courseId } = ctx.params;
+    if (
+      guards.isLoggedIn(ctx) &&
+      (guards.isPowerUser(courseId) || guards.isSupervisor(courseId) || guards.isDementor(courseId))
+    ) {
       await next();
       return;
     }
