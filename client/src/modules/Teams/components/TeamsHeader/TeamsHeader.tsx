@@ -45,16 +45,23 @@ export default function TeamsHeader({
   return (
     <Row style={{ background: 'white', padding: '24px 24px 0' }}>
       <Col span={24}>
-        <Row justify="start" align="middle">
-          <Space size={24}>
-            <Link href={`team-distributions?course=${courseAlias}`}>
-              <ArrowLeftOutlined />
-            </Link>
-            <Title level={4} style={{ marginBottom: 0 }}>
-              Teams
-            </Title>
+        <Row justify="start" align="middle" gutter={24}>
+          <Col>
+            <Space size="small">
+              {' '}
+              <Link href={`team-distributions?course=${courseAlias}`}>
+                <ArrowLeftOutlined />
+              </Link>
+              <Title level={4} style={{ marginBottom: 0 }}>
+                Teams
+              </Title>
+            </Space>
+          </Col>
+          <Col>
             <Text type="secondary">Distribution of participants per team</Text>
-            {isStudent && (
+          </Col>
+          {isStudent && (
+            <Col>
               <Space size={12}>
                 <Text type="secondary">My status:</Text>
                 {distribution.myTeam ? (
@@ -65,8 +72,8 @@ export default function TeamsHeader({
                   <Tag icon={<ClockCircleOutlined />}>without team</Tag>
                 )}
               </Space>
-            )}
-          </Space>
+            </Col>
+          )}
         </Row>
         <Title level={5} style={{ marginLeft: 27 }}>
           The roles of team members are determined automatically.
