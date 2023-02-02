@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { Col, Row, Space, Tabs, Tag, Typography } from 'antd';
 import { ArrowLeftOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { TeamDistributionDetailedDto } from 'api';
