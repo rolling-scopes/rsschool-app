@@ -22,7 +22,7 @@ import {
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager, isCourseSupervisor } from 'domain/user';
 import _ from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
@@ -39,6 +39,10 @@ function Page(props: Props) {
 
   const [loading, withLoading] = useLoading(false);
   const [courseManagerRole] = useState(isCourseManager(props.session, courseId));
+  const courseSupervisorRole = useMemo(
+    () => isCourseSupervisor(props.session, props.course.id),
+    [props.session, props.course.id],
+  );
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
@@ -137,6 +141,7 @@ function Page(props: Props) {
           }}
           details={details}
           courseId={props.course.id}
+          courseManagerOrSupervisor={courseManagerRole || courseSupervisorRole}
         />
         {expelModel ? (
           <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
@@ -164,9 +169,11 @@ function Page(props: Props) {
             </Button>
           </>
         ) : null}
-        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
-          Export CSV
-        </Button>
+        {courseManagerRole || courseSupervisorRole ? (
+          <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
+            Export CSV
+          </Button>
+        ) : null}
       </>
     );
   }
