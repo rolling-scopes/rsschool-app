@@ -617,8 +617,8 @@ export class CourseService {
   }
 
   async getMentorInterviews(githubId: string) {
-    const result = await this.axios.get(`/mentor/${githubId}/interviews`);
-    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: unknown }[];
+    const result = await this.axios.get<{ data: MentorInterview[] }>(`/mentor/${githubId}/interviews`);
+    return result.data.data;
   }
 
   async createMentor(
@@ -767,4 +767,14 @@ const sortTasksByEndDate = (a: CourseTaskDetails, b: CourseTaskDetails) => {
     return 0;
   }
   return new Date(a.studentEndDate!).getTime() - new Date(b.studentEndDate!).getTime();
+};
+
+export type MentorInterview = {
+  name: string;
+  endDate: string;
+  completed: boolean;
+  interviewer: unknown;
+  status: number;
+  student: Omit<UserBasic, 'id'>;
+  id: number;
 };

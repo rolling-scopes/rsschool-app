@@ -2,7 +2,7 @@ import { Alert, Typography } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import moment from 'moment';
 import { useContext } from 'react';
-import { isInterviewRegistrationInProgess, stageInterviewType } from 'domain/interview';
+import { stageInterviewType } from 'domain/interview';
 import { InterviewDto } from 'api';
 import { MentorOptionsContext } from './MentorPreferencesModal';
 
@@ -14,13 +14,10 @@ export function RegistrationNotice(props: { interview: InterviewDto; startDate: 
     return null;
   }
 
-  if (!isInterviewRegistrationInProgess(startDate)) {
-    return null;
-  }
-
   return (
     <>
       <Alert
+        closable
         message="Registration period"
         icon={<InfoCircleTwoTone />}
         showIcon

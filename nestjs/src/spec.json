@@ -2467,6 +2467,11 @@
           "comment": { "type": "string" }
         }
       },
+      "Attributes": {
+        "type": "object",
+        "properties": { "template": { "type": "string", "nullable": true } },
+        "required": ["template"]
+      },
       "InterviewDto": {
         "type": "object",
         "properties": {
@@ -2477,7 +2482,7 @@
           "endDate": { "type": "string" },
           "description": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "attributes": { "type": "object" }
+          "attributes": { "$ref": "#/components/schemas/Attributes" }
         },
         "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
