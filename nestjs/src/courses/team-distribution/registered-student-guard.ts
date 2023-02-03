@@ -11,12 +11,13 @@ export class RegisteredStudentOrManagerGuard implements CanActivate {
     const courseId = Number(request.params.courseId);
     const studentId = request.user.courses[courseId]?.studentId;
     const distributionId = Number(request.params.id);
-    if (!courseId || !studentId) {
-      throw new UnauthorizedException();
-    }
     const isManager = request.user.isAdmin || request.user.courses[courseId]?.roles.includes(CourseRole.Manager);
     if (isManager) {
       return true;
+    }
+
+    if (!courseId || !studentId) {
+      throw new UnauthorizedException();
     }
 
     const registration = await this.teamDistributionStudentService.getTeamDistributionStudent(

@@ -123,6 +123,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         <Form.Item
           name="range"
           label="Pre-distribution period"
+          tooltip="Time frame for student registration and self distribution"
           rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
         >
           <DatePicker.RangePicker
@@ -135,11 +136,15 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
           label="Team size"
           initialValue={3}
           rules={[{ required: true, message: 'Please enter team size' }]}
-          extra="Please select the number of team members"
         >
           <InputNumber min={2} />
         </Form.Item>
-        <Form.Item initialValue={0} name="minTotalScore" label="Minimum passing score">
+        <Form.Item
+          initialValue={0}
+          name="minTotalScore"
+          label="Minimum passing score"
+          tooltip="Shows the activity of the students and their maturity to complete group tasks"
+        >
           <InputNumber min={0} />
         </Form.Item>
         <Form.Item name="description" label="Description">
