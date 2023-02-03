@@ -3,7 +3,8 @@ import { useAsync } from 'react-use';
 import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
 import withCourseData from 'components/withCourseData';
 import { PageLayoutSimple } from 'components/PageLayout';
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
+import { CourseRole } from 'services/models';
 import { UserSearch } from 'components/UserSearch';
 
 import { CoursePageProps, StudentBasic } from 'services/models';

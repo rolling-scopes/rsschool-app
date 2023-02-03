@@ -2,15 +2,8 @@ import axios from 'axios';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
+import { CourseRole } from 'services/models';
 import { LoadingScreen } from './LoadingScreen';
-
-export const enum CourseRole {
-  TaskOwner = 'taskOwner',
-  Manager = 'manager',
-  Supervisor = 'supervisor',
-  Student = 'student',
-  Mentor = 'mentor',
-}
 
 export interface CourseInfo {
   mentorId?: number;

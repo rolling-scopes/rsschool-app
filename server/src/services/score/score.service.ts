@@ -7,6 +7,7 @@ import { getCourseTasks, updateScoreStudents, getCourses } from '../course.servi
 import { getStageInterviewRating } from '../stageInterview.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
 import { ILogger } from '../../logger';
+import { config } from '../../config';
 
 const orderByFieldMapping = {
   rank: 'student.rank',
@@ -122,6 +123,8 @@ export class ScoreService {
       .innerJoin('student.user', 'user')
       .addSelect(getPrimaryUserFields().concat(this.options.includeContacts ? getContactsUserFields() : []))
       .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
+      .leftJoin('user.resume', 'resume')
+      .addSelect(['resume.uuid', 'resume.userId'])
       .addSelect(['mentor.id', 'mentor.userId'])
       .leftJoin('student.taskResults', 'tr')
       .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId', 'tr.courseTask'])
@@ -176,6 +179,10 @@ export class ScoreService {
         : [];
 
       const user = student.user;
+
+      const resumeUuid = student.user.resume?.find(r => r.userId === user.id)?.uuid;
+      const cvLink = resumeUuid ? `${config.host}/cv/${resumeUuid}` : '';
+
       const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
         .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
         .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
@@ -195,6 +202,7 @@ export class ScoreService {
       return {
         id: student.id,
         rank: student.rank,
+        cvLink,
         mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
         name: createName(user),
         githubId: user.githubId,
@@ -229,6 +237,7 @@ export class ScoreService {
       return {
         githubId: student.githubId,
         name: student.name,
+        cvLink: student.cvLink,
         locationName: student.cityName,
         countryName: student.countryName || 'Other',
         mentorGithubId: student.mentor ? student.mentor.githubId : '',

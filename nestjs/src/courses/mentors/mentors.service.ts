@@ -111,7 +111,6 @@ export class MentorsService {
       ])
       .where('s."courseId" = :courseId', { courseId })
       .andWhere('ct.checker = :checker', { checker: Checker.Mentor })
-      .andWhere('s."isExpelled" = false')
       .andWhere('s."mentorId" = :mentorId', { mentorId })
       .orWhere('tc."mentorId" = :mentorId', { mentorId })
       .orderBy('ct."studentEndDate"', 'DESC')

@@ -6,7 +6,6 @@ import {
   ManyToOne,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  Unique,
   Index,
   JoinColumn,
 } from 'typeorm';
@@ -17,8 +16,6 @@ import { Registry } from './registry';
 import { Discipline } from './discipline';
 
 @Entity()
-@Unique(['name', 'alias'])
-@Index(['discordServerId'])
 export class Course {
   @PrimaryGeneratedColumn() id: number;
 
@@ -28,13 +25,14 @@ export class Course {
   @UpdateDateColumn()
   updatedDate: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column()
   fullName: string;
 
-  @Column({ nullable: true })
+  @Index()
+  @Column({ unique: true })
   alias: string;
 
   @Column({ nullable: true })
@@ -76,6 +74,7 @@ export class Course {
   @ManyToOne(_ => DiscordServer, (discordServer: DiscordServer) => discordServer.courses, { nullable: true })
   discordServer: DiscordServer;
 
+  @Index()
   @Column({ nullable: true })
   discordServerId: number;
 

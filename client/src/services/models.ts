@@ -1,11 +1,12 @@
 import { Session } from 'components/withSession';
-import { StudentBasic as CommonStudentBasic, DiscordServer, UserGroup } from 'common/models';
-import type { ProfileCourseDto } from 'api';
+import { StudentBasic as CommonStudentBasic } from 'common/models';
+import { ProfileCourseDto, UserGroupDtoRolesEnum as CourseRole, UserGroupDto as UserGroup } from 'api';
 
 export type Course = ProfileCourseDto;
 export type StudentBasic = CommonStudentBasic;
 
-export type { DiscordServer };
+export { CourseRole };
+
 export type { UserGroup };
 
 export interface Mentor {
@@ -16,12 +17,6 @@ export interface Mentor {
   studentId: number;
   userId: number;
   courseId: number;
-}
-
-export interface PageWithModalState<T> {
-  data: T[];
-  modalData: Partial<T> | null;
-  modalAction: 'update' | 'create';
 }
 
 export interface CoursePageProps {

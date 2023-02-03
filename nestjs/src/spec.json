@@ -2467,6 +2467,11 @@
           "comment": { "type": "string" }
         }
       },
+      "Attributes": {
+        "type": "object",
+        "properties": { "template": { "type": "string", "nullable": true } },
+        "required": ["template"]
+      },
       "InterviewDto": {
         "type": "object",
         "properties": {
@@ -2477,7 +2482,7 @@
           "endDate": { "type": "string" },
           "description": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "attributes": { "type": "object" }
+          "attributes": { "$ref": "#/components/schemas/Attributes" }
         },
         "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
@@ -3546,7 +3551,13 @@
         "properties": {
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "type": "number" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["name", "users", "roles"]
       },
@@ -3561,7 +3572,13 @@
           "id": { "type": "number" },
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "$ref": "#/components/schemas/UserDto" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["id", "name", "users", "roles"]
       },
@@ -3570,7 +3587,13 @@
         "properties": {
           "name": { "type": "string" },
           "users": { "type": "array", "items": { "type": "number" } },
-          "roles": { "type": "array", "items": { "type": "string" } }
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+            }
+          }
         },
         "required": ["name", "users", "roles"]
       },

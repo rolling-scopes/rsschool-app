@@ -8,7 +8,8 @@ import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
+import { CourseRole } from 'services/models';
 import { omit } from 'lodash';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import {
