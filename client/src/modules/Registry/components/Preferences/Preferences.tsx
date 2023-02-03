@@ -1,5 +1,5 @@
 import { Typography, Form, Radio } from 'antd';
-import { EXTRAS, LABELS } from 'modules/Registry/constants';
+import { EXTRAS, LABELS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
 import { MentorOptionsDtoPreferedStudentsLocationEnum } from 'api';
 
@@ -21,16 +21,7 @@ const locations = [
   },
 ];
 
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 7, offset: 0 },
-  },
-  wrapperCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 10, offset: 0 },
-  },
-};
+const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Preferences() {
   return (

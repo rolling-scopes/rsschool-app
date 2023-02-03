@@ -1,36 +1,23 @@
-import { Col, Form, Row, Space, Steps, Typography } from 'antd';
+import { Col, Form, Row, Space, Typography } from 'antd';
 import { useUpdate } from 'react-use';
-import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
+import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { Session } from 'components/withSession';
-import { Footer } from 'modules/Registry/components';
+import { Footer, FormSteps } from 'modules/Registry/components';
 import type { Course } from 'services/models';
-import { useMentorData, useFormProps } from 'modules/Registry/hooks';
+import { useMentorData, useFormLayout } from 'modules/Registry/hooks';
+import { DEFAULT_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 
-export type Props = {
+type Props = {
   courses?: Course[];
   session: Session;
 };
 
-const { Step } = Steps;
 const { Title, Text } = Typography;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { offset: 4 },
-    md: { span: 6, offset: 0 },
-    xl: { span: 8, offset: 0 },
-  },
-  wrapperCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 12, offset: 0 },
-    xl: { span: 8, offset: 0 },
-  },
-};
 
 export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
-  const { form, formLayout, isSmallScreen } = useFormProps();
-  const { resume, loading, currentStep, steps, handleSubmit } = useMentorData(props.courseAlias);
+  const { formLayout } = useFormLayout();
+  const { resume, loading, currentStep, steps, form, handleSubmit } = useMentorData(props.courseAlias);
 
   return (
     <RegistrationPageLayout loading={loading} githubId={props.session.githubId}>
@@ -38,7 +25,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
         <Row justify="center" style={{ paddingBlock: 24 }}>
           <Col xs={24} lg={18} xl={18} xxl={14}>
             <Form
-              {...formItemLayout}
+              {...DEFAULT_FORM_ITEM_LAYOUT}
               layout={formLayout}
               form={form}
               initialValues={resume}
@@ -54,22 +41,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
                     <Text type="secondary">Free courses from the developer community</Text>
                   </Space>
                 </Col>
-                <Col
-                  span={24}
-                  style={{
-                    background: '#FFFFFF',
-                    borderRadius: 2,
-                    paddingBlock: 16,
-                    paddingInline: 60,
-                  }}
-                >
-                  <Steps current={currentStep} responsive={false}>
-                    {steps.map(item => (
-                      <Step key={item.title} title={isSmallScreen ? null : item.title} />
-                    ))}
-                  </Steps>
-                </Col>
-                <Col span={24}>{steps[currentStep].content}</Col>
+                <FormSteps steps={steps} currentStep={currentStep} />
                 <Col span={24} flex="none">
                   <Footer />
                 </Col>

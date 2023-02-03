@@ -1,6 +1,7 @@
 export * from './Form/DoneSection/DoneSection';
 export * from './Form/GeneralSection/GeneralSection';
 export * from './Form/MentorshipSection/MentorshipSection';
+export * from './FormSteps/FormSteps';
 export * from './PersonalInfo/PersonalInfo';
 export * from './AdditionalInfo/AdditionalInfo';
 export * from './ContactInfo/ContactInfo';
@@ -8,3 +9,9 @@ export * from './Disciplines/Disciplines';
 export * from './Footer/Footer';
 export * from './FormCard/FormCard';
 export * from './Preferences/Preferences';
+export * from './DataProcessingCheckbox/DataProcessingCheckbox';
+export * from './FormButtons/FormButtons';
+export * from './CourseDetails/CourseDetails';
+export * from './LanguagesMentoring/LanguagesMentoring';
+export * from './CourseLabel/CourseLabel';
+export * from './NoCourses/NoCourses';

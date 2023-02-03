@@ -1,6 +1,6 @@
 import { Form, Checkbox, Row, Empty, Typography, Col } from 'antd';
 import { DisciplineDto } from 'api';
-import { LABELS, VALIDATION_RULES } from 'modules/Registry/constants';
+import { LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
 
 type Props = {
@@ -9,16 +9,7 @@ type Props = {
 
 const { Title } = Typography;
 
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 7, offset: 0 },
-  },
-  wrapperCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 10, offset: 0 },
-  },
-};
+const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Disciplines({ disciplines }: Props) {
   return (

@@ -1,7 +1,7 @@
-import { Alert, Button, Col, Form, Input, Row, Space, Typography } from 'antd';
+import { Alert, Form, Input, Space, Typography } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { emailPattern, phonePattern } from 'services/validators';
-import { FormCard } from 'modules/Registry/components';
+import { FormButtons, FormCard } from 'modules/Registry/components';
 
 const { Title, Text } = Typography;
 
@@ -13,15 +13,6 @@ const CardTitle = (
     </Text>
   </Space>
 );
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: { span: 12, offset: 0 },
-    sm: { span: 16, offset: 4 },
-    md: { span: 12, offset: 6 },
-    xl: { span: 8, offset: 8 },
-  },
-};
 
 export function ContactInfo() {
   return (
@@ -70,15 +61,7 @@ export function ContactInfo() {
       <Form.Item label={LABELS.notes} name="contactsNotes">
         <Input.TextArea rows={4} placeholder={PLACEHOLDERS.notes} />
       </Form.Item>
-      <Form.Item {...tailFormItemLayout} className="buttons">
-        <Row justify="end">
-          <Col>
-            <Button size="large" type="primary" htmlType="submit">
-              Continue
-            </Button>
-          </Col>
-        </Row>
-      </Form.Item>
+      <FormButtons submitTitle="Continue" />
     </FormCard>
   );
 }

@@ -1,7 +1,7 @@
 import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from 'common/models';
-import { FormCard } from 'modules/Registry/components';
+import { DataProcessingCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
 import { LocationSelect } from 'components/Forms';
@@ -9,11 +9,12 @@ import { LocationSelect } from 'components/Forms';
 type Props = {
   location: Location | null;
   setLocation: Dispatch<SetStateAction<Location | null>>;
+  isStudentForm?: boolean;
 };
 
 const { Title } = Typography;
 
-export function PersonalInfo({ location, setLocation }: Props) {
+export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
   return (
     <FormCard title={<Title level={5}>Personal information</Title>}>
       <Form.Item
@@ -33,7 +34,7 @@ export function PersonalInfo({ location, setLocation }: Props) {
       </Form.Item>
       <Form.Item
         label={LABELS.location}
-        tooltip={TOOLTIPS.locationMentor}
+        tooltip={isStudentForm ? TOOLTIPS.locationStudent : TOOLTIPS.locationMentor}
         name="location"
         rules={[{ required: true, message: ERROR_MESSAGES.location }]}
         valuePropName={'location'}
@@ -53,9 +54,16 @@ export function PersonalInfo({ location, setLocation }: Props) {
         tooltip={TOOLTIPS.epamEmail}
         name="contactsEpamEmail"
         rules={[{ pattern: epamEmailPattern, message: ERROR_MESSAGES.epamEmail }]}
+        requiredMark={isStudentForm && 'optional'}
       >
         <Input placeholder={PLACEHOLDERS.epamEmail} />
       </Form.Item>
+      {isStudentForm ? (
+        <>
+          <DataProcessingCheckbox isStudentForm />
+          <FormButtons />
+        </>
+      ) : null}
     </FormCard>
   );
 }

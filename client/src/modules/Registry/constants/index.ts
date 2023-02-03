@@ -4,16 +4,13 @@ export const DEFAULT_COLUMN_SIZES = { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 };
 export const DEFAULT_DOUBLE_COLUMN_SIZES = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12 };
 export const DEFAULT_ROW_GUTTER = 24;
 
-export const TEXT_EMAIL_TOOLTIP = 'No spam e-mails. Only for course purposes.';
-export const TEXT_EPAM_EMAIL_TOOLTIP =
-  'If you are EPAM employee, please specify your email to avoid some manual processes later';
-export const TEXT_LOCATION_STUDENT_TOOLTIP =
-  'We need your location for understanding the audience and for mentor distribution.';
 export const RSSCHOOL_BOT_LINK = 'https://t.me/rsschool_bot?start';
 export const DATA_PROCESSING_TEXT =
   'I agree to the processing of my personal data contained in the application and sharing it with companies only for students employment purposes.';
-export const SUCCESS_TEXT =
-  'Before you start we need to consider your application and submit you to a course. It could take some time. We will send you next steps via an email on the address you provided during registration.';
+export const SUCCESS_TEXT = (courseName?: string) =>
+  courseName
+    ? `You have successfully registered for the ${courseName} course.`
+    : 'Before you start we need to consider your application and submit you to a course. It could take some time. We will send you next steps via an email on the address you provided during registration.';
 
 export const ERROR_MESSAGES = {
   chooseAtLeastOne: 'Should choose at least one',
@@ -28,6 +25,7 @@ export const ERROR_MESSAGES = {
 
 export const TOOLTIPS = {
   locationMentor: 'We need your location for understanding audience and use it for students distribution',
+  locationStudent: 'We need your location for understanding the audience and for mentor distribution.',
   primaryEmail: 'No spam e-mails. Only for course purposes.',
   epamEmail: 'If you are EPAM employee, please specify your email to avoid some manual processes later',
 };
@@ -66,10 +64,12 @@ export const LABELS = {
   notes: 'Contact Notes',
   courses: 'Preferred Courses',
   languages: 'Languages you can mentor in',
+  languagesStudent: 'Mentoring languages',
   aboutYourself: 'About Yourself',
   disciplines: 'You can mentor',
   studentsCount: 'Count of students',
   studentsLocation: 'Students location',
+  course: 'Course',
 };
 
 export const VALIDATION_RULES: Rule[] = [
@@ -79,3 +79,48 @@ export const VALIDATION_RULES: Rule[] = [
     },
   },
 ];
+
+export const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
+  isMentorshipSection
+    ? {
+        wrapperCol: {
+          xs: { span: 12, offset: 0 },
+          sm: { span: 16, offset: 4 },
+          md: { span: 10, offset: 7 },
+        },
+      }
+    : {
+        wrapperCol: {
+          xs: { span: 12, offset: 0 },
+          sm: { span: 16, offset: 4 },
+          md: { span: 12, offset: 6 },
+          xl: { span: 8, offset: 8 },
+        },
+      };
+
+export const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
+  isStudentForm
+    ? {}
+    : {
+        labelCol: {
+          sm: { span: 16, offset: 4 },
+          md: { span: 7, offset: 0 },
+        },
+        wrapperCol: {
+          sm: { span: 16, offset: 4 },
+          md: { span: 10, offset: 0 },
+        },
+      };
+
+export const DEFAULT_FORM_ITEM_LAYOUT = {
+  labelCol: {
+    sm: { offset: 4 },
+    md: { span: 6, offset: 0 },
+    xl: { span: 8, offset: 0 },
+  },
+  wrapperCol: {
+    sm: { span: 16, offset: 4 },
+    md: { span: 12, offset: 0 },
+    xl: { span: 8, offset: 0 },
+  },
+};

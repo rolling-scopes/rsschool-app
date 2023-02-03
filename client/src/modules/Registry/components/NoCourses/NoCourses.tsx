@@ -1,6 +1,5 @@
 import { MehTwoTone } from '@ant-design/icons';
 import { Button, Result } from 'antd';
-import * as React from 'react';
 
 export function NoCourses() {
   return (
