@@ -1563,7 +1563,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GiveConsentDto" } } }
           }
         },
         "tags": ["opportunities"]
@@ -3481,7 +3481,16 @@
         ]
       },
       "Resume": { "type": "object", "properties": {} },
-      "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
+      "ConsentDto": {
+        "type": "object",
+        "properties": { "consent": { "type": "boolean" }, "expires": { "type": "object" } },
+        "required": ["consent", "expires"]
+      },
+      "GiveConsentDto": {
+        "type": "object",
+        "properties": { "consent": { "type": "boolean" }, "expires": { "type": "number" } },
+        "required": ["consent", "expires"]
+      },
       "StatusDto": { "type": "object", "properties": { "expires": { "type": "number" } }, "required": ["expires"] },
       "VisibilityDto": {
         "type": "object",
