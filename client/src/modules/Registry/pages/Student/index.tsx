@@ -288,7 +288,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                         rules={[{ pattern: epamEmailPattern, message: 'Please enter a valid EPAM email' }]}
                         requiredMark="optional"
                       >
-                        <Input placeholder="first_last@epam.com" />
+                        <Input placeholder="john_doe@epam.com" />
                       </Form.Item>
                     </Col>
                   </Row>
