@@ -3,6 +3,11 @@ import { TaskType } from '@entities/task';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
+class Attributes {
+  @ApiProperty({ nullable: true })
+  public template?: string;
+}
+
 @ApiResponse({})
 export class InterviewDto {
   constructor(courseTask: CourseTask) {
@@ -45,6 +50,6 @@ export class InterviewDto {
   @ApiProperty()
   descriptionUrl: string;
 
-  @ApiProperty({ type: Object })
-  attributes: Record<string, string>;
+  @ApiProperty({ type: Attributes })
+  attributes: Attributes;
 }

@@ -26,7 +26,7 @@ export type PageProps = CoursePageProps & { interview: InterviewDto };
 
 export function InterviewWaitingList({ session, course, interview }: PageProps) {
   const courseId = course.id;
-  const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session]);
+  const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
