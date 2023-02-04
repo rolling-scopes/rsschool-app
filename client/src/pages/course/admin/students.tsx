@@ -38,8 +38,8 @@ function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [courseManagerRole] = useState(isCourseManager(props.session, courseId));
-  const courseSupervisorRole = useMemo(
+  const [hasCourseManagerRole] = useState(isCourseManager(props.session, courseId));
+  const hasCourseSupervisorRole = useMemo(
     () => isCourseSupervisor(props.session, props.course.id),
     [props.session, props.course.id],
   );
@@ -141,7 +141,7 @@ function Page(props: Props) {
           }}
           details={details}
           courseId={props.course.id}
-          courseManagerOrSupervisor={courseManagerRole || courseSupervisorRole}
+          courseManagerOrSupervisor={hasCourseManagerRole || hasCourseSupervisorRole}
         />
         {expelModel ? (
           <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
@@ -156,7 +156,7 @@ function Page(props: Props) {
   function renderToolbar() {
     return (
       <>
-        {courseManagerRole ? (
+        {hasCourseManagerRole ? (
           <>
             <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
               Create Repos
@@ -169,7 +169,7 @@ function Page(props: Props) {
             </Button>
           </>
         ) : null}
-        {courseManagerRole || courseSupervisorRole ? (
+        {hasCourseManagerRole || hasCourseSupervisorRole ? (
           <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
             Export CSV
           </Button>
