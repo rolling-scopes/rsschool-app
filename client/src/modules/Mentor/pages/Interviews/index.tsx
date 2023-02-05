@@ -51,7 +51,8 @@ export function Interviews(props: CoursePageProps) {
         .container {
           display: flex;
           margin: 0 auto;
-          max-width: 90%;
+          width: 100%;
+          max-width: 1200px;
           flex-direction: column;
         }
       `}</style>

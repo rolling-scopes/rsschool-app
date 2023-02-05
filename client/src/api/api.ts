@@ -267,7 +267,7 @@ export interface Attributes {
      * @type {string}
      * @memberof Attributes
      */
-    'template': string | null;
+    'template'?: string | null;
 }
 /**
  * 

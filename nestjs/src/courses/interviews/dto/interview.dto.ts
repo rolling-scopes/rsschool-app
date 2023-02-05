@@ -4,7 +4,7 @@ import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 class Attributes {
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, required: false })
   public template?: string;
 }
 

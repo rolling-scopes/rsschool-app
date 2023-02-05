@@ -2467,11 +2467,7 @@
           "comment": { "type": "string" }
         }
       },
-      "Attributes": {
-        "type": "object",
-        "properties": { "template": { "type": "string", "nullable": true } },
-        "required": ["template"]
-      },
+      "Attributes": { "type": "object", "properties": { "template": { "type": "string", "nullable": true } } },
       "InterviewDto": {
         "type": "object",
         "properties": {
