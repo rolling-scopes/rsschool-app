@@ -47,6 +47,9 @@ const { className: containerClassName, styles: containerStyles } = css.resolve`
     border: 1px solid rgba(245, 245, 245, 1);
     padding: 16px;
   }
+  div + div {
+    border-top: none;
+  }
 
   div:first-child {
     margin-top: 15px;
