@@ -553,12 +553,6 @@ export interface ConsentDto {
      * @memberof ConsentDto
      */
     'consent': boolean;
-    /**
-     * 
-     * @type {object}
-     * @memberof ConsentDto
-     */
-    'expires': object;
 }
 /**
  * 

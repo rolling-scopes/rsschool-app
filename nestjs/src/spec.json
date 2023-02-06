@@ -3486,11 +3486,7 @@
         ]
       },
       "Resume": { "type": "object", "properties": {} },
-      "ConsentDto": {
-        "type": "object",
-        "properties": { "consent": { "type": "boolean" }, "expires": { "type": "object" } },
-        "required": ["consent", "expires"]
-      },
+      "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
       "GiveConsentDto": {
         "type": "object",
         "properties": { "consent": { "type": "boolean" }, "expires": { "type": "number" } },
