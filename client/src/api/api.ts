@@ -2490,6 +2490,25 @@ export interface GeneralInfo {
 /**
  * 
  * @export
+ * @interface GiveConsentDto
+ */
+export interface GiveConsentDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GiveConsentDto
+     */
+    'consent': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof GiveConsentDto
+     */
+    'expires': number;
+}
+/**
+ * 
+ * @export
  * @interface GratitudeDto
  */
 export interface GratitudeDto {
@@ -11002,7 +11021,7 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
+        async createConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GiveConsentDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createConsent(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -11097,7 +11116,7 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createConsent(options?: any): AxiosPromise<ConsentDto> {
+        createConsent(options?: any): AxiosPromise<GiveConsentDto> {
             return localVarFp.createConsent(options).then((request) => request(axios, basePath));
         },
         /**
