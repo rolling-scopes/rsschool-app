@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { isAnyCourseManager } from 'domain/user';
+import { hasRoleInAnyCourse, isAnyCourseManager, isAnyCoursePowerUser } from 'domain/user';
 import { NotAccess } from 'modules/NotAccess';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -25,10 +25,14 @@ export interface Session {
 
 let sessionCache: Session | undefined;
 
-function withSession(
-  WrappedComponent: React.ComponentType<any>,
-  restArgs?: { requiredCourseRole?: CourseRole; onlyForAdmin?: boolean; requiredAnyCourseRole?: CourseRole },
-) {
+type AccessSettings = {
+  requiredCourseRole?: CourseRole;
+  onlyForAdmin?: boolean;
+  requiredAnyCourseRole?: CourseRole;
+  onlyForAnyCoursePowerUser?: boolean;
+};
+
+function withSession(WrappedComponent: React.ComponentType<any>, accessSettings?: AccessSettings) {
   return (props: any) => {
     const [session, setSession] = useState<Session | undefined>();
 
@@ -48,23 +52,27 @@ function withSession(
       }
     }, []);
 
-    if (session && restArgs?.onlyForAdmin && !session.isAdmin) {
+    if (session && accessSettings?.onlyForAdmin && !session.isAdmin) {
       return <NotAccess session={session} />;
     }
 
-    if (session && !session.isAdmin && restArgs?.requiredAnyCourseRole === CourseRole.Manager) {
-      if (!isAnyCourseManager(session)) {
+    if (session && accessSettings?.onlyForAnyCoursePowerUser && !isAnyCoursePowerUser(session)) {
+      return <NotAccess session={session} />;
+    }
+
+    if (session && !session.isAdmin && accessSettings?.requiredAnyCourseRole) {
+      if (!hasRoleInAnyCourse(session, accessSettings.requiredAnyCourseRole)) {
         return <NotAccess session={session} />;
       }
     }
 
-    if (session && restArgs?.requiredCourseRole) {
+    if (session && accessSettings?.requiredCourseRole) {
       const { courses, isAdmin } = session;
       const id = props.course.id;
-      if (!courses?.[id]?.roles.includes(restArgs.requiredCourseRole) && !isAdmin) {
+      if (!courses?.[id]?.roles.includes(accessSettings.requiredCourseRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
-            You are not [{restArgs.requiredCourseRole}] in {props.course.alias}
+            You are not [{accessSettings.requiredCourseRole}] in {props.course.alias}
           </h4>
         );
       }
