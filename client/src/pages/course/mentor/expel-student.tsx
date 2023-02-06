@@ -156,4 +156,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, CourseRole.Mentor));
+export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Mentor }));

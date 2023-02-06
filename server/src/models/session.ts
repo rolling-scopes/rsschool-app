@@ -36,6 +36,8 @@ export const isAnyManager = (user?: IUserSession) => hasRoleInAny(user, CourseRo
 export const isAnySupervisor = (user?: IUserSession) => hasRoleInAny(user, CourseRole.Supervisor);
 export const isManager = (user?: IUserSession, courseId?: number) =>
   isAdmin(user) || hasRole(user, courseId, CourseRole.Manager);
+export const isDementor = (user?: IUserSession, courseId?: number) =>
+  isAdmin(user) || hasRole(user, courseId, CourseRole.Dementor);
 export const isMentor = (user?: IUserSession, courseId?: number) => hasRole(user, courseId, CourseRole.Mentor);
 export const isAnyMentor = (user?: IUserSession) => hasRoleInAny(user, CourseRole.Mentor);
 export const isStudent = (user?: IUserSession, courseId?: number) => hasRole(user, courseId, CourseRole.Student);
