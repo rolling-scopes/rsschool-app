@@ -42,6 +42,10 @@ export function isCourseManager(session: Session, courseId: number) {
   return isAdmin(session) || hasRole(session, courseId, CourseRole.Manager);
 }
 
+export function isDementor(session: Session, courseId: number) {
+  return isAdmin(session) || hasRole(session, courseId, CourseRole.Dementor);
+}
+
 export function isPowerUser(session: Session, courseId: number) {
   return isAdmin(session) || isCourseManager(session, courseId) || isCourseSupervisor(session, courseId);
 }
@@ -64,6 +68,10 @@ export function isAnyCoursePowerUser(session: Session) {
     hasRoleInAnyCourse(session, CourseRole.Manager) ||
     hasRoleInAnyCourse(session, CourseRole.Supervisor)
   );
+}
+
+export function isAnyCourseDementor(session: Session) {
+  return isAdmin(session) || hasRoleInAnyCourse(session, CourseRole.Dementor);
 }
 
 export function isTaskOwner(session: Session, courseId: number) {

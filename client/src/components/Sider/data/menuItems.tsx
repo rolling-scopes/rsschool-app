@@ -17,8 +17,10 @@ import {
   isAnyCourseManager,
   isAnyCoursePowerUser,
   isCourseManager,
+  isDementor,
   isCourseSupervisor,
   isHirer,
+  isAnyCourseDementor,
 } from 'domain/user';
 import { Course } from 'services/models';
 
@@ -56,7 +58,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'main',
     icon: <HomeOutlined />,
     href: '/',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+    access: session => isAdmin(session) || isAnyCoursePowerUser(session) || isAnyCourseDementor(session),
   },
   {
     name: 'Disciplines',
@@ -151,7 +153,7 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     name: 'Course Students',
     key: 'courseStudents',
     getUrl: (course: Course) => `/course/admin/students?course=${course.alias}`,
-    courseAccess: some(isCourseManager, isCourseSupervisor),
+    courseAccess: some(isCourseManager, isCourseSupervisor, isDementor),
   },
   {
     name: 'Course Mentors',
@@ -169,7 +171,7 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     name: 'Cross-Сheck Table',
     key: 'Cross-Сheck Table',
     getUrl: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
-    courseAccess: isCourseManager,
+    courseAccess: some(isCourseManager, isDementor),
   },
   {
     name: 'Technical Screening',

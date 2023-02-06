@@ -10,7 +10,9 @@ import {
   courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
+  courseMentorOrDementorGuard,
   courseSupervisorGuard,
+  courseSupervisorOrDementorGuard,
   courseSupervisorOrMentorGuard,
   crossCheckGuard,
   guard,
@@ -193,6 +195,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const activeStudentValidators = [validateGithubIdAndAccess, validateExpelledStudent];
   const mentorValidators = [courseMentorGuard, validateGithubId];
+  const mentorOrDementorValidators = [courseMentorOrDementorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
   router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
@@ -239,7 +242,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
   router.post('/student/:githubId/repository', guard, ...validators, createRepository(logger));
-  router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
+  router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
@@ -249,7 +252,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
   router.post('/students/status', courseManagerGuard, updateStatuses(logger));
   router.post('/students', adminGuard, postStudents(logger));
-  router.get('/students/details', courseSupervisorGuard, getStudentsWithDetails(logger));
+  router.get('/students/details', courseSupervisorOrDementorGuard, getStudentsWithDetails(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
 
   router.get('/students/search/:searchText', guard, searchStudent(logger));
