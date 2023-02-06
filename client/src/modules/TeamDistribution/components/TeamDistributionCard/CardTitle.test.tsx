@@ -19,7 +19,7 @@ describe('CardTitle', () => {
 
   it('should display min score when it is not 0 and registrationStatus not completed or distributed', () => {
     render(<CardTitle distribution={distribution} />);
-    expect(screen.getByText('Min score 100500')).toBeInTheDocument();
+    expect(screen.getByText(`Min score ${distribution.minTotalScore}`)).toBeInTheDocument();
   });
 
   it('should not display min score when it is 0', () => {
@@ -47,7 +47,7 @@ describe('CardTitle', () => {
         }}
       />,
     );
-    expect(screen.queryByText('Min score 100500')).not.toBeInTheDocument();
+    expect(screen.queryByText(`Min score ${distribution.minTotalScore}`)).not.toBeInTheDocument();
   });
 
   it.each`
@@ -68,7 +68,7 @@ describe('CardTitle', () => {
 
   it('should display strict team size', () => {
     render(<CardTitle distribution={distribution} />);
-    expect(screen.getByText('3 members')).toBeInTheDocument();
+    expect(screen.getByText(`${distribution.strictTeamSize} members`)).toBeInTheDocument();
   });
 
   it('should display distribution period', () => {

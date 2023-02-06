@@ -78,7 +78,7 @@ describe('Actions', () => {
     expect(cancel).toBeInTheDocument();
   });
 
-  it('should render a Registration is closed text when the distribution is completed and end date passed', () => {
+  it('should render the "Registration is closed" text when the distribution is completed and end date has passed', () => {
     const completedDistribution = {
       ...distribution,
       endDate: '2022-01-01T00:00:00Z',

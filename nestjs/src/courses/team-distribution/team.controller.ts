@@ -90,11 +90,11 @@ export class TeamController {
 
     if (team.students.length) {
       const teamDistributionStudents = await this.teamDistributionStudentService.findByStudentIds(
-        team.students.map(s => s.id),
+        team.students.map(student => student.id),
         distributionId,
       );
       await this.teamDistributionStudentService.saveTeamDistributionStudents(
-        teamDistributionStudents.map(s => ({ ...s, distributed: true })),
+        teamDistributionStudents.map(student => ({ ...student, distributed: true })),
       );
     }
 

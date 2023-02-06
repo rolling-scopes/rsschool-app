@@ -42,7 +42,11 @@ export class TeamDistributionStudentService {
   }
 
   private verifyStudentTeams(students: Student[], teamDistributionId: number, teamId?: number) {
-    if (students.find(st => st.teams.find(t => t.teamDistributionId === teamDistributionId && t.id !== teamId))) {
+    if (
+      students.some(student =>
+        student.teams.some(team => team.teamDistributionId === teamDistributionId && team.id !== teamId),
+      )
+    ) {
       throw new BadRequestException('One of the students is already on the team for the current distribution');
     }
   }

@@ -44,7 +44,9 @@ export class TeamService {
       team.id,
     );
 
-    const notDistributedStudentIds = team.students.filter(el => !studentIds?.includes(el.id)).map(el => el.id);
+    const notDistributedStudentIds = team.students
+      .filter(student => !studentIds?.includes(student.id))
+      .map(student => student.id);
     const distributedStudentIds = studentIds?.filter(id => !team.students.find(el => el.id === id));
 
     const studentsNeedingUpdate = await this.teamDistributionStudentService.findByStudentIds(
@@ -53,11 +55,11 @@ export class TeamService {
     );
 
     const notDistributedStudents = studentsNeedingUpdate
-      .filter(s => notDistributedStudentIds.includes(s.studentId))
-      .map(s => ({ ...s, distributed: false }));
+      .filter(student => notDistributedStudentIds.includes(student.studentId))
+      .map(student => ({ ...student, distributed: false }));
     const distributedStudents = studentsNeedingUpdate
-      .filter(s => distributedStudentIds.includes(s.studentId))
-      .map(s => ({ ...s, distributed: true }));
+      .filter(student => distributedStudentIds.includes(student.studentId))
+      .map(student => ({ ...student, distributed: true }));
 
     await this.teamDistributionStudentService.saveTeamDistributionStudents([
       ...notDistributedStudents,
@@ -125,7 +127,7 @@ export class TeamService {
       dto.studentIds &&
       !isEqual(
         dto.studentIds,
-        team.students.map(el => el.id),
+        team.students.map(student => student.id),
       )
     ) {
       const res = await this.editTeamSquad(team, dto.studentIds, distributionId, courseId);
