@@ -79,21 +79,21 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'tasks',
     icon: <AlertOutlined />,
     href: '/admin/tasks',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   {
     name: 'Events',
     key: 'events',
     icon: <BellOutlined />,
     href: '/admin/events',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   {
     name: 'Users',
     key: 'users',
     icon: <UserOutlined />,
     href: '/admin/users',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   {
     name: 'Mentor Registry',
@@ -128,7 +128,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'notifications',
     icon: <NotificationFilled />,
     href: '/admin/notifications',
-    access: session => isAdmin(session) || isAnyCoursePowerUser(session),
+    access: session => isAdmin(session),
   },
 ];
 
@@ -165,7 +165,7 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     name: 'Course Users',
     key: 'courseUsers',
     getUrl: (course: Course) => `/course/admin/users?course=${course.alias}`,
-    courseAccess: isAdmin,
+    courseAccess: isCourseManager,
   },
   {
     name: 'Cross-Сheck Table',

@@ -3,7 +3,7 @@ import { Student } from '@entities/student';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuthUser, Role } from '../auth';
+import { AuthUser, CourseRole, Role } from '../auth';
 
 // use this as a mark for identifying self-expelled students.
 const SELF_EXPELLED_MARK = 'Self expelled from the course';
@@ -23,6 +23,10 @@ export class CourseAccessService {
     }
 
     return !!user.courses[courseId];
+  }
+
+  public canAccessCourseAsManager(user: AuthUser, courseId: number): boolean {
+    return user.courses[courseId]?.roles.includes(CourseRole.Manager) || user.isAdmin;
   }
 
   public async leaveAsStudent(courseId: number, studentId: number, comment?: string): Promise<void> {

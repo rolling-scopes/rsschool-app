@@ -226,4 +226,4 @@ function getInitialValues(modalData: Partial<UserGroupDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { onlyForAdmin: true });
