@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { hasRoleInAnyCourse, isAnyCourseManager, isAnyCoursePowerUser } from 'domain/user';
+import { hasRoleInAnyCourse, isAnyCoursePowerUser } from 'domain/user';
 import { NotAccess } from 'modules/NotAccess';
 import Router from 'next/router';
 import React, { useState } from 'react';
