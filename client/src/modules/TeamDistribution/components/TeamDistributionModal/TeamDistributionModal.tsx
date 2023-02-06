@@ -104,7 +104,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
     >
       <Form {...formLayoutProps} form={form} initialValues={data ? getInitialValues(data) : undefined}>
         <Text strong>
-          You are {!data ? 'creating' : 'editing'} a group distribution event. Fill out the form to add it to the
+          You are {data ? 'editing' : 'creating' } a group distribution event. Fill out the form to add it to the
           schedule.
         </Text>
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
