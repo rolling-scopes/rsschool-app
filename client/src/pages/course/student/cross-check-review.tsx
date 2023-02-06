@@ -323,4 +323,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, { requiredRole: CourseRole.Student }));
+export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Student }));

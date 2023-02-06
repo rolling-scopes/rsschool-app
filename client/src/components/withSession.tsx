@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isAnyCourseManager } from 'domain/user';
 import { NotAccess } from 'modules/NotAccess';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -26,7 +27,7 @@ let sessionCache: Session | undefined;
 
 function withSession(
   WrappedComponent: React.ComponentType<any>,
-  restArgs?: { requiredRole?: CourseRole; onlyForAdmin?: boolean },
+  restArgs?: { requiredCourseRole?: CourseRole; onlyForAdmin?: boolean; requiredAnyCourseRole?: CourseRole },
 ) {
   return (props: any) => {
     const [session, setSession] = useState<Session | undefined>();
@@ -51,13 +52,19 @@ function withSession(
       return <NotAccess session={session} />;
     }
 
-    if (session && restArgs?.requiredRole) {
+    if (session && !session.isAdmin && restArgs?.requiredAnyCourseRole === CourseRole.Manager) {
+      if (!isAnyCourseManager(session)) {
+        return <NotAccess session={session} />;
+      }
+    }
+
+    if (session && restArgs?.requiredCourseRole) {
       const { courses, isAdmin } = session;
       const id = props.course.id;
-      if (!courses?.[id]?.roles.includes(restArgs.requiredRole) && !isAdmin) {
+      if (!courses?.[id]?.roles.includes(restArgs.requiredCourseRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
-            You are not [{restArgs.requiredRole}] in {props.course.alias}
+            You are not [{restArgs.requiredCourseRole}] in {props.course.alias}
           </h4>
         );
       }
