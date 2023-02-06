@@ -435,4 +435,4 @@ function deserializeFromJson(json: any) {
     }, {} as any);
 }
 
-export default withCourseData(withSession(Page, CourseRole.Mentor));
+export default withCourseData(withSession(Page, { requiredRole: CourseRole.Mentor }));

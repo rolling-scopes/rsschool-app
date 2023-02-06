@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { NotAccess } from 'modules/NotAccess';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -23,7 +24,10 @@ export interface Session {
 
 let sessionCache: Session | undefined;
 
-function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: CourseRole) {
+function withSession(
+  WrappedComponent: React.ComponentType<any>,
+  restArgs?: { requiredRole?: CourseRole; onlyForAdmin?: boolean },
+) {
   return (props: any) => {
     const [session, setSession] = useState<Session | undefined>();
 
@@ -43,13 +47,17 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
       }
     }, []);
 
-    if (session && requiredRole) {
+    if (session && restArgs?.onlyForAdmin && !session.isAdmin) {
+      return <NotAccess session={session} />;
+    }
+
+    if (session && restArgs?.requiredRole) {
       const { courses, isAdmin } = session;
       const id = props.course.id;
-      if (!courses?.[id]?.roles.includes(requiredRole) && !isAdmin) {
+      if (!courses?.[id]?.roles.includes(restArgs.requiredRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
-            You are not [{requiredRole}] in {props.course.alias}
+            You are not [{restArgs.requiredRole}] in {props.course.alias}
           </h4>
         );
       }
