@@ -1,20 +1,17 @@
 import { DisciplineDto, DisciplinesApi, ProfileCourseDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { DisciplineModal } from '../components/DisciplineModal';
-import { useCallback, useContext, useState } from 'react';
-import { SessionContext } from 'modules/Course/contexts/SessionContext';
+import { useCallback, useState } from 'react';
 import { Button, Layout, message } from 'antd';
 import { DisciplineTable } from '../components/DisciplineTable';
 import { useAsync } from 'react-use';
+import { Session } from 'components/withSession';
 
-type Props = {
-  courses: ProfileCourseDto[];
-};
+type Props = { session: Session; courses: ProfileCourseDto[] };
 
 const disciplinesApi = new DisciplinesApi();
 
-export const DisciplinePage = ({ courses }: Props) => {
-  const session = useContext(SessionContext);
+export const DisciplinePage = ({ session, courses }: Props) => {
   const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
   const [discipline, setDiscipline] = useState<DisciplineDto | null>(null);
   const [loading, setLoading] = useState(false);

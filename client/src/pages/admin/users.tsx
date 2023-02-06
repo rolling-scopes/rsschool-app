@@ -5,7 +5,7 @@ import { Session, withSession } from 'components/withSession';
 import { UserService, UserFull } from 'services/user';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -78,4 +78,4 @@ function Page(props: Props) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
