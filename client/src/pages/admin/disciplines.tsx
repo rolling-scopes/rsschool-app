@@ -1,18 +1,7 @@
 import { DisciplinePage } from 'modules/Discipline/pages/DisciplinePage';
-import { getServerSideProps } from 'modules/Home/data/getServerSideProps';
-import { SessionProvider } from 'modules/Course/contexts';
-import { ProfileCourseDto } from 'api';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import withSession from 'components/withSession';
 
 export { getServerSideProps };
 
-type Props = {
-  courses: ProfileCourseDto[];
-};
-
-export default function (props: Props) {
-  return (
-    <SessionProvider>
-      <DisciplinePage {...props} />
-    </SessionProvider>
-  );
-}
+export default withSession(DisciplinePage, { onlyForAdmin: true });

@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { CourseGuard } from '../auth/course.guard';
@@ -36,7 +47,14 @@ export class CoursesController {
   @ApiOkResponse({ type: CourseDto })
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([CourseRole.Manager, Role.Admin])
-  public async updateCourse(@Param('courseId', ParseIntPipe) courseId: number, @Body() update: UpdateCourseDto) {
+  public async updateCourse(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() update: UpdateCourseDto,
+  ) {
+    if (!this.courseAccessService.canAccessCourseAsManager(req.user, courseId)) {
+      throw new ForbiddenException('No access to edit course');
+    }
     const data = await this.courseService.update(courseId, update);
     return new CourseDto(data);
   }

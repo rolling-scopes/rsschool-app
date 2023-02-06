@@ -4,7 +4,7 @@ import { ILogger } from '../../logger';
 import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { adminGuard, guard, RouterContext } from '../guards';
+import { adminGuard, anyCourseManagerGuard, guard, RouterContext } from '../guards';
 import { OperationResult, userService } from '../../services';
 
 const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
@@ -154,7 +154,7 @@ export function usersRoute(logger: ILogger) {
     { field: 'lastName', isCaseSensitive: false },
   ];
 
-  router.get('/search/extended/:searchText', guard, getSearch(logger)(searchConfig));
+  router.get('/search/extended/:searchText', anyCourseManagerGuard, getSearch(logger)(searchConfig));
 
   return router;
 }

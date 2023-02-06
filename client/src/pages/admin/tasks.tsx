@@ -10,7 +10,7 @@ import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import {
   UploadCriteriaJSON,
@@ -397,4 +397,4 @@ function getInitialValues(modalData: Partial<TaskDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });

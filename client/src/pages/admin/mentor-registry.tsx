@@ -289,7 +289,7 @@ function renderPreselectedCourses(courses: Course[]) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { onlyForAnyCoursePowerUser: true });
 
 const styles = css`
   .info-icons {
