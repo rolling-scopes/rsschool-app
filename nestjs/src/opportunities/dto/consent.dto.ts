@@ -1,17 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 export class ConsentDto {
-  constructor(consent: boolean, expires?: number) {
+  constructor(consent: boolean) {
     this.consent = consent;
-    this.expires = expires;
   }
 
   @ApiProperty()
   @IsBoolean()
   public consent: boolean;
-
-  @ApiProperty()
-  @IsOptional()
-  public expires: number | undefined;
 }
