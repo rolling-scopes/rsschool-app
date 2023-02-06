@@ -163,7 +163,7 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     name: 'Course Users',
     key: 'courseUsers',
     getUrl: (course: Course) => `/course/admin/users?course=${course.alias}`,
-    courseAccess: some(isCourseManager, isAdmin),
+    courseAccess: isCourseManager,
   },
   {
     name: 'Cross-Сheck Table',
