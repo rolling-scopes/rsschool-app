@@ -124,10 +124,10 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
               keyField="id"
               courseId={courseId}
               mode="multiple"
-              defaultValues={data?.students?.map(s => ({
-                name: s.fullName,
-                id: s.id,
-                githubId: s.githubId,
+              defaultValues={data?.students?.map(student => ({
+                name: student.fullName,
+                id: student.id,
+                githubId: student.githubId,
               }))}
             />
           </Form.Item>

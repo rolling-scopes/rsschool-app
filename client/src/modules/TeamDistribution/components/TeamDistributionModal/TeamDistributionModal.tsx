@@ -16,7 +16,7 @@ type Props = {
 
 const { Text } = Typography;
 
-const layout = {
+const formLayoutProps = {
   labelCol: { span: 8 },
   wrapperCol: { span: 24 },
 };
@@ -102,7 +102,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         form.resetFields();
       }}
     >
-      <Form {...layout} form={form} initialValues={data ? getInitialValues(data) : undefined}>
+      <Form {...formLayoutProps} form={form} initialValues={data ? getInitialValues(data) : undefined}>
         <Text strong>
           You are {!data ? 'creating' : 'editing'} a group distribution event. Fill out the form to add it to the
           schedule.
