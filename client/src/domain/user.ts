@@ -71,7 +71,7 @@ export function isAnyCoursePowerUser(session: Session) {
 }
 
 export function isAnyCourseDementor(session: Session) {
-  return isAdmin(session) || hasRoleInAny(session, CourseRole.Dementor);
+  return isAdmin(session) || hasRoleInAnyCourse(session, CourseRole.Dementor);
 }
 
 export function isTaskOwner(session: Session, courseId: number) {
