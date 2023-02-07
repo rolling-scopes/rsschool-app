@@ -1,5 +1,5 @@
 import { Alert, Spin } from 'antd';
-import { InfoCircleTwoTone } from '@ant-design/icons';
+import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import { useState } from 'react';
 import { MentorInterview } from 'services/course';
 import { StudentInterview } from './StudentInterview';

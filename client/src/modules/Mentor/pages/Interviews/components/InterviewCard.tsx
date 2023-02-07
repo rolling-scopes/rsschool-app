@@ -42,7 +42,7 @@ export function InteviewCard(props: {
 const containerCss = css.resolve`
   div {
     margin-bottom: 16px;
-    pointer: default;
+    cursor: default;
   }
 
   div:last-child {

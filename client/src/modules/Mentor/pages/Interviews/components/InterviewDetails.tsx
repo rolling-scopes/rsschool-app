@@ -2,7 +2,7 @@ import { InterviewDto } from 'api';
 import { isInterviewRegistrationInProgess, isInterviewStarted } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import { Course } from 'services/models';
-import { RegistrationNotice } from './RegistrationNotice';
+import { RegistrationNoticeAlert } from './RegistrationNoticeAlert';
 import { StudentsList } from './StudentsList';
 import { WaitListAlert } from './WaitListAlert';
 
@@ -23,7 +23,7 @@ export function InterviewDetails(props: {
       {interviewStarted && (
         <WaitListAlert interviewId={interview.id} startDate={startDate} courseAlias={course.alias} />
       )}
-      {isRegistrationInProgress && <RegistrationNotice interview={interview} startDate={startDate} />}
+      {isRegistrationInProgress && <RegistrationNoticeAlert interview={interview} startDate={startDate} />}
       {interviewStarted && (
         <StudentsList
           fetchStudentInterviews={fetchStudentInterviews}
