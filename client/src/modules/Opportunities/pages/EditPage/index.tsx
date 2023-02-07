@@ -47,9 +47,10 @@ export function EditPage() {
     setConsent(data.consent);
   });
 
-  const handleConsentUpdate = withLoading(async (value: boolean) => {
-    value ? await service.createConsent() : await service.deleteConsent();
+  const handleDeleteConsent = withLoading(async () => {
+    const { data } = await service.deleteConsent();
     await getData();
+    return data;
   });
 
   const showCreationModal = (validUntilTimestamp: number) => {
@@ -77,9 +78,9 @@ export function EditPage() {
   };
 
   const handleCreateConsent = withLoading(async () => {
-    await handleConsentUpdate(true);
-    const updatedTimestamp = await service.prolong();
-    showCreationModal(updatedTimestamp.data.expires);
+    const { data } = await service.createConsent();
+    await getData();
+    showCreationModal(data.expires);
     setEditMode(true);
   });
 
@@ -98,7 +99,7 @@ export function EditPage() {
               data={resume}
               editMode={editMode || resume == null}
               switchView={switchView}
-              onRemoveConsent={() => handleConsentUpdate(false)}
+              onRemoveConsent={handleDeleteConsent}
               onCreateConsent={handleCreateConsent}
               onUpdateResume={() => getData()}
             />

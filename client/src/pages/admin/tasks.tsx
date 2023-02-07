@@ -10,7 +10,7 @@ import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import {
   UploadCriteriaJSON,
@@ -106,17 +106,19 @@ function Page(props: Props) {
           columns={getColumns(handleEditItem)}
         />
       </Content>
-      <TaskModal
-        data={data}
-        dataCriteria={dataCriteria}
-        disciplines={disciplines}
-        handleModalSubmit={handleModalSubmit}
-        modalData={modalData}
-        modalLoading={modalLoading}
-        setDataCriteria={setDataCriteria}
-        setModalData={setModalData}
-        setModalValues={setModalValues}
-      />
+      {modalData && (
+        <TaskModal
+          tasks={data}
+          dataCriteria={dataCriteria}
+          disciplines={disciplines}
+          handleModalSubmit={handleModalSubmit}
+          modalData={modalData}
+          modalLoading={modalLoading}
+          setDataCriteria={setDataCriteria}
+          setModalData={setModalData}
+          setModalValues={setModalValues}
+        />
+      )}
     </AdminPageLayout>
   );
 }
@@ -210,7 +212,7 @@ function getColumns(handleEditItem: any) {
 }
 
 type ModalProps = {
-  data: TaskDto[];
+  tasks: TaskDto[];
   modalData: ModalData;
   dataCriteria: CriteriaDto[];
   modalLoading: boolean;
@@ -222,7 +224,7 @@ type ModalProps = {
 };
 
 function TaskModal({
-  data,
+  tasks,
   dataCriteria,
   modalData,
   modalLoading,
@@ -236,25 +238,25 @@ function TaskModal({
     const newDataCriteria = [...dataCriteria, criteria];
     setDataCriteria(addKeyAndIndex(newDataCriteria));
   };
-
   const addJSONtoCriteria = (criteria: CriteriaDto[]) => {
     const oldCriteria = dataCriteria;
     const newCriteria = [...oldCriteria, ...criteria];
     setDataCriteria(addKeyAndIndex(newCriteria));
   };
 
-  const allTags = useMemo(() => union(...data.map(d => d.tags || [])), [data]);
+  const allTags = useMemo(() => union(...tasks.map(task => task.tags || [])), [tasks]);
   const allSkills = useMemo(
     () =>
       union(
-        data
-          .map(d => d.skills || [])
+        tasks
+          .map(task => task.skills || [])
           .concat(SKILLS)
           .flat()
           .sort(),
       ),
-    [data],
+    [tasks],
   );
+
   return (
     <ModalForm
       data={modalData}
@@ -397,4 +399,4 @@ function getInitialValues(modalData: Partial<TaskDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });

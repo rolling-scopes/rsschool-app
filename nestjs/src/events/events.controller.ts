@@ -12,6 +12,7 @@ export class EventsController {
 
   @Get('/')
   @ApiOperation({ operationId: 'getEvents' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   @ApiOkResponse({ type: [EventDto] })
   public async findAll() {
     const events = await this.eventsService.findAll();

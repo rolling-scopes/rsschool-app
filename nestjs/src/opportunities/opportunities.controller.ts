@@ -29,6 +29,7 @@ import { VisibilityDto } from './dto/visibility.dto';
 import { OpportunitiesService } from './opportunities.service';
 import { Resume } from '@entities/resume';
 import { FormDataDto } from './dto/form-data.dto';
+import { GiveConsentDto } from './dto/give-consent-dto';
 
 @Controller('opportunities')
 @ApiTags('opportunities')
@@ -87,11 +88,11 @@ export class OpportunitiesController {
 
   @Post('/consent')
   @ApiOperation({ operationId: 'createConsent' })
-  @ApiOkResponse({ type: ConsentDto })
+  @ApiOkResponse({ type: GiveConsentDto })
   @UseGuards(DefaultGuard)
   public async createConsent(@Req() req: CurrentRequest) {
-    const data = await this.opportunitiesService.createConsent(req.user.githubId);
-    return new ConsentDto(data);
+    const { expires, consent } = await this.opportunitiesService.createConsent(req.user.githubId);
+    return new GiveConsentDto(consent, expires);
   }
 
   @Delete('/consent')
