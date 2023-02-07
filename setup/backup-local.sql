@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.8 (Debian 12.8-1.pgdg110+1)
--- Dumped by pg_dump version 13.3
+-- Dumped by pg_dump version 13.9
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -194,14 +194,14 @@ CREATE TABLE public.course (
     "primarySkillId" character varying,
     "primarySkillName" character varying,
     "locationName" character varying,
-    alias character varying,
+    alias character varying NOT NULL,
     completed boolean DEFAULT false NOT NULL,
     description character varying,
     "descriptionUrl" character varying,
     planned boolean DEFAULT false NOT NULL,
     "startDate" timestamp with time zone,
     "endDate" timestamp with time zone,
-    "fullName" character varying,
+    "fullName" character varying NOT NULL,
     "registrationEndDate" timestamp with time zone,
     "inviteOnly" boolean DEFAULT false NOT NULL,
     "discordServerId" integer,
@@ -389,7 +389,8 @@ CREATE TABLE public.course_user (
     "userId" integer NOT NULL,
     "isManager" boolean DEFAULT false NOT NULL,
     "isJuryActivist" boolean DEFAULT false NOT NULL,
-    "isSupervisor" boolean DEFAULT false NOT NULL
+    "isSupervisor" boolean DEFAULT false NOT NULL,
+    "isDementor" boolean DEFAULT false NOT NULL
 );
 
 
@@ -2749,7 +2750,12 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 -- Data for Name: course_user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId", "isManager", "isJuryActivist", "isSupervisor") FROM stdin;
+COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId", "isManager", "isJuryActivist", "isSupervisor", "isDementor") FROM stdin;
+121	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2098	f	f	f	t
+122	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2103	f	f	f	t
+123	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	5481	f	f	f	t
+125	2023-02-03 07:46:43.309521	2023-02-03 08:05:32.461954	13	2098	f	f	f	t
+124	2023-02-03 07:46:36.33884	2023-02-03 08:36:06.162812	13	11569	f	f	f	t
 \.
 
 
@@ -2766,6 +2772,10 @@ COPY public.cv (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", 
 --
 
 COPY public.discipline (id, created_date, updated_date, deleted_date, name) FROM stdin;
+1	2023-02-02 14:54:47.349888	2023-02-02 14:54:47.349888	\N	JavaScript
+2	2023-02-02 14:54:58.640241	2023-02-02 14:54:58.640241	\N	React
+3	2023-02-02 14:55:05.070751	2023-02-02 14:55:05.070751	\N	Angular
+4	2023-02-02 14:55:14.334551	2023-02-02 14:55:14.334551	\N	NodeJs
 \.
 
 
@@ -3078,6 +3088,8 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 43	1674128274839	Team1674128274839
 44	1674755854609	Resume1674755854609
 45	1674377676805	TeamDistributionStudent1674377676805
+46	1675245424426	UserGroup1675245424426
+47	1675345245770	Course1675345245770
 \.
 
 
@@ -3166,6 +3178,7 @@ COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdD
 --
 
 COPY public.resume (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", expires, "militaryService", "englishLevel", "avatarLink", "desiredPosition", notes, phone, email, skype, telegram, linkedin, locations, "githubUsername", website, "isHidden", "visibleCourses", uuid, "userId", "updatedDate") FROM stdin;
+1	valerydluski	v	\N	2023-02-22	f	1678005529649	served	A0	\N	as	\N	\N	\N	\N	\N	\N	v	\N	\N	f	{}	4ca1a1ca-e98a-4ef2-81c2-f90e38605e8c	11569	2023-02-03 08:38:59.072447
 \.
 
 
@@ -3183,8 +3196,8 @@ COPY public.stage (id, "createdDate", "updatedDate", name, "courseId", status, "
 
 COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "mentorId", "stageId", "isCompleted", decision, "isGoodCandidate", "courseId", "courseTaskId", "isCanceled") FROM stdin;
 10687	2020-04-07 20:27:20.124459	2020-04-07 20:27:20.124459	14327	1266	\N	f	\N	\N	13	408	f
-10688	2020-04-07 20:27:41.249823	2020-04-07 20:27:41.249823	14329	1266	\N	f	\N	\N	13	408	f
 10689	2020-04-07 20:28:00.755084	2020-04-07 21:07:08.374015	14329	1266	\N	t	noButGoodCandidate	t	13	408	f
+10688	2020-04-07 20:27:41.249823	2023-02-03 07:48:18.719106	14329	1266	\N	f	\N	\N	13	408	t
 \.
 
 
@@ -3211,7 +3224,6 @@ COPY public.stage_interview_student (id, "createdDate", "updatedDate", "studentI
 --
 
 COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingReason", "courseCompleted", "isTopPerformer", "preferedMentorGithubId", "readyFullTime", "courseId", "userId", "mentorId", "cvUrl", "hiredById", "hiredByName", "isFailed", "totalScore", "startDate", "endDate", repository, "totalScoreChangeDate", "repositoryLastActivityDate", rank, "crossCheckScore", "unassigningComment", mentoring) FROM stdin;
-14329	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	1090	\N	\N	\N	\N	f	32	2020-04-06 15:31:44.388+00	\N	\N	2021-07-28 21:28:00.058+00	\N	1	0	\N	t
 14327	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	11563	1266	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N	\N	2	0	\N	t
 14331	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	3	0	\N	t
 14332	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N	t
@@ -3227,10 +3239,11 @@ COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingR
 14341	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N	t
 14342	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0	\N	t
 14343	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0	\N	t
-14345	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N	t
 14339	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	1090	\N	\N	\N	\N	f	0	2020-04-06 15:31:44.388+00	\N	\N	\N	\N	8	0	\N	t
 14344	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0	\N	t
-14338	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.146524	t	test	f	f	\N	\N	23	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0	\N	t
+14338	2020-04-06 15:30:27.104695	2023-02-02 15:37:56.504153	f		f	f	\N	\N	23	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	\N	\N	\N	\N	10	0	\N	t
+14345	2020-04-06 15:34:19.221853	2023-02-02 15:38:36.638022	f		f	f	\N	\N	23	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N	t
+14329	2020-04-06 15:31:44.421341	2023-02-03 07:48:22.122732	f		f	f	\N	\N	13	1090	\N	\N	\N	\N	f	32	2020-04-06 15:31:44.388+00	\N	\N	2021-07-28 21:28:00.058+00	\N	1	0	\N	t
 \.
 
 
@@ -3848,6 +3861,7 @@ COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "upd
 2549	kvtofan	\N	\N	2019-04-17 11:41:21.396686	2019-09-24 14:56:49.229102	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1563521151921	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2549	github	\N
 2089	yuliahope	\N	\N	2019-04-17 11:41:21.396686	2019-08-29 11:15:32.412097	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566418583423	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2089	github	\N
 677	amoebiusss	Test 1	Last Name	2019-04-17 11:41:21.396686	2020-04-06 15:30:27.059612	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1568012639853	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	677	github	\N
+11569	valerydluski	name	last name	2020-04-06 15:12:34.19737	2023-02-03 08:38:45.621748	\N	\N	\N	\N	\N	Minsk	12158	[]	[]	example_mail@epam.com	+325155534711	hello@example.com	[]	\N	f	b2	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	t	\N	\N	\N	12341	github	\N
 \.
 
 
@@ -3856,6 +3870,7 @@ COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "upd
 --
 
 COPY public.user_group (id, "createdDate", "updatedDate", name, users, roles) FROM stdin;
+1	2023-02-02 14:53:58.798684	2023-02-02 14:53:58.798684	dementors	{2098,2103,5481}	{dementor}
 \.
 
 
@@ -3912,7 +3927,7 @@ SELECT pg_catalog.setval('public.course_task_id_seq', 431, true);
 -- Name: course_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.course_user_id_seq', 120, true);
+SELECT pg_catalog.setval('public.course_user_id_seq', 125, true);
 
 
 --
@@ -3926,7 +3941,7 @@ SELECT pg_catalog.setval('public.cv_id_seq', 1, false);
 -- Name: discipline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.discipline_id_seq', 1, false);
+SELECT pg_catalog.setval('public.discipline_id_seq', 4, true);
 
 
 --
@@ -3989,7 +4004,7 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 45, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 47, true);
 
 
 --
@@ -4024,7 +4039,7 @@ SELECT pg_catalog.setval('public.repository_event_id_seq', 1, false);
 -- Name: resume_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.resume_id_seq', 1, false);
+SELECT pg_catalog.setval('public.resume_id_seq', 1, true);
 
 
 --
@@ -4164,14 +4179,14 @@ SELECT pg_catalog.setval('public.team_id_seq', 1, false);
 -- Name: user_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.user_group_id_seq', 1, false);
+SELECT pg_catalog.setval('public.user_group_id_seq', 1, true);
 
 
 --
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 11567, true);
+SELECT pg_catalog.setval('public.user_id_seq', 11569, true);
 
 
 --
@@ -4647,6 +4662,14 @@ ALTER TABLE ONLY public.profile_permissions
 
 
 --
+-- Name: course UQ_30d559218724a6d6e0cc4f26b0e; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.course
+    ADD CONSTRAINT "UQ_30d559218724a6d6e0cc4f26b0e" UNIQUE (name);
+
+
+--
 -- Name: interview_question_category UQ_40c79f8d86c0b762b849c8c0781; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4684,6 +4707,14 @@ ALTER TABLE ONLY public.task_result
 
 ALTER TABLE ONLY public.mentor
     ADD CONSTRAINT "UQ_86a8c9674f84523385ff741bfc2" UNIQUE ("courseId", "userId");
+
+
+--
+-- Name: course UQ_8a167196d86062fa6abf6f0d546; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.course
+    ADD CONSTRAINT "UQ_8a167196d86062fa6abf6f0d546" UNIQUE (alias);
 
 
 --
@@ -4764,14 +4795,6 @@ ALTER TABLE ONLY public.task_solution_result
 
 ALTER TABLE ONLY public.cv
     ADD CONSTRAINT "UQ_f21b478fe949f06e4e64d728318" UNIQUE ("githubId");
-
-
---
--- Name: course UQ_fc5c908f913cd7188a018775f5f; Type: CONSTRAINT; Schema: public; Owner: rs_master
---
-
-ALTER TABLE ONLY public.course
-    ADD CONSTRAINT "UQ_fc5c908f913cd7188a018775f5f" UNIQUE (name, alias);
 
 
 --
@@ -5003,6 +5026,13 @@ CREATE INDEX "IDX_87736b09d69bacdc6bc272e023" ON public.course_task USING btree 
 --
 
 CREATE INDEX "IDX_87c5a426accd8659ac76e8d3fb" ON public.course_task USING btree (disabled);
+
+
+--
+-- Name: IDX_8a167196d86062fa6abf6f0d54; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_8a167196d86062fa6abf6f0d54" ON public.course USING btree (alias);
 
 
 --

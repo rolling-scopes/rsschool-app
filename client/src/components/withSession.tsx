@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { hasRoleInAnyCourse, isAnyCoursePowerUser } from 'domain/user';
+import { NotAccess } from 'modules/NotAccess';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -23,7 +25,14 @@ export interface Session {
 
 let sessionCache: Session | undefined;
 
-function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: CourseRole) {
+type AccessSettings = {
+  requiredCourseRole?: CourseRole;
+  onlyForAdmin?: boolean;
+  requiredAnyCourseRole?: CourseRole;
+  onlyForAnyCoursePowerUser?: boolean;
+};
+
+function withSession(WrappedComponent: React.ComponentType<any>, accessSettings?: AccessSettings) {
   return (props: any) => {
     const [session, setSession] = useState<Session | undefined>();
 
@@ -43,13 +52,27 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
       }
     }, []);
 
-    if (session && requiredRole) {
+    if (session && accessSettings?.onlyForAdmin && !session.isAdmin) {
+      return <NotAccess session={session} />;
+    }
+
+    if (session && accessSettings?.onlyForAnyCoursePowerUser && !isAnyCoursePowerUser(session)) {
+      return <NotAccess session={session} />;
+    }
+
+    if (session && !session.isAdmin && accessSettings?.requiredAnyCourseRole) {
+      if (!hasRoleInAnyCourse(session, accessSettings.requiredAnyCourseRole)) {
+        return <NotAccess session={session} />;
+      }
+    }
+
+    if (session && accessSettings?.requiredCourseRole) {
       const { courses, isAdmin } = session;
       const id = props.course.id;
-      if (!courses?.[id]?.roles.includes(requiredRole) && !isAdmin) {
+      if (!courses?.[id]?.roles.includes(accessSettings.requiredCourseRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
-            You are not [{requiredRole}] in {props.course.alias}
+            You are not [{accessSettings.requiredCourseRole}] in {props.course.alias}
           </h4>
         );
       }

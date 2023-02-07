@@ -16,6 +16,7 @@ type Props = {
   onExpelStudent: (comment: string) => void;
   onIssueCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
+  courseManagerOrSupervisor: boolean;
 };
 
 export function DashboardDetails(props: Props) {
@@ -35,16 +36,20 @@ export function DashboardDetails(props: Props) {
         visible={!!details}
       >
         <div className="student-details-actions">
-          <Button
-            disabled={!details.isActive || !!details.repository}
-            icon={<BranchesOutlined />}
-            onClick={props.onCreateRepository}
-          >
-            Create Repository
-          </Button>
-          <Button disabled={!details.isActive} icon={<SolutionOutlined />} onClick={props.onIssueCertificate}>
-            Issue Certificate
-          </Button>
+          {props.courseManagerOrSupervisor && (
+            <>
+              <Button
+                disabled={!details.isActive || !!details.repository}
+                icon={<BranchesOutlined />}
+                onClick={props.onCreateRepository}
+              >
+                Create Repository
+              </Button>
+              <Button disabled={!details.isActive} icon={<SolutionOutlined />} onClick={props.onIssueCertificate}>
+                Issue Certificate
+              </Button>
+            </>
+          )}
           <Button
             hidden={!details.isActive}
             icon={<CloseCircleTwoTone twoToneColor="red" />}
@@ -55,18 +60,20 @@ export function DashboardDetails(props: Props) {
           <Button hidden={details.isActive} icon={<UndoOutlined />} onClick={props.onRestoreStudent}>
             Restore
           </Button>
-          <Descriptions bordered layout="vertical" size="small" column={1}>
-            <Descriptions.Item label="Mentor">
-              <MentorSearch
-                style={{ width: '100%' }}
-                onChange={props.onUpdateMentor}
-                courseId={props.courseId}
-                keyField="githubId"
-                value={(details.mentor as MentorBasic)?.githubId}
-                defaultValues={details.mentor ? [details.mentor as any] : []}
-              />
-            </Descriptions.Item>
-          </Descriptions>
+          {props.courseManagerOrSupervisor && (
+            <Descriptions bordered layout="vertical" size="small" column={1}>
+              <Descriptions.Item label="Mentor">
+                <MentorSearch
+                  style={{ width: '100%' }}
+                  onChange={props.onUpdateMentor}
+                  courseId={props.courseId}
+                  keyField="githubId"
+                  value={(details.mentor as MentorBasic)?.githubId}
+                  defaultValues={details.mentor ? [details.mentor as any] : []}
+                />
+              </Descriptions.Item>
+            </Descriptions>
+          )}
         </div>
       </Drawer>
       <CommentModal

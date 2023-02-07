@@ -7,7 +7,7 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
@@ -212,4 +212,4 @@ function getInitialValues(modalData: Partial<EventDto>) {
 }
 
 export { getServerSideProps };
-export default withSession(Page);
+export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
