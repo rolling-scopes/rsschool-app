@@ -4,7 +4,7 @@ import { getInterviewFeedbackUrl } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
 
-export function StudentInterview(props: { interview: MentorInterview; template: string | null; courseAlias: string }) {
+export function StudentInterview(props: { interview: MentorInterview; template?: string | null; courseAlias: string }) {
   const { interview, template, courseAlias } = props;
   const { student, completed } = interview;
   return (
@@ -29,8 +29,8 @@ export function StudentInterview(props: { interview: MentorInterview; template: 
           </Button>
         </Row>
         <Row>
-          <Space size={14}>
-            <GithubAvatar githubId={student.githubId} size={48} />
+          <Space size={14} align="baseline">
+            <GithubAvatar githubId={student.githubId} size={24} />
             <Col>
               <Typography.Title level={5}> {student.name || student.githubId}</Typography.Title>
             </Col>
@@ -45,7 +45,10 @@ export function StudentInterview(props: { interview: MentorInterview; template: 
 const { className: containerClassName, styles: containerStyles } = css.resolve`
   div {
     border: 1px solid rgba(245, 245, 245, 1);
-    padding: 32px;
+    padding: 16px;
+  }
+  div + div {
+    border-top: none;
   }
 
   div:first-child {

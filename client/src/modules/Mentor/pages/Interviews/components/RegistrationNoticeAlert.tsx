@@ -1,14 +1,19 @@
 import { Alert, Typography } from 'antd';
-import { InfoCircleTwoTone } from '@ant-design/icons';
+import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import moment from 'moment';
 import { useContext } from 'react';
 import { stageInterviewType } from 'domain/interview';
 import { InterviewDto } from 'api';
 import { MentorOptionsContext } from './MentorPreferencesModal';
+import { useAlert } from '../hooks/useAlert';
 
-export function RegistrationNotice(props: { interview: InterviewDto; startDate: string }) {
+export function RegistrationNoticeAlert(props: { interview: InterviewDto; startDate: string }) {
   const { startDate, interview } = props;
   const { showMentorOptions: openMentorOptions } = useContext(MentorOptionsContext);
+
+  const [isDismissed, setDismissed] = useAlert(`registration-notice-alert-${interview.id}`);
+
+  if (isDismissed) return null;
 
   if (interview.type !== stageInterviewType) {
     return null;
@@ -21,6 +26,7 @@ export function RegistrationNotice(props: { interview: InterviewDto; startDate: 
         message="Registration period"
         icon={<InfoCircleTwoTone />}
         showIcon
+        onClose={() => setDismissed()}
         description={
           <>
             <Typography.Text>
