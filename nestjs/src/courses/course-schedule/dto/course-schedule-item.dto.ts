@@ -1,6 +1,11 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { PersonDto } from 'src/core/dto';
-import { CourseScheduleItem, CourseScheduleItemStatus, CourseScheduleItemTag } from '../course-schedule.service';
+import {
+  CourseScheduleDataSource,
+  CourseScheduleItem,
+  CourseScheduleItemStatus,
+  CourseScheduleItemTag,
+} from '../course-schedule.service';
 
 @ApiResponse({})
 export class CourseScheduleItemDto {
@@ -16,6 +21,7 @@ export class CourseScheduleItemDto {
     this.score = item.score ?? null;
     this.tag = item.tag ?? null;
     this.descriptionUrl = item.descriptionUrl ?? null;
+    this.type = item.type;
   }
 
   @ApiProperty({ type: Number, nullable: true })
@@ -53,4 +59,7 @@ export class CourseScheduleItemDto {
 
   @ApiProperty({ enum: CourseScheduleItemTag })
   tag: CourseScheduleItemTag;
+
+  @ApiProperty({ enum: CourseScheduleDataSource })
+  type: CourseScheduleDataSource;
 }

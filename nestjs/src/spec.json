@@ -2467,11 +2467,7 @@
           "comment": { "type": "string" }
         }
       },
-      "Attributes": {
-        "type": "object",
-        "properties": { "template": { "type": "string", "nullable": true } },
-        "required": ["template"]
-      },
+      "Attributes": { "type": "object", "properties": { "template": { "type": "string", "nullable": true } } },
       "InterviewDto": {
         "type": "object",
         "properties": {
@@ -2656,7 +2652,8 @@
           "tag": {
             "type": "string",
             "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
-          }
+          },
+          "type": { "type": "string", "enum": ["courseTask", "courseEvent"] }
         },
         "required": [
           "score",
@@ -2670,7 +2667,8 @@
           "maxScore",
           "scoreWeight",
           "descriptionUrl",
-          "tag"
+          "tag",
+          "type"
         ]
       },
       "CourseCopyFromDto": {

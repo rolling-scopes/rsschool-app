@@ -267,7 +267,7 @@ export interface Attributes {
      * @type {string}
      * @memberof Attributes
      */
-    'template': string | null;
+    'template'?: string | null;
 }
 /**
  * 
@@ -948,6 +948,12 @@ export interface CourseScheduleItemDto {
      * @memberof CourseScheduleItemDto
      */
     'tag': CourseScheduleItemDtoTagEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'type': CourseScheduleItemDtoTypeEnum;
 }
 
 export const CourseScheduleItemDtoStatusEnum = {
@@ -971,6 +977,12 @@ export const CourseScheduleItemDtoTagEnum = {
 } as const;
 
 export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[keyof typeof CourseScheduleItemDtoTagEnum];
+export const CourseScheduleItemDtoTypeEnum = {
+    CourseTask: 'courseTask',
+    CourseEvent: 'courseEvent'
+} as const;
+
+export type CourseScheduleItemDtoTypeEnum = typeof CourseScheduleItemDtoTypeEnum[keyof typeof CourseScheduleItemDtoTypeEnum];
 
 /**
  * 
