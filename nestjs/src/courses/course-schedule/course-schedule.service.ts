@@ -95,6 +95,7 @@ export class CourseScheduleService {
         const submitted = this.getCourseTaskSubmitted(courseTask.id, taskSolutions, taskCheckers);
         const status = this.getCourseTaskStatus(
           { startTime: courseTask.studentStartDate, endTime: courseTask.studentEndDate },
+          { maxScore: courseTask.maxScore, checker: courseTask.checker },
           studentId ? { currentScore, submitted } : undefined,
         );
         const tag = this.getCourseTaskTag(courseTask);
@@ -369,6 +370,7 @@ export class CourseScheduleService {
 
   private getCourseTaskStatus(
     range: { startTime: string | Date | null; endTime: string | Date | null },
+    task: Pick<CourseTask, 'maxScore' | 'checker'>,
     studentData?: { currentScore: number | null; submitted: boolean },
   ) {
     if (!range.startTime || !range.endTime) {
@@ -378,8 +380,13 @@ export class CourseScheduleService {
     const endTime = new Date(range.endTime).getTime();
     const { currentScore = null, submitted = false } = studentData ?? {};
     const now = Date.now();
+    const isAvailablePeriod = startTime <= now && endTime >= now;
+    const isAvailableAutoTest = isAvailablePeriod && task.checker === Checker.AutoTest;
     if (startTime > now) {
       return CourseScheduleItemStatus.Future;
+    }
+    if (isAvailableAutoTest && Number(currentScore) < task.maxScore) {
+      return CourseScheduleItemStatus.Available;
     }
     if (currentScore != null) {
       return CourseScheduleItemStatus.Done;
@@ -387,7 +394,7 @@ export class CourseScheduleService {
     if (submitted) {
       return CourseScheduleItemStatus.Review;
     }
-    if (startTime <= now && endTime >= now) {
+    if (isAvailablePeriod) {
       return CourseScheduleItemStatus.Available;
     }
     return studentData ? CourseScheduleItemStatus.Missed : CourseScheduleItemStatus.Archived;
