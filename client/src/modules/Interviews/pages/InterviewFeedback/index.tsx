@@ -22,7 +22,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
   const router = useRouter();
   const session = useContext(SessionContext);
   const template = templates[type];
-  const [githubId, setGithubId] = useState(router.query.githubId as string);
+  const githubId = router.query.githubId as string;
 
   const [form] = Form.useForm();
 
@@ -30,8 +30,6 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
   const [loading, setLoading] = useState(false);
 
   const questions = useMemo(() => template.categories.flatMap(c => c.questions), [type]);
-
-  useEffect(() => setGithubId(router.query.githubId as string), [router.query.githubId]);
 
   const handleSubmit = async (values: any) => {
     if (!githubId || loading) {
