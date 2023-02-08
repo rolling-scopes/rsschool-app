@@ -22,7 +22,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
   const router = useRouter();
   const session = useContext(SessionContext);
   const template = templates[type];
-  const githubId = (router.query.githubId ?? null) as string | null;
+  const [githubId, setGithubId] = useState(router.query.githubId as string);
 
   const [form] = Form.useForm();
 
@@ -31,10 +31,10 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
 
   const questions = useMemo(() => template.categories.flatMap(c => c.questions), [type]);
 
-  useEffect(() => form.setFieldsValue({ githubId }), [githubId]);
+  useEffect(() => setGithubId(router.query.githubId as string), [router.query.githubId]);
 
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
+    if (!githubId || loading) {
       return;
     }
     try {
@@ -46,7 +46,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
       }));
       const score = Number(values.score) - 1;
       const body = { formAnswers, score, comment: values.comment || '' };
-      await courseService.postStudentInterviewResult(values.githubId, interviewId, body);
+      await courseService.postStudentInterviewResult(githubId, interviewId, body);
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
