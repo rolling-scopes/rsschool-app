@@ -7,7 +7,7 @@ import { InputType, templates } from 'data/interviews';
 import _ from 'lodash';
 import { SessionContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import type { PageProps } from './getServerSideProps';
 
@@ -22,7 +22,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
   const router = useRouter();
   const session = useContext(SessionContext);
   const template = templates[type];
-  const githubId = (router.query.githubId ?? null) as string | null;
+  const githubId = router.query.githubId as string;
 
   const [form] = Form.useForm();
 
@@ -31,10 +31,8 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
 
   const questions = useMemo(() => template.categories.flatMap(c => c.questions), [type]);
 
-  useEffect(() => form.setFieldsValue({ githubId }), [githubId]);
-
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
+    if (!githubId || loading) {
       return;
     }
     try {
@@ -46,7 +44,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
       }));
       const score = Number(values.score) - 1;
       const body = { formAnswers, score, comment: values.comment || '' };
-      await courseService.postStudentInterviewResult(values.githubId, interviewId, body);
+      await courseService.postStudentInterviewResult(githubId, interviewId, body);
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
