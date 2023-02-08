@@ -1,5 +1,6 @@
-import { Typography } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { TeamDistributionDetailedDto, TeamDto } from 'api';
 import { StudentsTableColumnKey, TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
 import StudentsTable from '../StudentsTable/StudentsTable';
@@ -22,12 +23,42 @@ function renderMemberCount({ students }: TeamDto, membersCount: number) {
   );
 }
 
-export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsType<TeamDto> => [
+function renderAction(onEditTeam: () => void) {
+  return (
+    <Button
+      type="link"
+      onClick={() => {
+        onEditTeam();
+      }}
+    >
+      Edit team
+    </Button>
+  );
+}
+
+function renderTeam(team: TeamDto, distribution: TeamDistributionDetailedDto) {
+  return (
+    <Space direction="vertical" size="small">
+      {renderName('', team)}
+      {renderDescription('', team)}
+      {renderMemberCount(team, distribution.strictTeamSize)}
+    </Space>
+  );
+}
+
+const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['sm'];
+const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs'];
+
+export const getColumns = (
+  distribution: TeamDistributionDetailedDto,
+  toggleTeamModal: (data?: Partial<TeamDto> | undefined) => void,
+): ColumnsType<TeamDto> => [
   {
     key: TeamsTableColumnKey.Name,
     title: TeamsTableColumnName.Name,
     dataIndex: 'name',
     render: renderName,
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
   },
   {
     key: TeamsTableColumnKey.Description,
@@ -35,12 +66,25 @@ export const getColumns = (distribution: TeamDistributionDetailedDto): ColumnsTy
     dataIndex: 'description',
     width: 'auto',
     render: renderDescription,
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
   },
   {
     key: TeamsTableColumnKey.Members,
     title: TeamsTableColumnName.Members,
-    dataIndex: 'solutionUrl',
+    dataIndex: 'students',
     render: (_v, t) => renderMemberCount(t, distribution.strictTeamSize),
+    responsive: DISPLAY_TABLE_BREAKPOINTS,
+  },
+  {
+    key: TeamsTableColumnKey.Team,
+    title: TeamsTableColumnName.Team,
+    render: (_v, t) => renderTeam(t, distribution),
+    responsive: DISPLAY_TABLE_MOBILE_BREAKPOINT,
+  },
+  {
+    key: TeamsTableColumnKey.Action,
+    title: TeamsTableColumnName.Action,
+    render: (_v, t) => renderAction(() => toggleTeamModal(t)),
   },
 ];
 

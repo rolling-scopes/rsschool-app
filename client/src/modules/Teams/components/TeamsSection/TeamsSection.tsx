@@ -1,14 +1,17 @@
 import { Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import { useAsync } from 'react-use';
 import { IPaginationInfo } from 'common/types/pagination';
 import { getColumns, expandedRowRender } from './renderers';
 import { useLoading } from 'components/useLoading';
+import { TeamsTableColumnKey } from 'modules/Teams/constants';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
+  toggleTeamModal: (data?: Partial<TeamDto> | undefined) => void;
+  isManager: boolean;
 };
 
 type TeamsState = {
@@ -20,7 +23,7 @@ const { Title } = Typography;
 
 const teamApi = new TeamApi();
 
-export default function TeamSection({ distribution }: Props) {
+export default function TeamSection({ distribution, toggleTeamModal, isManager }: Props) {
   const [teams, setTeams] = useState<TeamsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
@@ -37,6 +40,12 @@ export default function TeamSection({ distribution }: Props) {
     setTeams({ ...teams, ...data });
   });
 
+  const columns = useMemo(() => {
+    return isManager
+      ? getColumns(distribution, toggleTeamModal)
+      : getColumns(distribution, toggleTeamModal).filter(col => col.key !== TeamsTableColumnKey.Action);
+  }, [isManager, distribution, toggleTeamModal]);
+
   const handleChange: TableProps<TeamDto>['onChange'] = pagination => {
     getTeams(pagination);
   };
@@ -52,7 +61,7 @@ export default function TeamSection({ distribution }: Props) {
         rowKey="id"
         onChange={handleChange}
         dataSource={teams.content}
-        columns={getColumns(distribution)}
+        columns={columns}
         expandable={{ expandedRowRender, rowExpandable: record => record.students.length > 0 }}
         loading={loading}
       />

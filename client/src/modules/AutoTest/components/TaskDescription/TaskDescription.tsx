@@ -15,7 +15,7 @@ function TaskDescription({ courseAlias, courseTask }: TaskDescriptionProps) {
   const { descriptionUrl, name, studentStartDate, studentEndDate, state } = courseTask;
 
   return (
-    <Row style={{ background: 'white', margin: '-15px -16px 24px', padding: '16px 24px' }}>
+    <Row style={{ background: 'white', padding: '16px 24px' }}>
       <Col flex="auto">
         <Title level={3}>
           <Space size={24}>

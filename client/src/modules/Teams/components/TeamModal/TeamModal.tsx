@@ -75,12 +75,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
     >
       <Form {...layout} form={form} initialValues={data}>
         <Text>You're creating the team for solving a group task. Fill out the form to invite new members.</Text>
-        <Form.Item
-          style={{ marginTop: 16 }}
-          name="name"
-          label="Name"
-          rules={[{ required: true, message: 'Please enter team name' }]}
-        >
+        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter team name' }]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -122,8 +117,19 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
               },
             ]}
             label="Students"
+            initialValue={mode === 'edit' ? data?.students?.map(s => s.id) : undefined}
           >
-            <StudentSearch onChange={handleChangeStudents as any} keyField="id" courseId={courseId} mode="multiple" />
+            <StudentSearch
+              onChange={handleChangeStudents as any}
+              keyField="id"
+              courseId={courseId}
+              mode="multiple"
+              defaultValues={data?.students?.map(student => ({
+                name: student.fullName,
+                id: student.id,
+                githubId: student.githubId,
+              }))}
+            />
           </Form.Item>
         )}
       </Form>

@@ -30,13 +30,20 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);
 
   return (
-    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
-      <Row gutter={24} style={{ background: 'white', marginTop: -15, marginBottom: 24 }}>
+    <PageLayout
+      loading={false}
+      title="Auto-tests"
+      background="#F0F2F5"
+      withMargin={false}
+      githubId={githubId}
+      courseName={course.name}
+    >
+      <Row gutter={24} style={{ background: 'white', marginBottom: 24, padding: '0 16px' }}>
         <Col span={24}>
           <StatusTabs statuses={statuses} activeTab={activeTab} onTabChange={setActiveTab} />
         </Col>
       </Row>
-      <Row gutter={[24, 24]}>
+      <Row gutter={[24, 24]} style={{ padding: '0 16px' }}>
         {filteredTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
             <TaskCard courseTask={courseTask} course={course} />

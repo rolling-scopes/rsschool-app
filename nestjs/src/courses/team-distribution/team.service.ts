@@ -1,6 +1,7 @@
 import { Student, Team, TeamDistributionStudent } from '@entities/index';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isEqual } from 'lodash';
 import { customAlphabet } from 'nanoid/async';
 import { paginate } from 'src/core/paginate';
 import { DataSource, Repository } from 'typeorm';
@@ -33,6 +34,44 @@ export class TeamService {
 
   public async remove(id: number) {
     await this.repository.delete(id);
+  }
+
+  public async editTeamSquad(team: Team, studentIds: number[], distributionId: number, courseId: number) {
+    const students = await this.teamDistributionStudentService.getStudentsForTeamByManager(
+      studentIds ?? [],
+      distributionId,
+      courseId,
+      team.id,
+    );
+
+    const notDistributedStudentIds = team.students
+      .filter(student => !studentIds?.includes(student.id))
+      .map(student => student.id);
+    const distributedStudentIds = studentIds?.filter(id => !team.students.find(el => el.id === id));
+
+    const studentsNeedingUpdate = await this.teamDistributionStudentService.findByStudentIds(
+      [...notDistributedStudentIds, ...distributedStudentIds],
+      distributionId,
+    );
+
+    const notDistributedStudents = studentsNeedingUpdate
+      .filter(student => notDistributedStudentIds.includes(student.studentId))
+      .map(student => ({ ...student, distributed: false }));
+    const distributedStudents = studentsNeedingUpdate
+      .filter(student => distributedStudentIds.includes(student.studentId))
+      .map(student => ({ ...student, distributed: true }));
+
+    await this.teamDistributionStudentService.saveTeamDistributionStudents([
+      ...notDistributedStudents,
+      ...distributedStudents,
+    ]);
+
+    let teamLeadId = team.teamLeadId;
+    if (notDistributedStudentIds.includes(team.teamLeadId)) {
+      teamLeadId = students.sort((a, b) => a.rank - b.rank)[0]?.id ?? team.teamLeadId;
+    }
+
+    return { students, teamLeadId };
   }
 
   public async findById(id: number) {
@@ -78,6 +117,25 @@ export class TeamService {
       .addSelect(this.getUserFields('u'))
       .addSelect('r.uuid')
       .getOneOrFail();
+  }
+
+  public async save(teamId: number, dto: UpdateTeamDto, distributionId: number, courseId: number) {
+    const team = await this.findById(teamId);
+    let students = team.students;
+    let teamLeadId = team.teamLeadId;
+    if (
+      dto.studentIds &&
+      !isEqual(
+        dto.studentIds,
+        team.students.map(student => student.id),
+      )
+    ) {
+      const res = await this.editTeamSquad(team, dto.studentIds, distributionId, courseId);
+      students = res.students;
+      teamLeadId = res.teamLeadId;
+    }
+    const data = { ...team, ...dto, students, teamLeadId };
+    return this.repository.save(data);
   }
 
   public async update(id: number, data: UpdateTeamDto) {

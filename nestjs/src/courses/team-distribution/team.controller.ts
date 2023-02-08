@@ -74,7 +74,7 @@ export class TeamController {
     }
 
     if (isManager) {
-      students = await this.teamDistributionStudentService.getStudentsForCreateTeamByManager(
+      students = await this.teamDistributionStudentService.getStudentsForTeamByManager(
         dto.studentIds ?? [],
         distributionId,
         courseId,
@@ -89,9 +89,12 @@ export class TeamController {
     const team = await this.teamService.findTeamWithStudentsById(data.id);
 
     if (team.students.length) {
-      await this.teamDistributionStudentService.markStudentsAsDistributed(
-        team.students.map(s => s.id),
+      const teamDistributionStudents = await this.teamDistributionStudentService.findByStudentIds(
+        team.students.map(student => student.id),
         distributionId,
+      );
+      await this.teamDistributionStudentService.saveTeamDistributionStudents(
+        teamDistributionStudents.map(student => ({ ...student, distributed: true })),
       );
     }
 
@@ -104,12 +107,18 @@ export class TeamController {
   @ApiOperation({ operationId: 'updateTeam' })
   @ApiOkResponse()
   public async updateTeam(
-    @Param('courseId', ParseIntPipe) _: number,
-    @Param('distributionId', ParseIntPipe) _distributionId: number,
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('distributionId', ParseIntPipe) distributionId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTeamDto,
   ) {
-    await this.teamService.update(id, dto);
+    const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
+    if (isManager) {
+      await this.teamService.save(id, dto, distributionId, courseId);
+    } else {
+      await this.teamService.update(id, dto);
+    }
   }
 
   @Get('/:id/password')

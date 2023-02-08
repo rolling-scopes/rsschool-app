@@ -45,7 +45,7 @@ export class TeamInfoDto {
 export class TeamDto extends TeamInfoDto {
   constructor(team: Team) {
     super(team);
-    this.students = team.students.map(st => new TeamDistributionStudentDto(st));
+    this.students = team.students.map(st => new TeamDistributionStudentDto(st)).sort((a, b) => a.rank - b.rank);
   }
 
   @ApiProperty({ type: [TeamDistributionStudentDto] })

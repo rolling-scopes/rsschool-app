@@ -7,7 +7,7 @@ const mockOnDeleteRegister = jest.fn();
 
 const distribution = {
   id: 1,
-  startDate: '2022-01-01T00:00:00Z',
+  startDate: '2021-12-31T00:00:00Z',
   endDate: '2022-01-03T00:00:00Z',
   registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Available,
 } as TeamDistributionDto;
@@ -20,7 +20,6 @@ function renderActions(distribution: TeamDistributionDto, isManager = false) {
       deleteRegister={mockOnDeleteRegister}
       isManager={isManager}
       courseAlias="test"
-      mobileView={false}
     />,
   );
 }
@@ -79,6 +78,18 @@ describe('Actions', () => {
     expect(cancel).toBeInTheDocument();
   });
 
+  it('should render the "Registration is closed" text when the distribution is completed and end date has passed', () => {
+    const completedDistribution = {
+      ...distribution,
+      endDate: '2022-01-01T00:00:00Z',
+      registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
+    };
+    renderActions(completedDistribution);
+
+    const text = screen.getByText(/registration is closed/i);
+    expect(text).toBeInTheDocument();
+  });
+
   it('should render a disabled register button when the distribution is in the future', () => {
     const futureDistribution = {
       ...distribution,
@@ -114,20 +125,20 @@ describe('Actions', () => {
     expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
   });
 
-  it('should render allocate a team button for managers', () => {
+  it('should render connect with teams button for managers', () => {
     renderActions(distribution, true);
 
     const registerButton = screen.getByRole('button', {
-      name: /allocate a team/i,
+      name: /connect with teams/i,
     });
     expect(registerButton).toBeInTheDocument();
   });
 
-  it('should render allocate a team when registration status is completed', () => {
+  it('should render connect with teams when registration status is completed', () => {
     renderActions({ ...distribution, registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed });
 
     const registerButton = screen.getByRole('button', {
-      name: /allocate a team/i,
+      name: /connect with teams/i,
     });
     expect(registerButton).toBeInTheDocument();
   });

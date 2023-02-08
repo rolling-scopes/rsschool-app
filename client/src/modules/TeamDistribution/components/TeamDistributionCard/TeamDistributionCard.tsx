@@ -1,8 +1,8 @@
 import { Button, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { TeamDistributionDto } from 'api';
-import { DistributionPeriod } from './DistributionPeriod';
 import { Actions } from './Actions';
+import { CardTitle } from './CardTitle';
 
 type Props = {
   distribution: TeamDistributionDto;
@@ -26,8 +26,7 @@ export default function TeamDistributionCard({
   return (
     <Card
       style={{ marginTop: 24 }}
-      title={distribution.name}
-      extra={<DistributionPeriod startDate={distribution.startDate} endDate={distribution.endDate} />}
+      title={<CardTitle distribution={distribution} />}
       actions={
         isManager
           ? [
