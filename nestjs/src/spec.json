@@ -2652,7 +2652,8 @@
           "tag": {
             "type": "string",
             "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
-          }
+          },
+          "type": { "type": "string", "enum": ["courseTask", "courseEvent"] }
         },
         "required": [
           "score",
@@ -2666,7 +2667,8 @@
           "maxScore",
           "scoreWeight",
           "descriptionUrl",
-          "tag"
+          "tag",
+          "type"
         ]
       },
       "CourseCopyFromDto": {
