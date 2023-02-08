@@ -117,7 +117,7 @@ export class CourseScheduleService {
             tag,
             descriptionUrl: courseTask.task.descriptionUrl,
             organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
-            type: 'courseTask',
+            type: CourseScheduleDataSource.CourseTask,
           } as CourseScheduleItem;
 
           acc.push(scheduleItem);
@@ -140,7 +140,7 @@ export class CourseScheduleService {
             tag,
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
-            type: 'courseEvent',
+            type: CourseScheduleDataSource.CourseEvent,
           } as CourseScheduleItem;
         }),
       )
