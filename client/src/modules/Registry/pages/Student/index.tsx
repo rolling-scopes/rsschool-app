@@ -6,14 +6,19 @@ import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
 import { Info } from 'modules/Registry/components/Info';
 import { NoCourses } from 'modules/Registry/components/NoCourses';
-import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
+import {
+  DEFAULT_ROW_GUTTER,
+  TEXT_EMAIL_TOOLTIP,
+  TEXT_EPAM_EMAIL_TOOLTIP,
+  TEXT_LOCATION_STUDENT_TOOLTIP,
+} from 'modules/Registry/constants';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useUpdate } from 'react-use';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull } from 'services/user';
-import { emailPattern, englishNamePattern } from 'services/validators';
+import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import css from 'styled-jsx/css';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
 import { CdnService } from 'services/cdn';
@@ -62,12 +67,13 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
         return;
       }
 
-      const { courseId, location, primaryEmail, firstName, lastName } = values;
+      const { courseId, location, primaryEmail, contactsEpamEmail, firstName, lastName } = values;
       const registryModel = { type: TYPES.STUDENT, courseId };
       const userModel = {
         cityName: location.cityName,
         countryName: location.countryName,
         primaryEmail,
+        contactsEpamEmail,
         firstName,
         lastName,
       };
@@ -249,7 +255,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 </Col>
               </Row>
               <Row gutter={DEFAULT_ROW_GUTTER}>
-                <Col xs={24} sm={24} md={20} lg={20} xl={20} style={{ marginBottom: 16 }}>
+                <Col xs={24} sm={24} md={20} lg={20} xl={20}>
                   <Row>
                     <Typography.Title level={5}>
                       E-mail <Info title={TEXT_EMAIL_TOOLTIP} />
@@ -262,6 +268,27 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                         rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
                       >
                         <Input placeholder="user@example.com" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row gutter={DEFAULT_ROW_GUTTER}>
+                <Col xs={24} sm={24} md={20} lg={20} xl={20} style={{ marginBottom: 16 }}>
+                  <Row>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                      <Form.Item
+                        label={
+                          <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                            EPAM E-mail
+                          </Typography.Title>
+                        }
+                        tooltip={TEXT_EPAM_EMAIL_TOOLTIP}
+                        name="contactsEpamEmail"
+                        rules={[{ pattern: epamEmailPattern, message: 'Please enter a valid EPAM email' }]}
+                        requiredMark="optional"
+                      >
+                        <Input placeholder="john_doe@epam.com" />
                       </Form.Item>
                     </Col>
                   </Row>
