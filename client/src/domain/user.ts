@@ -10,7 +10,7 @@ export function isExpelledStudent(session: Session, courseId: number) {
   return session.courses[courseId]?.isExpelled === true;
 }
 
-function hasRoleInAny(session: Session, role: CourseRole) {
+export function hasRoleInAnyCourse(session: Session, role: CourseRole) {
   return keys(session.courses).some(courseId => hasRole(session, Number(courseId), role));
 }
 
@@ -27,7 +27,7 @@ export function getMentorId(session: Session, courseId: number) {
 }
 
 export function isAnyMentor(session: Session) {
-  return hasRoleInAny(session, CourseRole.Mentor);
+  return hasRoleInAnyCourse(session, CourseRole.Mentor);
 }
 
 export function isStudent(session: Session, courseId: number) {
@@ -42,12 +42,16 @@ export function isCourseManager(session: Session, courseId: number) {
   return isAdmin(session) || hasRole(session, courseId, CourseRole.Manager);
 }
 
+export function isDementor(session: Session, courseId: number) {
+  return isAdmin(session) || hasRole(session, courseId, CourseRole.Dementor);
+}
+
 export function isPowerUser(session: Session, courseId: number) {
   return isAdmin(session) || isCourseManager(session, courseId) || isCourseSupervisor(session, courseId);
 }
 
 export function isAnyCourseManager(session: Session) {
-  return hasRoleInAny(session, CourseRole.Manager);
+  return hasRoleInAnyCourse(session, CourseRole.Manager);
 }
 
 export function isCourseSupervisor(session: Session, courseId: number) {
@@ -55,11 +59,19 @@ export function isCourseSupervisor(session: Session, courseId: number) {
 }
 
 export function isAnyCourseSupervisor(session: Session) {
-  return isAdmin(session) || hasRoleInAny(session, CourseRole.Supervisor);
+  return isAdmin(session) || hasRoleInAnyCourse(session, CourseRole.Supervisor);
 }
 
 export function isAnyCoursePowerUser(session: Session) {
-  return isAdmin(session) || hasRoleInAny(session, CourseRole.Manager) || hasRoleInAny(session, CourseRole.Supervisor);
+  return (
+    isAdmin(session) ||
+    hasRoleInAnyCourse(session, CourseRole.Manager) ||
+    hasRoleInAnyCourse(session, CourseRole.Supervisor)
+  );
+}
+
+export function isAnyCourseDementor(session: Session) {
+  return isAdmin(session) || hasRoleInAnyCourse(session, CourseRole.Dementor);
 }
 
 export function isTaskOwner(session: Session, courseId: number) {

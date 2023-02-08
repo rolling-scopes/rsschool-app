@@ -4,7 +4,7 @@ import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
 import { Session } from 'components/withSession';
-import { isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
+import { isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { CourseSelector } from 'modules/Home/components/CourseSelector';
@@ -36,7 +36,7 @@ export function HomePage(props: Props) {
   const hasRegistryBanner =
     wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.courses[course.id] == null);
 
-  const isPowerUser = isAnyCoursePowerUser(props.session);
+  const isPowerUser = isAnyCoursePowerUser(props.session) || isAnyCourseDementor(props.session);
 
   const courses = props.courses ?? [];
   const [activeCourse, saveActiveCourseId] = useActiveCourse(courses);

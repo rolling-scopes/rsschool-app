@@ -66,7 +66,7 @@ export class OpportunitiesService {
 
   public async prolong(githubId: string) {
     const resume = await this.resumeRepository.findOneBy({ githubId });
-    const expirationTimestamp = dayjs().add(EXPIRATION_DAYS_PROLONGATION, 'days').valueOf();
+    const expirationTimestamp = this.getProlongedExpirationTimestamp();
     const result = await this.resumeRepository.save({ id: resume?.id, githubId, expires: expirationTimestamp });
     return result.expires;
   }
@@ -85,13 +85,17 @@ export class OpportunitiesService {
     return Boolean(value);
   }
 
-  public async createConsent(githubId: string) {
+  public async createConsent(githubId: string): Promise<{ consent: boolean; expires: number }> {
     const value = true;
-    const user = await this.userRepository.findOneOrFail({ where: { githubId } });
-    await this.userRepository.update(user.id, { opportunitiesConsent: value });
+    const { id: userId } = await this.userRepository.findOneOrFail({ where: { githubId } });
+    await this.userRepository.update(userId, { opportunitiesConsent: value });
     const current = await this.resumeRepository.findOneBy({ githubId });
-    await this.resumeRepository.save({ id: current?.id, githubId, userId: user.id });
-    return Boolean(value);
+    const expiresIn = this.getProlongedExpirationTimestamp();
+    const { expires } = await this.resumeRepository.save({ id: current?.id, githubId, userId, expires: expiresIn });
+    return {
+      consent: value,
+      expires,
+    };
   }
 
   public async deleteConsent(githubId: string) {
@@ -130,5 +134,11 @@ export class OpportunitiesService {
       gratitudes,
       feedbacks,
     };
+  }
+
+  private getProlongedExpirationTimestamp() {
+    const expirationDate = dayjs().add(EXPIRATION_DAYS_PROLONGATION, 'days');
+    const expirationTimestamp = expirationDate.valueOf();
+    return expirationTimestamp;
   }
 }
