@@ -7,7 +7,7 @@ import { InputType, templates } from 'data/interviews';
 import _ from 'lodash';
 import { SessionContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import type { PageProps } from './getServerSideProps';
 
