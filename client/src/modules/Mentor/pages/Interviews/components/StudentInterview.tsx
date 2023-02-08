@@ -32,7 +32,11 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
           <Space size={14} align="baseline">
             <GithubAvatar githubId={student.githubId} size={24} />
             <Col>
-              <Typography.Title level={5}> {student.name || student.githubId}</Typography.Title>
+              <Typography.Title level={5}>
+                <Typography.Link target="_blank" href={`/profile?githubId=${student.githubId}`}>
+                  {student.name || student.githubId}
+                </Typography.Link>
+              </Typography.Title>
             </Col>
           </Space>
         </Row>
