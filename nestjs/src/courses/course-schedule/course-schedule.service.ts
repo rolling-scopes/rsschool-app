@@ -22,6 +22,7 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     status: CourseScheduleItemStatus;
     tag: CourseScheduleItemTag;
     descriptionUrl?: string;
+    type: CourseScheduleDataSource;
   };
 
 export enum CourseScheduleDataSource {
@@ -116,6 +117,7 @@ export class CourseScheduleService {
             tag,
             descriptionUrl: courseTask.task.descriptionUrl,
             organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
+            type: CourseScheduleDataSource.CourseTask,
           } as CourseScheduleItem;
 
           acc.push(scheduleItem);
@@ -138,6 +140,7 @@ export class CourseScheduleService {
             tag,
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
+            type: CourseScheduleDataSource.CourseEvent,
           } as CourseScheduleItem;
         }),
       )
