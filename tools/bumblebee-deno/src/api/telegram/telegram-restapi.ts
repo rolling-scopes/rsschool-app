@@ -1,7 +1,7 @@
 import config from '../../config.ts';
 import { Exception } from '../../utils/exception.ts';
 
-const { token, channelId } = config.telegram;
+const { token, channelId, adminChannelId } = config.telegram;
 
 const baseUrl = `https://api.telegram.org/bot${token}`;
 
@@ -30,6 +30,11 @@ const request = async (methodName: string, body: any) => {
 
 export const sendMessage = (text: string) => request('sendMessage', {
   chat_id: channelId,
+  text,
+});
+
+export const notifyAdmin = (text: string) => request('sendMessage', {
+  chat_id: adminChannelId,
   text,
 });
 

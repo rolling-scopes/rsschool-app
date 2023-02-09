@@ -4,14 +4,13 @@ import { sendMessage, editMessageText, deleteMessage } from '../api/telegram/tel
 import { registerMessage, unregisterMessage, getMessage } from '../services/cache.ts';
 import { discordCache } from '../services/discord.ts';
 import { taskQueue } from '../services/task-queue.ts';
-import { handleAsyncError } from '../utils/exception.ts';
 
 export const messageReceivedEvent = Symbol('Message received');
 export const messageDeletedEvent = Symbol('Message deleted');
 
 export const eventBus = new EventEmitter()
 
-  .on(messageReceivedEvent, (event: Message) => taskQueue.add(() => handleAsyncError(async () => {
+  .on(messageReceivedEvent, (event: Message) => taskQueue.add(async () => {
     console.info(messageReceivedEvent.description, event);
 
     const parsedMessage = toParsedMessage(event, discordCache.channels!, discordCache.roles!);
@@ -23,18 +22,22 @@ export const eventBus = new EventEmitter()
     const message = getMessage(id);
 
     if (message === null) {
+      if (parsedMessage.content.startsWith('error')) throw new Error(parsedMessage.content.slice(6));
+
       const { result } = await sendMessage(`${timestamp}\n *${author}* said in channel *${channel}* that\n\n${content}`);
       registerMessage(timestamp, id, result.message_id);
       console.log(result);
     } else if (message.timestamp !== timestamp) {
+      if (parsedMessage.content.startsWith('error')) throw new Error(parsedMessage.content.slice(6));
+
       const { result } = await editMessageText(message.id, `${timestamp}\n *${author}* said in channel *${channel}* that\n\n${content} \n(Edited)`);
       console.log(result);
       registerMessage(timestamp, id, result.message_id);
       console.log(result);
     }
-  })))
+  }))
 
-  .on(messageDeletedEvent, (event: string) => taskQueue.add(() => handleAsyncError(async() => {
+  .on(messageDeletedEvent, (event: string) => taskQueue.add(async() => {
     console.info(messageDeletedEvent.description, event);
 
     const message = getMessage(event);
@@ -43,4 +46,4 @@ export const eventBus = new EventEmitter()
       const result = await deleteMessage(message.id);
       if (result.ok) unregisterMessage(event);
     }
-  })));
+  }));
