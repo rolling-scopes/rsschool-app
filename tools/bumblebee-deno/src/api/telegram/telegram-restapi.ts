@@ -1,6 +1,5 @@
-import config from '../config.ts';
-import { RestApi } from './enums.ts';
-import { Exception } from '../error/index.ts';
+import config from '../../config.ts';
+import { Exception } from '../../utils/exception.ts';
 
 const { token, channelId } = config.telegram;
 
@@ -29,18 +28,18 @@ const request = async (methodName: string, body: any) => {
   return json;
 }
 
-export const sendMessage = (text: string) => request(RestApi.SendMessage, {
+export const sendMessage = (text: string) => request('sendMessage', {
   chat_id: channelId,
   text,
 });
 
-export const editMessageText = (id: number, text: string) => request(RestApi.EditMessageText, {
+export const editMessageText = (id: number, text: string) => request('editMessageText', {
   chat_id: channelId,
   message_id: id,
   text,
 });
 
-export const deleteMessage = (id: number) => request(RestApi.DeleteMessage, {
+export const deleteMessage = (id: number) => request('deleteMessage', {
   chat_id: channelId,
   message_id: id,
 });

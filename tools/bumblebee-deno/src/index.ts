@@ -1,7 +1,7 @@
-import { listenDiscord } from './discord/websocket.ts';
-import { initDiscordApi } from './discord/restapi.ts';
+import { listenDiscord } from './api/discord/discord-websocket.ts';
+import { processOldMessages } from './services/discord.ts';
 
 console.debug = () => {};
 
-await initDiscordApi();
+await processOldMessages();
 listenDiscord();

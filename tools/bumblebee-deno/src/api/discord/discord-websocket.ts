@@ -1,7 +1,7 @@
-import { delay, EventEmitter } from '../deps.ts';
-import config from '../config.ts';
-import { globalBus, messageReceivedEvent, messageDeletedEvent } from '../bus/events.ts';
-import { GatewayEventName, Opcode, Intent, getIntents } from './enums.ts';
+import { delay, EventEmitter } from '../../dependencies.ts';
+import config from '../../config.ts';
+import { eventBus, messageReceivedEvent, messageDeletedEvent } from '../../services/event-bus.ts';
+import { discordCache } from '../../services/discord.ts';
 import {
   GatewayPayload,
   HelloGatewayPayload,
@@ -14,8 +14,8 @@ import {
   HeartbeatGatewayPayload,
   IdentifyGatewayPayload,
   ResumeGatewayPayload,
-} from './model.ts';
-import { cache } from './restapi.ts';
+} from './discord-model.ts';
+import { GatewayEventName, Opcode, Intent, getIntents } from './discord-enums.ts';
 
 const { apiUrl, token } = config.discord;
 
@@ -99,7 +99,6 @@ const listen = () => {
     }
   });
 }
-
 
 const bus = new EventEmitter()
 
@@ -215,25 +214,25 @@ const bus = new EventEmitter()
       GatewayEventName.MESSAGE_DELETE_BULK,
     ].includes(event.t)) {
       const channelId = (event as DispatchGatewayPayload<Message>).d.channel_id;
-      if (!cache.activeChannels!.has(channelId)) return;
+      if (!discordCache.activeChannels!.has(channelId)) return;
     }
 
     switch(event.t) {
       case GatewayEventName.MESSAGE_CREATE:
       case GatewayEventName.MESSAGE_UPDATE: {
         const data = (event as DispatchGatewayPayload<Message>).d;
-        globalBus.emit(messageReceivedEvent, data);
+        eventBus.emit(messageReceivedEvent, data);
         break;
       }
       case GatewayEventName.MESSAGE_DELETE: {
         const { id } = (event as DispatchGatewayPayload<DispatchMessageDeleteEvent>).d;
-        globalBus.emit(messageDeletedEvent, id);
+        eventBus.emit(messageDeletedEvent, id);
         break;
       }
       case GatewayEventName.MESSAGE_DELETE_BULK: {
         const { ids } = (event as DispatchGatewayPayload<DispatchMessageDeleteBulkEvent>).d;
         for (const id of ids) {
-          globalBus.emit(messageDeletedEvent, id);
+          eventBus.emit(messageDeletedEvent, id);
         }
         break;
       }

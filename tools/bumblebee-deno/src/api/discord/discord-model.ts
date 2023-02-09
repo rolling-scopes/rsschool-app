@@ -1,4 +1,4 @@
-import { MessageType, GatewayEventName, Opcode } from './enums.ts';
+import { MessageType, GatewayEventName, Opcode } from './discord-enums.ts';
 
 /**
  * https://discord.com/developers/docs/topics/gateway#payloads-gateway-payload-structure

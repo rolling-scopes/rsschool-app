@@ -51,21 +51,3 @@ export class Queue<T> {
     }
   }
 }
-
-// [1]<-[2]<-[3]<-[4]
-
-// 1 => next: 2, prev: null; // head
-// 2 => next: 3, prev: 1;
-// 3 => next: null, prev: 2; // tail
-
-
-// q.get():
-//    q.head.value
-// q.remove():
-//    q.head = q.head.next
-// q.add():
-//    q.tail.next = new Link()
-//    q.tail = q.tail.next
-
-// create queue
-// setInterval 2000 sec - and check queue

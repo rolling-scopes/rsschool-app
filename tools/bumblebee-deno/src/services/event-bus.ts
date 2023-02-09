@@ -1,20 +1,20 @@
-import { EventEmitter } from '../deps.ts';
-import { cache } from '../discord/restapi.ts';
-import { sendMessage, editMessageText, deleteMessage } from '../telegram/restapi.ts';
-import { registerMessage, unregisterMessage, getMessage } from '../cache/index.ts';
-import { Message, toParsedMessage } from '../discord/model.ts';
-import { handleAsyncError } from '../error/handle-error.ts';
-import { queue } from '../queue/index.ts';
+import { EventEmitter } from '../dependencies.ts';
+import { Message, toParsedMessage } from '../api/discord/discord-model.ts';
+import { sendMessage, editMessageText, deleteMessage } from '../api/telegram/telegram-restapi.ts';
+import { registerMessage, unregisterMessage, getMessage } from '../services/cache.ts';
+import { discordCache } from '../services/discord.ts';
+import { taskQueue } from '../services/task-queue.ts';
+import { handleAsyncError } from '../utils/exception.ts';
 
 export const messageReceivedEvent = Symbol('Message received');
 export const messageDeletedEvent = Symbol('Message deleted');
 
-export const globalBus = new EventEmitter()
+export const eventBus = new EventEmitter()
 
-  .on(messageReceivedEvent, (event: Message) => queue.add(() => handleAsyncError(async () => {
+  .on(messageReceivedEvent, (event: Message) => taskQueue.add(() => handleAsyncError(async () => {
     console.info(messageReceivedEvent.description, event);
 
-    const parsedMessage = toParsedMessage(event, cache.channels!, cache.roles!);
+    const parsedMessage = toParsedMessage(event, discordCache.channels!, discordCache.roles!);
 
     console.info(messageReceivedEvent.description, 'content', parsedMessage.content);
 
@@ -34,7 +34,7 @@ export const globalBus = new EventEmitter()
     }
   })))
 
-  .on(messageDeletedEvent, (event: string) => queue.add(() => handleAsyncError(async() => {
+  .on(messageDeletedEvent, (event: string) => taskQueue.add(() => handleAsyncError(async() => {
     console.info(messageDeletedEvent.description, event);
 
     const message = getMessage(event);
