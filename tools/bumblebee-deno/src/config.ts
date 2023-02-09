@@ -18,13 +18,9 @@ const config = {
     token: getEnv('RS_BUMBLEBEE_DISCORD_TOKEN'),
     serverName: getEnv('RS_BUMBLEBEE_DISCORD_SERVER_NAME'),
     channelPrefix: getEnv('RS_BUMBLEBEE_DISCORD_CHANNEL_PREFIX'),
-    limitInitialMessagesCount: getEnv('RS_BUMBLEBEE_LIMIT_INITIAL_MESSAGES_COUNT'),
+    limitInitialMessagesCount: Number(getEnv('RS_BUMBLEBEE_LIMIT_INITIAL_MESSAGES_COUNT')),
     apiUrl: 'wss://gateway.discord.gg/?v=10&encoding=json',
   },
 };
-
-if (!isProd) {
-  // const { parseDotenv } = import('./dev_deps.ts');
-}
 
 export default config;

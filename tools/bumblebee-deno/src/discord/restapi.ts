@@ -3,7 +3,7 @@ import { RestApi, getRestApiPath, MessageType } from './enums.ts';
 import { Message, Role, Guild, GuildChannel } from './model.ts';
 import { globalBus, messageReceivedEvent } from '../bus/events.ts';
 
-const { token, serverName, channelPrefix } = config.discord;
+const { token, serverName, channelPrefix, limitInitialMessagesCount } = config.discord;
 
 export const cache: {
   roles: Map<string, string> | null;
@@ -99,7 +99,7 @@ export const initDiscordApi = async () => {
 
   const messages: Message[] = [];
   for (const channel of filteredChannels) {
-    let channelMessages = await getChannelMessages(channel.id);
+    let channelMessages = await getChannelMessages(channel.id, undefined, limitInitialMessagesCount );
     channelMessages = channelMessages.filter(message => message.content && (message.type === MessageType.DEFAULT || message.type === MessageType.REPLY));
     channelMessages.reverse();
     messages.push(...channelMessages);
