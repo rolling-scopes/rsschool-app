@@ -1,8 +1,7 @@
 import { Space, Typography } from "antd"
 import BadgeItem from "./BadgeItem"
 
-
-function TitlePage() {
+const TitlePage = () => {
     return (
         <Space>
             <Typography.Title level={4} style={{marginBottom: "0"}}>
