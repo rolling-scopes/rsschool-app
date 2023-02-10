@@ -1,10 +1,12 @@
 import { Badge, Space } from 'antd';
+type Props = {
+  count: number
+}
 
-const BadgeItem: React.FC = () => {
-
+const BadgeItem: React.FC<Props> = ({count}) => {
   return (
     <Space >
-      <Badge count={44} style={{backgroundColor: "#F0F0F0", color: "#000000", opacity: 0.45,}}  />
+      <Badge count={count}  style={{backgroundColor: "#F0F0F0", color: "#000000", opacity: 0.45,}}  />
     </Space>
   );
 };
