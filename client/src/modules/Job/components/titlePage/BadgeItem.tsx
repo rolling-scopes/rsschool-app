@@ -1,6 +1,6 @@
 import { Badge, Space } from 'antd';
 
-const App: React.FC = () => {
+const BadgeItem: React.FC = () => {
 
   return (
     <Space >
@@ -9,4 +9,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default BadgeItem;
