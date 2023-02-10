@@ -11,7 +11,7 @@ const processQueue = async () => {
       await task();
       taskQueue.remove();
     } catch (error) {
-      registerError(error);
+      await registerError('Task Queue Service', error);
     }
   }
 };

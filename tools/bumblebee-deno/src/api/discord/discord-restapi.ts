@@ -1,4 +1,5 @@
 import config from '../../config.ts';
+import { Exception } from '../../utils/exception.ts';
 import { RestApi, getRestApiPath } from './discord-enums.ts';
 import { Message, Role, Guild, GuildChannel } from './discord-model.ts';
 
@@ -26,13 +27,26 @@ const getParams = (params: Record<string, string | boolean | number | undefined>
 ).toString();
 
 const request = async (path: string) => {
-  const response = await fetch(`${baseUrl}/v${version}${path}`, {
-    headers: {
-      'User-Agent': userAgent,
-      'Authorization': authorization,
-    },
-  });
-  return response.json();
+  try {
+    const response = await fetch(`${baseUrl}/v${version}${path}`, {
+      headers: {
+        'User-Agent': userAgent,
+        'Authorization': authorization,
+      },
+    });
+
+    const json = await response.json();
+
+    if (response.ok === false) {
+      throw new Exception('Discord Api', response.statusText, response.status, json);
+    }
+
+    return json;
+  } catch (error) {
+    throw error instanceof Exception
+      ? error
+      : new Exception('Discord Api', error.message ?? 'Unknown error', 500);
+  }
 }
 
 /**
@@ -65,5 +79,6 @@ export const getGuildRoles = (guildId: string): Promise<Role[]> => {
 export const getChannelMessages = (channelId: string, after?: string, limit = 1): Promise<Message[]> => {
   const params = getParams({ after, limit });
   const path = `${getRestApiPath(RestApi.GetChannelMessages, channelId)}?${params}`;
+
   return request(path);
 };

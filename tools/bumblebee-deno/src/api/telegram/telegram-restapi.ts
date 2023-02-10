@@ -10,22 +10,27 @@ const baseUrl = `https://api.telegram.org/bot${token}`;
  */
 // deno-lint-ignore no-explicit-any
 const request = async (methodName: string, body: any) => {
-  const response = await fetch(`${baseUrl}/${methodName}`, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const response = await fetch(`${baseUrl}/${methodName}`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  const json = await response.json();
+    const json = await response.json();
 
-  console.log(json);
-  if (json.ok === false) {
-    throw new Exception('Telegram', json.description, json.error_code);
+    if (json.ok === false) {
+      throw new Exception('Telegram Api', json.description, json.error_code);
+    }
+
+    return json;
+  } catch (error) {
+    throw error instanceof Exception
+      ? error
+      : new Exception('Telegram Api', error.message ?? 'Unknown error', 500);
   }
-
-  return json;
 }
 
 export const sendMessage = (text: string) => request('sendMessage', {

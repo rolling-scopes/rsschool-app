@@ -44,14 +44,14 @@ export const unregisterMessage = (discordMessageId: string) => {
   writeToFile();
 };
 
-export const registerError = (error: Error) => {
+export const registerError = async (service: string, error: Error) => {
   const errorText = error.stack ?? error.message;
   const timestamp = new Date().toISOString();
 
   if (!cache.errors.get(errorText)) {
     cache.errors.set(errorText, { error: errorText, timestamp });
     writeToFile();
-    notifyAdmin(`Error has first occured at ${timestamp}:\n\n ${errorText}`).catch();
+    await notifyAdmin(`[${service}]\n\nError has first occured at ${timestamp}:\n\n ${errorText}`).catch();
     console.log(cache.errors);
   }
 };
