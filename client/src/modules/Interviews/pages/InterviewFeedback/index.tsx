@@ -1,16 +1,14 @@
-import { Button, Checkbox, Form, Input, message, Rate, Typography } from 'antd';
+import { Button, Checkbox, Form, Input, message, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import { CommentInput } from 'components/Forms';
+import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
 import { InputType, templates } from 'data/interviews';
 import _ from 'lodash';
 import { SessionContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
-import type { StudentBasic } from 'services/models';
 import type { PageProps } from './getServerSideProps';
 
 type FormAnswer = {
@@ -24,29 +22,17 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
   const router = useRouter();
   const session = useContext(SessionContext);
   const template = templates[type];
-  const githubId = (router.query.githubId ?? null) as string | null;
+  const githubId = router.query.githubId as string;
 
   const [form] = Form.useForm();
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState([] as StudentBasic[]);
 
   const questions = useMemo(() => template.categories.flatMap(c => c.questions), [type]);
 
-  useEffect(() => form.setFieldsValue({ githubId }), [githubId]);
-
-  useAsync(async () => {
-    const students = await courseService.getInterviewStudents(interviewId);
-    setStudents(students);
-  });
-
-  const loadStudents = async (searchText: string) => {
-    return students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
-  };
-
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
+    if (!githubId || loading) {
       return;
     }
     try {
@@ -58,7 +44,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
       }));
       const score = Number(values.score) - 1;
       const body = { formAnswers, score, comment: values.comment || '' };
-      await courseService.postStudentInterviewResult(values.githubId, interviewId, body);
+      await courseService.postStudentInterviewResult(githubId, interviewId, body);
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
@@ -101,10 +87,15 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
       >
-        <Typography.Title level={4}>Student</Typography.Title>
-        <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-          <UserSearch keyField="githubId" defaultValues={students} searchFn={loadStudents} />
-        </Form.Item>
+        <Space align="baseline">
+          <Typography.Title level={4}>Student: </Typography.Title>{' '}
+          <GithubAvatar githubId={githubId ?? undefined} size={24} />
+          <Typography.Link target="_blank" href={`/profile?githubId=${githubId}`}>
+            <Typography.Title level={4}>
+              <Typography.Link>{githubId}</Typography.Link>
+            </Typography.Title>
+          </Typography.Link>
+        </Space>
 
         {template.categories.map(category => (
           <Fragment key={category.id}>
@@ -135,7 +126,6 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
             })}
           </Fragment>
         ))}
-
         <Typography.Title level={4}>Total score</Typography.Title>
         <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please set Score' }]}>
           <Rate

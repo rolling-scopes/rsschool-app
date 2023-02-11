@@ -21,7 +21,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto, CoursesApi, UpdateCourseDto } from 'api';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
@@ -380,4 +380,4 @@ function getInitialValues(modalData: Partial<Course>) {
 
 export { getServerSideProps };
 
-export default withSession(Page);
+export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });

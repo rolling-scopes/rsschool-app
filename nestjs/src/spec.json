@@ -1563,7 +1563,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GiveConsentDto" } } }
           }
         },
         "tags": ["opportunities"]
@@ -2467,6 +2467,7 @@
           "comment": { "type": "string" }
         }
       },
+      "Attributes": { "type": "object", "properties": { "template": { "type": "string", "nullable": true } } },
       "InterviewDto": {
         "type": "object",
         "properties": {
@@ -2477,7 +2478,7 @@
           "endDate": { "type": "string" },
           "description": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "attributes": { "type": "object" }
+          "attributes": { "$ref": "#/components/schemas/Attributes" }
         },
         "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
       },
@@ -2651,7 +2652,8 @@
           "tag": {
             "type": "string",
             "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
-          }
+          },
+          "type": { "type": "string", "enum": ["courseTask", "courseEvent"] }
         },
         "required": [
           "score",
@@ -2665,7 +2667,8 @@
           "maxScore",
           "scoreWeight",
           "descriptionUrl",
-          "tag"
+          "tag",
+          "type"
         ]
       },
       "CourseCopyFromDto": {
@@ -3518,6 +3521,11 @@
       },
       "Resume": { "type": "object", "properties": {} },
       "ConsentDto": { "type": "object", "properties": { "consent": { "type": "boolean" } }, "required": ["consent"] },
+      "GiveConsentDto": {
+        "type": "object",
+        "properties": { "consent": { "type": "boolean" }, "expires": { "type": "number" } },
+        "required": ["consent", "expires"]
+      },
       "StatusDto": { "type": "object", "properties": { "expires": { "type": "number" } }, "required": ["expires"] },
       "VisibilityDto": {
         "type": "object",

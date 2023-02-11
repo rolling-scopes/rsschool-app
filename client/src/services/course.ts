@@ -1,6 +1,5 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
-import { sortTasksByEndDate } from 'services/rules';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import { IPaginationInfo } from 'common/types/pagination';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
@@ -618,8 +617,8 @@ export class CourseService {
   }
 
   async getMentorInterviews(githubId: string) {
-    const result = await this.axios.get(`/mentor/${githubId}/interviews`);
-    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: unknown }[];
+    const result = await this.axios.get<{ data: MentorInterview[] }>(`/mentor/${githubId}/interviews`);
+    return result.data.data;
   }
 
   async createMentor(
@@ -692,12 +691,6 @@ export interface Interview {
   template: string | null;
 }
 
-export interface StudentProfile {
-  courseId: number;
-  totalScore: number;
-  mentor: MentorWithContacts | null;
-}
-
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number;
 }
@@ -762,3 +755,26 @@ export interface TaskSolution {
 export interface IAddCriteriaForCrossCheck {
   onCreate: (data: CriteriaDto) => void;
 }
+
+const sortTasksByEndDate = (a: CourseTaskDetails, b: CourseTaskDetails) => {
+  if (!b.studentEndDate && a.studentEndDate) {
+    return -1;
+  }
+  if (!a.studentEndDate && b.studentEndDate) {
+    return 1;
+  }
+  if (!a.studentEndDate && !b.studentEndDate) {
+    return 0;
+  }
+  return new Date(a.studentEndDate!).getTime() - new Date(b.studentEndDate!).getTime();
+};
+
+export type MentorInterview = {
+  name: string;
+  endDate: string;
+  completed: boolean;
+  interviewer: unknown;
+  status: number;
+  student: Omit<UserBasic, 'id'>;
+  id: number;
+};

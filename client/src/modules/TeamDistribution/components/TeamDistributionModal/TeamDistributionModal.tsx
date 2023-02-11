@@ -1,18 +1,24 @@
-import { Col, DatePicker, Form, Input, InputNumber, message, Row, Select, Space, Switch } from 'antd';
+import { DatePicker, Form, Input, InputNumber, message, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
-import { ModalForm } from 'components/Forms';
 import { TIMEZONES } from 'configs/timezones';
 import moment, { Moment } from 'moment';
-import { useState } from 'react';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { urlPattern } from 'services/validators';
 
 type Props = {
-  data: Partial<TeamDistributionDto>;
+  data?: TeamDistributionDto;
   onCancel: () => void;
   onSubmit: () => Promise<void>;
   courseId: number;
+};
+
+const { Text } = Typography;
+
+const formLayoutProps = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 24 },
 };
 
 interface FormState extends TeamDistributionDto {
@@ -24,7 +30,7 @@ const { Option } = Select;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-function getInitialValues(data: Partial<TeamDistributionDto>) {
+function getInitialValues(data: TeamDistributionDto) {
   const timeZone = 'UTC';
   return {
     ...data,
@@ -37,21 +43,19 @@ function getInitialValues(data: Partial<TeamDistributionDto>) {
         : null,
     timeZone,
     strictTeamSizeMode: data.strictTeamSizeMode ?? true,
-    minTeamSize: data.minTeamSize ?? 2,
-    maxTeamSize: data.maxTeamSize ?? 4,
     strictTeamSize: data.strictTeamSize ?? 3,
     minTotalScore: data.minTotalScore ?? 0,
   };
 }
 
-const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => {
-  const [startDate, endDate] = values.range!;
+const createRecord = (values: FormState): CreateTeamDistributionDto => {
+  const [startDate, endDate] = values.range;
   const record = {
     name: values.name!,
     description: values.description ?? '',
-    startDate: formatTimezoneToUTC(startDate!, values.timeZone!),
-    endDate: formatTimezoneToUTC(endDate!, values.timeZone!),
-    strictTeamSizeMode: values.strictTeamSizeMode!,
+    startDate: formatTimezoneToUTC(startDate, values.timeZone),
+    endDate: formatTimezoneToUTC(endDate, values.timeZone),
+    strictTeamSizeMode: values.strictTeamSizeMode ?? true,
     minTeamSize: values.minTeamSize ?? 2,
     maxTeamSize: values.maxTeamSize ?? 4,
     strictTeamSize: values.strictTeamSize ?? 3,
@@ -61,7 +65,7 @@ const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => 
   return record;
 };
 
-const submitTeamDistribution = async (courseId: number, values: Partial<FormState>, id?: number): Promise<void> => {
+const submitTeamDistribution = async (courseId: number, values: FormState, id?: number): Promise<void> => {
   try {
     const record = createRecord(values);
     if (id) {
@@ -75,97 +79,85 @@ const submitTeamDistribution = async (courseId: number, values: Partial<FormStat
 };
 
 export default function TeamDistributionModal({ data, onCancel, courseId, onSubmit }: Props) {
-  const [form] = Form.useForm<Partial<FormState>>();
-  const [changes, setChanges] = useState<Record<string, boolean>>({
-    strictTeamSizeMode: data.strictTeamSizeMode ?? true,
-  });
-
-  const handleModalSubmit = async (values: Partial<FormState>) => {
-    await submitTeamDistribution(courseId, values, data.id);
+  const [form] = Form.useForm<FormState>();
+  const handleModalSubmit = async (values: FormState) => {
+    await submitTeamDistribution(courseId, values, data?.id);
     await onSubmit();
   };
 
   return (
-    <ModalForm
-      form={form}
-      data={data}
-      onChange={values => setChanges({ strictTeamSizeMode: values.strictTeamSizeMode })}
-      title="Team Distribution"
-      submit={handleModalSubmit}
-      cancel={onCancel}
-      getInitialValues={getInitialValues}
+    <Modal
+      open={true}
+      title={'Team distribution'}
+      width={756}
+      onOk={async () => {
+        const values = await form.validateFields().catch(() => null);
+        if (values == null) {
+          return;
+        }
+        handleModalSubmit(values);
+      }}
+      onCancel={() => {
+        onCancel();
+        form.resetFields();
+      }}
     >
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
-        <Input />
-      </Form.Item>
-      <Row gutter={24}>
-        <Col span={18}>
-          <Form.Item
-            name="range"
-            label="Start Date - End Date"
-            rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
-          >
-            <DatePicker.RangePicker
-              format="YYYY-MM-DD HH:mm"
-              showTime={{ format: 'HH:mm', defaultValue: [moment().hour(0).minute(0), moment().hour(23).minute(59)] }}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={6}>
-          <Form.Item name="timeZone" label="TimeZone">
-            <Select placeholder="Please select a timezone">
-              {TIMEZONES.map(tz => (
-                <Option key={tz} value={tz}>
-                  {/* there is no 'Europe / Kyiv' time zone at the moment */}
-                  {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
-      <Form.Item name="strictTeamSizeMode" label="Fixed team size" valuePropName="checked">
-        <Switch />
-      </Form.Item>
-      {changes.strictTeamSizeMode === true ? (
+      <Form {...formLayoutProps} form={form} initialValues={data ? getInitialValues(data) : undefined}>
+        <Text strong>
+          You are {data ? 'editing' : 'creating'} a group distribution event. Fill out the form to add it to the
+          schedule.
+        </Text>
+        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="timeZone" label="TimeZone" initialValue="UTC">
+          <Select placeholder="Please select a timezone">
+            {TIMEZONES.map(tz => (
+              <Option key={tz} value={tz}>
+                {/* there is no 'Europe / Kyiv' time zone at the moment */}
+                {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="range"
+          label="Pre-distribution period"
+          tooltip="Time frame for student registration and self distribution"
+          rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
+        >
+          <DatePicker.RangePicker
+            format="YYYY-MM-DD HH:mm"
+            showTime={{ format: 'HH:mm', defaultValue: [moment().hour(0).minute(0), moment().hour(23).minute(59)] }}
+          />
+        </Form.Item>
         <Form.Item
           name="strictTeamSize"
           label="Team size"
+          initialValue={3}
           rules={[{ required: true, message: 'Please enter team size' }]}
         >
           <InputNumber min={2} />
         </Form.Item>
-      ) : (
-        <Space>
-          <Form.Item
-            name="minTeamSize"
-            label="Minimum Team size"
-            rules={[{ required: true, message: 'Please enter minimum team size' }]}
-          >
-            <InputNumber min={2} />
-          </Form.Item>
-          <Form.Item
-            name="maxTeamSize"
-            label="Maximum Team size"
-            rules={[{ required: true, message: 'Please enter maximum team size' }]}
-          >
-            <InputNumber min={2} />
-          </Form.Item>
-        </Space>
-      )}
-      <Form.Item name="minTotalScore" label="Minimum passing score">
-        <InputNumber min={0} />
-      </Form.Item>
-      <Form.Item name="description" label="Description">
-        <TextArea />
-      </Form.Item>
-      <Form.Item
-        name="descriptionUrl"
-        label="Description Url"
-        rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
-      >
-        <Input />
-      </Form.Item>
-    </ModalForm>
+        <Form.Item
+          initialValue={0}
+          name="minTotalScore"
+          label="Minimum passing score"
+          tooltip="Shows the activity of the students and their maturity to complete group tasks"
+        >
+          <InputNumber min={0} />
+        </Form.Item>
+        <Form.Item name="description" label="Description">
+          <TextArea />
+        </Form.Item>
+        <Form.Item
+          name="descriptionUrl"
+          label="Description Url"
+          rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
+        >
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 }

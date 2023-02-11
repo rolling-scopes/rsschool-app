@@ -3,4 +3,4 @@ import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
 import { CrossCheckSubmit } from 'modules/Course/pages/Student/CrossCheckSubmit';
 
-export default withCourseData(withSession(CrossCheckSubmit, CourseRole.Student));
+export default withCourseData(withSession(CrossCheckSubmit, { requiredCourseRole: CourseRole.Student }));

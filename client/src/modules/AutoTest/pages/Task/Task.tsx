@@ -28,23 +28,32 @@ function Task({ course, task }: AutoTestTaskProps) {
   }
 
   return (
-    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" githubId={githubId} courseName={course.name}>
+    <PageLayout
+      loading={false}
+      title="Auto-tests"
+      background="#F0F2F5"
+      withMargin={false}
+      githubId={githubId}
+      courseName={course.name}
+    >
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
-      {!answers ? (
-        <VerificationInformation
-          courseTask={courseTask}
-          loading={loading}
-          isTableVisible={!isExerciseVisible}
-          startTask={startTask}
-          reload={reload}
-          showAnswers={showAnswers}
-        />
-      ) : (
-        <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers} />
-      )}
-      {isExerciseVisible && (
-        <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
-      )}
+      <div style={{ margin: 16 }}>
+        {!answers ? (
+          <VerificationInformation
+            courseTask={courseTask}
+            loading={loading}
+            isTableVisible={!isExerciseVisible}
+            startTask={startTask}
+            reload={reload}
+            showAnswers={showAnswers}
+          />
+        ) : (
+          <AttemptsAnswers attempts={answers} hideAnswers={hideAnswers} />
+        )}
+        {isExerciseVisible && (
+          <Exercise courseId={course.id} courseTask={courseTask} githubId={githubId} finishTask={finishTask} />
+        )}
+      </div>
     </PageLayout>
   );
 }

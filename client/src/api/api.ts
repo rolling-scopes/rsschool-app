@@ -259,6 +259,19 @@ export interface ApproveMentorDto {
 /**
  * 
  * @export
+ * @interface Attributes
+ */
+export interface Attributes {
+    /**
+     * 
+     * @type {string}
+     * @memberof Attributes
+     */
+    'template'?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface AuthConnectionDto
  */
 export interface AuthConnectionDto {
@@ -935,6 +948,12 @@ export interface CourseScheduleItemDto {
      * @memberof CourseScheduleItemDto
      */
     'tag': CourseScheduleItemDtoTagEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'type': CourseScheduleItemDtoTypeEnum;
 }
 
 export const CourseScheduleItemDtoStatusEnum = {
@@ -958,6 +977,12 @@ export const CourseScheduleItemDtoTagEnum = {
 } as const;
 
 export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[keyof typeof CourseScheduleItemDtoTagEnum];
+export const CourseScheduleItemDtoTypeEnum = {
+    CourseTask: 'courseTask',
+    CourseEvent: 'courseEvent'
+} as const;
+
+export type CourseScheduleItemDtoTypeEnum = typeof CourseScheduleItemDtoTypeEnum[keyof typeof CourseScheduleItemDtoTypeEnum];
 
 /**
  * 
@@ -2477,6 +2502,25 @@ export interface GeneralInfo {
 /**
  * 
  * @export
+ * @interface GiveConsentDto
+ */
+export interface GiveConsentDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GiveConsentDto
+     */
+    'consent': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof GiveConsentDto
+     */
+    'expires': number;
+}
+/**
+ * 
+ * @export
  * @interface GratitudeDto
  */
 export interface GratitudeDto {
@@ -2604,10 +2648,10 @@ export interface InterviewDto {
     'descriptionUrl': string;
     /**
      * 
-     * @type {object}
+     * @type {Attributes}
      * @memberof InterviewDto
      */
-    'attributes': object;
+    'attributes': Attributes;
 }
 /**
  * 
@@ -11034,7 +11078,7 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
+        async createConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GiveConsentDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createConsent(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -11129,7 +11173,7 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createConsent(options?: any): AxiosPromise<ConsentDto> {
+        createConsent(options?: any): AxiosPromise<GiveConsentDto> {
             return localVarFp.createConsent(options).then((request) => request(axios, basePath));
         },
         /**

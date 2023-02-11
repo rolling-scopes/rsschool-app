@@ -1,4 +1,4 @@
-import { CalendarOutlined } from '@ant-design/icons';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import { Typography } from 'antd';
 import { formatDate } from 'services/formatter';
 

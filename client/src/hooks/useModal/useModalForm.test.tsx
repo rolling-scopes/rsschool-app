@@ -1,16 +1,16 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useModal } from './useModal';
+import { useModalForm } from './useModalForm';
 
-describe('useModal', () => {
+describe('useModalForm', () => {
   it('should return the correct initial state', () => {
-    const { result } = renderHook(() => useModal<{ id: number }>());
+    const { result } = renderHook(() => useModalForm<{ id: number }>());
     expect(result.current.mode).toBe('create');
     expect(result.current.open).toBe(false);
     expect(result.current.formData).toBe(undefined);
   });
 
   it('should toggle the modal when toggle is called', () => {
-    const { result } = renderHook(() => useModal<{ id: number }>());
+    const { result } = renderHook(() => useModalForm<{ id: number }>());
     act(() => {
       result.current.toggle();
     });
@@ -22,7 +22,7 @@ describe('useModal', () => {
   });
 
   it('should set the mode to "edit" and form data when toggle is called with data', () => {
-    const { result } = renderHook(() => useModal<{ id: number }>());
+    const { result } = renderHook(() => useModalForm<{ id: number }>());
     act(() => {
       result.current.toggle({ id: 1 });
     });
@@ -31,7 +31,7 @@ describe('useModal', () => {
   });
 
   it('should set the mode to "create" and form data to null when toggle is called without data', () => {
-    const { result } = renderHook(() => useModal<{ id: number }>());
+    const { result } = renderHook(() => useModalForm<{ id: number }>());
     act(() => {
       result.current.toggle({ id: 1 });
     });

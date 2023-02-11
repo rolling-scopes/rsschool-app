@@ -36,7 +36,7 @@ export class CourseCrossCheckController {
   @ApiQuery({ name: 'student', required: false })
   @ApiQuery({ name: 'url', required: false })
   @ApiQuery({ name: 'task', required: false })
-  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @RequiredRoles([CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   @UseGuards(DefaultGuard, RoleGuard)
   public async getPairs(
     @Param('courseId', ParseIntPipe) courseId: number,

@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { RegistrationNotice } from './RegistrationNotice';
+import { InterviewDto } from 'api';
+import { RegistrationNoticeAlert } from './RegistrationNoticeAlert';
 
-describe('RegistrationNotice', () => {
+describe('RegistrationNoticeAlert', () => {
   beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2023-01-01')));
 
   afterAll(() => jest.useRealTimers());
 
-  const interview = {
+  const interview: InterviewDto = {
     id: 1,
     startDate: '',
     endDate: '',
@@ -18,19 +19,19 @@ describe('RegistrationNotice', () => {
   };
 
   it('should not render component if registration not yet started', () => {
-    render(<RegistrationNotice interview={interview} startDate="2023-02-01" />);
+    render(<RegistrationNoticeAlert interview={interview} startDate="2023-02-01" />);
 
     expect(screen.queryByText('test course')).not.toBeInTheDocument();
   });
 
   it('should not render component if interview is not of stage type', () => {
-    render(<RegistrationNotice interview={{ ...interview, type: 'interview' }} startDate="2023-02-01" />);
+    render(<RegistrationNoticeAlert interview={{ ...interview, type: 'interview' }} startDate="2023-02-01" />);
 
     expect(screen.queryByText('test course')).not.toBeInTheDocument();
   });
 
   it('should render component if registration in progress', () => {
-    render(<RegistrationNotice interview={interview} startDate="2023-01-02" />);
+    render(<RegistrationNoticeAlert interview={interview} startDate="2023-01-02" />);
 
     expect(screen.getByText('test course', { exact: false })).toBeInTheDocument();
   });

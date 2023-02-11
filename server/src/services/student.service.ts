@@ -1,5 +1,5 @@
 import * as courseService from './course.service';
-import { IUserSession } from '../models';
+import { isDementor, IUserSession } from '../models';
 import { getCustomRepository } from 'typeorm';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
 import { StudentRepository } from '../repositories/student.repository';
@@ -16,9 +16,10 @@ export async function canChangeStatus(
       message: 'not valid student',
     };
   }
-  if (courseService.isPowerUser(courseId, session)) {
+  if (courseService.isPowerUser(courseId, session) || isDementor(session, courseId)) {
     return { allow: true };
   }
+
   if (!courseService.isPowerUser(courseId, session)) {
     const repository = getCustomRepository(StageInterviewRepository);
     const [interviews, mentor] = await Promise.all([

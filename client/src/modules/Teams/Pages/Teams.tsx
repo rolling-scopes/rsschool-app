@@ -14,8 +14,9 @@ import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from 'api';
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
-import { useDistribution, useModal } from '../hooks';
 import { useLoading } from 'components/useLoading';
+import { useDistribution } from '../hooks';
+import { useModalForm } from 'hooks';
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
@@ -26,7 +27,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     loadDistribution,
     loading: loadingDistribution,
   } = useDistribution(teamDistributionDetailed, course.id);
-  const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModal<Partial<TeamDto>>();
+  const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModalForm<Partial<TeamDto>>();
   const [loading, withLoading] = useLoading(false);
 
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
@@ -100,7 +101,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
   const contentRenderers = () => {
     switch (activeTab) {
       case 'teams':
-        return <TeamsSection distribution={distribution} />;
+        return <TeamsSection distribution={distribution} toggleTeamModal={toggleTeamModal} isManager={isManager} />;
 
       case 'students':
         return <StudentsWithoutTeamSection distribution={distribution} />;
@@ -129,6 +130,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       background="#F0F2F5"
       githubId={session.githubId}
       courseName={course.name}
+      withMargin={false}
     >
       {openTeamModal && (
         <TeamModal

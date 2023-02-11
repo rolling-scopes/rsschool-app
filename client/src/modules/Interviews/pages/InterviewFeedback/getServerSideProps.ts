@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       return notAuthorizedResponse;
     }
 
-    const response = await new CoursesInterviewsApi(getApiConfiguration(token)).getInterviews(course.id);
+    const response = await new CoursesInterviewsApi(getApiConfiguration(token)).getInterviews(course.id, false);
     const interview =
       response.data.find(interview => (interview.attributes as { template?: string })?.template === type) ?? null;
 

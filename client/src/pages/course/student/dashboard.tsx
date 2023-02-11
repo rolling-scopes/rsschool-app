@@ -31,6 +31,7 @@ import {
   CourseScheduleItemDto,
   CourseScheduleItemDtoStatusEnum,
   AvailableReviewStatsDto,
+  CourseScheduleItemDtoTypeEnum,
 } from 'api';
 
 const coursesTasksApi = new CoursesTasksApi();
@@ -67,7 +68,7 @@ function Page(props: CoursePageProps) {
         { data: courseTasks },
         statisticsCourses,
         courseStats,
-        { data: scheduleTasks },
+        { data: scheduleItems },
         { data: availableReviews },
       ] = await Promise.all([
         courseService.getStudentSummary(githubId),
@@ -78,7 +79,7 @@ function Page(props: CoursePageProps) {
         coursesTasksApi.getAvailableCrossCheckReviewStats(courseId),
       ]);
 
-      const nextEvents = scheduleTasks
+      const nextEvents = scheduleItems
         .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
@@ -95,11 +96,13 @@ function Page(props: CoursePageProps) {
       setTasksByStatus(
         omitBy(
           groupBy(
-            scheduleTasks.map(task => {
-              const { comment, taskGithubPrUris } =
-                tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
-              return { ...task, comment, githubPrUri: taskGithubPrUris };
-            }),
+            scheduleItems
+              .filter(scheduleItem => scheduleItem.type === CourseScheduleItemDtoTypeEnum.CourseTask)
+              .map(task => {
+                const { comment, taskGithubPrUris } =
+                  tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
+                return { ...task, comment, githubPrUri: taskGithubPrUris };
+              }),
             'status',
           ),
           (_, status) => status === CourseScheduleItemDtoStatusEnum.Archived,

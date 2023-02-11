@@ -14,10 +14,12 @@ type Props = {
   children?: any;
   noData?: boolean;
   background?: string;
+  withMargin?: boolean;
 };
 
 export function PageLayout(props: Props) {
   if (process.env.NODE_ENV !== 'production' && props.error) console.error(props.error);
+  const withMargin = props.withMargin ?? true;
 
   return (
     <Layout style={{ background: props.background ?? 'transparent', minHeight: '100vh' }}>
@@ -34,7 +36,7 @@ export function PageLayout(props: Props) {
           }
         />
       ) : (
-        <Layout.Content style={{ margin: 16 }}>
+        <Layout.Content style={withMargin ? { margin: 16 } : undefined}>
           <Spin spinning={props.loading}>{props.children}</Spin>
         </Layout.Content>
       )}
