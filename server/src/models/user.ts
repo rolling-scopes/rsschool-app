@@ -20,7 +20,6 @@ import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
 import { CourseUser } from './courseUser';
 import { NotificationUserConnection, Resume } from '.';
-import { AvailableLanguages } from './data';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -111,8 +110,8 @@ export class User {
   @Column({ type: String, nullable: true })
   englishLevel: EnglishLevel | null;
 
-  @Column({ type: 'enum', enum: AvailableLanguages, array: true, default: [] })
-  languages: AvailableLanguages[];
+  @Column({ type: 'text', array: true, default: [] })
+  languages: string[];
 
   @Column({
     type: 'json',
