@@ -183,6 +183,7 @@ export class CourseScheduleService {
       scoreWeight: crossCheckTask.scoreWeight,
       score: currentScore,
       maxScore: crossCheckTask.maxScore,
+      type: CourseScheduleDataSource.CourseTask,
     };
 
     const reviewItem = {
