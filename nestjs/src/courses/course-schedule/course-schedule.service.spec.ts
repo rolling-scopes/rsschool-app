@@ -1,5 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CourseScheduleItemStatus, CourseScheduleItemTag, CourseScheduleService } from './course-schedule.service';
+import {
+  CourseScheduleDataSource,
+  CourseScheduleItemStatus,
+  CourseScheduleItemTag,
+  CourseScheduleService,
+} from './course-schedule.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Course } from '@entities/course';
 import {
@@ -149,6 +154,7 @@ describe('CourseScheduleService', () => {
         scoreWeight: mockCrossCheckCourseTask.scoreWeight,
         score: null,
         maxScore: mockCrossCheckCourseTask.maxScore,
+        type: CourseScheduleDataSource.CourseTask,
       });
 
       expect(reviewItem).toEqual({
