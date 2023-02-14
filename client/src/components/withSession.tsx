@@ -48,7 +48,11 @@ function withSession(WrappedComponent: React.ComponentType<any>, accessSettings?
       } catch (e) {
         const { pathname, search } = document.location;
         const redirectUrl = encodeURIComponent(`${pathname}${search}`);
-        Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+        if (pathname.startsWith('/job')) {
+          Router.push('/job/welcome');
+        } else {
+          Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+        }
       }
     }, []);
 
