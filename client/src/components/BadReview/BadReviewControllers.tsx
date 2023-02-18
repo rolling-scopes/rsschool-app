@@ -38,6 +38,12 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
     }
   }, [taskId, checkType, checkService, courseId]);
 
+  const downloadSolutionsUrls = async () => {
+    if (courseId && taskId) {
+      window.location.href = `/api/v2/courses/${courseId}/cross-checks/${taskId}/csv`;
+    }
+  };
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -68,6 +74,11 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
               </Option>
             ))}
           </Select>
+        </Col>
+        <Col>
+          <Button type="primary" onClick={downloadSolutionsUrls} disabled={!taskId}>
+            Download solutions urls
+          </Button>
         </Col>
         <Col>
           <Button type="primary" danger onClick={() => buttonHandler('Bad comment')} disabled={!taskId}>

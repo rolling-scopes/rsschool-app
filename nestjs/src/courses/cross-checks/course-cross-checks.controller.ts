@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Query,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
@@ -16,6 +17,8 @@ import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
 import { CrossCheckPairResponseDto } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
+import { parseAsync } from 'json2csv';
+import { Response } from 'express';
 
 @Controller('courses/:courseId/cross-checks')
 @ApiTags('courses tasks')
@@ -75,5 +78,32 @@ export class CourseCrossCheckController {
     if (crossChecks.length === 0) return [];
     const res = await this.crossCheckPairsService.getAvailableCrossChecksStats(crossChecks, studentId);
     return res.map(e => new AvailableReviewStatsDto(e));
+  }
+
+  @Get(':courseTaskId/csv')
+  @ApiOperation({ operationId: 'getCrossCheckCsv' })
+  @ApiForbiddenResponse()
+  @RequiredRoles([CourseRole.Dementor, CourseRole.Manager, Role.Admin])
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getSolutionsUrls(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Res() res: Response,
+  ) {
+    try {
+      const [courseTask, solutionUrls] = await Promise.all([
+        this.courseTasksService.getById(courseTaskId),
+        this.crossCheckPairsService.getSolutionsUrls(courseId, courseTaskId),
+      ]);
+
+      const parsedData = await parseAsync(solutionUrls, { fields: ['githubId', 'solutionUrl'] });
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
+
+      res.end(parsedData);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
