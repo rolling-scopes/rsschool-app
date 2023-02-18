@@ -46,22 +46,6 @@ describe('CourseCrossCheckService', () => {
     service = module.get<CourseCrossCheckService>(CourseCrossCheckService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  it('should have getAvailableCrossChecksStats method', () => {
-    expect(service).toHaveProperty('getAvailableCrossChecksStats');
-  });
-
-  it('should have getSolutionsUrls method', () => {
-    expect(service).toHaveProperty('getSolutionsUrls');
-  });
-
-  it('should have findPairs method', () => {
-    expect(service).toHaveProperty('findPairs');
-  });
-
   describe('getSolutionsUrls', () => {
     it('should return transformed data from repositories correctly', async () => {
       const pairs = await service.getSolutionsUrls(mockCourseId, mockCourseTaskId);

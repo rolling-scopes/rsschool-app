@@ -90,20 +90,16 @@ export class CourseCrossCheckController {
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
     @Res() res: Response,
   ) {
-    try {
-      const [courseTask, solutionUrls] = await Promise.all([
-        this.courseTasksService.getById(courseTaskId),
-        this.crossCheckPairsService.getSolutionsUrls(courseId, courseTaskId),
-      ]);
+    const [courseTask, solutionUrls] = await Promise.all([
+      this.courseTasksService.getById(courseTaskId),
+      this.crossCheckPairsService.getSolutionsUrls(courseId, courseTaskId),
+    ]);
 
-      const parsedData = await parseAsync(solutionUrls, { fields: ['githubId', 'solutionUrl'] });
+    const parsedData = await parseAsync(solutionUrls, { fields: ['githubId', 'solutionUrl'] });
 
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
-      res.end(parsedData);
-    } catch (err) {
-      console.log(err);
-    }
+    res.end(parsedData);
   }
 }
