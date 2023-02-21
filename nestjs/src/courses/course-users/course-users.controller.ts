@@ -9,7 +9,14 @@ import {
   Body,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles } from 'src/auth';
 import { CourseUsersService } from './course-users.service';
 import { CourseUserDto } from './dto/course-user.dto';
@@ -39,6 +46,7 @@ export class CourseUsersController {
 
   @Put()
   @ApiOperation({ operationId: 'putUsers' })
+  @ApiBody({ type: [PutUsersDto] })
   @ApiOkResponse()
   @RequiredRoles([CourseRole.Manager])
   async putUsers(@Param('courseId', ParseIntPipe) courseId: number, @Body() courseUsersWithRoles: PutUsersDto[]) {

@@ -1079,7 +1079,11 @@
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "array", "items": { "type": "string" } } } }
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PutUsersDto" } }
+            }
+          }
         },
         "responses": { "200": { "description": "" } },
         "tags": ["course user"]
@@ -2969,6 +2973,16 @@
           "isDementor": { "type": "boolean" }
         },
         "required": ["id", "courseId", "name", "githubId", "isManager", "isSupervisor", "isJuryActivist", "isDementor"]
+      },
+      "PutUsersDto": {
+        "type": "object",
+        "properties": {
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isDementor": { "type": "boolean" },
+          "userId": { "type": "number" }
+        },
+        "required": ["isManager", "isSupervisor", "isDementor", "userId"]
       },
       "CourseRolesDto": {
         "type": "object",

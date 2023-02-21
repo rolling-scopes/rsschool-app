@@ -71,7 +71,7 @@ function Page(props: Props) {
 
   const handleGroupModalSubmit = async (values: UserGroupDto[]) => {
     const records = createRecords(values);
-    await courseUserService.putUsers(courseId, records as any);
+    await courseUserService.putUsers(courseId, records);
 
     setGroupModalData(null);
     loadData();
