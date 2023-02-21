@@ -17,7 +17,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CourseRole, DefaultGuard, RequiredRoles } from 'src/auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role } from 'src/auth';
 import { CourseUsersService } from './course-users.service';
 import { CourseUserDto } from './dto/course-user.dto';
 import { PutUsersDto } from './dto/put-users.dto';
@@ -33,7 +33,7 @@ export class CourseUsersController {
   @ApiOperation({ operationId: 'getUsers' })
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: [CourseUserDto] })
-  @RequiredRoles([CourseRole.Manager])
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
   async getUsers(@Param('courseId', ParseIntPipe) courseId: number) {
     const users = await this.courseUserService.getCourseUsersByCourseId(courseId);
 
@@ -48,7 +48,7 @@ export class CourseUsersController {
   @ApiOperation({ operationId: 'putUsers' })
   @ApiBody({ type: [PutUsersDto] })
   @ApiOkResponse()
-  @RequiredRoles([CourseRole.Manager])
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
   async putUsers(@Param('courseId', ParseIntPipe) courseId: number, @Body() courseUsersWithRoles: PutUsersDto[]) {
     const { usersToInsert, usersToUpdate } = await this.courseUserService.getUsersToUpdateAndToInsert(
       courseUsersWithRoles,
@@ -68,7 +68,7 @@ export class CourseUsersController {
   @ApiOperation({ operationId: 'putUser' })
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager])
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
   async putUser(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('githubId') githubId: string,
