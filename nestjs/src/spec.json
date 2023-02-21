@@ -1055,6 +1055,52 @@
         "tags": ["course task verifications"]
       }
     },
+    "/courses/{courseId}/users": {
+      "get": {
+        "operationId": "getUsers",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseUserDto" } }
+              }
+            }
+          },
+          "404": { "description": "" }
+        },
+        "tags": ["course user"]
+      },
+      "put": {
+        "operationId": "putUsers",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "array", "items": { "type": "string" } } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["course user"]
+      }
+    },
+    "/courses/{courseId}/users/{githubId}": {
+      "put": {
+        "operationId": "putUser",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseRolesDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "tags": ["course user"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2909,6 +2955,29 @@
           }
         },
         "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
+      },
+      "CourseUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "courseId": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isJuryActivist": { "type": "boolean" },
+          "isDementor": { "type": "boolean" }
+        },
+        "required": ["id", "courseId", "name", "githubId", "isManager", "isSupervisor", "isJuryActivist", "isDementor"]
+      },
+      "CourseRolesDto": {
+        "type": "object",
+        "properties": {
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isDementor": { "type": "boolean" }
+        },
+        "required": ["isManager", "isSupervisor", "isDementor"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
