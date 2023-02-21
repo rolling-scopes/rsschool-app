@@ -33,8 +33,8 @@ export function NoAuthLanding() {
           .content-wrap {
             position: relative;
             padding: 0 120px;
-            background: ${COLORS.white};
-            background-image: radial-gradient(${COLORS.RS_yellow} 2px, transparent 0);
+            background: ${COLORS.WHITE};
+            background-image: radial-gradient(${COLORS.YELLOW} 2px, transparent 0);
             background-size: 40px 40px;
             z-index: 1;
           }

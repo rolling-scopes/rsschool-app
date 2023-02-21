@@ -46,7 +46,7 @@ export const JobSeekerInfo = () => {
             font-size: 120px;
             font-weight: 700;
             line-height: 141px;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
             white-space: nowrap;
           }
           .content ul {
@@ -60,7 +60,7 @@ export const JobSeekerInfo = () => {
             width: 640px;
             height: 640px;
             border-radius: 100%;
-            background: ${COLORS.RS_yellow};
+            background: ${COLORS.YELLOW};
           }
           .button-wrap {
             width: 160px;

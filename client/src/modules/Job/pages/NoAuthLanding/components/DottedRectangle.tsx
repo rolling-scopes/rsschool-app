@@ -18,7 +18,7 @@ export const DottedRectangle = () => {
             height: 16px;
             border-radius: 16px;
             border: 1px solid;
-            border-color: ${COLORS.Neutral_9};
+            border-color: ${COLORS.GREY};
           }
           .container {
             display: flex;

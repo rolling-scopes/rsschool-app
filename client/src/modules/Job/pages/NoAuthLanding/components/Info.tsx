@@ -41,13 +41,13 @@ export const Info = () => {
             text-align: center;
             font-size: 24px;
             font-weight: 500;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
           }
           .title-wrap h2 {
             text-align: center;
             font-size: 30px;
             font-weight: 500;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
           }
           .button-wrap {
             width: 160px;

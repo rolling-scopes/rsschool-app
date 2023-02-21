@@ -1,31 +1,25 @@
-import { Button } from 'antd';
+import { Button, Col, Image, Layout, Row } from 'antd';
 import { COLORS } from '../theme/colors';
+
+const { Header: HeaderAnt } = Layout;
 
 export const Header = () => {
   return (
-    <>
-      <header className="header">
-        <img src="/static/svg/jobs/rs-jobs-logo.svg" alt="logo_rs-jobs" />
-        <Button
-          ghost
-          style={{ color: COLORS.RS_yellow, borderColor: COLORS.RS_yellow }}
-          onClick={() => (window.location.href = `/api/v2/auth/github/login`)}
-        >
-          Sign in
-        </Button>
-      </header>
-
-      <style jsx>{`
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-          height: 48px;
-          padding: 0 48px;
-          background: ${COLORS.Neutral_9};
-        }
-      `}</style>
-    </>
+    <HeaderAnt style={{ background: COLORS.GREY }}>
+      <Row justify="space-between">
+        <Col>
+          <Image src="/static/svg/jobs/rs-jobs-logo.svg" alt="logo_rs-jobs" preview={false} />
+        </Col>
+        <Col>
+          <Button
+            ghost
+            style={{ color: COLORS.YELLOW, borderColor: COLORS.YELLOW }}
+            onClick={() => (window.location.href = `/api/v2/auth/github/login`)}
+          >
+            Sign in
+          </Button>
+        </Col>
+      </Row>
+    </HeaderAnt>
   );
 };

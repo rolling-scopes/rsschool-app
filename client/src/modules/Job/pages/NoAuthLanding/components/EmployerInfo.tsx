@@ -42,20 +42,20 @@ export const EmployerInfo = () => {
             font-size: 120px;
             font-weight: 700;
             line-height: 141px;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
             white-space: nowrap;
           }
           .content p {
             font-size: 24px;
             line-height: 32px;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
           }
           .circle {
             display: flex;
             width: 540px;
             height: 540px;
             border-radius: 100%;
-            background: ${COLORS.RS_yellow};
+            background: ${COLORS.YELLOW};
           }
           .button-wrap {
             width: 160px;

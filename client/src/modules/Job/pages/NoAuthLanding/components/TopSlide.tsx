@@ -35,11 +35,11 @@ export function TopSlide() {
           }
           .wrapper {
             padding-top: 24px;
-            background: ${COLORS.RS_yellow};
+            background: ${COLORS.YELLOW};
           }
           .divider {
             height: 8px;
-            background: ${COLORS.white};
+            background: ${COLORS.WHITE};
           }
           .logo-dots-wrap {
             display: flex;
@@ -61,7 +61,7 @@ export function TopSlide() {
             bottom: -25%;
             width: 640px;
             height: 640px;
-            background: ${COLORS.white};
+            background: ${COLORS.WHITE};
             border-radius: 100%;
           }
           .welcome-pic {
@@ -85,14 +85,14 @@ export function TopSlide() {
             text-align: center;
             font-size: 48px;
             font-weight: 500;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
           }
           .subtitle {
             margin: 0;
             text-align: center;
             font-size: 40px;
             max-width: 560px;
-            color: ${COLORS.Neutral_9};
+            color: ${COLORS.GREY};
           }
           @media (max-width: 1439px) {
             .welcome-pic {
@@ -118,7 +118,7 @@ export function TopSlide() {
           @media (max-width: 767px) {
             .title {
               font-size: 24px;
-              color: ${COLORS.Neutral_9};
+              color: ${COLORS.GREY};
             }
             .subtitle {
               font-size: 16px;

@@ -1,29 +1,36 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Space } from 'antd';
-import { COLORS } from '../theme/colors';
+import { Button, Col, Image, Layout, Row } from 'antd';
+
+const { Footer: FooterAnt } = Layout;
 
 export const Footer = () => {
   return (
     <>
-      <footer className="footer">
-        <Space size={32}>
-          <img src="/static/svg/jobs/logo-footer-rs.svg" alt="logo_rss" />
-          <img src="/static/svg/jobs/logo-footer-github.svg" alt="logo_github" />
-        </Space>
-        <Button type="text" icon={<QuestionCircleOutlined />}>
-          Help
-        </Button>
-      </footer>
+      <FooterAnt>
+        <Row justify="space-between">
+          <Col>
+            <div className="wrap-images">
+              <Image src="/static/svg/jobs/logo-footer-rs.svg" alt="logo_rss" preview={false} />
+              <Image src="/static/svg/jobs/logo-footer-github.svg" alt="logo_github" preview={false} />
+            </div>
+          </Col>
+          <Col>
+            <Button type="text" icon={<QuestionCircleOutlined />}>
+              Help
+            </Button>
+          </Col>
+        </Row>
+      </FooterAnt>
 
       <style jsx>{`
-        .footer {
+        .wrap-images {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-          height: 48px;
-          padding: 0 48px;
-          background: ${COLORS.Neutral_2};
+          gap: 32px;
+        }
+        @media (max-width: 400px) {
+          .wrap-images {
+            flex-direction: column;
+          }
         }
       `}</style>
     </>
