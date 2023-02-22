@@ -647,6 +647,18 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/csv": {
+      "get": {
+        "operationId": "getCrossCheckCsv",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "tags": ["courses tasks"]
+      }
+    },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
