@@ -70,6 +70,11 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
           </Select>
         </Col>
         <Col>
+          <Button type="primary" href={`/api/v2/courses/${courseId}/cross-checks/${taskId}/csv`} disabled={!taskId}>
+            Download solutions urls
+          </Button>
+        </Col>
+        <Col>
           <Button type="primary" danger onClick={() => buttonHandler('Bad comment')} disabled={!taskId}>
             Bad comment
           </Button>
