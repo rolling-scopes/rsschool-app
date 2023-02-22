@@ -167,6 +167,28 @@ export class CourseCrossCheckService {
     };
   }
 
+  public async getSolutionsUrls(courseId: number, courseTaskId: number) {
+    const query = this.taskSolutionCheckerRepository
+      .createQueryBuilder('tsc')
+      .leftJoin(CourseTask, 'ct', 'tsc."courseTaskId" = ct.id')
+      .leftJoin(Student, 'st', 'tsc."studentId" = st.id')
+      .leftJoin(User, 'stu', 'st."userId" = stu.id')
+      .leftJoin(TaskSolution, 'ts', 'ts."courseTaskId" = tsc."courseTaskId" AND ts."studentId" = st."id"')
+      .addSelect(['stu.githubId'])
+      .addSelect(['ts.url', 'ts.updatedDate'])
+      .where('ct."courseId" = :courseId', { courseId })
+      .andWhere('ct."id" = :courseTaskId', { courseTaskId });
+
+    const rawData = await query.getRawMany();
+
+    const result = rawData.map((data: any) => ({
+      githubId: data.stu_githubId,
+      solutionUrl: data.ts_url,
+    }));
+
+    return result;
+  }
+
   public async getAvailableCrossChecksStats(
     tasks: CourseTask[],
     studentId: number,
