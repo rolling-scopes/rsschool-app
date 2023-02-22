@@ -1,15 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class CourseRolesDto {
+  @IsOptional()
   @IsBoolean()
   @ApiProperty()
   isManager: boolean;
 
+  @IsOptional()
   @IsBoolean()
   @ApiProperty()
   isSupervisor: boolean;
 
+  @IsOptional()
   @IsBoolean()
   @ApiProperty()
   isDementor: boolean;

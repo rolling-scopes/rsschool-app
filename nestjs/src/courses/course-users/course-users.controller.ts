@@ -17,7 +17,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CourseRole, DefaultGuard, RequiredRoles, Role } from 'src/auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { UsersService } from 'src/users/users.service';
+
 import { CourseUsersService } from './course-users.service';
 import { CourseUserDto } from './dto/course-user.dto';
 import { PutUsersDto } from './dto/put-users.dto';
@@ -25,15 +27,15 @@ import { CourseRolesDto } from './dto/course-roles.dto';
 
 @Controller('courses/:courseId/users')
 @ApiTags('course user')
-@UseGuards(DefaultGuard)
+@UseGuards(DefaultGuard, RoleGuard)
 export class CourseUsersController {
-  constructor(private readonly courseUserService: CourseUsersService) {}
+  constructor(private readonly courseUserService: CourseUsersService, private readonly usersService: UsersService) {}
 
   @Get()
   @ApiOperation({ operationId: 'getUsers' })
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: [CourseUserDto] })
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   async getUsers(@Param('courseId', ParseIntPipe) courseId: number) {
     const users = await this.courseUserService.getCourseUsersByCourseId(courseId);
 
@@ -48,7 +50,7 @@ export class CourseUsersController {
   @ApiOperation({ operationId: 'putUsers' })
   @ApiBody({ type: [PutUsersDto] })
   @ApiOkResponse()
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   async putUsers(@Param('courseId', ParseIntPipe) courseId: number, @Body() courseUsersWithRoles: PutUsersDto[]) {
     const { usersToInsert, usersToUpdate } = await this.courseUserService.getUsersToUpdateAndToInsert(
       courseUsersWithRoles,
@@ -68,16 +70,16 @@ export class CourseUsersController {
   @ApiOperation({ operationId: 'putUser' })
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   async putUser(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('githubId') githubId: string,
     @Body() roles: CourseRolesDto,
   ) {
-    const user = await this.courseUserService.getByGithubId(githubId, courseId);
+    const user = await this.usersService.getByGithubId(githubId);
 
     if (!user) {
-      throw new BadRequestException(`User with ${githubId} is not found`);
+      throw new BadRequestException(`User with githubid ${githubId} is not found`);
     }
 
     const { isManager = false, isSupervisor = false, isDementor = false } = roles;
@@ -86,7 +88,7 @@ export class CourseUsersController {
     if (!courseUser) {
       await this.courseUserService.saveCourseUsers({ courseId, userId: user.id, isManager, isSupervisor, isDementor });
     } else {
-      await this.courseUserService.updateCourseUser(user.id, { isManager, isSupervisor, isDementor });
+      await this.courseUserService.updateCourseUser(courseUser.id, { isManager, isSupervisor, isDementor });
     }
   }
 }

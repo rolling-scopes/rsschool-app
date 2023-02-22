@@ -4,6 +4,7 @@ import { CourseUsersService } from './course-users.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ExtendedCourseUser } from './types';
 import { omit } from 'lodash';
+import { UsersService } from 'src/users/users.service';
 
 const mockUserId = 111;
 const mockCourseId = 333;
@@ -22,7 +23,6 @@ const mockCourseUser = {
 } as ExtendedCourseUser;
 
 const mockGetByUserId = jest.fn();
-const mockGetByGithubId = jest.fn();
 const mockGetCourseUsersByCourseId = jest.fn();
 const mockGetUsersToUpdateAndToInsert = jest.fn();
 const mockSaveCourseUsers = jest.fn();
@@ -31,7 +31,6 @@ const mockUpdateCourseUsersRoles = jest.fn();
 
 const mockCourseUsersServiceFactory = jest.fn(() => ({
   getByUserId: mockGetByUserId,
-  getByGithubId: mockGetByGithubId,
   getCourseUsersByCourseId: mockGetCourseUsersByCourseId,
   getUsersToUpdateAndToInsert: mockGetUsersToUpdateAndToInsert,
   saveCourseUsers: mockSaveCourseUsers,
@@ -39,18 +38,29 @@ const mockCourseUsersServiceFactory = jest.fn(() => ({
   updateCourseUsersRoles: mockUpdateCourseUsersRoles,
 }));
 
+const mockGetByGithubId = jest.fn();
+
+const mockUsersServiceFactory = jest.fn(() => ({
+  getByGithubId: mockGetByGithubId,
+}));
+
 describe('CourseUsersController', () => {
   let controller: CourseUsersController;
-  let mockService: CourseUsersService;
+  let mockCourseUsersService: CourseUsersService;
+  let mockUsersService: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CourseUsersController],
-      providers: [{ provide: CourseUsersService, useFactory: mockCourseUsersServiceFactory }],
+      providers: [
+        { provide: CourseUsersService, useFactory: mockCourseUsersServiceFactory },
+        { provide: UsersService, useFactory: mockUsersServiceFactory },
+      ],
     }).compile();
 
     controller = module.get<CourseUsersController>(CourseUsersController);
-    mockService = module.get<CourseUsersService>(CourseUsersService);
+    mockCourseUsersService = module.get<CourseUsersService>(CourseUsersService);
+    mockUsersService = module.get<UsersService>(UsersService);
   });
 
   describe('getUsers', () => {
@@ -60,7 +70,7 @@ describe('CourseUsersController', () => {
 
       const result = await controller.getUsers(mockCourseId);
 
-      expect(mockService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
+      expect(mockCourseUsersService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
       expect(result).toMatchObject([expected]);
     });
 
@@ -70,57 +80,60 @@ describe('CourseUsersController', () => {
         new NotFoundException(`Users for course ${mockCourseId} are not found`),
       );
 
-      expect(mockService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
+      expect(mockCourseUsersService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
     });
   });
 
   describe('putUser', () => {
     it('shouldd update user roles and update course user if user exists', async () => {
       mockGetByGithubId.mockResolvedValueOnce({ id: mockUserId });
-      mockGetByUserId.mockResolvedValueOnce(true);
+      mockGetByUserId.mockResolvedValueOnce({ id: mockUserId });
 
       await controller.putUser(mockCourseId, mockGithubId, mockCourseUser);
 
       const { isManager, isDementor, isSupervisor } = mockCourseUser;
 
-      expect(mockService.getByGithubId).toHaveBeenCalledWith(mockGithubId, mockCourseId);
-      expect(mockService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
-      expect(mockService.updateCourseUser).toHaveBeenCalledWith(mockUserId, { isDementor, isManager, isSupervisor });
-      expect(mockService.saveCourseUsers).not.toHaveBeenCalled();
+      expect(mockUsersService.getByGithubId).toHaveBeenCalledWith(mockGithubId);
+      expect(mockCourseUsersService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
+      expect(mockCourseUsersService.updateCourseUser).toHaveBeenCalledWith(mockUserId, {
+        isDementor,
+        isManager,
+        isSupervisor,
+      });
+      expect(mockCourseUsersService.saveCourseUsers).not.toHaveBeenCalled();
     });
 
     it('shouldd create course user if user does not exist', async () => {
       mockGetByGithubId.mockResolvedValueOnce({ id: mockUserId });
-      mockGetByUserId.mockResolvedValueOnce(false);
+      mockGetByUserId.mockResolvedValueOnce(null);
 
       await controller.putUser(mockCourseId, mockGithubId, mockCourseUser);
 
       const { isManager, isDementor, isSupervisor } = mockCourseUser;
 
-      expect(mockService.getByGithubId).toHaveBeenCalledWith(mockGithubId, mockCourseId);
-      expect(mockService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
-      expect(mockService.saveCourseUsers).toHaveBeenCalledWith({
+      expect(mockUsersService.getByGithubId).toHaveBeenCalledWith(mockGithubId);
+      expect(mockCourseUsersService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
+      expect(mockCourseUsersService.saveCourseUsers).toHaveBeenCalledWith({
         courseId: mockCourseId,
         userId: mockUserId,
         isDementor,
         isManager,
         isSupervisor,
       });
-      expect(mockService.updateCourseUser).not.toHaveBeenCalled();
+      expect(mockCourseUsersService.updateCourseUser).not.toHaveBeenCalled();
     });
 
     it('shouldd throw BadRequestException if user does not exist', async () => {
       mockGetByGithubId.mockResolvedValueOnce(null);
-      mockGetByUserId.mockResolvedValueOnce(false);
 
       await expect(() => controller.putUser(mockCourseId, mockGithubId, mockCourseUser)).rejects.toThrow(
-        new BadRequestException(`User with ${mockGithubId} is not found`),
+        new BadRequestException(`User with githubid ${mockGithubId} is not found`),
       );
 
-      expect(mockService.getByGithubId).toHaveBeenCalledWith(mockGithubId, mockCourseId);
-      expect(mockService.getByUserId).not.toHaveBeenCalled();
-      expect(mockService.saveCourseUsers).not.toHaveBeenCalled();
-      expect(mockService.updateCourseUser).not.toHaveBeenCalled();
+      expect(mockUsersService.getByGithubId).toHaveBeenCalledWith(mockGithubId);
+      expect(mockCourseUsersService.getByUserId).not.toHaveBeenCalled();
+      expect(mockCourseUsersService.saveCourseUsers).not.toHaveBeenCalled();
+      expect(mockCourseUsersService.updateCourseUser).not.toHaveBeenCalled();
     });
   });
 
@@ -133,12 +146,12 @@ describe('CourseUsersController', () => {
 
       await controller.putUsers(mockCourseId, [mockCourseUser, mockCourseUser]);
 
-      expect(mockService.getUsersToUpdateAndToInsert).toHaveBeenCalledWith(
+      expect(mockCourseUsersService.getUsersToUpdateAndToInsert).toHaveBeenCalledWith(
         [mockCourseUser, mockCourseUser],
         mockCourseId,
       );
-      expect(mockService.saveCourseUsers).toHaveBeenCalledWith([mockCourseUser]);
-      expect(mockService.updateCourseUsersRoles).toHaveBeenCalledWith([mockCourseUser]);
+      expect(mockCourseUsersService.saveCourseUsers).toHaveBeenCalledWith([mockCourseUser]);
+      expect(mockCourseUsersService.updateCourseUsersRoles).toHaveBeenCalledWith([mockCourseUser]);
     });
   });
 });
