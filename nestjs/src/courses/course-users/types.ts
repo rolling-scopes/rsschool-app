@@ -1,6 +1,6 @@
 import { CourseUser } from '@entities/courseUser';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { PutUsersDto } from './dto/put-users.dto';
+import { UpdateCourseUserDto } from './dto/update-user.dto';
 
 export type PartialCourseUserData = QueryDeepPartialEntity<CourseUser> | QueryDeepPartialEntity<CourseUser>[];
 
@@ -10,6 +10,6 @@ export type ExtendedCourseUser = Omit<CourseUser, 'course' | 'user'> & {
 };
 
 export type SplitCourseUsers = {
-  usersToInsert: PutUsersDto[];
+  usersToInsert: UpdateCourseUserDto[];
   usersToUpdate: CourseUser[];
 };

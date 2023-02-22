@@ -22,17 +22,17 @@ import { UsersService } from 'src/users/users.service';
 
 import { CourseUsersService } from './course-users.service';
 import { CourseUserDto } from './dto/course-user.dto';
-import { PutUsersDto } from './dto/put-users.dto';
+import { UpdateCourseUserDto } from './dto/update-user.dto';
 import { CourseRolesDto } from './dto/course-roles.dto';
 
 @Controller('courses/:courseId/users')
-@ApiTags('course user')
+@ApiTags('course users')
 @UseGuards(DefaultGuard, RoleGuard)
 export class CourseUsersController {
   constructor(private readonly courseUserService: CourseUsersService, private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOperation({ operationId: 'getUsers' })
+  @ApiOperation({ operationId: 'getCourseUsers' })
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: [CourseUserDto] })
   @RequiredRoles([CourseRole.Manager, Role.Admin], true)
@@ -47,11 +47,14 @@ export class CourseUsersController {
   }
 
   @Put()
-  @ApiOperation({ operationId: 'putUsers' })
-  @ApiBody({ type: [PutUsersDto] })
+  @ApiOperation({ operationId: 'putCourseUsers' })
+  @ApiBody({ type: [UpdateCourseUserDto] })
   @ApiOkResponse()
   @RequiredRoles([CourseRole.Manager, Role.Admin], true)
-  async putUsers(@Param('courseId', ParseIntPipe) courseId: number, @Body() courseUsersWithRoles: PutUsersDto[]) {
+  async putUsers(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() courseUsersWithRoles: UpdateCourseUserDto[],
+  ) {
     const { usersToInsert, usersToUpdate } = await this.courseUserService.getUsersToUpdateAndToInsert(
       courseUsersWithRoles,
       courseId,
@@ -67,7 +70,7 @@ export class CourseUsersController {
   }
 
   @Put('/:githubId')
-  @ApiOperation({ operationId: 'putUser' })
+  @ApiOperation({ operationId: 'putCourseUser' })
   @ApiOkResponse()
   @ApiBadRequestResponse()
   @RequiredRoles([CourseRole.Manager, Role.Admin], true)

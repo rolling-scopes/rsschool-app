@@ -8,7 +8,7 @@ import withCourseData from 'components/withCourseData';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseUser } from 'services/course';
-import { CourseUserApi } from 'api';
+import { CourseUsersApi } from 'api';
 import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
@@ -18,7 +18,7 @@ type Props = CoursePageProps;
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();
-const courseUserService = new CourseUserApi();
+const courseUserService = new CourseUsersApi();
 
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
@@ -37,7 +37,7 @@ function Page(props: Props) {
   const loadData = useCallback(async () => {
     setLoading(true);
     const [users, { data: groups }] = await Promise.all([
-      courseUserService.getUsers(courseId),
+      courseUserService.getCourseUsers(courseId),
       props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
     ]);
     setLoading(false);
@@ -63,7 +63,7 @@ function Page(props: Props) {
 
   const handleUserModalSubmit = async (values: any) => {
     const record = createRecord(values);
-    await courseUserService.putUser(courseId, values.githubId, record);
+    await courseUserService.putCourseUser(courseId, values.githubId, record);
 
     setUserModalData(null);
     loadData();
@@ -71,7 +71,7 @@ function Page(props: Props) {
 
   const handleGroupModalSubmit = async (values: UserGroupDto[]) => {
     const records = createRecords(values);
-    await courseUserService.putUsers(courseId, records);
+    await courseUserService.putCourseUsers(courseId, records);
 
     setGroupModalData(null);
     loadData();

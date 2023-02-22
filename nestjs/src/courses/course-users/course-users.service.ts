@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ExtendedCourseUser, PartialCourseUserData, SplitCourseUsers } from './types';
-import { PutUsersDto } from './dto/put-users.dto';
+import { UpdateCourseUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class CourseUsersService {
@@ -41,7 +41,7 @@ export class CourseUsersService {
   }
 
   public async getUsersToUpdateAndToInsert(
-    courseUserWithRoles: PutUsersDto[],
+    courseUserWithRoles: UpdateCourseUserDto[],
     courseId: number,
   ): Promise<SplitCourseUsers> {
     const courseUsersWithCourseId = courseUserWithRoles.map(user => ({ ...user, courseId }));

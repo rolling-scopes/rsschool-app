@@ -3476,37 +3476,6 @@ export interface PublicVisibilitySettings {
 /**
  * 
  * @export
- * @interface PutUsersDto
- */
-export interface PutUsersDto {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PutUsersDto
-     */
-    'isManager': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PutUsersDto
-     */
-    'isSupervisor': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PutUsersDto
-     */
-    'isDementor': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PutUsersDto
-     */
-    'userId': number;
-}
-/**
- * 
- * @export
  * @interface ResumeCourseDto
  */
 export interface ResumeCourseDto {
@@ -5123,6 +5092,37 @@ export const UpdateCourseTaskDtoTypeEnum = {
 
 export type UpdateCourseTaskDtoTypeEnum = typeof UpdateCourseTaskDtoTypeEnum[keyof typeof UpdateCourseTaskDtoTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface UpdateCourseUserDto
+ */
+export interface UpdateCourseUserDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseUserDto
+     */
+    'isManager': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseUserDto
+     */
+    'isSupervisor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseUserDto
+     */
+    'isDementor': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseUserDto
+     */
+    'userId': number;
+}
 /**
  * 
  * @export
@@ -7058,10 +7058,10 @@ export class CourseTaskVerificationsApi extends BaseAPI {
 
 
 /**
- * CourseUserApi - axios parameter creator
+ * CourseUsersApi - axios parameter creator
  * @export
  */
-export const CourseUserApiAxiosParamCreator = function (configuration?: Configuration) {
+export const CourseUsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -7069,9 +7069,9 @@ export const CourseUserApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsers: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCourseUsers: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('getUsers', 'courseId', courseId)
+            assertParamExists('getCourseUsers', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/users`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7104,13 +7104,13 @@ export const CourseUserApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUser: async (courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putCourseUser: async (courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('putUser', 'courseId', courseId)
+            assertParamExists('putCourseUser', 'courseId', courseId)
             // verify required parameter 'githubId' is not null or undefined
-            assertParamExists('putUser', 'githubId', githubId)
+            assertParamExists('putCourseUser', 'githubId', githubId)
             // verify required parameter 'courseRolesDto' is not null or undefined
-            assertParamExists('putUser', 'courseRolesDto', courseRolesDto)
+            assertParamExists('putCourseUser', 'courseRolesDto', courseRolesDto)
             const localVarPath = `/courses/{courseId}/users/{githubId}`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
                 .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
@@ -7142,15 +7142,15 @@ export const CourseUserApiAxiosParamCreator = function (configuration?: Configur
         /**
          * 
          * @param {number} courseId 
-         * @param {Array<PutUsersDto>} putUsersDto 
+         * @param {Array<UpdateCourseUserDto>} updateCourseUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUsers: async (courseId: number, putUsersDto: Array<PutUsersDto>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putCourseUsers: async (courseId: number, updateCourseUserDto: Array<UpdateCourseUserDto>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('putUsers', 'courseId', courseId)
-            // verify required parameter 'putUsersDto' is not null or undefined
-            assertParamExists('putUsers', 'putUsersDto', putUsersDto)
+            assertParamExists('putCourseUsers', 'courseId', courseId)
+            // verify required parameter 'updateCourseUserDto' is not null or undefined
+            assertParamExists('putCourseUsers', 'updateCourseUserDto', updateCourseUserDto)
             const localVarPath = `/courses/{courseId}/users`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7171,7 +7171,7 @@ export const CourseUserApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(putUsersDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateCourseUserDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7182,11 +7182,11 @@ export const CourseUserApiAxiosParamCreator = function (configuration?: Configur
 };
 
 /**
- * CourseUserApi - functional programming interface
+ * CourseUsersApi - functional programming interface
  * @export
  */
-export const CourseUserApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CourseUserApiAxiosParamCreator(configuration)
+export const CourseUsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CourseUsersApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -7194,8 +7194,8 @@ export const CourseUserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUsers(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseUserDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUsers(courseId, options);
+        async getCourseUsers(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseUserDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseUsers(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -7206,30 +7206,30 @@ export const CourseUserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putUser(courseId, githubId, courseRolesDto, options);
+        async putCourseUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putCourseUser(courseId, githubId, courseRolesDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {number} courseId 
-         * @param {Array<PutUsersDto>} putUsersDto 
+         * @param {Array<UpdateCourseUserDto>} updateCourseUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putUsers(courseId: number, putUsersDto: Array<PutUsersDto>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putUsers(courseId, putUsersDto, options);
+        async putCourseUsers(courseId: number, updateCourseUserDto: Array<UpdateCourseUserDto>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putCourseUsers(courseId, updateCourseUserDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * CourseUserApi - factory interface
+ * CourseUsersApi - factory interface
  * @export
  */
-export const CourseUserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CourseUserApiFp(configuration)
+export const CourseUsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CourseUsersApiFp(configuration)
     return {
         /**
          * 
@@ -7237,8 +7237,8 @@ export const CourseUserApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsers(courseId: number, options?: any): AxiosPromise<Array<CourseUserDto>> {
-            return localVarFp.getUsers(courseId, options).then((request) => request(axios, basePath));
+        getCourseUsers(courseId: number, options?: any): AxiosPromise<Array<CourseUserDto>> {
+            return localVarFp.getCourseUsers(courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -7248,38 +7248,38 @@ export const CourseUserApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: any): AxiosPromise<void> {
-            return localVarFp.putUser(courseId, githubId, courseRolesDto, options).then((request) => request(axios, basePath));
+        putCourseUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: any): AxiosPromise<void> {
+            return localVarFp.putCourseUser(courseId, githubId, courseRolesDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} courseId 
-         * @param {Array<PutUsersDto>} putUsersDto 
+         * @param {Array<UpdateCourseUserDto>} updateCourseUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUsers(courseId: number, putUsersDto: Array<PutUsersDto>, options?: any): AxiosPromise<void> {
-            return localVarFp.putUsers(courseId, putUsersDto, options).then((request) => request(axios, basePath));
+        putCourseUsers(courseId: number, updateCourseUserDto: Array<UpdateCourseUserDto>, options?: any): AxiosPromise<void> {
+            return localVarFp.putCourseUsers(courseId, updateCourseUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * CourseUserApi - object-oriented interface
+ * CourseUsersApi - object-oriented interface
  * @export
- * @class CourseUserApi
+ * @class CourseUsersApi
  * @extends {BaseAPI}
  */
-export class CourseUserApi extends BaseAPI {
+export class CourseUsersApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CourseUserApi
+     * @memberof CourseUsersApi
      */
-    public getUsers(courseId: number, options?: AxiosRequestConfig) {
-        return CourseUserApiFp(this.configuration).getUsers(courseId, options).then((request) => request(this.axios, this.basePath));
+    public getCourseUsers(courseId: number, options?: AxiosRequestConfig) {
+        return CourseUsersApiFp(this.configuration).getCourseUsers(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7289,22 +7289,22 @@ export class CourseUserApi extends BaseAPI {
      * @param {CourseRolesDto} courseRolesDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CourseUserApi
+     * @memberof CourseUsersApi
      */
-    public putUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: AxiosRequestConfig) {
-        return CourseUserApiFp(this.configuration).putUser(courseId, githubId, courseRolesDto, options).then((request) => request(this.axios, this.basePath));
+    public putCourseUser(courseId: number, githubId: string, courseRolesDto: CourseRolesDto, options?: AxiosRequestConfig) {
+        return CourseUsersApiFp(this.configuration).putCourseUser(courseId, githubId, courseRolesDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} courseId 
-     * @param {Array<PutUsersDto>} putUsersDto 
+     * @param {Array<UpdateCourseUserDto>} updateCourseUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CourseUserApi
+     * @memberof CourseUsersApi
      */
-    public putUsers(courseId: number, putUsersDto: Array<PutUsersDto>, options?: AxiosRequestConfig) {
-        return CourseUserApiFp(this.configuration).putUsers(courseId, putUsersDto, options).then((request) => request(this.axios, this.basePath));
+    public putCourseUsers(courseId: number, updateCourseUserDto: Array<UpdateCourseUserDto>, options?: AxiosRequestConfig) {
+        return CourseUsersApiFp(this.configuration).putCourseUsers(courseId, updateCourseUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
