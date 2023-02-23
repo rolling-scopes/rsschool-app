@@ -22,7 +22,12 @@ export function ModalForm(props: Props) {
   if (props.data == null) {
     return null;
   }
-  const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
+
+  const formValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
+
+  form.resetFields();
+  form.setFieldsValue(formValues);
+
   return (
     <Modal
       style={{ top: 20 }}
@@ -44,12 +49,7 @@ export function ModalForm(props: Props) {
       }}
     >
       <Spin spinning={props.loading ?? false}>
-        <Form
-          layout="vertical"
-          onValuesChange={() => props.onChange?.(form.getFieldsValue())}
-          form={form}
-          initialValues={initialValues}
-        >
+        <Form layout="vertical" onValuesChange={() => props.onChange?.(form.getFieldsValue())} form={form}>
           {props.children}
         </Form>
       </Spin>
