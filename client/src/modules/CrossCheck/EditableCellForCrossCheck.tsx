@@ -1,17 +1,18 @@
-import { Form, InputNumber, Input, Select } from 'antd';
+import { Form, InputNumber, Input } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
+import { TaskType } from './components/CrossCheckCriteriaForm';
 
 const { TextArea } = Input;
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
-  title: any;
   inputType: 'max' | 'text' | 'description';
   record: CriteriaDto;
   index: number;
   children: React.ReactNode;
+  type: TaskType;
 }
 
 export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
@@ -19,24 +20,19 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   dataIndex,
   inputType,
   children,
+  type,
   ...restProps
 }) => {
   const inputNode =
-    inputType === 'max' ? (
-      <InputNumber style={{ width: 65 }} />
-    ) : inputType === 'text' ? (
-      <Select style={{ width: 75 }}>
-        <Select.Option value="Title">Title</Select.Option>
-        <Select.Option value="Subtask">Subtask</Select.Option>
-        <Select.Option value="Penalty">Penalty</Select.Option>
-      </Select>
-    ) : (
+    inputType === 'description' ? (
       <TextArea rows={3} />
-    );
+    ) : type !== TaskType.Title ? (
+      <InputNumber style={{ width: 65 }} />
+    ) : null;
 
   return (
     <td {...restProps}>
-      {editing ? (
+      {editing && inputType !== 'text' ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
           {inputNode}
         </Form.Item>
