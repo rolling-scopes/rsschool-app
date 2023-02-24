@@ -54,8 +54,11 @@ export class ProfileService {
       contactsEmail,
       contactsNotes,
       contactsSkype,
+      contactsWhatsApp,
       contactsLinkedIn,
       contactsEpamEmail,
+      aboutMyself,
+      languages,
     } = userDto;
 
     await this.userRepository
@@ -71,8 +74,11 @@ export class ProfileService {
         contactsEmail,
         contactsNotes,
         contactsSkype,
+        contactsWhatsApp,
         contactsLinkedIn,
         contactsEpamEmail,
+        aboutMyself,
+        languages,
       })
       .returning('*')
       .where('id = :id', { id: userId })
@@ -102,7 +108,7 @@ export class ProfileService {
     if (isProfileSettingsChanged) {
       const [firstName, lastName = ''] = generalInfo.name.split(' ');
       const { location, aboutMyself, educationHistory, englishLevel } = generalInfo;
-      const { skype, phone, email, epamEmail, telegram, notes, linkedIn } = contacts;
+      const { skype, whatsApp, phone, email, epamEmail, telegram, notes, linkedIn } = contacts;
       const { countryName, cityName } = location;
       if (email && !isEmail(email)) {
         throw new BadRequestException('Email is invalid.');
@@ -128,6 +134,7 @@ export class ProfileService {
           contactsEmail: email || '',
           contactsNotes: notes || '',
           contactsSkype: skype || '',
+          contactsWhatsApp: whatsApp || '',
           contactsLinkedIn: linkedIn || '',
           contactsEpamEmail: epamEmail || '',
         })
