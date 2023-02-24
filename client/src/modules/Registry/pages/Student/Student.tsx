@@ -5,14 +5,13 @@ import { useStudentData } from 'modules/Registry/hooks';
 import { NoCourses, RegistrationForm } from 'modules/Registry/components';
 
 type Props = {
-  courses?: Course[];
   session: Session;
+  courses?: Course[];
   courseAlias?: string;
 };
 
 export function StudentRegistry({ session, courseAlias }: Props) {
   const { githubId } = session;
-
   const { courses, loading, registered, steps, currentStep, form, handleSubmit } = useStudentData(
     githubId,
     courseAlias,

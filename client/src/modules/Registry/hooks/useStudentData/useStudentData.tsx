@@ -10,6 +10,8 @@ import { Form, message, Modal, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { ProfileApi } from 'api';
+import { TYPES } from 'configs/registry';
+import { ERROR_MESSAGES } from 'modules/Registry/constants';
 
 const { Title, Text } = Typography;
 
@@ -20,24 +22,19 @@ type IdName = {
   name: string;
 };
 
-const TYPES = {
-  MENTOR: 'mentor',
-  STUDENT: 'student',
-};
-
 const cdnService = new CdnService();
 const profileApi = new ProfileApi();
+const userService = new UserService();
 
 export function useStudentData(githubId: string, courseAlias: string | undefined) {
+  const router = useRouter();
   const [form] = Form.useForm<StudentFormData>();
   const [registered, setRegistered] = useState<boolean | null>(null);
-  const [currentStep, setCurrentSteps] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
   const [location, setLocation] = useState(null as Location | null);
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const { value: student, loading: dataLoading } = useAsync(async () => {
-    const userService = new UserService();
     const [profile, profileInfo, courses] = await Promise.all([
       userService.getMyProfile(),
       userService.getProfileInfo(githubId),
@@ -70,18 +67,8 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
     } as const;
   }, [githubId, courseAlias]);
 
-  function getCourseName() {
-    const course = student?.courses.find(course => course.id === form.getFieldValue('courseId'));
-    return course?.fullName;
-  }
-
-  const steps = [
-    { title: 'General', content: <GeneralSection location={location} setLocation={setLocation} student={student} /> },
-    { title: 'Done', content: <DoneSection courseName={getCourseName()} /> },
-  ];
-
   const handleSubmit = useCallback(
-    async (values: any) => {
+    async (values: StudentFormData) => {
       if (loading || dataLoading) {
         return;
       }
@@ -89,8 +76,8 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
       const { courseId, location, primaryEmail, contactsEpamEmail, firstName, lastName, languagesMentoring } = values;
       const registryModel = { type: TYPES.STUDENT, courseId };
       const userModel = {
-        cityName: location.cityName,
-        countryName: location.countryName,
+        cityName: location?.cityName ?? '',
+        countryName: location?.countryName ?? '',
         primaryEmail,
         contactsEpamEmail,
         firstName,
@@ -110,7 +97,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
             <>
               <Text>You are already registered for the following courses:</Text>
               <ul>
-                {student?.registeredForCourses.map(({ name }) => (
+                {student.registeredForCourses.map(({ name }) => (
                   <li key={name}>
                     <Text>{name}</Text>
                   </li>
@@ -134,30 +121,43 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
       }
 
       async function confirmRegistration() {
+        const requests = [profileApi.updateUser(userModel), cdnService.registerStudent(registryModel)];
         setLoading(true);
+
         try {
-          await profileApi.updateUser(userModel);
-          await cdnService.registerStudent(registryModel);
-          setCurrentSteps(previousStep => previousStep + 1);
+          await Promise.all(requests);
+          setCurrentStep(previousStep => previousStep + 1);
         } catch (e) {
-          message.error('An error occurred. Please try later.');
+          message.error(ERROR_MESSAGES.tryLater);
         } finally {
           setLoading(false);
         }
       }
     },
-    [loading, dataLoading],
+    [loading, dataLoading, student?.registeredForCourses],
   );
+
+  function getCourseName() {
+    const course = student?.courses.find(course => course.id === form.getFieldValue('courseId'));
+    return course?.fullName;
+  }
+
+  const steps = [
+    { title: 'General', content: <GeneralSection location={location} setLocation={setLocation} student={student} /> },
+    { title: 'Done', content: <DoneSection courseName={getCourseName()} /> },
+  ];
 
   useEffect(() => {
     if (registered) {
       message.success('You are already registered to the course. Redirecting to Home page in 5 seconds...');
       setTimeout(() => router.push('/'), 5000);
     }
-  }, [registered]);
+  }, [registered, router]);
 
   useEffect(() => {
-    setLocation(student ? { countryName: student.profile.countryName, cityName: student.profile.cityName } : null);
+    setLocation(
+      student?.profile ? { countryName: student.profile.countryName, cityName: student.profile.cityName } : null,
+    );
   }, [student?.profile]);
 
   return {
