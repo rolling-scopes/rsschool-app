@@ -19,6 +19,14 @@ describe('AddCriteriaForCrossCheck', () => {
 
   test('should call addCriteria when "Add new criteria" button was clicked', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
+    const selectCriteriaType = screen.getByRole('combobox') as HTMLSelectElement;
+    fireEvent.mouseDown(selectCriteriaType);
+    const optionTitle = screen.getByTestId('Title') as HTMLOptionElement;
+    fireEvent.click(optionTitle);
+
+    const descriptionInput = screen.getByPlaceholderText('Add description');
+    fireEvent.change(descriptionInput, { target: { value: 'test' } });
+
     const button = screen.getByRole('button', { name: /Add New Criteria/i });
     fireEvent.click(button);
     expect(addCriteria).toHaveBeenCalledTimes(1);
