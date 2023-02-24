@@ -20,7 +20,7 @@ type IdName = {
   name: string;
 };
 
-export const TYPES = {
+const TYPES = {
   MENTOR: 'mentor',
   STUDENT: 'student',
 };
@@ -72,7 +72,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
 
   function getCourseName() {
     const course = student?.courses.find(course => course.id === form.getFieldValue('courseId'));
-    return course?.name;
+    return course?.fullName;
   }
 
   const steps = [

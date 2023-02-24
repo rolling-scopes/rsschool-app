@@ -1,18 +1,14 @@
 import { Rule } from 'antd/lib/form';
 
-export const DEFAULT_COLUMN_SIZES = { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 };
-export const DEFAULT_DOUBLE_COLUMN_SIZES = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12 };
-export const DEFAULT_ROW_GUTTER = 24;
-
-export const RSSCHOOL_BOT_LINK = 'https://t.me/rsschool_bot?start';
-export const DATA_PROCESSING_TEXT =
+const RSSCHOOL_BOT_LINK = 'https://t.me/rsschool_bot?start';
+const DATA_PROCESSING_TEXT =
   'I agree to the processing of my personal data contained in the application and sharing it with companies only for students employment purposes.';
-export const SUCCESS_TEXT = (courseName?: string) =>
+const SUCCESS_TEXT = (courseName?: string) =>
   courseName
     ? `You have successfully registered for the ${courseName} course.`
     : 'Before you start we need to consider your application and submit you to a course. It could take some time. We will send you next steps via an email on the address you provided during registration.';
 
-export const ERROR_MESSAGES = {
+const ERROR_MESSAGES = {
   chooseAtLeastOne: 'Should choose at least one',
   shouldAgree: 'Should agree to the data processing',
   inEnglish: (prop: string) => `${prop} should be in English`,
@@ -23,14 +19,19 @@ export const ERROR_MESSAGES = {
   tryLater: 'An error occurred. Please try later',
 };
 
-export const TOOLTIPS = {
+const TOOLTIPS = {
   locationMentor: 'We need your location for understanding audience and use it for students distribution',
   locationStudent: 'We need your location for understanding the audience and for mentor distribution.',
   primaryEmail: 'No spam e-mails. Only for course purposes.',
   epamEmail: 'If you are EPAM employee, please specify your email to avoid some manual processes later',
 };
 
-export const PLACEHOLDERS = {
+const FORM_TITLES = {
+  mentorForm: 'Mentors registration',
+  studentForm: 'Welcome to RS School',
+};
+
+const PLACEHOLDERS = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'user@example.com',
@@ -45,12 +46,12 @@ export const PLACEHOLDERS = {
   aboutYourself: 'A couple words about yourself...',
 };
 
-export const EXTRAS = {
+const EXTRAS = {
   inEnglish: 'In English, as in passport',
   readyToMentor: 'You are ready to mentor per course',
 };
 
-export const LABELS = {
+const LABELS = {
   firstName: 'First Name',
   lastName: 'Last Name',
   location: 'Location',
@@ -72,7 +73,7 @@ export const LABELS = {
   course: 'Course',
 };
 
-export const VALIDATION_RULES: Rule[] = [
+const VALIDATION_RULES: Rule[] = [
   {
     validator: (_, value) => {
       return value?.length ? Promise.resolve() : Promise.reject(new Error(ERROR_MESSAGES.chooseAtLeastOne));
@@ -80,7 +81,7 @@ export const VALIDATION_RULES: Rule[] = [
   },
 ];
 
-export const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
+const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
   isMentorshipSection
     ? {
         wrapperCol: {
@@ -98,7 +99,7 @@ export const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
         },
       };
 
-export const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
+const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
   isStudentForm
     ? {}
     : {
@@ -112,7 +113,7 @@ export const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
         },
       };
 
-export const DEFAULT_FORM_ITEM_LAYOUT = {
+const DEFAULT_FORM_ITEM_LAYOUT = {
   labelCol: {
     sm: { offset: 4 },
     md: { span: 6, offset: 0 },
@@ -123,4 +124,20 @@ export const DEFAULT_FORM_ITEM_LAYOUT = {
     md: { span: 12, offset: 0 },
     xl: { span: 8, offset: 0 },
   },
+};
+
+export {
+  RSSCHOOL_BOT_LINK,
+  DATA_PROCESSING_TEXT,
+  ERROR_MESSAGES,
+  TOOLTIPS,
+  FORM_TITLES,
+  PLACEHOLDERS,
+  EXTRAS,
+  LABELS,
+  VALIDATION_RULES,
+  DEFAULT_FORM_ITEM_LAYOUT,
+  TAIL_FORM_ITEM_LAYOUT,
+  WIDE_FORM_ITEM_LAYOUT,
+  SUCCESS_TEXT,
 };

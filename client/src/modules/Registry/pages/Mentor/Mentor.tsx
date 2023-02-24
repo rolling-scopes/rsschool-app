@@ -1,54 +1,28 @@
-import { Col, Form, Row, Space, Typography } from 'antd';
-import { useUpdate } from 'react-use';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { Session } from 'components/withSession';
-import { Footer, FormSteps } from 'modules/Registry/components';
+import { RegistrationForm } from 'modules/Registry/components';
 import type { Course } from 'services/models';
-import { useMentorData, useFormLayout } from 'modules/Registry/hooks';
-import { DEFAULT_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { useMentorData } from 'modules/Registry/hooks';
 
 type Props = {
   courses?: Course[];
   session: Session;
+  courseAlias?: string;
 };
 
-const { Title, Text } = Typography;
-
-export function MentorRegistry(props: Props & { courseAlias?: string }) {
-  const update = useUpdate();
-  const { formLayout } = useFormLayout();
-  const { resume, loading, currentStep, steps, form, handleSubmit } = useMentorData(props.courseAlias);
+export function MentorRegistry({ courseAlias, session }: Props) {
+  const { resume, loading, currentStep, steps, form, handleSubmit } = useMentorData(courseAlias);
 
   return (
-    <RegistrationPageLayout loading={loading} githubId={props.session.githubId}>
+    <RegistrationPageLayout loading={loading} githubId={session.githubId}>
       {resume ? (
-        <Row justify="center" style={{ paddingBlock: 24 }}>
-          <Col xs={24} lg={18} xl={18} xxl={14}>
-            <Form
-              {...DEFAULT_FORM_ITEM_LAYOUT}
-              layout={formLayout}
-              form={form}
-              initialValues={resume}
-              onChange={update}
-              onFinish={handleSubmit}
-              scrollToFirstError
-              onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
-            >
-              <Row justify="center" gutter={[0, 24]}>
-                <Col>
-                  <Space direction="vertical" align="center" size={0}>
-                    <Title>Mentors registration</Title>
-                    <Text type="secondary">Free courses from the developer community</Text>
-                  </Space>
-                </Col>
-                <FormSteps steps={steps} currentStep={currentStep} />
-                <Col span={24} flex="none">
-                  <Footer />
-                </Col>
-              </Row>
-            </Form>
-          </Col>
-        </Row>
+        <RegistrationForm
+          form={form}
+          handleSubmit={handleSubmit}
+          steps={steps}
+          currentStep={currentStep}
+          initialValues={resume}
+        />
       ) : null}
     </RegistrationPageLayout>
   );
