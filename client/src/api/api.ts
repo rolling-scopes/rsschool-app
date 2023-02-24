@@ -5656,6 +5656,12 @@ export interface UpdateUserDto {
      * @type {string}
      * @memberof UpdateUserDto
      */
+    'contactsWhatsApp'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
     'contactsTelegram'?: string | null;
     /**
      * 
@@ -5675,7 +5681,46 @@ export interface UpdateUserDto {
      * @memberof UpdateUserDto
      */
     'aboutMyself'?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdateUserDto
+     */
+    'languages'?: Array<UpdateUserDtoLanguagesEnum>;
 }
+
+export const UpdateUserDtoLanguagesEnum = {
+    En: 'EN',
+    Cn: 'CN',
+    Hi: 'HI',
+    Es: 'ES',
+    Fr: 'FR',
+    Ar: 'AR',
+    Bn: 'BN',
+    Ru: 'RU',
+    Pt: 'PT',
+    Id: 'ID',
+    Ur: 'UR',
+    Ja: 'JA',
+    De: 'DE',
+    Pa: 'PA',
+    Te: 'TE',
+    Tr: 'TR',
+    Ko: 'KO',
+    Mr: 'MR',
+    Ky: 'KY',
+    Kz: 'KZ',
+    Uz: 'UZ',
+    Ka: 'KA',
+    Pl: 'PL',
+    Lt: 'LT',
+    Lv: 'LV',
+    Be: 'BE',
+    Uk: 'UK'
+} as const;
+
+export type UpdateUserDtoLanguagesEnum = typeof UpdateUserDtoLanguagesEnum[keyof typeof UpdateUserDtoLanguagesEnum];
+
 /**
  * 
  * @export

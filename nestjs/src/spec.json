@@ -3180,10 +3180,46 @@
           "contactsEmail": { "type": "string", "nullable": true },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "contactsSkype": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true },
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },
-          "aboutMyself": { "type": "string", "nullable": true }
+          "aboutMyself": { "type": "string", "nullable": true },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EN",
+                "CN",
+                "HI",
+                "ES",
+                "FR",
+                "AR",
+                "BN",
+                "RU",
+                "PT",
+                "ID",
+                "UR",
+                "JA",
+                "DE",
+                "PA",
+                "TE",
+                "TR",
+                "KO",
+                "MR",
+                "KY",
+                "KZ",
+                "UZ",
+                "KA",
+                "PL",
+                "LT",
+                "LV",
+                "BE",
+                "UK"
+              ]
+            }
+          }
         }
       },
       "PublicVisibilitySettings": {
