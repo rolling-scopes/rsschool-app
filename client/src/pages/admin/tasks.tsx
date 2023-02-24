@@ -19,6 +19,7 @@ import {
   addKeyAndIndex,
   EditableTable,
 } from 'modules/CrossCheck';
+import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -63,6 +64,21 @@ function Page(props: Props) {
 
   const handleModalSubmit = useCallback(
     async (values: any) => {
+      const checkCriteria = () => {
+        return dataCriteria.every(item => {
+          if (item.type !== TaskType.Title) {
+            return item.max !== 0;
+          }
+          return;
+        });
+      };
+
+      const isVerified = dataCriteria.length ? checkCriteria() : true;
+      if (!isVerified) {
+        message.error('Please, check criteria! It has subtask with no score.');
+        return;
+      }
+
       try {
         if (modalLoading) {
           return;
@@ -238,6 +254,7 @@ function TaskModal({
     const newDataCriteria = [...dataCriteria, criteria];
     setDataCriteria(addKeyAndIndex(newDataCriteria));
   };
+
   const addJSONtoCriteria = (criteria: CriteriaDto[]) => {
     const oldCriteria = dataCriteria;
     const newCriteria = [...oldCriteria, ...criteria];

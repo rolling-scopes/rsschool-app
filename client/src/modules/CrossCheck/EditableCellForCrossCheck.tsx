@@ -13,6 +13,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   index: number;
   children: React.ReactNode;
   type: TaskType;
+  points: undefined | number;
 }
 
 export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
@@ -21,6 +22,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   inputType,
   children,
   type,
+  points,
   ...restProps
 }) => {
   const inputNode =
@@ -31,7 +33,11 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
     ) : null;
 
   return (
-    <td {...restProps}>
+    <td
+      {...restProps}
+      title={points === 0 ? 'Check points for this line' : ''}
+      style={{ color: points === 0 ? 'red' : 'black' }}
+    >
       {editing && inputType !== 'text' ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
           {inputNode}

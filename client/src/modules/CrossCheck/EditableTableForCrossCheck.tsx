@@ -144,6 +144,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         title: col.title,
         editing: isEditing(record),
         type: record.type,
+        points: record.max,
       }),
     };
   });
