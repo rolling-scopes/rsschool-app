@@ -12,7 +12,7 @@ const mockRawData = [
   },
   {
     githubId: 2,
-    ts_url: 'htpps://example.com',
+    url: 'htpps://example.com',
     omittedField: 'bar',
   },
 ];
