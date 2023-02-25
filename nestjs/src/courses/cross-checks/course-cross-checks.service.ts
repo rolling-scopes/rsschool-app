@@ -1,3 +1,4 @@
+import { uniqBy } from 'lodash';
 import { Injectable } from '@nestjs/common';
 import { Task } from '@entities/task';
 import { User } from '@entities/user';
@@ -186,7 +187,10 @@ export class CourseCrossCheckService {
       solutionUrl: data.ts_url,
     }));
 
-    return result;
+    // Each record occurs n times where n is number of checkers
+    const deduplicatedRecords = uniqBy(result, 'githubId');
+
+    return deduplicatedRecords;
   }
 
   public async getAvailableCrossChecksStats(

@@ -16,13 +16,15 @@ const mockRawData = [
   },
 ];
 
+const mockRawDataWithDuplicates = mockRawData.concat(mockRawData).concat(mockRawData);
+
 const mockCourseTaskRepositoryFactory = jest.fn(() => ({
   createQueryBuilder: jest.fn(() => ({
     leftJoin: jest.fn().mockReturnThis(),
     addSelect: jest.fn().mockReturnThis(),
     where: jest.fn().mockReturnThis(),
     andWhere: jest.fn().mockReturnThis(),
-    getRawMany: () => Promise.resolve(mockRawData),
+    getRawMany: () => Promise.resolve(mockRawDataWithDuplicates),
   })),
 }));
 
