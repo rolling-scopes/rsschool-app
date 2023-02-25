@@ -13,10 +13,10 @@ const mockValues = {
 
 type Values = typeof mockValues | Record<string, unknown>;
 
-const renderPersonalInfo = (values: Values = mockValues) =>
+const renderPersonalInfo = (values: Values = mockValues, isStudentForm?: boolean) =>
   render(
     <Form role="form" initialValues={values}>
-      <PersonalInfo location={null} setLocation={jest.fn()} />
+      <PersonalInfo location={null} setLocation={jest.fn()} isStudentForm={isStudentForm} />
     </Form>,
   );
 
@@ -119,5 +119,33 @@ describe('PersonalInfo', () => {
     expect(errorEmail).toBeInTheDocument();
     expect(errorLastName).not.toBeInTheDocument();
     expect(errorEpamEmail).not.toBeInTheDocument();
+  });
+
+  test('should render data processing checkbox on student form', async () => {
+    renderPersonalInfo(mockValues, true);
+
+    const checkbox = await screen.findByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+  });
+
+  test('should render Submit button on student form', async () => {
+    renderPersonalInfo(mockValues, true);
+
+    const button = await screen.findByRole('button', { name: /submit/i });
+    expect(button).toBeInTheDocument();
+  });
+
+  test('should not render data processing checkbox on mentor form', () => {
+    renderPersonalInfo();
+
+    const checkbox = screen.queryByRole('checkbox');
+    expect(checkbox).not.toBeInTheDocument();
+  });
+
+  test('should not render Submit button on mentor form', () => {
+    renderPersonalInfo();
+
+    const button = screen.queryByRole('button', { name: /submit/i });
+    expect(button).not.toBeInTheDocument();
   });
 });

@@ -14,10 +14,10 @@ const renderLanguages = (isStudentForm = false) =>
   );
 
 describe('LanguagesMentoring', () => {
-  test(`should render field with "${LABELS.languages}" label on mentor form`, async () => {
+  test(`should render field with "${LABELS.languagesMentor}" label on mentor form`, async () => {
     renderLanguages();
 
-    const field = await screen.findByLabelText(LABELS.languages);
+    const field = await screen.findByLabelText(LABELS.languagesMentor);
     expect(field).toBeInTheDocument();
   });
 
