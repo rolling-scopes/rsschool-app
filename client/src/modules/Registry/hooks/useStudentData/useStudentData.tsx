@@ -143,7 +143,10 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
   }
 
   const steps = [
-    { title: 'General', content: <GeneralSection location={location} setLocation={setLocation} student={student} /> },
+    {
+      title: 'General',
+      content: <GeneralSection location={location} setLocation={setLocation} courses={student?.courses} />,
+    },
     { title: 'Done', content: <DoneSection courseName={getCourseName()} /> },
   ];
 

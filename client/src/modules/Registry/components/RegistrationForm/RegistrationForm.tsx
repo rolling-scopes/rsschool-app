@@ -28,6 +28,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
       <Col xs={24} lg={18} xl={18} xxl={14}>
         <Form
           {...DEFAULT_FORM_ITEM_LAYOUT}
+          role="form"
           layout={formLayout}
           form={form}
           initialValues={initialValues}

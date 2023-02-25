@@ -2,36 +2,29 @@ import { Col, Row } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from 'common/models';
 import { PersonalInfo, ContactInfo, CourseDetails } from 'modules/Registry/components';
-import { UserFull } from 'services/user';
 import { CourseDto } from 'api';
-
-type IdName = {
-  id: number;
-  name: string;
-};
 
 type Props = {
   location: Location | null;
   setLocation: Dispatch<SetStateAction<Location | null>>;
-  student?: {
-    profile: UserFull;
-    registeredForCourses: IdName[];
-    courses: CourseDto[];
-  };
+  courses?: CourseDto[];
 };
 
-export function GeneralSection({ location, setLocation, student }: Props) {
+export function GeneralSection({ location, setLocation, courses }: Props) {
+  const isStudentForm = !!courses;
+  const isMentorForm = !isStudentForm;
+
   return (
     <Row justify="center" gutter={[0, 24]}>
-      {student && (
+      {isStudentForm && (
         <Col span={24}>
-          <CourseDetails student={student} />
+          <CourseDetails courses={courses} />
         </Col>
       )}
       <Col span={24}>
-        <PersonalInfo setLocation={setLocation} location={location} isStudentForm={!!student} />
+        <PersonalInfo setLocation={setLocation} location={location} isStudentForm={isStudentForm} />
       </Col>
-      {!student && (
+      {isMentorForm && (
         <Col span={24}>
           <ContactInfo />
         </Col>

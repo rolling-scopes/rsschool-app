@@ -73,6 +73,15 @@ const LABELS = {
   course: 'Course',
 };
 
+const CARD_TITLES = {
+  additionalInfo: 'Additional information',
+  contactInfo: 'Contact information',
+  courseDetails: 'Course details',
+  disciplines: 'Disciplines',
+  personalInfo: 'Personal information',
+  preferences: 'Preferences about students',
+};
+
 const VALIDATION_RULES: Rule[] = [
   {
     validator: (_, value) => {
@@ -135,6 +144,7 @@ export {
   PLACEHOLDERS,
   EXTRAS,
   LABELS,
+  CARD_TITLES,
   VALIDATION_RULES,
   DEFAULT_FORM_ITEM_LAYOUT,
   TAIL_FORM_ITEM_LAYOUT,

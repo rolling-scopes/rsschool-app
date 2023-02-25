@@ -11,6 +11,7 @@ const { Title, Text } = Typography;
 
 export function DoneSection({ courseName }: Props) {
   const isStudentForm = !!courseName;
+  const isMentorForm = !isStudentForm;
 
   return (
     <Card>
@@ -27,7 +28,7 @@ export function DoneSection({ courseName }: Props) {
                 </Title>
               </Row>
             </Col>
-            {!isStudentForm && (
+            {isMentorForm && (
               <>
                 <Col span={24}>
                   <Row justify="center">
@@ -93,7 +94,7 @@ function ArrowIcon(props: Partial<CustomIconComponentProps>) {
 
 function DoneSectionImage({ isStudentForm }: { isStudentForm: boolean }) {
   const alt = isStudentForm ? Sloths.StudentForm : Sloths.MentorForm;
-  const src = `https://cdn.rs.school/sloths/stickers/${alt}/image.svg`;
+  const src = `https://cdn.rs.school/sloths/stickers/${alt}/image.png`;
 
   return <Image preview={false} src={src} alt={alt} />;
 }

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Location } from 'common/models';
 import { DataProcessingCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
-import { ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
+import { CARD_TITLES, ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
 import { LocationSelect } from 'components/Forms';
 
 type Props = {
@@ -16,7 +16,7 @@ const { Title } = Typography;
 
 export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
   return (
-    <FormCard title={<Title level={5}>Personal information</Title>}>
+    <FormCard title={<Title level={5}>{CARD_TITLES.personalInfo}</Title>}>
       <Form.Item
         label={LABELS.firstName}
         name="firstName"

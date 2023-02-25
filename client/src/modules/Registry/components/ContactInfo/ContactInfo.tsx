@@ -1,5 +1,5 @@
 import { Alert, Form, Input, Space, Typography } from 'antd';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
+import { CARD_TITLES, ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { emailPattern, phonePattern } from 'services/validators';
 import { FormButtons, FormCard } from 'modules/Registry/components';
 
@@ -7,7 +7,7 @@ const { Title, Text } = Typography;
 
 const CardTitle = (
   <Space direction="vertical" size={0}>
-    <Title level={5}>Contact information</Title>
+    <Title level={5}>{CARD_TITLES.contactInfo}</Title>
     <Text type="secondary" style={{ whiteSpace: 'normal' }}>
       Information will be shown to students so they can contact you. Indicate only the data that you're willing to share
     </Text>

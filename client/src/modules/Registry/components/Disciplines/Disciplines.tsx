@@ -1,6 +1,6 @@
 import { Form, Checkbox, Row, Empty, Typography, Col } from 'antd';
 import { DisciplineDto } from 'api';
-import { LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { CARD_TITLES, LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
 
 type Props = {
@@ -13,7 +13,7 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Disciplines({ disciplines }: Props) {
   return (
-    <FormCard title={<Title level={5}>Disciplines</Title>}>
+    <FormCard title={<Title level={5}>{CARD_TITLES.disciplines}</Title>}>
       {disciplines.length ? (
         <Form.Item
           {...formItemLayout}

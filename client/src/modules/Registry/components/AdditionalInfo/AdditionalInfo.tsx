@@ -1,5 +1,5 @@
 import { Form, Select, Input, Typography } from 'antd';
-import { LABELS, PLACEHOLDERS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { CARD_TITLES, LABELS, PLACEHOLDERS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { Course } from 'services/models';
 import {
   CourseLabel,
@@ -21,7 +21,7 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
   return (
-    <FormCard title={<Title level={5}>Additional information</Title>}>
+    <FormCard title={<Title level={5}>{CARD_TITLES.additionalInfo}</Title>}>
       <Form.Item {...formItemLayout} name="preferedCourses" label={LABELS.courses} requiredMark="optional">
         <Select
           mode="multiple"

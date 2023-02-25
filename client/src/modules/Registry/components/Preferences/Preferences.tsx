@@ -1,5 +1,5 @@
 import { Typography, Form, Radio } from 'antd';
-import { EXTRAS, LABELS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { CARD_TITLES, EXTRAS, LABELS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
 import { MentorOptionsDtoPreferedStudentsLocationEnum } from 'api';
 
@@ -25,7 +25,7 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Preferences() {
   return (
-    <FormCard title={<Title level={5}>Preferences about students</Title>}>
+    <FormCard title={<Title level={5}>{CARD_TITLES.preferences}</Title>}>
       <Form.Item {...formItemLayout} name="maxStudentsLimit" label={LABELS.studentsCount} extra={EXTRAS.readyToMentor}>
         <Radio.Group>
           {studentsLimits.map(elem => (
