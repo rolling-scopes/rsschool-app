@@ -1,11 +1,9 @@
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { Session } from 'components/withSession';
 import { RegistrationForm } from 'modules/Registry/components';
-import type { Course } from 'services/models';
 import { useMentorData } from 'modules/Registry/hooks';
 
 type Props = {
-  courses?: Course[];
   session: Session;
   courseAlias?: string;
 };

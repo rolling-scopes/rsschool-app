@@ -1,12 +1,10 @@
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { Session } from 'components/withSession';
-import { Course } from 'services/models';
 import { useStudentData } from 'modules/Registry/hooks';
 import { NoCourses, RegistrationForm } from 'modules/Registry/components';
 
 type Props = {
   session: Session;
-  courses?: Course[];
   courseAlias?: string;
 };
 

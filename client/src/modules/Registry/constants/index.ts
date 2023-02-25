@@ -64,7 +64,7 @@ const LABELS = {
   phone: 'Phone',
   notes: 'Contact Notes',
   courses: 'Preferred Courses',
-  languages: 'Languages you can mentor in',
+  languagesMentor: 'Languages you can mentor in',
   languagesStudent: 'Mentoring languages',
   aboutYourself: 'About Yourself',
   disciplines: 'You can mentor',

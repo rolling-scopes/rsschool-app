@@ -13,7 +13,7 @@ export function LanguagesMentoring({ isStudentForm }: Props) {
     <Form.Item
       {...WIDE_FORM_ITEM_LAYOUT(isStudentForm)}
       name="languagesMentoring"
-      label={isStudentForm ? LABELS.languagesStudent : LABELS.languages}
+      label={isStudentForm ? LABELS.languagesStudent : LABELS.languagesMentor}
       rules={VALIDATION_RULES}
       required
     >
