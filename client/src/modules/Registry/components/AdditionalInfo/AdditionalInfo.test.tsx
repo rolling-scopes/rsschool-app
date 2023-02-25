@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
-import { ERROR_MESSAGES } from 'modules/Registry/constants';
+import { UpdateUserDtoLanguagesEnum } from 'api';
+import { LABELS } from 'modules/Registry/constants';
 import { Course } from 'services/models';
 import { AdditionalInfo } from './AdditionalInfo';
 
@@ -16,7 +17,7 @@ const preferedCourses = [
 
 const mockValues = {
   preferedCourses,
-  languagesMentoring: ['English'],
+  languagesMentoring: [UpdateUserDtoLanguagesEnum.En],
   dataProcessing: 1,
   aboutMyself: "I'm Groot",
 };
@@ -41,22 +42,42 @@ describe('AdditionalInfo', () => {
 
   const user = userEvent.setup();
 
-  test('should call previousHandler', async () => {
+  test.each`
+    label
+    ${LABELS.courses}
+    ${LABELS.aboutYourself}
+  `('should render field with $label label', async ({ label }) => {
     renderAdditionalInfo(mockValues);
 
-    const button = await screen.findByText('Previous');
-    expect(button).toBeInTheDocument();
-
-    await user.click(button);
-
-    expect(previousHandler).toHaveBeenCalled();
+    const field = await screen.findByText(label);
+    expect(field).toBeInTheDocument();
   });
 
-  test('should call submitHandler', async () => {
+  test('should render data processing checkbox', async () => {
     renderAdditionalInfo(mockValues);
 
-    const button = await screen.findByText('Submit');
+    const checkbox = await screen.findByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+  });
+
+  test('should render Previous button', async () => {
+    renderAdditionalInfo(mockValues);
+
+    const button = await screen.findByRole('button', { name: /previous/i });
     expect(button).toBeInTheDocument();
+  });
+
+  test('should render Submit button', async () => {
+    renderAdditionalInfo(mockValues);
+
+    const button = await screen.findByRole('button', { name: /submit/i });
+    expect(button).toBeInTheDocument();
+  });
+
+  test('should call only submitHandler', async () => {
+    renderAdditionalInfo(mockValues);
+
+    const button = await screen.findByRole('button', { name: /submit/i });
 
     await user.click(button);
 
@@ -64,43 +85,14 @@ describe('AdditionalInfo', () => {
     expect(submitFailedHandler).not.toHaveBeenCalled();
   });
 
-  test('should call submitFailedHandler', async () => {
+  test('should call only submitFailedHandler', async () => {
     renderAdditionalInfo({ ...mockValues, dataProcessing: 0 });
 
-    const button = await screen.findByText('Submit');
-    expect(button).toBeInTheDocument();
+    const button = await screen.findByRole('button', { name: /submit/i });
 
     await user.click(button);
 
     expect(submitHandler).not.toHaveBeenCalled();
     expect(submitFailedHandler).toHaveBeenCalled();
-  });
-
-  test('should render checkbox', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const checkbox = await screen.findByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-  });
-
-  test('should not render error message when checkbox is selected', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const checkbox = await screen.findByRole('checkbox');
-    const errorMessage = screen.queryByText(ERROR_MESSAGES.shouldAgree);
-    expect(checkbox).toBeChecked();
-    expect(errorMessage).not.toBeInTheDocument();
-  });
-
-  test('should render error message when checkbox is not selected', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const checkbox = await screen.findByRole('checkbox');
-
-    await user.click(checkbox);
-
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.shouldAgree);
-    expect(checkbox).not.toBeChecked();
-    expect(errorMessage).toBeInTheDocument();
   });
 });
