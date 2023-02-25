@@ -2,29 +2,28 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TaskSolutionChecker } from '@entities/taskSolutionChecker';
 import { CourseCrossCheckService } from './course-cross-checks.service';
+import { TaskSolution } from '@entities/taskSolution';
 
 const mockRawData = [
   {
-    stu_githubId: 1,
-    ts_url: 'htpps://example.com',
+    githubId: 1,
+    url: 'htpps://example.com',
     omittedField: 'foo',
   },
   {
-    stu_githubId: 2,
+    githubId: 2,
     ts_url: 'htpps://example.com',
     omittedField: 'bar',
   },
 ];
 
-const mockRawDataWithDuplicates = mockRawData.concat(mockRawData).concat(mockRawData);
-
-const mockCourseTaskRepositoryFactory = jest.fn(() => ({
+const mockTaskSolutionRepositoryFactory = jest.fn(() => ({
   createQueryBuilder: jest.fn(() => ({
     leftJoin: jest.fn().mockReturnThis(),
     addSelect: jest.fn().mockReturnThis(),
     where: jest.fn().mockReturnThis(),
     andWhere: jest.fn().mockReturnThis(),
-    getRawMany: () => Promise.resolve(mockRawDataWithDuplicates),
+    getRawMany: () => Promise.resolve(mockRawData),
   })),
 }));
 
@@ -39,8 +38,12 @@ describe('CourseCrossCheckService', () => {
       providers: [
         CourseCrossCheckService,
         {
+          provide: getRepositoryToken(TaskSolution),
+          useFactory: mockTaskSolutionRepositoryFactory,
+        },
+        {
           provide: getRepositoryToken(TaskSolutionChecker),
-          useFactory: mockCourseTaskRepositoryFactory,
+          useValue: {},
         },
       ],
     }).compile();
@@ -54,8 +57,8 @@ describe('CourseCrossCheckService', () => {
 
       expect(pairs).toStrictEqual(
         mockRawData.map(data => ({
-          githubId: data.stu_githubId,
-          solutionUrl: data.ts_url,
+          githubId: data.githubId,
+          solutionUrl: data.url,
         })),
       );
     });
