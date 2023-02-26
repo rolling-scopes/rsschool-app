@@ -11,7 +11,6 @@ import {
   TaskChecker,
   TaskInterviewResult,
   StageInterview,
-  MentorRegistry,
   isManager,
   IUserSession,
   isSupervisor,
@@ -67,15 +66,15 @@ export const getStudentCourses = async (githubId: string): Promise<{ courseId: n
   return result ?? null;
 };
 
-export const getMentorRegistryCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
-  const result = await getRepository(MentorRegistry)
-    .createQueryBuilder('mentorRegistry')
-    .select(['mentorRegistry.preferedCourses'])
-    .leftJoin('mentorRegistry.user', 'user')
+export const getMentorCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
+  const result = await getRepository(Mentor)
+    .createQueryBuilder('mentor')
+    .select(['mentor.courseId'])
+    .leftJoin('mentor.user', 'user')
     .where('user.githubId = :githubId', { githubId })
-    .andWhere('"mentorRegistry".canceled = false')
-    .getOne();
-  return result?.preferedCourses?.map(course => ({ courseId: Number(course) })) ?? null;
+    .getMany();
+
+  return result.length ? result.map(({ courseId }) => ({ courseId })) : null;
 };
 
 export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
