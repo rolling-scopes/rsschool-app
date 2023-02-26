@@ -42,7 +42,7 @@ function Page(props: CoursePageProps) {
   const { fullName, usePrivateRepositories, alias } = props.course;
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const userService = useMemo(() => new UserService(), [props.course.id]);
+  const userService = useMemo(() => new UserService(), []);
 
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [repositoryUrl, setRepositoryUrl] = useState('');
