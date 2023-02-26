@@ -1,6 +1,6 @@
 import { Form, Modal, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import * as React from 'react';
+import { useEffect } from 'react';
 
 type Props = {
   data: any;
@@ -19,13 +19,16 @@ export function ModalForm(props: Props) {
   const antForm = Form.useForm()[0];
   const form = props.form || antForm;
 
+  useEffect(() => {
+    form.resetFields();
+  }, [props.data]);
+
   if (props.data == null) {
     return null;
   }
 
   const formValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
 
-  form.resetFields();
   form.setFieldsValue(formValues);
 
   return (
