@@ -110,6 +110,9 @@ export class User {
   @Column({ type: String, nullable: true })
   englishLevel: EnglishLevel | null;
 
+  @Column({ type: 'text', array: true, default: [] })
+  languages: string[];
+
   @Column({
     type: 'json',
     default: [],
