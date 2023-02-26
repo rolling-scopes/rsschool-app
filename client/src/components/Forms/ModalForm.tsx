@@ -20,7 +20,9 @@ export function ModalForm(props: Props) {
   const form = props.form || antForm;
 
   useEffect(() => {
-    form.resetFields();
+    if (props.data && !Object.values(props.data).length) {
+      form.resetFields();
+    }
   }, [props.data]);
 
   if (props.data == null) {
