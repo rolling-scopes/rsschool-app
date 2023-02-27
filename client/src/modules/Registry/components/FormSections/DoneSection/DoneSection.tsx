@@ -1,6 +1,7 @@
-import { Button, Card, Col, Image, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
+import { SlothImage } from 'components/SlothImage';
 import { SUCCESS_TEXT } from 'modules/Registry/constants';
 
 type Props = {
@@ -17,7 +18,7 @@ export function DoneSection({ courseName }: Props) {
     <Card>
       <Row justify="center" gutter={[0, 28]}>
         <Col>
-          <DoneSectionImage isStudentForm={isStudentForm} />
+          <SlothImage name={isStudentForm ? 'its-a-good-job' : 'slothzy'} />
         </Col>
         <Col span={24}>
           <Row justify="center" gutter={[0, 16]}>
@@ -72,11 +73,6 @@ export function DoneSection({ courseName }: Props) {
   );
 }
 
-enum Sloths {
-  MentorForm = 'slothzy',
-  StudentForm = 'its-a-good-job',
-}
-
 function svg() {
   return (
     <svg width="24" height="65" viewBox="0 0 24 65" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,11 +86,4 @@ function svg() {
 
 function ArrowIcon(props: Partial<CustomIconComponentProps>) {
   return <Icon component={svg} {...props} />;
-}
-
-function DoneSectionImage({ isStudentForm }: { isStudentForm: boolean }) {
-  const alt = isStudentForm ? Sloths.StudentForm : Sloths.MentorForm;
-  const src = `https://cdn.rs.school/sloths/stickers/${alt}/image.png`;
-
-  return <Image preview={false} src={src} alt={alt} />;
 }
