@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
-import { CourseTasksService, CourseUsersService } from '../courses';
+import { CourseTasksService } from '../courses';
 import { AuthService } from './auth.service';
 import { JwtService } from '../core/jwt/jwt.service';
 import { ConfigService } from '../config';
@@ -19,7 +19,6 @@ describe('AuthService', () => {
         AuthService,
         { provide: JwtService, useValue: {} },
         { provide: CourseTasksService, useValue: {} },
-        { provide: CourseUsersService, useValue: {} },
         { provide: UsersService, useValue: {} },
         {
           provide: ConfigService,

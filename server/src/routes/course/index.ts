@@ -73,7 +73,6 @@ import {
 } from './student';
 import * as tasks from './tasks';
 import { postCopyCourse } from './template';
-import { getUsers, putUser, putUsers } from './user';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
@@ -91,7 +90,6 @@ export function courseRoute(logger: ILogger) {
   addMentorApi(router, logger);
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
-  addCourseUserApi(router, logger);
   addScheduleApi(router, logger);
   return router;
 }
@@ -150,12 +148,6 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
 
   router.post('/interviews/stage', courseManagerGuard, stageInterview.createInterviews(logger));
   router.get('/interviews/stage', courseMentorGuard, stageInterview.getInterviews(logger));
-}
-
-function addCourseUserApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/users', courseManagerGuard, getUsers(logger));
-  router.put('/users', courseManagerGuard, putUsers(logger));
-  router.put('/user/:githubId', courseManagerGuard, validateGithubId, putUser(logger));
 }
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {

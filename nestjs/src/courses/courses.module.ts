@@ -1,7 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { CourseUsersService } from './course-users.service';
 import { Course } from '@entities/course';
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
@@ -60,6 +59,8 @@ import { TaskVerificationsController } from './task-verifications/task-verificat
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 import { TeamDistributionStudentService } from './team-distribution/team-distribution-student.service';
 import { DistributeStudentsService } from './team-distribution/distribute-students.service';
+import { CourseUsersController } from './course-users/course-users.controller';
+import { CourseUsersService } from './course-users/course-users.service';
 
 @Module({
   imports: [
@@ -110,6 +111,7 @@ import { DistributeStudentsService } from './team-distribution/distribute-studen
     TeamDistributionController,
     TeamController,
     TaskVerificationsController,
+    CourseUsersController,
   ],
   providers: [
     CourseTasksService,
