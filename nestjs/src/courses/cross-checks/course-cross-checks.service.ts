@@ -72,6 +72,8 @@ export class CourseCrossCheckService {
   constructor(
     @InjectRepository(TaskSolutionChecker)
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
+    @InjectRepository(TaskSolution)
+    private readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
   public async findPairs(
@@ -168,22 +170,20 @@ export class CourseCrossCheckService {
   }
 
   public async getSolutionsUrls(courseId: number, courseTaskId: number) {
-    const query = this.taskSolutionCheckerRepository
-      .createQueryBuilder('tsc')
-      .leftJoin(CourseTask, 'ct', 'tsc."courseTaskId" = ct.id')
-      .leftJoin(Student, 'st', 'tsc."studentId" = st.id')
-      .leftJoin(User, 'stu', 'st."userId" = stu.id')
-      .leftJoin(TaskSolution, 'ts', 'ts."courseTaskId" = tsc."courseTaskId" AND ts."studentId" = st."id"')
-      .addSelect(['stu.githubId'])
-      .addSelect(['ts.url', 'ts.updatedDate'])
+    const query = this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(CourseTask, 'ct', 'ts."courseTaskId" = ct.id')
+      .leftJoin(Student, 'st', 'ts."studentId" = st.id')
+      .leftJoin(User, 'stu', 'stu."id" = st."userId"')
+      .addSelect(['stu."githubId"', 'ts.url'])
       .where('ct."courseId" = :courseId', { courseId })
       .andWhere('ct."id" = :courseTaskId', { courseTaskId });
 
     const rawData = await query.getRawMany();
 
     const result = rawData.map((data: any) => ({
-      githubId: data.stu_githubId,
-      solutionUrl: data.ts_url,
+      githubId: data.githubId,
+      solutionUrl: data.url,
     }));
 
     return result;
