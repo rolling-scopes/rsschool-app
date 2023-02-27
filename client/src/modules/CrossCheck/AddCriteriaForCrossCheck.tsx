@@ -56,9 +56,12 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
 
   const isDisabled: boolean = useMemo(() => {
     if (type.toLocaleLowerCase() === TaskType.Title) {
-      return !!text;
+      return text ? false : true;
     }
-    return type.toLocaleLowerCase() === TaskType.Penalty ? !!text && !!maxPenalty : !!text && !!max;
+    if (type.toLocaleLowerCase() === TaskType.Penalty) {
+      return text && maxPenalty ? false : true;
+    }
+    return text && max ? false : true;
   }, [type, max, maxPenalty, text]);
 
   return (
@@ -96,7 +99,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
       </Item>
 
       <div style={{ textAlign: 'right' }}>
-        <Button type="primary" onClick={onFinish} disabled={!isDisabled}>
+        <Button type="primary" onClick={onFinish} disabled={isDisabled}>
           Add New Criteria
         </Button>
       </div>

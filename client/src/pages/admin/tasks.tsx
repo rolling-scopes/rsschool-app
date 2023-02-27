@@ -69,7 +69,7 @@ function Page(props: Props) {
           if (item.type !== TaskType.Title) {
             return item.max !== 0;
           }
-          return;
+          return true;
         });
       };
 
