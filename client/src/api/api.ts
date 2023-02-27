@@ -2978,6 +2978,12 @@ export interface MentorRegistryDto {
     'updatedDate': string;
     /**
      * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'receivedDate': string;
+    /**
+     * 
      * @type {boolean}
      * @memberof MentorRegistryDto
      */
