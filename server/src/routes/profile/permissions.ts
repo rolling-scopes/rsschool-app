@@ -67,14 +67,14 @@ export const getStudentCourses = async (githubId: string): Promise<{ courseId: n
 };
 
 export const getMentorCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
-  const result = await getRepository(Mentor)
+  const result: { courseId: number }[] = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .select(['mentor.courseId'])
     .leftJoin('mentor.user', 'user')
     .where('user.githubId = :githubId', { githubId })
     .getMany();
 
-  return result.length ? result.map(({ courseId }) => ({ courseId })) : null;
+  return result.length ? result : null;
 };
 
 export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
