@@ -30,7 +30,7 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
             return { type: item.type, text: item.title };
           } else return item;
         });
-        if (!transformedCriteria?.lengthgi) {
+        if (!transformedCriteria?.length) {
           message.warn(`There is no criteria for downloading`);
           return;
         }
