@@ -20,6 +20,7 @@ export class MentorRegistryDto {
     this.primaryEmail = mentorRegistry.user.primaryEmail;
     this.languagesMentoring = mentorRegistry.languagesMentoring;
     this.contactsEpamEmail = mentorRegistry.user.contactsEpamEmail;
+    this.receivedDate = mentorRegistry.createdDate;
   }
 
   @ApiProperty()
@@ -54,6 +55,9 @@ export class MentorRegistryDto {
 
   @ApiProperty()
   public updatedDate: Date;
+
+  @ApiProperty()
+  public receivedDate: Date;
 
   @ApiProperty()
   public hasCertificate?: boolean;
