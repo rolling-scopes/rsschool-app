@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal } from 'antd';
+import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal, message } from 'antd';
 import withSession from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
@@ -35,14 +35,20 @@ function Page(props: Props) {
   const [groupModalData, setGroupModalData] = useState(null as UserGroupDto[] | null);
 
   const loadData = useCallback(async () => {
-    setLoading(true);
-    const [users, { data: groups }] = await Promise.all([
-      courseUserService.getCourseUsers(courseId),
-      props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
-    ]);
-    setLoading(false);
-    setCourseUsers(users.data as any);
-    setUserGroups(groups);
+    try {
+      setLoading(true);
+
+      const [users, { data: groups }] = await Promise.all([
+        courseUserService.getCourseUsers(courseId),
+        props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
+      ]);
+      setCourseUsers(users.data as any);
+      setUserGroups(groups);
+    } catch (error) {
+      message.error('Something went wrong, please try reloading the page later');
+    } finally {
+      setLoading(false);
+    }
   }, [courseId]);
 
   useAsync(loadData, [courseId]);
