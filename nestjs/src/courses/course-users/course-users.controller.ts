@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Put,
-  UseGuards,
-  Param,
-  ParseIntPipe,
-  NotFoundException,
-  Body,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Get, Put, UseGuards, Param, ParseIntPipe, Body, BadRequestException } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -38,11 +28,6 @@ export class CourseUsersController {
   @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   async getUsers(@Param('courseId', ParseIntPipe) courseId: number) {
     const users = await this.courseUserService.getCourseUsersByCourseId(courseId);
-
-    if (!users.length) {
-      throw new NotFoundException(`Users for course ${courseId} are not found`);
-    }
-
     return users.map(user => new CourseUserDto(user));
   }
 
