@@ -1067,6 +1067,31 @@
         "tags": ["course task verifications"]
       }
     },
+    "/courses/{courseId}/tasks/{courseTaskId}/verifications": {
+      "post": {
+        "operationId": "createTaskVerification",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Object" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CreateTaskVerificationDto" } }
+            }
+          },
+          "400": { "description": "" },
+          "429": { "description": "" }
+        },
+        "tags": ["course task verifications"]
+      }
+    },
     "/courses/{courseId}/users": {
       "get": {
         "operationId": "getCourseUsers",
@@ -2990,6 +3015,8 @@
         },
         "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
       },
+      "Object": { "type": "object", "properties": {} },
+      "CreateTaskVerificationDto": { "type": "object", "properties": { "id": { "type": "number" } } },
       "CourseUserDto": {
         "type": "object",
         "properties": {

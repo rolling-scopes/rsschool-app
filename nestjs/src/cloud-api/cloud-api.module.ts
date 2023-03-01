@@ -7,5 +7,6 @@ import { CloudApiService } from './cloud-api.service';
   imports: [HttpModule, ConfigModule],
   controllers: [],
   providers: [CloudApiService],
+  exports: [CloudApiService],
 })
 export class CloudApiModule {}

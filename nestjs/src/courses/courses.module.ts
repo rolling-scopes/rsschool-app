@@ -42,7 +42,7 @@ import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
 import { CourseCrossCheckController, CourseCrossCheckService } from './cross-checks';
 import { CourseEventsController, CourseEventsService } from './course-events';
-import { ScoreController, ScoreService } from './score';
+import { ScoreController, ScoreService, WriteScoreService } from './score';
 import { TaskSolutionsController, TaskSolutionsService } from './task-solutions';
 import {
   CourseScheduleService,
@@ -50,7 +50,7 @@ import {
   CourseICalendarService,
   CourseICalendarController,
 } from './course-schedule';
-import { CoreModule } from 'src/core/core.module';
+import { CoreModule } from '../core/core.module';
 import { TeamDistributionController } from './team-distribution/team-distribution.controller';
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
 import { TeamService } from './team-distribution/team.service';
@@ -61,6 +61,8 @@ import { TeamDistributionStudentService } from './team-distribution/team-distrib
 import { DistributeStudentsService } from './team-distribution/distribute-students.service';
 import { CourseUsersController } from './course-users/course-users.controller';
 import { CourseUsersService } from './course-users/course-users.service';
+import { CloudApiModule } from 'src/cloud-api/cloud-api.module';
+import { SelfEducationService } from './task-verifications/self-education.service';
 
 @Module({
   imports: [
@@ -92,6 +94,7 @@ import { CourseUsersService } from './course-users/course-users.service';
     CoreModule,
     UsersModule,
     UsersNotificationsModule,
+    CloudApiModule,
   ],
   controllers: [
     FeedbacksController,
@@ -127,6 +130,7 @@ import { CourseUsersService } from './course-users/course-users.service';
     CourseStatsService,
     CourseCrossCheckService,
     ScoreService,
+    WriteScoreService,
     TaskSolutionsService,
     CourseScheduleService,
     CourseICalendarService,
@@ -134,6 +138,7 @@ import { CourseUsersService } from './course-users/course-users.service';
     TeamDistributionStudentService,
     TeamService,
     DistributeStudentsService,
+    SelfEducationService,
     TaskVerificationsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
