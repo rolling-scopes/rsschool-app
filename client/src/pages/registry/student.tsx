@@ -1,6 +1,6 @@
 import { NextPageContext } from 'next';
 import { withSession } from 'components/withSession';
-import { StudentRegistry } from 'modules/Registry/pages/Student';
+import { StudentRegistry } from 'modules/Registry/pages';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 
 const StudentRegistryPage: any = withGoogleMaps(withSession(StudentRegistry));

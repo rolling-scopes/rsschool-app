@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { Form, message } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
 import {
@@ -23,6 +23,7 @@ const disciplinesApi = new DisciplinesApi();
 const profileApi = new ProfileApi();
 
 export function useMentorData(courseAlias?: string) {
+  const [form] = Form.useForm<FormData>();
   const [checkedList, setCheckedListCourse] = useState([] as number[]);
   const [courses, setCourses] = useState([] as Course[]);
   const [currentStep, setCurrentSteps] = useState(0);
@@ -152,6 +153,7 @@ export function useMentorData(courseAlias?: string) {
     loading,
     currentStep,
     steps,
+    form,
   };
 }
 
