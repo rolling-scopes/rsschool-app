@@ -10,14 +10,6 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     return data.map(transformMentorRegistry);
   }
 
-  public async findByCoursesIds(coursesIds: Array<any>) {
-    const data = await this.getPreparedMentorRegistriesQuery()
-      .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
-      .andWhere('mentorRegistry.canceled = false')
-      .getMany();
-    return data.map(transformMentorRegistry);
-  }
-
   public async cancel(githubId: string) {
     const user = await userService.getUserByGithubId(githubId);
     if (user == null) {

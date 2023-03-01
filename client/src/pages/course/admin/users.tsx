@@ -1,13 +1,14 @@
-import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal } from 'antd';
+import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal, message } from 'antd';
 import withSession from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseUser } from 'services/course';
+import { CourseUser } from 'services/course';
+import { CourseUsersApi } from 'api';
 import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
@@ -17,6 +18,7 @@ type Props = CoursePageProps;
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();
+const courseUserService = new CourseUsersApi();
 
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
@@ -27,21 +29,26 @@ function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, setLoading] = useState(false);
-  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
   const [userGroups, setUserGroups] = useState<UserGroupDto[] | null>(null);
   const [userModalData, setUserModalData] = useState(null as Partial<CourseUser> | null);
   const [groupModalData, setGroupModalData] = useState(null as UserGroupDto[] | null);
 
   const loadData = useCallback(async () => {
-    setLoading(true);
-    const [users, { data: groups }] = await Promise.all([
-      courseService.getUsers(),
-      props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
-    ]);
-    setLoading(false);
-    setCourseUsers(users);
-    setUserGroups(groups);
+    try {
+      setLoading(true);
+
+      const [users, { data: groups }] = await Promise.all([
+        courseUserService.getCourseUsers(courseId),
+        props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
+      ]);
+      setCourseUsers(users.data as any);
+      setUserGroups(groups);
+    } catch (error) {
+      message.error('Something went wrong, please try reloading the page later');
+    } finally {
+      setLoading(false);
+    }
   }, [courseId]);
 
   useAsync(loadData, [courseId]);
@@ -62,7 +69,7 @@ function Page(props: Props) {
 
   const handleUserModalSubmit = async (values: any) => {
     const record = createRecord(values);
-    await courseService.upsertUser(record.githubId, record);
+    await courseUserService.putCourseUser(courseId, values.githubId, record);
 
     setUserModalData(null);
     loadData();
@@ -70,7 +77,7 @@ function Page(props: Props) {
 
   const handleGroupModalSubmit = async (values: UserGroupDto[]) => {
     const records = createRecords(values);
-    await courseService.upsertUsers(records);
+    await courseUserService.putCourseUsers(courseId, records);
 
     setGroupModalData(null);
     loadData();
@@ -233,7 +240,6 @@ function getColumns(handleEditItem: any) {
 
 function createRecord(values: any) {
   const data = {
-    githubId: values.githubId,
     isManager: values.isManager,
     isSupervisor: values.isSupervisor,
     isDementor: values.isDementor,

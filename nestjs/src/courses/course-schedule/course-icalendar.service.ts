@@ -43,7 +43,7 @@ export class CourseICalendarService {
         description: this.buildDescription(item),
         id,
         alarms: [],
-        organizer: item.organizer ? { name: item.organizer?.name ?? '' } : undefined,
+        organizer: item.organizer ? { name: item.organizer?.name ?? '', email: 'user@example.com' } : undefined,
         url: item.descriptionUrl ?? undefined,
       });
     }

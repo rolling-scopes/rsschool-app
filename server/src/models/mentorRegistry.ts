@@ -34,10 +34,10 @@ export class MentorRegistry {
   preferedStudentsLocation: string;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: Date;
 
   @Column({ default: false, type: 'boolean' })
   canceled: boolean;

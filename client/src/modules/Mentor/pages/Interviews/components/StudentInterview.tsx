@@ -1,5 +1,6 @@
 import { Col, Tag, Row, Button, Typography, Space } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
+import GithubFilled from '@ant-design/icons/GithubFilled';
 import { getInterviewFeedbackUrl } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
@@ -37,6 +38,11 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
                   {student.name || student.githubId}
                 </Typography.Link>
               </Typography.Title>
+            </Col>
+            <Col>
+              <Typography.Link target="_blank" href={`https://github.com/${student.githubId}`}>
+                <GithubFilled />
+              </Typography.Link>
             </Col>
           </Space>
         </Row>
