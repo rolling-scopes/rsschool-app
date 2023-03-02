@@ -1,5 +1,5 @@
 import { Form, message } from 'antd';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
 import {
   CourseDto,
@@ -22,16 +22,14 @@ const userService = new UserService();
 const disciplinesApi = new DisciplinesApi();
 const profileApi = new ProfileApi();
 
-export function useMentorData(courseAlias?: string) {
+export function useMentorData(courseAlias?: string | string[]) {
   const [form] = Form.useForm<FormData>();
-  const [checkedList, setCheckedListCourse] = useState([] as number[]);
-  const [courses, setCourses] = useState([] as Course[]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [currentStep, setCurrentSteps] = useState(0);
   const [loading, setLoading] = useState(false);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
-  const [initialData, setInitialData] = useState<Partial<UserFull> | null>(null);
   const [resume, setResume] = useState<FormData | undefined>();
-  const [location, setLocation] = useState(null as Location | null);
+  const [location, setLocation] = useState<Location | null>(null);
 
   useAsync(async () => {
     setLoading(true);
@@ -41,32 +39,17 @@ export function useMentorData(courseAlias?: string) {
       disciplinesApi.getDisciplines(),
     ]);
     const activeCourses = getActiveCourses(courses, courseAlias);
-    const checkedListCourse = courseAlias
-      ? courses.filter((course: Course) => course.alias === courseAlias).map(({ id }: Course) => id)
-      : [];
+    const preselectedCourseIds = courseAlias ? activeCourses.map(({ id }: Course) => id) : [];
 
-    setInitialData(profile);
     setCourses(activeCourses);
-    setCheckedListCourse(checkedListCourse);
     setDisciplines(disciplinesData.data);
-
-    if (initialData) {
-      setResume(getInitialValues(initialData, checkedList));
-    }
-
+    setLocation({
+      countryName: profile.countryName,
+      cityName: profile.cityName,
+    });
+    setResume(getInitialValues(profile, preselectedCourseIds));
     setLoading(false);
   }, []);
-
-  useEffect(() => {
-    setLocation({
-      countryName: initialData?.countryName,
-      cityName: initialData?.cityName,
-    } as Location);
-
-    if (initialData) {
-      setResume(getInitialValues(initialData, checkedList));
-    }
-  }, [initialData, checkedList]);
 
   const onPrevious = () => {
     setCurrentSteps(previousStep => previousStep - 1);
@@ -88,6 +71,17 @@ export function useMentorData(courseAlias?: string) {
           maxStudentsLimit,
           languagesMentoring,
           location,
+          firstName,
+          lastName,
+          primaryEmail,
+          contactsEpamEmail,
+          contactsTelegram,
+          contactsSkype,
+          contactsWhatsApp,
+          contactsEmail,
+          contactsNotes,
+          contactsPhone,
+          aboutMyself,
         } = data;
 
         const registryModel = {
@@ -99,20 +93,19 @@ export function useMentorData(courseAlias?: string) {
         };
 
         const userModel = {
+          firstName,
+          lastName,
+          primaryEmail,
+          contactsEpamEmail,
+          contactsTelegram,
+          contactsSkype,
+          contactsWhatsApp,
+          contactsEmail,
+          contactsNotes,
+          contactsPhone,
+          aboutMyself,
           cityName: location ? location.cityName : '',
           countryName: location ? location.countryName : '',
-          firstName: data.firstName,
-          lastName: data.lastName,
-          primaryEmail: data.primaryEmail,
-          contactsEpamEmail: data.contactsEpamEmail,
-
-          contactsTelegram: data.contactsTelegram,
-          contactsSkype: data.contactsSkype,
-          contactsWhatsApp: data.contactsWhatsApp,
-          contactsEmail: data.contactsEmail,
-          contactsNotes: data.contactsNotes,
-          contactsPhone: data.contactsPhone,
-          aboutMyself: data.aboutMyself,
           languages: languagesMentoring,
         };
 
@@ -135,14 +128,7 @@ export function useMentorData(courseAlias?: string) {
     { title: 'General', content: <GeneralSection location={location} setLocation={setLocation} /> },
     {
       title: 'Mentorship',
-      content: (
-        <MentorshipSection
-          checkedList={checkedList}
-          courses={courses}
-          disciplines={disciplines}
-          onPrevious={onPrevious}
-        />
-      ),
+      content: <MentorshipSection courses={courses} disciplines={disciplines} onPrevious={onPrevious} />,
     },
     { title: 'Done', content: <DoneSection /> },
   ];
@@ -158,8 +144,23 @@ export function useMentorData(courseAlias?: string) {
 }
 
 function getInitialValues(
-  { countryName, cityName, languages, ...initialData }: Partial<UserFull>,
-  checkedList: number[],
+  {
+    countryName,
+    cityName,
+    languages,
+    firstName,
+    lastName,
+    primaryEmail,
+    contactsEpamEmail,
+    contactsTelegram,
+    contactsSkype,
+    contactsWhatsApp,
+    contactsEmail,
+    contactsNotes,
+    contactsPhone,
+    aboutMyself,
+  }: UserFull,
+  preselectedCourseIds: number[],
 ) {
   const location =
     countryName &&
@@ -169,22 +170,38 @@ function getInitialValues(
       cityName,
     } as Location | null);
   return {
-    ...initialData,
+    firstName,
+    lastName,
+    primaryEmail,
+    contactsEpamEmail,
+    contactsTelegram,
+    contactsSkype,
+    contactsWhatsApp,
+    contactsEmail,
+    contactsNotes,
+    contactsPhone,
+    aboutMyself,
     location,
-    preferedCourses: checkedList,
-    englishMentoring: false,
+    preferedCourses: preselectedCourseIds,
     technicalMentoring: [],
     languagesMentoring: languages ?? [],
     preferedStudentsLocation:
       MentorOptionsDtoPreferedStudentsLocationEnum.Any as MentorOptionsDtoPreferedStudentsLocationEnum,
     maxStudentsLimit: 2,
+    dataProcessing: false,
   };
 }
 
-function getActiveCourses(courses: CourseDto[], courseAlias?: string) {
-  return courseAlias
-    ? courses.filter((course: Course) => course.alias === courseAlias)
-    : courses
-        .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
-        .sort((a, b) => a.startDate.localeCompare(b.startDate));
+function getActiveCourses(courses: CourseDto[], courseAlias?: string | string[]) {
+  if (!courseAlias) {
+    return courses
+      .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
+      .sort((a, b) => a.startDate.localeCompare(b.startDate));
+  }
+
+  if (Array.isArray(courseAlias)) {
+    return courses.filter((course: Course) => courseAlias.includes(course.alias));
+  }
+
+  return courses.filter((course: Course) => course.alias === courseAlias);
 }

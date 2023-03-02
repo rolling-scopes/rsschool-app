@@ -6,7 +6,7 @@ import { LABELS } from 'modules/Registry/constants';
 import { Course } from 'services/models';
 import { AdditionalInfo } from './AdditionalInfo';
 
-const preferedCourses = [
+const courses = [
   {
     id: 1,
     name: 'test',
@@ -16,7 +16,7 @@ const preferedCourses = [
 ] as Course[];
 
 const mockValues = {
-  preferedCourses,
+  preferedCourses: [1],
   languagesMentoring: [UpdateUserDtoLanguagesEnum.En],
   dataProcessing: 1,
   aboutMyself: "I'm Groot",
@@ -31,7 +31,7 @@ const submitFailedHandler = jest.fn();
 const renderAdditionalInfo = (values: Values) =>
   render(
     <Form initialValues={values} onFinish={submitHandler} onFinishFailed={submitFailedHandler}>
-      <AdditionalInfo courses={preferedCourses} checkedList={[1]} onPrevious={previousHandler} />
+      <AdditionalInfo courses={courses} onPrevious={previousHandler} />
     </Form>,
   );
 

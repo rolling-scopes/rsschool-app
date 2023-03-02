@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react';
+import { Form } from 'antd';
 import { CARD_TITLES } from 'modules/Registry/constants';
 import { MentorshipSection } from './MentorshipSection';
 
 const renderMentorshipSection = () => {
-  render(<MentorshipSection courses={[]} checkedList={[]} disciplines={[]} onPrevious={jest.fn()} />);
+  render(
+    <Form>
+      <MentorshipSection courses={[]} disciplines={[]} onPrevious={jest.fn()} />
+    </Form>,
+  );
 };
 
 describe('MentorshipSection', () => {
