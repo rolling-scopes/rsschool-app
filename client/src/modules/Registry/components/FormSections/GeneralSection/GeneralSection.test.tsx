@@ -1,10 +1,15 @@
 import { render, screen } from '@testing-library/react';
+import { Form } from 'antd';
 import { CourseDto } from 'api';
 import { CARD_TITLES } from 'modules/Registry/constants';
 import { GeneralSection } from './GeneralSection';
 
 const renderGeneralSection = (courses?: CourseDto[]) => {
-  render(<GeneralSection location={null} setLocation={jest.fn()} courses={courses} />);
+  render(
+    <Form>
+      <GeneralSection location={null} setLocation={jest.fn()} courses={courses} />
+    </Form>,
+  );
 };
 
 describe('GeneralSection', () => {

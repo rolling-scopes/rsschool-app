@@ -5,7 +5,7 @@ import { useMentorData } from 'modules/Registry/hooks';
 
 type Props = {
   session: Session;
-  courseAlias?: string;
+  courseAlias?: string | string[];
 };
 
 export function MentorRegistry({ courseAlias, session }: Props) {

@@ -4,13 +4,12 @@ import { Preferences, Disciplines, AdditionalInfo } from 'modules/Registry/compo
 import { Col, Row } from 'antd';
 
 type Props = {
-  checkedList: number[];
   courses: Course[];
   disciplines: DisciplineDto[];
   onPrevious: () => void;
 };
 
-export function MentorshipSection({ courses, checkedList, disciplines, onPrevious }: Props) {
+export function MentorshipSection({ courses, disciplines, onPrevious }: Props) {
   return (
     <Row justify="center" gutter={[0, 24]}>
       <Col span={24}>
@@ -20,7 +19,7 @@ export function MentorshipSection({ courses, checkedList, disciplines, onPreviou
         <Preferences />
       </Col>
       <Col span={24}>
-        <AdditionalInfo courses={courses} checkedList={checkedList} onPrevious={onPrevious} />
+        <AdditionalInfo courses={courses} onPrevious={onPrevious} />
       </Col>
     </Row>
   );
