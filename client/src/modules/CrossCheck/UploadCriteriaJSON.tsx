@@ -20,17 +20,21 @@ export type CriteriaJSONType = {
 export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
       const fileReader = new FileReader();
       fileReader.readAsText(info.file.originFileObj as Blob, 'UTF-8');
       fileReader.onload = (e: Event) => {
         const target = e.target as Element & { result: string };
         const { criteria } = JSON.parse(target.result);
-        const transformedCriteria = criteria.map((item: CriteriaJSONType) => {
+        const transformedCriteria = criteria?.map((item: CriteriaJSONType) => {
           if (item.type === TaskType.Title) {
             return { type: item.type, text: item.title };
           } else return item;
         });
+        if (!transformedCriteria?.length) {
+          message.warn(`There is no criteria for downloading`);
+          return;
+        }
+        message.success(`${info.file.name} file uploaded successfully`);
         onLoad(transformedCriteria);
       };
     }

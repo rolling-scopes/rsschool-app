@@ -135,6 +135,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
       >
         <button
           class="ant-btn ant-btn-primary"
+          disabled=""
           type="button"
         >
           <span>
@@ -275,6 +276,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
     >
       <button
         class="ant-btn ant-btn-primary"
+        disabled=""
         type="button"
       >
         <span>
