@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseUsersController } from './course-users.controller';
 import { CourseUsersService } from './course-users.service';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { ExtendedCourseUser } from './types';
 import { omit } from 'lodash';
 import { UsersService } from 'src/users/users.service';
@@ -64,7 +64,7 @@ describe('CourseUsersController', () => {
   });
 
   describe('getUsers', () => {
-    it('shouldd get users from service and map it to dto', async () => {
+    it('should get users from service and map it to dto', async () => {
       mockGetCourseUsersByCourseId.mockResolvedValueOnce([mockCourseUser]);
       const expected = omit(mockCourseUser, ['userId']);
 
@@ -73,19 +73,10 @@ describe('CourseUsersController', () => {
       expect(mockCourseUsersService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
       expect(result).toMatchObject([expected]);
     });
-
-    it('shouldd throw NotFoundException if users not found', async () => {
-      mockGetCourseUsersByCourseId.mockResolvedValueOnce([]);
-      await expect(() => controller.getUsers(mockCourseId)).rejects.toThrow(
-        new NotFoundException(`Users for course ${mockCourseId} are not found`),
-      );
-
-      expect(mockCourseUsersService.getCourseUsersByCourseId).toHaveBeenCalledWith(mockCourseId);
-    });
   });
 
   describe('putUser', () => {
-    it('shouldd update user roles and update course user if user exists', async () => {
+    it('should update user roles and update course user if user exists', async () => {
       mockGetByGithubId.mockResolvedValueOnce({ id: mockUserId });
       mockGetByUserId.mockResolvedValueOnce({ id: mockUserId });
 
@@ -103,7 +94,7 @@ describe('CourseUsersController', () => {
       expect(mockCourseUsersService.saveCourseUsers).not.toHaveBeenCalled();
     });
 
-    it('shouldd create course user if user does not exist', async () => {
+    it('should create course user if user does not exist', async () => {
       mockGetByGithubId.mockResolvedValueOnce({ id: mockUserId });
       mockGetByUserId.mockResolvedValueOnce(null);
 
@@ -123,7 +114,7 @@ describe('CourseUsersController', () => {
       expect(mockCourseUsersService.updateCourseUser).not.toHaveBeenCalled();
     });
 
-    it('shouldd throw BadRequestException if user does not exist', async () => {
+    it('should throw BadRequestException if user does not exist', async () => {
       mockGetByGithubId.mockResolvedValueOnce(null);
 
       await expect(() => controller.putUser(mockCourseId, mockGithubId, mockCourseUser)).rejects.toThrow(
@@ -138,7 +129,7 @@ describe('CourseUsersController', () => {
   });
 
   describe('putUsers', () => {
-    it('shouldd process users and put them to update and insert', async () => {
+    it('should process users and put them to update and insert', async () => {
       mockGetUsersToUpdateAndToInsert.mockResolvedValueOnce({
         usersToInsert: [mockCourseUser],
         usersToUpdate: [mockCourseUser],

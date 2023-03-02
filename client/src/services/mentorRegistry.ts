@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { RegistryApi } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
@@ -17,14 +18,16 @@ export interface MentorRegistry {
 
 export class MentorRegistryService {
   private axios: AxiosInstance;
+  private registryApi: RegistryApi;
 
   constructor() {
     this.axios = axios.create({ baseURL: `/api/registry` });
+    this.registryApi = new RegistryApi();
   }
 
   public async getMentors() {
-    const response = await this.axios.get('/mentors');
-    return response.data.data;
+    const response = await this.registryApi.getMentorRegistries();
+    return response.data;
   }
 
   public async updateMentor(githubId: string, data: any) {
