@@ -5438,6 +5438,12 @@ export interface UpdateProfileInfoDto {
     'englishLevel'?: string | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof UpdateProfileInfoDto
+     */
+    'languages'?: Array<string>;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateProfileInfoDto
      */
