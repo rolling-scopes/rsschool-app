@@ -83,39 +83,37 @@ function Page(props: Props) {
     loadData();
   };
 
-  const renderUserModal = (modalData: Partial<CourseUser>) => {
-    return (
-      <ModalForm
-        getInitialValues={getInitialValues}
-        data={modalData}
-        title="Course User"
-        submit={handleUserModalSubmit}
-        cancel={() => setUserModalData(null)}
-      >
-        <Form.Item name="githubId" label="User" rules={[{ required: true, message: 'Please select an user' }]}>
-          <UserSearch keyField="githubId" searchFn={loadUsers} />
-        </Form.Item>
+  const renderUserModal = (modalData: Partial<CourseUser>) => (
+    <ModalForm
+      getInitialValues={getInitialValues}
+      data={modalData}
+      title="Course User"
+      submit={handleUserModalSubmit}
+      cancel={() => setUserModalData(null)}
+    >
+      <Form.Item name="githubId" label="User" rules={[{ required: true, message: 'Please select an user' }]}>
+        <UserSearch keyField="githubId" searchFn={loadUsers} />
+      </Form.Item>
 
-        <Row gutter={24}>
-          <Col span={8}>
-            <Form.Item name="isManager" valuePropName="checked">
-              <Checkbox>Manager</Checkbox>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item name="isSupervisor" valuePropName="checked">
-              <Checkbox>Supervisor</Checkbox>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item name="isDementor" valuePropName="checked">
-              <Checkbox>Dementor</Checkbox>
-            </Form.Item>
-          </Col>
-        </Row>
-      </ModalForm>
-    );
-  };
+      <Row gutter={24}>
+        <Col span={8}>
+          <Form.Item name="isManager" valuePropName="checked">
+            <Checkbox>Manager</Checkbox>
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item name="isSupervisor" valuePropName="checked">
+            <Checkbox>Supervisor</Checkbox>
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item name="isDementor" valuePropName="checked">
+            <Checkbox>Dementor</Checkbox>
+          </Form.Item>
+        </Col>
+      </Row>
+    </ModalForm>
+  );
 
   const GroupModal = ({ modalData }: { modalData: UserGroupDto[] }) => {
     const [selectedGroups, setSelectedGroups] = useState<UserGroup[] | null>(null);
