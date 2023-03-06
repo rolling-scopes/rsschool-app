@@ -1483,6 +1483,24 @@
         "tags": ["registry"]
       }
     },
+    "/registry/mentors": {
+      "get": {
+        "operationId": "getMentorRegistries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["registry"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
@@ -3369,6 +3387,47 @@
         "type": "object",
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },
         "required": ["preselectedCourses"]
+      },
+      "MentorRegistryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "cityName": { "type": "object" },
+          "preferedCourses": { "type": "array", "items": { "type": "number" } },
+          "preselectedCourses": { "type": "array", "items": { "type": "number" } },
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "name": { "type": "string" },
+          "technicalMentoring": { "type": "array", "items": { "type": "string" } },
+          "courses": { "type": "array", "items": { "type": "number" } },
+          "updatedDate": { "format": "date-time", "type": "string" },
+          "receivedDate": { "format": "date-time", "type": "string" },
+          "hasCertificate": { "type": "boolean" },
+          "englishMentoring": { "type": "boolean" },
+          "primaryEmail": { "type": "string" },
+          "languagesMentoring": { "type": "array", "items": { "type": "string" } },
+          "contactsEpamEmail": { "type": "object" }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "cityName",
+          "preferedCourses",
+          "preselectedCourses",
+          "maxStudentsLimit",
+          "preferedStudentsLocation",
+          "name",
+          "technicalMentoring",
+          "courses",
+          "updatedDate",
+          "receivedDate",
+          "hasCertificate",
+          "englishMentoring",
+          "primaryEmail",
+          "languagesMentoring",
+          "contactsEpamEmail"
+        ]
       },
       "SaveCertificateDto": {
         "type": "object",

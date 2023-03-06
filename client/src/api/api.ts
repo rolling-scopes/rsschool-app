@@ -2907,6 +2907,115 @@ export type MentorOptionsDtoPreferedStudentsLocationEnum = typeof MentorOptionsD
 /**
  * 
  * @export
+ * @interface MentorRegistryDto
+ */
+export interface MentorRegistryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorRegistryDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof MentorRegistryDto
+     */
+    'cityName': object;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof MentorRegistryDto
+     */
+    'preferedCourses': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof MentorRegistryDto
+     */
+    'preselectedCourses': Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorRegistryDto
+     */
+    'maxStudentsLimit': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'preferedStudentsLocation': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MentorRegistryDto
+     */
+    'technicalMentoring': Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof MentorRegistryDto
+     */
+    'courses': Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'receivedDate': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MentorRegistryDto
+     */
+    'hasCertificate': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MentorRegistryDto
+     */
+    'englishMentoring': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'primaryEmail': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MentorRegistryDto
+     */
+    'languagesMentoring': Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof MentorRegistryDto
+     */
+    'contactsEpamEmail': object;
+}
+/**
+ * 
+ * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -12187,6 +12296,35 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorRegistries: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/registry/mentors`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -12206,6 +12344,15 @@ export const RegistryApiFp = function(configuration?: Configuration) {
          */
         async approveMentor(githubId: string, approveMentorDto: ApproveMentorDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.approveMentor(githubId, approveMentorDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMentorRegistries(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorRegistryDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistries(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12228,6 +12375,14 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
         approveMentor(githubId: string, approveMentorDto: ApproveMentorDto, options?: any): AxiosPromise<void> {
             return localVarFp.approveMentor(githubId, approveMentorDto, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorRegistries(options?: any): AxiosPromise<Array<MentorRegistryDto>> {
+            return localVarFp.getMentorRegistries(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -12248,6 +12403,16 @@ export class RegistryApi extends BaseAPI {
      */
     public approveMentor(githubId: string, approveMentorDto: ApproveMentorDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).approveMentor(githubId, approveMentorDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public getMentorRegistries(options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).getMentorRegistries(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

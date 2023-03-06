@@ -10,10 +10,11 @@ import { Session, withSession } from 'components/withSession';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
+import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import css from 'styled-jsx/css';
 import { AdminPageLayout } from 'components/PageLayout';
+import { MentorRegistryDto } from 'api';
 
 const { Content } = Layout;
 const PAGINATION = 200;
@@ -28,14 +29,14 @@ function Page(props: Props) {
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
-  const [data, setData] = useState<any[]>([]);
-  const [allData, setAllData] = useState<any[]>([]);
+  const [data, setData] = useState<MentorRegistryDto[]>([]);
+  const [allData, setAllData] = useState<MentorRegistryDto[]>([]);
   const [maxStudents, setMaxStudents] = useState(0);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState(null as Partial<any> | null);
 
-  const updateData = (showAll: boolean, allData: any[]) => {
+  const updateData = (showAll: boolean, allData: MentorRegistryDto[]) => {
     setShowAll(showAll);
     const data = filterData(allData, showAll);
     setData(data);
@@ -107,7 +108,7 @@ function Page(props: Props) {
     };
   }
 
-  async function resendConfirmation(record: any) {
+  async function resendConfirmation(record: MentorRegistryDto) {
     try {
       setModalLoading(true);
       await mentorRegistryService.updateMentor(record!.githubId, getInitialValues(record));
@@ -140,7 +141,7 @@ function Page(props: Props) {
         <Col style={{ marginBottom: 8 }}> Total mentors: {data.length} </Col>
         <Col style={{ marginBottom: 8 }}> Total max students: {maxStudents} </Col>
         <Col>
-          <Table<MentorRegistry>
+          <Table<MentorRegistryDto>
             bordered
             pagination={{ pageSize: PAGINATION }}
             size="small"
@@ -212,7 +213,7 @@ function Page(props: Props) {
                 width: 80,
                 title: 'Actions',
                 dataIndex: 'actions',
-                render: (_: any, record: any) => (
+                render: (_, record) => (
                   <>
                     <a onClick={() => setModalData(record)}>Edit</a> <br />
                     <a onClick={() => cancelMentor(record.githubId)}>Cancel</a> <br />
@@ -229,8 +230,8 @@ function Page(props: Props) {
   );
 }
 
-function renderInfo(_: any, record: any) {
-  const isMentor = record.courses.some((id: string) => !record.preselectedCourses.includes(id));
+function renderInfo(_: any, record: MentorRegistryDto) {
+  const isMentor = record.courses.some(id => !record.preselectedCourses.includes(id));
   return (
     <div className="info-icons">
       {record.englishMentoring ? <div title="Ready to mentor in English" className="icon-flag-uk" /> : null}
@@ -247,10 +248,7 @@ function renderInfo(_: any, record: any) {
   );
 }
 
-function filterData(
-  data: { maxStudentsLimit: number; preselectedCourses: number[]; courses: number[] }[],
-  showAll: boolean,
-) {
+function filterData(data: MentorRegistryDto[], showAll: boolean) {
   if (showAll) {
     return data;
   }
@@ -272,7 +270,7 @@ function renderTagWithCopyButton(value: string, alias: string) {
 }
 
 function renderPreselectedCourses(courses: Course[]) {
-  return (values: number[], record: any) => {
+  return (values: number[], record: MentorRegistryDto) => {
     return (
       <>
         {values

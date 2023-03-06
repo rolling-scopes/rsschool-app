@@ -25,6 +25,39 @@ export class RegistryService {
     return user;
   }
 
+  private getPreparedMentorRegistriesQuery() {
+    return this.mentorsRegistryRepository
+      .createQueryBuilder('mentorRegistry')
+      .innerJoin('mentorRegistry.user', 'user')
+      .addSelect([
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.githubId',
+        'user.primaryEmail',
+        'user.cityName',
+        'user.contactsEpamEmail',
+      ])
+      .leftJoin('user.mentors', 'mentor')
+      .leftJoin('user.students', 'student')
+      .leftJoin('student.certificate', 'certificate')
+      .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
+      .orderBy('"mentorRegistry"."updatedDate"', 'DESC');
+  }
+
+  public async findAllMentorRegistries() {
+    const mentorRegistries = await this.getPreparedMentorRegistriesQuery().getMany();
+    return mentorRegistries;
+  }
+
+  public async findMentorRegistriesByCourseIds(coursesIds: number[]) {
+    const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
+      .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
+      .andWhere('mentorRegistry.canceled = false')
+      .getMany();
+    return mentorRegistries;
+  }
+
   public async buildMentorApprovalData(preselectedCourses: string[]) {
     const courses = await this.coursesService.getByIds(preselectedCourses.map(id => parseInt(id)));
 

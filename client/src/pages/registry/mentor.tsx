@@ -1,6 +1,6 @@
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { withSession } from 'components/withSession';
-import { MentorRegistry } from 'modules/Registry/pages/Mentor';
+import { MentorRegistry } from 'modules/Registry/pages';
 import { NextPageContext } from 'next';
 
 const MentorRegistryPage: any = withGoogleMaps(withSession(MentorRegistry));
