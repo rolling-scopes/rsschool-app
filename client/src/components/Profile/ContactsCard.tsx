@@ -9,6 +9,7 @@ import { EmailConfirmation } from './EmailConfirmation';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { Contact, ContactsKeys } from 'services/user';
 import ContactsCardForm from './ContactsCardForm';
+import { epamEmailPattern } from 'services/validators';
 
 const { Text } = Typography;
 
@@ -41,7 +42,7 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
         name: 'EPAM E-mail',
         value: epamEmail,
         key: ContactsKeys.EpamEmail,
-        rules: [{ type: 'email', message: 'Email is not valid' }],
+        rules: [{ pattern: epamEmailPattern, message: 'Please enter valid Epam email' }],
       },
       {
         name: 'E-mail',
