@@ -1,6 +1,6 @@
 import { Button, Form, InputNumber, Select, Input, message } from 'antd';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 
 const { Item } = Form;
@@ -54,11 +54,23 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setType(value);
   }
 
+  const isDisabled: boolean = useMemo(() => {
+    if (type.toLocaleLowerCase() === TaskType.Title) {
+      return text ? false : true;
+    }
+    if (type.toLocaleLowerCase() === TaskType.Penalty) {
+      return text && maxPenalty ? false : true;
+    }
+    return text && max ? false : true;
+  }, [type, max, maxPenalty, text]);
+
   return (
     <>
       <Item label="Criteria Type">
         <Select placeholder="Select type" onChange={changeType}>
-          <Option value="Title">Title</Option>
+          <Option data-testid="Title" value="Title">
+            Title
+          </Option>
           <Option data-testid="Subtask" value="Subtask">
             Subtask
           </Option>
@@ -87,7 +99,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
       </Item>
 
       <div style={{ textAlign: 'right' }}>
-        <Button type="primary" onClick={onFinish}>
+        <Button type="primary" onClick={onFinish} disabled={isDisabled}>
           Add New Criteria
         </Button>
       </div>

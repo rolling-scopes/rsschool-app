@@ -647,6 +647,18 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/csv": {
+      "get": {
+        "operationId": "getCrossCheckCsv",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "tags": ["courses tasks"]
+      }
+    },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
@@ -1055,6 +1067,56 @@
         "tags": ["course task verifications"]
       }
     },
+    "/courses/{courseId}/users": {
+      "get": {
+        "operationId": "getCourseUsers",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseUserDto" } }
+              }
+            }
+          },
+          "404": { "description": "" }
+        },
+        "tags": ["course users"]
+      },
+      "put": {
+        "operationId": "putCourseUsers",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UpdateCourseUserDto" } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["course users"]
+      }
+    },
+    "/courses/{courseId}/users/{githubId}": {
+      "put": {
+        "operationId": "putCourseUser",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseRolesDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "tags": ["course users"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -1418,6 +1480,24 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApproveMentorDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
+      }
+    },
+    "/registry/mentors": {
+      "get": {
+        "operationId": "getMentorRegistries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
+              }
+            }
+          }
+        },
         "tags": ["registry"]
       }
     },
@@ -2910,6 +2990,39 @@
         },
         "required": ["createdDate", "courseTaskId", "score", "maxScore", "questions"]
       },
+      "CourseUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "courseId": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isJuryActivist": { "type": "boolean" },
+          "isDementor": { "type": "boolean" }
+        },
+        "required": ["id", "courseId", "name", "githubId", "isManager", "isSupervisor", "isJuryActivist", "isDementor"]
+      },
+      "UpdateCourseUserDto": {
+        "type": "object",
+        "properties": {
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isDementor": { "type": "boolean" },
+          "userId": { "type": "number" }
+        },
+        "required": ["isManager", "isSupervisor", "isDementor", "userId"]
+      },
+      "CourseRolesDto": {
+        "type": "object",
+        "properties": {
+          "isManager": { "type": "boolean" },
+          "isSupervisor": { "type": "boolean" },
+          "isDementor": { "type": "boolean" }
+        },
+        "required": ["isManager", "isSupervisor", "isDementor"]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",
@@ -3085,10 +3198,46 @@
           "contactsEmail": { "type": "string", "nullable": true },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "contactsSkype": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true },
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "notes": { "type": "string", "nullable": true },
-          "aboutMyself": { "type": "string", "nullable": true }
+          "aboutMyself": { "type": "string", "nullable": true },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EN",
+                "CN",
+                "HI",
+                "ES",
+                "FR",
+                "AR",
+                "BN",
+                "RU",
+                "PT",
+                "ID",
+                "UR",
+                "JA",
+                "DE",
+                "PA",
+                "TE",
+                "TR",
+                "KO",
+                "MR",
+                "KY",
+                "KZ",
+                "UZ",
+                "KA",
+                "PL",
+                "LT",
+                "LV",
+                "BE",
+                "UK"
+              ]
+            }
+          }
         }
       },
       "PublicVisibilitySettings": {
@@ -3238,6 +3387,47 @@
         "type": "object",
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },
         "required": ["preselectedCourses"]
+      },
+      "MentorRegistryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "cityName": { "type": "object" },
+          "preferedCourses": { "type": "array", "items": { "type": "number" } },
+          "preselectedCourses": { "type": "array", "items": { "type": "number" } },
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "name": { "type": "string" },
+          "technicalMentoring": { "type": "array", "items": { "type": "string" } },
+          "courses": { "type": "array", "items": { "type": "number" } },
+          "updatedDate": { "format": "date-time", "type": "string" },
+          "receivedDate": { "format": "date-time", "type": "string" },
+          "hasCertificate": { "type": "boolean" },
+          "englishMentoring": { "type": "boolean" },
+          "primaryEmail": { "type": "string" },
+          "languagesMentoring": { "type": "array", "items": { "type": "string" } },
+          "contactsEpamEmail": { "type": "object" }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "cityName",
+          "preferedCourses",
+          "preselectedCourses",
+          "maxStudentsLimit",
+          "preferedStudentsLocation",
+          "name",
+          "technicalMentoring",
+          "courses",
+          "updatedDate",
+          "receivedDate",
+          "hasCertificate",
+          "englishMentoring",
+          "primaryEmail",
+          "languagesMentoring",
+          "contactsEpamEmail"
+        ]
       },
       "SaveCertificateDto": {
         "type": "object",

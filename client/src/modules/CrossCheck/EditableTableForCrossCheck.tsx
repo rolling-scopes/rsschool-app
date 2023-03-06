@@ -143,6 +143,8 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
+        type: record.type,
+        points: record.max,
       }),
     };
   });

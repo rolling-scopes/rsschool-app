@@ -1,19 +1,12 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import { MentorRegistry } from '../models';
+import { AvailableLanguages } from '../models/data';
 import { userService } from '../services';
 
 @EntityRepository(MentorRegistry)
 export class MentorRegistryRepository extends AbstractRepository<MentorRegistry> {
   public async findAll() {
     const data = await this.getPreparedMentorRegistriesQuery().where('mentorRegistry.canceled = false').getMany();
-    return data.map(transformMentorRegistry);
-  }
-
-  public async findByCoursesIds(coursesIds: Array<any>) {
-    const data = await this.getPreparedMentorRegistriesQuery()
-      .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
-      .andWhere('mentorRegistry.canceled = false')
-      .getMany();
     return data.map(transformMentorRegistry);
   }
 
@@ -42,7 +35,7 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     const mentorData: Partial<MentorRegistry> = {
       maxStudentsLimit,
       preferedStudentsLocation,
-      englishMentoring: Boolean(languagesMentoring?.find(language => language === 'english')),
+      englishMentoring: languagesMentoring.some(language => language === AvailableLanguages.EN),
       languagesMentoring,
       preferedCourses,
       technicalMentoring,

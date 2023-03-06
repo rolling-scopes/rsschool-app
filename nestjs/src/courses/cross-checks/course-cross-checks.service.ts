@@ -72,6 +72,8 @@ export class CourseCrossCheckService {
   constructor(
     @InjectRepository(TaskSolutionChecker)
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
+    @InjectRepository(TaskSolution)
+    private readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
   public async findPairs(
@@ -165,6 +167,26 @@ export class CourseCrossCheckService {
         totalPages: Math.ceil(total / pagination.pageSize),
       },
     };
+  }
+
+  public async getSolutionsUrls(courseId: number, courseTaskId: number) {
+    const query = this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin(CourseTask, 'ct', 'ts."courseTaskId" = ct.id')
+      .leftJoin(Student, 'st', 'ts."studentId" = st.id')
+      .leftJoin(User, 'stu', 'stu."id" = st."userId"')
+      .addSelect(['stu."githubId"', 'ts.url'])
+      .where('ct."courseId" = :courseId', { courseId })
+      .andWhere('ct."id" = :courseTaskId', { courseTaskId });
+
+    const rawData = await query.getRawMany();
+
+    const result = rawData.map((data: any) => ({
+      githubId: data.githubId,
+      solutionUrl: data.url,
+    }));
+
+    return result;
   }
 
   public async getAvailableCrossChecksStats(
