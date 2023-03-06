@@ -21,7 +21,7 @@ export function TopSlide() {
           </div>
           <div className="circle-logo-wrap">
             <div className="circle"></div>
-            <img src="/static/svg/jobs/sloth-welcome.svg" className="welcome-pic" alt="welcome" />
+            <img src="https://cdn.rs.school/sloths/stickers/welcome/image.png" className="welcome-pic" alt="welcome" />
           </div>
         </div>
       </div>
