@@ -40,7 +40,6 @@ import {
   updateStatuses,
 } from './students';
 import { postTaskArtefact } from './taskArtefact';
-import { createTaskVerification } from './taskVerification';
 import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
 
 import * as interviews from './interviews';
@@ -185,7 +184,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
-  const activeStudentValidators = [validateGithubIdAndAccess, validateExpelledStudent];
   const mentorValidators = [courseMentorGuard, validateGithubId];
   const mentorOrDementorValidators = [courseMentorOrDementorGuard, validateGithubId];
 
@@ -225,12 +223,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
-  router.post(
-    '/student/:githubId/task/:courseTaskId/verification',
-    courseGuard,
-    ...activeStudentValidators,
-    createTaskVerification(logger),
-  );
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
   router.post('/student/:githubId/repository', guard, ...validators, createRepository(logger));

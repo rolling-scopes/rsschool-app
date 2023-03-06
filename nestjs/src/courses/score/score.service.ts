@@ -11,6 +11,7 @@ import { MentorsService } from '../../courses/mentors';
 import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from './dto/score-query.dto';
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
+import { TaskResult } from '@entities/taskResult';
 
 const defaultFilter: Partial<ScoreQueryDto> = {
   activeOnly: 'false',
@@ -30,6 +31,9 @@ export class ScoreService {
   constructor(
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+
+    @InjectRepository(TaskResult)
+    readonly taskResultRepository: Repository<TaskResult>,
   ) {}
 
   public async getScore({

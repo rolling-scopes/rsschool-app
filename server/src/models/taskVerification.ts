@@ -11,7 +11,7 @@ export class TaskVerification {
 
   @UpdateDateColumn()
   @Index()
-  updatedDate: number;
+  updatedDate: Date;
 
   @ManyToOne(_ => Student)
   student: Student;

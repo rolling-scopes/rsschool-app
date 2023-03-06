@@ -1,9 +1,9 @@
 import { Form, notification } from 'antd';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
 import { FilesService } from 'services/files';
-import { CourseService, SelfEducationPublicAttributes } from 'services/course';
+import { SelfEducationPublicAttributes } from 'services/course';
 import { AxiosError } from 'axios';
 import { isExpelledStudent } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
@@ -21,10 +21,10 @@ function isIpynbFile(item: unknown): item is IpynbFile {
 
 export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVerifications, finishTask: () => void) {
   const session = useContext(SessionContext);
+  const taskVerificationsApi = useMemo(() => new CourseTaskVerificationsApi(), []);
   const [loading, setLoading] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [form] = Form.useForm<FormValues>();
-  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   useBeforeUnload(isModified, 'You have changes in test. Do you really want to close this page?');
 
@@ -118,11 +118,9 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
     }
 
     try {
-      const {
-        courseTask: { type },
-      } = await courseService.postTaskVerification(courseTask.id, data);
+      const response = await taskVerificationsApi.createTaskVerification(courseId, courseTask.id, data);
 
-      if (type === CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+      if (!response.data.id) {
         notification.success({ message: 'The task has been submitted.' });
       } else {
         notification.success({ message: 'The task has been submitted for verification and it will be checked soon.' });
