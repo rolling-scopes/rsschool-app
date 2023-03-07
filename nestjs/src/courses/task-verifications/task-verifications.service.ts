@@ -94,7 +94,10 @@ export class TaskVerificationsService {
     data: { githubId: string; body: any },
   ): Promise<{ id?: number }> {
     const [courseTask, student] = await Promise.all([
-      this.courseTasksRepository.findOneByOrFail({ id: courseTaskId }),
+      this.courseTasksRepository.findOne({
+        where: { id: courseTaskId },
+        relations: ['task'],
+      }),
       this.studentsRepository.findOneByOrFail({ id: studentId }),
     ]);
 
