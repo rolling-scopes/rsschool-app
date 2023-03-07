@@ -120,16 +120,11 @@ export class TaskVerificationsService {
       throw new HttpException(`Task Verification [${existing.id}] is in progress`, HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    const expired = await this.courseTasksRepository.findOne({
-      where: {
-        id: courseTaskId,
-        studentEndDate: MoreThan(dayjs().toDate()),
-      },
-      select: ['id'],
-    });
+    const now = dayjs();
+    const endDate = dayjs(courseTask?.studentEndDate);
 
-    if (expired != null) {
-      throw new HttpException(`Task Verification [${expired.id}] expired`, 423);
+    if (endDate.isBefore(now)) {
+      throw new BadRequestException(`Task Verification [${courseTask.id}] expired`);
     }
 
     if (courseTask.type === TaskType.SelfEducation) {
