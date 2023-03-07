@@ -2937,10 +2937,10 @@ export interface MentorRegistryDto {
     'githubId': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof MentorRegistryDto
      */
-    'cityName': object;
+    'cityName': string | null;
     /**
      * 
      * @type {Array<number>}
@@ -3021,10 +3021,10 @@ export interface MentorRegistryDto {
     'languagesMentoring': Array<string>;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof MentorRegistryDto
      */
-    'contactsEpamEmail': object;
+    'contactsEpamEmail': string | null;
 }
 /**
  * 
