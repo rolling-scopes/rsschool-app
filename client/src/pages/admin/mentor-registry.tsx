@@ -1,22 +1,27 @@
-import { Alert, Button, Col, message, notification, Row, Tabs, Typography } from 'antd';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import { useLoading } from 'components/useLoading';
-import { Session, withSession } from 'components/withSession';
 import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
+
+import { FileExcelOutlined } from '@ant-design/icons';
+import { Alert, Button, Col, message, notification, Row, Tabs, Typography } from 'antd';
+
+import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
+
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
+
+import { MentorRegistryTable } from 'modules/MentorRegistryTable/components/MentorRegistryTable';
+import { MentorRegistryModal } from 'modules/MentorRegistryTable/components/MentorRegistryModal';
+import { MentorRegistryTableContainer } from 'modules/MentorRegistryTable/components/MentorRegistryTableContainer';
+import { MentorRegistryTabsMode, TabsMode } from 'modules/MentorRegistryTable/constants';
+import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+
+import { useLoading } from 'components/useLoading';
+import { Session, withSession } from 'components/withSession';
 import { AdminPageLayout } from 'components/PageLayout';
-import { MentorRegistryDto } from 'api';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
-import { FileExcelOutlined } from '@ant-design/icons';
-import MentorRegistryTable from './MentorRegistryTable/MentorRegistryTable';
-import { MentorRegistryTableContainer } from './MentorRegistryTable/MentorRegistryTableContainer';
-import { MentorRegistryTabsMode, TabsMode } from './MentorRegistryTable/constants';
-import { MentorRegistryModal } from './MentorRegistryTable/MentorRegistryModal';
+
 import css from 'styled-jsx/css';
-import { DisciplineDto, DisciplinesApi } from 'api';
 
 type Props = {
   courses: Course[];
@@ -32,7 +37,7 @@ const disciplinesApi = new DisciplinesApi();
 function Page(props: Props) {
   const [loading, withLoading] = useLoading(false);
 
-  const [api,contextHolder] = notification.useNotification();
+  const [api, contextHolder] = notification.useNotification();
 
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -179,7 +184,7 @@ function Page(props: Props) {
           onCancel={onCancelModal}
           cancelMentor={cancelMentor}
         />}
-        {contextHolder}
+      {contextHolder}
     </AdminPageLayout>
   );
 }

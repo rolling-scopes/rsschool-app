@@ -5,7 +5,7 @@ import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dat
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { mentorRegistryStyles, MentorRegistryTabsMode, MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, TabsMode } from './constants';
+import { mentorRegistryStyles, MentorRegistryTabsMode, MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, TabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button } from 'antd';
 import { DisciplineDto, MentorRegistryDto, UpdateUserDtoLanguagesEnum } from 'api';

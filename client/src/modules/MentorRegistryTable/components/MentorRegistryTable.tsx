@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, Table } from 'antd';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
-import { MentorsRegistryColumnKey, PAGINATION } from './constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
+import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
 
 type Props = {
   tagFilters: string[],
@@ -14,7 +14,7 @@ type Props = {
   handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void,
 };
 
-export default function MentorRegistryTable(props: Props) {
+export function MentorRegistryTable(props: Props) {
   const { tagFilters, filteredData, columns, handleTagClose, handleClearAllButtonClick, handleTableChange } = props;
   const [form] = Form.useForm();
 
