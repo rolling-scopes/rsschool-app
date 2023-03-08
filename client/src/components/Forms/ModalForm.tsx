@@ -1,6 +1,6 @@
 import { Form, Modal, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { useEffect } from 'react';
+import * as React from 'react';
 
 type Props = {
   data: any;
@@ -19,20 +19,10 @@ export function ModalForm(props: Props) {
   const antForm = Form.useForm()[0];
   const form = props.form || antForm;
 
-  useEffect(() => {
-    if (props.data && !Object.values(props.data).length) {
-      form.resetFields();
-    }
-  }, [props.data]);
-
   if (props.data == null) {
     return null;
   }
-
-  const formValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
-
-  form.setFieldsValue(formValues);
-
+  const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
   return (
     <Modal
       style={{ top: 20 }}
@@ -54,7 +44,12 @@ export function ModalForm(props: Props) {
       }}
     >
       <Spin spinning={props.loading ?? false}>
-        <Form layout="vertical" onValuesChange={() => props.onChange?.(form.getFieldsValue())} form={form}>
+        <Form
+          layout="vertical"
+          onValuesChange={() => props.onChange?.(form.getFieldsValue())}
+          form={form}
+          initialValues={initialValues}
+        >
           {props.children}
         </Form>
       </Spin>
