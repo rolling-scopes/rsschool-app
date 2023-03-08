@@ -16,8 +16,9 @@ export const FilteredTags = ({ tagFilters, onTagClose, onClearAllButtonClick, fi
       <Col flex="auto">
         <FilterFilled style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: 8 }} />
         {tagFilters.map(tag => (
-          <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`${filterName}${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']] || tag
-            }`}</Tag>
+          <Tag key={tag} closable onClose={() => onTagClose(tag)}>{`${filterName}${
+            TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']] || tag
+          }`}</Tag>
         ))}
       </Col>
       <Col flex="none">

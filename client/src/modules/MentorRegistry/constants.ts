@@ -66,7 +66,6 @@ export enum TabsMode {
 
 export type MentorRegistryTabsMode = TabsMode.All | TabsMode.New;
 
-
 export const mentorRegistryStyles = css`
   .info-icons {
     display: flex;

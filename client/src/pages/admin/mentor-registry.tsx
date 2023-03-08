@@ -97,11 +97,14 @@ function Page(props: Props) {
     [modalData],
   );
 
-  const getInitialValues = useCallback((modalData?: Partial<any>) => {
-    return {
-      preselectedCourses: modalData?.preselectedCourses?.map((v: string) => Number(v)),
-    };
-  }, [modalData, setModalData]);
+  const getInitialValues = useCallback(
+    (modalData?: Partial<any>) => {
+      return {
+        preselectedCourses: modalData?.preselectedCourses?.map((v: string) => Number(v)),
+      };
+    },
+    [modalData, setModalData],
+  );
 
   async function resendConfirmation(record: MentorRegistryDto) {
     try {
@@ -131,49 +134,66 @@ function Page(props: Props) {
 
   const handleTabChange = useCallback(() => {
     activeTab === TabsMode.New ? setActiveTab(TabsMode.All) : setActiveTab(TabsMode.New);
-  }, [activeTab])
+  }, [activeTab]);
 
   const handleModalDataChange = (mode: string, record: any) => {
     setIsModalOpen(true);
     setModalData({ mode, record });
-  }
+  };
 
   const onCancelModal = () => {
     setModalData(null);
     setIsModalOpen(false);
-  }
+  };
 
   const openNotificationWithIcon = (type: NotificationType) => {
     api[type]({
       message: 'Success',
-      description:
-        'Your invitation was successfully send',
+      description: 'Your invitation was successfully send',
     });
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
-      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align='bottom' className='tabs'>
+    <AdminPageLayout
+      session={props.session}
+      title="Mentor Registry"
+      loading={loading}
+      courses={courses}
+      styles={{ margin: 0, padding: 0 }}
+    >
+      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
         <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
-        <Button icon={<FileExcelOutlined />} style={{ alignSelf: 'center' }} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>Export CSV</Button>
+        <Button
+          icon={<FileExcelOutlined />}
+          style={{ alignSelf: 'center' }}
+          onClick={() => (window.location.href = `/api/registry/mentors/csv`)}
+        >
+          Export CSV
+        </Button>
         <style jsx>{styles}</style>
       </Row>
       <Col style={{ background: '#f0f2f5', padding: 24 }}>
         <Alert
-          message={<>The number of mentors below can mentor: <Typography.Text strong>{maxStudents} students</Typography.Text></>}
+          message={
+            <>
+              The number of mentors below can mentor: <Typography.Text strong>{maxStudents} students</Typography.Text>
+            </>
+          }
           type="info"
           showIcon
-          style={{ marginBottom: 24 }} />
+          style={{ marginBottom: 24 }}
+        />
         <MentorRegistryTableContainer
           data={data}
           courses={courses}
           activeTab={activeTab}
           disciplines={disciplines}
-          handleModalDataChange={handleModalDataChange}>
-          {(mentorRegistryProps) => <MentorRegistryTable {...mentorRegistryProps} />}
+          handleModalDataChange={handleModalDataChange}
+        >
+          {mentorRegistryProps => <MentorRegistryTable {...mentorRegistryProps} />}
         </MentorRegistryTableContainer>
       </Col>
-      {isModalOpen &&
+      {isModalOpen && (
         <MentorRegistryModal
           modalData={modalData || {}}
           courses={courses}
@@ -183,7 +203,8 @@ function Page(props: Props) {
           resendConfirmation={resendConfirmation}
           onCancel={onCancelModal}
           cancelMentor={cancelMentor}
-        />}
+        />
+      )}
       {contextHolder}
     </AdminPageLayout>
   );
@@ -205,12 +226,11 @@ export { getServerSideProps };
 
 export default withSession(Page, { onlyForAnyCoursePowerUser: true });
 
-
 export const styles = css`
-@media (min-width: 575px) {
-  .tabs {
-    padding: '12px 24px 0';
-    height: 64px;
+  @media (min-width: 575px) {
+    .tabs {
+      padding: '12px 24px 0';
+      height: 64px;
+    }
   }
-}
 `;

@@ -15,7 +15,16 @@ interface MentorRegistryModalProps {
 }
 
 export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
-  const { modalData, modalLoading, courses, handleModalSubmit, getInitialValues, resendConfirmation, onCancel, cancelMentor } = props;
+  const {
+    modalData,
+    modalLoading,
+    courses,
+    handleModalSubmit,
+    getInitialValues,
+    resendConfirmation,
+    onCancel,
+    cancelMentor,
+  } = props;
   const form = Form.useForm()[0];
 
   const renderModal = useCallback(() => {
@@ -26,8 +35,8 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
             style={{ top: 20 }}
             width={700}
             open
-            title='Invite Mentor for a Courses'
-            okText='Send Invite'
+            title="Invite Mentor for a Courses"
+            okText="Send Invite"
             onOk={async e => {
               e.preventDefault();
               const values = await form.validateFields().catch(() => null);
@@ -68,7 +77,8 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
             onOk={() => resendConfirmation(modalData.record)}
             open
             onCancel={onCancel}
-            okText='Re-send'>
+            okText="Re-send"
+          >
             <Spin spinning={modalLoading ?? false}>
               <div style={{ display: 'flex' }}>
                 <ExclamationCircleOutlined style={{ fontSize: '32px', color: '#178df9', marginRight: 16 }} />
@@ -87,8 +97,9 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
             onOk={() => cancelMentor(modalData.record.githubId)}
             open
             onCancel={onCancel}
-            okText='Delete'
-            okButtonProps={{ danger: true, type: 'primary' }}>
+            okText="Delete"
+            okButtonProps={{ danger: true, type: 'primary' }}
+          >
             <Spin spinning={modalLoading ?? false}>
               <div style={{ display: 'flex' }}>
                 <ExclamationCircleOutlined style={{ fontSize: '32px', color: '#faad14', marginRight: 16 }} />
@@ -105,6 +116,5 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
     }
   }, [modalData]);
 
-  return renderModal()
-
-}
+  return renderModal();
+};

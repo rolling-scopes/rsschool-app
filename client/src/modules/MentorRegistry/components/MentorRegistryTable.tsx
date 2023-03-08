@@ -6,12 +6,12 @@ import { MentorRegistryDto } from 'api';
 import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
 
 type Props = {
-  tagFilters: string[],
-  filteredData: MentorRegistryDto[],
-  columns: any[],
-  handleTagClose: (tag: string) => void,
-  handleClearAllButtonClick: () => void,
-  handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void,
+  tagFilters: string[];
+  filteredData: MentorRegistryDto[];
+  columns: any[];
+  handleTagClose: (tag: string) => void;
+  handleClearAllButtonClick: () => void;
+  handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
 };
 
 export function MentorRegistryTable(props: Props) {

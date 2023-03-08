@@ -76,7 +76,14 @@ export function AdminPageLayout({
   children,
   courses,
   styles,
-}: PropsWithChildren<{ session: Session; title?: string; courseName?: string; loading: boolean; courses: Course[]; styles?: any }>) {
+}: PropsWithChildren<{
+  session: Session;
+  title?: string;
+  courseName?: string;
+  loading: boolean;
+  courses: Course[];
+  styles?: any;
+}>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header title={title} username={session.githubId} courseName={courseName} />
