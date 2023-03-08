@@ -29,7 +29,6 @@ export class ScoreController {
   @ApiOperation({ operationId: 'getScore' })
   @ApiOkResponse({ type: ScoreDto })
   @CacheTTL(DEFAULT_CACHE_TTL)
-  @CacheKey('score')
   @UseInterceptors(CacheInterceptor)
   public async getScore(@Query() query: ScoreQueryDto, @Param('courseId', ParseIntPipe) courseId: number) {
     const orderBy: OrderField = query.orderBy ?? 'totalScore';
