@@ -8,7 +8,7 @@ import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { mentorRegistryStyles, MentorRegistryTabsMode, MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, TabsMode } from './constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button } from 'antd';
-import { DisciplineDto, MentorRegistryDto } from 'api';
+import { DisciplineDto, MentorRegistryDto, UpdateUserDtoLanguagesEnum } from 'api';
 
 type ChildrenProp = {
   tagFilters: string[],
@@ -208,8 +208,9 @@ export const MentorRegistryTableContainer = ({ children, data, courses, activeTa
         key: MentorsRegistryColumnKey.Languages,
         title: MentorsRegistryColumnName.Languages,
         dataIndex: MentorsRegistryColumnKey.Languages,
+        render: tagsRenderer,
         //TODO
-        filters: [],
+        filters: Object.values(UpdateUserDtoLanguagesEnum).map((language) => { return { text: language, value: language } }),
         width: 130,
       },
       {

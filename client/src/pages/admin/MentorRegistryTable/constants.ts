@@ -10,7 +10,7 @@ export enum MentorsRegistryColumnKey {
   Preselected = 'preselectedCourses',
   UpdatedDate = 'updatedDate',
   Tech = 'technicalMentoring',
-  Languages = 'languages',
+  Languages = 'languagesMentoring',
   StudentsLimit = 'maxStudentsLimit',
   City = 'cityName',
   PreferredLocation = 'preferedStudentsLocation',
