@@ -10,10 +10,10 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 
-import { MentorRegistryTable } from 'modules/MentorRegistryTable/components/MentorRegistryTable';
-import { MentorRegistryModal } from 'modules/MentorRegistryTable/components/MentorRegistryModal';
-import { MentorRegistryTableContainer } from 'modules/MentorRegistryTable/components/MentorRegistryTableContainer';
-import { MentorRegistryTabsMode, TabsMode } from 'modules/MentorRegistryTable/constants';
+import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
+import { MentorRegistryModal } from 'modules/MentorRegistry/components/MentorRegistryModal';
+import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
+import { MentorRegistryTabsMode, TabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 
 import { useLoading } from 'components/useLoading';
