@@ -2,7 +2,6 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CacheInterceptor,
   CacheTTL,
-  CacheKey,
   Controller,
   Get,
   Param,
