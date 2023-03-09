@@ -51,12 +51,7 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
             }}
           >
             <Spin spinning={modalLoading ?? false}>
-              <Form
-                layout="vertical"
-                // onValuesChange={() => props.onChange?.(form.getFieldsValue())}
-                form={form}
-                initialValues={getInitialValues(modalData.record)}
-              >
+              <Form layout="vertical" form={form} initialValues={getInitialValues(modalData.record)}>
                 <Form.Item name="preselectedCourses" label="Pre-Selected Courses" required>
                   <Select mode="multiple" optionFilterProp="children">
                     {courses.map(course => (
