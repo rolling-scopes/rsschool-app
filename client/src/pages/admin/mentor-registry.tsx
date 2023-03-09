@@ -48,7 +48,7 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as Partial<any> | null);
   const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(TabsMode.New);
   const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
-  const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const updateData = (showAll: boolean, allData: MentorRegistryDto[]) => {
     setShowAll(showAll);

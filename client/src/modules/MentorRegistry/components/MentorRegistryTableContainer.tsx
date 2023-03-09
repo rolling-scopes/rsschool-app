@@ -124,11 +124,11 @@ export const MentorRegistryTableContainer = ({
     };
 
     const filterTag: string[] = [
-      ...combinedFilter?.technicalMentoring?.map(v => `${MentorsRegistryColumnName.Tech}: ${v}`),
-      ...combinedFilter.preselectedCourses?.map(
+      ...combinedFilter.technicalMentoring.map(v => `${MentorsRegistryColumnName.Tech}: ${v}`),
+      ...combinedFilter.preselectedCourses.map(
         v => `${MentorsRegistryColumnName.Preselected}: ${courses.find(i => i.id === v)?.name}`,
       ),
-      ...combinedFilter.preferredCourses?.map(
+      ...combinedFilter.preferredCourses.map(
         v => `${MentorsRegistryColumnName.PreferredCourses}: ${courses.find(i => i.id === v)?.name}`,
       ),
     ];
@@ -277,28 +277,34 @@ export const MentorRegistryTableContainer = ({
   const handleTagClose = (removedTag: string) => {
     const [removedTagName, removedTagValue] = removedTag.split(':');
     switch (removedTagName) {
-      case MentorsRegistryColumnName.Tech: {
-        setCombinedFilter(prevState => ({
-          ...prevState,
-          technicalMentoring: combinedFilter.technicalMentoring.filter(tag => tag !== removedTagValue.trim()),
-        }));
-      }
-      case MentorsRegistryColumnName.PreferredCourses: {
-        setCombinedFilter(prevState => ({
-          ...prevState,
-          preferredCourses: combinedFilter.preferredCourses.filter(
-            tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
-          ),
-        }));
-      }
-      case MentorsRegistryColumnName.Preselected: {
-        setCombinedFilter(prevState => ({
-          ...prevState,
-          preselectedCourses: combinedFilter.preselectedCourses.filter(
-            tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
-          ),
-        }));
-      }
+      case MentorsRegistryColumnName.Tech:
+        {
+          setCombinedFilter(prevState => ({
+            ...prevState,
+            technicalMentoring: combinedFilter.technicalMentoring.filter(tag => tag !== removedTagValue.trim()),
+          }));
+        }
+        break;
+      case MentorsRegistryColumnName.PreferredCourses:
+        {
+          setCombinedFilter(prevState => ({
+            ...prevState,
+            preferredCourses: combinedFilter.preferredCourses.filter(
+              tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
+            ),
+          }));
+        }
+        break;
+      case MentorsRegistryColumnName.Preselected:
+        {
+          setCombinedFilter(prevState => ({
+            ...prevState,
+            preselectedCourses: combinedFilter.preselectedCourses.filter(
+              tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
+            ),
+          }));
+        }
+        break;
       default:
         break;
     }
