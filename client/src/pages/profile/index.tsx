@@ -2,7 +2,7 @@ import * as React from 'react';
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
-import { ProfileApi, UpdateProfileInfoDto } from 'api';
+import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
@@ -208,7 +208,7 @@ export class ProfilePage extends React.Component<Props, State> {
       />,
       <LanguagesCard
         key="languages-card"
-        data={languages}
+        data={languages as UpdateUserDtoLanguagesEnum[]}
         isEditingModeEnabled={isProfileOwner}
         updateProfile={this.updateProfile}
       />,

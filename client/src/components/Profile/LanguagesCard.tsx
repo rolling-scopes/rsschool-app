@@ -2,11 +2,11 @@ import { TranslationOutlined } from '@ant-design/icons';
 import { Form, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
-import { SelectLanguages } from 'components/SelectLanguages';
+import { getLanguageName, SelectLanguages } from 'components/SelectLanguages';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 
 type Props = {
-  data: string[];
+  data: UpdateUserDtoLanguagesEnum[];
   isEditingModeEnabled: boolean;
   updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
@@ -50,7 +50,7 @@ const LanguagesCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => 
         languages.length ? (
           <Space size={0}>
             {languages.map(el => (
-              <Tag key={el}>{el}</Tag>
+              <Tag key={el}>{getLanguageName(el)}</Tag>
             ))}
           </Space>
         ) : null

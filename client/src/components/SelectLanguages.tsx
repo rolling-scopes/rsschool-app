@@ -10,10 +10,16 @@ export function SelectLanguages({ placeholder = 'Select languages', ...props }: 
       mode="multiple"
       placeholder={placeholder}
       options={languages.map(language => ({
-        label: language,
+        label: getLanguageName(language),
         value: language,
       }))}
       {...props}
     />
   );
+}
+
+export function getLanguageName(language: UpdateUserDtoLanguagesEnum) {
+  const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
+
+  return languageNames.of(language);
 }
