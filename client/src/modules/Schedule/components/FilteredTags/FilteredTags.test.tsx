@@ -39,7 +39,9 @@ describe('FilteredTags', () => {
       />,
     );
 
-    expect(screen.getAllByText(/Type: /)).toHaveLength(3);
+    expect(screen.getByText(getTagLabel(TagsEnum.Coding))).toBeInTheDocument();
+    expect(screen.getByText(getTagLabel(TagsEnum.CrossCheckReview))).toBeInTheDocument();
+    expect(screen.getByText(getTagLabel(TagsEnum.Interview))).toBeInTheDocument();
   });
 
   it('should render "Clear all" button', () => {
