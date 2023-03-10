@@ -83,8 +83,8 @@ export const MentorRegistryTableContainer = ({
     );
   };
 
-  const renderInfo = (_: any, record: any) => {
-    const isMentor = record.courses.some((id: string) => !record.preselectedCourses.includes(id));
+  const renderInfo = (_: any, record: MentorRegistryDto) => {
+    const isMentor = record.courses.some(id => !record.preselectedCourses.includes(id));
     return (
       <div className="info-icons">
         {/* {record.englishMentoring ? <div title="Ready to mentor in English" className="icon-flag-uk" /> : null} */}

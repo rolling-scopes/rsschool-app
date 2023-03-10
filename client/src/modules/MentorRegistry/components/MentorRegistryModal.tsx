@@ -25,7 +25,7 @@ export const MentorRegistryModal = (props: MentorRegistryModalProps) => {
     onCancel,
     cancelMentor,
   } = props;
-  const form = Form.useForm()[0];
+  const [form] = Form.useForm();
 
   const renderModal = useCallback(() => {
     switch (modalData?.mode) {
