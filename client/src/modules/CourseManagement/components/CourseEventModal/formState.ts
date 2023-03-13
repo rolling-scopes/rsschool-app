@@ -15,7 +15,7 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
     dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     endTime: values.endTime ? formatTimezoneToUTC(values.endTime, values.timeZone) : undefined,
     place: values.place || null,
-    organizer: values.organizerId ? { id: values.organizerId } : undefined,
+    organizer: values.taskOwner?.id ? { id: values.taskOwner?.id } : undefined,
   };
   return record;
 };
