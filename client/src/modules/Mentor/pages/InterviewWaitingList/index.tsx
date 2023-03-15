@@ -1,4 +1,4 @@
-import { Button, Table } from 'antd';
+import { Button, Popconfirm, Table } from 'antd';
 import { Rating } from 'components/Rating';
 import { PageLayout } from 'components/PageLayout';
 import {
@@ -117,13 +117,25 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
             align: 'right',
             render: (_, record) => (
               <>
-                <Button type="link" onClick={() => inviteStudent(record.githubId)}>
-                  Want to interview
-                </Button>
+                <Popconfirm
+                  title={
+                    <>
+                      Are you sure to interview <b>{record.githubId}</b>?
+                    </>
+                  }
+                  okText="Yes"
+                  onConfirm={() => inviteStudent(record.githubId)}
+                >
+                  <Button type="link">Want to interview</Button>
+                </Popconfirm>
                 {isStageInterview && isPowerUser ? (
-                  <Button type="link" onClick={() => removeFromList(record.githubId)}>
-                    Remove from list
-                  </Button>
+                  <Popconfirm
+                    title={<>Are you sure to remove {record.githubId} from the wait list?</>}
+                    okText="Yes"
+                    onConfirm={() => removeFromList(record.githubId)}
+                  >
+                    <Button type="link">Remove from list</Button>
+                  </Popconfirm>
                 ) : null}
               </>
             ),
