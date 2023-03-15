@@ -21,7 +21,7 @@ function Page(props: CoursePageProps) {
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseTaskDto[]);
-  const [modalData, setModalData] = useState(null as Partial<CourseTaskDto> | null);
+  const [modalData, setModalData] = useState<Partial<CourseTaskDto> | null>(null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = useCallback(async () => {

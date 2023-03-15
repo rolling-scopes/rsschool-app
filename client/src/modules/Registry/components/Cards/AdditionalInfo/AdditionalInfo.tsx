@@ -10,7 +10,6 @@ import {
 } from 'modules/Registry/components';
 
 type Props = {
-  checkedList: number[];
   courses: Course[];
   onPrevious: () => void;
 };
@@ -19,13 +18,12 @@ const { Title } = Typography;
 
 const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
-export function AdditionalInfo({ courses, checkedList, onPrevious }: Props) {
+export function AdditionalInfo({ courses, onPrevious }: Props) {
   return (
     <FormCard title={<Title level={5}>{CARD_TITLES.additionalInfo}</Title>}>
       <Form.Item {...formItemLayout} name="preferedCourses" label={LABELS.courses} requiredMark="optional">
         <Select
           mode="multiple"
-          value={checkedList}
           placeholder={PLACEHOLDERS.courses}
           options={courses.map(course => ({
             label: <CourseLabel course={course} />,

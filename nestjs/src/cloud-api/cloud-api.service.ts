@@ -17,6 +17,10 @@ export class CloudApiService {
     return lastValueFrom(this.httpService.post(`${this.baseUrl}/errors`, errors, this.getHeaders()));
   }
 
+  public async submitTask<T>(data: T[]) {
+    return lastValueFrom(this.httpService.post(`${this.baseUrl}/task`, data, this.getHeaders()));
+  }
+
   private getHeaders() {
     return { headers: { 'x-api-key': this.apiKey } };
   }

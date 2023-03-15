@@ -1,8 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
+import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
 import { FilesService } from 'services/files';
-import { CourseService } from 'services/course';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
 import { notification } from 'antd';
@@ -10,8 +9,8 @@ import * as UserUtils from 'domain/user';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 jest.mock('services/files');
-jest.mock('services/course');
 jest.mock('domain/user');
+jest.mock('api');
 
 const uploadFileMock = jest.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
 (FilesService as jest.Mock).mockImplementation(() => ({ uploadFile: uploadFileMock }));
@@ -50,8 +49,10 @@ describe('useCourseTaskSubmit', () => {
   `(
     'should post task verification for $type',
     async ({ type, values, result }: { type: CourseTaskDetailedDtoTypeEnum; values: any; result: any }) => {
-      const postTaskVerificationMock = jest.fn().mockResolvedValueOnce(() => ({ courseTask: { type } }));
-      (CourseService as jest.Mock).mockImplementationOnce(() => ({ postTaskVerification: postTaskVerificationMock }));
+      const createTaskVerificationMock = jest.fn().mockResolvedValueOnce(() => ({ data: { courseTask: { type } } }));
+      (CourseTaskVerificationsApi as jest.Mock).mockImplementationOnce(() => ({
+        createTaskVerification: createTaskVerificationMock,
+      }));
 
       const courseTask = generateCourseTask(type);
       const { submit } = renderUseCourseTaskSubmit(courseTask);
@@ -60,7 +61,7 @@ describe('useCourseTaskSubmit', () => {
         await submit(values);
       });
 
-      expect(postTaskVerificationMock).toHaveBeenCalledWith(courseTask.id, result);
+      expect(createTaskVerificationMock).toHaveBeenCalledWith(100, courseTask.id, result);
     },
   );
 
@@ -91,7 +92,7 @@ describe('useCourseTaskSubmit', () => {
       async ({ statusCode, message }: { statusCode: number; message: string }) => {
         const error = generateAxiosError(statusCode);
         const notificationMock = jest.fn();
-        jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValueOnce(error);
+        jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
         jest.spyOn(notification, 'error').mockImplementationOnce(() => notificationMock);
 
         const courseTask = generateCourseTask();
@@ -118,7 +119,7 @@ describe('useCourseTaskSubmit', () => {
       async ({ isExpelled, perHour, message }: { isExpelled: boolean; perHour: number; message: string }) => {
         const error = generateAxiosError(403);
         jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
-        jest.spyOn(CourseService.prototype, 'postTaskVerification').mockRejectedValueOnce(error);
+        jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
         jest.spyOn(notification, 'error').mockImplementationOnce(() => jest.fn());
 
         const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Jstask, perHour);
