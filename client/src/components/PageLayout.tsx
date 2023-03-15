@@ -82,7 +82,7 @@ export function AdminPageLayout({
   courseName?: string;
   loading: boolean;
   courses: Course[];
-  styles?: any;
+  styles?: Partial<{ margin: string | number; padding: string | number }>;
 }>) {
   return (
     <Layout style={{ minHeight: '100vh' }}>

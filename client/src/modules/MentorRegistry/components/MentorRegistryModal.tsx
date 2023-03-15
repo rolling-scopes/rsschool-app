@@ -2,14 +2,15 @@ import { Col, Form, Modal, Select, Spin, Typography } from 'antd';
 import React, { useCallback } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Course } from 'services/models';
+import { MentorRegistryDto } from 'api';
 
 interface MentorRegistryModalProps {
   modalData: any;
   modalLoading?: boolean;
   courses: Course[];
   handleModalSubmit: (arg: any) => void;
-  getInitialValues: (arg: any) => any;
-  resendConfirmation: (record: any) => void;
+  getInitialValues: (arg: MentorRegistryDto) => any;
+  resendConfirmation: (record: MentorRegistryDto) => void;
   onCancel: () => void;
   cancelMentor: (githubId: string) => Promise<void | undefined>;
 }

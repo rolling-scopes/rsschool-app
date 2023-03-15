@@ -1,5 +1,3 @@
-import css from 'styled-jsx/css';
-
 export const PAGINATION = 200;
 
 export enum MentorsRegistryColumnKey {
@@ -59,41 +57,7 @@ export const TABS = {
   ],
 };
 
-export enum TabsMode {
+export enum MentorRegistryTabsMode {
   New = 'new',
   All = 'all',
 }
-
-export type MentorRegistryTabsMode = TabsMode.All | TabsMode.New;
-
-export const mentorRegistryStyles = css`
-  .info-icons {
-    display: flex;
-    justify-content: center;
-  }
-
-  .info-icons > div {
-    margin-right: 8px;
-  }
-
-  :global(.icon-certificate svg) {
-    width: 16px;
-    height: 16px;
-  }
-
-  .icon-flag-uk {
-    background-image: url(/static/images/united-kingdom.png);
-    background-position: center;
-    background-size: contain;
-    width: 16px;
-    height: 16px;
-  }
-
-  .icon-mentor {
-    background-image: url(/static/svg/master-yoda.svg);
-    background-position: center;
-    background-size: contain;
-    width: 16px;
-    height: 16px;
-  }
-`;

@@ -13,7 +13,7 @@ import { Course } from 'services/models';
 import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
 import { MentorRegistryModal } from 'modules/MentorRegistry/components/MentorRegistryModal';
 import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
-import { MentorRegistryTabsMode, TabsMode } from 'modules/MentorRegistry/constants';
+import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 
 import { useLoading } from 'components/useLoading';
@@ -46,7 +46,7 @@ function Page(props: Props) {
   const [maxStudents, setMaxStudents] = useState(0);
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState(null as Partial<any> | null);
-  const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(TabsMode.New);
+  const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(MentorRegistryTabsMode.New);
   const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -74,6 +74,7 @@ function Page(props: Props) {
       setModalData(null);
       await mentorRegistryService.cancelMentor(githubId);
       await loadData();
+      setIsModalOpen(false);
     }),
     [],
   );
@@ -122,18 +123,20 @@ function Page(props: Props) {
 
   const tabs = useMemo(() => {
     const tabs = [
-      { key: TabsMode.New, label: 'New applications', count: filterData(allData, false).length },
-      { key: TabsMode.All, label: 'All Mentors', count: allData.length },
+      { key: MentorRegistryTabsMode.New, label: 'New applications', count: filterData(allData, false).length },
+      { key: MentorRegistryTabsMode.All, label: 'All Mentors', count: allData.length },
     ];
     return tabs.map(el => tabRenderer(el, activeTab));
   }, [activeTab, data, filterData, allData]);
 
   useEffect(() => {
-    activeTab === TabsMode.New ? updateData(false, allData) : updateData(true, allData);
+    activeTab === MentorRegistryTabsMode.New ? updateData(false, allData) : updateData(true, allData);
   }, [activeTab]);
 
   const handleTabChange = useCallback(() => {
-    activeTab === TabsMode.New ? setActiveTab(TabsMode.All) : setActiveTab(TabsMode.New);
+    activeTab === MentorRegistryTabsMode.New
+      ? setActiveTab(MentorRegistryTabsMode.All)
+      : setActiveTab(MentorRegistryTabsMode.New);
   }, [activeTab]);
 
   const handleModalDataChange = (mode: string, record: any) => {
@@ -184,7 +187,7 @@ function Page(props: Props) {
           style={{ marginBottom: 24 }}
         />
         <MentorRegistryTableContainer
-          data={data}
+          mentors={data}
           courses={courses}
           activeTab={activeTab}
           disciplines={disciplines}

@@ -5,35 +5,30 @@ import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dat
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import {
-  mentorRegistryStyles,
-  MentorRegistryTabsMode,
-  MentorsRegistryColumnKey,
-  MentorsRegistryColumnName,
-  TABS,
-  TabsMode,
-} from '../constants';
+import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button } from 'antd';
+import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto, UpdateUserDtoLanguagesEnum } from 'api';
+import css from 'styled-jsx/css';
 
-type ChildrenProp = {
+interface ChildrenProp {
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
-  columns: any[];
+  columns: ColumnType<MentorRegistryDto>[];
   handleTagClose: (tag: string) => void;
   handleClearAllButtonClick: () => void;
   handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
-};
+}
 
-type Props = {
-  data: MentorRegistryDto[];
+interface Props {
+  mentors: MentorRegistryDto[];
   courses: Course[];
   activeTab: MentorRegistryTabsMode;
-  handleModalDataChange: (mode: string, record: any) => void;
+  handleModalDataChange: (mode: string, record: MentorRegistryDto) => void;
   children: (props: ChildrenProp) => JSX.Element;
   disciplines: DisciplineDto[];
-};
+}
 
 export interface CombinedFilter {
   preselectedCourses: number[];
@@ -45,7 +40,7 @@ export interface CombinedFilter {
 
 export const MentorRegistryTableContainer = ({
   children,
-  data,
+  mentors,
   courses,
   activeTab,
   handleModalDataChange,
@@ -59,7 +54,7 @@ export const MentorRegistryTableContainer = ({
   });
 
   const renderPreselectedCourses = (courses: Course[]) => {
-    return (values: number[], record: any) => {
+    return (values: number[], record: MentorRegistryDto) => {
       return (
         <>
           {values
@@ -87,7 +82,6 @@ export const MentorRegistryTableContainer = ({
     const isMentor = record.courses.some(id => !record.preselectedCourses.includes(id));
     return (
       <div className="info-icons">
-        {/* {record.englishMentoring ? <div title="Ready to mentor in English" className="icon-flag-uk" /> : null} */}
         {isMentor ? <div title="Mentor in the past" className="icon-mentor" /> : null}
         {record.hasCertificate ? (
           <SafetyCertificateTwoTone
@@ -102,19 +96,19 @@ export const MentorRegistryTableContainer = ({
   };
 
   const filteredData = useMemo(() => {
-    return data.filter(
-      e =>
+    return mentors.filter(
+      mentor =>
         (combinedFilter.technicalMentoring.length
-          ? e.technicalMentoring.some(v => combinedFilter.technicalMentoring.includes(v))
+          ? mentor.technicalMentoring.some(value => combinedFilter.technicalMentoring.includes(value))
           : true) &&
         (combinedFilter.preselectedCourses.length
-          ? e.preselectedCourses.some(v => combinedFilter.preselectedCourses.includes(v))
+          ? mentor.preselectedCourses.some(value => combinedFilter.preselectedCourses.includes(value))
           : true) &&
         (combinedFilter.preferredCourses.length
-          ? e.preferedCourses.some(v => combinedFilter.preferredCourses.includes(v))
+          ? mentor.preferedCourses.some(value => combinedFilter.preferredCourses.includes(value))
           : true),
     );
-  }, [combinedFilter, data]);
+  }, [combinedFilter, mentors]);
 
   const handleTableChange = (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => {
     const combinedFilter: CombinedFilter = {
@@ -137,7 +131,7 @@ export const MentorRegistryTableContainer = ({
     setCombinedFilter(combinedFilter);
   };
 
-  const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]) => {
+  const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
     const { preferredCourses, preselectedCourses, technicalMentoring } = combinedFilter;
     const allColumns = [
       {
@@ -155,7 +149,6 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('githubId'),
         ...getColumnSearchProps(['githubId', 'name']),
         width: 200,
-        fixed: 'left',
       },
       {
         key: MentorsRegistryColumnKey.Info,
@@ -163,7 +156,6 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Info,
         render: renderInfo,
         width: 100,
-        align: 'center',
       },
       {
         key: MentorsRegistryColumnKey.PreferredCourses,
@@ -239,25 +231,23 @@ export const MentorRegistryTableContainer = ({
         title: MentorsRegistryColumnName.StudentsLimit,
         dataIndex: MentorsRegistryColumnKey.StudentsLimit,
         width: 130,
-        align: 'center',
       },
       {
         key: MentorsRegistryColumnKey.PreferredLocation,
         title: MentorsRegistryColumnName.PreferredLocation,
         dataIndex: MentorsRegistryColumnKey.PreferredLocation,
         sorter: stringSorter('githubId'),
-        align: 'center',
       },
       {
         key: MentorsRegistryColumnKey.Actions,
         title: MentorsRegistryColumnName.Actions,
         dataIndex: MentorsRegistryColumnKey.Actions,
-        render: (_: any, record: any) => (
+        render: (_: any, record: MentorRegistryDto) => (
           <>
             <Button type="link" size="small" onClick={() => handleModalDataChange('invite', record)}>
               Invite
             </Button>
-            {record.preselectedCourses.length && activeTab === TabsMode.New ? (
+            {record.preselectedCourses.length && activeTab === MentorRegistryTabsMode.New ? (
               <Button type="link" size="small" onClick={() => handleModalDataChange('re-send', record)}>
                 Re-send
               </Button>
@@ -267,7 +257,7 @@ export const MentorRegistryTableContainer = ({
             </Button>
           </>
         ),
-        width: activeTab === TabsMode.New ? 210 : 140,
+        width: activeTab === MentorRegistryTabsMode.New ? 210 : 140,
       },
     ];
 
@@ -325,3 +315,35 @@ export const MentorRegistryTableContainer = ({
     handleTableChange,
   });
 };
+
+const mentorRegistryStyles = css`
+  .info-icons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .info-icons > div {
+    margin-right: 8px;
+  }
+
+  :global(.icon-certificate svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .icon-flag-uk {
+    background-image: url(/static/images/united-kingdom.png);
+    background-position: center;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+  }
+
+  .icon-mentor {
+    background-image: url(/static/svg/master-yoda.svg);
+    background-position: center;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+  }
+`;

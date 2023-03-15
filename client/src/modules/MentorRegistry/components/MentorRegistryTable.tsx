@@ -4,11 +4,12 @@ import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
 import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
+import { ColumnType } from 'antd/lib/table';
 
 type Props = {
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
-  columns: any[];
+  columns: ColumnType<MentorRegistryDto>[];
   handleTagClose: (tag: string) => void;
   handleClearAllButtonClick: () => void;
   handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
@@ -17,6 +18,8 @@ type Props = {
 export function MentorRegistryTable(props: Props) {
   const { tagFilters, filteredData, columns, handleTagClose, handleClearAllButtonClick, handleTableChange } = props;
   const [form] = Form.useForm();
+
+  const tableWidth = 1600;
 
   return (
     <Form form={form} component={false}>
@@ -30,7 +33,7 @@ export function MentorRegistryTable(props: Props) {
         size="large"
         rowKey="id"
         dataSource={filteredData}
-        scroll={{ x: 1600 }}
+        scroll={{ x: tableWidth }}
         columns={columns}
         onChange={handleTableChange}
       />
