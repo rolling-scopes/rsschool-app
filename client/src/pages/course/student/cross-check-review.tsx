@@ -1,7 +1,7 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
 import { TasksCriteriaApi } from 'api';
-import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
@@ -10,20 +10,19 @@ import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
-import { omit } from 'lodash';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
-import {
-  CommentState,
-  CountState,
-  CrossCheckCriteriaForm,
-  TaskType,
-} from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
+import { CrossCheckCriteriaForm, TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
-import { useCriteriaState } from 'modules/CrossCheck/hooks/useCriteriaState';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService, CrossCheckMessageAuthorRole, CrossCheckStatus, SolutionReviewType } from 'services/course';
+import {
+  CourseService,
+  CrossCheckCriteriaData,
+  CrossCheckMessageAuthorRole,
+  CrossCheckStatus,
+  SolutionReviewType,
+} from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
 
@@ -56,10 +55,8 @@ function Page(props: CoursePageProps) {
     data: [],
   });
 
-  const [
-    { countStar, penalty, criteriaData, criteriaComment },
-    { setCountStar, setPenalty, setCriteriaData, setComment },
-  ] = useCriteriaState();
+  const [criteriaData, setCriteriaData] = useState<CrossCheckCriteriaData[]>([]);
+  const [score, setScore] = useState(0);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
@@ -76,8 +73,7 @@ function Page(props: CoursePageProps) {
     ]);
 
     setCriteriaData(taskCriteriaData.criteria ?? []);
-    resetCriterias();
-    form.resetFields(['comment', 'score']);
+    form.resetFields(['comment']);
 
     if (!result) {
       return setState({ loading: false, data: [] });
@@ -107,30 +103,18 @@ function Page(props: CoursePageProps) {
     const [activeSolutionReview] = solutionReviews;
 
     form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
-    loadInitialCriteria(activeSolutionReview);
+    setScore(activeSolutionReview.score ?? 0);
+    if (activeSolutionReview.criteria) {
+      setCriteriaData(activeSolutionReview.criteria);
+    }
     setState({ loading: false, data: solutionReviews ?? [] });
   };
 
-  const loadInitialCriteria = (data: SolutionReviewType) => {
-    form.setFieldValue('score', data.score);
-    if (!data.criteria) return;
-    setCriteriaData(data.criteria);
-    const newCountState = data.criteria
-      .filter(item => item.type.toLowerCase() === TaskType.Subtask)
-      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-    setCountStar(newCountState as CountState[]);
-    const newCommentState = data.criteria.map(item => omit(item, ['text', 'index', 'point', 'type', 'max']));
-    setComment(newCommentState as CommentState[]);
-    const newPenalty = data.criteria
-      .filter(item => item.type.toLowerCase() === TaskType.Penalty)
-      .map(item => omit(item, ['text', 'index', 'textComment', 'type', 'max']));
-    setPenalty(newPenalty as CountState[]);
-  };
-
-  const checkPoints = () => criteriaData.filter(item => item.type.toLowerCase() === 'subtask').map(item => item.type);
-
-  const notFilledCriteriaWarning = () =>
-    message.warning(`You have not checked all the items (${countStar.length}/${checkPoints().length})`);
+  const checkCriteriaWarning = () =>
+    modal.confirm({
+      okText: 'Back to review',
+      content: <Text>You have not checked all the criteria and leave comments</Text>,
+    });
 
   useEffect(() => {
     if (queryTaskId && courseTasks.length) {
@@ -145,31 +129,21 @@ function Page(props: CoursePageProps) {
     }
   }, [historicalCommentSelected]);
 
-  const resetCriterias = () => {
-    setCountStar([]);
-    setComment([]);
-    setPenalty([]);
-  };
-
   const submitReview = withLoading(async values => {
     try {
-      const criteria = arrayForCrossCheckSubmit();
-      criteria.map(item => {
-        if (!item.point) {
-          item.point = 0;
-        }
-      });
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
-        score: values.score,
+        score,
         comment: markdownLabel + values.comment,
         anonymous: values.visibleName !== true,
         comments: [],
         review: [],
-        criteria,
+        criteria: criteriaData,
       });
       message.success('The review has been submitted. Thanks!');
-      form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
-      resetCriterias();
+      form.resetFields(['comment', 'githubId', 'visibleName']);
+      setScore(0);
+      setCriteriaData([]);
+      setState({ loading: false, data: [] });
     } catch (e) {
       message.error('An error occurred. Please try later.');
     }
@@ -180,11 +154,27 @@ function Page(props: CoursePageProps) {
       return;
     }
 
-    if (checkPoints().length !== countStar.length) {
-      return notFilledCriteriaWarning();
+    const criteriaToSubmit = criteriaData.map(item => {
+      if (item.type !== TaskType.Title && !item.point) {
+        item.point = 0;
+      }
+      return item;
+    });
+
+    setCriteriaData(criteriaToSubmit);
+
+    const isCriteriaPointsAndCommentsVerified = criteriaToSubmit
+      .filter(criteria => criteria.type.toLowerCase() === TaskType.Subtask)
+      .every(item => {
+        return item.point === item.max ? true : item.textComment && item.textComment.length > 10;
+      });
+
+    if (!isCriteriaPointsAndCommentsVerified) {
+      checkCriteriaWarning();
+      return;
     }
 
-    if (values.score !== 0) {
+    if (score !== 0) {
       await submitReview(values);
     } else {
       modal.confirm({
@@ -216,7 +206,7 @@ function Page(props: CoursePageProps) {
     setSubmissionDisabled(submissionDisabled);
     setGithubId(null);
     setState({ loading: false, data: [] });
-    form.resetFields(['score', 'comment', 'githubId']);
+    form.resetFields(['comment', 'githubId']);
   };
 
   const handleStudentChange = (githubId: string) => {
@@ -232,21 +222,6 @@ function Page(props: CoursePageProps) {
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
   const maxScore = courseTask?.maxScore;
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
-
-  function arrayForCrossCheckSubmit() {
-    const arrayPoints = countStar.concat(penalty);
-    criteriaData?.forEach(item => {
-      const arrayPoint = arrayPoints.find(point => point.key === item.key);
-      const arrayComment = criteriaComment.find(comment => comment.key === item.key);
-      if (arrayPoint) {
-        item.point = arrayPoint.point;
-      }
-      if (arrayComment) {
-        item.textComment = arrayComment.textComment;
-      }
-    });
-    return criteriaData;
-  }
 
   return (
     <PageLayout
@@ -276,16 +251,14 @@ function Page(props: CoursePageProps) {
             </Form.Item>
             {!!githubId && (
               <CrossCheckCriteriaForm
-                countStar={countStar}
-                setCountStar={setCountStar}
+                maxScore={maxScore}
+                score={score}
+                setScore={setScore}
                 criteriaData={criteriaData}
-                setPenalty={setPenalty}
-                penalty={penalty}
-                criteriaComment={criteriaComment}
-                setComment={setComment}
+                setCriteriaData={setCriteriaData}
+                initialData={state.data[0]}
               />
             )}
-            <ScoreInput courseTask={courseTask} />
             <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
             <Form.Item name="visibleName" valuePropName="checked" initialValue={isUsernameVisible}>
               <Checkbox onChange={handleUsernameVisibilityChange}>Make my name visible in feedback</Checkbox>
