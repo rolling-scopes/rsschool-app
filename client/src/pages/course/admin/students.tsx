@@ -2,12 +2,9 @@ import {
   BranchesOutlined,
   CheckCircleTwoTone,
   ClockCircleTwoTone,
-  FileExcelOutlined,
   MinusCircleOutlined,
-  CloseCircleTwoTone,
-  SolutionOutlined,
 } from '@ant-design/icons';
-import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
+import { Button, message, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
@@ -52,11 +49,6 @@ function Page(props: Props) {
   const [certificateModel, setCertificateMode] = useToggle(false);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
-
-  const createRepositories = withLoading(async () => {
-    await courseService.createRepositories();
-    message.info('The job for creating repositories has been submitted');
-  });
 
   const issueCertificate = withLoading(async () => {
     const githubId = details?.githubId;
@@ -155,26 +147,23 @@ function Page(props: Props) {
 
   function renderToolbar() {
     return (
-      <>
-        {hasCourseManagerRole ? (
-          <>
-            <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
-              Create Repos
-            </Button>
-            <Button icon={<SolutionOutlined />} style={{ marginRight: 8 }} onClick={setCertificateMode}>
-              Certificates
-            </Button>
-            <Button icon={<CloseCircleTwoTone twoToneColor="red" />} style={{ marginRight: 8 }} onClick={setExpelMode}>
-              Expel
-            </Button>
-          </>
-        ) : null}
+      <Space>
         {hasCourseManagerRole || hasCourseSupervisorRole ? (
-          <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
+          <Button onClick={exportStudents}>
             Export CSV
           </Button>
         ) : null}
-      </>
+        {hasCourseManagerRole ? (
+          <>
+            <Button onClick={setExpelMode} danger type="default">
+              Expel Students
+            </Button>
+            <Button onClick={setCertificateMode} type="primary">
+              Issue Certificates
+            </Button>
+          </>
+        ) : null}
+      </Space>
     );
   }
 
