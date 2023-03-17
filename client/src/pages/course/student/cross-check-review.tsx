@@ -103,7 +103,7 @@ function Page(props: CoursePageProps) {
     const [activeSolutionReview] = solutionReviews;
 
     form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
-    setScore(activeSolutionReview.score ?? 0);
+    setScore(activeSolutionReview.score);
     if (activeSolutionReview.criteria) {
       setCriteriaData(activeSolutionReview.criteria);
     }
@@ -166,7 +166,7 @@ function Page(props: CoursePageProps) {
     const isCriteriaPointsAndCommentsVerified = criteriaToSubmit
       .filter(criteria => criteria.type.toLowerCase() === TaskType.Subtask)
       .every(item => {
-        return item.point === item.max ? true : item.textComment && item.textComment.length > 10;
+        return item.point === item.max ? true : item.textComment && item.textComment.length >= 10;
       });
 
     if (!isCriteriaPointsAndCommentsVerified) {

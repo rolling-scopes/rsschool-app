@@ -10,23 +10,19 @@ interface SubtaskCriteriaProps {
   updateCriteriaData: (updatedEntry: CrossCheckCriteriaData) => void;
 }
 
-export default function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCriteriaProps) {
-  const maxScore = subtaskData.max as number;
-  const comment = subtaskData.textComment as string;
-  const criteriaScore = subtaskData.point as number;
+export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCriteriaProps) {
+  const maxScore = subtaskData.max;
+  const comment = subtaskData.textComment;
+  const criteriaScore = subtaskData.point;
 
-  const updateScore = (event: number) => {
-    const updatedEntry = { ...subtaskData, point: event };
-    updateCriteriaData(updatedEntry);
-  };
-
-  const updateComment = (newComment: string) => {
-    const updatedEntry = { ...subtaskData, textComment: newComment };
+  const updateSubtaskData = (newData: number | string) => {
+    const updatedEntry =
+      typeof newData === 'string' ? { ...subtaskData, textComment: newData } : { ...subtaskData, point: newData };
     updateCriteriaData(updatedEntry);
   };
 
   const statusCommentRequired = useMemo(() => {
-    if (criteriaScore !== undefined) {
+    if (criteriaScore !== undefined && maxScore) {
       const commentNotMatchRules = comment ? comment.length < 10 : true;
       return criteriaScore < maxScore && commentNotMatchRules;
     }
@@ -59,8 +55,14 @@ export default function SubtaskCriteria({ subtaskData, updateCriteriaData }: Sub
           (Max {maxScore} points for criteria)
         </Text>
         <div style={{ width: '60%', display: 'flex', gap: '10px' }}>
-          <Slider style={{ width: '70%' }} min={0} max={maxScore} onChange={updateScore} value={criteriaScore ?? 0} />
-          <InputNumber min={0} max={maxScore} value={criteriaScore ?? 0} onChange={updateScore} />
+          <Slider
+            style={{ width: '70%' }}
+            min={0}
+            max={maxScore}
+            onChange={updateSubtaskData}
+            value={criteriaScore ?? 0}
+          />
+          <InputNumber min={0} max={maxScore} value={criteriaScore ?? 0} onChange={updateSubtaskData} />
         </div>
       </div>
       <div style={{ padding: '0 12px' }}>
@@ -68,7 +70,7 @@ export default function SubtaskCriteria({ subtaskData, updateCriteriaData }: Sub
           style={{ border: statusCommentRequired ? '1px red solid' : '' }}
           value={subtaskData.textComment}
           rows={2}
-          onInput={event => updateComment((event.target as HTMLInputElement).value)}
+          onInput={event => updateSubtaskData((event.target as HTMLInputElement).value)}
         />
         <div style={{ height: '20px' }}>
           {statusCommentRequired && <Text type="danger">Please leave a detailed comment</Text>}

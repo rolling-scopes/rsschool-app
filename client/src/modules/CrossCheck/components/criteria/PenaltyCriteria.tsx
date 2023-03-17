@@ -15,7 +15,7 @@ interface PenaltyCriteriaProps {
   updateCriteriaData: (updatedEntry: CrossCheckCriteriaData) => void;
 }
 
-export default function PenaltyCriteria({ penaltyData, updateCriteriaData }: PenaltyCriteriaProps) {
+export function PenaltyCriteria({ penaltyData, updateCriteriaData }: PenaltyCriteriaProps) {
   const hasPenalty = Boolean(penaltyData.point && penaltyData.point !== 0);
   const penaltyScore = -Math.abs(penaltyData.max!);
 

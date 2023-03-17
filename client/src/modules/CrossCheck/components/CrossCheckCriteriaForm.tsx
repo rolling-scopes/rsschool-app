@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { Typography, InputNumber } from 'antd';
+import { isEqual } from 'lodash';
 
-import SubtaskCriteria from './criteria/SubtaskCriteria';
-import TitleCriteria from './criteria/TitleCriteria';
-import PenaltyCriteria from './criteria/PenaltyCriteria';
+import { SubtaskCriteria } from './criteria/SubtaskCriteria';
+import { TitleCriteria } from './criteria/TitleCriteria';
+import { PenaltyCriteria } from './criteria/PenaltyCriteria';
 import { CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
 
 export enum TaskType {
@@ -28,13 +29,16 @@ export function CrossCheckCriteriaForm({
   setCriteriaData,
   initialData,
 }: CriteriaFormProps) {
-  const maxScoreValue = maxScore || 100;
+  const maxScoreValue = maxScore ?? 100;
   const maxScoreLabel = maxScoreValue ? ` (Max ${maxScoreValue} points)` : '';
   const penaltyData: CrossCheckCriteriaData[] =
     criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty) ?? [];
 
   useEffect(() => {
-    if (JSON.stringify(initialData?.criteria) !== JSON.stringify(criteriaData)) {
+    const sortedInitialData = initialData?.criteria?.sort((a, b) => (a.key > b.key ? 1 : -1));
+    const sortedCriteriaData = criteriaData.sort((a, b) => (a.key > b.key ? 1 : -1));
+
+    if (!isEqual(sortedInitialData, sortedCriteriaData)) {
       const totalPoints = criteriaData.reduce((acc, criteria) => {
         return criteria.point ? acc + criteria.point : acc;
       }, 0);
