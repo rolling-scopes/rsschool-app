@@ -1,80 +1,94 @@
-import { Alert, Button, Drawer, Form, InputNumber, Select } from 'antd';
+import { Alert, Button, Col, Form, InputNumber, Modal, Row, Select, Space } from 'antd';
 import { CoursesTasksApi } from 'api';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 
 type Props = {
   courseId: number;
-  onApply: (criteria: { courseTaskIds: number[]; minScore: number; minTotalScore: number }) => void;
+  onSubmit: (criteria: { courseTaskIds: number[]; minScore: number; minTotalScore: number }) => void;
   onClose: () => void;
+  isModalOpen: boolean;
+};
+
+type FormValues = {
+  courseTaskIds: number[];
+  minScore: number;
+  minTotalScore: number;
 };
 
 const courseTasksApi = new CoursesTasksApi();
 
-export function CertificateCriteria(props: Props) {
-  const [applyEnabled, setApplyEnabled] = useState(false);
+export function CertificateCriteria({ courseId, onSubmit, onClose, isModalOpen }: Props) {
+  const [form] = Form.useForm<FormValues>();
+  const [okEnabled, setOkEnabled] = useState(false);
 
-  const { value: courseTasks = [] } = useAsync(async () => {
-    const { data } = await courseTasksApi.getCourseTasks(props.courseId);
+  const { value: courseTasks = [], loading } = useAsync(async () => {
+    const { data } = await courseTasksApi.getCourseTasks(courseId);
     return data;
   }, []);
 
-  const [form] = Form.useForm();
   return (
-    <Drawer
+    <Modal
       width={600}
       title="Certificate Criteria"
-      placement="right"
-      closable={false}
-      onClose={props.onClose}
-      visible={!!courseTasks}
+      onCancel={onClose}
+      open={isModalOpen}
+      bodyStyle={{ paddingBlock: 16 }}
+      footer={null}
     >
-      <div>
-        <Form
-          layout="vertical"
-          form={form}
-          onValuesChange={(_: any, values: any) => {
-            const { minScore, courseTaskIds, minTotalScore } = values as FormValues;
-            const tasksCriteriaValid =
-              !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
-            setApplyEnabled(tasksCriteriaValid && !!minTotalScore);
-          }}
-          onFinish={values => {
-            const { minScore, courseTaskIds, minTotalScore } = values;
-            props.onApply({ courseTaskIds, minScore, minTotalScore });
-          }}
-        >
-          <Alert
-            style={{ marginBottom: 8 }}
-            message="It will issue certificates to students who have completed all the tasks from the selected ones, scored more than the specified score and have an overall score greater than the specified one."
-          />
-
-          <Form.Item name="courseTaskIds" label="Tasks">
-            <Select mode="multiple" optionFilterProp="children">
-              {courseTasks.map(task => (
-                <Select.Option key={task.id} value={task.id}>
-                  {task.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name="minScore" label="Min score for tasks">
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name="minTotalScore" label="Min total score">
-            <InputNumber />
-          </Form.Item>
-          <Button disabled={!applyEnabled} htmlType="submit" type="primary">
-            Apply
-          </Button>
-        </Form>
-      </div>
-    </Drawer>
+      <Form
+        layout="vertical"
+        form={form}
+        onValuesChange={(_, values) => {
+          const { minScore, courseTaskIds, minTotalScore } = values;
+          const tasksCriteriaValid =
+            !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
+          setOkEnabled(tasksCriteriaValid && !!minTotalScore);
+        }}
+        onFinish={onSubmit}
+      >
+        <Row gutter={[0, 16]}>
+          <Col span={24}>
+            <Alert message="Certificates will be issued to all students meeting the criteria down below." showIcon />
+          </Col>
+          <Col span={24}>
+            <Form.Item name="courseTaskIds" label="Tasks" style={{ marginBottom: 0 }} required>
+              <Select
+                mode="multiple"
+                placeholder="Select tasks"
+                loading={loading}
+                optionFilterProp="label"
+                options={courseTasks.map(({ name, id }) => ({
+                  label: name,
+                  value: id,
+                }))}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="minScore" label="Minimum Score Per Task" style={{ marginBottom: 0 }}>
+              <InputNumber style={{ width: '100%' }} type="number" min={0} placeholder="Enter minimum score" />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="minTotalScore" label="Minimum Total Score" style={{ marginBottom: 0 }}>
+              <InputNumber style={{ width: '100%' }} type="number" min={0} placeholder="Enter minimum score" />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Row justify="end">
+              <Space wrap>
+                <Button key="back" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button key="submit" type="primary" htmlType="submit" disabled={!okEnabled}>
+                  Issue Certificates
+                </Button>
+              </Space>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>
   );
 }
-
-type FormValues = {
-  courseTaskIds: string[];
-  minScore: number;
-  minTotalScore: number;
-};

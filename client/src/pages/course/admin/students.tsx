@@ -1,9 +1,4 @@
-import {
-  BranchesOutlined,
-  CheckCircleTwoTone,
-  ClockCircleTwoTone,
-  MinusCircleOutlined,
-} from '@ant-design/icons';
+import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, message, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -45,8 +40,8 @@ function Page(props: Props) {
   const [stats, setStats] = useState(null as Stats | null);
   const [activeOnly, setActiveOnly] = useState(false);
   const [details, setDetails] = useState<StudentDetails | null>(null);
-  const [expelModel, setExpelMode] = useToggle(false);
-  const [certificateModel, setCertificateMode] = useToggle(false);
+  const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
+  const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
 
@@ -93,13 +88,15 @@ function Page(props: Props) {
 
   const expelStudents = withLoading(async (criteria: any, options: any, expellingReason: string) => {
     await courseService.expelStudents(criteria, options, expellingReason);
-    setExpelMode();
+    toggleExpelModal();
     loadStudents();
+    message.success('Students successfully expelled');
   });
 
-  const certificateStudents = withLoading(async (criteria: any) => {
+  const issueCertificates = withLoading(async (criteria: any) => {
     await courseService.postCertificateStudents(criteria);
-    setCertificateMode();
+    toggleCertificateModal();
+    message.success('All certificates successfully issued');
   });
 
   return render();
@@ -135,30 +132,32 @@ function Page(props: Props) {
           courseId={props.course.id}
           courseManagerOrSupervisor={hasCourseManagerRole || hasCourseSupervisorRole}
         />
-        {expelModel ? (
-          <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
-        ) : null}
-        {certificateModel ? (
-          <CertificateCriteria courseId={props.course.id} onClose={setCertificateMode} onApply={certificateStudents} />
-        ) : null}
+        <ExpelCriteria
+          courseId={props.course.id}
+          onClose={toggleExpelModal}
+          onApply={expelStudents}
+          isModalOpen={isExpelModalOpen}
+        />
+        <CertificateCriteria
+          courseId={props.course.id}
+          onClose={toggleCertificateModal}
+          onSubmit={issueCertificates}
+          isModalOpen={isCertificateModalOpen}
+        />
       </AdminPageLayout>
     );
   }
 
   function renderToolbar() {
     return (
-      <Space>
-        {hasCourseManagerRole || hasCourseSupervisorRole ? (
-          <Button onClick={exportStudents}>
-            Export CSV
-          </Button>
-        ) : null}
+      <Space wrap>
+        {hasCourseManagerRole || hasCourseSupervisorRole ? <Button onClick={exportStudents}>Export CSV</Button> : null}
         {hasCourseManagerRole ? (
           <>
-            <Button onClick={setExpelMode} danger type="default">
+            <Button onClick={toggleExpelModal} danger type="default">
               Expel Students
             </Button>
-            <Button onClick={setCertificateMode} type="primary">
+            <Button onClick={toggleCertificateModal} type="primary">
               Issue Certificates
             </Button>
           </>
