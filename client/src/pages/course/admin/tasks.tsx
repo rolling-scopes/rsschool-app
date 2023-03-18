@@ -165,7 +165,9 @@ function Page(props: CoursePageProps) {
         columns={getColumns(getDropdownMenu)}
         scroll={{ x: 1020, y: 'calc(100vh - 260px)' }}
       />
-      <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
+      {modalData && (
+        <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
+      )}
     </AdminPageLayout>
   );
 }
