@@ -9,6 +9,7 @@ export function SelectLanguages({ placeholder = 'Select languages', ...props }: 
     <Select
       mode="multiple"
       placeholder={placeholder}
+      optionFilterProp="label"
       options={languages.map(language => ({
         label: getLanguageName(language),
         value: language,
