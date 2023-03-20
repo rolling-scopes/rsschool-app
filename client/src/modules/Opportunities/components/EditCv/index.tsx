@@ -97,7 +97,7 @@ export const EditCV = (props: Props) => {
 
     setLoading(false);
 
-    notification.success({ message: 'CV sucessfully updated' });
+    notification.success({ message: 'CV sucessfully updated', duration: 2 });
   };
 
   return (
