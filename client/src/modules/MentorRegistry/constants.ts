@@ -30,8 +30,13 @@ export enum MentorsRegistryColumnName {
   Actions = 'Actions',
 }
 
+export enum MentorRegistryTabsMode {
+  New = 'new',
+  All = 'all',
+}
+
 export const TABS = {
-  new: [
+  [MentorRegistryTabsMode.New]: [
     MentorsRegistryColumnKey.Github,
     MentorsRegistryColumnKey.Info,
     MentorsRegistryColumnKey.PreferredCourses,
@@ -43,7 +48,7 @@ export const TABS = {
     MentorsRegistryColumnKey.StudentsLimit,
     MentorsRegistryColumnKey.Actions,
   ],
-  all: [
+  [MentorRegistryTabsMode.All]: [
     MentorsRegistryColumnKey.Github,
     MentorsRegistryColumnKey.Info,
     MentorsRegistryColumnKey.PreferredCourses,
@@ -56,8 +61,3 @@ export const TABS = {
     MentorsRegistryColumnKey.Actions,
   ],
 };
-
-export enum MentorRegistryTabsMode {
-  New = 'new',
-  All = 'all',
-}

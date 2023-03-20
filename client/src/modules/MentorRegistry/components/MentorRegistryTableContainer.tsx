@@ -7,9 +7,10 @@ import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import { DisciplineDto, MentorRegistryDto, UpdateUserDtoLanguagesEnum } from 'api';
+import { DisciplineDto, MentorRegistryDto } from 'api';
+import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
 
 interface ChildrenProp {
@@ -25,7 +26,7 @@ interface Props {
   mentors: MentorRegistryDto[];
   courses: Course[];
   activeTab: MentorRegistryTabsMode;
-  handleModalDataChange: (mode: string, record: MentorRegistryDto) => void;
+  handleModalDataChange: (mode: ModalDataMode, record: MentorRegistryDto) => void;
   children: (props: ChildrenProp) => JSX.Element;
   disciplines: DisciplineDto[];
 }
@@ -55,17 +56,13 @@ export const MentorRegistryTableContainer = ({
 
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
-      return (
-        <>
-          {values
-            .map(v => ({
-              value: courses.find(c => c.id === v)?.name ?? v.toString(),
-              alias: courses.find(c => c.id === v)?.alias ?? '',
-              color: record.courses.includes(v) ? '#87d068' : undefined,
-            }))
-            .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)))}
-        </>
-      );
+      return values
+        .map(value => ({
+          value: courses.find(course => course.id === value)?.name ?? value.toString(),
+          alias: courses.find(course => course.id === value)?.alias ?? '',
+          color: record.courses.includes(value) ? '#87d068' : undefined,
+        }))
+        .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)));
     };
   };
 
@@ -112,18 +109,22 @@ export const MentorRegistryTableContainer = ({
 
   const handleTableChange = (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => {
     const combinedFilter: CombinedFilter = {
-      preferredCourses: filters.preferedCourses?.map(c => Number(c)) ?? [],
-      preselectedCourses: filters.preselectedCourses?.map(c => Number(c)) ?? [],
-      technicalMentoring: filters.technicalMentoring?.map(v => v.toString()) ?? [],
+      preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
+      preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
+      technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
     };
 
     const filterTag: string[] = [
-      ...combinedFilter.technicalMentoring.map(v => `${MentorsRegistryColumnName.Tech}: ${v}`),
+      ...combinedFilter.technicalMentoring.map(discipline => `${MentorsRegistryColumnName.Tech}: ${discipline}`),
       ...combinedFilter.preselectedCourses.map(
-        v => `${MentorsRegistryColumnName.Preselected}: ${courses.find(i => i.id === v)?.name}`,
+        preselectedCourse =>
+          `${MentorsRegistryColumnName.Preselected}: ${courses.find(course => course.id === preselectedCourse)?.name}`,
       ),
       ...combinedFilter.preferredCourses.map(
-        v => `${MentorsRegistryColumnName.PreferredCourses}: ${courses.find(i => i.id === v)?.name}`,
+        preferredCourse =>
+          `${MentorsRegistryColumnName.PreferredCourses}: ${
+            courses.find(course => course.id === preferredCourse)?.name
+          }`,
       ),
     ];
 
@@ -161,7 +162,10 @@ export const MentorRegistryTableContainer = ({
         key: MentorsRegistryColumnKey.PreferredCourses,
         title: MentorsRegistryColumnName.PreferredCourses,
         dataIndex: MentorsRegistryColumnKey.PreferredCourses,
-        render: (values: number[]) => tagsRenderer(values.map(v => allCourses.find(c => c.id === v)?.name ?? v)),
+        render: (courses: number[]) =>
+          tagsRenderer(
+            courses.map(course => allCourses.find(preferredCourse => preferredCourse.id === course)?.name ?? course),
+          ),
         filters: allCourses.map(status => ({ text: status.name, value: status.id })),
         defaultFilteredValue: preferredCourses,
         filtered: preferredCourses?.length > 0,
@@ -172,7 +176,7 @@ export const MentorRegistryTableContainer = ({
         key: MentorsRegistryColumnKey.ReceivedDate,
         title: MentorsRegistryColumnName.ReceivedDate,
         dataIndex: MentorsRegistryColumnKey.ReceivedDate,
-        render: (v: string) => formatDate(v),
+        render: (date: string) => formatDate(date),
         sorter: dateSorter('receivedDate'),
         width: 120,
       },
@@ -191,7 +195,7 @@ export const MentorRegistryTableContainer = ({
         key: MentorsRegistryColumnKey.UpdatedDate,
         title: MentorsRegistryColumnName.UpdatedDate,
         dataIndex: MentorsRegistryColumnKey.UpdatedDate,
-        render: (v: string) => formatDate(v),
+        render: (date: string) => formatDate(date),
         sorter: dateSorter('updatedDate'),
         width: 120,
       },
@@ -220,10 +224,6 @@ export const MentorRegistryTableContainer = ({
         title: MentorsRegistryColumnName.Languages,
         dataIndex: MentorsRegistryColumnKey.Languages,
         render: tagsRenderer,
-        //TODO
-        filters: Object.values(UpdateUserDtoLanguagesEnum).map(language => {
-          return { text: language, value: language };
-        }),
         width: 130,
       },
       {
@@ -244,15 +244,15 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Actions,
         render: (_: any, record: MentorRegistryDto) => (
           <>
-            <Button type="link" size="small" onClick={() => handleModalDataChange('invite', record)}>
+            <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Invite, record)}>
               Invite
             </Button>
             {record.preselectedCourses.length && activeTab === MentorRegistryTabsMode.New ? (
-              <Button type="link" size="small" onClick={() => handleModalDataChange('re-send', record)}>
+              <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}>
                 Re-send
               </Button>
             ) : null}
-            <Button type="link" size="small" onClick={() => handleModalDataChange('delete', record)}>
+            <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Delete, record)}>
               Delete
             </Button>
           </>
@@ -280,7 +280,7 @@ export const MentorRegistryTableContainer = ({
           setCombinedFilter(prevState => ({
             ...prevState,
             preferredCourses: combinedFilter.preferredCourses.filter(
-              tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
+              tag => courses.find(course => course.id === tag)?.name !== removedTagValue.trim(),
             ),
           }));
         }
@@ -290,15 +290,16 @@ export const MentorRegistryTableContainer = ({
           setCombinedFilter(prevState => ({
             ...prevState,
             preselectedCourses: combinedFilter.preselectedCourses.filter(
-              tag => courses.find(i => i.id === tag)?.name !== removedTagValue.trim(),
+              tag => courses.find(course => course.id === tag)?.name !== removedTagValue.trim(),
             ),
           }));
         }
         break;
       default:
+        message.error('An error occurred. Please try again later.');
         break;
     }
-    setTagFilters(tagFilters.filter(f => f !== removedTag));
+    setTagFilters(tagFilters.filter(filter => filter !== removedTag));
   };
 
   const handleClearAllButtonClick = () => {

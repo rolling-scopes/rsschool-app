@@ -2,16 +2,17 @@ import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
 
 import { FileExcelOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, message, notification, Row, Tabs, Typography } from 'antd';
+import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typography } from 'antd';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
-
+import { ModalForm } from 'components/Forms';
+import { MentorRegistryResendModal } from 'modules/MentorRegistry/components/MentorRegistryResendModal';
+import { MentorRegistryDeleteModal } from 'modules/MentorRegistry/components/MentorRegistryDeleteModal';
 import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
-import { MentorRegistryModal } from 'modules/MentorRegistry/components/MentorRegistryModal';
 import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
@@ -30,6 +31,17 @@ type Props = {
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
+export enum ModalDataMode {
+  Invite = 'invite',
+  Resend = 'resend',
+  Delete = 'delete',
+}
+
+type ModalData = Partial<{
+  record: MentorRegistryDto;
+  mode: ModalDataMode;
+}>;
+
 const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
 const disciplinesApi = new DisciplinesApi();
@@ -45,9 +57,9 @@ function Page(props: Props) {
   const [allData, setAllData] = useState<MentorRegistryDto[]>([]);
   const [maxStudents, setMaxStudents] = useState(0);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [modalData, setModalData] = useState(null as Partial<any> | null);
+  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(MentorRegistryTabsMode.New);
-  const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
+  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const updateData = (showAll: boolean, allData: MentorRegistryDto[]) => {
@@ -57,35 +69,36 @@ function Page(props: Props) {
     setMaxStudents(data.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
   };
 
-  const loadData = useCallback(
-    withLoading(async () => {
-      const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
-      const { data: disciplines } = await disciplinesApi.getDisciplines();
-      setAllData(allData);
-      updateData(showAll, allData);
-      setCourses(courses);
-      setDisciplines(disciplines);
-    }),
-    [showAll],
-  );
+  const loadData = withLoading(async () => {
+    const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
+    const { data: disciplines } = await disciplinesApi.getDisciplines();
+    setAllData(allData);
+    updateData(showAll, allData);
+    setCourses(courses);
+    setDisciplines(disciplines);
+  });
 
-  const cancelMentor = useCallback(
-    withLoading(async (githubId: string) => {
-      setModalData(null);
-      await mentorRegistryService.cancelMentor(githubId);
-      await loadData();
-      setIsModalOpen(false);
-    }),
-    [],
-  );
+  const cancelMentor = withLoading(async (githubId: string) => {
+    setModalData(null);
+    await mentorRegistryService.cancelMentor(githubId);
+    await loadData();
+    setIsModalOpen(false);
+  });
 
   useAsync(loadData, []);
+
+  const openNotificationWithIcon = (type: NotificationType) => {
+    api[type]({
+      message: 'Success',
+      description: 'Your invitation was successfully send',
+    });
+  };
 
   const handleModalSubmit = useCallback(
     async (values: any) => {
       try {
         setModalLoading(true);
-        await mentorRegistryService.updateMentor(modalData?.record.githubId, values);
+        modalData?.record?.githubId && (await mentorRegistryService.updateMentor(modalData.record.githubId, values));
         setModalData(null);
         await loadData();
         openNotificationWithIcon('success');
@@ -95,17 +108,37 @@ function Page(props: Props) {
         setModalLoading(false);
       }
     },
-    [modalData],
+    [modalData, openNotificationWithIcon, loadData],
   );
 
-  const getInitialValues = useCallback(
-    (modalData?: Partial<any>) => {
-      return {
-        preselectedCourses: modalData?.preselectedCourses?.map((v: string) => Number(v)),
-      };
-    },
-    [modalData, setModalData],
-  );
+  const renderModal = useCallback(() => {
+    return (
+      <ModalForm
+        data={modalData?.record}
+        title="Record"
+        submit={handleModalSubmit}
+        cancel={() => setModalData(null)}
+        getInitialValues={getInitialValues}
+        loading={modalLoading}
+      >
+        <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
+          <Select mode="multiple" optionFilterProp="children">
+            {courses.map(course => (
+              <Select.Option disabled={course.completed} key={course.id} value={course.id}>
+                {course.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </ModalForm>
+    );
+  }, [modalData]);
+
+  const getInitialValues = useCallback((modalData?: Partial<any>) => {
+    return {
+      preselectedCourses: modalData?.record.preselectedCourses?.map((v: string) => Number(v)),
+    };
+  }, []);
 
   async function resendConfirmation(record: MentorRegistryDto) {
     try {
@@ -127,11 +160,11 @@ function Page(props: Props) {
       { key: MentorRegistryTabsMode.All, label: 'All Mentors', count: allData.length },
     ];
     return tabs.map(el => tabRenderer(el, activeTab));
-  }, [activeTab, data, filterData, allData]);
+  }, [activeTab, allData]);
 
   useEffect(() => {
     activeTab === MentorRegistryTabsMode.New ? updateData(false, allData) : updateData(true, allData);
-  }, [activeTab]);
+  }, [activeTab, allData]);
 
   const handleTabChange = useCallback(() => {
     activeTab === MentorRegistryTabsMode.New
@@ -139,7 +172,7 @@ function Page(props: Props) {
       : setActiveTab(MentorRegistryTabsMode.New);
   }, [activeTab]);
 
-  const handleModalDataChange = (mode: string, record: any) => {
+  const handleModalDataChange = (mode: ModalDataMode, record: MentorRegistryDto) => {
     setIsModalOpen(true);
     setModalData({ mode, record });
   };
@@ -147,13 +180,6 @@ function Page(props: Props) {
   const onCancelModal = () => {
     setModalData(null);
     setIsModalOpen(false);
-  };
-
-  const openNotificationWithIcon = (type: NotificationType) => {
-    api[type]({
-      message: 'Success',
-      description: 'Your invitation was successfully send',
-    });
   };
 
   return (
@@ -196,14 +222,19 @@ function Page(props: Props) {
           {mentorRegistryProps => <MentorRegistryTable {...mentorRegistryProps} />}
         </MentorRegistryTableContainer>
       </Col>
-      {isModalOpen && (
-        <MentorRegistryModal
+      {isModalOpen && modalData?.mode === ModalDataMode.Invite && renderModal()}
+      {isModalOpen && modalData?.mode === ModalDataMode.Resend && (
+        <MentorRegistryResendModal
           modalData={modalData || {}}
-          courses={courses}
           modalLoading={modalLoading}
-          handleModalSubmit={handleModalSubmit}
-          getInitialValues={getInitialValues}
           resendConfirmation={resendConfirmation}
+          onCancel={onCancelModal}
+        />
+      )}
+      {isModalOpen && modalData?.mode === ModalDataMode.Delete && (
+        <MentorRegistryDeleteModal
+          modalData={modalData || {}}
+          modalLoading={modalLoading}
           onCancel={onCancelModal}
           cancelMentor={cancelMentor}
         />
