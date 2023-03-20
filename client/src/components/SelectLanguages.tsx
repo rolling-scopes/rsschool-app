@@ -1,10 +1,9 @@
 import { Select, SelectProps } from 'antd';
-import { useMemo } from 'react';
 import { UpdateUserDtoLanguagesEnum } from 'api';
 
-export function SelectLanguages({ placeholder = 'Select languages', ...props }: SelectProps) {
-  const languages = useMemo(() => Object.values(UpdateUserDtoLanguagesEnum).sort(languagesSorter), []);
+const languages = Object.values(UpdateUserDtoLanguagesEnum).sort(languagesSorter);
 
+export function SelectLanguages({ placeholder = 'Select languages', ...props }: SelectProps) {
   return (
     <Select
       mode="multiple"
@@ -21,7 +20,6 @@ export function SelectLanguages({ placeholder = 'Select languages', ...props }: 
 
 export function getLanguageName(language: UpdateUserDtoLanguagesEnum) {
   const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
-
   return languageNames.of(language);
 }
 
