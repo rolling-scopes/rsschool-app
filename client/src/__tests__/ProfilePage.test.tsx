@@ -12,6 +12,7 @@ jest.mock('api', () => ({
   CoursesApi: jest.fn(),
   CoursesTasksApi: jest.fn(),
   StudentsScoreApi: jest.fn(),
+  UpdateUserDtoLanguagesEnum: {},
 }));
 
 const session = {
