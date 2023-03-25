@@ -1,5 +1,5 @@
 import { useState, createRef, RefObject } from 'react';
-import { Layout, Space, Button, Row, Col, Alert } from 'antd';
+import { Layout, Space, Button, Row, Col, Alert, notification } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { ResumeCourseDto, OpportunitiesApi, FormDataDto } from 'api';
@@ -96,6 +96,8 @@ export const EditCV = (props: Props) => {
     await saveData(values);
 
     setLoading(false);
+
+    notification.success({ message: 'CV sucessfully updated', duration: 2 });
   };
 
   return (

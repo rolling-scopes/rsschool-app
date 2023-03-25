@@ -1,6 +1,6 @@
 export enum AvailableLanguages {
   EN = 'EN',
-  CN = 'CN',
+  ZH = 'ZH',
   HI = 'HI',
   ES = 'ES',
   FR = 'FR',
@@ -18,7 +18,7 @@ export enum AvailableLanguages {
   KO = 'KO',
   MR = 'MR',
   KY = 'KY',
-  KZ = 'KZ',
+  KK = 'KK',
   UZ = 'UZ',
   KA = 'KA',
   PL = 'PL',
