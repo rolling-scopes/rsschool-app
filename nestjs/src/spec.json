@@ -3236,7 +3236,7 @@
               "type": "string",
               "enum": [
                 "EN",
-                "CN",
+                "ZH",
                 "HI",
                 "ES",
                 "FR",
@@ -3254,7 +3254,7 @@
                 "KO",
                 "MR",
                 "KY",
-                "KZ",
+                "KK",
                 "UZ",
                 "KA",
                 "PL",
@@ -3382,6 +3382,7 @@
             "items": { "$ref": "#/components/schemas/Education" }
           },
           "englishLevel": { "type": "string", "nullable": true },
+          "languages": { "type": "array", "items": { "type": "string" } },
           "contactsPhone": { "type": "string", "nullable": true },
           "contactsEmail": { "type": "string", "nullable": true },
           "contactsEpamEmail": { "type": "string", "nullable": true },

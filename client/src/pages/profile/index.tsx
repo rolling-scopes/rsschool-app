@@ -2,7 +2,7 @@ import * as React from 'react';
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
-import { ProfileApi, UpdateProfileInfoDto } from 'api';
+import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
@@ -16,6 +16,7 @@ import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
+import LanguagesCard from 'components/Profile/LanguagesCard';
 import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
@@ -193,6 +194,7 @@ export class ProfilePage extends React.Component<Props, State> {
       publicCvUrl: profile?.publicCvUrl ?? null,
     };
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
+    const languages = profile?.generalInfo?.languages ?? [];
 
     const cards = [
       profile?.generalInfo && (
@@ -201,6 +203,12 @@ export class ProfilePage extends React.Component<Props, State> {
       <AboutCard
         key="about-card"
         data={aboutMyself}
+        isEditingModeEnabled={isProfileOwner}
+        updateProfile={this.updateProfile}
+      />,
+      <LanguagesCard
+        key="languages-card"
+        data={languages as UpdateUserDtoLanguagesEnum[]}
         isEditingModeEnabled={isProfileOwner}
         updateProfile={this.updateProfile}
       />,

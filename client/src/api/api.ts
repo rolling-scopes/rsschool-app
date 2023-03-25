@@ -5438,6 +5438,12 @@ export interface UpdateProfileInfoDto {
     'englishLevel'?: string | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof UpdateProfileInfoDto
+     */
+    'languages'?: Array<string>;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateProfileInfoDto
      */
@@ -5813,7 +5819,7 @@ export interface UpdateUserDto {
 
 export const UpdateUserDtoLanguagesEnum = {
     En: 'EN',
-    Cn: 'CN',
+    Zh: 'ZH',
     Hi: 'HI',
     Es: 'ES',
     Fr: 'FR',
@@ -5831,7 +5837,7 @@ export const UpdateUserDtoLanguagesEnum = {
     Ko: 'KO',
     Mr: 'MR',
     Ky: 'KY',
-    Kz: 'KZ',
+    Kk: 'KK',
     Uz: 'UZ',
     Ka: 'KA',
     Pl: 'PL',

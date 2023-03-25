@@ -1,6 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { forwardRef } from 'react';
+import { AxiosResponse } from 'axios';
 import { Contacts, UserData } from 'modules/Opportunities/models';
+import { OpportunitiesApi } from 'api';
 import { EditCV } from './index';
 
 const enum EditCvForms {
@@ -26,8 +28,6 @@ const mockGithubId = 'some-github';
 const mockSwitchView = jest.fn();
 const mockOnUpdateResume = jest.fn();
 
-// TODO: Add tests for data submit after merge of
-// Opportunities API migration to avoid conflicts
 describe('EditCV', () => {
   test('should display forms and control buttons', () => {
     render(
@@ -73,5 +73,55 @@ describe('EditCV', () => {
     fireEvent.click(cancelButton);
 
     expect(mockSwitchView).toHaveBeenCalled();
+  });
+
+  test('should show notification view on Cancel button click', () => {
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={{} as Contacts}
+        userData={{} as UserData}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={[]}
+        courses={[]}
+      />,
+    );
+
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+
+    fireEvent.click(cancelButton);
+
+    expect(mockSwitchView).toHaveBeenCalled();
+  });
+
+  test('should save data on Save button click and show success notification', async () => {
+    const mockSaveResume = jest
+      .spyOn(OpportunitiesApi.prototype, 'saveResume')
+      .mockResolvedValue({ data: {} } as AxiosResponse);
+
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={{} as Contacts}
+        userData={{} as UserData}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={[]}
+        courses={[]}
+      />,
+    );
+
+    const saveButton = await screen.findByRole('button', { name: /save cv/i });
+
+    fireEvent.click(saveButton);
+
+    expect(mockSaveResume).toHaveBeenCalledWith(mockGithubId, expect.any(Object));
+
+    await waitFor(() => {
+      expect(mockOnUpdateResume).toHaveBeenCalled();
+    });
+
+    expect(screen.getByText(/cv sucessfully updated/i)).toBeInTheDocument();
   });
 });

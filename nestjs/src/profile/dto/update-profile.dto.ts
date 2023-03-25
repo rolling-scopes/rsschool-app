@@ -276,6 +276,11 @@ export class UpdateProfileInfoDto {
   @IsString()
   englishLevel?: EnglishLevel | null;
 
+  @ApiProperty({ required: false, type: [String] })
+  @IsOptional()
+  @IsArray()
+  languages?: string[];
+
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()

@@ -24,7 +24,8 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     .addSelect('"user"."githubId" AS "githubId"')
     .addSelect('"user"."countryName" AS "countryName"')
     .addSelect('"user"."cityName" AS "cityName"')
-    .addSelect('"user"."discord" AS "discord"');
+    .addSelect('"user"."discord" AS "discord"')
+    .addSelect('"user"."languages" AS "languages"');
 
   if (isEducationVisible) {
     query.addSelect('"user"."educationHistory" AS "educationHistory"');
@@ -92,6 +93,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     contactsLinkedIn = null,
     aboutMyself = null,
     epamEmail = null,
+    languages = [],
   } = rawUser;
 
   return {
@@ -105,6 +107,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
       educationHistory: isEducationVisible ? educationHistory : undefined,
       englishLevel: isEnglishVisible ? englishLevel : undefined,
       name: getFullName(firstName, lastName, githubId),
+      languages,
     },
     discord,
     contacts: isContactsVisible

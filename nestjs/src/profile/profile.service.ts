@@ -163,6 +163,7 @@ export class ProfileService {
       contactsWhatsApp,
       contactsLinkedIn,
       contactsEpamEmail,
+      languages,
     } = profileInfo;
 
     const [firstName, lastName] = name?.split(' ') ?? [];
@@ -186,6 +187,7 @@ export class ProfileService {
           contactsWhatsApp,
           contactsLinkedIn,
           contactsEpamEmail,
+          languages,
         },
         isUndefined,
       ),
