@@ -46,7 +46,9 @@ export class RegistryService {
   }
 
   public async findAllMentorRegistries() {
-    const mentorRegistries = await this.getPreparedMentorRegistriesQuery().getMany();
+    const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
+      .andWhere('mentorRegistry.canceled = false')
+      .getMany();
     return mentorRegistries;
   }
 

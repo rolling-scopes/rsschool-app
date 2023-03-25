@@ -134,9 +134,9 @@ function Page(props: Props) {
     );
   }, [modalData]);
 
-  const getInitialValues = useCallback((modalData?: Partial<any>) => {
+  const getInitialValues = useCallback((record?: Partial<any>) => {
     return {
-      preselectedCourses: modalData?.record.preselectedCourses?.map((v: string) => Number(v)),
+      preselectedCourses: record?.preselectedCourses?.map((v: string) => Number(v)),
     };
   }, []);
 
