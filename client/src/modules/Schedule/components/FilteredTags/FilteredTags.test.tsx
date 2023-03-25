@@ -8,22 +8,23 @@ describe('FilteredTags', () => {
   const onClearAllButtonClick = jest.fn();
 
   it('should not render when tags were not provided', () => {
-    render(<FilteredTags tagFilter={[]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />);
+    render(<FilteredTags tagFilters={[]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />);
 
-    expect(screen.queryByText(/Type: /)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Type /)).not.toBeInTheDocument();
   });
 
   it.each`
     tag
     ${TagsEnum.Coding}
-    ${TagsEnum.CrossCheck}
+    ${TagsEnum.CrossCheckReview}
+    ${TagsEnum.CrossCheckSubmit}
     ${TagsEnum.Interview}
     ${TagsEnum.Lecture}
     ${TagsEnum.SelfStudy}
     ${TagsEnum.Test}
   `('should render tag "$tag"', ({ tag }: { tag: CourseScheduleItemDto['tag'] }) => {
     render(
-      <FilteredTags tagFilter={[tag]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />,
+      <FilteredTags tagFilters={[tag]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />,
     );
 
     expect(screen.getByText(getTagLabel(tag))).toBeInTheDocument();
@@ -32,19 +33,21 @@ describe('FilteredTags', () => {
   it('should render several tags', () => {
     render(
       <FilteredTags
-        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
         onClearAllButtonClick={onClearAllButtonClick}
       />,
     );
 
-    expect(screen.getAllByText(/Type: /)).toHaveLength(3);
+    expect(screen.getByText(getTagLabel(TagsEnum.Coding))).toBeInTheDocument();
+    expect(screen.getByText(getTagLabel(TagsEnum.CrossCheckReview))).toBeInTheDocument();
+    expect(screen.getByText(getTagLabel(TagsEnum.Interview))).toBeInTheDocument();
   });
 
   it('should render "Clear all" button', () => {
     render(
       <FilteredTags
-        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
         onClearAllButtonClick={onClearAllButtonClick}
       />,
@@ -56,7 +59,7 @@ describe('FilteredTags', () => {
   it('should remove selected tag when onTagClose was called', () => {
     render(
       <FilteredTags
-        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
         onClearAllButtonClick={onClearAllButtonClick}
       />,
@@ -72,7 +75,7 @@ describe('FilteredTags', () => {
   it('should clear all tags when onClearAllButtonClick was called', () => {
     render(
       <FilteredTags
-        tagFilter={[TagsEnum.Coding, TagsEnum.CrossCheck, TagsEnum.Interview]}
+        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
         onTagClose={onTagCloseMock}
         onClearAllButtonClick={onClearAllButtonClick}
       />,
@@ -86,5 +89,5 @@ describe('FilteredTags', () => {
 });
 
 function getTagLabel(tag: CourseScheduleItemDto['tag']) {
-  return `Type: ${TAG_NAME_MAP[tag]}`;
+  return TAG_NAME_MAP[tag];
 }

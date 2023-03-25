@@ -29,7 +29,7 @@ export class MentorRegistryDto {
   @ApiProperty()
   public githubId: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   public cityName: string | null;
 
   @ApiProperty({ type: [Number] })
@@ -71,6 +71,6 @@ export class MentorRegistryDto {
   @ApiProperty({ type: [String] })
   public languagesMentoring: string[];
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   public contactsEpamEmail: string | null;
 }

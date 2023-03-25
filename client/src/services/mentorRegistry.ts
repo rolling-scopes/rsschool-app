@@ -14,6 +14,7 @@ export interface MentorRegistry {
   name: string;
   githubId: string;
   cityName: string;
+  updatedDate: Date;
 }
 
 export class MentorRegistryService {

@@ -3421,7 +3421,7 @@
         "properties": {
           "id": { "type": "number" },
           "githubId": { "type": "string" },
-          "cityName": { "type": "object" },
+          "cityName": { "type": "string", "nullable": true },
           "preferedCourses": { "type": "array", "items": { "type": "number" } },
           "preselectedCourses": { "type": "array", "items": { "type": "number" } },
           "maxStudentsLimit": { "type": "number" },
@@ -3435,7 +3435,7 @@
           "englishMentoring": { "type": "boolean" },
           "primaryEmail": { "type": "string" },
           "languagesMentoring": { "type": "array", "items": { "type": "string" } },
-          "contactsEpamEmail": { "type": "object" }
+          "contactsEpamEmail": { "type": "string", "nullable": true }
         },
         "required": [
           "id",
