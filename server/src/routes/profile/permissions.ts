@@ -14,6 +14,7 @@ import {
   isManager,
   IUserSession,
   isSupervisor,
+  MentorRegistry,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -67,6 +68,17 @@ export const getStudentCourses = async (githubId: string): Promise<{ courseId: n
 };
 
 export const getMentorCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
+  const [registerdCourseIds, registryCourseIds] = await Promise.all([
+    getRegisteredMentorsCourseIds(githubId),
+    getMentorsFromRegistryCourseIds(githubId),
+  ]);
+
+  const mentorsCourses = registerdCourseIds.concat(registryCourseIds);
+
+  return mentorsCourses.length ? mentorsCourses : null;
+};
+
+const getRegisteredMentorsCourseIds = async (githubId: string) => {
   const result: { courseId: number }[] = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .select(['mentor.courseId'])
@@ -74,7 +86,19 @@ export const getMentorCourses = async (githubId: string): Promise<{ courseId: nu
     .where('user.githubId = :githubId', { githubId })
     .getMany();
 
-  return result.length ? result : null;
+  return result.length ? result : [];
+};
+
+const getMentorsFromRegistryCourseIds = async (githubId: string) => {
+  const result = await getRepository(MentorRegistry)
+    .createQueryBuilder('mentorRegistry')
+    .select(['mentorRegistry.preferedCourses'])
+    .leftJoin('mentorRegistry.user', 'user')
+    .where('user.githubId = :githubId', { githubId })
+    .andWhere('"mentorRegistry".canceled = false')
+    .getOne();
+
+  return result?.preferedCourses?.map(courseId => ({ courseId: Number(courseId) })) ?? [];
 };
 
 export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
