@@ -58,7 +58,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
           <br />
           (Max {maxScore} points for criteria)
         </Text>
-        <div style={{ width: '60%', display: 'flex', gap: '10px' }}>
+        <div style={{ width: '60%', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <Slider
             style={{ width: '70%' }}
             min={0}

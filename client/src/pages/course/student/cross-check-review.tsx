@@ -57,6 +57,7 @@ function Page(props: CoursePageProps) {
 
   const [criteriaData, setCriteriaData] = useState<CrossCheckCriteriaData[]>([]);
   const [score, setScore] = useState(0);
+  const [isSkipped, setIsSkipped] = useState(false);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
@@ -169,7 +170,7 @@ function Page(props: CoursePageProps) {
         return item.point === item.max ? true : item.textComment && item.textComment.length >= 10;
       });
 
-    if (!isCriteriaPointsAndCommentsVerified) {
+    if (!isCriteriaPointsAndCommentsVerified && !isSkipped) {
       checkCriteriaWarning();
       return;
     }
@@ -211,6 +212,7 @@ function Page(props: CoursePageProps) {
 
   const handleStudentChange = (githubId: string) => {
     setGithubId(githubId as string);
+    setIsSkipped(false);
     form.setFieldsValue({ githubId });
     loadStudentScoreHistory(githubId);
   };
@@ -257,6 +259,8 @@ function Page(props: CoursePageProps) {
                 criteriaData={criteriaData}
                 setCriteriaData={setCriteriaData}
                 initialData={state.data[0]}
+                isSkipped={isSkipped}
+                setIsSkipped={setIsSkipped}
               />
             )}
             <MarkdownInput historicalCommentSelected={historicalCommentSelected} />
