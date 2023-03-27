@@ -34,7 +34,7 @@ export class MentorsController {
   @ApiForbiddenResponse()
   @ApiNotFoundResponse()
   @RequiredRoles([CourseRole.Mentor])
-  public async getMentoroptions(
+  public async getMentorOptions(
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Req() req: CurrentRequest,
