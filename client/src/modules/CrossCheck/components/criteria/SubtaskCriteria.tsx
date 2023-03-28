@@ -1,6 +1,7 @@
 import { Input, Typography, InputNumber, Slider } from 'antd';
 import { useMemo } from 'react';
 import { CrossCheckCriteriaData } from 'services/course';
+import { isUndefined } from 'lodash';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -15,9 +16,12 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
   const comment = subtaskData.textComment;
   const criteriaScore = subtaskData.point;
 
-  const updateSubtaskData = (newData: number | string) => {
-    const updatedEntry =
-      typeof newData === 'string' ? { ...subtaskData, textComment: newData } : { ...subtaskData, point: newData };
+  const updateSubtaskData = ({ textComment, point }: { textComment?: string; point?: number }) => {
+    const updatedEntry = {
+      ...subtaskData,
+      ...(isUndefined(textComment) ? undefined : { textComment }),
+      ...(isUndefined(point) ? undefined : { point }),
+    };
     updateCriteriaData(updatedEntry);
   };
 
@@ -54,15 +58,20 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
           <br />
           (Max {maxScore} points for criteria)
         </Text>
-        <div style={{ width: '60%', display: 'flex', gap: '10px' }}>
+        <div style={{ width: '60%', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <Slider
             style={{ width: '70%' }}
             min={0}
             max={maxScore}
-            onChange={updateSubtaskData}
+            onChange={num => updateSubtaskData({ point: num })}
             value={criteriaScore ?? 0}
           />
-          <InputNumber min={0} max={maxScore} value={criteriaScore ?? 0} onChange={updateSubtaskData} />
+          <InputNumber
+            min={0}
+            max={maxScore}
+            value={criteriaScore ?? 0}
+            onChange={num => updateSubtaskData({ point: num })}
+          />
         </div>
       </div>
       <div style={{ padding: '0 12px' }}>
@@ -70,7 +79,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
           style={{ border: statusCommentRequired ? '1px red solid' : '' }}
           value={subtaskData.textComment}
           rows={2}
-          onInput={event => updateSubtaskData((event.target as HTMLInputElement).value)}
+          onInput={event => updateSubtaskData({ textComment: (event.target as HTMLInputElement).value })}
         />
         <div style={{ height: '20px' }}>
           {statusCommentRequired && <Text type="danger">Please leave a detailed comment</Text>}
