@@ -43,8 +43,9 @@ export function CrossCheckCriteriaForm({
     criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty) ?? [];
 
   useEffect(() => {
-    const sortedInitialData = initialData?.criteria?.sort((a, b) => (a.key > b.key ? 1 : -1));
-    const sortedCriteriaData = criteriaData.sort((a, b) => (a.key > b.key ? 1 : -1));
+    const criteria = initialData?.criteria ? [...initialData.criteria] : undefined;
+    const sortedInitialData = criteria?.sort((a, b) => (a.key > b.key ? 1 : -1));
+    const sortedCriteriaData = [...criteriaData].sort((a, b) => (a.key > b.key ? 1 : -1));
 
     if (!isEqual(sortedInitialData, sortedCriteriaData)) {
       const totalPoints = criteriaData.reduce((acc, criteria) => {
