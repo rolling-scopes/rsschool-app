@@ -159,7 +159,8 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       <Col span={24}>
         <Form form={form} component={false}>
           <FilteredTags
-            tagFilter={tagFilter}
+            filterName={`${ColumnName.Type}: `}
+            tagFilters={tagFilter}
             onTagClose={handleTagClose}
             onClearAllButtonClick={handleClearAllButtonClick}
           />

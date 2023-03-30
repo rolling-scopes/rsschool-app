@@ -1846,6 +1846,19 @@ export interface CreateTaskDto {
 /**
  * 
  * @export
+ * @interface CreateTaskVerificationDto
+ */
+export interface CreateTaskVerificationDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTaskVerificationDto
+     */
+    'id'?: number;
+}
+/**
+ * 
+ * @export
  * @interface CreateTeamDistributionDto
  */
 export interface CreateTeamDistributionDto {
@@ -2924,10 +2937,10 @@ export interface MentorRegistryDto {
     'githubId': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof MentorRegistryDto
      */
-    'cityName': object;
+    'cityName': string | null;
     /**
      * 
      * @type {Array<number>}
@@ -3008,10 +3021,10 @@ export interface MentorRegistryDto {
     'languagesMentoring': Array<string>;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof MentorRegistryDto
      */
-    'contactsEpamEmail': object;
+    'contactsEpamEmail': string | null;
 }
 /**
  * 
@@ -5425,6 +5438,12 @@ export interface UpdateProfileInfoDto {
     'englishLevel'?: string | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof UpdateProfileInfoDto
+     */
+    'languages'?: Array<string>;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateProfileInfoDto
      */
@@ -5800,7 +5819,7 @@ export interface UpdateUserDto {
 
 export const UpdateUserDtoLanguagesEnum = {
     En: 'EN',
-    Cn: 'CN',
+    Zh: 'ZH',
     Hi: 'HI',
     Es: 'ES',
     Fr: 'FR',
@@ -5818,7 +5837,7 @@ export const UpdateUserDtoLanguagesEnum = {
     Ko: 'KO',
     Mr: 'MR',
     Ky: 'KY',
-    Kz: 'KZ',
+    Kk: 'KK',
     Uz: 'UZ',
     Ka: 'KA',
     Pl: 'PL',
@@ -7113,6 +7132,49 @@ export const CourseTaskVerificationsApiAxiosParamCreator = function (configurati
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskVerification: async (courseId: number, courseTaskId: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createTaskVerification', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createTaskVerification', 'courseTaskId', courseTaskId)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('createTaskVerification', 'body', body)
+            const localVarPath = `/courses/{courseId}/tasks/{courseTaskId}/verifications`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7160,6 +7222,18 @@ export const CourseTaskVerificationsApiFp = function(configuration?: Configurati
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTaskVerification(courseId: number, courseTaskId: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTaskVerificationDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskVerification(courseId, courseTaskId, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7181,6 +7255,17 @@ export const CourseTaskVerificationsApiFactory = function (configuration?: Confi
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskVerification(courseId: number, courseTaskId: number, body: object, options?: any): AxiosPromise<CreateTaskVerificationDto> {
+            return localVarFp.createTaskVerification(courseId, courseTaskId, body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7197,6 +7282,19 @@ export const CourseTaskVerificationsApiFactory = function (configuration?: Confi
  * @extends {BaseAPI}
  */
 export class CourseTaskVerificationsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseTaskVerificationsApi
+     */
+    public createTaskVerification(courseId: number, courseTaskId: number, body: object, options?: AxiosRequestConfig) {
+        return CourseTaskVerificationsApiFp(this.configuration).createTaskVerification(courseId, courseTaskId, body, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 

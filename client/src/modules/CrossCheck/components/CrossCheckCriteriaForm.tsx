@@ -1,127 +1,148 @@
 import { useEffect } from 'react';
-import { Typography, Form } from 'antd';
+import { Typography, InputNumber, Button, Modal, List } from 'antd';
+import { isEqual } from 'lodash';
 
-import SubtaskCriteria from './criteria/SubtaskCriteria';
-import TitleCriteria from './criteria/TitleCriteria';
-import PenaltyCriteria from './criteria/PenaltyCriteria';
-import { omit } from 'lodash';
-import { CrossCheckCriteriaData } from 'services/course';
+import { SubtaskCriteria } from './criteria/SubtaskCriteria';
+import { TitleCriteria } from './criteria/TitleCriteria';
+import { PenaltyCriteria } from './criteria/PenaltyCriteria';
+import { CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
+
+const { Text, Title } = Typography;
 
 export enum TaskType {
   Title = 'title',
   Subtask = 'subtask',
   Penalty = 'penalty',
 }
-
-enum HasPenalty {
-  Yes = 'yes',
-  No = 'no',
-}
-
-export interface CountState {
-  key: string;
-  point: number;
-}
-
-export interface CommentState {
-  key: string;
-  textComment: string;
-}
-
 export interface CriteriaFormProps {
-  countStar: CountState[];
-  setCountStar: (newCount: CountState[]) => void;
+  maxScore: number | undefined;
+  score: number;
+  setScore: (value: number) => void;
   criteriaData: CrossCheckCriteriaData[];
-  penalty: CountState[];
-  setPenalty: (newPenalty: CountState[]) => void;
-  criteriaComment: CommentState[];
-  setComment: (newComment: CommentState[]) => void;
+  setCriteriaData: (newData: CrossCheckCriteriaData[]) => void;
+  initialData: SolutionReviewType;
+  setIsSkipped: (value: boolean) => void;
+  isSkipped: boolean;
 }
 
 export function CrossCheckCriteriaForm({
-  countStar,
-  setCountStar,
+  maxScore,
+  score,
+  setScore,
   criteriaData,
-  penalty,
-  setPenalty,
-  criteriaComment,
-  setComment,
+  setCriteriaData,
+  initialData,
+  setIsSkipped,
+  isSkipped,
 }: CriteriaFormProps) {
-  const form = Form.useFormInstance();
+  const [modal, contextHolder] = Modal.useModal();
+
+  const maxScoreValue = maxScore ?? 100;
+  const maxScoreLabel = maxScoreValue ? ` (Max ${maxScoreValue} points)` : '';
   const penaltyData: CrossCheckCriteriaData[] =
-    criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty).map(item => omit(item, ['point'])) ?? [];
+    criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty) ?? [];
 
   useEffect(() => {
-    if (!criteriaData.length) return;
+    const criteria = initialData?.criteria ? [...initialData.criteria] : undefined;
+    const sortedInitialData = criteria?.sort((a, b) => (a.key > b.key ? 1 : -1));
+    const sortedCriteriaData = [...criteriaData].sort((a, b) => (a.key > b.key ? 1 : -1));
 
-    const scorePoints = +countStar.reduce((acc, next) => acc + next.point, 0).toFixed(1);
-    const penaltyPoints = penalty.reduce((acc, next) => acc + next.point, 0);
-
-    const totalScore = scorePoints + penaltyPoints;
-    const finalScore = totalScore > 0 ? totalScore : 0;
-
-    form.setFieldValue('score', finalScore);
-  }, [countStar, penalty]);
-
-  function updateCountStar(event: number, max: number, key: string) {
-    if (countStar.find(item => item.key === key)) {
-      setCountStar([...countStar.filter(item => item.key !== key), { key, point: +((max / 5) * event).toFixed(1) }]);
+    if (!isEqual(sortedInitialData, sortedCriteriaData)) {
+      const totalPoints = criteriaData.reduce((acc, criteria) => {
+        return criteria.point ? acc + criteria.point : acc;
+      }, 0);
+      setScore(totalPoints > 0 ? totalPoints : 0);
     } else {
-      setCountStar([...countStar, { key, point: +((max / 5) * event).toFixed(1) }]);
+      setScore(initialData.score);
     }
+  }, [criteriaData, initialData]);
+
+  function updateCriteriaData(updatedEntry: CrossCheckCriteriaData) {
+    const index = criteriaData.findIndex(item => item.key === updatedEntry.key);
+    const updatedData = [...criteriaData];
+    updatedData.splice(index, 1, updatedEntry);
+    setCriteriaData(updatedData);
   }
 
-  function updatePenalty(max: number, key: string, value: string) {
-    if (penalty.find(item => item.key === key)) {
-      setPenalty([...penalty.filter(item => item.key !== key), { key, point: value === HasPenalty.Yes ? max : 0 }]);
+  const skipConfirmation = () => {
+    if (isSkipped) {
+      setIsSkipped(false);
     } else {
-      setPenalty([...penalty, { key, point: value === HasPenalty.Yes ? max : 0 }]);
+      modal.confirm({
+        onOk: () => setIsSkipped(true),
+        title: 'Skip Task for Checking',
+        okText: 'Yes, skip form',
+        cancelText: 'Back to review',
+        content: (
+          <>
+            <div className="skip-modal">
+              <Text>Are you sure you want to skip cross check form?</Text>
+              <Text>Possible reasons:</Text>
+              <List
+                size="small"
+                dataSource={['- Task not done (Submitted but empty)', '- Submitted broken link']}
+                renderItem={item => <List.Item>{item}</List.Item>}
+              />
+            </div>
+            <style jsx>{`
+              .skip-modal {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+              }
+            `}</style>
+          </>
+        ),
+      });
     }
-  }
-
-  function updateComment(value: string, key: string) {
-    if (criteriaComment.find((item: { key: string }) => item.key === key)) {
-      setComment([...criteriaComment.filter(item => item.key !== key), { key, textComment: value }]);
-    } else {
-      setComment([...criteriaComment, { key, textComment: value }]);
-    }
-  }
+  };
 
   return (
     <div style={{ margin: '0 auto', backgroundColor: 'white' }}>
-      <div>
-        {!!criteriaData?.length && (
-          <>
-            <Typography.Title level={4}>Criteria</Typography.Title>
-            {criteriaData
-              ?.filter(
-                (item: CrossCheckCriteriaData) =>
-                  item.type.toLowerCase() === TaskType.Title || item.type.toLowerCase() === TaskType.Subtask,
-              )
-              .map((item: CrossCheckCriteriaData) => {
-                return item.type.toLowerCase() === TaskType.Title ? (
-                  <TitleCriteria titleData={item} />
-                ) : (
-                  <SubtaskCriteria
-                    criteriaComment={criteriaComment}
-                    countStar={countStar}
-                    updateCountStar={updateCountStar}
-                    subtaskData={item}
-                    updateComment={updateComment}
-                  />
-                );
-              })}
-          </>
-        )}
-        {!!penaltyData?.length && (
-          <>
-            <Typography.Title level={4}>Penalty</Typography.Title>
-            {penaltyData?.map((task: CrossCheckCriteriaData) => (
-              <PenaltyCriteria key={task.key} penaltyData={task} updatePenalty={updatePenalty} penaltyCount={penalty} />
-            ))}
-          </>
-        )}
-      </div>
+      {criteriaData?.length ? (
+        <Button style={{ marginBottom: '16px' }} type="primary" onClick={skipConfirmation}>
+          {isSkipped ? 'Show' : 'Skip'} cross check form
+        </Button>
+      ) : null}
+      {contextHolder}
+      {!isSkipped && (
+        <div>
+          {!!criteriaData?.length && (
+            <>
+              <Title level={4}>Criteria</Title>
+              {criteriaData
+                ?.filter(
+                  (item: CrossCheckCriteriaData) =>
+                    item.type.toLowerCase() === TaskType.Title || item.type.toLowerCase() === TaskType.Subtask,
+                )
+                .map((item: CrossCheckCriteriaData) => {
+                  return item.type.toLowerCase() === TaskType.Title ? (
+                    <TitleCriteria key={item.key} titleData={item} />
+                  ) : (
+                    <SubtaskCriteria key={item.key} subtaskData={item} updateCriteriaData={updateCriteriaData} />
+                  );
+                })}
+            </>
+          )}
+          {!!penaltyData?.length && (
+            <>
+              <Title level={4}>Penalty</Title>
+              {penaltyData?.map((item: CrossCheckCriteriaData) => (
+                <PenaltyCriteria key={item.key} penaltyData={item} updateCriteriaData={updateCriteriaData} />
+              ))}
+            </>
+          )}
+        </div>
+      )}
+      <Title level={4}>{maxScoreLabel}</Title>
+      <InputNumber
+        value={score}
+        onChange={num => setScore(num)}
+        step={1}
+        min={0}
+        max={maxScoreValue}
+        decimalSeparator={','}
+      />
     </div>
   );
 }

@@ -453,11 +453,6 @@ export class CourseService {
     } | null;
   }
 
-  async postTaskVerification(courseTaskId: number, data: unknown) {
-    const result = await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
-    return result.data.data;
-  }
-
   async getTaskVerifications() {
     const result = await this.axios.get(`/student/me/tasks/verifications`);
     return result.data.data;

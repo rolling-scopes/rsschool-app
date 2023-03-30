@@ -26,6 +26,7 @@ export class CourseTasksService {
       relations: ['task', 'taskOwner'],
       order: {
         studentEndDate: 'ASC',
+        studentStartDate: 'ASC',
       },
       cache: useCache ? 60 * 1000 : undefined,
     });

@@ -7,7 +7,7 @@ interface TitleCriteriaProps {
 }
 const { Text } = Typography;
 
-export default function TitleCriteria({ titleData }: TitleCriteriaProps) {
+export function TitleCriteria({ titleData }: TitleCriteriaProps) {
   return (
     <div
       style={{
