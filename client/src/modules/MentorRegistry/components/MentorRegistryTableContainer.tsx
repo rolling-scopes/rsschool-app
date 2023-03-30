@@ -257,7 +257,7 @@ export const MentorRegistryTableContainer = ({
             </Button>
           </>
         ),
-        width: activeTab === MentorRegistryTabsMode.New ? 210 : 140,
+        width: activeTab === MentorRegistryTabsMode.New ? 240 : 140,
       },
     ];
 

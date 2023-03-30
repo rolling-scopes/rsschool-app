@@ -19,7 +19,7 @@ export function MentorRegistryTable(props: Props) {
   const { tagFilters, filteredData, columns, handleTagClose, handleClearAllButtonClick, handleTableChange } = props;
   const [form] = Form.useForm();
 
-  const tableWidth = 1600;
+  const tableWidth = 1700;
 
   return (
     <Form form={form} component={false}>

@@ -44,6 +44,7 @@ export const TABS = {
     MentorsRegistryColumnKey.ReceivedDate,
     MentorsRegistryColumnKey.UpdatedDate,
     MentorsRegistryColumnKey.Tech,
+    MentorsRegistryColumnKey.City,
     MentorsRegistryColumnKey.Languages,
     MentorsRegistryColumnKey.StudentsLimit,
     MentorsRegistryColumnKey.Actions,
