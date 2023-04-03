@@ -20,6 +20,7 @@ import {
   EditableTable,
 } from 'modules/CrossCheck';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
+import { ColumnsType } from 'antd/lib/table';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -166,7 +167,7 @@ function prepareValues(modalData: TaskDto) {
   };
 }
 
-function getColumns(handleEditItem: any) {
+function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
   return [
     {
       title: 'Id',
@@ -197,6 +198,8 @@ function getColumns(handleEditItem: any) {
       title: 'Type',
       dataIndex: 'type',
       sorter: stringSorter<TaskDto>('type'),
+      filters: TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
+      onFilter: (value, record) => record.type === value,
     },
     {
       title: 'Description URL',
