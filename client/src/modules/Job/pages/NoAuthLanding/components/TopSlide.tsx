@@ -1,5 +1,4 @@
 import { COLORS } from 'modules/Job/theme/colors';
-import { DottedRectangle } from './DottedRectangle';
 
 export function TopSlide() {
   return (
@@ -9,9 +8,7 @@ export function TopSlide() {
         <div className="content">
           <div className="text-wrapper">
             <div className="logo-dots-wrap">
-              <div className="dot-wrap">
-                <DottedRectangle />
-              </div>
+              <div className="dot-wrap"></div>
               <img src="/static/svg/jobs/rs-logo-big.svg" className="logo" alt="logo-rss" />
             </div>
             <div className="text-block">
@@ -47,7 +44,9 @@ export function TopSlide() {
             gap: 32px;
           }
           .dot-wrap {
-            max-width: 352px;
+            width: 352px;
+            height: 208px;
+            background-image: url('/static/images/job/dot.png');
           }
           .circle-logo-wrap {
             position: relative;
