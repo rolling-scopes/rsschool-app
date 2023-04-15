@@ -44,7 +44,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
         </Col>
       </Row>
       <Row gutter={[24, 24]} style={{ padding: '0 16px', marginRight: 0 }}>
-        {filteredTasks.concat(filteredTasks).map(courseTask => (
+        {filteredTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
             <TaskCard courseTask={courseTask} course={course} />
           </Col>
