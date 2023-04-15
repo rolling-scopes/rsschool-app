@@ -38,12 +38,12 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
       githubId={githubId}
       courseName={course.name}
     >
-      <Row gutter={24} style={{ background: 'white', marginBottom: 24, padding: '0 16px' }}>
+      <Row gutter={24} style={{ background: 'white', marginRight: 0, marginBottom: 24, padding: '0 16px' }}>
         <Col span={24}>
           <StatusTabs statuses={statuses} activeTab={activeTab} onTabChange={setActiveTab} />
         </Col>
       </Row>
-      <Row gutter={[24, 24]} style={{ padding: '0 16px' }}>
+      <Row gutter={[24, 24]} style={{ padding: '0 16px', marginRight: 0 }}>
         {filteredTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
             <TaskCard courseTask={courseTask} course={course} />
