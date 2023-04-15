@@ -23,7 +23,7 @@ export interface PaginationMeta {
   current: number;
 }
 
-export async function paginate<T>(
+export async function paginate<T extends {}>(
   queryBuilder: SelectQueryBuilder<T>,
   { page, limit }: { page: number; limit: number },
 ): Promise<{ items: T[]; meta: PaginationMeta }> {
