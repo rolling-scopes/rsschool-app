@@ -1,4 +1,4 @@
-import { SelectQueryBuilder } from 'typeorm';
+import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 export interface PaginationMeta {
   /**
@@ -23,7 +23,7 @@ export interface PaginationMeta {
   current: number;
 }
 
-export async function paginate<T extends {}>(
+export async function paginate<T extends ObjectLiteral>(
   queryBuilder: SelectQueryBuilder<T>,
   { page, limit }: { page: number; limit: number },
 ): Promise<{ items: T[]; meta: PaginationMeta }> {
