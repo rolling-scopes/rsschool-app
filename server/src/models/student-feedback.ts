@@ -27,12 +27,12 @@ export enum SoftSkill {
 }
 
 export enum Rate {
-  None,
-  Poor,
-  Fair,
-  Good,
-  Great,
-  Excellent,
+  None = 'None',
+  Poor = 'Poor',
+  Fair = 'Fair',
+  Good = 'Good',
+  Great = 'Great',
+  Excellent = 'Excellent',
 }
 
 export enum Recommendation {
