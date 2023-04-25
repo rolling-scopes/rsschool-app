@@ -17,13 +17,13 @@ import {
   CrossCheckComment,
   CrossCheckCriteria,
   CrossCheckReview,
-  Feedback,
   TaskSolution,
   CrossCheckMessageAuthorRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
+import { TaskSolutionFeedbackDto } from 'api';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -47,7 +47,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const solutionReviewSettings = useSolutionReviewSettings();
-  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [feedback, setFeedback] = useState<TaskSolutionFeedbackDto | null>(null);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const router = useRouter();
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
@@ -140,7 +140,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     }
 
     const [feedback, submittedSolution, taskDetails] = await Promise.all([
-      courseService.getCrossCheckFeedback(props.session.githubId, courseTask.id),
+      courseService.getCrossCheckFeedback(props.course.id, props.session.courses[props.course.id]!.studentId!, courseTask.id),
       courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);

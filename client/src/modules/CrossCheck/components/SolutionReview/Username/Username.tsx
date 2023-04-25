@@ -1,13 +1,14 @@
 import { Typography } from 'antd';
-import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageAuthor } from 'services/course';
 import { GithubUserLink } from 'components/GithubUserLink';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 const { Text } = Typography;
 
 export type UsernameProps = {
   reviewNumber: number;
   author: CrossCheckMessageAuthor | null;
-  role: CrossCheckMessageAuthorRole;
+  role: CrossCheckMessageDtoRoleEnum;
   areContactsVisible: boolean;
 };
 
@@ -25,10 +26,10 @@ function createFakeUsername(props: UsernameProps): string {
   const { reviewNumber, author, role, areContactsVisible } = props;
 
   switch (role) {
-    case CrossCheckMessageAuthorRole.Reviewer:
+    case CrossCheckMessageDtoRoleEnum.Reviewer:
       return `Reviewer ${reviewNumber + 1}${author && !areContactsVisible ? ' (hidden)' : ''}`;
 
-    case CrossCheckMessageAuthorRole.Student:
+    case CrossCheckMessageDtoRoleEnum.Student:
     default:
       return `Student${author && !areContactsVisible ? ' (hidden)' : ''}`;
   }

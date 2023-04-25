@@ -2040,6 +2040,49 @@ export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof Criter
 /**
  * 
  * @export
+ * @interface CrossCheckCriteriaData
+ */
+export interface CrossCheckCriteriaData {
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckCriteriaData
+     */
+    'key': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckCriteriaData
+     */
+    'max': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaData
+     */
+    'text': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaData
+     */
+    'type': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckCriteriaData
+     */
+    'point': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaData
+     */
+    'comment': string;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckMessageAuthor
  */
 export interface CrossCheckMessageAuthor {
@@ -2262,10 +2305,10 @@ export interface CrossCheckReviewDto {
     'dateTime': number;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<CrossCheckCriteriaData>}
      * @memberof CrossCheckReviewDto
      */
-    'criteria': Array<string>;
+    'criteria': Array<CrossCheckCriteriaData>;
 }
 /**
  * 

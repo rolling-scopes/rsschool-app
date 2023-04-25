@@ -2709,6 +2709,18 @@
         },
         "required": ["timestamp", "content", "author", "role", "isReviewerRead", "isStudentRead"]
       },
+      "CrossCheckCriteriaData": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "number" },
+          "max": { "type": "number" },
+          "text": { "type": "string" },
+          "type": { "type": "string" },
+          "point": { "type": "number" },
+          "comment": { "type": "string" }
+        },
+        "required": ["key", "max", "text", "type", "point", "comment"]
+      },
       "CrossCheckReviewDto": {
         "type": "object",
         "properties": {
@@ -2718,7 +2730,7 @@
           "comment": { "type": "string" },
           "score": { "type": "number" },
           "dateTime": { "type": "number" },
-          "criteria": { "type": "array", "items": { "type": "string" } }
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaData" } }
         },
         "required": ["author", "messages", "id", "comment", "score", "dateTime", "criteria"]
       },

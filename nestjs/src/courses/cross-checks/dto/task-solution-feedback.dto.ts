@@ -1,6 +1,6 @@
 import { User } from '@entities/index';
 import { TaskSolution } from '@entities/taskSolution';
-import { CrossCheckMessageAuthorRole, TaskSolutionResult, CrossCheckCriteriaData } from '@entities/taskSolutionResult';
+import { CrossCheckMessageAuthorRole, TaskSolutionResult } from '@entities/taskSolutionResult';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
@@ -37,7 +37,7 @@ class CrossCheckMessageAuthor {
   githubId: string;
 }
 
-export class CrossCheckMessageDto {
+class CrossCheckMessageDto {
   @ApiProperty()
   @IsNotEmpty()
   timestamp: string;
@@ -60,6 +60,26 @@ export class CrossCheckMessageDto {
   @ApiProperty()
   @IsNotEmpty()
   isStudentRead: boolean;
+}
+
+class CrossCheckCriteriaData {
+  @ApiProperty()
+  key: number;
+
+  @ApiProperty()
+  max?: number;
+
+  @ApiProperty()
+  text?: string;
+
+  @ApiProperty()
+  type?: string;
+
+  @ApiProperty()
+  point?: number;
+
+  @ApiProperty()
+  comment?: string;
 }
 
 class CrossCheckReviewDto {
@@ -96,7 +116,7 @@ class CrossCheckReviewDto {
   @ApiProperty()
   public dateTime?: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: [CrossCheckCriteriaData] })
   public criteria?: CrossCheckCriteriaData[];
 }
 

@@ -1,18 +1,18 @@
 import { CheckOutlined } from '@ant-design/icons';
 import { Badge, Col, Comment, Row, Tag, Tooltip, Typography } from 'antd';
 import { formatDateTime } from 'services/formatter';
-import { CrossCheckMessage, CrossCheckMessageAuthorRole } from 'services/course';
 import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
 import { Username } from '../Username';
+import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from 'api';
 
 const { Text } = Typography;
 
 export type MessageProps = {
   reviewNumber: number;
-  message: CrossCheckMessage;
-  currentRole: CrossCheckMessageAuthorRole;
+  message: CrossCheckMessageDto;
+  currentRole: CrossCheckMessageDtoRoleEnum;
   settings: SolutionReviewSettings;
 };
 
@@ -94,10 +94,10 @@ function getBadgeDotVisibility(props: MessageProps): boolean {
   const { isReviewerRead, isStudentRead } = message;
 
   switch (currentRole) {
-    case CrossCheckMessageAuthorRole.Reviewer:
+    case CrossCheckMessageDtoRoleEnum.Reviewer:
       return !isReviewerRead;
 
-    case CrossCheckMessageAuthorRole.Student:
+    case CrossCheckMessageDtoRoleEnum.Student:
       return !isStudentRead;
 
     default:

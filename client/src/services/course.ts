@@ -549,11 +549,9 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCrossCheckFeedback(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<{ data: Feedback }>(
-      `/student/${githubId}/task/${courseTaskId}/cross-check/feedback`,
-    );
-    return result.data.data;
+  async getCrossCheckFeedback(courseId: number, githubId: number, courseTaskId: number) {
+    const result = await courseTasksApi.getCrossCheckFeedback(courseId, githubId, courseTaskId)
+    return result.data;
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {

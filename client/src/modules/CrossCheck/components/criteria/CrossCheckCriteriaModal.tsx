@@ -1,6 +1,6 @@
 import { Modal, Typography } from 'antd';
-import { CrossCheckCriteriaData } from 'services/course';
 import { TaskType } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaData } from 'api';
 
 const { Text, Title } = Typography;
 
@@ -42,10 +42,10 @@ export function CrossCheckCriteriaModal({ modalInfo, isModalVisible, showModal }
               <Text>{criteriaItem.text}</Text>
             </div>
 
-            {criteriaItem.textComment && (
+            {criteriaItem.comment && (
               <div style={{ padding: '0 12px', fontSize: '16px' }}>
                 <Text strong={true}>Comment:</Text>
-                {criteriaItem.textComment?.split('\n').map((textLine, k) => (
+                {criteriaItem.comment?.split('\n').map((textLine, k) => (
                   <p key={k} style={{ margin: '0px 0 5px 0' }}>
                     {textLine}
                   </p>

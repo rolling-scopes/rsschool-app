@@ -5,9 +5,7 @@ import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
 import {
   CourseService,
-  CrossCheckCriteriaData,
   CrossCheckMessageAuthorRole,
-  SolutionReviewType,
 } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
@@ -17,6 +15,7 @@ import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
+import { CrossCheckCriteriaData, CrossCheckReviewDto } from 'api';
 
 const { Text } = Typography;
 
@@ -28,7 +27,7 @@ export type SolutionReviewProps = {
   reviewNumber: number;
   settings: SolutionReviewSettings;
   courseTaskId: number | null;
-  review: SolutionReviewType;
+  review: CrossCheckReviewDto;
   isActiveReview: boolean;
   isMessageSendingPanelVisible?: boolean;
   currentRole: CrossCheckMessageAuthorRole;

@@ -185,7 +185,6 @@ export async function getCrossCheckData(
   };
 }
 
-
 type TaskArtefactInput = {
   studentId: number;
   courseTaskId: number;

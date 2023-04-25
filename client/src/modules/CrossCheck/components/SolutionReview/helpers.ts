@@ -1,8 +1,9 @@
-import { CrossCheckMessageAuthorRole, CrossCheckMessage } from 'services/course';
+import { CrossCheckMessageDto } from 'api';
+import { CrossCheckMessageAuthorRole } from 'services/course';
 
 export const getAmountUnreadMessages = (
   currentRole: CrossCheckMessageAuthorRole,
-  messages: CrossCheckMessage[],
+  messages: CrossCheckMessageDto[],
 ): number => {
   switch (currentRole) {
     case CrossCheckMessageAuthorRole.Reviewer:
