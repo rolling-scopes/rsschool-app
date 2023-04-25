@@ -18,7 +18,7 @@
     "@koa/cors": "3.0.0",
     "@koa/router": "8.0.8",
     "@vendia/serverless-express": "4.5.3",
-    "aws-sdk": "2.1022.0",
+    "aws-sdk": "2.1354.0",
     "axios": "0.27.2",
     "dotenv": "10.0.0",
     "http-status-codes": "2.1.4",
@@ -43,7 +43,7 @@
     "pg": "8.7.3",
     "pino-multi-stream": "4.2.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.3.7"
+    "typeorm": "0.3.14"
   },
   "devDependencies": {
     "@types/jest": "28.1.7",

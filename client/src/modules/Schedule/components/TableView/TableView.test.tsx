@@ -227,6 +227,7 @@ function generateCourseData(
       tag: 'test',
       descriptionUrl: '',
       crossCheckEndDate: '2020-02-01T21:00:00.000Z',
+      type: 'courseTask',
     };
   });
 }

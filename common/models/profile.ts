@@ -45,6 +45,7 @@ export interface GeneralInfo {
   location: Location;
   educationHistory?: any | null;
   englishLevel?: EnglishLevel | null;
+  languages: string[];
 }
 
 export interface Contacts {

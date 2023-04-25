@@ -1,12 +1,10 @@
-import { Form, Select } from 'antd';
-import { UpdateUserDtoLanguagesEnum } from 'api';
-import { LABELS, PLACEHOLDERS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { Form } from 'antd';
+import { SelectLanguages } from 'components/SelectLanguages';
+import { LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 
 type Props = {
   isStudentForm?: boolean;
 };
-
-const languages = Object.values(UpdateUserDtoLanguagesEnum).sort();
 
 export function LanguagesMentoring({ isStudentForm }: Props) {
   return (
@@ -17,14 +15,7 @@ export function LanguagesMentoring({ isStudentForm }: Props) {
       rules={VALIDATION_RULES}
       required
     >
-      <Select
-        mode="multiple"
-        placeholder={PLACEHOLDERS.languages}
-        options={languages.map(language => ({
-          label: language,
-          value: language,
-        }))}
-      />
+      <SelectLanguages />
     </Form.Item>
   );
 }
