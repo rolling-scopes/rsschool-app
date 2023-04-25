@@ -659,6 +659,25 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/student/{studentId}/task/{courseTaskId}/feedback": {
+      "get": {
+        "operationId": "getCrossCheckFeedback",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "403": { "description": "" },
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskSolutionFeedbackDto" } } }
+          }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
@@ -2654,6 +2673,63 @@
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
       },
+      "Discord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "discriminator": { "type": "string" }
+        },
+        "required": ["id", "username", "discriminator"]
+      },
+      "CrossCheckReviewAuthor": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
+        },
+        "required": ["id", "name", "githubId", "discord"]
+      },
+      "CrossCheckMessageAuthor": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "githubId": { "type": "string" } },
+        "required": ["id", "githubId"]
+      },
+      "CrossCheckMessageDto": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string" },
+          "content": { "type": "string" },
+          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckMessageAuthor" }] },
+          "role": { "type": "string", "enum": ["reviewer", "student"] },
+          "isReviewerRead": { "type": "boolean" },
+          "isStudentRead": { "type": "boolean" }
+        },
+        "required": ["timestamp", "content", "author", "role", "isReviewerRead", "isStudentRead"]
+      },
+      "CrossCheckReviewDto": {
+        "type": "object",
+        "properties": {
+          "author": { "$ref": "#/components/schemas/CrossCheckReviewAuthor" },
+          "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } },
+          "id": { "type": "number" },
+          "comment": { "type": "string" },
+          "score": { "type": "number" },
+          "dateTime": { "type": "number" },
+          "criteria": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["author", "messages", "id", "comment", "score", "dateTime", "criteria"]
+      },
+      "TaskSolutionFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string" },
+          "reviews": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckReviewDto" } }
+        },
+        "required": ["url", "reviews"]
+      },
       "MentorDto": {
         "type": "object",
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
@@ -3340,15 +3416,6 @@
           "englishLevel": { "type": "string", "nullable": true }
         },
         "required": ["name", "githubId", "location"]
-      },
-      "Discord": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "username": { "type": "string" },
-          "discriminator": { "type": "string" }
-        },
-        "required": ["id", "username", "discriminator"]
       },
       "ProfileInfoDto": {
         "type": "object",

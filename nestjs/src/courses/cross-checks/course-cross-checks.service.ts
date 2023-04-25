@@ -74,6 +74,8 @@ export class CourseCrossCheckService {
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
     @InjectRepository(TaskSolution)
     private readonly taskSolutionRepository: Repository<TaskSolution>,
+    @InjectRepository(TaskSolutionResult)
+    private readonly taskSolutionResultRepository: Repository<TaskSolutionResult>,
   ) {}
 
   public async findPairs(
@@ -217,5 +219,38 @@ export class CourseCrossCheckService {
         };
       })
       .filter(el => el.checksCount !== 0);
+  }
+
+  private getPrimaryUserFields(modelName = 'user') {
+    return [
+      `${modelName}.id`,
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+      `${modelName}.discord`,
+    ];
+  }
+
+  public async getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
+    const query = this.taskSolutionResultRepository
+      .createQueryBuilder('tsr')
+      .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
+      .innerJoin('tsr.checker', 'checker')
+      .innerJoin('checker.user', 'user')
+      .addSelect(['checker.id', ...this.getPrimaryUserFields('user')])
+      .where('"tsr"."studentId" = :studentId', { studentId })
+      .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId });
+
+    const taskSolutionResults = await query.getMany();
+
+    const taskSolution = await this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .where('"ts"."studentId" = :studentId', { studentId })
+      .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+
+    return { taskSolutionResults, taskSolution };
   }
 }

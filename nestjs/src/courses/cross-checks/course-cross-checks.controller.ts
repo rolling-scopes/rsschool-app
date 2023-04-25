@@ -9,14 +9,14 @@ import {
   Query,
   Req,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { CrossCheckPairResponseDto } from './dto';
-import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
+import { CrossCheckPairResponseDto, TaskSolutionFeedbackDto, AvailableReviewStatsDto } from './dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
 
@@ -25,7 +25,7 @@ import { Response } from 'express';
 @UseGuards(DefaultGuard, CourseGuard)
 export class CourseCrossCheckController {
   constructor(
-    private crossCheckPairsService: CourseCrossCheckService,
+    private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
   ) {}
 
@@ -53,7 +53,7 @@ export class CourseCrossCheckController {
     @Query('url') url: string,
     @Query('task') task: string,
   ) {
-    const { items, pagination } = await this.crossCheckPairsService.findPairs(
+    const { items, pagination } = await this.courseCrossCheckService.findPairs(
       courseId,
       { pageSize, current },
       { checker, student, url, task },
@@ -76,14 +76,14 @@ export class CourseCrossCheckController {
     if (!studentId) throw new BadRequestException();
     const crossChecks = await this.courseTasksService.getAvailableCrossChecks(courseId);
     if (crossChecks.length === 0) return [];
-    const res = await this.crossCheckPairsService.getAvailableCrossChecksStats(crossChecks, studentId);
+    const res = await this.courseCrossCheckService.getAvailableCrossChecksStats(crossChecks, studentId);
     return res.map(e => new AvailableReviewStatsDto(e));
   }
 
   @Get(':courseTaskId/csv')
   @ApiOperation({ operationId: 'getCrossCheckCsv' })
   @ApiForbiddenResponse()
-  @RequiredRoles([CourseRole.Dementor, CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Dementor, CourseRole.Manager, Role.Admin], true)
   @UseGuards(DefaultGuard, RoleGuard)
   public async getSolutionsUrls(
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -92,7 +92,7 @@ export class CourseCrossCheckController {
   ) {
     const [courseTask, solutionUrls] = await Promise.all([
       this.courseTasksService.getById(courseTaskId),
-      this.crossCheckPairsService.getSolutionsUrls(courseId, courseTaskId),
+      this.courseCrossCheckService.getSolutionsUrls(courseId, courseTaskId),
     ]);
 
     const parsedData = await parseAsync(solutionUrls, { fields: ['githubId', 'solutionUrl'] });
@@ -101,5 +101,27 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get('/student/:studentId/task/:courseTaskId/feedback')
+  @ApiOperation({ operationId: 'getCrossCheckFeedback' })
+  @ApiForbiddenResponse()
+  @ApiResponse({ type: TaskSolutionFeedbackDto })
+  @RequiredRoles([CourseRole.Student], true)
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getCrossCheckFeedback(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('studentId', ParseIntPipe) studentId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    if (studentId !== req.user.courses[courseId]?.studentId) {
+      throw new UnauthorizedException();
+    }
+    const { taskSolution, taskSolutionResults } = await this.courseCrossCheckService.getTaskSolutionFeedback(
+      studentId,
+      courseTaskId,
+    );
+    return new TaskSolutionFeedbackDto(taskSolutionResults, taskSolution);
   }
 }
