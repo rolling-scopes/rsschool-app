@@ -1,8 +1,9 @@
 import { User } from '@entities/index';
+import { CrossCheckCriteriaType } from '@entities/taskCriteria';
 import { TaskSolution } from '@entities/taskSolution';
-import { CrossCheckMessageAuthorRole, TaskSolutionResult } from '@entities/taskSolutionResult';
+import { CrossCheckMessageDtoRoleEnum, TaskSolutionResult } from '@entities/taskSolutionResult';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
 import { Discord } from 'src/profile/dto';
 
@@ -49,9 +50,9 @@ class CrossCheckMessageDto {
   @ApiProperty({ type: CrossCheckMessageAuthor, nullable: true })
   author: CrossCheckMessageAuthor | null;
 
-  @ApiProperty({ enum: CrossCheckMessageAuthorRole })
+  @ApiProperty({ enum: CrossCheckMessageDtoRoleEnum })
   @IsNotEmpty()
-  role: CrossCheckMessageAuthorRole;
+  role: CrossCheckMessageDtoRoleEnum;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -70,10 +71,10 @@ class CrossCheckCriteriaData {
   max?: number;
 
   @ApiProperty()
-  text?: string;
+  text: string;
 
-  @ApiProperty()
-  type?: string;
+  @ApiProperty({ enum: CrossCheckCriteriaType })
+  type: CrossCheckCriteriaType;
 
   @ApiProperty()
   point?: number;
@@ -89,7 +90,7 @@ class CrossCheckReviewDto {
       ? taskSolutionResult.messages
       : taskSolutionResult.messages.map(message => ({
           ...message,
-          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+          author: message.role === CrossCheckMessageDtoRoleEnum.Reviewer ? null : message.author,
         }));
     this.id = taskSolutionResult.id;
     this.comment = taskSolutionResult.comment;
@@ -98,7 +99,7 @@ class CrossCheckReviewDto {
     this.criteria = taskSolutionResult.historicalScores.sort((a, b) => b.dateTime - a.dateTime).at(0)?.criteria;
   }
 
-  @ApiProperty({ type: CrossCheckReviewAuthor })
+  @ApiProperty({ type: CrossCheckReviewAuthor, nullable: true })
   public author: CrossCheckReviewAuthor | null;
 
   @ApiProperty({ type: [CrossCheckMessageDto] })
@@ -123,10 +124,13 @@ class CrossCheckReviewDto {
 export class TaskSolutionFeedbackDto {
   constructor(taskSolutionResults: TaskSolutionResult[], taskSolution: TaskSolution | null) {
     this.url = taskSolution?.url;
-    this.reviews = taskSolutionResults.map(taskSolutionResult => new CrossCheckReviewDto(taskSolutionResult));
+    this.reviews = taskSolution
+      ? taskSolutionResults.map(taskSolutionResult => new CrossCheckReviewDto(taskSolutionResult))
+      : [];
   }
 
   @ApiProperty()
+  @IsOptional()
   public url?: string;
 
   @ApiProperty({ type: [CrossCheckReviewDto] })

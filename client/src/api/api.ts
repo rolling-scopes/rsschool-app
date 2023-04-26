@@ -2066,7 +2066,7 @@ export interface CrossCheckCriteriaData {
      * @type {string}
      * @memberof CrossCheckCriteriaData
      */
-    'type': string;
+    'type': CrossCheckCriteriaDataTypeEnum;
     /**
      * 
      * @type {number}
@@ -2080,6 +2080,15 @@ export interface CrossCheckCriteriaData {
      */
     'comment': string;
 }
+
+export const CrossCheckCriteriaDataTypeEnum = {
+    Title: 'title',
+    Subtask: 'subtask',
+    Penalty: 'penalty'
+} as const;
+
+export type CrossCheckCriteriaDataTypeEnum = typeof CrossCheckCriteriaDataTypeEnum[keyof typeof CrossCheckCriteriaDataTypeEnum];
+
 /**
  * 
  * @export
@@ -2272,7 +2281,7 @@ export interface CrossCheckReviewDto {
      * @type {CrossCheckReviewAuthor}
      * @memberof CrossCheckReviewDto
      */
-    'author': CrossCheckReviewAuthor;
+    'author': CrossCheckReviewAuthor | null;
     /**
      * 
      * @type {Array<CrossCheckMessageDto>}
@@ -9385,21 +9394,17 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
-         * @param {number} studentId 
          * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCrossCheckFeedback: async (courseId: number, studentId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCrossCheckFeedback: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCrossCheckFeedback', 'courseId', courseId)
-            // verify required parameter 'studentId' is not null or undefined
-            assertParamExists('getCrossCheckFeedback', 'studentId', studentId)
             // verify required parameter 'courseTaskId' is not null or undefined
             assertParamExists('getCrossCheckFeedback', 'courseTaskId', courseTaskId)
-            const localVarPath = `/courses/{courseId}/cross-checks/student/{studentId}/task/{courseTaskId}/feedback`
+            const localVarPath = `/courses/{courseId}/cross-checks/student/task/{courseTaskId}/feedback`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
-                .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)))
                 .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9666,13 +9671,12 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
-         * @param {number} studentId 
          * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCrossCheckFeedback(courseId: number, studentId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskSolutionFeedbackDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckFeedback(courseId, studentId, courseTaskId, options);
+        async getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskSolutionFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckFeedback(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9796,13 +9800,12 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {number} courseId 
-         * @param {number} studentId 
          * @param {number} courseTaskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCrossCheckFeedback(courseId: number, studentId: number, courseTaskId: number, options?: any): AxiosPromise<TaskSolutionFeedbackDto> {
-            return localVarFp.getCrossCheckFeedback(courseId, studentId, courseTaskId, options).then((request) => request(axios, basePath));
+        getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: any): AxiosPromise<TaskSolutionFeedbackDto> {
+            return localVarFp.getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9936,14 +9939,13 @@ export class CoursesTasksApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
-     * @param {number} studentId 
      * @param {number} courseTaskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesTasksApi
      */
-    public getCrossCheckFeedback(courseId: number, studentId: number, courseTaskId: number, options?: AxiosRequestConfig) {
-        return CoursesTasksApiFp(this.configuration).getCrossCheckFeedback(courseId, studentId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
+    public getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

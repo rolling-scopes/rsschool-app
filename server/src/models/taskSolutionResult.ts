@@ -11,12 +11,13 @@ import {
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
+import { CrossCheckCriteriaType } from './taskCriteria';
 
 export interface CrossCheckCriteriaData {
   key: number;
   max?: number;
   text: string;
-  type: string;
+  type: CrossCheckCriteriaType;
   point?: number;
   comment?: string;
 }
@@ -34,7 +35,7 @@ export interface CrossCheckMessageAuthor {
   githubId: string;
 }
 
-export enum CrossCheckMessageAuthorRole {
+export enum CrossCheckMessageDtoRoleEnum {
   Reviewer = 'reviewer',
   Student = 'student',
 }
@@ -43,7 +44,7 @@ export interface CrossCheckMessage {
   timestamp: string;
   content: string;
   author: CrossCheckMessageAuthor | null;
-  role: CrossCheckMessageAuthorRole;
+  role: CrossCheckMessageDtoRoleEnum;
   isReviewerRead: boolean;
   isStudentRead: boolean;
 }

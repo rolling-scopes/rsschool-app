@@ -18,12 +18,11 @@ import {
   CrossCheckCriteria,
   CrossCheckReview,
   TaskSolution,
-  CrossCheckMessageAuthorRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
-import { TaskSolutionFeedbackDto } from 'api';
+import { CrossCheckMessageDtoRoleEnum, TaskSolutionFeedbackDto } from 'api';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -140,7 +139,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     }
 
     const [feedback, submittedSolution, taskDetails] = await Promise.all([
-      courseService.getCrossCheckFeedback(props.course.id, props.session.courses[props.course.id]!.studentId!, courseTask.id),
+      courseService.getCrossCheckFeedback(props.course.id, courseTask.id),
       courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);
@@ -275,7 +274,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
               courseTaskId={courseTaskId}
               review={review}
               isActiveReview={true}
-              currentRole={CrossCheckMessageAuthorRole.Student}
+              currentRole={CrossCheckMessageDtoRoleEnum.Student}
               maxScore={maxScore}
             />
           </Col>

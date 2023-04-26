@@ -14,6 +14,7 @@ import {
   CourseTaskDto,
   EventDto,
   CriteriaDto,
+  CrossCheckMessageDtoRoleEnum,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -25,7 +26,7 @@ export enum CrossCheckStatus {
 
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
 export interface CrossCheckCriteriaData {
-  key: string;
+  key: number;
   max?: number;
   text: string;
   type: CrossCheckCriteriaType;
@@ -38,23 +39,18 @@ export interface CrossCheckMessageAuthor {
   githubId: string;
 }
 
-export enum CrossCheckMessageAuthorRole {
-  Reviewer = 'reviewer',
-  Student = 'student',
-}
-
 export type CrossCheckMessage = {
   timestamp: string;
   content: string;
   author: CrossCheckMessageAuthor | null;
-  role: CrossCheckMessageAuthorRole;
+  role: CrossCheckMessageDtoRoleEnum;
   isReviewerRead: boolean;
   isStudentRead: boolean;
 };
 
 export type SolutionReviewType = {
   id: number;
-  dateTime: number;
+  dateTime?: number;
   comment: string;
   criteria?: CrossCheckCriteriaData[];
   author: {
@@ -549,8 +545,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCrossCheckFeedback(courseId: number, githubId: number, courseTaskId: number) {
-    const result = await courseTasksApi.getCrossCheckFeedback(courseId, githubId, courseTaskId)
+  async getCrossCheckFeedback(courseId: number, courseTaskId: number) {
+    const result = await courseTasksApi.getCrossCheckFeedback(courseId, courseTaskId)
     return result.data;
   }
 

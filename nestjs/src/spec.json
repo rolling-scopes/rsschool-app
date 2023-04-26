@@ -659,13 +659,12 @@
         "tags": ["courses tasks"]
       }
     },
-    "/courses/{courseId}/cross-checks/student/{studentId}/task/{courseTaskId}/feedback": {
+    "/courses/{courseId}/cross-checks/student/task/{courseTaskId}/feedback": {
       "get": {
         "operationId": "getCrossCheckFeedback",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
@@ -2715,7 +2714,7 @@
           "key": { "type": "number" },
           "max": { "type": "number" },
           "text": { "type": "string" },
-          "type": { "type": "string" },
+          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
           "point": { "type": "number" },
           "comment": { "type": "string" }
         },
@@ -2724,7 +2723,7 @@
       "CrossCheckReviewDto": {
         "type": "object",
         "properties": {
-          "author": { "$ref": "#/components/schemas/CrossCheckReviewAuthor" },
+          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckReviewAuthor" }] },
           "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } },
           "id": { "type": "number" },
           "comment": { "type": "string" },

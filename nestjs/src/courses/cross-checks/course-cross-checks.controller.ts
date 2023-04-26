@@ -103,7 +103,7 @@ export class CourseCrossCheckController {
     res.end(parsedData);
   }
 
-  @Get('/student/:studentId/task/:courseTaskId/feedback')
+  @Get('/student/task/:courseTaskId/feedback')
   @ApiOperation({ operationId: 'getCrossCheckFeedback' })
   @ApiForbiddenResponse()
   @ApiResponse({ type: TaskSolutionFeedbackDto })
@@ -111,11 +111,11 @@ export class CourseCrossCheckController {
   @UseGuards(DefaultGuard, RoleGuard)
   public async getCrossCheckFeedback(
     @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('studentId', ParseIntPipe) studentId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
     @Req() req: CurrentRequest,
   ) {
-    if (studentId !== req.user.courses[courseId]?.studentId) {
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) {
       throw new UnauthorizedException();
     }
     const { taskSolution, taskSolutionResults } = await this.courseCrossCheckService.getTaskSolutionFeedback(

@@ -1,15 +1,15 @@
-import { CrossCheckMessageDto } from 'api';
-import { CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessage } from 'services/course';
 
 export const getAmountUnreadMessages = (
-  currentRole: CrossCheckMessageAuthorRole,
-  messages: CrossCheckMessageDto[],
+  currentRole: CrossCheckMessageDtoRoleEnum,
+  messages: CrossCheckMessage[],
 ): number => {
   switch (currentRole) {
-    case CrossCheckMessageAuthorRole.Reviewer:
+    case CrossCheckMessageDtoRoleEnum.Reviewer:
       return messages.filter(messages => !messages.isReviewerRead).length;
 
-    case CrossCheckMessageAuthorRole.Student:
+    case CrossCheckMessageDtoRoleEnum.Student:
       return messages.filter(messages => !messages.isStudentRead).length;
 
     default:
