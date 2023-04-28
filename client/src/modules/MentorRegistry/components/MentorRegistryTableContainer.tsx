@@ -247,8 +247,13 @@ export const MentorRegistryTableContainer = ({
             <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Invite, record)}>
               Invite
             </Button>
-            {record.preselectedCourses.length && activeTab === MentorRegistryTabsMode.New ? (
-              <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}>
+            {activeTab === MentorRegistryTabsMode.New ? (
+              <Button
+                type="link"
+                size="small"
+                disabled={!record.preselectedCourses.length}
+                onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}
+              >
                 Re-send
               </Button>
             ) : null}
