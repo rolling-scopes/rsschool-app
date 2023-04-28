@@ -205,7 +205,7 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Tech,
         render: tagsRenderer,
         filters: disciplines.map(discipline => {
-          return { text: discipline.name, value: discipline.id };
+          return { text: discipline.name, value: discipline.name };
         }),
         defaultFilteredValue: technicalMentoring,
         filtered: technicalMentoring?.length > 0,
