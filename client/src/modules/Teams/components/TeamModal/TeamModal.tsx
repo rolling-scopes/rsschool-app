@@ -25,8 +25,7 @@ const layout = {
 
 export default function TeamModal({ onCancel, onSubmit, data, courseId, isManager, maxStudentsCount, mode }: Props) {
   const [form] = Form.useForm<CreateTeamDto>();
-    const [loading, withLoading] = useLoading(false);
-
+  const [loading, withLoading] = useLoading(false);
 
   const createRecord = ({
     name = 'Team name',
@@ -45,8 +44,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
   const handleModalSubmit = withLoading(async (values: CreateTeamDto) => {
     const record = createRecord(values);
     await onSubmit(record, data?.id);
-  })
-
+  });
 
   const handleChangeStudents = (value: number[]) => {
     if (value.length <= maxStudentsCount) {
@@ -72,7 +70,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
         }
         handleModalSubmit(values);
       }}
-      okButtonProps={{disabled: loading }}
+      okButtonProps={{ disabled: loading }}
       onCancel={() => {
         onCancel();
         form.resetFields();
