@@ -3,6 +3,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDto, TeamDto } from 'api';
 import { StudentSearch } from 'components/StudentSearch';
+import { useLoading } from 'components/useLoading';
 import { urlPattern } from 'services/validators';
 
 type Props = {
@@ -24,6 +25,8 @@ const layout = {
 
 export default function TeamModal({ onCancel, onSubmit, data, courseId, isManager, maxStudentsCount, mode }: Props) {
   const [form] = Form.useForm<CreateTeamDto>();
+    const [loading, withLoading] = useLoading(false);
+
 
   const createRecord = ({
     name = 'Team name',
@@ -39,10 +42,11 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
     };
   };
 
-  const handleModalSubmit = async (values: CreateTeamDto) => {
+  const handleModalSubmit = withLoading(async (values: CreateTeamDto) => {
     const record = createRecord(values);
     await onSubmit(record, data?.id);
-  };
+  })
+
 
   const handleChangeStudents = (value: number[]) => {
     if (value.length <= maxStudentsCount) {
@@ -68,6 +72,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
         }
         handleModalSubmit(values);
       }}
+      okButtonProps={{disabled: loading }}
       onCancel={() => {
         onCancel();
         form.resetFields();
