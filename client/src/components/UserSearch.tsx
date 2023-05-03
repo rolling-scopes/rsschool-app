@@ -32,6 +32,7 @@ export function UserSearch(props: UserProps) {
 
   const handleSearch = async (value: string) => {
     if (value) {
+      value = value.trim();
       const data = await searchFn(value, onlyStudentsWithoutMentorShown);
       setData(data);
     } else {
