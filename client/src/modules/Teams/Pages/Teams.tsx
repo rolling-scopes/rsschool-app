@@ -61,7 +61,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     setShowJoinTeamModal(true);
   };
 
-  const joinTeam = async (teamId: number, record: JoinTeamDto) => {
+  const joinTeam = withLoading(async (teamId: number, record: JoinTeamDto) => {
     try {
       const { data: team } = await teamApi.joinTeam(course.id, distribution.id, teamId, record);
       await loadDistribution();
@@ -70,7 +70,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     } catch (error) {
       message.error('Failed to join to team. Please try later.');
     }
-  };
+  });
 
   const copyPassword = async (teamId: number): Promise<void> => {
     const teamApi = new TeamApi();
@@ -83,7 +83,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
-  const submitTeam = async (record: CreateTeamDto, id?: number) => {
+  const submitTeam = withLoading(async (record: CreateTeamDto, id?: number) => {
     try {
       if (id) {
         await teamApi.updateTeam(course.id, distribution.id, id, record);
@@ -96,7 +96,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     } catch (error) {
       message.error('Failed to create team. Please try later.');
     }
-  };
+  });
 
   const contentRenderers = () => {
     switch (activeTab) {
