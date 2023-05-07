@@ -50,7 +50,7 @@ export default function MyTeamSection({
         {isTeamLead && <EditTwoTone twoToneColor="#1890FF" onClick={() => toggleTeamModal(myTeam)} />}
       </Space>
       <Row justify="end">
-        <Space size="small">
+        <Space size="small" wrap>
           {isTeamLead && (
             <>
               <Button onClick={() => copyPassword(myTeam.id)} icon={<CopyOutlined />}>
