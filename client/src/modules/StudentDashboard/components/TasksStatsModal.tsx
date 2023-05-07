@@ -27,6 +27,7 @@ export function TasksStatsModal(props: Props) {
       onCancel={props.onHide}
       footer={null}
       width={'90%'}
+      style={{ top: 30 }}
     >
       <p style={{ textAlign: 'center', fontWeight: 700 }}>{tableName.toUpperCase()}</p>
       <Table
