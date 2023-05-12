@@ -20,8 +20,6 @@ export function MentorRegistryTable(props: Props) {
   const [form] = Form.useForm();
 
   const tableWidth = 2000;
-  const tableHeight = 1000;
-
   return (
     <Form form={form} component={false}>
       <FilteredTags
@@ -34,7 +32,7 @@ export function MentorRegistryTable(props: Props) {
         size="large"
         rowKey="id"
         dataSource={filteredData}
-        scroll={{ x: tableWidth, y: tableHeight }}
+        scroll={{ x: tableWidth, y: 'calc(95vh - 290px)' }}
         columns={columns}
         onChange={handleTableChange}
       />
