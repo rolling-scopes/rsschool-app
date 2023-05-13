@@ -28,7 +28,8 @@ export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
       <Form.Item
         label={LABELS.lastName}
         name="lastName"
-        rules={[{ pattern: englishNamePattern, message: ERROR_MESSAGES.inEnglish('Last name') }]}
+        rules={[{ required: true, pattern: englishNamePattern, message: ERROR_MESSAGES.inEnglish('Last name') }]}
+        extra={EXTRAS.inEnglish}
       >
         <Input placeholder={PLACEHOLDERS.lastName} />
       </Form.Item>
