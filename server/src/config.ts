@@ -58,7 +58,7 @@ export interface IConfig {
 
 export const config: IConfig = {
   app: {
-    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'sonejka', 'aaliakseyenka'],
+    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'sonejka', 'aaliakseyenka', 'valerydluski'],
   },
   users: {
     cloud: {
