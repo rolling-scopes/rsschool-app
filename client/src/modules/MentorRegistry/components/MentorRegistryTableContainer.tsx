@@ -150,6 +150,7 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('githubId'),
         ...getColumnSearchProps(['githubId', 'name']),
         width: 200,
+        fixed: 'left' as const,
       },
       {
         key: MentorsRegistryColumnKey.Info,
@@ -262,7 +263,8 @@ export const MentorRegistryTableContainer = ({
             </Button>
           </>
         ),
-        width: activeTab === MentorRegistryTabsMode.New ? 240 : 140,
+        width: activeTab === MentorRegistryTabsMode.New ? 210 : 140,
+        fixed: 'right' as const,
       },
     ];
 
