@@ -80,7 +80,7 @@ function Page(props: Props) {
 
   const cancelMentor = withLoading(async (githubId: string) => {
     setModalData(null);
-    await mentorRegistryService.cancelMentor(githubId);
+    await mentorRegistryService.cancelMentorRegistry(githubId);
     await loadData();
     setIsModalOpen(false);
   });

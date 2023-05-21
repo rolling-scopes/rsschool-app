@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -14,7 +14,7 @@ import { DisciplinesService } from 'src/disciplines/disciplines.service';
 @UseGuards(DefaultGuard, RoleGuard)
 export class RegistryController {
   constructor(
-    private mentorsService: RegistryService,
+    private registryService: RegistryService,
     private notificationService: UserNotificationsService,
     private coursesService: CoursesService,
     private disciplinesService: DisciplinesService,
@@ -28,8 +28,8 @@ export class RegistryController {
     const { preselectedCourses } = body;
 
     const [user, notificationData] = await Promise.all([
-      this.mentorsService.approveMentor(githubId, preselectedCourses),
-      this.mentorsService.buildMentorApprovalData(preselectedCourses),
+      this.registryService.approveMentor(githubId, preselectedCourses),
+      this.registryService.buildMentorApprovalData(preselectedCourses),
     ]);
 
     await this.notificationService.sendEventNotification({
@@ -39,13 +39,21 @@ export class RegistryController {
     });
   }
 
+  @Delete('mentor/:githubId')
+  @ApiOperation({ operationId: 'cancelMentorRegistry' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @ApiOkResponse()
+  public async cancelMentorRegistry(@Param('githubId') githubId: string) {
+    await this.registryService.cancelMentorRegistry(githubId);
+  }
+
   @Get('mentors')
   @ApiOperation({ operationId: 'getMentorRegistries' })
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiOkResponse({ type: [MentorRegistryDto] })
   public async getMentorRegistries(@Req() req: CurrentRequest) {
     if (req.user.isAdmin) {
-      const data = await this.mentorsService.findAllMentorRegistries();
+      const data = await this.registryService.findAllMentorRegistries();
       return data.map(el => new MentorRegistryDto(el));
     } else {
       const coursesIds = Object.entries(req.user.courses)
@@ -55,7 +63,10 @@ export class RegistryController {
       const disciplineIds = uniq(courses.map(course => course.disciplineId).filter(Boolean)) as number[];
       const disciplines = await this.disciplinesService.getByIds(disciplineIds);
       const disciplineNames = disciplines.map(discipline => discipline.name);
-      const data = await this.mentorsService.findMentorRegistriesByCourseIdsAndDisciplines(coursesIds, disciplineNames);
+      const data = await this.registryService.findMentorRegistriesByCourseIdsAndDisciplines(
+        coursesIds,
+        disciplineNames,
+      );
       return data.map(el => new MentorRegistryDto(el));
     }
   }

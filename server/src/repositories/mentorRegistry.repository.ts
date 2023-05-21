@@ -10,14 +10,6 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     return data.map(transformMentorRegistry);
   }
 
-  public async cancel(githubId: string) {
-    const user = await userService.getUserByGithubId(githubId);
-    if (user == null) {
-      return;
-    }
-    await getRepository(MentorRegistry).update({ userId: user.id }, { canceled: true });
-  }
-
   public async register(githubId: string, updateData: Partial<MentorRegistry>) {
     const user = await userService.getUserByGithubId(githubId);
 
