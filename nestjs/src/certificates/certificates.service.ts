@@ -8,7 +8,7 @@ import { SaveCertificateDto } from './dto/save-certificate-dto';
 
 import { ConfigService } from 'src/config';
 import { Student } from '@entities/student';
-import { Course } from '@entities/course';;
+import { Course } from '@entities/course';
 
 @Injectable()
 export class CertificationsService {
@@ -26,7 +26,7 @@ export class CertificationsService {
       credentials: {
         secretAccessKey: this.configService.awsServices.secretAccessKey,
         accessKeyId: this.configService.awsServices.accessKeyId,
-      }
+      },
     });
   }
 
@@ -35,9 +35,7 @@ export class CertificationsService {
   }
 
   public async getFileStream(bucket: string, key: string) {
-    const { Body } = await this.s3.send(
-      new GetObjectCommand({ Bucket: bucket, Key: key })
-    );
+    const { Body } = await this.s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     return Body as Readable;
   }
 
