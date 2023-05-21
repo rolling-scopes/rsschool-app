@@ -6,9 +6,16 @@ import { UsersModule } from 'src/users';
 import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { RegistryController } from './registry.controller';
 import { RegistryService } from './registry.service';
+import { DisciplinesModule } from 'src/disciplines';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MentorRegistry]), UsersModule, UsersNotificationsModule, CoursesModule],
+  imports: [
+    TypeOrmModule.forFeature([MentorRegistry]),
+    UsersModule,
+    UsersNotificationsModule,
+    CoursesModule,
+    DisciplinesModule,
+  ],
   controllers: [RegistryController],
   providers: [RegistryService],
 })
