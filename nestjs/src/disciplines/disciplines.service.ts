@@ -1,7 +1,7 @@
 import { Discipline } from '@entities/discipline';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { CreateDisciplineDto, UpdateDisciplineDto } from './dto';
 
 @Injectable()
@@ -17,6 +17,15 @@ export class DisciplinesService {
 
   public async getById(id: number) {
     return this.repository.findOneBy({ id });
+  }
+
+  public async getByIds(ids: number[], filter?: FindOptionsWhere<Discipline>) {
+    return this.repository.find({
+      where: {
+        id: In(ids),
+        ...filter,
+      },
+    });
   }
 
   public async create(data: CreateDisciplineDto) {

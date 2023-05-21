@@ -2,7 +2,8 @@ import get from 'lodash/get';
 import mapValues from 'lodash/mapValues';
 import mergeWith from 'lodash/mergeWith';
 import cloneDeep from 'lodash/cloneDeep';
-import { getRepository } from 'typeorm';
+import uniqBy from 'lodash/uniqBy';
+import { In, getRepository } from 'typeorm';
 import {
   User,
   Student,
@@ -15,6 +16,8 @@ import {
   IUserSession,
   isSupervisor,
   MentorRegistry,
+  Discipline,
+  Course,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -92,13 +95,22 @@ const getRegisteredMentorsCourseIds = async (githubId: string) => {
 const getMentorsFromRegistryCourseIds = async (githubId: string) => {
   const result = await getRepository(MentorRegistry)
     .createQueryBuilder('mentorRegistry')
-    .select(['mentorRegistry.preferedCourses'])
+    .select(['mentorRegistry.preferedCourses', 'mentorRegistry.technicalMentoring'])
     .leftJoin('mentorRegistry.user', 'user')
     .where('user.githubId = :githubId', { githubId })
     .andWhere('"mentorRegistry".canceled = false')
     .getOne();
 
-  return result?.preferedCourses?.map(courseId => ({ courseId: Number(courseId) })) ?? [];
+  const disciplines = await getRepository(Discipline).find({ where: { name: In(result?.technicalMentoring ?? []) } });
+  const disciplinesIds = disciplines.map(({ id }) => id);
+  const coursesByDisciplines = await getRepository(Course).find({ where: { disciplineId: In(disciplinesIds) } });
+
+  const preferredCourseIds = result?.preferedCourses?.map(courseId => ({ courseId: Number(courseId) })) ?? [];
+  const courseIdsByDisciplines = coursesByDisciplines.map(({ id }) => ({ courseId: id }));
+
+  const courseIds = uniqBy(preferredCourseIds.concat(courseIdsByDisciplines), ({ courseId }) => courseId);
+
+  return courseIds;
 };
 
 export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
