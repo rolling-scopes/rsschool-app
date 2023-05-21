@@ -701,6 +701,9 @@ function shiftDate(date: string, shift: number, format: string): string {
 
 function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
   delete event.id;
+  delete event.createdDate;
+  delete event.updatedDate;
+
   event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   if (event.endTime) {
     event.endTime = shiftDate(event.endTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
@@ -710,6 +713,10 @@ function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
 
 function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
   delete task.id;
+  delete task.createdDate;
+  delete task.updatedDate;
+  delete task.crossCheckStatus;
+
   task.studentStartDate = shiftDate(task.studentStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   task.studentEndDate = shiftDate(task.studentEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   if (task.mentorStartDate) {
