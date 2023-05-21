@@ -21,7 +21,7 @@ export interface CrossCheckCriteriaData {
   comment?: string;
 }
 
-type ScoreRecord = {
+export type ScoreRecord = {
   score: number;
   dateTime: number;
   comment: string;

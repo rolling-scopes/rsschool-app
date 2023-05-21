@@ -6,7 +6,7 @@ import { TaskSolutionChecker } from '@entities/taskSolutionChecker';
 import { Repository } from 'typeorm';
 import { Student } from '@entities/student';
 import { TaskSolution } from '@entities/taskSolution';
-import { TaskSolutionResult } from '@entities/taskSolutionResult';
+import { CrossCheckMessage, ScoreRecord, TaskSolutionResult } from '@entities/taskSolutionResult';
 import { CourseTask } from '@entities/courseTask';
 
 export type CrossCheckPair = {
@@ -15,6 +15,8 @@ export type CrossCheckPair = {
   comment: string;
   student: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
   checker: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
+  historicalScores: null | ScoreRecord[];
+  messages: null | CrossCheckMessage[];
   url: string;
   courseTask: Pick<Task, 'id' | 'name'>;
   submittedDate: string;
@@ -99,7 +101,7 @@ export class CourseCrossCheckService {
         'tsr',
         'tsr."courseTaskId" = tsc."courseTaskId" AND tsr."studentId" = tsc."studentId" AND tsr."checkerId" = tsc."checkerId"',
       )
-      .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate'])
+      .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate', 'tsr.historicalScores', 'tsr.messages'])
       .addSelect(['stu.githubId', 'stu.id', 'stu.firstName', 'stu.lastName'])
       .addSelect(['chu.githubId', 'chu.id', 'chu.firstName', 'chu.lastName'])
       .addSelect(['ts.url', 'ts.updatedDate'])
@@ -154,6 +156,8 @@ export class CourseCrossCheckService {
         comment: e.tsr_comment,
         submittedDate: e.ts_updatedDate,
         reviewedDate: e.tsr_updatedDate,
+        messages: e.tsr_messages,
+        historicalScores: e.tsr_historicalScores,
         id: e.tsc_id,
       } as CrossCheckPair;
     });

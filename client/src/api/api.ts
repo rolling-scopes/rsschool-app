@@ -2040,6 +2040,44 @@ export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof Criter
 /**
  * 
  * @export
+ * @interface CrossCheckMessageAuthorDto
+ */
+export interface CrossCheckMessageAuthorDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageAuthorDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckMessageAuthorDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface CrossCheckMessageDto
+ */
+export interface CrossCheckMessageDto {
+    /**
+     * 
+     * @type {CrossCheckMessageAuthorDto}
+     * @memberof CrossCheckMessageDto
+     */
+    'author': CrossCheckMessageAuthorDto | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'content': string;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckPairDto
  */
 export interface CrossCheckPairDto {
@@ -2097,6 +2135,18 @@ export interface CrossCheckPairDto {
      * @memberof CrossCheckPairDto
      */
     'submittedDate': string;
+    /**
+     * 
+     * @type {Array<HistoricalScoreDto>}
+     * @memberof CrossCheckPairDto
+     */
+    'historicalScores': Array<HistoricalScoreDto>;
+    /**
+     * 
+     * @type {Array<CrossCheckMessageDto>}
+     * @memberof CrossCheckPairDto
+     */
+    'messages': Array<CrossCheckMessageDto>;
 }
 /**
  * 
@@ -2672,6 +2722,25 @@ export const GratitudeDtoBadgeIdEnum = {
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
 
+/**
+ * 
+ * @export
+ * @interface HistoricalScoreDto
+ */
+export interface HistoricalScoreDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HistoricalScoreDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HistoricalScoreDto
+     */
+    'dateTime': string;
+}
 /**
  * 
  * @export

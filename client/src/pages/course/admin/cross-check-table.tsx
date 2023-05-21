@@ -1,4 +1,4 @@
-import { Button, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Button, Comment, Modal, Table, TablePaginationConfig, Typography } from 'antd';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
@@ -150,11 +150,21 @@ export function Page(props: CoursePageProps) {
         crossCheckList.content,
         crossCheckList.pagination,
         getCourseScore,
-        ({ comment, checker }) => {
+        ({ historicalScores, checker }) => {
           modal.info({
             width: 600,
             title: `Comment from ${checker.githubId}`,
-            content: <PreparedComment text={comment}></PreparedComment>,
+            content: historicalScores.map(historicalScore => (
+              <Comment
+                key={historicalScore.dateTime}
+                content={
+                  <>
+                    {dateTimeRenderer(historicalScore.dateTime)}
+                    <PreparedComment text={historicalScore.comment}></PreparedComment>
+                  </>
+                }
+              />
+            )),
           });
         },
       )}
@@ -253,7 +263,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'reviewedDate',
-    render: dateTimeRenderer,
+    render: (_, record) => dateTimeRenderer(record.historicalScores?.at(-1)?.dateTime ?? null),
   },
   {
     title: 'Comment',
