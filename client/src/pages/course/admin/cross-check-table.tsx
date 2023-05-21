@@ -271,7 +271,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     key: 'comment',
     width: 60,
     render: (_, record) => (
-      <Button onClick={() => viewComment(record)} type="link" size="small">
+      <Button disabled={!record.historicalScores} onClick={() => viewComment(record)} type="link" size="small">
         Show
       </Button>
     ),
