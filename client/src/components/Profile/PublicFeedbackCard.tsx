@@ -16,7 +16,6 @@ dayjs.extend(relative);
 
 const { Text, Paragraph } = Typography;
 
-
 type Props = {
   data: PublicFeedback[];
 };

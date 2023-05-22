@@ -5,11 +5,11 @@ import { FullscreenOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-interface Props extends CardProps {
+type Props = Omit<CardProps, 'content'> & {
   isMoreContent?: boolean | undefined;
   noDataDescription?: string | undefined;
   content?: React.ReactNode;
-}
+};
 
 type State = {
   isVisibilitySettingsVisible: boolean;
