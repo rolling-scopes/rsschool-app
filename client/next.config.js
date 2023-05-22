@@ -2,10 +2,6 @@
 const prodConfig = require('./next.config.prod');
 const { withSentryConfig } = require('@sentry/nextjs');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: Boolean(process.env.ANALYZE),
-});
-
 const isProd = process.env.NODE_ENV === 'production';
 
 const server = process.env.SERVER_HOST || 'http://localhost:3001';
@@ -29,33 +25,31 @@ const nextConfig = {
   },
   swcMinify: true,
 };
-module.exports = withBundleAnalyzer(
-  withSentryConfig(
-    nextConfig,
-    {
-      // Suppresses source map uploading logs during build
-      silent: true,
+module.exports = withSentryConfig(
+  nextConfig,
+  {
+    // Suppresses source map uploading logs during build
+    silent: true,
 
-      org: 'rs-school',
-      project: 'rs-app',
-    },
-    {
-      // Upload a larger set of source maps for prettier stack traces (increases build time)
-      widenClientFileUpload: true,
+    org: 'rs-school',
+    project: 'rs-app',
+  },
+  {
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
 
-      // Transpiles SDK to be compatible with IE11 (increases bundle size)
-      transpileClientSDK: false,
+    // Transpiles SDK to be compatible with IE11 (increases bundle size)
+    transpileClientSDK: false,
 
-      // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-      tunnelRoute: '/monitoring',
+    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+    tunnelRoute: '/monitoring',
 
-      // Hides source maps from generated client bundles
-      hideSourceMaps: true,
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
 
-      // Automatically tree-shake Sentry logger statements to reduce bundle size
-      disableLogger: true,
-    },
-  ),
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+  },
 );
 
 // Injected content via Sentry wizard below
