@@ -9,7 +9,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
     <div
       aria-busy="true"
       aria-live="polite"
-      class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-mxhywb"
+      class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-w8mnev"
       style="font-size: 20px;"
     >
       <span
@@ -28,11 +28,6 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
           class="ant-spin-dot-item"
         />
       </span>
-      <div
-        class="ant-spin-text"
-      >
-        Loading...
-      </div>
     </div>
   </div>
 </div>

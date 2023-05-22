@@ -6,13 +6,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="ant-form-item css-dev-only-do-not-override-mxhywb"
+        class="ant-form-item css-dev-only-do-not-override-w8mnev"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-w8mnev"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-w8mnev"
           >
             <label
               class=""
@@ -22,7 +22,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-w8mnev"
           >
             <div
               class="ant-form-item-control-input"
@@ -31,7 +31,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                 class="ant-form-item-control-input-content"
               >
                 <div
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-mxhywb ant-select-single ant-select-show-arrow"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-w8mnev ant-select-single ant-select-show-arrow"
                 >
                   <div
                     class="ant-select-selector"
@@ -43,6 +43,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                         aria-activedescendant="rc_select_TEST_OR_SSR_list_0"
                         aria-autocomplete="list"
                         aria-controls="rc_select_TEST_OR_SSR_list"
+                        aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-owns="rc_select_TEST_OR_SSR_list"
                         autocomplete="off"
@@ -95,13 +96,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
         </div>
       </div>
       <div
-        class="ant-form-item css-dev-only-do-not-override-mxhywb"
+        class="ant-form-item css-dev-only-do-not-override-w8mnev"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-w8mnev"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-w8mnev"
           >
             <label
               class=""
@@ -111,7 +112,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-w8mnev"
           >
             <div
               class="ant-form-item-control-input"
@@ -120,7 +121,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                 class="ant-form-item-control-input-content"
               >
                 <textarea
-                  class="ant-input css-dev-only-do-not-override-mxhywb"
+                  class="ant-input css-dev-only-do-not-override-w8mnev"
                   placeholder="Add description"
                   rows="3"
                   style="max-width: 1200px;"
@@ -134,7 +135,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
         style="text-align: right;"
       >
         <button
-          class="ant-btn css-dev-only-do-not-override-mxhywb ant-btn-primary"
+          class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-primary"
           disabled=""
           type="button"
         >
@@ -147,13 +148,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
   </body>,
   "container": <div>
     <div
-      class="ant-form-item css-dev-only-do-not-override-mxhywb"
+      class="ant-form-item css-dev-only-do-not-override-w8mnev"
     >
       <div
-        class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-w8mnev"
       >
         <div
-          class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-w8mnev"
         >
           <label
             class=""
@@ -163,7 +164,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
           </label>
         </div>
         <div
-          class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-w8mnev"
         >
           <div
             class="ant-form-item-control-input"
@@ -172,7 +173,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
               class="ant-form-item-control-input-content"
             >
               <div
-                class="ant-select ant-select-in-form-item css-dev-only-do-not-override-mxhywb ant-select-single ant-select-show-arrow"
+                class="ant-select ant-select-in-form-item css-dev-only-do-not-override-w8mnev ant-select-single ant-select-show-arrow"
               >
                 <div
                   class="ant-select-selector"
@@ -184,6 +185,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                       aria-activedescendant="rc_select_TEST_OR_SSR_list_0"
                       aria-autocomplete="list"
                       aria-controls="rc_select_TEST_OR_SSR_list"
+                      aria-expanded="false"
                       aria-haspopup="listbox"
                       aria-owns="rc_select_TEST_OR_SSR_list"
                       autocomplete="off"
@@ -236,13 +238,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
       </div>
     </div>
     <div
-      class="ant-form-item css-dev-only-do-not-override-mxhywb"
+      class="ant-form-item css-dev-only-do-not-override-w8mnev"
     >
       <div
-        class="ant-row ant-form-item-row css-dev-only-do-not-override-mxhywb"
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-w8mnev"
       >
         <div
-          class="ant-col ant-form-item-label css-dev-only-do-not-override-mxhywb"
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-w8mnev"
         >
           <label
             class=""
@@ -252,7 +254,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
           </label>
         </div>
         <div
-          class="ant-col ant-form-item-control css-dev-only-do-not-override-mxhywb"
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-w8mnev"
         >
           <div
             class="ant-form-item-control-input"
@@ -261,7 +263,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
               class="ant-form-item-control-input-content"
             >
               <textarea
-                class="ant-input css-dev-only-do-not-override-mxhywb"
+                class="ant-input css-dev-only-do-not-override-w8mnev"
                 placeholder="Add description"
                 rows="3"
                 style="max-width: 1200px;"
@@ -275,7 +277,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
       style="text-align: right;"
     >
       <button
-        class="ant-btn css-dev-only-do-not-override-mxhywb ant-btn-primary"
+        class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-primary"
         disabled=""
         type="button"
       >
