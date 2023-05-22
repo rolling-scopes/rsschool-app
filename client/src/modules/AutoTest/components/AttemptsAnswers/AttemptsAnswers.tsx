@@ -3,7 +3,7 @@ import { TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
 import dayjs from 'dayjs';
 import { Fragment } from 'react';
-import { CalendarOutlined } from '@ant-design/icons';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 
 type Props = {
   attempts: TaskVerificationAttemptDto[];

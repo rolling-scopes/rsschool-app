@@ -54,8 +54,8 @@ export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
         label={LABELS.epamEmail}
         tooltip={TOOLTIPS.epamEmail}
         name="contactsEpamEmail"
+        required={!isStudentForm}
         rules={[{ pattern: epamEmailPattern, message: ERROR_MESSAGES.epamEmail }]}
-        requiredMark={isStudentForm && 'optional'}
       >
         <Input placeholder={PLACEHOLDERS.epamEmail} />
       </Form.Item>

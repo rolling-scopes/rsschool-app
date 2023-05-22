@@ -2,6 +2,8 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, Tooltip, Avatar, Badge } from 'antd';
 import { Comment } from '@ant-design/compatible';
+import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
+import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
@@ -14,7 +16,6 @@ dayjs.extend(relative);
 
 const { Text, Paragraph } = Typography;
 
-import { MessageOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 type Props = {
   data: PublicFeedback[];

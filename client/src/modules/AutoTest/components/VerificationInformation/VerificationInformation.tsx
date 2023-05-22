@@ -2,7 +2,7 @@ import { Row, Col, Space, Button, Alert, Typography, Tooltip } from 'antd';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import { ReloadOutlined } from '@ant-design/icons';
+import ReloadOutlined from '@ant-design/icons/ReloadOutlined';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 
 export type VerificationInformationProps = {

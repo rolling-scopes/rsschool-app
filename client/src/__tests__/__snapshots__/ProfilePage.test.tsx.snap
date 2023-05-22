@@ -3,31 +3,50 @@
 exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
 <div>
   <div
-    class="jsx-24f0c3f38e667ccd loading-screen"
+    class="jsx-58a81771df76c199 loading-screen"
+    data-testid="loading-screen"
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh;"
   >
     <div
-      aria-busy="true"
-      aria-live="polite"
-      class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-w8mnev"
-      style="font-size: 20px;"
+      class="ant-spin-nested-loading css-dev-only-do-not-override-w8mnev"
     >
-      <span
-        class="ant-spin-dot ant-spin-dot-spin"
+      <div>
+        <div
+          aria-busy="true"
+          aria-live="polite"
+          class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-w8mnev"
+          style="font-size: 20px;"
+        >
+          <span
+            class="ant-spin-dot ant-spin-dot-spin"
+          >
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+          </span>
+          <div
+            class="ant-spin-text"
+          >
+            Loading...
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-spin-container ant-spin-blur"
       >
-        <i
-          class="ant-spin-dot-item"
+        <div
+          class="jsx-58a81771df76c199 content"
         />
-        <i
-          class="ant-spin-dot-item"
-        />
-        <i
-          class="ant-spin-dot-item"
-        />
-        <i
-          class="ant-spin-dot-item"
-        />
-      </span>
+      </div>
     </div>
   </div>
 </div>
