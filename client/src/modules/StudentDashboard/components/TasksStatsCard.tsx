@@ -73,7 +73,7 @@ export function TasksStatsCard(props: Props) {
         onHide={hideTasksStatsModal}
       />
       <CommonCard
-        title="Tasks statistics"
+        title="Tasks Statistics"
         content={
           <div style={{ height: '220px' }}>
             <TasksChart data={chartData} onItemSelected={data => updateUrl(data.status)} />

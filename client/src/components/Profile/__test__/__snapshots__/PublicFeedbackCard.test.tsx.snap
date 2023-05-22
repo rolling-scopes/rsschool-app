@@ -3,7 +3,7 @@
 exports[`PublicFeedbackCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-w8mnev"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-w8mnev"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,7 +52,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 20px;"
       >
         <span
-          class="ant-typography"
+          class="ant-typography css-dev-only-do-not-override-w8mnev"
         >
           <strong>
             Total badges:
@@ -68,10 +68,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge"
+            class="ant-badge css-dev-only-do-not-override-w8mnev"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -101,10 +101,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge"
+            class="ant-badge css-dev-only-do-not-override-w8mnev"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -134,10 +134,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge"
+            class="ant-badge css-dev-only-do-not-override-w8mnev"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -168,7 +168,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 0px;"
       >
         <span
-          class="ant-typography"
+          class="ant-typography css-dev-only-do-not-override-w8mnev"
         >
           <strong>
             Last feedback:
@@ -176,7 +176,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         </span>
       </div>
       <div
-        class="ant-comment"
+        class="ant-comment css-dev-only-do-not-override-w8mnev"
       >
         <div
           class="ant-comment-inner"
@@ -185,7 +185,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
             class="ant-comment-avatar"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -212,7 +212,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
                 class="ant-comment-content-author-time"
               >
                 <span>
-                  fromNow
+                  a month ago
                 </span>
               </span>
             </div>
@@ -220,7 +220,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               class="ant-comment-content-detail"
             >
               <span
-                class="ant-typography"
+                class="ant-typography css-dev-only-do-not-override-w8mnev"
                 style="font-size: 12px;"
               >
                 <strong>
@@ -229,18 +229,18 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               </span>
               <div
                 aria-label="Test"
-                class="ant-typography ant-typography-ellipsis"
+                class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-w8mnev"
               >
                 Test
                 <span
                   aria-hidden="true"
-                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; word-break: keep-all; white-space: nowrap;"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; word-break: keep-all; white-space: nowrap;"
                 >
                   lg
                 </span>
                 <span
                   aria-hidden="true"
-                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
+                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
                 >
                   <span
                     aria-hidden="true"

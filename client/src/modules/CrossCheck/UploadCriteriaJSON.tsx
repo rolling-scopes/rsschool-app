@@ -31,7 +31,7 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
           } else return item;
         });
         if (!transformedCriteria?.length) {
-          message.warn(`There is no criteria for downloading`);
+          message.warning(`There is no criteria for downloading`);
           return;
         }
         message.success(`${info.file.name} file uploaded successfully`);

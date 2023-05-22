@@ -35,8 +35,8 @@ describe('TaskCard', () => {
 function generateCourseTask(maxAttemptsNumber?: number): CourseTaskVerifications {
   return {
     name: 'Course Task',
-    studentStartDate: '2022-09-10 12:00',
-    studentEndDate: '2022-10-10 12:00',
+    studentStartDate: '2022-09-10T12:00:00.000Z',
+    studentEndDate: '2022-10-10T12:00:00.000Z',
     checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
     id: 10,
     descriptionUrl: 'description-url',

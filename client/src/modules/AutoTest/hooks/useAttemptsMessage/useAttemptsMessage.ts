@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   const { publicAttributes, type, verifications, studentEndDate } = courseTask;
@@ -18,8 +21,8 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
   }, [maxAttemptsNumber, verifications?.length]);
 
   const isDeadlinePassed = useMemo(() => {
-    const now = moment();
-    const endDate = moment(studentEndDate);
+    const now = dayjs();
+    const endDate = dayjs(studentEndDate);
 
     return now.isAfter(endDate);
   }, [studentEndDate]);
@@ -29,7 +32,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     const lastAttemptTime = lastAttempt?.createdDate;
 
     if (oneAttemptPerNumberOfHours && lastAttemptTime) {
-      const diff = moment(lastAttemptTime).diff(moment().subtract(oneAttemptPerNumberOfHours, 'hour'));
+      const diff = dayjs(lastAttemptTime).diff(dayjs().subtract(oneAttemptPerNumberOfHours, 'hour'));
 
       if (diff < 0) {
         return 0;
@@ -54,7 +57,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
       }
 
       if (timeToNextSubmit !== 0 && attemptsCount > 0) {
-        str += ` Next submit is possible in ${moment.utc(timeToNextSubmit).format('HH:mm:ss')}`;
+        str += ` Next submit is possible in ${dayjs.utc(timeToNextSubmit).format('HH:mm:ss')}`;
       }
 
       return str;

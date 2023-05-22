@@ -1,5 +1,5 @@
 import { Session } from 'components/withSession';
-import { keys } from 'lodash';
+import keys from 'lodash/keys';
 import { CourseRole } from 'services/models';
 
 function hasRole(session: Session, courseId: number, role: CourseRole) {

@@ -22,9 +22,14 @@ import {
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
 import { statusRenderer, renderTagWithStyle } from './renderers';
 import { FilterValue } from 'antd/lib/table/interface';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const getColumns = ({
   timezone,
@@ -37,7 +42,7 @@ const getColumns = ({
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
 }): ColumnsType<CourseScheduleItemDto> => {
-  const timezoneOffset = `(UTC ${moment().tz(timezone).format('Z')})`;
+  const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   return [
     {
       key: ColumnKey.Status,

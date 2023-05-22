@@ -6,7 +6,10 @@ import { noAccessResponse, notAuthorizedResponse } from 'modules/Course/data';
 import { UserService } from 'services/user';
 import { getApiConfiguration } from 'utils/axios';
 import { AutoTests, AutoTestsProps } from 'modules/AutoTest/pages';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrAfter);
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
   try {
@@ -32,9 +35,9 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
         task =>
           task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest &&
           task.type !== CourseTaskDtoTypeEnum.Test &&
-          moment().isSameOrAfter(task.studentStartDate, 'd'),
+          dayjs().isSameOrAfter(task.studentStartDate, 'd'),
       )
-      .sort((a, b) => moment(b.studentEndDate).diff(a.studentEndDate));
+      .sort((a, b) => dayjs(b.studentEndDate).diff(a.studentEndDate));
 
     return {
       props: { course, courseTasks },

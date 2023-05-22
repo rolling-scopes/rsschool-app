@@ -1,30 +1,33 @@
-import {
-  CheckCircleFilled,
-  ChromeOutlined,
-  GithubOutlined,
-  MinusCircleOutlined,
-  YoutubeOutlined,
-  InfoCircleOutlined,
-} from '@ant-design/icons';
+import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
+import ChromeOutlined from '@ant-design/icons/ChromeOutlined';
+import GithubOutlined from '@ant-design/icons/GithubOutlined';
+import MinusCircleOutlined from '@ant-design/icons/MinusCircleOutlined';
+import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
-import moment from 'moment-timezone';
 import { CrossCheckStatus } from 'services/course';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const { Text, Link } = Typography;
 
 export function dateRenderer(value: string | null) {
-  return value ? moment(value).format('YYYY-MM-DD') : '';
+  return value ? dayjs(value).format('YYYY-MM-DD') : '';
 }
 
 export function dateUtcRenderer(value: string | null) {
-  return value ? moment.utc(value).format('YYYY-MM-DD') : '';
+  return value ? dayjs.utc(value).format('YYYY-MM-DD') : '';
 }
 
 export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CreateCourseTaskDtoCheckerEnum }) {
   if (checker !== CreateCourseTaskDtoCheckerEnum.CrossCheck) return 'N/A';
-  return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
+  return value ? dayjs(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
 export function crossCheckStatusRenderer(
@@ -41,19 +44,19 @@ export function crossCheckStatusRenderer(
 }
 
 export function timeRenderer(value: string) {
-  return value ? moment(value, 'HH:mm:ssZ').format('HH:mm') : '';
+  return value ? dayjs(value, 'HH:mm:ssZ').format('HH:mm') : '';
 }
 
 export function dateTimeRenderer(value: string | null) {
-  return value ? moment(value).format('YYYY-MM-DD HH:mm') : '';
+  return value ? dayjs(value).format('YYYY-MM-DD HH:mm') : '';
 }
 
 export function shortDateTimeRenderer(value: string) {
-  return value ? moment(value).format('DD.MM HH:mm') : '';
+  return value ? dayjs(value).format('DD.MM HH:mm') : '';
 }
 
 export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (value: string) =>
-  value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format(format) : '';
+  value ? dayjs(value).tz(timeZone).format(format) : '';
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
@@ -168,11 +171,11 @@ export const renderTask = (name: string, item: CourseScheduleItemDto) => {
 };
 
 export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
-  const now = moment();
+  const now = dayjs();
   return (value: string, { startDate, endDate, score, tag }: CourseScheduleItemDto) => {
     let color: BaseType | undefined = undefined;
-    const start = moment(startDate);
-    const end = moment(endDate);
+    const start = dayjs(startDate);
+    const end = dayjs(endDate);
 
     const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
     const isCurrent = now >= start && now < end && !score;

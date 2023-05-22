@@ -1,5 +1,4 @@
-import { Form, Row, Col, Button } from 'antd';
-import { TAIL_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { Row, Col, Button } from 'antd';
 
 type Props = {
   onPrevious?: () => void;
@@ -8,21 +7,19 @@ type Props = {
 
 export function FormButtons({ onPrevious, submitTitle = 'Submit' }: Props) {
   return (
-    <Form.Item {...TAIL_FORM_ITEM_LAYOUT(!!onPrevious)} className="buttons">
-      <Row justify="end" gutter={16}>
-        {onPrevious ? (
-          <Col>
-            <Button size="large" type="default" onClick={onPrevious}>
-              Previous
-            </Button>
-          </Col>
-        ) : null}
+    <Row justify="center" className="buttons" gutter={24}>
+      {onPrevious ? (
         <Col>
-          <Button size="large" type="primary" htmlType="submit">
-            {submitTitle}
+          <Button size="large" type="default" onClick={onPrevious}>
+            Previous
           </Button>
         </Col>
-      </Row>
-    </Form.Item>
+      ) : null}
+      <Col>
+        <Button size="large" type="primary" htmlType="submit">
+          {submitTitle}
+        </Button>
+      </Col>
+    </Row>
   );
 }

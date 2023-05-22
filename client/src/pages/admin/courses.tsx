@@ -16,7 +16,7 @@ import {
 import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { dateUtcRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
@@ -26,6 +26,8 @@ import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { isCourseManager } from 'domain/user';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -268,13 +270,13 @@ function Page(props: Props) {
 }
 
 function createRecord(values: any) {
-  const [startDate, endDate] = values.range || [null, null];
+  const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
   const record: UpdateCourseDto = {
     name: values.name,
     fullName: values.fullName,
     alias: values.alias,
-    startDate: startDate ? moment.utc(startDate).startOf('day').toISOString() : undefined,
-    endDate: endDate ? moment.utc(endDate).startOf('day').toISOString() : undefined,
+    startDate: startDate ? dayjs.utc(startDate).startOf('day').format() : undefined,
+    endDate: endDate ? dayjs.utc(endDate).startOf('day').format() : undefined,
     registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
     completed: values.state === 'completed',
     planned: values.state === 'planned',
@@ -367,12 +369,12 @@ function getInitialValues(modalData: Partial<Course>) {
     ...modalData,
     inviteOnly: !!modalData.inviteOnly,
     state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : null,
-    registrationEndDate: modalData.registrationEndDate ? moment(modalData.registrationEndDate) : null,
+    registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
     range:
       modalData.startDate && modalData.endDate
         ? [
-            modalData.startDate ? moment(modalData.startDate) : null,
-            modalData.endDate ? moment(modalData.endDate) : null,
+            modalData.startDate ? dayjs.utc(modalData.startDate) : null,
+            modalData.endDate ? dayjs.utc(modalData.endDate) : null,
           ]
         : null,
   };

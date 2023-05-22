@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from 'api';
 import { useViewData } from './useViewData';
 
@@ -36,9 +36,9 @@ const mockResume = {
 
 describe('useViewData', () => {
   test('should split data if provided', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useViewData({ initialData: mockResume }));
-    await waitForNextUpdate();
-    expect(result.current).toStrictEqual({
+    const { result } = renderHook(() => useViewData({ initialData: mockResume }));
+
+    const expected = {
       contacts: {
         email: mockResume.email,
         githubUsername: mockResume.githubUsername,
@@ -67,22 +67,26 @@ describe('useViewData', () => {
         startFrom: mockResume.startFrom,
       },
       uuid: mockResume.uuid,
-    });
+    };
+
+    await waitFor(() => expect(result.current).toStrictEqual(expected));
   });
 
   test('should return empty data if not provided', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useViewData({}));
-    await waitForNextUpdate();
-    expect(result.current).toStrictEqual({
-      contacts: null,
-      courses: [],
-      expires: null,
-      feedbacks: [],
-      gratitudes: [],
-      loading: true,
-      setExpires: expect.any(Function),
-      userData: null,
-      uuid: null,
+    const { result } = renderHook(() => useViewData({}));
+
+    await waitFor(() => {
+      expect(result.current).toStrictEqual({
+        contacts: null,
+        courses: [],
+        expires: null,
+        feedbacks: [],
+        gratitudes: [],
+        loading: true,
+        setExpires: expect.any(Function),
+        userData: null,
+        uuid: null,
+      });
     });
   });
 });

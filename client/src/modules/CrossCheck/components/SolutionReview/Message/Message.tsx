@@ -1,5 +1,6 @@
 import { CheckOutlined } from '@ant-design/icons';
-import { Badge, Col, Comment, Row, Tag, Tooltip, Typography } from 'antd';
+import { Badge, Col, Row, Tag, Tooltip, Typography } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckMessage, CrossCheckMessageAuthorRole } from 'services/course';
 import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'modules/CrossCheck/constants';

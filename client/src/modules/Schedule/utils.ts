@@ -21,7 +21,7 @@ export function getTaskStatusColor(value: CourseScheduleItemDtoStatusEnum) {
     case CourseScheduleItemDtoStatusEnum.Archived:
       return '#d9d9d9';
     case CourseScheduleItemDtoStatusEnum.Available:
-      return '#1890ff';
+      return '#1677ff';
     case CourseScheduleItemDtoStatusEnum.Future:
       return '#13c2c2';
     case CourseScheduleItemDtoStatusEnum.Review:

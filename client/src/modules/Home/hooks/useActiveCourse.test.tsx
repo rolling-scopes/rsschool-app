@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { ProfileCourseDto } from 'api';
 import { useActiveCourse } from './useActiveCourse';
 import * as ReactUse from 'react-use';

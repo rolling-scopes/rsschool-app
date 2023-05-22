@@ -41,9 +41,7 @@ export function Students(props: CourseOnlyPageProps) {
                   <div>
                     <GithubUserLink value={student.githubId} />
                   </div>
-                  <Link href={`/profile?githubId=${student.githubId}`}>
-                    <a>{student.name}</a>
-                  </Link>
+                  <Link href={`/profile?githubId=${student.githubId}`}>{student.name}</Link>
                   {student.repoUrl && (
                     <div>
                       <LockFilled />{' '}
@@ -56,14 +54,14 @@ export function Students(props: CourseOnlyPageProps) {
               }
               actions={[
                 !feedback ? (
-                  <Link href={routes.getStudentFeedbackRoute(alias, student.id)}>
+                  <Link href={routes.getStudentFeedbackRoute(alias, student.id)} legacyBehavior>
                     <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
                       {feedback ? `Edit Feedback` : `Give Feedback`}
                     </Button>
                   </Link>
                 ) : null,
                 student.active ? (
-                  <Link href={routes.getExpelRoute(alias)}>
+                  <Link href={routes.getExpelRoute(alias)} legacyBehavior>
                     <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
                       Expel
                     </Button>

@@ -48,14 +48,14 @@ jest.mock('modules/Opportunities/hooks');
 
 /*
     Preerequisities:
-    1. Mock usViewData hook 
+    1. Mock usViewData hook
     2. Mock use expiration
-    
+
     Test cases:
     1. If loading is true, then LoadingScreen should be displayed
     2.Loading = false + public mode = true => PublicLink should be displayed
     3.Loading = false + public mode = false => ActionButtons should be displayed
-    
+
     Mock ExpirationTooltip
     Mock NameTitle
     Mock PersonalSection

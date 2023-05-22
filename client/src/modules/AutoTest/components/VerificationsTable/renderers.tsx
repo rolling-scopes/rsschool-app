@@ -3,14 +3,15 @@ import { ColumnType } from 'antd/lib/table';
 import { dateWithTimeZoneRenderer } from 'components/Table';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { CheckSquareTwoTone, CloseSquareTwoTone } from '@ant-design/icons';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { Verification } from 'services/course';
 
 const { Text, Link, Title } = Typography;
 
-const DISPLAY_ALL: Breakpoint[] = ['sm'];
-const DISPLAY_ACCURACY: Breakpoint[] = ['md'];
-const DISPLAY_MOBILE: Breakpoint[] = ['xs'];
+type Breakpoint = ColumnType<Verification>['responsive'];
+
+const DISPLAY_ALL: Breakpoint = ['sm'];
+const DISPLAY_ACCURACY: Breakpoint = ['md'];
+const DISPLAY_MOBILE: Breakpoint = ['xs'];
 
 type Metadata = {
   id: string;

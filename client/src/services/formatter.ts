@@ -1,33 +1,42 @@
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export function formatDate(value: string) {
-  return moment(value).format('YYYY-MM-DD');
+  return dayjs(value).format('YYYY-MM-DD');
 }
 
 export function formatShortDate(value: string) {
-  return moment(value).format('MMM DD');
+  return dayjs(value).format('MMM DD');
 }
 
 export function relativeDays(value: string) {
-  return moment().diff(moment(value), 'day');
+  return dayjs().diff(dayjs(value), 'day');
 }
 
 export function formatDateTime(value: string | number) {
-  return moment(value).format('YYYY-MM-DD HH:mm');
+  return dayjs(value).format('YYYY-MM-DD HH:mm');
 }
 
-export function formatTimezoneToUTC(value: moment.MomentInput, zone: string) {
-  return moment(value).tz(zone, true).utc().format('YYYY-MM-DD HH:mmZ');
+export function formatTimezoneToUTC(value: dayjs.ConfigType, zone = 'UTC') {
+  return dayjs(value).tz(zone, true).utc().format();
 }
 
 export function formatTime(value: string) {
-  return moment(value).format('HH:mm:ssZ');
+  return dayjs(value).format('HH:mm:ssZ');
+}
+
+export function formatDateFriendly(value: string) {
+  return dayjs(value).format('DD MMM YYYY');
 }
 
 export function formatMonth(value: string) {
-  return moment(value).format('YYYY-MM');
+  return dayjs(value).format('YYYY-MM');
 }
 
 export function formatMonthFriendly(value: string) {
-  return moment(value).format('MMM YYYY');
+  return dayjs(value).format('MMM YYYY');
 }

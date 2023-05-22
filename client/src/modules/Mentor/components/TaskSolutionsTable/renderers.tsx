@@ -1,17 +1,18 @@
-import { ColumnsType } from 'antd/lib/table';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
 import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
 import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from 'api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Text, Link } = Typography;
 
+type Breakpoint = ColumnType<MentorDashboardDto>['responsive'];
+
 const FORMAT = 'YYYY-MM-DD HH:mm';
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['sm'];
-const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs'];
+const DISPLAY_TABLE_BREAKPOINTS: Breakpoint = ['sm'];
+const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint = ['xs'];
 
 export const getColumns = (handleSubmitClick: (data: MentorDashboardDto) => void): ColumnsType<MentorDashboardDto> => [
   {
@@ -134,8 +135,8 @@ function renderMobile(row: MentorDashboardDto) {
 }
 
 function renderDate(value: string, { endDate, resultScore }: MentorDashboardDto) {
-  const now = moment();
-  const end = moment(endDate);
+  const now = dayjs();
+  const end = dayjs(endDate);
   const color = end.diff(now, 'hours') < 48 && !resultScore ? 'warning' : undefined;
   const text = dateWithTimeZoneRenderer(TIMEZONE, FORMAT)(value);
 

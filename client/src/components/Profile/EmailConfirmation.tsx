@@ -1,6 +1,6 @@
 import { Alert } from 'antd';
 import { Timer } from 'components/Timer';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 
 export type Connection = {
@@ -16,7 +16,7 @@ type Props = {
 
 export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) {
   const [lastSent, setLastSent] = useState(connection?.lastLinkSentAt);
-  const allowedToResend = !lastSent ? true : moment().diff(moment(lastSent), 'seconds') > 60;
+  const allowedToResend = !lastSent ? true : dayjs().diff(dayjs(lastSent), 'seconds') > 60;
 
   useEffect(() => {
     setLastSent(connection?.lastLinkSentAt);
@@ -42,7 +42,7 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
             <span>
               Send confirmation email in{' '}
               <Timer
-                seconds={60 - moment().diff(moment(lastSent), 'seconds')}
+                seconds={60 - dayjs().diff(dayjs(lastSent), 'seconds')}
                 onElapsed={() => {
                   setLastSent(undefined);
                 }}

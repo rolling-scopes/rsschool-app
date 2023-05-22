@@ -3,9 +3,12 @@ import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TIMEZONES } from 'configs/timezones';
-import moment, { Moment } from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { urlPattern } from 'services/validators';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(timezone);
 
 type Props = {
   data?: TeamDistributionDto;
@@ -23,7 +26,7 @@ const formLayoutProps = {
 
 interface FormState extends TeamDistributionDto {
   timeZone: string;
-  range: Moment[];
+  range: Dayjs[];
 }
 
 const { Option } = Select;
@@ -36,10 +39,7 @@ function getInitialValues(data: TeamDistributionDto) {
     ...data,
     range:
       data.startDate && data.endDate
-        ? [
-            data.startDate ? moment.tz(data.startDate, timeZone) : null,
-            data.endDate ? moment.tz(data.endDate, timeZone) : null,
-          ]
+        ? [data.startDate ? dayjs.utc(data.startDate) : null, data.endDate ? dayjs.utc(data.endDate) : null]
         : null,
     timeZone,
     strictTeamSizeMode: data.strictTeamSizeMode ?? true,
@@ -48,8 +48,8 @@ function getInitialValues(data: TeamDistributionDto) {
   };
 }
 
-const createRecord = (values: FormState): CreateTeamDistributionDto => {
-  const [startDate, endDate] = values.range;
+const createRecord = (values: Partial<FormState>): CreateTeamDistributionDto => {
+  const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
   const record = {
     name: values.name!,
     description: values.description ?? '',
@@ -127,8 +127,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
           rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
         >
           <DatePicker.RangePicker
-            format="YYYY-MM-DD HH:mm"
-            showTime={{ format: 'HH:mm', defaultValue: [moment().hour(0).minute(0), moment().hour(23).minute(59)] }}
+            showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
           />
         </Form.Item>
         <Form.Item

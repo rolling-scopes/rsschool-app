@@ -1,4 +1,5 @@
-import { Button, Comment, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Button, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
@@ -7,13 +8,13 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
-import { isArray, omit } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { CoursesTasksApi, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
+import omit from 'lodash/omit';
 
 const { Text } = Typography;
 
@@ -94,7 +95,7 @@ export function Page(props: CoursePageProps) {
       filters: Record<keyof Filters, FilterValue | null>,
       sorter: Sorter<CrossCheckPairDto>,
     ) => {
-      if (isArray(sorter)) {
+      if (Array.isArray(sorter)) {
         return;
       }
 

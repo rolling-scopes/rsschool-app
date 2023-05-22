@@ -4,7 +4,7 @@ import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { ScoreInput } from 'components/Forms';
 import { MentorDashboardDto } from 'api';
 import { CourseService } from 'services/course';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 export interface SubmitReviewModalProps {
   data: MentorDashboardDto | null;

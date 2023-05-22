@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Typography, Input } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { UpdateProfileInfoDto } from 'api';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 

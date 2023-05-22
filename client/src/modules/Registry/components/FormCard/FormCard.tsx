@@ -8,7 +8,7 @@ type Props = {
 
 export function FormCard({ title, children }: Props) {
   return (
-    <Card title={title} bordered={false} style={{ width: '100%' }}>
+    <Card title={title} bordered={false}>
       {children}
     </Card>
   );

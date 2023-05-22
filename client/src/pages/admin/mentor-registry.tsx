@@ -1,7 +1,6 @@
 import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
-
-import { FileExcelOutlined } from '@ant-design/icons';
+import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typography } from 'antd';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';

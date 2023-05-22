@@ -1,4 +1,4 @@
-import { ClockCircleOutlined } from '@ant-design/icons';
+import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import { Tooltip } from 'antd';
 import { formatDateTime } from 'services/formatter';
 import { Group, GroupType } from 'components/Forms/CourseTaskSelect';

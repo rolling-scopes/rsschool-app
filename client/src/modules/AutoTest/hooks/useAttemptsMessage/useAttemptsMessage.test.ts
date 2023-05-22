@@ -1,9 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { useAttemptsMessage } from './useAttemptsMessage';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const MAX_ATTEMPTS = 4;
 function renderUseAttemptsMessage({
@@ -16,7 +16,7 @@ function renderUseAttemptsMessage({
   verificationCreatedDate?: string;
 }) {
   const verifications = new Array(verificationsCount).fill({
-    createdDate: moment(verificationCreatedDate).add(2, 'h').format(),
+    createdDate: dayjs(verificationCreatedDate).add(2, 'h').format(),
   }) as Verification[];
 
   let courseTask = {
@@ -137,7 +137,7 @@ describe('useAttemptsMessage', () => {
 
     it('when deadline has not passed', () => {
       const task = {
-        studentEndDate: moment().add(7, 'd').format(),
+        studentEndDate: dayjs().add(7, 'd').format(),
       } as CourseTaskVerifications;
       const { allowStartTask } = renderUseAttemptsMessage({ task, verificationsCount: MAX_ATTEMPTS });
 
@@ -146,7 +146,7 @@ describe('useAttemptsMessage', () => {
 
     it('when attempts per hours are not over', () => {
       const task = {
-        studentEndDate: moment().add(7, 'd').format(),
+        studentEndDate: dayjs().add(7, 'd').format(),
         publicAttributes: {
           oneAttemptPerNumberOfHours: 1,
         },
@@ -154,7 +154,7 @@ describe('useAttemptsMessage', () => {
       const { allowStartTask } = renderUseAttemptsMessage({
         task,
         verificationsCount: 1,
-        verificationCreatedDate: moment().subtract(4, 'h').format(),
+        verificationCreatedDate: dayjs().subtract(4, 'h').format(),
       });
 
       expect(allowStartTask).toBeTruthy();
@@ -185,7 +185,7 @@ describe('useAttemptsMessage', () => {
 
     it('when attempts per hours are over', () => {
       const task = {
-        studentEndDate: moment().add(7, 'd').format(),
+        studentEndDate: dayjs().add(7, 'd').format(),
         publicAttributes: {
           oneAttemptPerNumberOfHours: 3,
         },
@@ -199,7 +199,7 @@ describe('useAttemptsMessage', () => {
   describe('should not allow to check answers', () => {
     it('when deadline is not passed', () => {
       const task = {
-        studentEndDate: moment().add(7, 'd').format(),
+        studentEndDate: dayjs().add(7, 'd').format(),
       } as CourseTaskVerifications;
       const { allowCheckAnswers } = renderUseAttemptsMessage({ task });
 
@@ -208,7 +208,7 @@ describe('useAttemptsMessage', () => {
 
     it('when deadline is passed and attempts were not taken', () => {
       const task = {
-        studentEndDate: moment().subtract(7, 'd').format(),
+        studentEndDate: dayjs().subtract(7, 'd').format(),
         publicAttributes: {
           maxAttemptsNumber: 5,
         },
@@ -222,7 +222,7 @@ describe('useAttemptsMessage', () => {
   describe('should allow to check answers', () => {
     it('when deadline is passed and attempts were taken', () => {
       const task = {
-        studentEndDate: moment().subtract(7, 'd').format(),
+        studentEndDate: dayjs().subtract(7, 'd').format(),
         publicAttributes: {
           maxAttemptsNumber: 5,
         },

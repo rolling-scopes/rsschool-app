@@ -49,7 +49,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
       );
     const icon =
       expirationState === ExpirationState.NotExpired ? (
-        <ExclamationCircleTwoTone twoToneColor="#1890FF" />
+        <ExclamationCircleTwoTone twoToneColor="#1677ff" />
       ) : expirationState === ExpirationState.Expired ? (
         <CloseCircleTwoTone twoToneColor="#FF4D4F" />
       ) : (

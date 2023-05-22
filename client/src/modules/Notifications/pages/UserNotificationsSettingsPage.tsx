@@ -5,7 +5,7 @@ import {
   NotificationChannel,
   UserNotificationSettings,
 } from 'modules/Notifications/services/notifications';
-import { set } from 'lodash';
+import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
 import { Session } from 'components/withSession';

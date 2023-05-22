@@ -1,8 +1,9 @@
-import crypto from 'crypto';
 import { Space, Typography } from 'antd';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { useAsync } from 'react-use';
+import { useState } from 'react';
 
 export type CodingProps = {
   courseTask: CourseTaskVerifications;
@@ -11,15 +12,21 @@ export type CodingProps = {
 
 const { Paragraph, Text, Link } = Typography;
 
-function getCodewarsUsername(githubId: string) {
-  const hash = crypto.createHash('sha1').update(githubId).digest('hex');
-  return `rsschool_${hash.slice(0, 16)}`;
+async function getCodewarsUsername(githubId: string) {
+  const digest = await window.crypto.subtle.digest('sha-1', new TextEncoder().encode(githubId));
+  const bytes = [...new Uint8Array(digest)];
+  const hash = bytes.map(x => x.toString(16).padStart(2, '0')).join('');
+  return `rsschool_${hash}`;
 }
 
 function Coding({ courseTask, githubId }: CodingProps) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   const codewarsLink = 'https://www.codewars.com/users/edit';
-  const codewarsUsername = getCodewarsUsername(githubId);
+  const [codewarsUsername, setCodewarsUsername] = useState<string | null>(null);
+
+  useAsync(async () => {
+    setCodewarsUsername(await getCodewarsUsername(githubId));
+  }, []);
 
   if (courseTask.type === CourseTaskDetailedDtoTypeEnum.Codewars) {
     return (
@@ -32,10 +39,12 @@ function Coding({ courseTask, githubId }: CodingProps) {
           :
         </Paragraph>
         <Paragraph>
-          <Space>
-            <Text strong>{codewarsUsername}</Text>
-            <CopyToClipboardButton value={codewarsUsername} />
-          </Space>
+          {codewarsUsername ? (
+            <Space>
+              <Text strong>{codewarsUsername}</Text>
+              <CopyToClipboardButton value={codewarsUsername} />
+            </Space>
+          ) : null}
         </Paragraph>
       </>
     );

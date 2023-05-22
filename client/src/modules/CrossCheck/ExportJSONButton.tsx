@@ -1,7 +1,7 @@
-import { FileOutlined } from '@ant-design/icons';
+import FileOutlined from '@ant-design/icons/FileOutlined';
 import { Button } from 'antd';
 import { CriteriaDto } from 'api';
-import _ from 'lodash';
+import omit from 'lodash/omit';
 import { TaskType } from './components/CrossCheckCriteriaForm';
 import { CriteriaJSONType } from './UploadCriteriaJSON';
 
@@ -18,7 +18,7 @@ export function ExportJSONButton({ dataCriteria }: Props) {
         editedItem.title = editedItem.text;
         delete editedItem.text;
       }
-      editedItem = _.omit(editedItem, ['key', 'index']);
+      editedItem = omit(editedItem, ['key', 'index']);
       return editedItem;
     });
     return { criteria: transformedCriteria };

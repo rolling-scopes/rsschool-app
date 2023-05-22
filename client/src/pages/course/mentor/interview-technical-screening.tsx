@@ -10,7 +10,9 @@ import { UserSearch } from 'components/UserSearch';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
-import _ from 'lodash';
+import keys from 'lodash/keys';
+import get from 'lodash/get';
+import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
@@ -419,18 +421,18 @@ function Page(props: CoursePageProps) {
 }
 
 function serializeToJson(values: any) {
-  return _.keys(values)
+  return keys(values)
     .filter(v => v !== 'githubId')
     .reduce((acc, key) => {
-      return _.set(acc, key.split('-').join('.'), values[key]);
+      return set(acc, key.split('-').join('.'), values[key]);
     }, {});
 }
 
 function deserializeFromJson(json: any) {
-  return _.keys(defaultInitialValues)
+  return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
-      acc[key] = _.get(json, key.split('-'));
+      acc[key] = get(json, key.split('-'));
       return acc;
     }, {} as any);
 }

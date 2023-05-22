@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react-hooks';
-import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
+import { renderHook } from '@testing-library/react';
 import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
+import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
 import { FilesService } from 'services/files';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
