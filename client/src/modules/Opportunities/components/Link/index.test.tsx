@@ -18,7 +18,7 @@ describe('Link', () => {
   test('should render working link with title and text', () => {
     render(<Link url={mockUrl} title={mockTitle} text={mockText} />);
 
-    const link = screen.getByRole('link', { name: mockTitle });
+    const link = screen.getByTitle(mockTitle);
 
     expect(link).toHaveAttribute('href', mockUrl);
     expect(screen.getByText(mockText)).toBeInTheDocument();

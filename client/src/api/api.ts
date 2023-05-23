@@ -2040,6 +2040,44 @@ export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof Criter
 /**
  * 
  * @export
+ * @interface CrossCheckMessageAuthorDto
+ */
+export interface CrossCheckMessageAuthorDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageAuthorDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckMessageAuthorDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface CrossCheckMessageDto
+ */
+export interface CrossCheckMessageDto {
+    /**
+     * 
+     * @type {CrossCheckMessageAuthorDto}
+     * @memberof CrossCheckMessageDto
+     */
+    'author': CrossCheckMessageAuthorDto | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'content': string;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckPairDto
  */
 export interface CrossCheckPairDto {
@@ -2097,6 +2135,18 @@ export interface CrossCheckPairDto {
      * @memberof CrossCheckPairDto
      */
     'submittedDate': string;
+    /**
+     * 
+     * @type {Array<HistoricalScoreDto>}
+     * @memberof CrossCheckPairDto
+     */
+    'historicalScores': Array<HistoricalScoreDto>;
+    /**
+     * 
+     * @type {Array<CrossCheckMessageDto>}
+     * @memberof CrossCheckPairDto
+     */
+    'messages': Array<CrossCheckMessageDto>;
 }
 /**
  * 
@@ -2672,6 +2722,25 @@ export const GratitudeDtoBadgeIdEnum = {
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
 
+/**
+ * 
+ * @export
+ * @interface HistoricalScoreDto
+ */
+export interface HistoricalScoreDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HistoricalScoreDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HistoricalScoreDto
+     */
+    'dateTime': string;
+}
 /**
  * 
  * @export
@@ -12396,6 +12465,39 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelMentorRegistry: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('cancelMentorRegistry', 'githubId', githubId)
+            const localVarPath = `/registry/mentor/{githubId}`
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12446,6 +12548,16 @@ export const RegistryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cancelMentorRegistry(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cancelMentorRegistry(githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12475,6 +12587,15 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelMentorRegistry(githubId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.cancelMentorRegistry(githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12501,6 +12622,17 @@ export class RegistryApi extends BaseAPI {
      */
     public approveMentor(githubId: string, approveMentorDto: ApproveMentorDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).approveMentor(githubId, approveMentorDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public cancelMentorRegistry(githubId: string, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).cancelMentorRegistry(githubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

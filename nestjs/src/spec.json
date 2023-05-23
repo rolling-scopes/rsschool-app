@@ -1506,6 +1506,13 @@
         },
         "responses": { "200": { "description": "" } },
         "tags": ["registry"]
+      },
+      "delete": {
+        "operationId": "cancelMentorRegistry",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
       }
     },
     "/registry/mentors": {
@@ -2611,6 +2618,24 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "HistoricalScoreDto": {
+        "type": "object",
+        "properties": { "comment": { "type": "string" }, "dateTime": { "format": "date-time", "type": "string" } },
+        "required": ["comment", "dateTime"]
+      },
+      "CrossCheckMessageAuthorDto": {
+        "type": "object",
+        "properties": { "githubId": { "type": "string" }, "id": { "type": "number" } },
+        "required": ["githubId", "id"]
+      },
+      "CrossCheckMessageDto": {
+        "type": "object",
+        "properties": {
+          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckMessageAuthorDto" }] },
+          "content": { "type": "string" }
+        },
+        "required": ["author", "content"]
+      },
       "CrossCheckPairDto": {
         "type": "object",
         "properties": {
@@ -2622,9 +2647,23 @@
           "comment": { "type": "string" },
           "url": { "type": "string" },
           "reviewedDate": { "type": "string" },
-          "submittedDate": { "type": "string" }
+          "submittedDate": { "type": "string" },
+          "historicalScores": { "type": "array", "items": { "$ref": "#/components/schemas/HistoricalScoreDto" } },
+          "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
         },
-        "required": ["student", "checker", "task", "score", "id", "comment", "url", "reviewedDate", "submittedDate"]
+        "required": [
+          "student",
+          "checker",
+          "task",
+          "score",
+          "id",
+          "comment",
+          "url",
+          "reviewedDate",
+          "submittedDate",
+          "historicalScores",
+          "messages"
+        ]
       },
       "PaginationDto": {
         "type": "object",

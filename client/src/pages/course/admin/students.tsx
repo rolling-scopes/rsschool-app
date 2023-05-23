@@ -15,7 +15,7 @@ import {
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
 import { isCourseManager, isCourseSupervisor } from 'domain/user';
-import _ from 'lodash';
+import keys from 'lodash/keys';
 import { useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
@@ -278,7 +278,7 @@ function calculateStats(students: StudentDetails[]) {
   return {
     activeStudentsCount,
     studentsCount: students.length,
-    countries: _.keys(countries).map(k => ({
+    countries: keys(countries).map(k => ({
       name: k,
       count: countries[k].count,
       totalCount: countries[k].totalCount,

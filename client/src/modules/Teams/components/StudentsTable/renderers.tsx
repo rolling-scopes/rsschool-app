@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
 import { TeamOutlined } from '@ant-design/icons';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import { Breakpoint } from 'antd/lib';
 const { Text, Link } = Typography;
 
 function renderName({ fullName, cvUuid, id }: TeamDistributionStudentDto, teamLeadId?: number) {

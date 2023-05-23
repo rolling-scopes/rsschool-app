@@ -4,7 +4,7 @@ import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { Store } from 'rc-field-form/lib/interface';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { useRouter } from 'next/router';
 import css from 'styled-jsx/css';
 import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';

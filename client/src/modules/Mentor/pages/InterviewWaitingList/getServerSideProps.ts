@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import type { PageProps } from './index';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { stageInterviewType } from 'domain/interview';
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     }
 
     const isStage = interview.type === stageInterviewType;
-    if (!isStage && moment(interview.startDate).isAfter(moment())) {
+    if (!isStage && dayjs(interview.startDate).isAfter(dayjs())) {
       return notAuthorizedResponse;
     }
 

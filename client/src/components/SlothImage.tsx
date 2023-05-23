@@ -61,7 +61,7 @@ export const slothNames = [
   'wtf',
 ] as const;
 
-export type SlothNames = typeof slothNames[number];
+export type SlothNames = (typeof slothNames)[number];
 
 interface Props extends ImageProps {
   name: SlothNames;

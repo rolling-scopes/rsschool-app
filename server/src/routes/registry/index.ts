@@ -43,12 +43,6 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK);
   });
 
-  router.delete('/mentor/:githubId', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
-    const githubId = ctx.params.githubId;
-    await repository.cancel(githubId);
-    setResponse(ctx, OK);
-  });
-
   router.get('/mentor', async (ctx: Router.RouterContext) => {
     const { id: userId } = ctx.state!.user as IUserSession;
 

@@ -21,7 +21,7 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 export function AdditionalInfo({ courses, onPrevious }: Props) {
   return (
     <FormCard title={<Title level={5}>{CARD_TITLES.additionalInfo}</Title>}>
-      <Form.Item {...formItemLayout} name="preferedCourses" label={LABELS.courses} requiredMark="optional">
+      <Form.Item {...formItemLayout} name="preferedCourses" label={LABELS.courses}>
         <Select
           mode="multiple"
           placeholder={PLACEHOLDERS.courses}

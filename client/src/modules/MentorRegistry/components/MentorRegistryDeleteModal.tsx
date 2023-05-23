@@ -6,7 +6,7 @@ interface MentorRegistryModalProps {
   modalData: any;
   modalLoading?: boolean;
   onCancel: () => void;
-  cancelMentor: (githubId: string) => Promise<void | undefined>;
+  cancelMentor: (githubId: string) => Promise<void>;
 }
 
 export const MentorRegistryDeleteModal = (props: MentorRegistryModalProps) => {

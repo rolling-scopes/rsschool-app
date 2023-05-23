@@ -2,7 +2,7 @@ import { CourseScheduleItemDto } from 'api';
 import { ColumnType } from 'antd/lib/table';
 import { coloredDateRenderer, renderTask } from 'components/Table';
 import { renderTagWithStyle } from 'modules/Schedule/components/TableView/renderers';
-import { CalendarOutlined } from '@ant-design/icons';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import { Space, Typography } from 'antd';
 
 export enum AvailableTasksColumnKey {

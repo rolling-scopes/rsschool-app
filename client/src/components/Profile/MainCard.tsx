@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Card, Typography, Input, Row, Col } from 'antd';
 import { GithubFilled, EnvironmentFilled, EditOutlined } from '@ant-design/icons';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
 import { Location } from 'common/models/profile';

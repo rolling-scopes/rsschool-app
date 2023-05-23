@@ -1,5 +1,6 @@
 import { MoreOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu, message, Table } from 'antd';
+import { Button, Dropdown, message, Table } from 'antd';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { ColumnsType } from 'antd/lib/table';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -13,7 +14,6 @@ import { useAsync } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
-const { Item, Divider } = Menu;
 const courseTasksApi = new CoursesTasksApi();
 
 function Page(props: CoursePageProps) {
@@ -89,32 +89,56 @@ function Page(props: CoursePageProps) {
     const submitDeadlineTimestamp = new Date(record.studentEndDate).getTime();
     const isSubmitDeadlinePassed = currentTimestamp > submitDeadlineTimestamp;
 
+    const items = [
+      {
+        key: 'edit',
+        label: 'Edit',
+        onClick: () => handleEditItem(record),
+      },
+      {
+        key: 'delete',
+        label: 'Delete',
+        onClick: () => handleDeleteItem(record.id),
+      },
+      hasTaskDistibute
+        ? {
+            key: 'distribute',
+            label: 'Distribute',
+            onClick: () => handleTaskDistribute(record),
+          }
+        : null,
+      hasInterviewDistibute
+        ? {
+            key: 'interviewDistribute',
+            label: 'Distribute',
+            onClick: () => handleInterviewDistribute(record),
+          }
+        : null,
+      hasCrossCheck
+        ? {
+            type: 'divider',
+          }
+        : null,
+      hasCrossCheck
+        ? {
+            key: 'crossCheckDistribute',
+            label: 'Cross-Check: Distribute',
+            disabled: !isSubmitDeadlinePassed,
+            onClick: () => handleCrossCheckDistribution(record),
+          }
+        : null,
+      hasCrossCheck
+        ? {
+            key: 'crossCheckComplete',
+            label: 'Cross-Check: Complete',
+            disabled: !isSubmitDeadlinePassed || record.crossCheckStatus === CrossCheckStatus.Initial,
+            onClick: () => handleCrossCheckCompletion(record),
+          }
+        : null,
+    ].filter(Boolean) as ItemType[];
+
     return (
-      <Dropdown
-        trigger={['click']}
-        overlay={
-          <Menu style={{ width: 200 }}>
-            <Item onClick={() => handleEditItem(record)}>Edit</Item>
-            <Item onClick={() => handleDeleteItem(record.id)}>Delete</Item>
-            {hasTaskDistibute && <Item onClick={() => handleTaskDistribute(record)}>Distribute</Item>}
-            {hasInterviewDistibute && <Item onClick={() => handleInterviewDistribute(record)}>Distribute</Item>}
-            {hasCrossCheck && <Divider />}
-            {hasCrossCheck && (
-              <Item disabled={!isSubmitDeadlinePassed} onClick={() => handleCrossCheckDistribution(record)}>
-                Cross-Check: Distribute
-              </Item>
-            )}
-            {hasCrossCheck && (
-              <Item
-                disabled={!isSubmitDeadlinePassed || record.crossCheckStatus === CrossCheckStatus.Initial}
-                onClick={() => handleCrossCheckCompletion(record)}
-              >
-                Cross-Check: Complete
-              </Item>
-            )}
-          </Menu>
-        }
-      >
+      <Dropdown trigger={['click']} menu={{ items }}>
         <Button size="small">
           More <MoreOutlined />
         </Button>
@@ -130,7 +154,7 @@ function Page(props: CoursePageProps) {
       if (crossCheckPairs.length) {
         message.success('Cross-Check distrubtion has been created');
       } else {
-        message.warn('Cross-check pairs were not created because there are no submitted solutions');
+        message.warning('Cross-check pairs were not created because there are no submitted solutions');
       }
     } catch (e) {
       message.error('An error occurred.');
@@ -165,9 +189,9 @@ function Page(props: CoursePageProps) {
         columns={getColumns(getDropdownMenu)}
         scroll={{ x: 1020, y: 'calc(100vh - 260px)' }}
       />
-      {modalData && (
+      {modalData ? (
         <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
-      )}
+      ) : null}
     </AdminPageLayout>
   );
 }

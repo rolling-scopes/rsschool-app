@@ -1,6 +1,46 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IdNameDto, PaginationDto, PersonDto } from 'src/core/dto';
 import { CrossCheckPair, Pagination } from '../course-cross-checks.service';
+import { CrossCheckMessage, CrossCheckMessageAuthor, ScoreRecord } from '@entities/taskSolutionResult';
+
+export class HistoricalScoreDto {
+  constructor(historicalScore: ScoreRecord) {
+    this.comment = historicalScore.comment;
+    this.dateTime = new Date(historicalScore.dateTime);
+  }
+
+  @ApiProperty()
+  public comment: string;
+
+  @ApiProperty()
+  public dateTime: Date;
+}
+
+export class CrossCheckMessageAuthorDto {
+  constructor(crossCheckMessageAuthor: CrossCheckMessageAuthor) {
+    this.githubId = crossCheckMessageAuthor.githubId;
+    this.id = crossCheckMessageAuthor.id;
+  }
+
+  @ApiProperty()
+  public githubId: string;
+
+  @ApiProperty()
+  public id: number;
+}
+
+export class CrossCheckMessageDto {
+  constructor(crossCheckMessage: CrossCheckMessage) {
+    this.content = crossCheckMessage.content;
+    this.author = crossCheckMessage.author ? new CrossCheckMessageAuthorDto(crossCheckMessage.author) : null;
+  }
+
+  @ApiProperty({ type: CrossCheckMessageAuthorDto, nullable: true })
+  public author: CrossCheckMessageAuthorDto | null;
+
+  @ApiProperty()
+  public content: string;
+}
 
 export class CrossCheckPairDto {
   constructor(pair: CrossCheckPair) {
@@ -13,6 +53,8 @@ export class CrossCheckPairDto {
     this.student = new PersonDto(pair.student);
     this.submittedDate = pair.submittedDate;
     this.url = pair.url;
+    this.historicalScores = pair.historicalScores?.map(historicalScore => new HistoricalScoreDto(historicalScore));
+    this.messages = pair.messages?.map(message => new CrossCheckMessageDto(message));
   }
 
   @ApiProperty({ type: PersonDto })
@@ -41,6 +83,12 @@ export class CrossCheckPairDto {
 
   @ApiProperty()
   public submittedDate: string;
+
+  @ApiProperty({ type: [HistoricalScoreDto] })
+  public historicalScores?: HistoricalScoreDto[];
+
+  @ApiProperty({ type: [CrossCheckMessageDto] })
+  public messages?: CrossCheckMessageDto[];
 }
 
 export class CrossCheckPairResponseDto {

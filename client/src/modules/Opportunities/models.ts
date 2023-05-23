@@ -1,5 +1,5 @@
-import { Moment } from 'moment';
 import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
+import { Dayjs } from 'dayjs';
 
 export interface CourseData {
   locationName: string;
@@ -58,7 +58,7 @@ export interface AllUserCVData extends Omit<UserData, 'uuid'>, Contacts {
 }
 
 export interface UserDataToSubmit extends Omit<UserData, 'startFrom'> {
-  startFrom: Moment;
+  startFrom: Dayjs;
   visibleCourses: VisibleCourses;
 }
 

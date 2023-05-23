@@ -150,6 +150,7 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('githubId'),
         ...getColumnSearchProps(['githubId', 'name']),
         width: 200,
+        fixed: 'left' as const,
       },
       {
         key: MentorsRegistryColumnKey.Info,
@@ -205,7 +206,7 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Tech,
         render: tagsRenderer,
         filters: disciplines.map(discipline => {
-          return { text: discipline.name, value: discipline.id };
+          return { text: discipline.name, value: discipline.name };
         }),
         defaultFilteredValue: technicalMentoring,
         filtered: technicalMentoring?.length > 0,
@@ -247,8 +248,13 @@ export const MentorRegistryTableContainer = ({
             <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Invite, record)}>
               Invite
             </Button>
-            {record.preselectedCourses.length && activeTab === MentorRegistryTabsMode.New ? (
-              <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}>
+            {activeTab === MentorRegistryTabsMode.New ? (
+              <Button
+                type="link"
+                size="small"
+                disabled={!record.preselectedCourses.length}
+                onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}
+              >
                 Re-send
               </Button>
             ) : null}
@@ -257,7 +263,8 @@ export const MentorRegistryTableContainer = ({
             </Button>
           </>
         ),
-        width: activeTab === MentorRegistryTabsMode.New ? 240 : 140,
+        width: activeTab === MentorRegistryTabsMode.New ? 210 : 140,
+        fixed: 'right' as const,
       },
     ];
 

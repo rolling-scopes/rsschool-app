@@ -3,14 +3,14 @@
 exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-w8mnev"
     style="position: relative;"
   >
     <div
       class="ant-card-body"
     >
       <span
-        class="ant-avatar ant-avatar-circle ant-avatar-image"
+        class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
         style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
         <img
@@ -18,13 +18,13 @@ exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
         />
       </span>
       <h1
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="font-size: 24px; text-align: center; margin: 0px;"
       >
         John Doe
       </h1>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin-bottom: 20px;"
       >
         <a
@@ -56,7 +56,7 @@ exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
         </a>
       </div>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin: 0px;"
       >
         <span>
@@ -84,7 +84,7 @@ exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
         </span>
       </div>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin-top: 20px;"
       >
         <a
@@ -102,7 +102,7 @@ exports[`MainCard Should render correctly if editing mode is disabled 1`] = `
 exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-w8mnev"
     style="position: relative;"
   >
     <div
@@ -130,7 +130,7 @@ exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
         </svg>
       </span>
       <span
-        class="ant-avatar ant-avatar-circle ant-avatar-image"
+        class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-w8mnev"
         style="width: 96px; height: 96px; line-height: 96px; font-size: 18px; margin: 0px auto 10px; display: block;"
       >
         <img
@@ -138,13 +138,13 @@ exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
         />
       </span>
       <h1
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="font-size: 24px; text-align: center; margin: 0px;"
       >
         John Doe
       </h1>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin-bottom: 20px;"
       >
         <a
@@ -176,7 +176,7 @@ exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
         </a>
       </div>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin: 0px;"
       >
         <span>
@@ -204,7 +204,7 @@ exports[`MainCard Should render correctly if editing mode is enabled 1`] = `
         </span>
       </div>
       <div
-        class="ant-typography"
+        class="ant-typography css-dev-only-do-not-override-w8mnev"
         style="text-align: center; margin-top: 20px;"
       >
         <a

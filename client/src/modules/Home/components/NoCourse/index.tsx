@@ -21,7 +21,7 @@ export function NoCourse({ courses, preselectedCourses }: Props) {
               {hasPlanned
                 ? 'You can register to the upcoming course.'
                 : 'Unfortunately, there are no any planned courses for students but you can always register as mentor'}
-              <Button target="_blank" size="small" type="link" href="https://docs.rs.school/#/how-to-enroll">
+              <Button target="_blank" size="small" type="link" href="https://docs.rs.school/#/rs-school-mentor">
                 More info
               </Button>
             </span>

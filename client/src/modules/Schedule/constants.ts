@@ -79,7 +79,7 @@ export const DEFAULT_COLOR = '#308e00';
 
 export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string> = {
   coding: '#722ed1',
-  interview: '#1890ff',
+  interview: '#1677ff',
   test: '#faad14',
   'cross-check-submit': '#13c2c2',
   'cross-check-review': '#13c2c2',
@@ -89,7 +89,7 @@ export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string>
 
 export const PICKER_COLORS = [
   '#13c2c2',
-  '#1890ff',
+  '#1677ff',
   '#595959',
   '#722ed1',
   '#9321a2',

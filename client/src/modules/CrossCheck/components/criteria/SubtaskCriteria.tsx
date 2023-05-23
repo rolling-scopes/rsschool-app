@@ -1,7 +1,8 @@
 import { Input, Typography, InputNumber, Slider } from 'antd';
 import { useMemo } from 'react';
 import { CrossCheckCriteriaData } from 'services/course';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
+import isNil from 'lodash/isNil';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -16,11 +17,11 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
   const comment = subtaskData.textComment;
   const criteriaScore = subtaskData.point;
 
-  const updateSubtaskData = ({ textComment, point }: { textComment?: string; point?: number }) => {
+  const updateSubtaskData = ({ textComment, point }: { textComment?: string; point?: number | null }) => {
     const updatedEntry = {
       ...subtaskData,
       ...(isUndefined(textComment) ? undefined : { textComment }),
-      ...(isUndefined(point) ? undefined : { point }),
+      ...(isNil(point) ? undefined : { point }),
     };
     updateCriteriaData(updatedEntry);
   };

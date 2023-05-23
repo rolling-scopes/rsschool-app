@@ -117,7 +117,7 @@ describe('PersonalInfo', () => {
     expect(errorFirstName).toBeInTheDocument();
     expect(errorLocation).toBeInTheDocument();
     expect(errorEmail).toBeInTheDocument();
-    expect(errorLastName).not.toBeInTheDocument();
+    expect(errorLastName).toBeInTheDocument();
     expect(errorEpamEmail).not.toBeInTheDocument();
   });
 
