@@ -1,4 +1,4 @@
-import { Typography, Form, Row, Checkbox, Radio, Col } from 'antd';
+import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
@@ -59,7 +59,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
               {multiple ? (
                 <Checkbox.Group>
                   {answers?.map((answer, answerIndex) => (
-                    <Row key={answerIndex}>
+                    <Space.Compact block key={answerIndex} direction="vertical">
                       <Checkbox value={answerIndex}>
                         {answersType === 'image' ? (
                           <>
@@ -77,7 +77,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                           answer
                         )}
                       </Checkbox>
-                    </Row>
+                    </Space.Compact>
                   ))}
                 </Checkbox.Group>
               ) : (
