@@ -15,7 +15,7 @@ const { Paragraph, Text, Link } = Typography;
 async function getCodewarsUsername(githubId: string) {
   const digest = await window.crypto.subtle.digest('sha-1', new TextEncoder().encode(githubId));
   const bytes = [...new Uint8Array(digest)];
-  const hash = bytes.map(x => x.toString(16).padStart(2, '0')).join('');
+  const hash = bytes.map(x => x.toString(16).padStart(2, '0')).join('').slice(0, 16);
   return `rsschool_${hash}`;
 }
 
