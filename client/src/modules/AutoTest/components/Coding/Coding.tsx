@@ -16,7 +16,7 @@ async function getCodewarsUsername(githubId: string) {
   const digest = await window.crypto.subtle.digest('sha-1', new TextEncoder().encode(githubId));
   const bytes = [...new Uint8Array(digest)];
   const hash = bytes.map(x => x.toString(16).padStart(2, '0')).join('');
-  return `rsschool_${hash}`;
+  return `rsschool_${hash.slice(0, 16)}`;
 }
 
 function Coding({ courseTask, githubId }: CodingProps) {
