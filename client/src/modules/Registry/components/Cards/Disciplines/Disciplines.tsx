@@ -13,7 +13,13 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Disciplines({ disciplines }: Props) {
   return (
-    <FormCard title={<Title level={5}>{CARD_TITLES.disciplines}</Title>}>
+    <FormCard
+      title={
+        <Title level={5} style={{ marginBottom: 0 }}>
+          {CARD_TITLES.disciplines}
+        </Title>
+      }
+    >
       {disciplines.length ? (
         <Form.Item
           {...formItemLayout}

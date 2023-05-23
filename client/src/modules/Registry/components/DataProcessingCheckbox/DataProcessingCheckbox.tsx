@@ -1,12 +1,16 @@
 import { Form, Checkbox, Typography } from 'antd';
-import { ERROR_MESSAGES, DATA_PROCESSING_TEXT } from 'modules/Registry/constants';
+import { ERROR_MESSAGES, DATA_PROCESSING_TEXT, TAIL_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 
 const { Text } = Typography;
 
-export function DataProcessingCheckbox() {
+type Props = {
+  isStudentForm?: boolean;
+};
+
+export function DataProcessingCheckbox({ isStudentForm }: Props) {
   return (
     <Form.Item
-      wrapperCol={{ lg: { span: 16, offset: 4 } }}
+      {...TAIL_FORM_ITEM_LAYOUT(!isStudentForm)}
       name="dataProcessing"
       valuePropName="checked"
       rules={[

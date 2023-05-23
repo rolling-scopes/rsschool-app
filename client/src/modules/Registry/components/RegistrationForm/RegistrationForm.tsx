@@ -1,9 +1,10 @@
-import { Col, Form, FormInstance, Row } from 'antd';
+import { Col, Form, FormInstance, Row, Steps } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import { useUpdate } from 'react-use';
-import { Footer, FormSteps, Header } from 'modules/Registry/components';
+import { Footer, Header } from 'modules/Registry/components';
 import { DEFAULT_FORM_ITEM_LAYOUT, FORM_TITLES } from 'modules/Registry/constants';
 import { useFormLayout } from 'modules/Registry/hooks';
+import { useMemo } from 'react';
 
 type Props = {
   form: FormInstance;
@@ -19,13 +20,16 @@ type Props = {
 
 export function RegistrationForm({ form, handleSubmit, steps, currentStep, initialValues, type = 'mentor' }: Props) {
   const update = useUpdate();
-  const { formLayout } = useFormLayout();
-
+  const { formLayout, isSmallScreen } = useFormLayout();
+  const stepItems = useMemo(
+    () => steps.map(({ title }) => ({ title: isSmallScreen ? null : title })),
+    [steps, isSmallScreen],
+  );
   const title = type === 'mentor' ? FORM_TITLES.mentorForm : FORM_TITLES.studentForm;
 
   return (
     <Row justify="center" style={{ paddingBlock: 24 }}>
-      <Col xs={24} lg={18} xl={18} xxl={14}>
+      <Col xs={24} sm={20} md={24} lg={18} xxl={14}>
         <Form
           {...DEFAULT_FORM_ITEM_LAYOUT}
           role="form"
@@ -49,7 +53,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
                 paddingInline: 60,
               }}
             >
-              <FormSteps steps={steps} currentStep={currentStep} />
+              <Steps current={currentStep} responsive={false} items={stepItems} />
             </Col>
             <Col span={24}>{steps[currentStep].content}</Col>
             <Col span={24} flex="none">
