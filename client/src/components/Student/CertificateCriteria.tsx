@@ -3,17 +3,19 @@ import { CoursesTasksApi } from 'api';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 
-type Props = {
-  courseId: number;
-  onSubmit: (criteria: { courseTaskIds: number[]; minScore: number; minTotalScore: number }) => void;
-  onClose: () => void;
-  isModalOpen: boolean;
-};
-
 type FormValues = {
   courseTaskIds: number[];
   minScore: number;
   minTotalScore: number;
+};
+
+type Criteria = Partial<FormValues>;
+
+type Props = {
+  courseId: number;
+  onSubmit: (criteria: Criteria) => void;
+  onClose: () => void;
+  isModalOpen: boolean;
 };
 
 const courseTasksApi = new CoursesTasksApi();
@@ -26,6 +28,13 @@ export function CertificateCriteria({ courseId, onSubmit, onClose, isModalOpen }
     const { data } = await courseTasksApi.getCourseTasks(courseId);
     return data;
   }, []);
+
+  const hasValidCriteria = (values: FormValues) => {
+    const { minScore, courseTaskIds, minTotalScore } = values;
+    const tasksCriteriaValid = !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
+
+    return tasksCriteriaValid && !!minTotalScore;
+  };
 
   return (
     <Modal
@@ -40,10 +49,7 @@ export function CertificateCriteria({ courseId, onSubmit, onClose, isModalOpen }
         layout="vertical"
         form={form}
         onValuesChange={(_, values) => {
-          const { minScore, courseTaskIds, minTotalScore } = values;
-          const tasksCriteriaValid =
-            !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
-          setOkEnabled(tasksCriteriaValid && !!minTotalScore);
+          setOkEnabled(hasValidCriteria(values));
         }}
         onFinish={onSubmit}
       >
@@ -52,7 +58,7 @@ export function CertificateCriteria({ courseId, onSubmit, onClose, isModalOpen }
             <Alert message="Certificates will be issued to all students meeting the criteria down below." showIcon />
           </Col>
           <Col span={24}>
-            <Form.Item name="courseTaskIds" label="Tasks" style={{ marginBottom: 0 }} required>
+            <Form.Item name="courseTaskIds" label="Tasks" style={{ marginBottom: 0 }}>
               <Select
                 mode="multiple"
                 placeholder="Select tasks"
@@ -78,10 +84,8 @@ export function CertificateCriteria({ courseId, onSubmit, onClose, isModalOpen }
           <Col span={24}>
             <Row justify="end">
               <Space wrap>
-                <Button key="back" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button key="submit" type="primary" htmlType="submit" disabled={!okEnabled}>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button type="primary" htmlType="submit" disabled={!okEnabled}>
                   Issue Certificates
                 </Button>
               </Space>

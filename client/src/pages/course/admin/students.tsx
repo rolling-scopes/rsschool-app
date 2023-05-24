@@ -24,6 +24,11 @@ import { CoursePageProps } from 'services/models';
 const { Text } = Typography;
 
 type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
+type Criteria = {
+  courseTaskIds?: number[];
+  minScore?: number;
+  minTotalScore?: number;
+};
 type Props = CoursePageProps;
 
 function Page(props: Props) {
@@ -93,7 +98,7 @@ function Page(props: Props) {
     message.success('Students successfully expelled');
   });
 
-  const issueCertificates = withLoading(async (criteria: any) => {
+  const issueCertificates = withLoading(async (criteria: Criteria) => {
     await courseService.postCertificateStudents(criteria);
     toggleCertificateModal();
     message.success('All certificates successfully issued');
