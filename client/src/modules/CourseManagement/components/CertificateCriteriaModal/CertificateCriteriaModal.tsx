@@ -2,7 +2,7 @@ import { Alert, Button, Col, Form, InputNumber, Modal, Row, Space } from 'antd';
 import { useState } from 'react';
 import { SelectCourseTasks } from 'modules/CourseManagement/components';
 
-type FormValues = {
+export type FormValues = {
   courseTaskIds: number[];
   minScore: number;
   minTotalScore: number;
@@ -17,16 +17,11 @@ type Props = {
   isModalOpen: boolean;
 };
 
+export const CERTIFICATE_ALERT_MESSAGE = 'Certificates will be issued to all students meeting the criteria down below.';
+
 export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }: Props) {
   const [form] = Form.useForm<FormValues>();
   const [okEnabled, setOkEnabled] = useState(false);
-
-  const hasValidCriteria = (values: FormValues) => {
-    const { minScore, courseTaskIds, minTotalScore } = values;
-    const tasksCriteriaValid = !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
-
-    return tasksCriteriaValid && !!minTotalScore;
-  };
 
   return (
     <Modal
@@ -47,7 +42,7 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
       >
         <Row gutter={[0, 16]}>
           <Col span={24}>
-            <Alert message="Certificates will be issued to all students meeting the criteria down below." showIcon />
+            <Alert message={CERTIFICATE_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
             <Form.Item name="courseTaskIds" label="Tasks" style={{ marginBottom: 0 }}>
@@ -78,4 +73,11 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
       </Form>
     </Modal>
   );
+}
+
+export function hasValidCriteria(values: FormValues) {
+  const { minScore, courseTaskIds, minTotalScore } = values;
+  const tasksCriteriaValid = !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
+
+  return tasksCriteriaValid && !!minTotalScore;
 }
