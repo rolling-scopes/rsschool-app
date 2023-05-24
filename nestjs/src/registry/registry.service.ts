@@ -63,6 +63,7 @@ export class RegistryService {
   public async findMentorRegistriesByCourseIdsAndDisciplines(coursesIds: number[], disciplines: string[]) {
     const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
       .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
+      .andWhere('mentorRegistry.canceled = false')
       .orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplines`, { disciplines })
       .andWhere('mentorRegistry.canceled = false')
       .getMany();

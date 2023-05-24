@@ -36,8 +36,8 @@ export class TeamController {
   public async getTeams(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) distributionId: number,
-    @Query('pageSize') pageSize: number = 10,
-    @Query('current') current: number = 1,
+    @Query('pageSize', ParseIntPipe) pageSize: number = 10,
+    @Query('current', ParseIntPipe) current: number = 1,
   ) {
     const { teams, paginationMeta } = await this.teamService.findByDistributionId(distributionId, {
       page: current,
