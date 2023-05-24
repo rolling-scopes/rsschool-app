@@ -24,10 +24,16 @@ import { CoursePageProps } from 'services/models';
 const { Text } = Typography;
 
 type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
-type Criteria = {
+type CertificateCriteria = {
   courseTaskIds?: number[];
   minScore?: number;
   minTotalScore?: number;
+};
+type ExpelCriteria = {
+  courseTaskIds?: number[];
+  minScore?: number;
+  keepWithMentor?: boolean;
+  reason: string;
 };
 type Props = CoursePageProps;
 
@@ -91,14 +97,14 @@ function Page(props: Props) {
     }
   });
 
-  const expelStudents = withLoading(async (criteria: any, options: any, expellingReason: string) => {
-    await courseService.expelStudents(criteria, options, expellingReason);
+  const expelStudents = withLoading(async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
+    await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
     toggleExpelModal();
     loadStudents();
     message.success('Students successfully expelled');
   });
 
-  const issueCertificates = withLoading(async (criteria: Criteria) => {
+  const issueCertificates = withLoading(async (criteria: CertificateCriteria) => {
     await courseService.postCertificateStudents(criteria);
     toggleCertificateModal();
     message.success('All certificates successfully issued');
@@ -140,7 +146,7 @@ function Page(props: Props) {
         <ExpelCriteria
           courseId={props.course.id}
           onClose={toggleExpelModal}
-          onApply={expelStudents}
+          onSubmit={expelStudents}
           isModalOpen={isExpelModalOpen}
         />
         <CertificateCriteria

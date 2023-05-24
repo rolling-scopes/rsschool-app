@@ -3,17 +3,6 @@ import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesTasksApi } from 'api';
 
-type Props = {
-  courseId: number;
-  onApply: (
-    criteria: { courseTaskIds: number[]; minScore: number },
-    options: { keepWithMentor: boolean },
-    expellingReason: string,
-  ) => void;
-  onClose: () => void;
-  isModalOpen: boolean;
-};
-
 type FormValues = {
   courseTaskIds: number[];
   minScore: number;
@@ -21,9 +10,18 @@ type FormValues = {
   reason: string;
 };
 
+type Criteria = Partial<FormValues> & { reason: string };
+
+type Props = {
+  courseId: number;
+  onSubmit: (expelCriteria: Criteria) => void;
+  onClose: () => void;
+  isModalOpen: boolean;
+};
+
 const courseTasksApi = new CoursesTasksApi();
 
-export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props) {
+export function ExpelCriteria({ courseId, onSubmit, onClose, isModalOpen }: Props) {
   const [form] = Form.useForm<FormValues>();
   const [okEnabled, setOkEnabled] = useState(false);
 
@@ -31,6 +29,12 @@ export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props
     const { data } = await courseTasksApi.getCourseTasks(courseId);
     return data;
   }, []);
+
+  const hasValidCriteria = (values: FormValues) => {
+    const { minScore, courseTaskIds } = values;
+
+    return !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0);
+  };
 
   return (
     <Modal
@@ -44,17 +48,10 @@ export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props
       <Form
         layout="vertical"
         form={form}
-        onValuesChange={(changes, values) => {
-          const { minScore, courseTaskIds } = values;
-          const formChanges = changes;
-          if (formChanges.minScore === undefined && formChanges.courseTaskIds === undefined) {
-            return;
-          }
-          setOkEnabled(!!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0));
+        onValuesChange={(_, values) => {
+          setOkEnabled(hasValidCriteria(values));
         }}
-        onFinish={({ minScore, keepWithMentor, courseTaskIds, reason }) => {
-          onApply({ courseTaskIds, minScore }, { keepWithMentor }, reason);
-        }}
+        onFinish={onSubmit}
       >
         <Row gutter={[0, 16]}>
           <Col span={24}>
@@ -65,12 +62,7 @@ export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props
             />
           </Col>
           <Col span={24}>
-            <Form.Item
-              name="courseTaskIds"
-              label="Didn't Complete Following Tasks"
-              required
-              style={{ marginBottom: 0 }}
-            >
+            <Form.Item name="courseTaskIds" label="Didn't Complete Following Tasks" style={{ marginBottom: 0 }}>
               <Select
                 mode="multiple"
                 placeholder="Select tasks"
@@ -84,7 +76,7 @@ export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item name="minScore" label="Score Per Task Less Than" style={{ marginBottom: 0 }}>
+            <Form.Item name="minScore" label="Minimum Total Score" style={{ marginBottom: 0 }}>
               <InputNumber style={{ width: '100%' }} type="number" min={0} placeholder="Enter minimum score" />
             </Form.Item>
           </Col>
@@ -105,10 +97,8 @@ export function ExpelCriteria({ courseId, onApply, onClose, isModalOpen }: Props
           <Col span={24}>
             <Row justify="end">
               <Space wrap>
-                <Button key="back" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button key="submit" type="primary" htmlType="submit" disabled={!okEnabled} danger>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button type="primary" htmlType="submit" disabled={!okEnabled} danger>
                   Expel Students
                 </Button>
               </Space>
