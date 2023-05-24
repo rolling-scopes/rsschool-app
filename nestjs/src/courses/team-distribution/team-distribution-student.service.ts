@@ -177,7 +177,20 @@ export class TeamDistributionStudentService {
     ];
   }
 
-  public async getStudentsByTeamDistributionId(distributionId: number, { page = 1, limit = 10 }) {
+  private getSearchString() {
+    const searchConfig = [
+      { field: 'discord.userName' },
+      { field: 'githubId' },
+      { field: 'firstName' },
+      { field: 'lastName' },
+      { field: 'cityName' },
+      { field: 'countryName' },
+    ];
+
+    return searchConfig.map(({ field }) => `user.${field} LIKE :text`).join(' OR ');
+  }
+
+  public async getStudentsByTeamDistributionId(distributionId: number, { search = '', page = 1, limit = 10 }) {
     const query = this.studentRepository
       .createQueryBuilder('student')
       .leftJoin('student.teamDistributionStudents', 'tds')
@@ -189,6 +202,14 @@ export class TeamDistributionStudentService {
       .andWhere('tds.active = true')
       .andWhere('tds.distributed = false')
       .orderBy('student.rank', 'ASC');
+
+    if (search) {
+      console.log(
+        '🚀 ~ file: team-distribution-student.service.ts:194 ~ TeamDistributionStudentService ~ getStudentsByTeamDistributionId ~ search:',
+        search,
+      );
+    }
+
     const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
 
     return { students, paginationMeta };

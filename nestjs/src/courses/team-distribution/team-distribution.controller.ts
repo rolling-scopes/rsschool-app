@@ -158,12 +158,14 @@ export class TeamDistributionController {
   public async getStudentsWithoutTeam(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
-    @Query('pageSize') pageSize: number = 10,
-    @Query('current') current: number = 1,
+    @Query('pageSize', ParseIntPipe) pageSize: number = 10,
+    @Query('current', ParseIntPipe) current: number = 1,
+    @Query('search') search: string,
   ) {
     const { students, paginationMeta } = await this.teamDistributionStudentService.getStudentsByTeamDistributionId(id, {
       page: current,
       limit: pageSize,
+      search,
     });
 
     return new StudentsWithoutTeamDto(students, paginationMeta);
