@@ -3,7 +3,8 @@ import { Button, message, Row, Space, Statistic, Switch, Table, Typography } fro
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
-import { DashboardDetails, ExpelCriteria, CertificateCriteria } from 'components/Student';
+import { DashboardDetails } from 'components/Student';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -143,13 +144,13 @@ function Page(props: Props) {
           courseId={props.course.id}
           courseManagerOrSupervisor={hasCourseManagerRole || hasCourseSupervisorRole}
         />
-        <ExpelCriteria
+        <ExpelCriteriaModal
           courseId={props.course.id}
           onClose={toggleExpelModal}
           onSubmit={expelStudents}
           isModalOpen={isExpelModalOpen}
         />
-        <CertificateCriteria
+        <CertificateCriteriaModal
           courseId={props.course.id}
           onClose={toggleCertificateModal}
           onSubmit={issueCertificates}

@@ -1,7 +1,6 @@
-import { Form, Input, InputNumber, Select, Alert, Checkbox, Modal, Row, Col, Button, Space } from 'antd';
+import { Form, Input, InputNumber, Alert, Checkbox, Modal, Row, Col, Button, Space } from 'antd';
 import { useState } from 'react';
-import { useAsync } from 'react-use';
-import { CoursesTasksApi } from 'api';
+import { SelectCourseTasks } from 'modules/CourseManagement/components';
 
 type FormValues = {
   courseTaskIds: number[];
@@ -19,16 +18,9 @@ type Props = {
   isModalOpen: boolean;
 };
 
-const courseTasksApi = new CoursesTasksApi();
-
-export function ExpelCriteria({ courseId, onSubmit, onClose, isModalOpen }: Props) {
+export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }: Props) {
   const [form] = Form.useForm<FormValues>();
   const [okEnabled, setOkEnabled] = useState(false);
-
-  const { value: courseTasks = [], loading } = useAsync(async () => {
-    const { data } = await courseTasksApi.getCourseTasks(courseId);
-    return data;
-  }, []);
 
   const hasValidCriteria = (values: FormValues) => {
     const { minScore, courseTaskIds } = values;
@@ -63,16 +55,7 @@ export function ExpelCriteria({ courseId, onSubmit, onClose, isModalOpen }: Prop
           </Col>
           <Col span={24}>
             <Form.Item name="courseTaskIds" label="Didn't Complete Following Tasks" style={{ marginBottom: 0 }}>
-              <Select
-                mode="multiple"
-                placeholder="Select tasks"
-                loading={loading}
-                optionFilterProp="label"
-                options={courseTasks.map(({ name, id }) => ({
-                  label: name,
-                  value: id,
-                }))}
-              />
+              <SelectCourseTasks courseId={courseId} />
             </Form.Item>
           </Col>
           <Col span={24}>
