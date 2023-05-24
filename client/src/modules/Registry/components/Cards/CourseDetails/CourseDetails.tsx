@@ -11,7 +11,13 @@ type Props = {
 
 export function CourseDetails({ courses }: Props) {
   return (
-    <FormCard title={<Title level={5}>{CARD_TITLES.courseDetails}</Title>}>
+    <FormCard
+      title={
+        <Title level={5} style={{ marginBottom: 0 }}>
+          {CARD_TITLES.courseDetails}
+        </Title>
+      }
+    >
       <Form.Item label={LABELS.course} name="courseId">
         <Select
           placeholder={PLACEHOLDERS.courses}

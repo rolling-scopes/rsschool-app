@@ -90,12 +90,30 @@ const VALIDATION_RULES: Rule[] = [
   },
 ];
 
+const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
+  isMentorshipSection
+    ? {
+        wrapperCol: {
+          xs: { span: 12, offset: 0 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 10, offset: 8 },
+        },
+      }
+    : {
+        wrapperCol: {
+          xs: { span: 12, offset: 0 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 16, offset: 6 },
+          xl: { span: 8, offset: 8 },
+        },
+      };
+
 const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
   isStudentForm
     ? {}
     : {
         labelCol: {
-          sm: { span: 8, offset: 0 },
+          sm: { span: 24, offset: 0 },
           md: { span: 8, offset: 0 },
         },
         wrapperCol: {
@@ -111,7 +129,7 @@ const DEFAULT_FORM_ITEM_LAYOUT = {
     xl: { span: 8 },
   },
   wrapperCol: {
-    sm: { span: 16 },
+    sm: { span: 24 },
     md: { span: 16 },
     xl: { span: 8 },
   },
@@ -130,5 +148,6 @@ export {
   VALIDATION_RULES,
   DEFAULT_FORM_ITEM_LAYOUT,
   WIDE_FORM_ITEM_LAYOUT,
+  TAIL_FORM_ITEM_LAYOUT,
   SUCCESS_TEXT,
 };
