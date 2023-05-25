@@ -46,9 +46,7 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
             <Alert type="warning" message={EXPEL_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
-            <Form.Item name="courseTaskIds" label="Didn't Complete Following Tasks" style={{ marginBottom: 0 }}>
-              <SelectCourseTasks courseId={courseId} />
-            </Form.Item>
+            <SelectCourseTasks courseId={courseId} label="Didn't Complete Following Tasks" />
           </Col>
           <Col span={24}>
             <Form.Item name="minScore" label="Minimum Total Score" style={{ marginBottom: 0 }}>

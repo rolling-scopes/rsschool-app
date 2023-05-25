@@ -45,9 +45,7 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
             <Alert message={CERTIFICATE_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
-            <Form.Item name="courseTaskIds" label="Tasks" style={{ marginBottom: 0 }}>
-              <SelectCourseTasks courseId={courseId} />
-            </Form.Item>
+            <SelectCourseTasks courseId={courseId} label="Tasks" />
           </Col>
           <Col span={24}>
             <Form.Item name="minScore" label="Minimum Score Per Task" style={{ marginBottom: 0 }}>
