@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { EXPEL_ALERT_MESSAGE, ExpelCriteriaModal, FormValues, hasValidCriteria } from './ExpelCriteriaModal';
 import userEvent from '@testing-library/user-event';
+import * as ReactUse from 'react-use';
 
 const props = {
   courseId: 1,
@@ -14,6 +15,19 @@ const renderExpelCriteriaModal = () => {
 };
 
 describe('ExpelCriteriaModal', () => {
+  beforeAll(() => {
+    // mock CoursesTasksApi call
+    jest.spyOn(ReactUse, 'useAsync').mockReturnValue({
+      value: [
+        {
+          name: 'course 1',
+          id: 1,
+        },
+      ],
+      loading: false,
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
