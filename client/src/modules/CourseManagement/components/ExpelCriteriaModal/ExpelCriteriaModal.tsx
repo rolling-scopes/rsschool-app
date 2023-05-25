@@ -2,7 +2,7 @@ import { Form, Input, InputNumber, Alert, Checkbox, Modal, Row, Col, Button, Spa
 import { useState } from 'react';
 import { SelectCourseTasks } from 'modules/CourseManagement/components';
 
-type FormValues = {
+export type FormValues = {
   courseTaskIds: number[];
   minScore: number;
   keepWithMentor: boolean;
@@ -18,15 +18,11 @@ type Props = {
   isModalOpen: boolean;
 };
 
+export const EXPEL_ALERT_MESSAGE = 'All students meeting the criteria below will be expelled from the course.';
+
 export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }: Props) {
   const [form] = Form.useForm<FormValues>();
   const [okEnabled, setOkEnabled] = useState(false);
-
-  const hasValidCriteria = (values: FormValues) => {
-    const { minScore, courseTaskIds } = values;
-
-    return !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0);
-  };
 
   return (
     <Modal
@@ -47,11 +43,7 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
       >
         <Row gutter={[0, 16]}>
           <Col span={24}>
-            <Alert
-              type="warning"
-              message="All students meeting the criteria below will be expelled from the course."
-              showIcon
-            />
+            <Alert type="warning" message={EXPEL_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
             <Form.Item name="courseTaskIds" label="Didn't Complete Following Tasks" style={{ marginBottom: 0 }}>
@@ -73,6 +65,7 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
               name="reason"
               rules={[{ required: true, message: 'Please provide the expel reason' }]}
               label="Expel Reason"
+              required
             >
               <Input.TextArea placeholder="Specify the student expel reason" />
             </Form.Item>
@@ -91,4 +84,10 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
       </Form>
     </Modal>
   );
+}
+
+export function hasValidCriteria(values: FormValues) {
+  const { minScore, courseTaskIds } = values;
+
+  return !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0);
 }
