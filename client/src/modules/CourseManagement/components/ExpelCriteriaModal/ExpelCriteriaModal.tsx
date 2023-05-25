@@ -84,8 +84,6 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
   );
 }
 
-export function hasValidCriteria(values: FormValues) {
-  const { minScore, courseTaskIds } = values;
-
+export function hasValidCriteria({ minScore, courseTaskIds }: FormValues) {
   return !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0);
 }

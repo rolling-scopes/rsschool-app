@@ -8,14 +8,14 @@ type Props = FormItemProps & {
 
 const courseTasksApi = new CoursesTasksApi();
 
-export function SelectCourseTasks({ courseId, label, ...props }: Props) {
+export function SelectCourseTasks({ courseId, ...props }: Props) {
   const { value: courseTasks = [], loading } = useAsync(async () => {
     const { data } = await courseTasksApi.getCourseTasks(courseId);
     return data;
   }, [courseId]);
 
   return (
-    <Form.Item name="courseTaskIds" label={label} style={{ marginBottom: 0 }} {...props}>
+    <Form.Item name="courseTaskIds" style={{ marginBottom: 0 }} {...props}>
       <Select
         mode="multiple"
         placeholder="Select tasks"
