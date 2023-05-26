@@ -34,7 +34,7 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
     setSearch(value);
   };
 
-  const getStudents = withLoading(async (pagination: TablePaginationConfig, search = students.search) => {
+  const getStudents = withLoading(async (pagination: TablePaginationConfig) => {
     const { data } = await teamDistributionApi.getStudentsWithoutTeam(
       distribution.courseId,
       distribution.id,
