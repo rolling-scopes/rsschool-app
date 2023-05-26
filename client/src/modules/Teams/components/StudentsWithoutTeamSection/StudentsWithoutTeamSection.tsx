@@ -14,6 +14,7 @@ type Props = {
 type StudentsState = {
   content: TeamDistributionStudentDto[];
   pagination: IPaginationInfo;
+  search: string;
 };
 
 const { Title } = Typography;
@@ -24,15 +25,16 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
+    search: '',
   });
   const [loading, withLoading] = useLoading(false);
   const [search, setSearch] = useState<string>('');
 
-  const onSearch = async (value: string) => {
+  const onSearch = (value: string) => {
     setSearch(value);
   };
 
-  const getStudents = withLoading(async (pagination: TablePaginationConfig) => {
+  const getStudents = withLoading(async (pagination: TablePaginationConfig, search = students.search) => {
     const { data } = await teamDistributionApi.getStudentsWithoutTeam(
       distribution.courseId,
       distribution.id,
