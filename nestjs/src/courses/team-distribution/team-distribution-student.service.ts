@@ -202,7 +202,10 @@ export class TeamDistributionStudentService {
       query
         .where(
           new Brackets(qb => {
-            qb.where(this.getSearchString(), { search: search + '%' });
+            qb.where(this.getSearchString(), { search: search + '%' }).orWhere(
+              `CAST(user.discord AS jsonb)->>'username' ILIKE :search`,
+              { search: search + '%' },
+            );
           }),
         )
         .andWhere('tds.teamDistributionId = :teamDistributionId', { teamDistributionId: distributionId });
