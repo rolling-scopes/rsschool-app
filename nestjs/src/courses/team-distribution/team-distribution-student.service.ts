@@ -197,6 +197,7 @@ export class TeamDistributionStudentService {
       .leftJoin('user.resume', 'resume')
       .addSelect('resume.uuid')
       .addSelect(this.getUserFields());
+
     if (search) {
       query
         .where(
