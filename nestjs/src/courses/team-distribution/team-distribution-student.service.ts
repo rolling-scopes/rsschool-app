@@ -206,9 +206,9 @@ export class TeamDistributionStudentService {
       .leftJoin('user.resume', 'resume')
       .addSelect('resume.uuid')
       .addSelect(this.getUserFields())
-      .where('"tds"."teamDistributionId" = :teamDistributionId', { teamDistributionId: distributionId })
-      .andWhere('"tds"."active" = true')
-      .andWhere('"tds"."distributed" = false')
+      .where('tds.teamDistributionId = :teamDistributionId', { teamDistributionId: distributionId })
+      .andWhere('tds.active = true')
+      .andWhere('tds.distributed = false')
       .orderBy('student.rank', 'ASC');
 
     if (search) {
