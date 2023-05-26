@@ -189,6 +189,15 @@ export class TeamDistributionStudentService {
     return searchConfig.map(({ field }) => `"user".${field} ilike :search`).join(' OR ');
   }
 
+  private getSearchConditions(search: string) {
+    return new Brackets(qb => {
+      qb.where(this.getSearchString(), { search: `${search}%` }).orWhere(
+        `CAST(user.discord AS jsonb)->>'username' ILIKE :search`,
+        { search: `${search}%` },
+      );
+    });
+  }
+
   public async getStudentsByTeamDistributionId(distributionId: number, { search = '', page = 1, limit = 10 }) {
     const query = this.studentRepository
       .createQueryBuilder('student')
@@ -196,25 +205,15 @@ export class TeamDistributionStudentService {
       .innerJoin('student.user', 'user')
       .leftJoin('user.resume', 'resume')
       .addSelect('resume.uuid')
-      .addSelect(this.getUserFields());
+      .addSelect(this.getUserFields())
+      .where('"tds"."teamDistributionId" = :teamDistributionId', { teamDistributionId: distributionId })
+      .andWhere('"tds"."active" = true')
+      .andWhere('"tds"."distributed" = false')
+      .orderBy('student.rank', 'ASC');
 
     if (search) {
-      query
-        .where(
-          new Brackets(qb => {
-            qb.where(this.getSearchString(), { search: search + '%' }).orWhere(
-              `CAST(user.discord AS jsonb)->>'username' ILIKE :search`,
-              { search: search + '%' },
-            );
-          }),
-        )
-        .andWhere('tds.teamDistributionId = :teamDistributionId', { teamDistributionId: distributionId });
-    } else {
-      query.where('"tds"."teamDistributionId" = :teamDistributionId', { teamDistributionId: distributionId });
+      query.andWhere(this.getSearchConditions(search));
     }
-
-    query.andWhere('"tds"."active" = true').andWhere('"tds"."distributed" = false').orderBy('student.rank', 'ASC');
-
     const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
     return { students, paginationMeta };
   }
