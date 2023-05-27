@@ -23,7 +23,7 @@ export class CertificatesController {
     if (!certificate) throw new NotFoundException('not found');
 
     try {
-      const stream = await this.certificatesService.getFileStream(certificate.s3Bucket, certificate.s3Key);
+      const stream = this.certificatesService.getFileStream(certificate.s3Bucket, certificate.s3Key);
       res.set('Content-Type', 'application/pdf');
       stream.pipe(res);
     } catch {
