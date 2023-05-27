@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { RegistryApi } from 'api';
+import { MentorRegistryDto, RegistryApi } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
@@ -40,6 +40,10 @@ export class MentorRegistryService {
 
   public async cancelMentorRegistry(githubId: string) {
     await this.registryApi.cancelMentorRegistry(githubId);
+  }
+
+  public async sendCommentMentorRegistry(githubId: string, comment: string) {
+    await this.registryApi.commentMentorRegistry(githubId, { comment: comment });
   }
 
   public async getMentor() {

@@ -8,6 +8,7 @@ import { MentorRegistryDto } from './dto/mentor-registry.dto';
 import { RegistryService } from './registry.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
+import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -45,6 +46,15 @@ export class RegistryController {
   @ApiOkResponse()
   public async cancelMentorRegistry(@Param('githubId') githubId: string) {
     await this.registryService.cancelMentorRegistry(githubId);
+  }
+
+  @Put('mentor/:githubId/comment')
+  @ApiOperation({ operationId: 'commentMentorRegistry' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @ApiOkResponse()
+  public async commentMentorRegistry(@Param('githubId') githubId: string, @Body() body: CommentMentorRegistryDto) {
+    const { comment } = body;
+    await this.registryService.commentMentorRegistry(githubId, comment);
   }
 
   @Get('mentors')
