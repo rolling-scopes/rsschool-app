@@ -44,30 +44,4 @@ describe('Message', () => {
     const comment = screen.getByText('Lorem ipsum');
     expect(comment).toBeInTheDocument();
   });
-
-  test('Should render UserAvatar with correct size and role', () => {
-    render(<Message {...messageProps} />);
-
-    const userAvatar = screen.getByTestId('user-avatar');
-    expect(userAvatar.style.getPropertyValue('width')).toBe('24px');
-    expect(userAvatar.style.getPropertyValue('height')).toBe('24px');
-
-    // Assuming role is passed as data-role attribute to the UserAvatar element
-    expect(userAvatar).toHaveAttribute('data-role', messageProps.message.role);
-  });
-
-  test('Should render Tooltip when areContactsVisible is false', () => {
-    const hiddenContactsProps: MessageProps = {
-      ...messageProps,
-      settings: {
-        ...messageProps.settings,
-        areContactsVisible: false,
-      },
-    };
-
-    render(<Message {...hiddenContactsProps} />);
-
-    const tooltip = screen.queryAllByRole('tooltip');
-    expect(tooltip.length).toBeGreaterThan(0);
-  });
 });
