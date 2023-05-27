@@ -5,6 +5,7 @@ type Props = {
   visible: boolean;
   onCancel: () => void;
   onOk: (text: string) => void;
+  initialValue?: string;
 };
 
 export function CommentModal(props: Props) {
@@ -22,7 +23,7 @@ export function CommentModal(props: Props) {
 
   return (
     <Modal title={props.title} open={props.visible} onOk={onOk} onCancel={props.onCancel}>
-      <Form form={form} layout="vertical" initialValues={{ comment: '' }}>
+      <Form form={form} layout="vertical" initialValues={{ comment: props.initialValue ?? '' }}>
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item name="comment" rules={[{ required: true, message: 'Please enter comment' }]} label="Comment">

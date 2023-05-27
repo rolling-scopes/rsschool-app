@@ -15,12 +15,13 @@ export class MentorRegistryDto {
     this.name = PersonDto.getName({ firstName: mentorRegistry.user.firstName, lastName: mentorRegistry.user.lastName });
     this.technicalMentoring = mentorRegistry.technicalMentoring;
     this.courses = mentorRegistry.user.mentors?.map(m => m.courseId);
-    this.updatedDate = mentorRegistry.updatedDate;
+    this.sendDate = mentorRegistry.sendDate ?? mentorRegistry.updatedDate;
     this.hasCertificate = mentorRegistry.user.students?.some(s => s.certificate?.id);
     this.primaryEmail = mentorRegistry.user.primaryEmail;
     this.languagesMentoring = mentorRegistry.languagesMentoring;
     this.contactsEpamEmail = mentorRegistry.user.contactsEpamEmail;
     this.receivedDate = mentorRegistry.createdDate;
+    this.comment = mentorRegistry.comment;
   }
 
   @ApiProperty()
@@ -54,7 +55,7 @@ export class MentorRegistryDto {
   public courses?: number[];
 
   @ApiProperty()
-  public updatedDate: Date;
+  public sendDate: Date;
 
   @ApiProperty()
   public receivedDate: Date;
@@ -73,4 +74,7 @@ export class MentorRegistryDto {
 
   @ApiProperty({ type: String, nullable: true })
   public contactsEpamEmail: string | null;
+
+  @ApiProperty({ type: String, nullable: true })
+  public comment: string | null;
 }

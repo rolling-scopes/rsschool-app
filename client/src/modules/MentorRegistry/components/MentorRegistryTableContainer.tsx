@@ -7,7 +7,8 @@ import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, message } from 'antd';
+import { Button, Dropdown, Menu, Tooltip, message } from 'antd';
+import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
@@ -80,6 +81,11 @@ export const MentorRegistryTableContainer = ({
     return (
       <div className="info-icons">
         {isMentor ? <div title="Mentor in the past" className="icon-mentor" /> : null}
+        {record.comment && (
+          <Tooltip placement="top" title={record.comment}>
+            <MessageTwoTone />
+          </Tooltip>
+        )}
         {record.hasCertificate ? (
           <SafetyCertificateTwoTone
             title="Completed with certificate"
@@ -130,6 +136,42 @@ export const MentorRegistryTableContainer = ({
 
     setTagFilters(filterTag);
     setCombinedFilter(combinedFilter);
+  };
+
+  const renderRestActions = (record: MentorRegistryDto) => {
+    return (
+      <Dropdown
+        overlay={
+          <Menu
+            mode="vertical"
+            items={[
+              activeTab === MentorRegistryTabsMode.New
+                ? {
+                    key: 'resend',
+                    label: 'Re-send',
+                    onClick: () => handleModalDataChange(ModalDataMode.Resend, record),
+                    disabled: !record.preselectedCourses.length,
+                  }
+                : null,
+              {
+                key: 'delete',
+                label: 'Delete',
+                onClick: () => handleModalDataChange(ModalDataMode.Delete, record),
+              },
+              {
+                key: 'comment',
+                label: record.comment ? 'Edit comment' : 'Add comment',
+                onClick: () => handleModalDataChange(ModalDataMode.Comment, record),
+              },
+            ]}
+          ></Menu>
+        }
+      >
+        <Button type="link">
+          <MoreOutlined />
+        </Button>
+      </Dropdown>
+    );
   };
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
@@ -193,11 +235,11 @@ export const MentorRegistryTableContainer = ({
         width: 260,
       },
       {
-        key: MentorsRegistryColumnKey.UpdatedDate,
-        title: MentorsRegistryColumnName.UpdatedDate,
-        dataIndex: MentorsRegistryColumnKey.UpdatedDate,
+        key: MentorsRegistryColumnKey.SendDate,
+        title: MentorsRegistryColumnName.SendDate,
+        dataIndex: MentorsRegistryColumnKey.SendDate,
         render: (date: string) => formatDate(date),
-        sorter: dateSorter('updatedDate'),
+        sorter: dateSorter('sendDate'),
         width: 120,
       },
       {
@@ -248,22 +290,10 @@ export const MentorRegistryTableContainer = ({
             <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Invite, record)}>
               Invite
             </Button>
-            {activeTab === MentorRegistryTabsMode.New ? (
-              <Button
-                type="link"
-                size="small"
-                disabled={!record.preselectedCourses.length}
-                onClick={() => handleModalDataChange(ModalDataMode.Resend, record)}
-              >
-                Re-send
-              </Button>
-            ) : null}
-            <Button type="link" size="small" onClick={() => handleModalDataChange(ModalDataMode.Delete, record)}>
-              Delete
-            </Button>
+            {renderRestActions(record)}
           </>
         ),
-        width: activeTab === MentorRegistryTabsMode.New ? 210 : 140,
+        width: 140,
         fixed: 'right' as const,
       },
     ];
