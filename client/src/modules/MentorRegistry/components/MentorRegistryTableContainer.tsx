@@ -8,7 +8,7 @@ import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button, Dropdown, Menu, Tooltip, message } from 'antd';
-import { MoreOutlined, MessageOutlined } from '@ant-design/icons';
+import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
@@ -83,7 +83,7 @@ export const MentorRegistryTableContainer = ({
         {isMentor ? <div title="Mentor in the past" className="icon-mentor" /> : null}
         {record.comment && (
           <Tooltip placement="top" title={record.comment}>
-            <MessageOutlined />
+            <MessageTwoTone />
           </Tooltip>
         )}
         {record.hasCertificate ? (
