@@ -10,3 +10,4 @@ reports/*.xml
 setup/backup.sql
 .history/
 setup/cdk/cdk.out
+.turbo
