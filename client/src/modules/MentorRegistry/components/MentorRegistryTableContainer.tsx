@@ -235,9 +235,9 @@ export const MentorRegistryTableContainer = ({
         width: 260,
       },
       {
-        key: MentorsRegistryColumnKey.UpdatedDate,
-        title: MentorsRegistryColumnName.UpdatedDate,
-        dataIndex: MentorsRegistryColumnKey.UpdatedDate,
+        key: MentorsRegistryColumnKey.SendDate,
+        title: MentorsRegistryColumnName.SendDate,
+        dataIndex: MentorsRegistryColumnKey.SendDate,
         render: (date: string) => formatDate(date),
         sorter: dateSorter('sendDate'),
         width: 120,
