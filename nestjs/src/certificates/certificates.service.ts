@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,7 +12,7 @@ import { Course } from '@entities/course';
 
 @Injectable()
 export class CertificationsService {
-  private s3: S3Client;
+  private s3: S3;
 
   constructor(
     @InjectRepository(Certificate)
@@ -21,7 +21,7 @@ export class CertificationsService {
     private courseRepository: Repository<Course>,
     private readonly configService: ConfigService,
   ) {
-    this.s3 = new S3Client({
+    this.s3 = new S3({
       region: 'eu-central-1',
       credentials: {
         secretAccessKey: this.configService.awsServices.secretAccessKey,
