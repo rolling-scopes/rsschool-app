@@ -404,7 +404,7 @@ export class CourseService {
         discord: Discord | null;
         githubId: string;
       };
-      messages: CrossCheckMessage[];
+      messages: CrossCheckMessageDto[];
     } | null;
   }
 

@@ -6,7 +6,7 @@ export enum LocalStorageKey {
 
 export interface SolutionReviewSettings {
   areContactsVisible: boolean;
-  setAreContactsVisible: (value: boolean) => void;
+  setAreContactsVisible?: (value: boolean) => void;
 }
 
 export const AVATAR_ICON_PATH = {

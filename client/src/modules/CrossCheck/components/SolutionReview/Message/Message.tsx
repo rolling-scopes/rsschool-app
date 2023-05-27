@@ -11,7 +11,7 @@ import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from 'api';
 const { Text } = Typography;
 
 export type MessageProps = {
-  reviewNumber: number;
+  reviewNumber?: number;
   message: CrossCheckMessageDto;
   currentRole: CrossCheckMessageDtoRoleEnum;
   settings: SolutionReviewSettings;
@@ -37,7 +37,7 @@ function Message(props: MessageProps) {
           <Row>
             <Col>
               <Username
-                reviewNumber={reviewNumber}
+                reviewNumber={reviewNumber ?? 0}
                 author={author}
                 role={role}
                 areContactsVisible={settings.areContactsVisible}
