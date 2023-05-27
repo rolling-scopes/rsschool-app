@@ -74,7 +74,7 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
 }
 
 export function hasValidCriteria({ minScore, courseTaskIds, minTotalScore }: FormValues) {
-  const tasksCriteriaValid = !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
+  const tasksCriteriaValid = !courseTaskIds?.length || !!minScore;
 
   return tasksCriteriaValid && !!minTotalScore;
 }
