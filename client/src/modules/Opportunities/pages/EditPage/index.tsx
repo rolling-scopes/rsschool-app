@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 /* eslint-disable @next/next/no-page-custom-font */
 import { Layout, Typography, Modal } from 'antd';
 import { AxiosError } from 'axios';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import Head from 'next/head';
 import { OpportunitiesApi, ResumeDto } from 'api';
 import { Header } from 'components/Header';
@@ -54,7 +54,7 @@ export function EditPage() {
   });
 
   const showCreationModal = (validUntilTimestamp: number) => {
-    const validUntil = moment(validUntilTimestamp).format('YY-MM-DD');
+    const validUntil = dayjs(validUntilTimestamp).format('YY-MM-DD');
 
     const title = <Text strong>Your CV is now public until {validUntil} (for 1 month period from now on)</Text>;
     const content = (

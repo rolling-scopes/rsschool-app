@@ -13,7 +13,7 @@ function getStylesByStatus(status?: PresetColors) {
     case 'processing':
       return {
         backgroundColor: '#e6f7ff',
-        color: '#1890ff',
+        color: '#1677ff',
       };
     default:
       return {};

@@ -1,4 +1,4 @@
-import { GithubFilled } from '@ant-design/icons';
+import GithubFilled from '@ant-design/icons/GithubFilled';
 import { CDN_AVATARS_URL } from 'configs/cdn';
 
 type Props = {

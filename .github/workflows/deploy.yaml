@@ -58,6 +58,7 @@ jobs:
           NODE_ENV: production
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
           CDN_HOST: 'https://cdn.rs.school'
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: npm run build
 
       - name: Clean modules

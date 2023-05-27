@@ -28,9 +28,7 @@ export function WaitListAlert({
           <>
             <Typography.Text onClick={e => e?.stopPropagation()}>
               Excellent candidates are waiting for their mentor. Please check the{' '}
-              <Link href={getInterviewWaitList(courseAlias, interviewId)}>
-                <a>students' waitlist. </a>
-              </Link>
+              <Link href={getInterviewWaitList(courseAlias, interviewId)}>students' waitlist.</Link>
             </Typography.Text>
             <div className="icon-group" />
           </>

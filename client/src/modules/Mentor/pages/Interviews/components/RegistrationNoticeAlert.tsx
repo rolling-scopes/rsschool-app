@@ -1,6 +1,6 @@
 import { Alert, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useContext } from 'react';
 import { stageInterviewType } from 'domain/interview';
 import { InterviewDto } from 'api';
@@ -30,8 +30,8 @@ export function RegistrationNoticeAlert(props: { interview: InterviewDto; startD
         description={
           <>
             <Typography.Text>
-              Students’ registration for {interview.name} continues until {moment(startDate).format('DD MMM hh:mm')}.
-              You can change <a onClick={showMentorOptions}>mentoring options</a> till this date.
+              Students’ registration for {interview.name} continues until {dayjs(startDate).format('DD MMM hh:mm')}. You
+              can change <a onClick={showMentorOptions}>mentoring options</a> till this date.
             </Typography.Text>
             <div className="icon-mentor" />
           </>

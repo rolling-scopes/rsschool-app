@@ -1,6 +1,6 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
-import { TasksCriteriaApi } from 'api';
+import { CrossCheckMessageDtoRoleEnum, TasksCriteriaApi } from 'api';
 import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
@@ -16,13 +16,7 @@ import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHisto
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import {
-  CourseService,
-  CrossCheckCriteriaData,
-  CrossCheckMessageAuthorRole,
-  CrossCheckStatus,
-  SolutionReviewType,
-} from 'services/course';
+import { CourseService, CrossCheckCriteriaData, CrossCheckStatus, SolutionReviewType } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
 
@@ -85,7 +79,7 @@ function Page(props: CoursePageProps) {
     const messages = result.anonymous
       ? result.messages.map(message => ({
           ...message,
-          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+          author: message.role === CrossCheckMessageDtoRoleEnum.Reviewer ? null : message.author,
         }))
       : result.messages;
 

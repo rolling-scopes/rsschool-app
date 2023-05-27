@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { withSession } from 'components/withSession';
@@ -6,7 +6,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import csv from 'csvtojson';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';

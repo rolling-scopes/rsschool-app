@@ -47,13 +47,11 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
 
   const { loading, value: { events = [], disciplines = [] } = {} } = useAsync(loadData, []);
   const filterOption = useCallback(
-    (input, option) => {
+    (input: string, option?: { value: string }): boolean => {
       if (!input) {
         return false;
       }
-      const event = events.find(e => {
-        return e.id === +option?.value;
-      });
+      const event = events.find(e => e.id === Number(option?.value));
       return event?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [events],

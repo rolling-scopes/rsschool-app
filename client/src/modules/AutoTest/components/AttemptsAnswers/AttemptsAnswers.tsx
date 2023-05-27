@@ -1,9 +1,9 @@
 import { Col, Row, Typography, Form, Space, Button } from 'antd';
 import { TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Fragment } from 'react';
-import { CalendarOutlined } from '@ant-design/icons';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 
 type Props = {
   attempts: TaskVerificationAttemptDto[];
@@ -37,7 +37,7 @@ function AttemptsAnswers({ attempts, hideAnswers }: Props) {
                       <Text type="secondary">
                         <Space>
                           <CalendarOutlined />
-                          {moment(attempt.createdDate).format('YYYY-MM-DD HH:mm')}
+                          {dayjs(attempt.createdDate).format('YYYY-MM-DD HH:mm')}
                         </Space>
                       </Text>
                     </Col>

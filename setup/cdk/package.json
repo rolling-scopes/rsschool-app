@@ -1,10 +1,11 @@
 {
   "name": "cdk",
   "dependencies": {
-    "aws-cdk-lib": "2.61.1",
-    "aws-cdk": "2.61.1",
-    "@aws-cdk/aws-apigatewayv2-alpha": "2.61.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "2.61.0-alpha.0",
-    "constructs": "10.1.96"
+    "@aws-cdk/aws-apigatewayv2-alpha": "2.62.2-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "2.62.2-alpha.0",
+    "aws-cdk": "2.62.2",
+    "aws-cdk-lib": "2.62.2",
+    "constructs": "^10",
+    "ts-node": "^10.9.1"
   }
 }

@@ -1,11 +1,14 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { ExpirationState } from 'modules/Opportunities/constants';
 
+dayjs.extend(duration);
+
 export const useExpiration = (expires: string) => {
-  const expirationDate = moment(Number(expires));
+  const expirationDate = dayjs(Number(expires));
   const expirationDateFormatted = expirationDate.format('YYYY-MM-DD');
   const diff = expirationDate.diff(Date.now());
-  const daysLeft = moment.duration(diff).asDays();
+  const daysLeft = dayjs.duration(diff).asDays();
   const expirationState =
     daysLeft < 0 ? ExpirationState.Expired : daysLeft < 2 ? ExpirationState.NearlyExpired : ExpirationState.NotExpired;
 

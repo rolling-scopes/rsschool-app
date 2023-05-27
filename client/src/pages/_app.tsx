@@ -2,7 +2,7 @@ import * as React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
 
-import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
 import '../styles/main.css';
 import { initializeFeatures } from 'services/features';
 

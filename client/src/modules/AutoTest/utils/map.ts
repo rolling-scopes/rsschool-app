@@ -1,11 +1,11 @@
 import { CourseTaskDetailedDto } from 'api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '../types';
 
 function getState({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskState {
-  const now = moment();
-  const end = moment(studentEndDate);
+  const now = dayjs();
+  const end = dayjs(studentEndDate);
   const attemptsCount = verifications?.length || 0;
 
   if (attemptsCount > 0) {
@@ -21,8 +21,8 @@ function getState({ studentEndDate }: CourseTaskDetailedDto, verifications: Veri
 
 function getStatus({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
   const attemptsCount = verifications?.length || 0;
-  const now = moment();
-  const end = moment(studentEndDate);
+  const now = dayjs();
+  const end = dayjs(studentEndDate);
 
   if (now.isAfter(end) && !attemptsCount) {
     return CourseTaskStatus.Missed;

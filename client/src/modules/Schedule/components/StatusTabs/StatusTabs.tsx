@@ -1,15 +1,15 @@
 import { Col, Row, Tabs } from 'antd';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, PropsWithChildren } from 'react';
 import { ALL_TAB_KEY } from 'modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
 
 export type Status = string;
 
-export interface StatusTabsProps {
+type StatusTabsProps = PropsWithChildren & {
   statuses: Status[];
   activeTab?: string;
   onTabChange: (tab: string) => void;
-}
+};
 
 const StatusTabs: FC<StatusTabsProps> = ({ statuses, activeTab, onTabChange, children }) => {
   const tabs = useMemo(() => tabsRenderer(statuses, activeTab), [statuses, activeTab]);

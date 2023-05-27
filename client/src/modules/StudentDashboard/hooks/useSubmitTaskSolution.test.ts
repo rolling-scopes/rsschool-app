@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { CoursesTasksApi, CoursesTaskSolutionsApi, CourseTaskDto } from 'api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useSubmitTaskSolution } from './useSubmitTaskSolution';

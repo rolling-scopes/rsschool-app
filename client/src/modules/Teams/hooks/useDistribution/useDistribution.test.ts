@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react';
 import { message } from 'antd';
 import { TeamDistributionApi, TeamDistributionDetailedDto } from 'api';
 import { useDistribution } from './useDistribution';

@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, ForwardedRef } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Form, Input, Select, DatePicker, Checkbox, Card, FormInstance, Typography, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { UserData } from 'modules/Opportunities/models';
@@ -30,7 +30,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
   const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes, locations } =
     userData;
 
-  const startFrom = userData.startFrom ? moment(userData.startFrom, 'YYYY.MM.DD') : undefined;
+  const startFrom = userData.startFrom ? dayjs(userData.startFrom, 'YYYY.MM.DD') : undefined;
   const fullTime = userData.fullTime ?? false;
 
   const formValues = {
@@ -101,7 +101,7 @@ export const GeneralInfoForm = forwardRef((props: Props, ref: ForwardedRef<FormI
             style={inputStyle}
             placeholder="Not selected yet"
             picker="date"
-            disabledDate={currDate => currDate.valueOf() < moment().subtract(1, 'days').valueOf()}
+            disabledDate={currDate => currDate.valueOf() < dayjs().subtract(1, 'days').valueOf()}
           />
         </Item>
         <Item label="Ready to work full time" colon={false} name="fullTime" valuePropName="checked">

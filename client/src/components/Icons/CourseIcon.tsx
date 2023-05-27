@@ -7,13 +7,13 @@ export const CourseIcon = ({ course }: { course: Course }) => {
     return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
       <Logo url={DEFAULT_COURSE_ICONS[course.logo].archived} />
     ) : (
-      <CheckCircleTwoTone twoToneColor="#aaa" />
+      <CheckCircleTwoTone style={{ display: 'inline' }} twoToneColor="#aaa" />
     );
   }
   return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
     <Logo url={DEFAULT_COURSE_ICONS[course.logo].active} />
   ) : (
-    <PlayCircleTwoTone />
+    <PlayCircleTwoTone style={{ display: 'inline' }} />
   );
 };
 

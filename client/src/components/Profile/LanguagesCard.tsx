@@ -1,4 +1,4 @@
-import { TranslationOutlined } from '@ant-design/icons';
+import TranslationOutlined from '@ant-design/icons/TranslationOutlined';
 import { Form, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';

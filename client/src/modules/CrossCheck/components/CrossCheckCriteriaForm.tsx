@@ -137,7 +137,7 @@ export function CrossCheckCriteriaForm({
       <Title level={4}>{maxScoreLabel}</Title>
       <InputNumber
         value={score}
-        onChange={num => setScore(num)}
+        onChange={num => setScore(Number(num || 0))}
         step={1}
         min={0}
         max={maxScoreValue}

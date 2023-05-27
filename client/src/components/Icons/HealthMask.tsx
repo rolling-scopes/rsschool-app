@@ -1,4 +1,4 @@
-import Icon from '@ant-design/icons';
+import Icon from '@ant-design/icons/lib/components/Icon';
 
 export function HealthMask() {
   return <Icon component={HealthMaskIcon} />;

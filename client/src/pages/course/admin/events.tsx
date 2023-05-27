@@ -1,5 +1,5 @@
 import { Button, message, Popconfirm, Select, Table } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -9,14 +9,20 @@ import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { CourseEvent, CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { TIMEZONES } from '../../../configs/timezones';
+import { ALL_TIMEZONES } from '../../../configs/timezones';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
 import { EventDto, EventsApi } from 'api';
+
+import tz from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+dayjs.extend(tz);
 
 type Props = CoursePageProps;
 
 const timeZoneRenderer = (timeZone: string) => (value: string) => {
-  return value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
+  return value ? dayjs(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 };
 
 const eventsApi = new EventsApi();
@@ -77,7 +83,7 @@ function Page(props: Props) {
         defaultValue={timeZone}
         onChange={handleTimeZoneChange}
       >
-        {TIMEZONES.map(tz => (
+        {ALL_TIMEZONES.map(tz => (
           <Select.Option key={tz} value={tz}>
             {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
           </Select.Option>

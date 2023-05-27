@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { TaskDeadlineDate, TaskDeadlineDateProps } from '..';
 import { CourseTaskState } from 'modules/AutoTest/types';
 
@@ -12,7 +12,7 @@ describe('TaskDeadlineDate', () => {
   `(
     'should render date as "$type" when $when',
     ({ type, state, daysCount }: { type: string; state: CourseTaskState; daysCount: number }) => {
-      const date = moment();
+      const date = dayjs();
       const startDate = date.subtract(2, 'd');
       const endDate = date.add(daysCount, 'd');
       const props: TaskDeadlineDateProps = {

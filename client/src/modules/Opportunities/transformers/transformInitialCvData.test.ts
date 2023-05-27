@@ -1,5 +1,5 @@
 import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from 'api';
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import { transformInitialCvData } from './transformInitialCvData';
 
 const mockInitialData = {

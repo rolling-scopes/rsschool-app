@@ -25,6 +25,14 @@ export class RegistryService {
     return user;
   }
 
+  public async cancelMentorRegistry(githubId: string) {
+    const user = await this.usersService.getByGithubId(githubId);
+    if (user == null) {
+      throw new BadRequestException('User not found');
+    }
+    await this.mentorsRegistryRepository.update({ userId: user.id }, { canceled: true });
+  }
+
   private getPreparedMentorRegistriesQuery() {
     return this.mentorsRegistryRepository
       .createQueryBuilder('mentorRegistry')
@@ -55,6 +63,7 @@ export class RegistryService {
   public async findMentorRegistriesByCourseIdsAndDisciplines(coursesIds: number[], disciplines: string[]) {
     const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
       .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
+      .andWhere('mentorRegistry.canceled = false')
       .orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplines`, { disciplines })
       .andWhere('mentorRegistry.canceled = false')
       .getMany();

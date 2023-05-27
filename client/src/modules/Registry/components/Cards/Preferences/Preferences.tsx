@@ -25,7 +25,13 @@ const formItemLayout = WIDE_FORM_ITEM_LAYOUT();
 
 export function Preferences() {
   return (
-    <FormCard title={<Title level={5}>{CARD_TITLES.preferences}</Title>}>
+    <FormCard
+      title={
+        <Title level={5} style={{ marginBottom: 0 }}>
+          {CARD_TITLES.preferences}
+        </Title>
+      }
+    >
       <Form.Item {...formItemLayout} name="maxStudentsLimit" label={LABELS.studentsCount} extra={EXTRAS.readyToMentor}>
         <Radio.Group>
           {studentsLimits.map(elem => (

@@ -4,7 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { TextProps } from 'antd/lib/typography/Text';
 import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
 import { dateWithTimeZoneRenderer } from 'components/Table';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Text, Link: LinkButton } = Typography;
 
@@ -17,8 +17,8 @@ type Props = {
 };
 
 const getDateColor = (date: string): TextProps['type'] => {
-  const now = moment();
-  const currentDate = moment(date);
+  const now = dayjs();
+  const currentDate = dayjs(date);
 
   const isDeadlineSoon = now <= currentDate && currentDate.diff(now, 'hours') < 48;
 
@@ -81,7 +81,7 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
               Registered
             </Button>
             <Text type="secondary">
-              {moment() > moment(distribution.endDate) ? 'Registration is closed' : renderRegistrationCancelSection()}
+              {dayjs() > dayjs(distribution.endDate) ? 'Registration is closed' : renderRegistrationCancelSection()}
             </Text>
           </>
         );

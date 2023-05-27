@@ -42,12 +42,12 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     message.success('Criteria added!');
   };
 
-  function changeMax(value: number) {
-    setMax(value);
+  function changeMax(value: number | null) {
+    setMax(value ?? 0);
   }
 
-  function changeMaxPenalty(value: number) {
-    setMaxPenalty(value);
+  function changeMaxPenalty(value: number | null) {
+    setMaxPenalty(value ?? 0);
   }
 
   function changeType(value: CrossCheckCriteriaType) {

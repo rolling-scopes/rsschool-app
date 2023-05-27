@@ -24,7 +24,7 @@ export function CrossCheckCriteriaModal({ modalInfo, isModalVisible, showModal }
   );
 
   return (
-    <Modal title="Feedback" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
+    <Modal title="Feedback" open={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
       {modalInfo
         ?.filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Subtask)
         .map(criteriaItem => (

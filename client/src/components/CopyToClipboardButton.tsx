@@ -1,5 +1,5 @@
 import { Button, ButtonProps, notification } from 'antd';
-import { CopyTwoTone } from '@ant-design/icons';
+import CopyTwoTone from '@ant-design/icons/CopyTwoTone';
 import { useCopyToClipboard } from 'react-use';
 
 type Props = {

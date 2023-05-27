@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Card, Typography, Empty } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import EditOutlined from '@ant-design/icons/EditOutlined';
 
 const { Title } = Typography;
 

@@ -30,11 +30,11 @@ export function CoursesListModal(props: Props) {
   };
 
   const filterOption = useCallback(
-    (input, option) => {
+    (input: string, option?: { value: number }): boolean => {
       if (!input) {
         return false;
       }
-      const task = courses.find(t => t.id === option?.value);
+      const task = courses.find(t => t.id === Number(option?.value));
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [courses],

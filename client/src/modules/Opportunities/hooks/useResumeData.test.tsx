@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 import { OpportunitiesApi, ResumeDto } from 'api';
 import { useResumeData } from './useResumeData';
 
@@ -19,11 +19,10 @@ describe('useResumeData', () => {
         data: mockResumeData as unknown as ResumeDto,
       }),
     );
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }),
-    );
-    await waitForNextUpdate();
-    expect(result.current[0]).toStrictEqual(mockResumeData);
+    const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
+    await waitFor(() => {
+      expect(result.current[0]).toBe(mockResumeData);
+    });
   });
 
   it('should return null in case of 404 error', async () => {
@@ -37,11 +36,10 @@ describe('useResumeData', () => {
         },
       }),
     );
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }),
-    );
-    await waitForNextUpdate();
-    expect(result.current[0]).toBe(null);
+    const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
+    await waitFor(() => {
+      expect(result.current[0]).toBe(null);
+    });
   });
 
   it('should throw error in case of unexpected error', async () => {
@@ -54,10 +52,9 @@ describe('useResumeData', () => {
       },
     };
     jest.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() => Promise.reject(mockErrorResponse));
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }),
-    );
-    await waitForNextUpdate();
-    expect(result.current[1]).toBe(mockErrorResponse);
+    const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
+    await waitFor(() => {
+      expect(result.current[1]).toBe(mockErrorResponse);
+    });
   });
 });

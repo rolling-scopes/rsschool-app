@@ -1,4 +1,5 @@
-import { Col, Row, Typography, Rate, Input, Avatar, Comment, Card } from 'antd';
+import { Col, Row, Typography, Rate, Input, Avatar, Card } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import { useCallback } from 'react';
 import { FrownTwoTone, MehTwoTone, SmileTwoTone } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -115,8 +116,8 @@ export function CriteriaForm({ authorId, comments, reviewComments, criteria, onC
                   </div>
                   <div>
                     <Rate
-                      character={({ index, value }: { index: number; value: number }) => (
-                        <RateIcon key={index} value={value} index={index} />
+                      character={props => (
+                        <RateIcon key={props.index ?? 0} value={props.value ?? 0} index={props.index ?? 0} />
                       )}
                       onChange={value => onReviewCriteria(item.criteriaId, convertValueToPercentage(value))}
                       value={convertPercentageToValue(currentReview.percentage)}
