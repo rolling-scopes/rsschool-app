@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IdNameDto, PaginationDto, PersonDto } from 'src/core/dto';
 import { CrossCheckPair, Pagination } from '../course-cross-checks.service';
-import { CrossCheckMessage, CrossCheckMessageAuthor, ScoreRecord } from '@entities/taskSolutionResult';
+import {
+  CrossCheckMessage,
+  CrossCheckMessageAuthor,
+  CrossCheckMessageAuthorRole,
+  ScoreRecord,
+} from '@entities/taskSolutionResult';
 
 export class HistoricalScoreDto {
   constructor(historicalScore: ScoreRecord) {
@@ -33,6 +38,10 @@ export class CrossCheckMessageDto {
   constructor(crossCheckMessage: CrossCheckMessage) {
     this.content = crossCheckMessage.content;
     this.author = crossCheckMessage.author ? new CrossCheckMessageAuthorDto(crossCheckMessage.author) : null;
+    this.timestamp = crossCheckMessage.timestamp;
+    this.isReviewerRead = crossCheckMessage.isReviewerRead;
+    this.isStudentRead = crossCheckMessage.isStudentRead;
+    this.role = crossCheckMessage.role;
   }
 
   @ApiProperty({ type: CrossCheckMessageAuthorDto, nullable: true })
@@ -40,6 +49,18 @@ export class CrossCheckMessageDto {
 
   @ApiProperty()
   public content: string;
+
+  @ApiProperty()
+  public timestamp: string;
+
+  @ApiProperty()
+  public isReviewerRead: boolean;
+
+  @ApiProperty()
+  public isStudentRead: boolean;
+
+  @ApiProperty({ enum: CrossCheckMessageAuthorRole })
+  public role: CrossCheckMessageAuthorRole;
 }
 
 export class CrossCheckPairDto {
