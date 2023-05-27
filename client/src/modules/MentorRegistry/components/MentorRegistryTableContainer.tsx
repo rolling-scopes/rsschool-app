@@ -213,7 +213,7 @@ export const MentorRegistryTableContainer = ({
         defaultFilteredValue: preferredCourses,
         filtered: preferredCourses?.length > 0,
         filteredValue: preferredCourses || null,
-        width: 260,
+        width: 240,
       },
       {
         key: MentorsRegistryColumnKey.ReceivedDate,
@@ -253,13 +253,14 @@ export const MentorRegistryTableContainer = ({
         defaultFilteredValue: technicalMentoring,
         filtered: technicalMentoring?.length > 0,
         filteredValue: technicalMentoring || null,
-        width: 210,
+        width: 240,
       },
       {
         key: MentorsRegistryColumnKey.City,
         title: MentorsRegistryColumnName.City,
         dataIndex: MentorsRegistryColumnKey.City,
         sorter: stringSorter('cityName'),
+        width: 150,
         ...getColumnSearchProps('cityName'),
       },
       {

@@ -155,7 +155,7 @@ export class CourseCrossCheckService {
         score: e.tsr_score,
         comment: e.tsr_comment,
         submittedDate: e.ts_updatedDate,
-        reviewedDate: e.tsr_updatedDate,
+        reviewedDate: e.tsr_historicalScores?.at(-1)?.dateTime,
         messages: e.tsr_messages,
         historicalScores: e.tsr_historicalScores,
         id: e.tsc_id,

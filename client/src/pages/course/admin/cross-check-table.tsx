@@ -1,4 +1,4 @@
-import { Button, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Button, Modal, Table, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -16,8 +16,6 @@ import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from
 import PreparedComment from 'components/Forms/PreparedComment';
 import omit from 'lodash/omit';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
-
-const { Text } = Typography;
 
 const fields = {
   task: 'task',
@@ -257,7 +255,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'score',
-    render: value => <Text strong>{value ?? '(Empty)'}</Text>,
+    render: value => <>{value ?? '(Empty)'}</>,
   },
   {
     title: 'Submitted Date',
@@ -275,7 +273,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'reviewedDate',
-    render: (_, record) => dateTimeRenderer(record.historicalScores?.at(-1)?.dateTime ?? null),
+    render: (_, record) => dateTimeRenderer(record.reviewedDate),
   },
   {
     title: 'Comment',

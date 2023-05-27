@@ -6,6 +6,7 @@ type Props = {
   onCancel: () => void;
   onOk: (text: string) => void;
   initialValue?: string;
+  availableEmptyComment?: boolean;
 };
 
 export function CommentModal(props: Props) {
@@ -26,7 +27,13 @@ export function CommentModal(props: Props) {
       <Form form={form} layout="vertical" initialValues={{ comment: props.initialValue ?? '' }}>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item name="comment" rules={[{ required: true, message: 'Please enter comment' }]} label="Comment">
+            <Form.Item
+              name="comment"
+              rules={[
+                { required: props.availableEmptyComment === true ? false : true, message: 'Please enter comment' },
+              ]}
+              label="Comment"
+            >
               <Input.TextArea style={{ height: 200 }} />
             </Form.Item>
           </Col>
