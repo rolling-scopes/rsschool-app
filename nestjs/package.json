@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.8.6",
+    "@aws-sdk/client-s3": "3.335.0",
     "@nestjs/axios": "2.0.0",
     "@nestjs/common": "9.3.9",
     "@nestjs/config": "2.3.1",
@@ -65,7 +66,6 @@
     "typeorm": "0.3.14"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "3.335.0",
     "@nestjs/cli": "9.3.0",
     "@nestjs/schematics": "9.0.4",
     "@nestjs/testing": "9.3.9",
