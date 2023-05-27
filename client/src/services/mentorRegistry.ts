@@ -42,6 +42,10 @@ export class MentorRegistryService {
     await this.registryApi.cancelMentorRegistry(githubId);
   }
 
+  public async sendCommentMentorRegistry(githubId: string, comment: string) {
+    await this.registryApi.commentMentorRegistry(githubId, { comment: comment });
+  }
+
   public async getMentor() {
     const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
     return response.data.data;
