@@ -1,7 +1,6 @@
 import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
-
-import { FileExcelOutlined } from '@ant-design/icons';
+import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typography } from 'antd';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
@@ -80,7 +79,7 @@ function Page(props: Props) {
 
   const cancelMentor = withLoading(async (githubId: string) => {
     setModalData(null);
-    await mentorRegistryService.cancelMentor(githubId);
+    await mentorRegistryService.cancelMentorRegistry(githubId);
     await loadData();
     setIsModalOpen(false);
   });

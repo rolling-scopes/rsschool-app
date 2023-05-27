@@ -93,10 +93,10 @@ export const config: IConfig = {
   },
   isDevMode: process.env.NODE_ENV !== 'production',
   pg: {
-    host: process.env.RSSHCOOL_API_PG_HOST || '',
-    username: process.env.RSSHCOOL_API_PG_USERNAME || '',
-    password: process.env.RSSHCOOL_API_PG_PASSWORD || '',
-    database: process.env.RSSHCOOL_API_PG_DATABASE || 'rs_school',
+    host: process.env.RSSHCOOL_PG_HOST || '',
+    username: process.env.RSSHCOOL_PG_USERNAME || '',
+    password: process.env.RSSHCOOL_PG_PASSWORD || '',
+    database: process.env.RSSHCOOL_PG_DATABASE || 'rs_school',
   },
   aws: {
     secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',

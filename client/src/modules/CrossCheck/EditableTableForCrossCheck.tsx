@@ -2,48 +2,16 @@ import { Form, Table, Typography, Popconfirm } from 'antd';
 import React, { useState } from 'react';
 import { SaveOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
-import { MenuOutlined } from '@ant-design/icons';
-import { arrayMoveImmutable } from './utils/arrayMoveImmutable';
-import { SortableElement, SortableHandle, SortableContainer } from 'react-sortable-hoc';
 import { CriteriaDto } from 'api';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
   setDataCriteria: (data: CriteriaDto[]) => void;
 }
-interface CriteriaIndex {
-  oldIndex: number;
-  newIndex: number;
-}
-
-const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
-
-const SortableItem = SortableElement((props: Record<string, unknown>) => {
-  return <tr {...props} />;
-});
-const SortableBody = SortableContainer((props: Record<string, unknown>) => {
-  return <tbody {...props} />;
-});
 
 export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableProps) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
-
-  const onSortEnd = ({ oldIndex, newIndex }: CriteriaIndex) => {
-    if (oldIndex !== newIndex) {
-      const newData = arrayMoveImmutable(dataCriteria, oldIndex, newIndex).filter(el => !!el);
-      setDataCriteria(newData);
-    }
-  };
-
-  const DraggableContainer = (props: Record<string, unknown>) => {
-    return <SortableBody useDragHandle disableAutoscroll helperClass="row-dragging" onSortEnd={onSortEnd} {...props} />;
-  };
-
-  const DraggableBodyRow = ({ ...restProps }) => {
-    const index = dataCriteria.findIndex(x => x.index === restProps['data-row-key']);
-    return <SortableItem index={index} {...restProps} />;
-  };
 
   const isEditing = (record: CriteriaDto) => record.key === editingKey;
 
@@ -83,7 +51,6 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       dataIndex: 'sort',
       width: '7%',
       className: 'drag-visible',
-      render: () => <DragHandle />,
     },
     {
       title: 'Type',
@@ -156,8 +123,6 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         components={{
           body: {
             cell: EditableCellForCrossCheck,
-            wrapper: DraggableContainer,
-            row: DraggableBodyRow,
           },
         }}
         style={{ wordBreak: 'break-word', fontStyle: 'normal' }}

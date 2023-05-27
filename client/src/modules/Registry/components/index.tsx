@@ -3,7 +3,6 @@ export * from './FormCard/FormCard';
 export * from './FormSections/DoneSection/DoneSection';
 export * from './FormSections/GeneralSection/GeneralSection';
 export * from './FormSections/MentorshipSection/MentorshipSection';
-export * from './FormSteps/FormSteps';
 export * from './Cards/PersonalInfo/PersonalInfo';
 export * from './Cards/AdditionalInfo/AdditionalInfo';
 export * from './Cards/ContactInfo/ContactInfo';

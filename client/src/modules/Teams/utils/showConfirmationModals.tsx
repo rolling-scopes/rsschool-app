@@ -1,5 +1,5 @@
 import { Modal, Typography } from 'antd';
-import { CheckCircleTwoTone } from '@ant-design/icons';
+import CheckCircleTwoTone from '@ant-design/icons/CheckCircleTwoTone';
 import { TeamInfoDto, TeamDto } from 'api';
 
 const { Title, Text } = Typography;

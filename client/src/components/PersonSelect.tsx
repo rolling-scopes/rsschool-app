@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import { SelectProps } from 'antd/lib/select';
 
 type Props = SelectProps<string> & {

@@ -1,14 +1,14 @@
-import React, { ForwardRefExoticComponent } from 'react';
+import React, { PropsWithChildren, ForwardRefExoticComponent } from 'react';
 import { Collapse, Typography } from 'antd';
 
 const { Text } = Typography;
 const { Panel } = Collapse;
 
-interface SettingsItemProps {
+type SettingsItemProps = PropsWithChildren & {
   header: string;
   /** Any antd icon */
   IconComponent: ForwardRefExoticComponent<any>;
-}
+};
 
 const SettingsItem: React.FC<SettingsItemProps> = ({ children, header, IconComponent }) => {
   return (

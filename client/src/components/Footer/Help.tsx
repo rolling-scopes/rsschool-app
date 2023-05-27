@@ -1,5 +1,7 @@
 import React from 'react';
-import { BookTwoTone, BugTwoTone, HddTwoTone } from '@ant-design/icons';
+import BookTwoTone from '@ant-design/icons/BookTwoTone';
+import BugTwoTone from '@ant-design/icons/BugTwoTone';
+import HddTwoTone from '@ant-design/icons/HddTwoTone';
 
 import { Menu } from './Menu';
 

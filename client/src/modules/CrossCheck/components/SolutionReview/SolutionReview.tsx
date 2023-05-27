@@ -1,14 +1,10 @@
-import { Alert, Button, Col, Comment, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
+import { Alert, Button, Col, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  CourseService,
-  CrossCheckCriteriaData,
-  CrossCheckMessageAuthorRole,
-  SolutionReviewType,
-} from 'services/course';
+import { CourseService, CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
 import { StudentContacts } from '../StudentContacts';
@@ -17,6 +13,7 @@ import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 const { Text } = Typography;
 
@@ -31,7 +28,7 @@ export type SolutionReviewProps = {
   review: SolutionReviewType;
   isActiveReview: boolean;
   isMessageSendingPanelVisible?: boolean;
-  currentRole: CrossCheckMessageAuthorRole;
+  currentRole: CrossCheckMessageDtoRoleEnum;
   maxScore?: number;
 };
 
@@ -129,7 +126,7 @@ function SolutionReview(props: SolutionReviewProps) {
             avatar={
               <UserAvatar
                 author={author}
-                role={CrossCheckMessageAuthorRole.Reviewer}
+                role={CrossCheckMessageDtoRoleEnum.Reviewer}
                 areContactsVisible={settings.areContactsVisible}
                 size={32}
               />
@@ -141,7 +138,7 @@ function SolutionReview(props: SolutionReviewProps) {
                     <Username
                       reviewNumber={reviewNumber}
                       author={author}
-                      role={CrossCheckMessageAuthorRole.Reviewer}
+                      role={CrossCheckMessageDtoRoleEnum.Reviewer}
                       areContactsVisible={settings.areContactsVisible}
                     />
                   </Col>

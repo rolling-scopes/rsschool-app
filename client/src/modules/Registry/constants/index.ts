@@ -95,15 +95,15 @@ const TAIL_FORM_ITEM_LAYOUT = (isMentorshipSection: boolean) =>
     ? {
         wrapperCol: {
           xs: { span: 12, offset: 0 },
-          sm: { span: 16, offset: 4 },
-          md: { span: 10, offset: 7 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 10, offset: 8 },
         },
       }
     : {
         wrapperCol: {
           xs: { span: 12, offset: 0 },
-          sm: { span: 16, offset: 4 },
-          md: { span: 12, offset: 6 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 16, offset: 6 },
           xl: { span: 8, offset: 8 },
         },
       };
@@ -113,25 +113,25 @@ const WIDE_FORM_ITEM_LAYOUT = (isStudentForm = false) =>
     ? {}
     : {
         labelCol: {
-          sm: { span: 16, offset: 4 },
-          md: { span: 7, offset: 0 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 8, offset: 0 },
         },
         wrapperCol: {
-          sm: { span: 16, offset: 4 },
+          sm: { span: 24, offset: 0 },
           md: { span: 10, offset: 0 },
         },
       };
 
 const DEFAULT_FORM_ITEM_LAYOUT = {
   labelCol: {
-    sm: { offset: 4 },
-    md: { span: 6, offset: 0 },
-    xl: { span: 8, offset: 0 },
+    sm: {},
+    md: { span: 6 },
+    xl: { span: 8 },
   },
   wrapperCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 12, offset: 0 },
-    xl: { span: 8, offset: 0 },
+    sm: { span: 24 },
+    md: { span: 16 },
+    xl: { span: 8 },
   },
 };
 
@@ -147,7 +147,7 @@ export {
   CARD_TITLES,
   VALIDATION_RULES,
   DEFAULT_FORM_ITEM_LAYOUT,
-  TAIL_FORM_ITEM_LAYOUT,
   WIDE_FORM_ITEM_LAYOUT,
+  TAIL_FORM_ITEM_LAYOUT,
   SUCCESS_TEXT,
 };

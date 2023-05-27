@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Select, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import { SelectProps } from 'antd/lib/select';
 import type { SearchStudent } from 'services/course';
 

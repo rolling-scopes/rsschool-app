@@ -1,10 +1,10 @@
 import { ColumnType } from 'antd/lib/table';
-import { SettingFilled } from '@ant-design/icons';
+import SettingFilled from '@ant-design/icons/SettingFilled';
 import { Typography } from 'antd';
 import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
-import { isArray } from 'lodash';
+import isArray from 'lodash/isArray';
 import Link from 'next/link';
 
 const { Text } = Typography;
@@ -59,7 +59,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       sorter: 'name',
       render: (value, record) => (
         <Link prefetch={false} href={`/profile?githubId=${record.githubId}`}>
-          <a>{value}</a>
+          {value}
         </Link>
       ),
       ...getSearchProps('name'),
@@ -109,7 +109,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       defaultFilteredValue: mentor ? (isArray(mentor) ? mentor : [mentor]) : undefined,
       render: (value: string) => (
         <Link prefetch={false} href={`/profile?githubId=${value}`}>
-          <a>{value}</a>
+          {value}
         </Link>
       ),
       ...getSearchProps('mentor.githubId'),

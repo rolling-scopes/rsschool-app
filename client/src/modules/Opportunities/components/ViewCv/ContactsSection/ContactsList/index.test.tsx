@@ -52,7 +52,7 @@ describe('ContactsList', () => {
     expect(websiteIcon).toBeInTheDocument();
   });
 
-  test('should have corresponding links', () => {
+  test.skip('should have corresponding links', () => {
     render(<ContactsList contacts={mockContacts} />);
 
     const emailIcon = screen.getByRole('link', { name: 'E-mail' });

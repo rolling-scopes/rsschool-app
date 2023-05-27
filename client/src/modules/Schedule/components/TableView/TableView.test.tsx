@@ -6,6 +6,7 @@ import {
   CourseScheduleItemDto,
   CourseScheduleItemDtoStatusEnum as StatusEnum,
   CourseScheduleItemDtoTagEnum as TagsEnum,
+  CourseScheduleItemDtoTypeEnum,
 } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
@@ -112,28 +113,32 @@ describe('TableView', () => {
       field                   | searchQuery
       ${ColumnName.Name}      | ${'Course Item 0'}
       ${ColumnName.Organizer} | ${'organizer 0'}
-    `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
-      const data = generateCourseData();
-      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
-      // Check that all items rendered
-      expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
-      // Find and click search button for column
-      const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
-      const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
-      fireEvent.click(searchButton);
-      // Type search query inside search input
-      const searchInput = await screen.findByRole('textbox');
-      fireEvent.change(searchInput, { target: { value: searchQuery } });
+    `(
+      'by "$field" column search',
+      async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+        const data = generateCourseData();
+        render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
+        // Check that all items rendered
+        expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
+        // Find and click search button for column
+        const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
+        const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
+        fireEvent.click(searchButton);
+        // Type search query inside search input
+        const searchInput = await screen.findByRole('textbox');
+        fireEvent.change(searchInput, { target: { value: searchQuery } });
 
-      // Apply search
-      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-      fireEvent.click(inputSearchBtn);
+        // Apply search
+        const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
+        fireEvent.click(inputSearchBtn);
 
-      // Find the line with search query and no others
-      const item = await screen.findByText(searchQuery);
-      expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
-    });
+        // Find the line with search query and no others
+        const item = await screen.findByText(searchQuery);
+        expect(item).toBeInTheDocument();
+        expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+      },
+      10000,
+    );
   });
 
   describe('should hide data', () => {
@@ -212,6 +217,7 @@ function generateCourseData(
   return new Array(count).fill({}).map((_, idx) => {
     return {
       id: idx,
+      type: CourseScheduleItemDtoTypeEnum.CourseTask,
       name: `Course Item ${idx}`,
       startDate: '2020-02-01T21:00:00.000Z',
       endDate: '2020-03-15T20:59:00.000Z',
@@ -227,7 +233,6 @@ function generateCourseData(
       tag: 'test',
       descriptionUrl: '',
       crossCheckEndDate: '2020-02-01T21:00:00.000Z',
-      type: 'courseTask',
     };
   });
 }

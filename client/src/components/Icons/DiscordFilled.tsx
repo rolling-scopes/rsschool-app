@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Icon from '@ant-design/icons';
+import Icon from '@ant-design/icons/lib/components/Icon';
 import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 
 const svg = () => (

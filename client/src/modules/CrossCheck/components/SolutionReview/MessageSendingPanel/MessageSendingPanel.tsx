@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { MessageFilled, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Comment, Form, Input, InputRef, Row, Typography } from 'antd';
+import { Button, Col, Form, Input, InputRef, Row, Typography } from 'antd';
+import { Comment } from '@ant-design/compatible';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { CrossCheckMessageAuthor, CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageAuthor } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 const { Text } = Typography;
 
@@ -12,7 +14,7 @@ export type MessageSendingPanelProps = {
   sessionId: number;
   sessionGithubId: string;
   author: CrossCheckMessageAuthor | null;
-  currentRole: CrossCheckMessageAuthorRole;
+  currentRole: CrossCheckMessageDtoRoleEnum;
   areContactsVisible: boolean;
 };
 
@@ -51,7 +53,7 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
       avatar={
         <UserAvatar
           author={
-            currentRole === CrossCheckMessageAuthorRole.Reviewer
+            currentRole === CrossCheckMessageDtoRoleEnum.Reviewer
               ? author && { id: sessionId, githubId: sessionGithubId }
               : { id: sessionId, githubId: sessionGithubId }
           }

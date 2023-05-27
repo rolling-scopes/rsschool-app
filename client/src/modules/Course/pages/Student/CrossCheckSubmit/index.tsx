@@ -19,11 +19,11 @@ import {
   CrossCheckReview,
   Feedback,
   TaskSolution,
-  CrossCheckMessageAuthorRole,
 } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -275,7 +275,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
               courseTaskId={courseTaskId}
               review={review}
               isActiveReview={true}
-              currentRole={CrossCheckMessageAuthorRole.Student}
+              currentRole={CrossCheckMessageDtoRoleEnum.Student}
               maxScore={maxScore}
             />
           </Col>

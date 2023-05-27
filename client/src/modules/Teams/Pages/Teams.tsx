@@ -1,7 +1,7 @@
 import { message, notification, Row } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
-import { TeamsPageProps } from 'pages/course/teams';
+import type { TeamsPageProps } from 'pages/course/teams';
 import {
   JoinTeamModal,
   MyTeamSection,

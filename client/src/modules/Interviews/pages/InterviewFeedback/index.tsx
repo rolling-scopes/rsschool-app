@@ -4,7 +4,8 @@ import { CommentInput } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { InputType, templates } from 'data/interviews';
-import _ from 'lodash';
+import range from 'lodash/range';
+import toString from 'lodash/toString';
 import { SessionContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { Fragment, useContext, useMemo, useState } from 'react';
@@ -130,7 +131,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
         <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please set Score' }]}>
           <Rate
             count={11}
-            tooltips={['0 (No Interview, Rejected etc.)'].concat(_.range(1, 11).map(_.toString))}
+            tooltips={['0 (No Interview, Rejected etc.)'].concat(range(1, 11).map(toString))}
             style={{ marginBottom: '5px' }}
           />
         </Form.Item>

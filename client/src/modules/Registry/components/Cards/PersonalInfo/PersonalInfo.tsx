@@ -16,7 +16,13 @@ const { Title } = Typography;
 
 export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
   return (
-    <FormCard title={<Title level={5}>{CARD_TITLES.personalInfo}</Title>}>
+    <FormCard
+      title={
+        <Title level={5} style={{ marginBottom: 0 }}>
+          {CARD_TITLES.personalInfo}
+        </Title>
+      }
+    >
       <Form.Item
         label={LABELS.firstName}
         name="firstName"
@@ -54,8 +60,8 @@ export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
         label={LABELS.epamEmail}
         tooltip={TOOLTIPS.epamEmail}
         name="contactsEpamEmail"
+        required={!isStudentForm}
         rules={[{ pattern: epamEmailPattern, message: ERROR_MESSAGES.epamEmail }]}
-        requiredMark={isStudentForm && 'optional'}
       >
         <Input placeholder={PLACEHOLDERS.epamEmail} />
       </Form.Item>

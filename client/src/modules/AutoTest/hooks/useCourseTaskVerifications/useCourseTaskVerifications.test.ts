@@ -1,8 +1,10 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { Verification } from 'services/course';
 import { useCourseTaskVerifications } from './useCourseTaskVerifications';
-import * as reactUse from 'react-use';
+import { useAsync } from 'react-use';
 import { CourseTaskDetailedDto } from 'api';
+
+jest.mock('react-use');
 
 const VERIFICATIONS_MOCK: Verification[] = [
   {
@@ -33,7 +35,7 @@ describe('useCourseTaskVerifications', () => {
   `(
     'should return $expectedLength verifications',
     async ({ verifications, expectedLength }: { verifications: Verification[]; expectedLength: number }) => {
-      jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(() => ({ value: verifications, loading: false }));
+      (useAsync as jest.Mock).mockReturnValueOnce({ value: verifications, loading: false });
       const courseTask = { id: 100 } as CourseTaskDetailedDto;
 
       const { task } = renderUseCourseTaskVerifications(courseTask);
@@ -43,27 +45,25 @@ describe('useCourseTaskVerifications', () => {
   );
 
   it('should reload verifications when task is finished', async () => {
-    const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
-    jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
+    (useAsync as jest.Mock).mockReturnValue({ value: VERIFICATIONS_MOCK, loading: false });
     const courseTask = { id: 100 } as CourseTaskDetailedDto;
 
     const { finishTask } = renderUseCourseTaskVerifications(courseTask);
 
     await act(async () => {
-      await finishTask();
+      finishTask();
     });
 
-    expect(asyncMock).toHaveBeenCalled();
+    expect(useAsync).toHaveBeenCalled();
   });
 
   it('should hide exercise when task is finished', async () => {
-    const asyncMock = jest.fn().mockImplementation(() => ({ value: VERIFICATIONS_MOCK, loading: false }));
-    jest.spyOn(reactUse, 'useAsync').mockImplementationOnce(asyncMock);
+    (useAsync as jest.Mock).mockReturnValue({ value: VERIFICATIONS_MOCK, loading: false });
     const courseTask = { id: 100 } as CourseTaskDetailedDto;
     const { finishTask, isExerciseVisible } = renderUseCourseTaskVerifications(courseTask);
 
     await act(async () => {
-      await finishTask();
+      finishTask();
     });
 
     expect(isExerciseVisible).toBeFalsy();

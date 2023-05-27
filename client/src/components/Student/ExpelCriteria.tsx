@@ -31,7 +31,7 @@ export function ExpelCriteria(props: Props) {
       placement="right"
       closable={false}
       onClose={props.onClose}
-      visible={!!courseTasks}
+      open={!!courseTasks}
     >
       <div>
         <Form
