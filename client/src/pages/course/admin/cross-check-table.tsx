@@ -1,4 +1,4 @@
-import { Button, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Button, Modal, Table, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
