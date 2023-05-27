@@ -12,9 +12,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import { CoursesTasksApi, CrossCheckPairDto } from 'api';
+import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
 import omit from 'lodash/omit';
+import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
 
 const { Text } = Typography;
 
@@ -151,17 +152,27 @@ export function Page(props: CoursePageProps) {
         crossCheckList.content,
         crossCheckList.pagination,
         getCourseScore,
-        ({ historicalScores, checker }) => {
+        ({ historicalScores, checker, messages }) => {
           modal.info({
-            width: 600,
+            width: 1020,
             title: `Comment from ${checker.githubId}`,
-            content: historicalScores.map(historicalScore => (
+            content: historicalScores.map((historicalScore, index) => (
               <Comment
                 key={historicalScore.dateTime}
                 content={
                   <>
                     {dateTimeRenderer(historicalScore.dateTime)}
                     <PreparedComment text={historicalScore.comment}></PreparedComment>
+                    {index === 0 &&
+                      messages.length > 0 &&
+                      messages.map(message => (
+                        <Message
+                          key={message.timestamp}
+                          message={message}
+                          currentRole={CrossCheckMessageDtoRoleEnum.Student}
+                          settings={{ areContactsVisible: true }}
+                        />
+                      ))}
                   </>
                 }
               />

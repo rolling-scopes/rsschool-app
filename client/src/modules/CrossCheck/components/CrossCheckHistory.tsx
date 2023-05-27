@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
-import { SolutionReviewType, CrossCheckMessageAuthorRole } from 'services/course';
+import { SolutionReviewType } from 'services/course';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 type CrossCheckHistoryState = {
   loading: boolean;
@@ -79,7 +80,7 @@ export function CrossCheckHistory(props: Props) {
                     review={review}
                     isActiveReview={isActiveReview}
                     isMessageSendingPanelVisible={isActiveReview}
-                    currentRole={CrossCheckMessageAuthorRole.Reviewer}
+                    currentRole={CrossCheckMessageDtoRoleEnum.Reviewer}
                     maxScore={props.maxScore}
                   >
                     <Row style={{ marginTop: 16 }}>

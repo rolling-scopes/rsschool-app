@@ -2074,7 +2074,39 @@ export interface CrossCheckMessageDto {
      * @memberof CrossCheckMessageDto
      */
     'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'timestamp': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CrossCheckMessageDto
+     */
+    'isReviewerRead': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CrossCheckMessageDto
+     */
+    'isStudentRead': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'role': CrossCheckMessageDtoRoleEnum;
 }
+
+export const CrossCheckMessageDtoRoleEnum = {
+    Reviewer: 'reviewer',
+    Student: 'student'
+} as const;
+
+export type CrossCheckMessageDtoRoleEnum = typeof CrossCheckMessageDtoRoleEnum[keyof typeof CrossCheckMessageDtoRoleEnum];
+
 /**
  * 
  * @export
