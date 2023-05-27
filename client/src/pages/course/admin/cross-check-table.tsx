@@ -17,8 +17,6 @@ import PreparedComment from 'components/Forms/PreparedComment';
 import omit from 'lodash/omit';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
 
-const { Text } = Typography;
-
 const fields = {
   task: 'task',
   checker: 'checker',
