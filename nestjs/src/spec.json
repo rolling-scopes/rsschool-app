@@ -2632,9 +2632,13 @@
         "type": "object",
         "properties": {
           "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckMessageAuthorDto" }] },
-          "content": { "type": "string" }
+          "content": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "isReviewerRead": { "type": "boolean" },
+          "isStudentRead": { "type": "boolean" },
+          "role": { "type": "string", "enum": ["reviewer", "student"] }
         },
-        "required": ["author", "content"]
+        "required": ["author", "content", "timestamp", "isReviewerRead", "isStudentRead", "role"]
       },
       "CrossCheckPairDto": {
         "type": "object",

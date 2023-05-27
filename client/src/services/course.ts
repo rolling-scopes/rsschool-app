@@ -14,6 +14,7 @@ import {
   CourseTaskDto,
   EventDto,
   CriteriaDto,
+  CrossCheckMessageDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -38,20 +39,6 @@ export interface CrossCheckMessageAuthor {
   githubId: string;
 }
 
-export enum CrossCheckMessageAuthorRole {
-  Reviewer = 'reviewer',
-  Student = 'student',
-}
-
-export type CrossCheckMessage = {
-  timestamp: string;
-  content: string;
-  author: CrossCheckMessageAuthor | null;
-  role: CrossCheckMessageAuthorRole;
-  isReviewerRead: boolean;
-  isStudentRead: boolean;
-};
-
 export type SolutionReviewType = {
   id: number;
   dateTime: number;
@@ -64,7 +51,7 @@ export type SolutionReviewType = {
     discord: Discord | null;
   } | null;
   score: number;
-  messages: CrossCheckMessage[];
+  messages: CrossCheckMessageDto[];
 };
 
 export type Feedback = {
