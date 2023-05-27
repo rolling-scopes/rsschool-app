@@ -14592,10 +14592,11 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentsWithoutTeam: async (courseId: number, id: number, pageSize: number, current: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStudentsWithoutTeam: async (courseId: number, id: number, pageSize: number, current: number, search: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getStudentsWithoutTeam', 'courseId', courseId)
             // verify required parameter 'id' is not null or undefined
@@ -14604,6 +14605,8 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
             assertParamExists('getStudentsWithoutTeam', 'pageSize', pageSize)
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getStudentsWithoutTeam', 'current', current)
+            // verify required parameter 'search' is not null or undefined
+            assertParamExists('getStudentsWithoutTeam', 'search', search)
             const localVarPath = `/courses/{courseId}/team-distribution/{id}/students`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -14624,6 +14627,10 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
 
             if (current !== undefined) {
                 localVarQueryParameter['current'] = current;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -14824,11 +14831,12 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDistributionStudentDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentsWithoutTeam(courseId, id, pageSize, current, options);
+        async getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDistributionStudentDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentsWithoutTeam(courseId, id, pageSize, current, search, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14930,11 +14938,12 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: any): AxiosPromise<Array<TeamDistributionStudentDto>> {
-            return localVarFp.getStudentsWithoutTeam(courseId, id, pageSize, current, options).then((request) => request(axios, basePath));
+        getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: any): AxiosPromise<Array<TeamDistributionStudentDto>> {
+            return localVarFp.getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15042,12 +15051,13 @@ export class TeamDistributionApi extends BaseAPI {
      * @param {number} id 
      * @param {number} pageSize 
      * @param {number} current 
+     * @param {string} search 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamDistributionApi
      */
-    public getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: AxiosRequestConfig) {
-        return TeamDistributionApiFp(this.configuration).getStudentsWithoutTeam(courseId, id, pageSize, current, options).then((request) => request(this.axios, this.basePath));
+    public getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
