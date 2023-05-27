@@ -257,7 +257,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'score',
-    render: value => <Text strong>{value ?? '(Empty)'}</Text>,
+    render: value => <>{value ?? '(Empty)'}</>,
   },
   {
     title: 'Submitted Date',
@@ -275,7 +275,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'reviewedDate',
-    render: (_, record) => dateTimeRenderer(record.historicalScores?.at(-1)?.dateTime ?? null),
+    render: (_, record) => dateTimeRenderer(record.reviewedDate),
   },
   {
     title: 'Comment',

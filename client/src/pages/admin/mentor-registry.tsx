@@ -15,12 +15,10 @@ import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorReg
 import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-
 import { useLoading } from 'components/useLoading';
 import { Session, withSession } from 'components/withSession';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
-
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
 
@@ -258,6 +256,7 @@ function Page(props: Props) {
           visible={isModalOpen}
           onCancel={onCancelModal}
           initialValue={modalData?.record?.comment ?? undefined}
+          availableEmptyComment={true}
           onOk={(comment: string) => {
             sendMentorRegistryComment(comment);
           }}
