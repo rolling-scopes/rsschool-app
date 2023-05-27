@@ -160,10 +160,12 @@ export class TeamDistributionController {
     @Param('id', ParseIntPipe) id: number,
     @Query('pageSize', ParseIntPipe) pageSize: number = 10,
     @Query('current', ParseIntPipe) current: number = 1,
+    @Query('search') search: string,
   ) {
     const { students, paginationMeta } = await this.teamDistributionStudentService.getStudentsByTeamDistributionId(id, {
       page: current,
       limit: pageSize,
+      search,
     });
 
     return new StudentsWithoutTeamDto(students, paginationMeta);
