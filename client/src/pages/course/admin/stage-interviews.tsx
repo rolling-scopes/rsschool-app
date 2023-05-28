@@ -75,14 +75,14 @@ function Page(props: CoursePageProps) {
             title: 'Interviewer',
             dataIndex: 'interviewer',
             sorter: stringSorter('interviewer.githubId'),
-            render: value => <PersonCell value={value} />,
+            render: value => <PersonCell value={value} showCountry={true} />,
             ...getColumnSearchProps('interviewer.githubId'),
           },
           {
             title: 'Student',
             dataIndex: 'student',
             sorter: stringSorter('student.githubId'),
-            render: value => <PersonCell value={value} />,
+            render: value => <PersonCell value={value} showCountry={true} />,
             ...getColumnSearchProps('student.githubId'),
           },
           {
