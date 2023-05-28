@@ -67,7 +67,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         interviewer: {
           id: it.mentor.id,
           cityName: it.mentor.user.cityName ?? undefined,
-          countryName: it.student.user.countryName ?? undefined,
+          countryName: it.mentor.user.countryName ?? undefined,
           githubId: it.mentor.user.githubId,
           name: userService.createName(it.mentor.user),
           preference: it.mentor.studentsPreference ?? 'any',
