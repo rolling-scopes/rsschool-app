@@ -32,7 +32,7 @@ const postTasks = (logger: ILogger) => async (ctx: RouterContext) => {
       const result = await getRepository(Task).save(item);
       response.push({ status: 'created', value: result.id });
     } catch (e) {
-      logger.error(e);
+      logger.error(e as Error);
       response.push({ status: 'failed', value: item.name });
     }
   }

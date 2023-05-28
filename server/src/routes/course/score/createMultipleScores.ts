@@ -69,7 +69,7 @@ export const createMultipleScores = (logger: ILogger) => async (ctx: Router.Rout
         result.push({ status: 'updated', value: undefined });
       }
     } catch (e) {
-      result.push({ status: 'failed', value: e.message });
+      result.push({ status: 'failed', value: (e as Error).message });
     }
   }
 

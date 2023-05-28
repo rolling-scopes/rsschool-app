@@ -24,7 +24,7 @@ const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
         result.push({ status: 'updated', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
       }
     } catch (e) {
-      result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${e.message}` });
+      result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${(e as Error).message}` });
     }
   }
 

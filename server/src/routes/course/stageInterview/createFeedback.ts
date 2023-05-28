@@ -46,6 +46,6 @@ export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) 
 
     setResponse(ctx, StatusCodes.OK, { stageInterviewId: interview.id, ...data });
   } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
   }
 };
