@@ -1,18 +1,19 @@
 import React from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 
-type Person = { name: string; githubId: string; cityName: string | null };
-
-export function PersonCell(props: { value: Person }) {
-  const hasName = !!props.value.name;
-  const hasCity = props.value?.cityName != null;
+type Person = { name: string; githubId: string; cityName: string | null; countryName?: string };
+type Props = { value: Person; showCountry?: boolean };
+export function PersonCell({ value, showCountry }: Props) {
+  const hasName = value.name;
+  const hasCity = value?.cityName != null;
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <GithubUserLink value={props.value.githubId} />
+      <GithubUserLink value={value.githubId} />
       <small>
-        {props.value.name}
+        {value.name}
         {hasName && hasCity ? ', ' : ''}
-        {props.value?.cityName}
+        {value?.cityName}
+        {showCountry ? `, ${value.countryName}` : ''}
       </small>
     </div>
   );

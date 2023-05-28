@@ -41,4 +41,13 @@ export class MentorRegistry {
 
   @Column({ default: false, type: 'boolean' })
   canceled: boolean;
+
+  @Column({ nullable: true })
+  comment: string;
+
+  @Column({ nullable: true })
+  receivedDate: Date;
+
+  @Column({ nullable: true })
+  sendDate: Date;
 }

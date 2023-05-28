@@ -1,18 +1,17 @@
-import { Readable } from 'stream';
-import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Certificate } from '@entities/certificate';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 
+import * as AWS from 'aws-sdk';
 import { ConfigService } from 'src/config';
 import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 
 @Injectable()
 export class CertificationsService {
-  private s3: S3;
+  private s3: AWS.S3;
 
   constructor(
     @InjectRepository(Certificate)
@@ -21,22 +20,21 @@ export class CertificationsService {
     private courseRepository: Repository<Course>,
     private readonly configService: ConfigService,
   ) {
-    this.s3 = new S3({
+    AWS.config.update({
       region: 'eu-central-1',
-      credentials: {
-        secretAccessKey: this.configService.awsServices.secretAccessKey,
-        accessKeyId: this.configService.awsServices.accessKeyId,
-      },
+      secretAccessKey: this.configService.awsServices.secretAccessKey,
+      accessKeyId: this.configService.awsServices.accessKeyId,
     });
+
+    this.s3 = new AWS.S3();
   }
 
   public async getByPublicId(publicId: string) {
     return await this.certificateRepository.findOne({ where: { publicId } });
   }
 
-  public async getFileStream(bucket: string, key: string) {
-    const { Body } = await this.s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
-    return Body as Readable;
+  public getFileStream(bucket: string, key: string) {
+    return this.s3.getObject({ Bucket: bucket, Key: key }).createReadStream();
   }
 
   public async saveCertificate(studentId: number, data: SaveCertificateDto) {

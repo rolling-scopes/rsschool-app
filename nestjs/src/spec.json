@@ -909,7 +909,8 @@
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "search", "required": true, "in": "query", "schema": { "type": "string" } }
         ],
         "responses": {
           "200": {
@@ -1511,6 +1512,19 @@
         "operationId": "cancelMentorRegistry",
         "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
+      }
+    },
+    "/registry/mentor/{githubId}/comment": {
+      "put": {
+        "operationId": "commentMentorRegistry",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CommentMentorRegistryDto" } } }
+        },
         "responses": { "200": { "description": "" } },
         "tags": ["registry"]
       }
@@ -3459,6 +3473,11 @@
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },
         "required": ["preselectedCourses"]
       },
+      "CommentMentorRegistryDto": {
+        "type": "object",
+        "properties": { "comment": { "type": "string", "nullable": true } },
+        "required": ["comment"]
+      },
       "MentorRegistryDto": {
         "type": "object",
         "properties": {
@@ -3472,13 +3491,14 @@
           "name": { "type": "string" },
           "technicalMentoring": { "type": "array", "items": { "type": "string" } },
           "courses": { "type": "array", "items": { "type": "number" } },
-          "updatedDate": { "format": "date-time", "type": "string" },
+          "sendDate": { "format": "date-time", "type": "string" },
           "receivedDate": { "format": "date-time", "type": "string" },
           "hasCertificate": { "type": "boolean" },
           "englishMentoring": { "type": "boolean" },
           "primaryEmail": { "type": "string" },
           "languagesMentoring": { "type": "array", "items": { "type": "string" } },
-          "contactsEpamEmail": { "type": "string", "nullable": true }
+          "contactsEpamEmail": { "type": "string", "nullable": true },
+          "comment": { "type": "string", "nullable": true }
         },
         "required": [
           "id",
@@ -3491,13 +3511,14 @@
           "name",
           "technicalMentoring",
           "courses",
-          "updatedDate",
+          "sendDate",
           "receivedDate",
           "hasCertificate",
           "englishMentoring",
           "primaryEmail",
           "languagesMentoring",
-          "contactsEpamEmail"
+          "contactsEpamEmail",
+          "comment"
         ]
       },
       "SaveCertificateDto": {
