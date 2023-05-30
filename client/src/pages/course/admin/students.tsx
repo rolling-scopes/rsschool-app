@@ -1,17 +1,10 @@
-import {
-  BranchesOutlined,
-  CheckCircleTwoTone,
-  ClockCircleTwoTone,
-  FileExcelOutlined,
-  MinusCircleOutlined,
-  CloseCircleTwoTone,
-  SolutionOutlined,
-} from '@ant-design/icons';
-import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
+import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
+import { Button, message, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
-import { DashboardDetails, ExpelCriteria, CertificateCriteria } from 'components/Student';
+import { DashboardDetails } from 'components/Student';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -32,6 +25,17 @@ import { CoursePageProps } from 'services/models';
 const { Text } = Typography;
 
 type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
+type CertificateCriteria = {
+  courseTaskIds?: number[];
+  minScore?: number;
+  minTotalScore?: number;
+};
+type ExpelCriteria = {
+  courseTaskIds?: number[];
+  minScore?: number;
+  keepWithMentor?: boolean;
+  reason: string;
+};
 type Props = CoursePageProps;
 
 function Page(props: Props) {
@@ -48,15 +52,10 @@ function Page(props: Props) {
   const [stats, setStats] = useState(null as Stats | null);
   const [activeOnly, setActiveOnly] = useState(false);
   const [details, setDetails] = useState<StudentDetails | null>(null);
-  const [expelModel, setExpelMode] = useToggle(false);
-  const [certificateModel, setCertificateMode] = useToggle(false);
+  const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
+  const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
-
-  const createRepositories = withLoading(async () => {
-    await courseService.createRepositories();
-    message.info('The job for creating repositories has been submitted');
-  });
 
   const issueCertificate = withLoading(async () => {
     const githubId = details?.githubId;
@@ -99,15 +98,17 @@ function Page(props: Props) {
     }
   });
 
-  const expelStudents = withLoading(async (criteria: any, options: any, expellingReason: string) => {
-    await courseService.expelStudents(criteria, options, expellingReason);
-    setExpelMode();
+  const expelStudents = withLoading(async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
+    await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
+    toggleExpelModal();
     loadStudents();
+    message.success('Students successfully expelled');
   });
 
-  const certificateStudents = withLoading(async (criteria: any) => {
+  const issueCertificates = withLoading(async (criteria: CertificateCriteria) => {
     await courseService.postCertificateStudents(criteria);
-    setCertificateMode();
+    toggleCertificateModal();
+    message.success('All certificates successfully issued');
   });
 
   return render();
@@ -143,38 +144,37 @@ function Page(props: Props) {
           courseId={props.course.id}
           courseManagerOrSupervisor={hasCourseManagerRole || hasCourseSupervisorRole}
         />
-        {expelModel ? (
-          <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
-        ) : null}
-        {certificateModel ? (
-          <CertificateCriteria courseId={props.course.id} onClose={setCertificateMode} onApply={certificateStudents} />
-        ) : null}
+        <ExpelCriteriaModal
+          courseId={props.course.id}
+          onClose={toggleExpelModal}
+          onSubmit={expelStudents}
+          isModalOpen={isExpelModalOpen}
+        />
+        <CertificateCriteriaModal
+          courseId={props.course.id}
+          onClose={toggleCertificateModal}
+          onSubmit={issueCertificates}
+          isModalOpen={isCertificateModalOpen}
+        />
       </AdminPageLayout>
     );
   }
 
   function renderToolbar() {
     return (
-      <>
+      <Space wrap>
+        {hasCourseManagerRole || hasCourseSupervisorRole ? <Button onClick={exportStudents}>Export CSV</Button> : null}
         {hasCourseManagerRole ? (
           <>
-            <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
-              Create Repos
+            <Button onClick={toggleExpelModal} danger type="default">
+              Expel Students
             </Button>
-            <Button icon={<SolutionOutlined />} style={{ marginRight: 8 }} onClick={setCertificateMode}>
-              Certificates
-            </Button>
-            <Button icon={<CloseCircleTwoTone twoToneColor="red" />} style={{ marginRight: 8 }} onClick={setExpelMode}>
-              Expel
+            <Button onClick={toggleCertificateModal} type="primary">
+              Issue Certificates
             </Button>
           </>
         ) : null}
-        {hasCourseManagerRole || hasCourseSupervisorRole ? (
-          <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
-            Export CSV
-          </Button>
-        ) : null}
-      </>
+      </Space>
     );
   }
 
