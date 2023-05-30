@@ -21,6 +21,6 @@ export class StudentsController {
       throw new ForbiddenException();
     }
     const data = await this.studentsService.getById(studentId);
-    return data;
+    return new StudentDto(data);
   }
 }

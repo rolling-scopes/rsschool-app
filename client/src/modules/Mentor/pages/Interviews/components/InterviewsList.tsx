@@ -12,13 +12,13 @@ import { useAsyncFn } from 'react-use';
 type StudentsListProps = {
   interviews: MentorInterview[] | undefined;
   course: Course;
-  interview: InterviewDto;
+  interviewTask: InterviewDto;
   fetchStudentInterviews: () => Promise<void>;
 };
 
-export function StudentsList(props: StudentsListProps) {
-  const { interviews = [], course, interview, fetchStudentInterviews } = props;
-  const template = interview.attributes?.template;
+export function InterviewsList(props: StudentsListProps) {
+  const { interviews = [], course, interviewTask, fetchStudentInterviews } = props;
+  const template = interviewTask.attributes?.template;
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [loading, withLoading] = useLoading();
@@ -39,7 +39,7 @@ export function StudentsList(props: StudentsListProps) {
     <Spin spinning={loading}>
       <div className="container">
         <InterviewsSummary
-          interview={interview}
+          interviewTask={interviewTask}
           interviews={interviews}
           courseId={course.id}
           toggleDetails={() => setIsExpanded(!isExpanded)}
@@ -48,10 +48,10 @@ export function StudentsList(props: StudentsListProps) {
         />
         {isExpanded && (
           <div>
-            {interviews.map(interview => (
+            {interviews.map(studentInterview => (
               <StudentInterview
-                key={interview.student.githubId}
-                interview={interview}
+                key={studentInterview.student.githubId}
+                interview={studentInterview}
                 courseAlias={course.alias}
                 template={template}
               />
