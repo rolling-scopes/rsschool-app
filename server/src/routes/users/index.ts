@@ -59,6 +59,7 @@ const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (c
     .where(generateSearchString(searchConfig, ':text'), {
       text: searchText.toLowerCase() + '%',
     })
+    .orWhere(`CAST(user.discord AS jsonb)->>'username' ILIKE :search`, { search: `${searchText}%` })
     .limit(20)
     .getMany();
 
@@ -68,7 +69,12 @@ const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (c
     entities.map(user => {
       const response = generateResponse(user, searchConfig);
       const { lastName, firstName, ...other } = response;
-      return { ...other, id: user.id, name: userService.createName({ lastName, firstName }) };
+      return {
+        ...other,
+        id: user.id,
+        name: userService.createName({ lastName, firstName }),
+        discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : undefined,
+      };
     }),
   );
 };

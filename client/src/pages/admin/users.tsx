@@ -61,6 +61,7 @@ function Page(props: Props) {
                             <div>{`EPAM email: ${user.contactsEpamEmail || ''}`}</div>
                             <div>{`Skype: ${user.contactsSkype || ''}`}</div>
                             <div>{`Telegram: ${user.contactsTelegram || ''}`}</div>
+                            <div>{`Discord: ${user.discord || ''}`}</div>
                           </div>
                         }
                       />
