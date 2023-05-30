@@ -459,6 +459,19 @@ export interface CheckTasksDeadlineDto {
 /**
  * 
  * @export
+ * @interface CommentMentorRegistryDto
+ */
+export interface CommentMentorRegistryDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentMentorRegistryDto
+     */
+    'comment': string | null;
+}
+/**
+ * 
+ * @export
  * @interface ConfigurableProfilePermissions
  */
 export interface ConfigurableProfilePermissions {
@@ -2074,7 +2087,39 @@ export interface CrossCheckMessageDto {
      * @memberof CrossCheckMessageDto
      */
     'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'timestamp': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CrossCheckMessageDto
+     */
+    'isReviewerRead': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CrossCheckMessageDto
+     */
+    'isStudentRead': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckMessageDto
+     */
+    'role': CrossCheckMessageDtoRoleEnum;
 }
+
+export const CrossCheckMessageDtoRoleEnum = {
+    Reviewer: 'reviewer',
+    Student: 'student'
+} as const;
+
+export type CrossCheckMessageDtoRoleEnum = typeof CrossCheckMessageDtoRoleEnum[keyof typeof CrossCheckMessageDtoRoleEnum];
+
 /**
  * 
  * @export
@@ -3057,7 +3102,7 @@ export interface MentorRegistryDto {
      * @type {string}
      * @memberof MentorRegistryDto
      */
-    'updatedDate': string;
+    'sendDate': string;
     /**
      * 
      * @type {string}
@@ -3094,6 +3139,12 @@ export interface MentorRegistryDto {
      * @memberof MentorRegistryDto
      */
     'contactsEpamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorRegistryDto
+     */
+    'comment': string | null;
 }
 /**
  * 
@@ -12498,6 +12549,45 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {string} githubId 
+         * @param {CommentMentorRegistryDto} commentMentorRegistryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        commentMentorRegistry: async (githubId: string, commentMentorRegistryDto: CommentMentorRegistryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('commentMentorRegistry', 'githubId', githubId)
+            // verify required parameter 'commentMentorRegistryDto' is not null or undefined
+            assertParamExists('commentMentorRegistry', 'commentMentorRegistryDto', commentMentorRegistryDto)
+            const localVarPath = `/registry/mentor/{githubId}/comment`
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(commentMentorRegistryDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12558,6 +12648,17 @@ export const RegistryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} githubId 
+         * @param {CommentMentorRegistryDto} commentMentorRegistryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async commentMentorRegistry(githubId: string, commentMentorRegistryDto: CommentMentorRegistryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.commentMentorRegistry(githubId, commentMentorRegistryDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12593,6 +12694,16 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          */
         cancelMentorRegistry(githubId: string, options?: any): AxiosPromise<void> {
             return localVarFp.cancelMentorRegistry(githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {CommentMentorRegistryDto} commentMentorRegistryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        commentMentorRegistry(githubId: string, commentMentorRegistryDto: CommentMentorRegistryDto, options?: any): AxiosPromise<void> {
+            return localVarFp.commentMentorRegistry(githubId, commentMentorRegistryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12633,6 +12744,18 @@ export class RegistryApi extends BaseAPI {
      */
     public cancelMentorRegistry(githubId: string, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).cancelMentorRegistry(githubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} githubId 
+     * @param {CommentMentorRegistryDto} commentMentorRegistryDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public commentMentorRegistry(githubId: string, commentMentorRegistryDto: CommentMentorRegistryDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).commentMentorRegistry(githubId, commentMentorRegistryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14560,10 +14683,11 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentsWithoutTeam: async (courseId: number, id: number, pageSize: number, current: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStudentsWithoutTeam: async (courseId: number, id: number, pageSize: number, current: number, search: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getStudentsWithoutTeam', 'courseId', courseId)
             // verify required parameter 'id' is not null or undefined
@@ -14572,6 +14696,8 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
             assertParamExists('getStudentsWithoutTeam', 'pageSize', pageSize)
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getStudentsWithoutTeam', 'current', current)
+            // verify required parameter 'search' is not null or undefined
+            assertParamExists('getStudentsWithoutTeam', 'search', search)
             const localVarPath = `/courses/{courseId}/team-distribution/{id}/students`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -14592,6 +14718,10 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
 
             if (current !== undefined) {
                 localVarQueryParameter['current'] = current;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -14792,11 +14922,12 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDistributionStudentDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentsWithoutTeam(courseId, id, pageSize, current, options);
+        async getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TeamDistributionStudentDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentsWithoutTeam(courseId, id, pageSize, current, search, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14898,11 +15029,12 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
          * @param {number} id 
          * @param {number} pageSize 
          * @param {number} current 
+         * @param {string} search 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: any): AxiosPromise<Array<TeamDistributionStudentDto>> {
-            return localVarFp.getStudentsWithoutTeam(courseId, id, pageSize, current, options).then((request) => request(axios, basePath));
+        getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: any): AxiosPromise<Array<TeamDistributionStudentDto>> {
+            return localVarFp.getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15010,12 +15142,13 @@ export class TeamDistributionApi extends BaseAPI {
      * @param {number} id 
      * @param {number} pageSize 
      * @param {number} current 
+     * @param {string} search 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamDistributionApi
      */
-    public getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, options?: AxiosRequestConfig) {
-        return TeamDistributionApiFp(this.configuration).getStudentsWithoutTeam(courseId, id, pageSize, current, options).then((request) => request(this.axios, this.basePath));
+    public getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

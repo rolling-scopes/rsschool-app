@@ -1,4 +1,4 @@
-import { Button, Modal, Table, TablePaginationConfig, Typography } from 'antd';
+import { Button, Modal, Table, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -12,11 +12,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import { CoursesTasksApi, CrossCheckPairDto } from 'api';
+import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
 import omit from 'lodash/omit';
-
-const { Text } = Typography;
+import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
 
 const fields = {
   task: 'task',
@@ -151,17 +150,27 @@ export function Page(props: CoursePageProps) {
         crossCheckList.content,
         crossCheckList.pagination,
         getCourseScore,
-        ({ historicalScores, checker }) => {
+        ({ historicalScores, checker, messages }) => {
           modal.info({
-            width: 600,
+            width: 1020,
             title: `Comment from ${checker.githubId}`,
-            content: historicalScores.map(historicalScore => (
+            content: historicalScores.map((historicalScore, index) => (
               <Comment
                 key={historicalScore.dateTime}
                 content={
                   <>
                     {dateTimeRenderer(historicalScore.dateTime)}
                     <PreparedComment text={historicalScore.comment}></PreparedComment>
+                    {index === 0 &&
+                      messages.length > 0 &&
+                      messages.map(message => (
+                        <Message
+                          key={message.timestamp}
+                          message={message}
+                          currentRole={CrossCheckMessageDtoRoleEnum.Student}
+                          settings={{ areContactsVisible: true }}
+                        />
+                      ))}
                   </>
                 }
               />
@@ -246,7 +255,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'score',
-    render: value => <Text strong>{value ?? '(Empty)'}</Text>,
+    render: value => <>{value ?? '(Empty)'}</>,
   },
   {
     title: 'Submitted Date',
@@ -264,7 +273,7 @@ const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColu
     width: 80,
     sorter: true,
     sorterField: 'reviewedDate',
-    render: (_, record) => dateTimeRenderer(record.historicalScores?.at(-1)?.dateTime ?? null),
+    render: (_, record) => dateTimeRenderer(record.reviewedDate),
   },
   {
     title: 'Comment',

@@ -15,13 +15,12 @@ import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorReg
 import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-
 import { useLoading } from 'components/useLoading';
 import { Session, withSession } from 'components/withSession';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
-
 import css from 'styled-jsx/css';
+import { CommentModal } from 'components/CommentModal';
 
 type Props = {
   courses: Course[];
@@ -34,6 +33,7 @@ export enum ModalDataMode {
   Invite = 'invite',
   Resend = 'resend',
   Delete = 'delete',
+  Comment = 'comment',
 }
 
 type ModalData = Partial<{
@@ -82,6 +82,18 @@ function Page(props: Props) {
     await mentorRegistryService.cancelMentorRegistry(githubId);
     await loadData();
     setIsModalOpen(false);
+  });
+
+  const sendMentorRegistryComment = withLoading(async (comment: string) => {
+    if (!modalData?.record?.githubId) return;
+    try {
+      await mentorRegistryService.sendCommentMentorRegistry(modalData?.record?.githubId, comment);
+      await loadData();
+    } catch (error) {
+      message.error('An error occurred. Please try again later.');
+    } finally {
+      setIsModalOpen(false);
+    }
   });
 
   useAsync(loadData, []);
@@ -236,6 +248,18 @@ function Page(props: Props) {
           modalLoading={modalLoading}
           onCancel={onCancelModal}
           cancelMentor={cancelMentor}
+        />
+      )}
+      {isModalOpen && modalData?.mode === ModalDataMode.Comment && (
+        <CommentModal
+          title="Comment"
+          visible={isModalOpen}
+          onCancel={onCancelModal}
+          initialValue={modalData?.record?.comment ?? undefined}
+          availableEmptyComment={true}
+          onOk={(comment: string) => {
+            sendMentorRegistryComment(comment);
+          }}
         />
       )}
       {contextHolder}

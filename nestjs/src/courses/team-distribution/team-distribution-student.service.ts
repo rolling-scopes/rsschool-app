@@ -2,7 +2,7 @@ import { Student, TeamDistributionStudent } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsRelations, In, Repository } from 'typeorm';
+import { Brackets, FindOptionsRelations, In, Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { paginate } from 'src/core/paginate';
 
@@ -177,7 +177,28 @@ export class TeamDistributionStudentService {
     ];
   }
 
-  public async getStudentsByTeamDistributionId(distributionId: number, { page = 1, limit = 10 }) {
+  private getSearchString() {
+    const searchConfig = [
+      { field: '"githubId"' },
+      { field: '"firstName"' },
+      { field: '"lastName"' },
+      { field: '"cityName"' },
+      { field: '"countryName"' },
+    ];
+
+    return searchConfig.map(({ field }) => `"user".${field} ilike :search`).join(' OR ');
+  }
+
+  private getSearchConditions(search: string) {
+    return new Brackets(qb => {
+      qb.where(this.getSearchString(), { search: `${search}%` }).orWhere(
+        `CAST(user.discord AS jsonb)->>'username' ILIKE :search`,
+        { search: `${search}%` },
+      );
+    });
+  }
+
+  public async getStudentsByTeamDistributionId(distributionId: number, { search = '', page = 1, limit = 10 }) {
     const query = this.studentRepository
       .createQueryBuilder('student')
       .leftJoin('student.teamDistributionStudents', 'tds')
@@ -189,8 +210,11 @@ export class TeamDistributionStudentService {
       .andWhere('tds.active = true')
       .andWhere('tds.distributed = false')
       .orderBy('student.rank', 'ASC');
-    const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
 
+    if (search) {
+      query.andWhere(this.getSearchConditions(search));
+    }
+    const { items: students, meta: paginationMeta } = await paginate(query, { page, limit });
     return { students, paginationMeta };
   }
 

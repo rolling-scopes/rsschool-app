@@ -1,4 +1,4 @@
-import { CrossCheckMessageAuthorRole } from 'services/course';
+import { CrossCheckMessageDtoRoleEnum } from 'api';
 
 export enum LocalStorageKey {
   AreContactsVisible = 'crossCheckAreContactsVisible',
@@ -6,7 +6,7 @@ export enum LocalStorageKey {
 
 export interface SolutionReviewSettings {
   areContactsVisible: boolean;
-  setAreContactsVisible: (value: boolean) => void;
+  setAreContactsVisible?: (value: boolean) => void;
 }
 
 export const AVATAR_ICON_PATH = {
@@ -15,6 +15,6 @@ export const AVATAR_ICON_PATH = {
 };
 
 export const ROLE_TAG_COLOR = {
-  [CrossCheckMessageAuthorRole.Reviewer]: 'processing',
-  [CrossCheckMessageAuthorRole.Student]: 'success',
+  [CrossCheckMessageDtoRoleEnum.Reviewer]: 'processing',
+  [CrossCheckMessageDtoRoleEnum.Student]: 'success',
 };

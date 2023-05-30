@@ -21,7 +21,7 @@ export class RegistryService {
       throw new BadRequestException('User not found');
     }
 
-    await this.mentorsRegistryRepository.update({ userId: user.id }, { preselectedCourses });
+    await this.mentorsRegistryRepository.update({ userId: user.id }, { preselectedCourses, sendDate: new Date() });
     return user;
   }
 
@@ -76,5 +76,13 @@ export class RegistryService {
     return {
       courses,
     };
+  }
+
+  public async commentMentorRegistry(githubId: string, comment: string | null) {
+    const user = await this.usersService.getByGithubId(githubId);
+    if (user == null) {
+      throw new BadRequestException('User not found');
+    }
+    await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
   }
 }
