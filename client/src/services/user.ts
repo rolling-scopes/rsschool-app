@@ -208,6 +208,7 @@ export interface UserFull extends UserBasic {
   countryName: string;
   cityName: string;
   languages: UpdateUserDtoLanguagesEnum[];
+  discord?: string;
 }
 
 export interface ProfileResponse {
