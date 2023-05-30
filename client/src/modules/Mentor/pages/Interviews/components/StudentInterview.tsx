@@ -23,6 +23,7 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
               courseAlias,
               interviewName: interview.name,
               studentGithubId: student.githubId,
+              studentId: student.id,
               template: template,
             })}
           >

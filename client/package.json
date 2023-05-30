@@ -26,6 +26,7 @@
   "dependencies": {
     "@ant-design/compatible": "5.1.1",
     "@ant-design/plots": "1.2.5",
+    "@ant-design/pro-components": "^2.4.16",
     "@sentry/nextjs": "^7.52.1",
     "antd": "5.5.1",
     "axios": "1.4.0",

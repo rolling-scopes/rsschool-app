@@ -1,6 +1,7 @@
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
+import { featureToggles } from 'services/features';
 dayjs.extend(between);
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
@@ -43,14 +44,21 @@ export function getInterviewFeedbackUrl({
   interviewName,
   studentGithubId,
   template,
+  studentId,
 }: {
   courseAlias: string;
   studentGithubId: string;
+  studentId: number;
   template?: string | null;
   interviewName: string;
 }) {
+  if (featureToggles.feedback) {
+    const type = isTechnicalScreening(interviewName) ? stageInterviewType : template;
+    return `/course/interview/${type}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&feedback=on`;
+  }
+
   if (!isTechnicalScreening(interviewName)) {
-    return `/course/interview/${template}/feedback?course=${courseAlias}&githubId=${studentGithubId}`;
+    return `/course/interview/${template}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}`;
   }
 
   return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;

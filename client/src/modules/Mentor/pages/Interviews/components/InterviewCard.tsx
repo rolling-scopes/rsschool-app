@@ -6,7 +6,7 @@ import { InterviewDto } from 'api';
 import { Course } from 'services/models';
 import { MentorInterview } from 'services/course';
 
-export function InteviewCard(props: {
+export function InterviewCard(props: {
   interview: InterviewDto;
   course: Course;
   students: MentorInterview[];

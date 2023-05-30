@@ -1,6 +1,10 @@
 export enum InputType {
   Input = 'input',
+  TextArea = 'textarea',
   Checkbox = 'checkbox',
+  Radio = 'radio',
+  RadioButton = 'radioButton',
+  Rating = 'rating'
 }
 
 export type Question = {
@@ -22,3 +26,12 @@ export type InterviewTemplate = {
   examplesUrl: string;
   descriptionHtml?: string;
 };
+
+export enum StepId {
+  Introduction = 'intro',
+  Warmup = 'warmup',
+  Theory = 'theory',
+  Practice = 'practice',
+  English = 'english',
+  Decision = 'decision',
+}

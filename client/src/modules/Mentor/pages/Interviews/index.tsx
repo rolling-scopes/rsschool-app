@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, MentorInterview } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { InteviewCard } from './components/InterviewCard';
+import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
@@ -37,7 +37,7 @@ export function Interviews(props: CoursePageProps) {
       <MentorOptionsProvider course={course} session={props.session}>
         <div className="container">
           {interviews.map(interview => (
-            <InteviewCard
+            <InterviewCard
               interview={interview}
               key={interview.id}
               course={course}

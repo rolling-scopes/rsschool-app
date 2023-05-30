@@ -770,6 +770,6 @@ export type MentorInterview = {
   completed: boolean;
   interviewer: unknown;
   status: number;
-  student: Omit<UserBasic, 'id'>;
+  student: UserBasic;
   id: number;
 };
