@@ -101,6 +101,13 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
             ...getColumnSearchProps('cityName'),
           },
           {
+            title: 'Country',
+            dataIndex: 'countryName',
+            sorter: stringSorter('countryName'),
+            width: 180,
+            ...getColumnSearchProps('countryName'),
+          },
+          {
             title: 'Score',
             dataIndex: 'totalScore',
             sorter: numberSorter('totalScore'),

@@ -84,6 +84,7 @@ export class InterviewsService {
       name: this.userService.getFullName(record.student.user),
       githubId: record.student.user.githubId,
       cityName: record.student.user.cityName,
+      countryName: record.student.user.countryName,
       totalScore: record.student.totalScore,
       registeredDate: record.createdDate,
     }));
@@ -136,6 +137,7 @@ export class InterviewsService {
           githubId: user.githubId,
           name: this.userService.getFullName(student.user),
           cityName: user.cityName,
+          countryName: user.countryName,
           isGoodCandidate: this.isGoodCandidate(stageInterviews),
           rating: InterviewsService.getStageInterviewRating(stageInterviews),
           registeredDate: raw.find(item => item.student_id === student.id)?.sis_createdDate,
