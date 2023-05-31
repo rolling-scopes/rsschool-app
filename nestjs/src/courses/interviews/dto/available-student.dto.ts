@@ -21,6 +21,10 @@ export class AvailableStudentDto {
   @ApiProperty({ nullable: true, type: String })
   cityName: string | null;
 
+  @IsString()
+  @ApiProperty({ nullable: true, type: String })
+  countryName: string | null;
+
   @IsBoolean()
   @ApiProperty()
   isGoodCandidate?: boolean;

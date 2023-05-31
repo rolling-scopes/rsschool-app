@@ -76,7 +76,7 @@ export class InterviewsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getAvailableStudents' })
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async getAvailableStudents(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,

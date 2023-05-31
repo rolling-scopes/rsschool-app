@@ -2615,12 +2615,23 @@
           "name": { "type": "string" },
           "githubId": { "type": "string" },
           "cityName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
           "isGoodCandidate": { "type": "boolean" },
           "rating": { "type": "string", "nullable": true },
           "totalScore": { "type": "number" },
           "registeredDate": { "type": "string" }
         },
-        "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore", "registeredDate"]
+        "required": [
+          "id",
+          "name",
+          "githubId",
+          "cityName",
+          "countryName",
+          "isGoodCandidate",
+          "rating",
+          "totalScore",
+          "registeredDate"
+        ]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",
