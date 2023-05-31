@@ -351,6 +351,12 @@ export interface AvailableStudentDto {
     'cityName': string | null;
     /**
      * 
+     * @type {string}
+     * @memberof AvailableStudentDto
+     */
+    'countryName': string | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof AvailableStudentDto
      */
