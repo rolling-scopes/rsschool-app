@@ -26,7 +26,7 @@ function getItem(
   children?: MenuItem[],
   onClick?: () => void,
 ): MenuItem {
-  return { key, label, icon, children, onClick } as MenuItem;
+  return { key, label, icon, children, onClick };
 }
 
 export function AdminSider(props: Props) {
