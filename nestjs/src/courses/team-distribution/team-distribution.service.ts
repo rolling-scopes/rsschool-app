@@ -134,6 +134,7 @@ export class TeamDistributionService {
       });
       return acc.concat(newTaskResults);
     }, [] as { data: SaveScoreInput; studentId: number }[]);
+
     await Promise.all(
       newStudentTaskResults.map(taskResult =>
         this.writeScoreService.saveScore(taskResult.studentId, taskId, taskResult.data),
