@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskResult } from '@entities/taskResult';
 
-type SaveScoreInput = {
+export type SaveScoreInput = {
   authorId?: number;
   score: number;
   comment: string;

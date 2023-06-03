@@ -106,6 +106,20 @@ export class TeamDistributionController {
     }
   }
 
+  @Get('/:id/submit-score/:taskId')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse({ type: TeamDistributionDto })
+  @ApiOperation({ operationId: 'submitScore' })
+  @RequiredRoles([CourseRole.Manager], true)
+  public async submitScore(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('taskId', ParseIntPipe) taskId: number,
+  ) {
+    await this.teamDistributionService.submitScore(id, taskId);
+  }
+
   @Delete('/:id/registry')
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDistributionDto })
