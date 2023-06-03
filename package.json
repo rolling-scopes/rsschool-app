@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "server",
-    "nestjs",
-    "client"
+    "apps/server",
+    "apps/nestjs",
+    "apps/client"
   ],
   "scripts": {
     "start": "turbo run start",

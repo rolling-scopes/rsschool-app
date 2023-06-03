@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "allowJs": true,
+    "declaration": false,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "es2015", "es2016", "es2017"],
+    "baseUrl": "src",
+    "paths": {
+      "common/*": ["../../../common/*"]
+    },
+    "incremental": true
+  },
+  "include": ["./next-env.d.ts", "./lambda/**/*.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./node_modules"]
+}
