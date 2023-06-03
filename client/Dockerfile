@@ -7,16 +7,16 @@ ENV NODE_PORT 8080
 
 WORKDIR /client
 
-COPY next.config.js /client
-COPY next.config.prod.js /client
-
-COPY public /client/public
+COPY apps/client/next.config.js /client/apps/client/next.config.js
+COPY apps/client/next.config.prod.js /client/apps/client/next.config.prod.js
+COPY apps/client/package.json /client/apps/client/package.json
+COPY apps/client/public /client/apps/client/public
 
 COPY package.json /client
 COPY package-lock.json /client
 
 RUN npm ci --production --no-optional
 
-COPY .next /client/.next
+COPY apps/client/.next /client/apps/client/.next
 
-CMD [ "npm", "run", "prod" ]
+CMD cd /client/apps/client && npm run prod
