@@ -1,6 +1,6 @@
-import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
-import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
-import { Layout, Menu, MenuProps } from 'antd';
+import { CrownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
+import type { MenuProps } from 'antd';
 import { Session } from 'components/withSession';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Router from 'next/router';
@@ -16,10 +16,22 @@ type Props = { session: Session; courses: Course[]; activeCourse?: Course | null
 
 enum LocalStorage {
   IsSiderCollapsed = 'isSiderCollapsed',
+  OpenedSidebarItems = 'openedSidebarItems',
+}
+
+function getItem(
+  key: React.Key,
+  label: React.ReactNode,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  onClick?: () => void,
+): MenuItem {
+  return { key, label, icon, children, onClick };
 }
 
 export function AdminSider(props: Props) {
   const [isSiderCollapsed = true, setIsSiderCollapsed] = useLocalStorage<boolean>(LocalStorage.IsSiderCollapsed);
+  const [openedSidebarItems = [], setOpenedSidebarItems] = useLocalStorage<string[]>(LocalStorage.OpenedSidebarItems);
   const [activeCourse] = useActiveCourse(props.courses);
   const adminMenuItems = getAdminMenuItems(props.session);
   const courseManagementMenuItems = useMemo(
@@ -37,38 +49,43 @@ export function AdminSider(props: Props) {
   const getMenuItems = () => {
     const menuItems: MenuItem[] = [];
     if (adminMenuItems.length) {
-      menuItems.push({
-        key: 'adminArea',
-        label: 'Admin area',
-        type: 'group',
-        children: adminMenuItems.map(item => ({
-          key: item.key,
-          label: item.name,
-          icon: item.icon,
-          onClick: () => Router.push(item.href),
-        })),
-      });
+      menuItems.push(
+        getItem(
+          'adminArea',
+          'Admin Area',
+          <CrownOutlined />,
+          adminMenuItems.map(item => getItem(item.key, item.name, item.icon, undefined, () => Router.push(item.href))),
+        ),
+      );
     }
     if (courseManagementMenuItems.length) {
-      menuItems.push({
-        key: 'courseManagement',
-        label: 'Course Management',
-        type: 'group',
-        children: courseManagementMenuItems.map(item => ({
-          key: item.key,
-          label: item.name,
-          icon: item.icon,
-          onClick: () => Router.push(item.href),
-        })),
-      });
+      menuItems.push(
+        getItem(
+          'courseManagement',
+          'Course Management',
+          <ShareAltOutlined />,
+          courseManagementMenuItems.map(item =>
+            getItem(item.key, item.name, item.icon, undefined, () => Router.push(item.href)),
+          ),
+        ),
+      );
     }
     return menuItems;
+  };
+
+  const onSidebarItemChanged: MenuProps['onOpenChange'] = (sidebarItemsKeys: string[]) => {
+    setOpenedSidebarItems(sidebarItemsKeys);
   };
 
   return (
     <Sider trigger={null} collapsible collapsed={isSiderCollapsed} theme="light" width={220}>
       {isSiderCollapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
-      <Menu mode="inline" items={getMenuItems()}></Menu>
+      <Menu
+        mode="inline"
+        items={getMenuItems()}
+        defaultOpenKeys={openedSidebarItems}
+        onOpenChange={onSidebarItemChanged}
+      />
     </Sider>
   );
 }
