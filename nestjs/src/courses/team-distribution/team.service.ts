@@ -142,6 +142,20 @@ export class TeamService {
     return this.repository.update(id, data);
   }
 
+  public async findAllByDistributionId(distributionId: number) {
+    const teams = await this.repository
+      .createQueryBuilder('team')
+      .where('team."teamDistributionId" = :distributionId', { distributionId })
+      .leftJoin('team.students', 's')
+      .leftJoin('s.user', 'u')
+      .addSelect(this.getStudentsFields('s'))
+      .addSelect(this.getUserFields('u'))
+      .orderBy('team.id', 'ASC')
+      .getMany();
+
+    return teams;
+  }
+
   public async findByDistributionId(distributionId: number, { page = 1, limit = 10 }) {
     const query = this.repository
       .createQueryBuilder('team')
