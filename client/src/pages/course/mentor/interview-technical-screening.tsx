@@ -1,12 +1,10 @@
 import React, { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
+import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber, Space } from 'antd';
 import withCourseData from 'components/withCourseData';
 import { PageLayoutSimple } from 'components/PageLayout';
 import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
-import { UserSearch } from 'components/UserSearch';
-
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
@@ -14,6 +12,7 @@ import keys from 'lodash/keys';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
+import { GithubAvatar } from 'components/GithubAvatar';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -135,8 +134,6 @@ const SKILLS = [
   },
 ];
 
-const radioStyle = { display: 'block', height: '30px', lineHeight: '30px' };
-
 const renderSkills = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Skills</Typography.Title>
@@ -175,15 +172,11 @@ const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
     </Form.Item>
     <Form.Item label="Has the student solved the task(s)?" name="programmingTask-resolved">
       <Radio.Group onChange={handleSkillChange('programmingTask-resolved')}>
-        <Radio style={radioStyle} value={1}>
-          Yes, he/she has
-        </Radio>
-        <Radio style={radioStyle} value={2}>
-          Yes, he/she has, but with tips
-        </Radio>
-        <Radio style={radioStyle} value={3}>
-          No, he/she hasn't
-        </Radio>
+        <Space direction="vertical">
+          <Radio value={1}>Yes, he/she has</Radio>
+          <Radio value={2}>Yes, he/she has, but with tips</Radio>
+          <Radio value={3}>No, he/she hasn't</Radio>
+        </Space>
       </Radio.Group>
     </Form.Item>
     <Form.Item label="Code writing confidence" name="programmingTask-codeWritingLevel">
@@ -237,20 +230,14 @@ const renderEnglishLevel = (handleSkillChange: HandleChangeValue) => (
 const renderResume = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Resume</Typography.Title>
-    <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict">
+    <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict" required>
       <Radio.Group onChange={handleSkillChange('resume-verdict')}>
-        <Radio style={radioStyle} value={'yes'}>
-          Yes, I do.
-        </Radio>
-        <Radio style={radioStyle} value={'no'}>
-          No, I do not.
-        </Radio>
-        <Radio style={radioStyle} value={'noButGoodCandidate'}>
-          No, I do not, but he/she is a good candidate.
-        </Radio>
-        <Radio style={radioStyle} value={'didNotDecideYet'}>
-          I didn't decide yet. I'll submit the feedback later.
-        </Radio>
+        <Space direction="vertical">
+          <Radio value={'yes'}>Yes, I do.</Radio>
+          <Radio value={'no'}>No, I do not.</Radio>
+          <Radio value={'noButGoodCandidate'}>No, I do not, but he/she is a good candidate.</Radio>
+          <Radio value={'didNotDecideYet'}>I didn't decide yet. I'll submit the feedback later.</Radio>
+        </Space>
       </Radio.Group>
     </Form.Item>
     <Form.Item name="resume-score" label="Score (Max 50 points)">
@@ -303,10 +290,6 @@ function Page(props: CoursePageProps) {
     }
   }, [interviews, githubId]);
 
-  const filterStudents = async (searchText: string) => {
-    return students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
-  };
-
   const handleStudentSelect = async (githubId: string) => {
     setStudentGitHubId(githubId);
 
@@ -338,10 +321,10 @@ function Page(props: CoursePageProps) {
   };
 
   const handleSubmit = withLoading(async (values: any) => {
-    if (!values.githubId || !values['resume-verdict'] || loading) {
+    if (githubId || !values['resume-verdict'] || loading) {
       return;
     }
-    const interview = interviews.find(i => i.student.githubId === values.githubId);
+    const interview = interviews.find(i => i.student.githubId === githubId);
     if (interview == null) {
       return;
     }
@@ -350,7 +333,7 @@ function Page(props: CoursePageProps) {
       const json = serializeToJson(values);
       await courseService.postStageInterviewFeedback(interview?.id, {
         json,
-        githubId: values.githubId,
+        githubId: githubId ?? '',
         isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
         isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
         decision: values['resume-verdict'],
@@ -391,20 +374,15 @@ function Page(props: CoursePageProps) {
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
       >
-        <Typography.Title level={4}>Student</Typography.Title>
-        <Form.Item
-          name="githubId"
-          label="Student"
-          rules={[{ required: false, message: 'Please select a student' }]}
-          style={{ marginBottom: '40px' }}
-        >
-          <UserSearch
-            onChange={handleStudentSelect}
-            keyField="githubId"
-            defaultValues={students}
-            searchFn={filterStudents}
-          />
-        </Form.Item>
+        <Space align="baseline">
+          <Typography.Title level={4}>Student: </Typography.Title>{' '}
+          <GithubAvatar githubId={githubId ?? undefined} size={24} />
+          <Typography.Link target="_blank" href={`/profile?githubId=${githubId}`}>
+            <Typography.Title level={4}>
+              <Typography.Link>{githubId}</Typography.Link>
+            </Typography.Title>
+          </Typography.Link>
+        </Space>
         {renderSkills(handleTotalScoreChange)}
         <Divider dashed />
         {renderProgrammingTask(handleTotalScoreChange)}

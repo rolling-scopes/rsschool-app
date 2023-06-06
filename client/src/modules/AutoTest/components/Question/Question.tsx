@@ -1,4 +1,4 @@
-import { Typography, Form, Row, Checkbox, Radio, Col } from 'antd';
+import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { SelfEducationQuestionSelectedAnswersDto } from 'api';
 
 const { Title } = Typography;
@@ -43,7 +43,7 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
             : selectedAnswers === answerIndex;
 
           return (
-            <Row key={answerIndex}>
+            <Space.Compact block key={answerIndex} direction="vertical">
               <Element value={answerIndex} checked={checked}>
                 {answersType === 'image' ? (
                   <>
@@ -61,7 +61,7 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
                   answer
                 )}
               </Element>
-            </Row>
+            </Space.Compact>
           );
         })}
       </Element.Group>
