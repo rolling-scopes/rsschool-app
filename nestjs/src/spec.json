@@ -882,6 +882,24 @@
         "tags": ["team distribution"]
       }
     },
+    "/courses/{courseId}/team-distribution/{id}/submit-score/{taskId}": {
+      "get": {
+        "operationId": "submitScore",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
+          }
+        },
+        "tags": ["team distribution"]
+      }
+    },
     "/courses/{courseId}/team-distribution/{id}/detailed": {
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",

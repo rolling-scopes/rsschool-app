@@ -14745,6 +14745,47 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
          * 
          * @param {number} courseId 
          * @param {number} id 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitScore: async (courseId: number, id: number, taskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('submitScore', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('submitScore', 'id', id)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('submitScore', 'taskId', taskId)
+            const localVarPath = `/courses/{courseId}/team-distribution/{id}/submit-score/{taskId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14940,6 +14981,18 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} id 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async submitScore(courseId: number, id: number, taskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.submitScore(courseId, id, taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15041,6 +15094,17 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
          */
         getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: any): AxiosPromise<Array<TeamDistributionStudentDto>> {
             return localVarFp.getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitScore(courseId: number, id: number, taskId: number, options?: any): AxiosPromise<TeamDistributionDto> {
+            return localVarFp.submitScore(courseId, id, taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15155,6 +15219,19 @@ export class TeamDistributionApi extends BaseAPI {
      */
     public getStudentsWithoutTeam(courseId: number, id: number, pageSize: number, current: number, search: string, options?: AxiosRequestConfig) {
         return TeamDistributionApiFp(this.configuration).getStudentsWithoutTeam(courseId, id, pageSize, current, search, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} id 
+     * @param {number} taskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public submitScore(courseId: number, id: number, taskId: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).submitScore(courseId, id, taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
