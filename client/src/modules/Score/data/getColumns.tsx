@@ -1,13 +1,10 @@
 import { ColumnType } from 'antd/lib/table';
 import SettingFilled from '@ant-design/icons/SettingFilled';
-import { Typography } from 'antd';
 import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
 import isArray from 'lodash/isArray';
 import Link from 'next/link';
-
-const { Text } = Typography;
 
 type Props = {
   taskColumns: Record<string, any>[];
@@ -77,14 +74,14 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       dataIndex: 'totalScore',
       width: 80,
       sorter: 'totalScore',
-      render: (value: number) => <Text strong>{value}</Text>,
+      render: (value: number) => <b>{value}</b>,
     },
     {
       title: 'Cross-Check',
       dataIndex: 'crossCheckScore',
       width: 90,
       sorter: 'crossCheckScore',
-      render: (value: number) => <Text strong>{value}</Text>,
+      render: (value: number) => <b>{value}</b>,
     },
     ...taskColumns,
     {
