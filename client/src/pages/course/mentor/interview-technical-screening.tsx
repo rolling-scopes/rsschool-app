@@ -321,7 +321,7 @@ function Page(props: CoursePageProps) {
   };
 
   const handleSubmit = withLoading(async (values: any) => {
-    if (githubId || !values['resume-verdict'] || loading) {
+    if (!githubId || !values['resume-verdict'] || loading) {
       return;
     }
     const interview = interviews.find(i => i.student.githubId === githubId);
