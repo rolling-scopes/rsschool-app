@@ -2,6 +2,8 @@
 
 <img src="https://www.rs.school/images/rs_school.svg" width="250px"/>
 
+Test
+
 # RS School App
 
 The [app.rs.school](https://app.rs.school) is an application for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
