@@ -1,4 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+const envPath = path.resolve(process.cwd(), './server/.env');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config({ path: envPath });
 const serverlessExpress = require('@vendia/serverless-express');
 const server = require('./server/src/app');
 

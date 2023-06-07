@@ -6,19 +6,16 @@ WORKDIR /container_out
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-
-COPY public public
-
-# next.js config
-COPY next.config.prod.js next.config.js
+COPY client/public client/public
+COPY client/package.json client/package.json
+COPY client/next.config.prod.js client/next.config.js
 
 RUN npm ci --production --no-optional
 
 # lambda entry handler (app.js)
-COPY dist .
-
+COPY client/dist client/
 # .next build folder
-COPY .next .next
+COPY client/.next client/.next
 
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:18
@@ -27,8 +24,6 @@ ENV NODE_ENV production
 ENV TZ utc
 ENV NEXT_RUNTIME nodejs
 
-WORKDIR /var/task
+COPY --from=builder /container_out /var/task/
 
-COPY --from=builder /container_out .
-
-CMD [ "app.handler" ]
+CMD [ "/var/task/client/app.handler" ]

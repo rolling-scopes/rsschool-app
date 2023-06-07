@@ -236,13 +236,13 @@ jobs:
         working-directory: ./client
         run: npm run build:lambda
 
-      - name: Package Сlient
+      - name: Package Client
         uses: docker/build-push-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./client
+          context: .
           file: ./client/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
@@ -267,7 +267,7 @@ jobs:
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./server
+          context: .
           file: ./server/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
@@ -292,7 +292,7 @@ jobs:
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./nestjs
+          context: .
           file: ./nestjs/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:pr${{ github.event.pull_request.number }}
