@@ -140,7 +140,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
                 >
                   <Button type="link">Want to interview</Button>
                 </Popconfirm>
-                {isStageInterview && isMentor(session, courseId) ? (
+                {isStageInterview && isMentor(session, courseId) && record.rating ? (
                   <Popconfirm
                     title={
                       <>
@@ -148,12 +148,9 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
                       </>
                     }
                     okText="Yes"
-                    okButtonProps={{ disabled: !record.rating }}
                     onConfirm={() => assignStudentToMentor(record.githubId)}
                   >
-                    <Button disabled={!record.rating} type="link">
-                      Assign student to me
-                    </Button>
+                    <Button type="link">Assign student to me</Button>
                   </Popconfirm>
                 ) : null}
                 {isStageInterview && isPowerUser ? (
