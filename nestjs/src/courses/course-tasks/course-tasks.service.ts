@@ -2,10 +2,20 @@ import { Checker, CourseTask, CrossCheckStatus } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository, FindOptionsWhere } from 'typeorm';
+import {
+  Between,
+  LessThan,
+  LessThanOrEqual,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+  FindOptionsWhere,
+  In,
+} from 'typeorm';
 import * as dayjs from 'dayjs';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
+import { TaskSolution } from '@entities/taskSolution';
 
 export enum Status {
   Started = 'started',
@@ -18,6 +28,8 @@ export class CourseTasksService {
   constructor(
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(TaskSolution)
+    readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
   public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false) {
@@ -30,6 +42,31 @@ export class CourseTasksService {
       },
       cache: useCache ? 60 * 1000 : undefined,
     });
+  }
+
+  public async getAllWithStudentSolution(
+    courseId: number,
+    studentId: number,
+    status?: 'started' | 'inprogress' | 'finished',
+    useCache = false,
+  ) {
+    const courseTasks = await this.getAll(courseId, status, useCache);
+    const taskSolutions = (
+      await this.taskSolutionRepository.findBy({
+        courseTaskId: In(courseTasks.map(courseTask => courseTask.id)),
+        studentId,
+      })
+    ).reduce((accumulator, taskSolution) => {
+      accumulator.set(taskSolution.courseTaskId, taskSolution);
+      return accumulator;
+    }, new Map());
+
+    const studentCourseTaskSolutions = courseTasks.map(courseTask => {
+      const taskSolution = taskSolutions.get(courseTask.id);
+      return { ...courseTask, ...(taskSolution && { taskSolutions: [taskSolution] }) };
+    });
+
+    return studentCourseTaskSolutions;
   }
 
   public async getAllDetailed(courseId: number) {
