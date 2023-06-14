@@ -19,14 +19,6 @@ export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContex
   setResponse(ctx, OK, students);
 };
 
-export const getAllMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params as Params;
-  const repository = getCustomRepository(StudentRepository);
-  const students = await repository.findByMentor(courseId, githubId);
-  const assignedStudents = await courseService.getCrossStudentsByMentor(courseId, githubId);
-  setResponse(ctx, OK, { students, assignedStudents });
-};
-
 export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
