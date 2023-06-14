@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager, isMentor } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto } from 'api';
 import { getApiConfiguration } from 'utils/axios';
 import { stageInterviewType } from 'domain/interview';
@@ -47,6 +47,11 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
       await courseService.addInterviewPair(`${interview.id}`, session.githubId, githubId);
     }
     removeStudentFromList(githubId);
+  });
+
+  const assignStudentToMentor = withLoading(async (studentId: string) => {
+    await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
+    removeStudentFromList(studentId);
   });
 
   const removeFromList = withLoading(async (githubId: string) => {
@@ -135,6 +140,19 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
                 >
                   <Button type="link">Want to interview</Button>
                 </Popconfirm>
+                {isStageInterview && isMentor(session, courseId) && record.rating ? (
+                  <Popconfirm
+                    title={
+                      <>
+                        Are you sure you want to assign <b>{record.githubId}</b> to yourself without an interview?
+                      </>
+                    }
+                    okText="Yes"
+                    onConfirm={() => assignStudentToMentor(record.githubId)}
+                  >
+                    <Button type="link">Assign student to me</Button>
+                  </Popconfirm>
+                ) : null}
                 {isStageInterview && isPowerUser ? (
                   <Popconfirm
                     title={<>Are you sure to remove {record.githubId} from the wait list?</>}
