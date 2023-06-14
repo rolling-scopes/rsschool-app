@@ -48,7 +48,7 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
         <Form form={form} layout="vertical" requiredMark={false} onFinish={submit} onChange={change}>
           {getExercise()}
           <Row justify="center">
-            <Button loading={loading} type="primary" htmlType="submit">
+            <Button loading={loading} type="primary" htmlType="submit" disabled={loading}>
               Submit
             </Button>
           </Row>

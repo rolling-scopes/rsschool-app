@@ -109,6 +109,10 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
   };
 
   const submit = async (values: FormValues) => {
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
 
     const data = await getSubmitData(values);
