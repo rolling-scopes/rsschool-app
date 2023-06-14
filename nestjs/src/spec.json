@@ -339,7 +339,7 @@
     },
     "/courses/{courseId}/tasks": {
       "get": {
-        "operationId": "getCourseTasks",
+        "operationId": "getCourseTasksWithStudentSolution",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -2387,6 +2387,7 @@
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
           "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
@@ -2405,6 +2406,7 @@
           "crossCheckEndDate",
           "descriptionUrl",
           "taskOwner",
+          "taskSolutions",
           "maxScore",
           "scoreWeight",
           "pairsCount",
@@ -2443,6 +2445,7 @@
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
           "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
@@ -2465,6 +2468,7 @@
           "crossCheckEndDate",
           "descriptionUrl",
           "taskOwner",
+          "taskSolutions",
           "maxScore",
           "scoreWeight",
           "pairsCount",
