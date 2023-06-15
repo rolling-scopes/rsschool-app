@@ -1,5 +1,18 @@
 import { CourseTask } from '@entities/courseTask';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -52,7 +65,7 @@ export class CourseTasksController {
     const isStudent = !!req.user.courses[courseId]?.studentId;
     const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) {
-      return [];
+      throw new BadRequestException('You are not a student in this course');
     }
     const data = await this.courseTasksService.getAllWithStudentSolution(courseId, studentId, status, isStudent);
     return data.map(item => new CourseTaskDto(item));
