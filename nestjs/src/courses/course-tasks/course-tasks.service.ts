@@ -51,18 +51,13 @@ export class CourseTasksService {
     useCache = false,
   ) {
     const courseTasks = await this.getAll(courseId, status, useCache);
-    const taskSolutions = (
-      await this.taskSolutionRepository.findBy({
-        courseTaskId: In(courseTasks.map(courseTask => courseTask.id)),
-        studentId,
-      })
-    ).reduce((accumulator, taskSolution) => {
-      accumulator.set(taskSolution.courseTaskId, taskSolution);
-      return accumulator;
-    }, new Map());
+    const taskSolutions = await this.taskSolutionRepository.findBy({
+      courseTaskId: In(courseTasks.map(courseTask => courseTask.id)),
+      studentId,
+    });
 
     const studentCourseTaskSolutions = courseTasks.map(courseTask => {
-      const taskSolution = taskSolutions.get(courseTask.id);
+      const taskSolution = taskSolutions.find(({ courseTaskId }) => courseTaskId === courseTask.id);
       return { ...courseTask, ...(taskSolution && { taskSolutions: [taskSolution] }) };
     });
 
