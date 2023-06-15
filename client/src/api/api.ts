@@ -2272,7 +2272,7 @@ export interface Discord {
      * @type {string}
      * @memberof Discord
      */
-    'discriminator': string;
+    'discriminator': string | null;
 }
 /**
  * 
