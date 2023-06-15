@@ -339,7 +339,7 @@
     },
     "/courses/{courseId}/tasks": {
       "get": {
-        "operationId": "getCourseTasksWithStudentSolution",
+        "operationId": "getCourseTasks",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -376,6 +376,34 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseTaskDetailedDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/tasks/solutions": {
+      "get": {
+        "operationId": "getCourseTasksWithStudentSolution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["started", "inprogress", "finished"], "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskDto" } }
+              }
+            }
           },
           "400": { "description": "" },
           "403": { "description": "" }

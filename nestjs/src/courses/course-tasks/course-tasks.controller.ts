@@ -37,7 +37,7 @@ export class CourseTasksController {
     return data.map(item => new CourseTaskDto(item));
   }
 
-  @Get()
+  @Get('/solutions')
   @ApiOkResponse({ type: [CourseTaskDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
