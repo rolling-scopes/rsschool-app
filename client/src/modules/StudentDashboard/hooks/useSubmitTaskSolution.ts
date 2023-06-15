@@ -44,7 +44,7 @@ export function useSubmitTaskSolution(courseId: number) {
     try {
       dispatch({ type: 'loading' });
       const coursesTasksApi = new CoursesTasksApi();
-      const { data } = await coursesTasksApi.getCourseTasks(courseId);
+      const { data } = await coursesTasksApi.getCourseTasksWithStudentSolution(courseId);
       const courseTasks = data.filter(
         item =>
           item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
