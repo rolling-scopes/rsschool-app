@@ -50,7 +50,10 @@ export class CourseTasksController {
     @Query('status') status?: Status,
   ): Promise<CourseTaskDto[]> {
     const isStudent = !!req.user.courses[courseId]?.studentId;
-    const studentId = req.user.id;
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) {
+      return [];
+    }
     const data = await this.courseTasksService.getAllWithStudentSolution(courseId, studentId, status, isStudent);
     return data.map(item => new CourseTaskDto(item));
   }
