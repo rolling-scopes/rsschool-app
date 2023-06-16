@@ -34,6 +34,6 @@ export class PersonDto {
   }
 
   public static getDiscordUserName(discord: Discord) {
-    return discord.discriminator ? `${discord.username}#${discord.discriminator}` : discord?.username ?? '';
+    return discord.discriminator ? `${discord.username}#${discord.discriminator}` : discord.username;
   }
 }
