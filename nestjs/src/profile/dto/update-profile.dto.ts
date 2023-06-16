@@ -205,9 +205,8 @@ class Discord {
   @IsNotEmpty()
   username: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  discriminator: string;
+  @ApiProperty({ nullable: true, type: String })
+  discriminator: string | null;
 }
 
 export class ProfileInfoDto {
