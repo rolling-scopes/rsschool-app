@@ -6,7 +6,6 @@ import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 import { adminGuard, anyCourseManagerGuard, guard, RouterContext } from '../guards';
 import { OperationResult, userService } from '../../services';
-import { Discord } from '../../../../common/models';
 
 const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
   const data = ctx.request.body as { githubId: string }[];
@@ -68,16 +67,13 @@ const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (c
     ctx,
     OK,
     entities.map(user => {
-      const getDiscordUserName = (discord: Discord) =>
-        discord.discriminator ? `${discord.username}#${discord.discriminator}` : discord?.username ?? '';
-
       const response = generateResponse(user, searchConfig);
       const { lastName, firstName, ...other } = response;
       return {
         ...other,
         id: user.id,
         name: userService.createName({ lastName, firstName }),
-        discord: user.discord ? getDiscordUserName(user.discord) : undefined,
+        discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : undefined,
       };
     }),
   );
