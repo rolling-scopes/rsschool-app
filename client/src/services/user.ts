@@ -54,7 +54,7 @@ export class UserService {
 
       return {
         username,
-        discriminator: discriminator !== '0' ? discriminator : null,
+        discriminator,
         id,
       };
     }

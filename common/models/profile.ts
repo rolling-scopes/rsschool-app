@@ -62,7 +62,7 @@ export interface Contacts {
 export interface Discord {
   id: string;
   username: string;
-  discriminator: string | null;
+  discriminator: string;
 }
 
 export interface Student {
