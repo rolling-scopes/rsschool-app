@@ -1,4 +1,3 @@
-import { Discord } from '@common/models';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
@@ -31,9 +30,5 @@ export class PersonDto {
 
   public static getName(person: { firstName?: string; lastName?: string }) {
     return [person?.firstName || '', person?.lastName || ''].join(' ').trim() || '(Empty)';
-  }
-
-  public static getDiscordUserName(discord: Discord) {
-    return discord.discriminator ? `${discord.username}#${discord.discriminator}` : discord.username;
   }
 }

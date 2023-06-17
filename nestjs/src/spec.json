@@ -3432,7 +3432,7 @@
         "properties": {
           "id": { "type": "string" },
           "username": { "type": "string" },
-          "discriminator": { "type": "string", "nullable": true }
+          "discriminator": { "type": "string" }
         },
         "required": ["id", "username", "discriminator"]
       },

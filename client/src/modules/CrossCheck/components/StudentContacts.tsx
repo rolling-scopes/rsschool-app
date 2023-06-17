@@ -7,14 +7,12 @@ type Props = {
 };
 
 export function StudentContacts({ discord }: Props) {
-  const discordUsername = discord?.discriminator
-    ? `${discord.username}#${discord.discriminator}`
-    : discord?.username ?? '';
+  const discordUsername = discord ? `@${discord.username}#${discord.discriminator}` : null;
 
   return (
     <Typography.Paragraph style={{ margin: 0 }}>
       Student Discord:{' '}
-      {discord ? (
+      {discordUsername ? (
         <>
           <Typography.Link target="_blank" href={`https://discordapp.com/users/${discord?.id}`}>
             {discordUsername}
