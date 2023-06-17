@@ -47,6 +47,7 @@ import { UserGroup1675245424426 } from './1675245424426-UserGroup';
 import { User1676139987317 } from './1676139987317-User';
 import { Course1675345245770 } from './1675345245770-Course';
 import { MentorRegistry1685197747051 } from './1685197747051-MentorRegistry';
+import { Prompt1687009744110 } from './1687009744110-Prompt';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -98,4 +99,5 @@ export const migrations = [
   User1676139987317,
   Course1675345245770,
   MentorRegistry1685197747051,
+  Prompt1687009744110,
 ];

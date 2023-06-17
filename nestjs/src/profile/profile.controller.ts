@@ -7,12 +7,18 @@ import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto }
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
+import { EndorsementService } from './endorsement.service';
+import { EndorsmentDto } from './dto/endorsment.dto';
 
 @Controller('profile')
 @ApiTags('profile')
 @UseGuards(DefaultGuard)
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService, private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly profileService: ProfileService,
+    private readonly endormentService: EndorsementService,
+    private readonly coursesService: CoursesService,
+  ) {}
 
   @Get(':username/courses')
   @ApiOperation({ operationId: 'getUserCourses' })
@@ -80,5 +86,15 @@ export class ProfileController {
     const user = await this.profileService.getPersonalProfile(githubId);
 
     return new PersonalProfileDto(user);
+  }
+
+  @Get(':username/endorsement')
+  @ApiOperation({ operationId: 'getEndorsement' })
+  @ApiResponse({ type: ProfileDto })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  public async getEndorsement(@Param('username') githubId: string) {
+    const endorsment = await this.endormentService.getEndorsement(githubId);
+    return new EndorsmentDto(endorsment);
   }
 }
