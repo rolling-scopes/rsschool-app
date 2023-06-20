@@ -51,13 +51,15 @@ export function CourseTaskSelect(props: Props) {
               <Select.OptGroup key={index} label={`${section.title} (${section.tasks.length})`}>
                 {section.tasks.map(task => (
                   <Select.Option key={task.id} value={task.id}>
-                    {section.title === Section.Active && groupBy === Group.Deadline && (
-                      <DeadlineIcon group={groupBy} endDate={task.studentEndDate} />
-                    )}
-                    {section.title === Section.Review && groupBy === Group.CrossCheckDeadline && (
-                      <DeadlineIcon group={groupBy} endDate={task.crossCheckEndDate} />
-                    )}{' '}
-                    {task.name}
+                    <span>
+                      {section.title === Section.Active && groupBy === Group.Deadline && (
+                        <DeadlineIcon group={groupBy} endDate={task.studentEndDate} />
+                      )}
+                      {section.title === Section.Review && groupBy === Group.CrossCheckDeadline && (
+                        <DeadlineIcon group={groupBy} endDate={task.crossCheckEndDate} />
+                      )}{' '}
+                      {task.name}
+                    </span>
                   </Select.Option>
                 ))}
               </Select.OptGroup>
