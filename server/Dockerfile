@@ -17,6 +17,6 @@ COPY package-lock.json /app
 RUN npm install --production --no-optional
 
 COPY server/public /app/server/public
-COPY server/dist /app/server/
+COPY server/dist /app/server/dist
 
-CMD [ "node", "/app/server/server/src/index.js" ]
+CMD [ "node", "/app/server/dist/server/src/index.js" ]

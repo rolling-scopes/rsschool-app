@@ -14,9 +14,6 @@ jobs:
   deploy_build_client:
     name: Build (Client)
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: ./client
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
@@ -86,7 +83,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
           AWS_DEFAULT_REGION: eu-central-1
-        run: aws s3 cp ./app/apps/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
+        run: aws s3 cp ./app/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Build container
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f client/Dockerfile ./app
