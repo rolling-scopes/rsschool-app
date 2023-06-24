@@ -6,15 +6,17 @@ ENV NODE_ENV production
 ENV NODE_PORT 8080
 ENV TZ utc
 
-WORKDIR /src
+WORKDIR /app
 
-COPY tsconfig.json /src
-COPY package.json /src
-COPY package-lock.json /src
+COPY server/tsconfig.json /app/server/
+COPY server/package.json /app/server/
+
+COPY package.json /app
+COPY package-lock.json /app
 
 RUN npm install --production --no-optional
 
-COPY public /src/public
-COPY dist /src
+COPY server/public /app/server/public
+COPY server/dist /app/server/
 
-CMD [ "node", "./server/src/index.js" ]
+CMD [ "node", "/app/server/server/src/index.js" ]
