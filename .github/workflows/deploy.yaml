@@ -166,34 +166,41 @@ jobs:
   deploy_build_nestjs:
     name: Build (Nest.js)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./nestjs
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Restore npm cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
+      # - name: Restore npm cache
+      #   uses: actions/cache@v2
+      #   env:
+      #     cache-name: cache-npm
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ env.cache-name }}-
+      #       ${{ runner.os }}-
+      - name: Install turbo
+        run: npm install turbo --global
+
+      - name: Generate a isolated subworkspace for Client
+        run: turbo prune --scope=server --scope=nestjs --docker
+
+      - name: Add lockfile and package.json's and source of isolated subworkspace
+        run: |
+          cp -r out/json/ app
+          cp -r out/package-lock.json app
+          cp -r out/full/ app
+          cp -r common app/common
 
       - name: Install dependencies
-        run: |
-          npm ci
-          cd ../server && npm ci
-          cd ../nestjs
+        run: npm ci
+        working-directory: ./app
 
       # - name: Test (npm test)
       #   run: npm test
@@ -201,10 +208,11 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-        run: npm run build
+        run: npx turbo run build --filter=nestjs
+        working-directory: ./app
 
       - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master .
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master -f nestjs/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
