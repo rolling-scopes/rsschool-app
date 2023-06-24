@@ -1,7 +1,10 @@
 const path = require('path');
+
+// we need to explicitly specify path
+// cause in Container Lambda the node process is executed from the /var/task directory based on the file specified in the CMD instruction
 const envPath = path.resolve(process.cwd(), './server/.env');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config({ path: envPath });
+
 const serverlessExpress = require('@vendia/serverless-express');
 const server = require('./server/src/app');
 
