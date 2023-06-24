@@ -89,7 +89,7 @@ jobs:
         run: aws s3 cp ./app/apps/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f apps/client/Dockerfile ./app
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f client/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
