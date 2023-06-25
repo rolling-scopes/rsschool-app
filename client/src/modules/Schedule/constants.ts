@@ -82,7 +82,7 @@ export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string>
   interview: '#1677ff',
   test: '#faad14',
   'cross-check-submit': '#13c2c2',
-  'cross-check-review': '#13c2c2',
+  'cross-check-review': '#36A836',
   'self-study': '#595959',
   lecture: '#eb2f96',
 };
