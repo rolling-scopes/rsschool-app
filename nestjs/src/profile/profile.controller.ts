@@ -1,11 +1,12 @@
 import { Body, Controller, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard } from 'src/auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
 import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
+import { PersonalProfileDto } from './dto/personal-profile.dto';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -68,5 +69,16 @@ export class ProfileController {
     const profile = await this.profileService.getProfile(githubId);
 
     return new ProfileDto(profile);
+  }
+
+  @Get(':username/personal')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  @ApiOperation({ operationId: 'getPersonalProfile' })
+  @ApiResponse({ type: PersonalProfileDto })
+  public async getPersonalProfile(@Param('username') githubId: string) {
+    const user = await this.profileService.getPersonalProfile(githubId);
+
+    return new PersonalProfileDto(user);
   }
 }
