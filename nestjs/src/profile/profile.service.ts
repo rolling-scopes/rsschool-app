@@ -205,6 +205,10 @@ export class ProfileService {
     return { resume: resume ?? null };
   }
 
+  public async getPersonalProfile(githubId: string) {
+    return this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
+  }
+
   private async updateEmailChannel(userId: number, user: UpdateResult) {
     const newEmail = user.raw[0]?.contactsEmail;
     const channelId = 'email';
