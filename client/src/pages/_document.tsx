@@ -11,7 +11,7 @@ export default class extends Document {
         <Head>
           <link rel="shortcut icon" href="https://rs.school/favicon.ico" />
 
-          {enableAnalytics && <Script async src="https://www.googletagmanager.com/gtag/js?id=UA-55428637-3" />}
+          {enableAnalytics && <Script async src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ" />}
           {enableAnalytics && <script dangerouslySetInnerHTML={{ __html: gaJsCode }} />}
           {enableAnalytics && (
             <script
@@ -35,5 +35,5 @@ const gaJsCode = `
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'UA-55428637-3');
+  gtag('config', 'G-WJLHZ9CCXJ');
 `;
