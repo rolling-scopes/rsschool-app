@@ -4,14 +4,16 @@ import CopyToClipboardButton from 'components/CopyToClipboardButton';
 
 type Props = {
   discord: Discord | null;
+  textPrefix?: string;
 };
 
-export function StudentContacts({ discord }: Props) {
-  const discordUsername = discord ? `@${discord.username}#${discord.discriminator}` : null;
+export function StudentDiscord({ discord, textPrefix }: Props) {
+  const discordDiscriminator = discord?.discriminator !== '0' ? `#${discord?.discriminator}` : '';
+  const discordUsername = discord ? `@${discord.username}${discordDiscriminator}` : null;
 
   return (
     <Typography.Paragraph style={{ margin: 0 }}>
-      Student Discord:{' '}
+      {textPrefix && `${textPrefix} `}
       {discordUsername ? (
         <>
           <Typography.Link target="_blank" href={`https://discordapp.com/users/${discord?.id}`}>

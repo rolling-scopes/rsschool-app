@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
-import { StudentContacts } from '../StudentContacts';
+import { StudentDiscord } from '../../../../components/StudentDiscord';
 import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
@@ -175,7 +175,11 @@ function SolutionReview(props: SolutionReviewProps) {
                   </Col>
                 </Row>
 
-                <Row>{settings.areContactsVisible && author && <StudentContacts discord={author.discord} />}</Row>
+                <Row>
+                  {settings.areContactsVisible && author && (
+                    <StudentDiscord discord={author.discord} textPrefix="Student Discord:" />
+                  )}
+                </Row>
               </>
             }
           >
