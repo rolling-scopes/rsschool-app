@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
 import { StudentBasic } from 'services/models';
-import { StudentContacts } from './StudentContacts';
+import { StudentDiscord } from '../../../components/StudentDiscord';
 
 export type AssignmentLink = { student: StudentBasic; url: string };
 
@@ -16,7 +16,7 @@ export function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignme
 
   return (
     <div style={{ marginTop: 16 }}>
-      <StudentContacts discord={discord} />
+      <StudentDiscord discord={discord} textPrefix="Student Discord:" />
       <Typography.Paragraph style={{ marginTop: 14 }}>
         Solution:{' '}
         <Typography.Link target="_blank" href={solutionUrl}>
