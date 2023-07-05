@@ -119,7 +119,8 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
     const isUpdatedStudentMenteeOfRequestor = mentorStudents.some(
       ({ githubId: studentGithubId }) => studentGithubId === githubId,
     );
-    if (!isUpdatedStudentMenteeOfRequestor) {
+    const isSelfAssignStudent = user.githubId === data.mentorGithuId;
+    if (!isUpdatedStudentMenteeOfRequestor && !isSelfAssignStudent) {
       setResponse(ctx, FORBIDDEN, null);
       return;
     }

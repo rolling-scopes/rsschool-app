@@ -294,11 +294,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getAllMentorStudents() {
-    const result = await this.axios.get<{ data: AllStudents }>(`/mentor/me/students/all`);
-    return result.data.data;
-  }
-
   async getInterviewStudents(courseTaskId: number) {
     const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
     return result.data.data;

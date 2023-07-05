@@ -81,13 +81,6 @@ const links: LinkData[] = [
     access: every(isMentor),
   },
   {
-    name: 'Submit Review',
-    icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
-    getUrl: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
-    access: every(some(isMentor, isTaskOwner, isCourseManager)),
-    courseAccess: everyCourse(isCourseNotCompleted),
-  },
-  {
     name: 'Submit Scores',
     icon: <CheckSquareTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,

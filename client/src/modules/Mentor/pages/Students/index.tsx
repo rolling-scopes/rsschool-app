@@ -34,7 +34,7 @@ export function Students(props: CourseOnlyPageProps) {
             <Card
               key={student.githubId}
               style={{ marginBottom: 32 }}
-              headStyle={{ border: 'none' }}
+              headStyle={{ border: 'none', paddingTop: 12 }}
               size="small"
               title={
                 <>
