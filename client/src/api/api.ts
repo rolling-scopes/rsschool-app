@@ -3504,6 +3504,37 @@ export interface PersonDto {
 /**
  * 
  * @export
+ * @interface PersonalProfileDto
+ */
+export interface PersonalProfileDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalProfileDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonalProfileDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonalProfileDto
+     */
+    'primaryEmail': string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PersonalProfileDto
+     */
+    'isActiveStudent': boolean;
+}
+/**
+ * 
+ * @export
  * @interface ProfileCourseDto
  */
 export interface ProfileCourseDto {
@@ -4877,10 +4908,10 @@ export interface TeamDistributionStudentDto {
     'cvLink': string;
     /**
      * 
-     * @type {string}
+     * @type {Discord}
      * @memberof TeamDistributionStudentDto
      */
-    'discord': string;
+    'discord': Discord | null;
     /**
      * 
      * @type {string}
@@ -12128,6 +12159,39 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getPersonalProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('getPersonalProfile', 'username', username)
+            const localVarPath = `/profile/{username}/personal`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('getProfile', 'username', username)
@@ -12309,6 +12373,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getPersonalProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonalProfileDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalProfile(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(username, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -12369,6 +12443,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getPersonalProfile(username: string, options?: any): AxiosPromise<PersonalProfileDto> {
+            return localVarFp.getPersonalProfile(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getProfile(username: string, options?: any): AxiosPromise<ProfileDto> {
             return localVarFp.getProfile(username, options).then((request) => request(axios, basePath));
         },
@@ -12418,6 +12501,17 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class ProfileApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getPersonalProfile(username: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getPersonalProfile(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} username 
