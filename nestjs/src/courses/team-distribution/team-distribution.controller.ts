@@ -47,6 +47,7 @@ export class TeamDistributionController {
     const data = await this.teamDistributionService.findByCourseId(courseId);
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
+
     if (studentId) {
       student = await this.teamDistributionStudentService.getStudentWithRelations(studentId, {
         user: true,
@@ -56,6 +57,7 @@ export class TeamDistributionController {
         },
       });
     }
+
     const teamDistributionsWithStatus = data.map(td =>
       this.teamDistributionService.addStatusToDistribution(td, student),
     );
@@ -100,7 +102,9 @@ export class TeamDistributionController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     const teamDistribution = await this.teamDistributionService.getById(id);
+
     const studentId = req.user.courses[courseId]?.studentId;
+
     if (studentId) {
       await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution, courseId);
     }

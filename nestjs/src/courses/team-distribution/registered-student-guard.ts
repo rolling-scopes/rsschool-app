@@ -15,6 +15,7 @@ export class RegisteredStudentOrPowerUserGuard implements CanActivate {
       request.user.isAdmin ||
       request.user.courses[courseId]?.roles.includes(CourseRole.Manager) ||
       request.user.courses[courseId]?.roles.includes(CourseRole.Dementor);
+
     if (isPowerUser) {
       return true;
     }
