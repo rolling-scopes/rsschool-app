@@ -15,7 +15,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent } from 'domain/user';
+import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
 import { getAutoTestRoute } from 'services/routes';
 
 const anyAccess = () => true;
@@ -133,7 +133,7 @@ const links: LinkData[] = [
     name: 'Team Distributions',
     icon: <UsergroupAddOutlined twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/team-distributions?course=${course.alias}`,
-    access: some(isCourseManager, isActiveStudent),
+    access: some(isCourseManager, isActiveStudent, isDementor),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
 ];
