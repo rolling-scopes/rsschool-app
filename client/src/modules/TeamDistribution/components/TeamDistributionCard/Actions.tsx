@@ -13,6 +13,7 @@ type Props = {
   register: (distributionId: number) => Promise<void>;
   deleteRegister: (distributionId: number) => Promise<void>;
   isManager: boolean;
+  isCourseDementor: boolean;
   courseAlias: string;
 };
 
@@ -25,7 +26,7 @@ const getDateColor = (date: string): TextProps['type'] => {
   if (isDeadlineSoon) return 'danger';
 };
 
-export function Actions({ distribution, register, deleteRegister, isManager, courseAlias }: Props) {
+export function Actions({ distribution, register, deleteRegister, isManager, isCourseDementor, courseAlias }: Props) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const endDateText = dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate);
 
@@ -104,10 +105,13 @@ export function Actions({ distribution, register, deleteRegister, isManager, cou
     }
   };
 
-  return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable || isManager ? (
+  return distribution.registrationStatus !== TeamDistributionDtoRegistrationStatusEnum.Unavailable ||
+    isManager ||
+    isCourseDementor ? (
     <Row style={{ marginTop: 16 }}>
       <Space size={24} wrap>
         {(isManager ||
+          isCourseDementor ||
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Completed ||
           distribution.registrationStatus === TeamDistributionDtoRegistrationStatusEnum.Distributed) && (
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
