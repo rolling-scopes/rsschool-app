@@ -4,6 +4,7 @@ import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib';
+import { StudentDiscord } from 'components/StudentDiscord';
 const { Text, Link } = Typography;
 
 function renderName({ fullName, cvUuid, id }: TeamDistributionStudentDto, teamLeadId?: number) {
@@ -51,7 +52,7 @@ function renderEmail(_v: string, { email }: TeamDistributionStudentDto) {
 }
 
 function renderDiscord(_v: string, { discord }: TeamDistributionStudentDto) {
-  return <Text>{discord}</Text>;
+  return <StudentDiscord discord={discord} />;
 }
 
 function renderStudent(_v: string, student: TeamDistributionStudentDto) {

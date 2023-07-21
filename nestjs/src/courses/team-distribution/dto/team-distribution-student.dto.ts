@@ -3,15 +3,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PersonDto } from 'src/core/dto';
 import { PaginationMeta } from 'src/core/paginate';
 import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
+import { Discord } from 'src/profile/dto';
 
 export class TeamDistributionStudentDto {
   constructor(student: Student) {
     this.id = student.id;
     this.fullName = PersonDto.getName({ firstName: student.user.firstName, lastName: student.user.lastName });
     this.cvLink = student.user.cvLink ?? undefined;
-    this.discord = student.user.discord
-      ? `${student.user.discord.username}#${student.user.discord.discriminator}`
-      : undefined;
+    this.discord = student.user.discord;
     this.telegram = student.user.contactsTelegram ?? undefined;
     this.email = student.user.contactsEmail ?? undefined;
     this.githubId = student.user.githubId;
@@ -32,8 +31,8 @@ export class TeamDistributionStudentDto {
   @ApiProperty()
   public cvLink?: string;
 
-  @ApiProperty()
-  public discord?: string;
+  @ApiProperty({ nullable: true, type: Discord })
+  discord: Discord | null;
 
   @ApiProperty()
   public telegram?: string;

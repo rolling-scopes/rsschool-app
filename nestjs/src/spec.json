@@ -1483,6 +1483,20 @@
         "tags": ["profile"]
       }
     },
+    "/profile/{username}/personal": {
+      "get": {
+        "operationId": "getPersonalProfile",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PersonalProfileDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
     "/disciplines": {
       "post": {
         "operationId": "createDiscipline",
@@ -2992,13 +3006,22 @@
           "minTotalScore"
         ]
       },
+      "Discord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "discriminator": { "type": "string" }
+        },
+        "required": ["id", "username", "discriminator"]
+      },
       "TeamDistributionStudentDto": {
         "type": "object",
         "properties": {
           "id": { "type": "number" },
           "fullName": { "type": "string" },
           "cvLink": { "type": "string" },
-          "discord": { "type": "string" },
+          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
           "telegram": { "type": "string" },
           "email": { "type": "string" },
           "githubId": { "type": "string" },
@@ -3459,15 +3482,6 @@
         },
         "required": ["name", "githubId", "location"]
       },
-      "Discord": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "username": { "type": "string" },
-          "discriminator": { "type": "string" }
-        },
-        "required": ["id", "username", "discriminator"]
-      },
       "ProfileInfoDto": {
         "type": "object",
         "properties": {
@@ -3516,6 +3530,16 @@
         "type": "object",
         "properties": { "publicCvUrl": { "type": "string", "nullable": true } },
         "required": ["publicCvUrl"]
+      },
+      "PersonalProfileDto": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "number" },
+          "githubId": { "type": "string" },
+          "primaryEmail": { "type": "string", "nullable": true },
+          "isActiveStudent": { "type": "boolean" }
+        },
+        "required": ["userId", "githubId", "primaryEmail", "isActiveStudent"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {

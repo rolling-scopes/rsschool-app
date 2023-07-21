@@ -196,7 +196,7 @@ export class ContactsDto implements Contacts {
   linkedIn: string | null;
 }
 
-class Discord {
+export class Discord {
   @ApiProperty()
   @IsNotEmpty()
   id: string;

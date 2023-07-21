@@ -32,7 +32,7 @@ export class TeamController {
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamsDto })
   @ApiOperation({ operationId: 'getTeams' })
-  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager, CourseRole.Dementor], true)
   public async getTeams(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) distributionId: number,

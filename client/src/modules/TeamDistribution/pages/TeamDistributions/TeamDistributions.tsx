@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager, isDementor } from 'domain/user';
 import { CoursePageProps } from 'services/models';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
@@ -21,6 +21,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   } = useModalForm<TeamDistributionDto>();
 
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
+  const isCourseDementor = useMemo(() => isDementor(session, course.id), [session, course.id]);
 
   const loadData = async () => {
     try {
@@ -102,6 +103,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
                 distribution={distribution}
                 courseAlias={course.alias}
                 isManager={isManager}
+                isCourseDementor={isCourseDementor}
                 onDelete={handleDeleteTeamDistribution}
                 onEdit={handleEditTeamDistribution}
                 key={distribution.id}

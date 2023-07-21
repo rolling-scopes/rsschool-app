@@ -7,6 +7,7 @@ import { CardTitle } from './CardTitle';
 type Props = {
   distribution: TeamDistributionDto;
   isManager: boolean;
+  isCourseDementor: boolean;
   onDelete: (id: number) => Promise<void>;
   onEdit: (distribution: TeamDistributionDto) => void;
   register: (distributionId: number) => Promise<void>;
@@ -17,6 +18,7 @@ type Props = {
 export default function TeamDistributionCard({
   distribution,
   isManager,
+  isCourseDementor,
   onDelete,
   onEdit,
   register,
@@ -45,6 +47,7 @@ export default function TeamDistributionCard({
       )}
       <Actions
         isManager={isManager}
+        isCourseDementor={isCourseDementor}
         distribution={distribution}
         register={register}
         deleteRegister={deleteRegister}

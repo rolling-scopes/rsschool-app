@@ -3,7 +3,7 @@ import { CourseRole, CurrentRequest } from 'src/auth';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 
 @Injectable()
-export class RegisteredStudentOrManagerGuard implements CanActivate {
+export class RegisteredStudentOrPowerUserGuard implements CanActivate {
   constructor(private teamDistributionStudentService: TeamDistributionStudentService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -11,8 +11,12 @@ export class RegisteredStudentOrManagerGuard implements CanActivate {
     const courseId = Number(request.params.courseId);
     const studentId = request.user.courses[courseId]?.studentId;
     const distributionId = Number(request.params.id);
-    const isManager = request.user.isAdmin || request.user.courses[courseId]?.roles.includes(CourseRole.Manager);
-    if (isManager) {
+    const isPowerUser =
+      request.user.isAdmin ||
+      request.user.courses[courseId]?.roles.includes(CourseRole.Manager) ||
+      request.user.courses[courseId]?.roles.includes(CourseRole.Dementor);
+
+    if (isPowerUser) {
       return true;
     }
 

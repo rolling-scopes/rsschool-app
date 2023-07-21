@@ -12,7 +12,7 @@ import {
   TeamDto,
 } from './dto';
 import { TeamService } from './team.service';
-import { RegisteredStudentOrManagerGuard } from './registered-student-guard';
+import { RegisteredStudentOrPowerUserGuard } from './registered-student-guard';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { Student } from '@entities/index';
 import { DistributeStudentsService } from './distribute-students.service';
@@ -47,6 +47,7 @@ export class TeamDistributionController {
     const data = await this.teamDistributionService.findByCourseId(courseId);
     const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
+
     if (studentId) {
       student = await this.teamDistributionStudentService.getStudentWithRelations(studentId, {
         user: true,
@@ -56,6 +57,7 @@ export class TeamDistributionController {
         },
       });
     }
+
     const teamDistributionsWithStatus = data.map(td =>
       this.teamDistributionService.addStatusToDistribution(td, student),
     );
@@ -100,7 +102,9 @@ export class TeamDistributionController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     const teamDistribution = await this.teamDistributionService.getById(id);
+
     const studentId = req.user.courses[courseId]?.studentId;
+
     if (studentId) {
       await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution, courseId);
     }
@@ -137,10 +141,10 @@ export class TeamDistributionController {
   }
 
   @Get('/:id/detailed')
-  @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
+  @UseGuards(RoleGuard, RegisteredStudentOrPowerUserGuard)
   @ApiOkResponse({ type: TeamDistributionDetailedDto })
   @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
-  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin], true)
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async getCourseTeamDistributionDetailed(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -165,10 +169,10 @@ export class TeamDistributionController {
   }
 
   @Get('/:id/students')
-  @UseGuards(RoleGuard, RegisteredStudentOrManagerGuard)
+  @UseGuards(RoleGuard, RegisteredStudentOrPowerUserGuard)
   @ApiOkResponse({ type: [TeamDistributionStudentDto] })
   @ApiOperation({ operationId: 'getStudentsWithoutTeam' })
-  @RequiredRoles([CourseRole.Student, CourseRole.Manager, Role.Admin], true)
+  @RequiredRoles([CourseRole.Student, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async getStudentsWithoutTeam(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
