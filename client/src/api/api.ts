@@ -13056,13 +13056,10 @@ export const PromptsApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {boolean} enabled 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPrompts: async (enabled: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'enabled' is not null or undefined
-            assertParamExists('getPrompts', 'enabled', enabled)
+        getPrompts: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/prompts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13074,10 +13071,6 @@ export const PromptsApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            if (enabled !== undefined) {
-                localVarQueryParameter['enabled'] = enabled;
-            }
 
 
     
@@ -13161,12 +13154,11 @@ export const PromptsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {boolean} enabled 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPrompts(enabled: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PromptDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrompts(enabled, options);
+        async getPrompts(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PromptDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrompts(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13210,12 +13202,11 @@ export const PromptsApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {boolean} enabled 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPrompts(enabled: boolean, options?: any): AxiosPromise<Array<PromptDto>> {
-            return localVarFp.getPrompts(enabled, options).then((request) => request(axios, basePath));
+        getPrompts(options?: any): AxiosPromise<Array<PromptDto>> {
+            return localVarFp.getPrompts(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13261,13 +13252,12 @@ export class PromptsApi extends BaseAPI {
 
     /**
      * 
-     * @param {boolean} enabled 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PromptsApi
      */
-    public getPrompts(enabled: boolean, options?: AxiosRequestConfig) {
-        return PromptsApiFp(this.configuration).getPrompts(enabled, options).then((request) => request(this.axios, this.basePath));
+    public getPrompts(options?: AxiosRequestConfig) {
+        return PromptsApiFp(this.configuration).getPrompts(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

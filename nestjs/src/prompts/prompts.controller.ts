@@ -1,21 +1,8 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Delete,
-  Get,
-  Param,
-  ParseBoolPipe,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
+import { CreatePromptDto, PromptDto, UpdatePromptDto } from './dto';
 import { PromptsService } from './prompts.service';
-import { PromptDto, CreatePromptDto, UpdatePromptDto } from './dto';
 
 @Controller('prompts')
 @ApiTags('prompts')
@@ -36,9 +23,7 @@ export class PromptsController {
   @UseGuards(DefaultGuard)
   @ApiOperation({ operationId: 'getPrompts' })
   @ApiOkResponse({ type: [PromptDto] })
-  public async getAll(
-    @Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean,
-  ): Promise<PromptDto[]> {
+  public async getAll(): Promise<PromptDto[]> {
     const data = await this.promptsService.findAll();
     return data.map(item => new PromptDto(item));
   }

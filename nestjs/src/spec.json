@@ -2174,7 +2174,7 @@
       "get": {
         "operationId": "getPrompts",
         "summary": "",
-        "parameters": [{ "name": "enabled", "required": true, "in": "query", "schema": { "type": "boolean" } }],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
