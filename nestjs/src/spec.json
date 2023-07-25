@@ -1532,6 +1532,20 @@
         "tags": ["profile"]
       }
     },
+    "/profile/{username}/endorsement": {
+      "get": {
+        "operationId": "getEndorsement",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
     "/disciplines": {
       "post": {
         "operationId": "createDiscipline",
@@ -2138,6 +2152,65 @@
           }
         },
         "tags": ["tasks-criteria"]
+      }
+    },
+    "/prompts": {
+      "post": {
+        "operationId": "createPrompt",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreatePromptDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
+          }
+        },
+        "tags": ["prompts"]
+      },
+      "get": {
+        "operationId": "getPrompts",
+        "summary": "",
+        "parameters": [{ "name": "enabled", "required": true, "in": "query", "schema": { "type": "boolean" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PromptDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["prompts"]
+      }
+    },
+    "/prompts/{id}": {
+      "delete": {
+        "operationId": "deletePrompt",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["prompts"]
+      },
+      "patch": {
+        "operationId": "updatePrompt",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdatePromptDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
+          }
+        },
+        "tags": ["prompts"]
       }
     }
   },
@@ -4257,7 +4330,18 @@
         "type": "object",
         "properties": { "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CriteriaDto" } } },
         "required": ["criteria"]
-      }
+      },
+      "CreatePromptDto": {
+        "type": "object",
+        "properties": { "type": { "type": "string" }, "text": { "type": "string" } },
+        "required": ["type", "text"]
+      },
+      "PromptDto": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "type": { "type": "string" }, "text": { "type": "string" } },
+        "required": ["id", "type", "text"]
+      },
+      "UpdatePromptDto": { "type": "object", "properties": {} }
     }
   }
 }

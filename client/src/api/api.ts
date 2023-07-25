@@ -1759,6 +1759,25 @@ export interface CreateGratitudeDto {
 /**
  * 
  * @export
+ * @interface CreatePromptDto
+ */
+export interface CreatePromptDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePromptDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePromptDto
+     */
+    'text': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -3901,6 +3920,31 @@ export interface ProfileInfoDto {
      * @memberof ProfileInfoDto
      */
     'isProfileSettingsChanged': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PromptDto
+ */
+export interface PromptDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PromptDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PromptDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PromptDto
+     */
+    'text': string;
 }
 /**
  * 
@@ -12463,6 +12507,39 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getEndorsement: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('getEndorsement', 'username', username)
+            const localVarPath = `/profile/{username}/endorsement`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPersonalProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('getPersonalProfile', 'username', username)
@@ -12677,6 +12754,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getEndorsement(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEndorsement(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getPersonalProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonalProfileDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalProfile(username, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -12741,6 +12828,15 @@ export const ProfileApiFp = function(configuration?: Configuration) {
 export const ProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ProfileApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEndorsement(username: string, options?: any): AxiosPromise<ProfileDto> {
+            return localVarFp.getEndorsement(username, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {string} username 
@@ -12812,6 +12908,17 @@ export class ProfileApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
+    public getEndorsement(username: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getEndorsement(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
     public getPersonalProfile(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getPersonalProfile(username, options).then((request) => request(this.axios, this.basePath));
     }
@@ -12869,6 +12976,310 @@ export class ProfileApi extends BaseAPI {
      */
     public updateUser(updateUserDto: UpdateUserDto, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).updateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * PromptsApi - axios parameter creator
+ * @export
+ */
+export const PromptsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreatePromptDto} createPromptDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPrompt: async (createPromptDto: CreatePromptDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPromptDto' is not null or undefined
+            assertParamExists('createPrompt', 'createPromptDto', createPromptDto)
+            const localVarPath = `/prompts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createPromptDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrompt: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deletePrompt', 'id', id)
+            const localVarPath = `/prompts/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {boolean} enabled 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPrompts: async (enabled: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'enabled' is not null or undefined
+            assertParamExists('getPrompts', 'enabled', enabled)
+            const localVarPath = `/prompts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (enabled !== undefined) {
+                localVarQueryParameter['enabled'] = enabled;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePrompt: async (id: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updatePrompt', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('updatePrompt', 'body', body)
+            const localVarPath = `/prompts/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PromptsApi - functional programming interface
+ * @export
+ */
+export const PromptsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PromptsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreatePromptDto} createPromptDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createPrompt(createPromptDto: CreatePromptDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PromptDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPrompt(createPromptDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePrompt(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePrompt(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {boolean} enabled 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPrompts(enabled: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PromptDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrompts(enabled, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePrompt(id: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PromptDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePrompt(id, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PromptsApi - factory interface
+ * @export
+ */
+export const PromptsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PromptsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreatePromptDto} createPromptDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPrompt(createPromptDto: CreatePromptDto, options?: any): AxiosPromise<PromptDto> {
+            return localVarFp.createPrompt(createPromptDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrompt(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePrompt(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {boolean} enabled 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPrompts(enabled: boolean, options?: any): AxiosPromise<Array<PromptDto>> {
+            return localVarFp.getPrompts(enabled, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePrompt(id: number, body: object, options?: any): AxiosPromise<PromptDto> {
+            return localVarFp.updatePrompt(id, body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PromptsApi - object-oriented interface
+ * @export
+ * @class PromptsApi
+ * @extends {BaseAPI}
+ */
+export class PromptsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreatePromptDto} createPromptDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PromptsApi
+     */
+    public createPrompt(createPromptDto: CreatePromptDto, options?: AxiosRequestConfig) {
+        return PromptsApiFp(this.configuration).createPrompt(createPromptDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PromptsApi
+     */
+    public deletePrompt(id: number, options?: AxiosRequestConfig) {
+        return PromptsApiFp(this.configuration).deletePrompt(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {boolean} enabled 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PromptsApi
+     */
+    public getPrompts(enabled: boolean, options?: AxiosRequestConfig) {
+        return PromptsApiFp(this.configuration).getPrompts(enabled, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PromptsApi
+     */
+    public updatePrompt(id: number, body: object, options?: AxiosRequestConfig) {
+        return PromptsApiFp(this.configuration).updatePrompt(id, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
