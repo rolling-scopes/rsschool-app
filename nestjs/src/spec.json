@@ -383,6 +383,34 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/tasks/solutions": {
+      "get": {
+        "operationId": "getCourseTasksWithStudentSolution",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["started", "inprogress", "finished"], "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/tasks/detailed": {
       "get": {
         "operationId": "getCourseTasksDetailed",
@@ -2401,6 +2429,7 @@
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
           "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
@@ -2419,6 +2448,7 @@
           "crossCheckEndDate",
           "descriptionUrl",
           "taskOwner",
+          "taskSolutions",
           "maxScore",
           "scoreWeight",
           "pairsCount",
@@ -2457,6 +2487,7 @@
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
           "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
@@ -2479,6 +2510,7 @@
           "crossCheckEndDate",
           "descriptionUrl",
           "taskOwner",
+          "taskSolutions",
           "maxScore",
           "scoreWeight",
           "pairsCount",

@@ -9,7 +9,7 @@ import {
 } from 'api';
 
 type Action = {
-  type: 'loading' | 'open' | 'close' | 'error' | 'submit';
+  type: 'loading' | 'open' | 'close' | 'error' | 'submit' | 'set-solution-url';
   state?: State;
 };
 
@@ -17,6 +17,7 @@ export type State = {
   errorText?: string;
   submitted?: boolean;
   data?: { courseTasks: CourseTaskDto[] };
+  selectedSolutionUrl?: string;
   loading?: boolean;
 } | null;
 
@@ -28,6 +29,8 @@ function reducer(state: State, action: Action): State {
       return { loading: false, data: action.state?.data };
     case 'submit':
       return { submitted: true, data: state?.data };
+    case 'set-solution-url':
+      return { selectedSolutionUrl: action.state?.selectedSolutionUrl, data: state?.data };
     case 'close':
       return null;
     case 'error':
@@ -44,7 +47,7 @@ export function useSubmitTaskSolution(courseId: number) {
     try {
       dispatch({ type: 'loading' });
       const coursesTasksApi = new CoursesTasksApi();
-      const { data } = await coursesTasksApi.getCourseTasks(courseId);
+      const { data } = await coursesTasksApi.getCourseTasksWithStudentSolution(courseId);
       const courseTasks = data.filter(
         item =>
           item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
@@ -70,11 +73,22 @@ export function useSubmitTaskSolution(courseId: number) {
     }
   };
 
+  const setSolutionUrl = (courseTaskId: number) => {
+    const courseTask = state?.data?.courseTasks.find(courseTask => courseTask.id === courseTaskId);
+    let url = '';
+    if (courseTask?.taskSolutions) {
+      const [taskSolution] = Object.values(courseTask?.taskSolutions);
+      url = taskSolution.url;
+    }
+    dispatch({ type: 'set-solution-url', state: { selectedSolutionUrl: url ?? '' } });
+  };
+
   const closeModal = () => dispatch({ type: 'close' });
 
   return {
     state,
     saveSolution,
+    setSolutionUrl,
     showModal,
     closeModal,
   };
