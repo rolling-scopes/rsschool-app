@@ -6,11 +6,11 @@ import { PromptsService } from './prompts.service';
 
 @Controller('prompts')
 @ApiTags('prompts')
+@UseGuards(DefaultGuard, RoleGuard)
 export class PromptsController {
   constructor(private readonly promptsService: PromptsService) {}
 
   @Post('/')
-  @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'createPrompt' })
   @ApiOkResponse({ type: PromptDto })
@@ -20,7 +20,7 @@ export class PromptsController {
   }
 
   @Get('/')
-  @UseGuards(DefaultGuard)
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'getPrompts' })
   @ApiOkResponse({ type: [PromptDto] })
   public async getAll(): Promise<PromptDto[]> {
@@ -29,7 +29,6 @@ export class PromptsController {
   }
 
   @Delete('/:id')
-  @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'deletePrompt' })
   @ApiOkResponse({})
@@ -38,7 +37,6 @@ export class PromptsController {
   }
 
   @Patch('/:id')
-  @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'updatePrompt' })
   @ApiOkResponse({ type: PromptDto })

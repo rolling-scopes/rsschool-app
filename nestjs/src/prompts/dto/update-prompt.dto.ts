@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePromptDto } from './create-prompt.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 
-export class UpdatePromptDto extends PartialType(CreatePromptDto) {}
+export class UpdatePromptDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty()
+  type?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty()
+  text?: string;
+}
