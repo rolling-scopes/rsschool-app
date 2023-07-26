@@ -18,6 +18,7 @@ import { TeamDto, TeamPasswordDto, TeamsDto, CreateTeamDto, TeamInfoDto, UpdateT
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
+import { StudentId } from './student-id.decorator';
 
 @Controller('courses/:courseId/team-distribution/:distributionId/team')
 @ApiTags('team')
@@ -53,12 +54,12 @@ export class TeamController {
   @ApiOperation({ operationId: 'createTeam' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async create(
+    @StudentId() studentId: number,
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('distributionId', ParseIntPipe) distributionId: number,
     @Body() dto: CreateTeamDto,
   ) {
-    const studentId = req.user.courses[courseId]?.studentId;
     let students: Student[] = [];
     const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
     if (studentId && !isManager) {
@@ -122,22 +123,26 @@ export class TeamController {
   }
 
   @Get('/:id/password')
-  @UseGuards(RoleGuard)
+  @UseGuards(RoleGuard, TeamLeadOrCourseManagerGuard)
   @ApiOkResponse({ type: TeamPasswordDto })
   @ApiOperation({ operationId: 'getTeamPassword' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
-  public async getTeamPassword(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('distributionId', ParseIntPipe) _: number,
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  public async getTeamPassword(@Param('id', ParseIntPipe) id: number) {
     const team = await this.teamService.findById(id);
-    const studentId = req.user.courses[courseId]?.studentId;
-    const isManager = req.user.isAdmin || req.user.courses[courseId]?.roles.includes(CourseRole.Manager);
 
-    if (studentId !== team.teamLeadId && !isManager) throw new BadRequestException();
     return new TeamPasswordDto(team);
+  }
+
+  @Post('/:id/password')
+  @UseGuards(RoleGuard, TeamLeadOrCourseManagerGuard)
+  @ApiOkResponse({ type: TeamPasswordDto })
+  @ApiOperation({ operationId: 'changeTeamPassword' })
+  @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
+  public async changeTeamPassword(@Param('id', ParseIntPipe) id: number) {
+    const password = await this.teamService.generatePassword();
+    await this.teamService.updatePassword(id, password);
+
+    return new TeamPasswordDto({ id, password });
   }
 
   @Post('/:id/join')
@@ -146,13 +151,11 @@ export class TeamController {
   @ApiOperation({ operationId: 'joinTeam' })
   @RequiredRoles([CourseRole.Student])
   public async joinTeam(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
+    @StudentId() studentId: number,
     @Param('distributionId', ParseIntPipe) teamDistributionId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: JoinTeamDto,
   ) {
-    const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) throw new BadRequestException();
     const team = await this.teamService.findById(id);
     if (dto.password !== team.password) throw new BadRequestException('Invalid password');
@@ -177,12 +180,10 @@ export class TeamController {
   @ApiOperation({ operationId: 'leaveTeam' })
   @RequiredRoles([CourseRole.Student])
   public async leaveTeam(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
+    @StudentId() studentId: number,
     @Param('distributionId', ParseIntPipe) teamDistributionId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const studentId = req.user.courses[courseId]?.studentId;
     if (!studentId) throw new BadRequestException();
     await this.teamService.deleteStudentFromTeam(id, studentId, teamDistributionId);
     const studentsCount = await this.teamService.getStudentsCountInTeam(id);

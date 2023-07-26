@@ -869,10 +869,7 @@
       "delete": {
         "operationId": "teamDistributionDeleteRegistry",
         "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
             "description": "",
@@ -904,10 +901,7 @@
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",
         "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
             "description": "",
@@ -1014,11 +1008,19 @@
       "get": {
         "operationId": "getTeamPassword",
         "summary": "",
-        "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
-        ],
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamPasswordDto" } } }
+          }
+        },
+        "tags": ["team"]
+      },
+      "post": {
+        "operationId": "changeTeamPassword",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
             "description": "",
@@ -1033,7 +1035,6 @@
         "operationId": "joinTeam",
         "summary": "",
         "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
@@ -1055,7 +1056,6 @@
         "operationId": "leaveTeam",
         "summary": "",
         "parameters": [
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],

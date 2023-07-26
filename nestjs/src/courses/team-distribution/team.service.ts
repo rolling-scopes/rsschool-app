@@ -142,6 +142,10 @@ export class TeamService {
     return this.repository.update(id, data);
   }
 
+  public async updatePassword(id: number, password: string) {
+    return this.repository.update(id, { password: password });
+  }
+
   public async findAllByDistributionId(distributionId: number) {
     const teams = await this.repository
       .createQueryBuilder('team')

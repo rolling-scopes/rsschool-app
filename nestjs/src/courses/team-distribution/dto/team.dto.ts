@@ -5,7 +5,7 @@ import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 import { TeamDistributionStudentDto } from './team-distribution-student.dto';
 
 export class TeamPasswordDto {
-  constructor(team: Team) {
+  constructor(team: { id: number; password: string }) {
     this.password = `${team.id}_${team.password}`;
   }
 

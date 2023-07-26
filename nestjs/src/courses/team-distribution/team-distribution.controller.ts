@@ -16,6 +16,7 @@ import { RegisteredStudentOrPowerUserGuard } from './registered-student-guard';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { Student } from '@entities/index';
 import { DistributeStudentsService } from './distribute-students.service';
+import { StudentId } from './student-id.decorator';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
@@ -41,11 +42,10 @@ export class TeamDistributionController {
   @ApiOkResponse({ type: [TeamDistributionDto] })
   @ApiOperation({ operationId: 'getCourseTeamDistributions' })
   public async getCourseTeamDistributions(
-    @Req() req: CurrentRequest,
+    @StudentId() studentId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
   ) {
     const data = await this.teamDistributionService.findByCourseId(courseId);
-    const studentId = req.user.courses[courseId]?.studentId;
     let student: Student | null = null;
 
     if (studentId) {
@@ -97,13 +97,11 @@ export class TeamDistributionController {
   @ApiOperation({ operationId: 'teamDistributionRegistry' })
   @RequiredRoles([CourseRole.Student])
   public async registry(
-    @Req() req: CurrentRequest,
+    @StudentId() studentId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
     const teamDistribution = await this.teamDistributionService.getById(id);
-
-    const studentId = req.user.courses[courseId]?.studentId;
 
     if (studentId) {
       await this.teamDistributionStudentService.addStudentToTeamDistribution(studentId, teamDistribution, courseId);
@@ -129,12 +127,7 @@ export class TeamDistributionController {
   @ApiOkResponse({ type: TeamDistributionDto })
   @ApiOperation({ operationId: 'teamDistributionDeleteRegistry' })
   @RequiredRoles([CourseRole.Student])
-  public async deleteRegistry(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('id', ParseIntPipe) id: number,
-  ) {
-    const studentId = req.user.courses[courseId]?.studentId;
+  public async deleteRegistry(@StudentId() studentId: number, @Param('id', ParseIntPipe) id: number) {
     if (studentId) {
       await this.teamDistributionStudentService.deleteStudentFromTeamDistribution(studentId, id);
     }
@@ -146,11 +139,9 @@ export class TeamDistributionController {
   @ApiOperation({ operationId: 'getCourseTeamDistributionDetailed' })
   @RequiredRoles([CourseRole.Student, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async getCourseTeamDistributionDetailed(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
+    @StudentId() studentId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const studentId = req.user.courses[courseId]?.studentId;
     let team;
 
     if (studentId) {
