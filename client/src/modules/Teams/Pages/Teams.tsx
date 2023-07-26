@@ -83,7 +83,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
-    const changePassword = async (teamId: number): Promise<void> => {
+  const changePassword = async (teamId: number): Promise<void> => {
     const teamApi = new TeamApi();
     try {
       const { data } = await teamApi.changeTeamPassword(course.id, distribution.id, teamId);
