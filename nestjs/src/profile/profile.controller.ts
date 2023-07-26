@@ -8,7 +8,7 @@ import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
-import { EndorsmentDto } from './dto/endorsment.dto';
+import { EndorsementDto } from './dto/endorsement.dto';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -94,7 +94,7 @@ export class ProfileController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   public async getEndorsement(@Param('username') githubId: string) {
-    const endorsment = await this.endormentService.getEndorsement(githubId);
-    return new EndorsmentDto(endorsment);
+    const endorsement = await this.endormentService.getEndorsement(githubId);
+    return new EndorsementDto(endorsement);
   }
 }
