@@ -35,17 +35,22 @@ export class EndorsementService {
   }
 
   public async getEndorsement(githubId: string): Promise<{ content: string } | null> {
-    const prompt = await this.getEndorsementPrompt(githubId);
-    if (!prompt) {
+    try {
+      const prompt = await this.getEndorsementPrompt(githubId);
+      if (!prompt) {
+        return null;
+      }
+      const result = await this.openAI.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.9,
+      });
+      const content = result.data.choices[0]?.message?.content ?? '';
+      return { content };
+    } catch (error) {
+      console.log((error as Error).message, error);
       return null;
     }
-    const result = await this.openAI.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.9,
-    });
-    const content = result.data.choices[0]?.message?.content ?? '';
-    return { content };
   }
 
   async getEndorsementPrompt(githubId: string) {
