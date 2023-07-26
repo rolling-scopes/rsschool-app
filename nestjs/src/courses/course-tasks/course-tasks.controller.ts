@@ -1,5 +1,18 @@
 import { CourseTask } from '@entities/courseTask';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -34,6 +47,27 @@ export class CourseTasksController {
   ): Promise<CourseTaskDto[]> {
     const isStudent = !!req.user.courses[courseId]?.studentId;
     const data = await this.courseTasksService.getAll(courseId, status, isStudent);
+    return data.map(item => new CourseTaskDto(item));
+  }
+
+  @Get('/solutions')
+  @ApiOkResponse({ type: [CourseTaskDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getCourseTasksWithStudentSolution' })
+  @ApiQuery({ name: 'status', enum: ['started', 'inprogress', 'finished'], required: false })
+  @UseGuards(CourseGuard)
+  public async getAllWithStudentSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query('status') status?: Status,
+  ): Promise<CourseTaskDto[]> {
+    const isStudent = !!req.user.courses[courseId]?.studentId;
+    const studentId = req.user.courses[courseId]?.studentId;
+    if (!studentId) {
+      throw new BadRequestException('You are not a student in this course');
+    }
+    const data = await this.courseTasksService.getAllWithStudentSolution(courseId, studentId, status, isStudent);
     return data.map(item => new CourseTaskDto(item));
   }
 
