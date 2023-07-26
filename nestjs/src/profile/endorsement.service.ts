@@ -55,7 +55,7 @@ export class EndorsementService {
     }
 
     const [prompt, mentors, feedbacks] = await Promise.all([
-      this.promptRepository.findOne({ where: { type: 'endorsment' } }),
+      this.promptRepository.findOne({ where: { type: 'endorsement' } }),
       this.mentorRepository.find({ where: { userId: user.id } }),
       this.feedbackRepository.find({ where: { toUserId: user.id } }),
     ]);

@@ -58,12 +58,14 @@ export const PromptsPage = () => {
         </Button>
         <PromptTable data={prompts || []} handleUpdate={handleModalShowUpdate} handleDelete={handleDelete} />
       </Layout.Content>
-      <PromptModal
-        isModalVisible={isModalVisible}
-        onCancel={handleModalCancel}
-        loadData={loadDisciplines}
-        data={prompt}
-      />
+      {prompt && (
+        <PromptModal
+          isModalVisible={isModalVisible}
+          onCancel={handleModalCancel}
+          loadData={loadDisciplines}
+          data={prompt}
+        />
+      )}
     </AdminPageLayout>
   );
 };
