@@ -16,5 +16,8 @@ export class Prompt {
   type: string;
 
   @Column()
+  temperature: number;
+
+  @Column()
   text: string;
 }

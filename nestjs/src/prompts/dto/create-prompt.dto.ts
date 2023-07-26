@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreatePromptDto {
   @IsString()
@@ -9,4 +9,8 @@ export class CreatePromptDto {
   @IsString()
   @ApiProperty()
   text: string;
+
+  @IsNumber()
+  @ApiProperty()
+  temperature: number;
 }

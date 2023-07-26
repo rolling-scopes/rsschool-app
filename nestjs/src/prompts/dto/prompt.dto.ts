@@ -2,10 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prompt } from '@entities/prompt';
 
 export class PromptDto {
-  constructor(alert: Prompt) {
-    this.id = alert.id;
-    this.type = alert.type;
-    this.text = alert.text;
+  constructor(prompt: Prompt) {
+    this.id = prompt.id;
+    this.type = prompt.type;
+    this.text = prompt.text;
+    this.temperature = prompt.temperature;
   }
 
   @ApiProperty()
@@ -16,4 +17,7 @@ export class PromptDto {
 
   @ApiProperty()
   text: string;
+
+  @ApiProperty()
+  temperature: number;
 }

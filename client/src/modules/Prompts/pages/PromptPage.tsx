@@ -1,6 +1,7 @@
 import { Button, Layout, message } from 'antd';
 import { PromptDto, PromptsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
+import { useModalForm } from 'hooks';
 import { SessionContext } from 'modules/Course/contexts';
 import { useCallback, useContext, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -12,10 +13,9 @@ const api = new PromptsApi();
 export const PromptsPage = () => {
   const session = useContext(SessionContext);
   const [prompts, setPrompts] = useState([] as PromptDto[]);
-  const [prompt, setPrompt] = useState<PromptDto | null>(null);
+  const { open, formData, toggle } = useModalForm<PromptDto>();
 
   const [loading, setLoading] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const loadDisciplines = useCallback(async () => {
     try {
@@ -34,18 +34,8 @@ export const PromptsPage = () => {
     await loadDisciplines();
   };
 
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-    setPrompt(null);
-  };
-
-  const handleModalShow = () => {
-    setIsModalVisible(true);
-  };
-
   const handleModalShowUpdate = (record: PromptDto) => {
-    setPrompt(record);
-    setIsModalVisible(true);
+    toggle(record);
   };
 
   useAsync(loadDisciplines, []);
@@ -53,19 +43,13 @@ export const PromptsPage = () => {
   return (
     <AdminPageLayout session={session} title="Manage Prompts" loading={loading} courses={[]}>
       <Layout.Content style={{ margin: 8 }}>
-        <Button type="primary" onClick={handleModalShow} style={{ marginBottom: '25px' }}>
+        <Button type="primary" onClick={() => toggle()} style={{ marginBottom: '25px' }}>
           Add Prompt
         </Button>
         <PromptTable data={prompts || []} handleUpdate={handleModalShowUpdate} handleDelete={handleDelete} />
       </Layout.Content>
-      {prompt && (
-        <PromptModal
-          isModalVisible={isModalVisible}
-          onCancel={handleModalCancel}
-          loadData={loadDisciplines}
-          data={prompt}
-        />
-      )}
+
+      <PromptModal open={open} onCancel={() => toggle()} loadData={loadDisciplines} data={formData} />
     </AdminPageLayout>
   );
 };
