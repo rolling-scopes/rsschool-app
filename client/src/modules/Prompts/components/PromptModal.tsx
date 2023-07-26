@@ -15,9 +15,7 @@ export function PromptModal({ isModalVisible, onCancel, loadData, data }: Props)
 
   useEffect(() => form.resetFields, [isModalVisible]);
 
-  const initialValues = {
-    type: data?.type,
-  };
+  const initialValues = data ?? {};
 
   const submitForm = async () => {
     try {
@@ -43,7 +41,7 @@ export function PromptModal({ isModalVisible, onCancel, loadData, data }: Props)
           <Input />
         </Form.Item>
         <Form.Item key="text" name="text" label="Text" rules={[{ required: true }]}>
-          <Input.TextArea rows={10} />
+          <Input.TextArea rows={16} />
         </Form.Item>
       </Form>
     </Modal>
