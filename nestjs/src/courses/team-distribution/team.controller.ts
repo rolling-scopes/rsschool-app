@@ -18,7 +18,7 @@ import { TeamDto, TeamPasswordDto, TeamsDto, CreateTeamDto, TeamInfoDto, UpdateT
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { TeamLeadOrCourseManagerGuard } from './team-lead-or-manager.guard';
 import { TeamService } from './team.service';
-import { StudentId } from './student-id.decorator';
+import { StudentId } from '../../core/decorators/';
 
 @Controller('courses/:courseId/team-distribution/:distributionId/team')
 @ApiTags('team')

@@ -16,7 +16,7 @@ import { RegisteredStudentOrPowerUserGuard } from './registered-student-guard';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 import { Student } from '@entities/index';
 import { DistributeStudentsService } from './distribute-students.service';
-import { StudentId } from './student-id.decorator';
+import { StudentId } from '../../core/decorators/';
 
 @Controller('courses/:courseId/team-distribution')
 @ApiTags('team distribution')
