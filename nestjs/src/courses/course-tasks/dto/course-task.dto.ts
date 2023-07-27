@@ -2,6 +2,7 @@ import { CourseTask, Checker, CrossCheckStatus, CourseTaskValidation } from '@en
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
+import { TaskSolutionDto } from 'src/courses/task-solutions/dto';
 
 export const typeEnum = [
   'jstask',
@@ -43,6 +44,7 @@ export class CourseTaskDto {
     this.submitText = courseTask.submitText;
     this.taskOwner = courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null;
     this.validations = courseTask.validations;
+    this.taskSolutions = courseTask.taskSolutions?.map(taskSolution => new TaskSolutionDto(taskSolution)) ?? null;
   }
 
   @IsNotEmpty()
@@ -80,6 +82,9 @@ export class CourseTaskDto {
 
   @ApiProperty({ nullable: true, type: PersonDto })
   taskOwner: PersonDto | null;
+
+  @ApiProperty({ nullable: true })
+  taskSolutions: TaskSolutionDto[] | null;
 
   @IsNotEmpty()
   @IsNumber()

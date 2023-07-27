@@ -1,5 +1,5 @@
 import { Alert, Button, Form, Modal, Result, Spin } from 'antd';
-import * as React from 'react';
+import { useEffect } from 'react';
 type Props = {
   data: any;
   title?: string;
@@ -30,6 +30,12 @@ export function ModalSubmitForm({
   open,
 }: Props) {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (data?.selectedSolutionUrl !== undefined) {
+      form.setFieldsValue({ url: data.selectedSolutionUrl });
+    }
+  }, [data?.selectedSolutionUrl]);
 
   if (data == null) {
     return null;

@@ -10,7 +10,7 @@ interface TaskSolutionModalProps {
 }
 
 function SubmitTaskSolution({ courseId }: TaskSolutionModalProps) {
-  const { state, closeModal, showModal, saveSolution } = useSubmitTaskSolution(courseId);
+  const { state, closeModal, showModal, saveSolution, setSolutionUrl } = useSubmitTaskSolution(courseId);
 
   return (
     <>
@@ -27,7 +27,7 @@ function SubmitTaskSolution({ courseId }: TaskSolutionModalProps) {
         loading={state?.loading}
         successText="Your task has been successfully submitted for review"
       >
-        <CourseTaskSelect groupBy="deadline" data={state?.data?.courseTasks ?? []} />
+        <CourseTaskSelect groupBy="deadline" data={state?.data?.courseTasks ?? []} onChange={setSolutionUrl} />
         <Form.Item
           label="Add a solution link"
           name="url"

@@ -79,7 +79,7 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
         </Col>
         <Col span={24}>
           <Link href={getAutoTestTaskRoute(course.alias, id)} legacyBehavior>
-            <Button type="primary">View details</Button>
+            <Button type="primary">Open Task</Button>
           </Link>
         </Col>
       </Row>
