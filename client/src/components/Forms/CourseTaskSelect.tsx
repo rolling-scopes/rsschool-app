@@ -44,13 +44,13 @@ export function CourseTaskSelect(props: Props) {
       initialValue={defaultValue}
       rules={[{ required: true, message: 'Please select a task' }]}
     >
-      <Select placeholder="Select task" {...selectProps} listHeight={274}>
+      <Select placeholder="Select task" {...selectProps} showSearch optionFilterProp="label" listHeight={274}>
         {selectingGroup.map(
           (section, index) =>
             section.tasks.length > 0 && (
               <Select.OptGroup key={index} label={`${section.title} (${section.tasks.length})`}>
                 {section.tasks.map(task => (
-                  <Select.Option key={task.id} value={task.id}>
+                  <Select.Option key={task.id} value={task.id} label={task.name}>
                     <span>
                       {section.title === Section.Active && groupBy === Group.Deadline && (
                         <DeadlineIcon group={groupBy} endDate={task.studentEndDate} />
