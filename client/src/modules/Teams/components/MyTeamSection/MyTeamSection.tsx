@@ -1,5 +1,5 @@
 import { Button, notification, Row, Space, Typography } from 'antd';
-import { EditTwoTone, CopyOutlined } from '@ant-design/icons';
+import { EditTwoTone, CopyOutlined, RedoOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import StudentsTable from '../StudentsTable/StudentsTable';
@@ -12,6 +12,7 @@ type Props = {
   toggleTeamModal: (data?: Partial<TeamDto> | undefined) => void;
   studentId?: number;
   copyPassword: (teamId: number) => Promise<void>;
+  changePassword: (teamId: number) => Promise<void>;
   reloadDistribution: () => Promise<void>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -23,6 +24,7 @@ export default function MyTeamSection({
   toggleTeamModal,
   studentId,
   copyPassword,
+  changePassword,
   reloadDistribution,
   setActiveTab,
 }: Props) {
@@ -55,6 +57,9 @@ export default function MyTeamSection({
             <>
               <Button onClick={() => copyPassword(myTeam.id)} icon={<CopyOutlined />}>
                 Invitation password
+              </Button>
+              <Button onClick={() => changePassword(myTeam.id)} icon={<RedoOutlined />}>
+                Change password
               </Button>
               <Button onClick={() => copyChatLink()} icon={<CopyOutlined />} disabled={!myTeam.chatLink}>
                 Chat link

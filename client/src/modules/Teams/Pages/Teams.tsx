@@ -83,6 +83,17 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
     }
   };
 
+  const changePassword = async (teamId: number): Promise<void> => {
+    const teamApi = new TeamApi();
+    try {
+      const { data } = await teamApi.changeTeamPassword(course.id, distribution.id, teamId);
+      copyToClipboard(data.password);
+      notification.success({ message: 'New Password copied to clipboard', duration: 2 });
+    } catch (error) {
+      message.error('Something went wrong. Please try again later.');
+    }
+  };
+
   const submitTeam = withLoading(async (record: CreateTeamDto, id?: number) => {
     try {
       if (id) {
@@ -113,6 +124,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
             toggleTeamModal={toggleTeamModal}
             studentId={studentId}
             copyPassword={copyPassword}
+            changePassword={changePassword}
             reloadDistribution={loadDistribution}
             setActiveTab={setActiveTab}
           />
