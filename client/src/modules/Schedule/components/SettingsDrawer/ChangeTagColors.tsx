@@ -1,5 +1,5 @@
 import { BgColorsOutlined } from '@ant-design/icons';
-import { Col, Collapse, ColorPicker, Row, Space, Tag } from 'antd';
+import { ColorPicker, Space, Tag } from 'antd';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 import { getTagStyle } from 'modules/Schedule/utils';
