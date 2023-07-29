@@ -5,7 +5,7 @@ import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 import { getTagStyle } from 'modules/Schedule/utils';
 import React from 'react';
 import SettingsItem from './SettingsItem';
-import { Color } from 'antd/es/color-picker';
+import type { Color } from 'antd/es/color-picker';
 
 interface ChangeTagColorProps {
   tags: CourseScheduleItemDtoTagEnum[];
