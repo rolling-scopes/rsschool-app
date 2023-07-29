@@ -32,11 +32,10 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
     try {
       await form.validateFields();
       setValidationError(false);
-    }
-    catch {
+    } catch {
       setValidationError(true);
     }
-  }
+  };
 
   const getExercise = () => {
     switch (courseTask?.type) {
@@ -57,7 +56,15 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
   return (
     <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
       <Col {...responsiveColumns(courseTask.type)}>
-        <Form form={form} layout="vertical" requiredMark={false} onFinish={submit} onFinishFailed={() => setValidationError(true)} onChange={change} onValuesChange={onValuesChange}>
+        <Form
+          form={form}
+          layout="vertical"
+          requiredMark={false}
+          onFinish={submit}
+          onFinishFailed={() => setValidationError(true)}
+          onChange={change}
+          onValuesChange={onValuesChange}
+        >
           {getExercise()}
           <Row justify="center">
             <Button loading={loading} type="primary" htmlType="submit" disabled={loading || validationError}>
