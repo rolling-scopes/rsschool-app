@@ -1,13 +1,11 @@
 import { BgColorsOutlined } from '@ant-design/icons';
-import { Collapse, Tag } from 'antd';
+import { Col, Collapse, ColorPicker, Row, Space, Tag } from 'antd';
 import { CourseScheduleItemDtoTagEnum } from 'api';
-import { PICKER_COLORS, TAG_NAME_MAP } from 'modules/Schedule/constants';
+import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 import { getTagStyle } from 'modules/Schedule/utils';
 import React from 'react';
-import { ColorState, GithubPicker } from 'react-color';
 import SettingsItem from './SettingsItem';
-
-const { Panel } = Collapse;
+import { Color } from 'antd/es/color-picker';
 
 interface ChangeTagColorProps {
   tags: CourseScheduleItemDtoTagEnum[];
@@ -16,27 +14,19 @@ interface ChangeTagColorProps {
 }
 
 const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColors, tags }) => {
-  const changeColor = (colorState: ColorState, tag: CourseScheduleItemDtoTagEnum) =>
-    setTagColors({ ...tagColors, [tag]: colorState.hex });
+  const changeColor = (colorState: Color, tag: CourseScheduleItemDtoTagEnum) =>
+    setTagColors({ ...tagColors, [tag]: colorState.toHexString() });
 
   return (
     <SettingsItem header="Change Tag Colors" IconComponent={BgColorsOutlined}>
-      <Collapse accordion ghost>
+      <Space direction="vertical">
         {tags.map(tag => (
-          <Panel
-            key={tag}
-            header={<Tag style={getTagStyle(tag, tagColors, { cursor: 'pointer' })}>{TAG_NAME_MAP[tag] ?? tag}</Tag>}
-            style={{ backgroundColor: '#fafafa' }}
-          >
-            <GithubPicker
-              colors={PICKER_COLORS}
-              triangle="hide"
-              width="138px"
-              onChange={colorState => changeColor(colorState, tag)}
-            />
-          </Panel>
+          <Space key={tag}>
+            <ColorPicker defaultValue={tagColors[tag]} onChange={value => changeColor(value, tag)} />
+            <Tag style={getTagStyle(tag, tagColors, { cursor: 'pointer' })}>{TAG_NAME_MAP[tag] ?? tag}</Tag>
+          </Space>
         ))}
-      </Collapse>
+      </Space>
     </SettingsItem>
   );
 };
