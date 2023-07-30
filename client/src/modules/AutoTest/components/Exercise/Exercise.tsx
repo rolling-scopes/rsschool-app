@@ -4,6 +4,7 @@ import { Button, Col, ColProps, Form, Row, Tooltip } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useEffect, useState } from 'react';
+import { TooltipedButton } from 'components/TooltipedButton';
 
 type ExerciseProps = {
   githubId: string;
@@ -74,13 +75,11 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
         >
           {getExercise()}
           <Row justify="center">
-            <Tooltip title="Form has validation errors! Check that all required fields are filled!"
+            <TooltipedButton tooltipTitle="Form has validation errors! Check that all required fields are filled!"
               open={validationError}
-            >
-              <Button loading={loading} type="primary" htmlType="submit" disabled={loading}>
-                Submit
-              </Button>
-            </Tooltip>
+              buttonText="Submit"
+              loading={loading}
+              disabled={loading}></TooltipedButton>
           </Row>
         </Form>
       </Col>
