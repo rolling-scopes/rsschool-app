@@ -3,7 +3,7 @@ import { CourseTaskDetailedDtoTypeEnum } from 'api';
 import { Button, Col, ColProps, Form, Row } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type ExerciseProps = {
   githubId: string;
@@ -28,14 +28,18 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
   const { form, loading, submit, change } = useCourseTaskSubmit(courseId, courseTask, finishTask);
   const [validationError, setValidationError] = useState(false);
 
-  const onValuesChange = async () => {
-    try {
-      await form.validateFields();
-      setValidationError(false);
-    } catch {
-      setValidationError(true);
-    }
-  };
+  const values = Form.useWatch([], form);
+
+  useEffect(() => {
+    form.validateFields({ validateOnly: true }).then(
+      () => {
+        setValidationError(false);
+      },
+      () => {
+        setValidationError(true);
+      },
+    );
+  }, [values]);
 
   const getExercise = () => {
     switch (courseTask?.type) {
