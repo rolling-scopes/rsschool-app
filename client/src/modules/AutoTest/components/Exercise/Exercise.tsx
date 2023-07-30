@@ -1,6 +1,6 @@
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { Button, Col, ColProps, Form, Row } from 'antd';
+import { Button, Col, ColProps, Form, Row, Tooltip } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useEffect, useState } from 'react';
@@ -31,6 +31,10 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
   const values = Form.useWatch([], form);
 
   useEffect(() => {
+    if(!values || !Object.values(values).every(Boolean)){
+      return;
+    }
+
     form.validateFields({ validateOnly: true }).then(
       () => {
         setValidationError(false);
@@ -67,13 +71,16 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
           onFinish={submit}
           onFinishFailed={() => setValidationError(true)}
           onChange={change}
-          onValuesChange={onValuesChange}
         >
           {getExercise()}
           <Row justify="center">
-            <Button loading={loading} type="primary" htmlType="submit" disabled={loading || validationError}>
-              Submit
-            </Button>
+            <Tooltip title="Form has validation errors! Check that all required fields are filled!"
+              open={validationError}
+            >
+              <Button loading={loading} type="primary" htmlType="submit" disabled={loading}>
+                Submit
+              </Button>
+            </Tooltip>
           </Row>
         </Form>
       </Col>
