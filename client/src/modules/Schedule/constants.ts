@@ -87,29 +87,6 @@ export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string>
   lecture: '#eb2f96',
 };
 
-export const PICKER_COLORS = [
-  '#13c2c2',
-  '#1677ff',
-  '#595959',
-  '#722ed1',
-  '#9321a2',
-  '#959e3c',
-  '#9ce20d',
-  '#ae8989',
-  '#b04df0',
-  '#d3adf7',
-  '#d9d9d9',
-  '#eb2f96',
-  '#fa28ff',
-  '#faad14',
-  '#ff7a45',
-  '#ffa940',
-  '#ffadd2',
-  '#ffe58f',
-  DEADLINE_COLOR,
-  DEFAULT_COLOR,
-];
-
 export const SPECIAL_TASK_TYPES = {
   deadline: 'deadline',
   test: 'test',
