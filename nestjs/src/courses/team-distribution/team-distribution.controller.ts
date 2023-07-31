@@ -160,8 +160,9 @@ export class TeamDistributionController {
         team = new TeamDto(team);
       }
     }
-    const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
-    return new TeamDistributionDetailedDto(distribution, team);
+    const { teamDistribution, teamsCount, studentsWithoutTeamCount } =
+      await this.teamDistributionService.getDistributionDetailedById(id);
+    return new TeamDistributionDetailedDto(teamDistribution, teamsCount, studentsWithoutTeamCount, team);
   }
 
   @Get('/:id/students')

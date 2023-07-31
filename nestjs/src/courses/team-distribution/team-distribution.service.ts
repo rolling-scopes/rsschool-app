@@ -84,13 +84,18 @@ export class TeamDistributionService {
   }
 
   public async getDistributionDetailedById(id: number) {
-    const teamDistribution = await this.repository.findOneOrFail({
-      where: {
-        id,
-      },
-      relations: ['teams', 'teamDistributionStudents'],
-    });
-    return teamDistribution;
+    const [teamDistribution, teamsCount, studentsWithoutTeamCount] = await Promise.all([
+      this.repository.findOneOrFail({
+        where: {
+          id,
+        },
+      }),
+      this.teamService.getCountByDistributionId(id),
+      this.teamDistributionStudentRepository.count({
+        where: { teamDistributionId: id, active: true, distributed: false },
+      }),
+    ]);
+    return { teamDistribution, teamsCount, studentsWithoutTeamCount };
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

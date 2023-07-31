@@ -160,6 +160,12 @@ export class TeamService {
     return teams;
   }
 
+  public async getCountByDistributionId(distributionId: number) {
+    return this.repository.count({
+      where: { teamDistributionId: distributionId },
+    });
+  }
+
   private getSearchString() {
     const searchConfig = [
       { field: '"githubId"' },
