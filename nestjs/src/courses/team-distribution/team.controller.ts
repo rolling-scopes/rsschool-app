@@ -130,9 +130,9 @@ export class TeamController {
   @ApiOperation({ operationId: 'getTeamPassword' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async getTeamPassword(
-    @Param('id', ParseIntPipe) id: number,
     @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('distributionId', ParseIntPipe) _distributionId: number,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     const team = await this.teamService.findById(id);
 
@@ -145,9 +145,9 @@ export class TeamController {
   @ApiOperation({ operationId: 'changeTeamPassword' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
   public async changeTeamPassword(
-    @Param('id', ParseIntPipe) id: number,
     @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('distributionId', ParseIntPipe) _distributionId: number,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     const password = await this.teamService.generatePassword();
     await this.teamService.updatePassword(id, password);
