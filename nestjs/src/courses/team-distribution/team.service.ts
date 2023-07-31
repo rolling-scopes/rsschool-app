@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { isEqual } from 'lodash';
 import { customAlphabet } from 'nanoid/async';
 import { paginate } from 'src/core/paginate';
-import { DataSource, Repository } from 'typeorm';
+import { Brackets, DataSource, Repository } from 'typeorm';
 import { UpdateTeamDto } from './dto';
 import { TeamDistributionStudentService } from './team-distribution-student.service';
 
@@ -160,16 +160,50 @@ export class TeamService {
     return teams;
   }
 
-  public async findByDistributionId(distributionId: number, { page = 1, limit = 10 }) {
+  private getSearchString() {
+    const searchConfig = [
+      { field: '"githubId"' },
+      { field: '"firstName"' },
+      { field: '"lastName"' },
+      { field: '"cityName"' },
+      { field: '"countryName"' },
+    ];
+
+    return searchConfig.map(({ field }) => `"u".${field} ilike :search`).join(' OR ');
+  }
+
+  private getSearchConditions(search: string) {
+    return new Brackets(qb => {
+      qb.where(this.getSearchString(), { search: `${search}%` })
+        .orWhere(`CAST(u.discord AS jsonb)->>'username' ILIKE :search`, { search: `${search}%` })
+        .orWhere(`team.name ilike :search`, { search: `${search}%` });
+    });
+  }
+
+  public async findByDistributionId(distributionId: number, { search = '', page = 1, limit = 10 }) {
+    let matchingTeamIds: number[] = [];
+
+    if (search) {
+      // find all the teams that have at least one student matching the search query
+      const teamsQuery = this.repository
+        .createQueryBuilder('team')
+        .select('team.id')
+        .leftJoin('team.students', 's')
+        .leftJoin('s.user', 'u')
+        .leftJoin('u.resume', 'r')
+        .where('team."teamDistributionId" = :distributionId', { distributionId })
+        .andWhere(this.getSearchConditions(search));
+
+      matchingTeamIds = (await teamsQuery.getMany()).map(team => team.id);
+    }
+
     const query = this.repository
       .createQueryBuilder('team')
       .where('team."teamDistributionId" = :distributionId', { distributionId })
-      .leftJoin('team.students', 's')
-      .leftJoin('s.user', 'u')
-      .leftJoin('u.resume', 'r')
-      .addSelect('r.uuid')
-      .addSelect(this.getStudentsFields('s'))
-      .addSelect(this.getUserFields('u'))
+      .andWhere(matchingTeamIds.length > 0 ? 'team.id IN (:...matchingTeamIds)' : '1=1', { matchingTeamIds })
+      .leftJoinAndSelect('team.students', 's')
+      .leftJoinAndSelect('s.user', 'u')
+      .leftJoinAndSelect('u.resume', 'r')
       .orderBy('team.id', 'ASC');
 
     const { items: teams, meta: paginationMeta } = await paginate(query, { page, limit });

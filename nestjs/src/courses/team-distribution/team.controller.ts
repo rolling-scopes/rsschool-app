@@ -39,10 +39,12 @@ export class TeamController {
     @Param('distributionId', ParseIntPipe) distributionId: number,
     @Query('pageSize', ParseIntPipe) pageSize: number = 10,
     @Query('current', ParseIntPipe) current: number = 1,
+    @Query('search') search: string,
   ) {
     const { teams, paginationMeta } = await this.teamService.findByDistributionId(distributionId, {
       page: current,
       limit: pageSize,
+      search,
     });
 
     return new TeamsDto(teams, paginationMeta);
@@ -127,7 +129,11 @@ export class TeamController {
   @ApiOkResponse({ type: TeamPasswordDto })
   @ApiOperation({ operationId: 'getTeamPassword' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
-  public async getTeamPassword(@Param('id', ParseIntPipe) id: number) {
+  public async getTeamPassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('distributionId', ParseIntPipe) _distributionId: number,
+  ) {
     const team = await this.teamService.findById(id);
 
     return new TeamPasswordDto(team);
@@ -138,7 +144,11 @@ export class TeamController {
   @ApiOkResponse({ type: TeamPasswordDto })
   @ApiOperation({ operationId: 'changeTeamPassword' })
   @RequiredRoles([CourseRole.Student, Role.Admin, CourseRole.Manager], true)
-  public async changeTeamPassword(@Param('id', ParseIntPipe) id: number) {
+  public async changeTeamPassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('distributionId', ParseIntPipe) _distributionId: number,
+  ) {
     const password = await this.teamService.generatePassword();
     await this.teamService.updatePassword(id, password);
 
@@ -152,6 +162,7 @@ export class TeamController {
   @RequiredRoles([CourseRole.Student])
   public async joinTeam(
     @StudentId() studentId: number,
+    @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) teamDistributionId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: JoinTeamDto,
@@ -181,6 +192,7 @@ export class TeamController {
   @RequiredRoles([CourseRole.Student])
   public async leaveTeam(
     @StudentId() studentId: number,
+    @Param('courseId', ParseIntPipe) _: number,
     @Param('distributionId', ParseIntPipe) teamDistributionId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
