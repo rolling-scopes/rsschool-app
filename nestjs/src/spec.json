@@ -1044,9 +1044,9 @@
         "operationId": "getTeamPassword",
         "summary": "",
         "parameters": [
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
@@ -1060,9 +1060,9 @@
         "operationId": "changeTeamPassword",
         "summary": "",
         "parameters": [
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
