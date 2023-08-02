@@ -34,13 +34,18 @@ export class TeamDistributionService {
     return this.repository.save(data);
   }
 
+  private isStudentUnavailable(student: Student, distribution: TeamDistribution) {
+    return student.isExpelled || distribution.minTotalScore > student.totalScore;
+  }
+
   public addStatusToDistribution(distribution: TeamDistribution, student: Student | null) {
-    if (student == null || student.isExpelled || distribution.minTotalScore > student.totalScore) {
+    if (student == null || this.isStudentUnavailable(student, distribution)) {
       return { ...distribution, registrationStatus: registrationStatusEnum.Unavailable };
     }
 
     const currTimestampUTC = dayjs();
     const distributionStartDate = dayjs(distribution.startDate);
+
     if (currTimestampUTC < distributionStartDate) {
       return { ...distribution, registrationStatus: registrationStatusEnum.Future };
     }
@@ -79,13 +84,18 @@ export class TeamDistributionService {
   }
 
   public async getDistributionDetailedById(id: number) {
-    const teamDistribution = await this.repository.findOneOrFail({
-      where: {
-        id,
-      },
-      relations: ['teams', 'teamDistributionStudents'],
-    });
-    return teamDistribution;
+    const [teamDistribution, teamsCount, studentsWithoutTeamCount] = await Promise.all([
+      this.repository.findOneOrFail({
+        where: {
+          id,
+        },
+      }),
+      this.teamService.getCountByDistributionId(id),
+      this.teamDistributionStudentRepository.count({
+        where: { teamDistributionId: id, active: true, distributed: false },
+      }),
+    ]);
+    return { teamDistribution, teamsCount, studentsWithoutTeamCount };
   }
 
   public async update(id: number, teamDistribution: Partial<TeamDistribution>) {

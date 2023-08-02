@@ -897,7 +897,10 @@
       "delete": {
         "operationId": "teamDistributionDeleteRegistry",
         "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -929,7 +932,10 @@
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",
         "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -985,7 +991,8 @@
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } }
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "search", "required": true, "in": "query", "schema": { "type": "string" } }
         ],
         "responses": {
           "200": {
@@ -1036,7 +1043,11 @@
       "get": {
         "operationId": "getTeamPassword",
         "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1048,7 +1059,11 @@
       "post": {
         "operationId": "changeTeamPassword",
         "summary": "",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1063,6 +1078,7 @@
         "operationId": "joinTeam",
         "summary": "",
         "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
@@ -1084,6 +1100,7 @@
         "operationId": "leaveTeam",
         "summary": "",
         "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],

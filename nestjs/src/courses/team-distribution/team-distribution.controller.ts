@@ -127,7 +127,11 @@ export class TeamDistributionController {
   @ApiOkResponse({ type: TeamDistributionDto })
   @ApiOperation({ operationId: 'teamDistributionDeleteRegistry' })
   @RequiredRoles([CourseRole.Student])
-  public async deleteRegistry(@StudentId() studentId: number, @Param('id', ParseIntPipe) id: number) {
+  public async deleteRegistry(
+    @StudentId() studentId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('courseId', ParseIntPipe) _: number,
+  ) {
     if (studentId) {
       await this.teamDistributionStudentService.deleteStudentFromTeamDistribution(studentId, id);
     }
@@ -140,6 +144,7 @@ export class TeamDistributionController {
   @RequiredRoles([CourseRole.Student, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async getCourseTeamDistributionDetailed(
     @StudentId() studentId: number,
+    @Param('courseId', ParseIntPipe) _: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
     let team;
@@ -155,8 +160,9 @@ export class TeamDistributionController {
         team = new TeamDto(team);
       }
     }
-    const distribution = await this.teamDistributionService.getDistributionDetailedById(id);
-    return new TeamDistributionDetailedDto(distribution, team);
+    const { teamDistribution, teamsCount, studentsWithoutTeamCount } =
+      await this.teamDistributionService.getDistributionDetailedById(id);
+    return new TeamDistributionDetailedDto(teamDistribution, teamsCount, studentsWithoutTeamCount, team);
   }
 
   @Get('/:id/students')

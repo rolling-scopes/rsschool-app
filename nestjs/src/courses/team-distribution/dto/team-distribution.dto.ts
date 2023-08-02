@@ -59,11 +59,9 @@ export class TeamDistributionDto {
 
 @ApiResponse({})
 export class TeamDistributionDetailedDto {
-  constructor(distribution: TeamDistribution, team?: TeamDto) {
-    this.studentsWithoutTeamCount = distribution.teamDistributionStudents.filter(
-      el => !el.distributed && el.active,
-    ).length;
-    this.teamsCount = distribution.teams.length;
+  constructor(distribution: TeamDistribution, teamsCount: number, studentsWithoutTeamCount: number, team?: TeamDto) {
+    this.studentsWithoutTeamCount = studentsWithoutTeamCount;
+    this.teamsCount = teamsCount;
     this.id = distribution.id;
     this.name = distribution.name;
     this.myTeam = team;
