@@ -61,9 +61,15 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
     <>
       <Row gutter={16} justify="start" style={{ marginBottom: '10px' }}>
         <Col>
-          <Select placeholder="Select task" style={{ width: 200 }} onChange={(value: number) => setTaskId(value)}>
+          <Select
+            placeholder="Select task"
+            style={{ width: 200 }}
+            onChange={(value: number) => setTaskId(value)}
+            showSearch
+            optionFilterProp="label"
+          >
             {courseTasks.map(task => (
-              <Option key={task.id} value={task.id}>
+              <Option key={task.id} value={task.id} label={task.name}>
                 {task.name}
               </Option>
             ))}

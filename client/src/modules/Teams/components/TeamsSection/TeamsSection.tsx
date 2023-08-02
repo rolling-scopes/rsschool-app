@@ -1,4 +1,4 @@
-import { Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
+import { Col, Input, Row, Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
@@ -28,6 +28,12 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
     content: [],
     pagination: { current: 1, pageSize: 10 },
   });
+  const [search, setSearch] = useState<string>('');
+
+  const onSearch = (value: string) => {
+    setSearch(value);
+  };
+
   const [loading, withLoading] = useLoading(false);
 
   const getTeams = withLoading(async (pagination: TablePaginationConfig) => {
@@ -36,6 +42,7 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
       distribution.id,
       pagination.pageSize ?? 10,
       pagination.current ?? 1,
+      search,
     );
     setTeams({ ...teams, ...data });
   });
@@ -50,11 +57,18 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
     getTeams(pagination);
   };
 
-  useAsync(async () => await getTeams(teams.pagination), [distribution]);
+  useAsync(async () => await getTeams(teams.pagination), [distribution, search]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
-      <Title level={5}>{`${distribution.name} teams`}</Title>
+      <Row justify="space-between">
+        <Col span={8}>
+          <Title level={5}>{`${distribution.name} teams`}</Title>
+        </Col>
+        <Col md={6} xl={4}>
+          <Input.Search placeholder="input search text" allowClear onSearch={onSearch} />
+        </Col>
+      </Row>
       <Table<TeamDto>
         showHeader
         pagination={teams.pagination}
