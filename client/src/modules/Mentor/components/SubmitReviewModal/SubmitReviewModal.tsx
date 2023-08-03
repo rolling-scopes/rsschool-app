@@ -19,7 +19,7 @@ export const MODAL_TITLE = 'Submit Score for';
 export const SUCCESS_MESSAGE = 'Your review has been successfully submitted';
 
 function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewModalProps) {
-  const { studentGithubId, courseTaskId, solutionUrl, studentName, taskDescriptionUrl, taskName, maxScore } =
+  const { studentGithubId, courseTaskId, solutionUrl, studentName, taskDescriptionUrl, taskName, maxScore, resultScore } =
     data || {};
 
   const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
               {solutionUrl}
             </Link>
           </Form.Item>
-          <ScoreInput maxScore={maxScore} style={{ width: '100%' }} />
+          <ScoreInput maxScore={maxScore} resultScore={resultScore ?? undefined} style={{ width: '100%' }} />
         </Col>
       </Row>
     </ModalSubmitForm>
