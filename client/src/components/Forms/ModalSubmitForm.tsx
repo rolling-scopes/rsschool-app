@@ -54,6 +54,11 @@ export function ModalSubmitForm({
     };
   }
 
+  const onClose = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    close(e);
+    form.resetFields();
+  }
+
   return (
     <Modal
       open={open ?? true}
@@ -61,10 +66,7 @@ export function ModalSubmitForm({
       title={title}
       okText="Submit"
       onOk={onSubmit()}
-      onCancel={e => {
-        close(e);
-        form.resetFields();
-      }}
+      onCancel={onClose}
     >
       <Spin spinning={loading ?? false}>
         {errorText ? <Alert style={{ marginBottom: 16 }} message={errorText} type="error" showIcon /> : null}
@@ -74,7 +76,7 @@ export function ModalSubmitForm({
             title="Success"
             subTitle={successText ?? 'Successfully submitted'}
             extra={[
-              <Button style={{ minWidth: 80 }} onClick={close} type="primary" key="ok">
+              <Button style={{ minWidth: 80 }} onClick={onClose} type="primary" key="ok">
                 Ok
               </Button>,
             ]}
