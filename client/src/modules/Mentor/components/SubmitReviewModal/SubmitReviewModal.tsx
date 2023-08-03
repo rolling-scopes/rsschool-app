@@ -19,8 +19,16 @@ export const MODAL_TITLE = 'Submit Score for';
 export const SUCCESS_MESSAGE = 'Your review has been successfully submitted';
 
 function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewModalProps) {
-  const { studentGithubId, courseTaskId, solutionUrl, studentName, taskDescriptionUrl, taskName, maxScore, resultScore } =
-    data || {};
+  const {
+    studentGithubId,
+    courseTaskId,
+    solutionUrl,
+    studentName,
+    taskDescriptionUrl,
+    taskName,
+    maxScore,
+    resultScore,
+  } = data || {};
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);

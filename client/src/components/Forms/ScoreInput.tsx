@@ -14,7 +14,14 @@ export function ScoreInput({ maxScore, resultScore, courseTask, style }: Props) 
   const maxScoreLabel = maxScoreValue ? ` (Max ${maxScoreValue} points)` : '';
   return (
     <Form.Item name="score" label={`Score${maxScoreLabel}`} rules={[{ required: true, message: 'Please enter score' }]}>
-      <InputNumber style={style} step={1} min={0} max={maxScoreValue} decimalSeparator={','} defaultValue={resultScore} />
+      <InputNumber
+        style={style}
+        step={1}
+        min={0}
+        max={maxScoreValue}
+        decimalSeparator={','}
+        defaultValue={resultScore}
+      />
     </Form.Item>
   );
 }

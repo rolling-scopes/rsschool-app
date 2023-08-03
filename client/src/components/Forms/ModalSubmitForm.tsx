@@ -57,7 +57,7 @@ export function ModalSubmitForm({
   const onClose = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     close(e);
     form.resetFields();
-  }
+  };
 
   return (
     <Modal
