@@ -15,6 +15,7 @@ import {
   EventDto,
   CriteriaDto,
   CrossCheckMessageDto,
+  CrossCheckCriteriaDataDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -43,7 +44,7 @@ export type SolutionReviewType = {
   id: number;
   dateTime: number;
   comment: string;
-  criteria?: CrossCheckCriteriaData[];
+  criteria?: CrossCheckCriteriaDataDto[];
   author: {
     id: number;
     name: string;

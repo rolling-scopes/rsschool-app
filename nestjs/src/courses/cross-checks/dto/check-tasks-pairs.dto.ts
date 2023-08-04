@@ -8,10 +8,31 @@ import {
   ScoreRecord,
 } from '@entities/taskSolutionResult';
 
+export class CrossCheckCriteriaDataDto {
+  @ApiProperty()
+  public key: number;
+
+  @ApiProperty({ required: false })
+  public max?: number;
+
+  @ApiProperty()
+  public text: string;
+
+  @ApiProperty()
+  public type: string;
+
+  @ApiProperty({ required: false })
+  public point?: number;
+
+  @ApiProperty({ required: false })
+  public comment?: string;
+}
+
 export class HistoricalScoreDto {
   constructor(historicalScore: ScoreRecord) {
     this.comment = historicalScore.comment;
     this.dateTime = new Date(historicalScore.dateTime);
+    this.criteria = historicalScore.criteria;
   }
 
   @ApiProperty()
@@ -19,6 +40,9 @@ export class HistoricalScoreDto {
 
   @ApiProperty()
   public dateTime: Date;
+
+  @ApiProperty({ type: [CrossCheckCriteriaDataDto], required: false })
+  public criteria?: CrossCheckCriteriaDataDto[];
 }
 
 export class CrossCheckMessageAuthorDto {

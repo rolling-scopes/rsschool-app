@@ -1,4 +1,4 @@
-import { Button, Modal, Table, TablePaginationConfig } from 'antd';
+import { Button, Collapse, Modal, Space, Table, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { ColumnType, FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -16,6 +16,7 @@ import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from
 import PreparedComment from 'components/Forms/PreparedComment';
 import omit from 'lodash/omit';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
+import { CrossCheckCriteria } from 'modules/CrossCheck/components/criteria/CrossCheckCriteria';
 
 const fields = {
   task: 'task',
@@ -155,25 +156,33 @@ export function Page(props: CoursePageProps) {
             width: 1020,
             title: `Comment from ${checker.githubId}`,
             content: historicalScores.map((historicalScore, index) => (
-              <Comment
-                key={historicalScore.dateTime}
-                content={
-                  <>
-                    {dateTimeRenderer(historicalScore.dateTime)}
-                    <PreparedComment text={historicalScore.comment}></PreparedComment>
-                    {index === 0 &&
-                      messages.length > 0 &&
-                      messages.map(message => (
-                        <Message
-                          key={message.timestamp}
-                          message={message}
-                          currentRole={CrossCheckMessageDtoRoleEnum.Student}
-                          settings={{ areContactsVisible: true }}
-                        />
-                      ))}
-                  </>
-                }
-              />
+              <Space direction="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
+                <Comment
+                  content={
+                    <>
+                      {dateTimeRenderer(historicalScore.dateTime)}
+                      <PreparedComment text={historicalScore.comment}></PreparedComment>
+                      {index === 0 &&
+                        messages.length > 0 &&
+                        messages.map(message => (
+                          <Message
+                            key={message.timestamp}
+                            message={message}
+                            currentRole={CrossCheckMessageDtoRoleEnum.Student}
+                            settings={{ areContactsVisible: true }}
+                          />
+                        ))}
+                    </>
+                  }
+                />
+                {historicalScore.criteria?.length ? (
+                  <Collapse>
+                    <Collapse.Panel key={historicalScore.dateTime} header="Detailed feedback">
+                      <CrossCheckCriteria criteria={historicalScore.criteria} />
+                    </Collapse.Panel>
+                  </Collapse>
+                ) : null}
+              </Space>
             )),
           });
         },

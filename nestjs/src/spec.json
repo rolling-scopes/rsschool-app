@@ -2724,9 +2724,25 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "CrossCheckCriteriaDataDto": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "number" },
+          "max": { "type": "number" },
+          "text": { "type": "string" },
+          "type": { "type": "string" },
+          "point": { "type": "number" },
+          "comment": { "type": "string" }
+        },
+        "required": ["key", "text", "type"]
+      },
       "HistoricalScoreDto": {
         "type": "object",
-        "properties": { "comment": { "type": "string" }, "dateTime": { "format": "date-time", "type": "string" } },
+        "properties": {
+          "comment": { "type": "string" },
+          "dateTime": { "format": "date-time", "type": "string" },
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } }
+        },
         "required": ["comment", "dateTime"]
       },
       "CrossCheckMessageAuthorDto": {

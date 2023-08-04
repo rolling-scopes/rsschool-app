@@ -12,14 +12,14 @@ import { Student } from './student';
 import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
 
-export interface CrossCheckCriteriaData {
+export type CrossCheckCriteriaData = {
   key: number;
   max?: number;
   text: string;
   type: string;
   point?: number;
   comment?: string;
-}
+};
 
 export type ScoreRecord = {
   score: number;
