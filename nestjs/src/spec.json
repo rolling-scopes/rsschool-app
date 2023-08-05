@@ -2833,6 +2833,25 @@
         },
         "required": ["key", "text", "type"]
       },
+      "Discord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "discriminator": { "type": "string" }
+        },
+        "required": ["id", "username", "discriminator"]
+      },
+      "CrossCheckAuthorDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
+        },
+        "required": ["id", "name", "githubId", "discord"]
+      },
       "CrossCheckSolutionReviewDto": {
         "type": "object",
         "properties": {
@@ -2840,7 +2859,7 @@
           "dateTime": { "type": "number" },
           "comment": { "type": "string" },
           "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } },
-          "author": { "type": "object" },
+          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckAuthorDto" }] },
           "score": { "type": "number" },
           "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
         },
@@ -3072,15 +3091,6 @@
           "strictTeamSizeMode",
           "minTotalScore"
         ]
-      },
-      "Discord": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "username": { "type": "string" },
-          "discriminator": { "type": "string" }
-        },
-        "required": ["id", "username", "discriminator"]
       },
       "TeamDistributionStudentDto": {
         "type": "object",

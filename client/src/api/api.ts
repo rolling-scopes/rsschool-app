@@ -2071,6 +2071,37 @@ export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof Criter
 /**
  * 
  * @export
+ * @interface CrossCheckAuthorDto
+ */
+export interface CrossCheckAuthorDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckAuthorDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckAuthorDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckAuthorDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {Discord}
+     * @memberof CrossCheckAuthorDto
+     */
+    'discord': Discord | null;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckCriteriaDataDto
  */
 export interface CrossCheckCriteriaDataDto {
@@ -2333,10 +2364,10 @@ export interface CrossCheckSolutionReviewDto {
     'criteria'?: Array<CrossCheckCriteriaDataDto>;
     /**
      * 
-     * @type {object}
+     * @type {CrossCheckAuthorDto}
      * @memberof CrossCheckSolutionReviewDto
      */
-    'author': object;
+    'author': CrossCheckAuthorDto | null;
     /**
      * 
      * @type {number}

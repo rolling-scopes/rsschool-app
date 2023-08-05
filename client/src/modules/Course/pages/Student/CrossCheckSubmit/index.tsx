@@ -12,18 +12,11 @@ import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAva
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import {
-  CourseService,
-  CrossCheckComment,
-  CrossCheckCriteria,
-  CrossCheckReview,
-  Feedback,
-  TaskSolution,
-} from 'services/course';
+import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -46,8 +39,9 @@ const createUrlRule = (): Rule => {
 export function CrossCheckSubmit(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const teamDistributionApi = useMemo(() => new CoursesTasksApi(), []);
   const solutionReviewSettings = useSolutionReviewSettings();
-  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [feedback, setFeedback] = useState<CrossCheckFeedbackDto | null>(null);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const router = useRouter();
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
@@ -139,8 +133,8 @@ export function CrossCheckSubmit(props: CoursePageProps) {
       return;
     }
 
-    const [feedback, submittedSolution, taskDetails] = await Promise.all([
-      courseService.getCrossCheckFeedback(props.session.githubId, courseTask.id),
+    const [{ data: feedback }, submittedSolution, taskDetails] = await Promise.all([
+      teamDistributionApi.getCrossCheckFeedback(Number(props.session.githubId), courseTask.id),
       courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);

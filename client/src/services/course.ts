@@ -15,6 +15,7 @@ import {
   EventDto,
   CriteriaDto,
   CrossCheckMessageDto,
+  CrossCheckCriteriaDataDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -30,7 +31,6 @@ export interface CrossCheckMessageAuthor {
   id: number;
   githubId: string;
 }
-
 
 export interface Verification {
   id: number;
@@ -344,7 +344,7 @@ export class CourseService {
       anonymous: boolean;
       review: CrossCheckReview[];
       comments: CrossCheckComment[];
-      criteria: CrossCheckCriteriaData[];
+      criteria: CrossCheckCriteriaDataDto[];
     },
   ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
@@ -364,7 +364,7 @@ export class CourseService {
         comment: string;
         dateTime: number;
         anonymous: boolean;
-        criteria: CrossCheckCriteriaData[];
+        criteria: CrossCheckCriteriaDataDto[];
       }[];
       author: {
         id: number;

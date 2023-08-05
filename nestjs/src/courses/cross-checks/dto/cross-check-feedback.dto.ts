@@ -63,7 +63,7 @@ export class CrossCheckSolutionReviewDto {
   @ApiProperty({ required: false, type: [CrossCheckCriteriaDataDto] })
   public criteria?: CrossCheckCriteriaDataDto[];
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ nullable: true, type: CrossCheckAuthorDto })
   public author: CrossCheckAuthorDto | null;
 
   @ApiProperty({ required: true })
