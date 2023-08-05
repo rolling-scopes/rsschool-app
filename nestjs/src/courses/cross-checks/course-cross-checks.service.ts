@@ -266,7 +266,7 @@ export class CourseCrossCheckService {
       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
       .getMany();
 
-    return taskSolutionResults.map(this.transformToCrossCheckSolutionReview);
+    return taskSolutionResults.map(taskSolutionResult => this.transformToCrossCheckSolutionReview(taskSolutionResult));
   }
 
   private transformToCrossCheckSolutionReview(taskSolutionResult: TaskSolutionResult): CrossCheckSolutionReview {
