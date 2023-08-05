@@ -25,39 +25,12 @@ export enum CrossCheckStatus {
 }
 
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
-export interface CrossCheckCriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: CrossCheckCriteriaType;
-  point?: number;
-  textComment?: string;
-}
 
 export interface CrossCheckMessageAuthor {
   id: number;
   githubId: string;
 }
 
-export type SolutionReviewType = {
-  id: number;
-  dateTime: number;
-  comment: string;
-  criteria?: CrossCheckCriteriaData[];
-  author: {
-    id: number;
-    name: string;
-    githubId: string;
-    discord: Discord | null;
-  } | null;
-  score: number;
-  messages: CrossCheckMessageDto[];
-};
-
-export type Feedback = {
-  url?: string;
-  reviews?: SolutionReviewType[];
-};
 
 export interface Verification {
   id: number;
@@ -528,13 +501,6 @@ export class CourseService {
         url: string;
       }[];
     }>(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`);
-    return result.data.data;
-  }
-
-  async getCrossCheckFeedback(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<{ data: Feedback }>(
-      `/student/${githubId}/task/${courseTaskId}/cross-check/feedback`,
-    );
     return result.data.data;
   }
 

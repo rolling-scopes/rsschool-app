@@ -687,6 +687,24 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/student/feedback": {
+      "get": {
+        "operationId": "getCrossCheckFeedback",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "403": { "description": "" },
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CrossCheckFeedbackDto" } } }
+          }
+        },
+        "tags": ["courses tasks"]
+      }
+    },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
@@ -2802,6 +2820,38 @@
           "completedChecksCount": { "type": "number" }
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
+      },
+      "CrossCheckCriteriaDataDto": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" },
+          "max": { "type": "number" },
+          "text": { "type": "string" },
+          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
+          "point": { "type": "number" },
+          "textComment": { "type": "string" }
+        },
+        "required": ["key", "text", "type"]
+      },
+      "CrossCheckSolutionReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "dateTime": { "type": "number" },
+          "comment": { "type": "string" },
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } },
+          "author": { "type": "object" },
+          "score": { "type": "number" },
+          "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
+        },
+        "required": ["id", "dateTime", "comment", "author", "score", "messages"]
+      },
+      "CrossCheckFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string" },
+          "reviews": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckSolutionReviewDto" } }
+        }
       },
       "MentorDto": {
         "type": "object",

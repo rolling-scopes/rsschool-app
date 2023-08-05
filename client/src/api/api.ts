@@ -2071,6 +2071,77 @@ export type CriteriaDtoTypeEnum = typeof CriteriaDtoTypeEnum[keyof typeof Criter
 /**
  * 
  * @export
+ * @interface CrossCheckCriteriaDataDto
+ */
+export interface CrossCheckCriteriaDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'key': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'max'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'text': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'type': CrossCheckCriteriaDataDtoTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'point'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckCriteriaDataDto
+     */
+    'textComment'?: string;
+}
+
+export const CrossCheckCriteriaDataDtoTypeEnum = {
+    Title: 'title',
+    Subtask: 'subtask',
+    Penalty: 'penalty'
+} as const;
+
+export type CrossCheckCriteriaDataDtoTypeEnum = typeof CrossCheckCriteriaDataDtoTypeEnum[keyof typeof CrossCheckCriteriaDataDtoTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface CrossCheckFeedbackDto
+ */
+export interface CrossCheckFeedbackDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckFeedbackDto
+     */
+    'url'?: string;
+    /**
+     * 
+     * @type {Array<CrossCheckSolutionReviewDto>}
+     * @memberof CrossCheckFeedbackDto
+     */
+    'reviews'?: Array<CrossCheckSolutionReviewDto>;
+}
+/**
+ * 
+ * @export
  * @interface CrossCheckMessageAuthorDto
  */
 export interface CrossCheckMessageAuthorDto {
@@ -2229,6 +2300,55 @@ export interface CrossCheckPairResponseDto {
      * @memberof CrossCheckPairResponseDto
      */
     'pagination': PaginationDto;
+}
+/**
+ * 
+ * @export
+ * @interface CrossCheckSolutionReviewDto
+ */
+export interface CrossCheckSolutionReviewDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'dateTime': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {Array<CrossCheckCriteriaDataDto>}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'criteria'?: Array<CrossCheckCriteriaDataDto>;
+    /**
+     * 
+     * @type {object}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'author': object;
+    /**
+     * 
+     * @type {number}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {Array<CrossCheckMessageDto>}
+     * @memberof CrossCheckSolutionReviewDto
+     */
+    'messages': Array<CrossCheckMessageDto>;
 }
 /**
  * 
@@ -9380,6 +9500,43 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCrossCheckFeedback: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCrossCheckFeedback', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('getCrossCheckFeedback', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/student/feedback`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -9631,6 +9788,17 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckFeedback(courseId, courseTaskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -9755,6 +9923,16 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getCrossCheckCsv(courseId: number, courseTaskId: number, options?: any): AxiosPromise<void> {
             return localVarFp.getCrossCheckCsv(courseId, courseTaskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CrossCheckFeedbackDto> {
+            return localVarFp.getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9895,6 +10073,18 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCrossCheckCsv(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCrossCheckCsv(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

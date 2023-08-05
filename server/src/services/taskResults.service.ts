@@ -10,8 +10,6 @@ import {
 } from '../models';
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
-import { createName } from './user.service';
-import { CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -187,50 +185,50 @@ export async function getCrossCheckData(
   };
 }
 
-export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
-  const comments = (
-    await getRepository(TaskSolutionResult)
-      .createQueryBuilder('tsr')
-      .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
-      .innerJoin('tsr.checker', 'checker')
-      .innerJoin('checker.user', 'user')
-      .addSelect(['checker.id', ...getPrimaryUserFields('user')])
-      .where('"tsr"."studentId" = :studentId', { studentId })
-      .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
-      .getMany()
-  ).map(c => {
-    const author = !c.anonymous
-      ? {
-          id: c.checker.user.id,
-          name: createName(c.checker.user),
-          githubId: c.checker.user.githubId,
-          discord: c.checker.user.discord,
-        }
-      : null;
-    const [{ dateTime, criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
-    const messages = !c.anonymous
-      ? c.messages
-      : c.messages.map(message => ({
-          ...message,
-          author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
-        }));
-    return {
-      dateTime,
-      author,
-      messages,
-      id: c.id,
-      comment: c.comment,
-      score: c.score,
-      criteria,
-    };
-  });
-  const taskSolution = await getRepository(TaskSolution)
-    .createQueryBuilder('ts')
-    .where('"ts"."studentId" = :studentId', { studentId })
-    .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .getOne();
-  return { url: taskSolution?.url, reviews: comments };
-}
+// export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
+//   const comments = (
+//     await getRepository(TaskSolutionResult)
+//       .createQueryBuilder('tsr')
+//       .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
+//       .innerJoin('tsr.checker', 'checker')
+//       .innerJoin('checker.user', 'user')
+//       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
+//       .where('"tsr"."studentId" = :studentId', { studentId })
+//       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
+//       .getMany()
+//   ).map(c => {
+//     const author = !c.anonymous
+//       ? {
+//           id: c.checker.user.id,
+//           name: createName(c.checker.user),
+//           githubId: c.checker.user.githubId,
+//           discord: c.checker.user.discord,
+//         }
+//       : null;
+//     const [{ dateTime, criteria }] = c.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+//     const messages = !c.anonymous
+//       ? c.messages
+//       : c.messages.map(message => ({
+//           ...message,
+//           author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+//         }));
+//     return {
+//       dateTime,
+//       author,
+//       messages,
+//       id: c.id,
+//       comment: c.comment,
+//       score: c.score,
+//       criteria,
+//     };
+//   });
+//   const taskSolution = await getRepository(TaskSolution)
+//     .createQueryBuilder('ts')
+//     .where('"ts"."studentId" = :studentId', { studentId })
+//     .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
+//     .getOne();
+//   return { url: taskSolution?.url, reviews: comments };
+// }
 
 type TaskArtefactInput = {
   studentId: number;

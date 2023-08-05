@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Task } from '@entities/task';
 import { User } from '@entities/user';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,8 +6,17 @@ import { TaskSolutionChecker } from '@entities/taskSolutionChecker';
 import { Repository } from 'typeorm';
 import { Student } from '@entities/student';
 import { TaskSolution } from '@entities/taskSolution';
-import { CrossCheckMessage, ScoreRecord, TaskSolutionResult } from '@entities/taskSolutionResult';
+import {
+  CrossCheckMessage,
+  CrossCheckMessageAuthorRole,
+  ScoreRecord,
+  TaskSolutionResult,
+} from '@entities/taskSolutionResult';
 import { CourseTask } from '@entities/courseTask';
+import { UsersService } from 'src/users/users.service';
+import { PersonDto } from 'src/core/dto';
+import { CrossCheckCriteriaDataDto, CrossCheckMessageDto } from './dto';
+import { Discord } from 'src/profile/dto';
 
 export type CrossCheckPair = {
   id: number;
@@ -69,6 +78,21 @@ const orderFieldMapping: Record<OrderField, string> = {
   reviewedDate: 'tsr.updatedDate',
 };
 
+export type CrossCheckSolutionReview = {
+  id: number;
+  dateTime: number;
+  comment: string;
+  criteria?: CrossCheckCriteriaDataDto[];
+  author: {
+    id: number;
+    name: string;
+    githubId: string;
+    discord: Discord | null;
+  } | null;
+  score: number;
+  messages: CrossCheckMessageDto[];
+};
+
 @Injectable()
 export class CourseCrossCheckService {
   constructor(
@@ -76,6 +100,8 @@ export class CourseCrossCheckService {
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
     @InjectRepository(TaskSolution)
     private readonly taskSolutionRepository: Repository<TaskSolution>,
+    @InjectRepository(TaskSolutionResult)
+    private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
   ) {}
 
   public async findPairs(
@@ -221,5 +247,71 @@ export class CourseCrossCheckService {
         };
       })
       .filter(el => el.checksCount !== 0);
+  }
+
+  public isCrossCheckTask(courseTask: Partial<CourseTask>) {
+    return courseTask.checker === 'crossCheck';
+  }
+
+  public async getCrossCheckSolutionReviews(
+    studentId: number,
+    courseTaskId: number,
+  ): Promise<CrossCheckSolutionReview[]> {
+    const comments = (
+      await this.TaskSolutionResultRepository.createQueryBuilder('tsr')
+        .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
+        .innerJoin('tsr.checker', 'checker')
+        .innerJoin('checker.user', 'user')
+        .addSelect(['checker.id', ...UsersService.getPrimaryUserFields('user')])
+        .where('"tsr"."studentId" = :studentId', { studentId })
+        .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
+        .getMany()
+    ).map(taskSolutionResult => {
+      const author = !taskSolutionResult.anonymous
+        ? {
+            id: taskSolutionResult.checker.user.id,
+            name: PersonDto.getName(taskSolutionResult.checker.user),
+            githubId: taskSolutionResult.checker.user.githubId,
+            discord: taskSolutionResult.checker.user.discord,
+          }
+        : null;
+
+      const [lastCheck] = taskSolutionResult.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+
+      if (!lastCheck) {
+        throw new BadRequestException('No historical scores found');
+      }
+
+      const { dateTime, criteria } = lastCheck;
+
+      const messages = !taskSolutionResult.anonymous
+        ? taskSolutionResult.messages
+        : taskSolutionResult.messages.map(message => ({
+            ...message,
+            author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+          }));
+
+      return {
+        dateTime,
+        author,
+        messages,
+        id: taskSolutionResult.id,
+        comment: taskSolutionResult.comment ?? '',
+        score: taskSolutionResult.score,
+        criteria,
+      };
+    });
+
+    return comments;
+  }
+
+  public async getTaskSolution(studentId: number, courseTaskId: number) {
+    const taskSolution = await this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .where('"ts"."studentId" = :studentId', { studentId })
+      .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOneOrFail();
+
+    return taskSolution;
   }
 }
