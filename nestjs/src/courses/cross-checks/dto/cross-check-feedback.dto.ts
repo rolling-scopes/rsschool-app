@@ -74,9 +74,9 @@ export class CrossCheckSolutionReviewDto {
 }
 
 export class CrossCheckFeedbackDto {
-  constructor(crossCheckSolutionReviews: CrossCheckSolutionReview[], taskSolution: TaskSolution) {
+  constructor(crossCheckSolutionReviews: CrossCheckSolutionReview[], taskSolution: TaskSolution | null) {
     this.reviews = crossCheckSolutionReviews;
-    this.url = taskSolution.url;
+    this.url = taskSolution?.url;
   }
 
   @ApiProperty({ required: false })

@@ -324,7 +324,7 @@ export class CourseCrossCheckService {
       .createQueryBuilder('ts')
       .where('"ts"."studentId" = :studentId', { studentId })
       .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
-      .getOneOrFail();
+      .getOne();
 
     return taskSolution;
   }
