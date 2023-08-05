@@ -257,52 +257,66 @@ export class CourseCrossCheckService {
     studentId: number,
     courseTaskId: number,
   ): Promise<CrossCheckSolutionReview[]> {
-    const comments = (
-      await this.TaskSolutionResultRepository.createQueryBuilder('tsr')
-        .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
-        .innerJoin('tsr.checker', 'checker')
-        .innerJoin('checker.user', 'user')
-        .addSelect(['checker.id', ...UsersService.getPrimaryUserFields('user')])
-        .where('"tsr"."studentId" = :studentId', { studentId })
-        .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
-        .getMany()
-    ).map(taskSolutionResult => {
-      const author = !taskSolutionResult.anonymous
-        ? {
-            id: taskSolutionResult.checker.user.id,
-            name: PersonDto.getName(taskSolutionResult.checker.user),
-            githubId: taskSolutionResult.checker.user.githubId,
-            discord: taskSolutionResult.checker.user.discord,
-          }
-        : null;
+    const taskSolutionResults = await this.TaskSolutionResultRepository.createQueryBuilder('tsr')
+      .select(['tsr.id', 'tsr.comment', 'tsr.anonymous', 'tsr.score', 'tsr.messages', 'tsr.historicalScores'])
+      .innerJoin('tsr.checker', 'checker')
+      .innerJoin('checker.user', 'user')
+      .addSelect(['checker.id', ...UsersService.getPrimaryUserFields('user')])
+      .where('"tsr"."studentId" = :studentId', { studentId })
+      .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getMany();
 
-      const [lastCheck] = taskSolutionResult.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+    return taskSolutionResults.map(this.transformToCrossCheckSolutionReview);
+  }
 
-      if (!lastCheck) {
-        throw new BadRequestException('No historical scores found');
-      }
+  private transformToCrossCheckSolutionReview(taskSolutionResult: TaskSolutionResult): CrossCheckSolutionReview {
+    const author = this.extractAuthor(taskSolutionResult);
+    const { dateTime, criteria } = this.getLastCheck(taskSolutionResult);
+    const messages = this.getMessages(taskSolutionResult);
 
-      const { dateTime, criteria } = lastCheck;
+    return {
+      dateTime,
+      author,
+      messages,
+      id: taskSolutionResult.id,
+      comment: taskSolutionResult.comment ?? '',
+      score: taskSolutionResult.score,
+      criteria,
+    };
+  }
 
-      const messages = !taskSolutionResult.anonymous
-        ? taskSolutionResult.messages
-        : taskSolutionResult.messages.map(message => ({
-            ...message,
-            author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
-          }));
+  private extractAuthor(taskSolutionResult: TaskSolutionResult) {
+    if (taskSolutionResult.anonymous) {
+      return null;
+    }
 
-      return {
-        dateTime,
-        author,
-        messages,
-        id: taskSolutionResult.id,
-        comment: taskSolutionResult.comment ?? '',
-        score: taskSolutionResult.score,
-        criteria,
-      };
-    });
+    return {
+      id: taskSolutionResult.checker.user.id,
+      name: PersonDto.getName(taskSolutionResult.checker.user),
+      githubId: taskSolutionResult.checker.user.githubId,
+      discord: taskSolutionResult.checker.user.discord,
+    };
+  }
 
-    return comments;
+  private getLastCheck(taskSolutionResult: TaskSolutionResult) {
+    const [lastCheck] = taskSolutionResult.historicalScores.sort((a, b) => b.dateTime - a.dateTime);
+
+    if (!lastCheck) {
+      throw new BadRequestException('No historical scores found');
+    }
+
+    return lastCheck;
+  }
+
+  private getMessages(taskSolutionResult: TaskSolutionResult) {
+    if (taskSolutionResult.anonymous) {
+      return taskSolutionResult.messages.map(message => ({
+        ...message,
+        author: message.role === CrossCheckMessageAuthorRole.Reviewer ? null : message.author,
+      }));
+    }
+
+    return taskSolutionResult.messages;
   }
 
   public async getTaskSolution(studentId: number, courseTaskId: number) {
