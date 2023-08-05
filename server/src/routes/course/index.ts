@@ -139,6 +139,9 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
     stageInterview.getInterviewerStudents(logger),
   );
 
+  /**
+   * @deprecated. please use v2
+   */
   router.get('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.getFeedback(logger));
   router.post('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.createFeedback(logger));
 

@@ -69,4 +69,7 @@ export class StageInterview {
 
   @Column({ nullable: true })
   isGoodCandidate: boolean;
+
+  @Column({ nullable: true })
+  rating: number;
 }

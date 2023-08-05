@@ -28,6 +28,9 @@ export class StageInterviewFeedbackRepository extends AbstractRepository<StageIn
       .getOne();
   }
 
+  /**
+   * @deprecated - use v2 version
+   */
   public async create(
     stageInterviewId: number,
     data: { json: any; decision: string | null; isGoodCandidate: boolean | null; isCompleted: boolean },

@@ -19,4 +19,7 @@ export class StageInterviewFeedback {
 
   @Column()
   json: string;
+
+  @Column({ nullable: true })
+  version: number;
 }

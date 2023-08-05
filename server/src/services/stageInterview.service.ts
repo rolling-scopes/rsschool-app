@@ -1,60 +1,5 @@
-import { StageInterview, StageInterviewFeedback, StageInterviewStudent, Student } from '../models';
-import { getRepository } from 'typeorm';
+import { StageInterview, StageInterviewFeedback } from '../models';
 import { StageInterviewFeedbackJson } from '../../../common/models';
-import * as courseService from './course.service';
-
-export async function getAvailableStudents(courseId: number) {
-  const students = await getRepository(Student)
-    .createQueryBuilder('student')
-    .innerJoin(StageInterviewStudent, 'sis', 'sis.studentId = student.id')
-    .innerJoin('student.user', 'user')
-    .leftJoin('student.stageInterviews', 'si')
-    .leftJoin('si.stageInterviewFeedbacks', 'sif')
-    .addSelect([
-      ...courseService.getPrimaryUserFields('user'),
-      'si.id',
-      'si.isGoodCandidate',
-      'si.isCompleted',
-      'si.isCanceled',
-      'sif.json',
-      'sif.updatedDate',
-    ])
-    .where(
-      [
-        `student.courseId = :courseId`,
-        `student.isFailed = false`,
-        `student.isExpelled = false`,
-        `student.mentorId IS NULL`,
-        `student.mentoring <> false`,
-      ].join(' AND '),
-      { courseId },
-    )
-    .orderBy('student.totalScore', 'DESC')
-    .getMany();
-
-  const result = students
-    .filter(s => {
-      return (
-        !s.stageInterviews ||
-        s.stageInterviews.length === 0 ||
-        s.stageInterviews.every(i => i.isCompleted || i.isCanceled)
-      );
-    })
-    .map(student => {
-      const { id, user, totalScore } = student;
-      const stageInterviews: StageInterview[] = student.stageInterviews || [];
-      return {
-        id,
-        totalScore,
-        githubId: user.githubId,
-        name: `${user.firstName} ${user.lastName}`.trim(),
-        cityName: user.cityName,
-        isGoodCandidate: isGoodCandidate(stageInterviews),
-        rating: getStageInterviewRating(stageInterviews),
-      };
-    });
-  return result;
-}
 
 export function getInterviewRatings({ skills, programmingTask, resume }: StageInterviewFeedbackJson) {
   const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
@@ -75,9 +20,6 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
 
   return { rating, htmlCss, common, dataStructures };
 }
-
-const isGoodCandidate = (stageInterviews: StageInterview[]) =>
-  stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
 
 export const getStageInterviewRating = (stageInterviews: StageInterview[]) => {
   const [lastInterview] = stageInterviews

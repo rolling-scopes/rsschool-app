@@ -16,6 +16,9 @@ type BodyParams = {
   isGoodCandidate: boolean | null;
 };
 
+/**
+ * @deprecated - use v2 version
+ */
 export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data: BodyParams = ctx.request.body;
   const { courseId } = ctx.params;
@@ -46,6 +49,6 @@ export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) 
 
     setResponse(ctx, StatusCodes.OK, { stageInterviewId: interview.id, ...data });
   } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
   }
 };

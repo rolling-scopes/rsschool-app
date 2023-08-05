@@ -574,6 +574,48 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{interviewId}/{type}/feedback": {
+      "get": {
+        "operationId": "getInterviewFeedback",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "type", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewFeedbackDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      },
+      "post": {
+        "operationId": "createInterviewFeedback",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "type", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateInterviewFeedbackDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewFeedbackDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "tags": ["courses interviews"]
+      }
+    },
     "/tasks/notify/changes": {
       "post": {
         "operationId": "notifyTasksDeadlines",
@@ -2607,6 +2649,26 @@
           "registeredDate": { "type": "string" }
         },
         "required": ["id", "name", "githubId", "cityName", "isGoodCandidate", "rating", "totalScore", "registeredDate"]
+      },
+      "InterviewFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "number" },
+          "json": { "type": "object" },
+          "isCompleted": { "type": "boolean" }
+        },
+        "required": ["version", "json", "isCompleted"]
+      },
+      "UpdateInterviewFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "number" },
+          "json": { "type": "object" },
+          "decision": { "type": "string" },
+          "isGoodCandidate": { "type": "boolean" },
+          "isCompleted": { "type": "boolean" }
+        },
+        "required": ["version", "json", "decision", "isGoodCandidate", "isCompleted"]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",
