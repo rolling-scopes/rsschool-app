@@ -1,6 +1,11 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
-import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto, TasksCriteriaApi } from 'api';
+import {
+  CrossCheckCriteriaDataDto,
+  CrossCheckMessageDtoRoleEnum,
+  CrossCheckSolutionReviewDto,
+  TasksCriteriaApi,
+} from 'api';
 import { CourseTaskSelect } from 'components/Forms';
 import MarkdownInput from 'components/Forms/MarkdownInput';
 import { markdownLabel } from 'components/Forms/PreparedComment';
