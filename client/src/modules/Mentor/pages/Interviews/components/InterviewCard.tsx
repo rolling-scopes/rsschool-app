@@ -7,13 +7,13 @@ import { Course } from 'services/models';
 import { MentorInterview } from 'services/course';
 
 export function InterviewCard(props: {
-  interview: InterviewDto;
+  interviewTask: InterviewDto;
   course: Course;
   students: MentorInterview[];
   fetchStudentInterviews: () => Promise<void>;
 }) {
-  const { interview, course, students, fetchStudentInterviews } = props;
-  const { name, startDate, endDate, id, description, descriptionUrl } = interview;
+  const { interviewTask, course, students, fetchStudentInterviews } = props;
+  const { name, startDate, endDate, id, description, descriptionUrl } = interviewTask;
 
   return (
     <Card
@@ -28,7 +28,7 @@ export function InterviewCard(props: {
         Read more
       </Button>
       <InterviewDetails
-        interview={interview}
+        interviewTask={interviewTask}
         course={course}
         students={students}
         fetchStudentInterviews={fetchStudentInterviews}

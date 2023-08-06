@@ -16,6 +16,7 @@ import {
   CriteriaDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
+import { getServerAxiosProps } from 'utils/axios';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -182,8 +183,11 @@ const studentsScoreApi = new StudentsScoreApi();
 export class CourseService {
   private axios: AxiosInstance;
 
-  constructor(private courseId: number) {
-    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
+  constructor(private courseId: number, token?: string) {
+    const options = token
+      ? getServerAxiosProps(token, `/api/course/${this.courseId}`)
+      : { baseURL: `/api/course/${this.courseId}` };
+    this.axios = globalAxios.create(options);
   }
 
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
@@ -506,8 +510,12 @@ export class CourseService {
     return result.data.data;
   }
 
+  /**
+   * @deprecated. use v2 version
+   */
   async getStageInterviewFeedback(interviewId: number) {
     const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
+
     return result.data.data;
   }
 

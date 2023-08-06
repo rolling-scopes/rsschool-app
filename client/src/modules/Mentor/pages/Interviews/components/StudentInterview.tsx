@@ -5,8 +5,13 @@ import { getInterviewFeedbackUrl } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
 
-export function StudentInterview(props: { interview: MentorInterview; template?: string | null; courseAlias: string }) {
-  const { interview, template, courseAlias } = props;
+export function StudentInterview(props: {
+  interview: MentorInterview;
+  template?: string | null;
+  courseAlias: string;
+  interviewTaskId: number;
+}) {
+  const { interview, template, courseAlias, interviewTaskId } = props;
   const { student, completed } = interview;
   return (
     <Col className={containerClassName}>
@@ -22,9 +27,11 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
             href={getInterviewFeedbackUrl({
               courseAlias,
               interviewName: interview.name,
+              interviewId: interview.id,
               studentGithubId: student.githubId,
               studentId: student.id,
               template: template,
+              interviewTaskId,
             })}
           >
             {completed ? 'Edit feedback' : 'Provide feedback'}

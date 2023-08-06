@@ -36,12 +36,12 @@ export function Interviews(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={course.name}>
       <MentorOptionsProvider course={course} session={props.session}>
         <div className="container">
-          {interviews.map(interview => (
+          {interviews.map(interviewTask => (
             <InterviewCard
-              interview={interview}
-              key={interview.id}
+              interviewTask={interviewTask}
+              key={interviewTask.id}
               course={course}
-              students={studentsByInterview[interview.name]}
+              students={studentsByInterview[interviewTask.name]}
               fetchStudentInterviews={fetchStudentInterviews}
             />
           ))}

@@ -29,7 +29,7 @@ export enum InterviewStatus {
 
 export const stageInterviewType = 'stage-interview';
 
-export function isInterviewRegistrationInProgess(interviewStartDate: string) {
+export function isInterviewRegistrationInProgress(interviewStartDate: string) {
   const startDate = dayjs(interviewStartDate).subtract(2, 'weeks');
 
   return dayjs().isBetween(startDate, interviewStartDate);
@@ -42,26 +42,27 @@ export function isInterviewStarted(interviewStartDate: string) {
 export function getInterviewFeedbackUrl({
   courseAlias,
   interviewName,
+  interviewId,
   studentGithubId,
   template,
   studentId,
+  interviewTaskId,
 }: {
   courseAlias: string;
   studentGithubId: string;
   studentId: number;
   template?: string | null;
   interviewName: string;
+  interviewId: number;
+  interviewTaskId: number;
 }) {
-  if (featureToggles.feedback) {
-    const type = isTechnicalScreening(interviewName) ? stageInterviewType : template;
-    return `/course/interview/${type}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&feedback=on`;
+  const isScreening = isTechnicalScreening(interviewName);
+  if (!featureToggles.feedback && isScreening) {
+    return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
   }
 
-  if (!isTechnicalScreening(interviewName)) {
-    return `/course/interview/${template}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}`;
-  }
-
-  return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
+  const type = isScreening ? stageInterviewType : template;
+  return `/course/interview/${type}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&interviewId=${interviewId}&interviewTaskId=${interviewTaskId}`;
 }
 
 export function isTechnicalScreening(name: string) {
