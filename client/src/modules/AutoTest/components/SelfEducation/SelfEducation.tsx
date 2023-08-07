@@ -10,7 +10,6 @@ type SelfEducationProps = {
 };
 
 const { Paragraph, Title } = Typography;
-const rowGapBetweenAnswers = 8;
 
 function getRandomQuestions(questions: SelfEducationQuestion[]): SelfEducationQuestionWithIndex[] {
   const questionsWithIndex = questions?.map((question, index) => ({ ...question, index }));
@@ -60,7 +59,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
             >
               {multiple ? (
                 <Checkbox.Group>
-                  <Space direction="vertical" size={rowGapBetweenAnswers}>
+                  <Space direction="vertical" size="small">
                     {answers?.map((answer, answerIndex) => (
                       <Checkbox key={answerIndex} value={answerIndex}>
                         {answersType === 'image' ? (
@@ -84,7 +83,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                 </Checkbox.Group>
               ) : (
                 <Radio.Group>
-                  <Space direction="vertical" size={rowGapBetweenAnswers}>
+                  <Space direction="vertical" size="small">
                     {answers?.map((answer, index) => (
                       <Radio key={index} value={index}>
                         {answersType === 'image' ? (
