@@ -207,8 +207,8 @@ function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<
       title: 'Used in Courses',
       dataIndex: 'courses',
       render: tagsRenderer,
-      filters: allUsedCourses.map(course => ({ text: course, value: course })),
-      onFilter: (value, record) => record.courses.includes(`${value}`),
+      filters: [{ text: 'Not assigned', value: '' }, ...allUsedCourses.map(course => ({ text: course, value: course }))],
+      onFilter: (value, record) => value ? record.courses.includes(`${value}`) : !record.courses.length,
     },
     {
       title: 'Description URL',
