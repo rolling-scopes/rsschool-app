@@ -98,6 +98,16 @@ export function tagsRenderer(values: (number | string)[]) {
   return <span>{values.map(v => renderTag(v))}</span>;
 }
 
+export function tagsRendererWithRemainingNumber(values: (number | string)[]) {
+  const tags = values.slice(0, 1);
+  const count = values.length - 1;
+  if (values.length && count) {
+    tags.push(`+ ${count} More`);
+  }
+
+  return tagsRenderer(tags);
+}
+
 export function renderTag(value: number | string, color?: string) {
   return (
     <Tag color={color} key={value}>

@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider } from 'antd';
 import withSession, { Session } from 'components/withSession';
-import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
+import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps, tagsRendererWithRemainingNumber } from 'components/Table';
 import union from 'lodash/union';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -206,7 +206,7 @@ function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<
     {
       title: 'Used in Courses',
       dataIndex: 'courses',
-      render: tagsRenderer,
+      render: tagsRendererWithRemainingNumber,
       filters: [{ text: 'Not assigned', value: '' }, ...allUsedCourses.map(course => ({ text: course, value: course }))],
       onFilter: (value, record) => value ? record.courses.includes(`${value}`) : !record.courses.length,
     },
