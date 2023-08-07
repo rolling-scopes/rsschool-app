@@ -26,7 +26,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   );
 
   return (
-    <>
+    <div className="self-education">
       <Paragraph>To submit the task answer the questions.</Paragraph>
       {randomQuestions?.map(
         ({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
@@ -112,12 +112,12 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
         },
       )}
       <style jsx>{styles}</style>
-    </>
+    </div>
   );
 }
 
 const styles = css`
-  :global(.ant-radio) {
+  .self-education :global(.ant-radio) {
     align-self: flex-start !important;
     margin-top: 3px !important;
   }
