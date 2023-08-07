@@ -4637,10 +4637,10 @@ export interface TaskDto {
     'attributes': object;
     /**
      * 
-     * @type {Array<IdNameDto>}
+     * @type {object}
      * @memberof TaskDto
      */
-    'courses': Array<IdNameDto>;
+    'courses': object;
 }
 
 export const TaskDtoTypeEnum = {
