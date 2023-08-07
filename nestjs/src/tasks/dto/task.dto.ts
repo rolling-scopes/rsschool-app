@@ -12,7 +12,9 @@ export class TaskDto {
     this.githubRepoName = task.githubRepoName;
     this.sourceGithubRepoUrl = task.sourceGithubRepoUrl;
     this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
-    this.courses = task.courseTasks ? [...new Set(task.courseTasks.map(courseTask => courseTask.course.name))] : [];
+    this.courses = task.courseTasks
+      ? [...new Set(task.courseTasks.map(courseTask => courseTask.course.name))].sort()
+      : [];
     this.githubPrRequired = task.githubPrRequired;
     this.tags = task.tags;
     this.skills = task.skills;
