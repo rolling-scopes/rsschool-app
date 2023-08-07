@@ -202,6 +202,11 @@ function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
       onFilter: (value, record) => record.type === value,
     },
     {
+      title: 'Used in Courses',
+      dataIndex: 'courses',
+      render: tagsRenderer,
+    },
+    {
       title: 'Description URL',
       dataIndex: 'descriptionUrl',
       render: (value: string) =>
