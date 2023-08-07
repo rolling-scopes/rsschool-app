@@ -108,6 +108,8 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading, dataCriteria],
   );
 
+  const allUsedCourses = [...new Set(data.map(({ courses }) => courses).flat())].sort();
+
   return (
     <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
@@ -120,7 +122,7 @@ function Page(props: Props) {
           dataSource={data}
           pagination={{ pageSize: 100 }}
           rowKey="id"
-          columns={getColumns(handleEditItem)}
+          columns={getColumns(handleEditItem, allUsedCourses)}
         />
       </Content>
       {modalData && (
@@ -167,7 +169,7 @@ function prepareValues(modalData: TaskDto) {
   };
 }
 
-function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
+function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<TaskDto> {
   return [
     {
       title: 'Id',
@@ -205,6 +207,8 @@ function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
       title: 'Used in Courses',
       dataIndex: 'courses',
       render: tagsRenderer,
+      filters: allUsedCourses.map(course => ({ text: course, value: course })),
+      onFilter: (value, record) => record.courses.includes(`${value}`),
     },
     {
       title: 'Description URL',
