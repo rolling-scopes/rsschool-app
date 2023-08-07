@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Select, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { get, debounce } from 'lodash';
+import get from 'lodash/get';
+import { debounce } from 'lodash';
 import { SelectProps } from 'antd/lib/select';
 import type { SearchStudent } from 'services/course';
+import { useDebounce } from 'react-use';
 
 type Person = { id: number; githubId: string; name: string } | SearchStudent;
 
@@ -17,6 +19,8 @@ export type UserProps = SelectProps<string> & {
 
 export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
+  const [value, setValue] = useState<string>('');
+  const [debouncedValue, setDebouncedValue] = useState<string>('');
   const {
     searchFn = defaultSearch,
     defaultValues,
@@ -30,15 +34,23 @@ export function UserSearch(props: UserProps) {
     setData(defaultValues ?? []);
   }, [props.defaultValues]);
 
-  const handleSearch = async (value: string) => {
-    value = value.trim();
-    if (value) {
-      const data = await searchFn(value, onlyStudentsWithoutMentorShown);
-      setData(data);
+  useEffect(() => {
+    if (debouncedValue) {
+      searchFn(debouncedValue, onlyStudentsWithoutMentorShown).then(data => setData(data));
     } else {
       setData(props.defaultValues ?? []);
     }
-  };
+  }, [debouncedValue]);
+
+  useDebounce(
+    () => {
+      setDebouncedValue(value);
+    },
+    300,
+    [value],
+  );
+
+  const handleSearch = (value: string) => setValue(value.trim());
 
   return (
     <Select
@@ -49,7 +61,7 @@ export function UserSearch(props: UserProps) {
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
-      onSearch={debounce(handleSearch, 300)}
+      onSearch={handleSearch}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
