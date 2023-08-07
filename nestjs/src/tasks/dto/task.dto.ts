@@ -12,7 +12,7 @@ export class TaskDto {
     this.githubRepoName = task.githubRepoName;
     this.sourceGithubRepoUrl = task.sourceGithubRepoUrl;
     this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
-    this.courses = task.courseTasks ? task.courseTasks.map(courseTask => courseTask.course.name) : [];
+    this.courses = task.courseTasks ? [...new Set(task.courseTasks.map(courseTask => courseTask.course.name))] : [];
     this.githubPrRequired = task.githubPrRequired;
     this.tags = task.tags;
     this.skills = task.skills;
@@ -64,5 +64,5 @@ export class TaskDto {
   public attributes: Record<string, any>;
 
   @ApiProperty()
-  public courses: string[] | null;
+  public courses: string[];
 }

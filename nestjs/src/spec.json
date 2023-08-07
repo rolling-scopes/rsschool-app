@@ -4135,7 +4135,7 @@
           "tags": { "type": "array", "items": { "type": "string" } },
           "skills": { "type": "array", "items": { "type": "string" } },
           "attributes": { "type": "object" },
-          "courses": { "type": "object" }
+          "courses": { "type": "array", "items": { "type": "string" } }
         },
         "required": [
           "type",
