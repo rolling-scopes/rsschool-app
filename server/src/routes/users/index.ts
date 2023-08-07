@@ -36,13 +36,24 @@ type SearchConfigItem = {
   isCaseSensitive: boolean;
 };
 
-const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: string): string =>
-  searchConfig
+const isSearchConfigIncludesName = (searchConfig: SearchConfigItem[]): boolean => {
+  return ['firstName', 'lastName'].every(fieldName => searchConfig.find(({ field }) => field === fieldName));
+};
+
+
+const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: string): string => {
+  const searchStringParts = searchConfig
     .map(
       ({ field, isCaseSensitive }: SearchConfigItem) =>
         `user.${field} ${isCaseSensitive ? 'like' : 'ilike'} ${parameterName}`,
     )
-    .join(' OR ');
+
+  if (isSearchConfigIncludesName(searchConfig)) {
+    searchStringParts.push(`CONCAT(user.firstName, ' ', user.lastName) ilike ${parameterName}`);
+  }
+
+  return searchStringParts.join(' OR ');
+}
 
 const generateResponse = (user: any, searchConfig: SearchConfigItem[]) =>
   searchConfig.reduce((response: any, { field }: SearchConfigItem) => ({ ...response, [field]: user[field] }), {});
