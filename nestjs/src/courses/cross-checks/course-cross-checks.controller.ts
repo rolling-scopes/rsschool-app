@@ -104,7 +104,7 @@ export class CourseCrossCheckController {
     res.end(parsedData);
   }
 
-  @Get(':courseTaskId/myFeedbacks')
+  @Get(':courseTaskId/feedbacks/my')
   @ApiOperation({ operationId: 'getMyCrossCheckFeedbacks' })
   @ApiForbiddenResponse()
   @ApiResponse({ type: CrossCheckFeedbackDto })
