@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Select, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import get from 'lodash/get';
+import { get, debounce } from 'lodash';
 import { SelectProps } from 'antd/lib/select';
 import type { SearchStudent } from 'services/course';
 
@@ -49,7 +49,7 @@ export function UserSearch(props: UserProps) {
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
-      onSearch={handleSearch}
+      onSearch={debounce(handleSearch, 300)}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
