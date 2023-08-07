@@ -134,7 +134,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     }
 
     const [{ data: feedback }, submittedSolution, taskDetails] = await Promise.all([
-      teamDistributionApi.getCrossCheckFeedback(props.course.id, courseTask.id),
+      teamDistributionApi.getMyCrossCheckFeedbacks(props.course.id, courseTask.id),
       courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);

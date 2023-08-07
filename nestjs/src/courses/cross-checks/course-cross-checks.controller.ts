@@ -104,13 +104,13 @@ export class CourseCrossCheckController {
     res.end(parsedData);
   }
 
-  @Get(':courseTaskId/student/feedback')
-  @ApiOperation({ operationId: 'getCrossCheckFeedback' })
+  @Get(':courseTaskId/myFeedbacks')
+  @ApiOperation({ operationId: 'getMyCrossCheckFeedbacks' })
   @ApiForbiddenResponse()
   @ApiResponse({ type: CrossCheckFeedbackDto })
   @RequiredRoles([CourseRole.Manager, Role.Admin, CourseRole.Student], true)
   @UseGuards(DefaultGuard, RoleGuard)
-  public async getCrossCheckFeedback(
+  public async getMyCrossCheckFeedbacks(
     @StudentId() studentId: number,
     @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,

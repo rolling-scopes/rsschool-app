@@ -9531,43 +9531,6 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
-         * @param {number} courseTaskId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getCrossCheckFeedback: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('getCrossCheckFeedback', 'courseId', courseId)
-            // verify required parameter 'courseTaskId' is not null or undefined
-            assertParamExists('getCrossCheckFeedback', 'courseTaskId', courseTaskId)
-            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/student/feedback`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
-                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -9630,6 +9593,43 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
             if (task !== undefined) {
                 localVarQueryParameter['task'] = task;
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyCrossCheckFeedbacks: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMyCrossCheckFeedbacks', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('getMyCrossCheckFeedbacks', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/myFeedbacks`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
 
     
@@ -9819,17 +9819,6 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
-         * @param {number} courseTaskId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckFeedbackDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckFeedback(courseId, courseTaskId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -9843,6 +9832,17 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
          */
         async getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckPairResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMyCrossCheckFeedbacks(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyCrossCheckFeedbacks(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9958,16 +9958,6 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {number} courseId 
-         * @param {number} courseTaskId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CrossCheckFeedbackDto> {
-            return localVarFp.getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} courseId 
          * @param {number} pageSize 
          * @param {number} current 
          * @param {string} [orderBy] 
@@ -9981,6 +9971,16 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: any): AxiosPromise<CrossCheckPairResponseDto> {
             return localVarFp.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyCrossCheckFeedbacks(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CrossCheckFeedbackDto> {
+            return localVarFp.getMyCrossCheckFeedbacks(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10109,18 +10109,6 @@ export class CoursesTasksApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
-     * @param {number} courseTaskId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesTasksApi
-     */
-    public getCrossCheckFeedback(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
-        return CoursesTasksApiFp(this.configuration).getCrossCheckFeedback(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} courseId 
      * @param {number} pageSize 
      * @param {number} current 
      * @param {string} [orderBy] 
@@ -10135,6 +10123,18 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getMyCrossCheckFeedbacks(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getMyCrossCheckFeedbacks(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

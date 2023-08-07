@@ -687,9 +687,9 @@
         "tags": ["courses tasks"]
       }
     },
-    "/courses/{courseId}/cross-checks/{courseTaskId}/student/feedback": {
+    "/courses/{courseId}/cross-checks/{courseTaskId}/myFeedbacks": {
       "get": {
-        "operationId": "getCrossCheckFeedback",
+        "operationId": "getMyCrossCheckFeedbacks",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
