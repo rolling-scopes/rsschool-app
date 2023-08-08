@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider } from 'antd';
+import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider, Card, Tag } from 'antd';
 import withSession, { Session } from 'components/withSession';
 import {
   boolIconRenderer,
@@ -27,7 +27,7 @@ import {
 } from 'modules/CrossCheck';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { ColumnsType } from 'antd/lib/table';
-import { uniqBy } from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -386,6 +386,20 @@ function TaskModal({
                 </Select.Option>
               ))}
             </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={24}>
+          <Form.Item name="usedInCourses" label="Used in Courses">
+            <Card>
+              {modalData?.courses?.map(({name, isActive}) => (
+                <Tag key={name} color={isActive ? 'blue' : ''}>
+                  {name}
+                </Tag>
+              ))}
+            </Card >
           </Form.Item>
         </Col>
       </Row>
