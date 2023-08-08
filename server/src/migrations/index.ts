@@ -48,6 +48,8 @@ import { User1676139987317 } from './1676139987317-User';
 import { Course1675345245770 } from './1675345245770-Course';
 import { MentorRegistry1685197747051 } from './1685197747051-MentorRegistry';
 import { Prompt1687009744110 } from './1687009744110-Prompt';
+import { Temperature1691520611773 } from './1691520611773-Temperature';
+import { Temperature1691524327332 } from './1691524327332-Temperature';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -100,4 +102,6 @@ export const migrations = [
   Course1675345245770,
   MentorRegistry1685197747051,
   Prompt1687009744110,
+  Temperature1691520611773,
+  Temperature1691524327332,
 ];

@@ -15,7 +15,7 @@ export class Prompt {
   @Column({ type: 'varchar', length: 256 })
   type: string;
 
-  @Column()
+  @Column({ type: 'float' })
   temperature: number;
 
   @Column()

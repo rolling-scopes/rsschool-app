@@ -34,7 +34,7 @@ export class EndorsementService {
     this.openAI = new OpenAIApi(new Configuration(this.configService.openai));
   }
 
-  public async getEndorsement(githubId: string): Promise<{ content: string } | null> {
+  public async getEndorsement(githubId: string): Promise<{ content: string; data: object } | null> {
     try {
       const prompt = await this.getEndorsementPrompt(githubId);
       if (!prompt) {
@@ -42,11 +42,11 @@ export class EndorsementService {
       }
       const result = await this.openAI.createChatCompletion({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.9,
+        messages: [{ role: 'user', content: prompt.text }],
+        temperature: prompt.temperature ?? 0.5,
       });
       const content = result.data.choices[0]?.message?.content ?? '';
-      return { content };
+      return { content, data: prompt.data };
     } catch (error) {
       console.log((error as Error).message, error);
       return null;
@@ -87,6 +87,6 @@ export class EndorsementService {
       interviewsCount,
       feedbacks,
     };
-    return eta.renderString(prompt.text, data);
+    return { text: eta.renderString(prompt.text, data), temperature: prompt.temperature, data };
   }
 }

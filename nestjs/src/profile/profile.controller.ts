@@ -90,7 +90,7 @@ export class ProfileController {
 
   @Get(':username/endorsement')
   @ApiOperation({ operationId: 'getEndorsement' })
-  @ApiResponse({ type: ProfileDto })
+  @ApiResponse({ type: EndorsementDto })
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   public async getEndorsement(@Param('username') githubId: string) {

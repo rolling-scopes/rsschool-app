@@ -15,7 +15,7 @@ export function PromptModal({ open, onCancel, loadData, data }: Props) {
 
   useEffect(() => form.resetFields, [open]);
 
-  const initialValues = data ?? {};
+  const initialValues = data ?? { temperature: 0.5 };
 
   const submitForm = async () => {
     try {
@@ -41,7 +41,7 @@ export function PromptModal({ open, onCancel, loadData, data }: Props) {
           <Input />
         </Form.Item>
         <Form.Item key="temperature" name="temperature" label="Temperature" rules={[{ required: true }]}>
-          <InputNumber min={0} max={1} defaultValue={0.5} />
+          <InputNumber step={0.1} min={0} max={1} />
         </Form.Item>
         <Form.Item key="text" name="text" label="Text" rules={[{ required: true }]}>
           <Input.TextArea rows={16} />

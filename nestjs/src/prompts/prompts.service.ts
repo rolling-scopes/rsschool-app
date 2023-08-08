@@ -13,11 +13,8 @@ export class PromptsService {
   ) {}
 
   public async create(dto: CreatePromptDto) {
-    const { text, type } = dto;
-    const { id } = await this.promptsRepository.save({
-      text,
-      type,
-    });
+    const { text, type, temperature } = dto;
+    const { id } = await this.promptsRepository.save({ text, type, temperature });
     return this.promptsRepository.findOneByOrFail({ id });
   }
 

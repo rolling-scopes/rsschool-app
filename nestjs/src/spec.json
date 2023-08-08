@@ -1540,7 +1540,7 @@
         "responses": {
           "default": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDto" } } }
           }
         },
         "tags": ["profile"]
@@ -3691,6 +3691,11 @@
         },
         "required": ["userId", "githubId", "primaryEmail", "isActiveStudent"]
       },
+      "EndorsementDto": {
+        "type": "object",
+        "properties": { "summary": { "type": "string" }, "data": { "type": "object" } },
+        "required": ["summary", "data"]
+      },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {
         "type": "object",
@@ -4333,15 +4338,32 @@
       },
       "CreatePromptDto": {
         "type": "object",
-        "properties": { "type": { "type": "string" }, "text": { "type": "string" } },
-        "required": ["type", "text"]
+        "properties": {
+          "type": { "type": "string" },
+          "text": { "type": "string" },
+          "temperature": { "type": "number" }
+        },
+        "required": ["type", "text", "temperature"]
       },
       "PromptDto": {
         "type": "object",
-        "properties": { "id": { "type": "number" }, "type": { "type": "string" }, "text": { "type": "string" } },
-        "required": ["id", "type", "text"]
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "text": { "type": "string" },
+          "temperature": { "type": "number" }
+        },
+        "required": ["id", "type", "text", "temperature"]
       },
-      "UpdatePromptDto": { "type": "object", "properties": {} }
+      "UpdatePromptDto": {
+        "type": "object",
+        "properties": {
+          "temperature": { "type": "number" },
+          "type": { "type": "string" },
+          "text": { "type": "string" }
+        },
+        "required": ["temperature", "type", "text"]
+      }
     }
   }
 }
