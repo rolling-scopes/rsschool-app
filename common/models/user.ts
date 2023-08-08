@@ -30,3 +30,23 @@ export interface StudentBasic extends UserBasic {
   totalScore: number;
   rank?: number;
 }
+
+export interface MentorDetails extends MentorBasic {
+  cityName: string;
+  countryName: string;
+  maxStudentsLimit: number;
+  studentsPreference: 'any' | 'city' | 'country';
+  interviews?: {
+    completed?: number;
+    total?: number;
+  };
+  screenings?: {
+    completed?: number;
+    total?: number;
+  };
+  studentsCount?: number;
+  taskResultsStats?: {
+    total: number;
+    checked: number;
+  };
+}
