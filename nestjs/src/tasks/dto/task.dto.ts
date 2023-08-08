@@ -1,5 +1,6 @@
 import { Task, TaskType } from '@entities/task';
 import { ApiProperty } from '@nestjs/swagger';
+import { uniq } from 'lodash';
 import { IdNameDto } from 'src/core/dto';
 
 export class TaskDto {
@@ -13,7 +14,14 @@ export class TaskDto {
     this.sourceGithubRepoUrl = task.sourceGithubRepoUrl;
     this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
     this.courses = task.courseTasks
-      ? [...new Set(task.courseTasks.map(courseTask => courseTask.course.name))].sort()
+      ? uniq(task.courseTasks.map(({ course }) => ({ name: course.name, isActive: !course.completed }))).sort(
+          (a, b) => {
+            if (a.isActive === b.isActive) {
+              return a.name.localeCompare(b.name);
+            }
+            return Number(a.isActive) - Number(b.isActive);
+          },
+        )
       : [];
     this.githubPrRequired = task.githubPrRequired;
     this.tags = task.tags;
@@ -66,5 +74,5 @@ export class TaskDto {
   public attributes: Record<string, any>;
 
   @ApiProperty()
-  public courses: string[];
+  public courses: { name: string; isActive: boolean }[];
 }
