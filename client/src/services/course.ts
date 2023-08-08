@@ -223,19 +223,23 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
-        `/mentors/search/${query}`,
-      );
-      return response.data.data;
+      const response = await globalAxios.get<
+        {
+          id: number;
+          githubId: string;
+          name: string;
+        }[]
+      >(`/api/v2/course/${this.courseId}/mentors/search/${query}`);
+      return response.data;
     } catch (e) {
       return [];
     }
   }
 
   async getMentorsWithDetails() {
-    type Response = { data: MentorDetails[] };
-    const result = await this.axios.get<Response>('/mentors/details');
-    return result.data.data;
+    type Response = MentorDetails[];
+    const result = await globalAxios.get<Response>(`/api/v2/course/${this.courseId}/mentors/details`);
+    return result.data;
   }
 
   async getCourseScore(
