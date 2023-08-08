@@ -9,4 +9,9 @@ export class CourseMentorsController {
   findAll(@Param('courseId') courseId: string) {
     return this.courseMentorsService.findAll(+courseId);
   }
+
+  @Get('details')
+  getMentorsDetails(@Param('courseId') courseId: string) {
+    return this.courseMentorsService.getMentorsWithStats(+courseId);
+  }
 }
