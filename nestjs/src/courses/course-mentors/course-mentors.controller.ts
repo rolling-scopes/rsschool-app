@@ -1,7 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { CourseMentorsService } from './course-mentors.service';
 
-@Controller('course-mentors')
+@Controller('course/:courseId/mentors')
 export class CourseMentorsController {
   constructor(private readonly courseMentorsService: CourseMentorsService) {}
+
+  @Get()
+  findAll(@Param('courseId') courseId: string) {
+    return this.courseMentorsService.findAll(+courseId);
+  }
 }
