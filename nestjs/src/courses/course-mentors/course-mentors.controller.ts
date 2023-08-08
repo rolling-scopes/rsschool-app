@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CourseMentorsService } from './course-mentors.service';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 
@@ -9,14 +9,14 @@ export class CourseMentorsController {
   @Get()
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
-  findAll(@Param('courseId') courseId: string) {
-    return this.courseMentorsService.findAll(+courseId);
+  findAll(@Param('courseId', ParseIntPipe) courseId: number) {
+    return this.courseMentorsService.findAll(courseId);
   }
 
   @Get('details')
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
-  getMentorsDetails(@Param('courseId') courseId: string) {
-    return this.courseMentorsService.getMentorsWithStats(+courseId);
+  getMentorsDetails(@Param('courseId', ParseIntPipe) courseId: number) {
+    return this.courseMentorsService.getMentorsWithStats(courseId);
   }
 }
