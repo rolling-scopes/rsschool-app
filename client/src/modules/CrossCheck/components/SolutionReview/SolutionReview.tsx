@@ -4,7 +4,7 @@ import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService, CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
+import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
 import { StudentDiscord } from '../../../../components/StudentDiscord';
@@ -13,7 +13,7 @@ import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
 
 const { Text } = Typography;
 
@@ -25,7 +25,7 @@ export type SolutionReviewProps = {
   reviewNumber: number;
   settings: SolutionReviewSettings;
   courseTaskId: number | null;
-  review: SolutionReviewType;
+  review: CrossCheckSolutionReviewDto;
   isActiveReview: boolean;
   isMessageSendingPanelVisible?: boolean;
   currentRole: CrossCheckMessageDtoRoleEnum;
@@ -50,9 +50,9 @@ function SolutionReview(props: SolutionReviewProps) {
   const { id, dateTime, author, comment, score, messages, criteria } = review;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalData, setModaldata] = useState<CrossCheckCriteriaData[]>([]);
+  const [modalData, setModaldata] = useState<CrossCheckCriteriaDataDto[]>([]);
 
-  const showModal = (modalData: CrossCheckCriteriaData[]) => {
+  const showModal = (modalData: CrossCheckCriteriaDataDto[]) => {
     setIsModalVisible(true);
     setModaldata(modalData);
   };

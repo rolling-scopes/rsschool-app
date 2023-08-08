@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TaskSolutionChecker } from '@entities/taskSolutionChecker';
 import { CourseCrossCheckService } from './course-cross-checks.service';
 import { TaskSolution } from '@entities/taskSolution';
+import { TaskSolutionResult } from '@entities/taskSolutionResult';
 
 const mockRawData = [
   {
@@ -43,6 +44,10 @@ describe('CourseCrossCheckService', () => {
         },
         {
           provide: getRepositoryToken(TaskSolutionChecker),
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(TaskSolutionResult),
           useValue: {},
         },
       ],

@@ -13,10 +13,10 @@ import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
 
 export interface CrossCheckCriteriaData {
-  key: number;
+  key: string;
   max?: number;
   text: string;
-  type: string;
+  type: 'title' | 'subtask' | 'penalty';
   point?: number;
   comment?: string;
 }

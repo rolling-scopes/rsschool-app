@@ -57,4 +57,16 @@ export class UsersService {
     }
     return result.join(' ');
   }
+
+  public static getPrimaryUserFields(modelName = 'user') {
+    return [
+      `${modelName}.id`,
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+      `${modelName}.discord`,
+    ];
+  }
 }
