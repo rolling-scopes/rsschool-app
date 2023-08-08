@@ -1,6 +1,6 @@
 import { Task, TaskType } from '@entities/task';
 import { ApiProperty } from '@nestjs/swagger';
-import { uniq } from 'lodash';
+import { uniqBy } from 'lodash';
 import { IdNameDto } from 'src/core/dto';
 import { UsedCourseDto } from 'src/courses/dto/used-course.dto';
 
@@ -15,8 +15,9 @@ export class TaskDto {
     this.sourceGithubRepoUrl = task.sourceGithubRepoUrl;
     this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
     this.courses = task.courseTasks
-      ? uniq(
+      ? uniqBy(
           task.courseTasks.map(({ course }) => new UsedCourseDto({ name: course.name, isActive: !course.completed })),
+          course => course.name,
         ).sort((a, b) => {
           if (a.isActive === b.isActive) {
             return a.name.localeCompare(b.name);
