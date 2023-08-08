@@ -1,15 +1,17 @@
-import { Button, Divider, message, Row, Statistic, Table, Popconfirm } from 'antd';
-import { withSession } from 'components/withSession';
+import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
 import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
-import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
+import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
+import { Session, withSession } from 'components/withSession';
+import { MentorEndorsement } from 'modules/Mentor/components/MentorEndorsement';
+import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, MentorDetails } from 'services/course';
 import { relativeDays } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { SyncOutlined, FileExcelOutlined } from '@ant-design/icons';
 
 type Stats = {
   recordCount: number;
@@ -17,11 +19,40 @@ type Stats = {
   students: { studentsGroupName: string; totalCount: number }[];
 };
 
+function getItems(mentor: MentorDetails, session: Session): MenuProps['items'] {
+  return [
+    {
+      label: 'Add student',
+      key: 'student',
+      disabled: !mentor.isActive,
+    },
+    {
+      label: 'Expel',
+      key: 'expel',
+      disabled: !mentor.isActive,
+    },
+    {
+      label: 'Restore',
+      key: 'restore',
+      disabled: mentor.isActive,
+    },
+    session.isAdmin
+      ? {
+          label: 'Endorsement',
+          key: 'endorsment',
+        }
+      : null,
+  ].filter(Boolean) as MenuProps['items'];
+}
+
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null as Stats | null);
   const [mentors, setMentors] = useState([] as MentorDetails[]);
+  const [endorsementGithubId, setEndorsementGithubId] = useState<string | null>(null);
+  const [currentMentor, setCurrentMentor] = useState<string | null>(null);
+  const [modal, contextHolder] = Modal.useModal();
 
   const service = useMemo(() => new CourseService(courseId), [courseId]);
 
@@ -95,6 +126,31 @@ function Page(props: CoursePageProps) {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMenuClick = async (menuItem: MenuInfo, mentor: MentorDetails) => {
+    switch (menuItem.key) {
+      case 'student': {
+        setCurrentMentor(mentor.githubId);
+        break;
+      }
+      case 'expel': {
+        modal.confirm({
+          onOk: () => handleExpel(mentor),
+          title: 'Are you sure you want to expel this mentor?',
+        });
+        break;
+      }
+      case 'restore':
+        modal.confirm({
+          onOk: () => handleRestore(mentor),
+          title: 'Do you want to restore the mentor?',
+        });
+        break;
+      case 'endorsment':
+        setEndorsementGithubId(mentor.githubId);
+        break;
     }
   };
 
@@ -229,36 +285,32 @@ function Page(props: CoursePageProps) {
             render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
           },
           {
-            title: 'Actions',
             dataIndex: 'actions',
-            render: (_: string, mentor: MentorDetails) =>
-              mentor.isActive ? (
-                <>
-                  <Popconfirm
-                    onConfirm={() => handleExpel(mentor)}
-                    title="Do you want to exclude a mentor from this course?"
-                  >
-                    <Button type="link" href="#">
-                      Expel
-                    </Button>
-                  </Popconfirm>
-                  <AssignStudentModal courseId={courseId} mentorGithuId={mentor.githubId} />
-                </>
-              ) : (
-                <>
-                  <Popconfirm
-                    onConfirm={() => handleRestore(mentor)}
-                    title="Do you want to restore mentor for this course?"
-                  >
-                    <Button type="link" href="#">
-                      Restore
-                    </Button>
-                  </Popconfirm>
-                </>
-              ),
+            width: 120,
+            render: (_: string, mentor: MentorDetails) => {
+              const items = getItems(mentor, props.session);
+              return (
+                <Dropdown menu={{ items, onClick: e => handleMenuClick(e, mentor) }}>
+                  <Button>
+                    <Space>
+                      Actions
+                      <DownOutlined />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              );
+            },
           },
         ]}
       />
+      <MentorEndorsement onClose={() => setEndorsementGithubId(null)} githubId={endorsementGithubId} />
+      <AssignStudentModal
+        onClose={() => setCurrentMentor(null)}
+        courseId={courseId}
+        open={Boolean(currentMentor)}
+        mentorGithuId={currentMentor}
+      />
+      {contextHolder}
     </AdminPageLayout>
   );
 }

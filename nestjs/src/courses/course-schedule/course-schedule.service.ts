@@ -285,7 +285,7 @@ export class CourseScheduleService {
         ...(technicalScreeningResults
           .find(task => task.courseTaskId === courseTaskId)
           ?.stageInterviewFeedbacks.map(feedback => JSON.parse(feedback.json))
-          .map(json => json?.resume?.score ?? 0) ?? []),
+          .map((json: any) => json?.resume?.score ?? 0) ?? []),
       );
     const currentScore = isFinite(scoreRaw) ? scoreRaw : null;
     return currentScore;
@@ -359,7 +359,7 @@ export class CourseScheduleService {
 
   private getEventStatus(courseEvent: CourseEvent) {
     const startTime = (courseEvent.dateTime as Date).getTime();
-    const endTime = courseEvent.endTime ?? startTime + (courseEvent.duration ?? 60) * 1000 * 60;
+    const endTime = Number(courseEvent.endTime) ?? startTime + (courseEvent.duration ?? 60) * 1000 * 60;
     if (endTime < Date.now()) {
       return CourseScheduleItemStatus.Archived;
     }

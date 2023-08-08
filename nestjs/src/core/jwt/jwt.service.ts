@@ -12,12 +12,14 @@ export class JwtService {
   }
 
   public createToken(payload: any) {
-    const jwt: string = sign(JSON.parse(JSON.stringify(payload)), this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
+    const jwt: string = sign(JSON.parse(JSON.stringify(payload)) as object, this.secretKey, {
+      expiresIn: JWT_TOKEN_EXPIRATION,
+    });
     return jwt;
   }
 
   public createPublicCalendarToken<T>(payload: T) {
-    const jwt: string = sign(JSON.parse(JSON.stringify(payload)), this.secretKey, { expiresIn: '365d' });
+    const jwt: string = sign(JSON.parse(JSON.stringify(payload)) as object, this.secretKey, { expiresIn: '365d' });
     return jwt;
   }
 

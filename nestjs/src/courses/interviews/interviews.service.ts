@@ -49,7 +49,7 @@ export class InterviewsService {
       .map(({ stageInterviewFeedbacks }) =>
         stageInterviewFeedbacks.map(feedback => ({
           date: feedback.updatedDate,
-          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json)).rating,
+          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json) as StageInterviewFeedbackJson).rating,
         })),
       )
       .reduce((acc, cur) => acc.concat(cur), [])

@@ -8,6 +8,7 @@ import NotificationFilled from '@ant-design/icons/NotificationFilled';
 import ProfileFilled from '@ant-design/icons/ProfileFilled';
 import TeamOutlined from '@ant-design/icons/TeamOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
+import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
@@ -126,6 +127,13 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'notifications',
     icon: <NotificationFilled />,
     href: '/admin/notifications',
+    access: session => isAdmin(session),
+  },
+  {
+    name: 'Propmts',
+    key: 'prompts',
+    icon: <FileTextOutlined />,
+    href: '/admin/prompts',
     access: session => isAdmin(session),
   },
 ];
