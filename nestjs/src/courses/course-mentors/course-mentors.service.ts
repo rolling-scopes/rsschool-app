@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CourseTask, Mentor, TaskResult } from '@entities/index';
 import { MentorDetails } from '@common/models';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
+import { PersonDto } from '../../core/dto';
 
 @Injectable()
 export class CourseMentorsService {
@@ -103,6 +104,38 @@ export class CourseMentorsService {
       });
     }
     return mentors;
+  }
+
+  public async searchMentors(
+    courseId: number,
+    searchText: string,
+  ): Promise<{ id: number; githubId: string; name: string }[]> {
+    const entities = await this.mentorsRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId'])
+      .where('"mentor"."courseId" = :courseId', { courseId })
+      .andWhere('"mentor"."isExpelled" = false')
+      .andWhere(
+        `
+        (
+          "user"."githubId" ILIKE :searchText OR
+          "user"."firstName" ILIKE :searchText OR
+          "user"."lastName" ILIKE :searchText
+        )
+      `,
+        { courseId, searchText },
+      )
+      .limit(20)
+      .getMany();
+
+    const result = entities.map(entity => ({
+      id: entity.id,
+      githubId: entity.user.githubId,
+      name: PersonDto.getName(entity.user),
+    }));
+
+    return result;
   }
 
   private async getLastCheckedDates(courseId: number, courseTasksIds: number[]) {
