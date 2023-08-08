@@ -9617,7 +9617,7 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
             assertParamExists('getMyCrossCheckFeedbacks', 'courseId', courseId)
             // verify required parameter 'courseTaskId' is not null or undefined
             assertParamExists('getMyCrossCheckFeedbacks', 'courseTaskId', courseTaskId)
-            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/myFeedbacks`
+            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/feedbacks/my`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
                 .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
