@@ -9,7 +9,7 @@ import { TaskResult } from '@entities/taskResult';
 import { TaskSolution } from '@entities/taskSolution';
 import { Task } from '@entities/task';
 
-import { MentorBasic } from '@common/models';
+import { MentorBasic, MentorDetails } from '@common/models';
 
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
@@ -57,6 +57,23 @@ export class MentorsService {
       students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
       cityName: user.cityName ?? '',
       countryName: user.countryName ?? '',
+    };
+  }
+
+  public static convertMentorToMentorDetails(mentor: Mentor): MentorDetails {
+    const mentorBasic = MentorsService.convertMentorToMentorBasic(mentor);
+    const user = mentor.user;
+    return {
+      ...mentorBasic,
+      students: mentor.students ?? [],
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
+      maxStudentsLimit: mentor.maxStudentsLimit,
+      studentsPreference: mentor.studentsPreference ?? 'any',
+      studentsCount: mentor.students ? mentor.students.length : 0,
+      screenings: {
+        total: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+      },
     };
   }
 
