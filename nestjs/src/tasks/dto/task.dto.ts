@@ -19,7 +19,7 @@ export class TaskDto {
             if (a.isActive === b.isActive) {
               return a.name.localeCompare(b.name);
             }
-            return Number(a.isActive) - Number(b.isActive);
+            return Number(b.isActive) - Number(a.isActive);
           },
         )
       : [];
