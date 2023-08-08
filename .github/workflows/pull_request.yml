@@ -173,10 +173,14 @@ jobs:
         env:
           cache-name: cache-next
         with:
-          path: client/.next/cache
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+          path: |
+            client/.next/cache
+            client/.turbo
+            nestjs/.turbo
+            server/.turbo
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}
 
       - name: Restore Docker layers
         uses: actions/cache@v2

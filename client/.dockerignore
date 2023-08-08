@@ -1,3 +1,4 @@
 .next/cache
 .next/static
 node_modules
+.turbo
