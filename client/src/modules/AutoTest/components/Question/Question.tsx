@@ -1,5 +1,6 @@
 import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { SelfEducationQuestionSelectedAnswersDto } from 'api';
+import css from 'styled-jsx/css';
 
 const { Title } = Typography;
 
@@ -13,60 +14,70 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
   const Element = multiple ? Checkbox : Radio;
 
   return (
-    <Form.Item
-      label={
-        <Row>
-          <Col>
-            <Title level={5}>{question}</Title>
-          </Col>
-          <Col span={24}>
-            {questionImage && (
-              <img
-                src={questionImage}
-                style={{
-                  width: '100%',
-                  maxWidth: '700px',
-                  marginBottom: '10px',
-                }}
-              />
-            )}
-          </Col>
-        </Row>
-      }
-      name={`answer-${questionIndex}`}
-      valuePropName="checked"
-    >
-      <Element.Group value={selectedAnswers as any}>
-        {answers?.map((answer, answerIndex) => {
-          const checked = Array.isArray(selectedAnswers)
-            ? selectedAnswers?.includes(answerIndex)
-            : selectedAnswers === answerIndex;
+    <div className="question">
+      <Form.Item
+        label={
+          <Row>
+            <Col>
+              <Title level={5}>{question}</Title>
+            </Col>
+            <Col span={24}>
+              {questionImage && (
+                <img
+                  src={questionImage}
+                  style={{
+                    width: '100%',
+                    maxWidth: '700px',
+                    marginBottom: '10px',
+                  }}
+                />
+              )}
+            </Col>
+          </Row>
+        }
+        name={`answer-${questionIndex}`}
+        valuePropName="checked"
+      >
+        <Element.Group value={selectedAnswers as any}>
+          <Space direction="vertical" size="small">
+            {answers?.map((answer, answerIndex) => {
+              const checked = Array.isArray(selectedAnswers)
+                ? selectedAnswers?.includes(answerIndex)
+                : selectedAnswers === answerIndex;
 
-          return (
-            <Space.Compact block key={answerIndex} direction="vertical">
-              <Element value={answerIndex} checked={checked}>
-                {answersType === 'image' ? (
-                  <>
-                    ({answerIndex + 1}){' '}
-                    <img
-                      src={answer}
-                      style={{
-                        width: '100%',
-                        maxWidth: '400px',
-                        marginBottom: '10px',
-                      }}
-                    />
-                  </>
-                ) : (
-                  answer
-                )}
-              </Element>
-            </Space.Compact>
-          );
-        })}
-      </Element.Group>
-    </Form.Item>
+              return (
+                <Element key={answerIndex} value={answerIndex} checked={checked}>
+                  {answersType === 'image' ? (
+                    <>
+                      ({answerIndex + 1}){' '}
+                      <img
+                        src={answer}
+                        style={{
+                          width: '100%',
+                          maxWidth: '400px',
+                          marginBottom: '10px',
+                        }}
+                      />
+                    </>
+                  ) : (
+                    answer
+                  )}
+                </Element>
+              );
+            })}
+          </Space>
+        </Element.Group>
+      </Form.Item>
+      <style jsx>{styles}</style>
+    </div>
   );
 }
+
+const styles = css`
+  .question :global(.ant-radio) {
+    align-self: flex-start !important;
+    margin-top: 3px !important;
+  }
+`;
 
 export default Question;
