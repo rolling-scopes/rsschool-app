@@ -6,7 +6,7 @@ import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum, TaskDto } from 'api';
 import { CrossCheckStatus } from 'services/course';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -98,14 +98,21 @@ export function tagsRenderer(values: (number | string)[]) {
   return <span>{values.map(v => renderTag(v))}</span>;
 }
 
-export function tagsRendererWithRemainingNumber(values: (number | string)[]) {
-  const tags = values.slice(0, 1);
-  const count = values.length - 1;
-  if (values.length && count) {
-    tags.push(`+ ${count} More`);
+export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }: TaskDto) {
+  if (!Array.isArray(courses) || courses.length === 0) {
+    return '';
   }
 
-  return tagsRenderer(tags);
+  const tags = courses
+    .slice(0, 1)
+    .map(({ name, isActive }) => ({ value: name, ...(isActive && { color: 'blue' }) }));
+  const count = courses.length - 1;
+
+  if (courses.length && count) {
+    tags.push({ value: `+ ${count} More` });
+  }
+
+  return <span>{tags.map(({ value, color }) => renderTag(value, color))}</span>;
 }
 
 export function renderTag(value: number | string, color?: string) {

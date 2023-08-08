@@ -1,6 +1,12 @@
 import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider } from 'antd';
 import withSession, { Session } from 'components/withSession';
-import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps, tagsRendererWithRemainingNumber } from 'components/Table';
+import {
+  boolIconRenderer,
+  stringSorter,
+  tagsRenderer,
+  getColumnSearchProps,
+  tagsCoursesRendererWithRemainingNumber,
+} from 'components/Table';
 import union from 'lodash/union';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -21,6 +27,7 @@ import {
 } from 'modules/CrossCheck';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { ColumnsType } from 'antd/lib/table';
+import { uniqBy } from 'lodash';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -108,7 +115,7 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading, dataCriteria],
   );
 
-  const allUsedCourses = [...new Set(data.map(({ courses }) => courses).flat())].sort();
+  const allUsedCourses = uniqBy(data.map(({ courses }) => courses).flat(), (course) => course.name).map(({ name }) => name).sort();
 
   return (
     <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
@@ -205,10 +212,13 @@ function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<
     },
     {
       title: 'Used in Courses',
-      dataIndex: 'courses',
-      render: tagsRendererWithRemainingNumber,
-      filters: [{ text: 'Not assigned', value: '' }, ...allUsedCourses.map(course => ({ text: course, value: course }))],
-      onFilter: (value, record) => value ? record.courses.includes(`${value}`) : !record.courses.length,
+      dataIndex: ['courses', 'name'],
+      render: tagsCoursesRendererWithRemainingNumber,
+      filters: [
+        { text: 'Not assigned', value: '' },
+        ...allUsedCourses.map(course => ({ text: course, value: course })),
+      ],
+      onFilter: (value, record) => (value ? record.courses.some(({name}) => name === `${value}`) : record.courses.length === 0),
     },
     {
       title: 'Description URL',
