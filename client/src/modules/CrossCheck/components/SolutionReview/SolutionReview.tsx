@@ -219,18 +219,18 @@ function SolutionReview(props: SolutionReviewProps) {
 
       <style jsx>{`
         :global(.ant-comment-inner) {
-          padding: 0;
+          padding: 0 !important;
         }
 
         :global(.ant-comment-avatar) {
-          position: sticky;
+          position: sticky !important;
           top: 16px;
           align-self: start;
         }
 
         :global(.ant-comment-avatar img) {
-          width: 100%;
-          height: 100%;
+          width: 100% !important;
+          height: 100% !important;
         }
       `}</style>
     </Spin>
