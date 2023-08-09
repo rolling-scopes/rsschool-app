@@ -105,7 +105,8 @@ export class CourseMentorsService {
         (
           "user"."githubId" ILIKE :searchText OR
           "user"."firstName" ILIKE :searchText OR
-          "user"."lastName" ILIKE :searchText
+          "user"."lastName" ILIKE :searchText OR
+          CONCAT("user"."firstName", ' ', "user"."lastName") ILIKE :searchText
         )
       `,
         { courseId, searchText },
