@@ -105,5 +105,5 @@ export const migrations = [
   Prompt1687009744110,
   Temperature1691520611773,
   Temperature1691524327332,
-  User1691604177978
+  User1691604177978,
 ];

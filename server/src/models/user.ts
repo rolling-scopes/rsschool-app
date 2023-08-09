@@ -222,11 +222,11 @@ export class User {
   notificationConnections: NotificationUserConnection[] | null;
 
   @Column({ type: Boolean, default: false })
-  jobFound: boolean
+  jobFound: boolean;
 
   @Column({ type: String, default: null, nullable: true })
-  jobFoundCompanyName: string | null
+  jobFoundCompanyName: string | null;
 
   @Column({ type: String, default: null, nullable: true })
-  jobFoundOfficeLocation: string | null
+  jobFoundOfficeLocation: string | null;
 }
