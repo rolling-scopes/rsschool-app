@@ -31,21 +31,21 @@ export interface StudentBasic extends UserBasic {
   rank?: number;
 }
 
+export interface InterviewStatistics {
+  completed?: number;
+  total?: number;
+}
+
 export interface MentorDetails extends MentorBasic {
   cityName: string;
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'any' | 'city' | 'country';
-  interviews?: {
-    completed?: number;
-    total?: number;
-  };
-  screenings?: {
-    completed?: number;
-    total?: number;
-  };
+  interviews?: InterviewStatistics;
+  screenings?: InterviewStatistics;
   studentsCount?: number;
   taskResultsStats?: {
+    lastUpdatedDate?: Date;
     total: number;
     checked: number;
   };
