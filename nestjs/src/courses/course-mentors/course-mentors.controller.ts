@@ -34,6 +34,6 @@ export class CourseMentorsController {
   @UseGuards(DefaultGuard, CourseGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   searchMentors(@Param('courseId', ParseIntPipe) courseId: number, @Param('searchText') searchText: string) {
-    return this.courseMentorsService.searchMentors(courseId, searchText);
+    return this.courseMentorsService.searchMentors(courseId, `${searchText}%`);
   }
 }
