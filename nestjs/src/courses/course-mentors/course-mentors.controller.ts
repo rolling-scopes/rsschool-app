@@ -7,13 +7,6 @@ import { DEFAULT_CACHE_TTL } from 'src/constants';
 export class CourseMentorsController {
   constructor(private readonly courseMentorsService: CourseMentorsService) {}
 
-  @Get()
-  @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
-  findAll(@Param('courseId', ParseIntPipe) courseId: number) {
-    return this.courseMentorsService.findAll(courseId);
-  }
-
   @Get('details')
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])

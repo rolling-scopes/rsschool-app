@@ -16,22 +16,6 @@ export class CourseMentorsService {
     readonly courseTaskRepository: Repository<CourseTask>,
     private dataSource: DataSource,
   ) {}
-  public async findAll(courseId: number): Promise<MentorDetails[]> {
-    const records = await this.mentorsRepository
-      .createQueryBuilder('mentor')
-      .innerJoin('mentor.user', 'user')
-      .addSelect(UsersService.getPrimaryUserFields())
-      .innerJoin('mentor.course', 'course')
-      .leftJoin('mentor.students', 'students')
-      .addSelect(['students.id'])
-      .leftJoinAndSelect('mentor.stageInterviews', 'stageInterviews')
-      .where(`course.id = :courseId`, { courseId })
-      .orderBy('mentor.createdDate')
-      .getMany();
-
-    const mentors = records.map(MentorsService.convertMentorToMentorDetails);
-    return mentors;
-  }
 
   public async getMentorsWithStats(courseId: number): Promise<MentorDetails[]> {
     const courseTasks = await this.courseTaskRepository
