@@ -6,6 +6,7 @@ import { MentorDetails } from '@common/models';
 import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
 import { PersonDto } from '../../core/dto';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 @Injectable()
 export class CourseMentorsService {
@@ -70,7 +71,7 @@ export class CourseMentorsService {
         countryName: user.countryName ?? '',
         contactsEpamEmail: user.contactsEpamEmail ?? '',
         maxStudentsLimit: mentor.maxStudentsLimit,
-        studentsPreference: mentor.studentsPreference ?? 'any',
+        studentsPreference: mentor.studentsPreference ?? PreferredStudentsLocation.ANY,
         studentsCount: activeStudents.length,
         screenings: {
           total: mentor.stageInterviews?.length ?? 0,
