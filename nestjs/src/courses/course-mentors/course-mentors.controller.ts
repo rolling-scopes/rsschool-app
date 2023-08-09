@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { CacheTTL, Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CourseMentorsService } from './course-mentors.service';
 import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { DEFAULT_CACHE_TTL } from 'src/constants';
 
 @Controller('course/:courseId/mentors')
 export class CourseMentorsController {
@@ -21,6 +22,7 @@ export class CourseMentorsController {
   }
 
   @Get('search/:searchText')
+  @CacheTTL(DEFAULT_CACHE_TTL)
   @UseGuards(DefaultGuard, CourseGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   searchMentors(@Param('courseId', ParseIntPipe) courseId: number, @Param('searchText') searchText: string) {
