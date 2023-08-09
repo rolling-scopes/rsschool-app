@@ -61,7 +61,7 @@ export class CourseMentorsService {
       const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
       const totalToCheck = activeStudents.length * count;
 
-      const lastCheckedDate = lastCheckedDateByMentor.find(m => m.id === mentor.id)?.value ?? null;
+      const lastCheckedDate = lastCheckedDateByMentor.find(m => m.id === mentor.id)?.value;
       const checkedCount = checkedCountByMentor.find(m => m.id === mentor.id)?.value ?? 0;
 
       mentors.push({
@@ -81,7 +81,7 @@ export class CourseMentorsService {
           completed: mentor.interviewResults?.length ?? 0,
         },
         taskResultsStats: {
-          lastUpdatedDate: lastCheckedDate,
+          lastUpdatedDate: lastCheckedDate ? new Date(lastCheckedDate) : null,
           total: totalToCheck,
           checked: checkedCount,
         },
