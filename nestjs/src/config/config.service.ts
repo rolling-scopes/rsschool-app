@@ -68,7 +68,7 @@ export class ConfigService {
     };
 
     this.openai = {
-      apiKey: process.env.RSSHCOOL_OPENAI_API_KEY || '',
+      apiKey: conf.get('RSSHCOOL_OPENAI_API_KEY') || '',
     };
 
     this.awsServices = {
