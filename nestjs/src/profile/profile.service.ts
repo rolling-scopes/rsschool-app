@@ -13,6 +13,7 @@ import { Resume } from '@entities/resume';
 import { Discord } from '../../../common/models';
 import { omitBy, isUndefined } from 'lodash';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { JobFoundDto } from './dto/job-found.dto';
 
 @Injectable()
 export class ProfileService {
@@ -207,6 +208,19 @@ export class ProfileService {
 
   public async getPersonalProfile(githubId: string) {
     return this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
+  }
+
+  public async updateJobFound(userId: number, { jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
+    await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        jobFound,
+        jobFoundCompanyName,
+        jobFoundOfficeLocation,
+      })
+      .where('id = :id', { id: userId })
+      .execute();
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

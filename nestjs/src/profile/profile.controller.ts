@@ -3,7 +3,7 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
+import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, JobFoundDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
@@ -96,5 +96,14 @@ export class ProfileController {
   public async getEndorsement(@Param('username') githubId: string) {
     const endorsement = await this.endormentService.getEndorsement(githubId);
     return new EndorsementDto(endorsement);
+  }
+
+  @Patch('/user')
+  @ApiOperation({ operationId: 'updateJobFound' })
+  @ApiBody({ type: JobFoundDto })
+  public async updateJobFound(@Req() req: CurrentRequest, @Body() dto: JobFoundDto) {
+    const { user } = req;
+
+    await this.profileService.updateJobFound(user.id, dto);
   }
 }
