@@ -52,7 +52,7 @@ export class EndorsementService {
       const content = result.data.choices[0]?.message?.content ?? '';
       return { content, data: prompt.data };
     } catch (error) {
-      this.logger.error((error as Error).message, error);
+      this.logger.error(error);
       return null;
     }
   }
