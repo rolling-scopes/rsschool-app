@@ -28,7 +28,7 @@ export class CourseMentorsService {
       .getMany();
 
     const courseTasksIds = courseTasks.map(t => t.id);
-    const query = await this.mentorsRepository
+    const query = this.mentorsRepository
       .createQueryBuilder('mentor')
       .innerJoin('mentor.user', 'user')
       .addSelect(UsersService.getPrimaryUserFields())
