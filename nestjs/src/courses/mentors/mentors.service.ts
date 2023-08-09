@@ -50,13 +50,13 @@ export class MentorsService {
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
     const user = mentor.user;
     return {
-      isActive: !mentor.isExpelled,
-      name: PersonDto.getName(user),
       id: mentor.id,
+      name: PersonDto.getName(user),
       githubId: user.githubId,
-      students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
       cityName: user.cityName ?? '',
       countryName: user.countryName ?? '',
+      isActive: !mentor.isExpelled,
+      students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
     };
   }
 
