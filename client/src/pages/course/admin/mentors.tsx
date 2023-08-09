@@ -98,7 +98,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
+  const exportToCsv = () => (window.location.href = `/api/v2/course/${courseId}/mentors/details/csv`);
 
   return (
     <AdminPageLayout
