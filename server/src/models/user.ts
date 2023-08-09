@@ -225,8 +225,8 @@ export class User {
   jobFound: boolean
 
   @Column({ type: String, default: null, nullable: true })
-  companyName: string
+  jobFoundCompanyName: string | null
 
   @Column({ type: String, default: null, nullable: true })
-  officeLocation: string
+  jobFoundOfficeLocation: string | null
 }
