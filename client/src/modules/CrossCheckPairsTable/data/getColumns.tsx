@@ -15,7 +15,6 @@ export const fields = {
   reviewedDate: 'reviewedDate',
 };
 
-
 export interface CustomColumnType<RecordType> extends ColumnType<RecordType> {
   sorterField?: string;
 }
@@ -63,19 +62,7 @@ export const getColumns = (viewComment: (value: CrossCheckPairDto) => void): Cus
     sorter: true,
     sorterField: 'student',
     width: 150,
-    render: (value: string) => (
-      <div>
-        {value ? (
-          <>
-            <GithubAvatar githubId={value} size={24} />
-            &nbsp;
-            <a target="_blank" href={`https://github.com/${value}`}>
-              {value}
-            </a>
-          </>
-        ) : null}
-      </div>
-    ),
+    render: renderGithubLink,
     ...omit(getColumnSearchProps(['student', 'githubId']), 'onFilter'),
   },
   {

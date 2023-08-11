@@ -175,8 +175,6 @@ export default function Page(props: CoursePageProps) {
   );
 }
 
-
-
 function renderTable(
   loaded: boolean,
   crossCheckPairs: CrossCheckPairDto[],
