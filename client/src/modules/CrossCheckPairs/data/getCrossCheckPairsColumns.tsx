@@ -33,7 +33,9 @@ const renderGithubLink = (value: string) => (
   </div>
 );
 
-export const getColumns = (viewComment: (value: CrossCheckPairDto) => void): CustomColumnType<CrossCheckPairDto>[] => [
+export const getCrossCheckPairsColumns = (
+  viewComment: (value: CrossCheckPairDto) => void,
+): CustomColumnType<CrossCheckPairDto>[] => [
   {
     title: 'Task',
     fixed: 'left',

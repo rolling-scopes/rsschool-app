@@ -1,8 +1,7 @@
-import { Collapse, Modal, Space, Table, TablePaginationConfig } from 'antd';
+import { Collapse, Modal, Space, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
-import { FilterValue, SorterResult } from 'antd/lib/table/interface';
+import { FilterValue } from 'antd/lib/table/interface';
 import { IPaginationInfo } from 'common/types/pagination';
-import { BadReviewControllers } from 'modules/CrossCheckPairsTable/components/BadReview/BadReviewControllers';
 import { AdminPageLayout } from 'components/PageLayout';
 import { dateTimeRenderer } from 'components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -13,15 +12,12 @@ import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from
 import PreparedComment from 'components/Forms/PreparedComment';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
 import { CrossCheckCriteria } from 'modules/CrossCheck/components/criteria/CrossCheckCriteria';
-import { CustomColumnType, fields, getColumns } from 'modules/CrossCheckPairsTable/data/getColumns';
-
-interface CustomSorterResult<RecordType> extends SorterResult<RecordType> {
-  column?: CustomColumnType<RecordType>;
-}
-
-type Sorter<RecordType> = CustomSorterResult<RecordType> | CustomSorterResult<RecordType>[];
-
-type Filters = Omit<typeof fields, 'score' | 'submittedDate' | 'reviewedDate'>;
+import { BadReviewControllers } from 'modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
+import {
+  Filters,
+  Sorter,
+  CrossCheckPairsTable,
+} from 'modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
 
 enum OrderDirection {
   ASC = 'ASC',
@@ -119,22 +115,7 @@ export default function Page(props: CoursePageProps) {
     loadInitialData();
   }, []);
 
-  return (
-    <AdminPageLayout
-      session={props.session}
-      loading={loading}
-      title="Cross-Check"
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
-      {contextHolder}
-      <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
-      {renderTable(
-        loaded,
-        crossCheckList.content,
-        crossCheckList.pagination,
-        getCourseScore,
-        ({ historicalScores, checker, messages }) => {
+  const handleViewComment = ({ historicalScores, checker, messages }: CrossCheckPairDto) => {
           modal.info({
             width: 1020,
             title: `Comment from ${checker.githubId}`,
@@ -168,40 +149,29 @@ export default function Page(props: CoursePageProps) {
               </Space>
             )),
           });
-        },
-      )}
+        };
+
+
+
+  return (
+    <AdminPageLayout
+      session={props.session}
+      loading={loading}
+      title="Cross-Check"
+      courseName={props.course.name}
+      courses={[props.course]}
+    >
+      {contextHolder}
+      <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
+      <CrossCheckPairsTable
+        loaded={loaded}
+        crossCheckPairs={crossCheckList.content}
+        pagination={crossCheckList.pagination}
+        onChange={getCourseScore}
+        viewComment={handleViewComment}
+      />
       <style jsx>{styles}</style>
     </AdminPageLayout>
-  );
-}
-
-function renderTable(
-  loaded: boolean,
-  crossCheckPairs: CrossCheckPairDto[],
-  pagination: TablePaginationConfig,
-  handleChange: (
-    pagination: TablePaginationConfig,
-    filters: Record<keyof Filters, FilterValue | null>,
-    sorter: Sorter<CrossCheckPairDto>,
-  ) => void,
-  viewComment: (value: CrossCheckPairDto) => void,
-) {
-  if (!loaded) {
-    return null;
-  }
-  // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
-  const tableWidth = 800;
-  return (
-    <Table<CrossCheckPairDto>
-      className="table-score"
-      showHeader
-      scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
-      pagination={pagination}
-      dataSource={crossCheckPairs}
-      onChange={handleChange}
-      key="id"
-      columns={getColumns(viewComment)}
-    />
   );
 }
 
