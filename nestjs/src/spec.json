@@ -3693,7 +3693,7 @@
       },
       "EndorsementDto": {
         "type": "object",
-        "properties": { "summary": { "type": "string" }, "data": { "type": "object" } },
+        "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },

@@ -2547,7 +2547,7 @@ export interface EndorsementDto {
      * @type {object}
      * @memberof EndorsementDto
      */
-    'data': object;
+    'data': object | null;
 }
 /**
  * 
