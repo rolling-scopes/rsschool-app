@@ -49,7 +49,7 @@ export class InterviewsService {
       .map(({ stageInterviewFeedbacks }) =>
         stageInterviewFeedbacks.map(feedback => ({
           date: feedback.updatedDate,
-          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json)).rating,
+          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json) as StageInterviewFeedbackJson).rating,
         })),
       )
       .reduce((acc, cur) => acc.concat(cur), [])
@@ -68,7 +68,7 @@ export class InterviewsService {
         'student.id',
         'student.totalScore',
         'student.mentorId',
-        ...this.getPrimaryUserFields(),
+        ...UsersService.getPrimaryUserFields(),
         'taskChecker.id',
       ])
       .where('is.courseId = :courseId', { courseId })
@@ -98,7 +98,7 @@ export class InterviewsService {
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
       .addSelect([
-        ...this.getPrimaryUserFields(),
+        ...UsersService.getPrimaryUserFields(),
         'si.id',
         'si.isGoodCandidate',
         'si.isCompleted',
@@ -164,18 +164,6 @@ export class InterviewsService {
     const rating = ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0;
 
     return { rating, htmlCss, common, dataStructures };
-  }
-
-  private getPrimaryUserFields(modelName = 'user') {
-    return [
-      `${modelName}.id`,
-      `${modelName}.firstName`,
-      `${modelName}.lastName`,
-      `${modelName}.githubId`,
-      `${modelName}.cityName`,
-      `${modelName}.countryName`,
-      `${modelName}.discord`,
-    ];
   }
 
   private isGoodCandidate(stageInterviews: StageInterview[]) {

@@ -1,11 +1,11 @@
 import { Modal, Typography } from 'antd';
-import { CrossCheckCriteriaData } from 'services/course';
 import { TaskType } from '../CrossCheckCriteriaForm';
+import { CrossCheckCriteriaDataDto } from 'api';
 
 const { Text, Title } = Typography;
 
 type Props = {
-  modalInfo: CrossCheckCriteriaData[] | null;
+  modalInfo: CrossCheckCriteriaDataDto[] | null;
   isModalVisible: boolean;
   showModal: (isModalVisible: boolean) => void;
 };

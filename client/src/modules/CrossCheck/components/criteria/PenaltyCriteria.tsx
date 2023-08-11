@@ -1,6 +1,6 @@
 import React from 'react';
 import { Radio, RadioChangeEvent, Typography } from 'antd';
-import { CrossCheckCriteriaData } from 'services/course';
+import { CrossCheckCriteriaDataDto } from 'api';
 
 const { Text } = Typography;
 const { Group } = Radio;
@@ -11,8 +11,8 @@ enum HasPenalty {
 }
 
 interface PenaltyCriteriaProps {
-  penaltyData: CrossCheckCriteriaData;
-  updateCriteriaData: (updatedEntry: CrossCheckCriteriaData) => void;
+  penaltyData: CrossCheckCriteriaDataDto;
+  updateCriteriaData: (updatedEntry: CrossCheckCriteriaDataDto) => void;
 }
 
 export function PenaltyCriteria({ penaltyData, updateCriteriaData }: PenaltyCriteriaProps) {

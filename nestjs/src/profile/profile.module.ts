@@ -9,15 +9,30 @@ import { User } from '@entities/user';
 import { ProfilePermissions } from '@entities/profilePermissions';
 import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { Resume } from '@entities/resume';
+import { EndorsementService } from './endorsement.service';
+import { Feedback, Mentor, Prompt, Student, TaskInterviewResult } from '@entities/index';
+import { ConfigModule } from 'src/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Course, NotificationUserConnection, User, ProfilePermissions, Resume]),
+    TypeOrmModule.forFeature([
+      Course,
+      NotificationUserConnection,
+      User,
+      ProfilePermissions,
+      Resume,
+      Student,
+      Mentor,
+      Prompt,
+      Feedback,
+      TaskInterviewResult,
+    ]),
     UsersNotificationsModule,
     CoursesModule,
+    ConfigModule,
   ],
   controllers: [ProfileController],
-  providers: [ProfileService],
+  providers: [ProfileService, EndorsementService],
   exports: [ProfileService],
 })
 export class ProfileModule {}

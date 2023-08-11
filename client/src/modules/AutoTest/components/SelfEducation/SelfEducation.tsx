@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import css from 'styled-jsx/css';
 
 type SelfEducationProps = {
   courseTask: CourseTaskVerifications;
@@ -24,7 +25,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   );
 
   return (
-    <>
+    <div className="self-education">
       <Paragraph>To submit the task answer the questions.</Paragraph>
       {randomQuestions?.map(
         ({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
@@ -58,9 +59,9 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
             >
               {multiple ? (
                 <Checkbox.Group>
-                  {answers?.map((answer, answerIndex) => (
-                    <Space.Compact block key={answerIndex} direction="vertical">
-                      <Checkbox value={answerIndex}>
+                  <Space direction="vertical" size="small">
+                    {answers?.map((answer, answerIndex) => (
+                      <Checkbox key={answerIndex} value={answerIndex}>
                         {answersType === 'image' ? (
                           <>
                             ({answerIndex + 1}){' '}
@@ -77,14 +78,14 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                           answer
                         )}
                       </Checkbox>
-                    </Space.Compact>
-                  ))}
+                    ))}
+                  </Space>
                 </Checkbox.Group>
               ) : (
                 <Radio.Group>
-                  {answers?.map((answer, index) => (
-                    <Row key={index}>
-                      <Radio value={index}>
+                  <Space direction="vertical" size="small">
+                    {answers?.map((answer, index) => (
+                      <Radio key={index} value={index}>
                         {answersType === 'image' ? (
                           <>
                             ({index + 1}){' '}
@@ -101,16 +102,24 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                           answer
                         )}
                       </Radio>
-                    </Row>
-                  ))}
+                    ))}
+                  </Space>
                 </Radio.Group>
               )}
             </Form.Item>
           );
         },
       )}
-    </>
+      <style jsx>{styles}</style>
+    </div>
   );
 }
+
+const styles = css`
+  .self-education :global(.ant-radio) {
+    align-self: flex-start !important;
+    margin-top: 3px !important;
+  }
+`;
 
 export default SelfEducation;

@@ -1,9 +1,9 @@
 import { Typography } from 'antd';
+import { CrossCheckCriteriaDataDto } from 'api';
 import React from 'react';
-import { CrossCheckCriteriaData } from 'services/course';
 
 interface TitleCriteriaProps {
-  titleData: CrossCheckCriteriaData;
+  titleData: CrossCheckCriteriaDataDto;
 }
 const { Text } = Typography;
 

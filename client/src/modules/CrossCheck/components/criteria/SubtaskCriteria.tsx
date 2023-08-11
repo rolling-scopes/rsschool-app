@@ -1,15 +1,15 @@
 import { Input, Typography, InputNumber, Slider } from 'antd';
 import { useMemo } from 'react';
-import { CrossCheckCriteriaData } from 'services/course';
 import isUndefined from 'lodash/isUndefined';
 import isNil from 'lodash/isNil';
+import { CrossCheckCriteriaDataDto } from 'api';
 
 const { TextArea } = Input;
 const { Text } = Typography;
 
 interface SubtaskCriteriaProps {
-  subtaskData: CrossCheckCriteriaData;
-  updateCriteriaData: (updatedEntry: CrossCheckCriteriaData) => void;
+  subtaskData: CrossCheckCriteriaDataDto;
+  updateCriteriaData: (updatedEntry: CrossCheckCriteriaDataDto) => void;
 }
 
 export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCriteriaProps) {
