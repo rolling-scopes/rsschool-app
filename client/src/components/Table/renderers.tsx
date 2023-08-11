@@ -103,9 +103,7 @@ export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }
     return '';
   }
 
-  const tags = courses
-    .slice(0, 1)
-    .map(({ name, isActive }) => ({ value: name, ...(isActive && { color: 'blue' }) }));
+  const tags = courses.slice(0, 1).map(({ name, isActive }) => ({ value: name, ...(isActive && { color: 'blue' }) }));
   const count = courses.length - 1;
 
   if (courses.length && count) {

@@ -1,4 +1,19 @@
-import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider, Card, Tag } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Row,
+  Col,
+  Input,
+  Collapse,
+  Layout,
+  message,
+  Select,
+  Table,
+  Divider,
+  Card,
+  Tag,
+} from 'antd';
 import withSession, { Session } from 'components/withSession';
 import {
   boolIconRenderer,
@@ -115,7 +130,9 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading, dataCriteria],
   );
 
-  const allUsedCourses = uniqBy(data.map(({ courses }) => courses).flat(), (course) => course.name).map(({ name }) => name).sort();
+  const allUsedCourses = uniqBy(data.map(({ courses }) => courses).flat(), course => course.name)
+    .map(({ name }) => name)
+    .sort();
 
   return (
     <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
@@ -218,7 +235,8 @@ function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<
         { text: 'Not assigned', value: '' },
         ...allUsedCourses.map(course => ({ text: course, value: course })),
       ],
-      onFilter: (value, record) => (value ? record.courses.some(({name}) => name === `${value}`) : record.courses.length === 0),
+      onFilter: (value, record) =>
+        value ? record.courses.some(({ name }) => name === `${value}`) : record.courses.length === 0,
     },
     {
       title: 'Description URL',
@@ -394,12 +412,12 @@ function TaskModal({
         <Col span={24}>
           <Form.Item name="usedInCourses" label="Used in Courses">
             <Card>
-              {modalData?.courses?.map(({name, isActive}) => (
+              {modalData?.courses?.map(({ name, isActive }) => (
                 <Tag key={name} color={isActive ? 'blue' : ''}>
                   {name}
                 </Tag>
               ))}
-            </Card >
+            </Card>
           </Form.Item>
         </Col>
       </Row>
