@@ -70,7 +70,7 @@ export class ProfileController {
 
   @Get('/job-found')
   @ApiOperation({ operationId: 'getJobFound' })
-  @ApiBody({ type: JobFoundDto })
+  @ApiResponse({ type: JobFoundDto })
   public async getJobFound(@Req() req: CurrentRequest) {
     const { user } = req;
     const jobFoundInfo = await this.profileService.getJobFound(user.id);

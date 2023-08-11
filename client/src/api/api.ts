@@ -2547,7 +2547,7 @@ export interface EndorsementDto {
      * @type {object}
      * @memberof EndorsementDto
      */
-    'data': object;
+    'data': object | null;
 }
 /**
  * 
@@ -3072,6 +3072,31 @@ export interface InterviewDto {
      * @memberof InterviewDto
      */
     'attributes': Attributes;
+}
+/**
+ * 
+ * @export
+ * @interface JobFoundDto
+ */
+export interface JobFoundDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof JobFoundDto
+     */
+    'jobFound': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobFoundDto
+     */
+    'jobFoundCompanyName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobFoundDto
+     */
+    'jobFoundOfficeLocation': string | null;
 }
 /**
  * 
@@ -12592,6 +12617,35 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJobFound: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/profile/job-found`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12683,6 +12737,41 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {JobFoundDto} jobFoundDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateJobFound: async (jobFoundDto: JobFoundDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'jobFoundDto' is not null or undefined
+            assertParamExists('updateJobFound', 'jobFoundDto', jobFoundDto)
+            const localVarPath = `/profile/job-found`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(jobFoundDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12816,6 +12905,15 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getJobFound(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobFoundDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getJobFound(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12842,6 +12940,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          */
         async getUserCourses(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProfileCourseDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserCourses(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {JobFoundDto} jobFoundDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateJobFound(jobFoundDto: JobFoundDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateJobFound(jobFoundDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -12895,6 +13003,14 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getJobFound(options?: any): AxiosPromise<JobFoundDto> {
+            return localVarFp.getJobFound(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12919,6 +13035,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          */
         getUserCourses(username: string, options?: any): AxiosPromise<Array<ProfileCourseDto>> {
             return localVarFp.getUserCourses(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {JobFoundDto} jobFoundDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateJobFound(jobFoundDto: JobFoundDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateJobFound(jobFoundDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12970,6 +13095,16 @@ export class ProfileApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getJobFound(options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getJobFound(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12999,6 +13134,17 @@ export class ProfileApi extends BaseAPI {
      */
     public getUserCourses(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getUserCourses(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {JobFoundDto} jobFoundDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public updateJobFound(jobFoundDto: JobFoundDto, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).updateJobFound(jobFoundDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

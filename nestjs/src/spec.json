@@ -1504,6 +1504,31 @@
         "tags": ["profile"]
       }
     },
+    "/profile/job-found": {
+      "get": {
+        "operationId": "getJobFound",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFoundDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      },
+      "patch": {
+        "operationId": "updateJobFound",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFoundDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["profile"]
+      }
+    },
     "/profile/{username}": {
       "get": {
         "operationId": "getProfile",
@@ -3676,6 +3701,15 @@
           "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
         }
       },
+      "JobFoundDto": {
+        "type": "object",
+        "properties": {
+          "jobFound": { "type": "boolean" },
+          "jobFoundCompanyName": { "type": "string", "nullable": true },
+          "jobFoundOfficeLocation": { "type": "string", "nullable": true }
+        },
+        "required": ["jobFound", "jobFoundCompanyName", "jobFoundOfficeLocation"]
+      },
       "ProfileDto": {
         "type": "object",
         "properties": { "publicCvUrl": { "type": "string", "nullable": true } },
@@ -3693,7 +3727,7 @@
       },
       "EndorsementDto": {
         "type": "object",
-        "properties": { "summary": { "type": "string" }, "data": { "type": "object" } },
+        "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },

@@ -1,8 +1,9 @@
+import { JobFoundInfo } from '@common/models';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class JobFoundDto {
-  constructor({ jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
+  constructor({ jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundInfo) {
     this.jobFound = jobFound;
     this.jobFoundCompanyName = jobFoundCompanyName;
     this.jobFoundOfficeLocation = jobFoundOfficeLocation;
