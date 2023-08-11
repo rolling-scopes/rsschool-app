@@ -116,42 +116,40 @@ export default function Page(props: CoursePageProps) {
   }, []);
 
   const handleViewComment = ({ historicalScores, checker, messages }: CrossCheckPairDto) => {
-          modal.info({
-            width: 1020,
-            title: `Comment from ${checker.githubId}`,
-            content: historicalScores.map((historicalScore, index) => (
-              <Space direction="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
-                <Comment
-                  content={
-                    <>
-                      {dateTimeRenderer(historicalScore.dateTime)}
-                      <PreparedComment text={historicalScore.comment}></PreparedComment>
-                      {index === 0 &&
-                        messages.length > 0 &&
-                        messages.map(message => (
-                          <Message
-                            key={message.timestamp}
-                            message={message}
-                            currentRole={CrossCheckMessageDtoRoleEnum.Student}
-                            settings={{ areContactsVisible: true }}
-                          />
-                        ))}
-                    </>
-                  }
-                />
-                {historicalScore.criteria?.length ? (
-                  <Collapse>
-                    <Collapse.Panel key={historicalScore.dateTime} header="Detailed feedback">
-                      <CrossCheckCriteria criteria={historicalScore.criteria} />
-                    </Collapse.Panel>
-                  </Collapse>
-                ) : null}
-              </Space>
-            )),
-          });
-        };
-
-
+    modal.info({
+      width: 1020,
+      title: `Comment from ${checker.githubId}`,
+      content: historicalScores.map((historicalScore, index) => (
+        <Space direction="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
+          <Comment
+            content={
+              <>
+                {dateTimeRenderer(historicalScore.dateTime)}
+                <PreparedComment text={historicalScore.comment}></PreparedComment>
+                {index === 0 &&
+                  messages.length > 0 &&
+                  messages.map(message => (
+                    <Message
+                      key={message.timestamp}
+                      message={message}
+                      currentRole={CrossCheckMessageDtoRoleEnum.Student}
+                      settings={{ areContactsVisible: true }}
+                    />
+                  ))}
+              </>
+            }
+          />
+          {historicalScore.criteria?.length ? (
+            <Collapse>
+              <Collapse.Panel key={historicalScore.dateTime} header="Detailed feedback">
+                <CrossCheckCriteria criteria={historicalScore.criteria} />
+              </Collapse.Panel>
+            </Collapse>
+          ) : null}
+        </Space>
+      )),
+    });
+  };
 
   return (
     <AdminPageLayout
