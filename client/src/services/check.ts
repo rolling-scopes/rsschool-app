@@ -1,4 +1,3 @@
-
 import globalAxios, { AxiosInstance } from 'axios';
 import { message } from 'antd';
 import { IBadReview, checkType } from 'modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
