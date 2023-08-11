@@ -1,4 +1,4 @@
-import { checkType, IBadReview } from './../components/BadReview/BadReviewControllers';
+import { checkType, IBadReview } from '../modules/CrossCheckPairsTable/components/BadReview/BadReviewControllers';
 import globalAxios, { AxiosInstance } from 'axios';
 import { message } from 'antd';
 
