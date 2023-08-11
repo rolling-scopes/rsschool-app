@@ -210,6 +210,13 @@ export class ProfileService {
     return this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
   }
 
+  public async getJobFound(userId: number) {
+    return await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      select: ['jobFound', 'jobFoundCompanyName', 'jobFoundOfficeLocation'],
+    });
+  }
+
   public async updateJobFound(userId: number, { jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
     await this.userRepository
       .createQueryBuilder()

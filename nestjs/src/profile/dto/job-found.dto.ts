@@ -2,6 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class JobFoundDto {
+  constructor({ jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
+    this.jobFound = jobFound;
+    this.jobFoundCompanyName = jobFoundCompanyName;
+    this.jobFoundOfficeLocation = jobFoundOfficeLocation;
+  }
+
   @ApiProperty({ type: Boolean })
   @IsBoolean()
   public jobFound: boolean;

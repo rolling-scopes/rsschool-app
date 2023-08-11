@@ -68,6 +68,25 @@ export class ProfileController {
     await this.profileService.updateProfileFlat(user.id, dto);
   }
 
+  @Get('/job-found')
+  @ApiOperation({ operationId: 'getJobFound' })
+  @ApiBody({ type: JobFoundDto })
+  public async getJobFound(@Req() req: CurrentRequest) {
+    const { user } = req;
+    const jobFoundInfo = await this.profileService.getJobFound(user.id);
+
+    return new JobFoundDto(jobFoundInfo);
+  }
+
+  @Patch('/job-found')
+  @ApiOperation({ operationId: 'updateJobFound' })
+  @ApiBody({ type: JobFoundDto })
+  public async updateJobFound(@Req() req: CurrentRequest, @Body() dto: JobFoundDto) {
+    const { user } = req;
+
+    await this.profileService.updateJobFound(user.id, dto);
+  }
+
   @Get(':username')
   @ApiOperation({ operationId: 'getProfile' })
   @ApiResponse({ type: ProfileDto })
@@ -96,14 +115,5 @@ export class ProfileController {
   public async getEndorsement(@Param('username') githubId: string) {
     const endorsement = await this.endormentService.getEndorsement(githubId);
     return new EndorsementDto(endorsement);
-  }
-
-  @Patch('/user')
-  @ApiOperation({ operationId: 'updateJobFound' })
-  @ApiBody({ type: JobFoundDto })
-  public async updateJobFound(@Req() req: CurrentRequest, @Body() dto: JobFoundDto) {
-    const { user } = req;
-
-    await this.profileService.updateJobFound(user.id, dto);
   }
 }
