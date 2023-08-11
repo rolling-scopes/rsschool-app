@@ -93,15 +93,17 @@ export class ProfilePage extends React.Component<Props, State> {
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
-      const [profile, connections, { data }] = await Promise.all([
+      const [profile, connections, { data }, { data: jobFoundInfo }] = await Promise.all([
         this.userService.getProfileInfo(githubId),
         this.notificationsService.getUserConnections().catch(() => []),
         profileApi.getProfile(githubId ?? session.githubId),
+        profileApi.getJobFound(),
       ]);
 
       const updateProfile = {
         ...profile,
         ...data,
+        jobFoundInfo,
       };
 
       let isProfileOwner = false;
@@ -161,6 +163,7 @@ export class ProfilePage extends React.Component<Props, State> {
         profile: {
           ...profile,
           publicCvUrl: profile?.publicCvUrl ?? null,
+          jobFoundInfo: profile?.jobFoundInfo ?? null,
           discord,
         },
       }));
@@ -192,6 +195,7 @@ export class ProfilePage extends React.Component<Props, State> {
       name: profile?.generalInfo?.name ?? '',
       githubId: profile?.generalInfo?.githubId ?? null,
       publicCvUrl: profile?.publicCvUrl ?? null,
+      jobFoundInfo: profile?.jobFoundInfo ?? null,
     };
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];

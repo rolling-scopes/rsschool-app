@@ -8,6 +8,7 @@ import { Location } from 'common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import { UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';
+import JobFoundButtonWithModal from './JobFoundButtonWithModal';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -18,7 +19,7 @@ type Props = {
 };
 
 const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
-  const { githubId, name, location, publicCvUrl } = data;
+  const { githubId, name, location, publicCvUrl, jobFoundInfo } = data;
   const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [displayName, setDisplayName] = useState(name);
@@ -120,34 +121,37 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
           </Paragraph>
         ) : null}
         {isEditingModeEnabled && (
-          <ProfileSettingsModal
-            isSettingsVisible={isProfileSettingsVisible}
-            onCancel={onCancel}
-            onSave={onSave}
-            isSaveDisabled={isSaveDisabled}
-            content={
-              <Row>
-                <Col style={{ width: '100%' }}>
-                  <Row>
-                    <Text strong>Name</Text>
-                  </Row>
-                  <Row style={{ marginTop: 4 }}>
-                    <Input value={nameInputValue} placeholder="First-name Last-name" onChange={handleNameChange} />
-                  </Row>
-                  <Row style={{ marginTop: 24 }}>
-                    <Text strong>Location</Text>
-                  </Row>
-                  <Row style={{ marginTop: 4 }}>
-                    <LocationSelect
-                      style={{ flex: 1 }}
-                      onChange={handleLocationChange}
-                      location={locationSelectValue}
-                    />
-                  </Row>
-                </Col>
-              </Row>
-            }
-          />
+          <>
+            {jobFoundInfo && <JobFoundButtonWithModal {...jobFoundInfo}></JobFoundButtonWithModal>}
+            <ProfileSettingsModal
+              isSettingsVisible={isProfileSettingsVisible}
+              onCancel={onCancel}
+              onSave={onSave}
+              isSaveDisabled={isSaveDisabled}
+              content={
+                <Row>
+                  <Col style={{ width: '100%' }}>
+                    <Row>
+                      <Text strong>Name</Text>
+                    </Row>
+                    <Row style={{ marginTop: 4 }}>
+                      <Input value={nameInputValue} placeholder="First-name Last-name" onChange={handleNameChange} />
+                    </Row>
+                    <Row style={{ marginTop: 24 }}>
+                      <Text strong>Location</Text>
+                    </Row>
+                    <Row style={{ marginTop: 4 }}>
+                      <LocationSelect
+                        style={{ flex: 1 }}
+                        onChange={handleLocationChange}
+                        location={locationSelectValue}
+                      />
+                    </Row>
+                  </Col>
+                </Row>
+              }
+            />
+          </>
         )}
       </Card>
     </>

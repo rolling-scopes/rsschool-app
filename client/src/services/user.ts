@@ -1,7 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileApi, ProfileDto, ProfileInfoDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
+import {
+  ProfileApi,
+  ProfileDto,
+  ProfileInfoDto,
+  UsersNotificationsApi,
+  UpdateUserDtoLanguagesEnum,
+  JobFoundDto,
+} from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -226,6 +233,7 @@ export type ProfileInfo = {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
+  jobFoundInfo: JobFoundDto | null;
 } & ProfileDto;
 
 export type ProfileMainCardData = {
@@ -233,6 +241,7 @@ export type ProfileMainCardData = {
   name: string;
   githubId: string | null;
   publicCvUrl: string | null;
+  jobFoundInfo: JobFoundDto | null;
 };
 
 export const enum ContactsKeys {
