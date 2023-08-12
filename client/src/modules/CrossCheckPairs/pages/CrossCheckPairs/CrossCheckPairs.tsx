@@ -7,7 +7,6 @@ import { dateTimeRenderer } from 'components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
 import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
@@ -38,7 +37,7 @@ export default function Page(props: CoursePageProps) {
   const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairDto[],
-    pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
+    pagination: { current: 1, pageSize: 50 } as IPaginationInfo,
     orderBy: { field: DEFAULT_ORDER_BY, order: DEFAULT_ORDER_DIRECTION },
   });
   const [loaded, setLoaded] = useState(false);
@@ -168,22 +167,6 @@ export default function Page(props: CoursePageProps) {
         onChange={getCourseScore}
         viewComment={handleViewComment}
       />
-      <style jsx>{styles}</style>
     </AdminPageLayout>
   );
 }
-
-const styles = css`
-  :global(.rs-table-row-disabled) {
-    opacity: 0.25;
-  }
-
-  :global(.table-score td, .table-score th) {
-    padding: 0 5px !important;
-    font-size: 11px;
-  }
-
-  :global(.table-score td a) {
-    line-height: 24px;
-  }
-`;

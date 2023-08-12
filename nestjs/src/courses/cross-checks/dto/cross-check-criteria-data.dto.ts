@@ -1,7 +1,6 @@
+import { CrossCheckCriteriaType } from '@entities/taskCriteria';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
-
-export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CrossCheckCriteriaDataDto {
   @ApiProperty()
@@ -17,8 +16,8 @@ export class CrossCheckCriteriaDataDto {
   @IsString()
   text: string;
 
-  @ApiProperty({ enum: ['title', 'subtask', 'penalty'] })
-  @IsIn(['title', 'subtask', 'penalty'])
+  @ApiProperty({ enum: CrossCheckCriteriaType })
+  @IsEnum(CrossCheckCriteriaType)
   type: CrossCheckCriteriaType;
 
   @ApiProperty({ required: false })

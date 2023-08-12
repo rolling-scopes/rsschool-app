@@ -9,14 +9,15 @@ type Props = {
 };
 
 export function CrossCheckCriteria({ criteria }: Props) {
-  const penaltyData = criteria?.filter(
+  if (!criteria?.length) return null;
+  const penaltyData = criteria.filter(
     criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Penalty && criteriaItem.point,
   );
 
   return (
     <>
       {criteria
-        ?.filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Subtask)
+        .filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Subtask)
         .map(criteriaItem => (
           <div key={criteriaItem.key} style={{ border: '1px solid #F5F5F5', margin: '24px 0', paddingBottom: '14px' }}>
             <div

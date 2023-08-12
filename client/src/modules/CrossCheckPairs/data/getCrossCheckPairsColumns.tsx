@@ -19,19 +19,16 @@ export interface CustomColumnType<RecordType> extends ColumnType<RecordType> {
   sorterField?: string;
 }
 
-const renderGithubLink = (value: string) => (
-  <div>
-    {value ? (
-      <>
-        <GithubAvatar githubId={value} size={24} />
-        &nbsp;
-        <a target="_blank" rel="noopener noreferrer" href={`https://github.com/${value}`}>
-          {value}
-        </a>
-      </>
-    ) : null}
-  </div>
-);
+const renderGithubLink = (value: string) =>
+  value ? (
+    <div>
+      <GithubAvatar githubId={value} size={24} />
+      &nbsp;
+      <a target="_blank" rel="noopener noreferrer" href={`https://github.com/${value}`}>
+        {value}
+      </a>
+    </div>
+  ) : null;
 
 export const getCrossCheckPairsColumns = (
   viewComment: (value: CrossCheckPairDto) => void,
