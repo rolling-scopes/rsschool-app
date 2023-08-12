@@ -7,11 +7,13 @@ import {
   CrossCheckMessageAuthorRole,
   ScoreRecord,
 } from '@entities/taskSolutionResult';
+import { CrossCheckCriteriaDataDto } from './cross-check-criteria-data.dto';
 
 export class HistoricalScoreDto {
   constructor(historicalScore: ScoreRecord) {
     this.comment = historicalScore.comment;
     this.dateTime = new Date(historicalScore.dateTime);
+    this.criteria = historicalScore.criteria;
   }
 
   @ApiProperty()
@@ -19,6 +21,9 @@ export class HistoricalScoreDto {
 
   @ApiProperty()
   public dateTime: Date;
+
+  @ApiProperty({ type: [CrossCheckCriteriaDataDto], required: false })
+  public criteria?: CrossCheckCriteriaDataDto[];
 }
 
 export class CrossCheckMessageAuthorDto {

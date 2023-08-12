@@ -2815,9 +2815,25 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "CrossCheckCriteriaDataDto": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" },
+          "max": { "type": "number" },
+          "text": { "type": "string" },
+          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
+          "point": { "type": "number" },
+          "textComment": { "type": "string" }
+        },
+        "required": ["key", "text", "type"]
+      },
       "HistoricalScoreDto": {
         "type": "object",
-        "properties": { "comment": { "type": "string" }, "dateTime": { "format": "date-time", "type": "string" } },
+        "properties": {
+          "comment": { "type": "string" },
+          "dateTime": { "format": "date-time", "type": "string" },
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } }
+        },
         "required": ["comment", "dateTime"]
       },
       "CrossCheckMessageAuthorDto": {
@@ -2893,18 +2909,6 @@
           "completedChecksCount": { "type": "number" }
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
-      },
-      "CrossCheckCriteriaDataDto": {
-        "type": "object",
-        "properties": {
-          "key": { "type": "string" },
-          "max": { "type": "number" },
-          "text": { "type": "string" },
-          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
-          "point": { "type": "number" },
-          "textComment": { "type": "string" }
-        },
-        "required": ["key", "text", "type"]
       },
       "Discord": {
         "type": "object",
@@ -3693,7 +3697,7 @@
       },
       "EndorsementDto": {
         "type": "object",
-        "properties": { "summary": { "type": "string" }, "data": { "type": "object" } },
+        "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
