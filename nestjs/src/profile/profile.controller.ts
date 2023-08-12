@@ -9,6 +9,7 @@ import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
 import { EndorsementDto } from './dto/endorsement.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -75,7 +76,7 @@ export class ProfileController {
     const { user } = req;
     const jobFoundInfo = await this.profileService.getJobFound(user.id);
 
-    return new JobFoundDto(jobFoundInfo);
+    return plainToClass(JobFoundDto, jobFoundInfo, { excludeExtraneousValues: true });
   }
 
   @Patch('/job-found')
