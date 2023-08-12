@@ -54,13 +54,13 @@ const JobFoundButtonWithModal = ({ jobFound = false, jobFoundCompanyName = null,
                 <Text strong>Company Name</Text>
               </Row>
               <Row style={{ marginTop: 4 }}>
-                <Input value={jobFoundCompanyName ?? undefined} placeholder="Company Name" disabled={!checked} />
+                <Input defaultValue={jobFoundCompanyName ?? undefined} placeholder="Company Name" disabled={!checked} />
               </Row>
               <Row style={{ marginTop: 24 }}>
                 <Text strong>Office Location</Text>
               </Row>
               <Row style={{ marginTop: 4 }}>
-                <Input value={jobFoundOfficeLocation ?? undefined} placeholder="Minsk, Belarus" disabled={!checked} />
+                <Input defaultValue={jobFoundOfficeLocation ?? undefined} placeholder="Minsk, Belarus" disabled={!checked} />
               </Row>
             </Col>
           </Row>
