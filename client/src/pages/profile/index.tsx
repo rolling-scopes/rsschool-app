@@ -93,17 +93,15 @@ export class ProfilePage extends React.Component<Props, State> {
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
-      const [profile, connections, { data }, { data: jobFoundInfo }] = await Promise.all([
+      const [profile, connections, { data }] = await Promise.all([
         this.userService.getProfileInfo(githubId),
         this.notificationsService.getUserConnections().catch(() => []),
         profileApi.getProfile(githubId ?? session.githubId),
-        profileApi.getJobFound(),
       ]);
 
       const updateProfile = {
         ...profile,
         ...data,
-        jobFoundInfo,
       };
 
       let isProfileOwner = false;
@@ -111,6 +109,11 @@ export class ProfilePage extends React.Component<Props, State> {
         const userId = this.props.session.githubId;
         const profileId = profile.generalInfo!.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
+      }
+
+      if (isProfileOwner) {
+        const { data } = await profileApi.getJobFound();
+        updateProfile.jobFoundInfo = data;
       }
 
       this.setState({
