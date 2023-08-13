@@ -30,6 +30,10 @@ const JobFoundButtonWithModal = (data: JobFoundDto) => {
   const onSubmit = async (values: JobFoundDto) => {
     setLoading(true);
     try {
+      if (!values.jobFound) {
+        values.jobFoundCompanyName = '';
+        values.jobFoundOfficeLocation = '';
+      }
       await profileApi.updateJobFound(values);
       setSubmitted(true);
     } catch (e) {
