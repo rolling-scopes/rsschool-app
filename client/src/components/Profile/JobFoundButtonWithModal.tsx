@@ -45,8 +45,6 @@ const JobFoundButtonWithModal = (data: JobFoundDto) => {
     }
   };
 
-
-
   const onChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
   };
