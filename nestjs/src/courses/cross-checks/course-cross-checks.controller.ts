@@ -20,6 +20,7 @@ import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
 import { StudentId } from 'src/core/decorators';
+import { FeedbackGuard } from './cross-check-feedback.guard';
 
 @Controller('courses/:courseId/cross-checks')
 @ApiTags('courses tasks')
@@ -109,7 +110,7 @@ export class CourseCrossCheckController {
   @ApiForbiddenResponse()
   @ApiResponse({ type: CrossCheckFeedbackDto })
   @RequiredRoles([CourseRole.Manager, Role.Admin, CourseRole.Student], true)
-  @UseGuards(DefaultGuard, RoleGuard)
+  @UseGuards(DefaultGuard, RoleGuard, FeedbackGuard)
   public async getMyCrossCheckFeedbacks(
     @StudentId() studentId: number,
     @Param('courseId', ParseIntPipe) _courseId: number,

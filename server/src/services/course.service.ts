@@ -546,9 +546,11 @@ export async function getEvents(courseId: number) {
 export async function getTaskSolutionsWithoutChecker(courseTaskId: number) {
   const records = await getRepository(TaskSolution)
     .createQueryBuilder('ts')
+    .leftJoin('student', 's', 's."id" = ts.studentId')
     .leftJoin('task_solution_checker', 'tsc', 'tsc."taskSolutionId" = ts.id')
     .where(`ts."courseTaskId" = :courseTaskId`, { courseTaskId })
     .andWhere('tsc.id IS NULL')
+    .andWhere('s.isExpelled = false')
     .getMany();
   return records;
 }

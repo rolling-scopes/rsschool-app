@@ -21,6 +21,7 @@ import { NotificationUserConnection } from './notificationUserConnection';
 import { NotificationUserSettings } from './notificationUserSettings';
 import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
+import { Prompt } from './prompt';
 import { Registry } from './registry';
 import { RepositoryEvent } from './repositoryEvent';
 import { Resume } from './resume';
@@ -70,6 +71,7 @@ export {
   NotificationUserSettings,
   PrivateFeedback,
   ProfilePermissions,
+  Prompt,
   Registry,
   RepositoryEvent,
   Resume,
@@ -118,6 +120,7 @@ export const models = [
   NotificationUserSettings,
   PrivateFeedback,
   ProfilePermissions,
+  Prompt,
   Registry,
   RepositoryEvent,
   Resume,

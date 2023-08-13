@@ -1,91 +1,50 @@
-import { Button, Modal, Row, Typography, message } from 'antd';
-import * as React from 'react';
+import { Modal, Typography, message } from 'antd';
 import { StudentSearch } from 'components/StudentSearch';
+import { useCallback, useState } from 'react';
 import { CourseService } from 'services/course';
 
 const { Text } = Typography;
 
-type State = {
-  isModalOpened: boolean;
-  studentGithubId: string | null;
-};
-
 type Props = {
-  mentorGithuId: string;
+  mentorGithuId: string | null;
   courseId: number;
+  open: boolean;
+  onClose: () => void;
 };
 
-class AssignStudentModal extends React.PureComponent<Props, State> {
-  state: State = {
-    isModalOpened: false,
-    studentGithubId: null,
-  };
+export function AssignStudentModal(props: Props) {
+  const [studentGithubId, setStudentGithubId] = useState<string | null>(null);
 
-  openModal = () => {
-    this.setState({ isModalOpened: true });
-  };
-
-  closeModal = () => {
-    this.setState({ isModalOpened: false });
-  };
-
-  addStudent = async () => {
-    const { mentorGithuId } = this.props;
-    const { studentGithubId } = this.state;
-
+  const addStudent = useCallback(async () => {
     if (!studentGithubId) {
       return;
     }
-
-    this.reset();
-
     try {
-      await new CourseService(this.props.courseId).updateStudent(studentGithubId, { mentorGithuId });
-      message.success('Success');
+      await new CourseService(props.courseId).updateStudent(studentGithubId, { mentorGithuId: props.mentorGithuId });
+      props.onClose();
+      message.success('Student has been added to mentor');
     } catch (e) {
       message.error(`${e}`);
     }
-  };
+  }, [props.mentorGithuId, studentGithubId]);
 
-  reset = () => {
-    this.setState({ isModalOpened: false, studentGithubId: null });
-  };
-
-  handleStudentSelect = (githubId: string) => {
-    this.setState({ studentGithubId: githubId ?? null });
-  };
-
-  render() {
-    const { mentorGithuId, courseId } = this.props;
-    const { isModalOpened } = this.state;
-
-    return (
-      <>
-        <Button type="link" shape="circle" onClick={this.openModal}>
-          Add Student
-        </Button>
-        <Modal
-          title={
-            <>
-              Assign Student to <Text underline>{mentorGithuId}</Text>
-            </>
-          }
-          open={isModalOpened}
-          onOk={this.addStudent}
-          onCancel={this.reset}
-        >
-          <Row>
-            <StudentSearch
-              style={{ width: '100%' }}
-              keyField="githubId"
-              onChange={this.handleStudentSelect}
-              courseId={courseId}
-            />
-          </Row>
-        </Modal>
-      </>
-    );
-  }
+  return (
+    <Modal
+      title={
+        <>
+          <Text>Assign Student to</Text> <Text underline>{props.mentorGithuId}</Text>
+        </>
+      }
+      open={props.open}
+      onOk={addStudent}
+      onCancel={props.onClose}
+    >
+      <StudentSearch
+        style={{ width: '100%' }}
+        keyField="githubId"
+        onChange={setStudentGithubId}
+        courseId={props.courseId}
+      />
+    </Modal>
+  );
 }
-
-export default AssignStudentModal;

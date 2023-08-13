@@ -687,7 +687,7 @@
         "tags": ["courses tasks"]
       }
     },
-    "/courses/{courseId}/cross-checks/{courseTaskId}/myFeedbacks": {
+    "/courses/{courseId}/cross-checks/{courseTaskId}/feedbacks/my": {
       "get": {
         "operationId": "getMyCrossCheckFeedbacks",
         "summary": "",
@@ -1532,6 +1532,20 @@
         "tags": ["profile"]
       }
     },
+    "/profile/{username}/endorsement": {
+      "get": {
+        "operationId": "getEndorsement",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
     "/disciplines": {
       "post": {
         "operationId": "createDiscipline",
@@ -2139,6 +2153,65 @@
         },
         "tags": ["tasks-criteria"]
       }
+    },
+    "/prompts": {
+      "post": {
+        "operationId": "createPrompt",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreatePromptDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
+          }
+        },
+        "tags": ["prompts"]
+      },
+      "get": {
+        "operationId": "getPrompts",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PromptDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["prompts"]
+      }
+    },
+    "/prompts/{id}": {
+      "delete": {
+        "operationId": "deletePrompt",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["prompts"]
+      },
+      "patch": {
+        "operationId": "updatePrompt",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdatePromptDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
+          }
+        },
+        "tags": ["prompts"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -2742,9 +2815,25 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "CrossCheckCriteriaDataDto": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" },
+          "max": { "type": "number" },
+          "text": { "type": "string" },
+          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
+          "point": { "type": "number" },
+          "textComment": { "type": "string" }
+        },
+        "required": ["key", "text", "type"]
+      },
       "HistoricalScoreDto": {
         "type": "object",
-        "properties": { "comment": { "type": "string" }, "dateTime": { "format": "date-time", "type": "string" } },
+        "properties": {
+          "comment": { "type": "string" },
+          "dateTime": { "format": "date-time", "type": "string" },
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } }
+        },
         "required": ["comment", "dateTime"]
       },
       "CrossCheckMessageAuthorDto": {
@@ -2820,18 +2909,6 @@
           "completedChecksCount": { "type": "number" }
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
-      },
-      "CrossCheckCriteriaDataDto": {
-        "type": "object",
-        "properties": {
-          "key": { "type": "string" },
-          "max": { "type": "number" },
-          "text": { "type": "string" },
-          "type": { "type": "string", "enum": ["title", "subtask", "penalty"] },
-          "point": { "type": "number" },
-          "textComment": { "type": "string" }
-        },
-        "required": ["key", "text", "type"]
       },
       "Discord": {
         "type": "object",
@@ -3618,6 +3695,11 @@
         },
         "required": ["userId", "githubId", "primaryEmail", "isActiveStudent"]
       },
+      "EndorsementDto": {
+        "type": "object",
+        "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
+        "required": ["summary", "data"]
+      },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {
         "type": "object",
@@ -4257,6 +4339,34 @@
         "type": "object",
         "properties": { "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CriteriaDto" } } },
         "required": ["criteria"]
+      },
+      "CreatePromptDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "text": { "type": "string" },
+          "temperature": { "type": "number" }
+        },
+        "required": ["type", "text", "temperature"]
+      },
+      "PromptDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "text": { "type": "string" },
+          "temperature": { "type": "number" }
+        },
+        "required": ["id", "type", "text", "temperature"]
+      },
+      "UpdatePromptDto": {
+        "type": "object",
+        "properties": {
+          "temperature": { "type": "number" },
+          "type": { "type": "string" },
+          "text": { "type": "string" }
+        },
+        "required": ["temperature", "type", "text"]
       }
     }
   }
