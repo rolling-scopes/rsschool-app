@@ -1,7 +1,7 @@
 import { Course } from '@entities/course';
 import { Feedback, Mentor, Student, TaskInterviewResult, User } from '@entities/index';
 import { Prompt } from '@entities/prompt';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { OpenAIApi, Configuration } from 'openai';
@@ -13,6 +13,8 @@ const eta = new Eta();
 @Injectable()
 export class EndorsementService {
   private openAI: OpenAIApi;
+
+  private logger = new Logger(EndorsementService.name);
 
   constructor(
     @InjectRepository(Course)
@@ -40,15 +42,17 @@ export class EndorsementService {
       if (!prompt) {
         return null;
       }
+      this.logger.log(`Endorsement prompt found`);
       const result = await this.openAI.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt.text }],
         temperature: prompt.temperature ?? 0.5,
       });
+      this.logger.log(`Open AI response received`, result);
       const content = result.data.choices[0]?.message?.content ?? '';
       return { content, data: prompt.data };
     } catch (error) {
-      console.log((error as Error).message, error);
+      this.logger.error(error);
       return null;
     }
   }
@@ -56,6 +60,7 @@ export class EndorsementService {
   async getEndorsementPrompt(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
     if (!user) {
+      this.logger.warn(`User not found for githubId: ${githubId}`);
       return null;
     }
 
@@ -66,6 +71,7 @@ export class EndorsementService {
     ]);
 
     if (!prompt?.text || mentors.length === 0) {
+      this.logger.warn(`No prompt text of mentors found for githubId: ${githubId}`);
       return null;
     }
 

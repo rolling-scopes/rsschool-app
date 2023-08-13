@@ -2998,6 +2998,12 @@ export interface HistoricalScoreDto {
      * @memberof HistoricalScoreDto
      */
     'dateTime': string;
+    /**
+     * 
+     * @type {Array<CrossCheckCriteriaDataDto>}
+     * @memberof HistoricalScoreDto
+     */
+    'criteria'?: Array<CrossCheckCriteriaDataDto>;
 }
 /**
  * 

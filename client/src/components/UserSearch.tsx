@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Select, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import get from 'lodash/get';
+import { get, debounce } from 'lodash';
 import { SelectProps } from 'antd/lib/select';
 import type { SearchStudent } from 'services/course';
 
@@ -30,7 +30,7 @@ export function UserSearch(props: UserProps) {
     setData(defaultValues ?? []);
   }, [props.defaultValues]);
 
-  const handleSearch = async (value: string) => {
+  const handleSearch = debounce(async (value: string) => {
     value = value.trim();
     if (value) {
       const data = await searchFn(value, onlyStudentsWithoutMentorShown);
@@ -38,7 +38,7 @@ export function UserSearch(props: UserProps) {
     } else {
       setData(props.defaultValues ?? []);
     }
-  };
+  }, 300);
 
   return (
     <Select
