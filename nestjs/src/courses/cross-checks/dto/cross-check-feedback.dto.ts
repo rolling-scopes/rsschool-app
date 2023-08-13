@@ -1,40 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CrossCheckMessageDto } from './check-tasks-pairs.dto';
 import { Discord } from 'src/profile/dto';
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CrossCheckSolutionReview } from '../course-cross-checks.service';
 import { TaskSolution } from '@entities/taskSolution';
-
-export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
-
-export class CrossCheckCriteriaDataDto {
-  @ApiProperty()
-  @IsString()
-  key: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNumber()
-  max?: number;
-
-  @ApiProperty()
-  @IsString()
-  text: string;
-
-  @ApiProperty({ enum: ['title', 'subtask', 'penalty'] })
-  @IsIn(['title', 'subtask', 'penalty'])
-  type: CrossCheckCriteriaType;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNumber()
-  point?: number;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  textComment?: string;
-}
+import { CrossCheckCriteriaDataDto } from './cross-check-criteria-data.dto';
 
 export class CrossCheckAuthorDto {
   @ApiProperty({ required: true })
