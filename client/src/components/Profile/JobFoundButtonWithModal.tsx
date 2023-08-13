@@ -1,15 +1,21 @@
-import { Button, Col, Input, Row, Typography } from 'antd';
-import ProfileSettingsModal from './ProfileSettingsModal';
+import { Button, Form, Input, Typography } from 'antd';
 import { useState } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Checkbox } from 'antd/lib';
-import { JobFoundDto } from 'api';
+import { JobFoundDto, ProfileApi } from 'api';
+import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
+import { AxiosError } from 'axios';
 
-const { Paragraph, Text } = Typography;
+const { Paragraph } = Typography;
+const profileApi = new ProfileApi();
 
-const JobFoundButtonWithModal = ({ jobFound = false, jobFoundCompanyName = null, jobFoundOfficeLocation = null }: JobFoundDto) => {
+const JobFoundButtonWithModal = (data: JobFoundDto) => {
   const [isJobFoundModalVisible, setIsJobFoundModalVisible] = useState(false);
-  const [checked, setChecked] = useState(jobFound);
+  const [checked, setChecked] = useState(data.jobFound);
+
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const title = `I've got a job`;
 
@@ -21,12 +27,35 @@ const JobFoundButtonWithModal = ({ jobFound = false, jobFoundCompanyName = null,
     setIsJobFoundModalVisible(false);
   };
 
-  const onCancel = () => hideJobFoundModal();
+  const onSubmit = async (values: JobFoundDto) => {
+    setLoading(true);
+    try {
+      await profileApi.updateJobFound(values);
+      setSubmitted(true);
+    } catch (e) {
+      let error = 'Unknown error';
+      if (e instanceof AxiosError) {
+        error = e.response?.data?.message;
+      } else if (e instanceof Error) {
+        error = e.message;
+      }
+      setErrorText(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const onSave = () => alert('done');
+
 
   const onChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
+  };
+
+  const onClose = () => {
+    setErrorText('');
+    setLoading(false);
+    setSubmitted(false);
+    hideJobFoundModal();
   };
 
   return (
@@ -36,36 +65,26 @@ const JobFoundButtonWithModal = ({ jobFound = false, jobFoundCompanyName = null,
           {title}
         </Button>
       </Paragraph>
-      <ProfileSettingsModal
-        isSettingsVisible={isJobFoundModalVisible}
-        onCancel={onCancel}
-        settingsTitle={'Share with us if you have got a job'}
-        onSave={onSave}
-        isSaveDisabled={!checked}
-        content={
-          <Row>
-            <Col style={{ width: '100%' }}>
-              <Row>
-                <Checkbox checked={checked} onChange={onChange}>
-                  {title}
-                </Checkbox>
-              </Row>
-              <Row>
-                <Text strong>Company Name</Text>
-              </Row>
-              <Row style={{ marginTop: 4 }}>
-                <Input defaultValue={jobFoundCompanyName ?? undefined} placeholder="Company Name" disabled={!checked} />
-              </Row>
-              <Row style={{ marginTop: 24 }}>
-                <Text strong>Office Location</Text>
-              </Row>
-              <Row style={{ marginTop: 4 }}>
-                <Input defaultValue={jobFoundOfficeLocation ?? undefined} placeholder="Minsk, Belarus" disabled={!checked} />
-              </Row>
-            </Col>
-          </Row>
-        }
-      />
+      <ModalSubmitForm
+        title="Share with us if you've got a job"
+        data={data}
+        submit={onSubmit}
+        close={onClose}
+        submitted={submitted}
+        errorText={errorText}
+        loading={loading}
+        open={isJobFoundModalVisible}
+      >
+        <Form.Item label="Check checkbox if you've got a job" name="jobFound" valuePropName="checked" required>
+          <Checkbox onChange={onChange}>{title}</Checkbox>
+        </Form.Item>
+        <Form.Item label="Add a company name" name="jobFoundCompanyName">
+          <Input disabled={!checked} />
+        </Form.Item>
+        <Form.Item label="Add a office location" name="jobFoundOfficeLocation">
+          <Input disabled={!checked} />
+        </Form.Item>
+      </ModalSubmitForm>
     </>
   );
 };
