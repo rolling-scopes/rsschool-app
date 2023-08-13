@@ -122,7 +122,7 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
         ) : null}
         {isEditingModeEnabled && (
           <>
-            {jobFoundInfo && <JobFoundButtonWithModal {...jobFoundInfo}></JobFoundButtonWithModal>}
+            {jobFoundInfo && <JobFoundButtonWithModal {...jobFoundInfo} />}
             <ProfileSettingsModal
               isSettingsVisible={isProfileSettingsVisible}
               onCancel={onCancel}
