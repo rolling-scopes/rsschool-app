@@ -11,12 +11,13 @@ import {
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 import { TaskSolutionReview } from './taskSolution';
+import { CrossCheckCriteriaType } from './taskCriteria';
 
 export interface CrossCheckCriteriaData {
-  key: number;
+  key: string;
   max?: number;
   text: string;
-  type: string;
+  type: CrossCheckCriteriaType;
   point?: number;
   comment?: string;
 }

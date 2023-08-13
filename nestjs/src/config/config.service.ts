@@ -47,6 +47,7 @@ export class ConfigService {
   public readonly host: string;
   public readonly isDev = process.env.NODE_ENV !== 'production';
   public readonly secure: Secure;
+  public readonly openai: { apiKey: string };
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -64,6 +65,10 @@ export class ConfigService {
       jwt: {
         secretKey: conf.get('RSSHCOOL_AUTH_JWT_SECRET_KEY') ?? 'secret',
       },
+    };
+
+    this.openai = {
+      apiKey: conf.get('RSSHCOOL_OPENAI_API_KEY') || '',
     };
 
     this.awsServices = {

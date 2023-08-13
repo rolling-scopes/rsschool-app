@@ -15,6 +15,7 @@ import {
   EventDto,
   CriteriaDto,
   CrossCheckMessageDto,
+  CrossCheckCriteriaDataDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 
@@ -25,39 +26,11 @@ export enum CrossCheckStatus {
 }
 
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
-export interface CrossCheckCriteriaData {
-  key: string;
-  max?: number;
-  text: string;
-  type: CrossCheckCriteriaType;
-  point?: number;
-  textComment?: string;
-}
 
 export interface CrossCheckMessageAuthor {
   id: number;
   githubId: string;
 }
-
-export type SolutionReviewType = {
-  id: number;
-  dateTime: number;
-  comment: string;
-  criteria?: CrossCheckCriteriaData[];
-  author: {
-    id: number;
-    name: string;
-    githubId: string;
-    discord: Discord | null;
-  } | null;
-  score: number;
-  messages: CrossCheckMessageDto[];
-};
-
-export type Feedback = {
-  url?: string;
-  reviews?: SolutionReviewType[];
-};
 
 export interface Verification {
   id: number;
@@ -371,7 +344,7 @@ export class CourseService {
       anonymous: boolean;
       review: CrossCheckReview[];
       comments: CrossCheckComment[];
-      criteria: CrossCheckCriteriaData[];
+      criteria: CrossCheckCriteriaDataDto[];
     },
   ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
@@ -391,7 +364,7 @@ export class CourseService {
         comment: string;
         dateTime: number;
         anonymous: boolean;
-        criteria: CrossCheckCriteriaData[];
+        criteria: CrossCheckCriteriaDataDto[];
       }[];
       author: {
         id: number;
@@ -528,13 +501,6 @@ export class CourseService {
         url: string;
       }[];
     }>(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`);
-    return result.data.data;
-  }
-
-  async getCrossCheckFeedback(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<{ data: Feedback }>(
-      `/student/${githubId}/task/${courseTaskId}/cross-check/feedback`,
-    );
     return result.data.data;
   }
 

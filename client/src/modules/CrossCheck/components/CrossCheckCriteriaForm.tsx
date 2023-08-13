@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 import { SubtaskCriteria } from './criteria/SubtaskCriteria';
 import { TitleCriteria } from './criteria/TitleCriteria';
 import { PenaltyCriteria } from './criteria/PenaltyCriteria';
-import { CrossCheckCriteriaData, SolutionReviewType } from 'services/course';
+import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from 'api';
 
 const { Text, Title } = Typography;
 
@@ -18,9 +18,9 @@ export interface CriteriaFormProps {
   maxScore: number | undefined;
   score: number;
   setScore: (value: number) => void;
-  criteriaData: CrossCheckCriteriaData[];
-  setCriteriaData: (newData: CrossCheckCriteriaData[]) => void;
-  initialData: SolutionReviewType;
+  criteriaData: CrossCheckCriteriaDataDto[];
+  setCriteriaData: (newData: CrossCheckCriteriaDataDto[]) => void;
+  initialData: CrossCheckSolutionReviewDto;
   setIsSkipped: (value: boolean) => void;
   isSkipped: boolean;
 }
@@ -39,7 +39,7 @@ export function CrossCheckCriteriaForm({
 
   const maxScoreValue = maxScore ?? 100;
   const maxScoreLabel = maxScoreValue ? ` (Max ${maxScoreValue} points)` : '';
-  const penaltyData: CrossCheckCriteriaData[] =
+  const penaltyData: CrossCheckCriteriaDataDto[] =
     criteriaData?.filter(item => item.type.toLowerCase() === TaskType.Penalty) ?? [];
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function CrossCheckCriteriaForm({
     }
   }, [criteriaData, initialData]);
 
-  function updateCriteriaData(updatedEntry: CrossCheckCriteriaData) {
+  function updateCriteriaData(updatedEntry: CrossCheckCriteriaDataDto) {
     const index = criteriaData.findIndex(item => item.key === updatedEntry.key);
     const updatedData = [...criteriaData];
     updatedData.splice(index, 1, updatedEntry);
@@ -112,10 +112,10 @@ export function CrossCheckCriteriaForm({
               <Title level={4}>Criteria</Title>
               {criteriaData
                 ?.filter(
-                  (item: CrossCheckCriteriaData) =>
+                  (item: CrossCheckCriteriaDataDto) =>
                     item.type.toLowerCase() === TaskType.Title || item.type.toLowerCase() === TaskType.Subtask,
                 )
-                .map((item: CrossCheckCriteriaData) => {
+                .map((item: CrossCheckCriteriaDataDto) => {
                   return item.type.toLowerCase() === TaskType.Title ? (
                     <TitleCriteria key={item.key} titleData={item} />
                   ) : (
@@ -127,7 +127,7 @@ export function CrossCheckCriteriaForm({
           {!!penaltyData?.length && (
             <>
               <Title level={4}>Penalty</Title>
-              {penaltyData?.map((item: CrossCheckCriteriaData) => (
+              {penaltyData?.map((item: CrossCheckCriteriaDataDto) => (
                 <PenaltyCriteria key={item.key} penaltyData={item} updateCriteriaData={updateCriteriaData} />
               ))}
             </>

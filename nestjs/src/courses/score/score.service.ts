@@ -12,6 +12,7 @@ import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from '
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 import { TaskResult } from '@entities/taskResult';
+import { UsersService } from 'src/users/users.service';
 
 const defaultFilter: Partial<ScoreQueryDto> = {
   activeOnly: 'false',
@@ -101,7 +102,7 @@ export class ScoreService {
     let query = this.studentRepository
       .createQueryBuilder('student')
       .innerJoin('student.user', 'user')
-      .addSelect(this.getPrimaryUserFields())
+      .addSelect(UsersService.getPrimaryUserFields())
       .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
       .addSelect(['mentor.id', 'mentor.userId'])
       .leftJoin('student.taskResults', 'tr')
@@ -111,7 +112,7 @@ export class ScoreService {
       .leftJoin('student.taskInterviewResults', 'tir')
       .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
       .leftJoin('mentor.user', 'mu')
-      .addSelect(this.getPrimaryUserFields('mu'))
+      .addSelect(UsersService.getPrimaryUserFields('mu'))
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
       .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
@@ -150,14 +151,4 @@ export class ScoreService {
       orderBy.direction.toUpperCase() as Uppercase<OrderDirection>,
     );
   }
-
-  private getPrimaryUserFields = (modelName = 'user') => [
-    `${modelName}.id`,
-    `${modelName}.firstName`,
-    `${modelName}.lastName`,
-    `${modelName}.githubId`,
-    `${modelName}.cityName`,
-    `${modelName}.countryName`,
-    `${modelName}.discord`,
-  ];
 }
