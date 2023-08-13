@@ -99,15 +99,18 @@ export function tagsRenderer(values: (number | string)[]) {
 }
 
 export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }: TaskDto) {
-  if (!Array.isArray(courses) || courses.length === 0) {
-    return '';
+  if (!courses?.length) {
+    return;
   }
 
-  const tags = courses.slice(0, 1).map(({ name, isActive }) => ({ value: name, ...(isActive && { color: 'blue' }) }));
-  const count = courses.length - 1;
+  const [firstCourse] = courses;
+  const firstTag = { value: firstCourse.name, ...(firstCourse.isActive && { color: 'blue' }) };
+  const remainingCoursesCount = courses.length - 1;
 
-  if (courses.length && count) {
-    tags.push({ value: `+ ${count} More` });
+  const tags = [firstTag];
+
+  if (remainingCoursesCount > 0) {
+    tags.push({ value: `+ ${remainingCoursesCount} More` });
   }
 
   return <span>{tags.map(({ value, color }) => renderTag(value, color))}</span>;
