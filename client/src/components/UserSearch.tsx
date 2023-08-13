@@ -30,7 +30,7 @@ export function UserSearch(props: UserProps) {
     setData(defaultValues ?? []);
   }, [props.defaultValues]);
 
-  const handleSearch = async (value: string) => {
+  const handleSearch = debounce(async (value: string) => {
     value = value.trim();
     if (value) {
       const data = await searchFn(value, onlyStudentsWithoutMentorShown);
@@ -38,7 +38,7 @@ export function UserSearch(props: UserProps) {
     } else {
       setData(props.defaultValues ?? []);
     }
-  };
+  }, 300);
 
   return (
     <Select
@@ -49,7 +49,7 @@ export function UserSearch(props: UserProps) {
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
-      onSearch={debounce(handleSearch, 300)}
+      onSearch={handleSearch}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
