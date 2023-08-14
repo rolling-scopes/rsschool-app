@@ -71,7 +71,7 @@ export function Header({ title, courseName, username }: Props) {
           boxShadow: '0px 2px 8px #F0F1F2',
         }}
       >
-        <Space className="icons" size={24}>
+        <Space className="icons">
           <Link href="/">
             <img
               style={{ height: 30 }}
@@ -115,7 +115,7 @@ export function Header({ title, courseName, username }: Props) {
             }
 
             .nav > :global(.icons > div:last-child) {
-              margin-left: -70px;
+              margin-left: -48px;
             }
 
             .title {
