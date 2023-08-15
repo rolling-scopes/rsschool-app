@@ -2547,7 +2547,7 @@ export interface EndorsementDto {
      * @type {object}
      * @memberof EndorsementDto
      */
-    'data': object;
+    'data': object | null;
 }
 /**
  * 
@@ -2998,6 +2998,12 @@ export interface HistoricalScoreDto {
      * @memberof HistoricalScoreDto
      */
     'dateTime': string;
+    /**
+     * 
+     * @type {Array<CrossCheckCriteriaDataDto>}
+     * @memberof HistoricalScoreDto
+     */
+    'criteria'?: Array<CrossCheckCriteriaDataDto>;
 }
 /**
  * 
