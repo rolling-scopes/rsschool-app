@@ -39,7 +39,7 @@ describe('AddCriteriaForCrossCheck', () => {
     expect(textarea).toBeInTheDocument();
   });
 
-  test('should change textarea value on typing',  async () => {
+  test('should change textarea value on typing', async () => {
     const expectedString = 'test value';
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
 

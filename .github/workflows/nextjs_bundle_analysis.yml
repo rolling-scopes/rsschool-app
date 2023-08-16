@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 name: 'Next.js Bundle Analysis'
 
 on:
@@ -9,24 +12,29 @@ on:
     paths-ignore:
       - 'tools/bumblebee/**'
 
-concurrency:
-  group: nextjs_bundle_analysis_${{ github.ref }}
-  cancel-in-progress: true
+defaults:
+  run:
+    # change this if your nextjs app does not live at the root of the repo
+    working-directory: ./
+
+permissions:
+  contents: read # for checkout repository
+  actions: read # for fetching base branch bundle stats
+  pull-requests: write # for comments
 
 jobs:
   analyze:
-    name: Analyze Next.js
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Set up node
-        uses: actions/setup-node@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 18
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -36,19 +44,17 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
-      - name: Restore next cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-next
-        with:
-          path: ./client/.next/cache/
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-
       - name: Install dependencies
-        run: npm ci
-        working-directory: client
+        uses: bahmutov/npm-install@v1
+
+      - name: Restore next build
+        uses: actions/cache@v3
+        id: restore-build-cache
+        env:
+          cache-name: cache-next-build
+        with:
+          path: client/.next/cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
 
       - name: Build next.js app
         working-directory: client
@@ -56,14 +62,11 @@ jobs:
           NODE_ENV: production
         run: npm run build
 
-      # Here's the first place where next-bundle-analysis' own script is used
-      # This step pulls the raw bundle stats for the current bundle
       - name: Analyze bundle
         run: npx -p nextjs-bundle-analysis report
-        working-directory: client
 
       - name: Upload bundle
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: bundle
           path: client/.next/analyze/__bundle_analysis.json
@@ -76,40 +79,50 @@ jobs:
           branch: ${{ github.event.pull_request.base.ref }}
           path: client/.next/analyze/base
 
+      # And here's the second place - this runs after we have both the current and
+      # base branch bundle stats, and will compare them to determine what changed.
+      # There are two configurable arguments that come from package.json:
+      #
+      # - budget: optional, set a budget (bytes) against which size changes are measured
+      #           it's set to 350kb here by default, as informed by the following piece:
+      #           https://infrequently.org/2021/03/the-performance-inequality-gap/
+      #
+      # - red-status-percentage: sets the percent size increase where you get a red
+      #                          status indicator, defaults to 20%
+      #
+      # Either of these arguments can be changed or removed by editing the `nextBundleAnalysis`
+      # entry in your package.json file.
       - name: Compare with base branch bundle
         if: success() && github.event.number
-        run: ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
-        working-directory: client
+        run: ls -laR client/.next/analyze/base && npx -p nextjs-bundle-analysis compare
 
-      - name: Get comment body
+      - name: Get Comment Body
         id: get-comment-body
         if: success() && github.event.number
-        working-directory: client
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         run: |
-          body=$(cat .next/analyze/__bundle_analysis_comment.txt)
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo ::set-output name=body::$body
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$(cat client/.next/analyze/__bundle_analysis_comment.txt)" >> $GITHUB_OUTPUT
+          echo EOF >> $GITHUB_OUTPUT
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v1
-        if: success() && github.event.number && github.event.pull_request.head.repo.full_name == github.repository
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
         id: fc
         with:
           issue-number: ${{ github.event.number }}
           body-includes: '<!-- __NEXTJS_BUNDLE -->'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v1.4.5
-        if: success() && github.event.number && steps.fc.outputs.comment-id == 0 && github.event.pull_request.head.repo.full_name == github.repository
+        uses: peter-evans/create-or-update-comment@v2
+        if: success() && github.event.number && steps.fc.outputs.comment-id == 0
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
 
       - name: Update Comment
-        uses: peter-evans/create-or-update-comment@v1.4.5
-        if: success() && github.event.number && steps.fc.outputs.comment-id != 0 && github.event.pull_request.head.repo.full_name == github.repository
+        uses: peter-evans/create-or-update-comment@v2
+        if: success() && github.event.number && steps.fc.outputs.comment-id != 0
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
