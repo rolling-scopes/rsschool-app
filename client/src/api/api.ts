@@ -2983,6 +2983,62 @@ export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface HeroesRadarBadgeDto
+ */
+export interface HeroesRadarBadgeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'badgeId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'badgeCount': number;
+}
+/**
+ * 
+ * @export
+ * @interface HeroesRadarDto
+ */
+export interface HeroesRadarDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarDto
+     */
+    'lastName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroesRadarDto
+     */
+    'total': number;
+    /**
+     * 
+     * @type {Array<HeroesRadarBadgeDto>}
+     * @memberof HeroesRadarDto
+     */
+    'badges': Array<HeroesRadarBadgeDto>;
+}
+/**
+ * 
+ * @export
  * @interface HistoricalScoreDto
  */
 export interface HistoricalScoreDto {
@@ -11295,7 +11351,7 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHeroesRadar(courseId?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getHeroesRadar(courseId?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<HeroesRadarDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -11333,7 +11389,7 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar(courseId?: number, options?: any): AxiosPromise<void> {
+        getHeroesRadar(courseId?: number, options?: any): AxiosPromise<Array<HeroesRadarDto>> {
             return localVarFp.getHeroesRadar(courseId, options).then((request) => request(axios, basePath));
         },
     };

@@ -1997,7 +1997,16 @@
         "operationId": "getHeroesRadar",
         "summary": "",
         "parameters": [{ "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } }],
-        "responses": { "200": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarDto" } }
+              }
+            }
+          }
+        },
         "tags": ["gratitudes"]
       }
     },
@@ -4173,6 +4182,22 @@
           }
         },
         "required": ["name", "id"]
+      },
+      "HeroesRadarBadgeDto": {
+        "type": "object",
+        "properties": { "badgeId": { "type": "string" }, "badgeCount": { "type": "number" } },
+        "required": ["badgeId", "badgeCount"]
+      },
+      "HeroesRadarDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "total": { "type": "number" },
+          "badges": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarBadgeDto" } }
+        },
+        "required": ["githubId", "firstName", "lastName", "total", "badges"]
       },
       "EventDto": {
         "type": "object",
