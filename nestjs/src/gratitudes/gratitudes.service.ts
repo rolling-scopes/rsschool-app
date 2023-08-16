@@ -57,6 +57,8 @@ export class GratitudesService {
       .createQueryBuilder()
       .select([
         'githubId',
+        'firstName',
+        'lastName',
         'sum(badgeCount) as total',
         `jsonb_agg(json_build_object('badgeId',badgeId, 'badgeCount', badgeCount)) as badges`,
       ])
@@ -83,6 +85,8 @@ export class GratitudesService {
         return subQuery;
       }, 'badges')
       .groupBy('githubId')
+      .addGroupBy('firstName')
+      .addGroupBy('lastName')
       .orderBy('total', 'DESC');
 
     return await query.getRawMany();
