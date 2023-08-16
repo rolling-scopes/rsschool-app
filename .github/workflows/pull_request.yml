@@ -23,30 +23,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node_modules
-        with:
-          path: |
-            node_modules
-            client/node_modules
-            server/node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-
       - name: Install dependencies
-        run: npm install
+        uses: bahmutov/npm-install@v1
 
       - name: Format & Lint (npm run lint && npm run ci:format)
         run: |
@@ -67,33 +45,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node_modules
-        with:
-          path: |
-            node_modules
-            client/node_modules
-            server/node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-
       - name: Install dependencies
-        run: npm install
+        uses: bahmutov/npm-install@v1
 
       - name: Test (client)
         run: npm run test:ci
@@ -142,30 +95,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Restore npm cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node_modules
-        with:
-          path: |
-            node_modules
-            client/node_modules
-            server/node_modules
-            nestjs/node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-
       - name: Restore next cache
         uses: actions/cache@v3
         env:
@@ -201,7 +130,7 @@ jobs:
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Install dependencies
-        run: npm install
+        uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
 

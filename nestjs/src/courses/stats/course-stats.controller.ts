@@ -1,6 +1,4 @@
 import {
-  CacheInterceptor,
-  CacheTTL,
   Controller,
   ForbiddenException,
   Get,
@@ -10,6 +8,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
