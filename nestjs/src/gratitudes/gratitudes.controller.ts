@@ -3,6 +3,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../auth';
 import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
 import { GratitudesService } from './gratitudes.service';
+import { HeroesRadarDto } from './dto/heroes-radar.dto';
 
 @Controller('gratitudes')
 @ApiTags('gratitudes')
@@ -27,7 +28,9 @@ export class GratitudesController {
 
   @Get('/heroes/radar')
   @ApiOperation({ operationId: 'getHeroesRadar' })
+  @ApiOkResponse({ type: [HeroesRadarDto] })
   public async getHeroesRadar(@Query() { courseId }: HeroesRadarQueryDto) {
-    return await this.service.getHeroesRadar(courseId);
+    const heroes = await this.service.getHeroesRadar(courseId);
+    return heroes.map(hero => new HeroesRadarDto(hero));
   }
 }
