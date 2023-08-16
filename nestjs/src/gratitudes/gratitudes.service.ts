@@ -2,7 +2,7 @@ import { Feedback } from '@entities/feedback';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, CourseRole } from 'src/auth';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { DiscordService } from './discord.service';
 import { Badge, CreateGratitudeDto } from './dto';
 
@@ -14,6 +14,7 @@ export class GratitudesService {
     private discordService: DiscordService,
     @InjectRepository(Feedback)
     private repository: Repository<Feedback>,
+    private dataSource: DataSource,
   ) {}
 
   public async create(authUser: AuthUser, data: CreateGratitudeDto) {
@@ -49,6 +50,42 @@ export class GratitudesService {
       const allowed = badge.roles?.some(role => userCourseRoles.includes(role)) ?? true;
       return allowed;
     });
+  }
+
+  public async getHeroesRadar(courseId?: number) {
+    const query = this.dataSource
+      .createQueryBuilder()
+      .select([
+        'githubId',
+        'sum(badgeCount) as total',
+        `jsonb_agg(json_build_object('badgeId',badgeId, 'badgeCount', badgeCount)) as badges`,
+      ])
+      .from(qb => {
+        const subQuery = qb
+          .select([
+            'feedback.badgeId as badgeId',
+            'toUser.githubId as githubId',
+            'toUser.firstName as firstName',
+            'toUser.lastName as lastName',
+            'COUNT(*) as badgeCount',
+          ])
+          .from(Feedback, 'feedback')
+          .leftJoin('feedback.toUser', 'toUser')
+          .groupBy('badgeId')
+          .addGroupBy('githubId')
+          .addGroupBy('firstName')
+          .addGroupBy('lastName');
+
+        if (courseId) {
+          subQuery.where('feedback.courseId = :courseId', { courseId });
+        }
+
+        return subQuery;
+      }, 'badges')
+      .groupBy('githubId')
+      .orderBy('total', 'DESC');
+
+    return await query.getRawMany();
   }
 
   private async postUserFeedback(data: Feedback) {

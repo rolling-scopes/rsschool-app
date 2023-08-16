@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../auth';
 import { BadgeDto, CreateGratitudeDto, GratitudeDto } from './dto';
@@ -23,5 +34,11 @@ export class GratitudesController {
   public async getBadges(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
     const badges = this.service.getBadges(req.user, courseId);
     return badges.map(badge => new BadgeDto(badge));
+  }
+
+  @Get('/heroes/radar')
+  @ApiOperation({ operationId: 'getHeroesRadar' })
+  public async getHeroesRadar(@Query('courseId', new DefaultValuePipe(0)) courseId: number) {
+    return await this.service.getHeroesRadar(courseId);
   }
 }
