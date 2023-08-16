@@ -42,9 +42,9 @@ export const createPostRoute =
       setResponse(ctx, OK, { id: identifier.id });
     } catch (e) {
       if (logger) {
-        logger.error(e.message);
+        logger.error((e as Error).message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, BAD_REQUEST, { message: (e as Error).message });
     }
   };
 
@@ -58,9 +58,9 @@ export const createPutRoute =
       setResponse(ctx, OK, result);
     } catch (e) {
       if (logger) {
-        logger.error(e.message);
+        logger.error((e as Error).message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, BAD_REQUEST, { message: (e as Error).message });
     }
   };
 
@@ -73,9 +73,9 @@ export const createDeleteRoute =
       setResponse(ctx, OK, result);
     } catch (e) {
       if (logger) {
-        logger.error(e.message);
+        logger.error((e as Error).message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, BAD_REQUEST, { message: (e as Error).message });
     }
   };
 
@@ -90,9 +90,9 @@ export const createMultiplePostRoute =
         setResponse(ctx, OK, result);
       } catch (e) {
         if (logger) {
-          logger.error(e.message);
+          logger.error((e as Error).message);
         }
-        setResponse(ctx, BAD_REQUEST, { message: e.message });
+        setResponse(ctx, BAD_REQUEST, { message: (e as Error).message });
       }
     });
   };
@@ -108,9 +108,9 @@ export const createMultiplePutRoute =
         setResponse(ctx, OK, result);
       } catch (e) {
         if (logger) {
-          logger.error(e.message);
+          logger.error((e as Error).message);
         }
-        setResponse(ctx, BAD_REQUEST, { message: e.message });
+        setResponse(ctx, BAD_REQUEST, { message: (e as Error).message });
       }
     });
   };

@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -137,7 +137,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -151,7 +151,6 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
 
       - name: Restore node_modules cache
         uses: actions/cache@v2
@@ -163,20 +162,20 @@ jobs:
             client/node_modules
             server/node_modules
             nestjs/node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
 
       - name: Restore next cache
         uses: actions/cache@v2
         env:
           cache-name: cache-next
         with:
-          path: client/.next/cache
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+          path: |
+            client/.next/cache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}
 
       - name: Restore Docker layers
         uses: actions/cache@v2
@@ -236,13 +235,13 @@ jobs:
         working-directory: ./client
         run: npm run build:lambda
 
-      - name: Package Сlient
+      - name: Package Client
         uses: docker/build-push-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./client
+          context: .
           file: ./client/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
@@ -267,7 +266,7 @@ jobs:
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./server
+          context: .
           file: ./server/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
@@ -292,7 +291,7 @@ jobs:
         with:
           platforms: linux/amd64
           provenance: false
-          context: ./nestjs
+          context: .
           file: ./nestjs/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:pr${{ github.event.pull_request.number }}
@@ -315,7 +314,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -369,7 +368,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Restore npm cache
         uses: actions/cache@v2

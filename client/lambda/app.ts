@@ -6,7 +6,9 @@ import next from 'next';
 import slsHttp from 'serverless-http';
 import { ServerResponse, IncomingMessage } from 'http';
 
-const app = next({ dev: false, port: 8080, hostname: '0.0.0.0' });
+// we need to explicitly specify path
+// cause in Container Lambda the node process is executed from the /var/task directory based on the file specified in the CMD instruction
+const app = next({ dev: false, port: 8080, hostname: '0.0.0.0', dir: './client' });
 const nextHandler = app.getRequestHandler();
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env"],
+  "pipeline": {
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "ACTIVITY_WEBHOOK_SECRET",
+        "AWS_LAMBDA",
+        "CDN_HOST",
+        "CONSENT_SECRET",
+        "NODE_ENV",
+        "NODE_PORT",
+        "NODE_TLS_REJECT_UNAUTHORIZED",
+        "RS_ENV",
+        "RSSCHOOL_ADMIN_TEAMS",
+        "RSSCHOOL_ADMIN_TEAMS",
+        "RSSHCOOL_API_ADMIN_PASSWORD",
+        "RSSHCOOL_API_ADMIN_USERNAME",
+        "RSSHCOOL_API_AUTH_CALLBACK",
+        "RSSHCOOL_API_AUTH_CLIENT_ID",
+        "RSSHCOOL_API_AUTH_CLIENT_SECRET",
+        "RSSHCOOL_API_AUTH_SUCCESS_REDIRECT",
+        "RSSHCOOL_API_AWS_ACCESS_KEY_ID",
+        "RSSHCOOL_API_AWS_REGION",
+        "RSSHCOOL_API_AWS_REST_API_KEY",
+        "RSSHCOOL_API_AWS_REST_API_URL",
+        "RSSHCOOL_API_AWS_SECRET_ACCESS_KEY",
+        "RSSHCOOL_API_GITHUB_APP_ID",
+        "RSSHCOOL_API_GITHUB_APP_INSTALL_ID",
+        "RSSHCOOL_API_GITHUB_HOOKS_SECRET",
+        "RSSHCOOL_API_GITHUB_PRIVATE_KEY",
+        "RSSHCOOL_API_HIRERS",
+        "RSSHCOOL_API_HIRERS",
+        "RSSHCOOL_API_SESSION_KEY",
+        "RSSHCOOL_API_USERS_CLOUD_PASSWORD",
+        "RSSHCOOL_API_USERS_CLOUD_USERNAME",
+        "RSSHCOOL_AWS_ACCESS_KEY_ID",
+        "RSSHCOOL_AWS_REGION",
+        "RSSHCOOL_AWS_REST_API_KEY",
+        "RSSHCOOL_AWS_REST_API_URL",
+        "RSSHCOOL_AWS_SECRET_ACCESS_KEY",
+        "RSSHCOOL_HOST",
+        "RSSHCOOL_PG_DATABASE",
+        "RSSHCOOL_PG_HOST",
+        "RSSHCOOL_PG_PASSWORD",
+        "RSSHCOOL_PG_USERNAME",
+        "RSSHCOOL_UI_GCP_MAPS_API_KEY",
+        "RSSHCOOL_OPENAI_API_KEY"
+      ]
+    },
+    "lint": {},
+    "test": {},
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
