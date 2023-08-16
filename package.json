@@ -12,6 +12,7 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
     "format": "prettier --write client server nestjs common setup docs .github",
     "ci:format": "prettier --check client server nestjs common setup docs .github",
     "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",

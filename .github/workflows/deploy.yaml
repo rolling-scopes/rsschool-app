@@ -62,8 +62,8 @@ jobs:
         run: npm ci
         working-directory: ./app
 
-      - name: Test (npm test)
-        run: npm test
+      - name: Test (npm run test:ci)
+        run: npm run test:ci
         working-directory: ./app
 
       - name: Build (npm run build)
