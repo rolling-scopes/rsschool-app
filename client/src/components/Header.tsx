@@ -61,7 +61,7 @@ export function Header({ title, courseName, username }: Props) {
   return (
     <>
       <nav
-        className="nav no-print"
+        className="no-print"
         style={{
           background: '#fff',
           padding: '8px',
@@ -71,7 +71,7 @@ export function Header({ title, courseName, username }: Props) {
           boxShadow: '0px 2px 8px #F0F1F2',
         }}
       >
-        <Space className="icons">
+        <Space size={24}>
           <Link href="/">
             <img
               style={{ height: 30 }}
@@ -88,18 +88,15 @@ export function Header({ title, courseName, username }: Props) {
         <div className="profile">
           <a target="_blank" href="https://docs.app.rs.school">
             <Tooltip title="RS School App docs">
-              <Button type="primary" ghost size="large" style={{ marginRight: 8 }}>
-                <QuestionCircleFilled />
-                <span className="button-text">Help</span>
+              <Button type="primary" ghost size="large" icon={<QuestionCircleFilled />} style={{ marginRight: 16 }}>
+                Help
               </Button>
             </Tooltip>
           </a>
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="dashed" size="large">
               <GithubAvatar githubId={username} size={24} />
-              <span className="button-text" style={{ marginLeft: '12px' }}>
-                My Profile
-              </span>
+              <span style={{ marginLeft: '12px' }}>My Profile</span>
             </Button>
           </Dropdown>
         </div>
@@ -109,24 +106,10 @@ export function Header({ title, courseName, username }: Props) {
             align-self: center;
           }
           @media all and (max-width: 540px) {
-            .header-logo {
-              position: relative;
-              z-index: 1;
-            }
-
-            .nav > :global(.icons > div:last-child) {
-              margin-left: -48px;
-            }
-
             .title {
               width: 100%;
               order: 3;
-              text-align: center;
               margin-top: 16px;
-            }
-
-            .button-text {
-              display: none;
             }
           }
         `}</style>
