@@ -16,15 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Restore node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node_modules
         with:
@@ -60,15 +60,15 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -79,7 +79,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Restore node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node_modules
         with:
@@ -110,21 +110,21 @@ jobs:
         working-directory: nestjs
 
       - name: Upload test report (client)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
           name: test-report-client
           path: reports/jest-junit-client.xml
 
       - name: Upload test report (server)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
           name: test-report-server
           path: reports/jest-junit-server.xml
 
       - name: Upload test report (nestjs)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
           name: test-report-nestjs
@@ -135,15 +135,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -153,7 +153,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node_modules
         with:
@@ -167,7 +167,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore next cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-next
         with:
@@ -178,7 +178,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}
 
       - name: Restore Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           path: /tmp/.buildx-cache
@@ -312,15 +312,15 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -363,15 +363,15 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
@@ -382,7 +382,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Restore browsers cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '~/.cache/ms-playwright/'
           key: ${{ runner.os }}-browsers
@@ -403,7 +403,7 @@ jobs:
         run: npx playwright test
 
       - name: Save Report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
