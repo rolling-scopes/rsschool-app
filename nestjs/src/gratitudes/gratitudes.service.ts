@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, CourseRole } from 'src/auth';
 import { Repository, DataSource } from 'typeorm';
 import { DiscordService } from './discord.service';
-import { Badge, CreateGratitudeDto } from './dto';
+import { Badge, CreateGratitudeDto, HeroesRadarQueryDto } from './dto';
 
 @Injectable()
 export class GratitudesService {
@@ -52,7 +52,7 @@ export class GratitudesService {
     });
   }
 
-  public async getHeroesRadar(courseId?: number) {
+  public async getHeroesRadar(courseId: HeroesRadarQueryDto['courseId']) {
     const query = this.dataSource
       .createQueryBuilder()
       .select([

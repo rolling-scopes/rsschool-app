@@ -1,18 +1,7 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../auth';
-import { BadgeDto, CreateGratitudeDto, GratitudeDto } from './dto';
+import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
 import { GratitudesService } from './gratitudes.service';
 
 @Controller('gratitudes')
@@ -38,7 +27,7 @@ export class GratitudesController {
 
   @Get('/heroes/radar')
   @ApiOperation({ operationId: 'getHeroesRadar' })
-  public async getHeroesRadar(@Query('courseId', new DefaultValuePipe(0)) courseId: number) {
+  public async getHeroesRadar(@Query() { courseId }: HeroesRadarQueryDto) {
     return await this.service.getHeroesRadar(courseId);
   }
 }
