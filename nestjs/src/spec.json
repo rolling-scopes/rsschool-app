@@ -1992,6 +1992,15 @@
         "tags": ["gratitudes"]
       }
     },
+    "/gratitudes/heroes/radar": {
+      "get": {
+        "operationId": "getHeroesRadar",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["gratitudes"]
+      }
+    },
     "/events": {
       "get": {
         "operationId": "getEvents",
