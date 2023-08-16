@@ -33,16 +33,15 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-${{ env.cache-name }}-
 
-      # - name: Restore npm cache
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-npm
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ env.cache-name }}-
-      #       ${{ runner.os }}-
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
         run: npm install turbo --global
@@ -111,16 +110,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Restore npm cache
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-npm
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ env.cache-name }}-
-      #       ${{ runner.os }}-
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
       - name: Install turbo
         run: npm install turbo --global
 
@@ -174,16 +173,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Restore npm cache
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-npm
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ env.cache-name }}-
-      #       ${{ runner.os }}-
+      - name: Restore npm cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
       - name: Install turbo
         run: npm install turbo --global
 

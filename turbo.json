@@ -51,6 +51,7 @@
     },
     "lint": {},
     "test": {},
+    "test:ci": {},
     "start": {
       "cache": false,
       "persistent": true
