@@ -605,14 +605,7 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateInterviewFeedbackDto" } } }
         },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewFeedbackDto" } } }
-          },
-          "400": { "description": "" },
-          "403": { "description": "" }
-        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
         "tags": ["courses interviews"]
       }
     },
@@ -2666,9 +2659,10 @@
           "json": { "type": "object" },
           "decision": { "type": "string" },
           "isGoodCandidate": { "type": "boolean" },
-          "isCompleted": { "type": "boolean" }
+          "isCompleted": { "type": "boolean" },
+          "rating": { "type": "number" }
         },
-        "required": ["version", "json", "decision", "isGoodCandidate", "isCompleted"]
+        "required": ["version", "json", "isCompleted"]
       },
       "CheckTasksDeadlineDto": {
         "type": "object",

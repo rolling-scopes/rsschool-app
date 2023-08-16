@@ -40,7 +40,7 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
     return (
       <>
         <PreScreeningIviewModal
-          feedback={interviews[courseIndex]}
+          interviewResult={interviews[courseIndex]}
           isVisible={isPreScreeningIviewModalVisible}
           onHide={this.hidePreScreeningIviewModal}
         />

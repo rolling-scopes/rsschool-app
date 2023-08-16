@@ -3,6 +3,21 @@ import { StageInterviewDetailedFeedback } from '../../../../common/models/profil
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course, StageInterview, StageInterviewFeedback } from '../../models';
 import { stageInterviewService } from '../../services';
+import { StageInterviewFeedbackJson } from '../../../../common/models';
+
+type FeedbackData = {
+  decision: string;
+  isGoodCandidate: boolean;
+  courseName: string;
+  courseFullName: string;
+  interviewResultJson: any;
+  interviewFeedbackDate: string;
+  interviewerFirstName: string;
+  interviewerLastName: string;
+  interviewerGithubId: string;
+  feedbackVersion: null | number;
+  interviewRating: null | number;
+};
 
 export const getStageInterviewFeedback = async (githubId: string): Promise<StageInterviewDetailedFeedback[]> =>
   (
@@ -10,10 +25,12 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
       .createQueryBuilder('stageInterview')
       .select('"stageInterview"."decision" AS "decision"')
       .addSelect('"stageInterview"."isGoodCandidate" AS "isGoodCandidate"')
+      .addSelect('"stageInterview"."rating" AS "interviewRating"')
       .addSelect('"course"."name" AS "courseName"')
       .addSelect('"course"."fullName" AS "courseFullName"')
       .addSelect('"stageInterviewFeedback"."json" AS "interviewResultJson"')
       .addSelect('"stageInterviewFeedback"."updatedDate" AS "interviewFeedbackDate"')
+      .addSelect('"stageInterviewFeedback"."version" AS "feedbackVersion"')
       .addSelect('"userMentor"."firstName" AS "interviewerFirstName"')
       .addSelect('"userMentor"."lastName" AS "interviewerLastName"')
       .addSelect('"userMentor"."githubId" AS "interviewerGithubId"')
@@ -31,40 +48,62 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
       .andWhere('"stageInterview"."isCompleted" = true')
       .orderBy('"course"."updatedDate"', 'ASC')
       .getRawMany()
-  ).map(
-    ({
-      decision,
-      isGoodCandidate,
-      courseName,
-      courseFullName,
-      interviewResultJson,
-      interviewFeedbackDate,
-      interviewerFirstName,
-      interviewerLastName,
-      interviewerGithubId,
-    }: any) => {
-      const interviewResult = JSON.parse(interviewResultJson);
-      const { english, programmingTask, resume } = interviewResult;
-      const { rating, htmlCss, common, dataStructures } = stageInterviewService.getInterviewRatings(interviewResult);
+  )
+    .map((data: FeedbackData) => {
+      const {
+        feedbackVersion,
+        decision,
+        interviewFeedbackDate,
+        interviewerFirstName,
+        courseFullName,
+        courseName,
+        interviewerLastName,
+        interviewerGithubId,
+        isGoodCandidate,
+        interviewRating,
+        interviewResultJson,
+      } = data;
+      const feedbackTemplate = JSON.parse(interviewResultJson);
+      const { rating, feedback } = !feedbackVersion
+        ? parseLegacyFeedback(feedbackTemplate)
+        : {
+            feedback: feedbackTemplate,
+            rating: interviewRating ?? 0,
+          };
+
       return {
+        version: feedbackVersion ?? 0,
+        date: interviewFeedbackDate,
         decision,
         isGoodCandidate,
         courseName,
         courseFullName,
-        programmingTask,
+        feedback,
         rating,
-        comment: resume.comment,
-        english: english.levelMentorOpinion ? english.levelMentorOpinion : english.levelStudentOpinion,
-        date: interviewFeedbackDate,
-        skills: {
-          htmlCss,
-          common,
-          dataStructures,
-        },
         interviewer: {
           name: getFullName(interviewerFirstName, interviewerLastName, interviewerGithubId),
           githubId: interviewerGithubId,
         },
-      } as StageInterviewDetailedFeedback;
+      };
+    })
+    .filter(Boolean);
+
+// this is legacy form
+function parseLegacyFeedback(interviewResult: StageInterviewFeedbackJson) {
+  const { english, programmingTask, resume } = interviewResult;
+  const { rating, htmlCss, common, dataStructures } = stageInterviewService.getInterviewRatings(interviewResult);
+
+  return {
+    rating,
+    feedback: {
+      english: english.levelMentorOpinion ? english.levelMentorOpinion : english.levelStudentOpinion,
+      programmingTask,
+      comment: resume.comment,
+      skills: {
+        htmlCss,
+        common,
+        dataStructures,
+      },
     },
-  );
+  };
+}

@@ -11,20 +11,23 @@ describe('PreScreeningIviewCard', () => {
       courseName: 'rs-2018-q1',
       courseFullName: 'Rolling Scopes School 2018 Q1',
       rating: 3.43,
-      comment: 'Not bad',
-      english: 'a2',
+      feedback: {
+        comment: 'Not bad',
+        english: 'a2',
+        programmingTask: {
+          task: 'aaa === 3a',
+          codeWritingLevel: 3,
+          resolved: 2,
+          comment: 'Not bad coder',
+        },
+        skills: {
+          htmlCss: 3,
+          common: 2,
+          dataStructures: 4,
+        },
+      },
       date: '2018-12-01',
-      programmingTask: {
-        task: 'aaa === 3a',
-        codeWritingLevel: 3,
-        resolved: 2,
-        comment: 'Not bad coder',
-      },
-      skills: {
-        htmlCss: 3,
-        common: 2,
-        dataStructures: 4,
-      },
+
       interviewer: {
         name: 'Dima Vasilyev',
         githubId: 'dva',

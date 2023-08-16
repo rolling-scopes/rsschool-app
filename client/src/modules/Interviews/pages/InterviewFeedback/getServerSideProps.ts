@@ -10,7 +10,7 @@ import { AxiosError } from 'axios';
 import { templates } from 'data/interviews';
 import { getTasksTotalScore } from 'domain/course';
 import { stageInterviewType } from 'domain/interview';
-import { notAuthorizedResponse, noAccessResponse } from 'modules/Course/data';
+import { notAuthorizedResponse } from 'modules/Course/data';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import type { CourseOnlyPageProps } from 'services/models';
@@ -20,13 +20,14 @@ import { getTokenFromContext } from 'utils/server';
 
 export type StageFeedbackProps = CourseOnlyPageProps & {
   interviewId: number;
-  student: StudentDto | null;
+  student: StudentDto;
   courseSummary: {
     totalScore: number;
     studentsCount: number;
   };
   interviewFeedback: InterviewFeedbackDto | null;
   type: typeof stageInterviewType;
+  interviewMaxScore: number;
 };
 
 export type FeedbackProps = CourseOnlyPageProps & {
@@ -65,7 +66,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       props: props,
     };
   } catch (e) {
-    return noAccessResponse;
+    console.error(e);
+    return notAuthorizedResponse;
   }
 };
 
@@ -82,6 +84,7 @@ async function getStageInterviewData({
   courseId: number;
 }): Promise<Omit<StageFeedbackProps, keyof CourseOnlyPageProps>> {
   const studentId = ctx.query.studentId as string | undefined;
+  const interviewTaskId = Number(ctx.query.interviewTaskId);
 
   if (!studentId || !ctx.query.interviewId) {
     throw new Error('No studentId or interviewId');
@@ -90,14 +93,14 @@ async function getStageInterviewData({
   const axiosConfig = getApiConfiguration(token);
 
   const [
-    studentResponse,
+    { data: student },
     { data: tasks },
     {
       data: { studentsActiveCount },
     },
     { data: interviewFeedback },
   ] = await Promise.all([
-    studentId ? new StudentsApi(axiosConfig).getStudent(Number(studentId)) : Promise.resolve(null),
+    new StudentsApi(axiosConfig).getStudent(Number(studentId)),
     new CoursesTasksApi(axiosConfig).getCourseTasks(courseId),
     new CourseStatsApi(axiosConfig).getCourseStats(courseId),
     new CoursesInterviewsApi(axiosConfig)
@@ -109,16 +112,24 @@ async function getStageInterviewData({
         throw error;
       }),
   ]);
+  if (!student) {
+    throw new Error('Student not found');
+  }
+  const task = tasks.find(task => task.id === interviewTaskId);
+  if (!task) {
+    throw new Error('Task not found');
+  }
 
   return {
     interviewId,
-    student: studentResponse?.data ?? null,
+    student,
     courseSummary: {
       totalScore: getTasksTotalScore(tasks),
       studentsCount: studentsActiveCount,
     },
     interviewFeedback,
     type: stageInterviewType,
+    interviewMaxScore: task.maxScore,
   };
 }
 

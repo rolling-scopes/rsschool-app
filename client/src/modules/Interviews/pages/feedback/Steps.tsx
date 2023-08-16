@@ -13,7 +13,7 @@ export function Steps() {
       style={{ padding: 24 }}
       items={steps.map((step, index) => ({
         title: step.title,
-        description: step.stepDescription,
+        description: step.stepperDescription,
         status: getStatus(index),
       }))}
     />

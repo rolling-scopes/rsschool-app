@@ -5437,19 +5437,25 @@ export interface UpdateInterviewFeedbackDto {
      * @type {string}
      * @memberof UpdateInterviewFeedbackDto
      */
-    'decision': string;
+    'decision'?: string;
     /**
      * 
      * @type {boolean}
      * @memberof UpdateInterviewFeedbackDto
      */
-    'isGoodCandidate': boolean;
+    'isGoodCandidate'?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof UpdateInterviewFeedbackDto
      */
     'isCompleted': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateInterviewFeedbackDto
+     */
+    'rating'?: number;
 }
 /**
  * 
@@ -8543,7 +8549,7 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createInterviewFeedback(courseId: number, interviewId: number, type: string, updateInterviewFeedbackDto: UpdateInterviewFeedbackDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InterviewFeedbackDto>> {
+        async createInterviewFeedback(courseId: number, interviewId: number, type: string, updateInterviewFeedbackDto: UpdateInterviewFeedbackDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createInterviewFeedback(courseId, interviewId, type, updateInterviewFeedbackDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -8612,7 +8618,7 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createInterviewFeedback(courseId: number, interviewId: number, type: string, updateInterviewFeedbackDto: UpdateInterviewFeedbackDto, options?: any): AxiosPromise<InterviewFeedbackDto> {
+        createInterviewFeedback(courseId: number, interviewId: number, type: string, updateInterviewFeedbackDto: UpdateInterviewFeedbackDto, options?: any): AxiosPromise<void> {
             return localVarFp.createInterviewFeedback(courseId, interviewId, type, updateInterviewFeedbackDto, options).then((request) => request(axios, basePath));
         },
         /**

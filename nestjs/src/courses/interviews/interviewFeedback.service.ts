@@ -55,7 +55,7 @@ export class InterviewFeedbackService {
       throw new BadRequestException('Interview is not found');
     }
     const { studentId } = interview;
-    const { decision, isGoodCandidate, isCompleted } = dto;
+    const { decision, isGoodCandidate, isCompleted, rating } = dto;
 
     await Promise.all([
       this.saveFeedback(interview.id, dto),
@@ -63,8 +63,7 @@ export class InterviewFeedbackService {
         isCompleted,
         decision,
         isGoodCandidate,
-        // TODO: calculate rating
-        rating: 0,
+        rating,
       }),
       decision === 'yes' ? this.studentsService.setMentor(studentId, interviewerId) : Promise.resolve(),
     ]);
@@ -73,7 +72,7 @@ export class InterviewFeedbackService {
   private async saveFeedback(stageInterviewId: number, data: UpdateInterviewFeedbackDto) {
     const feedback = await this.stageInterviewFeedbackRepository.findOne({ where: { stageInterviewId } });
 
-    const newFeedback = { stageInterviewId, json: JSON.stringify(data.json) };
+    const newFeedback = { stageInterviewId, json: JSON.stringify(data.json), version: data.version };
 
     if (feedback) {
       await this.stageInterviewFeedbackRepository.update(feedback.id, newFeedback);

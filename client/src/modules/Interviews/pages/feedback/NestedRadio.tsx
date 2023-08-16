@@ -2,7 +2,7 @@ import { Radio, Space, FormInstance, Form } from 'antd';
 import { RadioOption } from 'data/interviews/technical-screening';
 import { useEffect } from 'react';
 
-const { Item } = Form;
+const { Item, useWatch } = Form;
 const { Group } = Radio;
 
 /**
@@ -12,20 +12,20 @@ export function NestedRadio({
   form,
   option,
   parentId,
-  stepId,
 }: {
   form: FormInstance;
   option: RadioOption;
   parentId: string;
   stepId: string;
 }) {
+  const parentValue = useWatch(parentId);
+
   useEffect(() => {
-    return () => {
-      if (option.options) {
-        form.resetFields([getFieldName(stepId, option.id)]);
-      }
-    };
-  }, [option]);
+    //reset current value in form, if parent value changes
+    if (parentValue && parentValue !== option.id) {
+      form.resetFields([option.id]);
+    }
+  }, [parentValue, option.id]);
 
   if (!option.options) {
     return null;
@@ -34,12 +34,12 @@ export function NestedRadio({
   return (
     <Item shouldUpdate noStyle>
       {() =>
-        form.getFieldValue(getFieldName(stepId, parentId)) === option.id && (
-          <Item name={getFieldName(stepId, option.id)} rules={[{ required: true, message: 'Required' }]}>
+        form.getFieldValue(parentId) === option.id && (
+          <Item name={option.id} rules={[{ required: true, message: 'Required' }]}>
             <Group>
               <Space direction="vertical" style={{ marginLeft: '24px' }}>
                 {option.options?.map((subOption: any) => (
-                  <Radio key={subOption.id} value={subOption.title}>
+                  <Radio key={subOption.id} value={subOption.id}>
                     {subOption.title}
                   </Radio>
                 ))}
@@ -50,8 +50,4 @@ export function NestedRadio({
       }
     </Item>
   );
-}
-
-export function getFieldName(step: string, field: string) {
-  return [step, field];
 }

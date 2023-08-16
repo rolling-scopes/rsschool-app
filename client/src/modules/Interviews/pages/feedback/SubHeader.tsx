@@ -1,6 +1,7 @@
 import { Col, Space, Tag, Typography } from 'antd';
 import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined';
 import css from 'styled-jsx/css';
+import { useRouter } from 'next/router';
 
 type Props = {
   completed: boolean;
@@ -8,10 +9,12 @@ type Props = {
 
 export function SubHeader(props: Props) {
   const { completed } = props;
+  const router = useRouter();
+
   return (
     <Space align="center" size="middle" className={containerClassName}>
       <Col />
-      <ArrowLeftOutlined />
+      <ArrowLeftOutlined onClick={router.back} />
       <Typography.Text strong>Feedback form</Typography.Text>
       <Tag color={completed ? 'green' : undefined}>{completed ? 'Completed' : 'Uncompleted'}</Tag>
       {containerStyles}

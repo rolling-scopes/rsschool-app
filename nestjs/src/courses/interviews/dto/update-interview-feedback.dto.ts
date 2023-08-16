@@ -9,14 +9,14 @@ export class UpdateInterviewFeedbackDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  json: unknown;
+  json: Record<string, unknown>;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   decision?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsBoolean()
   isGoodCandidate?: boolean;
@@ -24,4 +24,8 @@ export class UpdateInterviewFeedbackDto {
   @ApiProperty()
   @IsNotEmpty()
   isCompleted: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  rating: number;
 }

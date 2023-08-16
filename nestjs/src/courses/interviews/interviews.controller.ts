@@ -137,7 +137,7 @@ export class InterviewsController {
   }
 
   @Post('/:interviewId/:type/feedback')
-  @ApiOkResponse({ type: InterviewFeedbackDto })
+  @ApiOkResponse()
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'createInterviewFeedback' })
@@ -161,7 +161,5 @@ export class InterviewsController {
       dto,
       interviewerId,
     });
-
-    return new InterviewFeedbackDto(dto);
   }
 }

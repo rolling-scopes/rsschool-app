@@ -134,9 +134,33 @@ export interface StageInterviewDetailedFeedback {
   courseName: string;
   courseFullName: string;
   rating: number;
-  comment: string;
-  english: EnglishLevel | number;
   date: string;
+  version: number;
+  interviewer: {
+    name: string;
+    githubId: string;
+  };
+  // This type have to updated to refer to `InterviewFeedbackStepData`, when profile is migrated to nestjs
+  feedback:
+    | LegacyFeedback
+    | {
+        steps: {
+          id: string;
+          isCompleted: boolean;
+          values?: Record<string, unknown>;
+        }[];
+      };
+}
+
+export interface UserInfo {
+  generalInfo: GeneralInfo;
+  contacts?: Contacts;
+  discord: Discord | null;
+}
+
+export type LegacyFeedback = {
+  english?: EnglishLevel;
+  comment: string;
   programmingTask: {
     task: string;
     codeWritingLevel: number;
@@ -148,14 +172,4 @@ export interface StageInterviewDetailedFeedback {
     common: number;
     dataStructures: number;
   };
-  interviewer: {
-    name: string;
-    githubId: string;
-  };
-}
-
-export interface UserInfo {
-  generalInfo: GeneralInfo;
-  contacts?: Contacts;
-  discord: Discord | null;
-}
+};
