@@ -11,7 +11,11 @@ import { MentorBasic } from '../../../common/models';
 import { camelCase, toUpper } from 'lodash';
 
 export class RepositoryService {
-  constructor(private courseId: number, private github: Octokit, private logger?: ILogger) {}
+  constructor(
+    private courseId: number,
+    private github: Octokit,
+    private logger?: ILogger,
+  ) {}
 
   public async createMany() {
     const result = [];

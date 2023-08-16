@@ -11,7 +11,10 @@ import * as dayjs from 'dayjs';
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   private readonly logger = new Logger(GithubStrategy.name);
 
-  constructor(private config: ConfigService, private readonly authService: AuthService) {
+  constructor(
+    private config: ConfigService,
+    private readonly authService: AuthService,
+  ) {
     super({
       clientID: config.auth.github.clientId,
       clientSecret: config.auth.github.clientSecret,

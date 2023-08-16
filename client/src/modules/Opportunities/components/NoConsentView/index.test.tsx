@@ -1,9 +1,7 @@
-import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { NoConsentView, confirmationModalInfo } from '../NoConsentView';
 
 describe('NoConsentView', () => {
-  afterEach(cleanup);
-
   it('should render 403 correctly', () => {
     render(<NoConsentView giveConsent={jest.fn()} />);
 

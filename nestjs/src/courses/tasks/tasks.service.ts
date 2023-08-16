@@ -8,7 +8,10 @@ import { Task } from '@entities/task';
 export class TasksService {
   private readonly logger = new Logger('tasks');
 
-  constructor(private courseService: CoursesService, private courseTasksService: CourseTasksService) {}
+  constructor(
+    private courseService: CoursesService,
+    private courseTasksService: CourseTasksService,
+  ) {}
 
   public async getPendingTasksDeadline(deadlineWithinHours: number) {
     const activeCourses = await this.courseService.getActiveCourses(['students']);

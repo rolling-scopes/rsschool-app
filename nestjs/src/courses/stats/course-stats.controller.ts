@@ -21,7 +21,10 @@ import { CourseStatsDto } from './dto';
 @ApiTags('course stats')
 @UseGuards(DefaultGuard)
 export class CourseStatsController {
-  constructor(private courseStatsService: CourseStatsService, private courseAccessService: CourseAccessService) {}
+  constructor(
+    private courseStatsService: CourseStatsService,
+    private courseAccessService: CourseAccessService,
+  ) {}
 
   @Get('/')
   @CacheTTL(ONE_HOUR_CACHE_TTL)

@@ -8,7 +8,10 @@ export class CloudApiService {
   private baseUrl: string;
   private apiKey: string;
 
-  constructor(private readonly httpService: HttpService, readonly configService: ConfigService) {
+  constructor(
+    private readonly httpService: HttpService,
+    readonly configService: ConfigService,
+  ) {
     this.baseUrl = configService.awsServices.restApiUrl;
     this.apiKey = configService.awsServices.restApiKey;
   }
