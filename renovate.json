@@ -20,6 +20,10 @@
     {
       "matchPackagePatterns": ["actions/"],
       "groupName": "actions"
+    },
+    {
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint"
     }
   ]
 }

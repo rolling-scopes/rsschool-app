@@ -138,7 +138,7 @@ export function registryRouter(logger?: ILogger) {
       const registry = await getRepository(Registry).save(registryPayload);
       setResponse(ctx, OK, registry);
     } catch (e) {
-      handleError({ logger, errorMsg: e.message, ctx });
+      handleError({ logger, errorMsg: (e as Error).message, ctx });
     }
   });
 
