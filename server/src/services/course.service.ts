@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { getRepository, getManager, getCustomRepository } from 'typeorm';
-import { MentorBasic, StudentBasic } from '../../../common/models';
+import { MentorBasic, MentorDetails, StudentBasic } from '../../../common/models';
 import {
   Course,
   CourseTask,
@@ -84,26 +84,6 @@ export interface StudentWithResults {
   countryName: string;
   isActive: boolean;
   taskResults: { courseTaskId: number; score: number }[];
-}
-
-export interface MentorDetails extends MentorBasic {
-  cityName: string;
-  countryName: string;
-  maxStudentsLimit: number;
-  studentsPreference: 'any' | 'city' | 'country';
-  interviews?: {
-    completed?: number;
-    total?: number;
-  };
-  screenings?: {
-    completed?: number;
-    total?: number;
-  };
-  studentsCount?: number;
-  taskResultsStats?: {
-    total: number;
-    checked: number;
-  };
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {

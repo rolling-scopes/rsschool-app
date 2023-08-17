@@ -45,7 +45,7 @@ export interface MentorDetails extends MentorBasic {
   screenings?: InterviewStatistics;
   studentsCount?: number;
   taskResultsStats?: {
-    lastUpdatedDate?: Date | null;
+    lastUpdatedDate?: Date | string | null;
     total: number;
     checked: number;
   };
