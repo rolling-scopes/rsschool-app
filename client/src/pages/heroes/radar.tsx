@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { GratitudesApi, HeroesRadarDto } from 'api';
-import { getFullName } from 'utils/text-utils';
+import HeroesRadarCard from 'modules/Heroes/HeroesRadarCard';
 
 type Props = {
   session: Session;
@@ -37,11 +37,8 @@ function Page(props: Props) {
         className={masonryClassName}
         columnClassName={masonryColumnClassName}
       >
-        {heroes.map(({ githubId, firstName, lastName, total, badges }) => (
-          <div key={githubId}>
-            <span>{getFullName({firstName, lastName, githubId})} - {total}</span>
-            {badges.map(badge => (<span key={badge.badgeId}>{badge.badgeId} {badge.badgeCount} </span>))}
-          </div>
+        {heroes.map((hero) => (
+          <HeroesRadarCard hero={hero} />
         ))}
       </Masonry>
       {masonryStyles}
