@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, Tooltip, Avatar, Badge } from 'antd';
+import { Typography, Tooltip } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
 import MessageOutlined from '@ant-design/icons/MessageOutlined';
@@ -11,6 +11,7 @@ import { PublicFeedback } from 'common/models/profile';
 import { GithubAvatar } from 'components/GithubAvatar';
 import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
+import HeroesCountBadge from 'modules/Heroes/HeroesCountBadge';
 
 dayjs.extend(relative);
 
@@ -87,17 +88,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               </div>
               <div style={{ marginBottom: 30 }}>
                 {Object.keys(badgesCount).map(badgeId => (
-                  <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
-                    <Badge count={badgesCount[badgeId]}>
-                      <Tooltip title={(heroesBadges as any)[badgeId].name}>
-                        <Avatar
-                          src={`/static/svg/badges/${(heroesBadges as any)[badgeId].url}`}
-                          alt={`${badgeId} badge`}
-                          size={48}
-                        />
-                      </Tooltip>
-                    </Badge>
-                  </div>
+                  <HeroesCountBadge badge={{ badgeId, badgeCount: badgesCount[badgeId] }} />
                 ))}
               </div>
               <div style={{ marginBottom: 0 }}>
