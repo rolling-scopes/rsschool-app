@@ -2,6 +2,7 @@ import { Card, Col, Row, Typography } from 'antd';
 import { HeroesRadarDto } from 'api';
 import { getFullName } from 'utils/text-utils';
 import HeroesCountBadge from './HeroesCountBadge';
+import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Title } = Typography;
 
@@ -12,9 +13,12 @@ function HeroesRadarCard({ hero: { githubId, firstName, lastName, total, badges 
   return (
     <Card
       title={
-        <Title level={5} ellipsis={true}>
-          {getFullName({ firstName, lastName, githubId })} - {total}
-        </Title>
+        <Row>
+          <GithubAvatar size={24} githubId={githubId} />
+          <Title level={5} ellipsis={true}>
+            {getFullName({ firstName, lastName, githubId })} - {total}
+          </Title>
+        </Row>
       }
     >
       <Row gutter={[24, 24]}>
