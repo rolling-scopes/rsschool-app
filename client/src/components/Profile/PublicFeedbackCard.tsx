@@ -11,7 +11,7 @@ import { PublicFeedback } from 'common/models/profile';
 import { GithubAvatar } from 'components/GithubAvatar';
 import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
-import HeroesCountBadge from 'modules/Heroes/HeroesCountBadge';
+import HeroesCountBadge from 'components/Heroes/HeroesCountBadge';
 
 dayjs.extend(relative);
 

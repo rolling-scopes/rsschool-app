@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { GratitudesApi, HeroesRadarDto } from 'api';
-import HeroesRadarCard from 'modules/Heroes/HeroesRadarCard';
+import HeroesRadarCard from 'components/Heroes/HeroesRadarCard';
 
 type Props = {
   session: Session;
