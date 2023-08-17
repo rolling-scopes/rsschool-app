@@ -52,8 +52,12 @@ export class GratitudesService {
     });
   }
 
-  public async getHeroesRadar(courseId: HeroesRadarQueryDto['courseId']) {
-    const query = this.dataSource
+  public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20 }: HeroesRadarQueryDto) {
+    console.log('page: ', page);
+
+    const countQuery = this.repository.createQueryBuilder('feedback').select('COUNT(DISTINCT "toUserId") as count');
+
+    const heroesQuery = this.dataSource
       .createQueryBuilder()
       .select([
         '"badges"."githubId"',
@@ -79,7 +83,7 @@ export class GratitudesService {
           .addGroupBy('"lastName"');
 
         if (courseId) {
-          subQuery.where('feedback.courseId = :courseId', { courseId });
+          [subQuery, countQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
         }
 
         return subQuery;
@@ -87,9 +91,19 @@ export class GratitudesService {
       .groupBy('"githubId"')
       .addGroupBy('"firstName"')
       .addGroupBy('"lastName"')
-      .orderBy('total', 'DESC');
+      .orderBy('total', 'DESC')
+      .take(pageSize)
+      .skip((page - 1) * pageSize);
 
-    return await query.getRawMany();
+    const { count } = await countQuery.getRawOne();
+    const total = +count;
+    const items = await heroesQuery.getRawMany();
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      items,
+      meta: { itemCount: items.length, total, current: page, pageSize, totalPages },
+    };
   }
 
   private async postUserFeedback(data: Feedback) {

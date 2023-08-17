@@ -1,33 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HeroesRadarBadge, HeroesRadarBadgeDto } from './heroes-radar-badge.dto';
+import { HeroRadar, HeroRadarDto } from './hero-radar.dto';
+import { PaginationMeta } from 'src/core/paginate';
+import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 
 export class HeroesRadarDto {
-  constructor(heroes: {
-    githubId: string;
-    firstName: string;
-    lastName: string;
-    total: number;
-    badges: HeroesRadarBadge[];
-  }) {
-    this.githubId = heroes.githubId;
-    this.firstName = heroes.firstName;
-    this.lastName = heroes.lastName;
-    this.total = heroes.total;
-    this.badges = heroes.badges.map(badge => new HeroesRadarBadgeDto(badge));
+  constructor({ items, meta }: { items: HeroRadar[]; meta: PaginationMeta }) {
+    this.content = items.map(item => new HeroRadarDto(item));
+    this.pagination = new PaginationMetaDto(meta);
   }
 
-  @ApiProperty()
-  public githubId: string;
+  @ApiProperty({ type: [HeroRadarDto] })
+  public content: HeroRadarDto[];
 
-  @ApiProperty()
-  public firstName: string;
-
-  @ApiProperty()
-  public lastName: string;
-
-  @ApiProperty()
-  public total: number;
-
-  @ApiProperty({ type: [HeroesRadarBadgeDto] })
-  badges: HeroesRadarBadgeDto[];
+  @ApiProperty({ type: PaginationMetaDto })
+  pagination: PaginationMetaDto;
 }

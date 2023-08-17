@@ -28,9 +28,10 @@ export class GratitudesController {
 
   @Get('/heroes/radar')
   @ApiOperation({ operationId: 'getHeroesRadar' })
-  @ApiOkResponse({ type: [HeroesRadarDto] })
-  public async getHeroesRadar(@Query() { courseId }: HeroesRadarQueryDto) {
-    const heroes = await this.service.getHeroesRadar(courseId);
-    return heroes.map(hero => new HeroesRadarDto(hero));
+  @ApiOkResponse({ type: HeroesRadarDto })
+  public async getHeroesRadar(@Query() query: HeroesRadarQueryDto) {
+    const heroes = await this.service.getHeroesRadar(query);
+
+    return new HeroesRadarDto(heroes);
   }
 }
