@@ -1,5 +1,5 @@
 import { Card, Col, Divider, Row, Space, Typography } from 'antd';
-import { HeroesRadarDto } from 'api';
+import { HeroRadarDto } from 'api';
 import { getFullName } from 'utils/text-utils';
 import HeroesCountBadge from './HeroesCountBadge';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -7,7 +7,7 @@ import { GithubAvatar } from 'components/GithubAvatar';
 const { Text, Title, Link } = Typography;
 
 export interface HeroesRadarCardProps {
-  hero: HeroesRadarDto;
+  hero: HeroRadarDto;
 }
 
 function HeroesRadarCard({ hero: { githubId, firstName, lastName, total, badges } }: HeroesRadarCardProps) {

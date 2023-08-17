@@ -3,7 +3,7 @@ import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { GratitudesApi, HeroesRadarDto } from 'api';
+import { GratitudesApi, HeroRadarDto } from 'api';
 import HeroesRadarCard from 'components/Heroes/HeroesRadarCard';
 import { Form, Select, Button } from 'antd';
 import { fields } from 'components/Forms/Heroes';
@@ -11,27 +11,36 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
+import { IPaginationInfo } from 'common/types/pagination';
 
 type Props = {
   session: Session;
 };
 
+const initialPage = 1;
+const initialPageSize = 20;
+const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
+
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [heroes, setHeroes] = useState<HeroesRadarDto[]>([]);
+  const [heroes, setHeroes] = useState<HeroRadarDto[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [heroesCount, setHeroesCount] = useState(initialPage);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [form] = Form.useForm();
   const gratitudeApi = new GratitudesApi();
 
-  const getHeroes = async (courseId?: number) => {
+  const getHeroes = async ({current = initialPage, pageSize = initialPageSize, courseId} : {courseId?: number} & Partial<IPaginationInfo>) => {
     setLoading(true);
-    const { data: heroes } = await gratitudeApi.getHeroesRadar(courseId);
-    setHeroes(heroes);
+    const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId);
+    setHeroes(data.content);
+    setHeroesCount(data.pagination.total);
+    setCurrentPage(initialPage);
     setLoading(false);
   };
 
   useEffect(() => {
-    getHeroes();
+    getHeroes(initialQueryParams);
   }, []);
 
   useAsync(async () => {
@@ -41,7 +50,7 @@ function Page(props: Props) {
 
   const makeRequest = useCallback(
     async (data: { courseId: number }) => {
-      await getHeroes(data.courseId);
+      await getHeroes(data);
     },
     [heroes],
   );
@@ -55,7 +64,7 @@ function Page(props: Props) {
   );
 
   const onClear = useCallback(async () => {
-    await getHeroes();
+    await getHeroes(initialQueryParams);
     form.resetFields();
   }, [heroes]);
 
