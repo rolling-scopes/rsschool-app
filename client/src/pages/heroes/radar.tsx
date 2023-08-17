@@ -5,7 +5,7 @@ import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { GratitudesApi, HeroRadarDto } from 'api';
 import HeroesRadarCard from 'components/Heroes/HeroesRadarCard';
-import { Form, Select, Button } from 'antd';
+import { Form, Select, Button, Pagination, Row } from 'antd';
 import { fields } from 'components/Forms/Heroes';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
@@ -68,6 +68,14 @@ function Page(props: Props) {
     form.resetFields();
   }, [heroes]);
 
+  const onClickPagination = useCallback(
+    async (current: number, pageSize: number = initialPageSize) => {
+      const formData = form.getFieldsValue();
+      await makeRequest({ current, pageSize, ...formData });
+      setCurrentPage(current);
+    },
+    [currentPage],
+  );
 
   return (
     <PageLayout loading={loading} title="Heroes Radar" githubId={props.session.githubId}>
@@ -106,6 +114,14 @@ function Page(props: Props) {
       </Masonry>
       {masonryStyles}
       {masonryColumnStyles}
+      <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
+        <Pagination
+          current={currentPage}
+          total={heroesCount}
+          onChange={onClickPagination}
+          defaultPageSize={initialPageSize}
+        />
+      </Row>
     </PageLayout>
   );
 }
