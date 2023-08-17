@@ -43,7 +43,7 @@ export class MentorDetailsDto extends UserDto implements MentorDetails {
 
   @ApiPropertyOptional()
   taskResultsStats?: {
-    lastUpdatedDate?: Date | null;
+    lastUpdatedDate?: Date | string | null;
     total: number;
     checked: number;
   };
