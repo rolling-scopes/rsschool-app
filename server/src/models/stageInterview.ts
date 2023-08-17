@@ -71,5 +71,5 @@ export class StageInterview {
   isGoodCandidate: boolean;
 
   @Column({ nullable: true })
-  rating: number;
+  score: number;
 }

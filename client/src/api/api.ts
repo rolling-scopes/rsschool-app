@@ -5455,7 +5455,7 @@ export interface UpdateInterviewFeedbackDto {
      * @type {number}
      * @memberof UpdateInterviewFeedbackDto
      */
-    'rating'?: number;
+    'score'?: number;
 }
 /**
  * 

@@ -55,7 +55,7 @@ export class InterviewFeedbackService {
       throw new BadRequestException('Interview is not found');
     }
     const { studentId } = interview;
-    const { decision, isGoodCandidate, isCompleted, rating } = dto;
+    const { decision, isGoodCandidate, isCompleted, score } = dto;
 
     await Promise.all([
       this.saveFeedback(interview.id, dto),
@@ -63,7 +63,7 @@ export class InterviewFeedbackService {
         isCompleted,
         decision,
         isGoodCandidate,
-        rating,
+        score,
       }),
       decision === 'yes' ? this.studentsService.setMentor(studentId, interviewerId) : Promise.resolve(),
     ]);

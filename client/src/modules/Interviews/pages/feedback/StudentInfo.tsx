@@ -1,4 +1,4 @@
-import { Card, Col, Row, Space, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { StudentDto } from 'api';

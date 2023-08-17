@@ -2660,7 +2660,7 @@
           "decision": { "type": "string" },
           "isGoodCandidate": { "type": "boolean" },
           "isCompleted": { "type": "boolean" },
-          "rating": { "type": "number" }
+          "score": { "type": "number" }
         },
         "required": ["version", "json", "isCompleted"]
       },

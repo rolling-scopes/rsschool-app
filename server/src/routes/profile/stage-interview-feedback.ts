@@ -16,7 +16,7 @@ type FeedbackData = {
   interviewerLastName: string;
   interviewerGithubId: string;
   feedbackVersion: null | number;
-  interviewRating: null | number;
+  interviewScore: null | number;
 };
 
 export const getStageInterviewFeedback = async (githubId: string): Promise<StageInterviewDetailedFeedback[]> =>
@@ -25,7 +25,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
       .createQueryBuilder('stageInterview')
       .select('"stageInterview"."decision" AS "decision"')
       .addSelect('"stageInterview"."isGoodCandidate" AS "isGoodCandidate"')
-      .addSelect('"stageInterview"."rating" AS "interviewRating"')
+      .addSelect('"stageInterview"."score" AS "interviewScore"')
       .addSelect('"course"."name" AS "courseName"')
       .addSelect('"course"."fullName" AS "courseFullName"')
       .addSelect('"stageInterviewFeedback"."json" AS "interviewResultJson"')
@@ -60,15 +60,15 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
         interviewerLastName,
         interviewerGithubId,
         isGoodCandidate,
-        interviewRating,
+        interviewScore,
         interviewResultJson,
       } = data;
       const feedbackTemplate = JSON.parse(interviewResultJson);
-      const { rating, feedback } = !feedbackVersion
+      const { score, feedback } = !feedbackVersion
         ? parseLegacyFeedback(feedbackTemplate)
         : {
             feedback: feedbackTemplate,
-            rating: interviewRating ?? 0,
+            score: interviewScore ?? 0,
           };
 
       return {
@@ -79,7 +79,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
         courseName,
         courseFullName,
         feedback,
-        rating,
+        score,
         interviewer: {
           name: getFullName(interviewerFirstName, interviewerLastName, interviewerGithubId),
           githubId: interviewerGithubId,
@@ -94,7 +94,7 @@ function parseLegacyFeedback(interviewResult: StageInterviewFeedbackJson) {
   const { rating, htmlCss, common, dataStructures } = stageInterviewService.getInterviewRatings(interviewResult);
 
   return {
-    rating,
+    score: rating,
     feedback: {
       english: english.levelMentorOpinion ? english.levelMentorOpinion : english.levelStudentOpinion,
       programmingTask,

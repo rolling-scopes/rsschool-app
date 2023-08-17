@@ -27,5 +27,5 @@ export class UpdateInterviewFeedbackDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  rating: number;
+  score: number;
 }

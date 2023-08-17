@@ -133,7 +133,7 @@ export interface StageInterviewDetailedFeedback {
   isGoodCandidate: boolean;
   courseName: string;
   courseFullName: string;
-  rating: number;
+  score: number;
   date: string;
   version: number;
   interviewer: {

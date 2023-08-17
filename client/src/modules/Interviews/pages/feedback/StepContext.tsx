@@ -4,7 +4,12 @@ import { createContext, PropsWithChildren, useCallback, useMemo, useState } from
 import { useLoading } from 'components/useLoading';
 import { message } from 'antd';
 import { useRouter } from 'next/router';
-import { getDefaultStep, getFeedbackFromTemplate, getUpdatedFeedback, isInterviewRejected } from './test';
+import {
+  getDefaultStep,
+  getFeedbackFromTemplate,
+  getUpdatedFeedback,
+  isInterviewRejected,
+} from './feedbackTemplateHandler';
 
 type ContextProps = {
   course: ProfileCourseDto;
@@ -44,7 +49,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const isFinalStep = activeStepIndex === feedback.steps.length - 1 || isFinished;
 
   const saveFeedback = withLoading(async (values: InterviewFeedbackValues) => {
-    const { feedbackValues, steps, isCompleted, rating, decision, isGoodCandidate } = getUpdatedFeedback({
+    const { feedbackValues, steps, isCompleted, score, decision, isGoodCandidate } = getUpdatedFeedback({
       feedback,
       newValues: values,
       activeStepIndex,
@@ -52,7 +57,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
     });
     await new CoursesInterviewsApi().createInterviewFeedback(course.id, interviewId, type, {
       isCompleted,
-      rating,
+      score,
       decision,
       isGoodCandidate,
       json: feedbackValues,

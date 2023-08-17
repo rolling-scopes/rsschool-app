@@ -141,7 +141,7 @@ function getInterviewSummary(feedback: Feedback) {
   const decision = steps.find(step => step.id === FeedbackStepId.Decision);
 
   return {
-    rating: (decision?.values?.finalScore as number) ?? undefined,
+    score: (decision?.values?.finalScore as number) ?? undefined,
     decision: getDecision(),
     isGoodCandidate: getIsGoodCandidate(),
   };
