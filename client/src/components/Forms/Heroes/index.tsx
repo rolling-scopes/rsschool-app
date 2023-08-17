@@ -10,6 +10,7 @@ import { CoursesService } from '../../../services/courses';
 import { GratitudeService } from '../../../services/gratitude';
 import { Course } from '../../../services/models';
 import { onlyDefined } from '../../../utils/onlyDefined';
+import { getFullName } from 'utils/text-utils';
 
 const { Text, Link, Paragraph } = Typography;
 
@@ -21,9 +22,6 @@ export const fields = {
   githubId: 'githubId',
   courseId: 'courseId',
 } as const;
-
-const getFullName = (user: { firstName: string | null; lastName: string | null; githubId: string }) =>
-  user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
 
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
   const [courses, setCourses] = useState<Course[]>([]);
