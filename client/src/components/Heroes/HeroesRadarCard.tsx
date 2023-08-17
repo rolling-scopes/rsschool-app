@@ -25,7 +25,7 @@ function HeroesRadarCard({ hero: { githubId, firstName, lastName, total, badges 
       <Row gutter={[24, 24]}>
         <Col span={24}>
           {badges.map(badge => (
-            <HeroesCountBadge badge={badge} />
+            <HeroesCountBadge key={badge.badgeId} badge={badge} />
           ))}
         </Col>
       </Row>
