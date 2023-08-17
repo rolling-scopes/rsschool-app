@@ -1996,15 +1996,15 @@
       "get": {
         "operationId": "getHeroesRadar",
         "summary": "",
-        "parameters": [{ "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarDto" } }
-              }
-            }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
           }
         },
         "tags": ["gratitudes"]
@@ -4188,7 +4188,7 @@
         "properties": { "badgeId": { "type": "string" }, "badgeCount": { "type": "number" } },
         "required": ["badgeId", "badgeCount"]
       },
-      "HeroesRadarDto": {
+      "HeroRadarDto": {
         "type": "object",
         "properties": {
           "githubId": { "type": "string" },
@@ -4198,6 +4198,14 @@
           "badges": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarBadgeDto" } }
         },
         "required": ["githubId", "firstName", "lastName", "total", "badges"]
+      },
+      "HeroesRadarDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/HeroRadarDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
       },
       "EventDto": {
         "type": "object",
