@@ -62,9 +62,4 @@ export class MentorService {
     }
     return result;
   }
-
-  public async getMentorsWithStats(): Promise<MentorDetails[]> {
-    const mentors = this.mentorRepository.findExtended(this.courseId);
-    return mentors;
-  }
 }

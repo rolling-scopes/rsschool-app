@@ -155,9 +155,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
   router.get('/mentors', courseSupervisorGuard, mentors.getMentors(mentorsLogger));
   router.post('/mentors', adminGuard, mentors.createMentors(mentorsLogger));
   router.post('/mentors/students', courseSupervisorGuard, mentors.assignStudents(mentorsLogger));
-  router.get('/mentors/details', courseSupervisorGuard, mentors.getMentorsDetails(mentorsLogger));
-  router.get('/mentors/details/csv', courseSupervisorGuard, mentors.getMentorsDetailsCsv(mentorsLogger));
-  router.get('/mentors/search/:searchText', courseGuard, mentors.searchMentors(mentorsLogger));
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
