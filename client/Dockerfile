@@ -1,22 +1,22 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 EXPOSE 8080
 
 ENV NODE_ENV production
 ENV NODE_PORT 8080
 
-WORKDIR /client
+WORKDIR /app
 
-COPY next.config.js /client
-COPY next.config.prod.js /client
+COPY client/next.config.js /app/client/next.config.js
+COPY client/next.config.prod.js /app/client/next.config.prod.js
+COPY client/package.json /app/client/package.json
+COPY client/public /app/client/public
 
-COPY public /client/public
-
-COPY package.json /client
-COPY package-lock.json /client
+COPY package.json /app
+COPY package-lock.json /app
 
 RUN npm ci --production --no-optional
 
-COPY .next /client/.next
+COPY client/.next /app/client/.next
 
-CMD [ "npm", "run", "prod" ]
+CMD cd /app/client && npm run prod

@@ -1,14 +1,16 @@
-FROM node:14-bullseye-slim as builder
+FROM node:18-bullseye-slim as builder
 
 WORKDIR /container_out
 
-COPY .env .env
 COPY package.json package.json
 COPY package-lock.json package-lock.json
+COPY nestjs/.env nestjs/.env
+COPY nestjs/package.json nestjs/package.json
+
 RUN npm ci --production --no-optional
 
-COPY lambda /container_out
-COPY dist /container_out
+COPY nestjs/lambda nestjs/
+COPY nestjs/dist nestjs/
 
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14
@@ -18,8 +20,6 @@ ENV TZ utc
 ENV AWS_LAMBDA true
 ENV RS_ENV staging
 
-WORKDIR /var/task
+COPY --from=builder /container_out /var/task/
 
-COPY --from=builder /container_out .
-
-CMD [ "app.handler" ]
+CMD [ "/var/task/nestjs/app.handler" ]

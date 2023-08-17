@@ -15,6 +15,6 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
     const result = JSON.parse(feedback?.json ?? '{}');
     setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
   }
 };

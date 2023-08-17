@@ -10,6 +10,6 @@ export const isTaskNeededToFinish = ({ crossCheckStatus, crossCheckEndDate }: Co
   const currTimestampUTC = Date.now();
   if (!crossCheckEndDate) return false;
   const crossCheckEndDateTimestampUTC =
-    typeof crossCheckEndDate === 'string' ? Date.parse(crossCheckEndDate) : crossCheckEndDate;
+    typeof crossCheckEndDate === 'string' ? Date.parse(crossCheckEndDate) : crossCheckEndDate.getTime();
   return crossCheckStatus === CrossCheckStatus.Distributed && currTimestampUTC > crossCheckEndDateTimestampUTC;
 };
