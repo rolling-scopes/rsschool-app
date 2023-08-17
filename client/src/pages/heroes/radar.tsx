@@ -37,7 +37,7 @@ function Page(props: Props) {
         className={masonryClassName}
         columnClassName={masonryColumnClassName}
       >
-        {heroes.map((hero) => (
+        {heroes.map(hero => (
           <HeroesRadarCard hero={hero} />
         ))}
       </Masonry>
