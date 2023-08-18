@@ -1,4 +1,4 @@
-import { Table, TablePaginationConfig, TableProps } from 'antd';
+import { Table, TableProps } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { HeroRadarDto, HeroesRadarBadgeDto, HeroesRadarDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -9,6 +9,7 @@ import useWindowDimensions from 'utils/useWindowDimensions';
 import { useState, useEffect } from 'react';
 import { LayoutType } from 'pages/heroes/radar';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
+import heroesBadges from 'configs/heroes-badges';
 
 interface HeroRadarRanked extends HeroRadarDto {
   rank: number;
@@ -21,6 +22,10 @@ interface HeroesRadarTableProps {
   getHeroes: (args: { courseId?: number } & Partial<IPaginationInfo>) => Promise<void>;
   setFormLayout: (layout: LayoutType) => void;
 }
+
+const BADGE_SIZE = 48;
+const BADGE_SUM_HORIZONTAL_MARGIN = 2 * 5;
+const XS_BREAKPOINT_IN_PX = 575;
 
 const initColumns: ColumnType<HeroRadarRanked>[] = [
   {
@@ -71,6 +76,7 @@ const initColumns: ColumnType<HeroRadarRanked>[] = [
     title: 'Badges',
     dataIndex: 'badges',
     key: 'badges',
+    width: Object.keys(heroesBadges).length * (BADGE_SIZE + BADGE_SUM_HORIZONTAL_MARGIN),
     responsive: ['xxl', 'xl', 'lg', 'md', 'sm'],
     render: (value: HeroesRadarBadgeDto[], { githubId }: HeroRadarRanked) => (
       <>
@@ -88,7 +94,7 @@ function HeroesRadarTable({ heroes, courseId, setLoading, getHeroes, setFormLayo
   const [columns, setColumns] = useState(initColumns);
 
   useEffect(() => {
-    if (width < 400) {
+    if (width < XS_BREAKPOINT_IN_PX) {
       setFixedColumn(false);
       setFormLayout('vertical');
       return;
@@ -118,18 +124,13 @@ function HeroesRadarTable({ heroes, courseId, setLoading, getHeroes, setFormLayo
       })
     : [];
 
-  const getPagedData = async (pagination: TablePaginationConfig) => {
+  const handleChange: TableProps<HeroRadarRanked>['onChange'] = async ({ current, pageSize }) => {
     try {
       setLoading(true);
-      const { current, pageSize } = pagination;
       await getHeroes({ current, pageSize, courseId });
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleChange: TableProps<HeroRadarRanked>['onChange'] = pagination => {
-    getPagedData(pagination);
   };
 
   return (
