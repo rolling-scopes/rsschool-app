@@ -1,11 +1,9 @@
 import { PageLayout } from 'components/PageLayout';
 import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
-import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
 import { GratitudesApi, HeroRadarDto } from 'api';
 import HeroesRadarCard from 'components/Heroes/HeroesRadarCard';
-import { Form, Select, Button, Pagination, Row } from 'antd';
+import { Form, Select, Button, Pagination, Row, Col } from 'antd';
 import { fields } from 'components/Forms/Heroes';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
@@ -98,22 +96,14 @@ function Page(props: Props) {
           </Button>
         </div>
       </Form>
-      <Masonry
-        breakpointCols={{
-          default: 4,
-          1100: 3,
-          700: 2,
-          500: 1,
-        }}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
-      >
+      <Row gutter={[16, 16]}>
         {heroes.map(hero => (
-          <HeroesRadarCard key={hero.githubId} hero={hero} />
+          <Col span={6}>
+            <HeroesRadarCard key={hero.githubId} hero={hero} />
+          </Col>
         ))}
-      </Masonry>
-      {masonryStyles}
-      {masonryColumnStyles}
+      </Row>
+
       <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
         <Pagination
           current={currentPage}
@@ -125,20 +115,5 @@ function Page(props: Props) {
     </PageLayout>
   );
 }
-
-const gapSize = 16;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default withSession(Page);
