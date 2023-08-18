@@ -27,6 +27,7 @@ function Page(props: Props) {
     pagination: { current: initialPage, pageSize: initialPageSize, itemCount: 0, total: 0, totalPages: 0 },
   });
   const [courses, setCourses] = useState<Course[]>([]);
+  const [courseId, setCourseId] = useState<number>();
   const [formLayout, setFormLayout] = useState<LayoutType>('inline');
   const [form] = Form.useForm();
   const gratitudeApi = new GratitudesApi();
@@ -61,12 +62,14 @@ function Page(props: Props) {
   const handleSubmit = useCallback(
     async (formData: { courseId: number }) => {
       const data = onlyDefined(formData) as { courseId: number };
+      setCourseId(data.courseId);
       await makeRequest(data);
     },
     [heroes],
   );
 
   const onClear = useCallback(async () => {
+    setCourseId(undefined);
     await getHeroes(initialQueryParams);
     form.resetFields();
   }, [heroes]);
@@ -92,7 +95,13 @@ function Page(props: Props) {
           </Button>
         </div>
       </Form>
-      <HeroesRadarTable heroes={heroes} getHeroes={getHeroes} setLoading={setLoading} setFormLayout={setFormLayout} />
+      <HeroesRadarTable
+        heroes={heroes}
+        courseId={courseId}
+        getHeroes={getHeroes}
+        setLoading={setLoading}
+        setFormLayout={setFormLayout}
+      />
     </PageLayout>
   );
 }

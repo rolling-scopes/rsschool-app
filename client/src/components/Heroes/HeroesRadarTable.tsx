@@ -16,6 +16,7 @@ interface HeroRadarRanked extends HeroRadarDto {
 
 interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;
+  courseId: number | undefined;
   setLoading: (loading: boolean) => void;
   getHeroes: (args: { courseId?: number } & Partial<IPaginationInfo>) => Promise<void>;
   setFormLayout: (layout: LayoutType) => void;
@@ -81,7 +82,7 @@ const initColumns: ColumnType<HeroRadarRanked>[] = [
   },
 ];
 
-function HeroesRadarTable({ heroes, setLoading, getHeroes, setFormLayout }: HeroesRadarTableProps) {
+function HeroesRadarTable({ heroes, courseId, setLoading, getHeroes, setFormLayout }: HeroesRadarTableProps) {
   const { width } = useWindowDimensions();
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [columns, setColumns] = useState(initColumns);
@@ -121,7 +122,7 @@ function HeroesRadarTable({ heroes, setLoading, getHeroes, setFormLayout }: Hero
     try {
       setLoading(true);
       const { current, pageSize } = pagination;
-      await getHeroes({ current, pageSize });
+      await getHeroes({ current, pageSize, courseId });
     } finally {
       setLoading(false);
     }
