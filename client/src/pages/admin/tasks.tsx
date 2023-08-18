@@ -130,7 +130,7 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading, dataCriteria],
   );
 
-  const allUsedCourses = uniqBy(data.map(({ courses }) => courses).flat(), course => course.name)
+  const allUsedCourses = uniqBy(data.flatMap(({ courses }) => courses), course => course.name)
     .map(({ name }) => name)
     .sort();
 
