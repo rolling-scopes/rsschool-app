@@ -1,10 +1,9 @@
 import { PageLayout } from 'components/PageLayout';
 import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
-import { GratitudesApi, HeroRadarDto } from 'api';
-import HeroesRadarCard from 'components/Heroes/HeroesRadarCard';
-import { Form, Select, Button, Pagination, Row, Col } from 'antd';
-import { fields } from 'components/Forms/Heroes';
+import { GratitudesApi, HeroesRadarDto } from 'api';
+import HeroesRadarTable from 'components/Heroes/HeroesRadarTable';
+import { Form, Select, Button } from 'antd';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -19,21 +18,27 @@ const initialPage = 1;
 const initialPageSize = 20;
 const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
 
+export type LayoutType = Parameters<typeof Form>[0]['layout'];
+
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [heroes, setHeroes] = useState<HeroRadarDto[]>([]);
+  const [heroes, setHeroes] = useState<HeroesRadarDto>({
+    content: [],
+    pagination: { current: initialPage, pageSize: initialPageSize, itemCount: 0, total: 0, totalPages: 0 },
+  });
   const [courses, setCourses] = useState<Course[]>([]);
-  const [heroesCount, setHeroesCount] = useState(initialPage);
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [formLayout, setFormLayout] = useState<LayoutType>('inline');
   const [form] = Form.useForm();
   const gratitudeApi = new GratitudesApi();
 
-  const getHeroes = async ({current = initialPage, pageSize = initialPageSize, courseId} : {courseId?: number} & Partial<IPaginationInfo>) => {
+  const getHeroes = async ({
+    current = initialPage,
+    pageSize = initialPageSize,
+    courseId,
+  }: { courseId?: number } & Partial<IPaginationInfo>) => {
     setLoading(true);
     const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId);
-    setHeroes(data.content);
-    setHeroesCount(data.pagination.total);
-    setCurrentPage(initialPage);
+    setHeroes(data);
     setLoading(false);
   };
 
@@ -66,23 +71,14 @@ function Page(props: Props) {
     form.resetFields();
   }, [heroes]);
 
-  const onClickPagination = useCallback(
-    async (current: number, pageSize: number = initialPageSize) => {
-      const formData = form.getFieldsValue();
-      await makeRequest({ current, pageSize, ...formData });
-      setCurrentPage(current);
-    },
-    [currentPage],
-  );
-
   return (
     <PageLayout loading={loading} title="Heroes Radar" githubId={props.session.githubId}>
-      <Form layout="inline" form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
-        <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300, marginBottom: 16 }}>
+      <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
+        <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
           <Select>
-            {courses.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
+            {courses.map(course => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.name}
               </Select.Option>
             ))}
           </Select>
@@ -96,22 +92,7 @@ function Page(props: Props) {
           </Button>
         </div>
       </Form>
-      <Row gutter={[16, 16]}>
-        {heroes.map(hero => (
-          <Col span={6}>
-            <HeroesRadarCard key={hero.githubId} hero={hero} />
-          </Col>
-        ))}
-      </Row>
-
-      <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
-        <Pagination
-          current={currentPage}
-          total={heroesCount}
-          onChange={onClickPagination}
-          defaultPageSize={initialPageSize}
-        />
-      </Row>
+      <HeroesRadarTable heroes={heroes} getHeroes={getHeroes} setLoading={setLoading} setFormLayout={setFormLayout} />
     </PageLayout>
   );
 }
