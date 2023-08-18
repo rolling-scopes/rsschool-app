@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
@@ -52,22 +52,20 @@ export type ChangedPermissionsSettings = {
 
 const profileApi = new ProfileApi();
 
-export class ProfilePage extends React.Component<Props, State> {
-  state: State = {
-    profile: null,
-    isProfileOwner: false,
-    isLoading: true,
-    isSaving: false,
-    connections: {},
-  };
+export const ProfilePage = (props: Props) => {
 
-  private userService = new UserService();
-  private notificationsService = new NotificationsService();
 
-  private hadStudentCoreJSInterview = (stats: StudentStats[]) =>
-    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
+    const [profile, setProfile] = useState(null);
+    const [isProfileOwner, setIsProfileOwner] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [connections, setConnections] = useState({});
 
-  private getStudentCoreJSInterviews = (stats: StudentStats[]) =>
+    const userService = useRef(new UserService());
+    const notificationsService = useRef(new NotificationsService());
+    const hadStudentCoreJSInterviewHandler = useCallback((stats: StudentStats[]) =>
+    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers)), []);
+    const getStudentCoreJSInterviewsHandler = useCallback((stats: StudentStats[]) =>
     stats
       .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
       .map(({ tasks, courseFullName, courseName, locationName }) => ({
@@ -82,141 +80,130 @@ export class ProfilePage extends React.Component<Props, State> {
             interviewer,
             answers: interviewFormAnswers,
             name,
-            interviewDate,
-          })),
-      })) as CoreJsInterviewsData[];
+            interviewDate
+          }))
+      })) as CoreJsInterviewsData[], []);
+    const fetchDataHandler = useCallback(async () => {
+    setIsLoading(true);
 
-  private fetchData = async () => {
-    this.setState({ isLoading: true });
-
-    const { router, session } = this.props;
+    const { router, session } = props;
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const [profile, connections, { data }] = await Promise.all([
-        this.userService.getProfileInfo(githubId),
-        this.notificationsService.getUserConnections().catch(() => []),
-        profileApi.getProfile(githubId ?? session.githubId),
+        userService.current.getProfileInfo(githubId),
+        notificationsService.current.getUserConnections().catch(() => []),
+        profileApi.getProfile(githubId ?? session.githubId)
       ]);
 
       const updateProfile = {
         ...profile,
-        ...data,
+        ...data
       };
 
       let isProfileOwner = false;
       if (profile) {
-        const userId = this.props.session.githubId;
+        const userId = props.session.githubId;
         const profileId = profile.generalInfo!.githubId;
-        isProfileOwner = checkIsProfileOwner(userId, profileId);
+        setIsProfileOwner(checkIsProfileOwner(userId, profileId));
       }
 
-      this.setState({
-        isLoading: false,
-        profile: updateProfile,
-        isProfileOwner,
-        connections: connections as State['connections'],
-      });
+      setIsLoading(false);
+    setProfile(updateProfile);
+    setIsProfileOwner(isProfileOwner);
+    setConnections(connections as State['connections']);
     } catch (e) {
-      this.setState({
-        isLoading: false,
-        profile: null,
-      });
+      setIsLoading(false);
+    setProfile(null);
     }
-  };
-
-  private sendEmailConfirmationLink = async () => {
+  }, [profile, connections, isProfileOwner]);
+    const sendEmailConfirmationLinkHandler = useCallback(async () => {
     try {
-      await this.userService.sendEmailConfirmationLink();
+      await userService.current.sendEmailConfirmationLink();
     } catch (e) {
       message.error('Error has occurred. Please try again later');
     }
-  };
-
-  private updateProfile = async (data: UpdateProfileInfoDto) => {
-    this.setState({ isSaving: true });
+  }, []);
+    const updateProfileHandler = useCallback(async (data: UpdateProfileInfoDto) => {
+    setIsSaving(true);
     let isUpdated = false;
     try {
       await profileApi.updateProfileInfoFlat(data);
-      this.setState({ isSaving: false });
+      setIsSaving(false);
       message.success('Profile was successfully saved');
       isUpdated = true;
     } catch (error) {
-      this.setState({ isSaving: false });
+      setIsSaving(false);
       message.error('Error has occurred. Please check your connection and try again');
       isUpdated = false;
     }
 
     return isUpdated;
-  };
+  }, []);
+    const authorizeDiscordHandler = useCallback(async () => {
+    setIsLoading(true);
 
-  authorizeDiscord = async () => {
-    this.setState({ isLoading: true });
-
-    const discord = await this.userService.getDiscordIds();
+    const discord = await userService.current.getDiscordIds();
 
     if (discord) {
-      this.setState(({ profile, ...state }) => ({
-        ...state,
-        profile: {
+      setProfile({
           ...profile,
           publicCvUrl: profile?.publicCvUrl ?? null,
-          discord,
-        },
-      }));
+          discord
+        });
+    setPublicCvUrl(profile?.publicCvUrl ?? null);
+    setDiscord(discord);
 
-      await this.updateProfile({ discord });
-      this.props.router.replace('/profile');
+      await updateProfileHandler({ discord });
+      props.router.replace('/profile');
     }
 
-    this.setState({ isLoading: false });
-  };
-
-  componentDidMount() {
+    setIsLoading(false);
+  }, [profile]);
+    useEffect(() => {
     // it's a dirty hack to fix an issue with empty query params
     // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
     //
     // >> After hydration, Next.js will trigger an update to your application
     // >> to provide the route parameters in the query object.
     setTimeout(async () => {
-      await this.fetchData();
-      await this.authorizeDiscord();
+      await fetchDataHandler();
+      await authorizeDiscordHandler();
     }, 100);
-  }
+  }, []);
 
-  render() {
-    const { profile, isProfileOwner, connections } = this.state;
+    
 
     const mainInfo: ProfileMainCardData = {
       location: profile?.generalInfo?.location ?? null,
       name: profile?.generalInfo?.name ?? '',
       githubId: profile?.generalInfo?.githubId ?? null,
-      publicCvUrl: profile?.publicCvUrl ?? null,
+      publicCvUrl: profile?.publicCvUrl ?? null
     };
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];
 
     const cards = [
       profile?.generalInfo && (
-        <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />
+        <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfileHandler} />
       ),
       <AboutCard
         key="about-card"
         data={aboutMyself}
         isEditingModeEnabled={isProfileOwner}
-        updateProfile={this.updateProfile}
+        updateProfile={updateProfileHandler}
       />,
       <LanguagesCard
         key="languages-card"
         data={languages as UpdateUserDtoLanguagesEnum[]}
         isEditingModeEnabled={isProfileOwner}
-        updateProfile={this.updateProfile}
+        updateProfile={updateProfileHandler}
       />,
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo?.educationHistory || []}
           isEditingModeEnabled={isProfileOwner}
-          updateProfile={this.updateProfile}
+          updateProfile={updateProfileHandler}
         />
       ),
       profile?.contacts !== undefined && (
@@ -224,39 +211,39 @@ export class ProfilePage extends React.Component<Props, State> {
           data={profile.contacts}
           isEditingModeEnabled={isProfileOwner}
           connections={connections}
-          sendConfirmationEmail={this.sendEmailConfirmationLink}
-          updateProfile={this.updateProfile}
+          sendConfirmationEmail={sendEmailConfirmationLinkHandler}
+          updateProfile={updateProfileHandler}
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
       profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
       profile?.studentStats?.length && (
         <StudentStatsCard
-          username={this.props.session.githubId}
+          username={props.session.githubId}
           data={profile.studentStats}
           isProfileOwner={isProfileOwner}
         />
       ),
       profile?.mentorStats?.length && <MentorStatsCard data={profile.mentorStats} />,
-      profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
-        <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />
+      profile?.studentStats?.length && hadStudentCoreJSInterviewHandler(profile.studentStats) && (
+        <CoreJsIviewsCard data={getStudentCoreJSInterviewsHandler(profile.studentStats)} />
       ),
-      profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
+      profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />
     ].filter(Boolean) as JSX.Element[];
 
     return (
       <>
-        <LoadingScreen show={this.state.isLoading}>
-          <Header username={this.props.session.githubId} />
-          <Spin spinning={this.state.isSaving} delay={200}>
-            {this.state.profile ? (
+        <LoadingScreen show={isLoading}>
+          <Header username={props.session.githubId} />
+          <Spin spinning={isSaving} delay={200}>
+            {profile ? (
               <div style={{ padding: 10 }}>
                 <Masonry
                   breakpointCols={{
                     default: 4,
                     1100: 3,
                     700: 2,
-                    500: 1,
+                    500: 1
                   }}
                   className="masonry"
                   columnClassName="masonry-column"
@@ -289,9 +276,11 @@ export class ProfilePage extends React.Component<Props, State> {
           </Spin>
         </LoadingScreen>
       </>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
   return githubId === requestedGithubId;

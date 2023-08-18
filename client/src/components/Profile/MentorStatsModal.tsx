@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { MentorStats } from 'common/models/profile';
 import { Modal, Typography, Tag, Row, Col } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -13,9 +13,14 @@ type Props = {
   onHide: () => void;
 };
 
-class MentorStatsModal extends React.Component<Props> {
-  render() {
-    const { stats, isVisible, onHide } = this.props;
+const MentorStatsModal = (props: Props) => {
+
+
+    
+
+    
+
+    const { stats, isVisible, onHide } = props;
     const { courseName, students } = stats;
 
     return (
@@ -66,8 +71,10 @@ class MentorStatsModal extends React.Component<Props> {
           })}
         </Row>
       </Modal>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default MentorStatsModal;

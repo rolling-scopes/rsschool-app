@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import isEqual from 'lodash/isEqual';
 import { Typography, List, Button } from 'antd';
 import CommonCard from './CommonCard';
@@ -39,28 +39,27 @@ type State = {
   isCoreJsIviewModalVisible: boolean;
 };
 
-class CoreJSIviewsCard extends React.Component<Props, State> {
-  state = {
-    courseIndex: 0,
-    interviewIndex: 0,
-    isCoreJsIviewModalVisible: false,
-  };
+const CoreJSIviewsCard = (props: Props) => {
 
-  shouldComponentUpdate = (_: Props, nextState: State) =>
-    !isEqual(nextState.isCoreJsIviewModalVisible, this.state.isCoreJsIviewModalVisible);
 
-  private showCoreJsIviewModal = (courseIndex: number, interviewIndex: number) => {
-    this.setState({ courseIndex, isCoreJsIviewModalVisible: true, interviewIndex });
-  };
+    const [courseIndex, setCourseIndex] = useState(0);
+    const [interviewIndex, setInterviewIndex] = useState(0);
+    const [isCoreJsIviewModalVisible, setIsCoreJsIviewModalVisible] = useState(false);
 
-  private hideCoreJsIviewModal = () => {
-    this.setState({ isCoreJsIviewModalVisible: false });
-  };
+    const shouldComponentUpdateHandler = useCallback((_: Props, nextState: State) =>
+    !isEqual(nextState.isCoreJsIviewModalVisible, isCoreJsIviewModalVisible), [isCoreJsIviewModalVisible]);
+    const showCoreJsIviewModalHandler = useCallback((courseIndex: number, interviewIndex: number) => {
+    setCourseIndex(courseIndex);
+    setIsCoreJsIviewModalVisible(true);
+    setInterviewIndex(interviewIndex);
+  }, [courseIndex, interviewIndex]);
+    const hideCoreJsIviewModalHandler = useCallback(() => {
+    setIsCoreJsIviewModalVisible(false);
+  }, []);
 
-  render() {
-    const stats = this.props.data;
-    const { isCoreJsIviewModalVisible, interviewIndex } = this.state;
-    const { courseIndex } = this.state;
+    const stats = props.data;
+    
+    
 
     return (
       <>
@@ -68,7 +67,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
           stats={stats[courseIndex]}
           interviewIndex={interviewIndex}
           isVisible={isCoreJsIviewModalVisible}
-          onHide={this.hideCoreJsIviewModal}
+          onHide={hideCoreJsIviewModalHandler}
         />
         <CommonCard
           title="CoreJS Interviews"
@@ -105,7 +104,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                     <Button
                       data-testid="profile-corejs-iview-button"
                       type="dashed"
-                      onClick={this.showCoreJsIviewModal.bind(null, idx, interviewIndex)}
+                      onClick={showCoreJsIviewModalHandler.bind(null, idx, interviewIndex)}
                     >
                       <FullscreenOutlined />
                     </Button>
@@ -116,8 +115,10 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
           }
         />
       </>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default CoreJSIviewsCard;

@@ -1,21 +1,20 @@
-import * as React from 'react';
+
 import { Col, Layout, Row } from 'antd';
-import { Feedback } from './Feedback';
-import { Help } from './Help';
-import { SocialNetworks } from './SocialNetworks';
-import { Donation } from './Donation';
 
 const { Footer } = Layout;
 
 const maxDonatorsShown = 21;
 
-class FooterLayout extends React.Component<any, any> {
-  getYear() {
+const FooterLayout = () => {
+
+
+    
+
+    const getYearHandler = useCallback(() => {
     const date = new Date();
     return date.getFullYear();
-  }
+  }, []);
 
-  render() {
     return (
       <div>
         <Footer className="footer">
@@ -37,13 +36,15 @@ class FooterLayout extends React.Component<any, any> {
               <SocialNetworks />
             </Col>
             <Col xs={24} sm={12} lg={8}>
-              <small>&copy; The Rolling Scopes {this.getYear()}</small>
+              <small>&copy; The Rolling Scopes {getYearHandler()}</small>
             </Col>
           </Row>
         </Footer>
       </div>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export { FooterLayout };

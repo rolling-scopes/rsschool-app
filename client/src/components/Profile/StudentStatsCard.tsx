@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import isEqual from 'lodash/isEqual';
 import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
 import CommonCard from './CommonCard';
@@ -30,25 +30,24 @@ const messages = ['Are you sure you want to leave the course?', 'Your learning w
 
 const messagesRu = ['Вы уверены, что хотите покинуть курс?', 'Ваше обучение будет прекращено.'];
 
-class StudentStatsCard extends React.Component<Props, State> {
-  state = {
-    courseIndex: 0,
-    coursesProgress: [],
-    scoredTasks: [],
-    isStudentStatsModalVisible: false,
-    isExpelConfirmationModalVisible: false,
-  };
+const StudentStatsCard = (props: Props) => {
 
-  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
-    !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
-    !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
-  private showStudentStatsModal = (courseIndex: number) => {
-    this.setState({ courseIndex, isStudentStatsModalVisible: true });
-  };
+    const [courseIndex, setCourseIndex] = useState(0);
+    const [coursesProgress, setCoursesProgress] = useState([]);
+    const [scoredTasks, setScoredTasks] = useState([]);
+    const [isStudentStatsModalVisible, setIsStudentStatsModalVisible] = useState(false);
+    const [isExpelConfirmationModalVisible, setIsExpelConfirmationModalVisible] = useState(false);
 
-  private showExpelConfirmationModal = (courseId: number) => {
-    const { isExpelConfirmationModalVisible } = this.state;
+    const shouldComponentUpdateHandler = useCallback((_nextProps: Props, nextState: State) =>
+    !isEqual(nextState.isStudentStatsModalVisible, isStudentStatsModalVisible) ||
+    !isEqual(nextState.coursesProgress, coursesProgress), [isStudentStatsModalVisible, coursesProgress]);
+    const showStudentStatsModalHandler = useCallback((courseIndex: number) => {
+    setCourseIndex(courseIndex);
+    setIsStudentStatsModalVisible(true);
+  }, [courseIndex]);
+    const showExpelConfirmationModalHandler = useCallback((courseId: number) => {
+    
 
     const content = (
       <>
@@ -67,54 +66,48 @@ class StudentStatsCard extends React.Component<Props, State> {
       icon: <WarningTwoTone twoToneColor="red" />,
       title: 'Leaving Course ?',
       content: content,
-      onOk: () => this.selfExpelStudent(courseId),
+      onOk: () => selfExpelStudentHandler(courseId),
       visible: isExpelConfirmationModalVisible,
-      onCancel: () => this.hideExpelConfirmationModal(),
+      onCancel: () => hideExpelConfirmationModalHandler(),
       okButtonProps: { danger: true },
       okText: 'Leave Course',
-      cancelText: 'Continue studying',
+      cancelText: 'Continue studying'
     });
-  };
-
-  private hideStudentStatsModal = () => {
-    this.setState({ isStudentStatsModalVisible: false });
-  };
-
-  private hideExpelConfirmationModal = () => {
-    this.setState({ isExpelConfirmationModalVisible: false });
-  };
-
-  private selfExpelStudent = async (courseId: number) => {
+  }, [isExpelConfirmationModalVisible]);
+    const hideStudentStatsModalHandler = useCallback(() => {
+    setIsStudentStatsModalVisible(false);
+  }, []);
+    const hideExpelConfirmationModalHandler = useCallback(() => {
+    setIsExpelConfirmationModalVisible(false);
+  }, []);
+    const selfExpelStudentHandler = useCallback(async (courseId: number) => {
     await coursesService.leaveCourse(courseId);
     window.location.reload();
-  };
-
-  private rejoinAsStudent = async (courseId: number) => {
+  }, []);
+    const rejoinAsStudentHandler = useCallback(async (courseId: number) => {
     await coursesService.rejoinCourse(courseId);
     window.location.reload();
-  };
+  }, []);
+    const countScoredTasksHandler = useCallback((tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length, []);
+    const countCourseCompletionPercentageHandler = useCallback((tasks: { score: number }[]) =>
+    Number(((tasks.filter(({ score }) => score !== null).length / tasks.length) * 100).toFixed(1)), []);
+    useEffect(() => {
+    const stats = props.data;
+    const scoredTasks = stats.map(({ tasks }) => countScoredTasksHandler(tasks));
+    const coursesProgress = stats.map(({ tasks }) => countCourseCompletionPercentageHandler(tasks));
+    setCoursesProgress(coursesProgress);
+    setScoredTasks(scoredTasks);
+  }, [scoredTasks, coursesProgress]);
 
-  private countScoredTasks = (tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length;
-  private countCourseCompletionPercentage = (tasks: { score: number }[]) =>
-    Number(((tasks.filter(({ score }) => score !== null).length / tasks.length) * 100).toFixed(1));
-
-  componentDidMount() {
-    const stats = this.props.data;
-    const scoredTasks = stats.map(({ tasks }) => this.countScoredTasks(tasks));
-    const coursesProgress = stats.map(({ tasks }) => this.countCourseCompletionPercentage(tasks));
-    this.setState({ coursesProgress, scoredTasks });
-  }
-
-  render() {
-    const { isProfileOwner } = this.props;
-    const stats = this.props.data;
-    const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
+    const { isProfileOwner } = props;
+    const stats = props.data;
+    
     return (
       <>
         <StudentStatsModal
           stats={stats[courseIndex]}
           isVisible={isStudentStatsModalVisible}
-          onHide={this.hideStudentStatsModal}
+          onHide={hideStudentStatsModalHandler}
         />
         <CommonCard
           title="Student Statistics"
@@ -134,9 +127,9 @@ class StudentStatsCard extends React.Component<Props, State> {
                   isCourseCompleted,
                   isSelfExpelled,
                   certificateId,
-                  courseId,
+                  courseId
                 },
-                idx,
+                idx
               ) => {
                 return (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -176,7 +169,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                             icon={<LogoutOutlined />}
                             danger
                             size="small"
-                            onClick={() => this.showExpelConfirmationModal(courseId)}
+                            onClick={() => showExpelConfirmationModalHandler(courseId)}
                           >
                             Leave course
                           </Button>
@@ -185,7 +178,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                             icon={<ReloadOutlined />}
                             danger
                             size="small"
-                            onClick={() => this.rejoinAsStudent(courseId)}
+                            onClick={() => rejoinAsStudentHandler(courseId)}
                           >
                             Back to Course
                           </Button>
@@ -196,7 +189,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                         ''
                       )}
                     </div>
-                    <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
+                    <Button type="dashed" onClick={showStudentStatsModalHandler.bind(null, idx)}>
                       <FullscreenOutlined />
                     </Button>
                   </List.Item>
@@ -206,8 +199,10 @@ class StudentStatsCard extends React.Component<Props, State> {
           }
         />
       </>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default StudentStatsCard;

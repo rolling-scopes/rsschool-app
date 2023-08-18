@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Row, Col, Space } from 'antd';
 import YoutubeFilled from '@ant-design/icons/YoutubeFilled';
@@ -12,32 +13,37 @@ const socialLinks = [
     icon: <GithubFilled style={iconStyle} />,
     name: 'GitHub',
     link: `https://github.com/rolling-scopes/rsschool-app`,
-    newTab: true,
+    newTab: true
   },
   {
     icon: <YoutubeFilled style={iconStyle} />,
     name: 'YouTube',
     link: `https://www.youtube.com/c/rollingscopesschool`,
-    newTab: true,
+    newTab: true
   },
   {
     icon: <DiscordOutlined style={iconStyle} />,
     name: 'Discord',
     link: `https://discord.gg/PRADsJB`,
-    newTab: true,
+    newTab: true
   },
   {
     icon: <LinkedinOutlined style={iconStyle} />,
     name: 'LinkedIn',
     link: `https://www.linkedin.com/company/the-rolling-scopes-school/`,
-    newTab: true,
-  },
+    newTab: true
+  }
 ];
 
 type LinkInfo = { icon: React.ReactNode; name: string; link: string; newTab: boolean };
 
-class SocialNetworks extends React.Component<any, any> {
-  render() {
+const SocialNetworks = () => {
+
+
+    
+
+    
+
     return (
       <Row gutter={[16, 8]}>
         {socialLinks.map((linkInfo: LinkInfo) => {
@@ -53,8 +59,10 @@ class SocialNetworks extends React.Component<any, any> {
           );
         })}
       </Row>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export { SocialNetworks };

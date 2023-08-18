@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Card, Typography, Empty, CardProps } from 'antd';
 
@@ -15,14 +16,15 @@ type State = {
   isVisibilitySettingsVisible: boolean;
   isProfileSettingsVisible: boolean;
 };
-class CommonCard extends React.Component<Props, State> {
-  state = {
-    isVisibilitySettingsVisible: false,
-    isProfileSettingsVisible: false,
-  };
+const CommonCard = (props: Props) => {
 
-  render() {
-    const { title, content, isMoreContent, noDataDescription, ...restProps } = this.props;
+
+    const [isVisibilitySettingsVisible, setIsVisibilitySettingsVisible] = useState(false);
+    const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
+
+    
+
+    const { title, content, isMoreContent, noDataDescription, ...restProps } = props;
 
     return (
       <Card
@@ -36,8 +38,10 @@ class CommonCard extends React.Component<Props, State> {
       >
         {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescription} />}
       </Card>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default CommonCard;

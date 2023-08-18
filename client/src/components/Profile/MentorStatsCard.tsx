@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import isEqual from 'lodash/isEqual';
 import { List, Typography, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
@@ -17,37 +17,34 @@ type State = {
   isMentorStatsModalVisible: boolean;
 };
 
-class MentorStatsCard extends React.Component<Props, State> {
-  state = {
-    courseIndex: 0,
-    isMentorStatsModalVisible: false,
-  };
+const MentorStatsCard = (props: Props) => {
 
-  private showMentorStatsModal = (courseIndex: number) => {
-    this.setState({ courseIndex, isMentorStatsModalVisible: true });
-  };
 
-  private hideMentortStatsModal = () => {
-    this.setState({ isMentorStatsModalVisible: false });
-  };
+    const [courseIndex, setCourseIndex] = useState(0);
+    const [isMentorStatsModalVisible, setIsMentorStatsModalVisible] = useState(false);
 
-  private countStudents = (data: MentorStats[]) =>
+    const showMentorStatsModalHandler = useCallback((courseIndex: number) => {
+    setCourseIndex(courseIndex);
+    setIsMentorStatsModalVisible(true);
+  }, [courseIndex]);
+    const hideMentortStatsModalHandler = useCallback(() => {
+    setIsMentorStatsModalVisible(false);
+  }, []);
+    const countStudentsHandler = useCallback((data: MentorStats[]) =>
     data.reduce((acc: Student[], cur: MentorStats) => (cur?.students?.length ? acc.concat(cur.students) : acc), [])
-      .length;
+      .length, []);
+    const shouldComponentUpdateHandler = useCallback((_nextProps: Props, nextState: State) =>
+    !isEqual(nextState.isMentorStatsModalVisible, isMentorStatsModalVisible), [isMentorStatsModalVisible]);
 
-  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
-    !isEqual(nextState.isMentorStatsModalVisible, this.state.isMentorStatsModalVisible);
-
-  render() {
-    const stats = this.props.data;
-    const { courseIndex, isMentorStatsModalVisible } = this.state;
+    const stats = props.data;
+    
 
     return (
       <>
         <MentorStatsModal
           stats={stats[courseIndex]}
           isVisible={isMentorStatsModalVisible}
-          onHide={this.hideMentortStatsModal}
+          onHide={hideMentortStatsModalHandler}
         />
         <CommonCard
           title="Mentor Statistics"
@@ -58,7 +55,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                 <p>
                   Mentored Students:{' '}
                   <Text style={{ fontSize: 18 }} strong>
-                    {this.countStudents(stats)}
+                    {countStudentsHandler(stats)}
                   </Text>
                 </p>
                 <p>
@@ -93,7 +90,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                                       display: 'flex',
                                       justifyContent: 'space-between',
                                       fontSize: 12,
-                                      marginBottom: 5,
+                                      marginBottom: 5
                                     }}
                                   >
                                     <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
@@ -115,7 +112,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                       <Button
                         style={{ marginLeft: 16 }}
                         type="dashed"
-                        onClick={this.showMentorStatsModal.bind(null, idx)}
+                        onClick={showMentorStatsModalHandler.bind(null, idx)}
                       >
                         <FullscreenOutlined />
                       </Button>
@@ -127,8 +124,10 @@ class MentorStatsCard extends React.Component<Props, State> {
           }
         />
       </>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default MentorStatsCard;

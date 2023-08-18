@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import isEqual from 'lodash/isEqual';
 import { Typography, Tooltip, Avatar, Badge } from 'antd';
 import { Comment } from '@ant-design/compatible';
@@ -27,22 +27,20 @@ interface State {
   isPublicFeedbackModalVisible: boolean;
 }
 
-class PublicFeedbackCard extends React.Component<Props, State> {
-  state: State = {
-    badgesCount: {},
-    isPublicFeedbackModalVisible: false,
-  };
+const PublicFeedbackCard = (props: Props) => {
 
-  private showPublicFeedbackModal = () => {
-    this.setState({ isPublicFeedbackModalVisible: true });
-  };
 
-  private hidePublicFeedbackModal = () => {
-    this.setState({ isPublicFeedbackModalVisible: false });
-  };
+    const [badgesCount, setBadgesCount] = useState({});
+    const [isPublicFeedbackModalVisible, setIsPublicFeedbackModalVisible] = useState(false);
 
-  private countBadges = () => {
-    const receivedBadges = this.props.data;
+    const showPublicFeedbackModalHandler = useCallback(() => {
+    setIsPublicFeedbackModalVisible(true);
+  }, []);
+    const hidePublicFeedbackModalHandler = useCallback(() => {
+    setIsPublicFeedbackModalVisible(false);
+  }, []);
+    const countBadgesHandler = useCallback(() => {
+    const receivedBadges = props.data;
     const badgesCount: any = {};
 
     receivedBadges.forEach(({ badgeId }) => {
@@ -52,33 +50,30 @@ class PublicFeedbackCard extends React.Component<Props, State> {
     });
 
     return badgesCount;
-  };
+  }, [badgesCount]);
+    const shouldComponentUpdateHandler = useCallback((_nextProps: Props, nextState: State) =>
+    !(nextState.isPublicFeedbackModalVisible === isPublicFeedbackModalVisible) ||
+    !isEqual(nextState.badgesCount, badgesCount), [isPublicFeedbackModalVisible, badgesCount]);
+    useEffect(() => {
+    const badgesCount = countBadgesHandler();
+    setBadgesCount(badgesCount);
+  }, [badgesCount]);
 
-  shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
-    !(nextState.isPublicFeedbackModalVisible === this.state.isPublicFeedbackModalVisible) ||
-    !isEqual(nextState.badgesCount, this.state.badgesCount);
-
-  componentDidMount() {
-    const badgesCount = this.countBadges();
-    this.setState({ badgesCount });
-  }
-
-  render() {
-    const badges = this.props.data;
-    const { badgesCount } = this.state;
+    const badges = props.data;
+    
 
     return (
       <>
         <PublicFeedbackModal
           data={badges}
-          isVisible={this.state.isPublicFeedbackModalVisible}
-          onHide={this.hidePublicFeedbackModal}
+          isVisible={isPublicFeedbackModalVisible}
+          onHide={hidePublicFeedbackModalHandler}
         />
         <CommonCard
           title="Public Feedback"
           icon={<MessageOutlined />}
           actions={[
-            <FullscreenOutlined key="card-public-feedback-button-more" onClick={this.showPublicFeedbackModal} />,
+            <FullscreenOutlined key="card-public-feedback-button-more" onClick={showPublicFeedbackModalHandler} />
           ]}
           content={
             <>
@@ -131,8 +126,10 @@ class PublicFeedbackCard extends React.Component<Props, State> {
           }
         />
       </>
-    );
-  }
-}
+    ); 
+};
+
+
+
 
 export default PublicFeedbackCard;
