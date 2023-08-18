@@ -18,17 +18,22 @@ export class CourseMentorsService {
     private dataSource: DataSource,
   ) {}
 
-  public async getMentorsWithStats(courseId: number): Promise<MentorDetails[]> {
-    const courseTasks = await this.courseTaskRepository
+  private async getMentorCheckerCourseTaskIds(courseId: number): Promise<[number[], number]> {
+    const [courseTasks, count] = await this.courseTaskRepository
       .createQueryBuilder('c')
       .select('c.id')
       .leftJoin('c.task', 't')
       .where({ checker: 'mentor', courseId, disabled: false })
       .andWhere('c.studentEndDate < NOW()')
       .andWhere("c.type <> 'interview'")
-      .getMany();
+      .getManyAndCount();
 
-    const courseTasksIds = courseTasks.map(t => t.id);
+    return [courseTasks.map(task => task.id), count];
+  }
+
+  public async getMentorsWithStats(courseId: number): Promise<MentorDetails[]> {
+    const [courseTasksIds, count] = await this.getMentorCheckerCourseTaskIds(courseId);
+
     const query = this.mentorsRepository
       .createQueryBuilder('mentor')
       .innerJoin('mentor.user', 'user')
@@ -53,7 +58,6 @@ export class CourseMentorsService {
       this.getLastCheckedDates(courseId, courseTasksIds),
     ]);
 
-    const count = courseTasks.length;
     const mentors = [];
     for (const mentor of records) {
       const mentorBasic = MentorsService.convertMentorToMentorBasic(mentor);
@@ -62,8 +66,8 @@ export class CourseMentorsService {
       const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
       const totalToCheck = activeStudents.length * count;
 
-      const lastCheckedDate = lastCheckedDateByMentor.find(m => m.id === mentor.id)?.value;
-      const checkedCount = checkedCountByMentor.find(m => m.id === mentor.id)?.value ?? 0;
+      const lastCheckedDate = lastCheckedDateByMentor[mentor.id];
+      const checkedCount = checkedCountByMentor[mentor.id] ?? 0;
 
       mentors.push({
         ...mentorBasic,
@@ -124,7 +128,7 @@ export class CourseMentorsService {
     return result;
   }
 
-  private async getLastCheckedDates(courseId: number, courseTasksIds: number[]) {
+  private async getLastCheckedDates(courseId: number, courseTasksIds: number[]): Promise<Record<string, Date | null>> {
     const query = this.dataSource
       .createQueryBuilder()
       .select('m.id', 'id')
@@ -145,15 +149,12 @@ export class CourseMentorsService {
       )
       .where('m."courseId" = :courseId', { courseId });
 
-    const result = await query.getRawMany();
+    const result: { id: number; value: Date | null }[] = await query.getRawMany();
 
-    return result.map<{ id: number; value: string }>(({ id, value }) => ({
-      id,
-      value,
-    }));
+    return Object.fromEntries(result.map(({id, value}) => [id, value]));
   }
 
-  private async getCheckedTasksCount(courseId: number, courseTasksIds: number[]) {
+  private async getCheckedTasksCount(courseId: number, courseTasksIds: number[]): Promise<Record<string, number>> {
     const query = this.dataSource
       .createQueryBuilder()
       .select('m.id', 'id')
@@ -174,11 +175,8 @@ export class CourseMentorsService {
       .where('m."courseId" = :courseId', { courseId })
       .groupBy('m.id');
 
-    const result = await query.getRawMany();
+    const result: { id: number; value: string }[] = await query.getRawMany();
 
-    return result.map<{ id: number; value: number }>(({ id, value }) => ({
-      id,
-      value: Number(value),
-    }));
+    return Object.fromEntries(result.map(({ id, value }) => [id, Number(value)]));
   }
 }
