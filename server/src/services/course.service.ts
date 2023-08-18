@@ -23,7 +23,6 @@ import {
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
-import { MentorRepository } from '../repositories/mentor.repository';
 import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
@@ -331,12 +330,6 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
     .getMany();
 
   const mentors = records.map(convertToMentorDetails);
-  return mentors;
-}
-
-export async function getMentorsDetails(courseId: number): Promise<MentorDetails[]> {
-  const mentorRepository = getCustomRepository(MentorRepository);
-  const mentors = mentorRepository.findExtended(courseId);
   return mentors;
 }
 
