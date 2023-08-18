@@ -1,4 +1,3 @@
-
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
@@ -53,37 +52,41 @@ export type ChangedPermissionsSettings = {
 const profileApi = new ProfileApi();
 
 export const ProfilePage = (props: Props) => {
+  const [profile, setProfile] = useState(null);
+  const [isProfileOwner, setIsProfileOwner] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [connections, setConnections] = useState({});
 
-
-    const [profile, setProfile] = useState(null);
-    const [isProfileOwner, setIsProfileOwner] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
-    const [connections, setConnections] = useState({});
-
-    const userService = useRef(new UserService());
-    const notificationsService = useRef(new NotificationsService());
-    const hadStudentCoreJSInterviewHandler = useCallback((stats: StudentStats[]) =>
-    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers)), []);
-    const getStudentCoreJSInterviewsHandler = useCallback((stats: StudentStats[]) =>
-    stats
-      .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
-      .map(({ tasks, courseFullName, courseName, locationName }) => ({
-        courseFullName,
-        courseName,
-        locationName,
-        interviews: tasks
-          .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer, name, interviewDate }) => ({
-            score,
-            comment,
-            interviewer,
-            answers: interviewFormAnswers,
-            name,
-            interviewDate
-          }))
-      })) as CoreJsInterviewsData[], []);
-    const fetchDataHandler = useCallback(async () => {
+  const userService = useRef(new UserService());
+  const notificationsService = useRef(new NotificationsService());
+  const hadStudentCoreJSInterviewHandler = useCallback(
+    (stats: StudentStats[]) =>
+      stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers)),
+    [],
+  );
+  const getStudentCoreJSInterviewsHandler = useCallback(
+    (stats: StudentStats[]) =>
+      stats
+        .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
+        .map(({ tasks, courseFullName, courseName, locationName }) => ({
+          courseFullName,
+          courseName,
+          locationName,
+          interviews: tasks
+            .filter(({ interviewFormAnswers }) => interviewFormAnswers)
+            .map(({ interviewFormAnswers, score, comment, interviewer, name, interviewDate }) => ({
+              score,
+              comment,
+              interviewer,
+              answers: interviewFormAnswers,
+              name,
+              interviewDate,
+            })),
+        })) as CoreJsInterviewsData[],
+    [],
+  );
+  const fetchDataHandler = useCallback(async () => {
     setIsLoading(true);
 
     const { router, session } = props;
@@ -93,12 +96,12 @@ export const ProfilePage = (props: Props) => {
       const [profile, connections, { data }] = await Promise.all([
         userService.current.getProfileInfo(githubId),
         notificationsService.current.getUserConnections().catch(() => []),
-        profileApi.getProfile(githubId ?? session.githubId)
+        profileApi.getProfile(githubId ?? session.githubId),
       ]);
 
       const updateProfile = {
         ...profile,
-        ...data
+        ...data,
       };
 
       let isProfileOwner = false;
@@ -109,22 +112,22 @@ export const ProfilePage = (props: Props) => {
       }
 
       setIsLoading(false);
-    setProfile(updateProfile);
-    setIsProfileOwner(isProfileOwner);
-    setConnections(connections as State['connections']);
+      setProfile(updateProfile);
+      setIsProfileOwner(isProfileOwner);
+      setConnections(connections as State['connections']);
     } catch (e) {
       setIsLoading(false);
-    setProfile(null);
+      setProfile(null);
     }
   }, [profile, connections, isProfileOwner]);
-    const sendEmailConfirmationLinkHandler = useCallback(async () => {
+  const sendEmailConfirmationLinkHandler = useCallback(async () => {
     try {
       await userService.current.sendEmailConfirmationLink();
     } catch (e) {
       message.error('Error has occurred. Please try again later');
     }
   }, []);
-    const updateProfileHandler = useCallback(async (data: UpdateProfileInfoDto) => {
+  const updateProfileHandler = useCallback(async (data: UpdateProfileInfoDto) => {
     setIsSaving(true);
     let isUpdated = false;
     try {
@@ -140,19 +143,19 @@ export const ProfilePage = (props: Props) => {
 
     return isUpdated;
   }, []);
-    const authorizeDiscordHandler = useCallback(async () => {
+  const authorizeDiscordHandler = useCallback(async () => {
     setIsLoading(true);
 
     const discord = await userService.current.getDiscordIds();
 
     if (discord) {
       setProfile({
-          ...profile,
-          publicCvUrl: profile?.publicCvUrl ?? null,
-          discord
-        });
-    setPublicCvUrl(profile?.publicCvUrl ?? null);
-    setDiscord(discord);
+        ...profile,
+        publicCvUrl: profile?.publicCvUrl ?? null,
+        discord,
+      });
+      setPublicCvUrl(profile?.publicCvUrl ?? null);
+      setDiscord(discord);
 
       await updateProfileHandler({ discord });
       props.router.replace('/profile');
@@ -160,7 +163,7 @@ export const ProfilePage = (props: Props) => {
 
     setIsLoading(false);
   }, [profile]);
-    useEffect(() => {
+  useEffect(() => {
     // it's a dirty hack to fix an issue with empty query params
     // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
     //
@@ -172,115 +175,106 @@ export const ProfilePage = (props: Props) => {
     }, 100);
   }, []);
 
-    
+  const mainInfo: ProfileMainCardData = {
+    location: profile?.generalInfo?.location ?? null,
+    name: profile?.generalInfo?.name ?? '',
+    githubId: profile?.generalInfo?.githubId ?? null,
+    publicCvUrl: profile?.publicCvUrl ?? null,
+  };
+  const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
+  const languages = profile?.generalInfo?.languages ?? [];
 
-    const mainInfo: ProfileMainCardData = {
-      location: profile?.generalInfo?.location ?? null,
-      name: profile?.generalInfo?.name ?? '',
-      githubId: profile?.generalInfo?.githubId ?? null,
-      publicCvUrl: profile?.publicCvUrl ?? null
-    };
-    const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
-    const languages = profile?.generalInfo?.languages ?? [];
-
-    const cards = [
-      profile?.generalInfo && (
-        <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfileHandler} />
-      ),
-      <AboutCard
-        key="about-card"
-        data={aboutMyself}
+  const cards = [
+    profile?.generalInfo && (
+      <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfileHandler} />
+    ),
+    <AboutCard
+      key="about-card"
+      data={aboutMyself}
+      isEditingModeEnabled={isProfileOwner}
+      updateProfile={updateProfileHandler}
+    />,
+    <LanguagesCard
+      key="languages-card"
+      data={languages as UpdateUserDtoLanguagesEnum[]}
+      isEditingModeEnabled={isProfileOwner}
+      updateProfile={updateProfileHandler}
+    />,
+    profile?.generalInfo?.educationHistory !== undefined && (
+      <EducationCard
+        data={profile.generalInfo?.educationHistory || []}
         isEditingModeEnabled={isProfileOwner}
         updateProfile={updateProfileHandler}
-      />,
-      <LanguagesCard
-        key="languages-card"
-        data={languages as UpdateUserDtoLanguagesEnum[]}
+      />
+    ),
+    profile?.contacts !== undefined && (
+      <ContactsCard
+        data={profile.contacts}
         isEditingModeEnabled={isProfileOwner}
+        connections={connections}
+        sendConfirmationEmail={sendEmailConfirmationLinkHandler}
         updateProfile={updateProfileHandler}
-      />,
-      profile?.generalInfo?.educationHistory !== undefined && (
-        <EducationCard
-          data={profile.generalInfo?.educationHistory || []}
-          isEditingModeEnabled={isProfileOwner}
-          updateProfile={updateProfileHandler}
-        />
-      ),
-      profile?.contacts !== undefined && (
-        <ContactsCard
-          data={profile.contacts}
-          isEditingModeEnabled={isProfileOwner}
-          connections={connections}
-          sendConfirmationEmail={sendEmailConfirmationLinkHandler}
-          updateProfile={updateProfileHandler}
-        />
-      ),
-      profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
-      profile?.studentStats?.length && (
-        <StudentStatsCard
-          username={props.session.githubId}
-          data={profile.studentStats}
-          isProfileOwner={isProfileOwner}
-        />
-      ),
-      profile?.mentorStats?.length && <MentorStatsCard data={profile.mentorStats} />,
-      profile?.studentStats?.length && hadStudentCoreJSInterviewHandler(profile.studentStats) && (
-        <CoreJsIviewsCard data={getStudentCoreJSInterviewsHandler(profile.studentStats)} />
-      ),
-      profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />
-    ].filter(Boolean) as JSX.Element[];
+      />
+    ),
+    profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
+    profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
+    profile?.studentStats?.length && (
+      <StudentStatsCard username={props.session.githubId} data={profile.studentStats} isProfileOwner={isProfileOwner} />
+    ),
+    profile?.mentorStats?.length && <MentorStatsCard data={profile.mentorStats} />,
+    profile?.studentStats?.length && hadStudentCoreJSInterviewHandler(profile.studentStats) && (
+      <CoreJsIviewsCard data={getStudentCoreJSInterviewsHandler(profile.studentStats)} />
+    ),
+    profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
+  ].filter(Boolean) as JSX.Element[];
 
-    return (
-      <>
-        <LoadingScreen show={isLoading}>
-          <Header username={props.session.githubId} />
-          <Spin spinning={isSaving} delay={200}>
-            {profile ? (
-              <div style={{ padding: 10 }}>
-                <Masonry
-                  breakpointCols={{
-                    default: 4,
-                    1100: 3,
-                    700: 2,
-                    500: 1
-                  }}
-                  className="masonry"
-                  columnClassName="masonry-column"
-                >
-                  {cards.map((card, idx) => (
-                    <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
-                      {card}
-                    </div>
-                  ))}
-                </Masonry>
-                <style jsx global>{`
-                  .masonry {
-                    display: flex;
-                    margin-left: -16px;
-                    width: auto;
-                  }
-                `}</style>
-                <style jsx global>{`
-                  .masonry-column {
-                    padding-left: 16px;
-                    background-clip: padding-box;
-                  }
-                `}</style>
-              </div>
-            ) : (
-              <>
-                <Result status={'403' as any} title="No access or user does not exist" />
-              </>
-            )}
-          </Spin>
-        </LoadingScreen>
-      </>
-    ); 
+  return (
+    <>
+      <LoadingScreen show={isLoading}>
+        <Header username={props.session.githubId} />
+        <Spin spinning={isSaving} delay={200}>
+          {profile ? (
+            <div style={{ padding: 10 }}>
+              <Masonry
+                breakpointCols={{
+                  default: 4,
+                  1100: 3,
+                  700: 2,
+                  500: 1,
+                }}
+                className="masonry"
+                columnClassName="masonry-column"
+              >
+                {cards.map((card, idx) => (
+                  <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
+                    {card}
+                  </div>
+                ))}
+              </Masonry>
+              <style jsx global>{`
+                .masonry {
+                  display: flex;
+                  margin-left: -16px;
+                  width: auto;
+                }
+              `}</style>
+              <style jsx global>{`
+                .masonry-column {
+                  padding-left: 16px;
+                  background-clip: padding-box;
+                }
+              `}</style>
+            </div>
+          ) : (
+            <>
+              <Result status={'403' as any} title="No access or user does not exist" />
+            </>
+          )}
+        </Spin>
+      </LoadingScreen>
+    </>
+  );
 };
-
-
-
 
 const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
   return githubId === requestedGithubId;
