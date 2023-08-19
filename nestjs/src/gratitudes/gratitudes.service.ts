@@ -53,8 +53,6 @@ export class GratitudesService {
   }
 
   public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20 }: HeroesRadarQueryDto) {
-    console.log('page: ', page);
-
     const countQuery = this.repository.createQueryBuilder('feedback').select('COUNT(DISTINCT "toUserId") as count');
 
     const heroesQuery = this.dataSource
