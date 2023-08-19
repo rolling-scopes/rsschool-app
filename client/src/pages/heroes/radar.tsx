@@ -17,7 +17,7 @@ type Props = {
 export type HeroesRadarFormProps = {
   courseId?: number;
   notActivist?: boolean;
-}
+};
 
 export type GetHeroesPros = HeroesRadarFormProps & Partial<IPaginationInfo>;
 
@@ -42,7 +42,8 @@ function Page(props: Props) {
   const getHeroes = async ({
     current = initialPage,
     pageSize = initialPageSize,
-    courseId, notActivist
+    courseId,
+    notActivist,
   }: GetHeroesPros) => {
     setLoading(true);
     const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist);
