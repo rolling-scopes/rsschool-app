@@ -4,10 +4,9 @@ import { HeroRadarDto, HeroesRadarBadgeDto, HeroesRadarDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import Link from 'next/link';
 import HeroesCountBadge from './HeroesCountBadge';
-import { IPaginationInfo } from 'common/types/pagination';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { useState, useEffect } from 'react';
-import { LayoutType } from 'pages/heroes/radar';
+import { GetHeroesPros, LayoutType } from 'pages/heroes/radar';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
 import heroesBadges from 'configs/heroes-badges';
 
@@ -18,8 +17,9 @@ interface HeroRadarRanked extends HeroRadarDto {
 interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;
   courseId: number | undefined;
+  notActivist: boolean | undefined;
   setLoading: (loading: boolean) => void;
-  getHeroes: (args: { courseId?: number } & Partial<IPaginationInfo>) => Promise<void>;
+  getHeroes: (args: GetHeroesPros) => Promise<void>;
   setFormLayout: (layout: LayoutType) => void;
 }
 
@@ -88,7 +88,7 @@ const initColumns: ColumnType<HeroRadarRanked>[] = [
   },
 ];
 
-function HeroesRadarTable({ heroes, courseId, setLoading, getHeroes, setFormLayout }: HeroesRadarTableProps) {
+function HeroesRadarTable({ heroes, courseId, notActivist, setLoading, getHeroes, setFormLayout }: HeroesRadarTableProps) {
   const { width } = useWindowDimensions();
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [columns, setColumns] = useState(initColumns);
@@ -127,7 +127,7 @@ function HeroesRadarTable({ heroes, courseId, setLoading, getHeroes, setFormLayo
   const handleChange: TableProps<HeroRadarRanked>['onChange'] = async ({ current, pageSize }) => {
     try {
       setLoading(true);
-      await getHeroes({ current, pageSize, courseId });
+      await getHeroes({ current, pageSize, courseId, notActivist });
     } finally {
       setLoading(false);
     }

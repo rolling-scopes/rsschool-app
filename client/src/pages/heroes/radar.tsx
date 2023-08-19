@@ -3,7 +3,7 @@ import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
 import { GratitudesApi, HeroesRadarDto } from 'api';
 import HeroesRadarTable from 'components/Heroes/HeroesRadarTable';
-import { Form, Select, Button } from 'antd';
+import { Form, Select, Button, Checkbox } from 'antd';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -14,11 +14,18 @@ type Props = {
   session: Session;
 };
 
+type HeroesRadarFormProps = {
+  courseId?: number;
+  notActivist?: boolean;
+}
+
+export type GetHeroesPros = HeroesRadarFormProps & Partial<IPaginationInfo>;
+
+export type LayoutType = Parameters<typeof Form>[0]['layout'];
+
 const initialPage = 1;
 const initialPageSize = 20;
 const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
-
-export type LayoutType = Parameters<typeof Form>[0]['layout'];
 
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
@@ -28,6 +35,7 @@ function Page(props: Props) {
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [courseId, setCourseId] = useState<number>();
+  const [notActivist, setNotActivist] = useState<boolean>();
   const [formLayout, setFormLayout] = useState<LayoutType>('inline');
   const [form] = Form.useForm();
   const gratitudeApi = new GratitudesApi();
@@ -35,10 +43,10 @@ function Page(props: Props) {
   const getHeroes = async ({
     current = initialPage,
     pageSize = initialPageSize,
-    courseId,
-  }: { courseId?: number } & Partial<IPaginationInfo>) => {
+    courseId, notActivist
+  }: GetHeroesPros) => {
     setLoading(true);
-    const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId);
+    const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist);
     setHeroes(data);
     setLoading(false);
   };
@@ -53,16 +61,17 @@ function Page(props: Props) {
   }, []);
 
   const makeRequest = useCallback(
-    async (data: { courseId: number }) => {
+    async (data: HeroesRadarFormProps) => {
       await getHeroes(data);
     },
     [heroes],
   );
 
   const handleSubmit = useCallback(
-    async (formData: { courseId: number }) => {
-      const data = onlyDefined(formData) as { courseId: number };
+    async (formData: HeroesRadarFormProps) => {
+      const data = onlyDefined(formData) as HeroesRadarFormProps;
       setCourseId(data.courseId);
+      setNotActivist(data.notActivist);
       await makeRequest(data);
     },
     [heroes],
@@ -70,6 +79,7 @@ function Page(props: Props) {
 
   const onClear = useCallback(async () => {
     setCourseId(undefined);
+    setNotActivist(undefined);
     await getHeroes(initialQueryParams);
     form.resetFields();
   }, [heroes]);
@@ -86,6 +96,9 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
+        <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
+          <Checkbox>Show only not activists</Checkbox>
+        </Form.Item>
         <div>
           <Button size="middle" type="primary" htmlType="submit">
             Submit
@@ -98,6 +111,7 @@ function Page(props: Props) {
       <HeroesRadarTable
         heroes={heroes}
         courseId={courseId}
+        notActivist={notActivist}
         getHeroes={getHeroes}
         setLoading={setLoading}
         setFormLayout={setFormLayout}
