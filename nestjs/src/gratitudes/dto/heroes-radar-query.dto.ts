@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 
 export class HeroesRadarQueryDto {
   @ApiPropertyOptional()
@@ -8,6 +8,19 @@ export class HeroesRadarQueryDto {
   @IsInt()
   @Type(() => Number)
   courseId?: number;
+
+  @ApiPropertyOptional()
+  @Transform(
+    ({ value }: { value: string }) => {
+      const newValue = value.toLowerCase();
+
+      return newValue === 'true' || newValue === '1';
+    },
+    { toClassOnly: true },
+  )
+  @IsOptional()
+  @IsBoolean()
+  notActivist?: boolean;
 
   @ApiProperty()
   @IsInt()

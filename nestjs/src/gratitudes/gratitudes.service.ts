@@ -52,11 +52,31 @@ export class GratitudesService {
     });
   }
 
-  public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20 }: HeroesRadarQueryDto) {
-    const countQuery = this.repository.createQueryBuilder('feedback').select('COUNT(DISTINCT "toUserId") as count');
+  public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20, notActivist }: HeroesRadarQueryDto) {
+    const countSubQuery = this.repository.createQueryBuilder('feedback');
+    const countQuery = this.dataSource.createQueryBuilder();
 
-    const heroesQuery = this.dataSource
-      .createQueryBuilder()
+    const heroesSubQuery = this.repository.createQueryBuilder('feedback');
+    const heroesQuery = this.dataSource.createQueryBuilder();
+
+    if (notActivist) {
+      console.log('notActivist: ', notActivist);
+      [countSubQuery, heroesQuery].forEach(query => query.having(`not bool_or("badgeId" = 'RS_activist')`));
+    }
+
+    if (courseId) {
+      [heroesSubQuery, countQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
+    }
+
+    countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId"))`).groupBy('"toUserId"');
+    countQuery.select('COUNT(*) as count').from('(' + countSubQuery.getQuery() + ')', 'badges');
+
+    heroesSubQuery
+      .select(['"feedback"."badgeId"', '"feedback"."toUserId"', 'COUNT(*) as "badgeCount"'])
+      .groupBy('"badgeId"')
+      .addGroupBy('"toUserId"');
+
+    heroesQuery
       .select([
         '"user"."githubId"',
         '"user"."firstName"',
@@ -64,23 +84,7 @@ export class GratitudesService {
         'sum("badgeCount") as total',
         `jsonb_agg(json_build_object('badgeId', "badgeId", 'badgeCount', "badgeCount")) as badges`,
       ])
-      .from(qb => {
-        const subQuery = qb
-          .select([
-            '"feedback"."badgeId"',
-            '"feedback"."toUserId"',
-            'COUNT(*) as "badgeCount"',
-          ])
-          .from(Feedback, 'feedback')
-          .groupBy('"badgeId"')
-          .addGroupBy('"toUserId"');
-
-        if (courseId) {
-          [subQuery, countQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
-        }
-
-        return subQuery;
-      }, 'badges')
+      .from('(' + heroesSubQuery.getQuery() + ')', 'badges')
       .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
       .groupBy('"githubId"')
       .addGroupBy('"firstName"')
