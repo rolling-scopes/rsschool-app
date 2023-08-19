@@ -24,7 +24,7 @@ const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
         result.push({ status: 'updated', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
       }
     } catch (e) {
-      result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${e.message}` });
+      result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${(e as Error).message}` });
     }
   }
 
@@ -36,13 +36,22 @@ type SearchConfigItem = {
   isCaseSensitive: boolean;
 };
 
-const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: string): string =>
-  searchConfig
-    .map(
-      ({ field, isCaseSensitive }: SearchConfigItem) =>
-        `user.${field} ${isCaseSensitive ? 'like' : 'ilike'} ${parameterName}`,
-    )
-    .join(' OR ');
+const isSearchConfigIncludesName = (searchConfig: SearchConfigItem[]): boolean => {
+  return ['firstName', 'lastName'].every(fieldName => searchConfig.find(({ field }) => field === fieldName));
+};
+
+const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: string): string => {
+  const searchStringParts = searchConfig.map(
+    ({ field, isCaseSensitive }: SearchConfigItem) =>
+      `user.${field} ${isCaseSensitive ? 'like' : 'ilike'} ${parameterName}`,
+  );
+
+  if (isSearchConfigIncludesName(searchConfig)) {
+    searchStringParts.push(`CONCAT(user.firstName, ' ', user.lastName) ilike ${parameterName}`);
+  }
+
+  return searchStringParts.join(' OR ');
+};
 
 const generateResponse = (user: any, searchConfig: SearchConfigItem[]) =>
   searchConfig.reduce((response: any, { field }: SearchConfigItem) => ({ ...response, [field]: user[field] }), {});
