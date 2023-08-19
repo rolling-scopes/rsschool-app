@@ -151,7 +151,7 @@ export class CourseMentorsService {
 
     const result: { id: number; value: Date | null }[] = await query.getRawMany();
 
-    return Object.fromEntries(result.map(({id, value}) => [id, value]));
+    return Object.fromEntries(result.map(({ id, value }) => [id, value]));
   }
 
   private async getCheckedTasksCount(courseId: number, courseTasksIds: number[]): Promise<Record<string, number>> {
