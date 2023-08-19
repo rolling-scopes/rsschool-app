@@ -2997,13 +2997,7 @@ export interface HeroRadarDto {
      * @type {string}
      * @memberof HeroRadarDto
      */
-    'firstName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HeroRadarDto
-     */
-    'lastName': string;
+    'name': string;
     /**
      * 
      * @type {number}

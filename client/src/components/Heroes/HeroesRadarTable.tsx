@@ -117,9 +117,8 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
   const dataSource = heroes?.content?.length
     ? heroes.content.map((hero: HeroRadarDto, i) => {
         const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
-        const name = !hero.firstName && !hero.lastName ? '(Empty)' : `${hero.firstName} ${hero.lastName}`;
 
-        return { ...hero, rank, name };
+        return { ...hero, rank };
       })
     : [];
 

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { HeroesRadarBadge, HeroesRadarBadgeDto } from './heroes-radar-badge.dto';
+import { PersonDto } from 'src/core/dto';
 
 export interface HeroRadar {
   githubId: string;
@@ -12,8 +13,7 @@ export interface HeroRadar {
 export class HeroRadarDto {
   constructor(hero: HeroRadar) {
     this.githubId = hero.githubId;
-    this.firstName = hero.firstName;
-    this.lastName = hero.lastName;
+    this.name = PersonDto.getName(hero);
     this.total = hero.total;
     this.badges = hero.badges.map(badge => new HeroesRadarBadgeDto(badge));
   }
@@ -22,10 +22,7 @@ export class HeroRadarDto {
   public githubId: string;
 
   @ApiProperty()
-  public firstName: string;
-
-  @ApiProperty()
-  public lastName: string;
+  public name: string;
 
   @ApiProperty()
   public total: number;

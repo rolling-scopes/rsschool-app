@@ -4193,12 +4193,11 @@
         "type": "object",
         "properties": {
           "githubId": { "type": "string" },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
+          "name": { "type": "string" },
           "total": { "type": "number" },
           "badges": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarBadgeDto" } }
         },
-        "required": ["githubId", "firstName", "lastName", "total", "badges"]
+        "required": ["githubId", "name", "total", "badges"]
       },
       "HeroesRadarDto": {
         "type": "object",
