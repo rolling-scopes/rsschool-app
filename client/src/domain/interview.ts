@@ -71,3 +71,14 @@ export function isTechnicalScreening(name: string) {
 
 export const getInterviewWaitList = (courseAlias: string, interviewId: number) =>
   `/course/mentor/interview-wait-list?course=${courseAlias}&interviewId=${interviewId}`;
+
+/** calculates the rating based on the interview score. rating scales from [1,5] */
+export function getRating(score: number, maxScore: number, feedbackVersion: number) {
+  if (!feedbackVersion) {
+    // In the legacy feedback, the score is a number with limit 50
+    return score / 10;
+  }
+  // calculate rating on the scale from 1 to 5
+  const rating = (score / maxScore) * 4 + 1;
+  return rating;
+}

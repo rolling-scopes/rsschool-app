@@ -5,6 +5,7 @@ import { Rating } from 'components/Rating';
 import { LegacyFeedback, StageInterviewDetailedFeedback } from 'common/models/profile';
 import { LegacyScreeningFeedback } from './LegacyScreeningFeedback';
 import { PrescreeningFeedback } from './PrescreeningFeedback';
+import { getRating } from 'domain/interview';
 
 type Props = {
   interviewResult: StageInterviewDetailedFeedback;
@@ -15,7 +16,8 @@ type Props = {
 class PreScreeningIviewModal extends React.PureComponent<Props> {
   render() {
     const { interviewResult, isVisible, onHide } = this.props;
-    const { courseFullName, date, rating, interviewer, isGoodCandidate, feedback, version, decision } = interviewResult;
+    const { courseFullName, date, score, interviewer, isGoodCandidate, feedback, version, decision, maxScore } =
+      interviewResult;
     return (
       <Modal
         title={`${courseFullName} Pre-Screening Interview Feedback`}
@@ -24,7 +26,7 @@ class PreScreeningIviewModal extends React.PureComponent<Props> {
         footer={null}
         width={'80%'}
       >
-        <Rating rating={rating} />
+        <Rating rating={getRating(score, maxScore, version)} />
         <p style={{ marginBottom: 5 }}>Date: {formatDate(date)}</p>
         {isGoodCandidate != null ? (
           <p style={{ marginBottom: 5 }}>

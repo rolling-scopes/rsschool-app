@@ -18,7 +18,7 @@ import { CoursePageProps } from 'services/models';
 import { isCourseManager } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto } from 'api';
 import { getApiConfiguration } from 'utils/axios';
-import { stageInterviewType } from 'domain/interview';
+import { getRating, stageInterviewType } from 'domain/interview';
 
 const api = new CoursesInterviewsApi(getApiConfiguration());
 
@@ -89,7 +89,10 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
                   dataIndex: 'rating',
                   sorter: numberSorter('rating'),
                   width: 210,
-                  render: (value: number) => (value != null ? <Rating rating={value} /> : null),
+                  render: (value: number, record: AvailableStudentDto) =>
+                    value != null ? (
+                      <Rating rating={getRating(value, record.maxScore, record.feedbackVersion)} />
+                    ) : null,
                 },
               ]
             : []),

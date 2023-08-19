@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class AvailableStudentDto {
   @IsNotEmpty()
@@ -38,4 +38,12 @@ export class AvailableStudentDto {
   @IsString()
   @ApiProperty()
   registeredDate: string;
+
+  @IsOptional()
+  @ApiProperty()
+  maxScore?: number;
+
+  @IsOptional()
+  @ApiProperty()
+  feedbackVersion?: number;
 }

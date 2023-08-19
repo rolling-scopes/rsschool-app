@@ -1,4 +1,4 @@
-import { isInterviewRegistrationInProgress, isInterviewStarted } from './interview';
+import { getRating, isInterviewRegistrationInProgress, isInterviewStarted } from './interview';
 
 describe('interview', () => {
   beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2023-01-01')));
@@ -36,6 +36,20 @@ describe('interview', () => {
       const isStarted = isInterviewStarted('2022-12-01');
 
       expect(isStarted).toBe(true);
+    });
+  });
+
+  describe('getRating', () => {
+    it('should return the correct rating for legacy feedback', () => {
+      const rating = getRating(30, 100, 0);
+
+      expect(rating).toBe(3);
+    });
+
+    it('should return the correct rating for current feedback', () => {
+      const rating = getRating(30, 100, 1);
+
+      expect(rating).toBe(2.2);
     });
   });
 });

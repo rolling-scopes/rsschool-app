@@ -43,19 +43,21 @@ export class InterviewsService {
     });
   }
 
-  public static getStageInterviewRating = (stageInterviews: StageInterview[]) => {
+  public static getLastStageInterview = (stageInterviews: StageInterview[]) => {
     const [lastInterview] = stageInterviews
       .filter(interview => interview.isCompleted)
-      .map(({ stageInterviewFeedbacks }) =>
+      .map(({ stageInterviewFeedbacks, score, courseTask }) =>
         stageInterviewFeedbacks.map(feedback => ({
           date: feedback.updatedDate,
-          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json)).rating,
+          version: feedback.version,
+          maxScore: courseTask?.maxScore,
+          rating: score ?? InterviewsService.getInterviewRatings(JSON.parse(feedback.json)).rating,
         })),
       )
       .reduce((acc, cur) => acc.concat(cur), [])
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    return lastInterview && lastInterview.rating !== undefined ? lastInterview.rating : null;
+    return lastInterview;
   };
 
   public async getInterviewRegisteredStudents(courseId: number, courseTaskId: number): Promise<AvailableStudentDto[]> {
@@ -96,15 +98,19 @@ export class InterviewsService {
       .innerJoin('student.user', 'user')
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
+      .leftJoin('si.courseTask', 'courseTask')
       .addSelect([
         ...this.getPrimaryUserFields(),
         'si.id',
         'si.isGoodCandidate',
         'si.isCompleted',
         'si.isCanceled',
+        'si.score',
         'sif.json',
         'sif.updatedDate',
+        'sif.version',
         'sis.createdDate',
+        'courseTask.maxScore',
       ])
       .where(
         [
@@ -130,6 +136,7 @@ export class InterviewsService {
       .map(student => {
         const { id, user, totalScore } = student;
         const stageInterviews: StageInterview[] = student.stageInterviews || [];
+        const lastStageInterview = InterviewsService.getLastStageInterview(stageInterviews);
         return {
           id,
           totalScore,
@@ -137,13 +144,19 @@ export class InterviewsService {
           name: this.userService.getFullName(student.user),
           cityName: user.cityName,
           isGoodCandidate: this.isGoodCandidate(stageInterviews),
-          rating: InterviewsService.getStageInterviewRating(stageInterviews),
+          rating: lastStageInterview?.rating,
+          maxScore: lastStageInterview?.maxScore,
+          feedbackVersion: lastStageInterview?.version,
           registeredDate: raw.find(item => item.student_id === student.id)?.sis_createdDate,
         };
       });
+
     return result;
   }
 
+  /**
+   * @deprecated - should be removed once Artsiom A. makes migration of the legacy feedback format
+   */
   private static getInterviewRatings({ skills, programmingTask, resume }: StageInterviewFeedbackJson) {
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
     const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
@@ -153,7 +166,7 @@ export class InterviewsService {
     const dataStructures = dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length;
 
     if (resume?.score !== undefined) {
-      const rating = resume.score / 10;
+      const rating = resume.score;
       return { rating, htmlCss, common, dataStructures };
     }
 

@@ -10,7 +10,7 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
   const dataStructures = dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length;
 
   if (resume?.score !== undefined) {
-    const rating = resume.score / 10;
+    const rating = resume.score;
     return { rating, htmlCss, common, dataStructures };
   }
 
@@ -24,10 +24,11 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
 export const getStageInterviewRating = (stageInterviews: StageInterview[]) => {
   const [lastInterview] = stageInterviews
     .filter((interview: StageInterview) => interview.isCompleted)
-    .map(({ stageInterviewFeedbacks }: StageInterview) =>
+    .map(({ stageInterviewFeedbacks, score }: StageInterview) =>
       stageInterviewFeedbacks.map((feedback: StageInterviewFeedback) => ({
         date: feedback.updatedDate,
-        rating: getInterviewRatings(JSON.parse(feedback.json)).rating,
+        // interviews in new template should have score precalculated
+        rating: score ?? getInterviewRatings(JSON.parse(feedback.json)).rating,
       })),
     )
     .reduce((acc, cur) => acc.concat(cur), [])

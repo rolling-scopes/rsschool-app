@@ -72,8 +72,9 @@ export function mergeFeedbackValuesToTemplate(feedback: Feedback, data: Feedback
         ...step,
         ...stepData,
       };
-      if ((result.id === FeedbackStepId.Theory || step.id === FeedbackStepId.Practice) && result.values) {
-        result.values.score = calculateStepScore(step, interviewMaxScore);
+      const ratedSteps = [FeedbackStepId.Theory, FeedbackStepId.Practice];
+      if (ratedSteps.includes(result.id) && result.values) {
+        result.values.score = calculateStepScore(step, interviewMaxScore / ratedSteps.length);
       }
       if (result.id === FeedbackStepId.Decision) {
         result.items = result.items.map(item => {

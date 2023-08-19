@@ -373,6 +373,18 @@ export interface AvailableStudentDto {
      * @memberof AvailableStudentDto
      */
     'registeredDate': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AvailableStudentDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AvailableStudentDto
+     */
+    'feedbackVersion': number;
 }
 /**
  * 

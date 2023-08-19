@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
-import { User, Mentor, Student, Course, StageInterview, StageInterviewFeedback } from '../../models';
+import { User, Mentor, Student, Course, StageInterview, StageInterviewFeedback, CourseTask } from '../../models';
 import { stageInterviewService } from '../../services';
 import { StageInterviewFeedbackJson } from '../../../../common/models';
 
@@ -17,6 +17,7 @@ type FeedbackData = {
   interviewerGithubId: string;
   feedbackVersion: null | number;
   interviewScore: null | number;
+  maxScore: number;
 };
 
 export const getStageInterviewFeedback = async (githubId: string): Promise<StageInterviewDetailedFeedback[]> =>
@@ -34,6 +35,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
       .addSelect('"userMentor"."firstName" AS "interviewerFirstName"')
       .addSelect('"userMentor"."lastName" AS "interviewerLastName"')
       .addSelect('"userMentor"."githubId" AS "interviewerGithubId"')
+      .addSelect('"courseTask"."maxScore" AS "maxScore"')
       .leftJoin(Student, 'student', '"student"."id" = "stageInterview"."studentId"')
       .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
       .leftJoin(Course, 'course', '"course"."id" = "stageInterview"."courseId"')
@@ -42,6 +44,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
         'stageInterviewFeedback',
         '"stageInterview"."id" = "stageInterviewFeedback"."stageInterviewId"',
       )
+      .leftJoin(CourseTask, 'courseTask', '"courseTask"."id" = "stageInterview"."courseTaskId"')
       .leftJoin(Mentor, 'mentor', '"mentor"."id" = "stageInterview"."mentorId"')
       .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
       .where('"user"."githubId" = :githubId', { githubId })
@@ -62,6 +65,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
         isGoodCandidate,
         interviewScore,
         interviewResultJson,
+        maxScore,
       } = data;
       const feedbackTemplate = JSON.parse(interviewResultJson);
       const { score, feedback } = !feedbackVersion
@@ -84,6 +88,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
           name: getFullName(interviewerFirstName, interviewerLastName, interviewerGithubId),
           githubId: interviewerGithubId,
         },
+        maxScore,
       };
     })
     .filter(Boolean);

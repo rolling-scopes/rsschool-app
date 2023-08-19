@@ -134,6 +134,7 @@ export interface StageInterviewDetailedFeedback {
   courseName: string;
   courseFullName: string;
   score: number;
+  maxScore: number;
   date: string;
   version: number;
   interviewer: {
