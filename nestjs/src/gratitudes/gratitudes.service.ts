@@ -58,9 +58,9 @@ export class GratitudesService {
     const heroesQuery = this.dataSource
       .createQueryBuilder()
       .select([
-        '"badges"."githubId"',
-        '"badges"."firstName"',
-        '"badges"."lastName"',
+        '"user"."githubId"',
+        '"user"."firstName"',
+        '"user"."lastName"',
         'sum("badgeCount") as total',
         `jsonb_agg(json_build_object('badgeId', "badgeId", 'badgeCount', "badgeCount")) as badges`,
       ])
@@ -68,17 +68,12 @@ export class GratitudesService {
         const subQuery = qb
           .select([
             '"feedback"."badgeId"',
-            '"toUser"."githubId"',
-            '"toUser"."firstName"',
-            '"toUser"."lastName"',
+            '"feedback"."toUserId"',
             'COUNT(*) as "badgeCount"',
           ])
           .from(Feedback, 'feedback')
-          .leftJoin('feedback.toUser', 'toUser')
           .groupBy('"badgeId"')
-          .addGroupBy('"githubId"')
-          .addGroupBy('"firstName"')
-          .addGroupBy('"lastName"');
+          .addGroupBy('"toUserId"');
 
         if (courseId) {
           [subQuery, countQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
@@ -86,12 +81,13 @@ export class GratitudesService {
 
         return subQuery;
       }, 'badges')
+      .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
       .groupBy('"githubId"')
       .addGroupBy('"firstName"')
       .addGroupBy('"lastName"')
       .orderBy('total', 'DESC')
-      .take(pageSize)
-      .skip((page - 1) * pageSize);
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
 
     const { count } = await countQuery.getRawOne();
     const total = +count;
