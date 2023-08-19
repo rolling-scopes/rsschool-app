@@ -14,7 +14,7 @@ type Props = {
   session: Session;
 };
 
-type HeroesRadarFormProps = {
+export type HeroesRadarFormProps = {
   courseId?: number;
   notActivist?: boolean;
 }
@@ -34,10 +34,9 @@ function Page(props: Props) {
     pagination: { current: initialPage, pageSize: initialPageSize, itemCount: 0, total: 0, totalPages: 0 },
   });
   const [courses, setCourses] = useState<Course[]>([]);
-  const [courseId, setCourseId] = useState<number>();
-  const [notActivist, setNotActivist] = useState<boolean>();
-  const [formLayout, setFormLayout] = useState<LayoutType>('inline');
   const [form] = Form.useForm();
+  const [formData, setFormData] = useState<HeroesRadarFormProps>(form.getFieldsValue());
+  const [formLayout, setFormLayout] = useState<LayoutType>('inline');
   const gratitudeApi = new GratitudesApi();
 
   const getHeroes = async ({
@@ -69,19 +68,17 @@ function Page(props: Props) {
 
   const handleSubmit = useCallback(
     async (formData: HeroesRadarFormProps) => {
-      const data = onlyDefined(formData) as HeroesRadarFormProps;
-      setCourseId(data.courseId);
-      setNotActivist(data.notActivist);
+      const data = onlyDefined(formData);
+      setFormData(data);
       await makeRequest(data);
     },
     [heroes],
   );
 
   const onClear = useCallback(async () => {
-    setCourseId(undefined);
-    setNotActivist(undefined);
-    await getHeroes(initialQueryParams);
     form.resetFields();
+    setFormData(form.getFieldsValue());
+    await getHeroes(initialQueryParams);
   }, [heroes]);
 
   return (
@@ -110,8 +107,7 @@ function Page(props: Props) {
       </Form>
       <HeroesRadarTable
         heroes={heroes}
-        courseId={courseId}
-        notActivist={notActivist}
+        formData={formData}
         getHeroes={getHeroes}
         setLoading={setLoading}
         setFormLayout={setFormLayout}
