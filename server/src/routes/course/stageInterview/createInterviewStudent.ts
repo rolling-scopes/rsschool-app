@@ -18,6 +18,6 @@ export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterC
     const result = await repository.addStudent(courseId, student.id);
     setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
   }
 };

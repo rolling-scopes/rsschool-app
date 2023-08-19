@@ -14,44 +14,56 @@ jobs:
   deploy_build_client:
     name: Build (Client)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Restore next cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-next
-        with:
-          path: client/.next/cache/
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
+      # - name: Restore next cache
+      #   uses: actions/cache@v2
+      #   env:
+      #     cache-name: cache-next
+      #   with:
+      #     path: client/.next/cache/
+      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
+
+      - name: Install turbo
+        run: npm install turbo --global
+
+      - name: Generate a isolated subworkspace for Client
+        run: turbo prune --scope=client --docker
+
+      - name: Add lockfile and package.json's and source of isolated subworkspace
+        run: |
+          mkdir -p app
+          cp -r out/json/. app
+          cp -r out/full/. app
+          cp -r out/package-lock.json app
+          cp -r common app/common
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./app
 
-      - name: Test (npm test)
-        run: npm test
+      - name: Test (npm run test:ci)
+        run: npm run test:ci
+        working-directory: ./app
 
       - name: Build (npm run build)
         env:
@@ -59,9 +71,11 @@ jobs:
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
           CDN_HOST: 'https://cdn.rs.school'
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        working-directory: ./app
         run: npm run build
 
       - name: Clean modules
+        working-directory: ./app
         run: npm prune --production
 
       - name: Upload to CDN
@@ -69,10 +83,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
           AWS_DEFAULT_REGION: eu-central-1
-        run: aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
+        run: aws s3 cp ./app/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master .
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f client/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -87,42 +101,55 @@ jobs:
   deploy_build_server:
     name: Build (Server)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
+
+      - name: Install turbo
+        run: npm install turbo --global
+
+      - name: Generate a isolated subworkspace for Client
+        run: turbo prune --scope=server --docker
+
+      - name: Add lockfile and package.json's and source of isolated subworkspace
+        run: |
+          mkdir -p app
+          cp -r out/json/. app
+          cp -r out/full/. app
+          cp -r out/package-lock.json app
+          cp -r common app/common
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./app
 
       - name: Test (npm test)
         run: npm test
+        working-directory: ./app
 
       - name: Build (npm run build)
         env:
           NODE_ENV: production
         run: npm run build
+        working-directory: ./app
 
       - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master .
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master -f server/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -137,34 +164,42 @@ jobs:
   deploy_build_nestjs:
     name: Build (Nest.js)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./nestjs
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
+
+      - name: Install turbo
+        run: npm install turbo --global
+
+      - name: Generate a isolated subworkspace for Client
+        run: turbo prune --scope=server --scope=nestjs --docker
+
+      - name: Add lockfile and package.json's and source of isolated subworkspace
+        run: |
+          mkdir -p app
+          cp -r out/json/. app
+          cp -r out/full/. app
+          cp -r out/package-lock.json app
+          cp -r common app/common
 
       - name: Install dependencies
-        run: |
-          npm ci
-          cd ../server && npm ci
-          cd ../nestjs
+        run: npm ci
+        working-directory: ./app
 
       # - name: Test (npm test)
       #   run: npm test
@@ -172,10 +207,11 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-        run: npm run build
+        run: npx turbo run build --filter=nestjs
+        working-directory: ./app
 
       - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master .
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master -f nestjs/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1

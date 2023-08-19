@@ -11,6 +11,6 @@ export const cancelInterview = (_: ILogger) => async (ctx: Router.RouterContext)
     const interview = await getRepository(StageInterview).update(interviewId, { isCanceled: true });
     setResponse(ctx, StatusCodes.OK, interview);
   } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
   }
 };

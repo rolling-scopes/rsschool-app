@@ -12,6 +12,7 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'turbo',
   ],
   env: {
     browser: true,
