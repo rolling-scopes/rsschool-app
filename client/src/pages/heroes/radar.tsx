@@ -19,7 +19,7 @@ export type HeroesRadarFormProps = {
   notActivist?: boolean;
 };
 
-export type GetHeroesPros = HeroesRadarFormProps & Partial<IPaginationInfo>;
+export type GetHeroesProps = HeroesRadarFormProps & Partial<IPaginationInfo>;
 
 export type LayoutType = Parameters<typeof Form>[0]['layout'];
 
@@ -44,7 +44,7 @@ function Page(props: Props) {
     pageSize = initialPageSize,
     courseId,
     notActivist,
-  }: GetHeroesPros) => {
+  }: GetHeroesProps) => {
     setLoading(true);
     const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist);
     setHeroes(data);

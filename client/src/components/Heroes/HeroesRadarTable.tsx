@@ -6,7 +6,7 @@ import Link from 'next/link';
 import HeroesCountBadge from './HeroesCountBadge';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { useState, useEffect } from 'react';
-import { GetHeroesPros, HeroesRadarFormProps, LayoutType } from 'pages/heroes/radar';
+import { GetHeroesProps, HeroesRadarFormProps, LayoutType } from 'pages/heroes/radar';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
 import heroesBadges from 'configs/heroes-badges';
 
@@ -18,7 +18,7 @@ interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;
   formData: HeroesRadarFormProps;
   setLoading: (loading: boolean) => void;
-  getHeroes: (args: GetHeroesPros) => Promise<void>;
+  getHeroes: (args: GetHeroesProps) => Promise<void>;
   setFormLayout: (layout: LayoutType) => void;
 }
 
@@ -116,10 +116,10 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
 
   const dataSource = heroes?.content?.length
     ? heroes.content.map((hero: HeroRadarDto, i) => {
-        const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
+      const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
 
-        return { ...hero, rank };
-      })
+      return { ...hero, rank };
+    })
     : [];
 
   const handleChange: TableProps<HeroRadarRanked>['onChange'] = async ({ current, pageSize }) => {
