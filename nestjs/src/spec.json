@@ -1998,6 +1998,7 @@
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
         ],

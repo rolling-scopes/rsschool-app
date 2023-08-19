@@ -11305,10 +11305,11 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getHeroesRadar', 'current', current)
             // verify required parameter 'pageSize' is not null or undefined
@@ -11327,6 +11328,10 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
 
             if (courseId !== undefined) {
                 localVarQueryParameter['courseId'] = courseId;
+            }
+
+            if (notActivist !== undefined) {
+                localVarQueryParameter['notActivist'] = notActivist;
             }
 
             if (current !== undefined) {
@@ -11383,11 +11388,12 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHeroesRadar(current: number, pageSize: number, courseId?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, options);
+        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -11423,11 +11429,12 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar(current: number, pageSize: number, courseId?: number, options?: any): AxiosPromise<HeroesRadarDto> {
-            return localVarFp.getHeroesRadar(current, pageSize, courseId, options).then((request) => request(axios, basePath));
+        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: any): AxiosPromise<HeroesRadarDto> {
+            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -11466,12 +11473,13 @@ export class GratitudesApi extends BaseAPI {
      * @param {number} current 
      * @param {number} pageSize 
      * @param {number} [courseId] 
+     * @param {boolean} [notActivist] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GratitudesApi
      */
-    public getHeroesRadar(current: number, pageSize: number, courseId?: number, options?: AxiosRequestConfig) {
-        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, options).then((request) => request(this.axios, this.basePath));
+    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
