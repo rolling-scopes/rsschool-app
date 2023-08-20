@@ -443,16 +443,17 @@ export class CourseService {
     return result.data.data;
   }
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async getInterviewerStageInterviews(githubId: string) {
     const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
     return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
-  async postStageInterviews(stageId: number) {
-    const result = await this.axios.post(`/stage/${stageId}/interviews`);
-    return result.data.data;
-  }
-
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async postStageInterviewFeedback(
     interviewId: number,
     data: { json: unknown; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
@@ -461,13 +462,12 @@ export class CourseService {
     return result.data.data;
   }
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async getStageInterviewFeedback(interviewId: number) {
     const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
-    return result.data.data;
-  }
 
-  async getStageInterviewsByStudent(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data;
   }
 

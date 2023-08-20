@@ -28,6 +28,9 @@ export class StageInterviewFeedbackRepository extends AbstractRepository<StageIn
       .getOne();
   }
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   public async create(
     stageInterviewId: number,
     data: { json: any; decision: string | null; isGoodCandidate: boolean | null; isCompleted: boolean },

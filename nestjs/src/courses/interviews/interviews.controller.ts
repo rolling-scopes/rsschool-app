@@ -1,14 +1,18 @@
 import {
   BadRequestException,
+  Body,
   CacheInterceptor,
   CacheTTL,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
   ParseArrayPipe,
   ParseIntPipe,
+  Post,
   Query,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -21,18 +25,24 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
 import { InterviewsService } from './interviews.service';
 import { TaskType } from '@entities/task';
+import { InterviewFeedbackService } from './interviewFeedback.service';
+import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
+import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
 @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
 export class InterviewsController {
-  constructor(private courseTasksService: InterviewsService) {}
+  constructor(
+    private courseTasksService: InterviewsService,
+    private interviewFeedbackService: InterviewFeedbackService,
+  ) {}
 
   @Get()
   @CacheTTL(DEFAULT_CACHE_TTL)
@@ -95,5 +105,60 @@ export class InterviewsController {
     }
 
     throw new BadRequestException('Invalid interview id');
+  }
+
+  // use `type` as a way to differentiate between stage-interview and interview.
+  @Get('/:interviewId/:type/feedback')
+  @ApiOkResponse({ type: InterviewFeedbackDto })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getInterviewFeedback' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  public async getInterviewFeedback(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('interviewId', ParseIntPipe) interviewId: number,
+    @Param('type') type: 'stage-interview' | 'interview',
+    @Req() req: CurrentRequest,
+  ) {
+    const { user } = req;
+
+    if (type !== 'stage-interview') {
+      throw new BadRequestException('Only stage interviews are supported now.');
+    }
+
+    const interview = await this.interviewFeedbackService.getStageInterviewFeedback(interviewId, user.githubId);
+
+    return new InterviewFeedbackDto(interview);
+  }
+
+  @Post('/:interviewId/:type/feedback')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'createInterviewFeedback' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  public async createInterviewFeedback(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('interviewId', ParseIntPipe) interviewId: number,
+    @Param('type') type: 'stage-interview' | 'interview',
+    @Body() dto: PutInterviewFeedbackDto,
+    @Req() req: CurrentRequest,
+  ) {
+    const { user } = req;
+
+    const interviewerId = user.courses[courseId]?.mentorId;
+    if (!interviewerId) {
+      throw new ForbiddenException(`You are not a mentor of course ${courseId}`);
+    }
+
+    if (type !== 'stage-interview') {
+      throw new BadRequestException('Only stage interviews are supported now.');
+    }
+
+    await this.interviewFeedbackService.upsertInterviewFeedback({
+      interviewId,
+      dto,
+      interviewerId,
+    });
   }
 }
