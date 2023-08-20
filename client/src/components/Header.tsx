@@ -114,7 +114,6 @@ export function Header({ title, showCourseName }: Props) {
             align-self: center;
           }
           @media all and (max-width: 768px) {
-
             .title {
               width: 100%;
               order: 3;
