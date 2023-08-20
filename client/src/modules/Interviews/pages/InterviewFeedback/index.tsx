@@ -21,7 +21,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: P
   const courseId = course.id;
   const session = useContext(SessionContext);
 
-  const template = templates[type as keyof typeof templates];
+  const template = templates[type];
 
   const [form] = Form.useForm();
 
