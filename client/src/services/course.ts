@@ -18,6 +18,8 @@ import {
   CrossCheckCriteriaDataDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
+import { Decision } from 'data/interviews/technical-screening';
+import { InterviewStatus } from 'domain/interview';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -697,7 +699,8 @@ export type MentorInterview = {
   endDate: string;
   completed: boolean;
   interviewer: unknown;
-  status: number;
+  status: InterviewStatus;
   student: UserBasic;
+  decision?: Decision;
   id: number;
 };

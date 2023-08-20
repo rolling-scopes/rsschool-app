@@ -47,18 +47,18 @@ export function getDefaultStep(feedback: Feedback) {
   for (let i = 0; i < feedback.steps.length; i++) {
     const { isCompleted, id, values } = feedback.steps[i];
 
-    if (!isCompleted || isInterviewRejected(id, values)) {
+    if (!isCompleted || isInterviewCanceled(id, values) || i === feedback.steps.length - 1) {
       return i;
     }
   }
 
-  return feedback.isCompleted ? feedback.steps.length - 1 : 0;
+  return 0;
 }
 
 /**
  * checks whether the step contains rejection value
  */
-export function isInterviewRejected(stepId: FeedbackStepId, stepValues: InterviewFeedbackValues = {}) {
+export function isInterviewCanceled(stepId: FeedbackStepId, stepValues: InterviewFeedbackValues = {}) {
   return stepId === FeedbackStepId.Introduction && stepValues.interviewResult === 'missed';
 }
 
@@ -125,10 +125,10 @@ export function getUpdatedFeedback({
   interviewMaxScore: number;
 }) {
   const { steps } = feedback;
-  const isRejected = isInterviewRejected(steps[activeStepIndex].id, newValues);
+  const isCanceled = isInterviewCanceled(steps[activeStepIndex].id, newValues);
 
   const feedbackValues = {
-    steps: generateFeedbackValues(steps, activeStepIndex, newValues, isRejected),
+    steps: generateFeedbackValues(steps, activeStepIndex, newValues, isCanceled),
   };
   const newFeedback = mergeFeedbackValuesToTemplate(feedback, feedbackValues, interviewMaxScore);
 
@@ -144,7 +144,7 @@ function generateFeedbackValues(
   steps: FeedbackStep[],
   activeStepIndex: number,
   newValues: InterviewFeedbackValues,
-  isRejected: boolean,
+  isCanceled: boolean,
 ): Record<FeedbackStepId, InterviewFeedbackStepData> {
   return steps.reduce((stepMap, step, index) => {
     if (index === activeStepIndex) {
@@ -155,10 +155,10 @@ function generateFeedbackValues(
       return stepMap;
     }
 
-    // if is rejected, all steps after the current one should be marked as not completed and values should be removed
+    // if is canceled, all steps after the current one should be marked as not completed and values should be removed
     stepMap[step.id] = {
-      values: isRejected ? undefined : step.values,
-      isCompleted: isRejected ? false : step.isCompleted,
+      values: isCanceled ? undefined : step.values,
+      isCompleted: isCanceled ? false : step.isCompleted,
     };
     return stepMap;
   }, {} as Record<FeedbackStepId, InterviewFeedbackStepData>);
@@ -171,7 +171,7 @@ function getInterviewSummary(feedback: Feedback) {
   const { steps } = feedback;
   const decision = steps.find(step => step.id === FeedbackStepId.Decision);
   const introduction = steps.find(step => step.id === FeedbackStepId.Introduction);
-  const isInterviewConducted = !isInterviewRejected(FeedbackStepId.Introduction, introduction?.values);
+  const isInterviewConducted = !isInterviewCanceled(FeedbackStepId.Introduction, introduction?.values);
 
   return {
     score: isInterviewConducted ? (decision?.values?.finalScore as number) : 0,
@@ -180,6 +180,9 @@ function getInterviewSummary(feedback: Feedback) {
   };
 
   function getIsGoodCandidate() {
+    if (!isInterviewConducted) {
+      return false;
+    }
     if (decision?.values?.isGoodCandidate == undefined) {
       return;
     }
@@ -203,7 +206,7 @@ function isInterviewCompleted(feedback: Feedback) {
   const decision = feedback.steps.find(step => step.id === FeedbackStepId.Decision);
 
   return (
-    (introduction && isInterviewRejected(introduction.id, introduction.values)) ||
+    (introduction && isInterviewCanceled(introduction.id, introduction.values)) ||
     (steps.every(step => step.isCompleted) && decision?.values?.decision !== Decision.Draft)
   );
 }
