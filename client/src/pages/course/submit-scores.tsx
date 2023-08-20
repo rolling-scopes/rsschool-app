@@ -10,12 +10,11 @@ import isUndefined from 'lodash/isUndefined';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps, CourseRole } from 'services/models';
+import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { SessionAndCourseProvider } from 'modules/Course/contexts';
-import { ScorePage } from 'modules/Score/pages/ScorePage';
 
 interface SubmitResult {
   status: string;
