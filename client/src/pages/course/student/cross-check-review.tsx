@@ -24,6 +24,7 @@ import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -225,12 +226,7 @@ function Page(props: CoursePageProps) {
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Cross-Check Review"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Cross-Check Review" showCourseName={true}>
       {contextHolder}
       <Row gutter={24}>
         <Col {...colSizes}>
@@ -299,4 +295,12 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Student }));
+function PageWithSession(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourseData(withSession(PageWithSession, { requiredCourseRole: CourseRole.Student }));

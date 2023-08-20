@@ -1,19 +1,21 @@
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
+import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { withSession } from 'components/withSession';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
-import withCourseData from 'components/withCourseData';
 import csv from 'csvtojson';
 import isUndefined from 'lodash/isUndefined';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CoursePageProps, CourseRole } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { ScorePage } from 'modules/Score/pages/ScorePage';
 
 interface SubmitResult {
   status: string;
@@ -23,7 +25,7 @@ interface SubmitResult {
 
 const courseTasksApi = new CoursesTasksApi();
 
-export function Page(props: CoursePageProps) {
+function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseId = props.course.id;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -85,12 +87,7 @@ export function Page(props: CoursePageProps) {
   const skippedStudents = skipped && skipped.messages ? skipped.messages : [];
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Submit Scores"
-      courseName={props.course.name}
-      githubId={props.session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title="Submit Scores" showCourseName={true}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
         <h3>Uploading rules</h3>
@@ -242,4 +239,14 @@ async function uploadResults(
   return submitResults;
 }
 
-export default withCourseData(withSession(Page));
+export { getServerSideProps };
+
+function PageWithSession(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithSession);

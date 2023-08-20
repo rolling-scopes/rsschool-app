@@ -6,6 +6,7 @@ import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { Session, withSession } from 'components/withSession';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 import { MentorEndorsement } from 'modules/Mentor/components/MentorEndorsement';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState } from 'react';
@@ -48,7 +49,7 @@ function getItems(mentor: MentorDetailsDto, session: Session): MenuProps['items'
   ].filter(Boolean) as MenuProps['items'];
 }
 
-function Page(props: CoursePageProps) {
+function CourseMentorsPage(props: CoursePageProps) {
   const courseId = props.course.id;
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null as Stats | null);
@@ -160,13 +161,7 @@ function Page(props: CoursePageProps) {
   const exportToCsv = () => (window.location.href = `/api/v2/course/${courseId}/mentors/details/csv`);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Course Mentors"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Course Mentors" showCourseName courses={[props.course]}>
       <div style={{ display: 'flex' }}>
         <div
           style={{
@@ -315,6 +310,14 @@ function Page(props: CoursePageProps) {
       />
       {contextHolder}
     </AdminPageLayout>
+  );
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseMentorsPage {...props} />
+    </SessionAndCourseProvider>
   );
 }
 

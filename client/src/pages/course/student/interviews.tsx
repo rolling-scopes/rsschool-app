@@ -9,8 +9,8 @@ import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
-import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
-import { Decision } from 'data/interviews/technical-screening';
+import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -88,13 +88,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Interviews"
-      background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Interviews" background="#F0F2F5">
       <Row gutter={24} style={{ minHeight: '85vh' }}>
         {interviews.map(interview => {
           const items = data.filter(d => d.name === interview.name);
@@ -155,4 +149,12 @@ function StatusLabel({ status }: { status: InterviewStatus }) {
   }
 }
 
-export default withCourseData(withSession(Page));
+function PageWithSession(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourseData(withSession(PageWithSession));

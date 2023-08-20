@@ -1,9 +1,24 @@
 import { NextPageContext } from 'next';
-import { withSession } from 'components/withSession';
+import { Session, withSession } from 'components/withSession';
 import { StudentRegistry } from 'modules/Registry/pages';
 import { withGoogleMaps } from 'components/withGoogleMaps';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
-const StudentRegistryPage: any = withGoogleMaps(withSession(StudentRegistry));
+type Props = {
+  session: Session;
+  courseAlias?: string;
+};
+
+function Page(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <StudentRegistry {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+const StudentRegistryPage: any = withGoogleMaps(withSession(Page));
+
 StudentRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;

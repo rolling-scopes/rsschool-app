@@ -67,7 +67,7 @@ export function HomePage(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
-      <Header username={props.session.githubId} />
+      <Header session={props.session} activeCourse={activeCourse} />
       <Layout style={{ background: '#fff' }}>
         {isPowerUser && <AdminSider session={props.session} courses={courses} activeCourse={activeCourse} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>

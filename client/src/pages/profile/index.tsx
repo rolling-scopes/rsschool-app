@@ -22,6 +22,7 @@ import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 type Props = {
   router: NextRouter;
@@ -247,7 +248,7 @@ export class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
-          <Header username={this.props.session.githubId} />
+          <Header />
           <Spin spinning={this.state.isSaving} delay={200}>
             {this.state.profile ? (
               <div style={{ padding: 10 }}>
@@ -297,4 +298,12 @@ const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boole
   return githubId === requestedGithubId;
 };
 
-export default withGoogleMaps(withRouter(withSession(ProfilePage)));
+function Page() {
+  return (
+    <SessionAndCourseProvider>
+      <ProfilePage />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withGoogleMaps(withRouter(withSession(Page)));

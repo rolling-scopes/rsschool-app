@@ -18,6 +18,7 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
       return noAccessResponse;
     }
     const courses = await new UserService(token).getCourses();
+
     return {
       props: { courses },
     };

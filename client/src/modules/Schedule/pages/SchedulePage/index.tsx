@@ -10,7 +10,7 @@ import {
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { PageProps } from 'modules/Course/data/getCourseProps';
 import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
@@ -29,7 +29,7 @@ const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
 const courseTaskApi = new CoursesTasksApi();
 
 export function SchedulePage(props: PageProps) {
-  const session = useContext(SessionContext);
+  const { session } = useContext(SessionAndCourseContext);
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
@@ -82,15 +82,13 @@ export function SchedulePage(props: PageProps) {
 
   return (
     <>
-      <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
+      <PageLayout loading={loading} error={error} title="Schedule">
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
             onCreateCourseEvent={handleCreateCourseEvent}
             onCopyFromCourse={() => setCopyModal({})}
             isCourseManager={isManager}
-            courseId={props.course.id}
-            courseAlias={props.course.alias}
             settings={settings}
             calendarToken={cipher}
             tags={eventTags}

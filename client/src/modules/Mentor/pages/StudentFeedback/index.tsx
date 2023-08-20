@@ -8,7 +8,7 @@ import {
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { getMentorId } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
@@ -34,8 +34,7 @@ const englishLevels = [
 ];
 
 export function StudentFeedback({ course }: CourseOnlyPageProps) {
-  const session = useContext(SessionContext);
-  const { githubId } = session;
+  const { session } = useContext(SessionAndCourseContext);
   const { id: courseId, alias } = course;
   const mentorId = getMentorId(session, courseId);
 
@@ -75,7 +74,7 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
   };
 
   return (
-    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading} githubId={githubId}>
+    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading}>
       <Alert
         showIcon
         type="info"

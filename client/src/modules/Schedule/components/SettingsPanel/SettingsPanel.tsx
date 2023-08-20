@@ -15,8 +15,6 @@ import { buildMenuItem } from './helpers';
 
 export interface SettingsPanelProps {
   isCourseManager: boolean;
-  courseId: number;
-  courseAlias: string;
   settings: ScheduleSettings;
   calendarToken: string;
   tags: CourseScheduleItemDtoTagEnum[];
@@ -41,8 +39,6 @@ export function SettingsPanel({
   onCreateCourseTask,
   onCreateCourseEvent,
   onCopyFromCourse,
-  courseId,
-  courseAlias,
   settings,
   calendarToken,
   tags,
@@ -82,10 +78,8 @@ export function SettingsPanel({
           <Col>
             <AdditionalActions
               menuItems={additionalMenuItems}
-              courseId={courseId}
               timezone={settings.timezone}
               calendarToken={calendarToken}
-              courseAlias={courseAlias}
               onCopyFromCourse={onCopyFromCourse}
             />
           </Col>

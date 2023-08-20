@@ -169,12 +169,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   const newCrossCheck = criteria.length > 0;
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Cross-Check Submit"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Cross-Check Submit" showCourseName>
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">

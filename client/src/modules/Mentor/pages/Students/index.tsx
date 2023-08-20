@@ -10,7 +10,7 @@ import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { getMentorId } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
 import { useContext } from 'react';
@@ -18,7 +18,7 @@ import type { CourseOnlyPageProps } from 'services/models';
 import * as routes from 'services/routes';
 
 export function Students(props: CourseOnlyPageProps) {
-  const session = useContext(SessionContext);
+  const { session } = useContext(SessionAndCourseContext);
   const { githubId } = session;
   const { id: courseId, alias, completed } = props.course;
   const mentorId = getMentorId(session, courseId);
@@ -26,7 +26,7 @@ export function Students(props: CourseOnlyPageProps) {
   const [students, loading] = useMentorStudents(mentorId);
 
   return (
-    <PageLayoutSimple title="Your students" loading={loading} githubId={githubId}>
+    <PageLayoutSimple title="Your students" loading={loading}>
       {students?.length ? (
         students.map(student => {
           const [feedback] = student.feedbacks;

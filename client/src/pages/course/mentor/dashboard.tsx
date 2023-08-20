@@ -1,6 +1,6 @@
 import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 import { MentorDashboard } from 'modules/Mentor/components';
 import { GetServerSideProps } from 'next';
 import { MentorsApi, ProfileCourseDto } from 'api';
@@ -57,9 +57,9 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
 
 function Page(props: MentorDashboardProps) {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+    <SessionAndCourseProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
       <MentorDashboard {...props} />
-    </SessionProvider>
+    </SessionAndCourseProvider>
   );
 }
 

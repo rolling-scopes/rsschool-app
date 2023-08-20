@@ -4,15 +4,12 @@ import { Alert, Button, Form, Input, message, Select } from 'antd';
 import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import withSession, { Session } from 'components/withSession';
+import withSession from 'components/withSession';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
-
-type Props = {
-  session: Session;
-};
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 interface IGratitude {
   userIds: number[];
@@ -25,7 +22,7 @@ const gratitudesApi = new GratitudesApi();
 const userService = new UserService();
 const coursesService = new CoursesService();
 
-function Page(props: Props) {
+function GratitudePage() {
   const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -67,7 +64,7 @@ function Page(props: Props) {
   };
 
   return (
-    <PageLayoutSimple loading={loading} title="#gratitude" githubId={props.session.githubId}>
+    <PageLayoutSimple loading={loading} title="#gratitude">
       <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
@@ -139,6 +136,14 @@ function Page(props: Props) {
         </Button>
       </Form>
     </PageLayoutSimple>
+  );
+}
+
+function Page() {
+  return (
+    <SessionAndCourseProvider>
+      <GratitudePage />
+    </SessionAndCourseProvider>
   );
 }
 

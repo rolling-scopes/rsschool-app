@@ -10,8 +10,9 @@ import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
-function Page(props: CoursePageProps) {
+function CourseStageInterviewPage(props: CoursePageProps) {
   const { session, course } = props;
   const courseId = course.id;
 
@@ -38,13 +39,7 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Technical Screening"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={[props.course]}>
       <Row style={{ marginBottom: 16 }} justify="space-between">
         {courseManagerRole ? (
           <div>
@@ -134,6 +129,14 @@ function Page(props: CoursePageProps) {
         courseId={props.course.id}
       />
     </AdminPageLayout>
+  );
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseStageInterviewPage {...props} />
+    </SessionAndCourseProvider>
   );
 }
 

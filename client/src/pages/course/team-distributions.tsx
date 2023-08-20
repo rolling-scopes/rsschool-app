@@ -1,16 +1,16 @@
 import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import withSession from 'components/withSession';
-import { SessionProvider } from 'modules/Course/contexts';
 import { TeamDistributions } from 'modules/TeamDistribution/pages/TeamDistributions';
-import { CoursePageProps } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { TeamsPageProps } from './teams';
 
 export { getServerSideProps };
 
-function Page(props: CoursePageProps) {
+function Page(props: TeamsPageProps) {
   return (
-    <SessionProvider course={props.course}>
+    <SessionAndCourseProvider course={props.course}>
       <TeamDistributions {...props} />
-    </SessionProvider>
+    </SessionAndCourseProvider>
   );
 }
 

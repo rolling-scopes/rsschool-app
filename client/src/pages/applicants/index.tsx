@@ -20,7 +20,7 @@ function Page(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [applicants, setApplicants] = useState<ApplicantResumeDto[] | null>(null);
 
-  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
+  const { isAdmin, isHirer } = props.session;
 
   const hasPriorityRole = isAdmin || isHirer;
 
@@ -114,7 +114,7 @@ function Page(props: Props) {
   if (!hasPriorityRole)
     return (
       <>
-        <Header username={userGithubId} />
+        <Header />
         <Result status="403" title="Sorry, but you don't have access to this page" />
       </>
     );
@@ -127,7 +127,7 @@ function Page(props: Props) {
 
   return (
     <>
-      <Header username={userGithubId} />
+      <Header />
       <LoadingScreen show={loading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>

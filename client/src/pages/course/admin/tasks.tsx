@@ -8,6 +8,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -16,7 +17,7 @@ import { CoursePageProps } from 'services/models';
 
 const courseTasksApi = new CoursesTasksApi();
 
-function Page(props: CoursePageProps) {
+function CourseTasksPage(props: CoursePageProps) {
   const courseId = props.course.id;
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -176,7 +177,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
+    <AdminPageLayout loading={loading} courses={[props.course]} showCourseName>
       <Button type="primary" onClick={handleAddItem}>
         Add Task
       </Button>
@@ -248,6 +249,14 @@ function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsTyp
       },
     },
   ];
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseTasksPage {...props} />
+    </SessionAndCourseProvider>
+  );
 }
 
 export default withCourseData(withSession(Page));

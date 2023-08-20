@@ -1,16 +1,16 @@
-import { SessionProvider } from 'modules/Course/contexts';
 import { getCourseProps, noAccessResponse } from 'modules/Course/data/getCourseProps';
 import { AutoTestTaskProps, Task } from 'modules/AutoTest/pages';
 import { GetServerSideProps } from 'next';
 import { CoursesTasksApi } from 'api';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 function Page(props: AutoTestTaskProps) {
   return (
-    <SessionProvider course={props.course}>
+    <SessionAndCourseProvider course={props.course}>
       <Task {...props} />
-    </SessionProvider>
+    </SessionAndCourseProvider>
   );
 }
 
@@ -42,4 +42,12 @@ export const getServerSideProps: GetServerSideProps<AutoTestTaskProps> = async c
   }
 };
 
-export default Page;
+function PageWithSession(props: AutoTestTaskProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default PageWithSession;

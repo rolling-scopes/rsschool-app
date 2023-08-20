@@ -7,9 +7,6 @@ import groupBy from 'lodash/groupBy';
 import omitBy from 'lodash/omitBy';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PageLayout } from 'components/PageLayout';
-
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
 import { CourseService, StudentSummary } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
@@ -33,6 +30,9 @@ import {
   AvailableReviewStatsDto,
   CourseScheduleItemDtoTypeEnum,
 } from 'api';
+import withCourseData from 'components/withCourseData';
+import withSession from 'components/withSession';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();
@@ -145,13 +145,7 @@ function Page(props: CoursePageProps) {
   ].filter(Boolean) as JSX.Element[];
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Student dashboard"
-      background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Student dashboard" background="#F0F2F5" showCourseName={true}>
       <LoadingScreen show={loading}>
         {studentSummary ? (
           <>
@@ -197,4 +191,12 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
   }
 `;
 
-export default withCourseData(withSession(Page));
+function PageWithSession(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourseData(withSession(PageWithSession));

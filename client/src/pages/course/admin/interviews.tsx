@@ -11,8 +11,9 @@ import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 import { InterviewPair } from 'common/models/interview';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
-function Page(props: CoursePageProps) {
+function CourseInterviewPage(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
@@ -47,13 +48,7 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Interviews"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={[props.course]}>
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
           {interviews.map(interview => (
@@ -129,6 +124,14 @@ function Page(props: CoursePageProps) {
         courseId={props.course.id}
       />
     </AdminPageLayout>
+  );
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseInterviewPage {...props} />
+    </SessionAndCourseProvider>
   );
 }
 
