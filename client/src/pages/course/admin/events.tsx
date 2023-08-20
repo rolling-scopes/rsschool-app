@@ -15,7 +15,7 @@ import { EventDto, EventsApi } from 'api';
 
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -159,9 +159,9 @@ function getColumns(
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <CourseEventPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

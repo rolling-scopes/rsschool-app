@@ -67,9 +67,9 @@ export function HomePage(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
-      <Header session={props.session} activeCourse={activeCourse} />
+      <Header />
       <Layout style={{ background: '#fff' }}>
-        {isPowerUser && <AdminSider session={props.session} courses={courses} activeCourse={activeCourse} />}
+        {isPowerUser && <AdminSider courses={courses} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
           {!activeCourse && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
 

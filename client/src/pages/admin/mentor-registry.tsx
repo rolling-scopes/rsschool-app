@@ -21,7 +21,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -273,9 +273,9 @@ export { getServerSideProps };
 
 function PageWithContext() {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <Page />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

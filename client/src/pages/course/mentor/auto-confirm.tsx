@@ -9,7 +9,7 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { CourseDto as Course } from 'api';
 import { CoursePageProps } from 'services/models';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 const mentorRegistry = new MentorRegistryService();
 
@@ -106,9 +106,9 @@ const SuccessComponent = () => {
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <MentorAutoConfirmPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

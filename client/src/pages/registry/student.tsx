@@ -2,7 +2,7 @@ import { NextPageContext } from 'next';
 import { Session, withSession } from 'components/withSession';
 import { StudentRegistry } from 'modules/Registry/pages';
 import { withGoogleMaps } from 'components/withGoogleMaps';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 type Props = {
   session: Session;
@@ -11,9 +11,9 @@ type Props = {
 
 function Page(props: Props) {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <StudentRegistry {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

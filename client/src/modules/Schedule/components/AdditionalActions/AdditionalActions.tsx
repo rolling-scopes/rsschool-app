@@ -5,7 +5,7 @@ import React, { useContext } from 'react';
 import { buildExportLink, buildICalendarLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';
-import { SessionAndCourseContext } from 'modules/Course/contexts';
+import { DefaultPageContext } from 'modules/Course/contexts';
 
 export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
@@ -19,7 +19,7 @@ export interface AdditionalActionsProps {
 
 const AdditionalActions = ({ menuItems, timezone, calendarToken, onCopyFromCourse }: AdditionalActionsProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
-  const { activeCourse } = useContext(SessionAndCourseContext);
+  const { activeCourse } = useContext(DefaultPageContext);
 
   if (!activeCourse) return null;
 

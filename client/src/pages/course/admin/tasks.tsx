@@ -8,7 +8,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { withSession } from 'components/withSession';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -253,9 +253,9 @@ function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsTyp
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <CourseTasksPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

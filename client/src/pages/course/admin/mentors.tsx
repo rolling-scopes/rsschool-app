@@ -6,7 +6,7 @@ import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { Session, withSession } from 'components/withSession';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { MentorEndorsement } from 'modules/Mentor/components/MentorEndorsement';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState } from 'react';
@@ -315,9 +315,9 @@ function CourseMentorsPage(props: CoursePageProps) {
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <CourseMentorsPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

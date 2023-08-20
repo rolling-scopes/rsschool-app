@@ -14,7 +14,7 @@ import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 interface SubmitResult {
   status: string;
@@ -242,9 +242,9 @@ export { getServerSideProps };
 
 function PageWithSession(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <Page {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

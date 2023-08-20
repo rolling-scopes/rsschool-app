@@ -12,7 +12,7 @@ import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { TYPES } from './../../configs/registry';
 import { Location } from 'common/models/profile';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
@@ -181,9 +181,9 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
 
 function PageWithSession() {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <Page />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

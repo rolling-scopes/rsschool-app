@@ -11,7 +11,7 @@ type Props = { session: Session; courses: ProfileCourseDto[] };
 
 const disciplinesApi = new DisciplinesApi();
 
-export const DisciplinePage = ({ session, courses }: Props) => {
+export const DisciplinePage = ({ courses }: Props) => {
   const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
   const [discipline, setDiscipline] = useState<DisciplineDto | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export const DisciplinePage = ({ session, courses }: Props) => {
   useAsync(loadDisciplines, []);
 
   return (
-    <AdminPageLayout session={session} title="Manage Disciplines" loading={loading} courses={courses}>
+    <AdminPageLayout title="Manage Disciplines" loading={loading} courses={courses}>
       <Layout.Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleModalShow} style={{ marginBottom: '25px' }}>
           Add Disciplines

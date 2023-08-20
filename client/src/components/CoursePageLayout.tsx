@@ -2,12 +2,12 @@ import { Layout, Spin } from 'antd';
 import { useContext } from 'react';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from './Header';
-import { SessionAndCourseContext } from 'modules/Course/contexts';
+import { DefaultPageContext } from 'modules/Course/contexts';
 
 type Props = { loading: boolean; title?: string; children?: any };
 
 export function CoursePageLayout(props: Props) {
-  const { activeCourse } = useContext(SessionAndCourseContext);
+  const { activeCourse } = useContext(DefaultPageContext);
 
   if (activeCourse == null) {
     return <CourseNoAccess />;

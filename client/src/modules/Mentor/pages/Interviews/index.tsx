@@ -33,7 +33,7 @@ export function Interviews(props: CoursePageProps) {
   useAsync(withLoading(loadData), []);
 
   return (
-    <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={course.name}>
+    <PageLayout loading={loading} title="Interviews" showCourseName={true}>
       <MentorOptionsProvider course={course} session={props.session}>
         <div className="container">
           {interviews.map(interviewTask => (
