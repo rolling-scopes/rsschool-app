@@ -88,7 +88,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               </div>
               <div style={{ marginBottom: 30 }}>
                 {Object.keys(badgesCount).map(badgeId => (
-                  <HeroesCountBadge badge={{ badgeId, badgeCount: badgesCount[badgeId] }} />
+                  <HeroesCountBadge key={`badge-${badgeId}`} badge={{ badgeId, badgeCount: badgesCount[badgeId] }} />
                 ))}
               </div>
               <div style={{ marginBottom: 0 }}>
