@@ -8,7 +8,12 @@ import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useAsync } from 'react-use';
 
-export const SessionContext = React.createContext<Session>({} as Session);
+type SessionAndCourse = {
+  session: Session;
+  activeCourse?: ProfileCourseDto;
+};
+
+export const SessionAndCourseContext = React.createContext<SessionAndCourse>({} as SessionAndCourse);
 
 let sessionCache: Session | undefined;
 
@@ -18,7 +23,7 @@ type Props = React.PropsWithChildren<{
   adminOnly?: boolean;
 }>;
 
-export function SessionProvider(props: Props) {
+export function SessionAndCourseProvider(props: Props) {
   const { allowedRoles } = props;
 
   const {
@@ -79,7 +84,11 @@ export function SessionProvider(props: Props) {
     }
   }
   if (session) {
-    return <SessionContext.Provider value={session}>{props.children}</SessionContext.Provider>;
+    return (
+      <SessionAndCourseContext.Provider value={{ session, activeCourse: props.course }}>
+        {props.children}
+      </SessionAndCourseContext.Provider>
+    );
   }
   return <LoadingScreen show={loading} />;
 }

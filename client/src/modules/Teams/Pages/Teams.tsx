@@ -140,8 +140,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       loading={loadingDistribution || loading}
       title="RS Teams"
       background="#F0F2F5"
-      githubId={session.githubId}
-      courseName={course.name}
+      showCourseName={true}
       withMargin={false}
     >
       {openTeamModal && (

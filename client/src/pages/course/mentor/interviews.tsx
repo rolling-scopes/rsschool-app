@@ -1,5 +1,15 @@
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 import { Interviews } from 'modules/Mentor/pages/Interviews';
+import { CoursePageProps, CourseRole } from 'services/models';
 
-export default withCourseData(withSession(Interviews));
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+      <Interviews {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourseData(withSession(Page));

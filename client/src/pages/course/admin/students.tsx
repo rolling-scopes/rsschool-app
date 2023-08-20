@@ -21,6 +21,7 @@ import { useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Text } = Typography;
 
@@ -38,7 +39,7 @@ type ExpelCriteria = {
 };
 type Props = CoursePageProps;
 
-function Page(props: Props) {
+function CourseStudentsPage(props: Props) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
@@ -115,7 +116,7 @@ function Page(props: Props) {
 
   function render() {
     return (
-      <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
+      <AdminPageLayout loading={loading} courses={[props.course]}>
         <Statistic
           title="Active Students"
           value={stats?.activeStudentsCount ?? 0}
@@ -296,6 +297,14 @@ function calculateStats(students: StudentDetails[]) {
       totalCount: countries[k].totalCount,
     })),
   };
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseStudentsPage {...props} />
+    </SessionAndCourseProvider>
+  );
 }
 
 export default withCourseData(withSession(Page));

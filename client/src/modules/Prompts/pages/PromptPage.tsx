@@ -2,7 +2,7 @@ import { Button, Layout, message } from 'antd';
 import { PromptDto, PromptsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { useModalForm } from 'hooks';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { useCallback, useContext, useState } from 'react';
 import { useAsync } from 'react-use';
 import { PromptModal } from '../components/PromptModal';
@@ -11,7 +11,7 @@ import { PromptTable } from '../components/PromptTable';
 const api = new PromptsApi();
 
 export const PromptsPage = () => {
-  const session = useContext(SessionContext);
+  const session = useContext(SessionAndCourseContext);
   const [prompts, setPrompts] = useState([] as PromptDto[]);
   const { open, formData, toggle } = useModalForm<PromptDto>();
 
@@ -41,7 +41,7 @@ export const PromptsPage = () => {
   useAsync(loadDisciplines, []);
 
   return (
-    <AdminPageLayout session={session} title="Manage Prompts" loading={loading} courses={[]}>
+    <AdminPageLayout title="Manage Prompts" loading={loading} courses={[]}>
       <Layout.Content style={{ margin: 8 }}>
         <Button type="primary" onClick={() => toggle()} style={{ marginBottom: '25px' }}>
           Add Prompt

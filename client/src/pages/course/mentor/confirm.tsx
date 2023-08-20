@@ -10,11 +10,14 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { CoursePageProps } from 'services/models';
 
 const { Link } = Typography;
 
 const mentorRegistry = new MentorRegistryService();
-function Page(props: { session: Session; courseAlias?: string }) {
+
+function MentorConfirmPage(props: { session: Session; courseAlias?: string }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -195,5 +198,13 @@ const SuccessComponent = () => {
   );
   return <Result status="success" title={titleCmp} />;
 };
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider>
+      <MentorConfirmPage {...props} />
+    </SessionAndCourseProvider>
+  );
+}
 
 export default withSession(Page);

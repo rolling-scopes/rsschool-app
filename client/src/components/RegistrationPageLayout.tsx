@@ -8,7 +8,7 @@ type Props = { loading: boolean; githubId: string; courseName?: string; title?: 
 export function RegistrationPageLayout(props: Props) {
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#F0F2F5' }}>
-      <Header username={props.githubId} />
+      <Header />
       <Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
       </Content>

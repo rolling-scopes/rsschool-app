@@ -8,9 +8,12 @@ import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { CourseDto as Course } from 'api';
+import { CoursePageProps } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const mentorRegistry = new MentorRegistryService();
-function Page(props: { session: Session }) {
+
+function MentorAutoConfirmPage(props: { session: Session }) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -100,5 +103,13 @@ const SuccessComponent = () => {
   );
   return <Result status="success" title={titleCmp} />;
 };
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider>
+      <MentorAutoConfirmPage {...props} />
+    </SessionAndCourseProvider>
+  );
+}
 
 export default withSession(Page);

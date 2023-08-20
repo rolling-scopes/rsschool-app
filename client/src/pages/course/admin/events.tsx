@@ -15,6 +15,7 @@ import { EventDto, EventsApi } from 'api';
 
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -27,7 +28,7 @@ const timeZoneRenderer = (timeZone: string) => (value: string) => {
 
 const eventsApi = new EventsApi();
 
-function Page(props: Props) {
+function CourseEventPage(props: Props) {
   const courseId = props.course.id;
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [modalData, setModalData] = useState<Partial<CourseEvent> | null>(null);
@@ -73,7 +74,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
+    <AdminPageLayout loading={loading} courses={[props.course]}>
       <Button type="primary" onClick={handleAddEvent}>
         Add Event
       </Button>
@@ -109,8 +110,6 @@ function Page(props: Props) {
     </AdminPageLayout>
   );
 }
-
-export default withCourseData(withSession(Page));
 
 function getColumns(
   handleEditItem: (event: Partial<CourseEvent>) => void,
@@ -157,3 +156,13 @@ function getColumns(
     },
   ];
 }
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseEventPage {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourseData(withSession(Page));

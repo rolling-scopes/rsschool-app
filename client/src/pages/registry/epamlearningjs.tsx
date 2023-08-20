@@ -10,15 +10,16 @@ import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Props, TYPES } from './../../configs/registry';
+import { TYPES } from './../../configs/registry';
 import { Location } from 'common/models/profile';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
 
-function Page(props: Props & { courseAlias?: string }) {
+function Page() {
   const [form] = Form.useForm();
 
   const update = useUpdate();
@@ -158,7 +159,7 @@ function Page(props: Props & { courseAlias?: string }) {
   }
 
   return (
-    <PageLayout loading={false} title="Registration" githubId={props.session.githubId}>
+    <PageLayout loading={false} title="Registration">
       {content}
     </PageLayout>
   );
@@ -178,4 +179,12 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   };
 }
 
-export default withGoogleMaps(withSession(Page));
+function PageWithSession() {
+  return (
+    <SessionAndCourseProvider>
+      <Page />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withGoogleMaps(withSession(PageWithSession));

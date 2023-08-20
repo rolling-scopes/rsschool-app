@@ -151,13 +151,7 @@ export default function Page(props: CoursePageProps) {
   };
 
   return (
-    <AdminPageLayout
-      session={props.session}
-      loading={loading}
-      title="Cross-Check"
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Cross-Check" showCourseName courses={[props.course]}>
       {contextHolder}
       <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
       <CrossCheckPairsTable

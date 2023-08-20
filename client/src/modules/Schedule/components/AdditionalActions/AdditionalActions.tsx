@@ -1,56 +1,51 @@
 import { Button, Dropdown, Menu, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import { buildExportLink, buildICalendarLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 
 export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
 
 export interface AdditionalActionsProps {
   menuItems: MenuItemType[];
-  courseId: number;
   timezone: string;
   calendarToken: string;
-  courseAlias: string;
   onCopyFromCourse: () => void;
 }
 
-const AdditionalActions = ({
-  menuItems,
-  courseId,
-  timezone,
-  calendarToken,
-  courseAlias,
-  onCopyFromCourse,
-}: AdditionalActionsProps) => {
+const AdditionalActions = ({ menuItems, timezone, calendarToken, onCopyFromCourse }: AdditionalActionsProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
+  const { activeCourse } = useContext(SessionAndCourseContext);
+
+  if (!activeCourse) return null;
 
   const onExport = () => {
-    window.location.href = buildExportLink(courseId, timezone);
+    window.location.href = buildExportLink(activeCourse.id, timezone);
   };
 
   const onCalendarDownload = () => {
     if (calendarToken) {
-      const iCalLink = buildICalendarLink(courseId, calendarToken, timezone);
+      const iCalLink = buildICalendarLink(activeCourse.id, calendarToken, timezone);
 
       const link = document.createElement('a');
       link.href = iCalLink;
       link.target = '_blank';
-      link.setAttribute('download', `schedule-${courseAlias}.ics`);
+      link.setAttribute('download', `schedule-${activeCourse.alias}.ics`);
       document.body.appendChild(link);
       link.click();
       link.remove();
     }
   };
 
-  function onCalendarCopyLink() {
-    const link = buildICalendarLink(courseId, calendarToken, timezone);
+  const onCalendarCopyLink = () => {
+    const link = buildICalendarLink(activeCourse.id, calendarToken, timezone);
     copyToClipboard(`${window.document.location.origin}${link}`);
     message.success('Copied to clipboard');
-  }
+  };
 
   const handleMenuItemClick: MenuItemClickHandler = item => {
     switch (item.key) {

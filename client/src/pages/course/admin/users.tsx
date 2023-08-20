@@ -13,6 +13,7 @@ import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 type Props = CoursePageProps;
 
@@ -25,7 +26,7 @@ const rolesColors: Record<string, string> = {
   manager: 'volcano',
 };
 
-function Page(props: Props) {
+function CourseUsersPage(props: Props) {
   const courseId = props.course.id;
 
   const [loading, setLoading] = useState(false);
@@ -179,7 +180,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
+    <AdminPageLayout showCourseName loading={loading} courses={[props.course]}>
       {props.session.isAdmin && (
         <Button type="primary" onClick={handleAddGroup}>
           Add Group
@@ -262,6 +263,14 @@ function createRecords(groups: UserGroupDto[]) {
 
 function getInitialValues(modalData: Partial<CourseUser> | UserGroup[]) {
   return modalData;
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider course={props.course}>
+      <CourseUsersPage {...props} />
+    </SessionAndCourseProvider>
+  );
 }
 
 export default withCourseData(withSession(Page));

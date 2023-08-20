@@ -13,6 +13,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -258,7 +259,7 @@ const renderResume = (handleSkillChange: HandleChangeValue) => (
   </>
 );
 
-function Page(props: CoursePageProps) {
+function TechnicalScreeningPage(props: CoursePageProps) {
   const courseId = props.course.id;
   const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
 
@@ -361,12 +362,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Technical Screening Feedback"
-      courseName={props.course.name}
-      githubId={props.session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title="Technical Screening Feedback" showCourseName>
       <Form
         form={form}
         initialValues={resume}
@@ -413,6 +409,14 @@ function deserializeFromJson(json: any) {
       acc[key] = get(json, key.split('-'));
       return acc;
     }, {} as any);
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+      <TechnicalScreeningPage {...props} />
+    </SessionAndCourseProvider>
+  );
 }
 
 export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Mentor }));

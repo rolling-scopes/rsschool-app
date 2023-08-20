@@ -6,7 +6,7 @@ import { FilesService } from 'services/files';
 import { SelfEducationPublicAttributes } from 'services/course';
 import { AxiosError } from 'axios';
 import { isExpelledStudent } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
@@ -20,7 +20,7 @@ function isIpynbFile(item: unknown): item is IpynbFile {
 }
 
 export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVerifications, finishTask: () => void) {
-  const session = useContext(SessionContext);
+  const { session } = useContext(SessionAndCourseContext);
   const taskVerificationsApi = useMemo(() => new CourseTaskVerificationsApi(), []);
   const [loading, setLoading] = useState(false);
   const [isModified, setIsModified] = useState(false);

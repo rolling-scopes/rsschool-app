@@ -1,7 +1,6 @@
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { CoursePageProps } from 'services/models';
-import { SessionContext } from 'modules/Course/contexts';
 import { StatusTabs, TaskCard } from 'modules/AutoTest/components';
 import { Col, Row } from 'antd';
 import { CourseTaskDetailedDto } from 'api';
@@ -22,7 +21,6 @@ const RESPONSIVE_COLUMNS: ColProps = {
 };
 
 function AutoTests({ course, courseTasks }: AutoTestsProps) {
-  const { githubId } = useContext(SessionContext);
   const { tasks } = useCourseTaskVerifications(course.id, courseTasks);
 
   const [activeTab, setActiveTab] = useState(CourseTaskStatus.Available);
@@ -30,14 +28,7 @@ function AutoTests({ course, courseTasks }: AutoTestsProps) {
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);
 
   return (
-    <PageLayout
-      loading={false}
-      title="Auto-tests"
-      background="#F0F2F5"
-      withMargin={false}
-      githubId={githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" withMargin={false} showCourseName>
       <Row gutter={24} style={{ background: 'white', marginRight: 0, marginBottom: 24, padding: '0 16px' }}>
         <Col span={24}>
           <StatusTabs statuses={statuses} activeTab={activeTab} onTabChange={setActiveTab} />

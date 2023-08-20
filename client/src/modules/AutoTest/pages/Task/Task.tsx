@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
 
@@ -11,7 +11,9 @@ export interface AutoTestTaskProps extends CoursePageProps {
 }
 
 function Task({ course, task }: AutoTestTaskProps) {
-  const { githubId } = useContext(SessionContext);
+  const {
+    session: { githubId },
+  } = useContext(SessionAndCourseContext);
   const {
     loading,
     task: courseTask,
@@ -28,14 +30,7 @@ function Task({ course, task }: AutoTestTaskProps) {
   }
 
   return (
-    <PageLayout
-      loading={false}
-      title="Auto-tests"
-      background="#F0F2F5"
-      withMargin={false}
-      githubId={githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" withMargin={false} showCourseName>
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
       <div style={{ margin: 16 }}>
         {!answers ? (

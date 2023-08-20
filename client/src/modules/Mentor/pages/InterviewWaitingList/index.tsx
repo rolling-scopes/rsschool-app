@@ -60,12 +60,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
   });
 
   return (
-    <PageLayout
-      loading={loading}
-      title={`${interview.name.trim()}: Wait list`}
-      githubId={session.githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={loading} title={`${interview.name.trim()}: Wait list`} showCourseName>
       <Table
         pagination={{ pageSize: 100 }}
         size="small"

@@ -10,12 +10,13 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
 const coursesApi = new CoursesApi();
 
-function Page(props: CoursePageProps) {
+function ExpelStudentsPage(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const userGithubId = props.session.githubId;
@@ -118,12 +119,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Expel/Unassign Student"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayoutSimple loading={loading} title="Expel/Unassign Student" showCourseName>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item initialValue={action} name="action" label="Action">
           <Radio.Group onChange={e => setAction(e.target.value)}>
@@ -153,6 +149,14 @@ function Page(props: CoursePageProps) {
         </Button>
       </Form>
     </PageLayoutSimple>
+  );
+}
+
+function Page(props: CoursePageProps) {
+  return (
+    <SessionAndCourseProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+      <ExpelStudentsPage {...props} />
+    </SessionAndCourseProvider>
   );
 }
 

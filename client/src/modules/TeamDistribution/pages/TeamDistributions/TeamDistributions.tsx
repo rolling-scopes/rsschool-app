@@ -77,13 +77,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   };
 
   return (
-    <PageLayout
-      loading={loading}
-      title="RS Teams"
-      background="#F0F2F5"
-      githubId={session.githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={loading} title="RS Teams" background="#F0F2F5" showCourseName={true}>
       {openTeamDistributionModal && (
         <TeamDistributionModal
           data={teamDistributionData}
