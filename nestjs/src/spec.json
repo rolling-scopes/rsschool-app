@@ -4327,6 +4327,11 @@
           "tags"
         ]
       },
+      "UsedCourseDto": {
+        "type": "object",
+        "properties": { "name": { "type": "string" }, "isActive": { "type": "boolean" } },
+        "required": ["name", "isActive"]
+      },
       "TaskDto": {
         "type": "object",
         "properties": {
@@ -4360,7 +4365,8 @@
           "updatedDate": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "skills": { "type": "array", "items": { "type": "string" } },
-          "attributes": { "type": "object" }
+          "attributes": { "type": "object" },
+          "courses": { "type": "array", "items": { "$ref": "#/components/schemas/UsedCourseDto" } }
         },
         "required": [
           "type",
@@ -4376,7 +4382,8 @@
           "updatedDate",
           "tags",
           "skills",
-          "attributes"
+          "attributes",
+          "courses"
         ]
       },
       "UpdateTaskDto": {

@@ -6,7 +6,7 @@ import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum, TaskDto } from 'api';
 import { CrossCheckStatus } from 'services/course';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -96,6 +96,24 @@ export function tagsRenderer(values: (number | string)[]) {
     return '';
   }
   return <span>{values.map(v => renderTag(v))}</span>;
+}
+
+export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }: TaskDto) {
+  if (!courses?.length) {
+    return;
+  }
+
+  const [firstCourse] = courses;
+  const firstTag = { value: firstCourse.name, ...(firstCourse.isActive && { color: 'blue' }) };
+  const remainingCoursesCount = courses.length - 1;
+
+  const tags = [firstTag];
+
+  if (remainingCoursesCount > 0) {
+    tags.push({ value: `+ ${remainingCoursesCount} More` });
+  }
+
+  return <span>{tags.map(({ value, color }) => renderTag(value, color))}</span>;
 }
 
 export function renderTag(value: number | string, color?: string) {
