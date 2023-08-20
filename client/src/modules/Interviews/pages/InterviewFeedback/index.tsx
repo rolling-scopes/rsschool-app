@@ -9,7 +9,7 @@ import toString from 'lodash/toString';
 import { SessionContext } from 'modules/Course/contexts';
 import { Fragment, useContext, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
-import type { PageProps } from './getServerSideProps';
+import type { FeedbackProps } from './getServerSideProps';
 
 type FormAnswer = {
   questionId: string;
@@ -17,7 +17,7 @@ type FormAnswer = {
   answer: string;
 };
 
-export function InterviewFeedback({ course, type, interviewTaskId, githubId }: PageProps) {
+export function InterviewFeedback({ course, type, interviewTaskId, githubId }: FeedbackProps) {
   const courseId = course.id;
   const session = useContext(SessionContext);
 

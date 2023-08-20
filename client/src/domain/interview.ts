@@ -1,6 +1,7 @@
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
+import { featureToggles } from 'services/features';
 dayjs.extend(between);
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
@@ -53,11 +54,12 @@ export function getInterviewFeedbackUrl({
   interviewName: string;
   interviewId: number;
 }) {
-  if (!isTechnicalScreening(interviewName)) {
-    return `/course/interview/${template}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&interviewId=${interviewId}`;
+  const isScreening = isTechnicalScreening(interviewName);
+  if (!featureToggles.feedback && isScreening) {
+    return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
   }
-
-  return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
+  const type = isScreening ? stageInterviewType : template;
+  return `/course/interview/${type}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&interviewId=${interviewId}`;
 }
 
 export function isTechnicalScreening(name: string) {
@@ -66,3 +68,15 @@ export function isTechnicalScreening(name: string) {
 
 export const getInterviewWaitList = (courseAlias: string, interviewId: number) =>
   `/course/mentor/interview-wait-list?course=${courseAlias}&interviewId=${interviewId}`;
+
+/** calculates the rating based on the interview score. rating scales from [0,5] */
+export function getRating(score: number, maxScore: number, feedbackVersion: number) {
+  if (!feedbackVersion) {
+    // In the legacy feedback, the score is a number with limit 50
+    const maxScore = 50;
+    return (score > maxScore ? maxScore : score) / 10;
+  }
+  // calculate rating on the scale from 0 to 5
+  const rating = (score / maxScore) * 5;
+  return rating;
+}
