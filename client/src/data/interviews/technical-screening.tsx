@@ -386,6 +386,7 @@ const english: Step = {
       options: [
         { id: 'none', title: 'No certificate' },
         { id: 'A1', title: 'A1' },
+        { id: 'A2', title: 'A2' },
         { id: 'B1', title: 'B1' },
         { id: 'B2', title: 'B2' },
         { id: 'C1', title: 'C1' },
@@ -401,6 +402,7 @@ const english: Step = {
         "Make a mark showing your own opinion of student's English level. It doesn't influence on the final score of the interview.",
       options: [
         { id: 'A1', title: 'A1' },
+        { id: 'A2', title: 'A2' },
         { id: 'B1', title: 'B1' },
         { id: 'B2', title: 'B2' },
         { id: 'C1', title: 'C1' },
