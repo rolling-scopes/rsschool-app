@@ -6,6 +6,7 @@ import { UserService, UserFull } from 'services/user';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { Course, CourseRole } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -23,7 +24,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} title="Users" loading={false} courses={props.courses}>
+    <AdminPageLayout title="Users" loading={false} courses={props.courses}>
       <Content>
         <div className="mt-4">
           <Form layout="horizontal" onFinish={handleSearch}>
@@ -79,4 +80,12 @@ function Page(props: Props) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { requiredAnyCourseRole: CourseRole.Manager });

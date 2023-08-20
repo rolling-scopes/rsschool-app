@@ -11,6 +11,7 @@ import { Course, CourseRole } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 
@@ -125,7 +126,7 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Events" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Events" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Event
@@ -212,4 +213,13 @@ function getInitialValues(modalData: Partial<EventDto>) {
 }
 
 export { getServerSideProps };
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { requiredAnyCourseRole: CourseRole.Manager });

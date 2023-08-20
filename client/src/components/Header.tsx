@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment, useMemo, useContext } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
-import EyeOutlined from '@ant-design/icons/EyeOutlined';
-import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import QuestionCircleFilled from '@ant-design/icons/QuestionCircleFilled';
-import SolutionOutlined from '@ant-design/icons/SolutionOutlined';
-import NotificationOutlined from '@ant-design/icons/NotificationOutlined';
+import {
+  EyeOutlined,
+  LogoutOutlined,
+  QuestionCircleFilled,
+  SolutionOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
-import { getNavigationItems } from 'modules/Home/data/links';
 import { SessionAndCourseContext } from 'modules/Course/contexts';
+import { getNavigationItems } from 'modules/Home/data/links';
 
 type Props = {
   showCourseName?: boolean;
@@ -43,6 +45,7 @@ const MENU_ITEMS = [
 export function Header({ title, showCourseName }: Props) {
   const { asPath: currentRoute } = useRouter();
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
+
   const { session, activeCourse } = useContext(SessionAndCourseContext);
   const courseLinks = useMemo(() => getNavigationItems(session, activeCourse ?? null), [activeCourse]);
 
@@ -62,7 +65,7 @@ export function Header({ title, showCourseName }: Props) {
   );
 
   return (
-    <Space direction="vertical" style={{ boxShadow: '0px 2px 8px #F0F1F2', backgroundColor: '#ffffff' }}>
+    <Space direction="vertical" style={{ boxShadow: '0px 2px 8px #F0F1F2', backgroundColor: '#ffffff', width: '100%' }}>
       <nav
         className="nav no-print"
         style={{
@@ -99,7 +102,9 @@ export function Header({ title, showCourseName }: Props) {
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="dashed" size="large">
               <GithubAvatar githubId={session?.githubId} size={24} />
-              <span style={{ marginLeft: '12px' }}>My Profile</span>
+              <span style={{ marginLeft: '12px' }} className="button-text">
+                My Profile
+              </span>
             </Button>
           </Dropdown>
         </div>
@@ -108,15 +113,7 @@ export function Header({ title, showCourseName }: Props) {
             font-size: 120%;
             align-self: center;
           }
-          @media all and (max-width: 540px) {
-            .header-logo {
-              position: relative;
-              z-index: 1;
-            }
-
-            .nav > :global(.icons > div:last-child) {
-              margin-left: -48px;
-            }
+          @media all and (max-width: 768px) {
 
             .title {
               width: 100%;

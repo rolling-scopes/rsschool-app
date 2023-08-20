@@ -11,6 +11,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Course, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -129,7 +130,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage User Groups" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage User Groups" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add User Group
@@ -226,4 +227,12 @@ function getInitialValues(modalData: Partial<UserGroupDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { onlyForAdmin: true });
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { onlyForAdmin: true });

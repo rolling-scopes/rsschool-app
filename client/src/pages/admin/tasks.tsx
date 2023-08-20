@@ -43,6 +43,7 @@ import {
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { ColumnsType } from 'antd/lib/table';
 import uniqBy from 'lodash/uniqBy';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -138,7 +139,7 @@ function Page(props: Props) {
     .sort();
 
   return (
-    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Tasks" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Task
@@ -473,4 +474,12 @@ function getInitialValues(modalData: Partial<TaskDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { requiredAnyCourseRole: CourseRole.Manager });

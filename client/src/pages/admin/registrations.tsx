@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { AdminPageLayout } from 'components/PageLayout';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
@@ -130,7 +131,7 @@ function Page(props: Props) {
   const rowSelection = { onChange: changeSelection };
 
   return (
-    <AdminPageLayout title="Registrations" session={props.session} loading={loading} courses={courses}>
+    <AdminPageLayout title="Registrations" loading={loading} courses={courses}>
       <Col>
         <Row gutter={defaultRowGutter}>
           <Col>
@@ -238,4 +239,12 @@ function Page(props: Props) {
   );
 }
 
-export default withCourses(withSession(Page));
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withCourses(withSession(PageWithContext));
