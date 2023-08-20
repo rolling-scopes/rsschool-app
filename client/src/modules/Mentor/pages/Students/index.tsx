@@ -19,7 +19,6 @@ import * as routes from 'services/routes';
 
 export function Students(props: CourseOnlyPageProps) {
   const { session } = useContext(SessionAndCourseContext);
-  const { githubId } = session;
   const { id: courseId, alias, completed } = props.course;
   const mentorId = getMentorId(session, courseId);
 

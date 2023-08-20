@@ -14,9 +14,9 @@ type Props = {
 };
 
 export function Warning(props: Props) {
-  const { loading = false, githubId, imagePath, imageName = defaultImageName, textMessage = defaultMessage } = props;
+  const { loading = false, imagePath, imageName = defaultImageName, textMessage = defaultMessage } = props;
   return (
-    <PageLayout loading={loading} githubId={githubId}>
+    <PageLayout loading={loading}>
       <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
         <Image src={`/static${imagePath}`} alt={imageName} width={175} height={175} />
       </Row>

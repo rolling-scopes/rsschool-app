@@ -16,17 +16,12 @@ import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { useLoading } from 'components/useLoading';
-import { Session, withSession } from 'components/withSession';
+import { withSession } from 'components/withSession';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
 import { SessionAndCourseProvider } from 'modules/Course/contexts';
-
-type Props = {
-  courses: Course[];
-  session: Session;
-};
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
