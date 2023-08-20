@@ -13,7 +13,10 @@ export class TasksService {
 
   public async getAll() {
     return this.repository.find({
-      relations: ['discipline'],
+      relations: {
+        discipline: true,
+        courseTasks: { course: true },
+      },
       order: {
         updatedDate: 'DESC',
       },
