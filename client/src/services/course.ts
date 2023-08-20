@@ -218,30 +218,6 @@ export class CourseService {
     }
   }
 
-  async searchMentors(query: string | null) {
-    try {
-      if (!query) {
-        return [];
-      }
-      const response = await globalAxios.get<
-        {
-          id: number;
-          githubId: string;
-          name: string;
-        }[]
-      >(`/api/v2/course/${this.courseId}/mentors/search/${query}`);
-      return response.data;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  async getMentorsWithDetails() {
-    type Response = MentorDetails[];
-    const result = await globalAxios.get<Response>(`/api/v2/course/${this.courseId}/mentors/details`);
-    return result.data;
-  }
-
   async getCourseScore(
     pagination: IPaginationInfo,
     filter: ScoreTableFilters = { activeOnly: false },
