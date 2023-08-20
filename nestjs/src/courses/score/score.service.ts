@@ -58,7 +58,7 @@ export class ScoreService {
       const [preScreeningInterview] = student.stageInterviews ?? [];
 
       const preScreeningScore = Math.floor(
-        (InterviewsService.getStageInterviewRating(student.stageInterviews ?? []) ?? 0) * 10,
+        InterviewsService.getLastStageInterview(student.stageInterviews ?? [])?.rating ?? 0,
       );
       const preScreeningInterviewWithScore = preScreeningInterview
         ? { score: preScreeningScore, courseTaskId: preScreeningInterview.courseTaskId }
@@ -115,7 +115,15 @@ export class ScoreService {
       .addSelect(UsersService.getPrimaryUserFields('mu'))
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
-      .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
+      .addSelect([
+        'sif.stageInterviewId',
+        'sif.json',
+        'sif.updatedDate',
+        'si.isCompleted',
+        'si.id',
+        'si.courseTaskId',
+        'si.score',
+      ])
       .where('student."courseId" = :courseId', { courseId });
 
     if (filter.activeOnly === 'true') {

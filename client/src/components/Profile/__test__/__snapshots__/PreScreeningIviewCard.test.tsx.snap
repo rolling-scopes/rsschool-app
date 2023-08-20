@@ -382,7 +382,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     class="ant-typography ant-rate-text css-dev-only-do-not-override-w8mnev"
                     style="font-weight: bold;"
                   >
-                    3.43
+                    3.40
                   </span>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"
@@ -635,7 +635,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="ant-rate-star ant-rate-star-full"
+                      class="ant-rate-star ant-rate-star-half ant-rate-star-active"
                     >
                       <div
                         aria-checked="true"
@@ -755,7 +755,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     class="ant-typography ant-rate-text css-dev-only-do-not-override-w8mnev"
                     style="font-weight: bold;"
                   >
-                    4.23
+                    3.40
                   </span>
                   <p
                     style="font-size: 12px; margin-bottom: 5px;"

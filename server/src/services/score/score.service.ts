@@ -136,7 +136,15 @@ export class ScoreService {
       .addSelect(getPrimaryUserFields('mu'))
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
-      .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
+      .addSelect([
+        'sif.stageInterviewId',
+        'sif.json',
+        'sif.updatedDate',
+        'si.isCompleted',
+        'si.id',
+        'si.courseTaskId',
+        'si.score',
+      ])
       .where('student."courseId" = :courseId', { courseId: this.courseId });
 
     if (this.options.includeCertificate) {
@@ -173,7 +181,7 @@ export class ScoreService {
     const content = await query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction).getMany();
 
     const students = content.map(student => {
-      const preScreeningScore = Math.floor((getStageInterviewRating(student.stageInterviews ?? []) ?? 0) * 10);
+      const preScreeningScore = Math.floor(getStageInterviewRating(student.stageInterviews ?? []) ?? 0);
       const preScreningInterviews = student.stageInterviews?.length
         ? [{ score: preScreeningScore, courseTaskId: student.stageInterviews[0].courseTaskId }]
         : [];
