@@ -113,7 +113,7 @@ export class InterviewsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getInterviewFeedback' })
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async getInterviewFeedback(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,
@@ -136,7 +136,7 @@ export class InterviewsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'createInterviewFeedback' })
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async createInterviewFeedback(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,
