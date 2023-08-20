@@ -2,8 +2,7 @@ import { Button, Layout, message } from 'antd';
 import { PromptDto, PromptsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { useModalForm } from 'hooks';
-import { SessionAndCourseContext } from 'modules/Course/contexts';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { PromptModal } from '../components/PromptModal';
 import { PromptTable } from '../components/PromptTable';
@@ -11,7 +10,6 @@ import { PromptTable } from '../components/PromptTable';
 const api = new PromptsApi();
 
 export const PromptsPage = () => {
-  const session = useContext(SessionAndCourseContext);
   const [prompts, setPrompts] = useState([] as PromptDto[]);
   const { open, formData, toggle } = useModalForm<PromptDto>();
 

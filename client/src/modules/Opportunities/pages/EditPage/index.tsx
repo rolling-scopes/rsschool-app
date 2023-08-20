@@ -8,7 +8,7 @@ import { OpportunitiesApi, ResumeDto } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionAndCourseContext } from 'modules/Course/contexts';
 import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
 
 const { Content } = Layout;
@@ -17,7 +17,9 @@ const { Text, Paragraph } = Typography;
 const service = new OpportunitiesApi();
 
 export function EditPage() {
-  const { githubId } = useContext(SessionContext);
+  const {
+    session: { githubId },
+  } = useContext(SessionAndCourseContext);
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);
@@ -90,7 +92,7 @@ export function EditPage() {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <LoadingScreen show={loading}>
-        <Header username={githubId} title="My CV" />
+        <Header title="My CV" />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
             <EditViewCv

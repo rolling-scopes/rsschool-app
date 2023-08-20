@@ -298,10 +298,10 @@ const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boole
   return githubId === requestedGithubId;
 };
 
-function Page() {
+function Page(props: Props) {
   return (
     <SessionAndCourseProvider>
-      <ProfilePage />
+      <ProfilePage {...props} />
     </SessionAndCourseProvider>
   );
 }

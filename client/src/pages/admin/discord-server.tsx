@@ -8,6 +8,7 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -115,7 +116,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Discord Servers" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Discord Servers" loading={loading} courses={props.courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Discord Server
@@ -183,4 +184,12 @@ function getInitialValues(modalData: Partial<DiscordServerDto>) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { onlyForAdmin: true });
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { onlyForAdmin: true });

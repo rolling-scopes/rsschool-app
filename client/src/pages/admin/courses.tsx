@@ -27,6 +27,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { isCourseManager } from 'domain/user';
 import utc from 'dayjs/plugin/utc';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 dayjs.extend(utc);
 
 const { Content } = Layout;
@@ -250,7 +251,7 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Courses" loading={loading} courses={courses}>
+    <AdminPageLayout title="Manage Courses" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Course
@@ -382,4 +383,12 @@ function getInitialValues(modalData: Partial<Course>) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+function PageWithContext(props: Props) {
+  return (
+    <SessionAndCourseProvider>
+      <Page {...props} />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { requiredAnyCourseRole: CourseRole.Manager });

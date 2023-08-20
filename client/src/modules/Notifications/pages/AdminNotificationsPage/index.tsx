@@ -6,9 +6,9 @@ import { Course } from 'services/models';
 
 type Props = { session: Session; courses: Course[] };
 
-export function AdminPage({ session, courses }: Props) {
+export function AdminPage({ courses }: Props) {
   return (
-    <AdminPageLayout session={session} title="Notifications" loading={false} courses={courses}>
+    <AdminPageLayout title="Notifications" loading={false} courses={courses}>
       <Tabs type="card">
         <Tabs.TabPane tab="Settings" key="1">
           <AdminNotificationsPage />

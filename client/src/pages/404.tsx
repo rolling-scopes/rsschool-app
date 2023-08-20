@@ -2,6 +2,7 @@ import Image from 'next/image';
 import withSession from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { Row } from 'antd';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 function Page() {
   return (
@@ -19,4 +20,12 @@ function Page() {
   );
 }
 
-export default withSession(Page);
+function PageWithContext() {
+  return (
+    <SessionAndCourseProvider>
+      <Page />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext);

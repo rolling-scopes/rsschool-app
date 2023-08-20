@@ -21,6 +21,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
+import { SessionAndCourseProvider } from 'modules/Course/contexts';
 
 type Props = {
   courses: Course[];
@@ -45,7 +46,7 @@ const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
 const disciplinesApi = new DisciplinesApi();
 
-function Page(props: Props) {
+function Page() {
   const [loading, withLoading] = useLoading(false);
 
   const [api, contextHolder] = notification.useNotification();
@@ -194,13 +195,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout
-      session={props.session}
-      title="Mentor Registry"
-      loading={loading}
-      courses={courses}
-      styles={{ margin: 0, padding: 0 }}
-    >
+    <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
       <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
         <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
         <Button
@@ -281,7 +276,15 @@ function filterData(data: MentorRegistryDto[], showAll: boolean) {
 
 export { getServerSideProps };
 
-export default withSession(Page, { onlyForAnyCoursePowerUser: true });
+function PageWithContext() {
+  return (
+    <SessionAndCourseProvider>
+      <Page />
+    </SessionAndCourseProvider>
+  );
+}
+
+export default withSession(PageWithContext, { onlyForAnyCoursePowerUser: true });
 
 export const styles = css`
   @media (min-width: 575px) {
