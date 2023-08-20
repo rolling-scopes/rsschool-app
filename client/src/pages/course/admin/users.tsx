@@ -13,7 +13,7 @@ import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 type Props = CoursePageProps;
 
@@ -267,9 +267,9 @@ function getInitialValues(modalData: Partial<CourseUser> | UserGroup[]) {
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <CourseUsersPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

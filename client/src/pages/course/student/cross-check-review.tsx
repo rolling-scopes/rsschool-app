@@ -24,7 +24,7 @@ import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -297,9 +297,9 @@ function Page(props: CoursePageProps) {
 
 function PageWithSession(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <Page {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

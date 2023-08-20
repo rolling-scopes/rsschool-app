@@ -57,16 +57,16 @@ function withSession(WrappedComponent: React.ComponentType<any>, accessSettings?
     }, []);
 
     if (session && accessSettings?.onlyForAdmin && !session.isAdmin) {
-      return <NotAccess session={session} />;
+      return <NotAccess />;
     }
 
     if (session && accessSettings?.onlyForAnyCoursePowerUser && !isAnyCoursePowerUser(session)) {
-      return <NotAccess session={session} />;
+      return <NotAccess />;
     }
 
     if (session && !session.isAdmin && accessSettings?.requiredAnyCourseRole) {
       if (!hasRoleInAnyCourse(session, accessSettings.requiredAnyCourseRole)) {
-        return <NotAccess session={session} />;
+        return <NotAccess />;
       }
     }
 

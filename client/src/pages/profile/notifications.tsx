@@ -1,12 +1,12 @@
 import withSession from 'components/withSession';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { UserNotificationsPage } from 'modules/Notifications/pages/UserNotificationsSettingsPage';
 
 function PageWithContext() {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <UserNotificationsPage />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

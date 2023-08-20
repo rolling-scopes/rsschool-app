@@ -2,7 +2,7 @@ import Image from 'next/image';
 import withSession from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { Row } from 'antd';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 function Page() {
   return (
@@ -22,9 +22,9 @@ function Page() {
 
 function PageWithContext() {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <Page />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

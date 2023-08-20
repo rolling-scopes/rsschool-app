@@ -5,7 +5,7 @@ import Router from 'next/router';
 import { useMemo, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
-import { SessionAndCourseContext } from 'modules/Course/contexts';
+import { DefaultPageContext } from 'modules/Course/contexts';
 import { Course } from 'services/models';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
@@ -34,7 +34,7 @@ export function AdminSider(props: Props) {
   const [openedSidebarItems = [], setOpenedSidebarItems] = useLocalStorage<string[]>(LocalStorage.OpenedSidebarItems);
   const [activeCourse] = useActiveCourse(props.courses);
 
-  const { session } = useContext(SessionAndCourseContext);
+  const { session } = useContext(DefaultPageContext);
 
   const adminMenuItems = getAdminMenuItems(session);
   const courseManagementMenuItems = useMemo(

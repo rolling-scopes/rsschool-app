@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
-import { SessionAndCourseContext } from 'modules/Course/contexts';
+import { DefaultPageContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 
 type Props = {
@@ -46,7 +46,7 @@ export function Header({ title, showCourseName }: Props) {
   const { asPath: currentRoute } = useRouter();
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
 
-  const { session, activeCourse } = useContext(SessionAndCourseContext);
+  const { session, activeCourse } = useContext(DefaultPageContext);
   const courseLinks = useMemo(() => getNavigationItems(session, activeCourse ?? null), [activeCourse]);
 
   const menu = (

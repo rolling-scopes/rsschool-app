@@ -1,6 +1,6 @@
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { Session, withSession } from 'components/withSession';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { MentorRegistry } from 'modules/Registry/pages';
 import { NextPageContext } from 'next';
 
@@ -11,9 +11,9 @@ type Props = {
 
 function Page(props: Props) {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <MentorRegistry {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

@@ -32,7 +32,7 @@ import {
 } from 'api';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();
@@ -193,9 +193,9 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
 
 function PageWithSession(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <Page {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

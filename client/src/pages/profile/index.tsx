@@ -22,7 +22,7 @@ import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 type Props = {
   router: NextRouter;
@@ -300,9 +300,9 @@ const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boole
 
 function Page(props: Props) {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <ProfilePage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

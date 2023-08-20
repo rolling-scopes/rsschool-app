@@ -10,7 +10,7 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { CoursePageProps } from 'services/models';
 
 const { Link } = Typography;
@@ -201,9 +201,9 @@ const SuccessComponent = () => {
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider>
+    <DefaultPageProvider>
       <MentorConfirmPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

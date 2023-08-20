@@ -11,7 +11,7 @@ import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 import { InterviewPair } from 'common/models/interview';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 function CourseInterviewPage(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -129,9 +129,9 @@ function CourseInterviewPage(props: CoursePageProps) {
 
 function Page(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <CourseInterviewPage {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

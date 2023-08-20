@@ -10,7 +10,7 @@ import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
 import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -151,9 +151,9 @@ function StatusLabel({ status }: { status: InterviewStatus }) {
 
 function PageWithSession(props: CoursePageProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <Page {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 

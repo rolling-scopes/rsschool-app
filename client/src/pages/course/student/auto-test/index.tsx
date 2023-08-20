@@ -1,4 +1,4 @@
-import { SessionAndCourseProvider } from 'modules/Course/contexts';
+import { DefaultPageProvider } from 'modules/Course/contexts';
 import { GetServerSideProps } from 'next';
 import { CoursesTasksApi, CourseTaskDtoTypeEnum, CreateCourseTaskDtoCheckerEnum, ProfileCourseDto } from 'api';
 import { getTokenFromContext } from 'utils/server';
@@ -49,9 +49,9 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
 
 function Page(props: AutoTestsProps) {
   return (
-    <SessionAndCourseProvider course={props.course}>
+    <DefaultPageProvider course={props.course}>
       <AutoTests {...props} />
-    </SessionAndCourseProvider>
+    </DefaultPageProvider>
   );
 }
 
