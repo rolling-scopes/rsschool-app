@@ -15,6 +15,8 @@ export class CourseMentorsService {
     readonly mentorsRepository: Repository<Mentor>,
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(TaskResult)
+    readonly taskResultRepository: Repository<TaskResult>,
     private dataSource: DataSource,
   ) {}
 
@@ -128,26 +130,33 @@ export class CourseMentorsService {
     return result;
   }
 
+  private buildTaskResultSubQuery(courseTasksIds: number[]) {
+    const subQuery = this.taskResultRepository.createQueryBuilder('t').select('t.lastCheckerId', 'lastCheckerId');
+
+    if (courseTasksIds.length) {
+      subQuery.where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds });
+    } else {
+      // to prevent empty array
+      subQuery.where('1 = 0');
+    }
+
+    return subQuery;
+  }
+
   private async getLastCheckedDates(courseId: number, courseTasksIds: number[]): Promise<Record<string, Date | null>> {
+    const subQuery = this.buildTaskResultSubQuery(courseTasksIds)
+      .addSelect('MAX(t."updatedDate")', 'updatedDate')
+      .groupBy('t.lastCheckerId');
+
     const query = this.dataSource
       .createQueryBuilder()
       .select('m.id', 'id')
       .addSelect('tr."updatedDate"', 'value')
       .from(Mentor, 'm')
       .leftJoin('user', 'u', 'u."id" = m."userId"')
-      .leftJoin(
-        qb =>
-          qb
-            .select('t.lastCheckerId', 'lastCheckerId')
-            .addSelect('MAX(t."updatedDate")', 'updatedDate')
-            .from(TaskResult, 't')
-            // add 0 to prevent empty array
-            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds.concat([0]) })
-            .groupBy('t.lastCheckerId'),
-        'tr',
-        'tr."lastCheckerId" = u.id',
-      )
-      .where('m."courseId" = :courseId', { courseId });
+      .leftJoin('(' + subQuery.getQuery() + ')', 'tr', 'tr."lastCheckerId" = u.id')
+      .where('m."courseId" = :courseId', { courseId })
+      .setParameters(subQuery.getParameters());
 
     const result: { id: number; value: Date | null }[] = await query.getRawMany();
 
@@ -155,25 +164,18 @@ export class CourseMentorsService {
   }
 
   private async getCheckedTasksCount(courseId: number, courseTasksIds: number[]): Promise<Record<string, number>> {
+    const subQuery = this.buildTaskResultSubQuery(courseTasksIds).addSelect('t."updatedDate"', 'updatedDate');
+
     const query = this.dataSource
       .createQueryBuilder()
       .select('m.id', 'id')
       .addSelect('COUNT(tr."lastCheckerId")', 'value')
       .from(Mentor, 'm')
       .leftJoin('user', 'u', 'u."id" = m."userId"')
-      .leftJoin(
-        qb =>
-          qb
-            .select('t.lastCheckerId', 'lastCheckerId')
-            .addSelect('t.updatedDate', 'updatedDate')
-            .from(TaskResult, 't')
-            // add 0 to prevent empty array
-            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds.concat([0]) }),
-        'tr',
-        'tr."lastCheckerId" = u.id',
-      )
+      .leftJoin('(' + subQuery.getQuery() + ')', 'tr', 'tr."lastCheckerId" = u.id')
       .where('m."courseId" = :courseId', { courseId })
-      .groupBy('m.id');
+      .groupBy('m.id')
+      .setParameters(subQuery.getParameters());
 
     const result: { id: number; value: string }[] = await query.getRawMany();
 
