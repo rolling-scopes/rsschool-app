@@ -8,7 +8,7 @@ import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCo
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Course } from 'services/models';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -186,9 +186,9 @@ export { getServerSideProps };
 
 function PageWithContext(props: Props) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <Page {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

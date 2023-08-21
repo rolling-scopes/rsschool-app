@@ -21,7 +21,7 @@ import { useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 const { Text } = Typography;
 
@@ -301,9 +301,9 @@ function calculateStats(students: StudentDetails[]) {
 
 function Page(props: CoursePageProps) {
   return (
-    <DefaultPageProvider course={props.course}>
+    <SessionProvider course={props.course}>
       <CourseStudentsPage {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
@@ -154,9 +154,9 @@ function ExpelStudentsPage(props: CoursePageProps) {
 
 function Page(props: CoursePageProps) {
   return (
-    <DefaultPageProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
       <ExpelStudentsPage {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

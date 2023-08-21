@@ -8,7 +8,7 @@ import {
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { getMentorId } from 'domain/user';
-import { DefaultPageContext } from 'modules/Course/contexts';
+import { SessionContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
@@ -34,7 +34,7 @@ const englishLevels = [
 ];
 
 export function StudentFeedback({ course }: CourseOnlyPageProps) {
-  const { session } = useContext(DefaultPageContext);
+  const { session } = useContext(SessionContext);
   const { id: courseId, alias } = course;
   const mentorId = getMentorId(session, courseId);
 

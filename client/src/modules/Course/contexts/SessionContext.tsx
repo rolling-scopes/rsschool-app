@@ -13,7 +13,7 @@ type DefaultContext = {
   activeCourse?: ProfileCourseDto;
 };
 
-export const DefaultPageContext = React.createContext<DefaultContext>({} as DefaultContext);
+export const SessionContext = React.createContext<DefaultContext>({} as DefaultContext);
 
 let sessionCache: Session | undefined;
 
@@ -23,7 +23,7 @@ type Props = React.PropsWithChildren<{
   adminOnly?: boolean;
 }>;
 
-export function DefaultPageProvider(props: Props) {
+export function SessionProvider(props: Props) {
   const { allowedRoles } = props;
 
   const {
@@ -85,9 +85,9 @@ export function DefaultPageProvider(props: Props) {
   }
   if (session) {
     return (
-      <DefaultPageContext.Provider value={{ session, activeCourse: props.course }}>
+      <SessionContext.Provider value={{ session, activeCourse: props.course }}>
         {props.children}
-      </DefaultPageContext.Provider>
+      </SessionContext.Provider>
     );
   }
   return <LoadingScreen show={loading} />;

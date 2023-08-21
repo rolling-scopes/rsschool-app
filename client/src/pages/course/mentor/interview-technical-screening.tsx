@@ -13,7 +13,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -413,9 +413,9 @@ function deserializeFromJson(json: any) {
 
 function Page(props: CoursePageProps) {
   return (
-    <DefaultPageProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
       <TechnicalScreeningPage {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

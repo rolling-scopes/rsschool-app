@@ -10,7 +10,7 @@ import {
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
-import { DefaultPageContext } from 'modules/Course/contexts';
+import { SessionContext } from 'modules/Course/contexts';
 import { PageProps } from 'modules/Course/data/getCourseProps';
 import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
@@ -29,7 +29,7 @@ const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
 const courseTaskApi = new CoursesTasksApi();
 
 export function SchedulePage(props: PageProps) {
-  const { session } = useContext(DefaultPageContext);
+  const { session } = useContext(SessionContext);
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
