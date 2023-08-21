@@ -18,7 +18,7 @@ export class CourseMentorsController {
   @ApiOkResponse({ type: [MentorDetailsDto] })
   @ApiForbiddenResponse()
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
   public async getMentorsDetails(@Param('courseId', ParseIntPipe) courseId: number) {
     const mentors = await this.courseMentorsService.getMentorsWithStats(courseId);
     return mentors.map(mentor => new MentorDetailsDto(mentor));
@@ -28,7 +28,7 @@ export class CourseMentorsController {
   @ApiOperation({ operationId: 'getMentorsDetailsCsv' })
   @ApiForbiddenResponse()
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
   public async getMentorsDetailsCsv(@Param('courseId', ParseIntPipe) courseId: number, @Res() res: Response) {
     const results = await this.courseMentorsService.getMentorsWithStats(courseId);
     const parsedData = await parseAsync(results, { transforms: [transforms.flatten()] });
