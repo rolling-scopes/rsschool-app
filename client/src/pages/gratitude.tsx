@@ -9,7 +9,7 @@ import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 interface IGratitude {
   userIds: number[];
@@ -141,9 +141,9 @@ function GratitudePage() {
 
 function Page() {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <GratitudePage />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

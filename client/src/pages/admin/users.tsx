@@ -6,7 +6,7 @@ import { UserService, UserFull } from 'services/user';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { Course, CourseRole } from 'services/models';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -82,9 +82,9 @@ export { getServerSideProps };
 
 function PageWithContext(props: Props) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <Page {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

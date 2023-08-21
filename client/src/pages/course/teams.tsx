@@ -6,7 +6,7 @@ import { ProfileCourseDto, TeamDistributionApi, TeamDistributionDetailedDto } fr
 import { Teams } from 'modules/Teams';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 export interface TeamsPageProps extends CoursePageProps {
   teamDistributionDetailed: TeamDistributionDetailedDto;
@@ -39,9 +39,9 @@ export const getServerSideProps: GetServerSideProps<{
 
 function Page(props: TeamsPageProps) {
   return (
-    <DefaultPageProvider course={props.course}>
+    <SessionProvider course={props.course}>
       <Teams {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

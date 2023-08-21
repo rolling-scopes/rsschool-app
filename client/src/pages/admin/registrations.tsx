@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { AdminPageLayout } from 'components/PageLayout';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
@@ -241,9 +241,9 @@ function Page(props: Props) {
 
 function PageWithContext(props: Props) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <Page {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

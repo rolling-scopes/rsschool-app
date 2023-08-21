@@ -10,7 +10,7 @@ import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 function CourseStageInterviewPage(props: CoursePageProps) {
   const { session, course } = props;
@@ -134,9 +134,9 @@ function CourseStageInterviewPage(props: CoursePageProps) {
 
 function Page(props: CoursePageProps) {
   return (
-    <DefaultPageProvider course={props.course}>
+    <SessionProvider course={props.course}>
       <CourseStageInterviewPage {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

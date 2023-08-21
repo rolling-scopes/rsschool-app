@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Course, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 type Props = { session: Session; courses: Course[] };
@@ -229,9 +229,9 @@ export { getServerSideProps };
 
 function PageWithContext(props: Props) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <Page {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

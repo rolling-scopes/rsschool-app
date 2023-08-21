@@ -27,7 +27,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { isCourseManager } from 'domain/user';
 import utc from 'dayjs/plugin/utc';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 dayjs.extend(utc);
 
 const { Content } = Layout;
@@ -385,9 +385,9 @@ export { getServerSideProps };
 
 function PageWithContext(props: Props) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <Page {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 

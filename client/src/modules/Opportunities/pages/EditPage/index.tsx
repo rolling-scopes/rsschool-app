@@ -8,7 +8,7 @@ import { OpportunitiesApi, ResumeDto } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
-import { DefaultPageContext } from 'modules/Course/contexts';
+import { SessionContext } from 'modules/Course/contexts';
 import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
 
 const { Content } = Layout;
@@ -19,7 +19,7 @@ const service = new OpportunitiesApi();
 export function EditPage() {
   const {
     session: { githubId },
-  } = useContext(DefaultPageContext);
+  } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);

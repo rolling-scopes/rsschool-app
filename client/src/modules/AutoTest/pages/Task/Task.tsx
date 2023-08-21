@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
-import { DefaultPageContext } from 'modules/Course/contexts';
+import { SessionContext } from 'modules/Course/contexts';
 import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
 
@@ -13,7 +13,7 @@ export interface AutoTestTaskProps extends CoursePageProps {
 function Task({ course, task }: AutoTestTaskProps) {
   const {
     session: { githubId },
-  } = useContext(DefaultPageContext);
+  } = useContext(SessionContext);
   const {
     loading,
     task: courseTask,

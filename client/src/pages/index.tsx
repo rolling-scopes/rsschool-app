@@ -1,5 +1,5 @@
 import { withSession } from 'components/withSession';
-import { DefaultPageProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 import { getServerSideProps } from 'modules/Home/data/getServerSideProps';
 import { HomePage } from 'modules/Home/pages/HomePage';
 import { CoursePageProps } from 'services/models';
@@ -8,9 +8,9 @@ export { getServerSideProps };
 
 function Page(props: CoursePageProps) {
   return (
-    <DefaultPageProvider>
+    <SessionProvider>
       <HomePage {...props} />
-    </DefaultPageProvider>
+    </SessionProvider>
   );
 }
 
