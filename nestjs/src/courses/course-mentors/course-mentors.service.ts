@@ -6,7 +6,6 @@ import { MentorDetails } from '@common/models';
 import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
 import { PersonDto } from '../../core/dto';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 @Injectable()
 export class CourseMentorsService {
@@ -36,65 +35,13 @@ export class CourseMentorsService {
   public async getMentorsWithStats(courseId: number): Promise<MentorDetails[]> {
     const [courseTasksIds, count] = await this.getMentorCheckerCourseTaskIds(courseId);
 
-    const query = this.mentorsRepository
-      .createQueryBuilder('mentor')
-      .innerJoin('mentor.user', 'user')
-      .addSelect(UsersService.getPrimaryUserFields())
-      .addSelect(['user.contactsEpamEmail'])
-      .leftJoin('mentor.students', 's')
-      .leftJoin('mentor.stageInterviews', 'si')
-      .leftJoin('mentor.taskChecker', 'tc')
-      .leftJoin('mentor.interviewResults', 'ir')
-      .leftJoin('tc.courseTask', 't', 't.type = :type', { type: 'interview' })
-      .addSelect(['s.id', 's.isExpelled', 's.isFailed'])
-      .addSelect(['si.id', 'si.isCompleted'])
-      .addSelect(['tc.id', 'tc.courseTaskId'])
-      .addSelect(['t.id', 't.type'])
-      .addSelect(['ir.id'])
-      .where(`"mentor"."courseId" = :courseId`, { courseId })
-      .orderBy('mentor.createdDate');
-
     const [records, checkedCountByMentor, lastCheckedDateByMentor] = await Promise.all([
-      query.getMany(),
+      this.getMentorsRecordsWithDetails(courseId),
       this.getCheckedTasksCount(courseId, courseTasksIds),
       this.getLastCheckedDates(courseId, courseTasksIds),
     ]);
 
-    const mentors = [];
-    for (const mentor of records) {
-      const mentorBasic = MentorsService.convertMentorToMentorBasic(mentor);
-
-      const user = mentor.user;
-      const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
-      const totalToCheck = activeStudents.length * count;
-
-      const lastCheckedDate = lastCheckedDateByMentor[mentor.id];
-      const checkedCount = checkedCountByMentor[mentor.id] ?? 0;
-
-      mentors.push({
-        ...mentorBasic,
-        cityName: user.cityName ?? '',
-        countryName: user.countryName ?? '',
-        contactsEpamEmail: user.contactsEpamEmail ?? '',
-        maxStudentsLimit: mentor.maxStudentsLimit,
-        studentsPreference: mentor.studentsPreference ?? PreferredStudentsLocation.ANY,
-        studentsCount: activeStudents.length,
-        screenings: {
-          total: mentor.stageInterviews?.length ?? 0,
-          completed: mentor.stageInterviews?.filter(s => s.isCompleted).length ?? 0,
-        },
-        interviews: {
-          total: mentor.taskChecker?.filter(tc => tc.courseTask?.type === 'interview').length,
-          completed: mentor.interviewResults?.length ?? 0,
-        },
-        taskResultsStats: {
-          lastUpdatedDate: lastCheckedDate ? new Date(lastCheckedDate) : null,
-          total: totalToCheck,
-          checked: checkedCount,
-        },
-      });
-    }
-    return mentors;
+    return this.constructMentorsWithStats(records, checkedCountByMentor, lastCheckedDateByMentor, count);
   }
 
   public async searchMentors(
@@ -128,6 +75,27 @@ export class CourseMentorsService {
     }));
 
     return result;
+  }
+
+  private async getMentorsRecordsWithDetails(courseId: number) {
+    return await this.mentorsRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(UsersService.getPrimaryUserFields())
+      .addSelect(['user.contactsEpamEmail'])
+      .leftJoin('mentor.students', 's')
+      .leftJoin('mentor.stageInterviews', 'si')
+      .leftJoin('mentor.taskChecker', 'tc')
+      .leftJoin('mentor.interviewResults', 'ir')
+      .leftJoin('tc.courseTask', 't', 't.type = :type', { type: 'interview' })
+      .addSelect(['s.id', 's.isExpelled', 's.isFailed'])
+      .addSelect(['si.id', 'si.isCompleted'])
+      .addSelect(['tc.id', 'tc.courseTaskId'])
+      .addSelect(['t.id', 't.type'])
+      .addSelect(['ir.id'])
+      .where(`"mentor"."courseId" = :courseId`, { courseId })
+      .orderBy('mentor.createdDate')
+      .getMany();
   }
 
   private buildTaskResultSubQuery(courseTasksIds: number[]) {
@@ -180,5 +148,44 @@ export class CourseMentorsService {
     const result: { id: number; value: string }[] = await query.getRawMany();
 
     return Object.fromEntries(result.map(({ id, value }) => [id, Number(value)]));
+  }
+
+  private constructMentorsWithStats(
+    mentorsRecords: Mentor[],
+    checkedTasksCountByMentor: Record<string, number>,
+    lastCheckedDateByMentor: Record<string, Date | null>,
+    tasksCount: number,
+  ) {
+    const mentors = [];
+    for (const mentor of mentorsRecords) {
+      const mentorDetails = MentorsService.convertMentorToMentorDetails(mentor);
+
+      const { user } = mentor;
+      const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
+      const totalToCheck = activeStudents.length * tasksCount;
+
+      const lastCheckedDate = lastCheckedDateByMentor[mentor.id];
+      const checkedCount = checkedTasksCountByMentor[mentor.id] ?? 0;
+
+      mentors.push({
+        ...mentorDetails,
+        contactsEpamEmail: user.contactsEpamEmail ?? '',
+        studentsCount: activeStudents.length,
+        screenings: {
+          total: mentor.stageInterviews?.length ?? 0,
+          completed: mentor.stageInterviews?.filter(s => s.isCompleted).length ?? 0,
+        },
+        interviews: {
+          total: mentor.taskChecker?.filter(tc => tc.courseTask?.type === 'interview').length,
+          completed: mentor.interviewResults?.length ?? 0,
+        },
+        taskResultsStats: {
+          lastUpdatedDate: lastCheckedDate ? new Date(lastCheckedDate) : null,
+          total: totalToCheck,
+          checked: checkedCount,
+        },
+      });
+    }
+    return mentors;
   }
 }

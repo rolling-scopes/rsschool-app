@@ -15,6 +15,7 @@ import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import * as dayjs from 'dayjs';
 import { TaskChecker, User } from '../../../../server/src/models';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 export interface SolutionItem {
   maxScore: number;
@@ -69,7 +70,7 @@ export class MentorsService {
       cityName: user.cityName ?? '',
       countryName: user.countryName ?? '',
       maxStudentsLimit: mentor.maxStudentsLimit,
-      studentsPreference: mentor.studentsPreference ?? 'any',
+      studentsPreference: mentor.studentsPreference ?? PreferredStudentsLocation.ANY,
       studentsCount: mentor.students ? mentor.students.length : 0,
       screenings: {
         total: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
