@@ -55,6 +55,7 @@ jobs:
           cp -r out/json/. app
           cp -r out/full/. app
           cp -r out/package-lock.json app
+          cp -r .dockerignore app
           cp -r common app/common
 
       - name: Install dependencies
