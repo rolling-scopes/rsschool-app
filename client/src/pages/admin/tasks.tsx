@@ -415,11 +415,13 @@ function TaskModal({
         <Col span={24}>
           <Form.Item name="usedInCourses" label="Used in Courses">
             <Card>
-              {modalData?.courses?.map(({ name, isActive }) => (
-                <Tag key={name} color={isActive ? 'blue' : ''}>
-                  {name}
-                </Tag>
-              ))}
+              <div style={{ display: 'flex', flexWrap: 'wrap', rowGap: 8 }}>
+                {modalData?.courses?.map(({ name, isActive }) => (
+                  <Tag key={name} color={isActive ? 'blue' : ''}>
+                    {name}
+                  </Tag>
+                ))}
+              </div>
             </Card>
           </Form.Item>
         </Col>
