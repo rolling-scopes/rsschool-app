@@ -13,6 +13,7 @@ import {
   Divider,
   Card,
   Tag,
+  Space,
 } from 'antd';
 import withSession, { Session } from 'components/withSession';
 import {
@@ -415,13 +416,13 @@ function TaskModal({
         <Col span={24}>
           <Form.Item name="usedInCourses" label="Used in Courses">
             <Card>
-              <div style={{ display: 'flex', flexWrap: 'wrap', rowGap: 8 }}>
+              <Space size={[0, 4]} wrap style={{ display: 'flex' }}>
                 {modalData?.courses?.map(({ name, isActive }) => (
                   <Tag key={name} color={isActive ? 'blue' : ''}>
                     {name}
                   </Tag>
                 ))}
-              </div>
+              </Space>
             </Card>
           </Form.Item>
         </Col>
