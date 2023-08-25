@@ -19,4 +19,10 @@ export class StageInterviewFeedback {
 
   @Column()
   json: string;
+
+  /**
+   * defines the version of free-form `json` feedback.
+   */
+  @Column({ nullable: true })
+  version: number;
 }

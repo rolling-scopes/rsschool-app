@@ -1,35 +1,35 @@
 import { InterviewDto } from 'api';
-import { isInterviewRegistrationInProgess, isInterviewStarted } from 'domain/interview';
+import { isInterviewRegistrationInProgress, isInterviewStarted } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import { Course } from 'services/models';
 import { RegistrationNoticeAlert } from './RegistrationNoticeAlert';
-import { StudentsList } from './StudentsList';
+import { InterviewsList } from './InterviewsList';
 import { WaitListAlert } from './WaitListAlert';
 
 export function InterviewDetails(props: {
-  interview: InterviewDto;
+  interviewTask: InterviewDto;
   course: Course;
-  students: MentorInterview[];
+  interviews: MentorInterview[];
   fetchStudentInterviews: () => Promise<void>;
 }) {
-  const { interview, course, students, fetchStudentInterviews } = props;
-  const { startDate } = interview;
+  const { interviewTask, course, interviews, fetchStudentInterviews } = props;
+  const { startDate } = interviewTask;
 
-  const isRegistrationInProgress = isInterviewRegistrationInProgess(startDate);
+  const isRegistrationInProgress = isInterviewRegistrationInProgress(startDate);
   const interviewStarted = isInterviewStarted(startDate);
 
   return (
     <>
       {interviewStarted && (
-        <WaitListAlert interviewId={interview.id} startDate={startDate} courseAlias={course.alias} />
+        <WaitListAlert interviewId={interviewTask.id} startDate={startDate} courseAlias={course.alias} />
       )}
-      {isRegistrationInProgress && <RegistrationNoticeAlert interview={interview} startDate={startDate} />}
+      {isRegistrationInProgress && <RegistrationNoticeAlert interview={interviewTask} startDate={startDate} />}
       {interviewStarted && (
-        <StudentsList
+        <InterviewsList
           fetchStudentInterviews={fetchStudentInterviews}
-          interviews={students}
+          interviews={interviews}
           course={course}
-          interview={interview}
+          interviewTask={interviewTask}
         />
       )}
     </>

@@ -43,4 +43,11 @@ export class StudentsService {
 
     return student.mentorId === currentMentorId;
   }
+
+  /*
+   * sets mentor for student, when mentor accepts the student after technical screening
+   */
+  public async setMentor(studentId: number, mentorId: number) {
+    await this.studentRepository.update(studentId, { mentorId });
+  }
 }
