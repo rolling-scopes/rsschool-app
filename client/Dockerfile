@@ -15,7 +15,7 @@ COPY client/public /app/client/public
 COPY package.json /app
 COPY package-lock.json /app
 
-RUN npm ci --production --no-optional
+RUN npm ci --omit=dev --omit=optional
 
 COPY client/.next /app/client/.next
 

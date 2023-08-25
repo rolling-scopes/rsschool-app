@@ -4867,6 +4867,12 @@ export interface TaskDto {
      * @memberof TaskDto
      */
     'attributes': object;
+    /**
+     * 
+     * @type {Array<UsedCourseDto>}
+     * @memberof TaskDto
+     */
+    'courses': Array<UsedCourseDto>;
 }
 
 export const TaskDtoTypeEnum = {
@@ -6342,6 +6348,25 @@ export interface UpsertNotificationConnectionDto {
      * @memberof UpsertNotificationConnectionDto
      */
     'enabled': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UsedCourseDto
+ */
+export interface UsedCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UsedCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UsedCourseDto
+     */
+    'isActive': boolean;
 }
 /**
  * 
