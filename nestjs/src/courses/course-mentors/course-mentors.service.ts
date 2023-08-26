@@ -122,7 +122,7 @@ export class CourseMentorsService {
       .addSelect('tr."updatedDate"', 'value')
       .from(Mentor, 'm')
       .leftJoin('user', 'u', 'u."id" = m."userId"')
-      .leftJoin('(' + subQuery.getQuery() + ')', 'tr', 'tr."lastCheckerId" = u.id')
+      .leftJoin(`(${subQuery.getQuery()})`, 'tr', 'tr."lastCheckerId" = u.id')
       .where('m."courseId" = :courseId', { courseId })
       .setParameters(subQuery.getParameters());
 
@@ -140,7 +140,7 @@ export class CourseMentorsService {
       .addSelect('COUNT(tr."lastCheckerId")', 'value')
       .from(Mentor, 'm')
       .leftJoin('user', 'u', 'u."id" = m."userId"')
-      .leftJoin('(' + subQuery.getQuery() + ')', 'tr', 'tr."lastCheckerId" = u.id')
+      .leftJoin(`(${subQuery.getQuery()})`, 'tr', 'tr."lastCheckerId" = u.id')
       .where('m."courseId" = :courseId', { courseId })
       .groupBy('m.id')
       .setParameters(subQuery.getParameters());
