@@ -1,6 +1,10 @@
 export enum InputType {
   Input = 'input',
+  TextArea = 'textarea',
   Checkbox = 'checkbox',
+  Radio = 'radio',
+  RadioButton = 'radioButton',
+  Rating = 'rating',
 }
 
 export type Question = {
