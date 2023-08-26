@@ -123,5 +123,15 @@ export function DecisionTag({ decision, status }: { decision?: Decision; status?
       return <Tag color="red">Ignored mentor</Tag>;
     case Decision.MissedWithReason:
       return <Tag color="cyan">Missed with a reason</Tag>;
+    default: {
+      // fallback to the old feedback values
+      if (decision === 'noButGoodCandidate') {
+        return <Tag color="green">Completed</Tag>;
+      }
+      if (decision === 'didNotDecideYet') {
+        return <Tag color="orange">Unfilled form</Tag>;
+      }
+      return <Tag>Uncompleted</Tag>;
+    }
   }
 }
