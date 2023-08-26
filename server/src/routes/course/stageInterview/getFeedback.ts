@@ -6,6 +6,9 @@ import { IUserSession } from '../../../models';
 import { StageInterviewFeedbackRepository } from '../../../repositories/stageInterviewFeedback.repository';
 import { setResponse } from '../../utils';
 
+/**
+ * @deprecated. should be removed after feedbacks are migrated to new template
+ */
 export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { interviewId } = ctx.params;
   const mentorGithubId = (ctx.state!.user as IUserSession).githubId;

@@ -16,6 +16,9 @@ type BodyParams = {
   isGoodCandidate: boolean | null;
 };
 
+/**
+ * @deprecated. should be removed after feedbacks are migrated to new template
+ */
 export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data: BodyParams = ctx.request.body;
   const { courseId } = ctx.params;
