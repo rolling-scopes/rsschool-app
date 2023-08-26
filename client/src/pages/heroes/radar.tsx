@@ -45,10 +45,13 @@ function Page(props: Props) {
     courseId,
     notActivist,
   }: GetHeroesProps) => {
-    setLoading(true);
-    const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist);
-    setHeroes(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist);
+      setHeroes(data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
