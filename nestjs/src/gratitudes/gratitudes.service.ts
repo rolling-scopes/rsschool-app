@@ -70,7 +70,7 @@ export class GratitudesService {
     countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId"))`).groupBy('"toUserId"');
     countQuery
       .select('COUNT(*) as count')
-      .from('(' + countSubQuery.getQuery() + ')', 'badges')
+      .from(`(${countSubQuery.getQuery()})`, 'badges')
       .setParameters(countSubQuery.getParameters());
 
     heroesSubQuery
@@ -86,7 +86,7 @@ export class GratitudesService {
         'sum("badgeCount") as total',
         `jsonb_agg(json_build_object('badgeId', "badgeId", 'badgeCount', "badgeCount")) as badges`,
       ])
-      .from('(' + heroesSubQuery.getQuery() + ')', 'badges')
+      .from(`(${heroesSubQuery.getQuery()})`, 'badges')
       .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
       .groupBy('"githubId"')
       .addGroupBy('"firstName"')
