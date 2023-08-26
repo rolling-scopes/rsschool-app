@@ -21,38 +21,38 @@ export class MentorDetailsDto extends UserDto implements MentorDetails {
   }
 
   @ApiProperty()
-  isActive: boolean;
+  public isActive: boolean;
 
   @ApiProperty()
-  cityName: string;
+  public cityName: string;
 
   @ApiProperty()
-  countryName: string;
+  public countryName: string;
 
   @ApiProperty()
-  maxStudentsLimit: number;
+  public maxStudentsLimit: number;
 
   @ApiProperty({ type: [StudentDto] })
-  students: (StudentDto | { id: number })[];
+  public students: (StudentDto | { id: number })[];
 
   @ApiPropertyOptional()
-  interviews?: InterviewStatistics;
+  public interviews?: InterviewStatistics;
 
   @ApiPropertyOptional()
-  screenings?: InterviewStatistics;
+  public screenings?: InterviewStatistics;
 
   @ApiPropertyOptional()
-  taskResultsStats?: {
+  public taskResultsStats?: {
     lastUpdatedDate?: Date | string | null;
     total: number;
     checked: number;
   };
 
   @ApiProperty({ enum: PreferredStudentsLocation })
-  studentsPreference: PreferredStudentsLocation;
+  public studentsPreference: PreferredStudentsLocation;
 
   @ApiPropertyOptional()
-  studentsCount?: number;
+  public studentsCount?: number;
 
   public contactsEpamEmail: string;
 }
