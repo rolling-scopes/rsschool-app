@@ -116,10 +116,10 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
 
   const dataSource = heroes?.content?.length
     ? heroes.content.map((hero: HeroRadarDto, i) => {
-      const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
+        const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
 
-      return { ...hero, rank };
-    })
+        return { ...hero, rank };
+      })
     : [];
 
   const handleChange: TableProps<HeroRadarRanked>['onChange'] = async ({ current, pageSize }) => {
