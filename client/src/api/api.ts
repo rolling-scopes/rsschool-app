@@ -3241,10 +3241,10 @@ export interface MentorDetailsDto {
     'maxStudentsLimit': number;
     /**
      * 
-     * @type {Array<StudentDto>}
+     * @type {Array<StudentId>}
      * @memberof MentorDetailsDto
      */
-    'students': Array<StudentDto>;
+    'students': Array<StudentId>;
     /**
      * 
      * @type {object}
@@ -3275,6 +3275,12 @@ export interface MentorDetailsDto {
      * @memberof MentorDetailsDto
      */
     'studentsCount'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'contactsEpamEmail': string;
 }
 
 export const MentorDetailsDtoStudentsPreferenceEnum = {
@@ -4858,6 +4864,19 @@ export const StudentFeedbackDtoEnglishLevelEnum = {
 
 export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
+/**
+ * 
+ * @export
+ * @interface StudentId
+ */
+export interface StudentId {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentId
+     */
+    'id': number;
+}
 /**
  * 
  * @export

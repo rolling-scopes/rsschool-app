@@ -3395,6 +3395,7 @@
         },
         "required": ["isManager", "isSupervisor", "isDementor"]
       },
+      "StudentId": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "MentorDetailsDto": {
         "type": "object",
         "properties": {
@@ -3405,12 +3406,13 @@
           "cityName": { "type": "string" },
           "countryName": { "type": "string" },
           "maxStudentsLimit": { "type": "number" },
-          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentDto" } },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentId" } },
           "interviews": { "type": "object" },
           "screenings": { "type": "object" },
           "taskResultsStats": { "type": "object" },
           "studentsPreference": { "type": "string", "enum": ["any", "country", "city"] },
-          "studentsCount": { "type": "number" }
+          "studentsCount": { "type": "number" },
+          "contactsEpamEmail": { "type": "string" }
         },
         "required": [
           "id",
@@ -3421,7 +3423,8 @@
           "countryName",
           "maxStudentsLimit",
           "students",
-          "studentsPreference"
+          "studentsPreference",
+          "contactsEpamEmail"
         ]
       },
       "SearchMentorDto": {
