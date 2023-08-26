@@ -54,5 +54,6 @@ export class MentorDetailsDto extends UserDto implements MentorDetails {
   @ApiPropertyOptional()
   public studentsCount?: number;
 
-  public contactsEpamEmail: string;
+  @ApiProperty({ type: String, nullable: true })
+  public contactsEpamEmail: string | null;
 }
