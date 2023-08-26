@@ -56,12 +56,3 @@ export interface StageInterviewFeedbackJson extends StageInterviewFeedback {
     comment: string | null;
   };
 }
-
-export interface StageInterviewFeedbackState extends StageInterviewFeedback {
-  english: {
-    levelStudentOpinion: number | null;
-    levelMentorOpinion: number | null;
-    whereAndWhenLearned: string | null;
-    comment: string | null;
-  };
-}

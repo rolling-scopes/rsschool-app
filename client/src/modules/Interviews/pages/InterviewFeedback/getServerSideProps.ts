@@ -8,15 +8,16 @@ import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
 
 export type PageProps = CourseOnlyPageProps & {
-  interviewId: number;
+  interviewTaskId: number;
   type: keyof typeof templates;
+  githubId: string;
 };
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
   try {
     const alias = ctx.query.course as string;
     const type = ctx.params?.type as string;
-
+    const githubId = ctx.query.githubId as string;
     const token = getTokenFromContext(ctx);
     const courses = await new UserService(token).getCourses();
     const course = courses.find(course => course.alias === alias) ?? null;
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       return notAuthorizedResponse;
     }
     return {
-      props: { course, interviewId: interview.id, type },
+      props: { course, interviewTaskId: interview.id, type, githubId },
     };
   } catch (e) {
     return noAccessResponse;

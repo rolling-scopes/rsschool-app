@@ -379,6 +379,18 @@ export interface AvailableStudentDto {
      * @memberof AvailableStudentDto
      */
     'registeredDate': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AvailableStudentDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AvailableStudentDto
+     */
+    'feedbackVersion': number;
 }
 /**
  * 
@@ -3082,6 +3094,37 @@ export interface InterviewDto {
 /**
  * 
  * @export
+ * @interface InterviewFeedbackDto
+ */
+export interface InterviewFeedbackDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewFeedbackDto
+     */
+    'version'?: number;
+    /**
+     * 
+     * @type {object}
+     * @memberof InterviewFeedbackDto
+     */
+    'json'?: object;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InterviewFeedbackDto
+     */
+    'isCompleted': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewFeedbackDto
+     */
+    'maxScore': number;
+}
+/**
+ * 
+ * @export
  * @interface JoinTeamDto
  */
 export interface JoinTeamDto {
@@ -4095,6 +4138,49 @@ export interface PublicVisibilitySettings {
      * @memberof PublicVisibilitySettings
      */
     'all': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PutInterviewFeedbackDto
+ */
+export interface PutInterviewFeedbackDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'version': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'json': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'decision'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'isGoodCandidate'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'isCompleted': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof PutInterviewFeedbackDto
+     */
+    'score'?: number;
 }
 /**
  * 
@@ -9015,6 +9101,53 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
          * 
          * @param {number} courseId 
          * @param {number} interviewId 
+         * @param {string} type 
+         * @param {PutInterviewFeedbackDto} putInterviewFeedbackDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createInterviewFeedback: async (courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createInterviewFeedback', 'courseId', courseId)
+            // verify required parameter 'interviewId' is not null or undefined
+            assertParamExists('createInterviewFeedback', 'interviewId', interviewId)
+            // verify required parameter 'type' is not null or undefined
+            assertParamExists('createInterviewFeedback', 'type', type)
+            // verify required parameter 'putInterviewFeedbackDto' is not null or undefined
+            assertParamExists('createInterviewFeedback', 'putInterviewFeedbackDto', putInterviewFeedbackDto)
+            const localVarPath = `/courses/{courseId}/interviews/{interviewId}/{type}/feedback`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"interviewId"}}`, encodeURIComponent(String(interviewId)))
+                .replace(`{${"type"}}`, encodeURIComponent(String(type)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(putInterviewFeedbackDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9063,6 +9196,47 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
             const localVarPath = `/courses/{courseId}/interviews/{interviewId}`
                 .replace(`{${"interviewId"}}`, encodeURIComponent(String(interviewId)))
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
+         * @param {string} type 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInterviewFeedback: async (courseId: number, interviewId: number, type: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getInterviewFeedback', 'courseId', courseId)
+            // verify required parameter 'interviewId' is not null or undefined
+            assertParamExists('getInterviewFeedback', 'interviewId', interviewId)
+            // verify required parameter 'type' is not null or undefined
+            assertParamExists('getInterviewFeedback', 'type', type)
+            const localVarPath = `/courses/{courseId}/interviews/{interviewId}/{type}/feedback`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"interviewId"}}`, encodeURIComponent(String(interviewId)))
+                .replace(`{${"type"}}`, encodeURIComponent(String(type)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9142,6 +9316,19 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} interviewId 
+         * @param {string} type 
+         * @param {PutInterviewFeedbackDto} putInterviewFeedbackDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createInterviewFeedback(courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createInterviewFeedback(courseId, interviewId, type, putInterviewFeedbackDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9158,6 +9345,18 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
          */
         async getInterview(interviewId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InterviewDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getInterview(interviewId, courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
+         * @param {string} type 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getInterviewFeedback(courseId: number, interviewId: number, type: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InterviewFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviewFeedback(courseId, interviewId, type, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9186,6 +9385,18 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
          * 
          * @param {number} courseId 
          * @param {number} interviewId 
+         * @param {string} type 
+         * @param {PutInterviewFeedbackDto} putInterviewFeedbackDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createInterviewFeedback(courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options?: any): AxiosPromise<void> {
+            return localVarFp.createInterviewFeedback(courseId, interviewId, type, putInterviewFeedbackDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9201,6 +9412,17 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
          */
         getInterview(interviewId: number, courseId: number, options?: any): AxiosPromise<InterviewDto> {
             return localVarFp.getInterview(interviewId, courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} interviewId 
+         * @param {string} type 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInterviewFeedback(courseId: number, interviewId: number, type: string, options?: any): AxiosPromise<InterviewFeedbackDto> {
+            return localVarFp.getInterviewFeedback(courseId, interviewId, type, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9227,6 +9449,20 @@ export class CoursesInterviewsApi extends BaseAPI {
      * 
      * @param {number} courseId 
      * @param {number} interviewId 
+     * @param {string} type 
+     * @param {PutInterviewFeedbackDto} putInterviewFeedbackDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesInterviewsApi
+     */
+    public createInterviewFeedback(courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).createInterviewFeedback(courseId, interviewId, type, putInterviewFeedbackDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} interviewId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesInterviewsApi
@@ -9245,6 +9481,19 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public getInterview(interviewId: number, courseId: number, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).getInterview(interviewId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} interviewId 
+     * @param {string} type 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesInterviewsApi
+     */
+    public getInterviewFeedback(courseId: number, interviewId: number, type: string, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).getInterviewFeedback(courseId, interviewId, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

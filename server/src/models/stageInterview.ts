@@ -69,4 +69,10 @@ export class StageInterview {
 
   @Column({ nullable: true })
   isGoodCandidate: boolean;
+
+  /**
+   * stores interview pre-calculated score
+   */
+  @Column({ nullable: true })
+  score: number;
 }

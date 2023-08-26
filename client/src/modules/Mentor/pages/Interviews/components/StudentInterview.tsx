@@ -22,7 +22,9 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
             href={getInterviewFeedbackUrl({
               courseAlias,
               interviewName: interview.name,
+              interviewId: interview.id,
               studentGithubId: student.githubId,
+              studentId: student.id,
               template: template,
             })}
           >
