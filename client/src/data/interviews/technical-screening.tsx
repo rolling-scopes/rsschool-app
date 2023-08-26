@@ -2,6 +2,15 @@ import { ReactNode } from 'react';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import { InputType } from './types';
 
+function TimeForStep({ minutes }: { minutes: string }) {
+  return (
+    <div>
+      <ClockCircleOutlined />
+      &nbsp; {minutes} min
+    </div>
+  );
+}
+
 /**
  * define steps for interview feedback, required to be filled
  */
@@ -150,7 +159,7 @@ export const SKILLS_LEVELS = [
 ];
 
 export const CODING_LEVELS = [
-  `Isn't able to coding`,
+  `Isn't able to code`,
   `Poor coding ability (almost isn't able to)`,
   'Can code with tips',
   'Good coding ability (makes not critical mistakes)',
@@ -181,10 +190,7 @@ export const introduction: Step = {
         face interviewing helps both parties to interact and form a connection.
       </div>
       <div>Make a mark, if the interview can't be managed.</div>
-      <div>
-        <ClockCircleOutlined />
-        &nbsp; 3 min
-      </div>
+      <TimeForStep minutes="3" />
     </>
   ),
   items: [
@@ -239,7 +245,7 @@ const theoryQuestions = [
   {
     id: 'html',
     title:
-      "Position and display attributes' values, tags, weight of selectors, pseudo-classes and elements, box model, relative and absolute values, em vs rem, semantic, semantic tags, etc.",
+      'Position and display attribute values, tags, weight of selectors, pseudo-classes and elements, box model, relative and absolute values, em vs rem, semantic, semantic tags, etc.',
     topic: 'HTML/CSS',
   },
   {
@@ -294,10 +300,7 @@ const theory: Step = {
         Ask student some questions from the self-study course. You can use the list of recommended questions or add your
         own.
       </div>
-      <div>
-        <ClockCircleOutlined />
-        &nbsp; 15-30 min
-      </div>
+      <TimeForStep minutes="15-30" />
     </>
   ),
   items: [
@@ -337,10 +340,7 @@ const practice: Step = {
     <>
       Ask the student to solve the coding problem. See the list of examples of coding tasks or suggest another problem
       of the same level.
-      <div>
-        <ClockCircleOutlined />
-        &nbsp; 10-30 min
-      </div>
+      <TimeForStep minutes="10-30" />
     </>
   ),
   items: [
@@ -370,10 +370,7 @@ const english: Step = {
   description: (
     <>
       Ask the student to tell about themselves (2—3 min), hobby, favorite book, film etc.
-      <div>
-        <ClockCircleOutlined />
-        &nbsp; 3-5 min
-      </div>
+      <TimeForStep minutes="3-5" />
     </>
   ),
   items: [
@@ -425,10 +422,7 @@ const mentorDecision: Step = {
   description: (
     <>
       Make a decision to accept a student into a mentoring program.
-      <div>
-        <ClockCircleOutlined />
-        &nbsp; 5 min
-      </div>
+      <TimeForStep minutes="5" />
     </>
   ),
   items: [
@@ -436,7 +430,7 @@ const mentorDecision: Step = {
       id: 'finalScore',
       type: InputType.Input,
       title: 'Final Score',
-      description: 'We calculated average based on your marks, but you can adjust the final score',
+      description: 'We calculated average score based on your marks, but you can adjust the final score',
       inputType: 'number',
       required: true,
     },
@@ -444,7 +438,7 @@ const mentorDecision: Step = {
       id: 'isGoodCandidate',
       type: InputType.Checkbox,
       title:
-        'In your opinion, is this student a good candidate for mentoring with active interest  and motivation? Make a mark',
+        'In your opinion, is this student a good candidate for mentoring with active interest and motivation? Make a mark',
       options: [{ id: 'true', title: 'The student is a good candidate for mentoring.' }],
     },
     {
