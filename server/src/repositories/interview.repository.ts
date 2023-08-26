@@ -153,6 +153,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
           name: userService.createName(record.mentor.user),
         },
         student: {
+          id: record.student.id,
           githubId: record.student.user.githubId,
           name: userService.createName(record.student.user),
         },

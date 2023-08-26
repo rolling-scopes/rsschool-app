@@ -5,20 +5,20 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, MentorInterview } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { InteviewCard } from './components/InterviewCard';
+import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
 
 export function Interviews(props: CoursePageProps) {
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
-  const [studentsByInterview, setStudentsByInterview] = useState<Dictionary<MentorInterview[]>>({});
+  const [interviewsByTask, setInterviewsByTask] = useState<Dictionary<MentorInterview[]>>({});
   const [loading, withLoading] = useLoading();
   const { course } = props;
 
   const fetchStudentInterviews = useCallback(async () => {
     const interviews = await new CourseService(course.id).getMentorInterviews(props.session.githubId);
-    setStudentsByInterview(groupBy(interviews, 'name'));
+    setInterviewsByTask(groupBy(interviews, 'name'));
   }, [course.id, props.session.githubId]);
 
   const loadData = async () => {
@@ -36,12 +36,12 @@ export function Interviews(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={course.name}>
       <MentorOptionsProvider course={course} session={props.session}>
         <div className="container">
-          {interviews.map(interview => (
-            <InteviewCard
-              interview={interview}
-              key={interview.id}
+          {interviews.map(interviewTask => (
+            <InterviewCard
+              interviewTask={interviewTask}
+              key={interviewTask.id}
               course={course}
-              students={studentsByInterview[interview.name]}
+              interviews={interviewsByTask[interviewTask.name]}
               fetchStudentInterviews={fetchStudentInterviews}
             />
           ))}
