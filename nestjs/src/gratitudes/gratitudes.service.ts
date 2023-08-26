@@ -60,16 +60,18 @@ export class GratitudesService {
     const heroesQuery = this.dataSource.createQueryBuilder();
 
     if (notActivist) {
-      console.log('notActivist: ', notActivist);
       [countSubQuery, heroesQuery].forEach(query => query.having(`not bool_or("badgeId" = 'RS_activist')`));
     }
 
     if (courseId) {
-      [heroesSubQuery, countQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
+      [heroesSubQuery, countSubQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
     }
 
     countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId"))`).groupBy('"toUserId"');
-    countQuery.select('COUNT(*) as count').from('(' + countSubQuery.getQuery() + ')', 'badges');
+    countQuery
+      .select('COUNT(*) as count')
+      .from('(' + countSubQuery.getQuery() + ')', 'badges')
+      .setParameters(countSubQuery.getParameters());
 
     heroesSubQuery
       .select(['"feedback"."badgeId"', '"feedback"."toUserId"', 'COUNT(*) as "badgeCount"'])
@@ -91,7 +93,8 @@ export class GratitudesService {
       .addGroupBy('"lastName"')
       .orderBy('total', 'DESC')
       .limit(pageSize)
-      .offset((page - 1) * pageSize);
+      .offset((page - 1) * pageSize)
+      .setParameters(heroesSubQuery.getParameters());
 
     const { count } = await countQuery.getRawOne();
     const total = +count;
