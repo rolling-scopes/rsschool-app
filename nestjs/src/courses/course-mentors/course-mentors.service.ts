@@ -104,7 +104,7 @@ export class CourseMentorsService {
     if (courseTasksIds.length) {
       subQuery.where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds });
     } else {
-      // to prevent empty array
+      // to preserve empty array
       subQuery.where('1 = 0');
     }
 
