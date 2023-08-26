@@ -10,7 +10,7 @@ import { Course } from 'services/models';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
 
-type Props = { courses: Course[] };
+type Props = { courses: Course[], activeCourse?: Course | null };
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,12 +34,12 @@ export function AdminSider(props: Props) {
   const [openedSidebarItems = [], setOpenedSidebarItems] = useLocalStorage<string[]>(LocalStorage.OpenedSidebarItems);
   const [activeCourse] = useActiveCourse(props.courses);
 
-  const { session } = useContext(SessionContext);
+  const session = useContext(SessionContext);
 
   const adminMenuItems = getAdminMenuItems(session);
   const courseManagementMenuItems = useMemo(
-    () => getCourseManagementMenuItems(session, activeCourse ?? null),
-    [activeCourse, activeCourse],
+    () => getCourseManagementMenuItems(session, props.activeCourse ?? activeCourse),
+    [activeCourse],
   );
 
   const menuIconProps = {

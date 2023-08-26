@@ -1,15 +1,13 @@
 import { Layout, Spin } from 'antd';
-import { useContext } from 'react';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from './Header';
-import { SessionContext } from 'modules/Course/contexts';
+import { Course } from 'services/models';
 
-type Props = { loading: boolean; title?: string; children?: any };
+type Props = { loading: boolean; title?: string; children?: any; course: Course; };
 
 export function CoursePageLayout(props: Props) {
-  const { activeCourse } = useContext(SessionContext);
 
-  if (activeCourse == null) {
+  if (props.course == null) {
     return <CourseNoAccess />;
   }
   return (

@@ -4,6 +4,7 @@ import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { dateRenderer, getColumnSearchProps, stringSorter } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
+import { SessionProvider } from 'modules/Course/contexts';
 import { NextRouter, withRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -16,7 +17,7 @@ type Props = {
 
 const api = new OpportunitiesApi();
 
-function Page(props: Props) {
+function ApplicantsPage(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [applicants, setApplicants] = useState<ApplicantResumeDto[] | null>(null);
 
@@ -141,6 +142,14 @@ function Page(props: Props) {
         </Layout>
       </LoadingScreen>
     </>
+  );
+}
+
+function Page(props: Props) {
+  return (
+    <SessionProvider>
+      <ApplicantsPage {...props} />
+    </SessionProvider>
   );
 }
 
