@@ -1,10 +1,14 @@
 import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { InterviewStatistics, MentorDetails } from '@common/models';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { StudentDto } from '../../../courses/students/dto';
 import { UserDto } from '../../../user-groups/dto';
 
-export class MentorDetailsDto extends UserDto implements MentorDetails {
+class StudentId {
+  @ApiProperty()
+  id: number;
+}
+
+export class MentorDetailsDto extends UserDto {
   constructor(mentor: MentorDetails) {
     super(mentor);
 
@@ -32,8 +36,8 @@ export class MentorDetailsDto extends UserDto implements MentorDetails {
   @ApiProperty()
   public maxStudentsLimit: number;
 
-  @ApiProperty({ type: [StudentDto] })
-  public students: (StudentDto | { id: number })[];
+  @ApiProperty({ type: [StudentId] })
+  public students: { id: number }[];
 
   @ApiPropertyOptional()
   public interviews?: InterviewStatistics;
