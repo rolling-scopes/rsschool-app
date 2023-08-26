@@ -99,16 +99,11 @@ export class CourseMentorsService {
   }
 
   private buildTaskResultSubQuery(courseTasksIds: number[]) {
-    const subQuery = this.taskResultRepository.createQueryBuilder('t').select('t.lastCheckerId', 'lastCheckerId');
-
-    if (courseTasksIds.length) {
-      subQuery.where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds });
-    } else {
-      // to preserve empty array
-      subQuery.where('1 = 0');
-    }
-
-    return subQuery;
+    // add 0 to preserve empty array
+    return this.taskResultRepository
+      .createQueryBuilder('t')
+      .select('t.lastCheckerId', 'lastCheckerId')
+      .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds.concat([0]) });
   }
 
   private async getLastCheckedDates(courseId: number, courseTasksIds: number[]): Promise<Record<string, Date | null>> {
