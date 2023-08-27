@@ -67,7 +67,7 @@ function Page(props: Props) {
     async (data: HeroesRadarFormProps) => {
       await getHeroes(data);
     },
-    [heroes],
+    [],
   );
 
   const handleSubmit = useCallback(
@@ -76,14 +76,14 @@ function Page(props: Props) {
       setFormData(data);
       await makeRequest(data);
     },
-    [heroes],
+    [],
   );
 
   const onClear = useCallback(async () => {
     form.resetFields();
     setFormData(form.getFieldsValue());
     await getHeroes(initialQueryParams);
-  }, [heroes]);
+  }, []);
 
   return (
     <PageLayout loading={loading} title="Heroes Radar" githubId={props.session.githubId}>
