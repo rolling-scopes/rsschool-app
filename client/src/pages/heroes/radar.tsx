@@ -112,11 +112,7 @@ function Page(props: Props) {
           </Button>
         </Space>
       </Form>
-      <HeroesRadarTable
-        heroes={heroes}
-        onChange={handleChange}
-        setFormLayout={setFormLayout}
-      />
+      <HeroesRadarTable heroes={heroes} onChange={handleChange} setFormLayout={setFormLayout} />
     </PageLayout>
   );
 }

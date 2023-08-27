@@ -8,18 +8,18 @@ interface HeroesRadar {
   meta: PaginationMeta;
 }
 
-const calculateRank = (heroes: HeroRadar[]): HeroRadar[] => {
+const calculateRank = ({ heroes, meta }: HeroesRadar): HeroRadar[] => {
   const sortedHeroes = [...heroes].sort((a, b) => b.total - a.total);
   const rankedHeroes = heroes.map(hero => {
-    const rank = sortedHeroes.findIndex(h => h.total === hero.total) + 1;
+    const rank = sortedHeroes.findIndex(h => h.total === hero.total) + 1 + meta.pageSize * (meta.current - 1);
     return { ...hero, rank };
   });
   return rankedHeroes;
-}
+};
 
 export class HeroesRadarDto {
   constructor(heroesRadar: HeroesRadar) {
-    this.content = calculateRank(heroesRadar.heroes).map((hero) => new HeroRadarDto(hero));
+    this.content = calculateRank(heroesRadar).map(hero => new HeroRadarDto(hero));
     this.pagination = new PaginationMetaDto(heroesRadar.meta);
   }
 
