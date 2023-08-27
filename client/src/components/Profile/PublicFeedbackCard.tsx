@@ -103,7 +103,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                     <>
                       {badgeId ? (
                         <Text strong style={{ fontSize: 12 }}>
-                          {(heroesBadges as any)[badgeId].name}
+                          {heroesBadges[badgeId].name}
                         </Text>
                       ) : (
                         ''

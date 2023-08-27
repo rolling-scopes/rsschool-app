@@ -126,7 +126,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
             <Card style={{ position: 'relative', background: 'none' }}>
               <div
                 className="badge-bg"
-                style={{ backgroundImage: `url(/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url})` }}
+                style={{ backgroundImage: `url(/static/svg/badges/${heroesBadges[feedback.badgeId].url})` }}
               />
               <div className="badge-note" style={{ marginBottom: 48 }}>
                 <Paragraph style={{ margin: 0 }}>
@@ -141,7 +141,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
               <div className="flex-center" style={{ marginBottom: 48 }}>
                 <div className="badge">
                   <Avatar
-                    src={`/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url}`}
+                    src={`/static/svg/badges/${heroesBadges[feedback.badgeId].url}`}
                     alt={`${feedback.badgeId} badge`}
                     size={128}
                   />
