@@ -3,7 +3,7 @@ import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
 import { GratitudesApi, HeroesRadarDto } from 'api';
 import HeroesRadarTable from 'components/Heroes/HeroesRadarTable';
-import { Form, Select, Button, Checkbox } from 'antd';
+import { Form, Select, Button, Checkbox, Space } from 'antd';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -94,14 +94,14 @@ function Page(props: Props) {
         <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
           <Checkbox>Show only not activists</Checkbox>
         </Form.Item>
-        <div>
+        <Space>
           <Button size="middle" type="primary" htmlType="submit">
             Submit
           </Button>
           <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
             Clear
           </Button>
-        </div>
+        </Space>
       </Form>
       <HeroesRadarTable
         heroes={heroes}
