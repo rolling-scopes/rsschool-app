@@ -3237,6 +3237,106 @@ export interface MentorDashboardDto {
 /**
  * 
  * @export
+ * @interface MentorDetailsDto
+ */
+export interface MentorDetailsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDetailsDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MentorDetailsDto
+     */
+    'isActive': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'cityName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'countryName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDetailsDto
+     */
+    'maxStudentsLimit': number;
+    /**
+     * 
+     * @type {Array<StudentId>}
+     * @memberof MentorDetailsDto
+     */
+    'students': Array<StudentId>;
+    /**
+     * 
+     * @type {object}
+     * @memberof MentorDetailsDto
+     */
+    'interviews'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof MentorDetailsDto
+     */
+    'screenings'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof MentorDetailsDto
+     */
+    'taskResultsStats'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'studentsPreference': MentorDetailsDtoStudentsPreferenceEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorDetailsDto
+     */
+    'studentsCount'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorDetailsDto
+     */
+    'contactsEpamEmail': string;
+}
+
+export const MentorDetailsDtoStudentsPreferenceEnum = {
+    Any: 'any',
+    Country: 'country',
+    City: 'city'
+} as const;
+
+export type MentorDetailsDtoStudentsPreferenceEnum = typeof MentorDetailsDtoStudentsPreferenceEnum[keyof typeof MentorDetailsDtoStudentsPreferenceEnum];
+
+/**
+ * 
+ * @export
  * @interface MentorDto
  */
 export interface MentorDto {
@@ -4509,6 +4609,31 @@ export interface ScoreStudentDto {
 /**
  * 
  * @export
+ * @interface SearchMentorDto
+ */
+export interface SearchMentorDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof SearchMentorDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof SearchMentorDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SearchMentorDto
+     */
+    'name': string;
+}
+/**
+ * 
+ * @export
  * @interface SelfEducationQuestionSelectedAnswersDto
  */
 export interface SelfEducationQuestionSelectedAnswersDto {
@@ -4825,6 +4950,19 @@ export const StudentFeedbackDtoEnglishLevelEnum = {
 
 export type StudentFeedbackDtoEnglishLevelEnum = typeof StudentFeedbackDtoEnglishLevelEnum[keyof typeof StudentFeedbackDtoEnglishLevelEnum];
 
+/**
+ * 
+ * @export
+ * @interface StudentId
+ */
+export interface StudentId {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentId
+     */
+    'id': number;
+}
 /**
  * 
  * @export
@@ -7554,6 +7692,240 @@ export class CertificateApi extends BaseAPI {
      */
     public saveCertificate(saveCertificateDto: SaveCertificateDto, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).saveCertificate(saveCertificateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CourseMentorsApi - axios parameter creator
+ * @export
+ */
+export const CourseMentorsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorsDetails: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMentorsDetails', 'courseId', courseId)
+            const localVarPath = `/course/{courseId}/mentors/details`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorsDetailsCsv: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMentorsDetailsCsv', 'courseId', courseId)
+            const localVarPath = `/course/{courseId}/mentors/details/csv`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} searchText 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchMentors: async (courseId: number, searchText: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('searchMentors', 'courseId', courseId)
+            // verify required parameter 'searchText' is not null or undefined
+            assertParamExists('searchMentors', 'searchText', searchText)
+            const localVarPath = `/course/{courseId}/mentors/search/{searchText}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"searchText"}}`, encodeURIComponent(String(searchText)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CourseMentorsApi - functional programming interface
+ * @export
+ */
+export const CourseMentorsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CourseMentorsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMentorsDetails(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorDetailsDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorsDetails(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMentorsDetailsCsv(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorsDetailsCsv(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} searchText 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchMentors(courseId: number, searchText: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SearchMentorDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchMentors(courseId, searchText, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CourseMentorsApi - factory interface
+ * @export
+ */
+export const CourseMentorsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CourseMentorsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorsDetails(courseId: number, options?: any): AxiosPromise<Array<MentorDetailsDto>> {
+            return localVarFp.getMentorsDetails(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorsDetailsCsv(courseId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.getMentorsDetailsCsv(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} searchText 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchMentors(courseId: number, searchText: string, options?: any): AxiosPromise<Array<SearchMentorDto>> {
+            return localVarFp.searchMentors(courseId, searchText, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CourseMentorsApi - object-oriented interface
+ * @export
+ * @class CourseMentorsApi
+ * @extends {BaseAPI}
+ */
+export class CourseMentorsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public getMentorsDetails(courseId: number, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).getMentorsDetails(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public getMentorsDetailsCsv(courseId: number, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).getMentorsDetailsCsv(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} searchText 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public searchMentors(courseId: number, searchText: string, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).searchMentors(courseId, searchText, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { getRepository, getManager, getCustomRepository } from 'typeorm';
-import { MentorBasic, StudentBasic } from '../../../common/models';
+import { MentorBasic, MentorDetails, StudentBasic } from '../../../common/models';
 import {
   Course,
   CourseTask,
@@ -23,7 +23,6 @@ import {
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
-import { MentorRepository } from '../repositories/mentor.repository';
 import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
@@ -84,26 +83,6 @@ export interface StudentWithResults {
   countryName: string;
   isActive: boolean;
   taskResults: { courseTaskId: number; score: number }[];
-}
-
-export interface MentorDetails extends MentorBasic {
-  cityName: string;
-  countryName: string;
-  maxStudentsLimit: number;
-  studentsPreference: 'any' | 'city' | 'country';
-  interviews?: {
-    completed?: number;
-    total?: number;
-  };
-  screenings?: {
-    completed?: number;
-    total?: number;
-  };
-  studentsCount?: number;
-  taskResultsStats?: {
-    total: number;
-    checked: number;
-  };
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
@@ -351,12 +330,6 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
     .getMany();
 
   const mentors = records.map(convertToMentorDetails);
-  return mentors;
-}
-
-export async function getMentorsDetails(courseId: number): Promise<MentorDetails[]> {
-  const mentorRepository = getCustomRepository(MentorRepository);
-  const mentors = mentorRepository.findExtended(courseId);
   return mentors;
 }
 
