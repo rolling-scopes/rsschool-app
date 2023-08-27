@@ -60,7 +60,6 @@ export type InterviewFeedbackValues = Record<string, string[] | string | number 
  * since the questions are dynamic(user can add/remove) we also store the submitted questions(the section of theory & practice are stored in db to persist the selected questions by the interviewer)
  */
 export type InterviewFeedbackStepData = {
-  id: FeedbackStepId;
   isCompleted: boolean;
   values?: InterviewFeedbackValues;
 };
@@ -118,6 +117,8 @@ interface InputItem extends Field {
   description?: string;
   inputType: 'number' | 'text';
   defaultValue?: string | number;
+  min?: number;
+  max?: number;
 }
 
 interface TextItem extends Field {
@@ -200,7 +201,7 @@ export const introduction: Step = {
       title: 'Did the student show up for the interview?',
       required: true,
       options: [
-        { id: 'done', title: "Yes, it's ok." },
+        { id: 'completed', title: "Yes, it's ok." },
         {
           id: 'missed',
           title: 'No, interview is failed.',
@@ -433,6 +434,7 @@ const mentorDecision: Step = {
       description: 'We calculated average score based on your marks, but you can adjust the final score',
       inputType: 'number',
       required: true,
+      min: 0,
     },
     {
       id: 'isGoodCandidate',
