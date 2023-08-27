@@ -103,7 +103,7 @@ function Page(props: Props) {
         <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
           <Checkbox>Show only not activists</Checkbox>
         </Form.Item>
-        <Space>
+        <Space align="start">
           <Button size="middle" type="primary" htmlType="submit">
             Submit
           </Button>
