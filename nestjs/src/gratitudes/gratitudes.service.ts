@@ -98,12 +98,12 @@ export class GratitudesService {
 
     const { count } = await countQuery.getRawOne();
     const total = Number(count);
-    const items = await heroesQuery.getRawMany();
+    const heroes = await heroesQuery.getRawMany();
     const totalPages = Math.ceil(total / pageSize);
 
     return {
-      items,
-      meta: { itemCount: items.length, total, current: page, pageSize, totalPages },
+      heroes,
+      meta: { itemCount: heroes.length, total, current: page, pageSize, totalPages },
     };
   }
 

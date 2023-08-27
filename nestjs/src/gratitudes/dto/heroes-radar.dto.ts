@@ -3,6 +3,11 @@ import { HeroRadar, HeroRadarDto } from './hero-radar.dto';
 import { PaginationMeta } from 'src/core/paginate';
 import { PaginationMetaDto } from 'src/core/paginate/dto/Paginate.dto';
 
+interface HeroesRadar {
+  heroes: HeroRadar[];
+  meta: PaginationMeta;
+}
+
 const calculateRank = (heroes: HeroRadar[]): HeroRadar[] => {
   const sortedHeroes = [...heroes].sort((a, b) => b.total - a.total);
   const rankedHeroes = heroes.map(hero => {
@@ -13,9 +18,9 @@ const calculateRank = (heroes: HeroRadar[]): HeroRadar[] => {
 }
 
 export class HeroesRadarDto {
-  constructor({ items, meta }: { items: HeroRadar[]; meta: PaginationMeta }) {
-    this.content = calculateRank(items).map((item) => new HeroRadarDto(item));
-    this.pagination = new PaginationMetaDto(meta);
+  constructor(heroesRadar: HeroesRadar) {
+    this.content = calculateRank(heroesRadar.heroes).map((hero) => new HeroRadarDto(hero));
+    this.pagination = new PaginationMetaDto(heroesRadar.meta);
   }
 
   @ApiProperty({ type: [HeroRadarDto] })
