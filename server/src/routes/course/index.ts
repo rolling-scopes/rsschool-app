@@ -138,6 +138,9 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
     stageInterview.getInterviewerStudents(logger),
   );
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   router.get('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.getFeedback(logger));
   router.post('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.createFeedback(logger));
 
