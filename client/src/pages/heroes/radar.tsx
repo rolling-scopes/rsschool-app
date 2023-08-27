@@ -63,21 +63,15 @@ function Page(props: Props) {
     setCourses(courses);
   }, []);
 
-  const makeRequest = useCallback(
-    async (data: HeroesRadarFormProps) => {
-      await getHeroes(data);
-    },
-    [],
-  );
+  const makeRequest = useCallback(async (data: HeroesRadarFormProps) => {
+    await getHeroes(data);
+  }, []);
 
-  const handleSubmit = useCallback(
-    async (formData: HeroesRadarFormProps) => {
-      const data = onlyDefined(formData);
-      setFormData(data);
-      await makeRequest(data);
-    },
-    [],
-  );
+  const handleSubmit = useCallback(async (formData: HeroesRadarFormProps) => {
+    const data = onlyDefined(formData);
+    setFormData(data);
+    await makeRequest(data);
+  }, []);
 
   const onClear = useCallback(async () => {
     form.resetFields();
