@@ -1,9 +1,9 @@
 import { PageLayout } from 'components/PageLayout';
 import withSession, { Session } from 'components/withSession';
 import { useCallback, useEffect, useState } from 'react';
-import { GratitudesApi, HeroesRadarDto } from 'api';
+import { GratitudesApi, HeroRadarDto, HeroesRadarDto } from 'api';
 import HeroesRadarTable from 'components/Heroes/HeroesRadarTable';
-import { Form, Select, Button, Checkbox, Space } from 'antd';
+import { Form, Select, Button, Checkbox, Space, TableProps } from 'antd';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -19,7 +19,7 @@ export type HeroesRadarFormProps = {
   notActivist?: boolean;
 };
 
-export type GetHeroesProps = HeroesRadarFormProps & Partial<IPaginationInfo>;
+type GetHeroesProps = HeroesRadarFormProps & Partial<IPaginationInfo>;
 
 export type LayoutType = Parameters<typeof Form>[0]['layout'];
 
@@ -79,6 +79,15 @@ function Page(props: Props) {
     await getHeroes(initialQueryParams);
   }, []);
 
+  const handleChange: TableProps<HeroRadarDto>['onChange'] = async ({ current, pageSize }) => {
+    try {
+      setLoading(true);
+      await getHeroes({ current, pageSize, ...formData });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <PageLayout loading={loading} title="Heroes Radar" githubId={props.session.githubId}>
       <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
@@ -105,9 +114,7 @@ function Page(props: Props) {
       </Form>
       <HeroesRadarTable
         heroes={heroes}
-        formData={formData}
-        getHeroes={getHeroes}
-        setLoading={setLoading}
+        onChange={handleChange}
         setFormLayout={setFormLayout}
       />
     </PageLayout>

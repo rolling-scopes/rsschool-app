@@ -6,15 +6,13 @@ import Link from 'next/link';
 import HeroesCountBadge from './HeroesCountBadge';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { useState, useEffect } from 'react';
-import { GetHeroesProps, HeroesRadarFormProps, LayoutType } from 'pages/heroes/radar';
+import type { LayoutType } from 'pages/heroes/radar';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
 import heroesBadges from 'configs/heroes-badges';
 
 interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;
-  formData: HeroesRadarFormProps;
-  setLoading: (loading: boolean) => void;
-  getHeroes: (args: GetHeroesProps) => Promise<void>;
+  onChange: TableProps<HeroRadarDto>['onChange'];
   setFormLayout: (layout: LayoutType) => void;
 }
 
@@ -83,7 +81,7 @@ const initColumns: ColumnType<HeroRadarDto>[] = [
   },
 ];
 
-function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayout }: HeroesRadarTableProps) {
+function HeroesRadarTable({ heroes, onChange, setFormLayout }: HeroesRadarTableProps) {
   const { width } = useWindowDimensions();
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [columns, setColumns] = useState(initColumns);
@@ -110,19 +108,10 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
     });
   }, [fixedColumn]);
 
-  const handleChange: TableProps<HeroRadarDto>['onChange'] = async ({ current, pageSize }) => {
-    try {
-      setLoading(true);
-      await getHeroes({ current, pageSize, ...formData });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <Table
       pagination={{ ...heroes.pagination, showTotal: total => `Total ${total} students` }}
-      onChange={handleChange}
+      onChange={onChange}
       rowKey="githubId"
       scroll={{ x: getTableWidth(columns.length), y: 'calc(95vh - 290px)' }}
       dataSource={heroes.content}
