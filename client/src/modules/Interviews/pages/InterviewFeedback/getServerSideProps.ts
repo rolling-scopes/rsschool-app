@@ -78,12 +78,11 @@ async function getStageInterviewData({
   token: string | undefined;
   courseId: number;
 }): Promise<Omit<StageFeedbackProps, keyof CourseOnlyPageProps>> {
-  const studentId = ctx.query.studentId as string | undefined;
+  validateQueryParams(ctx, ['studentId', 'interviewId']);
 
-  if (!studentId || !ctx.query.interviewId) {
-    throw new Error('No studentId or interviewId');
-  }
+  const studentId = Number(ctx.query.studentId);
   const interviewId = Number(ctx.query.interviewId);
+
   const axiosConfig = getApiConfiguration(token);
 
   const [
@@ -142,4 +141,12 @@ async function getInterviewData({
     type,
     githubId,
   };
+}
+
+function validateQueryParams(ctx: GetServerSidePropsContext<ParsedUrlQuery>, params: string[]) {
+  for (const param of params) {
+    if (!ctx.query[param]) {
+      throw new Error(`Parameter ${param} is not defined`);
+    }
+  }
 }

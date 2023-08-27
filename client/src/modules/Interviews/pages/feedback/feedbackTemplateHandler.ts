@@ -127,24 +127,7 @@ export function getUpdatedFeedback({
   const isRejected = isInterviewRejected(steps[activeStepIndex].id, newValues);
 
   const feedbackValues = {
-    steps: steps.reduce((stepMap, step, index) => {
-      if (index === activeStepIndex) {
-        stepMap[step.id] = {
-          isCompleted: true,
-          values: newValues,
-        };
-
-        return stepMap;
-      }
-
-      // if is rejected, all steps after the current one should be marked as not completed and values should be removed
-      stepMap[step.id] = {
-        values: isRejected ? undefined : step.values,
-        isCompleted: isRejected ? false : step.isCompleted,
-      };
-
-      return stepMap;
-    }, {} as Record<FeedbackStepId, InterviewFeedbackStepData>),
+    steps: generateFeedbackValues(steps, activeStepIndex, newValues, isRejected),
   };
   const newFeedback = mergeFeedbackValuesToTemplate(feedback, feedbackValues, interviewMaxScore);
 
@@ -154,6 +137,30 @@ export function getUpdatedFeedback({
     isCompleted: isInterviewCompleted(newFeedback),
     ...getInterviewSummary(newFeedback),
   };
+}
+
+function generateFeedbackValues(
+  steps: FeedbackStep[],
+  activeStepIndex: number,
+  newValues: InterviewFeedbackValues,
+  isRejected: boolean,
+): Record<FeedbackStepId, InterviewFeedbackStepData> {
+  return steps.reduce((stepMap, step, index) => {
+    if (index === activeStepIndex) {
+      stepMap[step.id] = {
+        isCompleted: true,
+        values: newValues,
+      };
+      return stepMap;
+    }
+
+    // if is rejected, all steps after the current one should be marked as not completed and values should be removed
+    stepMap[step.id] = {
+      values: isRejected ? undefined : step.values,
+      isCompleted: isRejected ? false : step.isCompleted,
+    };
+    return stepMap;
+  }, {} as Record<FeedbackStepId, InterviewFeedbackStepData>);
 }
 
 /**

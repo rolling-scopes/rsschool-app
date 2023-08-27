@@ -36,7 +36,7 @@ export function FormItem({ item, form, stepId }: { item: StepFormItem; form: For
           <Group buttonStyle="solid">
             {item.description && (
               <Text type="secondary">
-                <div dangerouslySetInnerHTML={{ __html: item.description }} />
+                <div>{item.description}</div>
               </Text>
             )}
             {item.options.map((option: RadioOption) => {
