@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Typography, Table, Row, Space } from 'antd';
 import { Rating } from 'components/Rating';
 import { StageInterviewDetailedFeedback } from 'common/models/profile';
