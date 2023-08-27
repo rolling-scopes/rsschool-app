@@ -97,7 +97,7 @@ export class GratitudesService {
       .setParameters(heroesSubQuery.getParameters());
 
     const { count } = await countQuery.getRawOne();
-    const total = +count;
+    const total = Number(count);
     const items = await heroesQuery.getRawMany();
     const totalPages = Math.ceil(total / pageSize);
 
