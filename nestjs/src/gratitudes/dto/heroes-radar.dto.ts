@@ -9,9 +9,8 @@ interface HeroesRadar {
 }
 
 const calculateRank = ({ heroes, meta }: HeroesRadar): HeroRadar[] => {
-  const sortedHeroes = [...heroes].sort((a, b) => b.total - a.total);
-  const rankedHeroes = heroes.map(hero => {
-    const rank = sortedHeroes.findIndex(h => h.total === hero.total) + 1 + meta.pageSize * (meta.current - 1);
+  const rankedHeroes = heroes.map((hero, index) => {
+    const rank = index + 1 + meta.pageSize * (meta.current - 1);
     return { ...hero, rank };
   });
   return rankedHeroes;
