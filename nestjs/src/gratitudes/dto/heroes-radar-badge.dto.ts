@@ -2,19 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Badge } from './badge.dto';
 
 export interface HeroesRadarBadge {
-  badgeId: Badge;
-  badgeCount: number;
+  id: Badge;
+  count: number;
 }
 
 export class HeroesRadarBadgeDto {
   constructor(badge: HeroesRadarBadge) {
-    this.badgeId = badge.badgeId;
-    this.badgeCount = badge.badgeCount;
+    this.id = badge.id;
+    this.count = badge.count;
   }
 
   @ApiProperty()
-  public badgeId: Badge;
+  public id: Badge;
 
   @ApiProperty()
-  public badgeCount: number;
+  public count: number;
 }

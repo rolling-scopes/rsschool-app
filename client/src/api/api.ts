@@ -3022,13 +3022,13 @@ export interface HeroesRadarBadgeDto {
      * @type {string}
      * @memberof HeroesRadarBadgeDto
      */
-    'badgeId': string;
+    'id': string;
     /**
      * 
      * @type {number}
      * @memberof HeroesRadarBadgeDto
      */
-    'badgeCount': number;
+    'count': number;
 }
 /**
  * 

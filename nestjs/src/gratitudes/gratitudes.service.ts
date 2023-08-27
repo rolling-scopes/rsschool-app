@@ -84,7 +84,7 @@ export class GratitudesService {
         '"user"."firstName"',
         '"user"."lastName"',
         'sum("badgeCount") as total',
-        `jsonb_agg(json_build_object('badgeId', "badgeId", 'badgeCount', "badgeCount")) as badges`,
+        `jsonb_agg(json_build_object('id', "badgeId", 'count', "badgeCount")) as badges`,
       ])
       .from(`(${heroesSubQuery.getQuery()})`, 'badges')
       .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')

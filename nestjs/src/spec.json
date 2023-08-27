@@ -4186,8 +4186,8 @@
       },
       "HeroesRadarBadgeDto": {
         "type": "object",
-        "properties": { "badgeId": { "type": "string" }, "badgeCount": { "type": "number" } },
-        "required": ["badgeId", "badgeCount"]
+        "properties": { "id": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["id", "count"]
       },
       "HeroRadarDto": {
         "type": "object",

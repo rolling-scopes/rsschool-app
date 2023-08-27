@@ -80,7 +80,7 @@ const initColumns: ColumnType<HeroRadarRanked>[] = [
     render: (value: HeroesRadarBadgeDto[], { githubId }: HeroRadarRanked) => (
       <>
         {value.map(badge => (
-          <HeroesCountBadge key={`${githubId}-${badge.badgeId}`} badge={badge} />
+          <HeroesCountBadge key={`${githubId}-${badge.id}`} badge={badge} />
         ))}
       </>
     ),
