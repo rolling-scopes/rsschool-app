@@ -3003,6 +3003,12 @@ export interface HeroRadarDto {
      * @type {number}
      * @memberof HeroRadarDto
      */
+    'rank': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroRadarDto
+     */
     'total': number;
     /**
      * 

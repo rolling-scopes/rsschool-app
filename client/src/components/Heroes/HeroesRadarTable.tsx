@@ -10,10 +10,6 @@ import { GetHeroesProps, HeroesRadarFormProps, LayoutType } from 'pages/heroes/r
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
 import heroesBadges from 'configs/heroes-badges';
 
-interface HeroRadarRanked extends HeroRadarDto {
-  rank: number;
-}
-
 interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;
   formData: HeroesRadarFormProps;
@@ -26,7 +22,7 @@ const BADGE_SIZE = 48;
 const BADGE_SUM_HORIZONTAL_MARGIN = 2 * 5;
 const XS_BREAKPOINT_IN_PX = 575;
 
-const initColumns: ColumnType<HeroRadarRanked>[] = [
+const initColumns: ColumnType<HeroRadarDto>[] = [
   {
     title: '#',
     fixed: 'left',
@@ -77,7 +73,7 @@ const initColumns: ColumnType<HeroRadarRanked>[] = [
     key: 'badges',
     width: Object.keys(heroesBadges).length * (BADGE_SIZE + BADGE_SUM_HORIZONTAL_MARGIN),
     responsive: ['xxl', 'xl', 'lg', 'md', 'sm'],
-    render: (value: HeroesRadarBadgeDto[], { githubId }: HeroRadarRanked) => (
+    render: (value: HeroesRadarBadgeDto[], { githubId }: HeroRadarDto) => (
       <>
         {value.map(badge => (
           <HeroesCountBadge key={`${githubId}-${badge.id}`} badge={badge} />
@@ -114,15 +110,7 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
     });
   }, [fixedColumn]);
 
-  const dataSource = heroes?.content?.length
-    ? heroes.content.map((hero: HeroRadarDto, i) => {
-        const rank = i + 1 + heroes.pagination.pageSize * (heroes.pagination.current - 1);
-
-        return { ...hero, rank };
-      })
-    : [];
-
-  const handleChange: TableProps<HeroRadarRanked>['onChange'] = async ({ current, pageSize }) => {
+  const handleChange: TableProps<HeroRadarDto>['onChange'] = async ({ current, pageSize }) => {
     try {
       setLoading(true);
       await getHeroes({ current, pageSize, ...formData });
@@ -137,7 +125,7 @@ function HeroesRadarTable({ heroes, formData, setLoading, getHeroes, setFormLayo
       onChange={handleChange}
       rowKey="githubId"
       scroll={{ x: getTableWidth(columns.length), y: 'calc(95vh - 290px)' }}
-      dataSource={dataSource}
+      dataSource={heroes.content}
       columns={columns}
     />
   );
