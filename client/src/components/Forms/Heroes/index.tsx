@@ -10,7 +10,7 @@ import { CoursesService } from 'services/courses';
 import { GratitudeService } from 'services/gratitude';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
-import { getFullName } from 'utils/text-utils';
+import { getFullName } from 'domain/user';
 
 const { Text, Link, Paragraph } = Typography;
 const { useBreakpoint } = Grid;

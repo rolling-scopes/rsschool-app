@@ -9,6 +9,3 @@ export const filterLogin = (login: string) => {
 
   return foundLogin;
 };
-
-export const getFullName = (user: { firstName: string | null; lastName: string | null; githubId: string }) =>
-  user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
