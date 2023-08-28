@@ -2,11 +2,9 @@ import { Avatar, Button, Card, Form, Grid, Input, Pagination, Row, Select, Space
 import { FormLayout } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
-import { useAsync } from 'react-use';
 import css from 'styled-jsx/css';
 import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'common/interfaces/gratitude';
 import heroesBadges from 'configs/heroes-badges';
-import { CoursesService } from 'services/courses';
 import { GratitudeService } from 'services/gratitude';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
@@ -24,8 +22,7 @@ export const fields = {
   courseId: 'courseId',
 } as const;
 
-export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
-  const [courses, setCourses] = useState<Course[]>([]);
+export const HeroesForm = ({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) => {
   const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
   const [heroesCount, setHeroesCount] = useState(initialPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -44,10 +41,6 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
       setLoading(false);
     };
     getHeroes();
-  }, []);
-  useAsync(async () => {
-    const [courses] = await Promise.all([new CoursesService().getCourses()]);
-    setCourses(courses);
   }, []);
 
   const makeRequest = useCallback(

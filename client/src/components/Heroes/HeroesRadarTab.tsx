@@ -1,18 +1,10 @@
-import { PageLayout } from 'components/PageLayout';
-import withSession, { Session } from 'components/withSession';
-import { useCallback, useEffect, useState } from 'react';
-import { GratitudesApi, HeroRadarDto, HeroesRadarDto } from 'api';
-import HeroesRadarTable from 'components/Heroes/HeroesRadarTable';
-import { Form, Select, Button, Checkbox, Space, TableProps } from 'antd';
-import { useAsync } from 'react-use';
-import { CoursesService } from 'services/courses';
+import { Button, Checkbox, Form, Select, Space, TableProps } from 'antd';
+import HeroesRadarTable from './HeroesRadarTable';
+import { HeroesRadarDto, GratitudesApi, HeroRadarDto } from 'api';
+import { IPaginationInfo } from 'common/types/pagination';
+import { useState, useEffect, useCallback } from 'react';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
-import { IPaginationInfo } from 'common/types/pagination';
-
-type Props = {
-  session: Session;
-};
 
 export type HeroesRadarFormProps = {
   courseId?: number;
@@ -27,13 +19,11 @@ const initialPage = 1;
 const initialPageSize = 20;
 const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
 
-function Page(props: Props) {
-  const [loading, setLoading] = useState(false);
+function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) {
   const [heroes, setHeroes] = useState<HeroesRadarDto>({
     content: [],
     pagination: { current: initialPage, pageSize: initialPageSize, itemCount: 0, total: 0, totalPages: 0 },
   });
-  const [courses, setCourses] = useState<Course[]>([]);
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<HeroesRadarFormProps>(form.getFieldsValue());
   const [formLayout, setFormLayout] = useState<LayoutType>('inline');
@@ -56,11 +46,6 @@ function Page(props: Props) {
 
   useEffect(() => {
     getHeroes(initialQueryParams);
-  }, []);
-
-  useAsync(async () => {
-    const [courses] = await Promise.all([new CoursesService().getCourses()]);
-    setCourses(courses);
   }, []);
 
   const makeRequest = useCallback(async (data: HeroesRadarFormProps) => {
@@ -89,7 +74,7 @@ function Page(props: Props) {
   };
 
   return (
-    <PageLayout loading={loading} title="Heroes Radar" githubId={props.session.githubId}>
+    <>
       <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
         <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
           <Select>
@@ -113,8 +98,8 @@ function Page(props: Props) {
         </Space>
       </Form>
       <HeroesRadarTable heroes={heroes} onChange={handleChange} setFormLayout={setFormLayout} />
-    </PageLayout>
+    </>
   );
 }
 
-export default withSession(Page);
+export default HeroesRadarTab;
