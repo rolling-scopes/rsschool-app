@@ -6,7 +6,7 @@ import Link from 'next/link';
 import HeroesCountBadge from './HeroesCountBadge';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { useState, useEffect } from 'react';
-import type { LayoutType } from 'pages/heroes/radar';
+import type { LayoutType } from './HeroesRadarTab';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';
 import heroesBadges from 'configs/heroes-badges';
 
