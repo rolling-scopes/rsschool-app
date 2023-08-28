@@ -105,7 +105,7 @@ function Page(props: Props) {
         </Form.Item>
         <Space align="start">
           <Button size="middle" type="primary" htmlType="submit">
-            Submit
+            Filter
           </Button>
           <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
             Clear
