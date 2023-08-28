@@ -1,5 +1,5 @@
 import { pick, random, shuffle, sum, sumBy } from 'lodash';
-import { MentorDetails } from '../services/course.service';
+import { MentorDetails } from '../../../common/models';
 
 type Mentor = {
   id: number;

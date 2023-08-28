@@ -6,7 +6,6 @@ import { createMentorStudentPairs } from '../rules/mentors';
 import { OperationResult } from './operationResult';
 import { Mentor } from '../models';
 import { ILogger } from '../logger';
-import { MentorDetails } from './course.service';
 import { sendNotification } from './notification.service';
 
 export class MentorService {
@@ -61,10 +60,5 @@ export class MentorService {
       result.push({ status: 'created', value: savedMentor.id });
     }
     return result;
-  }
-
-  public async getMentorsWithStats(): Promise<MentorDetails[]> {
-    const mentors = this.mentorRepository.findExtended(this.courseId);
-    return mentors;
   }
 }

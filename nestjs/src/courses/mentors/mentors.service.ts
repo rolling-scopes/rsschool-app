@@ -9,12 +9,13 @@ import { TaskResult } from '@entities/taskResult';
 import { TaskSolution } from '@entities/taskSolution';
 import { Task } from '@entities/task';
 
-import { MentorBasic } from '@common/models';
+import { MentorBasic, MentorDetails } from '@common/models';
 
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import * as dayjs from 'dayjs';
 import { TaskChecker, User } from '../../../../server/src/models';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 export interface SolutionItem {
   maxScore: number;
@@ -50,13 +51,30 @@ export class MentorsService {
   public static convertMentorToMentorBasic(mentor: Mentor): MentorBasic {
     const user = mentor.user;
     return {
-      isActive: !mentor.isExpelled,
-      name: PersonDto.getName(user),
       id: mentor.id,
+      name: PersonDto.getName(user),
       githubId: user.githubId,
-      students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
       cityName: user.cityName ?? '',
       countryName: user.countryName ?? '',
+      isActive: !mentor.isExpelled,
+      students: mentor.students?.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) ?? [],
+    };
+  }
+
+  public static convertMentorToMentorDetails(mentor: Mentor): MentorDetails {
+    const mentorBasic = MentorsService.convertMentorToMentorBasic(mentor);
+    const user = mentor.user;
+    return {
+      ...mentorBasic,
+      students: mentor.students ?? [],
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
+      maxStudentsLimit: mentor.maxStudentsLimit,
+      studentsPreference: mentor.studentsPreference ?? PreferredStudentsLocation.ANY,
+      studentsCount: mentor.students ? mentor.students.length : 0,
+      screenings: {
+        total: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+      },
     };
   }
 
