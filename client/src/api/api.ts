@@ -668,6 +668,19 @@ export interface ContactsVisibilitySettings {
 /**
  * 
  * @export
+ * @interface CountryDto
+ */
+export interface CountryDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CountryDto
+     */
+    'countryName': string;
+}
+/**
+ * 
+ * @export
  * @interface CourseCopyFromDto
  */
 export interface CourseCopyFromDto {
@@ -11969,14 +11982,44 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesCountries: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/gratitudes/heroes/countries`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getHeroesRadar', 'current', current)
             // verify required parameter 'pageSize' is not null or undefined
@@ -11999,6 +12042,10 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
 
             if (notActivist !== undefined) {
                 localVarQueryParameter['notActivist'] = notActivist;
+            }
+
+            if (countryName !== undefined) {
+                localVarQueryParameter['countryName'] = countryName;
             }
 
             if (current !== undefined) {
@@ -12052,15 +12099,25 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getHeroesCountries(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CountryDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesCountries(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, options);
+        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12093,15 +12150,24 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesCountries(options?: any): AxiosPromise<Array<CountryDto>> {
+            return localVarFp.getHeroesCountries(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} current 
          * @param {number} pageSize 
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: any): AxiosPromise<HeroesRadarDto> {
-            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(axios, basePath));
+        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: any): AxiosPromise<HeroesRadarDto> {
+            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12137,16 +12203,27 @@ export class GratitudesApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} current 
-     * @param {number} pageSize 
-     * @param {number} [courseId] 
-     * @param {boolean} [notActivist] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GratitudesApi
      */
-    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig) {
-        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(this.axios, this.basePath));
+    public getHeroesCountries(options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesCountries(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} current 
+     * @param {number} pageSize 
+     * @param {number} [courseId] 
+     * @param {boolean} [notActivist] 
+     * @param {string} [countryName] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

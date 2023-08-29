@@ -2084,6 +2084,7 @@
         "parameters": [
           { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
         ],
@@ -2091,6 +2092,24 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
+          }
+        },
+        "tags": ["gratitudes"]
+      }
+    },
+    "/gratitudes/heroes/countries": {
+      "get": {
+        "operationId": "getHeroesCountries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CountryDto" } }
+              }
+            }
           }
         },
         "tags": ["gratitudes"]
@@ -4368,6 +4387,11 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "CountryDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" } },
+        "required": ["countryName"]
       },
       "EventDto": {
         "type": "object",
