@@ -9,6 +9,7 @@ import PreScreeningIviewModal from './PreScreeningIviewModal';
 const { Text } = Typography;
 
 import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { getRating } from 'domain/interview';
 
 type Props = {
   data: StageInterviewDetailedFeedback[];
@@ -36,11 +37,12 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
   render() {
     const interviews = this.props.data;
     const { isPreScreeningIviewModalVisible, courseIndex } = this.state;
+    const interviewResult = interviews[courseIndex];
 
     return (
       <>
         <PreScreeningIviewModal
-          feedback={interviews[courseIndex]}
+          interviewResult={interviewResult}
           isVisible={isPreScreeningIviewModalVisible}
           onHide={this.hidePreScreeningIviewModal}
         />
@@ -51,13 +53,13 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={interviews}
-              renderItem={({ courseName, interviewer, rating, date, isGoodCandidate }, idx) => (
+              renderItem={({ courseName, interviewer, score, maxScore, date, isGoodCandidate, version }, idx) => (
                 <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ flexGrow: 2 }}>
                     <p style={{ marginBottom: 0 }}>
                       <Text strong>{courseName}</Text>
                     </p>
-                    <Rating rating={rating} />
+                    <Rating rating={getRating(score, maxScore, version)} />
                     <p style={{ fontSize: 12, marginBottom: 5 }}>Date: {formatDate(date)}</p>
                     {isGoodCandidate != null ? (
                       <p style={{ fontSize: 12, marginBottom: 5 }}>

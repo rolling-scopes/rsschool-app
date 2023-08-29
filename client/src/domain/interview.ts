@@ -1,4 +1,5 @@
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
+import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
 import { featureToggles } from 'services/features';
@@ -16,6 +17,25 @@ export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdi
       return 'No, but good student';
     default:
       return value;
+  }
+}
+
+export function getInterviewResult(decision: Decision) {
+  switch (decision) {
+    case Decision.Yes:
+      return 'Mentor accepted';
+    case Decision.No:
+      return 'Mentor declined';
+    case Decision.Draft:
+      return 'No decision yet';
+    case Decision.SeparateStudy:
+      return 'Separate study';
+    case Decision.MissedIgnoresMentor:
+      return 'Ignored mentor';
+    case Decision.MissedWithReason:
+      return 'Missed with a reason';
+    default:
+      return friendlyStageInterviewVerdict(decision as StageInterviewFeedbackVerdict);
   }
 }
 

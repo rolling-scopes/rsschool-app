@@ -1,49 +1,22 @@
 import * as React from 'react';
-import { Modal, Tag, Typography, Table } from 'antd';
+import { Modal, Tag } from 'antd';
 import { formatDate } from 'services/formatter';
 import { Rating } from 'components/Rating';
-import { StageInterviewDetailedFeedback } from 'common/models/profile';
-import { CODING_LEVELS, SKILLS_LEVELS, SKILL_NAME } from 'services/reference-data/stageInterview';
-import { ENGLISH_LEVELS } from 'data/english';
-
-const { Text } = Typography;
+import { LegacyFeedback, StageInterviewDetailedFeedback } from 'common/models/profile';
+import { LegacyScreeningFeedback } from './LegacyScreeningFeedback';
+import { PrescreeningFeedback } from './PrescreeningFeedback';
+import { getRating } from 'domain/interview';
 
 type Props = {
-  feedback: StageInterviewDetailedFeedback;
+  interviewResult: StageInterviewDetailedFeedback;
   isVisible: boolean;
   onHide: () => void;
 };
 
 class PreScreeningIviewModal extends React.PureComponent<Props> {
   render() {
-    const { feedback, isVisible, onHide } = this.props;
-    const {
-      courseName,
-      courseFullName,
-      date,
-      rating,
-      interviewer,
-      isGoodCandidate,
-      comment,
-      skills,
-      programmingTask,
-      english,
-    } = feedback;
-    const skillSet = [
-      ...(Object.keys(skills) as any[]).map((key: keyof typeof skills) => ({
-        rating: skills[key],
-        name: SKILL_NAME[key],
-        key: `stageInterview-${courseName}-${date}-skills-${key}`,
-        isNotCodeWritingLevel: true,
-      })),
-      {
-        rating: programmingTask.codeWritingLevel,
-        name: 'Code writing level',
-        key: `stageInterview-${courseName}-${date}-skills-codeWritingLevel`,
-        isNotCodeWritingLevel: false,
-      },
-    ];
-    const englishLevel = typeof english === 'number' ? ENGLISH_LEVELS[english] : english;
+    const { interviewResult, isVisible, onHide } = this.props;
+    const { courseFullName, date, score, interviewer, isGoodCandidate, feedback, version, maxScore } = interviewResult;
     return (
       <Modal
         title={`${courseFullName} Pre-Screening Interview Feedback`}
@@ -52,7 +25,7 @@ class PreScreeningIviewModal extends React.PureComponent<Props> {
         footer={null}
         width={'80%'}
       >
-        <Rating rating={rating} />
+        <Rating rating={getRating(score, maxScore, version)} />
         <p style={{ marginBottom: 5 }}>Date: {formatDate(date)}</p>
         {isGoodCandidate != null ? (
           <p style={{ marginBottom: 5 }}>
@@ -62,46 +35,8 @@ class PreScreeningIviewModal extends React.PureComponent<Props> {
         <p style={{ marginBottom: 20 }}>
           Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
         </p>
-        {comment && (
-          <p style={{ marginBottom: 20 }}>
-            <Text strong>Comment: </Text>
-            {comment}
-          </p>
-        )}
-        <p style={{ marginBottom: 5 }}>
-          Programming task(s): <br /> <Text code>{programmingTask.task}</Text>
-        </p>
-        <p style={{ marginBottom: 5 }}>
-          Has the student solved the task(s)?{' '}
-          {programmingTask.resolved === 1 ? (
-            <Tag color="green">Yes</Tag>
-          ) : programmingTask.resolved === 2 ? (
-            <Tag color="orange">Yes (with tips)</Tag>
-          ) : (
-            <Tag color="red">No</Tag>
-          )}
-        </p>
-        <p style={{ marginBottom: 5 }}>Comments about coding level: {programmingTask.comment}</p>
-        <p style={{ marginBottom: 5 }}>Estimated English level: {englishLevel?.toString().toUpperCase()}</p>
-        <Table
-          dataSource={skillSet}
-          size="small"
-          rowKey="key"
-          pagination={false}
-          columns={[
-            {
-              dataIndex: 'name',
-              ellipsis: true,
-              width: '30%',
-            },
-            {
-              dataIndex: 'rating',
-              render: (rating, record) => (
-                <Rating rating={rating} tooltips={record.isNotCodeWritingLevel ? SKILLS_LEVELS : CODING_LEVELS} />
-              ),
-            },
-          ]}
-        />
+        {version === 0 && <LegacyScreeningFeedback feedback={feedback as LegacyFeedback} />}
+        {version === 1 && <PrescreeningFeedback feedback={feedback} />}
       </Modal>
     );
   }

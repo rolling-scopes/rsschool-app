@@ -9,7 +9,8 @@ import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
-import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { Decision } from 'data/interviews/technical-screening';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -126,7 +127,7 @@ function Page(props: CoursePageProps) {
                             <StatusLabel status={item.status} />
                           </Descriptions.Item>
                           <Descriptions.Item label="Result">
-                            <b>{friendlyStageInterviewVerdict(item.result as any) ?? '-'}</b>
+                            <b>{getInterviewResult(item.result as Decision) ?? '-'}</b>
                           </Descriptions.Item>
                         </Descriptions>
                       </List.Item>
