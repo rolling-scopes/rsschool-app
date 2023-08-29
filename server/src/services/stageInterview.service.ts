@@ -16,7 +16,7 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
 
   const ratingsCount = 4;
   const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
-  const rating = ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0;
+  const rating = (ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0) * 10;
 
   return { rating, htmlCss, common, dataStructures };
 }
