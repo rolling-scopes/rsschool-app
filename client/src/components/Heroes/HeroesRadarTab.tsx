@@ -1,15 +1,19 @@
-import { Button, Checkbox, Form, Select, Space, TableProps } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Select, Space, TableProps } from 'antd';
 import HeroesRadarTable from './HeroesRadarTable';
 import { HeroesRadarDto, GratitudesApi, HeroRadarDto, CountryDto } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
 import { useState, useEffect, useCallback } from 'react';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
+import dayjs from 'dayjs';
+import type { TimeRangePickerProps } from 'antd';
+import type { Dayjs } from 'dayjs';
 
 export type HeroesRadarFormProps = {
   courseId?: number;
   notActivist?: boolean;
   countryName?: string;
+  dates?: (Dayjs | null)[];
 };
 
 type GetHeroesProps = HeroesRadarFormProps & Partial<IPaginationInfo>;
@@ -19,6 +23,15 @@ export type LayoutType = Parameters<typeof Form>[0]['layout'];
 const initialPage = 1;
 const initialPageSize = 20;
 const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
+
+const { RangePicker } = DatePicker;
+
+const rangePresets: TimeRangePickerProps['presets'] = [
+  { label: 'Last 7 Days', value: [dayjs().add(-7, 'd'), dayjs()] },
+  { label: 'Last 14 Days', value: [dayjs().add(-14, 'd'), dayjs()] },
+  { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
+  { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
+];
 
 function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) {
   const [heroes, setHeroes] = useState<HeroesRadarDto>({
@@ -33,19 +46,29 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
 
   const getCountries = async () => {
     const { data } = await gratitudeApi.getHeroesCountries();
-    setCountries(data)
-  }
+    setCountries(data);
+  };
 
   const getHeroes = async ({
     current = initialPage,
     pageSize = initialPageSize,
     courseId,
     notActivist,
-    countryName
+    countryName,
+    dates,
   }: GetHeroesProps) => {
     try {
       setLoading(true);
-      const { data } = await gratitudeApi.getHeroesRadar(current, pageSize, courseId, notActivist, countryName);
+      const [startDate, endDate] = dates?.map(date => date?.format('YYYY-MM-DD')) ?? [];
+      const { data } = await gratitudeApi.getHeroesRadar(
+        current,
+        pageSize,
+        courseId,
+        notActivist,
+        countryName,
+        startDate,
+        endDate,
+      );
       setHeroes(data);
     } finally {
       setLoading(false);
@@ -86,12 +109,15 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
         </Form.Item>
         <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
           <Select>
-            {countries.map(({countryName}) => (
+            {countries.map(({ countryName }) => (
               <Select.Option key={countryName} value={countryName}>
                 {countryName}
               </Select.Option>
             ))}
           </Select>
+        </Form.Item>
+        <Form.Item name={'dates'} label="Dates" style={{ minWidth: 260, marginBottom: 16 }}>
+          <RangePicker presets={rangePresets} />
         </Form.Item>
         <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
           <Checkbox>Show only not activists</Checkbox>

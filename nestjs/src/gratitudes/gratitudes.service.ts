@@ -58,6 +58,8 @@ export class GratitudesService {
     pageSize = 20,
     notActivist,
     countryName,
+    startDate,
+    endDate,
   }: HeroesRadarQueryDto) {
     const countSubQuery = this.repository.createQueryBuilder('feedback');
     const countQuery = this.dataSource.createQueryBuilder();
@@ -75,6 +77,15 @@ export class GratitudesService {
 
     if (countryName) {
       [heroesQuery, countQuery].forEach(query => query.where('"user"."countryName" = :countryName', { countryName }));
+    }
+
+    if (startDate && endDate) {
+      [heroesSubQuery, countSubQuery].forEach(query =>
+        query.where('"createdDate" BETWEEN :startDate and :endDate', {
+          startDate,
+          endDate,
+        }),
+      );
     }
 
     countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId")), "toUserId"`).groupBy('"toUserId"');

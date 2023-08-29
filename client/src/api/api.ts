@@ -12016,10 +12016,12 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
          * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getHeroesRadar', 'current', current)
             // verify required parameter 'pageSize' is not null or undefined
@@ -12036,6 +12038,14 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
             if (courseId !== undefined) {
                 localVarQueryParameter['courseId'] = courseId;
             }
@@ -12048,12 +12058,16 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['countryName'] = countryName;
             }
 
-            if (current !== undefined) {
-                localVarQueryParameter['current'] = current;
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString() :
+                    startDate;
             }
 
-            if (pageSize !== undefined) {
-                localVarQueryParameter['pageSize'] = pageSize;
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString() :
+                    endDate;
             }
 
 
@@ -12113,11 +12127,13 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
          * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options);
+        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12163,11 +12179,13 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
          * @param {number} [courseId] 
          * @param {boolean} [notActivist] 
          * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: any): AxiosPromise<HeroesRadarDto> {
-            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options).then((request) => request(axios, basePath));
+        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: any): AxiosPromise<HeroesRadarDto> {
+            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12218,12 +12236,14 @@ export class GratitudesApi extends BaseAPI {
      * @param {number} [courseId] 
      * @param {boolean} [notActivist] 
      * @param {string} [countryName] 
+     * @param {string} [startDate] 
+     * @param {string} [endDate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GratitudesApi
      */
-    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, options?: AxiosRequestConfig) {
-        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, countryName, options).then((request) => request(this.axios, this.basePath));
+    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
