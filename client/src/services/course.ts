@@ -218,26 +218,6 @@ export class CourseService {
     }
   }
 
-  async searchMentors(query: string | null) {
-    try {
-      if (!query) {
-        return [];
-      }
-      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
-        `/mentors/search/${query}`,
-      );
-      return response.data.data;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  async getMentorsWithDetails() {
-    type Response = { data: MentorDetails[] };
-    const result = await this.axios.get<Response>('/mentors/details');
-    return result.data.data;
-  }
-
   async getCourseScore(
     pagination: IPaginationInfo,
     filter: ScoreTableFilters = { activeOnly: false },
