@@ -52,7 +52,13 @@ export class GratitudesService {
     });
   }
 
-  public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20, notActivist }: HeroesRadarQueryDto) {
+  public async getHeroesRadar({
+    courseId,
+    current: page = 1,
+    pageSize = 20,
+    notActivist,
+    countryName,
+  }: HeroesRadarQueryDto) {
     const countSubQuery = this.repository.createQueryBuilder('feedback');
     const countQuery = this.dataSource.createQueryBuilder();
 
@@ -67,10 +73,15 @@ export class GratitudesService {
       [heroesSubQuery, countSubQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
     }
 
-    countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId"))`).groupBy('"toUserId"');
+    if (countryName) {
+      [heroesQuery, countQuery].forEach(query => query.where('"user"."countryName" = :countryName', { countryName }));
+    }
+
+    countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId")), "toUserId"`).groupBy('"toUserId"');
     countQuery
       .select('COUNT(*) as count')
       .from(`(${countSubQuery.getQuery()})`, 'badges')
+      .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
       .setParameters(countSubQuery.getParameters());
 
     heroesSubQuery
@@ -106,6 +117,15 @@ export class GratitudesService {
       heroes,
       meta: { itemCount: heroes.length, total, current: page, pageSize, totalPages },
     };
+  }
+
+  public async getHeroesCountries() {
+    return await this.repository
+      .createQueryBuilder('feedback')
+      .leftJoinAndSelect('feedback.fromUser', 'user')
+      .select('DISTINCT "countryName"')
+      .where('"countryName" IS NOT NULL')
+      .getRawMany();
   }
 
   private async postUserFeedback(data: Feedback) {

@@ -4,6 +4,7 @@ import { CurrentRequest, DefaultGuard } from '../auth';
 import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
 import { GratitudesService } from './gratitudes.service';
 import { HeroesRadarDto } from './dto/heroes-radar.dto';
+import { CountryDto } from './dto/country.dto';
 
 @Controller('gratitudes')
 @ApiTags('gratitudes')
@@ -33,5 +34,13 @@ export class GratitudesController {
     const heroes = await this.service.getHeroesRadar(query);
 
     return new HeroesRadarDto(heroes);
+  }
+
+  @Get('/heroes/countries')
+  @ApiOperation({ operationId: 'getHeroesCountries' })
+  @ApiOkResponse({ type: [CountryDto] })
+  public async getHeroesContries() {
+    const countries = await this.service.getHeroesCountries();
+    return countries.map(country => new CountryDto(country));
   }
 }
