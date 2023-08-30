@@ -18,6 +18,11 @@ function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
 
+  const tabs = [
+    { label: 'Gratitudes', key: '1', children: <HeroesForm setLoading={setLoading} courses={courses} /> },
+    { label: 'Heroes Radar', key: '2', children: <HeroesRadarTab setLoading={setLoading} courses={courses} /> },
+  ];
+
   useAsync(async () => {
     const [courses] = await Promise.all([new CoursesService().getCourses()]);
     setCourses(courses);
@@ -25,12 +30,7 @@ function Page(props: Props) {
 
   return (
     <PageLayout loading={loading} title="Heroes" githubId={props.session.githubId}>
-      <Tabs
-        items={[
-          { label: 'Gratitudes', key: '1', children: <HeroesForm setLoading={setLoading} courses={courses} /> },
-          { label: 'Heroes Radar', key: '2', children: <HeroesRadarTab setLoading={setLoading} courses={courses} /> },
-        ]}
-      />
+      <Tabs items={tabs} />
     </PageLayout>
   );
 }
