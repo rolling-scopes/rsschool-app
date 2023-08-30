@@ -12,8 +12,6 @@ type Props = {
   session: Session;
 };
 
-// const { TabPane } = Tabs;
-
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
