@@ -77,22 +77,16 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
     <>
       <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
         <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
-          <Select>
-            {courses.map(course => (
-              <Select.Option key={course.id} value={course.id}>
-                {course.name}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select options={courses.map(({ id, name }) => ({ value: id, label: name }))} />
         </Form.Item>
         <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
           <Checkbox>Show only not activists</Checkbox>
         </Form.Item>
-        <Space align="start">
+        <Space align="start" size={20}>
           <Button size="middle" type="primary" htmlType="submit">
             Filter
           </Button>
-          <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
+          <Button size="middle" type="primary" onClick={onClear}>
             Clear
           </Button>
         </Space>
