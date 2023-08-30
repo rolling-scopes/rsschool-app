@@ -12,7 +12,7 @@ type Props = {
   session: Session;
 };
 
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
 
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
@@ -25,14 +25,12 @@ function Page(props: Props) {
 
   return (
     <PageLayout loading={loading} title="Heroes" githubId={props.session.githubId}>
-      <Tabs>
-        <TabPane tab="Gratitudes" key="1">
-          <HeroesForm setLoading={setLoading} courses={courses} />
-        </TabPane>
-        <TabPane tab="Heroes Radar" key="2">
-          <HeroesRadarTab setLoading={setLoading} courses={courses} />
-        </TabPane>
-      </Tabs>
+      <Tabs
+        items={[
+          { label: 'Gratitudes', key: '1', children: <HeroesForm setLoading={setLoading} courses={courses} /> },
+          { label: 'Heroes Radar', key: '2', children: <HeroesRadarTab setLoading={setLoading} courses={courses} /> },
+        ]}
+      />
     </PageLayout>
   );
 }
