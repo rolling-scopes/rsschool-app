@@ -81,6 +81,15 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                       </strong>
                     </span>
                   </p>
+                  <div
+                    class="ant-row css-dev-only-do-not-override-w8mnev"
+                  >
+                    <span
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                    >
+                      Completed
+                    </span>
+                  </div>
                   <ul
                     class="ant-rate css-dev-only-do-not-override-w8mnev ant-rate-disabled"
                     role="radiogroup"
@@ -454,6 +463,15 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                       </strong>
                     </span>
                   </p>
+                  <div
+                    class="ant-row css-dev-only-do-not-override-w8mnev"
+                  >
+                    <span
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                    >
+                      Completed
+                    </span>
+                  </div>
                   <ul
                     class="ant-rate css-dev-only-do-not-override-w8mnev ant-rate-disabled"
                     role="radiogroup"
