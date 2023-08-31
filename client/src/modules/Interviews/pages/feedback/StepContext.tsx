@@ -8,7 +8,7 @@ import {
   getDefaultStep,
   getFeedbackFromTemplate,
   getUpdatedFeedback,
-  isInterviewRejected,
+  isInterviewCanceled,
 } from './feedbackTemplateHandler';
 
 type ContextProps = {
@@ -45,7 +45,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const [activeStepIndex, setActiveIndex] = useState(() => getDefaultStep(feedback));
   const activeStep = feedback.steps[activeStepIndex];
 
-  const [isFinished, setIsFinished] = useState(() => isInterviewRejected(activeStep.id, activeStep.values));
+  const [isFinished, setIsFinished] = useState(() => isInterviewCanceled(activeStep.id, activeStep.values));
   const isFinalStep = activeStepIndex === feedback.steps.length - 1 || isFinished;
 
   const saveFeedback = withLoading(async (values: InterviewFeedbackValues) => {
@@ -73,7 +73,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
 
   const onValuesChange = useCallback(
     (_: InterviewFeedbackValues, values: InterviewFeedbackValues) => {
-      setIsFinished(isInterviewRejected(activeStep.id, values));
+      setIsFinished(isInterviewCanceled(activeStep.id, values));
     },
     [activeStep.id],
   );

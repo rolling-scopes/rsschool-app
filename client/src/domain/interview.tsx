@@ -1,4 +1,6 @@
+import { Tag } from 'antd';
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
+import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
 import { featureToggles } from 'services/features';
@@ -16,6 +18,25 @@ export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdi
       return 'No, but good student';
     default:
       return value;
+  }
+}
+
+export function getInterviewResult(decision: Decision) {
+  switch (decision) {
+    case Decision.Yes:
+      return 'Mentor accepted';
+    case Decision.No:
+      return 'Mentor declined';
+    case Decision.Draft:
+      return 'No decision yet';
+    case Decision.SeparateStudy:
+      return 'Separate study';
+    case Decision.MissedIgnoresMentor:
+      return 'Ignored mentor';
+    case Decision.MissedWithReason:
+      return 'Missed with a reason';
+    default:
+      return friendlyStageInterviewVerdict(decision as StageInterviewFeedbackVerdict);
   }
 }
 
@@ -79,4 +100,38 @@ export function getRating(score: number, maxScore: number, feedbackVersion: numb
   // calculate rating on the scale from 0 to 5
   const rating = (score / maxScore) * 5;
   return rating;
+}
+
+export function DecisionTag({ decision, status }: { decision?: Decision; status?: InterviewStatus }) {
+  if (!decision) {
+    return (
+      <Tag color={status === InterviewStatus.Completed ? 'green' : undefined}>
+        {status === InterviewStatus.Completed ? 'Completed' : 'Uncompleted'}
+      </Tag>
+    );
+  }
+
+  switch (decision) {
+    case Decision.Yes:
+    case Decision.No:
+      return <Tag color="green">Completed</Tag>;
+    case Decision.Draft:
+      return <Tag color="orange">Unfilled form</Tag>;
+    case Decision.SeparateStudy:
+      return <Tag color="blue">Separate study</Tag>;
+    case Decision.MissedIgnoresMentor:
+      return <Tag color="red">Ignored mentor</Tag>;
+    case Decision.MissedWithReason:
+      return <Tag color="cyan">Missed with a reason</Tag>;
+    default: {
+      // fallback to the old feedback values
+      if (decision === 'noButGoodCandidate') {
+        return <Tag color="green">Completed</Tag>;
+      }
+      if (decision === 'didNotDecideYet') {
+        return <Tag color="orange">Unfilled form</Tag>;
+      }
+      return <Tag>Uncompleted</Tag>;
+    }
+  }
 }
