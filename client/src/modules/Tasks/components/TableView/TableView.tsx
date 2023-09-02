@@ -8,8 +8,9 @@ import {
   tagsCoursesRendererWithRemainingNumber,
   boolIconRenderer,
 } from 'components/Table';
-import { TASK_TYPES } from 'data/taskTypes';
+import { NEW_API_TASK_TYPES } from 'data/taskTypes';
 import { uniqBy } from 'lodash';
+import { ColumnName } from 'modules/Tasks/types';
 import { useMemo } from 'react';
 
 function getColumns(
@@ -18,39 +19,41 @@ function getColumns(
 ): ColumnsType<TaskDto> {
   return [
     {
-      title: 'Id',
+      title: ColumnName.Id,
       dataIndex: 'id',
+      fixed: true,
     },
     {
-      title: 'Name',
+      title: ColumnName.Name,
       dataIndex: 'name',
       sorter: stringSorter<TaskDto>('name'),
       ...getColumnSearchProps('name'),
     },
     {
-      title: 'Discipline',
+      title: ColumnName.Discipline,
       dataIndex: ['discipline', 'name'],
       sorter: stringSorter<TaskDto>('discipline'),
     },
     {
-      title: 'Tags',
+      title: ColumnName.Tags,
       dataIndex: 'tags',
       render: tagsRenderer,
     },
     {
-      title: 'Skills',
+      title: ColumnName.Skills,
       dataIndex: 'skills',
       render: tagsRenderer,
     },
+    // TODO: resolve double source data issue(TaskDtoTypeEnum, CourseTaskDtoTypeEnum)
     {
-      title: 'Type',
+      title: ColumnName.Type,
       dataIndex: 'type',
       sorter: stringSorter<TaskDto>('type'),
-      filters: TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
+      filters: NEW_API_TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
       onFilter: (value, record) => record.type === value,
     },
     {
-      title: 'Used in Courses',
+      title: ColumnName.UsedInCourses,
       dataIndex: ['courses', 'name'],
       render: tagsCoursesRendererWithRemainingNumber,
       filters: [
@@ -61,28 +64,28 @@ function getColumns(
         value ? record.courses.some(({ name }) => name === `${value}`) : record.courses.length === 0,
     },
     {
-      title: 'Description URL',
+      title: ColumnName.DescriptionURL,
       dataIndex: 'descriptionUrl',
       render: (value: string) =>
         value ? (
-          <a title={value} href={value}>
+          <a title={value} href={value} target="_blank">
             Link
           </a>
         ) : null,
       width: 80,
     },
     {
-      title: 'PR Required',
+      title: ColumnName.PRRequired,
       dataIndex: 'githubPrRequired',
       render: boolIconRenderer,
       width: 80,
     },
     {
-      title: 'Repo Name',
+      title: ColumnName.RepoName,
       dataIndex: 'githubRepoName',
     },
     {
-      title: 'Actions',
+      title: ColumnName.Actions,
       dataIndex: 'actions',
       render: (_, record) => <a onClick={() => handleEditItem(record)}>Edit</a>,
     },
