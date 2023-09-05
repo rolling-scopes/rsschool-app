@@ -70,13 +70,23 @@ export class CourseUsersController {
       throw new BadRequestException(`User with githubid ${githubId} is not found`);
     }
 
-    const { isManager = false, isSupervisor = false, isDementor = false } = roles;
+    const { isManager = false, isSupervisor = false, isDementor = false, isActivist = false } = roles;
     const courseUser = await this.courseUserService.getByUserId(user.id, courseId);
+    if (isActivist) {
+      this.usersService.updateUser(user.id, { activist: isActivist });
+    }
 
     if (!courseUser) {
-      await this.courseUserService.saveCourseUsers({ courseId, userId: user.id, isManager, isSupervisor, isDementor });
+      await this.courseUserService.saveCourseUsers({
+        courseId,
+        userId: user.id,
+        isManager,
+        isSupervisor,
+        isDementor,
+        isActivist,
+      });
     } else {
-      await this.courseUserService.updateCourseUser(courseUser.id, { isManager, isSupervisor, isDementor });
+      await this.courseUserService.updateCourseUser(courseUser.id, { isManager, isSupervisor, isDementor, isActivist });
     }
   }
 }
