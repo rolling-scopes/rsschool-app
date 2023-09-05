@@ -4245,7 +4245,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },
@@ -4266,7 +4266,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },
@@ -4281,7 +4281,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },

@@ -2066,7 +2066,8 @@ export const CreateUserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type CreateUserGroupDtoRolesEnum = typeof CreateUserGroupDtoRolesEnum[keyof typeof CreateUserGroupDtoRolesEnum];
@@ -6555,7 +6556,8 @@ export const UpdateUserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type UpdateUserGroupDtoRolesEnum = typeof UpdateUserGroupDtoRolesEnum[keyof typeof UpdateUserGroupDtoRolesEnum];
@@ -6673,7 +6675,8 @@ export const UserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type UserGroupDtoRolesEnum = typeof UserGroupDtoRolesEnum[keyof typeof UserGroupDtoRolesEnum];
