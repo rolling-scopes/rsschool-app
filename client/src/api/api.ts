@@ -925,6 +925,12 @@ export interface CourseRolesDto {
      * @memberof CourseRolesDto
      */
     'isDementor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseRolesDto
+     */
+    'isActivist': boolean;
 }
 /**
  * 
@@ -1424,6 +1430,12 @@ export interface CourseUserDto {
      * @memberof CourseUserDto
      */
     'isDementor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseUserDto
+     */
+    'isActivist': boolean;
 }
 /**
  * 
@@ -5869,6 +5881,12 @@ export interface UpdateCourseUserDto {
      * @memberof UpdateCourseUserDto
      */
     'isDementor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCourseUserDto
+     */
+    'isActivist': boolean;
     /**
      * 
      * @type {number}
