@@ -14,7 +14,7 @@ export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
 export function renderStatusWithStyle(statusName: CourseScheduleItemDtoStatusEnum) {
   return (
     <Tag style={getStatusStyle(statusName)} key={statusName}>
-      {capitalize(statusName)}
+      {statusName}
     </Tag>
   );
 }
