@@ -17,13 +17,14 @@ import {
   ColumnName,
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
+  SCHEDULE_STATUSES,
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import dayjs from 'dayjs';
-import { statusRenderer, renderTagWithStyle } from './renderers';
+import { statusRenderer, renderTagWithStyle, renderStatusWithStyle } from './renderers';
 import { FilterValue } from 'antd/lib/table/interface';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -36,11 +37,13 @@ const getColumns = ({
   tagColors,
   tagFilter,
   filteredInfo,
+  tabKey,
 }: {
   tagFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
+  tabKey: string;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   return [
@@ -49,6 +52,9 @@ const getColumns = ({
       title: ColumnName.Status,
       dataIndex: 'status',
       render: statusRenderer,
+      ...(tabKey === ALL_TAB_KEY && {
+        filters: SCHEDULE_STATUSES.map(({value}) => ({ text: renderStatusWithStyle(value), value })),
+      }),
     },
     {
       key: ColumnKey.Name,
@@ -141,6 +147,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
         timezone: settings.timezone,
         tagFilter,
         filteredInfo,
+        tabKey: statusFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
