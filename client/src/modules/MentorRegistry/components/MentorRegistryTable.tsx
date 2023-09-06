@@ -23,7 +23,8 @@ export function MentorRegistryTable(props: Props) {
   return (
     <Form form={form} component={false}>
       <FilteredTags
-        filters={[{ tags: tagFilters, onClose: handleTagClose }]}
+        tagFilters={tagFilters}
+        onTagClose={handleTagClose}
         onClearAllButtonClick={handleClearAllButtonClick}
       />
       <Table<MentorRegistryDto>
