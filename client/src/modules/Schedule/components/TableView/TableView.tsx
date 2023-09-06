@@ -176,8 +176,13 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
     setTagFilter(tagFilter.filter(t => t !== removedTag));
   };
 
+  const handleStatusClose = (removedStatus: string) => {
+    setStatusColumnFilter(statusColumnFilter.filter(s => s !== removedStatus));
+  };
+
   const handleClearAllButtonClick = () => {
     setTagFilter([]);
+    setStatusColumnFilter([]);
   };
 
   const generateUniqueRowKey = ({ id, name, tag }: CourseScheduleItemDto) => [id, name, tag].join('|');
@@ -187,9 +192,10 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       <Col span={24}>
         <Form form={form} component={false}>
           <FilteredTags
-            filterName={`${ColumnName.Type}: `}
-            tagFilters={tagFilter}
-            onTagClose={handleTagClose}
+            filters={[
+              { column: ColumnName.Type, tags: tagFilter, onClose: handleTagClose },
+              { column: ColumnName.Status, tags: statusColumnFilter, onClose: handleStatusClose },
+            ]}
             onClearAllButtonClick={handleClearAllButtonClick}
           />
           <Table
