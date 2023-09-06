@@ -1,7 +1,7 @@
-import { Col, Tag, Row, Button, Typography, Space } from 'antd';
+import { Col, Row, Button, Typography, Space } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
-import { getInterviewFeedbackUrl } from 'domain/interview';
+import { DecisionTag, getInterviewFeedbackUrl } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
 
@@ -12,9 +12,8 @@ export function StudentInterview(props: { interview: MentorInterview; template?:
     <Col className={containerClassName}>
       <Space size={21} direction="vertical" style={{ width: '100%' }}>
         <Row justify="space-between" align="middle">
-          <Tag color={interview.completed ? 'green' : undefined}>
-            {interview.completed ? 'Completed' : 'Uncompleted'}
-          </Tag>
+          <DecisionTag decision={interview.decision} status={interview.status} />
+
           <Button
             type="primary"
             ghost

@@ -436,7 +436,7 @@ export async function getStudentScore(studentId: number) {
   // we have a case when technical screening score are set as task result.
   if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
     results.push({
-      score: Math.floor((getStageInterviewRating(stageInterviews) ?? 0) * 10),
+      score: Math.floor(getStageInterviewRating(stageInterviews) ?? 0),
       courseTaskId: stageInterviews[0].courseTaskId,
     });
   }

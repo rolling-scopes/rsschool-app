@@ -1,7 +1,7 @@
 import {
   getFeedbackFromTemplate,
   getDefaultStep,
-  isInterviewRejected,
+  isInterviewCanceled,
   getUpdatedFeedback,
 } from './feedbackTemplateHandler';
 import {
@@ -102,24 +102,24 @@ describe('getDefaultStep', () => {
   });
 });
 
-describe('isInterviewRejected', () => {
+describe('isInterviewCanceled', () => {
   test('should return true if interview is rejected on the intro step', () => {
     const stepValues = { interviewResult: 'missed' };
-    const isRejected = isInterviewRejected(FeedbackStepId.Introduction, stepValues);
+    const isRejected = isInterviewCanceled(FeedbackStepId.Introduction, stepValues);
 
     expect(isRejected).toBe(true);
   });
 
   test('should return false if not rejected on intro step', () => {
     const stepValues = { interviewResult: 'completed' };
-    const isRejected = isInterviewRejected(FeedbackStepId.Introduction, stepValues);
+    const isRejected = isInterviewCanceled(FeedbackStepId.Introduction, stepValues);
 
     expect(isRejected).toBe(false);
   });
 
   test('should return false if not a intro step', () => {
     const stepValues = {};
-    const isRejected = isInterviewRejected(FeedbackStepId.Theory, stepValues);
+    const isRejected = isInterviewCanceled(FeedbackStepId.Theory, stepValues);
 
     expect(isRejected).toBe(false);
   });

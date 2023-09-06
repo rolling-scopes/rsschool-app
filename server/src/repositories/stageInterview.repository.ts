@@ -261,6 +261,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         endDate: it.courseTask.studentEndDate,
         result: it.decision ?? null,
         interviewer: { githubId: it.mentor.user.githubId, name: userService.createName(it.mentor.user) },
+        decision: it.decision,
         student: {
           id: it.student.id,
           githubId: it.student.user.githubId,
