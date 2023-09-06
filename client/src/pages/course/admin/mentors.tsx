@@ -6,7 +6,6 @@ import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { Session, withSession } from 'components/withSession';
-import { MentorEndorsement } from 'modules/Mentor/components/MentorEndorsement';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -53,7 +52,6 @@ function Page(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null as Stats | null);
   const [mentors, setMentors] = useState<MentorDetailsDto[]>([]);
-  const [endorsementGithubId, setEndorsementGithubId] = useState<string | null>(null);
   const [currentMentor, setCurrentMentor] = useState<string | null>(null);
   const [modal, contextHolder] = Modal.useModal();
 
@@ -150,9 +148,6 @@ function Page(props: CoursePageProps) {
           onOk: () => handleRestore(mentor),
           title: 'Do you want to restore the mentor?',
         });
-        break;
-      case 'endorsment':
-        setEndorsementGithubId(mentor.githubId);
         break;
     }
   };
@@ -306,7 +301,6 @@ function Page(props: CoursePageProps) {
           },
         ]}
       />
-      <MentorEndorsement onClose={() => setEndorsementGithubId(null)} githubId={endorsementGithubId} />
       <AssignStudentModal
         onClose={() => setCurrentMentor(null)}
         courseId={courseId}
