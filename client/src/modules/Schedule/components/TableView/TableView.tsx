@@ -1,4 +1,4 @@
-import { Col, Form, Row, Table } from 'antd';
+import { Col, Form, Row, Table, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -17,7 +17,9 @@ import {
   ColumnName,
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
+  REVERSE_TAG_NAME_MAP,
   SCHEDULE_STATUSES,
+  TAG_NAME_MAP,
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
@@ -28,6 +30,7 @@ import { statusRenderer, renderTagWithStyle, renderStatusWithStyle } from './ren
 import { FilterValue } from 'antd/lib/table/interface';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { capitalize } from 'lodash';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,19 +38,18 @@ dayjs.extend(timezone);
 const getColumns = ({
   timezone,
   tagColors,
-  tagFilter,
-  statusColumnFilter,
+  combinedFilter,
   filteredInfo,
   tabKey,
 }: {
-  tagFilter: string[];
-  statusColumnFilter: string[];
+  combinedFilter: CombinedFilter;
   timezone: string;
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
   tabKey: string;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
+  const { types, statuses } = combinedFilter;
   return [
     {
       key: ColumnKey.Status,
@@ -56,9 +58,9 @@ const getColumns = ({
       render: statusRenderer,
       ...(tabKey === ALL_TAB_KEY && {
         filters: SCHEDULE_STATUSES.map(({ value }) => ({ text: renderStatusWithStyle(value), value })),
-        defaultFilteredValue: statusColumnFilter,
-        filtered: statusColumnFilter?.length > 0,
-        filteredValue: statusColumnFilter || null,
+        defaultFilteredValue: statuses,
+        filtered: statuses?.length > 0,
+        filteredValue: statuses || null,
       }),
     },
     {
@@ -75,9 +77,9 @@ const getColumns = ({
       dataIndex: 'tag',
       render: (tag: CourseScheduleItemDto['tag']) => renderTagWithStyle(tag, tagColors),
       filters: TAGS.map(status => ({ text: renderTagWithStyle(status.value, tagColors), value: status.value })),
-      defaultFilteredValue: tagFilter,
-      filtered: tagFilter?.length > 0,
-      filteredValue: tagFilter || null,
+      defaultFilteredValue: types,
+      filtered: types?.length > 0,
+      filteredValue: types || null,
     },
     {
       key: ColumnKey.StartDate,
@@ -133,51 +135,104 @@ export interface TableViewProps {
   statusFilter?: string;
 }
 
+export interface CombinedFilter {
+  types: string[];
+  statuses: string[];
+
+  filterTags?: string[];
+}
+
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
 export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
   const [form] = Form.useForm();
-  const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
+  const [tagFilters, setTagFilters] = useState<string[]>([]);
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
-  const [statusColumnFilter = [], setStatusColumnFilter] = useLocalStorage<string[]>(
-    LocalStorageKeys.StatusColumnFilter,
+  const [combinedFilter = { types: [], statuses: [] }, setCombinedFilter] = useLocalStorage<CombinedFilter>(
+    LocalStorageKeys.Filters,
   );
 
   useEffect(() => {
-    if (statusFilter !== ALL_TAB_KEY && statusColumnFilter.length) {
-      setStatusColumnFilter([]);
+    if (statusFilter !== ALL_TAB_KEY && combinedFilter.statuses.length) {
+      setCombinedFilter({ ...combinedFilter, statuses: [] });
+      setTagFilters(tagFilters.filter(filter => !filter.toLowerCase().startsWith(ColumnKey.Status)));
     }
   }, [statusFilter]);
 
-  const filteredData = data
-    .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
-    .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event))
-    .filter(event => (statusColumnFilter?.length > 0 ? statusColumnFilter.includes(event.status) : event));
+  const filteredData = useMemo(() => {
+    return data
+      .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
+      .filter(
+        item =>
+          (combinedFilter.types.length ? combinedFilter.types.includes(item.tag) : true) &&
+          (combinedFilter.statuses.length ? combinedFilter.statuses.includes(item.status) : true),
+      );
+  }, [combinedFilter, data, statusFilter]);
 
   const filteredColumns = useMemo(
     () =>
       getColumns({
         tagColors: settings.tagColors,
         timezone: settings.timezone,
-        tagFilter,
-        statusColumnFilter,
+        combinedFilter,
         filteredInfo,
         tabKey: statusFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
       }),
-    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter, tagFilter, statusColumnFilter],
+    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter, combinedFilter],
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
   const handleTagClose = (removedTag: string) => {
-    setTagFilter(tagFilter.filter(t => t !== removedTag));
+    const [removedTagName, ...removedTagValueParts] = removedTag.split(':');
+    const removedTagValue = removedTagValueParts.join(':');
+
+    switch (removedTagName) {
+      case ColumnName.Type:
+        {
+          setCombinedFilter({
+            ...combinedFilter,
+            types: combinedFilter.types.filter(tag => tag !== REVERSE_TAG_NAME_MAP[removedTagValue.trim()]),
+          });
+        }
+        break;
+      case ColumnName.Status:
+        {
+          setCombinedFilter({
+            ...combinedFilter,
+            statuses: combinedFilter.statuses.filter(tag => tag !== removedTagValue.trim().toLowerCase()),
+          });
+        }
+        break;
+      default:
+        message.error('An error occurred. Please try again later.');
+        break;
+    }
+    setTagFilters(tagFilters.filter(filter => filter !== removedTag));
   };
 
   const handleClearAllButtonClick = () => {
-    setTagFilter([]);
+    setCombinedFilter({ types: [], statuses: [] });
+    setTagFilters([]);
+  };
+
+  const handleTableChange = (_: any, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
+    const combinedFilter: CombinedFilter = {
+      types: filters.type?.map(tag => tag.toString()) ?? [],
+      statuses: filters.status?.map(status => status.toString()) ?? [],
+    };
+
+    const filterTag: string[] = [
+      ...combinedFilter.types.map(tag => `${ColumnName.Type}: ${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']]}`),
+      ...combinedFilter.statuses.map(status => `${ColumnName.Status}: ${capitalize(status)}`),
+    ];
+
+    setTagFilters(filterTag);
+    setCombinedFilter(combinedFilter);
+    setFilteredInfo(filters);
   };
 
   const generateUniqueRowKey = ({ id, name, tag }: CourseScheduleItemDto) => [id, name, tag].join('|');
@@ -187,8 +242,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       <Col span={24}>
         <Form form={form} component={false}>
           <FilteredTags
-            filterName={`${ColumnName.Type}: `}
-            tagFilters={tagFilter}
+            tagFilters={tagFilters}
             onTagClose={handleTagClose}
             onClearAllButtonClick={handleClearAllButtonClick}
           />
@@ -199,11 +253,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
               triggerAsc: undefined,
               cancelSort: undefined,
             }}
-            onChange={(_, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
-              setTagFilter(filters?.type as string[]);
-              setStatusColumnFilter(filters?.status as string[]);
-              setFilteredInfo(filters);
-            }}
+            onChange={handleTableChange}
             pagination={false}
             dataSource={filteredData}
             rowKey={generateUniqueRowKey}

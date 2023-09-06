@@ -43,7 +43,7 @@ export enum LocalStorageKeys {
   EventTypesHidden = 'scheduleEventTypesHidden',
   StatusFilter = 'scheduleStatusFilter',
   StatusColumnFilter = 'scheduleStatusColumnFilter',
-  TagFilter = 'scheduleTagFilter',
+  Filters = 'scheduleFilters',
 }
 
 export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
@@ -55,6 +55,10 @@ export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
   'self-study': 'Self-study',
   lecture: 'Lecture',
 };
+
+export const REVERSE_TAG_NAME_MAP: Record<string, CourseScheduleItemDto['tag']> = Object.fromEntries(
+  Object.entries(TAG_NAME_MAP).map(entry => entry.reverse()),
+);
 
 export const SCHEDULE_STATUSES = Object.keys(CourseScheduleItemDtoStatusEnum).map(key => ({
   value: (CourseScheduleItemDtoStatusEnum as any)[key] as CourseScheduleItemDtoStatusEnum,
