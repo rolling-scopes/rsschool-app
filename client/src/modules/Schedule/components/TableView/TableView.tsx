@@ -36,10 +36,12 @@ const getColumns = ({
   timezone,
   tagColors,
   tagFilter,
+  statusColumnFilter,
   filteredInfo,
   tabKey,
 }: {
   tagFilter: string[];
+  statusColumnFilter: string[];
   timezone: string;
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
@@ -53,7 +55,10 @@ const getColumns = ({
       dataIndex: 'status',
       render: statusRenderer,
       ...(tabKey === ALL_TAB_KEY && {
-        filters: SCHEDULE_STATUSES.map(({value}) => ({ text: renderStatusWithStyle(value), value })),
+        filters: SCHEDULE_STATUSES.map(({ value }) => ({ text: renderStatusWithStyle(value), value })),
+        defaultFilteredValue: statusColumnFilter,
+        filtered: statusColumnFilter?.length > 0,
+        filteredValue: statusColumnFilter || null,
       }),
     },
     {
@@ -135,10 +140,14 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
   const [form] = Form.useForm();
   const [tagFilter = [], setTagFilter] = useLocalStorage<string[]>(LocalStorageKeys.TagFilter);
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
+  const [statusColumnFilter = [], setStatusColumnFilter] = useLocalStorage<string[]>(
+    LocalStorageKeys.StatusColumnFilter,
+  );
 
   const filteredData = data
     .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
-    .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event));
+    .filter(event => (tagFilter?.length > 0 ? tagFilter.includes(event.tag) : event))
+    .filter(event => (statusColumnFilter?.length > 0 ? statusColumnFilter.includes(event.status) : event));
 
   const filteredColumns = useMemo(
     () =>
@@ -146,13 +155,14 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
         tagColors: settings.tagColors,
         timezone: settings.timezone,
         tagFilter,
+        statusColumnFilter,
         filteredInfo,
         tabKey: statusFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
       }),
-    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter, tagFilter],
+    [settings.columnsHidden, settings.timezone, settings.tagColors, statusFilter, tagFilter, statusColumnFilter],
   );
   const columns = filteredColumns as ColumnsType<CourseScheduleItemDto>;
 
@@ -185,6 +195,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
             }}
             onChange={(_, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
               setTagFilter(filters?.type as string[]);
+              setStatusColumnFilter(filters?.status as string[]);
               setFilteredInfo(filters);
             }}
             pagination={false}
