@@ -21,7 +21,7 @@ import {
   TAGS,
 } from 'modules/Schedule/constants';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 import dayjs from 'dayjs';
 import { statusRenderer, renderTagWithStyle, renderStatusWithStyle } from './renderers';
@@ -143,6 +143,12 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
   const [statusColumnFilter = [], setStatusColumnFilter] = useLocalStorage<string[]>(
     LocalStorageKeys.StatusColumnFilter,
   );
+
+  useEffect(() => {
+    if (statusFilter !== ALL_TAB_KEY && statusColumnFilter.length) {
+      setStatusColumnFilter([]);
+    }
+  }, [statusFilter]);
 
   const filteredData = data
     .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
