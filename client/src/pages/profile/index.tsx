@@ -94,9 +94,9 @@ export class ProfilePage extends React.Component<Props, State> {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const [profile, connections, { data }] = await Promise.all([
-        this.userService.getProfileInfo(githubId),
+        this.userService.getProfileInfo(githubId?.toLowerCase()),
         this.notificationsService.getUserConnections().catch(() => []),
-        profileApi.getProfile(githubId ?? session.githubId),
+        profileApi.getProfile(githubId?.toLowerCase() ?? session.githubId),
       ]);
 
       const updateProfile = {
