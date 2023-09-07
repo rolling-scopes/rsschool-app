@@ -20,7 +20,10 @@ import { CourseDto, LeaveCourseRequestDto, UpdateCourseDto } from './dto';
 @Controller('courses')
 @ApiTags('courses')
 export class CoursesController {
-  constructor(private courseService: CoursesService, private courseAccessService: CourseAccessService) {}
+  constructor(
+    private courseService: CoursesService,
+    private courseAccessService: CourseAccessService,
+  ) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getCourses' })

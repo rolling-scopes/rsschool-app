@@ -21,10 +21,13 @@ export function SettingsModal(props: Props) {
     onOk(values);
   };
 
-  const initialValues = courseTasks.reduce((acc, curr) => {
-    acc[curr.id] = curr.isVisible;
-    return acc;
-  }, {} as Record<string, boolean | undefined>);
+  const initialValues = courseTasks.reduce(
+    (acc, curr) => {
+      acc[curr.id] = curr.isVisible;
+      return acc;
+    },
+    {} as Record<string, boolean | undefined>,
+  );
 
   const fillAllFields = (value: boolean) => {
     const newValues: Record<string, boolean | undefined> = {};

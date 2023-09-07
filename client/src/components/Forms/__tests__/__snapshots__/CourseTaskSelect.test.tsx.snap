@@ -142,7 +142,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
             >
               <div
                 class="rc-virtual-list-holder-inner"
-                style="display: flex; flex-direction: column; transform: translateY(0px); position: absolute; left: 0px; right: 0px; top: 0px;"
+                style="display: flex; flex-direction: column; transform: translateY(0px); margin-left: 0px; position: absolute; left: 0px; right: 0px; top: 0px;"
               >
                 <div
                   class="ant-select-item ant-select-item-group"
@@ -378,12 +378,12 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
             </div>
           </div>
           <div
-            class="rc-virtual-list-scrollbar rc-virtual-list-scrollbar-show"
-            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute;"
+            class="rc-virtual-list-scrollbar rc-virtual-list-scrollbar-vertical rc-virtual-list-scrollbar-visible"
+            style="position: absolute; width: 8px; top: 0px; bottom: 0px; right: 0px;"
           >
             <div
               class="rc-virtual-list-scrollbar-thumb"
-              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
+              style="position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none; width: 100%; height: 95px; top: 0px;"
             />
           </div>
         </div>
@@ -717,15 +717,6 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
               </div>
             </div>
           </div>
-          <div
-            class="rc-virtual-list-scrollbar"
-            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
-          >
-            <div
-              class="rc-virtual-list-scrollbar-thumb"
-              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
-            />
-          </div>
         </div>
       </div>
     </div>
@@ -1043,15 +1034,6 @@ exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="rc-virtual-list-scrollbar"
-            style="width: 8px; top: 0px; bottom: 0px; right: 0px; position: absolute; display: none;"
-          >
-            <div
-              class="rc-virtual-list-scrollbar-thumb"
-              style="width: 100%; height: 137px; top: 0px; left: 0px; position: absolute; background: rgba(0, 0, 0, 0.5); border-radius: 99px; cursor: pointer; user-select: none;"
-            />
           </div>
         </div>
       </div>

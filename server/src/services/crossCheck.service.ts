@@ -31,7 +31,10 @@ export interface CrossCheckSubmitResult {
 }
 
 export class CrossCheckService {
-  constructor(private courseTaskId: number, private repository = getCustomRepository(CrossCheckRepository)) {}
+  constructor(
+    private courseTaskId: number,
+    private repository = getCustomRepository(CrossCheckRepository),
+  ) {}
 
   public static isCrossCheckTask(courseTask: Partial<CourseTask>) {
     return courseTask.checker === 'crossCheck';
