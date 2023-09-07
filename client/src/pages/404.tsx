@@ -4,7 +4,7 @@ import { PageLayout } from 'components/PageLayout';
 import { Row } from 'antd';
 import { SessionProvider } from 'modules/Course/contexts';
 
-function Page() {
+function NotFoundPage() {
   return (
     <PageLayout loading={false}>
       <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
@@ -20,12 +20,12 @@ function Page() {
   );
 }
 
-function PageWithContext() {
+function Page() {
   return (
     <SessionProvider>
-      <Page />
+      <NotFoundPage />
     </SessionProvider>
   );
 }
 
-export default withSession(PageWithContext);
+export default withSession(Page);

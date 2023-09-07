@@ -19,6 +19,7 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
+import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 
 const { Content } = Layout;
 
@@ -31,6 +32,8 @@ const mentorRegistryService = new MentorRegistryService();
 const alertService = new AlertsApi();
 
 export function HomePage(props: Props) {
+  const course = useActiveCourseContext();
+  console.log('🚀 ~ file: index.tsx:36 ~ HomePage ~ course:', course);
   const plannedCourses = (props.courses || []).filter(course => course.planned && !course.inviteOnly);
   const wasMentor = isAnyMentor(props.session);
   const hasRegistryBanner =

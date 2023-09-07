@@ -3,10 +3,9 @@ import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from './Header';
 import { Course } from 'services/models';
 
-type Props = { loading: boolean; title?: string; children?: any; course: Course; };
+type Props = { loading: boolean; title?: string; children?: any; course: Course };
 
 export function CoursePageLayout(props: Props) {
-
   if (props.course == null) {
     return <CourseNoAccess />;
   }

@@ -1,11 +1,14 @@
 import withSession from 'components/withSession';
 import { SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider } from 'modules/Course/contexts/ActiveCourseContext';
 import { UserNotificationsPage } from 'modules/Notifications/pages/UserNotificationsSettingsPage';
 
 function PageWithContext() {
   return (
     <SessionProvider>
-      <UserNotificationsPage />
+      <ActiveCourseProvider>
+        <UserNotificationsPage />
+      </ActiveCourseProvider>
     </SessionProvider>
   );
 }

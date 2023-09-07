@@ -19,7 +19,7 @@ const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
 
-function Page() {
+function EpamLearningJsRegistryPage() {
   const [form] = Form.useForm();
 
   const update = useUpdate();
@@ -182,7 +182,7 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
 function PageWithSession() {
   return (
     <SessionProvider>
-      <Page />
+      <EpamLearningJsRegistryPage />
     </SessionProvider>
   );
 }

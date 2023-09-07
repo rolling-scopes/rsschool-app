@@ -10,7 +10,7 @@ import { Course } from 'services/models';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
 
-type Props = { courses: Course[], activeCourse?: Course | null };
+type Props = { courses: Course[]; activeCourse?: Course | null };
 
 type MenuItem = Required<MenuProps>['items'][number];
 

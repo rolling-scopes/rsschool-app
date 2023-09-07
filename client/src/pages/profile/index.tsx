@@ -23,6 +23,7 @@ import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider } from 'modules/Course/contexts/ActiveCourseContext';
 
 type Props = {
   router: NextRouter;
@@ -301,7 +302,9 @@ const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boole
 function Page(props: Props) {
   return (
     <SessionProvider>
-      <ProfilePage {...props} />
+      <ActiveCourseProvider>
+        <ProfilePage {...props} />
+      </ActiveCourseProvider>
     </SessionProvider>
   );
 }
