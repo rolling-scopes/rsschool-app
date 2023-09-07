@@ -40,13 +40,13 @@ const getColumns = ({
   tagColors,
   combinedFilter,
   filteredInfo,
-  tabKey,
+  currentTabKey,
 }: {
   combinedFilter: CombinedFilter;
   timezone: string;
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
-  tabKey: string;
+  currentTabKey: string;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   const { types, statuses } = combinedFilter;
@@ -56,7 +56,7 @@ const getColumns = ({
       title: ColumnName.Status,
       dataIndex: 'status',
       render: statusRenderer,
-      ...(tabKey === ALL_TAB_KEY && {
+      ...(currentTabKey === ALL_TAB_KEY && {
         filters: SCHEDULE_STATUSES.map(({ value }) => ({ text: renderStatusWithStyle(value), value })),
         defaultFilteredValue: statuses,
         filtered: statuses?.length > 0,
@@ -177,7 +177,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
         timezone: settings.timezone,
         combinedFilter,
         filteredInfo,
-        tabKey: statusFilter,
+        currentTabKey: statusFilter,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;
