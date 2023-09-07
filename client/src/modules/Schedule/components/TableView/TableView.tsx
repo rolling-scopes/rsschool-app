@@ -225,12 +225,12 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       statuses: filters.status?.map(status => status.toString()) ?? [],
     };
 
-    const filterTag: string[] = [
+    const filterTags: string[] = [
       ...combinedFilter.types.map(tag => `${ColumnName.Type}: ${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']]}`),
       ...combinedFilter.statuses.map(status => `${ColumnName.Status}: ${capitalize(status)}`),
     ];
 
-    setTagFilters(filterTag);
+    setTagFilters(filterTags);
     setCombinedFilter(combinedFilter);
     setFilteredInfo(filters);
   };
