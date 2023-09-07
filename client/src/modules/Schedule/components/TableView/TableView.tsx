@@ -153,7 +153,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
 
   useEffect(() => {
     if (statusFilter !== ALL_TAB_KEY && combinedFilter.statuses.length) {
-      const filterTags = combinedFilter.filterTags?.filter(tag => tag.startsWith(ColumnName.Status));
+      const filterTags = combinedFilter.filterTags?.filter(tag => !tag.startsWith(ColumnName.Status));
       setCombinedFilter({ ...combinedFilter, statuses: [], filterTags });
     }
   }, [statusFilter]);
