@@ -171,7 +171,7 @@ describe('TableView', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for tagFilter
-      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn(), jest.fn()]);
+      .mockReturnValue([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tagFilterBtn = screen.getByRole('button', { name: /filter/i });
@@ -187,7 +187,7 @@ describe('TableView', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for tagFilter
-      .mockReturnValueOnce([null, jest.fn(), jest.fn()]);
+      .mockReturnValue([null, jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tag = screen.queryByText(/Type: /);
@@ -200,7 +200,7 @@ describe('TableView', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for tagFilter
-      .mockReturnValueOnce([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], setFilterMock, jest.fn()]);
+      .mockReturnValue([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], setFilterMock, jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const clearAllBtn = screen.getByText(/Clear all/);
