@@ -42,7 +42,6 @@ export enum LocalStorageKeys {
   ColumnsHidden = 'scheduleColumnsHidden',
   EventTypesHidden = 'scheduleEventTypesHidden',
   StatusFilter = 'scheduleStatusFilter',
-  StatusColumnFilter = 'scheduleStatusColumnFilter',
   Filters = 'scheduleFilters',
 }
 
