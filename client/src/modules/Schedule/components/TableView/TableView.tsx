@@ -147,16 +147,14 @@ const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
 
 export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
   const [form] = Form.useForm();
-  const [tagFilters, setTagFilters] = useState<string[]>([]);
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
-  const [combinedFilter = { types: [], statuses: [] }, setCombinedFilter] = useLocalStorage<CombinedFilter>(
-    LocalStorageKeys.Filters,
-  );
+  const [combinedFilter = { types: [], statuses: [], filterTags: [] }, setCombinedFilter] =
+    useLocalStorage<CombinedFilter>(LocalStorageKeys.Filters);
 
   useEffect(() => {
     if (statusFilter !== ALL_TAB_KEY && combinedFilter.statuses.length) {
-      setCombinedFilter({ ...combinedFilter, statuses: [] });
-      setTagFilters(tagFilters.filter(filter => !filter.toLowerCase().startsWith(ColumnKey.Status)));
+      const filterTags = combinedFilter.filterTags?.filter(tag => tag.startsWith(ColumnName.Status))
+      setCombinedFilter({ ...combinedFilter, statuses: [], filterTags });
     }
   }, [statusFilter]);
 
@@ -165,8 +163,8 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       .filter(item => (hasStatusFilter(statusFilter, item.status) ? item : null))
       .filter(
         item =>
-          (combinedFilter.types.length ? combinedFilter.types.includes(item.tag) : true) &&
-          (combinedFilter.statuses.length ? combinedFilter.statuses.includes(item.status) : true),
+          (combinedFilter?.types?.length ? combinedFilter.types.includes(item.tag) : true) &&
+          (combinedFilter?.statuses?.length ? combinedFilter.statuses.includes(item.status) : true),
       );
   }, [combinedFilter, data, statusFilter]);
 
@@ -190,33 +188,31 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
     const [removedTagName, ...removedTagValueParts] = removedTag.split(':');
     const removedTagValue = removedTagValueParts.join(':');
 
+    const filterTags = combinedFilter.filterTags?.filter(filter => filter !== removedTag);
+
     switch (removedTagName) {
       case ColumnName.Type:
-        {
-          setCombinedFilter({
-            ...combinedFilter,
-            types: combinedFilter.types.filter(tag => tag !== REVERSE_TAG_NAME_MAP[removedTagValue.trim()]),
-          });
-        }
+        setCombinedFilter({
+          ...combinedFilter,
+          types: combinedFilter.types.filter(tag => tag !== REVERSE_TAG_NAME_MAP[removedTagValue.trim()]),
+          filterTags,
+        });
         break;
       case ColumnName.Status:
-        {
-          setCombinedFilter({
-            ...combinedFilter,
-            statuses: combinedFilter.statuses.filter(tag => tag !== removedTagValue.trim().toLowerCase()),
-          });
-        }
+        setCombinedFilter({
+          ...combinedFilter,
+          statuses: combinedFilter.statuses.filter(tag => tag !== removedTagValue.trim().toLowerCase()),
+          filterTags,
+        });
         break;
       default:
         message.error('An error occurred. Please try again later.');
         break;
     }
-    setTagFilters(tagFilters.filter(filter => filter !== removedTag));
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({ types: [], statuses: [] });
-    setTagFilters([]);
+    setCombinedFilter({ types: [], statuses: [], filterTags: [] });
   };
 
   const handleTableChange = (_: any, filters: Record<ColumnKey, FilterValue | string[] | null>) => {
@@ -225,12 +221,11 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       statuses: filters.status?.map(status => status.toString()) ?? [],
     };
 
-    const filterTags: string[] = [
+    combinedFilter.filterTags = [
       ...combinedFilter.types.map(tag => `${ColumnName.Type}: ${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']]}`),
       ...combinedFilter.statuses.map(status => `${ColumnName.Status}: ${capitalize(status)}`),
     ];
 
-    setTagFilters(filterTags);
     setCombinedFilter(combinedFilter);
     setFilteredInfo(filters);
   };
@@ -242,7 +237,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
       <Col span={24}>
         <Form form={form} component={false}>
           <FilteredTags
-            tagFilters={tagFilters}
+            tagFilters={combinedFilter.filterTags ?? []}
             onTagClose={handleTagClose}
             onClearAllButtonClick={handleClearAllButtonClick}
           />
