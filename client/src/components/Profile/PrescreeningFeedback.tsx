@@ -83,7 +83,7 @@ function SkillSection({
   if (!skills) return null;
 
   return (
-    <Space direction="vertical" style={{ marginBottom: 20 }}>
+    <Space direction="vertical" style={{ marginBottom: 20, width: '100%' }}>
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
       {skills.comment && (

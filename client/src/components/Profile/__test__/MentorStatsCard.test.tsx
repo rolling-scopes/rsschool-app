@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import MentorStatsCard from '../MentorStatsCard';
+import { MentorStatsCard } from '../MentorStatsCard';
 
 describe('MentorStatsCard', () => {
   const mentorStats = [
@@ -31,7 +31,7 @@ describe('MentorStatsCard', () => {
   ];
 
   it('should render correctly', () => {
-    const { container } = render(<MentorStatsCard data={mentorStats} />);
+    const { container } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
     expect(container).toMatchSnapshot();
   });
 });

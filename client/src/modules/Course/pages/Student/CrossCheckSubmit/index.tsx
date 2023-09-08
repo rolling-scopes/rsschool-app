@@ -227,7 +227,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                 </Col>
                 {submittedSolution && (
                   <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button danger type="ghost" onClick={showModal}>
+                    <Button danger ghost onClick={showModal}>
                       Cancel Submit
                     </Button>
                     <Modal
