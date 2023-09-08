@@ -134,12 +134,12 @@ export interface TableViewProps {
   statusFilter?: string;
 }
 
-export interface CombinedFilter {
+export type CombinedFilter = {
   types: string[];
   statuses: string[];
 
   tags?: FilterTag[];
-}
+};
 
 export type FilterTag = {
   label: string;
