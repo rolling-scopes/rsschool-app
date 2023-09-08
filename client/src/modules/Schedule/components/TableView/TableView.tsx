@@ -145,7 +145,7 @@ export type FilterTag = {
   label: string;
   value: string;
   tagType: ColumnName.Type | ColumnName.Status;
-}
+};
 
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
@@ -227,20 +227,18 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
 
     combinedFilter.tags = [
       ...combinedFilter.types.map(
-        (tag: string): FilterTag =>
-          ({
-            label: `${ColumnName.Type}: ${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']]}`,
-            value: tag,
-            tagType: ColumnName.Type,
-          }),
+        (tag: string): FilterTag => ({
+          label: `${ColumnName.Type}: ${TAG_NAME_MAP[tag as CourseScheduleItemDto['tag']]}`,
+          value: tag,
+          tagType: ColumnName.Type,
+        }),
       ),
       ...combinedFilter.statuses.map(
-        (status: string): FilterTag =>
-          ({
-            label: `${ColumnName.Status}: ${capitalize(status)}`,
-            value: status,
-            tagType: ColumnName.Status,
-          }),
+        (status: string): FilterTag => ({
+          label: `${ColumnName.Status}: ${capitalize(status)}`,
+          value: status,
+          tagType: ColumnName.Status,
+        }),
       ),
     ];
 
