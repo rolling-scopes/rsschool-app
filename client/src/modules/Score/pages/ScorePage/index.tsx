@@ -30,7 +30,7 @@ export function ScorePage(props: CoursePageProps) {
   return !props.course ? (
     <CourseNoAccess />
   ) : (
-    <CoursePageLayout title="Score" loading={loading}>
+    <CoursePageLayout title="Score" loading={loading} course={props.course}>
       <Row style={{ margin: '8px 0' }} justify="space-between">
         <div>
           <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}

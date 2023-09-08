@@ -2,7 +2,7 @@ import Image from 'next/image';
 import withSession from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { Row } from 'antd';
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider, ActiveCourseProvider } from 'modules/Course/contexts';
 
 function NotFoundPage() {
   return (
@@ -23,7 +23,9 @@ function NotFoundPage() {
 function Page() {
   return (
     <SessionProvider>
-      <NotFoundPage />
+      <ActiveCourseProvider>
+        <NotFoundPage />
+      </ActiveCourseProvider>
     </SessionProvider>
   );
 }

@@ -29,7 +29,7 @@ const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
 const courseTaskApi = new CoursesTasksApi();
 
 export function SchedulePage(props: PageProps) {
-  const { session } = useContext(SessionContext);
+  const session = useContext(SessionContext);
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
@@ -82,7 +82,7 @@ export function SchedulePage(props: PageProps) {
 
   return (
     <>
-      <PageLayout loading={loading} error={error} title="Schedule">
+      <PageLayout loading={loading} error={error} title="Schedule" showCourseName course={props.course}>
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
