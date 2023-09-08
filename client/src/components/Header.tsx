@@ -107,14 +107,16 @@ export function Header({ title, showCourseName, course }: Props) {
               </Button>
             </Tooltip>
           </a>
-          <Dropdown overlay={menu} trigger={['click']}>
-            <Button type="dashed" size="large">
-              <GithubAvatar githubId={session?.githubId} size={24} />
-              <span style={{ marginLeft: '12px' }} className="button-text">
-                My Profile
-              </span>
-            </Button>
-          </Dropdown>
+          {session.githubId && (
+            <Dropdown overlay={menu} trigger={['click']}>
+              <Button type="dashed" size="large">
+                <GithubAvatar githubId={session?.githubId} size={24} />
+                <span style={{ marginLeft: '12px' }} className="button-text">
+                  My Profile
+                </span>
+              </Button>
+            </Dropdown>
+          )}
         </div>
         <style jsx>{`
           .title {

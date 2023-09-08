@@ -4,6 +4,7 @@ import Router from 'next/router';
 import React, { useContext, useEffect } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { UserService } from 'services/user';
+import { WelcomeCard } from 'components/WelcomeCard';
 
 const ActiveCourseContext = React.createContext<{ course: ProfileCourseDto; courses: ProfileCourseDto[] }>(
   {} as { course: ProfileCourseDto; courses: ProfileCourseDto[] },
@@ -50,6 +51,10 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     return (
       <ActiveCourseContext.Provider value={{ course, courses: coursesCache }}>{children}</ActiveCourseContext.Provider>
     );
+  }
+
+  if (!loading && !course && !coursesCache) {
+    return <WelcomeCard />;
   }
 
   return <LoadingScreen show={loading} />;
