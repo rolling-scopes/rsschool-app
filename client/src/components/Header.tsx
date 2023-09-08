@@ -1,19 +1,25 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
-import EyeOutlined from '@ant-design/icons/EyeOutlined';
-import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import QuestionCircleFilled from '@ant-design/icons/QuestionCircleFilled';
-import SolutionOutlined from '@ant-design/icons/SolutionOutlined';
-import NotificationOutlined from '@ant-design/icons/NotificationOutlined';
+import {
+  EyeOutlined,
+  LogoutOutlined,
+  QuestionCircleFilled,
+  SolutionOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
+import { Course } from 'services/models';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
+import { SessionContext } from 'modules/Course/contexts';
+import { getNavigationItems } from 'modules/Home/data/links';
+import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 
 type Props = {
-  username: string;
-  courseName?: string;
+  showCourseName?: boolean;
   title?: string;
+  course?: Course;
 };
 
 const MENU_ITEMS = [
@@ -39,9 +45,13 @@ const MENU_ITEMS = [
   },
 ];
 
-export function Header({ title, courseName, username }: Props) {
+export function Header({ title, showCourseName, course }: Props) {
   const { asPath: currentRoute } = useRouter();
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
+
+  const session = useContext(SessionContext);
+  const activeCourse = useActiveCourseContext().course ?? course;
+  const courseLinks = useMemo(() => getNavigationItems(session, activeCourse ?? null), [course]);
 
   const menu = (
     <Menu>
@@ -59,7 +69,11 @@ export function Header({ title, courseName, username }: Props) {
   );
 
   return (
-    <>
+    <Space
+      direction="vertical"
+      size={0}
+      style={{ boxShadow: '0px 2px 8px #F0F1F2', backgroundColor: '#ffffff', width: '100%' }}
+    >
       <nav
         className="nav no-print"
         style={{
@@ -68,7 +82,6 @@ export function Header({ title, courseName, username }: Props) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'space-between',
-          boxShadow: '0px 2px 8px #F0F1F2',
         }}
       >
         <Space className="icons">
@@ -83,7 +96,7 @@ export function Header({ title, courseName, username }: Props) {
           <SolidarityUkraine />
         </Space>
         <div className="title">
-          <b>{title}</b> {courseName}
+          <b>{title}</b> {showCourseName ? activeCourse?.name : null}
         </div>
         <div className="profile">
           <a target="_blank" href="https://docs.app.rs.school">
@@ -96,8 +109,8 @@ export function Header({ title, courseName, username }: Props) {
           </a>
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="dashed" size="large">
-              <GithubAvatar githubId={username} size={24} />
-              <span className="button-text" style={{ marginLeft: '12px' }}>
+              <GithubAvatar githubId={session?.githubId} size={24} />
+              <span style={{ marginLeft: '12px' }} className="button-text">
                 My Profile
               </span>
             </Button>
@@ -108,16 +121,7 @@ export function Header({ title, courseName, username }: Props) {
             font-size: 120%;
             align-self: center;
           }
-          @media all and (max-width: 540px) {
-            .header-logo {
-              position: relative;
-              z-index: 1;
-            }
-
-            .nav > :global(.icons > div:last-child) {
-              margin-left: -48px;
-            }
-
+          @media all and (max-width: 768px) {
             .title {
               width: 100%;
               order: 3;
@@ -131,6 +135,7 @@ export function Header({ title, courseName, username }: Props) {
           }
         `}</style>
       </nav>
-    </>
+      <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />
+    </Space>
   );
 }
