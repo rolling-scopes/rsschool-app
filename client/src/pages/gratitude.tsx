@@ -5,10 +5,11 @@ import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withSession from 'components/withSession';
+import { CoursesService } from 'services/courses';
+import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
 import { SessionProvider } from 'modules/Course/contexts';
-import { ActiveCourseProvider, useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 
 interface IGratitude {
   userIds: number[];
@@ -135,9 +136,7 @@ function GratitudePage() {
 function Page() {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <GratitudePage />
-      </ActiveCourseProvider>
+      <GratitudePage />
     </SessionProvider>
   );
 }

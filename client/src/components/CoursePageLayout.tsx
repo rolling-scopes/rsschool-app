@@ -6,7 +6,9 @@ import { Course } from 'services/models';
 type Props = { loading: boolean; title?: string; children?: any; course: Course };
 
 export function CoursePageLayout(props: Props) {
-  if (props.course == null) {
+  const { activeCourse } = useContext(SessionContext);
+
+  if (activeCourse == null) {
     return <CourseNoAccess />;
   }
   return (

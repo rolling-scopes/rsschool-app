@@ -8,7 +8,12 @@ import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useAsync } from 'react-use';
 
-export const SessionContext = React.createContext<Session>({} as Session);
+type DefaultContext = {
+  session: Session;
+  activeCourse?: ProfileCourseDto;
+};
+
+export const SessionContext = React.createContext<DefaultContext>({} as DefaultContext);
 
 let sessionCache: Session | undefined;
 
@@ -79,7 +84,11 @@ export function SessionProvider(props: Props) {
     }
   }
   if (session) {
-    return <SessionContext.Provider value={session}>{props.children}</SessionContext.Provider>;
+    return (
+      <SessionContext.Provider value={{ session, activeCourse: props.course }}>
+        {props.children}
+      </SessionContext.Provider>
+    );
   }
   return <LoadingScreen show={loading} />;
 }

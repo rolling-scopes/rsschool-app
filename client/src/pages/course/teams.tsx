@@ -6,7 +6,7 @@ import { ProfileCourseDto, TeamDistributionApi, TeamDistributionDetailedDto } fr
 import { Teams } from 'modules/Teams';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
 export interface TeamsPageProps extends CoursePageProps {
   teamDistributionDetailed: TeamDistributionDetailedDto;

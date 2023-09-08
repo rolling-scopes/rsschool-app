@@ -24,7 +24,7 @@ interface SubmitResult {
 
 const courseTasksApi = new CoursesTasksApi();
 
-function SubmitScorePage(props: CoursePageProps) {
+function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseId = props.course.id;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -86,7 +86,7 @@ function SubmitScorePage(props: CoursePageProps) {
   const skippedStudents = skipped && skipped.messages ? skipped.messages : [];
 
   return (
-    <PageLayoutSimple loading={loading} title="Submit Scores" showCourseName={true} course={props.course}>
+    <PageLayoutSimple loading={loading} title="Submit Scores" showCourseName={true}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
         <h3>Uploading rules</h3>
@@ -240,12 +240,12 @@ async function uploadResults(
 
 export { getServerSideProps };
 
-function Page(props: CoursePageProps) {
+function PageWithSession(props: CoursePageProps) {
   return (
     <SessionProvider course={props.course}>
-      <SubmitScorePage {...props} />
+      <Page {...props} />
     </SessionProvider>
   );
 }
 
-export default withSession(Page);
+export default withSession(PageWithSession);

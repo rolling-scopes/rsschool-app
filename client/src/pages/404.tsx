@@ -2,9 +2,9 @@ import Image from 'next/image';
 import withSession from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { Row } from 'antd';
-import { SessionProvider, ActiveCourseProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 
-function NotFoundPage() {
+function Page() {
   return (
     <PageLayout loading={false}>
       <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
@@ -20,14 +20,16 @@ function NotFoundPage() {
   );
 }
 
-function Page() {
+function PageWithContext() {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <NotFoundPage />
-      </ActiveCourseProvider>
+      <Page />
     </SessionProvider>
   );
 }
 
+<<<<<<< HEAD
 export default withSession(Page);
+=======
+export default withSession(PageWithContext);
+>>>>>>> 5c7ac9ea9359f6bac618baf02b5c9dc0206d53ac

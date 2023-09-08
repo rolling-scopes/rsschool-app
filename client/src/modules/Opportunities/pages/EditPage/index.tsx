@@ -17,7 +17,9 @@ const { Text, Paragraph } = Typography;
 const service = new OpportunitiesApi();
 
 export function EditPage() {
-  const { githubId } = useContext(SessionContext);
+  const {
+    session: { githubId },
+  } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);
