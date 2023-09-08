@@ -72,7 +72,7 @@ describe('TableView', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for combinedFilter
-        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], filterTags: [] }, jest.fn(), jest.fn()]);
+        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, jest.fn(), jest.fn()]);
       const data = generateCourseData();
 
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
@@ -172,7 +172,7 @@ describe('TableView', () => {
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
-        { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], filterTags: [] },
+        { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
         jest.fn(),
         jest.fn(),
       ]);
@@ -187,11 +187,11 @@ describe('TableView', () => {
     expect(checkbox).toBeChecked();
   });
 
-  it('should not render filtered tags when filterTags is empty', () => {
+  it('should not render filtered tags when tags is empty', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
-      .mockReturnValueOnce([{ filterTags: [] }, jest.fn(), jest.fn()]);
+      .mockReturnValueOnce([{ tags: [] }, jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tag = screen.queryByText(/Type: /);
@@ -206,7 +206,11 @@ describe('TableView', () => {
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
-        { types, statuses: [], filterTags: types.map(t => `${ColumnName.Type}: ${t}`) },
+        {
+          types,
+          statuses: [],
+          tags: types.map(t => ({ label: `${ColumnName.Type}: ${t}`, value: t, tagType: ColumnName.Type })),
+        },
         setFilterMock,
         jest.fn(),
       ]);
@@ -215,7 +219,7 @@ describe('TableView', () => {
     const clearAllBtn = screen.getByText(/Clear all/);
     fireEvent.click(clearAllBtn);
 
-    expect(setFilterMock).toHaveBeenCalledWith({ types: [], statuses: [], filterTags: [] });
+    expect(setFilterMock).toHaveBeenCalledWith({ types: [], statuses: [], tags: [] });
   });
 });
 
