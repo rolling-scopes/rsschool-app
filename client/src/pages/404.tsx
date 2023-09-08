@@ -23,10 +23,10 @@ function Page() {
   return (
     <SessionProvider>
       <ActiveCourseProvider>
-          <NotFoundPage />
+        <NotFoundPage />
       </ActiveCourseProvider>
     </SessionProvider>
   );
 }
 
-export default (Page);
+export default Page;

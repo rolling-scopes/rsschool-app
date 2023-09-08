@@ -19,7 +19,7 @@ const gratitudesApi = new GratitudesApi();
 const userService = new UserService();
 
 function GratitudePage() {
-  const {course, courses} = useActiveCourseContext();
+  const { course, courses } = useActiveCourseContext();
   const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -134,10 +134,10 @@ function Page() {
   return (
     <SessionProvider>
       <ActiveCourseProvider>
-          <GratitudePage />
+        <GratitudePage />
       </ActiveCourseProvider>
     </SessionProvider>
   );
 }
 
-export default (Page);
+export default Page;
