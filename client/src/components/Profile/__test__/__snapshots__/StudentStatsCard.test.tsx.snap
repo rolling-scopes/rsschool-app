@@ -3,7 +3,7 @@
 exports[`StudentStatsCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-w8mnev"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`StudentStatsCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-w8mnev"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -49,10 +49,10 @@ exports[`StudentStatsCard should render correctly 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-w8mnev"
+        class="ant-list ant-list-split css-dev-only-do-not-override-nnuwmp"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-w8mnev"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-nnuwmp"
         >
           <div
             class="ant-spin-container"
@@ -71,7 +71,7 @@ exports[`StudentStatsCard should render correctly 1`] = `
                     style="margin-bottom: 0px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-w8mnev"
+                      class="ant-typography css-dev-only-do-not-override-nnuwmp"
                     >
                       <strong>
                         rs-2018-q1
@@ -83,7 +83,8 @@ exports[`StudentStatsCard should render correctly 1`] = `
                     style="width: 80%; margin-bottom: 5px;"
                   >
                     <div
-                      class="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small css-dev-only-do-not-override-w8mnev"
+                      aria-valuenow="100"
+                      class="ant-progress ant-progress-status-success ant-progress-line ant-progress-show-info ant-progress-small css-dev-only-do-not-override-nnuwmp"
                       role="progressbar"
                     >
                       <div
@@ -148,7 +149,7 @@ exports[`StudentStatsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-nnuwmp ant-btn-dashed"
                   type="button"
                 >
                   <span
@@ -183,7 +184,7 @@ exports[`StudentStatsCard should render correctly 1`] = `
                     style="margin-bottom: 0px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-w8mnev"
+                      class="ant-typography css-dev-only-do-not-override-nnuwmp"
                     >
                       <strong>
                         rs-2019-q1
@@ -195,7 +196,8 @@ exports[`StudentStatsCard should render correctly 1`] = `
                     style="width: 80%; margin-bottom: 5px;"
                   >
                     <div
-                      class="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small css-dev-only-do-not-override-w8mnev"
+                      aria-valuenow="50"
+                      class="ant-progress ant-progress-status-exception ant-progress-line ant-progress-show-info ant-progress-small css-dev-only-do-not-override-nnuwmp"
                       role="progressbar"
                     >
                       <div
@@ -261,7 +263,7 @@ exports[`StudentStatsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-nnuwmp ant-btn-dashed"
                   type="button"
                 >
                   <span

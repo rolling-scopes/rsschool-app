@@ -3,7 +3,7 @@
 exports[`PreScreeningIviewCard Should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-w8mnev"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-w8mnev"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,10 +52,10 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-w8mnev"
+        class="ant-list ant-list-split css-dev-only-do-not-override-nnuwmp"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-w8mnev"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-nnuwmp"
         >
           <div
             class="ant-spin-container"
@@ -74,7 +74,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     style="margin-bottom: 0px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-w8mnev"
+                      class="ant-typography css-dev-only-do-not-override-nnuwmp"
                     >
                       <strong>
                         rs-2018-q1
@@ -82,16 +82,16 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     </span>
                   </p>
                   <div
-                    class="ant-row css-dev-only-do-not-override-w8mnev"
+                    class="ant-row css-dev-only-do-not-override-nnuwmp"
                   >
                     <span
-                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-nnuwmp"
                     >
                       Completed
                     </span>
                   </div>
                   <ul
-                    class="ant-rate css-dev-only-do-not-override-w8mnev ant-rate-disabled"
+                    class="ant-rate css-dev-only-do-not-override-nnuwmp ant-rate-disabled"
                     role="radiogroup"
                     style="margin-bottom: 5px;"
                     tabindex="-1"
@@ -388,7 +388,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     </li>
                   </ul>
                   <span
-                    class="ant-typography ant-rate-text css-dev-only-do-not-override-w8mnev"
+                    class="ant-typography ant-rate-text css-dev-only-do-not-override-nnuwmp"
                     style="font-weight: bold;"
                   >
                     3.40
@@ -404,7 +404,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                   >
                     Good candidate: 
                     <span
-                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-nnuwmp"
                     >
                       Yes
                     </span>
@@ -421,7 +421,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-nnuwmp ant-btn-dashed"
                   type="button"
                 >
                   <span
@@ -456,7 +456,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     style="margin-bottom: 0px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-w8mnev"
+                      class="ant-typography css-dev-only-do-not-override-nnuwmp"
                     >
                       <strong>
                         rs-2019-q1
@@ -464,16 +464,16 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     </span>
                   </p>
                   <div
-                    class="ant-row css-dev-only-do-not-override-w8mnev"
+                    class="ant-row css-dev-only-do-not-override-nnuwmp"
                   >
                     <span
-                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-nnuwmp"
                     >
                       Completed
                     </span>
                   </div>
                   <ul
-                    class="ant-rate css-dev-only-do-not-override-w8mnev ant-rate-disabled"
+                    class="ant-rate css-dev-only-do-not-override-nnuwmp ant-rate-disabled"
                     role="radiogroup"
                     style="margin-bottom: 5px;"
                     tabindex="-1"
@@ -770,7 +770,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     </li>
                   </ul>
                   <span
-                    class="ant-typography ant-rate-text css-dev-only-do-not-override-w8mnev"
+                    class="ant-typography ant-rate-text css-dev-only-do-not-override-nnuwmp"
                     style="font-weight: bold;"
                   >
                     3.40
@@ -786,7 +786,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                   >
                     Good candidate: 
                     <span
-                      class="ant-tag ant-tag-green css-dev-only-do-not-override-w8mnev"
+                      class="ant-tag ant-tag-green css-dev-only-do-not-override-nnuwmp"
                     >
                       Yes
                     </span>
@@ -803,7 +803,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-w8mnev ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-nnuwmp ant-btn-dashed"
                   type="button"
                 >
                   <span
