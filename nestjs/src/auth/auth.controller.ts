@@ -20,7 +20,10 @@ const twoDaysMs = 1000 * 60 * 60 * 24 * 2;
 export class AuthController {
   private logger = new Logger(AuthController.name);
 
-  constructor(private readonly authService: AuthService, private githubStrategy: GithubStrategy) {}
+  constructor(
+    private readonly authService: AuthService,
+    private githubStrategy: GithubStrategy,
+  ) {}
 
   @Get('github/login')
   @ApiOperation({ operationId: 'githubLogin' })

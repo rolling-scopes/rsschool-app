@@ -9,7 +9,10 @@ import { JWT_COOKIE_NAME } from '../constants';
 
 @Injectable()
 export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
-  constructor(private readonly authService: AuthService, private readonly config: ConfigService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
+  ) {
     super();
   }
 

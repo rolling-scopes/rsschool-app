@@ -13,7 +13,7 @@ COPY nestjs/lambda nestjs/
 COPY nestjs/dist nestjs/
 
 # Lambda Container
-FROM public.ecr.aws/lambda/nodejs:14
+FROM public.ecr.aws/lambda/nodejs:18
 
 ENV NODE_ENV production
 ENV TZ utc

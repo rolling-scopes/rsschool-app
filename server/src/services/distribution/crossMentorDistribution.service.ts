@@ -6,7 +6,10 @@ import { shuffleRec } from './shuffle';
 export type CrossMentor = { id: number; students: { id: number }[] | null };
 
 export class CrossMentorDistributionService {
-  constructor(private defaultMaxStudents = 1, private logger?: ILogger) {}
+  constructor(
+    private defaultMaxStudents = 1,
+    private logger?: ILogger,
+  ) {}
 
   public distribute(
     mentors: CrossMentor[],
@@ -41,10 +44,13 @@ export class CrossMentorDistributionService {
     const randomStudents = students.length > 1 ? shuffleRec(students) : students;
 
     // distribute students to mentors by round robin
-    const maxStudentsMap = maxStudentsPerMentor.reduce((acc, m) => {
-      acc[m.id] = m.maxStudents;
-      return acc;
-    }, {} as Record<number, number>);
+    const maxStudentsMap = maxStudentsPerMentor.reduce(
+      (acc, m) => {
+        acc[m.id] = m.maxStudents;
+        return acc;
+      },
+      {} as Record<number, number>,
+    );
 
     this.logger?.info(`Registered Students ${registeredStudentsIds?.length}. Max Students: ${maxStudentsTotal}`);
     this.logger?.info(`Selected Students: ${randomStudents.length}`);

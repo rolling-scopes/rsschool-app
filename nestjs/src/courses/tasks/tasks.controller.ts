@@ -11,7 +11,10 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   private readonly logger = new Logger('tasks');
 
-  constructor(private tasksService: TasksService, private notificationService: UserNotificationsService) {}
+  constructor(
+    private tasksService: TasksService,
+    private notificationService: UserNotificationsService,
+  ) {}
 
   @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyTasksDeadlines' })

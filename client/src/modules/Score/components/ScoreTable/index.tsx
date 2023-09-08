@@ -41,7 +41,7 @@ export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const { activeOnly } = props;
-  const { ['mentor.githubId']: mentor, cityName } = router.query;
+  const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
   const [columns, setColumns] = useState<ColumnType<ScoreStudentDto>[]>([]);
@@ -85,6 +85,13 @@ export function ScoreTable(props: Props) {
       }
       if (!isUndefined(mentor)) {
         filters = { ...filters, ['mentor.githubId']: mentor } as ScoreTableFilters;
+      }
+
+      if (!isUndefined(githubId)) {
+        filters = { ...filters, githubId } as ScoreTableFilters;
+      }
+      if (!isUndefined(name)) {
+        filters = { ...filters, name } as ScoreTableFilters;
       }
 
       const [courseScore, courseTasks] = await Promise.all([

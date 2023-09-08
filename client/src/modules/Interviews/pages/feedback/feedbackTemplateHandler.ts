@@ -146,22 +146,25 @@ function generateFeedbackValues(
   newValues: InterviewFeedbackValues,
   isCanceled: boolean,
 ): Record<FeedbackStepId, InterviewFeedbackStepData> {
-  return steps.reduce((stepMap, step, index) => {
-    if (index === activeStepIndex) {
+  return steps.reduce(
+    (stepMap, step, index) => {
+      if (index === activeStepIndex) {
+        stepMap[step.id] = {
+          isCompleted: true,
+          values: newValues,
+        };
+        return stepMap;
+      }
+
+      // if is canceled, all steps after the current one should be marked as not completed and values should be removed
       stepMap[step.id] = {
-        isCompleted: true,
-        values: newValues,
+        values: isCanceled ? undefined : step.values,
+        isCompleted: isCanceled ? false : step.isCompleted,
       };
       return stepMap;
-    }
-
-    // if is canceled, all steps after the current one should be marked as not completed and values should be removed
-    stepMap[step.id] = {
-      values: isCanceled ? undefined : step.values,
-      isCompleted: isCanceled ? false : step.isCompleted,
-    };
-    return stepMap;
-  }, {} as Record<FeedbackStepId, InterviewFeedbackStepData>);
+    },
+    {} as Record<FeedbackStepId, InterviewFeedbackStepData>,
+  );
 }
 
 /**
