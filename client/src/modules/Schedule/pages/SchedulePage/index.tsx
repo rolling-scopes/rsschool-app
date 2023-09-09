@@ -106,7 +106,7 @@ export function SchedulePage() {
         ) : (
           <>
             {data.map(item => (
-              <MobileItemCard item={item} />
+              <MobileItemCard item={item} key={item.id} />
             ))}
           </>
         )}
