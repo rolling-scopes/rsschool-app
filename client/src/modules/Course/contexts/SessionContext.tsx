@@ -21,7 +21,8 @@ type Props = React.PropsWithChildren<{
 
 export function SessionProvider(props: Props) {
   const { allowedRoles } = props;
-  const course = props.course ?? useActiveCourseContext().course;
+  const activeCourse = useActiveCourseContext().course;
+  const course = props.course ?? activeCourse;
 
   const {
     value: session,
