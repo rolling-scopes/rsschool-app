@@ -75,7 +75,7 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
   };
 
   return (
-    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading} githubId={githubId}>
+    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading}>
       <Alert
         showIcon
         type="info"

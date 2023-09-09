@@ -11,7 +11,6 @@ import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { PageProps } from 'modules/Course/data/getCourseProps';
 import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';

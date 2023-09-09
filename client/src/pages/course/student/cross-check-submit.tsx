@@ -1,6 +1,15 @@
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
-import { CourseRole } from 'services/models';
 import { CrossCheckSubmit } from 'modules/Course/pages/Student/CrossCheckSubmit';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { CourseRole } from '../../../services/models';
 
-export default withCourseData(withSession(CrossCheckSubmit, { requiredCourseRole: CourseRole.Student }));
+function Page() {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Student]}>
+        <CrossCheckSubmit />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}
+
+export default Page;

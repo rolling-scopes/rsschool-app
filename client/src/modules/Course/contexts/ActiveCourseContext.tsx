@@ -1,10 +1,11 @@
 import { ProfileCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { UserService } from 'services/user';
 import { WelcomeCard } from 'components/WelcomeCard';
+import { Alert, Col, Row } from 'antd';
 
 const ActiveCourseContext = React.createContext<{ course: ProfileCourseDto; courses: ProfileCourseDto[] }>(
   {} as { course: ProfileCourseDto; courses: ProfileCourseDto[] },
@@ -19,7 +20,8 @@ type Props = React.PropsWithChildren;
 let coursesCache: ProfileCourseDto[] | undefined;
 
 export const ActiveCourseProvider = ({ children }: Props) => {
-  const alias = Router.query.course;
+  const router = useRouter();
+  const alias = router.query.course;
   const [storageCourseId] = useLocalStorage('activeCourseId');
 
   const {
@@ -37,6 +39,7 @@ export const ActiveCourseProvider = ({ children }: Props) => {
       coursesCache[0];
     return course;
   }, []);
+  console.log('🚀 ~ file: ActiveCourseContext.tsx:25 ~ ActiveCourseProvider ~ alias:', alias, course);
 
   useEffect(() => {
     if (!error) {
@@ -44,8 +47,22 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     }
     const { pathname, search } = document.location;
     const redirectUrl = encodeURIComponent(`${pathname}${search}`);
-    Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+    router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
   }, [error]);
+
+  if (alias && course && course.alias !== alias) {
+    return (
+      <Row justify="center">
+        <Col md={12} xs={18} style={{ marginTop: '60px' }}>
+          <Alert
+            message="No Access"
+            description="Probably you do not participate in the course. Please register or choose another course."
+            type="error"
+          />
+        </Col>
+      </Row>
+    );
+  }
 
   if (course && coursesCache) {
     return (

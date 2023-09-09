@@ -1,20 +1,21 @@
 import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
 import { CourseDto as Course } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
-import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
+import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 
 const { Link } = Typography;
 
 const mentorRegistry = new MentorRegistryService();
-function Page(props: { session: Session; courseAlias?: string }) {
+function Page() {
+  const session = useContext(SessionContext);
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -68,7 +69,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
     try {
       setLoading(true);
 
-      await courseService?.createMentor(props.session.githubId, {
+      await courseService?.createMentor(session.githubId, {
         maxStudentsLimit: values.maxStudentsLimit,
         preferedStudentsLocation: values.preferedStudentsLocation,
         students: values.students?.map((s: any) => Number(s.value)) ?? [],
@@ -88,7 +89,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
   if (course == null) {
     return (
       <Warning
-        githubId={props.session.githubId}
+        githubId={session.githubId}
         imagePath="/svg/err.svg"
         imageName="Course Not Found"
         textMessage="Sorry, Course Not Found"
@@ -99,7 +100,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
   const pageProps = {
     loading,
     title: 'Confirm Mentorship',
-    githubId: props.session.githubId,
+    githubId: session.githubId,
     courseName: course.name,
   };
 
@@ -113,7 +114,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
     );
     return (
       <Warning
-        githubId={props.session.githubId}
+        githubId={session.githubId}
         imagePath="/svg/wanted-mentors.svg"
         imageName="Not registered"
         textMessage={message}
@@ -149,7 +150,7 @@ function Page(props: { session: Session; courseAlias?: string }) {
     );
     return (
       <Warning
-        githubId={props.session.githubId}
+        githubId={session.githubId}
         imagePath="/images/rs-hero.png"
         imageName="You are RS hero"
         textMessage={message}
@@ -196,4 +197,10 @@ const SuccessComponent = () => {
   return <Result status="success" title={titleCmp} />;
 };
 
-export default withSession(Page);
+export default function () {
+  return (
+    <SessionProvider>
+      <Page />
+    </SessionProvider>
+  );
+}

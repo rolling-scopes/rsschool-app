@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
 import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';

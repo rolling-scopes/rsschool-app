@@ -7,7 +7,6 @@ import { CourseRole } from 'services/models';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useAsync } from 'react-use';
-import { use } from 'passport';
 import { useActiveCourseContext } from './ActiveCourseContext';
 
 export const SessionContext = React.createContext<Session>({} as Session);
