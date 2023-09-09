@@ -1,7 +1,7 @@
 import { Course } from '@entities/course';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { ProfilePermissions } from '@entities/profilePermissions';
-import { User } from '@entities/user';
+import { EmploymentRecord, User } from '@entities/user';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/auth';
@@ -14,6 +14,7 @@ import { Discord } from '../../../common/models';
 import { omitBy, isUndefined } from 'lodash';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { JobFoundDto } from './dto/job-found.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProfileService {
@@ -29,6 +30,7 @@ export class ProfileService {
     @InjectRepository(ProfilePermissions)
     private profilePermissionsRepository: Repository<ProfilePermissions>,
     private userNotificationsService: UserNotificationsService,
+    private usersService: UsersService,
   ) {}
 
   public async getCourses(authUser: AuthUser): Promise<Course[]> {
@@ -211,23 +213,12 @@ export class ProfileService {
   }
 
   public async getJobFound(userId: number) {
-    return await this.userRepository.findOneOrFail({
-      where: { id: userId },
-      select: ['jobFound', 'jobFoundCompanyName', 'jobFoundOfficeLocation'],
-    });
+    return JobFoundDto.employmentRecordToJobFound(await this.usersService.getLastEmploymentRecord(userId));
   }
 
-  public async updateJobFound(userId: number, { jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
-    await this.userRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({
-        jobFound,
-        jobFoundCompanyName,
-        jobFoundOfficeLocation,
-      })
-      .where('id = :id', { id: userId })
-      .execute();
+  public async updateJobFound(userId: number, jobFoundDto: JobFoundDto) {
+    const employmentRecord = JobFoundDto.jobFoundToEmploymentRecord(jobFoundDto);
+    await this.usersService.saveNewEmploymentRecord(userId, employmentRecord);
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

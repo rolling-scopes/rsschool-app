@@ -12,6 +12,7 @@ import { Resume } from '@entities/resume';
 import { EndorsementService } from './endorsement.service';
 import { Feedback, Mentor, Prompt, Student, TaskInterviewResult } from '@entities/index';
 import { ConfigModule } from 'src/config';
+import { UsersModule } from 'src/users';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ConfigModule } from 'src/config';
     UsersNotificationsModule,
     CoursesModule,
     ConfigModule,
+    UsersModule,
   ],
   controllers: [ProfileController],
   providers: [ProfileService, EndorsementService],
