@@ -1,15 +1,15 @@
 import { getCourseProps, noAccessResponse } from 'modules/Course/data/getCourseProps';
-import withSession from 'components/withSession';
-import { SessionProvider } from 'modules/Course/contexts';
-import { CoursePageProps } from 'services/models';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { Course } from 'services/models';
 import { GetServerSideProps } from 'next';
 import { ProfileCourseDto, TeamDistributionApi, TeamDistributionDetailedDto } from 'api';
 import { Teams } from 'modules/Teams';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
 
-export interface TeamsPageProps extends CoursePageProps {
+export interface TeamsPageProps {
   teamDistributionDetailed: TeamDistributionDetailedDto;
+  course: Course;
 }
 
 export const getServerSideProps: GetServerSideProps<{
@@ -40,9 +40,11 @@ export const getServerSideProps: GetServerSideProps<{
 export function Page(props: TeamsPageProps) {
   return (
     <SessionProvider course={props.course}>
-      <Teams {...props} />
+      <ActiveCourseProvider>
+        <Teams {...props} />
+      </ActiveCourseProvider>
     </SessionProvider>
   );
 }
 
-export default withSession(Page);
+export default Page;

@@ -181,9 +181,9 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
 function Page() {
   return (
     <SessionProvider>
-        <EpamLearningJSPage />
+      <EpamLearningJSPage />
     </SessionProvider>
   );
 }
 
-export default withGoogleMaps((Page));
+export default withGoogleMaps(Page);

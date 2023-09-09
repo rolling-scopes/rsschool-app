@@ -3,15 +3,15 @@ import { SessionProvider } from 'modules/Course/contexts';
 import { MentorRegistry } from 'modules/Registry/pages';
 import { NextPageContext } from 'next';
 
-function Page(props: {courseAlias?: string}) {
+function Page(props: { courseAlias?: string }) {
   return (
     <SessionProvider>
-        <MentorRegistry {...props} />
+      <MentorRegistry {...props} />
     </SessionProvider>
   );
 }
 
-const MentorRegistryPage: any = withGoogleMaps((Page));
+const MentorRegistryPage: any = withGoogleMaps(Page);
 MentorRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;

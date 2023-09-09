@@ -18,7 +18,11 @@ export function WelcomeCard() {
       </Row>
       <Row justify="center">
         <Space direction="vertical" align="center" size="middle" style={{ padding: '20px' }}>
-          <Alert message="Oops, looks like we couldn't find your profile in RS-App! 🤔" type="warning" showIcon />
+          <Alert
+            message="Oops, looks like we couldn't find your profile in RS School App! 🤔"
+            type="warning"
+            showIcon
+          />
           <Text>No worries—you have a couple of options:</Text>
           <Space direction="vertical" align="center">
             <Link href="/login">

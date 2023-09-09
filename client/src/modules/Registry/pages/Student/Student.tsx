@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function StudentRegistry({ courseAlias }: Props) {
-  const session = useContext(SessionContext)
+  const session = useContext(SessionContext);
   const { courses, loading, registered, steps, currentStep, form, handleSubmit } = useStudentData(
     session.githubId,
     courseAlias,

@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function MentorRegistry({ courseAlias }: Props) {
-  const {githubId} = useContext(SessionContext);
+  const { githubId } = useContext(SessionContext);
   const { resume, loading, currentStep, steps, form, handleSubmit } = useMentorData(courseAlias);
 
   return (

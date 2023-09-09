@@ -3,15 +3,15 @@ import { StudentRegistry } from 'modules/Registry/pages';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { SessionProvider } from 'modules/Course/contexts';
 
-function Page(props: {courseAlias?: string}) {
+function Page(props: { courseAlias?: string }) {
   return (
     <SessionProvider>
-        <StudentRegistry {...props} />
+      <StudentRegistry {...props} />
     </SessionProvider>
   );
 }
 
-const StudentRegistryPage: any = withGoogleMaps((Page));
+const StudentRegistryPage: any = withGoogleMaps(Page);
 StudentRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
@@ -24,4 +24,3 @@ StudentRegistryPage.getInitialProps = async (context: NextPageContext) => {
 };
 
 export default StudentRegistryPage;
-
