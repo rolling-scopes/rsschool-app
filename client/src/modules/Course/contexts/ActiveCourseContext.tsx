@@ -49,6 +49,11 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
   }, [error]);
 
+
+  if (!loading && !course && !coursesCache?.length) {
+    return <WelcomeCard />;
+  }
+
   if (alias && course && course.alias !== alias) {
     return (
       <Row justify="center">
@@ -67,10 +72,6 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     return (
       <ActiveCourseContext.Provider value={{ course, courses: coursesCache }}>{children}</ActiveCourseContext.Provider>
     );
-  }
-
-  if (!loading && !course && !coursesCache) {
-    return <WelcomeCard />;
   }
 
   return <LoadingScreen show={loading} />;
