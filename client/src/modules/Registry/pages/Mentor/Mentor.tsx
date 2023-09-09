@@ -1,18 +1,19 @@
+import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { Session } from 'components/withSession';
+import { SessionContext } from 'modules/Course/contexts';
 import { RegistrationForm } from 'modules/Registry/components';
 import { useMentorData } from 'modules/Registry/hooks';
 
 type Props = {
-  session: Session;
   courseAlias?: string | string[];
 };
 
-export function MentorRegistry({ courseAlias, session }: Props) {
+export function MentorRegistry({ courseAlias }: Props) {
+  const {githubId} = useContext(SessionContext);
   const { resume, loading, currentStep, steps, form, handleSubmit } = useMentorData(courseAlias);
 
   return (
-    <RegistrationPageLayout loading={loading} githubId={session.githubId}>
+    <RegistrationPageLayout loading={loading} githubId={githubId}>
       {resume ? (
         <RegistrationForm
           form={form}

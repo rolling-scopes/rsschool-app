@@ -1,9 +1,17 @@
 import { withGoogleMaps } from 'components/withGoogleMaps';
-import { withSession } from 'components/withSession';
+import { SessionProvider } from 'modules/Course/contexts';
 import { MentorRegistry } from 'modules/Registry/pages';
 import { NextPageContext } from 'next';
 
-const MentorRegistryPage: any = withGoogleMaps(withSession(MentorRegistry));
+function Page(props: {courseAlias?: string}) {
+  return (
+    <SessionProvider>
+        <MentorRegistry {...props} />
+    </SessionProvider>
+  );
+}
+
+const MentorRegistryPage: any = withGoogleMaps((Page));
 MentorRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
