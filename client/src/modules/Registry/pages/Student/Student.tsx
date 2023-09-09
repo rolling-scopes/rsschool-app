@@ -32,9 +32,5 @@ export function StudentRegistry({ courseAlias }: Props) {
     );
   }
 
-  return (
-    <RegistrationPageLayout loading={loading} githubId={session.githubId}>
-      {content}
-    </RegistrationPageLayout>
-  );
+  return <RegistrationPageLayout loading={loading}>{content}</RegistrationPageLayout>;
 }

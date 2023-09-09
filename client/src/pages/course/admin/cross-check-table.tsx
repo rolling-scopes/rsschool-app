@@ -1,5 +1,13 @@
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { CrossCheckPairs } from 'modules/CrossCheckPairs/pages/CrossCheckPairs';
+import { CourseRole } from 'services/models';
 
-export default withCourseData(withSession(CrossCheckPairs));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Dementor]}>
+        <CrossCheckPairs />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

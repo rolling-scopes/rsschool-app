@@ -57,12 +57,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title={`${template.name}: Interview Feedback`}
-      courseName={course.name}
-      githubId={session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title={`${template.name}: Interview Feedback`} showCourseName>
       <Typography style={{ marginBottom: 24 }}>
         <h4>Process</h4>
         <div>

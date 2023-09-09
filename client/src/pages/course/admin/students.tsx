@@ -14,13 +14,13 @@ import {
   stringSorter,
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import withCourseData from 'components/withCourseData';
 import { isCourseManager, isCourseSupervisor } from 'domain/user';
 import keys from 'lodash/keys';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'services/models';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Text } = Typography;
 
@@ -36,17 +36,16 @@ type ExpelCriteria = {
   keepWithMentor?: boolean;
   reason: string;
 };
-type Props = CoursePageProps;
 
-function Page(props: Props) {
-  const courseId = props.course.id;
+function Page() {
+  const { course, courses } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+
+  const courseId = course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [hasCourseManagerRole] = useState(isCourseManager(props.session, courseId));
-  const hasCourseSupervisorRole = useMemo(
-    () => isCourseSupervisor(props.session, props.course.id),
-    [props.session, props.course.id],
-  );
+  const [hasCourseManagerRole] = useState(isCourseManager(session, courseId));
+  const hasCourseSupervisorRole = useMemo(() => isCourseSupervisor(session, course.id), [session, course.id]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
@@ -115,7 +114,7 @@ function Page(props: Props) {
 
   function render() {
     return (
-      <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
+      <AdminPageLayout loading={loading} showCourseName courses={courses}>
         <Statistic
           title="Active Students"
           value={stats?.activeStudentsCount ?? 0}
@@ -141,17 +140,17 @@ function Page(props: Props) {
             loadStudents();
           }}
           details={details}
-          courseId={props.course.id}
+          courseId={course.id}
           courseManagerOrSupervisor={hasCourseManagerRole || hasCourseSupervisorRole}
         />
         <ExpelCriteriaModal
-          courseId={props.course.id}
+          courseId={course.id}
           onClose={toggleExpelModal}
           onSubmit={expelStudents}
           isModalOpen={isExpelModalOpen}
         />
         <CertificateCriteriaModal
-          courseId={props.course.id}
+          courseId={course.id}
           onClose={toggleCertificateModal}
           onSubmit={issueCertificates}
           isModalOpen={isCertificateModalOpen}
@@ -298,4 +297,12 @@ function calculateStats(students: StudentDetails[]) {
   };
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

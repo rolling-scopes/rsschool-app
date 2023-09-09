@@ -3,24 +3,18 @@ import { ApplicantResumeDto, OpportunitiesApi } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { dateRenderer, getColumnSearchProps, stringSorter } from 'components/Table';
-import withSession, { Session } from 'components/withSession';
-import { NextRouter, withRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { withRouter } from 'next/router';
+import { useCallback, useEffect, useState, useContext } from 'react';
 
 const { Content } = Layout;
 
-type Props = {
-  router: NextRouter;
-  session: Session;
-};
-
 const api = new OpportunitiesApi();
 
-function Page(props: Props) {
+function ApplicantsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [applicants, setApplicants] = useState<ApplicantResumeDto[] | null>(null);
-
-  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
+  const { isAdmin, isHirer } = useContext(SessionContext);
 
   const hasPriorityRole = isAdmin || isHirer;
 
@@ -114,7 +108,7 @@ function Page(props: Props) {
   if (!hasPriorityRole)
     return (
       <>
-        <Header username={userGithubId} />
+        <Header />
         <Result status="403" title="Sorry, but you don't have access to this page" />
       </>
     );
@@ -127,7 +121,7 @@ function Page(props: Props) {
 
   return (
     <>
-      <Header username={userGithubId} />
+      <Header />
       <LoadingScreen show={loading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
@@ -144,4 +138,12 @@ function Page(props: Props) {
   );
 }
 
-export default withRouter(withSession(Page));
+function Page() {
+  return (
+    <SessionProvider>
+      <ApplicantsPage />
+    </SessionProvider>
+  );
+}
+
+export default withRouter(Page);

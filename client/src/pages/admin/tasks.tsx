@@ -26,13 +26,12 @@ import {
 import union from 'lodash/union';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course, CourseRole } from 'services/models';
+import { CourseRole } from 'services/models';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import {
   UploadCriteriaJSON,
@@ -44,16 +43,17 @@ import {
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { ColumnsType } from 'antd/lib/table';
 import uniqBy from 'lodash/uniqBy';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
-type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<TaskDto, 'attributes'>> & { attributes?: string }) | null;
 
 const tasksApi = new TasksApi();
 const criteriaApi = new TasksCriteriaApi();
 const disciplinesApi = new DisciplinesApi();
 
-function Page(props: Props) {
+function Page() {
+  const { courses } = useActiveCourseContext();
   const [data, setData] = useState<TaskDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
@@ -139,7 +139,7 @@ function Page(props: Props) {
     .sort();
 
   return (
-    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Tasks" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Task
@@ -474,6 +474,12 @@ function getInitialValues(modalData: Partial<TaskDto>) {
   return { ...modalData, discipline: modalData.discipline?.id };
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

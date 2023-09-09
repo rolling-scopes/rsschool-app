@@ -39,7 +39,6 @@ export const ActiveCourseProvider = ({ children }: Props) => {
       coursesCache[0];
     return course;
   }, []);
-  console.log('🚀 ~ file: ActiveCourseContext.tsx:25 ~ ActiveCourseProvider ~ alias:', alias, course);
 
   useEffect(() => {
     if (!error) {
