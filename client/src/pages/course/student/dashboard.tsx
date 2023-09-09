@@ -2,16 +2,13 @@ import { Result } from 'antd';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 import { useAsync } from 'react-use';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import groupBy from 'lodash/groupBy';
 import omitBy from 'lodash/omitBy';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PageLayout } from 'components/PageLayout';
 
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
 import { CourseService, StudentSummary } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import {
   MainStatsCard,
@@ -33,15 +30,18 @@ import {
   AvailableReviewStatsDto,
   CourseScheduleItemDtoTypeEnum,
 } from 'api';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();
 
-function Page(props: CoursePageProps) {
-  const { githubId } = props.session;
-  const { fullName, usePrivateRepositories, alias } = props.course;
+function Page() {
+  const { githubId } = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
 
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const { fullName, usePrivateRepositories, alias } = course;
+
+  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const userService = useMemo(() => new UserService(), []);
 
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
@@ -62,7 +62,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(
     withLoading(async () => {
-      const courseId = props.course.id;
+      const courseId = course.id;
       const [
         studentSummary,
         { data: courseTasks },
@@ -84,7 +84,7 @@ function Page(props: CoursePageProps) {
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
       const tasksDetailCurrentCourse =
-        statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
+        statisticsCourses.studentStats?.find(currentCourse => currentCourse.courseId === course.id)?.tasks ?? [];
 
       setNextEvent(nextEvents);
       setStudentSummary(studentSummary);
@@ -109,7 +109,7 @@ function Page(props: CoursePageProps) {
         ) as Record<CourseScheduleItemDtoStatusEnum, TaskStat[]>,
       );
     }),
-    [props.course.id],
+    [course.id],
   );
 
   const studentPosition = studentSummary?.rank ?? 0;
@@ -133,7 +133,7 @@ function Page(props: CoursePageProps) {
     courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
     <NextEventCard key="next-event-card" nextEvents={nextEvents} courseAlias={alias} />,
     <AvailableReviewCard key="available-review-card" availableReviews={availableReviews} courseAlias={alias} />,
-    <MentorCard key="mentor-card" courseId={props.course.id} mentor={studentSummary?.mentor} />,
+    <MentorCard key="mentor-card" courseId={course.id} mentor={studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}
@@ -145,13 +145,7 @@ function Page(props: CoursePageProps) {
   ].filter(Boolean) as JSX.Element[];
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Student dashboard"
-      background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Student dashboard" background="#F0F2F5" showCourseName>
       <LoadingScreen show={loading}>
         {studentSummary ? (
           <>
@@ -197,4 +191,12 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
   }
 `;
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <Page />
+      </ActiveCourseProvider>
+    </SessionProvider>
+  );
+}

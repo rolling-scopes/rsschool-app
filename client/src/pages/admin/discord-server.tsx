@@ -1,23 +1,21 @@
 import { Button, Col, Form, Input, Layout, message, Row, Table, Popconfirm } from 'antd';
-import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course } from 'services/models';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
-type Props = { session: Session; courses: Course[] };
 
 enum ModalAction {
   update = 'update',
   create = 'create',
 }
 
-function Page(props: Props) {
+function Page() {
+  const { courses } = useActiveCourseContext();
   const [data, setData] = useState<DiscordServerDto[]>([]);
   const [modalData, setModalData] = useState<Partial<DiscordServerDto> | null>(null);
   const [modalAction, setModalAction] = useState(ModalAction.update);
@@ -115,7 +113,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Discord Servers" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Discord Servers" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Discord Server
@@ -181,6 +179,12 @@ function getInitialValues(modalData: Partial<DiscordServerDto>) {
   return modalData;
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { onlyForAdmin: true });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider adminOnly>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

@@ -2,23 +2,23 @@ import { Button, Form, Input, message, Radio, Typography } from 'antd';
 import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
 import { isMentor, getMentorId } from 'domain/user';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
 const coursesApi = new CoursesApi();
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page() {
+  const { course } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+  const courseId = course.id;
 
-  const userGithubId = props.session.githubId;
+  const userGithubId = session.githubId;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -27,8 +27,8 @@ function Page(props: CoursePageProps) {
   const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
-    if (isMentor(props.session, courseId)) {
-      const mentorId = getMentorId(props.session, courseId);
+    if (isMentor(session, courseId)) {
+      const mentorId = getMentorId(session, courseId);
       if (!mentorId) {
         return null;
       }
@@ -40,9 +40,9 @@ function Page(props: CoursePageProps) {
       if (student.isActive) {
         setStudents([
           Object.assign(student, {
-            id: props.session.id,
-            githubId: props.session.githubId,
-            name: props.session.githubId,
+            id: session.id,
+            githubId: session.githubId,
+            name: session.githubId,
           }),
         ]);
       }
@@ -118,12 +118,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Expel/Unassign Student"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayoutSimple loading={loading} title="Expel/Unassign Student" showCourseName>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item initialValue={action} name="action" label="Action">
           <Radio.Group onChange={e => setAction(e.target.value)}>
@@ -156,4 +151,12 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Mentor }));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

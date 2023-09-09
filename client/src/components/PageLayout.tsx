@@ -1,20 +1,19 @@
 import { PropsWithChildren } from 'react';
 import { Header } from './Header';
 import { Spin, Row, Col, Layout, Result, Button } from 'antd';
-import { Session } from './withSession';
 import { AdminSider } from './Sider/AdminSider';
 import { Course } from 'services/models';
 
 type Props = {
   loading: boolean;
   error?: Error;
-  githubId: string;
-  courseName?: string;
+  showCourseName?: boolean;
   title?: string;
   children?: any;
   noData?: boolean;
   background?: string;
   withMargin?: boolean;
+  course?: Course;
 };
 
 export function PageLayout(props: Props) {
@@ -23,7 +22,7 @@ export function PageLayout(props: Props) {
 
   return (
     <Layout style={{ background: props.background ?? 'transparent', minHeight: '100vh' }}>
-      <Header title={props.title} username={props.githubId} courseName={props.courseName} />
+      <Header title={props.title} course={props.course} showCourseName={props.showCourseName} />
       {props.error ? (
         <Result
           status="500"
@@ -47,7 +46,7 @@ export function PageLayout(props: Props) {
 export function PageLayoutSimple(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header title={props.title} username={props.githubId} courseName={props.courseName} />
+      <Header title={props.title} course={props.course} showCourseName={props.showCourseName} />
       <Layout.Content>
         {props.noData ? (
           <div>no data</div>
@@ -69,26 +68,26 @@ export function PageLayoutSimple(props: Props) {
 }
 
 export function AdminPageLayout({
-  session,
   title,
-  courseName,
   loading,
   children,
+  showCourseName,
   courses,
   styles,
 }: PropsWithChildren<{
-  session: Session;
   title?: string;
-  courseName?: string;
+  showCourseName?: boolean;
   loading: boolean;
   courses: Course[];
   styles?: React.CSSProperties;
 }>) {
+  const [course] = courses;
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header title={title} username={session.githubId} courseName={courseName} />
+      <Header title={title} showCourseName={showCourseName} course={course} />
       <Layout style={{ background: '#e5e5e5' }}>
-        <AdminSider session={session} courses={courses} />
+        <AdminSider courses={courses} />
         <Layout.Content style={{ background: '#fff', margin: 16, padding: 16, ...styles }}>
           <Spin spinning={loading}>{children}</Spin>
         </Layout.Content>

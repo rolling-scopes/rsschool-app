@@ -1,8 +1,6 @@
 import { Divider, Layout } from 'antd';
 import dynamic from 'next/dynamic';
 import { Header } from 'components/Header';
-import { SessionContext } from 'modules/Course/contexts';
-import { useContext } from 'react';
 import { StageFeedbackProps } from '../InterviewFeedback/getServerSideProps';
 
 import { Steps } from './Steps';
@@ -17,7 +15,6 @@ const LegacyTechScreening = dynamic(() => import('pages/course/mentor/interview-
 });
 
 export function Feedback(props: StageFeedbackProps) {
-  const session = useContext(SessionContext);
   const { student, courseSummary, interviewFeedback, course, interviewId, type } = props;
 
   const shouldFallbackToLegacy = !featureToggles.feedback || interviewFeedback.version === 0;
@@ -25,12 +22,12 @@ export function Feedback(props: StageFeedbackProps) {
   // if the feedback exists and doesn't have a version, it means it was created before the feedback feature was released
   // fallback to previous form. Once we migrate old data to new format(Artsiom A.), we may remove this fallback
   if (shouldFallbackToLegacy) {
-    return <LegacyTechScreening {...props} session={session} />;
+    return <LegacyTechScreening />;
   }
 
   return (
     <Layout style={{ background: 'transparent', minHeight: '100vh' }}>
-      <Header title="Technical screening" username={session.githubId} />
+      <Header title="Technical screening" showCourseName />
       <SubHeader isCompleted={interviewFeedback.isCompleted ?? false} />
       <StepContextProvider
         interviewFeedback={interviewFeedback}

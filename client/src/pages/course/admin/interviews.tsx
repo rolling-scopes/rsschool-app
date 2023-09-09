@@ -1,19 +1,20 @@
 import { Button, Row, Select, Table } from 'antd';
-import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import withCourseData from 'components/withCourseData';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { CourseService, Interview } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 import { InterviewPair } from 'common/models/interview';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page() {
+  const session = useContext(SessionContext);
+  const { course, courses } = useActiveCourseContext();
+  const courseId = course.id;
 
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState([] as Interview[]);
@@ -47,13 +48,7 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Interviews"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
           {interviews.map(interview => (
@@ -105,7 +100,7 @@ function Page(props: CoursePageProps) {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (isCourseManager(props.session, props.course.id)) {
+              if (isCourseManager(session, course.id)) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel
@@ -126,10 +121,18 @@ function Page(props: CoursePageProps) {
         })}
         onCancel={() => setModal(false)}
         visible={modal}
-        courseId={props.course.id}
+        courseId={course.id}
       />
     </AdminPageLayout>
   );
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

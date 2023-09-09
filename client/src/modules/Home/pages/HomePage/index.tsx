@@ -3,7 +3,6 @@ import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
-import { Session } from 'components/withSession';
 import { isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
@@ -14,38 +13,35 @@ import { getCourseLinks } from 'modules/Home/data/links';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
 import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
-
-type Props = {
-  courses?: Course[];
-  session: Session;
-};
 
 const mentorRegistryService = new MentorRegistryService();
 const alertService = new AlertsApi();
 
-export function HomePage(props: Props) {
-  const plannedCourses = (props.courses || []).filter(course => course.planned && !course.inviteOnly);
-  const wasMentor = isAnyMentor(props.session);
+export function HomePage() {
+  const { courses = [] } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+  const plannedCourses = (courses || []).filter(course => course.planned && !course.inviteOnly);
+  const wasMentor = isAnyMentor(session);
   const hasRegistryBanner =
-    wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.courses[course.id] == null);
+    wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => session.courses[course.id] == null);
 
-  const isPowerUser = isAnyCoursePowerUser(props.session) || isAnyCourseDementor(props.session);
+  const isPowerUser = isAnyCoursePowerUser(session) || isAnyCourseDementor(session);
 
-  const courses = props.courses ?? [];
   const [activeCourse, saveActiveCourseId] = useActiveCourse(courses);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [preselectedCourses, setPreselectedCourses] = useState<Course[]>([]);
   const [alerts, setAlerts] = useState<AlertDto[]>([]);
 
-  const courseLinks = useMemo(() => getCourseLinks(props.session, activeCourse), [activeCourse]);
-  const [approvedCourse] = preselectedCourses.filter(course => !props.session.courses?.[course.id]);
+  const courseLinks = useMemo(() => getCourseLinks(session, activeCourse), [activeCourse]);
+  const [approvedCourse] = preselectedCourses.filter(course => !session.courses?.[course.id]);
 
   useAsync(async () => {
     const { data } = await alertService.getAlerts(true);
@@ -63,13 +59,13 @@ export function HomePage(props: Props) {
     setPreselectedCourses(preselectedCourses);
   });
 
-  const { courseTasks, studentSummary } = useStudentSummary(props.session, activeCourse);
+  const { courseTasks, studentSummary } = useStudentSummary(session, activeCourse);
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
-      <Header username={props.session.githubId} />
+      <Header />
       <Layout style={{ background: '#fff' }}>
-        {isPowerUser && <AdminSider session={props.session} courses={courses} activeCourse={activeCourse} />}
+        {isPowerUser && <AdminSider courses={courses} activeCourse={activeCourse} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
           {!activeCourse && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
 
