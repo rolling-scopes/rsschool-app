@@ -49,7 +49,6 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
   }, [error]);
 
-
   if (!loading && !course && !coursesCache?.length) {
     return <WelcomeCard />;
   }
