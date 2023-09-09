@@ -15,7 +15,6 @@ import {
   Tag,
   Space,
 } from 'antd';
-import withSession, { Session } from 'components/withSession';
 import {
   boolIconRenderer,
   stringSorter,

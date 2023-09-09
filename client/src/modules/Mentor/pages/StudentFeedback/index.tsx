@@ -35,7 +35,6 @@ const englishLevels = [
 
 export function StudentFeedback({ course }: CourseOnlyPageProps) {
   const session = useContext(SessionContext);
-  const { githubId } = session;
   const { id: courseId, alias } = course;
   const mentorId = getMentorId(session, courseId);
 

@@ -2,7 +2,6 @@ import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOu
 import { Button, message, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
 import { DashboardDetails } from 'components/Student';
 import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
 import {

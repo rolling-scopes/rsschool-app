@@ -5,7 +5,6 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typ
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
-import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { CourseRole } from 'services/models';
 import { ModalForm } from 'components/Forms';

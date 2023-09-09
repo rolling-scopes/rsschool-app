@@ -87,14 +87,7 @@ function Page() {
   }
 
   if (course == null) {
-    return (
-      <Warning
-        githubId={session.githubId}
-        imagePath="/svg/err.svg"
-        imageName="Course Not Found"
-        textMessage="Sorry, Course Not Found"
-      />
-    );
+    return <Warning imagePath="/svg/err.svg" imageName="Course Not Found" textMessage="Sorry, Course Not Found" />;
   }
 
   const pageProps = {
@@ -112,14 +105,7 @@ function Page() {
         </Link>
       </div>
     );
-    return (
-      <Warning
-        githubId={session.githubId}
-        imagePath="/svg/wanted-mentors.svg"
-        imageName="Not registered"
-        textMessage={message}
-      />
-    );
+    return <Warning imagePath="/svg/wanted-mentors.svg" imageName="Not registered" textMessage={message} />;
   }
 
   if (noAccess && isPreferredCourse) {
@@ -148,14 +134,7 @@ function Page() {
         </Row>
       </div>
     );
-    return (
-      <Warning
-        githubId={session.githubId}
-        imagePath="/images/rs-hero.png"
-        imageName="You are RS hero"
-        textMessage={message}
-      />
-    );
+    return <Warning imagePath="/images/rs-hero.png" imageName="You are RS hero" textMessage={message} />;
   }
 
   if (success) {
