@@ -9,7 +9,10 @@ import { AuthUser } from '../auth-user.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(config: ConfigService, private authService: AuthService) {
+  constructor(
+    config: ConfigService,
+    private authService: AuthService,
+  ) {
     super({
       jwtFromRequest: (req: Request) => req.cookies?.[JWT_COOKIE_NAME] || ExtractJwt.fromAuthHeaderAsBearerToken()(req),
       ignoreExpiration: false,

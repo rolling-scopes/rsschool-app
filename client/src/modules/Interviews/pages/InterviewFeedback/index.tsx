@@ -6,8 +6,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { InputType, templates } from 'data/interviews';
 import range from 'lodash/range';
 import toString from 'lodash/toString';
-import { SessionContext } from 'modules/Course/contexts';
-import { Fragment, useContext, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import type { FeedbackProps } from './getServerSideProps';
 
@@ -19,7 +18,6 @@ type FormAnswer = {
 
 export function InterviewFeedback({ course, type, interviewTaskId, githubId }: FeedbackProps) {
   const courseId = course.id;
-  const session = useContext(SessionContext);
 
   const template = templates[type];
 
@@ -57,12 +55,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title={`${template.name}: Interview Feedback`}
-      courseName={course.name}
-      githubId={session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title={`${template.name}: Interview Feedback`} showCourseName>
       <Typography style={{ marginBottom: 24 }}>
         <h4>Process</h4>
         <div>

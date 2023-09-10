@@ -1,7 +1,12 @@
 import { DisciplinePage } from 'modules/Discipline/pages/DisciplinePage';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
-import withSession from 'components/withSession';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 
-export { getServerSideProps };
-
-export default withSession(DisciplinePage, { onlyForAdmin: true });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider adminOnly>
+        <DisciplinePage />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

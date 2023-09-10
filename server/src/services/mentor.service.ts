@@ -12,7 +12,10 @@ export class MentorService {
   private studentRepository = getCustomRepository(StudentRepository);
   private mentorRepository = getCustomRepository(MentorRepository);
 
-  constructor(private courseId: number, private logger: ILogger) {}
+  constructor(
+    private courseId: number,
+    private logger: ILogger,
+  ) {}
 
   public async assignStudentsRandomly() {
     const students = await this.studentRepository.findActiveByCourseId(this.courseId);

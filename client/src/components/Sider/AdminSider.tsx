@@ -1,18 +1,18 @@
 import { CrownOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import type { MenuProps } from 'antd';
-import { Session } from 'components/withSession';
-import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import Router from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
-import { Course } from 'services/models';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
+import { SessionContext } from 'modules/Course/contexts';
+import { Course } from 'services/models';
+import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
+type Props = { courses: Course[]; activeCourse?: Course | null };
 
-type Props = { session: Session; courses: Course[]; activeCourse?: Course | null };
+type MenuItem = Required<MenuProps>['items'][number];
 
 enum LocalStorage {
   IsSiderCollapsed = 'isSiderCollapsed',
@@ -33,10 +33,13 @@ export function AdminSider(props: Props) {
   const [isSiderCollapsed = true, setIsSiderCollapsed] = useLocalStorage<boolean>(LocalStorage.IsSiderCollapsed);
   const [openedSidebarItems = [], setOpenedSidebarItems] = useLocalStorage<string[]>(LocalStorage.OpenedSidebarItems);
   const [activeCourse] = useActiveCourse(props.courses);
-  const adminMenuItems = getAdminMenuItems(props.session);
+
+  const session = useContext(SessionContext);
+
+  const adminMenuItems = getAdminMenuItems(session);
   const courseManagementMenuItems = useMemo(
-    () => getCourseManagementMenuItems(props.session, props.activeCourse ?? activeCourse),
-    [props.activeCourse, activeCourse],
+    () => getCourseManagementMenuItems(session, props.activeCourse ?? activeCourse),
+    [activeCourse],
   );
 
   const menuIconProps = {

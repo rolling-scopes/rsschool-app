@@ -1,11 +1,10 @@
 import { BadRequestException, INestApplication, ValidationError, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import * as Sentry from '@sentry/node';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
-import { CloudApiService } from './cloud-api/cloud-api.service';
-import { ConfigService } from './config';
-import { EntityNotFoundFilter, UnhandledExceptionsFilter } from './core/filters';
+import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { ValidationFilter } from './core/validation';
+import { HttpAdapterHost } from '@nestjs/core';
 
 export function setupApp(app: INestApplication) {
   const logger = app.get(Logger);
@@ -13,11 +12,12 @@ export function setupApp(app: INestApplication) {
   app.useLogger(logger);
   app.use(cookieParser());
 
+  if (process.env.SENTRY_DSN) {
+    Sentry.init({ dsn: process.env.SENTRY_DSN });
+  }
+
   const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(
-    new UnhandledExceptionsFilter(httpAdapterHost, app.get(CloudApiService), app.get(ConfigService)),
-    new EntityNotFoundFilter(),
-  );
+  app.useGlobalFilters(new EntityNotFoundFilter(), new SentryFilter(httpAdapterHost.httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

@@ -17,6 +17,8 @@ import React from 'react';
 import { Course } from 'services/models';
 import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
 import { getAutoTestRoute } from 'services/routes';
+import { MenuProps } from 'antd';
+import Router from 'next/router';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
@@ -147,5 +149,22 @@ export function getCourseLinks(session: Session, activeCourse: Course | null): L
             (route.access(session, activeCourse.id) && (route.courseAccess?.(session, activeCourse) ?? true)),
         )
         .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
+    : [];
+}
+
+export function getNavigationItems(session: Session, activeCourse: Course | null): MenuProps['items'] {
+  return activeCourse
+    ? links
+        .filter(
+          route =>
+            isAdmin(session) ||
+            (route.access(session, activeCourse.id) && (route.courseAccess?.(session, activeCourse) ?? true)),
+        )
+        .map(({ name, icon, getUrl }) => ({
+          label: name,
+          icon,
+          key: getUrl(activeCourse),
+          onClick: () => Router.push(getUrl(activeCourse)),
+        }))
     : [];
 }

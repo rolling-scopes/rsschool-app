@@ -12,7 +12,10 @@ import { ScheduleService } from './schedule.service';
 export class ScheduleController {
   private readonly logger = new Logger('schedule');
 
-  constructor(private scheduleService: ScheduleService, private notificationService: UserNotificationsService) {}
+  constructor(
+    private scheduleService: ScheduleService,
+    private notificationService: UserNotificationsService,
+  ) {}
 
   @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyScheduleChanges' })

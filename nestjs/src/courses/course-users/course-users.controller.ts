@@ -19,7 +19,10 @@ import { CourseRolesDto } from './dto/course-roles.dto';
 @ApiTags('course users')
 @UseGuards(DefaultGuard, RoleGuard)
 export class CourseUsersController {
-  constructor(private readonly courseUserService: CourseUsersService, private readonly usersService: UsersService) {}
+  constructor(
+    private readonly courseUserService: CourseUsersService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
   @ApiOperation({ operationId: 'getCourseUsers' })

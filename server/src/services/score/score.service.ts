@@ -56,7 +56,10 @@ type ScoreOptions = {
 export class ScoreService {
   private taskResultRepository = getRepository(TaskResult);
 
-  constructor(private courseId: number, private options: ScoreOptions = {}) {}
+  constructor(
+    private courseId: number,
+    private options: ScoreOptions = {},
+  ) {}
 
   public static async recalculateTotalScore(logger: ILogger, coursesToUpdate?: Course[]) {
     const courses = coursesToUpdate ?? (await getCourses());
@@ -352,12 +355,15 @@ export class ScoreService {
   }
 
   private getTasksResults(results: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
-    return courseTasks.reduce((acc, courseTask) => {
-      const result = results.find(r => r.courseTaskId === courseTask.id);
-      const { name } = courseTask.task;
-      acc[name] = result?.score ?? 0;
-      return acc;
-    }, {} as Record<string, number>);
+    return courseTasks.reduce(
+      (acc, courseTask) => {
+        const result = results.find(r => r.courseTaskId === courseTask.id);
+        const { name } = courseTask.task;
+        acc[name] = result?.score ?? 0;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 }
 

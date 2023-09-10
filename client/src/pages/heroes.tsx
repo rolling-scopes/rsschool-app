@@ -1,19 +1,19 @@
 import { PageLayout } from 'components/PageLayout';
-import withSession, { Session } from 'components/withSession';
 import { HeroesForm } from '../components/Forms/Heroes';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 
-type Props = {
-  session: Session;
-};
-
-function Page(props: Props) {
+function Page() {
   const [loading, setLoading] = useState(false);
   return (
-    <PageLayout loading={loading} title="Heroes" githubId={props.session.githubId}>
-      <HeroesForm setLoading={setLoading} />
-    </PageLayout>
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <PageLayout loading={loading} title="Heroes">
+          <HeroesForm setLoading={setLoading} />
+        </PageLayout>
+      </ActiveCourseProvider>
+    </SessionProvider>
   );
 }
 
-export default withSession(Page);
+export default Page;
