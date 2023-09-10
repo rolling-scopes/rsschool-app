@@ -50,7 +50,6 @@ import { MentorRegistry1685197747051 } from './1685197747051-MentorRegistry';
 import { Prompt1687009744110 } from './1687009744110-Prompt';
 import { Temperature1691520611773 } from './1691520611773-Temperature';
 import { Temperature1691524327332 } from './1691524327332-Temperature';
-import { User1691604177978 } from './1691604177978-User';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -105,5 +104,4 @@ export const migrations = [
   Prompt1687009744110,
   Temperature1691520611773,
   Temperature1691524327332,
-  User1691604177978,
 ];
