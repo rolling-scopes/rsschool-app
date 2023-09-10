@@ -5,27 +5,21 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typ
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
-import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { ModalForm } from 'components/Forms';
 import { MentorRegistryResendModal } from 'modules/MentorRegistry/components/MentorRegistryResendModal';
 import { MentorRegistryDeleteModal } from 'modules/MentorRegistry/components/MentorRegistryDeleteModal';
 import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
 import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { useLoading } from 'components/useLoading';
-import { Session, withSession } from 'components/withSession';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-
-type Props = {
-  courses: Course[];
-  session: Session;
-};
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { CoursesService } from 'services/courses';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -45,17 +39,17 @@ const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
 const disciplinesApi = new DisciplinesApi();
 
-function Page(props: Props) {
+function Page() {
   const [loading, withLoading] = useLoading(false);
 
   const [api, contextHolder] = notification.useNotification();
 
+  const [courses, setCourses] = useState<Course[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState<MentorRegistryDto[]>([]);
   const [allData, setAllData] = useState<MentorRegistryDto[]>([]);
   const [maxStudents, setMaxStudents] = useState(0);
-  const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(MentorRegistryTabsMode.New);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
@@ -72,8 +66,8 @@ function Page(props: Props) {
     const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
     setAllData(allData);
-    updateData(showAll, allData);
     setCourses(courses);
+    updateData(showAll, allData);
     setDisciplines(disciplines);
   });
 
@@ -194,13 +188,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout
-      session={props.session}
-      title="Mentor Registry"
-      loading={loading}
-      courses={courses}
-      styles={{ margin: 0, padding: 0 }}
-    >
+    <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
       <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
         <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
         <Button
@@ -279,9 +267,15 @@ function filterData(data: MentorRegistryDto[], showAll: boolean) {
   );
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { onlyForAnyCoursePowerUser: true });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}
 
 export const styles = css`
   @media (min-width: 575px) {

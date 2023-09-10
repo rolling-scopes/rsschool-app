@@ -1,25 +1,26 @@
 import { CoursesInterviewsApi, InterviewDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, MentorInterview } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
-export function Interviews(props: CoursePageProps) {
+export function Interviews() {
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [interviewsByTask, setInterviewsByTask] = useState<Dictionary<MentorInterview[]>>({});
   const [loading, withLoading] = useLoading();
-  const { course } = props;
 
   const fetchStudentInterviews = useCallback(async () => {
-    const interviews = await new CourseService(course.id).getMentorInterviews(props.session.githubId);
+    const interviews = await new CourseService(course.id).getMentorInterviews(session.githubId);
     setInterviewsByTask(groupBy(interviews, 'name'));
-  }, [course.id, props.session.githubId]);
+  }, [course.id, session.githubId]);
 
   const loadData = async () => {
     const [{ data }] = await Promise.all([
@@ -33,8 +34,8 @@ export function Interviews(props: CoursePageProps) {
   useAsync(withLoading(loadData), []);
 
   return (
-    <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={course.name}>
-      <MentorOptionsProvider course={course} session={props.session}>
+    <PageLayout loading={loading} title="Interviews" showCourseName>
+      <MentorOptionsProvider course={course} session={session}>
         <div className="container">
           {interviews.map(interviewTask => (
             <InterviewCard

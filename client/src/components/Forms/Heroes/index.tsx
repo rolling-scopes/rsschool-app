@@ -6,8 +6,8 @@ import css from 'styled-jsx/css';
 import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'common/interfaces/gratitude';
 import heroesBadges from 'configs/heroes-badges';
 import { GratitudeService } from 'services/gratitude';
-import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
+import { Course } from 'services/models';
 import { getFullName } from 'domain/user';
 
 const { Text, Link, Paragraph } = Typography;
@@ -23,7 +23,7 @@ export const fields = {
 } as const;
 
 export const HeroesForm = ({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) => {
-  const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
+  const [heroesData, setHeroesData] = useState<IGratitudeGetResponse[]>([]);
   const [heroesCount, setHeroesCount] = useState(initialPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const gratitudeService = new GratitudeService();

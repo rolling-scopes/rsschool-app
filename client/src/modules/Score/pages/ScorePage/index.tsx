@@ -6,12 +6,15 @@ import { ScoreTable } from 'modules/Score/components/ScoreTable';
 import { getExportCsvUrl } from 'modules/Score/data/getExportCsvUrl';
 import { isExportEnabled } from 'modules/Score/data/isExportEnabled';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
-import { CoursePageProps } from 'services/models';
+import { useCallback, useState, useContext } from 'react';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Text } = Typography;
 
-export function ScorePage(props: CoursePageProps) {
+export function ScorePage() {
+  const { course } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+
   const router = useRouter();
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
@@ -21,16 +24,16 @@ export function ScorePage(props: CoursePageProps) {
   const handleActiveOnlyChange = () => setActiveOnly(!activeOnly);
 
   const handleExportCsv = useCallback(
-    () => (window.location.href = getExportCsvUrl(props.course?.id, cityName, mentor)),
-    [cityName, mentor, props.course?.id],
+    () => (window.location.href = getExportCsvUrl(course?.id, cityName, mentor)),
+    [cityName, mentor, course?.id],
   );
 
-  const csvEnabled = isExportEnabled(props);
+  const csvEnabled = isExportEnabled({ course, session });
 
-  return !props.course ? (
+  return !course ? (
     <CourseNoAccess />
   ) : (
-    <CoursePageLayout course={props.course} title="Score" githubId={props.session.githubId} loading={loading}>
+    <CoursePageLayout showCourseName course={course} title="Score" githubId={session.githubId} loading={loading}>
       <Row style={{ margin: '8px 0' }} justify="space-between">
         <div>
           <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
@@ -39,7 +42,7 @@ export function ScorePage(props: CoursePageProps) {
         <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
         <ExportCsvButton enabled={csvEnabled} onClick={handleExportCsv} />
       </Row>
-      <ScoreTable {...props} activeOnly={activeOnly} onLoading={setLoading} />
+      <ScoreTable session={session} course={course} activeOnly={activeOnly} onLoading={setLoading} />
     </CoursePageLayout>
   );
 }

@@ -1,10 +1,11 @@
-import { CacheTTL, Controller, Get, Param, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
-import { CourseMentorsService } from './course-mentors.service';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
-import { DEFAULT_CACHE_TTL } from 'src/constants';
-import { parseAsync, transforms } from 'json2csv';
-import { Response } from 'express';
+import { CacheTTL } from '@nestjs/cache-manager';
+import { Controller, Get, Param, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { parseAsync, transforms } from 'json2csv';
+import { DEFAULT_CACHE_TTL } from 'src/constants';
+import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { CourseMentorsService } from './course-mentors.service';
 import { MentorDetailsDto } from './dto/mentor-details.dto';
 import { SearchMentorDto } from './dto/search-mentor.dto';
 

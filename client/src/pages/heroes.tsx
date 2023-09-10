@@ -1,18 +1,14 @@
 import { PageLayout } from 'components/PageLayout';
-import withSession, { Session } from 'components/withSession';
 import { HeroesForm } from '../components/Forms/Heroes';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { Tabs } from 'antd';
 import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
 import { Course } from 'services/models';
 import { CoursesService } from 'services/courses';
 import { useAsync } from 'react-use';
 
-type Props = {
-  session: Session;
-};
-
-function Page(props: Props) {
+function Page() {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
 
@@ -27,10 +23,14 @@ function Page(props: Props) {
   }, []);
 
   return (
-    <PageLayout loading={loading} title="Heroes" githubId={props.session.githubId}>
-      <Tabs items={tabs} />
-    </PageLayout>
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <PageLayout loading={loading} title="Heroes">
+          <Tabs items={tabs} />
+        </PageLayout>
+      </ActiveCourseProvider>
+    </SessionProvider>
   );
 }
 
-export default withSession(Page);
+export default Page;

@@ -14,7 +14,7 @@ import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
-import MentorStatsCard from 'components/Profile/MentorStatsCard';
+import { MentorStatsCard } from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import LanguagesCard from 'components/Profile/LanguagesCard';
 import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
@@ -22,6 +22,7 @@ import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 
 type Props = {
   router: NextRouter;
@@ -94,9 +95,9 @@ export class ProfilePage extends React.Component<Props, State> {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const [profile, connections, { data }] = await Promise.all([
-        this.userService.getProfileInfo(githubId),
+        this.userService.getProfileInfo(githubId?.toLowerCase()),
         this.notificationsService.getUserConnections().catch(() => []),
-        profileApi.getProfile(githubId ?? session.githubId),
+        profileApi.getProfile(githubId?.toLowerCase() ?? session.githubId),
       ]);
 
       const updateProfile = {
@@ -196,6 +197,9 @@ export class ProfilePage extends React.Component<Props, State> {
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];
 
+    const githubId = this.props.session.githubId;
+    const isAdmin = this.props.session.isAdmin;
+
     const cards = [
       profile?.generalInfo && (
         <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />
@@ -237,7 +241,9 @@ export class ProfilePage extends React.Component<Props, State> {
           isProfileOwner={isProfileOwner}
         />
       ),
-      profile?.mentorStats?.length && <MentorStatsCard data={profile.mentorStats} />,
+      profile?.mentorStats?.length && githubId && (
+        <MentorStatsCard isAdmin={isAdmin} githubId={githubId} data={profile.mentorStats} />
+      ),
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />
       ),
@@ -247,7 +253,7 @@ export class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
-          <Header username={this.props.session.githubId} />
+          <Header />
           <Spin spinning={this.state.isSaving} delay={200}>
             {this.state.profile ? (
               <div style={{ padding: 10 }}>
@@ -297,4 +303,14 @@ const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boole
   return githubId === requestedGithubId;
 };
 
-export default withGoogleMaps(withRouter(withSession(ProfilePage)));
+function Page(props: Props) {
+  return (
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <ProfilePage {...props} />
+      </ActiveCourseProvider>
+    </SessionProvider>
+  );
+}
+
+export default withGoogleMaps(withRouter(withSession(Page)));

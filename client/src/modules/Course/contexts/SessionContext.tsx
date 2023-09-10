@@ -7,6 +7,7 @@ import { CourseRole } from 'services/models';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useAsync } from 'react-use';
+import { useActiveCourseContext } from './ActiveCourseContext';
 
 export const SessionContext = React.createContext<Session>({} as Session);
 
@@ -20,6 +21,8 @@ type Props = React.PropsWithChildren<{
 
 export function SessionProvider(props: Props) {
   const { allowedRoles } = props;
+  const activeCourse = useActiveCourseContext().course;
+  const course = props.course ?? activeCourse;
 
   const {
     value: session,
@@ -57,9 +60,9 @@ export function SessionProvider(props: Props) {
     );
   }
 
-  if (session && allowedRoles && props.course) {
+  if (session && allowedRoles && course) {
     const { courses, isAdmin } = session;
-    const id = props.course.id;
+    const id = course.id;
 
     if (!isAdmin) {
       const roles = courses?.[id]?.roles ?? [];

@@ -1,11 +1,9 @@
-import React, { useState, useMemo, useEffect, ChangeEvent } from 'react';
+import React, { useState, useMemo, useEffect, ChangeEvent, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber, Space } from 'antd';
-import withCourseData from 'components/withCourseData';
 import { PageLayoutSimple } from 'components/PageLayout';
-import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
-import { CoursePageProps, StudentBasic } from 'services/models';
+import { StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
 import keys from 'lodash/keys';
@@ -13,6 +11,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -258,8 +257,10 @@ const renderResume = (handleSkillChange: HandleChangeValue) => (
   </>
 );
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page() {
+  const { course } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+  const courseId = course.id;
   const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
 
   const [form] = Form.useForm();
@@ -272,7 +273,7 @@ function Page(props: CoursePageProps) {
   const [resume, setResume] = useState(defaultInitialValues);
 
   const loadData = async () => {
-    const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
+    const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
     setStudents(interviews.filter(i => !i.completed).map(i => i.student));
     setStudents(students);
     setInterviews(interviews);
@@ -361,12 +362,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Technical Screening Feedback"
-      courseName={props.course.name}
-      githubId={props.session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title="Technical Screening Feedback" showCourseName>
       <Form
         form={form}
         initialValues={resume}
@@ -415,4 +411,12 @@ function deserializeFromJson(json: any) {
     }, {} as any);
 }
 
-export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Mentor }));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

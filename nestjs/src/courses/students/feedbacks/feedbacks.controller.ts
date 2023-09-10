@@ -20,7 +20,10 @@ import { FeedbacksService } from './feedbacks.service';
 @ApiTags('students feedbacks')
 @UseGuards(DefaultGuard)
 export class FeedbacksController {
-  constructor(private stundentsService: StudentsService, private feedbackService: FeedbacksService) {}
+  constructor(
+    private stundentsService: StudentsService,
+    private feedbackService: FeedbacksService,
+  ) {}
 
   @Post('/')
   @ApiOperation({ operationId: 'createStudentFeedback' })

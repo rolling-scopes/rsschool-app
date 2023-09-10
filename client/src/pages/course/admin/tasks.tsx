@@ -6,18 +6,18 @@ import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
-import withCourseData from 'components/withCourseData';
-import { withSession } from 'components/withSession';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'services/models';
 
 const courseTasksApi = new CoursesTasksApi();
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page() {
+  const { course, courses } = useActiveCourseContext();
+  const courseId = course.id;
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseTaskDto[]);
@@ -49,7 +49,7 @@ function Page(props: CoursePageProps) {
       if (!result) {
         return;
       }
-      await courseTasksApi.deleteCourseTask(props.course.id, id);
+      await courseTasksApi.deleteCourseTask(course.id, id);
       await loadData();
     } catch {
       message.error('Failed to delete item. Please try later.');
@@ -58,10 +58,10 @@ function Page(props: CoursePageProps) {
 
   const handleModalSubmit = async (record: any) => {
     if (modalAction === 'update') {
-      await courseTasksApi.updateCourseTask(props.course.id, modalData!.id!, record);
+      await courseTasksApi.updateCourseTask(course.id, modalData!.id!, record);
     } else {
       const { ...rest } = record;
-      await courseTasksApi.createCourseTask(props.course.id, rest);
+      await courseTasksApi.createCourseTask(course.id, rest);
     }
     await loadData();
 
@@ -176,7 +176,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <AdminPageLayout loading={loading} session={props.session} courses={[props.course]}>
+    <AdminPageLayout loading={loading} courses={courses}>
       <Button type="primary" onClick={handleAddItem}>
         Add Task
       </Button>
@@ -250,4 +250,12 @@ function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsTyp
   ];
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

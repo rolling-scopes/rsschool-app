@@ -1,6 +1,5 @@
-import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
-import { SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { MentorDashboard } from 'modules/Mentor/components';
 import { GetServerSideProps } from 'next';
 import { MentorsApi, ProfileCourseDto } from 'api';
@@ -17,7 +16,7 @@ export interface MentorDashboardProps extends CoursePageProps {
 }
 
 function parseToken(token: string): Session {
-  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()) as Session;
 }
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
@@ -55,12 +54,12 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
   }
 };
 
-function Page(props: MentorDashboardProps) {
+export default function (props: MentorDashboardProps) {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
-      <MentorDashboard {...props} />
-    </SessionProvider>
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+        <MentorDashboard {...props} />
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }
-
-export default withSession(Page);

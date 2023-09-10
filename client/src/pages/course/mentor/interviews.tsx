@@ -1,5 +1,12 @@
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { Interviews } from 'modules/Mentor/pages/Interviews';
 
-export default withCourseData(withSession(Interviews));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider>
+        <Interviews />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

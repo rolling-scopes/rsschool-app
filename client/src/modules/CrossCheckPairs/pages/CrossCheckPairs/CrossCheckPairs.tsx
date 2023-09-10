@@ -6,7 +6,6 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { dateTimeRenderer } from 'components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
 import PreparedComment from 'components/Forms/PreparedComment';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
@@ -17,6 +16,7 @@ import {
   Sorter,
   CrossCheckPairsTable,
 } from 'modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 
 enum OrderDirection {
   ASC = 'ASC',
@@ -28,10 +28,11 @@ const DEFAULT_ORDER_DIRECTION = OrderDirection.ASC;
 
 const api = new CoursesTasksApi();
 
-export default function Page(props: CoursePageProps) {
+export default function Page() {
+  const { course, courses } = useActiveCourseContext();
   const [modal, contextHolder] = Modal.useModal();
-  const courseId = props.course.id;
-  const courseService = useMemo(() => new CourseService(courseId), [props.course]);
+  const courseId = course.id;
+  const courseService = useMemo(() => new CourseService(courseId), [course]);
 
   const [loading, setLoading] = useState(false);
   const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
@@ -151,15 +152,9 @@ export default function Page(props: CoursePageProps) {
   };
 
   return (
-    <AdminPageLayout
-      session={props.session}
-      loading={loading}
-      title="Cross-Check"
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Cross-Check" showCourseName courses={courses}>
       {contextHolder}
-      <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
+      <BadReviewControllers courseTasks={courseTasks} courseId={course?.id} />
       <CrossCheckPairsTable
         loaded={loaded}
         crossCheckPairs={crossCheckList.content}
