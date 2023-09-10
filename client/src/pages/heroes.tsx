@@ -22,7 +22,7 @@ function Page(props: Props) {
   ];
 
   useAsync(async () => {
-    const [courses] = await Promise.all([new CoursesService().getCourses()]);
+    const courses = await new CoursesService().getCourses();
     setCourses(courses);
   }, []);
 
