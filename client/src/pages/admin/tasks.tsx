@@ -1,16 +1,36 @@
-import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table, Divider } from 'antd';
-import withSession, { Session } from 'components/withSession';
-import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Row,
+  Col,
+  Input,
+  Collapse,
+  Layout,
+  message,
+  Select,
+  Table,
+  Divider,
+  Card,
+  Tag,
+  Space,
+} from 'antd';
+import {
+  boolIconRenderer,
+  stringSorter,
+  tagsRenderer,
+  getColumnSearchProps,
+  tagsCoursesRendererWithRemainingNumber,
+} from 'components/Table';
 import union from 'lodash/union';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course, CourseRole } from 'services/models';
+import { CourseRole } from 'services/models';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import {
   UploadCriteriaJSON,
@@ -21,16 +41,18 @@ import {
 } from 'modules/CrossCheck';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { ColumnsType } from 'antd/lib/table';
+import uniqBy from 'lodash/uniqBy';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
-type Props = { session: Session; courses: Course[] };
 type ModalData = (Partial<Omit<TaskDto, 'attributes'>> & { attributes?: string }) | null;
 
 const tasksApi = new TasksApi();
 const criteriaApi = new TasksCriteriaApi();
 const disciplinesApi = new DisciplinesApi();
 
-function Page(props: Props) {
+function Page() {
+  const { courses } = useActiveCourseContext();
   const [data, setData] = useState<TaskDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
@@ -108,8 +130,15 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading, dataCriteria],
   );
 
+  const allUsedCourses = uniqBy(
+    data.flatMap(({ courses }) => courses),
+    course => course.name,
+  )
+    .map(({ name }) => name)
+    .sort();
+
   return (
-    <AdminPageLayout title="Manage Tasks" session={props.session} loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Tasks" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Task
@@ -120,7 +149,7 @@ function Page(props: Props) {
           dataSource={data}
           pagination={{ pageSize: 100 }}
           rowKey="id"
-          columns={getColumns(handleEditItem)}
+          columns={getColumns(handleEditItem, allUsedCourses)}
         />
       </Content>
       {modalData && (
@@ -152,7 +181,7 @@ function createRecord(values: any) {
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
     disciplineId: values.discipline,
-    attributes: JSON.parse(values.attributes ?? '{}'),
+    attributes: JSON.parse(values.attributes ?? '{}') as Record<string, unknown>,
   };
   return data;
 }
@@ -167,7 +196,7 @@ function prepareValues(modalData: TaskDto) {
   };
 }
 
-function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
+function getColumns(handleEditItem: any, allUsedCourses: string[]): ColumnsType<TaskDto> {
   return [
     {
       title: 'Id',
@@ -200,6 +229,17 @@ function getColumns(handleEditItem: any): ColumnsType<TaskDto> {
       sorter: stringSorter<TaskDto>('type'),
       filters: TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
       onFilter: (value, record) => record.type === value,
+    },
+    {
+      title: 'Used in Courses',
+      dataIndex: ['courses', 'name'],
+      render: tagsCoursesRendererWithRemainingNumber,
+      filters: [
+        { text: 'Not assigned', value: '' },
+        ...allUsedCourses.map(course => ({ text: course, value: course })),
+      ],
+      onFilter: (value, record) =>
+        value ? record.courses.some(({ name }) => name === `${value}`) : record.courses.length === 0,
     },
     {
       title: 'Description URL',
@@ -370,6 +410,22 @@ function TaskModal({
           </Form.Item>
         </Col>
       </Row>
+
+      <Row gutter={24}>
+        <Col span={24}>
+          <Form.Item name="usedInCourses" label="Used in Courses">
+            <Card>
+              <Space size={[0, 8]} wrap>
+                {modalData?.courses?.map(({ name, isActive }) => (
+                  <Tag key={name} color={isActive ? 'blue' : ''}>
+                    {name}
+                  </Tag>
+                ))}
+              </Space>
+            </Card>
+          </Form.Item>
+        </Col>
+      </Row>
       <Collapse>
         <Collapse.Panel header="Criteria For Cross-Check Task" key="1" forceRender>
           <Form.Item label="Criteria For Cross-Check">
@@ -417,6 +473,12 @@ function getInitialValues(modalData: Partial<TaskDto>) {
   return { ...modalData, discipline: modalData.discipline?.id };
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

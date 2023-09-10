@@ -2,17 +2,18 @@ import { message, Card, Row, List, Col, Button, Modal, Tag, Descriptions } from 
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
-import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { Decision } from 'data/interviews/technical-screening';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
-function Page(props: CoursePageProps) {
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+function StudentInterviewPage() {
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
+  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const [data, setData] = useState<InterviewDetails[]>([]);
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
@@ -22,7 +23,7 @@ function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       const [data, interviews] = await Promise.all([
-        courseService.getStudentInterviews(props.session.githubId),
+        courseService.getStudentInterviews(session.githubId),
         courseService.getInterviews(),
       ] as const);
       const registeredInterviews = await getRegisteredInterviews(interviews);
@@ -35,7 +36,7 @@ function Page(props: CoursePageProps) {
     } finally {
       setLoading(false);
     }
-  }, [props.course.id]);
+  }, [course.id]);
 
   const handleRegister = async (interviewId: string) => {
     Modal.confirm({
@@ -53,7 +54,7 @@ function Page(props: CoursePageProps) {
       ),
       okText: 'Yes',
       onOk: async () => {
-        await courseService.createInterviewStudent(props.session.githubId, interviewId);
+        await courseService.createInterviewStudent(session.githubId, interviewId);
         setRegisteredInterviews(registeredInterviews.concat([interviewId]));
       },
     });
@@ -63,7 +64,7 @@ function Page(props: CoursePageProps) {
     const requests = interviews
       .map(({ type, id }) => (type === stageInterviewType ? 'stage' : id))
       .map(async id => {
-        const data = await courseService.getInterviewStudent(props.session.githubId, id).catch(() => null);
+        const data = await courseService.getInterviewStudent(session.githubId, id).catch(() => null);
         return data ? id : null;
       });
 
@@ -87,13 +88,7 @@ function Page(props: CoursePageProps) {
   };
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Interviews"
-      background="#F0F2F5"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
       <Row gutter={24} style={{ minHeight: '85vh' }}>
         {interviews.map(interview => {
           const items = data.filter(d => d.name === interview.name);
@@ -126,7 +121,7 @@ function Page(props: CoursePageProps) {
                             <StatusLabel status={item.status} />
                           </Descriptions.Item>
                           <Descriptions.Item label="Result">
-                            <b>{friendlyStageInterviewVerdict(item.result as any) ?? '-'}</b>
+                            <b>{getInterviewResult(item.result as Decision) ?? '-'}</b>
                           </Descriptions.Item>
                         </Descriptions>
                       </List.Item>
@@ -154,4 +149,12 @@ function StatusLabel({ status }: { status: InterviewStatus }) {
   }
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <StudentInterviewPage />
+      </ActiveCourseProvider>
+    </SessionProvider>
+  );
+}

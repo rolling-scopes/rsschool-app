@@ -57,7 +57,11 @@ export class UserService {
         },
       });
 
-      const { username, discriminator, id } = await response.json();
+      const { username, discriminator, id } = (await response.json()) as {
+        username: string;
+        discriminator: string;
+        id: string;
+      };
 
       return {
         username,

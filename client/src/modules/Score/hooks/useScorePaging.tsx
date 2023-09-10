@@ -19,8 +19,8 @@ export function useScorePaging(router: NextRouter, courseService: CourseService,
 
   const getCourseScore = useCallback(
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, scoreOrder: ScoreOrder) => {
-      const { cityName, ['mentor.githubId']: mentor } = filters;
-      const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor }, currentQuery);
+      const { cityName, ['mentor.githubId']: mentor, githubId, name } = filters;
+      const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor, githubId, name }, currentQuery);
       setQueryParams(newQueryParams);
       const field = scoreOrder.column?.sorter || 'rank';
       const courseScore = await courseService.getCourseScore(

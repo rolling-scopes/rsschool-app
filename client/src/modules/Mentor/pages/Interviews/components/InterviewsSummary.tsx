@@ -11,12 +11,12 @@ import { CourseService } from 'services/course';
 export function InterviewsSummary({
   interviews,
   toggleDetails,
-  interview,
+  interviewTask,
   courseId,
   reloadList,
   courseAlias,
 }: {
-  interview: InterviewDto;
+  interviewTask: InterviewDto;
   interviews: MentorInterview[];
   toggleDetails: () => void;
   courseId: number;
@@ -25,8 +25,8 @@ export function InterviewsSummary({
 }) {
   const totalCompleted = useMemo(() => interviews.filter(interview => interview.completed).length, [interviews]);
   const canTransfer = useMemo(
-    () => interviews.some(studentInterview => !studentInterview.completed && isTechnicalScreening(interview.name)),
-    [interview.name, interviews],
+    () => interviews.some(studentInterview => !studentInterview.completed && isTechnicalScreening(interviewTask.name)),
+    [interviewTask.name, interviews],
   );
   const [showTransfer, setShowTransfer] = useState(false);
 
@@ -47,7 +47,7 @@ export function InterviewsSummary({
         </Button>
       </Row>
       <Space size={'small'}>
-        <Button icon={<UserAddOutlined />} href={getInterviewWaitList(courseAlias, interview.id)}>
+        <Button icon={<UserAddOutlined />} href={getInterviewWaitList(courseAlias, interviewTask.id)}>
           Add student
         </Button>
         {canTransfer && (

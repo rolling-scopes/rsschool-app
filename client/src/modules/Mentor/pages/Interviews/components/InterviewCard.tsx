@@ -6,14 +6,14 @@ import { InterviewDto } from 'api';
 import { Course } from 'services/models';
 import { MentorInterview } from 'services/course';
 
-export function InteviewCard(props: {
-  interview: InterviewDto;
+export function InterviewCard(props: {
+  interviewTask: InterviewDto;
   course: Course;
-  students: MentorInterview[];
+  interviews: MentorInterview[];
   fetchStudentInterviews: () => Promise<void>;
 }) {
-  const { interview, course, students, fetchStudentInterviews } = props;
-  const { name, startDate, endDate, id, description, descriptionUrl } = interview;
+  const { interviewTask, course, interviews, fetchStudentInterviews } = props;
+  const { name, startDate, endDate, id, description, descriptionUrl } = interviewTask;
 
   return (
     <Card
@@ -28,9 +28,9 @@ export function InteviewCard(props: {
         Read more
       </Button>
       <InterviewDetails
-        interview={interview}
+        interviewTask={interviewTask}
         course={course}
-        students={students}
+        interviews={interviews}
         fetchStudentInterviews={fetchStudentInterviews}
       />
       {containerCss.styles}

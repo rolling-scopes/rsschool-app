@@ -1,20 +1,17 @@
 import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal, message } from 'antd';
-import withSession from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
-import withCourseData from 'components/withCourseData';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseUser } from 'services/course';
 import { CourseUsersApi } from 'api';
-import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
+import { UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-
-type Props = CoursePageProps;
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();
@@ -25,8 +22,10 @@ const rolesColors: Record<string, string> = {
   manager: 'volcano',
 };
 
-function Page(props: Props) {
-  const courseId = props.course.id;
+function Page() {
+  const { course, courses } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+  const courseId = course.id;
 
   const [loading, setLoading] = useState(false);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
@@ -40,7 +39,7 @@ function Page(props: Props) {
 
       const [users, { data: groups }] = await Promise.all([
         courseUserService.getCourseUsers(courseId),
-        props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
+        session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
       ]);
       setCourseUsers(users.data as any);
       setUserGroups(groups);
@@ -179,8 +178,8 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
-      {props.session.isAdmin && (
+    <AdminPageLayout loading={loading} courses={courses} showCourseName>
+      {session.isAdmin && (
         <Button type="primary" onClick={handleAddGroup}>
           Add Group
         </Button>
@@ -248,15 +247,18 @@ function createRecord(values: any) {
 }
 
 function createRecords(groups: UserGroupDto[]) {
-  const data = groups.reduce((users, group) => {
-    group.users.forEach(({ id }) => {
-      users[id] = users[id] ?? {};
-      users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
-      users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
-      users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
-    });
-    return users;
-  }, {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean }>);
+  const data = groups.reduce(
+    (users, group) => {
+      group.users.forEach(({ id }) => {
+        users[id] = users[id] ?? {};
+        users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
+        users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
+        users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
+      });
+      return users;
+    },
+    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean }>,
+  );
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
 
@@ -264,4 +266,12 @@ function getInitialValues(modalData: Partial<CourseUser> | UserGroup[]) {
   return modalData;
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

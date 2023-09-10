@@ -122,28 +122,33 @@ export class TeamDistributionService {
     const allTeams = await this.teamService.findAllByDistributionId(teamDistributionId);
     const studentsWithScore = await this.getTeamDistributionStudentsWithScore(teamDistributionId, taskId);
 
-    const newStudentTaskResults = allTeams.reduce((acc, team) => {
-      const studentsIds = team.students.map(el => el.id);
-      const studentsWithTaskResultsInTeam = studentsWithScore.filter(el => studentsIds.includes(el.studentId));
+    const newStudentTaskResults = allTeams.reduce(
+      (acc, team) => {
+        const studentsIds = team.students.map(el => el.id);
+        const studentsWithTaskResultsInTeam = studentsWithScore.filter(el => studentsIds.includes(el.studentId));
 
-      const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.at(0));
-      const maxScore = taskResults.length ? Math.max(...taskResults.map(taskResult => taskResult?.score ?? 0)) : 0;
-      const taskResultWithMaxScore = taskResults.find(taskResult => taskResult?.score === maxScore);
+        const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.at(0));
+        const maxScore = taskResults.length ? Math.max(...taskResults.map(taskResult => taskResult?.score ?? 0)) : 0;
+        const taskResultWithMaxScore = taskResults.find(taskResult => taskResult?.score === maxScore);
 
-      const studentsWithoutMaxScore = team.students.filter(student => student.id !== taskResultWithMaxScore?.studentId);
+        const studentsWithoutMaxScore = team.students.filter(
+          student => student.id !== taskResultWithMaxScore?.studentId,
+        );
 
-      const newTaskResults = studentsWithoutMaxScore.map(student => {
-        return {
-          studentId: student.id,
-          data: {
-            score: taskResultWithMaxScore?.score ?? 0,
-            courseTaskId: taskId,
-            comment: taskResultWithMaxScore?.comment ?? 'Cross-Check score',
-          },
-        };
-      });
-      return acc.concat(newTaskResults);
-    }, [] as { data: SaveScoreInput; studentId: number }[]);
+        const newTaskResults = studentsWithoutMaxScore.map(student => {
+          return {
+            studentId: student.id,
+            data: {
+              score: taskResultWithMaxScore?.score ?? 0,
+              courseTaskId: taskId,
+              comment: taskResultWithMaxScore?.comment ?? 'Cross-Check score',
+            },
+          };
+        });
+        return acc.concat(newTaskResults);
+      },
+      [] as { data: SaveScoreInput; studentId: number }[],
+    );
 
     await Promise.all(
       newStudentTaskResults.map(taskResult =>

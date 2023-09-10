@@ -10,7 +10,10 @@ export class InterviewService {
   private interviewRepository = getCustomRepository(InterviewRepository);
   private crossMentorService: CrossMentorDistributionService;
 
-  constructor(private courseId: number, logger?: ILogger) {
+  constructor(
+    private courseId: number,
+    logger?: ILogger,
+  ) {
     this.crossMentorService = new CrossMentorDistributionService(undefined, logger);
   }
 

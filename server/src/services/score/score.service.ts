@@ -56,7 +56,10 @@ type ScoreOptions = {
 export class ScoreService {
   private taskResultRepository = getRepository(TaskResult);
 
-  constructor(private courseId: number, private options: ScoreOptions = {}) {}
+  constructor(
+    private courseId: number,
+    private options: ScoreOptions = {},
+  ) {}
 
   public static async recalculateTotalScore(logger: ILogger, coursesToUpdate?: Course[]) {
     const courses = coursesToUpdate ?? (await getCourses());
@@ -136,7 +139,15 @@ export class ScoreService {
       .addSelect(getPrimaryUserFields('mu'))
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
-      .addSelect(['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
+      .addSelect([
+        'sif.stageInterviewId',
+        'sif.json',
+        'sif.updatedDate',
+        'si.isCompleted',
+        'si.id',
+        'si.courseTaskId',
+        'si.score',
+      ])
       .where('student."courseId" = :courseId', { courseId: this.courseId });
 
     if (this.options.includeCertificate) {
@@ -173,7 +184,7 @@ export class ScoreService {
     const content = await query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction).getMany();
 
     const students = content.map(student => {
-      const preScreeningScore = Math.floor((getStageInterviewRating(student.stageInterviews ?? []) ?? 0) * 10);
+      const preScreeningScore = Math.floor(getStageInterviewRating(student.stageInterviews ?? []) ?? 0);
       const preScreningInterviews = student.stageInterviews?.length
         ? [{ score: preScreeningScore, courseTaskId: student.stageInterviews[0].courseTaskId }]
         : [];
@@ -344,12 +355,15 @@ export class ScoreService {
   }
 
   private getTasksResults(results: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
-    return courseTasks.reduce((acc, courseTask) => {
-      const result = results.find(r => r.courseTaskId === courseTask.id);
-      const { name } = courseTask.task;
-      acc[name] = result?.score ?? 0;
-      return acc;
-    }, {} as Record<string, number>);
+    return courseTasks.reduce(
+      (acc, courseTask) => {
+        const result = results.find(r => r.courseTaskId === courseTask.id);
+        const { name } = courseTask.task;
+        acc[name] = result?.score ?? 0;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }
 }
 

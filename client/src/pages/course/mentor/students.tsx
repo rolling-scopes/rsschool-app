@@ -1,14 +1,13 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { getCourseProps as getServerSideProps, PageProps } from 'modules/Course/data/getCourseProps';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { Students } from 'modules/Mentor/pages/Students';
 import { CourseRole } from 'services/models';
 
-export { getServerSideProps };
-
-export default function (props: PageProps) {
+export default function () {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
-      <Students {...props} />
-    </SessionProvider>
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Mentor]}>
+        <Students />
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }

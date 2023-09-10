@@ -1,15 +1,6 @@
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  CacheInterceptor,
-  CacheTTL,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 import { CourseGuard, DefaultGuard } from 'src/auth';
 import { DEFAULT_CACHE_TTL } from 'src/constants';

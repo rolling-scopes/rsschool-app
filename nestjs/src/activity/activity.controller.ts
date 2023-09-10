@@ -22,7 +22,10 @@ import { CreateActivityWebhookDto } from './dto/create-activity-webhook.dto';
 @Controller('activity')
 @ApiTags('activity')
 export class ActivityController {
-  constructor(private userService: UsersService, private config: ConfigService) {}
+  constructor(
+    private userService: UsersService,
+    private config: ConfigService,
+  ) {}
 
   @Get('/')
   @UseGuards(DefaultGuard)

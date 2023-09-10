@@ -18,6 +18,8 @@ import {
   CrossCheckCriteriaDataDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
+import { Decision } from 'data/interviews/technical-screening';
+import { InterviewStatus } from 'domain/interview';
 
 export enum CrossCheckStatus {
   Initial = 'initial',
@@ -216,26 +218,6 @@ export class CourseService {
     } catch (e) {
       return [];
     }
-  }
-
-  async searchMentors(query: string | null) {
-    try {
-      if (!query) {
-        return [];
-      }
-      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
-        `/mentors/search/${query}`,
-      );
-      return response.data.data;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  async getMentorsWithDetails() {
-    type Response = { data: MentorDetails[] };
-    const result = await this.axios.get<Response>('/mentors/details');
-    return result.data.data;
   }
 
   async getCourseScore(
@@ -443,16 +425,17 @@ export class CourseService {
     return result.data.data;
   }
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async getInterviewerStageInterviews(githubId: string) {
     const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
     return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
-  async postStageInterviews(stageId: number) {
-    const result = await this.axios.post(`/stage/${stageId}/interviews`);
-    return result.data.data;
-  }
-
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async postStageInterviewFeedback(
     interviewId: number,
     data: { json: unknown; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
@@ -461,13 +444,12 @@ export class CourseService {
     return result.data.data;
   }
 
+  /**
+   * @deprecated. should be removed after feedbacks are migrated to new template
+   */
   async getStageInterviewFeedback(interviewId: number) {
     const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
-    return result.data.data;
-  }
 
-  async getStageInterviewsByStudent(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data;
   }
 
@@ -717,7 +699,8 @@ export type MentorInterview = {
   endDate: string;
   completed: boolean;
   interviewer: unknown;
-  status: number;
-  student: Omit<UserBasic, 'id'>;
+  status: InterviewStatus;
+  student: UserBasic;
+  decision?: Decision;
   id: number;
 };

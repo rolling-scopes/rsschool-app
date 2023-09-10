@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { Rate, Typography, Tag } from 'antd';
+import { Rate, Typography } from 'antd';
 
 type Props = { rating: number; tooltips?: string[] };
 
 export function Rating(props: Props) {
   const { rating, tooltips } = props;
-
-  if (rating <= 0) {
-    return <Tag color="orange">Partially rated</Tag>;
-  }
 
   return (
     <>

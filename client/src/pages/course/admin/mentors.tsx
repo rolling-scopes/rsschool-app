@@ -1,17 +1,17 @@
 import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
+import { CourseMentorsApi, MentorDetailsDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
-import withCourseData from 'components/withCourseData';
-import { Session, withSession } from 'components/withSession';
-import { MentorEndorsement } from 'modules/Mentor/components/MentorEndorsement';
+import { Session } from 'components/withSession';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, MentorDetails } from 'services/course';
+import { CourseService } from 'services/course';
 import { relativeDays } from 'services/formatter';
-import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'services/models';
 
 type Stats = {
   recordCount: number;
@@ -19,7 +19,9 @@ type Stats = {
   students: { studentsGroupName: string; totalCount: number }[];
 };
 
-function getItems(mentor: MentorDetails, session: Session): MenuProps['items'] {
+const courseMentorsApi = new CourseMentorsApi();
+
+function getItems(mentor: MentorDetailsDto, session: Session): MenuProps['items'] {
   return [
     {
       label: 'Add student',
@@ -45,12 +47,13 @@ function getItems(mentor: MentorDetails, session: Session): MenuProps['items'] {
   ].filter(Boolean) as MenuProps['items'];
 }
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page() {
+  const session = useContext(SessionContext);
+  const { course, courses } = useActiveCourseContext();
+  const courseId = course.id;
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null as Stats | null);
-  const [mentors, setMentors] = useState([] as MentorDetails[]);
-  const [endorsementGithubId, setEndorsementGithubId] = useState<string | null>(null);
+  const [mentors, setMentors] = useState<MentorDetailsDto[]>([]);
   const [currentMentor, setCurrentMentor] = useState<string | null>(null);
   const [modal, contextHolder] = Modal.useModal();
 
@@ -60,7 +63,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     setLoading(true);
-    const records: any[] = await service.getMentorsWithDetails();
+    const { data: records } = await courseMentorsApi.getMentorsDetails(courseId);
     const countries: Record<string, { totalCount: number }> = {};
 
     const studentsGroupCount = records.reduce(
@@ -94,7 +97,7 @@ function Page(props: CoursePageProps) {
     });
   }, []);
 
-  const handleExpel = async ({ githubId }: MentorDetails) => {
+  const handleExpel = async ({ githubId }: MentorDetailsDto) => {
     try {
       setLoading(true);
       await service.expelMentor(githubId);
@@ -106,7 +109,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const handleRestore = async ({ githubId }: MentorDetails) => {
+  const handleRestore = async ({ githubId }: MentorDetailsDto) => {
     try {
       setLoading(true);
       await service.restoreMentor(githubId);
@@ -129,7 +132,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const handleMenuClick = async (menuItem: MenuInfo, mentor: MentorDetails) => {
+  const handleMenuClick = async (menuItem: MenuInfo, mentor: MentorDetailsDto) => {
     switch (menuItem.key) {
       case 'student': {
         setCurrentMentor(mentor.githubId);
@@ -148,22 +151,13 @@ function Page(props: CoursePageProps) {
           title: 'Do you want to restore the mentor?',
         });
         break;
-      case 'endorsment':
-        setEndorsementGithubId(mentor.githubId);
-        break;
     }
   };
 
-  const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
+  const exportToCsv = () => (window.location.href = `/api/v2/course/${courseId}/mentors/details/csv`);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Course Mentors"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Course Mentors" showCourseName courses={courses}>
       <div style={{ display: 'flex' }}>
         <div
           style={{
@@ -209,7 +203,7 @@ function Page(props: CoursePageProps) {
           Export CSV
         </Button>
       </Row>
-      <Table<MentorDetails>
+      <Table<MentorDetailsDto>
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-cols-disabled' : '')}
         pagination={{ pageSize: 100 }}
@@ -287,8 +281,8 @@ function Page(props: CoursePageProps) {
           {
             dataIndex: 'actions',
             width: 120,
-            render: (_: string, mentor: MentorDetails) => {
-              const items = getItems(mentor, props.session);
+            render: (_: string, mentor: MentorDetailsDto) => {
+              const items = getItems(mentor, session);
               return (
                 <Dropdown menu={{ items, onClick: e => handleMenuClick(e, mentor) }}>
                   <Button>
@@ -303,7 +297,6 @@ function Page(props: CoursePageProps) {
           },
         ]}
       />
-      <MentorEndorsement onClose={() => setEndorsementGithubId(null)} githubId={endorsementGithubId} />
       <AssignStudentModal
         onClose={() => setCurrentMentor(null)}
         courseId={courseId}
@@ -315,4 +308,12 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

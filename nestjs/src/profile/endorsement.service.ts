@@ -4,15 +4,13 @@ import { Prompt } from '@entities/prompt';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { OpenAIApi, Configuration } from 'openai';
-import { Eta } from 'eta';
+import OpenAI from 'openai';
+import { compile } from 'handlebars';
 import { ConfigService } from 'src/config';
-
-const eta = new Eta();
 
 @Injectable()
 export class EndorsementService {
-  private openAI: OpenAIApi;
+  private openAI: OpenAI;
 
   private logger = new Logger(EndorsementService.name);
 
@@ -33,7 +31,7 @@ export class EndorsementService {
     private taskInterviewResultRepository: Repository<TaskInterviewResult>,
     private readonly configService: ConfigService,
   ) {
-    this.openAI = new OpenAIApi(new Configuration(this.configService.openai));
+    this.openAI = new OpenAI(this.configService.openai);
   }
 
   public async getEndorsement(githubId: string): Promise<{ content: string; data: object } | null> {
@@ -43,13 +41,13 @@ export class EndorsementService {
         return null;
       }
       this.logger.log(`Endorsement prompt found`);
-      const result = await this.openAI.createChatCompletion({
+      const result = await this.openAI.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt.text }],
         temperature: prompt.temperature ?? 0.5,
       });
       this.logger.log(`Open AI response received`, result);
-      const content = result.data.choices[0]?.message?.content ?? '';
+      const content = result.choices[0]?.message?.content ?? '';
       return { content, data: prompt.data };
     } catch (error) {
       this.logger.error(error);
@@ -93,6 +91,6 @@ export class EndorsementService {
       interviewsCount,
       feedbacks,
     };
-    return { text: eta.renderString(prompt.text, data), temperature: prompt.temperature, data };
+    return { text: compile(prompt.text)(data), temperature: prompt.temperature, data };
   }
 }

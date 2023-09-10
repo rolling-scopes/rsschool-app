@@ -44,6 +44,7 @@ describe('AddCriteriaForCrossCheck', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
 
     const textarea = screen.getByPlaceholderText<HTMLInputElement>('Add description');
+    // eslint-disable-next-line testing-library/no-await-sync-events
     await userEvent.type(textarea, expectedString);
 
     expect(textarea.value).toEqual(expectedString);

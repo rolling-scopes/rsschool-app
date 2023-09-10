@@ -10,13 +10,13 @@ import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -36,9 +36,11 @@ const createUrlRule = (): Rule => {
   };
 };
 
-export function CrossCheckSubmit(props: CoursePageProps) {
+export function CrossCheckSubmit() {
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const [form] = Form.useForm();
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const teamDistributionApi = useMemo(() => new CoursesTasksApi(), []);
   const solutionReviewSettings = useSolutionReviewSettings();
   const [feedback, setFeedback] = useState<CrossCheckFeedbackDto | null>(null);
@@ -57,7 +59,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
 
   const { value: courseTasks = [], loading } = useAsync(
     () => courseService.getCourseCrossCheckTasks('started'),
-    [props.course.id],
+    [course.id],
   );
 
   useEffect(() => {
@@ -73,13 +75,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
       return;
     }
     try {
-      await courseService.postTaskSolution(
-        props.session.githubId,
-        courseTaskId,
-        values.url,
-        values.review,
-        newComments,
-      );
+      await courseService.postTaskSolution(session.githubId, courseTaskId, values.url, values.review, newComments);
       message.success('The task solution has been submitted');
       form.resetFields();
       setComments([]);
@@ -95,7 +91,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     }
 
     try {
-      await courseService.deleteTaskSolution(props.session.githubId, courseTaskId);
+      await courseService.deleteTaskSolution(session.githubId, courseTaskId);
       message.success('The task submission has been canceled');
       setIsModalVisible(false);
       form.resetFields();
@@ -134,8 +130,8 @@ export function CrossCheckSubmit(props: CoursePageProps) {
     }
 
     const [{ data: feedback }, submittedSolution, taskDetails] = await Promise.all([
-      teamDistributionApi.getMyCrossCheckFeedbacks(props.course.id, courseTask.id),
-      courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
+      teamDistributionApi.getMyCrossCheckFeedbacks(course.id, courseTask.id),
+      courseService.getCrossCheckTaskSolution(session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);
 
@@ -169,12 +165,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
   const newCrossCheck = criteria.length > 0;
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Cross-Check Submit"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Cross-Check Submit" showCourseName>
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
@@ -186,7 +177,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                 defaultValue={courseTaskId}
               />
             )}
-            {courseTasks.length === 0 && !loading && <NoSubmissionAvailable courseAlias={props.course.alias} />}
+            {courseTasks.length === 0 && !loading && <NoSubmissionAvailable courseAlias={course.alias} />}
             <SubmittedStatus
               taskExists={taskExists}
               solution={submittedSolution}
@@ -198,7 +189,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                   name="url"
                   label="Solution URL"
                   rules={[createUrlRule()].concat(
-                    task.validations?.githubIdInUrl ? [createGithubInUrlRule(props.session.githubId)] : [],
+                    task.validations?.githubIdInUrl ? [createGithubInUrlRule(session.githubId)] : [],
                   )}
                 >
                   <Input placeholder="link in the form of https://www.google.com" />
@@ -227,7 +218,7 @@ export function CrossCheckSubmit(props: CoursePageProps) {
                 </Col>
                 {submittedSolution && (
                   <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button danger type="ghost" onClick={showModal}>
+                    <Button danger ghost onClick={showModal}>
                       Cancel Submit
                     </Button>
                     <Modal
@@ -261,9 +252,9 @@ export function CrossCheckSubmit(props: CoursePageProps) {
         <Row key={index}>
           <Col span={24}>
             <SolutionReview
-              sessionId={props.session.id}
-              sessionGithubId={props.session.githubId}
-              courseId={props.course.id}
+              sessionId={session.id}
+              sessionGithubId={session.githubId}
+              courseId={course.id}
               reviewNumber={index}
               settings={solutionReviewSettings}
               courseTaskId={courseTaskId}

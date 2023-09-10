@@ -1,17 +1,16 @@
-import { Avatar, Button, Card, Form, Input, Pagination, Row, Select, Typography } from 'antd';
-import { IGratitudeGetRequest, IGratitudeGetResponse } from 'common/interfaces/gratitude';
+import { Avatar, Button, Card, Form, Grid, Input, Pagination, Row, Select, Space, Typography } from 'antd';
+import { FormLayout } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
-import { useAsync } from 'react-use';
 import css from 'styled-jsx/css';
-import { HeroesFormData } from '../../../../../common/interfaces/gratitude';
-import heroesBadges from '../../../configs/heroes-badges';
-import { CoursesService } from '../../../services/courses';
-import { GratitudeService } from '../../../services/gratitude';
-import { Course } from '../../../services/models';
-import { onlyDefined } from '../../../utils/onlyDefined';
+import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'common/interfaces/gratitude';
+import heroesBadges from 'configs/heroes-badges';
+import { GratitudeService } from 'services/gratitude';
+import { onlyDefined } from 'utils/onlyDefined';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Text, Link, Paragraph } = Typography;
+const { useBreakpoint } = Grid;
 
 const initialPage = 1;
 const initialPageSize = 20;
@@ -26,12 +25,15 @@ const getFullName = (user: { firstName: string | null; lastName: string | null; 
   user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
 
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
+  const { courses } = useActiveCourseContext();
+  const [heroesData, setHeroesData] = useState<IGratitudeGetResponse[]>([]);
   const [heroesCount, setHeroesCount] = useState(initialPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const gratitudeService = new GratitudeService();
   const [form] = Form.useForm();
+  const { xs } = useBreakpoint();
+  const formLayout: FormLayout = xs ? 'vertical' : 'inline';
+  const minWidth = xs ? undefined : 300;
 
   useEffect(() => {
     const getHeroes = async () => {
@@ -42,10 +44,6 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
       setLoading(false);
     };
     getHeroes();
-  }, []);
-  useAsync(async () => {
-    const [courses] = await Promise.all([new CoursesService().getCourses()]);
-    setCourses(courses);
   }, []);
 
   const makeRequest = useCallback(
@@ -90,30 +88,24 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   return (
     <>
-      <Form layout="inline" form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
+      <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
         <Form.Item name={fields.name} label="Name" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
         <Form.Item name={fields.githubId} label="Github Username" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
-        <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300, marginBottom: 16 }}>
-          <Select>
-            {courses.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
-              </Select.Option>
-            ))}
-          </Select>
+        <Form.Item name={fields.courseId} label="Courses" style={{ minWidth, marginBottom: 16 }}>
+          <Select options={courses.map(({ id, name }) => ({ value: id, label: name }))} />
         </Form.Item>
-        <div>
-          <Button size="middle" type="primary" htmlType="submit">
+        <Space align="start" size={20}>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
-          <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
+          <Button type="primary" onClick={onClear}>
             Clear
           </Button>
-        </div>
+        </Space>
       </Form>
       <Masonry
         breakpointCols={{

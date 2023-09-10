@@ -1,18 +1,18 @@
 import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
 import { AdminPageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
 import { StudentMentorModal } from 'components/StudentMentorModal';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import withCourseData from 'components/withCourseData';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
-function Page(props: CoursePageProps) {
-  const { session, course } = props;
+function Page() {
+  const session = useContext(SessionContext);
+  const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
   const [loading, withLoading] = useLoading(false);
@@ -21,7 +21,7 @@ function Page(props: CoursePageProps) {
   const [noRegistration, setNoRegistration] = useState(false);
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const courseManagerRole = useMemo(() => isCourseManager(props.session, courseId), [course, session]);
+  const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
 
   const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
 
@@ -38,13 +38,7 @@ function Page(props: CoursePageProps) {
   useAsync(withLoading(loadInterviews), []);
 
   return (
-    <AdminPageLayout
-      loading={loading}
-      title="Technical Screening"
-      session={props.session}
-      courseName={props.course.name}
-      courses={[props.course]}
-    >
+    <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={courses}>
       <Row style={{ marginBottom: 16 }} justify="space-between">
         {courseManagerRole ? (
           <div>
@@ -131,10 +125,18 @@ function Page(props: CoursePageProps) {
         })}
         onCancel={() => setModal(false)}
         visible={modal}
-        courseId={props.course.id}
+        courseId={course.id}
       />
     </AdminPageLayout>
   );
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

@@ -1,4 +1,5 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Course } from '@entities/course';
@@ -36,7 +37,7 @@ import { StudentsService, StudentsController } from './students';
 import { MentorsService, MentorsController } from './mentors';
 import { CourseAccessService } from './course-access.service';
 import { CourseTasksController, CourseTasksService } from './course-tasks';
-import { InterviewsController, InterviewsService } from './interviews';
+import { InterviewsController, InterviewsService, InterviewFeedbackService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
@@ -63,6 +64,7 @@ import { CourseUsersController } from './course-users/course-users.controller';
 import { CourseUsersService } from './course-users/course-users.service';
 import { CloudApiModule } from 'src/cloud-api/cloud-api.module';
 import { SelfEducationService } from './task-verifications/self-education.service';
+import { CourseMentorsController, CourseMentorsService } from './course-mentors';
 
 @Module({
   imports: [
@@ -115,6 +117,7 @@ import { SelfEducationService } from './task-verifications/self-education.servic
     TeamController,
     TaskVerificationsController,
     CourseUsersController,
+    CourseMentorsController,
   ],
   providers: [
     CourseTasksService,
@@ -126,6 +129,7 @@ import { SelfEducationService } from './task-verifications/self-education.servic
     MentorsService,
     CourseAccessService,
     InterviewsService,
+    InterviewFeedbackService,
     TasksService,
     CourseStatsService,
     CourseCrossCheckService,
@@ -140,6 +144,7 @@ import { SelfEducationService } from './task-verifications/self-education.servic
     DistributeStudentsService,
     SelfEducationService,
     TaskVerificationsService,
+    CourseMentorsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

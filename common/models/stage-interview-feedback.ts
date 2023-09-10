@@ -9,7 +9,7 @@ interface StageInterviewFeedback {
     otherAchievements: string | null;
     militaryService: 'served' | 'liable' | 'notLiable' | null;
   };
-  skills: {
+  skills?: {
     [index: string]: any;
     htmlCss: {
       level: number | null;
@@ -52,15 +52,6 @@ export interface StageInterviewFeedbackJson extends StageInterviewFeedback {
   english: {
     levelStudentOpinion: EnglishLevel | null;
     levelMentorOpinion: EnglishLevel | null;
-    whereAndWhenLearned: string | null;
-    comment: string | null;
-  };
-}
-
-export interface StageInterviewFeedbackState extends StageInterviewFeedback {
-  english: {
-    levelStudentOpinion: number | null;
-    levelMentorOpinion: number | null;
     whereAndWhenLearned: string | null;
     comment: string | null;
   };

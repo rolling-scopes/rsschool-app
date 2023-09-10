@@ -5,21 +5,18 @@ import { useAsync } from 'react-use';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
 import { CourseEvent, CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { ALL_TIMEZONES } from '../../../configs/timezones';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
 import { EventDto, EventsApi } from 'api';
 
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CourseRole } from 'services/models';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
-
-type Props = CoursePageProps;
 
 const timeZoneRenderer = (timeZone: string) => (value: string) => {
   return value ? dayjs(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
@@ -27,8 +24,9 @@ const timeZoneRenderer = (timeZone: string) => (value: string) => {
 
 const eventsApi = new EventsApi();
 
-function Page(props: Props) {
-  const courseId = props.course.id;
+function Page() {
+  const { course, courses } = useActiveCourseContext();
+  const courseId = course.id;
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [modalData, setModalData] = useState<Partial<CourseEvent> | null>(null);
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -73,7 +71,7 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
+    <AdminPageLayout showCourseName loading={loading} courses={courses}>
       <Button type="primary" onClick={handleAddEvent}>
         Add Event
       </Button>
@@ -109,8 +107,6 @@ function Page(props: Props) {
     </AdminPageLayout>
   );
 }
-
-export default withCourseData(withSession(Page));
 
 function getColumns(
   handleEditItem: (event: Partial<CourseEvent>) => void,
@@ -156,4 +152,14 @@ function getColumns(
       ),
     },
   ];
+}
+
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
 }

@@ -43,19 +43,23 @@ export class InterviewsService {
     });
   }
 
-  public static getStageInterviewRating = (stageInterviews: StageInterview[]) => {
+  public static getLastStageInterview = (stageInterviews: StageInterview[]) => {
     const [lastInterview] = stageInterviews
       .filter(interview => interview.isCompleted)
-      .map(({ stageInterviewFeedbacks }) =>
+      .map(({ stageInterviewFeedbacks, score, courseTask }) =>
         stageInterviewFeedbacks.map(feedback => ({
           date: feedback.updatedDate,
-          rating: InterviewsService.getInterviewRatings(JSON.parse(feedback.json) as StageInterviewFeedbackJson).rating,
+          rating:
+            score ??
+            InterviewsService.getInterviewRatings(JSON.parse(feedback.json) as StageInterviewFeedbackJson).rating,
+          version: feedback.version,
+          maxScore: courseTask?.maxScore,
         })),
       )
       .reduce((acc, cur) => acc.concat(cur), [])
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    return lastInterview && lastInterview.rating !== undefined ? lastInterview.rating : null;
+    return lastInterview;
   };
 
   public async getInterviewRegisteredStudents(courseId: number, courseTaskId: number): Promise<AvailableStudentDto[]> {
@@ -97,15 +101,19 @@ export class InterviewsService {
       .innerJoin('student.user', 'user')
       .leftJoin('student.stageInterviews', 'si')
       .leftJoin('si.stageInterviewFeedbacks', 'sif')
+      .leftJoin('si.courseTask', 'courseTask')
       .addSelect([
         ...UsersService.getPrimaryUserFields(),
         'si.id',
         'si.isGoodCandidate',
         'si.isCompleted',
         'si.isCanceled',
+        'si.score',
         'sif.json',
         'sif.updatedDate',
+        'sif.version',
         'sis.createdDate',
+        'courseTask.maxScore',
       ])
       .where(
         [
@@ -131,6 +139,7 @@ export class InterviewsService {
       .map(student => {
         const { id, user, totalScore } = student;
         const stageInterviews: StageInterview[] = student.stageInterviews || [];
+        const lastStageInterview = InterviewsService.getLastStageInterview(stageInterviews);
         return {
           id,
           totalScore,
@@ -139,29 +148,35 @@ export class InterviewsService {
           cityName: user.cityName,
           countryName: user.countryName,
           isGoodCandidate: this.isGoodCandidate(stageInterviews),
-          rating: InterviewsService.getStageInterviewRating(stageInterviews),
+          rating: lastStageInterview?.rating,
+          maxScore: lastStageInterview?.maxScore,
+          feedbackVersion: lastStageInterview?.version,
           registeredDate: raw.find(item => item.student_id === student.id)?.sis_createdDate,
         };
       });
+
     return result;
   }
 
+  /**
+   * @deprecated - should be removed once Artsiom A. makes migration of the legacy feedback format
+   */
   private static getInterviewRatings({ skills, programmingTask, resume }: StageInterviewFeedbackJson) {
-    const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
-    const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
+    const commonSkills = Object.values(skills?.common ?? {}).filter(Boolean) as number[];
+    const dataStructuresSkills = Object.values(skills?.dataStructures ?? {}).filter(Boolean) as number[];
 
-    const htmlCss = skills.htmlCss.level;
+    const htmlCss = skills?.htmlCss.level;
     const common = commonSkills.reduce((acc, cur) => acc + cur, 0) / commonSkills.length;
     const dataStructures = dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length;
 
     if (resume?.score !== undefined) {
-      const rating = resume.score / 10;
+      const rating = resume.score;
       return { rating, htmlCss, common, dataStructures };
     }
 
     const ratingsCount = 4;
     const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
-    const rating = ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0;
+    const rating = (ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0) * 10;
 
     return { rating, htmlCss, common, dataStructures };
   }
