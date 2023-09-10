@@ -212,7 +212,7 @@ function Page() {
           style={{ marginBottom: 24 }}
         />
         <MentorRegistryTableContainer
-          mentors={filterData(data, false)}
+          mentors={data}
           courses={courses}
           activeTab={activeTab}
           disciplines={disciplines}
