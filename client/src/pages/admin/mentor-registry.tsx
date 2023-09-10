@@ -6,7 +6,7 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typ
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
 import { MentorRegistryService } from 'services/mentorRegistry';
-import { CourseRole } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { ModalForm } from 'components/Forms';
 import { MentorRegistryResendModal } from 'modules/MentorRegistry/components/MentorRegistryResendModal';
 import { MentorRegistryDeleteModal } from 'modules/MentorRegistry/components/MentorRegistryDeleteModal';
@@ -18,7 +18,8 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { CoursesService } from 'services/courses';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -35,14 +36,15 @@ type ModalData = Partial<{
 }>;
 
 const mentorRegistryService = new MentorRegistryService();
+const coursesService = new CoursesService();
 const disciplinesApi = new DisciplinesApi();
 
 function Page() {
-  const { courses } = useActiveCourseContext();
   const [loading, withLoading] = useLoading(false);
 
   const [api, contextHolder] = notification.useNotification();
 
+  const [courses, setCourses] = useState<Course[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState<MentorRegistryDto[]>([]);
@@ -61,9 +63,10 @@ function Page() {
   };
 
   const loadData = withLoading(async () => {
-    const allData = await mentorRegistryService.getMentors();
+    const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
     setAllData(allData);
+    setCourses(courses);
     updateData(showAll, allData);
     setDisciplines(disciplines);
   });
@@ -209,7 +212,7 @@ function Page() {
           style={{ marginBottom: 24 }}
         />
         <MentorRegistryTableContainer
-          mentors={data}
+          mentors={filterData(data, false)}
           courses={courses}
           activeTab={activeTab}
           disciplines={disciplines}
