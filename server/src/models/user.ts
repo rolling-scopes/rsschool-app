@@ -221,13 +221,4 @@ export class User {
     { nullable: true },
   )
   notificationConnections: NotificationUserConnection[] | null;
-
-  @Column({ type: Boolean, default: false })
-  jobFound: boolean;
-
-  @Column({ type: String, default: null, nullable: true })
-  companyName: string
-
-  @Column({ type: String, default: null, nullable: true })
-  officeLocation: string
 }
