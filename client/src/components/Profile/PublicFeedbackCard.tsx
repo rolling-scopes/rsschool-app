@@ -44,7 +44,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
 
   private countBadges = () => {
     const receivedBadges = this.props.data;
-    const badgesCount: any = {};
+    const badgesCount: Record<string, number> = {};
 
     receivedBadges.forEach(({ badgeId }) => {
       if (badgeId) {
@@ -87,8 +87,8 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                 <Text strong>Total badges:</Text> {badges.length}
               </div>
               <div style={{ marginBottom: 30 }}>
-                {Object.keys(badgesCount).map(id => (
-                  <HeroesCountBadge key={`badge-${id}`} badge={{ id, count: badgesCount[id] }} />
+                {Object.entries(badgesCount).map(([id, count]) => (
+                  <HeroesCountBadge key={`badge-${id}`} badge={{ id, count }} />
                 ))}
               </div>
               <div style={{ marginBottom: 0 }}>
