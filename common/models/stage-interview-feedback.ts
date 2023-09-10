@@ -9,7 +9,7 @@ interface StageInterviewFeedback {
     otherAchievements: string | null;
     militaryService: 'served' | 'liable' | 'notLiable' | null;
   };
-  skills: {
+  skills?: {
     [index: string]: any;
     htmlCss: {
       level: number | null;

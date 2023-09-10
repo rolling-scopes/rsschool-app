@@ -16,7 +16,7 @@ export interface MentorDashboardProps extends CoursePageProps {
 }
 
 function parseToken(token: string): Session {
-  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()) as Session;
 }
 
 export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
