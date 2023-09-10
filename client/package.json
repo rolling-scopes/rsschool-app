@@ -27,7 +27,7 @@
     "@ant-design/compatible": "5.1.1",
     "@ant-design/plots": "1.2.5",
     "@sentry/nextjs": "7.68.0",
-    "antd": "5.8.6",
+    "antd": "5.9.0",
     "axios": "1.5.0",
     "cookie": "0.5.0",
     "csvtojson": "2.0.10",

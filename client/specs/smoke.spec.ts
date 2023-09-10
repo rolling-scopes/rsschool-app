@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 
+// eslint-disable-next-line turbo/no-undeclared-env-vars
 const url = process.env.BASE_URL || 'http://localhost:3000';
 
 test.beforeEach(async ({ page }) => {
@@ -11,9 +12,8 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Home', () => {
   test('should have link to Score page', async ({ page }) => {
-    expect(await page.locator('text="Score"').isVisible()).toBe(true);
+    const href = await page.locator('.ant-menu-title-content').filter({ hasText: 'Score' }).getAttribute('href');
 
-    const href = await page.locator('css=a >> text="Score"').getAttribute('href');
-    expect(href.includes('/course/score')).toBeTruthy();
+    expect(href?.includes('/course/score')).toBeTruthy();
   });
 });

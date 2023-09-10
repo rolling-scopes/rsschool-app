@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1",
-    "prettier": "3.0.2",
+    "prettier": "3.0.3",
     "turbo": "1.10.13"
   }
 }

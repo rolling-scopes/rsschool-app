@@ -13,15 +13,15 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-npm
         with:

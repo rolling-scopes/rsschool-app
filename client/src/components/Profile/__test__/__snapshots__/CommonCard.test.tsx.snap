@@ -3,7 +3,7 @@
 exports[`CommonCard Should render correctly if is null content passed 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-18iikkb"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`CommonCard Should render correctly if is null content passed 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-18iikkb"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -33,7 +33,7 @@ exports[`CommonCard Should render correctly if is null content passed 1`] = `
       class="ant-card-body"
     >
       <div
-        class="css-dev-only-do-not-override-nnuwmp ant-empty ant-empty-normal"
+        class="css-dev-only-do-not-override-18iikkb ant-empty ant-empty-normal"
       >
         <div
           class="ant-empty-image"
@@ -85,7 +85,7 @@ exports[`CommonCard Should render correctly if is null content passed 1`] = `
 exports[`CommonCard Should render correctly if just basic props is present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-18iikkb"
   >
     <div
       class="ant-card-head"
@@ -97,7 +97,7 @@ exports[`CommonCard Should render correctly if just basic props is present 1`] =
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-18iikkb"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>

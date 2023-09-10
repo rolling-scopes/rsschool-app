@@ -8,13 +8,13 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh;"
   >
     <div
-      class="ant-spin-nested-loading css-dev-only-do-not-override-nnuwmp"
+      class="ant-spin-nested-loading css-dev-only-do-not-override-18iikkb"
     >
       <div>
         <div
           aria-busy="true"
           aria-live="polite"
-          class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-nnuwmp"
+          class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-18iikkb"
           style="font-size: 20px;"
         >
           <span
