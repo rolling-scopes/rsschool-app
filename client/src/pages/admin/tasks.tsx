@@ -181,7 +181,7 @@ function createRecord(values: any) {
     tags: values.tags,
     skills: values.skills?.map((skill: string) => skill.toLowerCase()),
     disciplineId: values.discipline,
-    attributes: JSON.parse(values.attributes ?? '{}'),
+    attributes: JSON.parse(values.attributes ?? '{}') as Record<string, unknown>,
   };
   return data;
 }
