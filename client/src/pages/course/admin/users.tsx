@@ -258,16 +258,19 @@ function createRecord(values: any) {
 }
 
 function createRecords(groups: UserGroupDto[]) {
-  const data = groups.reduce((users, group) => {
-    group.users.forEach(({ id }) => {
-      users[id] = users[id] ?? {};
-      users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
-      users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
-      users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
-      users[id].isActivist = users[id].isActivist || group.roles.includes(CourseRole.Activist);
-    });
-    return users;
-  }, {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean; isActivist: boolean }>);
+  const data = groups.reduce(
+    (users, group) => {
+      group.users.forEach(({ id }) => {
+        users[id] = users[id] ?? {};
+        users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
+        users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
+        users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
+        users[id].isActivist = users[id].isActivist || group.roles.includes(CourseRole.Activist);
+      });
+      return users;
+    },
+    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean; isActivist: boolean }>,
+  );
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
 
