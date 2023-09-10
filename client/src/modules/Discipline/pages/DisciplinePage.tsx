@@ -1,17 +1,16 @@
-import { DisciplineDto, DisciplinesApi, ProfileCourseDto } from 'api';
+import { DisciplineDto, DisciplinesApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { DisciplineModal } from '../components/DisciplineModal';
 import { useCallback, useState } from 'react';
 import { Button, Layout, message } from 'antd';
 import { DisciplineTable } from '../components/DisciplineTable';
 import { useAsync } from 'react-use';
-import { Session } from 'components/withSession';
-
-type Props = { session: Session; courses: ProfileCourseDto[] };
+import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const disciplinesApi = new DisciplinesApi();
 
-export const DisciplinePage = ({ session, courses }: Props) => {
+export const DisciplinePage = () => {
+  const { courses } = useActiveCourseContext();
   const [disciplines, setDisciplines] = useState([] as DisciplineDto[]);
   const [discipline, setDiscipline] = useState<DisciplineDto | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,7 +50,7 @@ export const DisciplinePage = ({ session, courses }: Props) => {
   useAsync(loadDisciplines, []);
 
   return (
-    <AdminPageLayout session={session} title="Manage Disciplines" loading={loading} courses={courses}>
+    <AdminPageLayout title="Manage Disciplines" loading={loading} courses={courses}>
       <Layout.Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleModalShow} style={{ marginBottom: '25px' }}>
           Add Disciplines

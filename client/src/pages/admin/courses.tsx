@@ -13,24 +13,23 @@ import {
   Select,
   Table,
 } from 'antd';
-import withSession, { Session } from 'components/withSession';
+import { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { dateUtcRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
 import dayjs from 'dayjs';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto, CoursesApi, UpdateCourseDto } from 'api';
 import { Course, CourseRole } from 'services/models';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { isCourseManager } from 'domain/user';
 import utc from 'dayjs/plugin/utc';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 dayjs.extend(utc);
 
 const { Content } = Layout;
-type Props = { session: Session; courses: Course[] };
 
 const disciplinesApi = new DisciplinesApi();
 const courseService = new CoursesService();
@@ -41,8 +40,10 @@ function filterCourses(session: Session, courses: Course[]) {
   return courses.filter(course => isCourseManager(session, course.id));
 }
 
-function Page(props: Props) {
-  const [courses, setCourses] = useState<Course[]>(filterCourses(props.session, props.courses));
+function Page() {
+  const session = useContext(SessionContext);
+  const { courses: allCourses } = useActiveCourseContext();
+  const [courses, setCourses] = useState<Course[]>(filterCourses(session, allCourses));
   const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
@@ -56,7 +57,7 @@ function Page(props: Props) {
       discordServersService.getDiscordServers(),
       disciplinesApi.getDisciplines(),
     ]);
-    setCourses(filterCourses(props.session, courses));
+    setCourses(filterCourses(session, courses));
     setDiscordServers(discordServers);
     setDisciplines(disciplines);
   };
@@ -250,7 +251,7 @@ function Page(props: Props) {
   }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Courses" loading={loading} courses={courses}>
+    <AdminPageLayout title="Manage Courses" loading={loading} courses={allCourses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Course
@@ -380,6 +381,12 @@ function getInitialValues(modalData: Partial<Course>) {
   };
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

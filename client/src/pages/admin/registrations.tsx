@@ -3,21 +3,15 @@ import { Button, Col, Row, Select, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { stringSorter } from 'components/Table';
-import withCourses from 'components/withCourses';
-import withSession, { Session } from 'components/withSession';
 import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
-import { Course } from 'services/models';
+import { Course, CourseRole } from 'services/models';
 import { AdminPageLayout } from 'components/PageLayout';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
-
-type Props = {
-  courses: Course[];
-  session: Session;
-};
 
 type Stats = {
   approved: number;
@@ -36,8 +30,9 @@ interface Registration {
   githubId: string;
 }
 
-function Page(props: Props) {
-  const [courses] = useState((props.courses || []).filter((course: Course) => !course.completed && !course.inviteOnly));
+function Page() {
+  const { courses } = useActiveCourseContext();
+  const [activeCourses] = useState((courses || []).filter((course: Course) => !course.completed && !course.inviteOnly));
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -126,16 +121,16 @@ function Page(props: Props) {
 
   const handleReject = async (e: any) => handleSubmit(e, 'rejected');
 
-  const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
+  const [description] = activeCourses.filter(c => c.id === courseId).map(c => c.description);
   const rowSelection = { onChange: changeSelection };
 
   return (
-    <AdminPageLayout title="Registrations" session={props.session} loading={loading} courses={courses}>
+    <AdminPageLayout title="Registrations" loading={loading} courses={courses}>
       <Col>
         <Row gutter={defaultRowGutter}>
           <Col>
             <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
-              {courses.map(course => (
+              {activeCourses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
                   {course.name}{' '}
                   {`(${course.discipline?.name ? `${course.discipline.name}, ` : ''}${formatMonthFriendly(
@@ -238,4 +233,12 @@ function Page(props: Props) {
   );
 }
 
-export default withCourses(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

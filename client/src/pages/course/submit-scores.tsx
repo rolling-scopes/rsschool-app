@@ -1,19 +1,18 @@
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { withSession } from 'components/withSession';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
-import withCourseData from 'components/withCourseData';
 import csv from 'csvtojson';
 import isUndefined from 'lodash/isUndefined';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CourseRole } from 'services/models';
 
 interface SubmitResult {
   status: string;
@@ -23,9 +22,11 @@ interface SubmitResult {
 
 const courseTasksApi = new CoursesTasksApi();
 
-export function Page(props: CoursePageProps) {
+export function SubmitScorePage() {
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const [form] = Form.useForm();
-  const courseId = props.course.id;
+  const courseId = course.id;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loading, setLoading] = useState(false);
@@ -34,9 +35,7 @@ export function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const { data } = await courseTasksApi.getCourseTasks(courseId);
-    setCourseTasks(
-      data.filter(item => item.taskOwner?.id === props.session.id || isCourseManager(props.session, courseId)),
-    );
+    setCourseTasks(data.filter(item => item.taskOwner?.id === session.id || isCourseManager(session, courseId)));
   }, [courseService]);
 
   const handleTaskChange = () => setSubmitResults([]);
@@ -85,12 +84,7 @@ export function Page(props: CoursePageProps) {
   const skippedStudents = skipped && skipped.messages ? skipped.messages : [];
 
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Submit Scores"
-      courseName={props.course.name}
-      githubId={props.session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title="Submit Scores" showCourseName>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
         <h3>Uploading rules</h3>
@@ -242,4 +236,14 @@ async function uploadResults(
   return submitResults;
 }
 
-export default withCourseData(withSession(Page));
+function Page() {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <SubmitScorePage />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}
+
+export default Page;

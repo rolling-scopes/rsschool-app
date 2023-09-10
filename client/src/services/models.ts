@@ -20,9 +20,9 @@ export interface Mentor {
 }
 
 export interface CoursePageProps {
-  session: Session;
+  session?: Session;
   course: Course;
-  params: Record<string, string>;
+  params?: Record<string, string>;
 }
 
 export type CourseOnlyPageProps = {

@@ -1,19 +1,17 @@
 import { Button, Col, Form, Input, Layout, message, Popconfirm, Row, Select, Table, Tag } from 'antd';
 import { UpdateUserGroupDto, UserGroupApi, UserGroupDto } from 'api';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { ModalForm } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { AdminPageLayout } from 'components/PageLayout';
 import { stringSorter } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
-import { Session, withSession } from 'components/withSession';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { Course, CourseRole } from 'services/models';
+import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
-type Props = { session: Session; courses: Course[] };
 
 enum ModalAction {
   update = 'update',
@@ -26,7 +24,8 @@ const rolesColors: Record<string, string> = {
   manager: 'volcano',
 };
 
-function Page(props: Props) {
+function Page() {
+  const { courses } = useActiveCourseContext();
   const [data, setData] = useState([] as UserGroupDto[]);
   const [modalData, setModalData] = useState(null as Partial<UserGroupDto & { id: number }> | null);
   const [modalAction, setModalAction] = useState(ModalAction.update);
@@ -129,7 +128,7 @@ function Page(props: Props) {
   );
 
   return (
-    <AdminPageLayout session={props.session} title="Manage User Groups" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage User Groups" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add User Group
@@ -224,6 +223,12 @@ function getInitialValues(modalData: Partial<UserGroupDto>) {
   };
 }
 
-export { getServerSideProps };
-
-export default withSession(Page, { onlyForAdmin: true });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider adminOnly>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

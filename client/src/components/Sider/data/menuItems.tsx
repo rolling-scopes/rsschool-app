@@ -130,7 +130,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     access: session => isAdmin(session),
   },
   {
-    name: 'Propmts',
+    name: 'Prompts',
     key: 'prompts',
     icon: <FileTextOutlined />,
     href: '/admin/prompts',

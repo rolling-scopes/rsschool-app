@@ -1,18 +1,12 @@
 import { useState } from 'react';
-import { useAsync, useLocalStorage } from 'react-use';
+import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
 import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import withSession, { Session } from 'components/withSession';
-import { CoursesService } from 'services/courses';
-import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
-
-type Props = {
-  session: Session;
-};
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 interface IGratitude {
   userIds: number[];
@@ -23,21 +17,15 @@ interface IGratitude {
 
 const gratitudesApi = new GratitudesApi();
 const userService = new UserService();
-const coursesService = new CoursesService();
 
-function Page(props: Props) {
+function GratitudePage() {
+  const { course, courses } = useActiveCourseContext();
   const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const [courses, setCourses] = useState([] as Course[]);
-  const [storageValue] = useLocalStorage('activeCourseId');
 
   useAsync(async () => {
-    const courses = await coursesService.getCourses();
-    const savedCourseId = Number(storageValue);
-    const courseId = savedCourseId ? savedCourseId : courses[0].id;
-    const { data: badges } = await gratitudesApi.getBadges(courseId);
-    setCourses(courses);
+    const { data: badges } = await gratitudesApi.getBadges(course.id);
     setBadges(badges);
   }, []);
 
@@ -67,7 +55,7 @@ function Page(props: Props) {
   };
 
   return (
-    <PageLayoutSimple loading={loading} title="#gratitude" githubId={props.session.githubId}>
+    <PageLayoutSimple loading={loading} title="#gratitude">
       <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
@@ -91,7 +79,7 @@ function Page(props: Props) {
         <Form.Item
           name="courseId"
           label="Course"
-          initialValue={Number(storageValue)}
+          initialValue={course.id}
           rules={[{ required: true, message: 'Please select a course' }]}
         >
           <Select placeholder="Select a course" onChange={onCourseChange}>
@@ -142,4 +130,14 @@ function Page(props: Props) {
   );
 }
 
-export default withSession(Page);
+function Page() {
+  return (
+    <SessionProvider>
+      <ActiveCourseProvider>
+        <GratitudePage />
+      </ActiveCourseProvider>
+    </SessionProvider>
+  );
+}
+
+export default Page;

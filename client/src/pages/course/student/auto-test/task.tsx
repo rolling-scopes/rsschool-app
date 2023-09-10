@@ -1,4 +1,4 @@
-import { SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { getCourseProps, noAccessResponse } from 'modules/Course/data/getCourseProps';
 import { AutoTestTaskProps, Task } from 'modules/AutoTest/pages';
 import { GetServerSideProps } from 'next';
@@ -9,7 +9,9 @@ import { getTokenFromContext } from 'utils/server';
 function Page(props: AutoTestTaskProps) {
   return (
     <SessionProvider course={props.course}>
-      <Task {...props} />
+      <ActiveCourseProvider>
+        <Task {...props} />
+      </ActiveCourseProvider>
     </SessionProvider>
   );
 }

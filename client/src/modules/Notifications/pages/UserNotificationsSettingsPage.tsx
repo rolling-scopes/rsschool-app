@@ -8,15 +8,12 @@ import {
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
-import { Session } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents, Connection } from '../components/Consents';
 import { UpdateNotificationUserSettingsDto } from 'api';
 
-type Props = { session: Session };
-
-export function UserNotificationsPage(props: Props) {
+export function UserNotificationsPage() {
   const [notifications, setNotifications] = useState<UserNotificationSettings[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
@@ -72,7 +69,7 @@ export function UserNotificationsPage(props: Props) {
   const hasConnections = Object.keys(NotificationChannel).length !== disabledChannels.length;
 
   return (
-    <PageLayout loading={loading} title="Notifications" githubId={props.session.githubId}>
+    <PageLayout loading={loading} title="Notifications" showCourseName>
       <Space direction="vertical" style={{ width: '100%' }}>
         {!loading && <Consents email={email} telegram={telegram} discord={discord} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>

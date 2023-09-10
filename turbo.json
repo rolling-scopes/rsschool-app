@@ -46,7 +46,8 @@
         "RSSHCOOL_PG_PASSWORD",
         "RSSHCOOL_PG_USERNAME",
         "RSSHCOOL_UI_GCP_MAPS_API_KEY",
-        "RSSHCOOL_OPENAI_API_KEY"
+        "RSSHCOOL_OPENAI_API_KEY",
+        "SENTRY_DSN"
       ]
     },
     "lint": {},

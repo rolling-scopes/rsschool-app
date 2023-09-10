@@ -1,6 +1,14 @@
-import { withSession } from 'components/withSession';
-import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { ScorePage } from 'modules/Score/pages/ScorePage';
 
-export { getServerSideProps };
-export default withSession(ScorePage);
+function Page() {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider>
+        <ScorePage />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}
+
+export default Page;

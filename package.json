@@ -22,6 +22,7 @@
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
+    "@total-typescript/ts-reset": "^0.5.1",
     "prettier": "3.0.2",
     "turbo": "1.10.13"
   }

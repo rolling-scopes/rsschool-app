@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager, isDementor } from 'domain/user';
-import { CoursePageProps } from 'services/models';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
 import { message } from 'antd';
@@ -9,10 +8,13 @@ import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
 import { useModalForm } from 'hooks';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 const teamDistributionApi = new TeamDistributionApi();
 
-function TeamDistributions({ session, course }: CoursePageProps) {
+function TeamDistributions() {
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);
   const {
     open: openTeamDistributionModal,
@@ -77,13 +79,7 @@ function TeamDistributions({ session, course }: CoursePageProps) {
   };
 
   return (
-    <PageLayout
-      loading={loading}
-      title="RS Teams"
-      background="#F0F2F5"
-      githubId={session.githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={loading} title="RS Teams" background="#F0F2F5" showCourseName>
       {openTeamDistributionModal && (
         <TeamDistributionModal
           data={teamDistributionData}
