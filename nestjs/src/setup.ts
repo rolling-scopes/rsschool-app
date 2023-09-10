@@ -4,6 +4,7 @@ import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { ValidationFilter } from './core/validation';
+import { HttpAdapterHost } from '@nestjs/core';
 
 export function setupApp(app: INestApplication) {
   const logger = app.get(Logger);
@@ -15,7 +16,8 @@ export function setupApp(app: INestApplication) {
     Sentry.init({ dsn: process.env.SENTRY_DSN });
   }
 
-  app.useGlobalFilters(new EntityNotFoundFilter(), new SentryFilter());
+  const httpAdapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new EntityNotFoundFilter(), new SentryFilter(httpAdapterHost.httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
