@@ -39,7 +39,7 @@ export function AdminSider(props: Props) {
   const adminMenuItems = getAdminMenuItems(session);
   const courseManagementMenuItems = useMemo(
     () => getCourseManagementMenuItems(session, props.activeCourse ?? activeCourse),
-    [activeCourse],
+    [activeCourse, props.activeCourse],
   );
 
   const menuIconProps = {

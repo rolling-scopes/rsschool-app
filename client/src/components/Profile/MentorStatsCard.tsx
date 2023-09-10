@@ -66,7 +66,7 @@ export function MentorStatsCard(props: Props) {
               </p>
             </div>
             {props.isAdmin ? (
-              <Button onClick={() => setIsEndorsmentModalVisible(true)} icon={<FileTextOutlined />} size="small">
+              <Button onClick={() => setIsEndorsmentModalVisible(true)} icon={<FileTextOutlined />} type="primary">
                 Get Endorsment
               </Button>
             ) : null}
