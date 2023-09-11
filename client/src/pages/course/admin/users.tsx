@@ -111,6 +111,11 @@ function Page() {
               <Checkbox>Dementor</Checkbox>
             </Form.Item>
           </Col>
+          <Col span={8}>
+            <Form.Item name="isActivist" valuePropName="checked">
+              <Checkbox>Activist</Checkbox>
+            </Form.Item>
+          </Col>
         </Row>
       </ModalForm>
     );
@@ -226,6 +231,11 @@ function getColumns(handleEditItem: any) {
       render: boolIconRenderer,
     },
     {
+      title: 'Activist',
+      dataIndex: 'isActivist',
+      render: boolIconRenderer,
+    },
+    {
       title: 'Actions',
       dataIndex: 'actions',
       render: (_: any, record: CourseUser) => (
@@ -242,6 +252,7 @@ function createRecord(values: any) {
     isManager: values.isManager,
     isSupervisor: values.isSupervisor,
     isDementor: values.isDementor,
+    isActivist: values.isActivist,
   };
   return data;
 }
@@ -254,10 +265,11 @@ function createRecords(groups: UserGroupDto[]) {
         users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
         users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
         users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
+        users[id].isActivist = users[id].isActivist || group.roles.includes(CourseRole.Activist);
       });
       return users;
     },
-    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean }>,
+    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean; isActivist: boolean }>,
   );
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }

@@ -3433,9 +3433,20 @@
           "isManager": { "type": "boolean" },
           "isSupervisor": { "type": "boolean" },
           "isJuryActivist": { "type": "boolean" },
-          "isDementor": { "type": "boolean" }
+          "isDementor": { "type": "boolean" },
+          "isActivist": { "type": "boolean" }
         },
-        "required": ["id", "courseId", "name", "githubId", "isManager", "isSupervisor", "isJuryActivist", "isDementor"]
+        "required": [
+          "id",
+          "courseId",
+          "name",
+          "githubId",
+          "isManager",
+          "isSupervisor",
+          "isJuryActivist",
+          "isDementor",
+          "isActivist"
+        ]
       },
       "UpdateCourseUserDto": {
         "type": "object",
@@ -3443,18 +3454,20 @@
           "isManager": { "type": "boolean" },
           "isSupervisor": { "type": "boolean" },
           "isDementor": { "type": "boolean" },
+          "isActivist": { "type": "boolean" },
           "userId": { "type": "number" }
         },
-        "required": ["isManager", "isSupervisor", "isDementor", "userId"]
+        "required": ["isManager", "isSupervisor", "isDementor", "isActivist", "userId"]
       },
       "CourseRolesDto": {
         "type": "object",
         "properties": {
           "isManager": { "type": "boolean" },
           "isSupervisor": { "type": "boolean" },
-          "isDementor": { "type": "boolean" }
+          "isDementor": { "type": "boolean" },
+          "isActivist": { "type": "boolean" }
         },
-        "required": ["isManager", "isSupervisor", "isDementor"]
+        "required": ["isManager", "isSupervisor", "isDementor", "isActivist"]
       },
       "StudentId": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "MentorDetailsDto": {
@@ -4232,7 +4245,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },
@@ -4253,7 +4266,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },
@@ -4268,7 +4281,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor"]
+              "enum": ["taskOwner", "manager", "supervisor", "student", "mentor", "dementor", "activist"]
             }
           }
         },

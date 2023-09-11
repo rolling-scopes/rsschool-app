@@ -12,6 +12,7 @@ export class CourseUserDto {
     this.isSupervisor = courseUser.isSupervisor;
     this.isJuryActivist = courseUser.isJuryActivist;
     this.isDementor = courseUser.isDementor;
+    this.isActivist = courseUser.isActivist;
   }
 
   @IsNotEmpty()
@@ -47,4 +48,8 @@ export class CourseUserDto {
   @IsBoolean()
   @ApiProperty()
   isDementor: boolean;
+
+  @IsBoolean()
+  @ApiProperty()
+  isActivist: boolean;
 }

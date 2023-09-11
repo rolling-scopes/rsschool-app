@@ -20,6 +20,7 @@ const mockCourseUser = {
   isSupervisor: true,
   isJuryActivist: false,
   isDementor: true,
+  isActivist: true,
   user: {
     id: mockUserId,
     firstName: ' Foo ',
@@ -37,6 +38,7 @@ const mockUsersToInsert = [
     isDementor: true,
     isManager: true,
     isSupervisor: true,
+    isActivist: false,
   },
 ];
 const mockUsersToUpdate = [
@@ -45,12 +47,14 @@ const mockUsersToUpdate = [
     isDementor: true,
     isManager: false,
     isSupervisor: true,
+    isActivist: true,
   },
   {
     userId: mockUserId2,
     isDementor: true,
     isManager: true,
     isSupervisor: true,
+    isActivist: false,
   },
 ];
 
