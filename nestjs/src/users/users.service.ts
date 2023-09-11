@@ -1,4 +1,4 @@
-import { EmploymentRecord, User } from '@entities/user';
+import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -45,32 +45,6 @@ export class UsersService {
     return this.userRepository.find({
       where: { id: In(userIds) },
     });
-  }
-
-  public async getLastEmploymentRecord(userId: number): Promise<EmploymentRecord | undefined> {
-    const { employmentHistory } = await this.userRepository.findOneOrFail({
-      where: { id: userId },
-      select: ['employmentHistory'],
-    });
-
-    return employmentHistory.at(-1);
-  }
-
-  public async saveNewEmploymentRecord(userId: number, employmentRecord: EmploymentRecord) {
-    const { employmentHistory } = await this.userRepository.findOneOrFail({
-      where: { id: userId },
-      select: ['employmentHistory'],
-    });
-
-    const previousRecord = employmentHistory.at(-1);
-    if (previousRecord) {
-      previousRecord.dateTo = employmentRecord.dateFrom;
-      previousRecord.toPresent = false;
-    }
-
-    const updatedHistory = [...employmentHistory.slice(0, -1), previousRecord, employmentRecord].filter(Boolean);
-
-    return await this.userRepository.update(userId, { employmentHistory: updatedHistory });
   }
 
   public getFullName({ firstName, lastName }: { firstName: string; lastName: string }) {
