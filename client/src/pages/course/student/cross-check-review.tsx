@@ -12,18 +12,16 @@ import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
-import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
 import { CourseRole } from 'services/models';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import { CrossCheckCriteriaForm, TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -35,7 +33,9 @@ const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 
 const criteriaApi = new TasksCriteriaApi();
 
-function Page(props: CoursePageProps) {
+function Page() {
+  const { course } = useActiveCourseContext();
+  const session = useContext(SessionContext);
   const router = useRouter();
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
   const queryGithubId = router.query.githubId ?? null;
@@ -59,9 +59,9 @@ function Page(props: CoursePageProps) {
   const [score, setScore] = useState(0);
   const [isSkipped, setIsSkipped] = useState(false);
 
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
 
-  const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [props.course.id]);
+  const { value: courseTasks = [] } = useAsync(() => courseService.getCourseCrossCheckTasks(), [course.id]);
 
   const loadStudentScoreHistory = async (githubId: string) => {
     if (!criteriaId || !courseTaskId) return;
@@ -206,7 +206,7 @@ function Page(props: CoursePageProps) {
     if (courseTask == null) {
       return;
     }
-    const assignments = await courseService.getCrossCheckAssignments(props.session.githubId, courseTask.id);
+    const assignments = await courseService.getCrossCheckAssignments(session.githubId, courseTask.id);
     const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatus.Distributed;
     setAssignments(assignments);
     setCourseTaskId(courseTask.id);
@@ -233,12 +233,7 @@ function Page(props: CoursePageProps) {
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
-    <PageLayout
-      loading={loading}
-      title="Cross-Check Review"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
-    >
+    <PageLayout loading={loading} title="Cross-Check Review" showCourseName>
       {contextHolder}
       <Row gutter={24}>
         <Col {...colSizes}>
@@ -277,7 +272,7 @@ function Page(props: CoursePageProps) {
             </Form.Item>
             {isUsernameVisible ? (
               <Button size="large" type="primary" htmlType="submit" icon={<EyeFilled />} disabled={submissionDisabled}>
-                Submit review as {props.session.githubId}
+                Submit review as {session.githubId}
               </Button>
             ) : (
               <Button
@@ -296,9 +291,9 @@ function Page(props: CoursePageProps) {
           <CrossCheckHistory
             state={state}
             courseTaskId={courseTaskId}
-            courseId={props.course.id}
-            sessionId={props.session.id}
-            sessionGithubId={props.session.githubId}
+            courseId={course.id}
+            sessionId={session.id}
+            sessionGithubId={session.githubId}
             maxScore={maxScore}
             setHistoricalCommentSelected={setHistoricalCommentSelected}
           />
@@ -308,4 +303,12 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, { requiredCourseRole: CourseRole.Student }));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Student]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

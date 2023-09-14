@@ -28,14 +28,7 @@ function Task({ course, task }: AutoTestTaskProps) {
   }
 
   return (
-    <PageLayout
-      loading={false}
-      title="Auto-tests"
-      background="#F0F2F5"
-      withMargin={false}
-      githubId={githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" withMargin={false} showCourseName>
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
       <div style={{ margin: 16 }}>
         {!answers ? (

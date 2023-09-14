@@ -24,18 +24,19 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
       fileReader.readAsText(info.file.originFileObj as Blob, 'UTF-8');
       fileReader.onload = (e: Event) => {
         const target = e.target as Element & { result: string };
-        const { criteria } = JSON.parse(target.result);
+        const { criteria } = JSON.parse(target.result) as { criteria: CriteriaDto[] };
         const transformedCriteria = criteria?.map((item: CriteriaJSONType) => {
           if (item.type === TaskType.Title) {
             return { type: item.type, text: item.title };
-          } else return item;
+          }
+          return item;
         });
         if (!transformedCriteria?.length) {
           message.warning(`There is no criteria for downloading`);
           return;
         }
         message.success(`${info.file.name} file uploaded successfully`);
-        onLoad(transformedCriteria);
+        onLoad(transformedCriteria as CriteriaDto[]);
       };
     }
   };

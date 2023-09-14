@@ -1,17 +1,17 @@
+import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { Session } from 'components/withSession';
 import { useStudentData } from 'modules/Registry/hooks';
 import { NoCourses, RegistrationForm } from 'modules/Registry/components';
+import { SessionContext } from 'modules/Course/contexts';
 
 type Props = {
-  session: Session;
   courseAlias?: string;
 };
 
-export function StudentRegistry({ session, courseAlias }: Props) {
-  const { githubId } = session;
+export function StudentRegistry({ courseAlias }: Props) {
+  const session = useContext(SessionContext);
   const { courses, loading, registered, steps, currentStep, form, handleSubmit } = useStudentData(
-    githubId,
+    session.githubId,
     courseAlias,
   );
 
@@ -32,9 +32,5 @@ export function StudentRegistry({ session, courseAlias }: Props) {
     );
   }
 
-  return (
-    <RegistrationPageLayout loading={loading} githubId={githubId}>
-      {content}
-    </RegistrationPageLayout>
-  );
+  return <RegistrationPageLayout loading={loading}>{content}</RegistrationPageLayout>;
 }

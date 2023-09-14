@@ -180,7 +180,7 @@ export function ScoreTable(props: Props) {
       <Table<ScoreStudentDto>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 290px)' }}
+        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 320px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}

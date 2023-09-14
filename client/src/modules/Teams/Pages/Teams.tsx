@@ -1,5 +1,5 @@
 import { message, notification, Row } from 'antd';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import type { TeamsPageProps } from 'pages/course/teams';
 import {
@@ -17,11 +17,13 @@ import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/sho
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
 import { useModalForm } from 'hooks';
+import { SessionContext } from 'modules/Course/contexts';
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
 
-function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
+function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
+  const session = useContext(SessionContext);
   const {
     distribution,
     loadDistribution,
@@ -140,8 +142,7 @@ function Teams({ session, course, teamDistributionDetailed }: TeamsPageProps) {
       loading={loadingDistribution || loading}
       title="RS Teams"
       background="#F0F2F5"
-      githubId={session.githubId}
-      courseName={course.name}
+      showCourseName
       withMargin={false}
     >
       {openTeamModal && (

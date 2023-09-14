@@ -1,16 +1,17 @@
 import { Button, Col, Result, Row, Typography } from 'antd';
 import { PageLayout } from 'components/PageLayout';
-import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { CourseDto as Course } from 'api';
+import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 
 const mentorRegistry = new MentorRegistryService();
-function Page(props: { session: Session }) {
+function Page() {
+  const session = useContext(SessionContext);
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ function Page(props: { session: Session }) {
         return;
       }
 
-      await new CourseService(course.id).createMentor(props.session.githubId, {
+      await new CourseService(course.id).createMentor(session.githubId, {
         maxStudentsLimit: mentor.maxStudentsLimit,
         preferedStudentsLocation: mentor.preferedStudentsLocation,
         students: [],
@@ -54,7 +55,7 @@ function Page(props: { session: Session }) {
   const pageProps = {
     loading,
     title: 'Confirm Mentorship',
-    githubId: props.session.githubId,
+    githubId: session.githubId,
     courseName: course?.name,
   };
 
@@ -101,4 +102,10 @@ const SuccessComponent = () => {
   return <Result status="success" title={titleCmp} />;
 };
 
-export default withSession(Page);
+export default function () {
+  return (
+    <SessionProvider>
+      <Page />
+    </SessionProvider>
+  );
+}

@@ -11,7 +11,7 @@ import {
   dateRenderer,
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
@@ -19,12 +19,14 @@ import { isCourseManager, isMentor } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto } from 'api';
 import { getApiConfiguration } from 'utils/axios';
 import { getRating, stageInterviewType } from 'domain/interview';
+import { SessionContext } from 'modules/Course/contexts';
 
 const api = new CoursesInterviewsApi(getApiConfiguration());
 
 export type PageProps = CoursePageProps & { interview: InterviewDto };
 
-export function InterviewWaitingList({ session, course, interview }: PageProps) {
+export function InterviewWaitingList({ course, interview }: PageProps) {
+  const session = useContext(SessionContext);
   const courseId = course.id;
   const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
   const [loading, withLoading] = useLoading(false);
@@ -60,12 +62,7 @@ export function InterviewWaitingList({ session, course, interview }: PageProps) 
   });
 
   return (
-    <PageLayout
-      loading={loading}
-      title={`${interview.name.trim()}: Wait list`}
-      githubId={session.githubId}
-      courseName={course.name}
-    >
+    <PageLayout loading={loading} title={`${interview.name.trim()}: Wait list`} showCourseName>
       <Table
         pagination={{ pageSize: 100 }}
         size="small"

@@ -10,8 +10,7 @@ import {
 import { PageLayout } from 'components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
-import { SessionContext } from 'modules/Course/contexts';
-import { PageProps } from 'modules/Course/data/getCourseProps';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
@@ -28,18 +27,19 @@ const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
 
 const courseTaskApi = new CoursesTasksApi();
 
-export function SchedulePage(props: PageProps) {
+export function SchedulePage() {
   const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
-  const isManager = useMemo(() => isCourseManager(session, props.course.id), [session, props.course.id]);
+  const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const settings = useScheduleSettings();
 
   const handleSubmit = async (record: CreateCourseTaskDto) => {
-    await courseTaskApi.createCourseTask(props.course.id, record);
+    await courseTaskApi.createCourseTask(course.id, record);
     setCourseTask(null);
     refreshData();
   };
@@ -50,7 +50,7 @@ export function SchedulePage(props: PageProps) {
   };
 
   const handleCopyFromSubmit = async (record: Pick<CourseDto, 'id'>) => {
-    await courseScheduleApi.copySchedule(props.course.id, { copyFromCourseId: record.id });
+    await courseScheduleApi.copySchedule(course.id, { copyFromCourseId: record.id });
     setCopyModal(null);
     refreshData();
   };
@@ -70,27 +70,27 @@ export function SchedulePage(props: PageProps) {
     error,
   } = useAsyncRetry(async () => {
     const [response, tokenResponse] = await Promise.all([
-      courseScheduleApi.getSchedule(props.course.id),
-      coursesScheduleIcalApi.getScheduleICalendarToken(props.course.id),
+      courseScheduleApi.getSchedule(course.id),
+      coursesScheduleIcalApi.getScheduleICalendarToken(course.id),
     ]);
     setCipher(tokenResponse.data.token);
     return response.data ?? [];
-  }, [props.course.id]);
+  }, [course.id]);
 
   const eventTags = useMemo(() => uniq(data.map(item => item.tag)), [data]);
   const statuses = useMemo(() => data.map(({ status }) => status), [data]);
 
   return (
     <>
-      <PageLayout loading={loading} error={error} title="Schedule" githubId={session.githubId}>
+      <PageLayout loading={loading} error={error} title="Schedule" showCourseName>
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
             onCreateCourseEvent={handleCreateCourseEvent}
             onCopyFromCourse={() => setCopyModal({})}
             isCourseManager={isManager}
-            courseId={props.course.id}
-            courseAlias={props.course.alias}
+            courseId={course.id}
+            courseAlias={course.alias}
             settings={settings}
             calendarToken={cipher}
             tags={eventTags}
@@ -106,7 +106,7 @@ export function SchedulePage(props: PageProps) {
             data={courseEvent}
             onSubmit={handleEventSubmit}
             onCancel={() => setCourseEvent(null)}
-            courseId={props.course.id}
+            courseId={course.id}
           />
         )}
         <CoursesListModal

@@ -3,7 +3,14 @@ import { Course } from 'services/models';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from './Header';
 
-type Props = { loading: boolean; githubId: string; course: Course; title?: string; children?: any };
+type Props = {
+  loading: boolean;
+  githubId: string;
+  course: Course;
+  title?: string;
+  children?: any;
+  showCourseName?: boolean;
+};
 
 export function CoursePageLayout(props: Props) {
   if (props.course == null) {
@@ -11,7 +18,7 @@ export function CoursePageLayout(props: Props) {
   }
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header title={props.title} username={props.githubId} courseName={props.course.name} />
+      <Header title={props.title} showCourseName={props.showCourseName} />
       <Layout.Content style={{ margin: 16 }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
       </Layout.Content>

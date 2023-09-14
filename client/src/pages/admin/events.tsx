@@ -1,24 +1,23 @@
 import { useState, useCallback } from 'react';
 import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 'antd';
-import { Session, withSession } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
-import { getCoursesProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { AdminPageLayout } from 'components/PageLayout';
-import { Course, CourseRole } from 'services/models';
+import { CourseRole } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
 
-type Props = { session: Session; courses: Course[] };
 const eventsApi = new EventsApi();
 const disciplinesApi = new DisciplinesApi();
 
-function Page(props: Props) {
+function Page() {
+  const { courses } = useActiveCourseContext();
   const [data, setData] = useState<EventDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalData, setModalData] = useState<Partial<EventDto> | null>(null);
@@ -125,7 +124,7 @@ function Page(props: Props) {
   }, [modalData]);
 
   return (
-    <AdminPageLayout session={props.session} title="Manage Events" loading={loading} courses={props.courses}>
+    <AdminPageLayout title="Manage Events" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
           Add Event
@@ -211,5 +210,12 @@ function getInitialValues(modalData: Partial<EventDto>) {
   return { ...modalData, disciplineId: modalData.discipline?.id };
 }
 
-export { getServerSideProps };
-export default withSession(Page, { requiredAnyCourseRole: CourseRole.Manager });
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

@@ -1,20 +1,17 @@
 import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal, message } from 'antd';
-import withSession from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
-import withCourseData from 'components/withCourseData';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseUser } from 'services/course';
 import { CourseUsersApi } from 'api';
-import { CoursePageProps, UserGroup, CourseRole } from 'services/models';
+import { UserGroup, CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-
-type Props = CoursePageProps;
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();
@@ -25,8 +22,10 @@ const rolesColors: Record<string, string> = {
   manager: 'volcano',
 };
 
-function Page(props: Props) {
-  const courseId = props.course.id;
+function Page() {
+  const { course, courses } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+  const courseId = course.id;
 
   const [loading, setLoading] = useState(false);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
@@ -40,7 +39,7 @@ function Page(props: Props) {
 
       const [users, { data: groups }] = await Promise.all([
         courseUserService.getCourseUsers(courseId),
-        props.session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
+        session.isAdmin ? userGroupService.getUserGroups() : Promise.resolve({ data: null }),
       ]);
       setCourseUsers(users.data as any);
       setUserGroups(groups);
@@ -112,6 +111,11 @@ function Page(props: Props) {
               <Checkbox>Dementor</Checkbox>
             </Form.Item>
           </Col>
+          <Col span={8}>
+            <Form.Item name="isActivist" valuePropName="checked">
+              <Checkbox>Activist</Checkbox>
+            </Form.Item>
+          </Col>
         </Row>
       </ModalForm>
     );
@@ -179,8 +183,8 @@ function Page(props: Props) {
   };
 
   return (
-    <AdminPageLayout session={props.session} loading={loading} courses={[props.course]}>
-      {props.session.isAdmin && (
+    <AdminPageLayout loading={loading} courses={courses} showCourseName>
+      {session.isAdmin && (
         <Button type="primary" onClick={handleAddGroup}>
           Add Group
         </Button>
@@ -227,6 +231,11 @@ function getColumns(handleEditItem: any) {
       render: boolIconRenderer,
     },
     {
+      title: 'Activist',
+      dataIndex: 'isActivist',
+      render: boolIconRenderer,
+    },
+    {
       title: 'Actions',
       dataIndex: 'actions',
       render: (_: any, record: CourseUser) => (
@@ -243,6 +252,7 @@ function createRecord(values: any) {
     isManager: values.isManager,
     isSupervisor: values.isSupervisor,
     isDementor: values.isDementor,
+    isActivist: values.isActivist,
   };
   return data;
 }
@@ -255,10 +265,11 @@ function createRecords(groups: UserGroupDto[]) {
         users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
         users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
         users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
+        users[id].isActivist = users[id].isActivist || group.roles.includes(CourseRole.Activist);
       });
       return users;
     },
-    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean }>,
+    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean; isActivist: boolean }>,
   );
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
@@ -267,4 +278,12 @@ function getInitialValues(modalData: Partial<CourseUser> | UserGroup[]) {
   return modalData;
 }
 
-export default withCourseData(withSession(Page));
+export default function () {
+  return (
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+        <Page />
+      </SessionProvider>
+    </ActiveCourseProvider>
+  );
+}

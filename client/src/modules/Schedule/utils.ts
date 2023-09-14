@@ -30,3 +30,13 @@ export function getTaskStatusColor(value: CourseScheduleItemDtoStatusEnum) {
       return '#d9d9d9';
   }
 }
+
+export const getStatusStyle = (statusName: CourseScheduleItemDtoStatusEnum, styles?: CSSProperties) => {
+  const statusColor = getTaskStatusColor(statusName);
+  return {
+    ...styles,
+    borderColor: statusColor,
+    color: statusColor,
+    backgroundColor: `${statusColor}10`,
+  };
+};
