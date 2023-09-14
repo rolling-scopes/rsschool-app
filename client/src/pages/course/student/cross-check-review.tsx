@@ -38,6 +38,7 @@ function Page() {
   const session = useContext(SessionContext);
   const router = useRouter();
   const queryTaskId = router.query.taskId ? +router.query.taskId : null;
+  const queryGithubId = router.query.githubId ?? null;
   const [form] = Form.useForm();
 
   const [loading, withLoading] = useLoading(false);
@@ -117,10 +118,17 @@ function Page() {
     });
 
   useEffect(() => {
-    if (queryTaskId && courseTasks.length) {
-      handleTaskChange(queryTaskId);
+    setup();
+
+    async function setup() {
+      if (queryTaskId && courseTasks.length) {
+        await handleTaskChange(queryTaskId);
+        if (queryGithubId) {
+          await handleStudentChange(queryGithubId as string);
+        }
+      }
     }
-  }, [queryTaskId, courseTasks]);
+  }, [queryTaskId, courseTasks.length, queryGithubId]);
 
   useEffect(() => {
     if (historicalCommentSelected !== '') {
@@ -242,6 +250,7 @@ function Page() {
                 onChange={handleStudentChange}
                 disabled={!courseTaskId}
                 defaultValues={assignments.map(({ student }) => student)}
+                value={githubId}
               />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
