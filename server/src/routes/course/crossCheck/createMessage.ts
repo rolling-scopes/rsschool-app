@@ -1,7 +1,8 @@
 import Router from '@koa/router';
+import { getRepository } from 'typeorm';
 import { StatusCodes } from 'http-status-codes';
 import { ILogger } from '../../../logger';
-import { IUserSession } from '../../../models';
+import { IUserSession, Student } from '../../../models';
 import { CrossCheckMessageAuthorRole } from '../../../models/taskSolutionResult';
 import { courseService, CrossCheckService, notificationService } from '../../../services';
 import { getTaskSolutionResultById } from '../../../services/taskResults.service';
@@ -67,9 +68,15 @@ export const createMessage = (_: ILogger) => async (ctx: Router.RouterContext) =
     user: user,
   });
 
+  const userId = await getUserId(student.id, taskSolutionResult.checkerId, inputData.role);
+  if (!userId) {
+    setErrorResponse(ctx, StatusCodes.BAD_REQUEST, 'user not found');
+    return;
+  }
+
   await notificationService
     .sendNotification({
-      userId: inputData.role === CrossCheckMessageAuthorRole.Reviewer ? student.userId : taskSolutionResult.checkerId,
+      userId,
       notificationId: 'messages',
       data: {
         isReviewerMessage: inputData.role === CrossCheckMessageAuthorRole.Reviewer,
@@ -83,3 +90,13 @@ export const createMessage = (_: ILogger) => async (ctx: Router.RouterContext) =
 
   setResponse(ctx, StatusCodes.OK);
 };
+
+async function getUserId(studentId: number, checkerId: number, role: CrossCheckMessageAuthorRole) {
+  if (role === CrossCheckMessageAuthorRole.Reviewer) {
+    return studentId;
+  }
+
+  const checker = await getRepository(Student).findOne({ where: { id: checkerId } });
+
+  return checker?.userId;
+}
