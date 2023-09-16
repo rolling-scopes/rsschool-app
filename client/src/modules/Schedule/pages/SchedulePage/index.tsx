@@ -102,15 +102,9 @@ export function SchedulePage() {
             mobileView={mobileView}
           />
         </StatusTabs>
-        {!mobileView ? (
-          <TableView settings={settings} data={data} statusFilter={selectedTab} />
-        ) : (
-          <>
-            {data.map(item => (
-              <MobileItemCard item={item} key={item.id} />
-            ))}
-          </>
-        )}
+
+        <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />
+
         {courseTask ? (
           <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
         ) : null}
