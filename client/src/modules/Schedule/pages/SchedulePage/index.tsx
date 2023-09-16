@@ -21,7 +21,6 @@ import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings'
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
 import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
-import { MobileItemCard } from 'modules/Schedule/components/MobileItemCard/MobileItemCard';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
