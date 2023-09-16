@@ -87,7 +87,7 @@ export function SchedulePage() {
   return (
     <>
       <PageLayout loading={loading} error={error} title="Schedule" showCourseName>
-        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
+        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
             onCreateCourseEvent={handleCreateCourseEvent}
@@ -99,6 +99,7 @@ export function SchedulePage() {
             calendarToken={cipher}
             tags={eventTags}
             refreshData={refreshData}
+            mobileView={mobileView}
           />
         </StatusTabs>
         {!mobileView ? (
