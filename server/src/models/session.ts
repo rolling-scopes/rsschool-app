@@ -19,6 +19,7 @@ export enum CourseRole {
   Student = 'student',
   Mentor = 'mentor',
   Dementor = 'dementor',
+  Activist = 'activist',
 }
 
 function hasRole(user?: IUserSession, courseId?: number, role?: CourseRole) {

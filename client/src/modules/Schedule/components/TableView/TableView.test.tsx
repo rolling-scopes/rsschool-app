@@ -71,8 +71,8 @@ describe('TableView', () => {
     it('by selected tag', () => {
       jest
         .spyOn(ReactUse, 'useLocalStorage')
-        // Mock useLocalStorage for tagFilter
-        .mockReturnValueOnce([[TagsEnum.Test], jest.fn(), jest.fn()]);
+        // Mock useLocalStorage for combinedFilter
+        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, jest.fn(), jest.fn()]);
       const data = generateCourseData();
 
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
@@ -170,11 +170,15 @@ describe('TableView', () => {
   `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
-      // Mock useLocalStorage for tagFilter
-      .mockReturnValue([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], jest.fn(), jest.fn()]);
+      // Mock useLocalStorage for combinedFilter
+      .mockReturnValueOnce([
+        { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
+        jest.fn(),
+        jest.fn(),
+      ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
-    const tagFilterBtn = screen.getByRole('button', { name: /filter/i });
+    const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
     fireEvent.click(tagFilterBtn);
 
     const filtersDropdown = await screen.findByRole('menu');
@@ -183,11 +187,11 @@ describe('TableView', () => {
     expect(checkbox).toBeChecked();
   });
 
-  it('should not render filtered tags when tagFilter is null', () => {
+  it('should not render filtered tags when tags is empty', () => {
     jest
       .spyOn(ReactUse, 'useLocalStorage')
-      // Mock useLocalStorage for tagFilter
-      .mockReturnValue([null, jest.fn(), jest.fn()]);
+      // Mock useLocalStorage for combinedFilter
+      .mockReturnValueOnce([{ tags: [] }, jest.fn(), jest.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tag = screen.queryByText(/Type: /);
@@ -197,16 +201,25 @@ describe('TableView', () => {
 
   it('should remove tags when "Clear all" button was clicked', async () => {
     const setFilterMock = jest.fn();
+    const types = [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview];
     jest
       .spyOn(ReactUse, 'useLocalStorage')
-      // Mock useLocalStorage for tagFilter
-      .mockReturnValue([[TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], setFilterMock, jest.fn()]);
+      // Mock useLocalStorage for combinedFilter
+      .mockReturnValueOnce([
+        {
+          types,
+          statuses: [],
+          tags: types.map(t => ({ label: `${ColumnName.Type}: ${t}`, value: t, tagType: ColumnName.Type })),
+        },
+        setFilterMock,
+        jest.fn(),
+      ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const clearAllBtn = screen.getByText(/Clear all/);
     fireEvent.click(clearAllBtn);
 
-    expect(setFilterMock).toHaveBeenCalledWith([]);
+    expect(setFilterMock).toHaveBeenCalledWith({ types: [], statuses: [], tags: [] });
   });
 });
 

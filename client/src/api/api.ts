@@ -925,6 +925,12 @@ export interface CourseRolesDto {
      * @memberof CourseRolesDto
      */
     'isDementor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseRolesDto
+     */
+    'isActivist': boolean;
 }
 /**
  * 
@@ -1424,6 +1430,12 @@ export interface CourseUserDto {
      * @memberof CourseUserDto
      */
     'isDementor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseUserDto
+     */
+    'isActivist': boolean;
 }
 /**
  * 
@@ -2054,7 +2066,8 @@ export const CreateUserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type CreateUserGroupDtoRolesEnum = typeof CreateUserGroupDtoRolesEnum[keyof typeof CreateUserGroupDtoRolesEnum];
@@ -5871,6 +5884,12 @@ export interface UpdateCourseUserDto {
     'isDementor': boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof UpdateCourseUserDto
+     */
+    'isActivist': boolean;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateCourseUserDto
      */
@@ -6537,7 +6556,8 @@ export const UpdateUserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type UpdateUserGroupDtoRolesEnum = typeof UpdateUserGroupDtoRolesEnum[keyof typeof UpdateUserGroupDtoRolesEnum];
@@ -6655,7 +6675,8 @@ export const UserGroupDtoRolesEnum = {
     Supervisor: 'supervisor',
     Student: 'student',
     Mentor: 'mentor',
-    Dementor: 'dementor'
+    Dementor: 'dementor',
+    Activist: 'activist'
 } as const;
 
 export type UserGroupDtoRolesEnum = typeof UserGroupDtoRolesEnum[keyof typeof UserGroupDtoRolesEnum];

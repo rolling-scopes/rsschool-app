@@ -16,4 +16,9 @@ export class CourseRolesDto {
   @IsBoolean()
   @ApiProperty()
   isDementor: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  isActivist: boolean;
 }
