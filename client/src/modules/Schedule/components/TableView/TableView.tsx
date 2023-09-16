@@ -279,7 +279,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileVi
   ) : (
     <>
       {filteredData.map(item => (
-        <MobileItemCard item={item} key={item.id} />
+        <MobileItemCard item={item} key={generateUniqueRowKey(item)} />
       ))}
     </>
   );
