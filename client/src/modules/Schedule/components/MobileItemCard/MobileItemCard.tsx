@@ -11,7 +11,7 @@ export const MobileItemCard = ({ item }: { item: CourseScheduleItemDto }) => {
     <div style={{ padding: '12px', backgroundColor: 'white', borderBottom: '1px groove' }}>
       <Row gutter={8} wrap={false}>
         <Col flex="1">
-          <Title level={5} ellipsis={{ expandable: true, rows: 1 }}>
+          <Title level={5} ellipsis={{ expandable: true, rows: 1, symbol: 'more' }}>
             {item.name}
           </Title>
         </Col>
