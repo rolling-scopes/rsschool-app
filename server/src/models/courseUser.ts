@@ -37,4 +37,7 @@ export class CourseUser {
 
   @Column({ default: false })
   isDementor: boolean;
+
+  @Column({ default: false })
+  isActivist: boolean;
 }

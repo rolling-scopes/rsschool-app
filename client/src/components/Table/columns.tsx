@@ -51,7 +51,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
       );
       return val;
     },
-    onFilterDropdownVisibleChange: (visible: boolean) => {
+    onFilterDropdownOpenChange: (visible: boolean) => {
       if (visible && searchInput) {
         setTimeout(() => searchInput.select());
       }

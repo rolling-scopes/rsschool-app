@@ -42,7 +42,7 @@ export enum LocalStorageKeys {
   ColumnsHidden = 'scheduleColumnsHidden',
   EventTypesHidden = 'scheduleEventTypesHidden',
   StatusFilter = 'scheduleStatusFilter',
-  TagFilter = 'scheduleTagFilter',
+  Filters = 'scheduleFilters',
 }
 
 export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
