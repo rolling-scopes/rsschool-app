@@ -19,7 +19,7 @@ import { TableView } from 'modules/Schedule/components/TableView';
 import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
 import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
-import { useAsyncRetry, useLocalStorage } from 'react-use';
+import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
 import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
 
 const courseScheduleApi = new CoursesScheduleApi();
@@ -30,6 +30,9 @@ const courseTaskApi = new CoursesTasksApi();
 export function SchedulePage() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
+
+  const mobileView = useMedia('(max-width: 768px)');
+
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
   const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
@@ -83,7 +86,7 @@ export function SchedulePage() {
   return (
     <>
       <PageLayout loading={loading} error={error} title="Schedule" showCourseName>
-        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab}>
+        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
           <SettingsPanel
             onCreateCourseTask={handleCreateCourseTask}
             onCreateCourseEvent={handleCreateCourseEvent}
@@ -95,9 +98,12 @@ export function SchedulePage() {
             calendarToken={cipher}
             tags={eventTags}
             refreshData={refreshData}
+            mobileView={mobileView}
           />
         </StatusTabs>
-        <TableView settings={settings} data={data} statusFilter={selectedTab} />
+
+        <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />
+
         {courseTask ? (
           <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
         ) : null}
@@ -122,15 +128,17 @@ export function SchedulePage() {
           />
         </CoursesListModal>
       </PageLayout>
-      <style jsx>
-        {`
-          :global(.ant-layout-content) {
-            background-color: #f0f2f5;
-            margin: 16px 0 0 !important;
-            padding: 0 24px 24px;
-          }
-        `}
-      </style>
+      {!mobileView && (
+        <style jsx>
+          {`
+            :global(.ant-layout-content) {
+              background-color: #f0f2f5;
+              margin: 16px 0 0 !important;
+              padding: 0 24px 24px;
+            }
+          `}
+        </style>
+      )}
     </>
   );
 }

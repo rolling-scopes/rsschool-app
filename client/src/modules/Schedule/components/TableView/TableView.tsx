@@ -30,6 +30,7 @@ import { FilterValue } from 'antd/lib/table/interface';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { capitalize } from 'lodash';
+import { MobileItemCard } from '../MobileItemCard';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -132,6 +133,7 @@ export interface TableViewProps {
   settings: ScheduleSettings;
   data: CourseScheduleItemDto[];
   statusFilter?: string;
+  mobileView?: boolean;
 }
 
 export type CombinedFilter = {
@@ -150,7 +152,7 @@ export type FilterTag = {
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
-export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableViewProps) {
+export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileView }: TableViewProps) {
   const [form] = Form.useForm();
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
   const [combinedFilter = { types: [], statuses: [], tags: [] }, setCombinedFilter] = useLocalStorage<CombinedFilter>(
@@ -248,7 +250,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
 
   const generateUniqueRowKey = ({ id, name, tag }: CourseScheduleItemDto) => [id, name, tag].join('|');
 
-  return (
+  return !mobileView ? (
     <Row style={{ padding: '24px 0 0' }} gutter={32}>
       <Col span={24}>
         <Form form={form} component={false}>
@@ -274,6 +276,12 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY }: TableV
         </Form>
       </Col>
     </Row>
+  ) : (
+    <>
+      {filteredData.map(item => (
+        <MobileItemCard item={item} key={generateUniqueRowKey(item)} />
+      ))}
+    </>
   );
 }
 
