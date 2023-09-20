@@ -19,6 +19,7 @@ export interface SettingsPanelProps {
   courseAlias: string;
   settings: ScheduleSettings;
   calendarToken: string;
+  mobileView?: boolean;
   tags: CourseScheduleItemDtoTagEnum[];
   refreshData: () => void;
   onCreateCourseTask: () => void;
@@ -46,6 +47,7 @@ export function SettingsPanel({
   settings,
   calendarToken,
   tags,
+  mobileView,
 }: SettingsPanelProps) {
   const additionalMenuItems = useMemo(
     () =>
@@ -59,39 +61,37 @@ export function SettingsPanel({
   );
 
   return (
-    <>
-      <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
-        {isCourseManager ? (
-          <Col>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
-              {SettingsButtons.Event}
-            </Button>
-          </Col>
-        ) : null}
-        {isCourseManager ? (
-          <Col>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
-              {SettingsButtons.Task}
-            </Button>
-          </Col>
-        ) : null}
+    <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
+      {isCourseManager && !mobileView ? (
         <Col>
-          <SettingsDrawer tags={tags} settings={settings} />
+          <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
+            {SettingsButtons.Event}
+          </Button>
         </Col>
-        {additionalMenuItems?.length !== 0 && (
-          <Col>
-            <AdditionalActions
-              menuItems={additionalMenuItems}
-              courseId={courseId}
-              timezone={settings.timezone}
-              calendarToken={calendarToken}
-              courseAlias={courseAlias}
-              onCopyFromCourse={onCopyFromCourse}
-            />
-          </Col>
-        )}
-      </Row>
-    </>
+      ) : null}
+      {isCourseManager && !mobileView ? (
+        <Col>
+          <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
+            {SettingsButtons.Task}
+          </Button>
+        </Col>
+      ) : null}
+      <Col>
+        <SettingsDrawer tags={tags} settings={settings} />
+      </Col>
+      {additionalMenuItems?.length !== 0 && (
+        <Col>
+          <AdditionalActions
+            menuItems={additionalMenuItems}
+            courseId={courseId}
+            timezone={settings.timezone}
+            calendarToken={calendarToken}
+            courseAlias={courseAlias}
+            onCopyFromCourse={onCopyFromCourse}
+          />
+        </Col>
+      )}
+    </Row>
   );
 }
 
