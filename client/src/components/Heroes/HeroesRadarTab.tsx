@@ -48,14 +48,10 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
     getHeroes(initialQueryParams);
   }, []);
 
-  const makeRequest = useCallback(async (data: HeroesRadarFormProps) => {
-    await getHeroes(data);
-  }, []);
-
   const handleSubmit = useCallback(async (formData: HeroesRadarFormProps) => {
     const data = onlyDefined(formData);
     setFormData(data);
-    await makeRequest(data);
+    await getHeroes(data);
   }, []);
 
   const onClear = useCallback(async () => {
