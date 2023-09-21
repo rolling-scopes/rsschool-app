@@ -1,21 +1,19 @@
-import { Row, Col, Form, Input, Select, Card, Space, Tag, Collapse, Divider, Checkbox } from 'antd';
+import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
 import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { union } from 'lodash';
-import {
-  addKeyAndIndex,
-  UploadCriteriaJSON,
-  AddCriteriaForCrossCheck,
-  EditableTable,
-  ExportJSONButton,
-} from 'modules/CrossCheck';
+
+import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
 import { ModalData } from 'modules/Tasks/types';
 import { useMemo } from 'react';
-import { urlPattern, githubRepoUrl } from 'services/validators';
+import { urlPattern } from 'services/validators';
+import { TaskSettings } from './TaskSettings/TaskSettings';
 
-type ModalProps = {
+const { Text } = Typography;
+
+export type ModalProps = {
   tasks: TaskDto[];
   modalData: ModalData;
   dataCriteria: CriteriaDto[];
@@ -38,17 +36,6 @@ export function TaskModal({
   setModalData,
   setModalValues,
 }: ModalProps) {
-  const addCriteria = (criteria: CriteriaDto) => {
-    const newDataCriteria = [...dataCriteria, criteria];
-    setDataCriteria(addKeyAndIndex(newDataCriteria));
-  };
-
-  const addJSONtoCriteria = (criteria: CriteriaDto[]) => {
-    const oldCriteria = dataCriteria;
-    const newCriteria = [...oldCriteria, ...criteria];
-    setDataCriteria(addKeyAndIndex(newCriteria));
-  };
-
   const allTags = useMemo(() => union(...tasks.map(task => task.tags || [])), [tasks]);
   const allSkills = useMemo(
     () =>
@@ -77,19 +64,16 @@ export function TaskModal({
     >
       <Row gutter={24}>
         <Col span={12}>
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter task name' }]}>
-            <Input />
+          <Form.Item name="name" label={LABELS.name} rules={[{ required: true, message: ERROR_MESSAGES.name }]}>
+            <Input placeholder={PLACEHOLDERS.name} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="type" label="Task Type" rules={[{ required: true, message: 'Please select a type' }]}>
-            <Select>
-              {TASK_TYPES.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
+          <Form.Item name="type" label={LABELS.taskType} rules={[{ required: true, message: ERROR_MESSAGES.taskType }]}>
+            <Select
+              placeholder={PLACEHOLDERS.taskType}
+              options={TASK_TYPES.map(({ id, name }) => ({ value: id, label: name }))}
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -97,119 +81,76 @@ export function TaskModal({
         <Col span={12}>
           <Form.Item
             name="discipline"
-            label="Discipline"
-            rules={[{ required: true, message: 'Please select a discipline' }]}
+            label={LABELS.discipline}
+            rules={[{ required: true, message: ERROR_MESSAGES.discipline }]}
           >
-            <Select>
-              {disciplines.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
+            <Select
+              placeholder={PLACEHOLDERS.discipline}
+              options={disciplines.map(({ id, name }) => ({ value: id, label: name }))}
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="tags" label="Tags">
-            <Select mode="tags">
-              {allTags.map(tag => (
-                <Select.Option key={tag} value={tag}>
-                  {tag}
-                </Select.Option>
-              ))}
-            </Select>
+          <Form.Item name="tags" label={LABELS.tags}>
+            <Select
+              mode="tags"
+              placeholder={PLACEHOLDERS.tags}
+              options={allTags.map(tag => ({ value: tag, label: tag }))}
+            />
           </Form.Item>
         </Col>
       </Row>
-
       <Form.Item
         name="descriptionUrl"
-        label="Description URL"
+        label={LABELS.descriptionUrl}
         rules={[
           {
             required: true,
-            message: 'Please enter description URL',
+            message: ERROR_MESSAGES.descriptionUrl,
           },
           {
-            message: 'Please enter valid URL',
+            message: ERROR_MESSAGES.validUrl,
             pattern: urlPattern,
           },
         ]}
       >
-        <Input />
+        <Input placeholder={PLACEHOLDERS.descriptionUrl} />
       </Form.Item>
-      <Form.Item name="description" label="Summary">
-        <Input />
+      <Form.Item name="description" label={LABELS.summary}>
+        <Input placeholder={PLACEHOLDERS.summary} />
       </Form.Item>
-
       <Row gutter={24}>
         <Col span={24}>
-          <Form.Item name="skills" label="Skills">
-            <Select mode="tags">
-              {allSkills.map(skill => (
-                <Select.Option key={skill} value={skill}>
-                  {skill}
-                </Select.Option>
-              ))}
-            </Select>
+          <Form.Item name="skills" label={LABELS.skills}>
+            <Select
+              mode="tags"
+              placeholder={PLACEHOLDERS.skills}
+              options={allSkills.map(tag => ({ value: tag, label: tag }))}
+            />
           </Form.Item>
         </Col>
       </Row>
-
       <Row gutter={24}>
         <Col span={24}>
-          <Form.Item name="usedInCourses" label="Used in Courses">
-            <Card>
-              <Space size={[0, 8]} wrap>
-                {modalData?.courses?.map(({ name, isActive }) => (
-                  <Tag key={name} color={isActive ? 'blue' : ''}>
-                    {name}
-                  </Tag>
-                ))}
-              </Space>
+          <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
+            <Text>{LABELS.usedInCourses}</Text>
+            <Card bodyStyle={{ padding: 8 }}>
+              {modalData?.courses?.length ? (
+                <Space size={[0, 8]} wrap>
+                  {modalData.courses.map(({ name, isActive }) => (
+                    <Tag key={name} color={isActive ? 'blue' : ''}>
+                      {name}
+                    </Tag>
+                  ))}
+                </Space>
+              ) : (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: 0 }} />
+              )}
             </Card>
-          </Form.Item>
+          </Space>
         </Col>
       </Row>
-      <Collapse>
-        <Collapse.Panel header="Criteria For Cross-Check Task" key="1" forceRender>
-          <Form.Item label="Criteria For Cross-Check">
-            <UploadCriteriaJSON onLoad={addJSONtoCriteria} />
-          </Form.Item>
-          <AddCriteriaForCrossCheck onCreate={addCriteria} />
-          {dataCriteria.length !== 0 ? (
-            <>
-              <Divider />
-              <EditableTable dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
-              <ExportJSONButton dataCriteria={dataCriteria} />
-            </>
-          ) : null}
-        </Collapse.Panel>
-        <Collapse.Panel header="Github" key="2" forceRender>
-          <Form.Item name="githubPrRequired" label="" valuePropName="checked">
-            <Checkbox>Pull Request required</Checkbox>
-          </Form.Item>
-          <Form.Item name="sourceGithubRepoUrl" label="Source Repo Url" rules={[{ pattern: githubRepoUrl }]}>
-            <Input placeholder="https://github.com/rolling-scopes-school/task1" />
-          </Form.Item>
-          <Form.Item name="githubRepoName" label="Expected Repo Name">
-            <Input placeholder="task1" />
-          </Form.Item>
-        </Collapse.Panel>
-        <Collapse.Panel header="JSON Attributes" key="3" forceRender>
-          <Form.Item
-            name="attributes"
-            rules={[
-              {
-                validator: async (_, value: string) => (value ? JSON.parse(value) : Promise.resolve()),
-                message: 'Invalid json',
-              },
-            ]}
-          >
-            <Input.TextArea rows={6} />
-          </Form.Item>
-        </Collapse.Panel>
-      </Collapse>
+      <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
     </ModalForm>
   );
 }
