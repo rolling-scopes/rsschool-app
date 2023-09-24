@@ -4,7 +4,6 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class EmploymentRecordDto {
   constructor(record: EmploymentRecord) {
-    console.log('record: ', record);
     this.companyName = record.companyName;
     this.dateTo = record.dateTo;
     this.dateFrom = record.dateFrom;

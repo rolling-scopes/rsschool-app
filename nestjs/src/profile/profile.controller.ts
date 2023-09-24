@@ -65,7 +65,6 @@ export class ProfileController {
   public async updateProfileFlatInfo(@Req() req: CurrentRequest, @Body() dto: UpdateProfileInfoDto) {
     const { user } = req;
 
-    console.log('dto: ', dto);
     await this.profileService.updateProfileFlat(user.id, dto);
   }
 
