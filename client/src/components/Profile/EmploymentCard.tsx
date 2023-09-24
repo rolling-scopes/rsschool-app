@@ -1,11 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { List, Button } from 'antd';
+import { List, Button, Form } from 'antd';
 import { ReadOutlined, FileAddOutlined } from '@ant-design/icons';
 import isEqual from 'lodash/isEqual';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { EmploymentRecordDto, UpdateProfileInfoDto } from 'api';
 import EmploymentHistoryItemForm from './EmploymentHistory/EmploymentHistoryItemForm';
 import EmploymentHistoryDisplayItem from './EmploymentHistory/EmploymentHistoryDisplayItem';
+import dayjs from 'dayjs';
+
+export type EmploymentRecordFormItem = Omit<EmploymentRecordDto, 'dateFrom' | 'dateTo'> & {
+  dateFrom: dayjs.Dayjs;
+  dateTo: dayjs.Dayjs;
+};
 
 type Props = {
   data: EmploymentRecordDto[];
@@ -13,15 +19,42 @@ type Props = {
   updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const hasEmptyFields = (employments: EmploymentRecordDto[]) =>
+const dateFormat = 'YYYY-MM-DD';
+
+const defaultEmploymentRecord: EmploymentRecordDto = {
+  title: '',
+  dateFrom: '',
+  dateTo: '',
+  toPresent: false,
+  companyName: '',
+  officeLocation: '',
+};
+
+const hasEmptyFields = (employments: EmploymentRecordFormItem[]) =>
   employments.some(
     ({ title, dateFrom, dateTo, toPresent, companyName, officeLocation }) =>
       !title || !dateFrom || !companyName || !officeLocation || !(toPresent || dateTo),
   );
 
 const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
-  const [displayEmployments, setDisplayEmployments] = useState<EmploymentRecordDto[]>(data);
-  const [employments, setEmployments] = useState<EmploymentRecordDto[]>(displayEmployments);
+  const [form] = Form.useForm<{ employmentHistory: EmploymentRecordFormItem[] }>();
+
+  const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({
+    ...employment,
+    dateFrom: employment.dateFrom.format(dateFormat),
+    dateTo: employment.dateTo.format(dateFormat),
+  });
+
+  const employmentRecordDtoToFormItem = (employment: EmploymentRecordDto): EmploymentRecordFormItem => ({
+    ...employment,
+    dateFrom: employment.dateFrom ? dayjs(employment.dateFrom) : dayjs(),
+    dateTo: employment.dateTo ? dayjs(employment.dateTo) : dayjs(),
+  });
+
+  const [displayEmployments, setDisplayEmployments] = useState<EmploymentRecordFormItem[]>(
+    data.map(employmentRecordDtoToFormItem),
+  );
+  const [employments, setEmployments] = useState<EmploymentRecordFormItem[]>(displayEmployments);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const isAddDisabled = useMemo(() => !!employments.length && hasEmptyFields(employments), [employments]);
 
@@ -30,27 +63,11 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
     setIsSaveDisabled(!readyToUpdate);
   }, [displayEmployments, employments]);
 
-  const handleChange = (
-    { title, dateFrom, dateTo, toPresent, companyName, officeLocation }: EmploymentRecordDto,
-    index: number,
-  ) => {
-    setEmployments([
-      ...employments.slice(0, index),
-      {
-        title,
-        dateFrom: dateFrom.valueOf(),
-        dateTo: dateTo.valueOf(),
-        toPresent,
-        companyName,
-        officeLocation,
-      },
-      ...employments.slice(index + 1),
-    ]);
-  };
-
   const handleSave = async () => {
     const employmentHistory = employments;
-    const isUpdated = await updateProfile({ employmentHistory });
+    const isUpdated = await updateProfile({
+      employmentHistory: employmentHistory.map(employmentRecordFormItemToDto),
+    });
 
     if (!isUpdated) {
       return;
@@ -60,41 +77,11 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
   };
 
   const handleCancel = () => {
+    form.setFieldsValue({ employmentHistory: displayEmployments });
     setEmployments(displayEmployments);
   };
 
-  const addEmployment = () => {
-    const emptyEmployment = {
-      title: '',
-      dateFrom: '',
-      dateTo: '',
-      toPresent: false,
-      companyName: '',
-      officeLocation: '',
-    };
-
-    setEmployments(prev => [...prev, emptyEmployment]);
-  };
-
-  const handleDelete = (index: number) => {
-    setEmployments(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const renderSettingsItem = (
-    { title, dateFrom, dateTo, toPresent, companyName, officeLocation }: EmploymentRecordDto,
-    index: number,
-  ) => (
-    <List.Item>
-      <EmploymentHistoryItemForm
-        employmentRecord={{ title, dateFrom, dateTo, toPresent, companyName, officeLocation }}
-        index={index}
-        handleChange={handleChange}
-        handleDelete={handleDelete}
-      />
-    </List.Item>
-  );
-
-  const renderContentItem = ({ title, dateFrom, dateTo, toPresent, companyName }: EmploymentRecordDto) => (
+  const renderContentItem = ({ title, dateFrom, dateTo, toPresent, companyName }: EmploymentRecordFormItem) => (
     <List.Item>
       <EmploymentHistoryDisplayItem employmentRecord={{ title, dateFrom, dateTo, toPresent, companyName }} />
     </List.Item>
@@ -116,10 +103,42 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
       }
       profileSettingsContent={
         <>
-          <List itemLayout="horizontal" dataSource={employments} renderItem={renderSettingsItem} />
-          <Button type="dashed" style={{ width: '100%' }} onClick={addEmployment} disabled={isAddDisabled}>
-            <FileAddOutlined /> Add new employment
-          </Button>
+          <Form
+            layout="vertical"
+            form={form}
+            onValuesChange={(_, { employmentHistory }) => setEmployments(employmentHistory)}
+            initialValues={{ employmentHistory: employments }}
+            style={{ width: '100%' }}
+          >
+            <Form.List name="employmentHistory">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <EmploymentHistoryItemForm
+                      key={key}
+                      name={name}
+                      restField={restField}
+                      remove={remove}
+                      form={form}
+                    />
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => {
+                        add(defaultEmploymentRecord);
+                      }}
+                      block
+                      icon={<FileAddOutlined />}
+                      disabled={isAddDisabled}
+                    >
+                      Add new employment
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Form>
         </>
       }
     />
