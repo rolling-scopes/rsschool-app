@@ -107,30 +107,19 @@ export function Header({ title, showCourseName, course }: Props) {
         <div className="profile">
           {session.githubId && (
             <Dropdown overlay={menu} trigger={['click']}>
-              <Button type="dashed" size="large">
-                <GithubAvatar githubId={session?.githubId} size={24} />
-                <span style={{ marginLeft: '12px' }} className="button-text">
-                  My Profile
-                </span>
+              <Button type='link'>
+                <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
           )}
         </div>
         <style jsx>{`
-          .title {
-            font-size: 120%;
-            align-self: center;
-          }
           @media all and (max-width: 768px) {
             .title {
               width: 100%;
               order: 3;
               text-align: center;
               margin-top: 16px;
-            }
-
-            .button-text {
-              display: none;
             }
           }
         `}</style>
