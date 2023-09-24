@@ -1589,28 +1589,21 @@
         "tags": ["profile"]
       }
     },
-    "/profile/job-found": {
+    "/profile/employment": {
       "get": {
-        "operationId": "getJobFound",
+        "operationId": "getEmployment",
         "summary": "",
         "parameters": [],
         "responses": {
           "default": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFoundDto" } } }
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EmploymentRecordDto" } }
+              }
+            }
           }
         },
-        "tags": ["profile"]
-      },
-      "patch": {
-        "operationId": "updateJobFound",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFoundDto" } } }
-        },
-        "responses": { "200": { "description": "" } },
         "tags": ["profile"]
       }
     },
@@ -3827,6 +3820,18 @@
           "isProfileSettingsChanged"
         ]
       },
+      "EmploymentRecordDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "dateTo": { "type": "string" },
+          "dateFrom": { "type": "string" },
+          "companyName": { "type": "string" },
+          "toPresent": { "type": "boolean" },
+          "officeLocation": { "type": "string" }
+        },
+        "required": ["title", "dateTo", "dateFrom", "companyName", "toPresent", "officeLocation"]
+      },
       "UpdateProfileInfoDto": {
         "type": "object",
         "properties": {
@@ -3840,6 +3845,11 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/Education" }
           },
+          "employmentHistory": {
+            "nullable": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/EmploymentRecordDto" }
+          },
           "englishLevel": { "type": "string", "nullable": true },
           "languages": { "type": "array", "items": { "type": "string" } },
           "contactsPhone": { "type": "string", "nullable": true },
@@ -3852,15 +3862,6 @@
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
         }
-      },
-      "JobFoundDto": {
-        "type": "object",
-        "properties": {
-          "jobFound": { "type": "boolean" },
-          "jobFoundCompanyName": { "type": "string", "nullable": true },
-          "jobFoundOfficeLocation": { "type": "string", "nullable": true }
-        },
-        "required": ["jobFound", "jobFoundCompanyName", "jobFoundOfficeLocation"]
       },
       "ProfileDto": {
         "type": "object",

@@ -10,6 +10,7 @@ import { StudentStats } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
+import EmploymentCard from 'components/Profile/EmploymentCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
@@ -113,8 +114,8 @@ export class ProfilePage extends React.Component<Props, State> {
       }
 
       if (isProfileOwner) {
-        const { data } = await profileApi.getJobFound();
-        updateProfile.jobFoundInfo = data;
+        const { data } = await profileApi.getEmployment();
+        updateProfile.employmentHistory = data;
       }
 
       this.setState({
@@ -167,7 +168,7 @@ export class ProfilePage extends React.Component<Props, State> {
         profile: {
           ...profile,
           publicCvUrl: profile?.publicCvUrl ?? null,
-          jobFoundInfo: profile?.jobFoundInfo ?? null,
+          employmentHistory: profile?.employmentHistory,
           discord,
         },
       }));
@@ -199,7 +200,7 @@ export class ProfilePage extends React.Component<Props, State> {
       name: profile?.generalInfo?.name ?? '',
       githubId: profile?.generalInfo?.githubId ?? null,
       publicCvUrl: profile?.publicCvUrl ?? null,
-      jobFoundInfo: profile?.jobFoundInfo ?? null,
+      employmentHistory: profile?.employmentHistory,
     };
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];
@@ -223,6 +224,13 @@ export class ProfilePage extends React.Component<Props, State> {
         isEditingModeEnabled={isProfileOwner}
         updateProfile={this.updateProfile}
       />,
+      profile?.employmentHistory !== undefined && (
+        <EmploymentCard
+          data={profile?.employmentHistory || []}
+          isEditingModeEnabled={isProfileOwner}
+          updateProfile={this.updateProfile}
+        />
+      ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo?.educationHistory || []}

@@ -7,7 +7,7 @@ import {
   ProfileInfoDto,
   UsersNotificationsApi,
   UpdateUserDtoLanguagesEnum,
-  JobFoundDto,
+  EmploymentRecordDto,
 } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
@@ -237,7 +237,7 @@ export type ProfileInfo = {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
-  jobFoundInfo: JobFoundDto | null;
+  employmentHistory: EmploymentRecordDto[] | undefined;
 } & ProfileDto;
 
 export type ProfileMainCardData = {
@@ -245,7 +245,7 @@ export type ProfileMainCardData = {
   name: string;
   githubId: string | null;
   publicCvUrl: string | null;
-  jobFoundInfo: JobFoundDto | null;
+  employmentHistory: EmploymentRecordDto[] | undefined;
 };
 
 export const enum ContactsKeys {

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Contacts, EnglishLevel } from '@common/models';
+import { EmploymentRecordDto } from './employment-record.dto';
 
 class Location {
   @IsString()
@@ -270,6 +271,11 @@ export class UpdateProfileInfoDto {
   @IsOptional()
   @IsArray()
   educationHistory?: Education[];
+
+  @ApiProperty({ required: false, nullable: true, type: [EmploymentRecordDto] })
+  @IsOptional()
+  @IsArray()
+  employmentHistory?: EmploymentRecordDto[];
 
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()

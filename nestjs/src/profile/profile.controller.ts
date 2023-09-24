@@ -3,13 +3,12 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, JobFoundDto } from './dto';
+import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, EmploymentRecordDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
 import { EndorsementDto } from './dto/endorsement.dto';
-import { plainToClass } from 'class-transformer';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -66,26 +65,17 @@ export class ProfileController {
   public async updateProfileFlatInfo(@Req() req: CurrentRequest, @Body() dto: UpdateProfileInfoDto) {
     const { user } = req;
 
+    console.log('dto: ', dto);
     await this.profileService.updateProfileFlat(user.id, dto);
   }
 
-  @Get('/job-found')
-  @ApiOperation({ operationId: 'getJobFound' })
-  @ApiResponse({ type: JobFoundDto })
-  public async getJobFound(@Req() req: CurrentRequest) {
+  @Get('/employment')
+  @ApiOperation({ operationId: 'getEmployment' })
+  @ApiResponse({ type: [EmploymentRecordDto] })
+  public async getEmploymentHistory(@Req() req: CurrentRequest) {
     const { user } = req;
-    const jobFoundInfo = await this.profileService.getJobFound(user.id);
-
-    return plainToClass(JobFoundDto, jobFoundInfo, { excludeExtraneousValues: true });
-  }
-
-  @Patch('/job-found')
-  @ApiOperation({ operationId: 'updateJobFound' })
-  @ApiBody({ type: JobFoundDto })
-  public async updateJobFound(@Req() req: CurrentRequest, @Body() dto: JobFoundDto) {
-    const { user } = req;
-
-    await this.profileService.updateJobFound(user.id, dto);
+    const employmentHistory = await this.profileService.getEmploymentHistory(user.id);
+    return employmentHistory.map(record => new EmploymentRecordDto(record));
   }
 
   @Get(':username')

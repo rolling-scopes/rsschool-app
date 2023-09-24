@@ -13,7 +13,6 @@ import { Resume } from '@entities/resume';
 import { Discord } from '../../../common/models';
 import { omitBy, isUndefined } from 'lodash';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { JobFoundDto } from './dto/job-found.dto';
 
 @Injectable()
 export class ProfileService {
@@ -153,6 +152,7 @@ export class ProfileService {
       countryName,
       cityName,
       educationHistory,
+      employmentHistory,
       discord,
       englishLevel,
       aboutMyself,
@@ -180,6 +180,7 @@ export class ProfileService {
           discord,
           englishLevel,
           aboutMyself,
+          employmentHistory,
           contactsTelegram,
           contactsPhone,
           contactsEmail,
@@ -210,24 +211,9 @@ export class ProfileService {
     return this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
   }
 
-  public async getJobFound(userId: number) {
-    return await this.userRepository.findOneOrFail({
-      where: { id: userId },
-      select: ['jobFound', 'jobFoundCompanyName', 'jobFoundOfficeLocation'],
-    });
-  }
-
-  public async updateJobFound(userId: number, { jobFound, jobFoundCompanyName, jobFoundOfficeLocation }: JobFoundDto) {
-    await this.userRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({
-        jobFound,
-        jobFoundCompanyName,
-        jobFoundOfficeLocation,
-      })
-      .where('id = :id', { id: userId })
-      .execute();
+  public async getEmploymentHistory(userId: number) {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+    return user?.employmentHistory;
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

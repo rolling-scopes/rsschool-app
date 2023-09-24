@@ -8,7 +8,6 @@ import { Location } from 'common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import { UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';
-import JobFoundButtonWithModal from './JobFoundButtonWithModal';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -19,7 +18,7 @@ type Props = {
 };
 
 const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
-  const { githubId, name, location, publicCvUrl, jobFoundInfo } = data;
+  const { githubId, name, location, publicCvUrl } = data;
   const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [displayName, setDisplayName] = useState(name);
@@ -122,7 +121,6 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
         ) : null}
         {isEditingModeEnabled && (
           <>
-            {jobFoundInfo && <JobFoundButtonWithModal {...jobFoundInfo} />}
             <ProfileSettingsModal
               isSettingsVisible={isProfileSettingsVisible}
               onCancel={onCancel}
