@@ -107,7 +107,7 @@ export function Header({ title, showCourseName, course }: Props) {
         <div className="profile">
           {session.githubId && (
             <Dropdown overlay={menu} trigger={['click']}>
-              <Button type='link'>
+              <Button type="link">
                 <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
