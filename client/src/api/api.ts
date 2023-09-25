@@ -2593,10 +2593,10 @@ export interface EmploymentRecordDto {
     'toPresent': boolean;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof EmploymentRecordDto
      */
-    'officeLocation': string;
+    'officeLocation'?: object;
 }
 /**
  * 

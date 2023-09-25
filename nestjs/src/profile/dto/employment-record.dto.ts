@@ -1,18 +1,9 @@
-import { Location } from '@common/models';
-import { EmploymentRecord } from '@entities/user';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { LocationDto } from './location.dto';
 
 export class EmploymentRecordDto {
-  constructor(record: EmploymentRecord) {
-    this.companyName = record.companyName;
-    this.dateTo = record.dateTo;
-    this.dateFrom = record.dateFrom;
-    this.title = record.title;
-    this.toPresent = record.toPresent;
-    this.officeLocation = record.officeLocation;
-  }
-
   @ApiProperty({ type: String })
   @IsString()
   title: string;
@@ -33,8 +24,9 @@ export class EmploymentRecordDto {
   @IsBoolean()
   toPresent: boolean;
 
-  @ApiProperty({ type: String })
-  @IsString()
+  @ApiProperty({ required: false, type: LocationDto })
   @IsOptional()
-  officeLocation?: Location;
+  @ValidateNested()
+  @Type(() => LocationDto)
+  officeLocation?: LocationDto;
 }

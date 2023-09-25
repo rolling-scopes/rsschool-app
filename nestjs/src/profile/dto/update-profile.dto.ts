@@ -275,6 +275,8 @@ export class UpdateProfileInfoDto {
   @ApiProperty({ required: false, nullable: true, type: [EmploymentRecordDto] })
   @IsOptional()
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EmploymentRecordDto)
   employmentHistory?: EmploymentRecordDto[];
 
   @ApiProperty({ required: false, nullable: true, type: String })

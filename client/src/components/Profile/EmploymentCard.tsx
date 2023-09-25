@@ -27,7 +27,7 @@ const defaultEmploymentRecord: EmploymentRecordDto = {
   dateTo: '',
   toPresent: false,
   companyName: '',
-  officeLocation: '',
+  officeLocation: undefined,
 };
 
 const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {

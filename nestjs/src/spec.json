@@ -3833,6 +3833,7 @@
           "isProfileSettingsChanged"
         ]
       },
+      "LocationDto": { "type": "object", "properties": {} },
       "EmploymentRecordDto": {
         "type": "object",
         "properties": {
@@ -3841,9 +3842,9 @@
           "dateFrom": { "type": "string" },
           "companyName": { "type": "string" },
           "toPresent": { "type": "boolean" },
-          "officeLocation": { "type": "string" }
+          "officeLocation": { "$ref": "#/components/schemas/LocationDto" }
         },
-        "required": ["title", "dateTo", "dateFrom", "companyName", "toPresent", "officeLocation"]
+        "required": ["title", "dateTo", "dateFrom", "companyName", "toPresent"]
       },
       "UpdateProfileInfoDto": {
         "type": "object",

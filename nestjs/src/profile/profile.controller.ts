@@ -9,6 +9,7 @@ import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
 import { EndorsementDto } from './dto/endorsement.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -74,7 +75,7 @@ export class ProfileController {
   public async getEmploymentHistory(@Req() req: CurrentRequest) {
     const { user } = req;
     const employmentHistory = await this.profileService.getEmploymentHistory(user.id);
-    return employmentHistory.map(record => new EmploymentRecordDto(record));
+    return employmentHistory.map(record => plainToClass(EmploymentRecordDto, record));
   }
 
   @Get(':username')
