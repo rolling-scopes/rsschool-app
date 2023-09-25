@@ -35,19 +35,39 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
             companyName,
           }}
         />
-        <Form.Item {...restField} name={[name, 'title']} label="Position title" rules={[{ required: true, message: '${label} is required' }]}>
+        <Form.Item
+          {...restField}
+          name={[name, 'title']}
+          label="Position title"
+          rules={[{ required: true, message: '${label} is required' }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item {...restField} name={[name, 'companyName']} label="Company name" rules={[{ required: true, message: '${label} is required' }]}>
+        <Form.Item
+          {...restField}
+          name={[name, 'companyName']}
+          label="Company name"
+          rules={[{ required: true, message: '${label} is required' }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item {...restField} name={[name, 'toPresent']} valuePropName="checked">
           <Checkbox onChange={onCheckboxChange}>I am currently working in this role</Checkbox>
         </Form.Item>
-        <Form.Item {...restField} name={[name, 'dateFrom']} label="Date From" rules={[{ required: true, message: '${label} is required' }]}>
+        <Form.Item
+          {...restField}
+          name={[name, 'dateFrom']}
+          label="Date From"
+          rules={[{ required: true, message: '${label} is required' }]}
+        >
           <DatePicker />
         </Form.Item>
-        <Form.Item {...restField} name={[name, 'dateTo']} label="Date To" rules={[{ required: isDateToRequired, message: '${label} is required' }]}>
+        <Form.Item
+          {...restField}
+          name={[name, 'dateTo']}
+          label="Date To"
+          rules={[{ required: isDateToRequired, message: '${label} is required' }]}
+        >
           <DatePicker disabled={isToPresent} />
         </Form.Item>
         <Form.Item {...restField} name={[name, 'officeLocation']} label="Office location">
