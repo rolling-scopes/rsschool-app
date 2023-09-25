@@ -5,14 +5,14 @@ import EmploymentHistoryDisplayItem from './EmploymentHistoryDisplayItem';
 import { EmploymentRecordFormItem } from '../EmploymentCard';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
-type EmploymentHistoryItemFormPros = {
+type EmploymentHistoryFormItemPros = {
   name: number;
   restField: { fieldKey?: number | undefined };
   remove: (index: number | number[]) => void;
   form: FormInstance<{ employmentHistory: EmploymentRecordFormItem[] }>;
 };
 
-const EmploymentHistoryItemForm = ({ name, restField, remove, form }: EmploymentHistoryItemFormPros) => {
+const EmploymentHistoryFormItem = ({ name, restField, remove, form }: EmploymentHistoryFormItemPros) => {
   const { title, dateFrom, dateTo, toPresent, companyName } = form.getFieldValue(['employmentHistory', name]) ?? {};
   const [isToPresent, setToPresent] = useState<boolean>(toPresent);
   const [isDateToRequired, setIsDateToRequired] = useState<boolean>(!toPresent);
@@ -62,4 +62,4 @@ const EmploymentHistoryItemForm = ({ name, restField, remove, form }: Employment
   );
 };
 
-export default EmploymentHistoryItemForm;
+export default EmploymentHistoryFormItem;

@@ -4,7 +4,7 @@ import { ReadOutlined, FileAddOutlined } from '@ant-design/icons';
 import isEqual from 'lodash/isEqual';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { EmploymentRecordDto, UpdateProfileInfoDto } from 'api';
-import EmploymentHistoryItemForm from './EmploymentHistory/EmploymentHistoryItemForm';
+import EmploymentHistoryFormItem from './EmploymentHistory/EmploymentHistoryFormItem';
 import EmploymentHistoryDisplayItem from './EmploymentHistory/EmploymentHistoryDisplayItem';
 import dayjs from 'dayjs';
 
@@ -120,7 +120,7 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, ...restField }) => (
-                    <EmploymentHistoryItemForm
+                    <EmploymentHistoryFormItem
                       key={key}
                       name={name}
                       restField={restField}
