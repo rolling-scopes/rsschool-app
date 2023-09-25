@@ -1,3 +1,4 @@
+import { Location } from '@common/models';
 import { EmploymentRecord } from '@entities/user';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
@@ -35,5 +36,5 @@ export class EmploymentRecordDto {
   @ApiProperty({ type: String })
   @IsString()
   @IsOptional()
-  officeLocation?: string;
+  officeLocation?: Location;
 }

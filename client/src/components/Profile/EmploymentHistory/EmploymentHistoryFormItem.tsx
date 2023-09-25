@@ -4,6 +4,8 @@ import { useState } from 'react';
 import EmploymentHistoryDisplayItem from './EmploymentHistoryDisplayItem';
 import { EmploymentRecordFormItem } from '../EmploymentCard';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { LocationSelect } from 'components/Forms';
+import { Location } from 'api';
 
 type EmploymentHistoryFormItemPros = {
   name: number;
@@ -13,9 +15,15 @@ type EmploymentHistoryFormItemPros = {
 };
 
 const EmploymentHistoryFormItem = ({ name, restField, remove, form }: EmploymentHistoryFormItemPros) => {
-  const { title, dateFrom, dateTo, toPresent, companyName } = form.getFieldValue(['employmentHistory', name]) ?? {};
+  const { title, dateFrom, dateTo, toPresent, companyName, officeLocation } =
+    form.getFieldValue(['employmentHistory', name]) ?? {};
   const [isToPresent, setToPresent] = useState<boolean>(toPresent);
   const [isDateToRequired, setIsDateToRequired] = useState<boolean>(!toPresent);
+  const [locationSelectValue, setLocationSelectValue] = useState(officeLocation);
+
+  const handleLocationChange = (value: Location | null) => {
+    setLocationSelectValue(value);
+  };
 
   const onCheckboxChange = (e: CheckboxChangeEvent) => {
     const toPresentValue = e.target.checked;
@@ -71,7 +79,7 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
           <DatePicker disabled={isToPresent} />
         </Form.Item>
         <Form.Item {...restField} name={[name, 'officeLocation']} label="Office location">
-          <Input />
+          <LocationSelect style={{ flex: 1 }} onChange={handleLocationChange} location={locationSelectValue} />
         </Form.Item>
         <Button size="small" type="dashed" onClick={() => remove(name)}>
           <DeleteOutlined /> Delete

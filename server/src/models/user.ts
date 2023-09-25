@@ -17,7 +17,7 @@ import { Mentor } from './mentor';
 import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
-import { Discord } from '../../../common/models/profile';
+import { Discord, Location } from '../../../common/models/profile';
 import { CourseUser } from './courseUser';
 import { NotificationUserConnection, Resume } from '.';
 
@@ -33,7 +33,7 @@ export interface EmploymentRecord {
   dateFrom: string;
   companyName: string;
   toPresent: boolean;
-  officeLocation?: string;
+  officeLocation?: Location;
 }
 
 type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
