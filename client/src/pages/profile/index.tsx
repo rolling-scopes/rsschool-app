@@ -205,7 +205,7 @@ export class ProfilePage extends React.Component<Props, State> {
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];
 
-    const githubId = this.props.session.githubId;
+    const githubId = profile?.generalInfo?.githubId;
     const isAdmin = this.props.session.isAdmin;
 
     const cards = [

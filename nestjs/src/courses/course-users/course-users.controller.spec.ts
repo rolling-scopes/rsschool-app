@@ -18,6 +18,7 @@ const mockCourseUser = {
   isSupervisor: true,
   isJuryActivist: false,
   isDementor: true,
+  isActivist: false,
   githubId: mockGithubId,
   name: 'Foo Bar',
 } as ExtendedCourseUser;
@@ -82,7 +83,7 @@ describe('CourseUsersController', () => {
 
       await controller.putUser(mockCourseId, mockGithubId, mockCourseUser);
 
-      const { isManager, isDementor, isSupervisor } = mockCourseUser;
+      const { isManager, isDementor, isSupervisor, isActivist } = mockCourseUser;
 
       expect(mockUsersService.getByGithubId).toHaveBeenCalledWith(mockGithubId);
       expect(mockCourseUsersService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
@@ -90,6 +91,7 @@ describe('CourseUsersController', () => {
         isDementor,
         isManager,
         isSupervisor,
+        isActivist,
       });
       expect(mockCourseUsersService.saveCourseUsers).not.toHaveBeenCalled();
     });
@@ -100,7 +102,7 @@ describe('CourseUsersController', () => {
 
       await controller.putUser(mockCourseId, mockGithubId, mockCourseUser);
 
-      const { isManager, isDementor, isSupervisor } = mockCourseUser;
+      const { isManager, isDementor, isSupervisor, isActivist } = mockCourseUser;
 
       expect(mockUsersService.getByGithubId).toHaveBeenCalledWith(mockGithubId);
       expect(mockCourseUsersService.getByUserId).toHaveBeenCalledWith(mockUserId, mockCourseId);
@@ -110,6 +112,7 @@ describe('CourseUsersController', () => {
         isDementor,
         isManager,
         isSupervisor,
+        isActivist,
       });
       expect(mockCourseUsersService.updateCourseUser).not.toHaveBeenCalled();
     });
