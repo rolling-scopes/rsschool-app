@@ -30,19 +30,13 @@ const defaultEmploymentRecord: EmploymentRecordDto = {
   officeLocation: '',
 };
 
-const hasEmptyFields = (employments: EmploymentRecordFormItem[]) =>
-  employments.some(
-    ({ title, dateFrom, dateTo, toPresent, companyName, officeLocation }) =>
-      !title || !dateFrom || !companyName || !officeLocation || !(toPresent || dateTo),
-  );
-
 const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
   const [form] = Form.useForm<{ employmentHistory: EmploymentRecordFormItem[] }>();
 
   const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({
     ...employment,
     dateFrom: employment.dateFrom.format(dateFormat),
-    dateTo: employment.dateTo.format(dateFormat),
+    dateTo: employment.toPresent ? '' : employment.dateTo.format(dateFormat),
   });
 
   const employmentRecordDtoToFormItem = (employment: EmploymentRecordDto): EmploymentRecordFormItem => ({
@@ -56,12 +50,24 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
   );
   const [employments, setEmployments] = useState<EmploymentRecordFormItem[]>(displayEmployments);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
-  const isAddDisabled = useMemo(() => !!employments.length && hasEmptyFields(employments), [employments]);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const isAddDisabled = useMemo(() => !!employments.length && !isFormValid, [employments, isFormValid]);
 
   useEffect(() => {
-    const readyToUpdate = !isEqual(displayEmployments, employments) && !hasEmptyFields(employments);
+    form.validateFields({ validateOnly: true }).then(
+      () => {
+        setIsFormValid(true);
+      },
+      () => {
+        setIsFormValid(false);
+      },
+    );
+  }, [employments]);
+
+  useEffect(() => {
+    const readyToUpdate = !isEqual(displayEmployments, employments) && isFormValid;
     setIsSaveDisabled(!readyToUpdate);
-  }, [displayEmployments, employments]);
+  }, [displayEmployments, employments, isFormValid]);
 
   const handleSave = async () => {
     const employmentHistory = employments;
