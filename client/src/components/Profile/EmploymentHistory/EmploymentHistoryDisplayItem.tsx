@@ -24,7 +24,9 @@ const EmploymentHistoryDisplayItem = ({
     const years = yearsCount > 0 ? `${yearsCount} year${yearsCount > 1 ? 's' : ''}` : '';
     const duration = `${months} ${years}`.trim();
 
-    return `${dateFrom.format(workingPeriodFormat)} - ${toPresent ? 'Present' : dateTo.format(workingPeriodFormat)} - ${duration}`;
+    return `${dateFrom.format(workingPeriodFormat)} - ${
+      toPresent ? 'Present' : dateTo.format(workingPeriodFormat)
+    } - ${duration}`;
   };
 
   return (
