@@ -78,7 +78,7 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
             { required: isDateToRequired, message: '${label} is required' },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue('dateFrom') < value) {
+                if (!value || getFieldValue(['employmentHistory', name, 'dateFrom']) < value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(new Error('Date To must be greater than Date From!'));
