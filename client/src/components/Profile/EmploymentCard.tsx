@@ -32,6 +32,7 @@ const defaultEmploymentRecord: EmploymentRecordDto = {
 
 const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
   const [form] = Form.useForm<{ employmentHistory: EmploymentRecordFormItem[] }>();
+  const values = Form.useWatch([], form);
 
   const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({
     ...employment,
@@ -54,6 +55,10 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
   const isAddDisabled = useMemo(() => !!employments.length && !isFormValid, [employments, isFormValid]);
 
   useEffect(() => {
+    if (!values || !Object.values(values).every(Boolean)) {
+      return;
+    }
+
     form.validateFields({ validateOnly: true }).then(
       () => {
         setIsFormValid(true);
@@ -62,7 +67,7 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
         setIsFormValid(false);
       },
     );
-  }, [employments]);
+  }, [values]);
 
   useEffect(() => {
     const readyToUpdate = !isEqual(displayEmployments, employments) && isFormValid;
