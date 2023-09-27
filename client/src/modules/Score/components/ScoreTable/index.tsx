@@ -215,7 +215,7 @@ export function ScoreTable(props: Props) {
   );
 }
 
-function getTableWidth(columnsCount: number) {
+export function getTableWidth(columnsCount: number) {
   const columnWidth = 90;
   // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
   const tableWidth = columnsCount * columnWidth;

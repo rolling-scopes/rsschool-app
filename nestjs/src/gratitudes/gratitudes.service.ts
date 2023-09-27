@@ -2,9 +2,9 @@ import { Feedback } from '@entities/feedback';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, CourseRole } from 'src/auth';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { DiscordService } from './discord.service';
-import { Badge, CreateGratitudeDto } from './dto';
+import { Badge, CreateGratitudeDto, HeroesRadarQueryDto } from './dto';
 
 @Injectable()
 export class GratitudesService {
@@ -14,6 +14,7 @@ export class GratitudesService {
     private discordService: DiscordService,
     @InjectRepository(Feedback)
     private repository: Repository<Feedback>,
+    private dataSource: DataSource,
   ) {}
 
   public async create(authUser: AuthUser, data: CreateGratitudeDto) {
@@ -49,6 +50,62 @@ export class GratitudesService {
       const allowed = badge.roles?.some(role => userCourseRoles.includes(role)) ?? true;
       return allowed;
     });
+  }
+
+  public async getHeroesRadar({ courseId, current: page = 1, pageSize = 20, notActivist }: HeroesRadarQueryDto) {
+    const countSubQuery = this.repository.createQueryBuilder('feedback');
+    const countQuery = this.dataSource.createQueryBuilder();
+
+    const heroesSubQuery = this.repository.createQueryBuilder('feedback');
+    const heroesQuery = this.dataSource.createQueryBuilder();
+
+    if (notActivist) {
+      [countSubQuery, heroesQuery].forEach(query => query.having(`not bool_or("badgeId" = 'RS_activist')`));
+    }
+
+    if (courseId) {
+      [heroesSubQuery, countSubQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
+    }
+
+    countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId"))`).groupBy('"toUserId"');
+    countQuery
+      .select('COUNT(*) as count')
+      .from(`(${countSubQuery.getQuery()})`, 'badges')
+      .setParameters(countSubQuery.getParameters());
+
+    heroesSubQuery
+      .select(['"feedback"."badgeId"', '"feedback"."toUserId"', 'COUNT(*) as "badgeCount"'])
+      .groupBy('"badgeId"')
+      .addGroupBy('"toUserId"');
+
+    heroesQuery
+      .select([
+        '"user"."githubId"',
+        '"user"."firstName"',
+        '"user"."lastName"',
+        'sum("badgeCount") as total',
+        `jsonb_agg(json_build_object('id', "badgeId", 'count', "badgeCount")) as badges`,
+      ])
+      .from(`(${heroesSubQuery.getQuery()})`, 'badges')
+      .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
+      .groupBy('"githubId"')
+      .addGroupBy('"firstName"')
+      .addGroupBy('"lastName"')
+      .orderBy('total', 'DESC')
+      .addOrderBy('"githubId"', 'ASC')
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+      .setParameters(heroesSubQuery.getParameters());
+
+    const { count } = await countQuery.getRawOne();
+    const total = Number(count);
+    const heroes = await heroesQuery.getRawMany();
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      heroes,
+      meta: { itemCount: heroes.length, total, current: page, pageSize, totalPages },
+    };
   }
 
   private async postUserFeedback(data: Feedback) {
