@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, useContext, useMemo } from 'react';
-import { Button, Dropdown, Menu, Space, Tooltip } from 'antd';
+import { Button, Dropdown, Menu, Space } from 'antd';
 import {
   EyeOutlined,
   LogoutOutlined,
@@ -37,6 +37,12 @@ const MENU_ITEMS = [
     title: 'My CV',
   },
   {
+    link: 'https://docs.app.rs.school',
+    icon: <QuestionCircleFilled />,
+    title: 'Help',
+    target: '_blank',
+  },
+  {
     link: '/api/v2/auth/github/logout',
     icon: <LogoutOutlined />,
     title: 'Logout',
@@ -53,11 +59,11 @@ export function Header({ title, showCourseName }: Props) {
 
   const menu = (
     <Menu>
-      {MENU_ITEMS.map(({ link, icon, title }, id, arr) => (
+      {MENU_ITEMS.map(({ link, icon, title, target }, id, arr) => (
         <Fragment key={id}>
           {id === arr.length - 1 ? <Menu.Divider /> : null}
           <Menu.Item key={id} style={currentRoute === link ? menuActiveItemStyle : undefined}>
-            <Button type="link" href={link} style={{ textAlign: 'left', width: '100%' }}>
+            <Button type="link" target={target} href={link} style={{ textAlign: 'left', width: '100%' }}>
               {icon} {title}
             </Button>
           </Menu.Item>
@@ -97,40 +103,21 @@ export function Header({ title, showCourseName }: Props) {
           <b>{title}</b> {showCourseName ? course?.name : null}
         </div>
         <div className="profile">
-          <a target="_blank" href="https://docs.app.rs.school">
-            <Tooltip title="RS School App docs">
-              <Button type="primary" ghost size="large" style={{ marginRight: 8 }}>
-                <QuestionCircleFilled />
-                <span className="button-text">Help</span>
-              </Button>
-            </Tooltip>
-          </a>
           {session.githubId && (
             <Dropdown overlay={menu} trigger={['click']}>
-              <Button type="dashed" size="large">
-                <GithubAvatar githubId={session?.githubId} size={24} />
-                <span style={{ marginLeft: '12px' }} className="button-text">
-                  My Profile
-                </span>
+              <Button type="link">
+                <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
           )}
         </div>
         <style jsx>{`
-          .title {
-            font-size: 120%;
-            align-self: center;
-          }
           @media all and (max-width: 768px) {
             .title {
               width: 100%;
               order: 3;
               text-align: center;
               margin-top: 16px;
-            }
-
-            .button-text {
-              display: none;
             }
           }
         `}</style>
