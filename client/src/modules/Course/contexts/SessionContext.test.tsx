@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { SessionProvider } from './';
 import Router from 'next/router';
 import { useAsync } from 'react-use';
@@ -27,8 +26,7 @@ describe('<SessionProvider />', () => {
 
   beforeEach(() => {
     (useActiveCourseContext as jest.Mock).mockReturnValue(mockActiveCourse);
-  }
-  );
+  });
 
   it('should render loading screen', () => {
     (useAsync as jest.Mock).mockReturnValue({ loading: true });
@@ -61,7 +59,7 @@ describe('<SessionProvider />', () => {
   });
 
   it('should render warning for user without allowed roles', () => {
-    (useAsync as jest.Mock).mockReturnValue({ value: {...mockSession, isAdmin: false} });
+    (useAsync as jest.Mock).mockReturnValue({ value: { ...mockSession, isAdmin: false } });
     render(<SessionProvider allowedRoles={['mentor']}>{mockChildren}</SessionProvider>);
     expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
   });
