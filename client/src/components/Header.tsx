@@ -9,7 +9,6 @@ import {
   SolutionOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
-import { Course } from 'services/models';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
 import { SessionContext } from 'modules/Course/contexts';
@@ -19,7 +18,6 @@ import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseCont
 type Props = {
   showCourseName?: boolean;
   title?: string;
-  course?: Course;
 };
 
 const MENU_ITEMS = [
@@ -45,13 +43,13 @@ const MENU_ITEMS = [
   },
 ];
 
-export function Header({ title, showCourseName, course }: Props) {
+export function Header({ title, showCourseName }: Props) {
   const { asPath: currentRoute } = useRouter();
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
 
   const session = useContext(SessionContext);
-  const activeCourse = useActiveCourseContext().course ?? course;
-  const courseLinks = useMemo(() => getNavigationItems(session, activeCourse ?? null), [course]);
+  const { course } = useActiveCourseContext();
+  const courseLinks = useMemo(() => getNavigationItems(session, course ?? null), [course]);
 
   const menu = (
     <Menu>
@@ -96,7 +94,7 @@ export function Header({ title, showCourseName, course }: Props) {
           <SolidarityUkraine />
         </Space>
         <div className="title">
-          <b>{title}</b> {showCourseName ? activeCourse?.name : null}
+          <b>{title}</b> {showCourseName ? course?.name : null}
         </div>
         <div className="profile">
           <a target="_blank" href="https://docs.app.rs.school">

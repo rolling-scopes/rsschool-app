@@ -13,7 +13,6 @@ type Props = {
   noData?: boolean;
   background?: string;
   withMargin?: boolean;
-  course?: Course;
 };
 
 export function PageLayout(props: Props) {
@@ -22,7 +21,7 @@ export function PageLayout(props: Props) {
 
   return (
     <Layout style={{ background: props.background ?? 'transparent', minHeight: '100vh' }}>
-      <Header title={props.title} course={props.course} showCourseName={props.showCourseName} />
+      <Header title={props.title} showCourseName={props.showCourseName} />
       {props.error ? (
         <Result
           status="500"
@@ -46,7 +45,7 @@ export function PageLayout(props: Props) {
 export function PageLayoutSimple(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header title={props.title} course={props.course} showCourseName={props.showCourseName} />
+      <Header title={props.title} showCourseName={props.showCourseName} />
       <Layout.Content>
         {props.noData ? (
           <div>no data</div>
@@ -81,11 +80,9 @@ export function AdminPageLayout({
   courses: Course[];
   styles?: React.CSSProperties;
 }>) {
-  const [course] = courses;
-
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header title={title} showCourseName={showCourseName} course={course} />
+      <Header title={title} showCourseName={showCourseName} />
       <Layout style={{ background: '#e5e5e5' }}>
         <AdminSider courses={courses} />
         <Layout.Content style={{ background: '#fff', margin: 16, padding: 16, ...styles }}>
