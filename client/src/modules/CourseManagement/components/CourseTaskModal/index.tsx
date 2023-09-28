@@ -30,6 +30,7 @@ const taskApi = new TasksApi();
 export function CourseTaskModal(props: Props) {
   const { data } = props;
   const [changes, setChanges] = useState({} as Record<string, any>);
+  const [form] = Form.useForm();
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 
   const { loading, value: tasksResponse } = useAsync(() => taskApi.getTasks(), []);
@@ -67,29 +68,38 @@ export function CourseTaskModal(props: Props) {
     props.onCancel();
   };
 
+  const findTaskById = useCallback((id: number | undefined) => tasks.find(t => t.id === id), [tasks]);
+
   const filterOption = useCallback(
     (input: string, option?: { value: number }): boolean => {
       if (!input) {
         return false;
       }
-      const task = tasks.find(t => t.id === option?.value);
+      const task = findTaskById(option?.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
   );
+
+  const onTaskChange = (taskId: number) => {
+    const task = findTaskById(taskId);
+
+    form.setFieldsValue({ type: task?.type });
+  };
 
   return (
     <ModalForm
       loading={loading}
       getInitialValues={getInitialValues}
       data={data}
+      form={form}
       onChange={values => setChanges({ checker: values.checker })}
       title="Course Task"
       submit={handleModalSubmit}
       cancel={handleModalCancel}
     >
       <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-        <Select filterOption={filterOption} showSearch placeholder="Please select a task">
+        <Select filterOption={filterOption} showSearch placeholder="Please select a task" onChange={onTaskChange}>
           {tasks.map((task: TaskDto) => (
             <Option key={task.id} value={task.id}>
               {task.name} {tagsRenderer(task.tags)}
@@ -100,11 +110,11 @@ export function CourseTaskModal(props: Props) {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="type" label="Task Type">
-            <Select placeholder="Please select type">
+            <Select placeholder="Please select type" disabled>
               {TASK_TYPES.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
+                <Option key={id} value={id}>
                   {name}
-                </Select.Option>
+                </Option>
               ))}
             </Select>
           </Form.Item>

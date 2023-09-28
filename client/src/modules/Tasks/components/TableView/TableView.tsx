@@ -8,7 +8,7 @@ import {
   tagsCoursesRendererWithRemainingNumber,
   boolIconRenderer,
 } from 'components/Table';
-import { NEW_API_TASK_TYPES } from 'data/taskTypes';
+import { TASK_TYPES } from 'data/taskTypes';
 import { uniqBy } from 'lodash';
 import { ColumnName } from 'modules/Tasks/types';
 import { useMemo } from 'react';
@@ -44,12 +44,11 @@ function getColumns(
       dataIndex: 'skills',
       render: tagsRenderer,
     },
-    // TODO: resolve double source data issue(TaskDtoTypeEnum, CourseTaskDtoTypeEnum)
     {
       title: ColumnName.Type,
       dataIndex: 'type',
       sorter: stringSorter<TaskDto>('type'),
-      filters: NEW_API_TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
+      filters: TASK_TYPES.map(type => ({ text: type.name, value: type.id })),
       onFilter: (value, record) => record.type === value,
     },
     {

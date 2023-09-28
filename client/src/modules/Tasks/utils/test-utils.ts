@@ -1,11 +1,11 @@
 import { TaskDto } from 'api';
-import { NEW_API_TASK_TYPES } from 'data/taskTypes';
+import { TASK_TYPES } from 'data/taskTypes';
 
 export const COURSE_NAME_MOCK = 'RS2023';
 
 export function generateTasksData(count = 3): TaskDto[] {
   const data = new Array(count).fill({}).map((_, i) => {
-    const taskType = NEW_API_TASK_TYPES[i].id;
+    const taskType = TASK_TYPES[i].id;
     const task: TaskDto = {
       discipline: { name: 'JS', id: 0 },
       id: i,

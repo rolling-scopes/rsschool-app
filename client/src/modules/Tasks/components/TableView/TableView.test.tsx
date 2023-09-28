@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { TaskDto } from 'api';
 import { TableView } from './TableView';
 import { ColumnName } from 'modules/Tasks/types';
-import { NEW_API_TASK_TYPES } from 'data/taskTypes';
+import { TASK_TYPES } from 'data/taskTypes';
 import { COURSE_NAME_MOCK, generateTasksData } from 'modules/Tasks/utils/test-utils';
 
 const renderTableView = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
@@ -101,7 +101,7 @@ describe('TableView', () => {
 
   describe('filter & search data', () => {
     test('should check filter in dropdown when tag is selected', async () => {
-      const tag = NEW_API_TASK_TYPES[0].name;
+      const tag = TASK_TYPES[0].name;
       const data = generateTasksData();
       renderTableView(data);
 
@@ -119,7 +119,7 @@ describe('TableView', () => {
     });
 
     test('should reset filter on Reset click', async () => {
-      const tag = NEW_API_TASK_TYPES[0].name;
+      const tag = TASK_TYPES[0].name;
       const data = generateTasksData();
       renderTableView(data);
 
@@ -143,7 +143,7 @@ describe('TableView', () => {
 
     test('should render only filtered by Type data', async () => {
       const data = generateTasksData();
-      const selectedTag = NEW_API_TASK_TYPES[0];
+      const selectedTag = TASK_TYPES[0];
       const notSelectedTags = data.filter(elem => elem.type !== selectedTag.id).map(task => task.type);
       renderTableView(data);
 
@@ -231,7 +231,7 @@ describe('TableView', () => {
 
     test('should render only data filtered by Name column search', async () => {
       const data = generateTasksData();
-      const searchQuery = NEW_API_TASK_TYPES[0].id;
+      const searchQuery = TASK_TYPES[0].id;
       renderTableView(data);
 
       // Check that all items rendered
@@ -259,7 +259,7 @@ describe('TableView', () => {
 
     test('should render all data when search query is cleared', async () => {
       const data = generateTasksData();
-      const searchQuery = NEW_API_TASK_TYPES[0].id;
+      const searchQuery = TASK_TYPES[0].id;
       renderTableView(data);
 
       // Find and click search button for column
