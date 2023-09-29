@@ -146,7 +146,7 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
           <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
             <Checkbox>Show only not activists</Checkbox>
           </Form.Item>
-          <Space align="start" size={20}>
+          <Space align="start" size={20} style={{ marginBottom: 16 }}>
             <Button size="middle" type="primary" htmlType="submit">
               Filter
             </Button>
