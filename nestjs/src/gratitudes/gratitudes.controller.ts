@@ -32,8 +32,10 @@ export class GratitudesController {
   @ApiOkResponse({ type: HeroesRadarDto })
   public async getHeroesRadar(@Query() query: HeroesRadarQueryDto) {
     const heroes = await this.service.getHeroesRadar(query);
-
+    // console.log('heroes: ', heroes);
     return new HeroesRadarDto(heroes);
+
+    return heroes;
   }
 
   @Get('/heroes/countries')

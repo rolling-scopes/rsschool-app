@@ -3069,10 +3069,22 @@ export interface HeroesRadarBadgeDto {
     'id': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof HeroesRadarBadgeDto
      */
-    'count': number;
+    'badgeId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'date': string;
 }
 /**
  * 

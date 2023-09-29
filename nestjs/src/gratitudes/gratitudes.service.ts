@@ -52,6 +52,16 @@ export class GratitudesService {
     });
   }
 
+  private async getUserIdsWithActivistBadge() {
+    const activistIds = await this.repository
+      .createQueryBuilder('feedback')
+      .select('DISTINCT "toUserId"')
+      .where(`"badgeId" = 'RS_activist'`)
+      .getRawMany<{ toUserId: number }>();
+
+    return activistIds.map(({ toUserId }) => toUserId);
+  }
+
   public async getHeroesRadar({
     courseId,
     current: page = 1,
@@ -61,63 +71,72 @@ export class GratitudesService {
     startDate,
     endDate,
   }: HeroesRadarQueryDto) {
-    const countSubQuery = this.repository.createQueryBuilder('feedback');
-    const countQuery = this.dataSource.createQueryBuilder();
+    const countQuery = this.repository
+      .createQueryBuilder('feedback')
+      .select('COUNT(DISTINCT "toUserId") as count')
+      .innerJoin('feedback.toUser', 'user');
 
-    const heroesSubQuery = this.repository.createQueryBuilder('feedback');
-    const heroesQuery = this.dataSource.createQueryBuilder();
+    const countedBadgesQuery = this.repository
+      .createQueryBuilder('feedback')
+      .select([
+        'feedback."id"',
+        '"user"."githubId"',
+        '"user"."firstName"',
+        '"user"."lastName"',
+        'feedback."badgeId"',
+        'feedback."comment"',
+        'feedback."createdDate"',
+        'ROW_NUMBER() OVER (PARTITION BY feedback."toUserId" ORDER BY feedback.createdDate DESC) AS "rowNumber"',
+        'COUNT(*) OVER (PARTITION BY feedback."toUserId") AS "total"',
+      ])
+      .innerJoin('feedback.toUser', 'user');
 
     if (notActivist) {
-      [countSubQuery, heroesQuery].forEach(query => query.having(`not bool_or("badgeId" = 'RS_activist')`));
+      const ids = await this.getUserIdsWithActivistBadge();
+      [countQuery, countedBadgesQuery].forEach(query => query.where('"feedback"."toUserId" NOT IN (:...ids)', { ids }));
     }
 
     if (courseId) {
-      [heroesSubQuery, countSubQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
+      [countQuery, countedBadgesQuery].forEach(query => query.where('feedback."courseId" = :courseId', { courseId }));
     }
 
     if (countryName) {
-      [heroesQuery, countQuery].forEach(query => query.where('"user"."countryName" = :countryName', { countryName }));
+      [countQuery, countedBadgesQuery].forEach(query =>
+        query.where('"user"."countryName" = :countryName', { countryName }),
+      );
     }
 
     if (startDate && endDate) {
-      [heroesSubQuery, countSubQuery].forEach(query =>
-        query.where('"createdDate" BETWEEN :startDate and :endDate', {
+      [countQuery, countedBadgesQuery].forEach(query =>
+        query.where('feedback."createdDate" BETWEEN :startDate and :endDate', {
           startDate,
           endDate,
         }),
       );
     }
 
-    countSubQuery.select(`jsonb_agg(json_build_object('badgeId', "badgeId")), "toUserId"`).groupBy('"toUserId"');
-    countQuery
-      .select('COUNT(*) as count')
-      .from(`(${countSubQuery.getQuery()})`, 'badges')
-      .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
-      .setParameters(countSubQuery.getParameters());
-
-    heroesSubQuery
-      .select(['"feedback"."badgeId"', '"feedback"."toUserId"', 'COUNT(*) as "badgeCount"'])
-      .groupBy('"badgeId"')
-      .addGroupBy('"toUserId"');
-
-    heroesQuery
+    const heroesQuery = this.dataSource
+      .createQueryBuilder()
       .select([
-        '"user"."githubId"',
-        '"user"."firstName"',
-        '"user"."lastName"',
-        'sum("badgeCount") as total',
-        `jsonb_agg(json_build_object('id', "badgeId", 'count', "badgeCount")) as badges`,
+        '"badgesInfo"."githubId"',
+        '"badgesInfo"."firstName"',
+        '"badgesInfo"."lastName"',
+        'total',
+        `jsonb_agg(json_build_object('id', "id",'badgeId', "badgeId",'comment', "comment",'date',"createdDate") ORDER BY "createdDate" DESC) as badges`,
       ])
-      .from(`(${heroesSubQuery.getQuery()})`, 'badges')
-      .leftJoin('user', 'user', 'badges."toUserId" = "user"."id"')
+      .from(
+        qb => qb.from(`(${countedBadgesQuery.getQuery()})`, 'countedBadges').where('"countedBadges"."rowNumber" <= 20'),
+        'badgesInfo',
+      )
       .groupBy('"githubId"')
       .addGroupBy('"firstName"')
       .addGroupBy('"lastName"')
+      .addGroupBy('"total"')
       .orderBy('total', 'DESC')
       .addOrderBy('"githubId"', 'ASC')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
-      .setParameters(heroesSubQuery.getParameters());
+      .setParameters(countedBadgesQuery.getParameters());
 
     const { count } = await countQuery.getRawOne();
     const total = Number(count);
