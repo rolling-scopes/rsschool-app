@@ -2104,6 +2104,28 @@
         "tags": ["gratitudes"]
       }
     },
+    "/gratitudes/heroes/radar/csv": {
+      "get": {
+        "operationId": "getHeroesRadarCsv",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "tags": ["gratitudes"]
+      }
+    },
     "/gratitudes/heroes/countries": {
       "get": {
         "operationId": "getHeroesCountries",

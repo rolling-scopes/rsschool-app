@@ -1,4 +1,5 @@
-import { Button, Checkbox, DatePicker, Form, Select, Space, TableProps } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Select, Space, TableProps, Row } from 'antd';
+import { FileExcelOutlined } from '@ant-design/icons';
 import HeroesRadarTable from './HeroesRadarTable';
 import { HeroesRadarDto, GratitudesApi, HeroRadarDto, CountryDto } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -104,39 +105,62 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
     }
   };
 
+  const exportToCsv = () => {
+    const data = onlyDefined(formData);
+    const formParams = Object.entries(data).reduce((acc: string[][], [key, value]) => {
+      if (key === 'dates' && Array.isArray(value)) {
+        const [startDate, endDate] = value.map(date => date?.format('YYYY-MM-DD'));
+        return [...acc, ['startDate', `${startDate}`], ['endDate', `${endDate}`]];
+      }
+      return [...acc, [key, `${value}`]];
+    }, []);
+
+    const params = new URLSearchParams([['current', '1'], ['pageSize', `${heroes.pagination.total}`], ...formParams]);
+    window.location.href = `/api/v2/gratitudes/heroes/radar/csv?${params}`;
+  };
+
   return (
     <>
-      <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
-        <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
-          <Select
-            placeholder="Select course"
-            showSearch
-            optionFilterProp="label"
-            options={courses.map(({ id, name }) => ({ value: id, label: name }))}
-          />
-        </Form.Item>
-        {isAdmin && <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
-          <Select
-            placeholder="Select country"
-            showSearch
-            options={countries.map(({ countryName }) => ({ value: countryName, label: countryName }))}
-          />
-        </Form.Item>}
-        <Form.Item name={'dates'} label="Dates" style={{ minWidth: 260, marginBottom: 16 }}>
-          <RangePicker presets={rangePresets} />
-        </Form.Item>
-        <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
-          <Checkbox>Show only not activists</Checkbox>
-        </Form.Item>
-        <Space align="start" size={20}>
-          <Button size="middle" type="primary" htmlType="submit">
-            Filter
+      <Row style={{ marginBottom: 24 }} justify="space-between">
+        <Form layout={formLayout} form={form} onFinish={handleSubmit}>
+          <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
+            <Select
+              placeholder="Select course"
+              showSearch
+              optionFilterProp="label"
+              options={courses.map(({ id, name }) => ({ value: id, label: name }))}
+            />
+          </Form.Item>
+          {isAdmin && (
+            <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
+              <Select
+                placeholder="Select country"
+                showSearch
+                options={countries.map(({ countryName }) => ({ value: countryName, label: countryName }))}
+              />
+            </Form.Item>
+          )}
+          <Form.Item name={'dates'} label="Dates" style={{ minWidth: 260, marginBottom: 16 }}>
+            <RangePicker presets={rangePresets} />
+          </Form.Item>
+          <Form.Item name={'notActivist'} valuePropName="checked" style={{ marginBottom: 16 }}>
+            <Checkbox>Show only not activists</Checkbox>
+          </Form.Item>
+          <Space align="start" size={20}>
+            <Button size="middle" type="primary" htmlType="submit">
+              Filter
+            </Button>
+            <Button size="middle" type="primary" onClick={onClear}>
+              Clear
+            </Button>
+          </Space>
+        </Form>
+        {isAdmin && (
+          <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
+            Export CSV
           </Button>
-          <Button size="middle" type="primary" onClick={onClear}>
-            Clear
-          </Button>
-        </Space>
-      </Form>
+        )}
+      </Row>
       <HeroesRadarTable heroes={heroes} onChange={handleChange} setFormLayout={setFormLayout} />
     </>
   );

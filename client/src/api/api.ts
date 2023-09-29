@@ -12093,6 +12093,78 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesRadarCsv: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'current' is not null or undefined
+            assertParamExists('getHeroesRadarCsv', 'current', current)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('getHeroesRadarCsv', 'pageSize', pageSize)
+            const localVarPath = `/gratitudes/heroes/radar/csv`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (courseId !== undefined) {
+                localVarQueryParameter['courseId'] = courseId;
+            }
+
+            if (notActivist !== undefined) {
+                localVarQueryParameter['notActivist'] = notActivist;
+            }
+
+            if (countryName !== undefined) {
+                localVarQueryParameter['countryName'] = countryName;
+            }
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString() :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString() :
+                    endDate;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -12148,6 +12220,22 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getHeroesRadarCsv(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadarCsv(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -12198,6 +12286,21 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
          */
         getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: any): AxiosPromise<HeroesRadarDto> {
             return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {string} [countryName] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesRadarCsv(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: any): AxiosPromise<void> {
+            return localVarFp.getHeroesRadarCsv(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12256,6 +12359,23 @@ export class GratitudesApi extends BaseAPI {
      */
     public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: AxiosRequestConfig) {
         return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} current 
+     * @param {number} pageSize 
+     * @param {number} [courseId] 
+     * @param {boolean} [notActivist] 
+     * @param {string} [countryName] 
+     * @param {string} [startDate] 
+     * @param {string} [endDate] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getHeroesRadarCsv(current: number, pageSize: number, courseId?: number, notActivist?: boolean, countryName?: string, startDate?: string, endDate?: string, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesRadarCsv(current, pageSize, courseId, notActivist, countryName, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

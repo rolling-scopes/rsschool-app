@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from '../auth';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
 import { GratitudesService } from './gratitudes.service';
 import { HeroesRadarDto } from './dto/heroes-radar.dto';
 import { CountryDto } from './dto/country.dto';
+import { parseAsync, transforms } from 'json2csv';
+import { Response } from 'express';
 
 @Controller('gratitudes')
 @ApiTags('gratitudes')
@@ -32,10 +34,24 @@ export class GratitudesController {
   @ApiOkResponse({ type: HeroesRadarDto })
   public async getHeroesRadar(@Query() query: HeroesRadarQueryDto) {
     const heroes = await this.service.getHeroesRadar(query);
-    // console.log('heroes: ', heroes);
-    return new HeroesRadarDto(heroes);
 
-    return heroes;
+    return new HeroesRadarDto(heroes);
+  }
+
+  @Get('/heroes/radar/csv')
+  @ApiOperation({ operationId: 'getHeroesRadarCsv' })
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin], true)
+  public async getHeroesRadarCsv(@Query() query: HeroesRadarQueryDto, @Res() res: Response) {
+    const heroes = await this.service.getHeroesRadar(query);
+
+    const parsedData = await parseAsync(new HeroesRadarDto(heroes).content, { transforms: [transforms.flatten()] });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-disposition', `filename=heroes-radar.csv`);
+
+    res.end(parsedData);
   }
 
   @Get('/heroes/countries')
