@@ -2,12 +2,13 @@ import { Button, Checkbox, DatePicker, Form, Select, Space, TableProps } from 'a
 import HeroesRadarTable from './HeroesRadarTable';
 import { HeroesRadarDto, GratitudesApi, HeroRadarDto, CountryDto } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
 import dayjs from 'dayjs';
 import type { TimeRangePickerProps } from 'antd';
 import type { Dayjs } from 'dayjs';
+import { SessionContext } from 'modules/Course/contexts';
 
 export type HeroesRadarFormProps = {
   courseId?: number;
@@ -42,6 +43,8 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<HeroesRadarFormProps>(form.getFieldsValue());
   const [formLayout, setFormLayout] = useState<LayoutType>('inline');
+  const { isAdmin } = useContext(SessionContext);
+
   const gratitudeApi = new GratitudesApi();
 
   const getCountries = async () => {
@@ -112,13 +115,13 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
             options={courses.map(({ id, name }) => ({ value: id, label: name }))}
           />
         </Form.Item>
-        <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
+        {isAdmin && <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
           <Select
             placeholder="Select country"
             showSearch
             options={countries.map(({ countryName }) => ({ value: countryName, label: countryName }))}
           />
-        </Form.Item>
+        </Form.Item>}
         <Form.Item name={'dates'} label="Dates" style={{ minWidth: 260, marginBottom: 16 }}>
           <RangePicker presets={rangePresets} />
         </Form.Item>
