@@ -1,7 +1,7 @@
 import { Badge, Tooltip, Avatar } from 'antd';
 import { HeroesRadarBadgeDto } from 'api';
-import { dateTimeRenderer } from 'components/Table';
 import heroesBadges from 'configs/heroes-badges';
+import dayjs from 'dayjs';
 
 type HeroesCountBadgeProps = {
   badge: Omit<HeroesRadarBadgeDto, 'id' | 'comment' | 'date'> &
@@ -21,7 +21,7 @@ function HeroesCountBadge({ badge: { badgeId, count = 0, comment, date } }: Hero
                   <br />
                   {comment}
                   <br />
-                  {dateTimeRenderer(date)}
+                  {dayjs(date).format('YYYY-MM-DD HH:mm')}
                 </>
               )}
             </>
