@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
@@ -32,7 +44,13 @@ export class GratitudesController {
   @Get('/heroes/radar')
   @ApiOperation({ operationId: 'getHeroesRadar' })
   @ApiOkResponse({ type: HeroesRadarDto })
-  public async getHeroesRadar(@Query() query: HeroesRadarQueryDto) {
+  @ApiForbiddenResponse()
+  public async getHeroesRadar(@Req() req: CurrentRequest, @Query() query: HeroesRadarQueryDto) {
+    const { isAdmin } = req.user;
+    if (query.countryName && !isAdmin) {
+      throw new ForbiddenException();
+    }
+
     const heroes = await this.service.getHeroesRadar(query);
 
     return new HeroesRadarDto(heroes);

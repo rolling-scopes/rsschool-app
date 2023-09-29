@@ -2099,7 +2099,8 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
-          }
+          },
+          "403": { "description": "" }
         },
         "tags": ["gratitudes"]
       }
