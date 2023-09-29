@@ -105,16 +105,19 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
     <>
       <Form layout={formLayout} form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
         <Form.Item name={'courseId'} label="Courses" style={{ minWidth: 260, marginBottom: 16 }}>
-          <Select options={courses.map(({ id, name }) => ({ value: id, label: name }))} />
+          <Select
+            placeholder="Select course"
+            showSearch
+            optionFilterProp="label"
+            options={courses.map(({ id, name }) => ({ value: id, label: name }))}
+          />
         </Form.Item>
         <Form.Item name={'countryName'} label="Countries" style={{ minWidth: 260, marginBottom: 16 }}>
-          <Select>
-            {countries.map(({ countryName }) => (
-              <Select.Option key={countryName} value={countryName}>
-                {countryName}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select
+            placeholder="Select country"
+            showSearch
+            options={countries.map(({ countryName }) => ({ value: countryName, label: countryName }))}
+          />
         </Form.Item>
         <Form.Item name={'dates'} label="Dates" style={{ minWidth: 260, marginBottom: 16 }}>
           <RangePicker presets={rangePresets} />
