@@ -57,7 +57,7 @@ export class GratitudesController {
   @Get('/heroes/countries')
   @ApiOperation({ operationId: 'getHeroesCountries' })
   @ApiOkResponse({ type: [CountryDto] })
-  public async getHeroesContries() {
+  public async getHeroesCountries() {
     const countries = await this.service.getHeroesCountries();
     return countries.map(country => new CountryDto(country));
   }
