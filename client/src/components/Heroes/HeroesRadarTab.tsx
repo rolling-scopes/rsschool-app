@@ -147,10 +147,10 @@ function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) =>
             <Checkbox>Show only not activists</Checkbox>
           </Form.Item>
           <Space align="start" size={20} style={{ marginBottom: 16 }}>
-            <Button size="middle" type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit">
               Filter
             </Button>
-            <Button size="middle" type="primary" onClick={onClear}>
+            <Button type="primary" onClick={onClear}>
               Clear
             </Button>
           </Space>
