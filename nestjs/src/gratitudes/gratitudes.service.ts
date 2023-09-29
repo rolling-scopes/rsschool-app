@@ -155,6 +155,7 @@ export class GratitudesService {
       .leftJoinAndSelect('feedback.fromUser', 'user')
       .select('DISTINCT "countryName"')
       .where('"countryName" IS NOT NULL')
+      .orderBy('"countryName"', 'ASC')
       .getRawMany();
   }
 
