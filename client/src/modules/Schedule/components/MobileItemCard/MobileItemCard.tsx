@@ -41,7 +41,7 @@ export const MobileItemCard = ({
             coloredDateRenderer(timezone, 'MMM D HH:mm', 'end', 'Recommended date for studying')(item.endDate, item)}
         </Col>
       </Row>
-      <Row justify={'end'} color='secondary'>
+      <Row justify={'end'} color="secondary">
         {timezoneOffset}
       </Row>
     </div>
