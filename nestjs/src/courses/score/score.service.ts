@@ -51,43 +51,20 @@ export class ScoreService {
     courseId: number;
   }) {
     const query = this.buildScoreQuery({ filter, orderBy, courseId });
-
     const { items: studentsContent, meta: paginationMeta } = await paginate(query, { page, limit });
-
-    const students = studentsContent.map(student => {
-      const [preScreeningInterview] = student.stageInterviews ?? [];
-
-      const preScreeningScore = Math.floor(
-        InterviewsService.getLastStageInterview(student.stageInterviews ?? [])?.rating ?? 0,
-      );
-      const preScreeningInterviewWithScore = preScreeningInterview
-        ? { score: preScreeningScore, courseTaskId: preScreeningInterview.courseTaskId }
-        : undefined;
-
-      const user = student.user;
-      const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
-        .map(arr => _.orderBy(arr, 'updatedDate', 'desc')[0]!)
-        .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
-
-      const taskResults =
-        student.taskResults
-          ?.filter(({ courseTask: { disabled } }) => !disabled)
-          .map(({ courseTaskId, score }) => ({ courseTaskId, score }))
-          .concat(interviews) ?? [];
-
-      // we have a case when technical screening score are set as task result.
-      if (
-        preScreeningInterviewWithScore &&
-        !taskResults.find(tr => tr.courseTaskId === preScreeningInterviewWithScore.courseTaskId)
-      ) {
-        taskResults.push(preScreeningInterviewWithScore);
-      }
-
-      const mentor = student.mentor ? MentorsService.convertMentorToMentorBasic(student.mentor) : undefined;
-      return new ScoreStudentDto(student, user, mentor, taskResults, undefined);
-    });
+    const students = studentsContent.map(student => this.convertToScoreStudentDto(student));
 
     return new ScoreDto(students, paginationMeta);
+  }
+
+  public async getStudentScore({ courseId, githubId }: { courseId: number; githubId: string }) {
+    const studentScoreContent = await this.buildBasicScoreQuery({ courseId })
+      .andWhere('"user"."githubId" = :githubId', { githubId })
+      .getOne();
+
+    const studentScore = studentScoreContent ? this.convertToScoreStudentDto(studentScoreContent) : null;
+
+    return studentScore;
   }
 
   private buildScoreQuery({
@@ -99,32 +76,7 @@ export class ScoreService {
     orderBy: { field: OrderField; direction: OrderDirection };
     courseId: number;
   }) {
-    let query = this.studentRepository
-      .createQueryBuilder('student')
-      .innerJoin('student.user', 'user')
-      .addSelect(UsersService.getPrimaryUserFields())
-      .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
-      .addSelect(['mentor.id', 'mentor.userId'])
-      .leftJoin('student.taskResults', 'tr')
-      .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId', 'tr.courseTask'])
-      .leftJoin('tr.courseTask', 'ct')
-      .addSelect(['ct.disabled', 'ct.id'])
-      .leftJoin('student.taskInterviewResults', 'tir')
-      .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
-      .leftJoin('mentor.user', 'mu')
-      .addSelect(UsersService.getPrimaryUserFields('mu'))
-      .leftJoin('student.stageInterviews', 'si')
-      .leftJoin('si.stageInterviewFeedbacks', 'sif')
-      .addSelect([
-        'sif.stageInterviewId',
-        'sif.json',
-        'sif.updatedDate',
-        'si.isCompleted',
-        'si.id',
-        'si.courseTaskId',
-        'si.score',
-      ])
-      .where('student."courseId" = :courseId', { courseId });
+    let query = this.buildBasicScoreQuery({ courseId });
 
     if (filter.activeOnly === 'true') {
       query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
@@ -158,5 +110,67 @@ export class ScoreService {
       orderByFieldMapping[orderBy.field],
       orderBy.direction.toUpperCase() as Uppercase<OrderDirection>,
     );
+  }
+
+  private buildBasicScoreQuery({ courseId }: { courseId: number }) {
+    return this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(UsersService.getPrimaryUserFields())
+      .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
+      .addSelect(['mentor.id', 'mentor.userId'])
+      .leftJoin('student.taskResults', 'tr')
+      .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId', 'tr.courseTask'])
+      .leftJoin('tr.courseTask', 'ct')
+      .addSelect(['ct.disabled', 'ct.id'])
+      .leftJoin('student.taskInterviewResults', 'tir')
+      .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
+      .leftJoin('mentor.user', 'mu')
+      .addSelect(UsersService.getPrimaryUserFields('mu'))
+      .leftJoin('student.stageInterviews', 'si')
+      .leftJoin('si.stageInterviewFeedbacks', 'sif')
+      .addSelect([
+        'sif.stageInterviewId',
+        'sif.json',
+        'sif.updatedDate',
+        'si.isCompleted',
+        'si.id',
+        'si.courseTaskId',
+        'si.score',
+      ])
+      .where('student."courseId" = :courseId', { courseId });
+  }
+
+  private convertToScoreStudentDto(student: Student) {
+    const [preScreeningInterview] = student.stageInterviews ?? [];
+
+    const preScreeningScore = Math.floor(
+      InterviewsService.getLastStageInterview(student.stageInterviews ?? [])?.rating ?? 0,
+    );
+    const preScreeningInterviewWithScore = preScreeningInterview
+      ? { score: preScreeningScore, courseTaskId: preScreeningInterview.courseTaskId }
+      : undefined;
+
+    const user = student.user;
+    const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
+      .map(arr => _.orderBy(arr, 'updatedDate', 'desc')[0]!)
+      .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
+
+    const taskResults =
+      student.taskResults
+        ?.filter(({ courseTask: { disabled } }) => !disabled)
+        .map(({ courseTaskId, score }) => ({ courseTaskId, score }))
+        .concat(interviews) ?? [];
+
+    // we have a case when technical screening score are set as task result.
+    if (
+      preScreeningInterviewWithScore &&
+      !taskResults.find(tr => tr.courseTaskId === preScreeningInterviewWithScore.courseTaskId)
+    ) {
+      taskResults.push(preScreeningInterviewWithScore);
+    }
+
+    const mentor = student.mentor ? MentorsService.convertMentorToMentorBasic(student.mentor) : undefined;
+    return new ScoreStudentDto(student, user, mentor, taskResults, undefined);
   }
 }

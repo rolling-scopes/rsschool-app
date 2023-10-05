@@ -17,10 +17,13 @@ import { CoursePageProps } from 'services/models';
 import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import useWindowDimensions from 'utils/useWindowDimensions';
+import { Summary } from './Summary';
+import { StudentPosition } from 'modules/Score/constants';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
+  studentPosition: StudentPosition;
 };
 
 type TableScoreOrder = SorterResult<ScoreStudentDto> | SorterResult<ScoreStudentDto>[];
@@ -40,7 +43,7 @@ const courseTasksApi = new CoursesTasksApi();
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { activeOnly } = props;
+  const { activeOnly, studentPosition } = props;
   const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
@@ -55,6 +58,8 @@ export function ScoreTable(props: Props) {
     filter: { activeOnly: true },
     order: { field: 'rank', order: 'ascend' },
   });
+  const [summaryData, setSummaryData] = useState<ScoreStudentDto | null>(null);
+
   const recentlyAppliedFilters = useRef<null | Record<string, FilterValue | null>>(null);
 
   const [notVisibleColumns = [], setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns');
@@ -94,8 +99,9 @@ export function ScoreTable(props: Props) {
         filters = { ...filters, name } as ScoreTableFilters;
       }
 
-      const [courseScore, courseTasks] = await Promise.all([
+      const [courseScore, studentCourseScore, courseTasks] = await Promise.all([
         courseService.getCourseScore(students.pagination, filters, students.order),
+        courseService.getStudentCourseScore(props.session?.githubId as string),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
       const sortedTasks = courseTasks.data
@@ -105,6 +111,7 @@ export function ScoreTable(props: Props) {
           isVisible: !notVisibleColumns.includes(String(task.id)),
         }));
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
+      setSummaryData(studentCourseScore);
       setCourseTasks(sortedTasks);
       setColumns(
         getColumns({
@@ -175,18 +182,28 @@ export function ScoreTable(props: Props) {
     getCourseScore(pagination, filters, sorter);
   };
 
+  const visibleColumns = getVisibleColumns(columns);
+  const isSummaryShown = students.content.length > 0 && studentPosition !== StudentPosition.Disabled && summaryData;
+
   return (
     <>
       <Table<ScoreStudentDto>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 320px)' }}
+        scroll={{ x: getTableWidth(visibleColumns.length), y: 'calc(95vh - 320px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
+        summary={() =>
+          isSummaryShown && (
+            <Table.Summary fixed={studentPosition}>
+              <Summary studentScore={summaryData} visibleColumns={visibleColumns} />
+            </Table.Summary>
+          )
+        }
         onChange={handleChange}
-        columns={getVisibleColumns(columns)}
+        columns={visibleColumns}
         rowSelection={{
           selectedRowKeys: state,
           onChange: (_, selectedRows) => {

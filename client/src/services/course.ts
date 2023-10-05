@@ -240,6 +240,11 @@ export class CourseService {
     return result.data;
   }
 
+  async getStudentCourseScore(githubId: string) {
+    const result = await studentsScoreApi.getStudentScore(this.courseId, githubId);
+    return result.data;
+  }
+
   async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/result`, data);
   }
