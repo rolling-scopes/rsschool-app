@@ -1,4 +1,4 @@
-export default {
+const heroesBadges: Record<string, { name: string; pictureId: number; url: string }> = {
   Congratulations: {
     name: 'Congratulations',
     pictureId: 23,
@@ -60,3 +60,5 @@ export default {
     url: 'JuryTeam.svg',
   },
 };
+
+export default heroesBadges;

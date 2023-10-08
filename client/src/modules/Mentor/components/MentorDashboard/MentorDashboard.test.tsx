@@ -4,6 +4,7 @@ import { Course } from 'services/models';
 import { CourseInfo, Session } from 'components/withSession';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
 import { MentorDashboardProps } from 'pages/course/mentor/dashboard';
+import { SessionContext } from 'modules/Course/contexts';
 
 jest.mock('modules/Mentor/hooks/useMentorDashboard', () => ({
   useMentorDashboard: jest.fn().mockReturnValue([[], false]),
@@ -13,19 +14,6 @@ jest.mock('next/router', () => ({
 }));
 
 const PROPS_MOCK: MentorDashboardProps = {
-  session: {
-    id: 1,
-    isActivist: false,
-    isAdmin: true,
-    isHirer: false,
-    githubId: 'github-id',
-    courses: {
-      '400': {
-        mentorId: 1,
-        roles: ['mentor'],
-      } as CourseInfo,
-    },
-  } as Session,
   course: {
     id: 400,
   } as Course,
@@ -36,7 +24,27 @@ const PROPS_MOCK: MentorDashboardProps = {
 
 describe('MentorDashboard', () => {
   it('should render instructions when mentor has no students for this course', () => {
-    render(<MentorDashboard {...PROPS_MOCK} studentsCount={0} />);
+    render(
+      <SessionContext.Provider
+        value={
+          {
+            id: 1,
+            isActivist: false,
+            isAdmin: true,
+            isHirer: false,
+            githubId: 'github-id',
+            courses: {
+              '400': {
+                mentorId: 1,
+                roles: ['mentor'],
+              } as CourseInfo,
+            },
+          } as Session
+        }
+      >
+        <MentorDashboard {...PROPS_MOCK} studentsCount={0} />
+      </SessionContext.Provider>,
+    );
 
     const instructionsTitle = screen.getByText(INSTRUCTIONS_TEXT.title);
 
@@ -44,7 +52,27 @@ describe('MentorDashboard', () => {
   });
 
   it('should render empty table when mentor has students for this course', () => {
-    render(<MentorDashboard {...PROPS_MOCK} />);
+    render(
+      <SessionContext.Provider
+        value={
+          {
+            id: 1,
+            isActivist: false,
+            isAdmin: true,
+            isHirer: false,
+            githubId: 'github-id',
+            courses: {
+              '400': {
+                mentorId: 1,
+                roles: ['mentor'],
+              } as CourseInfo,
+            },
+          } as Session
+        }
+      >
+        <MentorDashboard {...PROPS_MOCK} />
+      </SessionContext.Provider>,
+    );
 
     const emptyTable = screen.getByText(/No Data/i);
 

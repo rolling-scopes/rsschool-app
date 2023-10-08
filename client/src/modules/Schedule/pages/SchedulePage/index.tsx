@@ -87,19 +87,21 @@ export function SchedulePage() {
     <>
       <PageLayout loading={loading} error={error} title="Schedule" showCourseName>
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
-          <SettingsPanel
-            onCreateCourseTask={handleCreateCourseTask}
-            onCreateCourseEvent={handleCreateCourseEvent}
-            onCopyFromCourse={() => setCopyModal({})}
-            isCourseManager={isManager}
-            courseId={course.id}
-            courseAlias={course.alias}
-            settings={settings}
-            calendarToken={cipher}
-            tags={eventTags}
-            refreshData={refreshData}
-            mobileView={mobileView}
-          />
+          {!mobileView && (
+            <SettingsPanel
+              onCreateCourseTask={handleCreateCourseTask}
+              onCreateCourseEvent={handleCreateCourseEvent}
+              onCopyFromCourse={() => setCopyModal({})}
+              isCourseManager={isManager}
+              courseId={course.id}
+              courseAlias={course.alias}
+              settings={settings}
+              calendarToken={cipher}
+              tags={eventTags}
+              refreshData={refreshData}
+              mobileView={mobileView}
+            />
+          )}
         </StatusTabs>
 
         <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />

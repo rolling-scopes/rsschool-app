@@ -10,7 +10,6 @@ import { CourseSelector } from 'modules/Home/components/CourseSelector';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
 import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
 import { getCourseLinks } from 'modules/Home/data/links';
-import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
 import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
 import Link from 'next/link';
 import { useMemo, useState, useContext } from 'react';
@@ -26,7 +25,7 @@ const mentorRegistryService = new MentorRegistryService();
 const alertService = new AlertsApi();
 
 export function HomePage() {
-  const { courses = [] } = useActiveCourseContext();
+  const { courses = [], setCourse, course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const plannedCourses = (courses || []).filter(course => course.planned && !course.inviteOnly);
   const wasMentor = isAnyMentor(session);
@@ -34,13 +33,11 @@ export function HomePage() {
     wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => session.courses[course.id] == null);
 
   const isPowerUser = isAnyCoursePowerUser(session) || isAnyCourseDementor(session);
-
-  const [activeCourse, saveActiveCourseId] = useActiveCourse(courses);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [preselectedCourses, setPreselectedCourses] = useState<Course[]>([]);
   const [alerts, setAlerts] = useState<AlertDto[]>([]);
 
-  const courseLinks = useMemo(() => getCourseLinks(session, activeCourse), [activeCourse]);
+  const courseLinks = useMemo(() => getCourseLinks(session, course), [course]);
   const [approvedCourse] = preselectedCourses.filter(course => !session.courses?.[course.id]);
 
   useAsync(async () => {
@@ -59,15 +56,24 @@ export function HomePage() {
     setPreselectedCourses(preselectedCourses);
   });
 
-  const { courseTasks, studentSummary } = useStudentSummary(session, activeCourse);
+  const handleChangeCourse = (courseId: number) => {
+    const course = courses.find(course => {
+      return course.id === courseId;
+    });
+    if (course) {
+      setCourse(course);
+    }
+  };
+
+  const { courseTasks, studentSummary } = useStudentSummary(session, course);
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
       <Header />
       <Layout style={{ background: '#fff' }}>
-        {isPowerUser && <AdminSider courses={courses} activeCourse={activeCourse} />}
+        {isPowerUser && <AdminSider courses={courses} activeCourse={course} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
-          {!activeCourse && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
+          {!course && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}
 
           {approvedCourse && (
             <div style={{ margin: '16px 0' }}>
@@ -88,7 +94,7 @@ export function HomePage() {
 
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
-          <CourseSelector course={activeCourse} onChangeCourse={saveActiveCourseId} courses={courses} />
+          <CourseSelector course={course} onChangeCourse={handleChangeCourse} courses={courses} />
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
