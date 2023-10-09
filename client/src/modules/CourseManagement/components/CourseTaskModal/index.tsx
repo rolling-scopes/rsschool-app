@@ -110,7 +110,7 @@ export function CourseTaskModal(props: Props) {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="type" label="Task Type">
-            <Select placeholder="Please select type" disabled>
+            <Select placeholder="Please select type">
               {TASK_TYPES.map(({ id, name }) => (
                 <Option key={id} value={id}>
                   {name}
