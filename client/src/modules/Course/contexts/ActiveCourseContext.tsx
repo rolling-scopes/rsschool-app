@@ -1,15 +1,23 @@
 import { ProfileCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
 import { UserService } from 'services/user';
 import { WelcomeCard } from 'components/WelcomeCard';
 import { Alert, Col, Row } from 'antd';
 
-const ActiveCourseContext = React.createContext<{ course: ProfileCourseDto; courses: ProfileCourseDto[] }>(
-  {} as { course: ProfileCourseDto; courses: ProfileCourseDto[] },
-);
+type ActiveCourseContextType = {
+  course: ProfileCourseDto;
+  courses: ProfileCourseDto[];
+  setCourse: (course: ProfileCourseDto) => void;
+};
+
+const ActiveCourseContext = React.createContext<ActiveCourseContextType>({
+  course: {} as ProfileCourseDto,
+  courses: [],
+  setCourse: () => {},
+});
 
 export const useActiveCourseContext = () => {
   return useContext(ActiveCourseContext);
@@ -23,12 +31,9 @@ export const ActiveCourseProvider = ({ children }: Props) => {
   const router = useRouter();
   const alias = router.query.course;
   const [storageCourseId] = useLocalStorage('activeCourseId');
+  const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
 
-  const {
-    value: course,
-    error,
-    loading,
-  } = useAsync(async () => {
+  const { error, loading } = useAsync(async () => {
     if (!coursesCache) {
       coursesCache = await new UserService().getCourses();
     }
@@ -37,8 +42,16 @@ export const ActiveCourseProvider = ({ children }: Props) => {
       coursesCache.find(course => course.alias === alias) ??
       coursesCache.find(course => course.id === storageCourseId) ??
       coursesCache[0];
+
+    setActiveCourse(course);
+
     return course;
   }, []);
+
+  const setCourse = (course: ProfileCourseDto) => {
+    setActiveCourse(course);
+    localStorage.setItem('activeCourseId', course.id.toString());
+  };
 
   useEffect(() => {
     if (!error) {
@@ -49,11 +62,11 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
   }, [error]);
 
-  if (!loading && !course && !coursesCache?.length) {
+  if (!loading && !activeCourse && !coursesCache?.length) {
     return <WelcomeCard />;
   }
 
-  if (alias && course && course.alias !== alias) {
+  if (alias && activeCourse && activeCourse.alias !== alias) {
     return (
       <Row justify="center">
         <Col md={12} xs={18} style={{ marginTop: '60px' }}>
@@ -67,9 +80,11 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     );
   }
 
-  if (course && coursesCache) {
+  if (activeCourse && coursesCache) {
     return (
-      <ActiveCourseContext.Provider value={{ course, courses: coursesCache }}>{children}</ActiveCourseContext.Provider>
+      <ActiveCourseContext.Provider value={{ course: activeCourse, courses: coursesCache, setCourse }}>
+        {children}
+      </ActiveCourseContext.Provider>
     );
   }
 

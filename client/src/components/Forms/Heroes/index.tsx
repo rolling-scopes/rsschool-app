@@ -7,7 +7,8 @@ import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'com
 import heroesBadges from 'configs/heroes-badges';
 import { GratitudeService } from 'services/gratitude';
 import { onlyDefined } from 'utils/onlyDefined';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { Course } from 'services/models';
+import { getFullName } from 'domain/user';
 
 const { Text, Link, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -21,11 +22,7 @@ export const fields = {
   courseId: 'courseId',
 } as const;
 
-const getFullName = (user: { firstName: string | null; lastName: string | null; githubId: string }) =>
-  user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
-
-export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
-  const { courses } = useActiveCourseContext();
+export const HeroesForm = ({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) => {
   const [heroesData, setHeroesData] = useState<IGratitudeGetResponse[]>([]);
   const [heroesCount, setHeroesCount] = useState(initialPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -122,7 +119,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
             <Card style={{ position: 'relative', background: 'none' }}>
               <div
                 className="badge-bg"
-                style={{ backgroundImage: `url(/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url})` }}
+                style={{ backgroundImage: `url(/static/svg/badges/${heroesBadges[feedback.badgeId].url})` }}
               />
               <div className="badge-note" style={{ marginBottom: 48 }}>
                 <Paragraph style={{ margin: 0 }}>
@@ -137,7 +134,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
               <div className="flex-center" style={{ marginBottom: 48 }}>
                 <div className="badge">
                   <Avatar
-                    src={`/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url}`}
+                    src={`/static/svg/badges/${heroesBadges[feedback.badgeId].url}`}
                     alt={`${feedback.badgeId} badge`}
                     size={128}
                   />

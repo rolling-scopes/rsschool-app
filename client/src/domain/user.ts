@@ -81,3 +81,7 @@ export function isTaskOwner(session: Session, courseId: number) {
 export function isHirer(session: Session) {
   return Boolean(session.isHirer);
 }
+
+export function getFullName(user: { firstName: string | null; lastName: string | null; githubId: string }) {
+  return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
+}
