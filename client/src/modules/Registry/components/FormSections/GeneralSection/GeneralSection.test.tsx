@@ -3,6 +3,20 @@ import { Form } from 'antd';
 import { CourseDto } from 'api';
 import { CARD_TITLES } from 'modules/Registry/constants';
 import { GeneralSection } from './GeneralSection';
+import usePlacesAutocomplete from 'use-places-autocomplete';
+
+jest.mock('use-places-autocomplete');
+
+(usePlacesAutocomplete as jest.Mock).mockImplementation(() => ({
+  value: null,
+  suggestions: {
+    data: {
+      map: jest.fn(),
+    },
+    loading: false,
+  },
+  setValue: jest.fn(),
+}));
 
 const renderGeneralSection = (courses?: CourseDto[]) => {
   render(
