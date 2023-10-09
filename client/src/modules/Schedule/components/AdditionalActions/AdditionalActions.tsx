@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, message, Space } from 'antd';
+import { Button, Dropdown, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import React from 'react';
@@ -72,11 +72,7 @@ const AdditionalActions = ({
   };
 
   return (
-    <Dropdown
-      overlay={<Menu items={menuItems} onClick={handleMenuItemClick} />}
-      trigger={['click']}
-      placement="bottomRight"
-    >
+    <Dropdown menu={{ items: menuItems, onClick: handleMenuItemClick }} trigger={['click']} placement="bottomRight">
       <Button>
         <Space>
           {SettingsButtons.More}
