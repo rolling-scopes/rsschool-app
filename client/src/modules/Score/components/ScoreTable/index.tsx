@@ -71,13 +71,8 @@ export function ScoreTable(props: Props) {
     filters: ScoreTableFiltersModified,
     order: TableScoreOrder,
   ) => {
-    try {
-      props.onLoading(true);
-      const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
-      setStudents({ ...students, content: data.content, pagination: data.pagination });
-    } finally {
-      props.onLoading(false);
-    }
+    const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
+    setStudents({ ...students, content: data.content, pagination: data.pagination });
   };
 
   const loadInitialData = useCallback(async () => {
@@ -168,7 +163,7 @@ export function ScoreTable(props: Props) {
     return null;
   }
 
-  const handleChange: TableProps<ScoreStudentDto>['onChange'] = (pagination, filters, sorter, { action }) => {
+  const handleChange: TableProps<ScoreStudentDto>['onChange'] = async (pagination, filters, sorter, { action }) => {
     // Dirty hack to prevent sort request with old filters on Enter key in filter modal search input
     // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
     // TODO: Remove this hack after fix in antd
@@ -179,7 +174,17 @@ export function ScoreTable(props: Props) {
     if (action === 'sort' && recentlyAppliedFilters.current) {
       filters = recentlyAppliedFilters.current;
     }
-    getCourseScore(pagination, filters, sorter);
+
+    try {
+      props.onLoading(true);
+      const [studentCourseScore] = await Promise.all([
+        courseService.getStudentCourseScore(props.session?.githubId as string),
+        getCourseScore(pagination, filters, sorter),
+      ]);
+      setSummaryData(studentCourseScore);
+    } finally {
+      props.onLoading(false);
+    }
   };
 
   const visibleColumns = getVisibleColumns(columns);
