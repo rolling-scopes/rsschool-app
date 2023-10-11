@@ -1,4 +1,4 @@
-import { Radio, RadioChangeEvent, Row, Switch, Typography } from 'antd';
+import { Radio, RadioChangeEvent, Row, Space, Switch, Typography } from 'antd';
 import { CourseNoAccess } from 'modules/Course/components/CourseNoAccess';
 import { CoursePageLayout } from 'components/CoursePageLayout';
 import { ExportCsvButton } from 'modules/Score/components/ExportCsvButton';
@@ -43,16 +43,21 @@ export function ScorePage() {
     <CourseNoAccess />
   ) : (
     <CoursePageLayout showCourseName course={course} title="Score" githubId={session.githubId} loading={loading}>
-      <Row style={{ margin: '8px 0' }} justify="space-between">
-        <div>
-          <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
-          <Switch checked={activeOnly} onChange={handleActiveOnlyChange} /> <span>My Position</span>{' '}
-          <Radio.Group defaultValue={studentPosition} onChange={handleStudentPositionChange}>
-            <Radio.Button value="top">Top</Radio.Button>
-            <Radio.Button value="bottom">Bottom</Radio.Button>
-            <Radio.Button value="disabled">Disabled</Radio.Button>
-          </Radio.Group>
-        </div>
+      <Row style={{ margin: '8px 0', gap: 8 }} justify="space-between">
+        <Space size={['large', 'small']} wrap>
+          <Space>
+            <Text>Active Students Only</Text>
+            <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
+          </Space>
+          <Space wrap>
+            <Text>Position</Text>
+            <Radio.Group defaultValue={studentPosition} onChange={handleStudentPositionChange}>
+              <Radio.Button value="top">Top</Radio.Button>
+              <Radio.Button value="bottom">Bottom</Radio.Button>
+              <Radio.Button value="disabled">Disabled</Radio.Button>
+            </Radio.Group>
+          </Space>
+        </Space>
         <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
         <ExportCsvButton enabled={csvEnabled} onClick={handleExportCsv} />
       </Row>
