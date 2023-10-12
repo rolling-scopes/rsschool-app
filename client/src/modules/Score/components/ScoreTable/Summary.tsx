@@ -10,6 +10,7 @@ type SummaryProps = {
 export const Summary = ({ visibleColumns, studentScore }: SummaryProps) => {
   return (
     <Table.Summary.Row>
+      {/* the table has a hidden first column */}
       <Table.Summary.Cell index={0} />
       {visibleColumns.map(({ dataIndex, render }, index) => {
         const value: any = Array.isArray(dataIndex)
