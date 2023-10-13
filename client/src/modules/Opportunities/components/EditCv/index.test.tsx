@@ -95,7 +95,7 @@ describe('EditCV', () => {
     expect(mockSwitchView).toHaveBeenCalled();
   });
 
-  test.skip('should save data on Save button click and show success notification', async () => {
+  test('should save data on Save button click and show success notification', async () => {
     const mockSaveResume = jest
       .spyOn(OpportunitiesApi.prototype, 'saveResume')
       .mockResolvedValue({ data: {} } as AxiosResponse);
@@ -122,6 +122,6 @@ describe('EditCV', () => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/cv sucessfully updated/i)).toBeInTheDocument();
+    expect(await screen.findByText(/cv sucessfully updated/i)).toBeInTheDocument();
   });
 });
