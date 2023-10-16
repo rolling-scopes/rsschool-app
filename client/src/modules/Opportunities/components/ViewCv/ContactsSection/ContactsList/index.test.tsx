@@ -52,23 +52,20 @@ describe('ContactsList', () => {
     expect(websiteIcon).toBeInTheDocument();
   });
 
-  test.skip('should have corresponding links', () => {
+  test('should have corresponding links', () => {
     render(<ContactsList contacts={mockContacts} />);
 
-    const emailIcon = screen.getByRole('link', { name: 'E-mail' });
-    const githubIcon = screen.getByRole('link', { name: 'Github' });
-    const linkedinIcon = screen.getByRole('link', { name: 'LinkedIn' });
-    const phoneIcon = screen.getByRole('link', { name: 'Phone' });
-    const skypeIcon = screen.getByRole('link', { name: 'Skype' });
-    const telegramIcon = screen.getByRole('link', { name: 'Telegram' });
-    const websiteIcon = screen.getByRole('link', { name: 'Website' });
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(7);
 
-    expect(emailIcon).toBeInTheDocument();
-    expect(githubIcon).toBeInTheDocument();
-    expect(linkedinIcon).toBeInTheDocument();
-    expect(phoneIcon).toBeInTheDocument();
-    expect(skypeIcon).toBeInTheDocument();
-    expect(telegramIcon).toBeInTheDocument();
-    expect(websiteIcon).toBeInTheDocument();
+    const [emailIcon, githubIcon, linkedinIcon, phoneIcon, skypeIcon, telegramIcon, websiteIcon] = links;
+
+    expect(emailIcon).toHaveAttribute('title', 'E-mail');
+    expect(githubIcon).toHaveAttribute('title', 'Github');
+    expect(linkedinIcon).toHaveAttribute('title', 'LinkedIn');
+    expect(phoneIcon).toHaveAttribute('title', 'Phone');
+    expect(skypeIcon).toHaveAttribute('title', 'Skype');
+    expect(telegramIcon).toHaveAttribute('title', 'Telegram');
+    expect(websiteIcon).toHaveAttribute('title', 'Website');
   });
 });

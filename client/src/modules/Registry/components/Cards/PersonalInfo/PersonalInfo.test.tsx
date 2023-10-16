@@ -2,6 +2,20 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
 import { PersonalInfo } from './PersonalInfo';
+import usePlacesAutocomplete from 'use-places-autocomplete';
+
+jest.mock('use-places-autocomplete');
+
+(usePlacesAutocomplete as jest.Mock).mockImplementation(() => ({
+  value: null,
+  suggestions: {
+    data: {
+      map: jest.fn(),
+    },
+    loading: false,
+  },
+  setValue: jest.fn(),
+}));
 
 const mockValues = {
   firstName: 'John',
