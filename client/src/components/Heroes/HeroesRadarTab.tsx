@@ -28,11 +28,12 @@ const initialQueryParams = { current: initialPage, pageSize: initialPageSize };
 
 const { RangePicker } = DatePicker;
 
+const currentDayjs = dayjs();
 const rangePresets: TimeRangePickerProps['presets'] = [
-  { label: 'Last 7 Days', value: [dayjs().add(-7, 'd'), dayjs()] },
-  { label: 'Last 14 Days', value: [dayjs().add(-14, 'd'), dayjs()] },
-  { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
-  { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
+  { label: 'Last 7 Days', value: [currentDayjs.add(-7, 'd'), currentDayjs] },
+  { label: 'Last 14 Days', value: [currentDayjs.add(-14, 'd'), currentDayjs] },
+  { label: 'Last 30 Days', value: [currentDayjs.add(-30, 'd'), currentDayjs] },
+  { label: 'Last 90 Days', value: [currentDayjs.add(-90, 'd'), currentDayjs] },
 ];
 
 function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) {
