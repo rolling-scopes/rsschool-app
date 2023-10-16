@@ -2095,6 +2095,25 @@
         "tags": ["gratitudes"]
       }
     },
+    "/gratitudes/heroes/radar": {
+      "get": {
+        "operationId": "getHeroesRadar",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
+          }
+        },
+        "tags": ["gratitudes"]
+      }
+    },
     "/events": {
       "get": {
         "operationId": "getEvents",
@@ -4361,6 +4380,30 @@
           }
         },
         "required": ["name", "id"]
+      },
+      "HeroesRadarBadgeDto": {
+        "type": "object",
+        "properties": { "id": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["id", "count"]
+      },
+      "HeroRadarDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "rank": { "type": "number" },
+          "total": { "type": "number" },
+          "badges": { "type": "array", "items": { "$ref": "#/components/schemas/HeroesRadarBadgeDto" } }
+        },
+        "required": ["githubId", "name", "rank", "total", "badges"]
+      },
+      "HeroesRadarDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/HeroRadarDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
       },
       "EventDto": {
         "type": "object",

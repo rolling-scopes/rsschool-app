@@ -3051,6 +3051,81 @@ export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface HeroRadarDto
+ */
+export interface HeroRadarDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroRadarDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroRadarDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroRadarDto
+     */
+    'rank': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroRadarDto
+     */
+    'total': number;
+    /**
+     * 
+     * @type {Array<HeroesRadarBadgeDto>}
+     * @memberof HeroRadarDto
+     */
+    'badges': Array<HeroesRadarBadgeDto>;
+}
+/**
+ * 
+ * @export
+ * @interface HeroesRadarBadgeDto
+ */
+export interface HeroesRadarBadgeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof HeroesRadarBadgeDto
+     */
+    'count': number;
+}
+/**
+ * 
+ * @export
+ * @interface HeroesRadarDto
+ */
+export interface HeroesRadarDto {
+    /**
+     * 
+     * @type {Array<HeroRadarDto>}
+     * @memberof HeroesRadarDto
+     */
+    'content': Array<HeroRadarDto>;
+    /**
+     * 
+     * @type {PaginationMetaDto}
+     * @memberof HeroesRadarDto
+     */
+    'pagination': PaginationMetaDto;
+}
+/**
+ * 
+ * @export
  * @interface HistoricalScoreDto
  */
 export interface HistoricalScoreDto {
@@ -11941,6 +12016,59 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesRadar: async (current: number, pageSize: number, courseId?: number, notActivist?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'current' is not null or undefined
+            assertParamExists('getHeroesRadar', 'current', current)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('getHeroesRadar', 'pageSize', pageSize)
+            const localVarPath = `/gratitudes/heroes/radar`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (courseId !== undefined) {
+                localVarQueryParameter['courseId'] = courseId;
+            }
+
+            if (notActivist !== undefined) {
+                localVarQueryParameter['notActivist'] = notActivist;
+            }
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11971,6 +12099,19 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBadges(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HeroesRadarDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHeroesRadar(current, pageSize, courseId, notActivist, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11998,6 +12139,18 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
          */
         getBadges(courseId: number, options?: any): AxiosPromise<Array<BadgeDto>> {
             return localVarFp.getBadges(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} current 
+         * @param {number} pageSize 
+         * @param {number} [courseId] 
+         * @param {boolean} [notActivist] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: any): AxiosPromise<HeroesRadarDto> {
+            return localVarFp.getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12029,6 +12182,20 @@ export class GratitudesApi extends BaseAPI {
      */
     public getBadges(courseId: number, options?: AxiosRequestConfig) {
         return GratitudesApiFp(this.configuration).getBadges(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} current 
+     * @param {number} pageSize 
+     * @param {number} [courseId] 
+     * @param {boolean} [notActivist] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getHeroesRadar(current: number, pageSize: number, courseId?: number, notActivist?: boolean, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getHeroesRadar(current, pageSize, courseId, notActivist, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
