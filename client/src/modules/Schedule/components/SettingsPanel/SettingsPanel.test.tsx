@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { SettingsButtons, SettingsPanel, SettingsPanelProps } from '.';
 
 const PROPS_MOCK: SettingsPanelProps = {
@@ -59,15 +59,17 @@ describe('SettingsPanel', () => {
     ${SettingsButtons.Copy}     | ${'isCourseManager'} | ${'user is not a course manager'}
   `(
     'should not render additional action "$item" when $condition',
-    ({ item, prop }: { item: string; prop: keyof SettingsPanelProps }) => {
+    async ({ item, prop }: { item: string; prop: keyof SettingsPanelProps }) => {
       const props = { ...PROPS_MOCK, [prop]: null };
       render(<SettingsPanel {...props} />);
 
       const moreBtn = screen.getByRole('button', { name: /more/i });
       fireEvent.click(moreBtn);
 
-      const menuItem = screen.queryByRole('menuitem', { name: new RegExp(item, 'i') });
-      expect(menuItem).not.toBeInTheDocument();
+      await waitFor(() => {
+        const menuItem = screen.queryByRole('menuitem', { name: new RegExp(item, 'i') });
+        expect(menuItem).not.toBeInTheDocument();
+      });
     },
   );
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
+import * as reactUse from 'react-use';
 
 describe('MentorStatsCard', () => {
   const mentorStats = [
@@ -31,6 +32,8 @@ describe('MentorStatsCard', () => {
   ];
 
   it('should render correctly', () => {
+    jest.spyOn(reactUse, 'useAsync').mockReturnValue({ value: null, loading: false });
+
     const { container } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
     expect(container).toMatchSnapshot();
   });

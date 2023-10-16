@@ -1,6 +1,6 @@
 import React from 'react';
 import { UploadCriteriaJSON } from '../UploadCriteriaJSON';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 const onLoad = jest.fn();
 
@@ -11,7 +11,7 @@ describe('UploadCriteriaJSON', () => {
     expect(element).toBeInTheDocument();
   });
 
-  test('upload file', () => {
+  test('upload file', async () => {
     render(<UploadCriteriaJSON onLoad={onLoad} />);
     global.URL.createObjectURL = jest.fn();
 
@@ -19,6 +19,9 @@ describe('UploadCriteriaJSON', () => {
     const input = screen.getByTestId('uploader') as HTMLInputElement;
 
     fireEvent.change(input, { target: { files: [file] } });
-    expect(input.files).toHaveLength(1);
+
+    await waitFor(() => {
+      expect(input.files).toHaveLength(1);
+    });
   });
 });
