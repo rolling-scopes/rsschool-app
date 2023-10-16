@@ -120,36 +120,34 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
           </Paragraph>
         ) : null}
         {isEditingModeEnabled && (
-          <>
-            <ProfileSettingsModal
-              isSettingsVisible={isProfileSettingsVisible}
-              onCancel={onCancel}
-              onSave={onSave}
-              isSaveDisabled={isSaveDisabled}
-              content={
-                <Row>
-                  <Col style={{ width: '100%' }}>
-                    <Row>
-                      <Text strong>Name</Text>
-                    </Row>
-                    <Row style={{ marginTop: 4 }}>
-                      <Input value={nameInputValue} placeholder="First-name Last-name" onChange={handleNameChange} />
-                    </Row>
-                    <Row style={{ marginTop: 24 }}>
-                      <Text strong>Location</Text>
-                    </Row>
-                    <Row style={{ marginTop: 4 }}>
-                      <LocationSelect
-                        style={{ flex: 1 }}
-                        onChange={handleLocationChange}
-                        location={locationSelectValue}
-                      />
-                    </Row>
-                  </Col>
-                </Row>
-              }
-            />
-          </>
+          <ProfileSettingsModal
+            isSettingsVisible={isProfileSettingsVisible}
+            onCancel={onCancel}
+            onSave={onSave}
+            isSaveDisabled={isSaveDisabled}
+            content={
+              <Row>
+                <Col style={{ width: '100%' }}>
+                  <Row>
+                    <Text strong>Name</Text>
+                  </Row>
+                  <Row style={{ marginTop: 4 }}>
+                    <Input value={nameInputValue} placeholder="First-name Last-name" onChange={handleNameChange} />
+                  </Row>
+                  <Row style={{ marginTop: 24 }}>
+                    <Text strong>Location</Text>
+                  </Row>
+                  <Row style={{ marginTop: 4 }}>
+                    <LocationSelect
+                      style={{ flex: 1 }}
+                      onChange={handleLocationChange}
+                      location={locationSelectValue}
+                    />
+                  </Row>
+                </Col>
+              </Row>
+            }
+          />
         )}
       </Card>
     </>

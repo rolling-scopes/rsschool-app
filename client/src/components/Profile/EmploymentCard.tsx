@@ -113,44 +113,36 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
         ) : null
       }
       profileSettingsContent={
-        <>
-          <Form
-            layout="vertical"
-            form={form}
-            onValuesChange={(_, { employmentHistory }) => setEmployments(employmentHistory)}
-            initialValues={{ employmentHistory: employments }}
-            style={{ width: '100%' }}
-          >
-            <Form.List name="employmentHistory">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <EmploymentHistoryFormItem
-                      key={key}
-                      name={name}
-                      restField={restField}
-                      remove={remove}
-                      form={form}
-                    />
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => {
-                        add(defaultEmploymentRecord);
-                      }}
-                      block
-                      icon={<FileAddOutlined />}
-                      disabled={isAddDisabled}
-                    >
-                      Add new employment
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-          </Form>
-        </>
+        <Form
+          layout="vertical"
+          form={form}
+          onValuesChange={(_, { employmentHistory }) => setEmployments(employmentHistory)}
+          initialValues={{ employmentHistory: employments }}
+          style={{ width: '100%' }}
+        >
+          <Form.List name="employmentHistory">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <EmploymentHistoryFormItem key={key} name={name} restField={restField} remove={remove} form={form} />
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => {
+                      add(defaultEmploymentRecord);
+                    }}
+                    block
+                    icon={<FileAddOutlined />}
+                    disabled={isAddDisabled}
+                  >
+                    Add new employment
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form>
       }
     />
   );
