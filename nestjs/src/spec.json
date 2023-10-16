@@ -2082,15 +2082,64 @@
         "operationId": "getHeroesRadar",
         "summary": "",
         "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
-          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
         ],
         "responses": {
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "tags": ["gratitudes"]
+      }
+    },
+    "/gratitudes/heroes/radar/csv": {
+      "get": {
+        "operationId": "getHeroesRadarCsv",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "tags": ["gratitudes"]
+      }
+    },
+    "/gratitudes/heroes/countries": {
+      "get": {
+        "operationId": "getHeroesCountries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CountryDto" } }
+              }
+            }
           }
         },
         "tags": ["gratitudes"]
@@ -4347,8 +4396,13 @@
       },
       "HeroesRadarBadgeDto": {
         "type": "object",
-        "properties": { "id": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["id", "count"]
+        "properties": {
+          "id": { "type": "string" },
+          "badgeId": { "type": "string" },
+          "comment": { "type": "string" },
+          "date": { "type": "string" }
+        },
+        "required": ["id", "badgeId", "comment", "date"]
       },
       "HeroRadarDto": {
         "type": "object",
@@ -4368,6 +4422,11 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "CountryDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" } },
+        "required": ["countryName"]
       },
       "EventDto": {
         "type": "object",
