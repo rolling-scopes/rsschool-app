@@ -7,7 +7,7 @@ import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, Dropdown, Menu, Tooltip, message } from 'antd';
+import { Button, Dropdown, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
@@ -140,31 +140,28 @@ export const MentorRegistryTableContainer = ({
   const renderRestActions = (record: MentorRegistryDto) => {
     return (
       <Dropdown
-        overlay={
-          <Menu
-            mode="vertical"
-            items={[
-              activeTab === MentorRegistryTabsMode.New
-                ? {
-                    key: 'resend',
-                    label: 'Re-send',
-                    onClick: () => handleModalDataChange(ModalDataMode.Resend, record),
-                    disabled: !record.preselectedCourses.length,
-                  }
-                : null,
-              {
-                key: 'delete',
-                label: 'Delete',
-                onClick: () => handleModalDataChange(ModalDataMode.Delete, record),
-              },
-              {
-                key: 'comment',
-                label: record.comment ? 'Edit comment' : 'Add comment',
-                onClick: () => handleModalDataChange(ModalDataMode.Comment, record),
-              },
-            ]}
-          ></Menu>
-        }
+        menu={{
+          items: [
+            activeTab === MentorRegistryTabsMode.New
+              ? {
+                  key: 'resend',
+                  label: 'Re-send',
+                  onClick: () => handleModalDataChange(ModalDataMode.Resend, record),
+                  disabled: !record.preselectedCourses.length,
+                }
+              : null,
+            {
+              key: 'delete',
+              label: 'Delete',
+              onClick: () => handleModalDataChange(ModalDataMode.Delete, record),
+            },
+            {
+              key: 'comment',
+              label: record.comment ? 'Edit comment' : 'Add comment',
+              onClick: () => handleModalDataChange(ModalDataMode.Comment, record),
+            },
+          ],
+        }}
       >
         <Button type="link">
           <MoreOutlined />
