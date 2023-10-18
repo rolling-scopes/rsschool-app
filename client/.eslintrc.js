@@ -8,7 +8,6 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:jest-dom/recommended',
-    'plugin:testing-library/dom',
     'plugin:jest/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
@@ -38,7 +37,8 @@ module.exports = {
     {
       // Enable eslint-plugin-testing-library rules or preset only for matching testing files
       files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-      extends: ['plugin:testing-library/react'],
+      excludedFiles: 'specs/**/*',
+      extends: ['plugin:testing-library/react', 'plugin:testing-library/dom'],
     },
   ],
   settings: {
