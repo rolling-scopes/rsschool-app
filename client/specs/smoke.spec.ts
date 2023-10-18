@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Home', () => {
   test('should have link to Score page', async ({ page }) => {
-    expect(await page.locator('text="Score"').isVisible()).toBe(true);
+    expect(await page.locator('css=a >> text="Score"').isVisible()).toBe(true);
 
     const href = await page.locator('css=a >> text="Score"').getAttribute('href');
     expect(href.includes('/course/score')).toBeTruthy();
