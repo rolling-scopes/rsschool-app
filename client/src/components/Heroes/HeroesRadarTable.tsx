@@ -1,4 +1,4 @@
-import { Table, TableProps } from 'antd';
+import { Table, TableProps, Tag } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { HeroRadarDto, HeroesRadarBadgeDto, HeroesRadarDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -71,11 +71,13 @@ const initColumns: ColumnType<HeroRadarDto>[] = [
     key: 'badges',
     width: Object.keys(heroesBadges).length * (BADGE_SIZE + BADGE_SUM_HORIZONTAL_MARGIN),
     responsive: ['xxl', 'xl', 'lg', 'md', 'sm'],
-    render: (value: HeroesRadarBadgeDto[], { githubId }: HeroRadarDto) => (
+    render: (value: HeroesRadarBadgeDto[], { total }: HeroRadarDto) => (
       <>
-        {value.map(badge => (
-          <HeroesCountBadge key={`${githubId}-${badge.id}`} badge={badge} />
-        ))}
+        {value.map(({ id, badgeId, comment, date }) => {
+          return <HeroesCountBadge key={id} badge={{ badgeId, comment, date }} />;
+        })}
+
+        {total > 20 && <Tag>+{total - 20} More</Tag>}
       </>
     ),
   },

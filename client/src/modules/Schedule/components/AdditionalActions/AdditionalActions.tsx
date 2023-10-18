@@ -1,8 +1,8 @@
-import { Button, Dropdown, Menu, message, Space } from 'antd';
+import { Button, Dropdown, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import React from 'react';
-import { buildExportLink, buildICalendarLink } from './helpers';
+import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';
 
@@ -29,7 +29,7 @@ const AdditionalActions = ({
   const [, copyToClipboard] = useCopyToClipboard();
 
   const onExport = () => {
-    window.location.href = buildExportLink(courseId, timezone);
+    setExportLink(buildExportLink(courseId, timezone));
   };
 
   const onCalendarDownload = () => {
@@ -72,11 +72,7 @@ const AdditionalActions = ({
   };
 
   return (
-    <Dropdown
-      overlay={<Menu items={menuItems} onClick={handleMenuItemClick} />}
-      trigger={['click']}
-      placement="bottomRight"
-    >
+    <Dropdown menu={{ items: menuItems, onClick: handleMenuItemClick }} trigger={['click']} placement="bottomRight">
       <Button>
         <Space>
           {SettingsButtons.More}
