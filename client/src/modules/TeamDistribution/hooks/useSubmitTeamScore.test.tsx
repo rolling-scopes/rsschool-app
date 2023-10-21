@@ -13,14 +13,6 @@ jest.mock('antd', () => ({
 }));
 
 describe('useSubmitTeamScore', () => {
-  const mockSubmitScore = jest.fn();
-
-  beforeEach(() => {
-    (TeamDistributionApi as jest.Mock).mockImplementation(() => {
-      return { submitScore: mockSubmitScore };
-    });
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -53,7 +45,8 @@ describe('useSubmitTeamScore', () => {
   });
 
   it('should handle successful score submission', async () => {
-    mockSubmitScore.mockResolvedValueOnce({});
+            (TeamDistributionApi.prototype.submitScore as jest.Mock).mockResolvedValueOnce({});
+
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 
     act(() => {
@@ -64,13 +57,13 @@ describe('useSubmitTeamScore', () => {
       result.current.handleSubmit();
     });
 
-    expect(mockSubmitScore).toHaveBeenCalledWith(1, 2, 3);
+    expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledWith(1, 2, 3);
     expect(result.current.taskId).toBe(null);
     expect(message.success).toHaveBeenCalledWith('Score submitted successfully.');
   });
 
   it('should handle failed score submission', async () => {
-    mockSubmitScore.mockRejectedValueOnce(new Error('Failed submission'));
+    (TeamDistributionApi.prototype.submitScore as jest.Mock).mockRejectedValueOnce(new Error('API error'));
 
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 

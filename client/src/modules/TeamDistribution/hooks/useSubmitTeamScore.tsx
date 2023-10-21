@@ -1,9 +1,10 @@
 import { message } from 'antd';
 import { TeamDistributionApi } from 'api';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+
+const teamDistributionApi = new TeamDistributionApi();
 
 export function useSubmitTeamScore(courseId: number, teamDistributionId: number) {
-  const service = useMemo(() => new TeamDistributionApi(), []);
   const [loading, setLoading] = useState(false);
   const [taskId, setTaskId] = useState<number | null>(null);
 
@@ -14,7 +15,9 @@ export function useSubmitTeamScore(courseId: number, teamDistributionId: number)
     }
     try {
       setLoading(true);
-      await service.submitScore(courseId, teamDistributionId, taskId);
+
+      await teamDistributionApi.submitScore(courseId, teamDistributionId, taskId);
+
       setTaskId(null);
       message.success('Score submitted successfully.');
     } catch (e) {
