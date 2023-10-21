@@ -45,7 +45,7 @@ describe('useSubmitTeamScore', () => {
   });
 
   it('should handle successful score submission', async () => {
-            (TeamDistributionApi.prototype.submitScore as jest.Mock).mockResolvedValueOnce({});
+    (TeamDistributionApi.prototype.submitScore as jest.Mock).mockResolvedValueOnce({});
 
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 
