@@ -4,7 +4,6 @@ import Router from 'next/router';
 import { useAsync } from 'react-use';
 import { useActiveCourseContext } from './ActiveCourseContext';
 
-jest.mock('axios');
 jest.mock('next/router', () => ({ push: jest.fn() }));
 jest.mock('./ActiveCourseContext', () => ({
   useActiveCourseContext: jest.fn(),

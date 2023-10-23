@@ -30,6 +30,7 @@ function renderVerificationInformation({
     loading: false,
     reload: jest.fn(),
     startTask: jest.fn(),
+    showAnswers: jest.fn(),
   };
 
   return render(<VerificationInformation {...props} />);

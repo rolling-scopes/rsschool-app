@@ -41,6 +41,9 @@ describe('useSubmitTeamScore', () => {
       result.current.handleSubmit();
     });
 
+    expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledTimes(0);
+    expect(result.current.taskId).toBe(null);
+    expect(message.success).toHaveBeenCalledTimes(0);
     expect(message.error).toHaveBeenCalledWith('Please select a task before submitting.');
   });
 
