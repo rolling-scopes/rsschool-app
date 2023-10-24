@@ -9,6 +9,7 @@ import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDi
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
 import { useModalForm } from 'hooks';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SubmitScoreModal } from 'modules/TeamDistribution/components/SubmitScoreModal';
 
 const teamDistributionApi = new TeamDistributionApi();
 
@@ -21,6 +22,7 @@ function TeamDistributions() {
     toggle: toggleTeamDistributionModal,
     formData: teamDistributionData,
   } = useModalForm<TeamDistributionDto>();
+  const [submitScoreModalData, setSubmitScoreModalData] = useState<TeamDistributionDto | null>(null);
 
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const isCourseDementor = useMemo(() => isDementor(session, course.id), [session, course.id]);
@@ -88,6 +90,9 @@ function TeamDistributions() {
           courseId={course.id}
         />
       )}
+      {isManager && (
+        <SubmitScoreModal distribution={submitScoreModalData} onClose={() => setSubmitScoreModalData(null)} />
+      )}
       <div style={{ maxWidth: '1020px', margin: '0 auto' }}>
         <WelcomeCard isManager={isManager} handleCreateTeamDistribution={handleCreateTeamDistribution} />
 
@@ -102,6 +107,7 @@ function TeamDistributions() {
                 isCourseDementor={isCourseDementor}
                 onDelete={handleDeleteTeamDistribution}
                 onEdit={handleEditTeamDistribution}
+                onOpenSubmitScoreModal={() => setSubmitScoreModalData(distribution)}
                 key={distribution.id}
               />
             ))

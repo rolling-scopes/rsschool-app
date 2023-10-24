@@ -15,6 +15,7 @@ type Props = {
   isManager: boolean;
   isCourseDementor: boolean;
   courseAlias: string;
+  onOpenSubmitScoreModal: () => void;
 };
 
 const getDateColor = (date: string): TextProps['type'] => {
@@ -26,7 +27,15 @@ const getDateColor = (date: string): TextProps['type'] => {
   if (isDeadlineSoon) return 'danger';
 };
 
-export function Actions({ distribution, register, deleteRegister, isManager, isCourseDementor, courseAlias }: Props) {
+export function Actions({
+  distribution,
+  register,
+  deleteRegister,
+  isManager,
+  isCourseDementor,
+  courseAlias,
+  onOpenSubmitScoreModal,
+}: Props) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const endDateText = dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate);
 
@@ -117,6 +126,11 @@ export function Actions({ distribution, register, deleteRegister, isManager, isC
           <Link href={`teams?course=${courseAlias}&teamDistributionId=${distribution.id}`}>
             <Button type="primary">Connect with teams</Button>
           </Link>
+        )}
+        {isManager && (
+          <Button type="dashed" onClick={onOpenSubmitScoreModal}>
+            Submit score
+          </Button>
         )}
         {renderActions()}
       </Space>

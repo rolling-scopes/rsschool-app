@@ -4,12 +4,11 @@ import HeroesRadarTable from './HeroesRadarTable';
 import { HeroesRadarDto, GratitudesApi, HeroRadarDto, CountryDto } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
 import { useState, useEffect, useCallback, useContext } from 'react';
-import { Course } from 'services/models';
 import { onlyDefined } from 'utils/onlyDefined';
 import dayjs from 'dayjs';
 import type { TimeRangePickerProps } from 'antd';
 import type { Dayjs } from 'dayjs';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 export type HeroesRadarFormProps = {
   courseId?: number;
@@ -36,11 +35,14 @@ const rangePresets: TimeRangePickerProps['presets'] = [
   { label: 'Last 90 Days', value: [currentDayjs.add(-90, 'd'), currentDayjs] },
 ];
 
-function HeroesRadarTab({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) {
+function HeroesRadarTab({ setLoading }: { setLoading: (arg: boolean) => void }) {
+  const { courses } = useActiveCourseContext();
+
   const [heroes, setHeroes] = useState<HeroesRadarDto>({
     content: [],
     pagination: { current: initialPage, pageSize: initialPageSize, itemCount: 0, total: 0, totalPages: 0 },
   });
+
   const [countries, setCountries] = useState<CountryDto[]>([]);
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<HeroesRadarFormProps>(form.getFieldsValue());

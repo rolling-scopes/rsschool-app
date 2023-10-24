@@ -13,6 +13,7 @@ type Props = {
   register: (distributionId: number) => Promise<void>;
   deleteRegister: (distributionId: number) => Promise<void>;
   courseAlias: string;
+  onOpenSubmitScoreModal: () => void;
 };
 
 export default function TeamDistributionCard({
@@ -24,6 +25,7 @@ export default function TeamDistributionCard({
   register,
   deleteRegister,
   courseAlias,
+  onOpenSubmitScoreModal,
 }: Props) {
   return (
     <Card
@@ -52,6 +54,7 @@ export default function TeamDistributionCard({
         register={register}
         deleteRegister={deleteRegister}
         courseAlias={courseAlias}
+        onOpenSubmitScoreModal={onOpenSubmitScoreModal}
       />
     </Card>
   );
