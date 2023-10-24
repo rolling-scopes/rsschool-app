@@ -1,6 +1,6 @@
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
-import { UploadFile } from 'antd/lib/upload/interface';
+import type { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
 import csv from 'csvtojson';
@@ -40,7 +40,7 @@ export function SubmitScorePage() {
 
   const handleTaskChange = () => setSubmitResults([]);
 
-  const handleFileChose = (info: any) => {
+  const handleFileChose = (info: UploadChangeParam<UploadFile>) => {
     let newSelectedFileList: Map<string, UploadFile> = new Map(selectedFileList);
     switch (info.file.status) {
       case 'uploading':
