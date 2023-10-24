@@ -16,7 +16,9 @@ export class TaskDto {
     this.discipline = task.discipline ? new IdNameDto(task.discipline) : null;
     this.courses = task.courseTasks
       ? uniqBy(
-          task.courseTasks.map(({ course }) => new UsedCourseDto({ name: course.name, isActive: !course.completed })),
+          task.courseTasks
+            .filter(task => !task.disabled)
+            .map(({ course }) => new UsedCourseDto({ name: course.name, isActive: !course.completed })),
           course => course.name,
         ).sort((a, b) => {
           if (a.isActive === b.isActive) {
