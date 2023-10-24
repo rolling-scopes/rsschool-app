@@ -109,7 +109,6 @@ export function SubmitScorePage() {
           <Upload
             fileList={Array.from(selectedFileList).map(([, file]) => file)}
             onChange={handleFileChose}
-            multiple={true}
             accept=".csv"
           >
             <Button>
