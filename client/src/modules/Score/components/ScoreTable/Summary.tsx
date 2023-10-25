@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { ScoreStudentDto } from 'api';
+import get from 'lodash/get';
 
 type SummaryProps = {
   visibleColumns: ColumnType<ScoreStudentDto>[];
@@ -13,14 +14,7 @@ export const Summary = ({ visibleColumns, studentScore }: SummaryProps) => {
       {/* the table has a hidden first column */}
       <Table.Summary.Cell index={0} />
       {visibleColumns.map(({ dataIndex, render }, index) => {
-        const value: any = Array.isArray(dataIndex)
-          ? dataIndex.reduce((result: any, property) => {
-              return Object.prototype.hasOwnProperty.call(result ?? {}, property as string)
-                ? result[property as string]
-                : null;
-            }, studentScore)
-          : studentScore[dataIndex as keyof ScoreStudentDto];
-
+        const value = get(studentScore, dataIndex as string | string[], null);
         return (
           <Table.Summary.Cell key={index} index={index + 1}>
             {render ? render(value, studentScore, index + 1) : value}
