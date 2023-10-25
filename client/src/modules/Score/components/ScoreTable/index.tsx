@@ -18,12 +18,10 @@ import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { Summary } from './Summary';
-import { StudentPosition } from 'modules/Score/constants';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
-  studentPosition: StudentPosition;
 };
 
 type TableScoreOrder = SorterResult<ScoreStudentDto> | SorterResult<ScoreStudentDto>[];
@@ -43,7 +41,7 @@ const courseTasksApi = new CoursesTasksApi();
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { activeOnly, studentPosition } = props;
+  const { activeOnly } = props;
   const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
@@ -188,7 +186,7 @@ export function ScoreTable(props: Props) {
   };
 
   const visibleColumns = getVisibleColumns(columns);
-  const isSummaryShown = students.content.length > 0 && studentPosition !== StudentPosition.Disabled && summaryData;
+  const isSummaryShown = students.content.length > 0 && summaryData;
 
   return (
     <>
@@ -202,7 +200,7 @@ export function ScoreTable(props: Props) {
         dataSource={students.content}
         summary={() =>
           isSummaryShown && (
-            <Table.Summary fixed={studentPosition}>
+            <Table.Summary fixed="top">
               <Summary studentScore={summaryData} visibleColumns={visibleColumns} />
             </Table.Summary>
           )
