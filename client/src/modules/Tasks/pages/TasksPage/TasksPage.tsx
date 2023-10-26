@@ -136,9 +136,6 @@ function createRecord(values: any) {
 }
 
 function prepareValues(modalData: TaskDto) {
-  if (!modalData) {
-    return modalData;
-  }
   return {
     ...modalData,
     attributes: JSON.stringify(modalData.attributes, null, 2),
