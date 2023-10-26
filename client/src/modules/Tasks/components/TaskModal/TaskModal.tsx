@@ -1,15 +1,14 @@
 import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
+import { useMemo } from 'react';
+import { union } from 'lodash';
 import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
-import { union } from 'lodash';
-
+import { TaskSettings } from 'modules/Tasks/components';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
 import { ModalData } from 'modules/Tasks/types';
-import { useMemo } from 'react';
 import { urlPattern } from 'services/validators';
-import { TaskSettings } from './TaskSettings/TaskSettings';
 
 const { Text } = Typography;
 

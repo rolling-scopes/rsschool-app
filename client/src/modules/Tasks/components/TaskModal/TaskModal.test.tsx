@@ -4,69 +4,75 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { ModalData } from 'modules/Tasks/types';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
 
+const mockData = generateData();
+
 describe('TaskModal', () => {
   test('should render modal', () => {
-    render(<TaskModal {...generateData()} />);
+    render(<TaskModal {...mockData} />);
 
     const modal = screen.getByRole('dialog');
     expect(modal).toBeInTheDocument();
   });
 
-  test.each`
-    label
-    ${LABELS.name}
-    ${LABELS.taskType}
-    ${LABELS.discipline}
-    ${LABELS.tags}
-    ${LABELS.descriptionUrl}
-    ${LABELS.summary}
-    ${LABELS.skills}
-  `('should render field with "$label" label', async ({ label }) => {
-    render(<TaskModal {...generateData()} />);
+  test('should render labels', () => {
+    render(<TaskModal {...mockData} />);
 
-    const field = await screen.findByLabelText(label);
-    expect(field).toBeInTheDocument();
+    const name = screen.getByLabelText(LABELS.name);
+    const taskType = screen.getByLabelText(LABELS.taskType);
+    const discipline = screen.getByLabelText(LABELS.discipline);
+    const tags = screen.getByLabelText(LABELS.tags);
+    const descriptionUrl = screen.getByLabelText(LABELS.descriptionUrl);
+    const summary = screen.getByLabelText(LABELS.summary);
+    const skills = screen.getByLabelText(LABELS.skills);
+
+    expect(name).toBeInTheDocument();
+    expect(taskType).toBeInTheDocument();
+    expect(discipline).toBeInTheDocument();
+    expect(tags).toBeInTheDocument();
+    expect(descriptionUrl).toBeInTheDocument();
+    expect(summary).toBeInTheDocument();
+    expect(skills).toBeInTheDocument();
   });
 
-  test('should render "Used in courses" card', async () => {
-    render(<TaskModal {...generateData()} />);
+  test('should render "Used in courses" card', () => {
+    render(<TaskModal {...mockData} />);
 
-    const card = await screen.findByText(LABELS.usedInCourses);
+    const card = screen.getByText(LABELS.usedInCourses);
     expect(card).toBeInTheDocument();
   });
 
   // Inputs
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.name}
-    ${PLACEHOLDERS.descriptionUrl}
-    ${PLACEHOLDERS.summary}
-  `('should render field with "$placeholder" placeholder', async ({ placeholder }) => {
-    render(<TaskModal {...generateData()} />);
+  test('should render input placeholders', () => {
+    render(<TaskModal {...mockData} />);
 
-    const field = await screen.findByPlaceholderText(placeholder);
-    expect(field).toBeInTheDocument();
+    const name = screen.getByPlaceholderText(PLACEHOLDERS.name);
+    const descriptionUrl = screen.getByPlaceholderText(PLACEHOLDERS.descriptionUrl);
+    const summary = screen.getByPlaceholderText(PLACEHOLDERS.summary);
+
+    expect(name).toBeInTheDocument();
+    expect(descriptionUrl).toBeInTheDocument();
+    expect(summary).toBeInTheDocument();
   });
 
   // Selects
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.taskType}
-    ${PLACEHOLDERS.discipline}
-    ${PLACEHOLDERS.tags}
-    ${PLACEHOLDERS.skills}
-  `('should render field with "$placeholder" placeholder', async ({ placeholder }) => {
+  test('should render select placeholders', () => {
     render(<TaskModal {...generateData(true)} />);
+    const taskType = screen.getByText(PLACEHOLDERS.taskType);
+    const discipline = screen.getByText(PLACEHOLDERS.discipline);
+    const tags = screen.getByText(PLACEHOLDERS.tags);
+    const skills = screen.getByText(PLACEHOLDERS.skills);
 
-    const select = await screen.findByText(placeholder);
-    expect(select).toBeInTheDocument();
+    expect(taskType).toBeInTheDocument();
+    expect(discipline).toBeInTheDocument();
+    expect(tags).toBeInTheDocument();
+    expect(skills).toBeInTheDocument();
   });
 
   describe('incorrect input handling', () => {
     test('should render error message on invalid description URL input', async () => {
-      render(<TaskModal {...generateData()} />);
+      render(<TaskModal {...mockData} />);
 
-      const input = await screen.findByPlaceholderText(PLACEHOLDERS.descriptionUrl);
+      const input = screen.getByPlaceholderText(PLACEHOLDERS.descriptionUrl);
       expect(input).toBeInTheDocument();
 
       const value = 'not url';
@@ -83,47 +89,39 @@ describe('TaskModal', () => {
       expect(errorMessage).toBeInTheDocument();
     });
 
-    test('should render all error messages on required fields', async () => {
+    test('should render error messages on required fields', async () => {
       render(<TaskModal {...generateData(true)} />);
 
-      const save = await screen.findByRole('button', { name: /save/i });
+      const save = screen.getByRole('button', { name: /save/i });
       expect(save).toBeInTheDocument();
 
       fireEvent.click(save);
 
-      const errors = await screen.findAllByRole('alert');
+      const errors = await Promise.all([
+        screen.findByText(ERROR_MESSAGES.name),
+        screen.findByText(ERROR_MESSAGES.taskType),
+        screen.findByText(ERROR_MESSAGES.discipline),
+        screen.findByText(ERROR_MESSAGES.descriptionUrl),
+      ]);
+
       expect(errors).toHaveLength(4);
-    });
 
-    test.each`
-      message
-      ${ERROR_MESSAGES.name}
-      ${ERROR_MESSAGES.taskType}
-      ${ERROR_MESSAGES.discipline}
-      ${ERROR_MESSAGES.descriptionUrl}
-    `('should render "$message" error message', async ({ message }: { message: string }) => {
-      render(<TaskModal {...generateData(true)} />);
-
-      const save = await screen.findByRole('button', { name: /save/i });
-      expect(save).toBeInTheDocument();
-
-      fireEvent.click(save);
-
-      const error = await screen.findByText(message);
-      expect(error).toBeInTheDocument();
+      errors.forEach(error => {
+        expect(error).toBeInTheDocument();
+      });
     });
   });
 
-  test.each`
-    header
-    ${TASK_SETTINGS_HEADERS.crossCheckCriteria}
-    ${TASK_SETTINGS_HEADERS.github}
-    ${TASK_SETTINGS_HEADERS.jsonAttributes}
-  `('should render task setting panel $header', async ({ header }) => {
-    render(<TaskModal {...generateData()} />);
+  test('should render task setting panel headers', () => {
+    render(<TaskModal {...mockData} />);
 
-    const panel = await screen.findByText(header);
-    expect(panel).toBeInTheDocument();
+    const crossCheckCriteria = screen.getByText(TASK_SETTINGS_HEADERS.crossCheckCriteria);
+    const github = screen.getByText(TASK_SETTINGS_HEADERS.github);
+    const jsonAttributes = screen.getByText(TASK_SETTINGS_HEADERS.jsonAttributes);
+
+    expect(crossCheckCriteria).toBeInTheDocument();
+    expect(github).toBeInTheDocument();
+    expect(jsonAttributes).toBeInTheDocument();
   });
 });
 
