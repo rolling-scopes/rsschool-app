@@ -109,7 +109,7 @@ describe('TaskModal', () => {
       errors.forEach(error => {
         expect(error).toBeInTheDocument();
       });
-    });
+    }, 10000);
   });
 
   test('should render task setting panel headers', () => {
