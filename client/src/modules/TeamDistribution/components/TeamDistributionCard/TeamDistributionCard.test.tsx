@@ -15,6 +15,7 @@ const mockOnDelete = jest.fn(() => Promise.resolve());
 const mockOnEdit = jest.fn();
 const onRegister = jest.fn();
 const onDeleteRegister = jest.fn();
+const onOpenSubmitScoreModal = jest.fn();
 
 function renderCard(distribution: TeamDistributionDto, isManager = false) {
   return render(
@@ -26,6 +27,8 @@ function renderCard(distribution: TeamDistributionDto, isManager = false) {
       deleteRegister={onDeleteRegister}
       register={onRegister}
       courseAlias="Test"
+      isCourseDementor={false}
+      onOpenSubmitScoreModal={onOpenSubmitScoreModal}
     />,
   );
 }

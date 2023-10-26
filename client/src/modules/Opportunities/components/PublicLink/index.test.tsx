@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { PublicLink } from './index';
 
 const mockUrl = 'https://expample.com';
@@ -33,16 +33,18 @@ describe('PublicLink', () => {
     expect(link).toHaveAttribute('href', mockUrl);
   });
 
-  test('should copy link', () => {
+  test('should copy link', async () => {
     render(<PublicLink url={mockUrl} />);
 
     const copyBtn = screen.getByRole('button');
 
     fireEvent.click(copyBtn);
 
-    expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
+    await waitFor(() => {
+      expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
+    });
 
-    // const notification = screen.getByText('Copied to clipboard');
-    // expect(notification).toBeInTheDocument();
+    const notification = screen.getByText('Copied to clipboard');
+    expect(notification).toBeInTheDocument();
   });
 });

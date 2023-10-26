@@ -18,7 +18,7 @@ describe('NoConsentView', () => {
     expect(createCvButton).toBeInTheDocument();
   });
 
-  it('should show confirmation modal correctly', async () => {
+  it('should show confirmation modal', async () => {
     render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
@@ -29,66 +29,125 @@ describe('NoConsentView', () => {
     const modalTitle = await screen.findByText(confirmationModalInfo.en.header);
 
     expect(modal).toBeInTheDocument();
-
-    // Check that we have all visible texts
     expect(modalTitle).toBeInTheDocument();
-    confirmationModalInfo.en.availableDataList.forEach(text => expect(screen.getByText(text)).toBeInTheDocument());
 
-    // Check that title tooltip works correctly
-    const titleTooltipIcon = await screen.findByTestId(confirmationModalInfo.ru.header);
-
-    expect(titleTooltipIcon).toBeInTheDocument();
-
-    fireEvent.mouseEnter(titleTooltipIcon);
-
-    const titleTooltipText = await screen.findByText(confirmationModalInfo.ru.header);
-
-    expect(titleTooltipText).toBeInTheDocument();
-
-    // Check that list items tooltips works correctly
-    for (const text of confirmationModalInfo.ru.availableDataList) {
-      const tooltipIcon = await screen.findByTestId(text);
-
-      expect(tooltipIcon).toBeInTheDocument();
-
-      fireEvent.mouseEnter(tooltipIcon);
-
-      const tooltipText = await screen.findByText(text);
-
-      expect(tooltipText).toBeInTheDocument();
-    }
-
+    // close modal
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
   });
 
-  it('should handle cancel correctly', async () => {
+  it('should render tooltip', async () => {
     render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
     fireEvent.click(createCvButton);
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    const titleTooltipIcon = await screen.findByTestId(confirmationModalInfo.ru.header);
+    expect(titleTooltipIcon).toBeInTheDocument();
 
-    const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+    fireEvent.mouseEnter(titleTooltipIcon);
 
-    fireEvent.click(cancelButton);
+    const titleTooltipText = await screen.findByText(confirmationModalInfo.ru.header);
+    expect(titleTooltipText).toBeInTheDocument();
 
-    // TODO: disable temporary
-    // await waitFor(() => {
-    //   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    // });
+    // close modal
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
   });
 
-  it.skip('should handle consent correctly', async () => {
+  it.each`
+    text
+    ${confirmationModalInfo.en.availableDataList[0]}
+    ${confirmationModalInfo.en.availableDataList[1]}
+    ${confirmationModalInfo.en.availableDataList[2]}
+    ${confirmationModalInfo.en.availableDataList[3]}
+  `('should render visible text $text', async ({ text }) => {
+    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+
+    fireEvent.click(createCvButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
+
+    // close modal
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
+  });
+
+  it.each`
+    text
+    ${confirmationModalInfo.ru.availableDataList[0]}
+    ${confirmationModalInfo.ru.availableDataList[1]}
+    ${confirmationModalInfo.ru.availableDataList[2]}
+    ${confirmationModalInfo.ru.availableDataList[3]}
+  `('should render tooltip $text', async ({ text }) => {
+    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+
+    fireEvent.click(createCvButton);
+
+    const tooltipIcon = await screen.findByTestId(text);
+    expect(tooltipIcon).toBeInTheDocument();
+
+    fireEvent.mouseEnter(tooltipIcon);
+
+    const tooltipText = await screen.findByText(text);
+    expect(tooltipText).toBeInTheDocument();
+
+    // close modal
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle cancel correctly', async () => {
+    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+
+    const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
+    expect(createCvButton).toBeInTheDocument();
+
+    fireEvent.click(createCvButton);
+
+    const cancelButton = await screen.findByRole('button', { name: 'Cancel' });
+    expect(cancelButton).toBeInTheDocument();
+
+    // close modal
+    fireEvent.click(cancelButton);
+
+    await waitFor(() => {
+      const modal = screen.queryByRole('dialog');
+      expect(modal).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle consent correctly', async () => {
     const mockGiveConsent = jest.fn();
 
     render(<NoConsentView isOwner={true} giveConsent={mockGiveConsent} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
-    // eslint-disable-next-line testing-library/no-wait-for-side-effects
-    await waitFor(() => fireEvent.click(createCvButton));
+    fireEvent.click(createCvButton);
 
     const consentButton = await screen.findByRole('button', { name: 'I consent' });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { AddCriteriaForCrossCheck } from '../AddCriteriaForCrossCheck';
 import userEvent from '@testing-library/user-event';
 
@@ -17,7 +17,7 @@ describe('AddCriteriaForCrossCheck', () => {
     expect(element).toBeInTheDocument();
   });
 
-  test('should call addCriteria when "Add new criteria" button was clicked', () => {
+  test('should call addCriteria when "Add new criteria" button was clicked', async () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
     const selectCriteriaType = screen.getByRole('combobox');
     fireEvent.mouseDown(selectCriteriaType);
@@ -29,7 +29,10 @@ describe('AddCriteriaForCrossCheck', () => {
 
     const button = screen.getByRole('button', { name: /Add New Criteria/i });
     fireEvent.click(button);
-    expect(addCriteria).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(addCriteria).toHaveBeenCalledTimes(1);
+    });
   });
 
   test('should render textarea', () => {
@@ -44,7 +47,6 @@ describe('AddCriteriaForCrossCheck', () => {
     render(<AddCriteriaForCrossCheck onCreate={addCriteria} />);
 
     const textarea = screen.getByPlaceholderText<HTMLInputElement>('Add description');
-    // eslint-disable-next-line testing-library/no-await-sync-events
     await userEvent.type(textarea, expectedString);
 
     expect(textarea.value).toEqual(expectedString);
