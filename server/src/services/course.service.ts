@@ -458,16 +458,6 @@ export async function getCourseTask(taskId: number) {
   return courseTasks;
 }
 
-export async function getCourseTasks(courseId: number) {
-  const courseTasks = await getRepository(CourseTask)
-    .createQueryBuilder('courseTask')
-    .innerJoinAndSelect('courseTask.task', 'task')
-    .where('courseTask.courseId = :courseId', { courseId })
-    .andWhere('courseTask.disabled = :disabled', { disabled: false })
-    .getMany();
-  return courseTasks;
-}
-
 export async function getCourseTasksWithOwner(courseId: number) {
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
@@ -668,67 +658,6 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
     };
   });
   return students;
-}
-
-function shiftDate(date: string, shift: number, format: string): string {
-  return moment(date).add(shift, 'days').format(format);
-}
-
-function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
-  delete event.id;
-  delete event.createdDate;
-  delete event.updatedDate;
-
-  event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  if (event.endTime) {
-    event.endTime = shiftDate(event.endTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  }
-  event.courseId = courseId;
-}
-
-function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
-  delete task.id;
-  delete task.createdDate;
-  delete task.updatedDate;
-  delete task.crossCheckStatus;
-
-  task.studentStartDate = shiftDate(task.studentStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  task.studentEndDate = shiftDate(task.studentEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  if (task.mentorStartDate) {
-    task.mentorStartDate = shiftDate(task.mentorStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  }
-  if (task.mentorEndDate) {
-    task.mentorEndDate = shiftDate(task.mentorEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  }
-  if (task.crossCheckEndDate) {
-    task.crossCheckEndDate = shiftDate(task.crossCheckEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
-  }
-  task.courseId = courseId;
-}
-
-export async function createCourseFromCopy(courseId: number, details: any) {
-  const courseToCopy = await getRepository(Course).findOneBy({ id: courseId });
-
-  if (courseToCopy && courseToCopy.id) {
-    const events: any = await getEvents(courseId);
-    const tasks: any = await getCourseTasks(courseId);
-    const { id, ...couseWithoutId } = courseToCopy;
-    const courseCopy: Course = { ...couseWithoutId, ...details };
-    const courseData = await getRepository(Course).insert(courseCopy);
-
-    const startDateDaysDiff = moment(details.startDate).diff(moment(courseToCopy.startDate), 'days');
-    courseCopy.id = courseData.identifiers[0].id;
-
-    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id));
-    const savedEventsData = await getRepository(CourseEvent).insert(events);
-
-    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id));
-    const savedTasksData = await getRepository(CourseTask).insert(tasks);
-
-    return { courseCopy, savedEventsData, savedTasksData };
-  }
-
-  throw new Error(`not valid course to copy id: ${courseId}`);
 }
 
 const timeout = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
