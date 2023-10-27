@@ -1,12 +1,15 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { AdditionalActions, AdditionalActionsProps, MenuItemType } from '.';
 import { SettingsButtons } from '../SettingsPanel';
 import { buildMenuItem } from '../SettingsPanel/helpers';
-import { buildExportLink, buildICalendarLink } from './helpers';
+import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
+
+window.prompt = jest.fn();
 
 jest.mock('./helpers', () => ({
   buildExportLink: jest.fn(),
   buildICalendarLink: jest.fn(),
+  setExportLink: jest.fn(),
 }));
 
 const PROPS_MOCK: AdditionalActionsProps = {
@@ -37,7 +40,9 @@ describe('AdditionalActions', () => {
     const copyBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Copy, 'i') });
     fireEvent.click(copyBtn);
 
-    expect(PROPS_MOCK.onCopyFromCourse).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(PROPS_MOCK.onCopyFromCourse).toHaveBeenCalled();
+    });
   });
 
   it('should call onCalendarCopyLink when "Copy iCal Link" action was clicked', async () => {
@@ -48,7 +53,13 @@ describe('AdditionalActions', () => {
     const calendarBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.CopyLink, 'i') });
     fireEvent.click(calendarBtn);
 
-    expect(buildICalendarLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.calendarToken, PROPS_MOCK.timezone);
+    await waitFor(() => {
+      expect(buildICalendarLink).toHaveBeenCalledWith(
+        PROPS_MOCK.courseId,
+        PROPS_MOCK.calendarToken,
+        PROPS_MOCK.timezone,
+      );
+    });
   });
 
   it('should call onExport when "Export" action was clicked', async () => {
@@ -60,6 +71,7 @@ describe('AdditionalActions', () => {
     fireEvent.click(exportBtn);
 
     expect(buildExportLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.timezone);
+    expect(setExportLink).toHaveBeenCalled();
   });
 });
 

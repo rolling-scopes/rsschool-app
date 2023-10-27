@@ -37,10 +37,10 @@ describe('Coding', () => {
     ${CourseTaskDetailedDtoTypeEnum.Kotlintask} | ${/https:\/\/github.com\/github-id\/github-repo-name/i}
   `(
     'should render $type task with $text',
-    ({ type, text }: { type: CourseTaskDetailedDtoTypeEnum; text: RegExp | string }) => {
+    async ({ type, text }: { type: CourseTaskDetailedDtoTypeEnum; text: RegExp | string }) => {
       renderCoding(type);
 
-      expect(screen.getByText(text)).toBeInTheDocument();
+      expect(await screen.findByText(text)).toBeInTheDocument();
     },
   );
 });

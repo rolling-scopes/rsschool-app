@@ -23,7 +23,7 @@ const PROPS_MOCK: MentorDashboardProps = {
 };
 
 describe('MentorDashboard', () => {
-  it('should render instructions when mentor has no students for this course', () => {
+  it('should render instructions when mentor has no students for this course', async () => {
     render(
       <SessionContext.Provider
         value={
@@ -46,12 +46,12 @@ describe('MentorDashboard', () => {
       </SessionContext.Provider>,
     );
 
-    const instructionsTitle = screen.getByText(INSTRUCTIONS_TEXT.title);
+    const instructionsTitle = await screen.findByText(INSTRUCTIONS_TEXT.title);
 
     expect(instructionsTitle).toBeInTheDocument();
   });
 
-  it('should render empty table when mentor has students for this course', () => {
+  it('should render empty table when mentor has students for this course', async () => {
     render(
       <SessionContext.Provider
         value={
@@ -74,7 +74,7 @@ describe('MentorDashboard', () => {
       </SessionContext.Provider>,
     );
 
-    const emptyTable = screen.getByText(/No Data/i);
+    const emptyTable = await screen.findByText(/No Data/i);
 
     expect(emptyTable).toBeInTheDocument();
   });

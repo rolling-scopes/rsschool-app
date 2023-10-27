@@ -4,23 +4,14 @@ import { useState } from 'react';
 import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { Tabs } from 'antd';
 import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
-import { Course } from 'services/models';
-import { CoursesService } from 'services/courses';
-import { useAsync } from 'react-use';
 
 function Page() {
   const [loading, setLoading] = useState(false);
-  const [courses, setCourses] = useState<Course[]>([]);
 
   const tabs = [
-    { label: 'Gratitudes', key: '1', children: <HeroesForm setLoading={setLoading} courses={courses} /> },
-    { label: 'Heroes Radar', key: '2', children: <HeroesRadarTab setLoading={setLoading} courses={courses} /> },
+    { label: 'Gratitudes', key: '1', children: <HeroesForm setLoading={setLoading} /> },
+    { label: 'Heroes Radar', key: '2', children: <HeroesRadarTab setLoading={setLoading} /> },
   ];
-
-  useAsync(async () => {
-    const courses = await new CoursesService().getCourses();
-    setCourses(courses);
-  }, []);
 
   return (
     <SessionProvider>

@@ -232,6 +232,9 @@ export class TeamDistributionStudentService {
         teamDistributionId: distributionId,
         active: true,
         distributed: false,
+        student: {
+          isExpelled: false,
+        },
       },
       relations: {
         student: true,

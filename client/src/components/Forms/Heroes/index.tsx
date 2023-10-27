@@ -7,8 +7,8 @@ import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'com
 import heroesBadges from 'configs/heroes-badges';
 import { GratitudeService } from 'services/gratitude';
 import { onlyDefined } from 'utils/onlyDefined';
-import { Course } from 'services/models';
 import { getFullName } from 'domain/user';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Text, Link, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -22,7 +22,9 @@ export const fields = {
   courseId: 'courseId',
 } as const;
 
-export const HeroesForm = ({ setLoading, courses }: { setLoading: (arg: boolean) => void; courses: Course[] }) => {
+export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
+  const { courses } = useActiveCourseContext();
+
   const [heroesData, setHeroesData] = useState<IGratitudeGetResponse[]>([]);
   const [heroesCount, setHeroesCount] = useState(initialPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
