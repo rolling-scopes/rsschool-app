@@ -457,6 +457,16 @@ export async function getCourseTask(taskId: number) {
   return courseTasks;
 }
 
+export async function getCourseTasks(courseId: number) {
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .innerJoinAndSelect('courseTask.task', 'task')
+    .where('courseTask.courseId = :courseId', { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
+    .getMany();
+  return courseTasks;
+}
+
 export async function getCourseTasksWithOwner(courseId: number) {
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
