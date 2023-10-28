@@ -56,7 +56,7 @@ export function ScoreTable(props: Props) {
     filter: { activeOnly: true },
     order: { field: 'rank', order: 'ascend' },
   });
-  const [summaryData, setSummaryData] = useState<ScoreStudentDto | null>(null);
+  const [studentScore, setStudentScore] = useState<ScoreStudentDto | null>(null);
 
   const recentlyAppliedFilters = useRef<null | Record<string, FilterValue | null>>(null);
 
@@ -104,7 +104,7 @@ export function ScoreTable(props: Props) {
           isVisible: !notVisibleColumns.includes(String(task.id)),
         }));
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
-      setSummaryData(studentCourseScore);
+      setStudentScore(studentCourseScore);
       setCourseTasks(sortedTasks);
       setColumns(
         getColumns({
@@ -179,14 +179,14 @@ export function ScoreTable(props: Props) {
         courseService.getStudentCourseScore(props.session?.githubId as string),
         getCourseScore(pagination, filters, sorter),
       ]);
-      setSummaryData(studentCourseScore);
+      setStudentScore(studentCourseScore);
     } finally {
       props.onLoading(false);
     }
   };
 
   const visibleColumns = getVisibleColumns(columns);
-  const isSummaryShown = students.content.length > 0 && summaryData;
+  const isSummaryShown = students.content.length > 0 && studentScore;
 
   return (
     <>
@@ -201,7 +201,7 @@ export function ScoreTable(props: Props) {
         summary={() =>
           isSummaryShown && (
             <Table.Summary fixed="top">
-              <Summary studentScore={summaryData} visibleColumns={visibleColumns} />
+              <Summary studentScore={studentScore} visibleColumns={visibleColumns} />
             </Table.Summary>
           )
         }
