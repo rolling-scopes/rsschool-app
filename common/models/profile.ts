@@ -176,9 +176,3 @@ export type LegacyFeedback = {
     dataStructures: number;
   };
 };
-
-export interface JobFoundInfo {
-  jobFound: boolean;
-  jobFoundCompanyName?: string | null;
-  jobFoundOfficeLocation?: string | null;
-}
