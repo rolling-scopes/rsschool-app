@@ -212,7 +212,7 @@ export class ProfileService {
   }
 
   public async getEmploymentHistory(userId: number) {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+    const user = await this.userRepository.findOneOrFail({ select: ['employmentHistory'], where: { id: userId } });
     return user?.employmentHistory;
   }
 
