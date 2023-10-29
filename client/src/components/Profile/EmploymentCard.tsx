@@ -30,21 +30,21 @@ const defaultEmploymentRecord: EmploymentRecordDto = {
   officeLocation: undefined,
 };
 
+const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({
+  ...employment,
+  dateFrom: employment.dateFrom.format(dateFormat),
+  dateTo: employment.toPresent ? '' : employment.dateTo.format(dateFormat),
+});
+
+const employmentRecordDtoToFormItem = (employment: EmploymentRecordDto): EmploymentRecordFormItem => ({
+  ...employment,
+  dateFrom: employment.dateFrom ? dayjs(employment.dateFrom) : dayjs(),
+  dateTo: employment.dateTo ? dayjs(employment.dateTo) : dayjs(),
+});
+
 const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
   const [form] = Form.useForm<{ employmentHistory: EmploymentRecordFormItem[] }>();
   const values = Form.useWatch([], form);
-
-  const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({
-    ...employment,
-    dateFrom: employment.dateFrom.format(dateFormat),
-    dateTo: employment.toPresent ? '' : employment.dateTo.format(dateFormat),
-  });
-
-  const employmentRecordDtoToFormItem = (employment: EmploymentRecordDto): EmploymentRecordFormItem => ({
-    ...employment,
-    dateFrom: employment.dateFrom ? dayjs(employment.dateFrom) : dayjs(),
-    dateTo: employment.dateTo ? dayjs(employment.dateTo) : dayjs(),
-  });
 
   const [displayEmployments, setDisplayEmployments] = useState<EmploymentRecordFormItem[]>(
     data.map(employmentRecordDtoToFormItem),
