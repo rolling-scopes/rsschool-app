@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<AutoTestTaskProps> = async c
       if (startDate > now) {
         return noAccessResponse;
       }
-      
+
       return {
         props: { course, task },
       };
