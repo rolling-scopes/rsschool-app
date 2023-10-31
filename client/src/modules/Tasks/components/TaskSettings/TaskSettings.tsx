@@ -1,32 +1,89 @@
-import { Collapse } from 'antd';
-import { CriteriaDto } from 'api';
+import { Collapse, CollapseProps } from 'antd';
+import { CollapsibleType } from 'antd/es/collapse/CollapsePanel';
+import { CriteriaDto, TaskDtoTypeEnum } from 'api';
 
 import { CrossCheckTaskCriteriaPanel, GitHubPanel, JsonAttributesPanel } from 'modules/Tasks/components';
 import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import { Settings, SettingsSet } from 'modules/Tasks/types';
+import { useEffect, useState } from 'react';
 
 type Props = {
   dataCriteria: CriteriaDto[];
   setDataCriteria: (criteria: CriteriaDto[]) => void;
+  taskType: TaskDtoTypeEnum | undefined;
 };
 
-export function TaskSettings({ dataCriteria, setDataCriteria }: Props) {
+export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props) {
+  const [activeKey, setActiveKey] = useState<CollapseProps['activeKey']>([]);
+  const { isJsonRequired, isGithubRequired, isCrossCheckRequired } = getRequiredSettings(taskType);
+
   const collapseItems = [
     {
       label: TASK_SETTINGS_HEADERS.crossCheckCriteria,
       children: <CrossCheckTaskCriteriaPanel dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />,
       forceRender: true,
+      collapsible: isCollapsible(isCrossCheckRequired),
     },
     {
       label: TASK_SETTINGS_HEADERS.github,
       children: <GitHubPanel />,
       forceRender: true,
+      collapsible: isCollapsible(isGithubRequired),
     },
     {
       label: TASK_SETTINGS_HEADERS.jsonAttributes,
       children: <JsonAttributesPanel />,
       forceRender: true,
+      collapsible: isCollapsible(isJsonRequired),
     },
   ];
 
-  return <Collapse items={collapseItems} />;
+  const handleChange: CollapseProps['onChange'] = key => setActiveKey(key);
+
+  // collapse opened panel(s)
+  useEffect(() => {
+    setActiveKey([]);
+  }, [taskType]);
+
+  return (
+    <Collapse items={collapseItems} defaultActiveKey={[]} activeKey={activeKey} onChange={handleChange} accordion />
+  );
+}
+
+const taskSettingsSet: SettingsSet = {
+  json: [
+    TaskDtoTypeEnum.Interview,
+    TaskDtoTypeEnum.StageInterview,
+    TaskDtoTypeEnum.Selfeducation,
+    TaskDtoTypeEnum.Codewars,
+    TaskDtoTypeEnum.Ipynb,
+    TaskDtoTypeEnum.Kotlintask,
+    TaskDtoTypeEnum.Objctask,
+  ],
+  github: [
+    TaskDtoTypeEnum.Codejam,
+    TaskDtoTypeEnum.Jstask,
+    TaskDtoTypeEnum.Ipynb,
+    TaskDtoTypeEnum.Kotlintask,
+    TaskDtoTypeEnum.Objctask,
+  ],
+  crossCheck: [TaskDtoTypeEnum.Htmltask, TaskDtoTypeEnum.Jstask],
+};
+
+const defaultSettings: Settings = { isJsonRequired: false, isGithubRequired: false, isCrossCheckRequired: false };
+
+function getRequiredSettings(taskType?: TaskDtoTypeEnum): Settings {
+  if (!taskType) {
+    return defaultSettings;
+  }
+
+  const isJsonRequired = taskSettingsSet.json.includes(taskType);
+  const isGithubRequired = taskSettingsSet.github.includes(taskType);
+  const isCrossCheckRequired = taskSettingsSet.crossCheck.includes(taskType);
+
+  return { isJsonRequired, isGithubRequired, isCrossCheckRequired };
+}
+
+function isCollapsible(isFieldRequired: boolean) {
+  return (!isFieldRequired ? 'disabled' : undefined) as CollapsibleType;
 }

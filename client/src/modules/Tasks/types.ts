@@ -1,6 +1,9 @@
-import { TaskDto } from 'api';
+import { TaskDto, TaskDtoTypeEnum } from 'api';
 
-type ModalData = (Partial<Omit<TaskDto, 'attributes'>> & { attributes?: string }) | null;
+// discipline on form is the discipline id(number), on TaskDto it's an object(id, name);
+type FormValues = Partial<Omit<TaskDto, 'discipline' | 'attributes'> & { discipline: number; attributes: string }>;
+
+type ModalData = Partial<Omit<TaskDto, 'attributes'> & { attributes: string }> | null;
 
 const enum ColumnName {
   Id = 'Id',
@@ -16,6 +19,14 @@ const enum ColumnName {
   Actions = 'Actions',
 }
 
-export type { ModalData };
+type Settings = {
+  isJsonRequired: boolean;
+  isGithubRequired: boolean;
+  isCrossCheckRequired: boolean;
+};
+
+type SettingsSet = Record<'json' | 'github' | 'crossCheck', TaskDtoTypeEnum[]>;
+
+export type { FormValues, ModalData, Settings, SettingsSet };
 
 export { ColumnName };

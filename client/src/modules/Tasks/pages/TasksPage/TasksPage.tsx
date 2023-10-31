@@ -5,7 +5,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';
-import { ModalData } from 'modules/Tasks/types';
+import { FormValues, ModalData } from 'modules/Tasks/types';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
@@ -20,8 +20,7 @@ export function TasksPage() {
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState<ModalData>(null);
-  const [modalAction, setModalAction] = useState('update');
-  const [, setModalValues] = useState<any>({});
+  const [modalAction, setModalAction] = useState<'update' | 'create'>('update');
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
 
   const { loading } = useAsync(async () => {
@@ -32,7 +31,7 @@ export function TasksPage() {
       disciplinesApi.getDisciplines(),
     ]);
     setData(tasks);
-    setDisciplines(disciplines || []);
+    setDisciplines(disciplines);
   }, [modalData]);
 
   const handleAddItem = () => {
@@ -49,7 +48,7 @@ export function TasksPage() {
   };
 
   const handleModalSubmit = useCallback(
-    async (values: any) => {
+    async (values: FormValues) => {
       const checkCriteria = () => {
         return dataCriteria.every(item => {
           if (item.type !== TaskType.Title) {
@@ -59,7 +58,7 @@ export function TasksPage() {
         });
       };
 
-      const isVerified = dataCriteria.length ? checkCriteria() : true;
+      const isVerified = checkCriteria();
       if (!isVerified) {
         message.error('Please, check criteria! It has subtask with no score.');
         return;
@@ -69,20 +68,32 @@ export function TasksPage() {
         if (modalLoading) {
           return;
         }
+
         setModalLoading(true);
         const record = createRecord(values);
+
+        if (!record) {
+          return;
+        }
+
         if (modalAction === 'update') {
-          await tasksApi.updateTask(modalData!.id!, record);
-          const { data } = await criteriaApi.getTaskCriteria(modalData!.id!);
+          if (!modalData?.id) {
+            return;
+          }
+
+          await tasksApi.updateTask(modalData.id, record);
+          const { data } = await criteriaApi.getTaskCriteria(modalData.id);
+
           if (data.criteria) {
-            await criteriaApi.updateTaskCriteria(modalData!.id!, { criteria: dataCriteria });
+            await criteriaApi.updateTaskCriteria(modalData.id, { criteria: dataCriteria });
           } else {
-            await criteriaApi.createTaskCriteria(modalData!.id!, { criteria: dataCriteria });
+            await criteriaApi.createTaskCriteria(modalData.id, { criteria: dataCriteria });
           }
         } else {
           const { data: task } = await tasksApi.createTask(record);
           await criteriaApi.createTaskCriteria(task.id, { criteria: dataCriteria });
         }
+
         setModalData(null);
       } catch (e) {
         message.error('An error occurred. Please try again later.');
@@ -111,27 +122,46 @@ export function TasksPage() {
           modalLoading={modalLoading}
           setDataCriteria={setDataCriteria}
           setModalData={setModalData}
-          setModalValues={setModalValues}
         />
       )}
     </AdminPageLayout>
   );
 }
 
-function createRecord(values: any) {
+function createRecord({
+  type,
+  name,
+  descriptionUrl,
+  discipline,
+  githubPrRequired,
+  githubRepoName,
+  sourceGithubRepoUrl,
+  description,
+  tags,
+  skills,
+  attributes,
+}: FormValues) {
+  if (!type || !name || !descriptionUrl || !discipline) {
+    return null;
+  }
+
   const data: CreateTaskDto = {
-    type: values.type,
-    name: values.name,
-    githubPrRequired: !!values.githubPrRequired,
-    descriptionUrl: values.descriptionUrl,
-    githubRepoName: values.githubRepoName,
-    sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-    description: values.description,
-    tags: values.tags,
-    skills: values.skills?.map((skill: string) => skill.toLowerCase()),
-    disciplineId: values.discipline,
-    attributes: JSON.parse(values.attributes ?? '{}') as Record<string, unknown>,
+    // required form fields
+    type,
+    name,
+    disciplineId: discipline,
+    descriptionUrl,
+
+    // not required form fields
+    githubPrRequired: !!githubPrRequired,
+    githubRepoName: githubRepoName ?? '',
+    sourceGithubRepoUrl: sourceGithubRepoUrl ?? '',
+    description: description ?? '',
+    tags: tags ?? [],
+    skills: skills?.map((skill: string) => skill.toLowerCase()) ?? [],
+    attributes: JSON.parse(attributes ?? '{}') as Record<string, unknown>,
   };
+
   return data;
 }
 

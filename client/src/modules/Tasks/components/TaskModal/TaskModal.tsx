@@ -7,8 +7,9 @@ import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { TaskSettings } from 'modules/Tasks/components';
 import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
-import { ModalData } from 'modules/Tasks/types';
+import { FormValues, ModalData } from 'modules/Tasks/types';
 import { urlPattern } from 'services/validators';
+import { stringSorter } from 'components/Table';
 
 const { Text } = Typography;
 
@@ -21,7 +22,6 @@ export type ModalProps = {
   setDataCriteria: (criteria: CriteriaDto[]) => void;
   handleModalSubmit: (values: any) => Promise<void>;
   setModalData: (data: ModalData) => void;
-  setModalValues: (value: any) => void;
 };
 
 export function TaskModal({
@@ -33,8 +33,10 @@ export function TaskModal({
   setDataCriteria,
   handleModalSubmit,
   setModalData,
-  setModalValues,
 }: ModalProps) {
+  const [form] = Form.useForm<FormValues>();
+  const typeField = Form.useWatch('type', form);
+
   const allTags = useMemo(() => union(...tasks.map(task => task.tags || [])), [tasks]);
   const allSkills = useMemo(
     () =>
@@ -46,17 +48,32 @@ export function TaskModal({
       ),
     [tasks],
   );
+  const taskTypes = useMemo(
+    () => TASK_TYPES.sort(stringSorter('name')).map(({ id, name }) => ({ value: id, label: name })),
+    [TASK_TYPES],
+  );
+
+  const handleTypeChange = () => {
+    // reset settings
+    form.setFieldsValue({
+      githubPrRequired: undefined,
+      githubRepoName: undefined,
+      sourceGithubRepoUrl: undefined,
+      attributes: undefined,
+    });
+    setDataCriteria([]);
+  };
 
   return (
     <ModalForm
       data={modalData}
+      form={form}
       title="Task"
       submit={handleModalSubmit}
       cancel={() => {
         setModalData(null);
         setDataCriteria([]);
       }}
-      onChange={setModalValues}
       getInitialValues={getInitialValues}
       loading={modalLoading}
     >
@@ -68,10 +85,7 @@ export function TaskModal({
         </Col>
         <Col span={12}>
           <Form.Item name="type" label={LABELS.taskType} rules={[{ required: true, message: ERROR_MESSAGES.taskType }]}>
-            <Select
-              placeholder={PLACEHOLDERS.taskType}
-              options={TASK_TYPES.map(({ id, name }) => ({ value: id, label: name }))}
-            />
+            <Select placeholder={PLACEHOLDERS.taskType} options={taskTypes} onChange={handleTypeChange} />
           </Form.Item>
         </Col>
       </Row>
@@ -148,7 +162,7 @@ export function TaskModal({
           </Space>
         </Col>
       </Row>
-      <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
+      <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} taskType={typeField} />
     </ModalForm>
   );
 }

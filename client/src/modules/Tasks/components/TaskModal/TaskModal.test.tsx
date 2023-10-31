@@ -150,6 +150,5 @@ function generateData(isEmpty = false): ModalProps {
     setDataCriteria: jest.fn(),
     handleModalSubmit: jest.fn(),
     setModalData: jest.fn(),
-    setModalValues: jest.fn(),
   };
 }
