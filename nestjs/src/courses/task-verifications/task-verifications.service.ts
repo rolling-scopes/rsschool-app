@@ -109,6 +109,10 @@ export class TaskVerificationsService {
       throw new BadRequestException(`Course task does not belong to the student's course`);
     }
 
+    if (courseTask.studentStartDate && courseTask.studentStartDate > new Date()) {
+      throw new BadRequestException(`Task Verification ${courseTask.task.name} not started`);
+    }
+
     const existing = await this.taskVerificationsRepository.findOne({
       where: {
         status: 'pending',
