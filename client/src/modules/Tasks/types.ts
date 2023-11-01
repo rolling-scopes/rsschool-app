@@ -19,13 +19,15 @@ const enum ColumnName {
   Actions = 'Actions',
 }
 
-type Settings = {
-  isJsonRequired: boolean;
-  isGithubRequired: boolean;
-  isCrossCheckRequired: boolean;
-};
+const enum Criteria {
+  json = 'json',
+  github = 'github',
+  crossCheck = 'crossCheck',
+}
 
-type SettingsSet = Record<'json' | 'github' | 'crossCheck', TaskDtoTypeEnum[]>;
+type Settings = Record<Criteria, boolean>;
+
+type SettingsSet = Record<Criteria, TaskDtoTypeEnum[]>;
 
 export type { FormValues, ModalData, Settings, SettingsSet };
 

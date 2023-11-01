@@ -15,26 +15,26 @@ type Props = {
 
 export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props) {
   const [activeKey, setActiveKey] = useState<CollapseProps['activeKey']>([]);
-  const { isJsonRequired, isGithubRequired, isCrossCheckRequired } = getRequiredSettings(taskType);
+  const { json, github, crossCheck } = getSettings(taskType);
 
   const collapseItems = [
     {
       label: TASK_SETTINGS_HEADERS.crossCheckCriteria,
       children: <CrossCheckTaskCriteriaPanel dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />,
       forceRender: true,
-      collapsible: isCollapsible(isCrossCheckRequired),
+      collapsible: isCollapsible(crossCheck),
     },
     {
       label: TASK_SETTINGS_HEADERS.github,
       children: <GitHubPanel />,
       forceRender: true,
-      collapsible: isCollapsible(isGithubRequired),
+      collapsible: isCollapsible(github),
     },
     {
       label: TASK_SETTINGS_HEADERS.jsonAttributes,
       children: <JsonAttributesPanel />,
       forceRender: true,
-      collapsible: isCollapsible(isJsonRequired),
+      collapsible: isCollapsible(json),
     },
   ];
 
@@ -70,20 +70,20 @@ const taskSettingsSet: SettingsSet = {
   crossCheck: [TaskDtoTypeEnum.Htmltask, TaskDtoTypeEnum.Jstask],
 };
 
-const defaultSettings: Settings = { isJsonRequired: false, isGithubRequired: false, isCrossCheckRequired: false };
+const defaultSettings: Settings = { json: false, github: false, crossCheck: false };
 
-function getRequiredSettings(taskType?: TaskDtoTypeEnum): Settings {
+function getSettings(taskType?: TaskDtoTypeEnum): Settings {
   if (!taskType) {
     return defaultSettings;
   }
 
-  const isJsonRequired = taskSettingsSet.json.includes(taskType);
-  const isGithubRequired = taskSettingsSet.github.includes(taskType);
-  const isCrossCheckRequired = taskSettingsSet.crossCheck.includes(taskType);
+  const json = taskSettingsSet.json.includes(taskType);
+  const github = taskSettingsSet.github.includes(taskType);
+  const crossCheck = taskSettingsSet.crossCheck.includes(taskType);
 
-  return { isJsonRequired, isGithubRequired, isCrossCheckRequired };
+  return { json, github, crossCheck };
 }
 
-function isCollapsible(isFieldRequired: boolean) {
-  return (!isFieldRequired ? 'disabled' : undefined) as CollapsibleType;
+function isCollapsible(isPanelEnabled: boolean) {
+  return (!isPanelEnabled ? 'disabled' : undefined) as CollapsibleType;
 }
