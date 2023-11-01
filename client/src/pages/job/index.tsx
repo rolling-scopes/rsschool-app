@@ -1,5 +1,4 @@
 import type { AxiosError } from 'axios';
-import withSession from 'components/withSession';
 import { JobMainPage } from 'modules/Job/pages/JobMainPage';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { getTokenFromContext } from 'utils/server';
@@ -27,4 +26,4 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   }
 };
 
-export default withSession(JobMainPage);
+export default JobMainPage
