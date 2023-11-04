@@ -26,4 +26,4 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   }
 };
 
-export default JobMainPage
+export default JobMainPage;
