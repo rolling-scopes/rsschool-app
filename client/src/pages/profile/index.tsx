@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 import { NextRouter, withRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
