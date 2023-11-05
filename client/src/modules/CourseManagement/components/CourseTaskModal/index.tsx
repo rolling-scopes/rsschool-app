@@ -135,9 +135,7 @@ export function CourseTaskModal(props: Props) {
             label="Start Date - End Date"
             rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
           >
-            <DatePicker.RangePicker
-              showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
-            />
+            <DatePicker.RangePicker showTime={{ format: 'HH:mm' }} />
           </Form.Item>
         </Col>
         <Col span={6}>
@@ -216,7 +214,7 @@ function createRecord(values: any): CreateCourseTaskDto {
   const data = {
     studentStartDate: startDate.utc().format(),
     studentEndDate: endDate.utc().format(),
-    crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).format() : undefined,
+    crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).second(59).format() : undefined,
     taskId: values.taskId,
     taskOwnerId: values.taskOwner?.id,
     checker: values.checker,
@@ -244,7 +242,7 @@ function getInitialValues(modalData: Partial<CourseTaskDetails>) {
             modalData.studentStartDate ? dayjs.utc(modalData.studentStartDate) : null,
             modalData.studentEndDate ? dayjs.utc(modalData.studentEndDate) : null,
           ]
-        : null,
+        : [dayjs().utc().hour(0).minute(0).second(0), dayjs().utc().hour(23).minute(59).second(58)],
     checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
   };
   return data;
