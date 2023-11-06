@@ -359,7 +359,7 @@ export class CourseScheduleService {
 
   private getEventStatus(courseEvent: CourseEvent) {
     const startTime = (courseEvent.dateTime as Date).getTime();
-    const endTime = Number(courseEvent.endTime) ?? startTime + (courseEvent.duration ?? 60) * 1000 * 60;
+    const endTime = Number(courseEvent.endTime) || startTime + (courseEvent.duration ?? 60) * 1000 * 60;
     if (endTime && endTime < Date.now()) {
       return CourseScheduleItemStatus.Archived;
     }
