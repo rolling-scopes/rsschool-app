@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
-import { NextRouter, withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
@@ -23,9 +23,6 @@ import { NotificationChannel, NotificationsService } from 'modules/Notifications
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 
-type Props = {
-  router: NextRouter;
-};
 
 type ConnectionValue = {
   value: string;
@@ -44,7 +41,8 @@ const profileApi = new ProfileApi();
 const userService = new UserService();
 const notificationsService = new NotificationsService();
 
-const ProfilePage = ({ router }: Props) => {
+const ProfilePage = () => {
+  const router = useRouter();
   const session = useContext(SessionContext);
   const [profile, setProfile] = useState<ProfileInfo | null>(null);
   const [isProfileOwner, setIsProfileOwner] = useState(false);
@@ -260,14 +258,14 @@ const ProfilePage = ({ router }: Props) => {
   );
 };
 
-function Page(props: Props) {
+function Page() {
   return (
     <SessionProvider>
       <ActiveCourseProvider>
-        <ProfilePage {...props} />
+        <ProfilePage />
       </ActiveCourseProvider>
     </SessionProvider>
   );
 }
 
-export default withGoogleMaps(withRouter(Page));
+export default withGoogleMaps(Page);
