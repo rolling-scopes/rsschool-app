@@ -5,6 +5,7 @@ import { GetServerSideProps } from 'next';
 import { CoursesTasksApi } from 'api';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
+import dayjs from 'dayjs';
 
 function Page(props: AutoTestTaskProps) {
   return (
@@ -27,11 +28,19 @@ export const getServerSideProps: GetServerSideProps<AutoTestTaskProps> = async c
 
   try {
     const course = result.props.course;
+
     if (course) {
       const { data: task } = await new CoursesTasksApi(getApiConfiguration(token)).getCourseTask(
         course.id,
         Number(courseTaskId),
       );
+
+      const now = dayjs();
+      const startDate = dayjs(task.studentStartDate);
+
+      if (startDate > now) {
+        return noAccessResponse;
+      }
 
       return {
         props: { course, task },

@@ -3,6 +3,7 @@ import { Course } from '@entities/course';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { UpdateCourseDto } from './dto';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Injectable()
 export class CoursesService {
@@ -22,6 +23,11 @@ export class CoursesService {
   public async update(id: number, course: UpdateCourseDto) {
     await this.repository.update(id, course);
     return this.repository.findOneByOrFail({ id });
+  }
+
+  public async create(course: CreateCourseDto) {
+    const created = await this.repository.save(course);
+    return this.repository.findOneByOrFail({ id: created.id });
   }
 
   public async getByIds(ids: number[], filter?: FindOptionsWhere<Course>) {

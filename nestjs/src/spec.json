@@ -234,6 +234,15 @@
         "tags": ["courses"]
       }
     },
+    "/courses/{courseId}/copy": {
+      "post": {
+        "operationId": "copyCourse",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "201": { "description": "" } },
+        "tags": ["courses"]
+      }
+    },
     "/students/{studentId}": {
       "get": {
         "operationId": "getStudent",
