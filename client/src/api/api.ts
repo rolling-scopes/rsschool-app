@@ -5780,6 +5780,13 @@ export interface UpdateCourseDto {
      * @memberof UpdateCourseDto
      */
     'disciplineId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'minStudentsPerMentor'?: number;
+    
 }
 /**
  * 
@@ -5847,6 +5854,12 @@ export interface UpdateCourseEventDto {
      * @memberof UpdateCourseEventDto
      */
     'comment'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'minStudentsPerMentor'?: number;
 }
 /**
  * 

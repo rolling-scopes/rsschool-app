@@ -6,6 +6,7 @@ import {
   Form,
   Image,
   Input,
+  InputNumber,
   Layout,
   message,
   Radio,
@@ -227,6 +228,14 @@ function Page() {
           </Select>
         </Form.Item>
 
+        <Form.Item
+          name="minStudentsPerMentor"
+          label="Minimum Students per Mentor"
+          rules={[{min:1, type:'integer',message: "Ensure that the input, if provided, is a positive integer."}]}
+        >
+          <InputNumber step={1} defaultValue={2}/>
+        </Form.Item>
+
         <Form.Item name="state" label="State">
           <Radio.Group>
             <Radio value={null}>Active</Radio>
@@ -289,6 +298,7 @@ function createRecord(values: any) {
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
     logo: values.logo,
+    minStudentsPerMentor: values.minStudentsPerMentor
   };
   return record;
 }
