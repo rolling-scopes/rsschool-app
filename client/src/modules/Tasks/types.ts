@@ -5,6 +5,11 @@ type FormValues = Partial<Omit<TaskDto, 'discipline' | 'attributes'> & { discipl
 
 type ModalData = Partial<Omit<TaskDto, 'attributes'> & { attributes: string }> | null;
 
+const enum ModalAction {
+  Update = 'update',
+  Create = 'create',
+}
+
 const enum ColumnName {
   Id = 'Id',
   Name = 'Name',
@@ -31,4 +36,4 @@ type SettingsSet = Record<Criteria, TaskDtoTypeEnum[]>;
 
 export type { FormValues, ModalData, Settings, SettingsSet };
 
-export { ColumnName };
+export { ColumnName, ModalAction };

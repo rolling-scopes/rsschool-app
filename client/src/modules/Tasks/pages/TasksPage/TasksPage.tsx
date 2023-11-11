@@ -5,7 +5,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';
-import { FormValues, ModalData } from 'modules/Tasks/types';
+import { FormValues, ModalAction, ModalData } from 'modules/Tasks/types';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Content } = Layout;
@@ -20,7 +20,7 @@ export function TasksPage() {
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalData, setModalData] = useState<ModalData>(null);
-  const [modalAction, setModalAction] = useState<'update' | 'create'>('update');
+  const [modalAction, setModalAction] = useState<ModalAction>(ModalAction.Update);
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
 
   const { loading } = useAsync(async () => {
@@ -37,14 +37,14 @@ export function TasksPage() {
   const handleAddItem = () => {
     setDataCriteria([]);
     setModalData({});
-    setModalAction('create');
+    setModalAction(ModalAction.Create);
   };
 
   const handleEditItem = async (record: TaskDto) => {
     const { data } = await criteriaApi.getTaskCriteria(record.id);
     setDataCriteria(data.criteria ?? []);
     setModalData(prepareValues(record));
-    setModalAction('update');
+    setModalAction(ModalAction.Update);
   };
 
   const handleModalSubmit = useCallback(
@@ -76,7 +76,7 @@ export function TasksPage() {
           return;
         }
 
-        if (modalAction === 'update') {
+        if (modalAction === ModalAction.Update) {
           if (!modalData?.id) {
             return;
           }
@@ -119,6 +119,7 @@ export function TasksPage() {
           disciplines={disciplines}
           handleModalSubmit={handleModalSubmit}
           modalData={modalData}
+          modalAction={modalAction}
           modalLoading={modalLoading}
           setDataCriteria={setDataCriteria}
           setModalData={setModalData}

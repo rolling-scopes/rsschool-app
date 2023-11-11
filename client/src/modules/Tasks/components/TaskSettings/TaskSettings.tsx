@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps } from 'antd';
+import { Collapse, CollapseProps, Space, Typography } from 'antd';
 import { CollapsibleType } from 'antd/es/collapse/CollapsePanel';
 import { CriteriaDto, TaskDtoTypeEnum } from 'api';
 
@@ -12,6 +12,8 @@ type Props = {
   setDataCriteria: (criteria: CriteriaDto[]) => void;
   taskType: TaskDtoTypeEnum | undefined;
 };
+
+const { Text } = Typography;
 
 export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props) {
   const [activeKey, setActiveKey] = useState<CollapseProps['activeKey']>([]);
@@ -46,7 +48,10 @@ export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props)
   }, [taskType]);
 
   return (
-    <Collapse items={collapseItems} defaultActiveKey={[]} activeKey={activeKey} onChange={handleChange} accordion />
+    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+      <Text strong>Settings for some types of tasks</Text>
+      <Collapse items={collapseItems} defaultActiveKey={[]} activeKey={activeKey} onChange={handleChange} accordion />
+    </Space>
   );
 }
 

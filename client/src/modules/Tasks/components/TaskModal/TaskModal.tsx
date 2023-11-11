@@ -6,12 +6,13 @@ import { ModalForm } from 'components/Forms';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { TaskSettings } from 'modules/Tasks/components';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
-import { FormValues, ModalData } from 'modules/Tasks/types';
+import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { FormValues, ModalAction, ModalData } from 'modules/Tasks/types';
 import { urlPattern } from 'services/validators';
 import { stringSorter } from 'components/Table';
 
 const { Text } = Typography;
+const { TextArea } = Input;
 
 export type ModalProps = {
   tasks: TaskDto[];
@@ -19,6 +20,7 @@ export type ModalProps = {
   dataCriteria: CriteriaDto[];
   modalLoading: boolean;
   disciplines: DisciplineDto[];
+  modalAction: ModalAction;
   setDataCriteria: (criteria: CriteriaDto[]) => void;
   handleModalSubmit: (values: any) => Promise<void>;
   setModalData: (data: ModalData) => void;
@@ -30,6 +32,7 @@ export function TaskModal({
   modalData,
   modalLoading,
   disciplines,
+  modalAction,
   setDataCriteria,
   handleModalSubmit,
   setModalData,
@@ -68,7 +71,7 @@ export function TaskModal({
     <ModalForm
       data={modalData}
       form={form}
-      title="Task"
+      title={MODAL_TITLES[modalAction]}
       submit={handleModalSubmit}
       cancel={() => {
         setModalData(null);
@@ -77,41 +80,9 @@ export function TaskModal({
       getInitialValues={getInitialValues}
       loading={modalLoading}
     >
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item name="name" label={LABELS.name} rules={[{ required: true, message: ERROR_MESSAGES.name }]}>
-            <Input placeholder={PLACEHOLDERS.name} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="type" label={LABELS.taskType} rules={[{ required: true, message: ERROR_MESSAGES.taskType }]}>
-            <Select placeholder={PLACEHOLDERS.taskType} options={taskTypes} onChange={handleTypeChange} />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item
-            name="discipline"
-            label={LABELS.discipline}
-            rules={[{ required: true, message: ERROR_MESSAGES.discipline }]}
-          >
-            <Select
-              placeholder={PLACEHOLDERS.discipline}
-              options={disciplines.map(({ id, name }) => ({ value: id, label: name }))}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="tags" label={LABELS.tags}>
-            <Select
-              mode="tags"
-              placeholder={PLACEHOLDERS.tags}
-              options={allTags.map(tag => ({ value: tag, label: tag }))}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Form.Item name="name" label={LABELS.name} rules={[{ required: true, message: ERROR_MESSAGES.name }]}>
+        <Input placeholder={PLACEHOLDERS.name} />
+      </Form.Item>
       <Form.Item
         name="descriptionUrl"
         label={LABELS.descriptionUrl}
@@ -128,11 +99,36 @@ export function TaskModal({
       >
         <Input placeholder={PLACEHOLDERS.descriptionUrl} />
       </Form.Item>
-      <Form.Item name="description" label={LABELS.summary}>
-        <Input placeholder={PLACEHOLDERS.summary} />
-      </Form.Item>
       <Row gutter={24}>
-        <Col span={24}>
+        <Col span={12}>
+          <Form.Item name="type" label={LABELS.taskType} rules={[{ required: true, message: ERROR_MESSAGES.taskType }]}>
+            <Select placeholder={PLACEHOLDERS.taskType} options={taskTypes} onChange={handleTypeChange} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="discipline"
+            label={LABELS.discipline}
+            rules={[{ required: true, message: ERROR_MESSAGES.discipline }]}
+          >
+            <Select
+              placeholder={PLACEHOLDERS.discipline}
+              options={disciplines.map(({ id, name }) => ({ value: id, label: name }))}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name="tags" label={LABELS.tags}>
+            <Select
+              mode="tags"
+              placeholder={PLACEHOLDERS.tags}
+              options={allTags.map(tag => ({ value: tag, label: tag }))}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
           <Form.Item name="skills" label={LABELS.skills}>
             <Select
               mode="tags"
@@ -142,6 +138,9 @@ export function TaskModal({
           </Form.Item>
         </Col>
       </Row>
+      <Form.Item name="description" label={LABELS.summary}>
+        <TextArea placeholder={PLACEHOLDERS.summary} maxLength={100} showCount />
+      </Form.Item>
       <Row gutter={24}>
         <Col span={24}>
           <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>

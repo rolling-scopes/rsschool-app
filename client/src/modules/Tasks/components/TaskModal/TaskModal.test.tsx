@@ -1,17 +1,20 @@
 import { generateTasksData } from 'modules/Tasks/utils/test-utils';
 import { ModalProps, TaskModal } from './TaskModal';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ModalData } from 'modules/Tasks/types';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import { ModalAction, ModalData } from 'modules/Tasks/types';
+import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
 
 const mockData = generateData();
 
 describe('TaskModal', () => {
-  test('should render modal', () => {
+  test('should render modal with proper title', () => {
     render(<TaskModal {...mockData} />);
 
     const modal = screen.getByRole('dialog');
     expect(modal).toBeInTheDocument();
+
+    const title = screen.getByText(MODAL_TITLES[ModalAction.Create]);
+    expect(title).toBeInTheDocument();
   });
 
   test('should render labels', () => {
@@ -147,6 +150,7 @@ function generateData(isEmpty = false): ModalProps {
     modalData,
     modalLoading: false,
     disciplines: [],
+    modalAction: ModalAction.Create,
     setDataCriteria: jest.fn(),
     handleModalSubmit: jest.fn(),
     setModalData: jest.fn(),
