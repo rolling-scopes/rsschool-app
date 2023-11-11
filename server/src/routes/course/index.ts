@@ -70,7 +70,6 @@ import {
   updateStudentStatus,
 } from './student';
 import * as tasks from './tasks';
-import { postCopyCourse } from './template';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
@@ -78,7 +77,6 @@ export function courseRoute(logger: ILogger) {
   router.post('/certificates', courseManagerGuard, postCertificates(logger));
   router.post('/repositories', courseManagerGuard, createRepositories(logger));
   router.put('/repositories', courseManagerGuard, updateRepositories(logger));
-  router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
