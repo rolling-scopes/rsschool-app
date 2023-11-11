@@ -28,7 +28,7 @@
     "@ant-design/plots": "1.2.5",
     "@sentry/nextjs": "7.77.0",
     "antd": "5.8.6",
-    "axios": "1.5.0",
+    "axios": "1.6.0",
     "cookie": "0.5.0",
     "csvtojson": "2.0.10",
     "dayjs": "1.11.9",
