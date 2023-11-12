@@ -6,7 +6,7 @@ import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
 
 type Props = {
   dataCriteria: CriteriaDto[];
-  setDataCriteria: (c: CriteriaDto[]) => void;
+  setDataCriteria: (criteria: CriteriaDto[]) => void;
 };
 
 export function TaskSettings({ dataCriteria, setDataCriteria }: Props) {

@@ -18,10 +18,10 @@ export type ModalProps = {
   dataCriteria: CriteriaDto[];
   modalLoading: boolean;
   disciplines: DisciplineDto[];
-  setDataCriteria: (c: CriteriaDto[]) => void;
+  setDataCriteria: (criteria: CriteriaDto[]) => void;
   handleModalSubmit: (values: any) => Promise<void>;
-  setModalData: (d: ModalData) => void;
-  setModalValues: (v: any) => void;
+  setModalData: (data: ModalData) => void;
+  setModalValues: (value: any) => void;
 };
 
 export function TaskModal({
