@@ -168,7 +168,6 @@ export class ProfilePage extends React.Component<Props, State> {
         profile: {
           ...profile,
           publicCvUrl: profile?.publicCvUrl ?? null,
-          employmentHistory: profile?.employmentHistory,
           discord,
         },
       }));
@@ -200,7 +199,6 @@ export class ProfilePage extends React.Component<Props, State> {
       name: profile?.generalInfo?.name ?? '',
       githubId: profile?.generalInfo?.githubId ?? null,
       publicCvUrl: profile?.publicCvUrl ?? null,
-      employmentHistory: profile?.employmentHistory,
     };
     const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
     const languages = profile?.generalInfo?.languages ?? [];

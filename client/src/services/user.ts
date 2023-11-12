@@ -237,7 +237,7 @@ export type ProfileInfo = {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
-  employmentHistory: EmploymentRecordDto[] | undefined;
+  employmentHistory?: EmploymentRecordDto[];
 } & ProfileDto;
 
 export type ProfileMainCardData = {
@@ -245,7 +245,6 @@ export type ProfileMainCardData = {
   name: string;
   githubId: string | null;
   publicCvUrl: string | null;
-  employmentHistory: EmploymentRecordDto[] | undefined;
 };
 
 export const enum ContactsKeys {
