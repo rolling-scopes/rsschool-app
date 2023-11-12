@@ -68,14 +68,14 @@ export function CourseTaskModal(props: Props) {
     props.onCancel();
   };
 
-  const findTaskById = useCallback((id: number | undefined) => tasks.find(t => t.id === id), [tasks]);
+  const findTaskById = useCallback((id: number) => tasks.find(t => t.id === id), [tasks]);
 
   const filterOption = useCallback(
     (input: string, option?: { value: number }): boolean => {
-      if (!input) {
+      if (!input || !option) {
         return false;
       }
-      const task = findTaskById(option?.value);
+      const task = findTaskById(option.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
