@@ -29,6 +29,11 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
     const toPresentValue = e.target.checked;
     setToPresent(toPresentValue);
     setIsDateToRequired(!toPresentValue);
+    const validateFields =[
+      ...(dateFrom ? [['employmentHistory', name, 'dateFrom']] : []),
+      ...(!dateTo ? [['employmentHistory', name, 'dateTo']] : []),
+    ]
+    form.validateFields(validateFields);
   };
 
   return (
