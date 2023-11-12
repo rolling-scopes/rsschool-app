@@ -119,6 +119,7 @@ const EmploymentCard = ({ isEditingModeEnabled, data, updateProfile }: Props) =>
           onValuesChange={(_, { employmentHistory }) => setEmployments(employmentHistory)}
           initialValues={{ employmentHistory: employments }}
           style={{ width: '100%' }}
+          requiredMark="optional"
         >
           <Form.List name="employmentHistory">
             {(fields, { add, remove }) => (
