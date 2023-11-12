@@ -71,6 +71,8 @@ const taskSettingsSet: SettingsSet = {
     TaskDtoTypeEnum.Ipynb,
     TaskDtoTypeEnum.Kotlintask,
     TaskDtoTypeEnum.Objctask,
+    TaskDtoTypeEnum.Cvhtml,
+    TaskDtoTypeEnum.Cvmarkdown,
   ],
   crossCheck: [TaskDtoTypeEnum.Htmltask, TaskDtoTypeEnum.Jstask],
 };
