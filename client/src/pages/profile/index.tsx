@@ -1,11 +1,10 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import { useRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { StudentStats } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
@@ -16,12 +15,13 @@ import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import { MentorStatsCard } from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import LanguagesCard from 'components/Profile/LanguagesCard';
-import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { useAsync } from 'react-use';
+import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from './utils';
 
 type ConnectionValue = {
   value: string;
@@ -29,7 +29,7 @@ type ConnectionValue = {
   lastLinkSentAt?: string;
 };
 
-type Connections = Partial<Record<NotificationChannel, ConnectionValue | undefined>>;
+type Connections = Partial<Record<NotificationChannel, ConnectionValue>>;
 
 export type ChangedPermissionsSettings = {
   permissionName: string;
@@ -45,42 +45,15 @@ const ProfilePage = () => {
   const session = useContext(SessionContext);
   const [profile, setProfile] = useState<ProfileInfo | null>(null);
   const [isProfileOwner, setIsProfileOwner] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [connections, setConnections] = useState<Connections>({});
-
-  const hadStudentCoreJSInterview = (stats: StudentStats[]) =>
-    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
-
-  const getStudentCoreJSInterviews = (stats: StudentStats[]) =>
-    stats
-      .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
-      .map(({ tasks, courseFullName, courseName, locationName }) => ({
-        courseFullName,
-        courseName,
-        locationName,
-        interviews: tasks
-          .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer, name, interviewDate }) => ({
-            score,
-            comment,
-            interviewer,
-            answers: interviewFormAnswers,
-            name,
-            interviewDate,
-          })),
-      })) as CoreJsInterviewsData[];
-
-  const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
-    return githubId === requestedGithubId;
-  };
 
   const fetchData = async () => {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const [profile, connections, { data }] = await Promise.all([
         userService.getProfileInfo(githubId?.toLowerCase()),
-        notificationsService.getUserConnections().catch(() => []),
+        notificationsService.getUserConnections().catch(() => ({})),
         profileApi.getProfile(githubId?.toLowerCase() ?? session.githubId),
       ]);
 
@@ -90,9 +63,9 @@ const ProfilePage = () => {
       };
 
       let isProfileOwner = false;
-      if (profile) {
+      if (profile?.generalInfo) {
         const userId = session.githubId;
-        const profileId = profile.generalInfo!.githubId;
+        const profileId = profile.generalInfo.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
       }
 
@@ -155,7 +128,7 @@ const ProfilePage = () => {
   const githubId = profile?.generalInfo?.githubId;
   const isAdmin = session.isAdmin;
 
-  const cards: JSX.Element[] = [
+  const cards = [
     profile?.generalInfo && (
       <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />
     ),
@@ -201,59 +174,52 @@ const ProfilePage = () => {
     profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
   ].filter(Boolean) as JSX.Element[];
 
-  const preloadData = () => {
-    fetchData()
-      .then(authorizeDiscord)
-      .finally(() => setIsLoading(false));
-  };
-
-  useEffect(preloadData, []);
+  const preloadData = useAsync(async () => {
+    await fetchData();
+    await authorizeDiscord();
+  });
 
   return (
-    <>
-      <LoadingScreen show={isLoading}>
-        <Header />
-        <Spin spinning={isSaving} delay={200}>
-          {profile ? (
-            <div style={{ padding: 10 }}>
-              <Masonry
-                breakpointCols={{
-                  default: 4,
-                  1100: 3,
-                  700: 2,
-                  500: 1,
-                }}
-                className="masonry"
-                columnClassName="masonry-column"
-              >
-                {cards.map((card, idx) => (
-                  <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
-                    {card}
-                  </div>
-                ))}
-              </Masonry>
-              <style jsx global>{`
-                .masonry {
-                  display: flex;
-                  margin-left: -16px;
-                  width: auto;
-                }
-              `}</style>
-              <style jsx global>{`
-                .masonry-column {
-                  padding-left: 16px;
-                  background-clip: padding-box;
-                }
-              `}</style>
-            </div>
-          ) : (
-            <>
-              <Result status={'403' as any} title="No access or user does not exist" />
-            </>
-          )}
-        </Spin>
-      </LoadingScreen>
-    </>
+    <LoadingScreen show={preloadData.loading}>
+      <Header />
+      <Spin spinning={isSaving} delay={200}>
+        {profile ? (
+          <div style={{ padding: 10 }}>
+            <Masonry
+              breakpointCols={{
+                default: 4,
+                1100: 3,
+                700: 2,
+                500: 1,
+              }}
+              className="masonry"
+              columnClassName="masonry-column"
+            >
+              {cards.map((card, idx) => (
+                <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
+                  {card}
+                </div>
+              ))}
+            </Masonry>
+            <style jsx global>{`
+              .masonry {
+                display: flex;
+                margin-left: -16px;
+                width: auto;
+              }
+            `}</style>
+            <style jsx global>{`
+              .masonry-column {
+                padding-left: 16px;
+                background-clip: padding-box;
+              }
+            `}</style>
+          </div>
+        ) : (
+          <Result status={'403'} title="No access or user does not exist" />
+        )}
+      </Spin>
+    </LoadingScreen>
   );
 };
 
