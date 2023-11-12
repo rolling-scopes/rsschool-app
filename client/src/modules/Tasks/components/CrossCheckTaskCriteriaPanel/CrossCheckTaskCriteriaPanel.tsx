@@ -11,7 +11,7 @@ import { LABELS } from 'modules/Tasks/constants';
 
 type Props = {
   dataCriteria: CriteriaDto[];
-  setDataCriteria: (c: CriteriaDto[]) => void;
+  setDataCriteria: (criteria: CriteriaDto[]) => void;
 };
 
 export function CrossCheckTaskCriteriaPanel({ dataCriteria, setDataCriteria }: Props) {
