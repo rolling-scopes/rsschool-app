@@ -21,7 +21,7 @@ import { NotificationChannel, NotificationsService } from 'modules/Notifications
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
-import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from './utils';
+import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
 
 type ConnectionValue = {
   value: string;
