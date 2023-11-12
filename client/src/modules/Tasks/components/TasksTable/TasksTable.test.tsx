@@ -1,15 +1,15 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { TaskDto } from 'api';
-import { TableView } from './TableView';
+import { TasksTable } from './TasksTable';
 import { ColumnName } from 'modules/Tasks/types';
 import { TASK_TYPES } from 'data/taskTypes';
 import { COURSE_NAME_MOCK, generateTasksData } from 'modules/Tasks/utils/test-utils';
 
-const renderTableView = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
-  render(<TableView data={data} handleEditItem={handleEditItem} />);
+const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
+  render(<TasksTable data={data} handleEditItem={handleEditItem} />);
 };
 
-describe('TableView', () => {
+describe('TasksTable', () => {
   const [mockData] = generateTasksData(1);
 
   test.each`
@@ -26,7 +26,7 @@ describe('TableView', () => {
     ${ColumnName.RepoName}
     ${ColumnName.Actions}
   `('should render column "$label"', ({ label }: { label: ColumnName }) => {
-    renderTableView();
+    renderTasksTable();
 
     expect(screen.getByText(label)).toBeInTheDocument();
   });
@@ -44,7 +44,7 @@ describe('TableView', () => {
     ${mockData.githubRepoName}
     ${mockData.courses[0].name}
   `('should render data field "$value"', ({ value }) => {
-    renderTableView();
+    renderTasksTable();
 
     const [dataField] = screen.getAllByText(value);
     expect(dataField).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('TableView', () => {
   test('should render description link fields', () => {
     const data = generateTasksData();
 
-    renderTableView(data);
+    renderTasksTable(data);
 
     const links = screen.getAllByRole('link', { name: /link/i });
     expect(links).toHaveLength(data.length);
@@ -66,7 +66,7 @@ describe('TableView', () => {
   test('should render "Edit" link fields', () => {
     const data = generateTasksData();
 
-    renderTableView(data);
+    renderTasksTable(data);
 
     const links = screen.getAllByText(/edit/i);
     expect(links).toHaveLength(data.length);
@@ -76,7 +76,7 @@ describe('TableView', () => {
     const handleEditItem = jest.fn();
     const data = generateTasksData();
 
-    renderTableView(data, handleEditItem);
+    renderTasksTable(data, handleEditItem);
 
     const links = screen.getAllByText('Edit');
     data.forEach((task, i) => {
@@ -90,7 +90,7 @@ describe('TableView', () => {
     const notRequiredPRs = data.filter(elem => !elem.githubPrRequired);
     const requiredPRs = data.filter(elem => elem.githubPrRequired);
 
-    renderTableView(data);
+    renderTasksTable(data);
 
     const minusMarks = screen.getAllByLabelText('minus-circle');
     expect(minusMarks).toHaveLength(notRequiredPRs.length);
@@ -103,7 +103,7 @@ describe('TableView', () => {
     test('should check filter in dropdown when tag is selected', async () => {
       const tag = TASK_TYPES[0].name;
       const data = generateTasksData();
-      renderTableView(data);
+      renderTasksTable(data);
 
       const columnHeader = screen.getByLabelText(/type/i);
 
@@ -121,7 +121,7 @@ describe('TableView', () => {
     test('should reset filter on Reset click', async () => {
       const tag = TASK_TYPES[0].name;
       const data = generateTasksData();
-      renderTableView(data);
+      renderTasksTable(data);
 
       const columnHeader = screen.getByLabelText(/type/i);
 
@@ -145,7 +145,7 @@ describe('TableView', () => {
       const data = generateTasksData();
       const selectedTag = TASK_TYPES[0];
       const notSelectedTags = data.filter(elem => elem.type !== selectedTag.id).map(task => task.type);
-      renderTableView(data);
+      renderTasksTable(data);
 
       // find and click filter button for Type column
       const columnHeader = screen.getByLabelText(/type/i);
@@ -174,7 +174,7 @@ describe('TableView', () => {
 
     test('should render only filtered by Course data', async () => {
       const data = generateTasksData();
-      renderTableView(data);
+      renderTasksTable(data);
 
       // find and click filter button for Used in Courses column
       const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
@@ -202,7 +202,7 @@ describe('TableView', () => {
 
     test('should render only data with "Not assigned" course', async () => {
       const data = generateTasksData();
-      renderTableView(data);
+      renderTasksTable(data);
 
       // find and click filter button for Used in Courses column
       const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
@@ -232,7 +232,7 @@ describe('TableView', () => {
     test('should render only data filtered by Name column search', async () => {
       const data = generateTasksData();
       const searchQuery = TASK_TYPES[0].id;
-      renderTableView(data);
+      renderTasksTable(data);
 
       // Check that all items rendered
       const table = screen.getByRole('table');
@@ -260,7 +260,7 @@ describe('TableView', () => {
     test('should render all data when search query is cleared', async () => {
       const data = generateTasksData();
       const searchQuery = TASK_TYPES[0].id;
-      renderTableView(data);
+      renderTasksTable(data);
 
       // Find and click search button for column
       const searchButton = screen.getByRole('button', { name: /search/i });

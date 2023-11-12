@@ -96,7 +96,7 @@ type Props = {
   handleEditItem: (record: TaskDto) => Promise<void>;
 };
 
-export const TableView = ({ data, handleEditItem }: Props) => {
+export const TasksTable = ({ data, handleEditItem }: Props) => {
   const allUsedCourses = useMemo(
     () =>
       uniqBy(

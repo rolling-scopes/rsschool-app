@@ -4,7 +4,7 @@ import { useAsync } from 'react-use';
 import { AdminPageLayout } from 'components/PageLayout';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
-import { TableView, TaskModal } from 'modules/Tasks/components';
+import { TasksTable, TaskModal } from 'modules/Tasks/components';
 import { ModalData } from 'modules/Tasks/types';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 
@@ -99,7 +99,7 @@ export function TasksPage() {
         <Button type="primary" onClick={handleAddItem}>
           Add Task
         </Button>
-        <TableView data={data} handleEditItem={handleEditItem} />
+        <TasksTable data={data} handleEditItem={handleEditItem} />
       </Content>
       {modalData && (
         <TaskModal
