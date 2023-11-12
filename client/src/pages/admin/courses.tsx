@@ -231,9 +231,9 @@ function Page() {
         <Form.Item
           name="minStudentsPerMentor"
           label="Minimum Students per Mentor"
-          rules={[{min:1, type:'integer',message: "Ensure that the input, if provided, is a positive integer."}]}
+          rules={[{ min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' }]}
         >
-          <InputNumber step={1} defaultValue={2}/>
+          <InputNumber step={1} />
         </Form.Item>
 
         <Form.Item name="state" label="State">
@@ -298,7 +298,7 @@ function createRecord(values: any) {
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
     logo: values.logo,
-    minStudentsPerMentor: values.minStudentsPerMentor
+    minStudentsPerMentor: values.minStudentsPerMentor,
   };
   return record;
 }
