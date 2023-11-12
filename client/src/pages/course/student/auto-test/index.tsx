@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
         task =>
           task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest &&
           task.type !== CourseTaskDtoTypeEnum.Test &&
-          dayjs().isSameOrAfter(task.studentStartDate, 'd'),
+          dayjs().isSameOrAfter(task.studentStartDate),
       )
       .sort((a, b) => dayjs(b.studentEndDate).diff(a.studentEndDate));
 
