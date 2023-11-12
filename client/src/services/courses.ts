@@ -13,7 +13,7 @@ export class CoursesService {
   }
 
   async createCourse(data: Partial<Course>) {
-    const result = await axios.post<CourseResponse>(`/api/course/`, data);
+    const result = await axios.post<CourseResponse>(`/api/v2/courses/`, data);
     return result.data.data;
   }
 

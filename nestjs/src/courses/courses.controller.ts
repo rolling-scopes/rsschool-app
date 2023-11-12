@@ -18,6 +18,7 @@ import { CoursesService } from './courses.service';
 import { CourseDto, LeaveCourseRequestDto, UpdateCourseDto } from './dto';
 import { CopyCourseDto } from './dto/copy-course.dto';
 import { CourseScheduleService } from './course-schedule/course-schedule.service';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Controller('courses')
 @ApiTags('courses schedule')
@@ -35,6 +36,20 @@ export class CoursesController {
   public async getCourses() {
     const data = await this.courseService.getAll();
     return data.map(it => new CourseDto(it));
+  }
+
+  @Post('/')
+  @ApiOperation({ operationId: 'createCourse' })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  public async createCourse(@Req() req: CurrentRequest) {
+    const dto = req.body as CreateCourseDto;
+    const created = await this.courseService.create(dto);
+    return {
+      data: {
+        id: created.id,
+      },
+    };
   }
 
   @Get('/:courseId')
