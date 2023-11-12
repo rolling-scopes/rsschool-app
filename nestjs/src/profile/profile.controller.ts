@@ -3,12 +3,13 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
+import { ProfileInfoDto, ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, EmploymentRecordDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
 import { EndorsementDto } from './dto/endorsement.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('profile')
 @ApiTags('profile')
@@ -66,6 +67,15 @@ export class ProfileController {
     const { user } = req;
 
     await this.profileService.updateProfileFlat(user.id, dto);
+  }
+
+  @Get('/employment')
+  @ApiOperation({ operationId: 'getEmployment' })
+  @ApiResponse({ type: [EmploymentRecordDto] })
+  public async getEmploymentHistory(@Req() req: CurrentRequest) {
+    const { user } = req;
+    const employmentHistory = await this.profileService.getEmploymentHistory(user.id);
+    return employmentHistory.map(record => plainToClass(EmploymentRecordDto, record));
   }
 
   @Get(':username')

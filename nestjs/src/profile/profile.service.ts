@@ -152,6 +152,7 @@ export class ProfileService {
       countryName,
       cityName,
       educationHistory,
+      employmentHistory,
       discord,
       englishLevel,
       aboutMyself,
@@ -179,6 +180,7 @@ export class ProfileService {
           discord,
           englishLevel,
           aboutMyself,
+          employmentHistory,
           contactsTelegram,
           contactsPhone,
           contactsEmail,
@@ -207,6 +209,11 @@ export class ProfileService {
 
   public async getPersonalProfile(githubId: string) {
     return this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
+  }
+
+  public async getEmploymentHistory(userId: number) {
+    const user = await this.userRepository.findOneOrFail({ select: ['employmentHistory'], where: { id: userId } });
+    return user?.employmentHistory;
   }
 
   private async updateEmailChannel(userId: number, user: UpdateResult) {

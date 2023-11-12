@@ -10,6 +10,7 @@ import { StudentStats } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
+import EmploymentCard from 'components/Profile/EmploymentCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
@@ -110,6 +111,11 @@ export class ProfilePage extends React.Component<Props, State> {
         const userId = this.props.session.githubId;
         const profileId = profile.generalInfo!.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
+      }
+
+      if (isProfileOwner) {
+        const { data } = await profileApi.getEmployment();
+        updateProfile.employmentHistory = data;
       }
 
       this.setState({
@@ -216,6 +222,13 @@ export class ProfilePage extends React.Component<Props, State> {
         isEditingModeEnabled={isProfileOwner}
         updateProfile={this.updateProfile}
       />,
+      profile?.employmentHistory !== undefined && (
+        <EmploymentCard
+          data={profile?.employmentHistory || []}
+          isEditingModeEnabled={isProfileOwner}
+          updateProfile={this.updateProfile}
+        />
+      ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo?.educationHistory || []}
