@@ -40,9 +40,8 @@ export function TaskModal({
     () =>
       union(
         tasks
-          .map(task => task.skills || [])
+          .flatMap(task => task.skills || [])
           .concat(SKILLS)
-          .flat()
           .sort(),
       ),
     [tasks],
