@@ -66,7 +66,15 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
           {...restField}
           name={[name, 'dateFrom']}
           label="Date From"
-          rules={[{ required: true, message: '${label} is required' }]}
+          rules={[{ required: true, message: '${label} is required' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || isToPresent || getFieldValue(['employmentHistory', name, 'dateTo']) > value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Date From must be less than Date To!'));
+              },
+            }),]}
         >
           <DatePicker />
         </Form.Item>
