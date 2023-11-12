@@ -14,6 +14,8 @@ import { stringSorter } from 'components/Table';
 const { Text } = Typography;
 const { TextArea } = Input;
 
+const taskTypes = TASK_TYPES.sort(stringSorter('name')).map(({ id, name }) => ({ value: id, label: name }));
+
 export type ModalProps = {
   tasks: TaskDto[];
   modalData: ModalData;
@@ -22,7 +24,7 @@ export type ModalProps = {
   disciplines: DisciplineDto[];
   modalAction: ModalAction;
   setDataCriteria: (criteria: CriteriaDto[]) => void;
-  handleModalSubmit: (values: any) => Promise<void>;
+  handleModalSubmit: (values: FormValues) => Promise<void>;
   setModalData: (data: ModalData) => void;
 };
 
@@ -50,10 +52,6 @@ export function TaskModal({
           .sort(),
       ),
     [tasks],
-  );
-  const taskTypes = useMemo(
-    () => TASK_TYPES.sort(stringSorter('name')).map(({ id, name }) => ({ value: id, label: name })),
-    [TASK_TYPES],
   );
 
   const handleTypeChange = () => {
