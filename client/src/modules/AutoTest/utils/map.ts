@@ -19,7 +19,7 @@ function getState({ studentEndDate }: CourseTaskDetailedDto, verifications: Veri
   return CourseTaskState.Uncompleted;
 }
 
-function getStatus({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
+function getStatus({ studentEndDate, maxScore }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskStatus {
   const attemptsCount = verifications?.length || 0;
   const now = dayjs();
   const end = dayjs(studentEndDate);
@@ -28,7 +28,7 @@ function getStatus({ studentEndDate }: CourseTaskDetailedDto, verifications: Ver
     return CourseTaskStatus.Missed;
   }
 
-  if (now.isAfter(end) && attemptsCount) {
+  if ( maxScore === verifications[0]?.score || (now.isAfter(end) && attemptsCount)) {
     return CourseTaskStatus.Done;
   }
 
