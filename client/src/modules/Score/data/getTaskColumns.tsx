@@ -19,6 +19,7 @@ export function getTaskColumns(courseTasks: CourseTaskDto[]) {
               </ul>
             }
             trigger="click"
+            overlayStyle={{ position: 'fixed', minWidth: 235 }}
           >
             <QuestionCircleOutlined title="Click for details" />
           </Popover>
