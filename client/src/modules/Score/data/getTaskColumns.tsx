@@ -13,7 +13,7 @@ export function getTaskColumns(courseTasks: CourseTaskDto[]) {
           <Popover
             content={
               <ul>
-                <li>Coefficient: {courseTask.scoreWeight}</li>
+                <li>Coefficient: {Number(courseTask.scoreWeight.toFixed(2))}</li>
                 <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
                 <li>Max. score: {courseTask.maxScore}</li>
               </ul>
