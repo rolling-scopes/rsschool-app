@@ -48,7 +48,7 @@ const LanguagesCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => 
       noDataDescription="Languages are not selected"
       content={
         languages.length ? (
-          <Space size={0}>
+          <Space size={[0, 8]} wrap>
             {languages.map(el => (
               <Tag key={el}>{getLanguageName(el)}</Tag>
             ))}
