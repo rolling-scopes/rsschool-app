@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { TaskSettings } from './TaskSettings';
 import { Form } from 'antd';
-import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
 import { CriteriaDto } from 'api';
+import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import { TaskSettings } from './TaskSettings';
 
 const renderTaskSettings = (dataCriteria: CriteriaDto[] = [], setDataCriteria = jest.fn()) => {
   render(
     <Form>
-      <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
+      <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} taskType={undefined} />
     </Form>,
   );
 };
