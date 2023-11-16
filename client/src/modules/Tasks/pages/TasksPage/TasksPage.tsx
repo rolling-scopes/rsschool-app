@@ -1,12 +1,13 @@
 import { Button, Layout, message } from 'antd';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { AdminPageLayout } from 'components/PageLayout';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
+import { AdminPageLayout } from 'components/PageLayout';
+import { useModalForm } from 'hooks';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';
-import { ModalData } from 'modules/Tasks/types';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { FormValues } from 'modules/Tasks/types';
 
 const { Content } = Layout;
 
@@ -16,40 +17,36 @@ const disciplinesApi = new DisciplinesApi();
 
 export function TasksPage() {
   const { courses } = useActiveCourseContext();
-  const [data, setData] = useState<TaskDto[]>([]);
+  const [tasks, setTasks] = useState<TaskDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
-  const [modalData, setModalData] = useState<ModalData>(null);
-  const [modalAction, setModalAction] = useState('update');
-  const [, setModalValues] = useState<any>({});
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
+  const { open, mode, formData, toggle: toggleModal } = useModalForm<FormValues>();
 
   const { loading } = useAsync(async () => {
-    if (modalData) return;
+    if (formData) return;
 
-    const [{ data: tasks }, { data: disciplines }] = await Promise.all([
+    const [{ data: tasksData }, { data: disciplines }] = await Promise.all([
       tasksApi.getTasks(),
       disciplinesApi.getDisciplines(),
     ]);
-    setData(tasks);
-    setDisciplines(disciplines || []);
-  }, [modalData]);
+    setTasks(tasksData);
+    setDisciplines(disciplines);
+  }, [open, formData]);
 
   const handleAddItem = () => {
     setDataCriteria([]);
-    setModalData({});
-    setModalAction('create');
+    toggleModal();
   };
 
   const handleEditItem = async (record: TaskDto) => {
     const { data } = await criteriaApi.getTaskCriteria(record.id);
     setDataCriteria(data.criteria ?? []);
-    setModalData(prepareValues(record));
-    setModalAction('update');
+    toggleModal(prepareValues(record));
   };
 
   const handleModalSubmit = useCallback(
-    async (values: any) => {
+    async (values: FormValues) => {
       const checkCriteria = () => {
         return dataCriteria.every(item => {
           if (item.type !== TaskType.Title) {
@@ -59,7 +56,7 @@ export function TasksPage() {
         });
       };
 
-      const isVerified = dataCriteria.length ? checkCriteria() : true;
+      const isVerified = checkCriteria();
       if (!isVerified) {
         message.error('Please, check criteria! It has subtask with no score.');
         return;
@@ -69,28 +66,40 @@ export function TasksPage() {
         if (modalLoading) {
           return;
         }
+
         setModalLoading(true);
         const record = createRecord(values);
-        if (modalAction === 'update') {
-          await tasksApi.updateTask(modalData!.id!, record);
-          const { data } = await criteriaApi.getTaskCriteria(modalData!.id!);
+
+        if (!record) {
+          return;
+        }
+
+        if (mode === 'edit') {
+          if (!formData?.id) {
+            return;
+          }
+
+          await tasksApi.updateTask(formData.id, record);
+          const { data } = await criteriaApi.getTaskCriteria(formData.id);
+
           if (data.criteria) {
-            await criteriaApi.updateTaskCriteria(modalData!.id!, { criteria: dataCriteria });
+            await criteriaApi.updateTaskCriteria(formData.id, { criteria: dataCriteria });
           } else {
-            await criteriaApi.createTaskCriteria(modalData!.id!, { criteria: dataCriteria });
+            await criteriaApi.createTaskCriteria(formData.id, { criteria: dataCriteria });
           }
         } else {
           const { data: task } = await tasksApi.createTask(record);
           await criteriaApi.createTaskCriteria(task.id, { criteria: dataCriteria });
         }
-        setModalData(null);
+
+        toggleModal();
       } catch (e) {
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);
       }
     },
-    [modalData, modalAction, modalLoading, dataCriteria],
+    [formData, modalLoading, dataCriteria, mode],
   );
 
   return (
@@ -99,45 +108,66 @@ export function TasksPage() {
         <Button type="primary" onClick={handleAddItem}>
           Add Task
         </Button>
-        <TasksTable data={data} handleEditItem={handleEditItem} />
+        <TasksTable data={tasks} handleEditItem={handleEditItem} />
       </Content>
-      {modalData && (
+      {open && (
         <TaskModal
-          tasks={data}
-          dataCriteria={dataCriteria}
+          tasks={tasks}
           disciplines={disciplines}
-          handleModalSubmit={handleModalSubmit}
-          modalData={modalData}
+          dataCriteria={dataCriteria}
           modalLoading={modalLoading}
+          mode={mode}
+          formData={formData}
           setDataCriteria={setDataCriteria}
-          setModalData={setModalData}
-          setModalValues={setModalValues}
+          toggleModal={toggleModal}
+          handleModalSubmit={handleModalSubmit}
         />
       )}
     </AdminPageLayout>
   );
 }
 
-function createRecord(values: any) {
+function createRecord({
+  type,
+  name,
+  descriptionUrl,
+  discipline,
+  githubPrRequired,
+  githubRepoName,
+  sourceGithubRepoUrl,
+  description,
+  tags,
+  skills,
+  attributes,
+}: FormValues) {
+  if (!type || !name || !descriptionUrl || !discipline) {
+    return null;
+  }
+
   const data: CreateTaskDto = {
-    type: values.type,
-    name: values.name,
-    githubPrRequired: !!values.githubPrRequired,
-    descriptionUrl: values.descriptionUrl,
-    githubRepoName: values.githubRepoName,
-    sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-    description: values.description,
-    tags: values.tags,
-    skills: values.skills?.map((skill: string) => skill.toLowerCase()),
-    disciplineId: values.discipline,
-    attributes: JSON.parse(values.attributes ?? '{}') as Record<string, unknown>,
+    // required form fields
+    type,
+    name,
+    disciplineId: discipline,
+    descriptionUrl,
+
+    // not required form fields
+    githubPrRequired: !!githubPrRequired,
+    githubRepoName: githubRepoName ?? '',
+    sourceGithubRepoUrl: sourceGithubRepoUrl ?? '',
+    description: description ?? '',
+    tags: tags ?? [],
+    skills: skills?.map((skill: string) => skill.toLowerCase()) ?? [],
+    attributes: JSON.parse(attributes ?? '{}') as Record<string, unknown>,
   };
+
   return data;
 }
 
-function prepareValues(modalData: TaskDto) {
+function prepareValues(task: TaskDto) {
   return {
-    ...modalData,
-    attributes: JSON.stringify(modalData.attributes, null, 2),
+    ...task,
+    attributes: JSON.stringify(task.attributes, null, 2),
+    discipline: task.discipline?.id,
   };
 }

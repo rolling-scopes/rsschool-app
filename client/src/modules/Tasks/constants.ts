@@ -1,5 +1,7 @@
+import { ModalFormMode } from 'hooks';
+
 const LABELS = {
-  name: 'Name',
+  name: 'Task name',
   taskType: 'Task type',
   discipline: 'Discipline',
   tags: 'Tags',
@@ -41,4 +43,9 @@ const ERROR_MESSAGES = {
   invalidJson: 'Invalid JSON',
 };
 
-export { LABELS, TASK_SETTINGS_HEADERS, PLACEHOLDERS, ERROR_MESSAGES };
+const MODAL_TITLES: Record<ModalFormMode, string> = {
+  create: 'Add Task',
+  edit: 'Edit Task',
+};
+
+export { LABELS, TASK_SETTINGS_HEADERS, PLACEHOLDERS, ERROR_MESSAGES, MODAL_TITLES };

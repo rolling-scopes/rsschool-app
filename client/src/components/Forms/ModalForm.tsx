@@ -1,4 +1,4 @@
-import { Form, Modal, Spin } from 'antd';
+import { ButtonProps, Form, Modal, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import * as React from 'react';
 
@@ -13,6 +13,7 @@ type Props = {
   loading?: boolean;
   okText?: string;
   form?: FormInstance;
+  okButtonProps?: ButtonProps;
 };
 
 export function ModalForm(props: Props) {
@@ -38,6 +39,7 @@ export function ModalForm(props: Props) {
         }
         props.submit(values);
       }}
+      okButtonProps={{ disabled: props.loading, ...props.okButtonProps }}
       onCancel={e => {
         props.cancel(e);
         form.resetFields();
