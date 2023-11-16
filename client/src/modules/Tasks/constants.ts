@@ -1,4 +1,4 @@
-import { ModalAction } from './types';
+import { ModalFormMode } from 'hooks';
 
 const LABELS = {
   name: 'Task name',
@@ -43,9 +43,9 @@ const ERROR_MESSAGES = {
   invalidJson: 'Invalid JSON',
 };
 
-const MODAL_TITLES: Record<ModalAction, string> = {
-  [ModalAction.Create]: 'Add Task',
-  [ModalAction.Update]: 'Edit Task',
+const MODAL_TITLES: Record<ModalFormMode, string> = {
+  create: 'Add Task',
+  edit: 'Edit Task',
 };
 
 export { LABELS, TASK_SETTINGS_HEADERS, PLACEHOLDERS, ERROR_MESSAGES, MODAL_TITLES };

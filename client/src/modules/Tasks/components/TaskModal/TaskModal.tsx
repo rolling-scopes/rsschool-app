@@ -1,15 +1,16 @@
 import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
 import { useMemo } from 'react';
-import { union } from 'lodash';
+import union from 'lodash/union';
 import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
 import { ModalForm } from 'components/Forms';
+import { stringSorter } from 'components/Table';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
+import { ModalFormMode } from 'hooks';
 import { TaskSettings } from 'modules/Tasks/components';
 import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from 'modules/Tasks/constants';
-import { FormValues, ModalAction, ModalData } from 'modules/Tasks/types';
+import { FormValues } from 'modules/Tasks/types';
 import { urlPattern } from 'services/validators';
-import { stringSorter } from 'components/Table';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -18,26 +19,26 @@ const taskTypes = TASK_TYPES.sort(stringSorter('name')).map(({ id, name }) => ({
 
 export type ModalProps = {
   tasks: TaskDto[];
-  modalData: ModalData;
+  formData: FormValues | undefined;
   dataCriteria: CriteriaDto[];
   modalLoading: boolean;
   disciplines: DisciplineDto[];
-  modalAction: ModalAction;
+  mode: ModalFormMode;
+  toggleModal: (data?: FormValues) => void;
   setDataCriteria: (criteria: CriteriaDto[]) => void;
   handleModalSubmit: (values: FormValues) => Promise<void>;
-  setModalData: (data: ModalData) => void;
 };
 
 export function TaskModal({
   tasks,
   dataCriteria,
-  modalData,
   modalLoading,
   disciplines,
-  modalAction,
+  mode,
+  formData,
+  toggleModal,
   setDataCriteria,
   handleModalSubmit,
-  setModalData,
 }: ModalProps) {
   const [form] = Form.useForm<FormValues>();
   const typeField = Form.useWatch('type', form);
@@ -67,15 +68,14 @@ export function TaskModal({
 
   return (
     <ModalForm
-      data={modalData}
+      data={formData ?? {}}
       form={form}
-      title={MODAL_TITLES[modalAction]}
+      title={MODAL_TITLES[mode]}
       submit={handleModalSubmit}
       cancel={() => {
-        setModalData(null);
+        toggleModal();
         setDataCriteria([]);
       }}
-      getInitialValues={getInitialValues}
       loading={modalLoading}
     >
       <Form.Item name="name" label={LABELS.name} rules={[{ required: true, message: ERROR_MESSAGES.name }]}>
@@ -144,9 +144,9 @@ export function TaskModal({
           <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
             <Text>{LABELS.usedInCourses}</Text>
             <Card bodyStyle={{ padding: 8 }}>
-              {modalData?.courses?.length ? (
+              {formData?.courses?.length ? (
                 <Space size={[0, 8]} wrap>
-                  {modalData.courses.map(({ name, isActive }) => (
+                  {formData.courses.map(({ name, isActive }) => (
                     <Tag key={name} color={isActive ? 'blue' : ''}>
                       {name}
                     </Tag>
@@ -162,8 +162,4 @@ export function TaskModal({
       <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} taskType={typeField} />
     </ModalForm>
   );
-}
-
-function getInitialValues(modalData: Partial<TaskDto>) {
-  return { ...modalData, discipline: modalData.discipline?.id };
 }

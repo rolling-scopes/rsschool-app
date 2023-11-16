@@ -1,12 +1,13 @@
 import { Button, Layout, message } from 'antd';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { AdminPageLayout } from 'components/PageLayout';
 import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
+import { AdminPageLayout } from 'components/PageLayout';
+import { useModalForm } from 'hooks';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';
-import { FormValues, ModalAction, ModalData } from 'modules/Tasks/types';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { FormValues } from 'modules/Tasks/types';
 
 const { Content } = Layout;
 
@@ -16,35 +17,32 @@ const disciplinesApi = new DisciplinesApi();
 
 export function TasksPage() {
   const { courses } = useActiveCourseContext();
-  const [data, setData] = useState<TaskDto[]>([]);
+  const [tasks, setTasks] = useState<TaskDto[]>([]);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
-  const [modalData, setModalData] = useState<ModalData>(null);
-  const [modalAction, setModalAction] = useState<ModalAction>(ModalAction.Update);
   const [dataCriteria, setDataCriteria] = useState<CriteriaDto[]>([]);
+  const { open, mode, formData, toggle: toggleModal } = useModalForm<FormValues>();
 
   const { loading } = useAsync(async () => {
-    if (modalData) return;
+    if (formData) return;
 
-    const [{ data: tasks }, { data: disciplines }] = await Promise.all([
+    const [{ data: tasksData }, { data: disciplines }] = await Promise.all([
       tasksApi.getTasks(),
       disciplinesApi.getDisciplines(),
     ]);
-    setData(tasks);
+    setTasks(tasksData);
     setDisciplines(disciplines);
-  }, [modalData]);
+  }, [open, formData]);
 
   const handleAddItem = () => {
     setDataCriteria([]);
-    setModalData({});
-    setModalAction(ModalAction.Create);
+    toggleModal();
   };
 
   const handleEditItem = async (record: TaskDto) => {
     const { data } = await criteriaApi.getTaskCriteria(record.id);
     setDataCriteria(data.criteria ?? []);
-    setModalData(prepareValues(record));
-    setModalAction(ModalAction.Update);
+    toggleModal(prepareValues(record));
   };
 
   const handleModalSubmit = useCallback(
@@ -76,32 +74,32 @@ export function TasksPage() {
           return;
         }
 
-        if (modalAction === ModalAction.Update) {
-          if (!modalData?.id) {
+        if (mode === 'edit') {
+          if (!formData?.id) {
             return;
           }
 
-          await tasksApi.updateTask(modalData.id, record);
-          const { data } = await criteriaApi.getTaskCriteria(modalData.id);
+          await tasksApi.updateTask(formData.id, record);
+          const { data } = await criteriaApi.getTaskCriteria(formData.id);
 
           if (data.criteria) {
-            await criteriaApi.updateTaskCriteria(modalData.id, { criteria: dataCriteria });
+            await criteriaApi.updateTaskCriteria(formData.id, { criteria: dataCriteria });
           } else {
-            await criteriaApi.createTaskCriteria(modalData.id, { criteria: dataCriteria });
+            await criteriaApi.createTaskCriteria(formData.id, { criteria: dataCriteria });
           }
         } else {
           const { data: task } = await tasksApi.createTask(record);
           await criteriaApi.createTaskCriteria(task.id, { criteria: dataCriteria });
         }
 
-        setModalData(null);
+        toggleModal();
       } catch (e) {
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);
       }
     },
-    [modalData, modalAction, modalLoading, dataCriteria],
+    [formData, modalLoading, dataCriteria, mode],
   );
 
   return (
@@ -110,19 +108,19 @@ export function TasksPage() {
         <Button type="primary" onClick={handleAddItem}>
           Add Task
         </Button>
-        <TasksTable data={data} handleEditItem={handleEditItem} />
+        <TasksTable data={tasks} handleEditItem={handleEditItem} />
       </Content>
-      {modalData && (
+      {open && (
         <TaskModal
-          tasks={data}
-          dataCriteria={dataCriteria}
+          tasks={tasks}
           disciplines={disciplines}
-          handleModalSubmit={handleModalSubmit}
-          modalData={modalData}
-          modalAction={modalAction}
+          dataCriteria={dataCriteria}
           modalLoading={modalLoading}
+          mode={mode}
+          formData={formData}
           setDataCriteria={setDataCriteria}
-          setModalData={setModalData}
+          toggleModal={toggleModal}
+          handleModalSubmit={handleModalSubmit}
         />
       )}
     </AdminPageLayout>
@@ -166,9 +164,10 @@ function createRecord({
   return data;
 }
 
-function prepareValues(modalData: TaskDto) {
+function prepareValues(task: TaskDto) {
   return {
-    ...modalData,
-    attributes: JSON.stringify(modalData.attributes, null, 2),
+    ...task,
+    attributes: JSON.stringify(task.attributes, null, 2),
+    discipline: task.discipline?.id,
   };
 }

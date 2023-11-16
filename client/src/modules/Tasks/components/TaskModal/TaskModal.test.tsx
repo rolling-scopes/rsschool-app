@@ -1,8 +1,8 @@
-import { generateTasksData } from 'modules/Tasks/utils/test-utils';
-import { ModalProps, TaskModal } from './TaskModal';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ModalAction, ModalData } from 'modules/Tasks/types';
+import { generateTasksData } from 'modules/Tasks/utils/test-utils';
+import { FormValues } from 'modules/Tasks/types';
 import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import { ModalProps, TaskModal } from './TaskModal';
 
 const mockData = generateData();
 
@@ -13,7 +13,7 @@ describe('TaskModal', () => {
     const modal = screen.getByRole('dialog');
     expect(modal).toBeInTheDocument();
 
-    const title = screen.getByText(MODAL_TITLES[ModalAction.Create]);
+    const title = screen.getByText(MODAL_TITLES.edit);
     expect(title).toBeInTheDocument();
   });
 
@@ -130,29 +130,30 @@ describe('TaskModal', () => {
 
 function generateData(isEmpty = false): ModalProps {
   const tasks = generateTasksData();
-  const modalData: ModalData = {
+  const formData: FormValues = {
     ...tasks[0],
     attributes: undefined,
+    discipline: tasks[0].discipline.id,
   };
 
   if (isEmpty) {
-    modalData.name = undefined;
-    modalData.type = undefined;
-    modalData.discipline = undefined;
-    modalData.descriptionUrl = undefined;
-    modalData.tags = undefined;
-    modalData.skills = undefined;
+    formData.name = undefined;
+    formData.type = undefined;
+    formData.discipline = undefined;
+    formData.descriptionUrl = undefined;
+    formData.tags = undefined;
+    formData.skills = undefined;
   }
 
   return {
     tasks,
     dataCriteria: [],
-    modalData,
+    formData,
     modalLoading: false,
     disciplines: [],
-    modalAction: ModalAction.Create,
+    mode: isEmpty ? 'create' : 'edit',
     setDataCriteria: jest.fn(),
     handleModalSubmit: jest.fn(),
-    setModalData: jest.fn(),
+    toggleModal: jest.fn(),
   };
 }

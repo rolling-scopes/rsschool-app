@@ -3,13 +3,6 @@ import { TaskDto, TaskDtoTypeEnum } from 'api';
 // discipline on form is the discipline id(number), on TaskDto it's an object(id, name);
 type FormValues = Partial<Omit<TaskDto, 'discipline' | 'attributes'> & { discipline: number; attributes: string }>;
 
-type ModalData = Partial<Omit<TaskDto, 'attributes'> & { attributes: string }> | null;
-
-const enum ModalAction {
-  Update = 'update',
-  Create = 'create',
-}
-
 const enum ColumnName {
   Id = 'Id',
   Name = 'Name',
@@ -34,6 +27,6 @@ type Settings = Record<Criteria, boolean>;
 
 type SettingsSet = Record<Criteria, TaskDtoTypeEnum[]>;
 
-export type { FormValues, ModalData, Settings, SettingsSet };
+export type { FormValues, Settings, SettingsSet };
 
-export { ColumnName, ModalAction };
+export { ColumnName };
