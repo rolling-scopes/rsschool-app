@@ -18,7 +18,7 @@ export class CoursesService {
   }
 
   async createCourseCopy(data: Partial<Course>, id: number) {
-    const result = await axios.post<CourseResponse>(`/api/course/${id}/copy`, data);
+    const result = await axios.post<CourseResponse>(`/api/v2/courses/${id}/copy`, data);
     return result.data.data;
   }
 

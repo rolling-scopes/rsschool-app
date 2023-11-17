@@ -14,6 +14,6 @@ test.describe('Home', () => {
     expect(await page.locator('css=a >> text="Score"').isVisible()).toBe(true);
 
     const href = await page.locator('css=a >> text="Score"').getAttribute('href');
-    expect(href.includes('/course/score')).toBeTruthy();
+    expect(href?.includes('/course/score')).toBeTruthy();
   });
 });

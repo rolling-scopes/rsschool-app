@@ -16,13 +16,16 @@ import { CourseGuard } from '../auth/course.guard';
 import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto, LeaveCourseRequestDto, UpdateCourseDto } from './dto';
+import { CopyCourseDto } from './dto/copy-course.dto';
+import { CourseScheduleService } from './course-schedule/course-schedule.service';
 
 @Controller('courses')
-@ApiTags('courses')
+@ApiTags('courses schedule')
 export class CoursesController {
   constructor(
     private courseService: CoursesService,
     private courseAccessService: CourseAccessService,
+    private courseScheduleService: CourseScheduleService,
   ) {}
 
   @Get('/')
@@ -87,5 +90,19 @@ export class CoursesController {
     if (studentId) {
       await this.courseAccessService.rejoinAsStudent(courseId, studentId);
     }
+  }
+
+  @Post('/:courseId/copy')
+  @ApiOkResponse({})
+  @ApiOperation({ operationId: 'copyCourse' })
+  @ApiBody({ type: CopyCourseDto, required: true })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  public async copyscheduleCourse(@Req() req: CurrentRequest, @Param('courseId') courseId: number) {
+    const created = await this.courseService.create(req.body);
+    if (created.id) {
+      await this.courseScheduleService.copyFromTo(courseId, created.id);
+    }
+    return await this.courseService.getById(created.id);
   }
 }
