@@ -1,11 +1,11 @@
 import { CourseTaskValidation } from '@entities/courseTask';
+import { TaskType } from '@entities/task';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
-import { typeEnum } from './course-task.dto';
 
 export class UpdateCourseTaskDto {
   @IsOptional()
-  @ApiProperty({ enum: typeEnum, required: false })
+  @ApiProperty({ enum: TaskType, required: false })
   type?: string;
 
   @IsOptional()
