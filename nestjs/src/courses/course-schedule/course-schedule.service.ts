@@ -11,7 +11,6 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
-import dayjs from 'dayjs';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -70,24 +69,6 @@ export class CourseScheduleService {
     @InjectRepository(TaskChecker)
     readonly taskCheckerRepository: Repository<TaskChecker>,
   ) {}
-
-  private scheduleSort(a: CourseScheduleItem, b: CourseScheduleItem) {
-    const tagPriority: { [key in CourseScheduleItemTag]?: number } = {
-      'self-study': 1,
-      test: 2,
-      coding: 3,
-    };
-
-    const timeDifference = dayjs(a.startDate).diff(dayjs(b.startDate), 'minute');
-    if (timeDifference !== 0) {
-      return timeDifference;
-    }
-
-    const aTagPriority = tagPriority[a.tag] || Infinity;
-    const bTagPriority = tagPriority[b.tag] || Infinity;
-
-    return aTagPriority - bTagPriority;
-  }
 
   public async getAll(courseId: number, studentId?: number): Promise<CourseScheduleItem[]> {
     const [courseTasks, courseEvents] = await Promise.all([
@@ -164,7 +145,7 @@ export class CourseScheduleService {
           } as CourseScheduleItem;
         }),
       )
-      .sort(this.scheduleSort);
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     return schedule;
   }
