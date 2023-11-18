@@ -11,7 +11,7 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
