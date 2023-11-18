@@ -70,6 +70,33 @@ export class CourseScheduleService {
     readonly taskCheckerRepository: Repository<TaskChecker>,
   ) {}
 
+  private scheduleSort(a: CourseScheduleItem, b: CourseScheduleItem) {
+    const tagPriority: { [key in CourseScheduleItemTag]?: number } = {
+      'self-study': 1,
+      test: 2,
+      coding: 3,
+    };
+
+    // Function to get the time in minutes (ignoring seconds and milliseconds)
+    const getTimeInMinutes = (date: Date) => {
+      return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+      ).getTime();
+    };
+
+    const timeDifference = getTimeInMinutes(a.startDate) - getTimeInMinutes(b.startDate);
+    if (timeDifference !== 0) return timeDifference;
+
+    const aTagPriority = tagPriority[a.tag] || Infinity;
+    const bTagPriority = tagPriority[b.tag] || Infinity;
+
+    return aTagPriority - bTagPriority;
+  }
+
   public async getAll(courseId: number, studentId?: number): Promise<CourseScheduleItem[]> {
     const [courseTasks, courseEvents] = await Promise.all([
       this.getActiveCourseTasks(courseId, studentId),
@@ -145,7 +172,7 @@ export class CourseScheduleService {
           } as CourseScheduleItem;
         }),
       )
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+      .sort(this.scheduleSort);
 
     return schedule;
   }
