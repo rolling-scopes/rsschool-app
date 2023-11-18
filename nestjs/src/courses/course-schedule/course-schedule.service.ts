@@ -11,6 +11,7 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
+import dayjs from 'dayjs';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -77,19 +78,10 @@ export class CourseScheduleService {
       coding: 3,
     };
 
-    // Function to get the time in minutes (ignoring seconds and milliseconds)
-    const getTimeInMinutes = (date: Date) => {
-      return new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes(),
-      ).getTime();
-    };
-
-    const timeDifference = getTimeInMinutes(a.startDate) - getTimeInMinutes(b.startDate);
-    if (timeDifference !== 0) return timeDifference;
+    const timeDifference = dayjs(a.startDate).diff(dayjs(b.startDate), 'minute');
+    if (timeDifference !== 0) {
+      return timeDifference;
+    }
 
     const aTagPriority = tagPriority[a.tag] || Infinity;
     const bTagPriority = tagPriority[b.tag] || Infinity;
