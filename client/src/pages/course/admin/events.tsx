@@ -4,9 +4,10 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
-import { dateRenderer, idFromArrayRenderer } from 'components/Table';
+import { dateWithTimeZoneRenderer, idFromArrayRenderer } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
 import { ALL_TIMEZONES } from '../../../configs/timezones';
+import { getColumnSearchProps } from 'components/Table';
 import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
 import { EventDto, EventsApi } from 'api';
 
@@ -17,10 +18,6 @@ import { CourseRole } from 'services/models';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
-
-const timeZoneRenderer = (timeZone: string) => (value: string) => {
-  return value ? dayjs(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
-};
 
 const eventsApi = new EventsApi();
 
@@ -119,11 +116,15 @@ function getColumns(
       title: 'Name',
       dataIndex: 'eventId',
       render: idFromArrayRenderer(events),
+      ...getColumnSearchProps('event.name'),
     },
     { title: 'Type', dataIndex: ['event', 'type'] },
-    { title: 'Date', dataIndex: 'dateTime', render: dateRenderer, width: 100 },
-    { title: 'Time', dataIndex: 'dateTime', render: timeZoneRenderer(timeZone), width: 60 },
-    { title: 'End Date', dataIndex: 'endTime', render: dateRenderer },
+    {
+      title: 'Start Date',
+      dataIndex: 'dateTime',
+      render: dateWithTimeZoneRenderer(timeZone, 'YYYY-MM-DD HH:mm'),
+    },
+    { title: 'End Date', dataIndex: 'endTime', render: dateWithTimeZoneRenderer(timeZone, 'YYYY-MM-DD HH:mm') },
     { title: 'Place', dataIndex: 'place' },
     {
       title: 'Organizer',
