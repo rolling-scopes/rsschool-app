@@ -1,24 +1,9 @@
 import { CourseTask, Checker, CrossCheckStatus, CourseTaskValidation } from '@entities/courseTask';
+import { TaskType } from '@entities/task';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { PersonDto } from 'src/core/dto';
 import { TaskSolutionDto } from 'src/courses/task-solutions/dto';
-
-export const typeEnum = [
-  'jstask',
-  'kotlintask',
-  'objctask',
-  'htmltask',
-  'ipynb',
-  'selfeducation',
-  'codewars',
-  'test',
-  'codejam',
-  'interview',
-  'stage-interview',
-  'cv:html',
-  'cv:markdown',
-];
 
 class Validations {
   @ApiProperty()
@@ -58,7 +43,7 @@ export class CourseTaskDto {
   taskId: number;
 
   @IsNotEmpty()
-  @ApiProperty({ enum: typeEnum })
+  @ApiProperty({ enum: TaskType })
   type: string;
 
   @IsNotEmpty()
