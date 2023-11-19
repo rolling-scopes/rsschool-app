@@ -1,11 +1,10 @@
-import * as React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
 
 import 'antd/dist/reset.css';
-import '../styles/main.css';
 import { initializeFeatures } from 'services/features';
-import { Analytics } from './analytics';
+import { Analytics } from '../components/Analytics';
+import '../styles/main.css';
 
 class RsSchoolApp extends App {
   render() {
