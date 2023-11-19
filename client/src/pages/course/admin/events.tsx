@@ -73,7 +73,7 @@ function Page() {
         Add Event
       </Button>
       <Select
-        style={{ marginLeft: 16 }}
+        style={{ marginLeft: 16, width: 200 }}
         placeholder="Please select a timezone"
         defaultValue={timeZone}
         onChange={handleTimeZoneChange}
