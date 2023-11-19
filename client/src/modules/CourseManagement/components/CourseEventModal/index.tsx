@@ -159,7 +159,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         <Form.Item
           name="endTime"
           label="End Date and Time"
-          rules={[{ required: true, message: 'Please enter start date and time' }]}
+          rules={[{ required: true, message: 'Please enter end date and time' }]}
         >
           <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
         </Form.Item>
