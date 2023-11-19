@@ -243,7 +243,12 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
         },
-        "responses": { "200": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          }
+        },
         "tags": ["courses"]
       }
     },
@@ -1616,7 +1621,7 @@
         "tags": ["profile"]
       },
       "delete": {
-        "operationId": "deleteProfile",
+        "operationId": "obfuscateProfile",
         "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" } },

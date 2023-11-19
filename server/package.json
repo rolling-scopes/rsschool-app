@@ -18,7 +18,7 @@
     "@koa/cors": "3.0.0",
     "@koa/router": "8.0.8",
     "@vendia/serverless-express": "4.5.3",
-    "axios": "1.5.0",
+    "axios": "1.6.2",
     "dotenv": "10.0.0",
     "http-status-codes": "2.1.4",
     "ics": "2.31.0",

@@ -85,7 +85,7 @@ const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props)
 
   const obfuscateProfile = async () => {
     if (githubId) {
-      await profileApi.deleteProfile(githubId);
+      await profileApi.obfuscateProfile(githubId);
     }
     window.location.reload();
   };

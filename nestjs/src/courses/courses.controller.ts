@@ -93,7 +93,7 @@ export class CoursesController {
   }
 
   @Post('/:courseId/copy')
-  @ApiOkResponse({})
+  @ApiOkResponse({ type: CourseDto })
   @ApiOperation({ operationId: 'copyCourse' })
   @ApiBody({ type: CreateCourseDto, required: true })
   @UseGuards(DefaultGuard, RoleGuard)
@@ -103,6 +103,7 @@ export class CoursesController {
     if (created.id) {
       await this.courseScheduleService.copyFromTo(courseId, created.id);
     }
-    return await this.courseService.getById(created.id);
+    const course = await this.courseService.getById(created.id);
+    return new CourseDto(course);
   }
 }
