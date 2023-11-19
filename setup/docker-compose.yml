@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    image: postgres:15.2
+    image: postgres:15.5
     container_name: db
     restart: always
     #volumes:
