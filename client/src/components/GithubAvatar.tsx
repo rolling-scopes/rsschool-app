@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function GithubAvatar({ githubId, size, style }: Props) {
-  if (!githubId) {
+  if (!githubId || githubId.startsWith('gdpr-')) {
     return <Avatar size={size} style={style} />;
   }
   return <Avatar src={`${CDN_AVATARS_URL}/${githubId}.png?size=${size * 2}`} size={size} style={style} />;

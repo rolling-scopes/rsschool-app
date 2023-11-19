@@ -1,4 +1,4 @@
-import { CourseDto as Course, CoursesApi } from 'api';
+import { CourseDto as Course, CoursesApi, CreateCourseDto } from 'api';
 import axios from 'axios';
 import { getApiConfiguration } from 'utils/axios';
 
@@ -17,9 +17,9 @@ export class CoursesService {
     return result.data.data;
   }
 
-  async createCourseCopy(data: Partial<Course>, id: number) {
-    const result = await axios.post<CourseResponse>(`/api/v2/courses/${id}/copy`, data);
-    return result.data.data;
+  async createCourseCopy(data: CreateCourseDto, id: number): Promise<Course> {
+    const result = await this.coursesApi.copyCourse(id, data);
+    return result.data;
   }
 
   async getCourses() {

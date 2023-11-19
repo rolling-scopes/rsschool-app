@@ -21,7 +21,7 @@ https://status.rs.school/
 - Back-end: [NestJS](https://nestjs.com/) and [Koa.js](https://koajs.com/) (deprecated backend) / [Node.js](https://nodejs.org/en/)
 - End-to-end: [Playwright](https://playwright.dev/)
 - Database: [PostgreSQL](https://www.postgresql.org/)
-- Deployment: [Docker](https://www.docker.com/)
+- Deployment: [Podman](https://podman.io/)
 
 ### Infrastructure
 
@@ -37,8 +37,8 @@ Please install the following software before starting development:
 
 - [Git 2.10+](https://git-scm.com/downloads)
 - [Node.js LTS](https://nodejs.org/en/download/)
-- [Docker](https://docs.docker.com/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Podman](https://podman.io/docs/installation)
+- [podman-compose](https://github.com/containers/podman-compose)
 
 ### Steps
 

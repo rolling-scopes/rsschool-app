@@ -10,22 +10,23 @@ import { ProfilePermissions } from '@entities/profilePermissions';
 import { UsersNotificationsModule } from 'src/users-notifications/users-notifications.module';
 import { Resume } from '@entities/resume';
 import { EndorsementService } from './endorsement.service';
-import { Feedback, Mentor, Prompt, Student, TaskInterviewResult } from '@entities/index';
+import { Certificate, Feedback, Mentor, Prompt, Student, TaskInterviewResult } from '@entities/index';
 import { ConfigModule } from 'src/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Certificate,
       Course,
+      Feedback,
+      Mentor,
       NotificationUserConnection,
-      User,
       ProfilePermissions,
+      Prompt,
       Resume,
       Student,
-      Mentor,
-      Prompt,
-      Feedback,
       TaskInterviewResult,
+      User,
     ]),
     UsersNotificationsModule,
     CoursesModule,

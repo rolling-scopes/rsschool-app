@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
@@ -96,5 +96,13 @@ export class ProfileController {
   public async getEndorsement(@Param('username') githubId: string) {
     const endorsement = await this.endormentService.getEndorsement(githubId);
     return new EndorsementDto(endorsement);
+  }
+
+  @Delete(':username')
+  @ApiOperation({ operationId: 'obfuscateProfile' })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  public async obfuscateProfile(@Param('username') githubId: string) {
+    await this.profileService.obfuscateProfile(githubId);
   }
 }
