@@ -1,23 +1,26 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Card, Typography, Input, Row, Col } from 'antd';
+import { Card, Typography, Input, Row, Col, Button } from 'antd';
 import { GithubFilled, EnvironmentFilled, EditOutlined } from '@ant-design/icons';
 import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
 import { Location } from 'common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
-import { UpdateProfileInfoDto } from 'api';
+import { ProfileApi, UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';
 
 const { Title, Paragraph, Text } = Typography;
 
 type Props = {
+  isAdmin: boolean;
   data: ProfileMainCardData;
   isEditingModeEnabled: boolean;
   updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
+const profileApi = new ProfileApi();
+
+const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props) => {
   const { githubId, name, location, publicCvUrl } = data;
   const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -80,6 +83,13 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
     setIsSaveDisabled(!readyToUpdate);
   }, [nameInputValue, locationSelectValue, displayName, displayLocation]);
 
+  const obfuscateProfile = async () => {
+    if (githubId) {
+      await profileApi.deleteProfile(githubId);
+    }
+    window.location.reload();
+  };
+
   return (
     <>
       <Card style={{ position: 'relative' }}>
@@ -117,6 +127,13 @@ const MainCard = ({ data, isEditingModeEnabled, updateProfile }: Props) => {
             <a target="_blank" href={publicCvUrl}>
               Public CV
             </a>
+          </Paragraph>
+        ) : null}
+        {isAdmin ? (
+          <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
+            <Button danger onClick={obfuscateProfile}>
+              Obfuscate
+            </Button>
           </Paragraph>
         ) : null}
         {isEditingModeEnabled && (

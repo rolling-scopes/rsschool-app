@@ -239,7 +239,11 @@
         "operationId": "copyCourse",
         "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": { "201": { "description": "" } },
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
         "tags": ["courses"]
       }
     },
@@ -1610,6 +1614,13 @@
           }
         },
         "tags": ["profile"]
+      },
+      "delete": {
+        "operationId": "deleteProfile",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["profile"]
       }
     },
     "/profile/{username}/personal": {
@@ -2581,6 +2592,28 @@
         "required": ["name", "fullName", "alias"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
+      "CreateCourseDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "fullName": { "type": "string" },
+          "alias": { "type": "string" },
+          "registrationEndDate": { "type": "string" },
+          "completed": { "type": "boolean" },
+          "planned": { "type": "boolean" },
+          "inviteOnly": { "type": "boolean" },
+          "description": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "discordServerId": { "type": "number" },
+          "usePrivateRepositories": { "type": "boolean" },
+          "certificateIssuer": { "type": "string" },
+          "personalMentoring": { "type": "boolean" },
+          "logo": { "type": "string" }
+        },
+        "required": ["name", "startDate", "endDate", "fullName", "alias", "description"]
+      },
       "StudentDto": {
         "type": "object",
         "properties": {
@@ -3977,7 +4010,7 @@
           "receivedDate": { "format": "date-time", "type": "string" },
           "hasCertificate": { "type": "boolean" },
           "englishMentoring": { "type": "boolean" },
-          "primaryEmail": { "type": "string" },
+          "primaryEmail": { "type": "object" },
           "languagesMentoring": { "type": "array", "items": { "type": "string" } },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "comment": { "type": "string", "nullable": true }

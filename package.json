@@ -15,15 +15,15 @@
     "test:ci": "turbo run test:ci",
     "format": "prettier --write client server nestjs common setup docs .github",
     "ci:format": "prettier --check client server nestjs common setup docs .github",
-    "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
+    "db:restore": "podman exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
     "db:dump": "PGPASSWORD=12345678 pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
     "db:dump:win": "pg_dump -h localhost --username rs_master rs_school > ./setup/backup-local.sql",
-    "db:up": "docker-compose -f ./setup/docker-compose.yml up  -d",
-    "db:down": "docker-compose -f ./setup/docker-compose.yml down"
+    "db:up": "podman-compose -f ./setup/docker-compose.yml up  -d",
+    "db:down": "podman-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
-    "@total-typescript/ts-reset": "^0.5.1",
-    "prettier": "3.0.2",
-    "turbo": "1.10.13"
+    "@total-typescript/ts-reset": "0.5.1",
+    "prettier": "3.1.0",
+    "turbo": "1.10.16"
   }
 }

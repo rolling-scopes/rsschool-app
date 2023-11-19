@@ -1510,6 +1510,109 @@ export interface CreateAlertDto {
 /**
  * 
  * @export
+ * @interface CreateCourseDto
+ */
+export interface CreateCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'fullName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'registrationEndDate'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'completed'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'planned'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'inviteOnly'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCourseDto
+     */
+    'disciplineId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCourseDto
+     */
+    'discordServerId'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'usePrivateRepositories'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'certificateIssuer'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'personalMentoring'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'logo'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateCourseEventDto
  */
 export interface CreateCourseEventDto {
@@ -3598,10 +3701,10 @@ export interface MentorRegistryDto {
     'englishMentoring': boolean;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof MentorRegistryDto
      */
-    'primaryEmail': string;
+    'primaryEmail': object;
     /**
      * 
      * @type {Array<string>}
@@ -8600,6 +8703,45 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyCourse: async (courseId: number, createCourseDto: CreateCourseDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('copyCourse', 'courseId', courseId)
+            // verify required parameter 'createCourseDto' is not null or undefined
+            assertParamExists('copyCourse', 'createCourseDto', createCourseDto)
+            const localVarPath = `/courses/{courseId}/copy`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createCourseDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8781,6 +8923,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copyCourse(courseId, createCourseDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8842,6 +8995,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: any): AxiosPromise<void> {
+            return localVarFp.copyCourse(courseId, createCourseDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8895,6 +9058,18 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class CoursesApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CreateCourseDto} createCourseDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: AxiosRequestConfig) {
+        return CoursesApiFp(this.configuration).copyCourse(courseId, createCourseDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 
@@ -13632,6 +13807,39 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        deleteProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('deleteProfile', 'username', username)
+            const localVarPath = `/profile/{username}`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getEndorsement: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('getEndorsement', 'username', username)
@@ -13879,6 +14087,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async deleteProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProfile(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getEndorsement(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EndorsementDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getEndorsement(username, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -13959,6 +14177,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        deleteProfile(username: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteProfile(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getEndorsement(username: string, options?: any): AxiosPromise<EndorsementDto> {
             return localVarFp.getEndorsement(username, options).then((request) => request(axios, basePath));
         },
@@ -14026,6 +14253,17 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class ProfileApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public deleteProfile(username: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).deleteProfile(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} username 

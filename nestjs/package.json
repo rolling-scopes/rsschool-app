@@ -24,7 +24,7 @@
     "openapi:sdk": "npx openapi-generator-cli generate -i ./src/spec.json -g typescript-axios -o ../client/src/api --additional-properties=supportsES6=true"
   },
   "dependencies": {
-    "@apalchys/pino-cloudwatch": "0.8.6",
+    "@apalchys/pino-cloudwatch": "0.9.0-beta.2",
     "@aws-sdk/client-s3": "3.391.0",
     "@nestjs/axios": "3.0.0",
     "@nestjs/cache-manager": "2.1.0",
