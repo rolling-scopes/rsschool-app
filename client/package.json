@@ -54,7 +54,7 @@
     "@types/cookie": "0.5.4",
     "@types/jest": "29.5.8",
     "@types/lodash": "4.14.201",
-    "@types/node": "^18.18.10",
+    "@types/node": "20.9.2",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/eslint-plugin": "6.6.0",

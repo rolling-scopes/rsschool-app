@@ -5,6 +5,7 @@ import Head from 'next/head';
 import 'antd/dist/reset.css';
 import '../styles/main.css';
 import { initializeFeatures } from 'services/features';
+import { Analytics } from './analytics';
 
 class RsSchoolApp extends App {
   render() {
@@ -12,6 +13,7 @@ class RsSchoolApp extends App {
     initializeFeatures(router.query);
     return (
       <>
+        <Analytics />
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
           <title>App / The Rolling Scopes School</title>

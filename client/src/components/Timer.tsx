@@ -18,7 +18,9 @@ export function Timer({ onElapsed, seconds }: { onElapsed: () => void; seconds: 
       onElapsed();
     }
     return () => {
-      timeout && clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout as NodeJS.Timeout);
+      }
     };
   }, [leftSeconds]);
 
