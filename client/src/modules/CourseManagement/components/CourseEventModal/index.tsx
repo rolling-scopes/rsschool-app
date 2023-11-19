@@ -118,7 +118,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         label="Discipline"
         rules={[{ required: true, message: 'Please select a discipline' }]}
       >
-        <Select>
+        <Select placeholder="Please select discipline">
           {disciplines.map(({ id, name }) => (
             <Select.Option key={id} value={id}>
               {name}
@@ -127,7 +127,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         </Select>
       </Form.Item>
       <Form.Item name="special" label="Special">
-        <Select mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>
+        <Select placeholder="Please select" mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>
           {SPECIAL_ENTITY_TAGS.map((tag: string) => (
             <Option key={tag} value={tag}>
               {tag}
