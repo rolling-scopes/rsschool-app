@@ -1,4 +1,4 @@
-FROM node:18-bullseye-slim as builder
+FROM node:20-bullseye-slim as builder
 
 WORKDIR /container_out
 
@@ -14,7 +14,7 @@ COPY server/lambda server/
 COPY server/dist server/
 
 # Lambda Container
-FROM public.ecr.aws/lambda/nodejs:14
+FROM public.ecr.aws/lambda/nodejs:20
 
 ENV NODE_ENV production
 ENV TZ utc
