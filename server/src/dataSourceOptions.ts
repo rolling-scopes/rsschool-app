@@ -4,12 +4,7 @@ import { DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  ssl:
-    process.env.RS_ENV === 'staging'
-      ? true
-      : {
-          rejectUnauthorized: false,
-        },
+  ssl: process.env.RS_ENV ? true : undefined, // localhost should not use ssl
   host: process.env.RSSHCOOL_PG_HOST,
   port: process.env.RS_ENV !== 'staging' ? 5432 : undefined,
   username: process.env.RSSHCOOL_PG_USERNAME,

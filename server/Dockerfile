@@ -5,6 +5,7 @@ EXPOSE 8080
 ENV NODE_ENV production
 ENV NODE_PORT 8080
 ENV TZ utc
+ENV RS_ENV production
 
 WORKDIR /app
 

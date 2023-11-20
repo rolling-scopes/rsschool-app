@@ -5,7 +5,7 @@ import { migrations } from './migrations';
 
 const config: DataSourceOptions = {
   type: 'postgres',
-  ssl: true,
+  ssl: process.env.RS_ENV ? true : undefined, // localhost should not use ssl
   host: process.env.RSSHCOOL_PG_HOST,
   port: process.env.RS_ENV !== 'staging' ? 5432 : undefined,
   username: process.env.RSSHCOOL_PG_USERNAME,
