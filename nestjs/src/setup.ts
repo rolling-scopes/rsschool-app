@@ -13,7 +13,19 @@ export function setupApp(app: INestApplication) {
   app.use(cookieParser());
 
   if (process.env.SENTRY_DSN) {
-    Sentry.init({ dsn: process.env.SENTRY_DSN });
+    const ignoredExceptions = ['UnauthorizedException', 'TokenExpiredError', 'NotFoundException'];
+
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      defaultIntegrations: false,
+      beforeSend(event) {
+        const [value] = event.exception?.values ?? [];
+        if (value?.type && ignoredExceptions.includes(value.type)) {
+          return null;
+        }
+        return event;
+      },
+    });
   }
 
   const httpAdapterHost = app.get(HttpAdapterHost);
