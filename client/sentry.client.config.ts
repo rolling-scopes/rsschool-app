@@ -6,11 +6,8 @@ import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: 'https://9b0bc864d5cb400b87bfef099d4a7bdd@o4505229370195968.ingest.sentry.io/4505229371375616',
-
-  // Adjust this value in production, or use tracesSampler for greater control
-  tracesSampleRate: 1,
-
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
+  enableTracing: false,
+  defaultIntegrations: false,
   debug: false,
   beforeSend: event => {
     if (event.message?.includes('ResizeObserver loop')) {

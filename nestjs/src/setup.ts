@@ -17,7 +17,9 @@ export function setupApp(app: INestApplication) {
 
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
+      enableTracing: false,
       defaultIntegrations: false,
+      debug: false,
       beforeSend(event) {
         const [value] = event.exception?.values ?? [];
         if (value?.type && ignoredExceptions.includes(value.type)) {
