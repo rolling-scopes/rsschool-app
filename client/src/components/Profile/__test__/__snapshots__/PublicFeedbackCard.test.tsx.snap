@@ -3,7 +3,7 @@
 exports[`PublicFeedbackCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,7 +52,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 20px;"
       >
         <span
-          class="ant-typography css-dev-only-do-not-override-nnuwmp"
+          class="ant-typography css-dev-only-do-not-override-nllxry"
         >
           <strong>
             Total badges:
@@ -68,10 +68,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-nnuwmp"
+            class="ant-badge css-dev-only-do-not-override-nllxry"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nnuwmp"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nllxry"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -103,10 +103,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-nnuwmp"
+            class="ant-badge css-dev-only-do-not-override-nllxry"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nnuwmp"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nllxry"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -138,10 +138,10 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-nnuwmp"
+            class="ant-badge css-dev-only-do-not-override-nllxry"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nnuwmp"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nllxry"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -174,7 +174,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 0px;"
       >
         <span
-          class="ant-typography css-dev-only-do-not-override-nnuwmp"
+          class="ant-typography css-dev-only-do-not-override-nllxry"
         >
           <strong>
             Last feedback:
@@ -182,7 +182,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         </span>
       </div>
       <div
-        class="ant-comment css-dev-only-do-not-override-nnuwmp"
+        class="ant-comment css-dev-only-do-not-override-nllxry"
       >
         <div
           class="ant-comment-inner"
@@ -191,7 +191,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
             class="ant-comment-avatar"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nnuwmp"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-nllxry"
               style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
             >
               <img
@@ -226,7 +226,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               class="ant-comment-content-detail"
             >
               <span
-                class="ant-typography css-dev-only-do-not-override-nnuwmp"
+                class="ant-typography css-dev-only-do-not-override-nllxry"
                 style="font-size: 12px;"
               >
                 <strong>
@@ -235,7 +235,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               </span>
               <div
                 aria-label="Test"
-                class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-nnuwmp"
+                class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-nllxry"
               >
                 Test
                 <span
