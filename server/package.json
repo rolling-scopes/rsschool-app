@@ -42,7 +42,7 @@
     "pg": "8.11.3",
     "pino-multi-stream": "4.2.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.3.14"
+    "typeorm": "0.3.17"
   },
   "devDependencies": {
     "@types/jest": "29.5.4",
