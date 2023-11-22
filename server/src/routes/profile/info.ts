@@ -1,17 +1,14 @@
-import { NOT_FOUND, OK, FORBIDDEN } from 'http-status-codes';
+import { NOT_FOUND, OK, FORBIDDEN, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { getMentorStats } from './mentor-stats';
 import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
 import { getStudentStats } from './student-stats';
 import { getUserInfo } from './user-info';
 import {
-  getProfilePermissionsSettings,
-  getConfigurableProfilePermissions,
   getRelationsRoles,
   getStudentCourses,
   getPermissions,
@@ -22,8 +19,13 @@ import {
 } from './permissions';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const session = ctx.state!.user as IUserSession;
-  const { githubId: userGithubId, isAdmin } = ctx.state!.user as IUserSession;
+  if (!ctx.state.user) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+
+  const session = ctx.state.user as IUserSession;
+  const { githubId: userGithubId, isAdmin } = session;
   const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
 
   if (!requestedGithubId) {
@@ -32,38 +34,32 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   const isProfileOwner = requestedGithubId === userGithubId;
 
-  const profilePermissions = await getConfigurableProfilePermissions(requestedGithubId);
-
   let role: RelationRole;
   let permissions: Permissions;
-  let permissionsSettings: ConfigurableProfilePermissions | undefined;
+
   if (isProfileOwner) {
     role = 'all';
     permissions = getPermissions({ isProfileOwner, isAdmin });
-    permissionsSettings = getProfilePermissionsSettings(profilePermissions);
   } else {
     const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
     const [studentCourses, registryCourses] = !relationsRoles
       ? await Promise.all([getStudentCourses(requestedGithubId), getMentorCourses(requestedGithubId)])
       : [null, null];
     role = defineRole({ relationsRoles, studentCourses, registryCourses, session, userGithubId });
-    permissions = getPermissions({ isAdmin, isProfileOwner, role, permissions: profilePermissions });
+    permissions = getPermissions({ isAdmin, isProfileOwner, role });
   }
 
-  const {
-    isProfileVisible,
-    isPublicFeedbackVisible,
-    isMentorStatsVisible,
-    isStudentStatsVisible,
-    isStageInterviewFeedbackVisible,
-  } = permissions;
+  const { isProfileVisible, isMentorStatsVisible, isStudentStatsVisible, isStageInterviewFeedbackVisible } =
+    permissions;
 
   if (!isProfileVisible && !isProfileOwner) {
     return setResponse(ctx, FORBIDDEN);
   }
 
-  const { generalInfo, contacts, discord } = await getUserInfo(requestedGithubId, permissions);
-  const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(requestedGithubId) : undefined;
+  const isEpamEmailVisible = isAdmin || ['all', 'coursemanager'].includes(role);
+
+  const { generalInfo, contacts, discord } = await getUserInfo(requestedGithubId, isEpamEmailVisible);
+  const publicFeedback = await getPublicFeedback(requestedGithubId);
   const mentorStats = isMentorStatsVisible ? await getMentorStats(requestedGithubId) : undefined;
   const studentStats = isStudentStatsVisible ? await getStudentStats(requestedGithubId, permissions) : undefined;
   const stageInterviewFeedback = isStageInterviewFeedbackVisible
@@ -71,7 +67,6 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     : undefined;
 
   const profileInfo = {
-    permissionsSettings,
     generalInfo,
     contacts,
     discord,

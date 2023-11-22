@@ -2,22 +2,8 @@ import { getRepository } from 'typeorm';
 import { UserInfo } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User } from '../../models';
-import { Permissions } from './permissions';
 
-export const getUserInfo = async (githubId: string, permissions: Permissions): Promise<UserInfo> => {
-  const {
-    isAboutVisible,
-    isEducationVisible,
-    isEnglishVisible,
-    isPhoneVisible,
-    isEmailVisible,
-    isTelegramVisible,
-    isSkypeVisible,
-    isContactsNotesVisible,
-    isLinkedInVisible,
-    isWhatsAppVisible,
-  } = permissions;
-
+export const getUserInfo = async (githubId: string, isEpamEmailVisible: boolean): Promise<UserInfo> => {
   const query = await getRepository(User)
     .createQueryBuilder('user')
     .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
@@ -25,46 +11,20 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     .addSelect('"user"."countryName" AS "countryName"')
     .addSelect('"user"."cityName" AS "cityName"')
     .addSelect('"user"."discord" AS "discord"')
-    .addSelect('"user"."languages" AS "languages"');
+    .addSelect('"user"."languages" AS "languages"')
+    .addSelect('"user"."educationHistory" AS "educationHistory"')
+    .addSelect('"user"."englishLevel" AS "englishLevel"')
+    .addSelect('"user"."contactsPhone" AS "contactsPhone"')
+    .addSelect('"user"."contactsEmail" AS "contactsEmail"')
+    .addSelect('"user"."contactsTelegram" AS "contactsTelegram"')
+    .addSelect('"user"."contactsSkype" AS "contactsSkype"')
+    .addSelect('"user"."contactsWhatsApp" AS "contactsWhatsApp"')
+    .addSelect('"user"."contactsNotes" AS "contactsNotes"')
+    .addSelect('"user"."contactsLinkedIn" AS "contactsLinkedIn"')
+    .addSelect('"user"."aboutMyself" AS "aboutMyself"');
 
-  if (isEducationVisible) {
-    query.addSelect('"user"."educationHistory" AS "educationHistory"');
-  }
-
-  if (isEnglishVisible) {
-    query.addSelect('"user"."englishLevel" AS "englishLevel"');
-  }
-
-  if (isPhoneVisible) {
-    query.addSelect('"user"."contactsPhone" AS "contactsPhone"');
-  }
-
-  if (isEmailVisible) {
-    query.addSelect('"user"."contactsEmail" AS "contactsEmail"').addSelect('"user"."contactsEpamEmail" AS "epamEmail"');
-  }
-
-  if (isTelegramVisible) {
-    query.addSelect('"user"."contactsTelegram" AS "contactsTelegram"');
-  }
-
-  if (isSkypeVisible) {
-    query.addSelect('"user"."contactsSkype" AS "contactsSkype"');
-  }
-
-  if (isWhatsAppVisible) {
-    query.addSelect('"user"."contactsWhatsApp" AS "contactsWhatsApp"');
-  }
-
-  if (isContactsNotesVisible) {
-    query.addSelect('"user"."contactsNotes" AS "contactsNotes"');
-  }
-
-  if (isLinkedInVisible) {
-    query.addSelect('"user"."contactsLinkedIn" AS "contactsLinkedIn"');
-  }
-
-  if (isAboutVisible) {
-    query.addSelect('"user"."aboutMyself" AS "aboutMyself"');
+  if (isEpamEmailVisible) {
+    query.addSelect('"user"."contactsEpamEmail" AS "epamEmail"');
   }
 
   const rawUser = await query.where('"user"."githubId" = :githubId', { githubId }).getRawOne();
@@ -72,9 +32,6 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
   if (rawUser == null) {
     throw new Error(`User with githubId ${githubId} not found`);
   }
-
-  const isContactsVisible =
-    isPhoneVisible || isEmailVisible || isTelegramVisible || isSkypeVisible || isContactsNotesVisible;
 
   const {
     firstName,
@@ -103,24 +60,22 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
         countryName,
         cityName,
       },
-      aboutMyself: isAboutVisible ? aboutMyself : undefined,
-      educationHistory: isEducationVisible ? educationHistory : undefined,
-      englishLevel: isEnglishVisible ? englishLevel : undefined,
+      aboutMyself,
+      educationHistory,
+      englishLevel,
       name: getFullName(firstName, lastName, githubId),
       languages,
     },
     discord,
-    contacts: isContactsVisible
-      ? {
-          phone: contactsPhone,
-          email: contactsEmail,
-          epamEmail,
-          skype: contactsSkype,
-          telegram: contactsTelegram,
-          notes: contactsNotes,
-          linkedIn: contactsLinkedIn,
-          whatsApp: contactsWhatsApp,
-        }
-      : undefined,
+    contacts: {
+      phone: contactsPhone,
+      email: contactsEmail,
+      epamEmail,
+      skype: contactsSkype,
+      telegram: contactsTelegram,
+      notes: contactsNotes,
+      linkedIn: contactsLinkedIn,
+      whatsApp: contactsWhatsApp,
+    },
   };
 };

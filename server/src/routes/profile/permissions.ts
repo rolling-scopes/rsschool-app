@@ -1,14 +1,11 @@
 import get from 'lodash/get';
 import mapValues from 'lodash/mapValues';
-import mergeWith from 'lodash/mergeWith';
-import cloneDeep from 'lodash/cloneDeep';
 import uniqBy from 'lodash/uniqBy';
 import { In, getRepository } from 'typeorm';
 import {
   User,
   Student,
   Mentor,
-  ProfilePermissions,
   TaskChecker,
   TaskInterviewResult,
   StageInterview,
@@ -19,7 +16,6 @@ import {
   Discipline,
   Course,
 } from '../../models';
-import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 interface Relations {
@@ -41,17 +37,6 @@ interface PermissionsSetup {
 
 export interface Permissions {
   isProfileVisible: boolean;
-  isAboutVisible: boolean;
-  isEducationVisible: boolean;
-  isEnglishVisible: boolean;
-  isEmailVisible: boolean;
-  isTelegramVisible: boolean;
-  isSkypeVisible: boolean;
-  isWhatsAppVisible: boolean;
-  isPhoneVisible: boolean;
-  isContactsNotesVisible: boolean;
-  isLinkedInVisible: boolean;
-  isPublicFeedbackVisible: boolean;
   isMentorStatsVisible: boolean;
   isStudentStatsVisible: boolean;
   isStageInterviewFeedbackVisible: boolean;
@@ -112,26 +97,6 @@ const getMentorsFromRegistryCourseIds = async (githubId: string) => {
 
   return courseIds;
 };
-
-export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
-  (await getRepository(ProfilePermissions)
-    .createQueryBuilder('pp')
-    .select('"pp"."isProfileVisible" AS "isProfileVisible"')
-    .addSelect('"pp"."isAboutVisible" AS "isAboutVisible"')
-    .addSelect('"pp"."isEducationVisible" AS "isEducationVisible"')
-    .addSelect('"pp"."isEnglishVisible" AS "isEnglishVisible"')
-    .addSelect('"pp"."isEmailVisible" AS "isEmailVisible"')
-    .addSelect('"pp"."isTelegramVisible" AS "isTelegramVisible"')
-    .addSelect('"pp"."isSkypeVisible" AS "isSkypeVisible"')
-    .addSelect('"pp"."isPhoneVisible" AS "isPhoneVisible"')
-    .addSelect('"pp"."isContactsNotesVisible" AS "isContactsNotesVisible"')
-    .addSelect('"pp"."isLinkedInVisible" AS "isLinkedInVisible"')
-    .addSelect('"pp"."isPublicFeedbackVisible" AS "isPublicFeedbackVisible"')
-    .addSelect('"pp"."isMentorStatsVisible" AS "isMentorStatsVisible"')
-    .addSelect('"pp"."isStudentStatsVisible" AS "isStudentStatsVisible"')
-    .leftJoin(User, 'user', '"user"."id" = "pp"."userId"')
-    .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne()) || {};
 
 export const getRelationsRoles = async (userGithubId: string, requestedGithubId: string): Promise<Relations | null> =>
   (await getRepository(Student)
@@ -210,54 +175,12 @@ export const defineRole = ({
 export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: PermissionsSetup): Permissions => {
   const defaultPermissions: Permissions = {
     isProfileVisible: false,
-    isAboutVisible: false,
-    isEducationVisible: false,
-    isEnglishVisible: false,
-    isEmailVisible: false,
-    isTelegramVisible: false,
-    isSkypeVisible: false,
-    isWhatsAppVisible: false,
-    isPhoneVisible: false,
-    isContactsNotesVisible: false,
-    isLinkedInVisible: false,
-    isPublicFeedbackVisible: false,
     isMentorStatsVisible: false,
     isStudentStatsVisible: false,
     isStageInterviewFeedbackVisible: false,
     isCoreJsFeedbackVisible: false,
     isConsentsVisible: false,
     isExpellingReasonVisible: false,
-  };
-
-  const accessToContacts = (permission: string, role?: RelationRole) => {
-    return (
-      [
-        'isEmailVisible',
-        'isTelegramVisible',
-        'isSkypeVisible',
-        'isPhoneVisible',
-        'isWhatsAppVisible',
-        'isContactsNodesVisible',
-        'isEnglishVisible',
-      ].includes(permission) &&
-      role &&
-      ['mentor', 'coursemanager', 'coursesupervisor'].includes(role)
-    );
-  };
-
-  const defaultAccessToContacts = (permission: string, role?: RelationRole) => {
-    return (
-      [
-        'isEmailVisible',
-        'isWhatsAppVisible',
-        'isTelegramVisible',
-        'isSkypeVisible',
-        'isPhoneVisible',
-        'isContactsNodesVisible',
-      ].includes(permission) &&
-      role &&
-      ['student'].includes(role)
-    );
   };
 
   const accessToFeedbacks = (permission: string, role?: RelationRole) => {
@@ -287,9 +210,6 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     if (accessToFeedbacks(permission, role)) {
       return true;
     }
-    if (accessToContacts(permission, role)) {
-      return true;
-    }
     if (accessToProfile(permission, role)) {
       return true;
     }
@@ -303,20 +223,6 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     if (get(permissions, `${permission}.all`) || get(permissions, `${permission}.${role}`)) {
       return true;
     }
-    // show mentor contacts to students by default
-    if (get(permissions, `${permission}.student`) === undefined && defaultAccessToContacts(permission, role)) {
-      return true;
-    }
     return false;
   });
-};
-
-export const getProfilePermissionsSettings = (permissions: ConfigurableProfilePermissions) => {
-  const newPermissions = cloneDeep(permissions);
-
-  mergeWith(newPermissions, defaultProfilePermissionsSettings, (setting, defaultSetting) =>
-    mapValues(defaultSetting, (value, key) => get(setting, key, value)),
-  );
-
-  return newPermissions;
 };

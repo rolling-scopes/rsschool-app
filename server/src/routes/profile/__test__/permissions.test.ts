@@ -1,5 +1,5 @@
 import { CourseRole, IUserSession } from '../../../models';
-import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
+import { getPermissions, defineRole } from '../permissions';
 
 const mockSession = {
   id: 1,
@@ -38,17 +38,6 @@ describe('getPermissions', () => {
         }),
       ).toEqual({
         isProfileVisible: false,
-        isAboutVisible: false,
-        isEducationVisible: false,
-        isEnglishVisible: false,
-        isEmailVisible: false,
-        isTelegramVisible: false,
-        isWhatsAppVisible: false,
-        isSkypeVisible: false,
-        isPhoneVisible: false,
-        isContactsNotesVisible: false,
-        isLinkedInVisible: false,
-        isPublicFeedbackVisible: false,
         isMentorStatsVisible: false,
         isStudentStatsVisible: false,
         isStageInterviewFeedbackVisible: false,
@@ -68,33 +57,12 @@ describe('getPermissions', () => {
             role: 'all',
             permissions: {
               isProfileVisible: { all: true },
-              isAboutVisible: { all: true, mentor: true, student: true },
-              isEducationVisible: { all: true, mentor: true, student: true },
-              isEnglishVisible: { all: false, student: false },
-              isEmailVisible: { all: true, student: true },
-              isTelegramVisible: { all: false, student: false },
-              isSkypeVisible: { all: true, student: true },
-              isPhoneVisible: { all: false, student: false },
-              isContactsNotesVisible: { all: true, student: true },
-              isLinkedInVisible: { all: false, mentor: false, student: false },
-              isPublicFeedbackVisible: { all: true, mentor: true, student: true },
               isMentorStatsVisible: { all: true, mentor: true, student: true },
               isStudentStatsVisible: { all: true, student: true },
             },
           }),
         ).toEqual({
           isProfileVisible: true,
-          isAboutVisible: true,
-          isEducationVisible: true,
-          isEnglishVisible: false,
-          isEmailVisible: true,
-          isTelegramVisible: false,
-          isWhatsAppVisible: false,
-          isSkypeVisible: true,
-          isPhoneVisible: false,
-          isContactsNotesVisible: true,
-          isLinkedInVisible: false,
-          isPublicFeedbackVisible: true,
           isMentorStatsVisible: true,
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
@@ -111,33 +79,12 @@ describe('getPermissions', () => {
             role: 'mentor',
             permissions: {
               isProfileVisible: { all: true },
-              isAboutVisible: { all: false, mentor: true, student: false },
-              isEducationVisible: { all: false, mentor: false, student: true },
-              isEnglishVisible: { all: false, student: false },
-              isEmailVisible: { all: false, student: true },
-              isTelegramVisible: { all: false, student: false },
-              isSkypeVisible: { all: false, student: true },
-              isPhoneVisible: { all: false, student: false },
-              isContactsNotesVisible: { all: true, student: true },
-              isLinkedInVisible: { all: false, mentor: false, student: false },
-              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
               isMentorStatsVisible: { all: false, mentor: true, student: true },
               isStudentStatsVisible: { all: false, student: true },
             },
           }),
         ).toEqual({
           isProfileVisible: true,
-          isAboutVisible: true,
-          isEducationVisible: false,
-          isEnglishVisible: true,
-          isEmailVisible: true,
-          isTelegramVisible: true,
-          isWhatsAppVisible: true,
-          isSkypeVisible: true,
-          isPhoneVisible: true,
-          isContactsNotesVisible: true,
-          isLinkedInVisible: false,
-          isPublicFeedbackVisible: true,
           isMentorStatsVisible: true,
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: true,
@@ -154,33 +101,12 @@ describe('getPermissions', () => {
             role: 'student',
             permissions: {
               isProfileVisible: { all: true },
-              isAboutVisible: { all: false, mentor: true, student: true },
-              isEducationVisible: { all: false, mentor: false, student: false },
-              isEnglishVisible: { all: false, student: false },
-              isEmailVisible: { all: false, student: false },
-              isTelegramVisible: { all: false, student: true },
-              isSkypeVisible: { all: false, student: true },
-              isPhoneVisible: { all: false, student: false },
-              isContactsNotesVisible: { all: true, student: true },
-              isLinkedInVisible: { all: false, mentor: false, student: false },
-              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
               isMentorStatsVisible: { all: false, mentor: true, student: true },
               isStudentStatsVisible: { all: false, student: true },
             },
           }),
         ).toEqual({
           isProfileVisible: true,
-          isAboutVisible: true,
-          isEducationVisible: false,
-          isEnglishVisible: false,
-          isEmailVisible: false,
-          isTelegramVisible: true,
-          isWhatsAppVisible: true,
-          isSkypeVisible: true,
-          isPhoneVisible: false,
-          isContactsNotesVisible: true,
-          isLinkedInVisible: false,
-          isPublicFeedbackVisible: true,
           isMentorStatsVisible: true,
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
@@ -197,33 +123,12 @@ describe('getPermissions', () => {
             role: 'coursemanager',
             permissions: {
               isProfileVisible: { all: true },
-              isAboutVisible: { all: false, mentor: true, student: true },
-              isEducationVisible: { all: false, mentor: false, student: false },
-              isEnglishVisible: { all: false, student: false },
-              isEmailVisible: { all: false, student: false },
-              isTelegramVisible: { all: false, student: true },
-              isSkypeVisible: { all: false, student: true },
-              isPhoneVisible: { all: false, student: false },
-              isContactsNotesVisible: { all: true, student: true },
-              isLinkedInVisible: { all: false, mentor: false, student: false },
-              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
               isMentorStatsVisible: { all: false, mentor: true, student: true },
               isStudentStatsVisible: { all: false, student: true },
             },
           }),
         ).toEqual({
           isProfileVisible: true,
-          isAboutVisible: true,
-          isEducationVisible: true,
-          isEnglishVisible: true,
-          isEmailVisible: true,
-          isTelegramVisible: true,
-          isWhatsAppVisible: true,
-          isSkypeVisible: true,
-          isPhoneVisible: true,
-          isContactsNotesVisible: true,
-          isLinkedInVisible: true,
-          isPublicFeedbackVisible: true,
           isMentorStatsVisible: true,
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: true,
@@ -242,33 +147,12 @@ describe('getPermissions', () => {
             role: 'all',
             permissions: {
               isProfileVisible: { all: false },
-              isAboutVisible: { all: false, mentor: false, student: false },
-              isEducationVisible: { all: false, mentor: false, student: false },
-              isEnglishVisible: { all: false, student: false },
-              isEmailVisible: { all: false, student: false },
-              isTelegramVisible: { all: false, student: false },
-              isSkypeVisible: { all: false, student: false },
-              isPhoneVisible: { all: false, student: false },
-              isContactsNotesVisible: { all: false, student: false },
-              isLinkedInVisible: { all: false, mentor: false, student: false },
-              isPublicFeedbackVisible: { all: false, mentor: false, student: false },
               isMentorStatsVisible: { all: false, mentor: false, student: false },
               isStudentStatsVisible: { all: false, student: false },
             },
           }),
         ).toEqual({
           isProfileVisible: true,
-          isAboutVisible: true,
-          isEducationVisible: true,
-          isEnglishVisible: true,
-          isEmailVisible: true,
-          isTelegramVisible: true,
-          isWhatsAppVisible: true,
-          isSkypeVisible: true,
-          isPhoneVisible: true,
-          isContactsNotesVisible: true,
-          isLinkedInVisible: true,
-          isPublicFeedbackVisible: true,
           isMentorStatsVisible: true,
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
@@ -417,47 +301,6 @@ describe('defineRole', () => {
           userGithubId: 'denis',
         }),
       ).toBe('all');
-    });
-  });
-});
-
-describe('getProfilePermissionsSettings', () => {
-  it('Should be an instance of Function', () => {
-    expect(defineRole).toBeInstanceOf(Function);
-  });
-
-  it('Should not mutate param "permissions"', () => {
-    const permissions = {
-      isProfileVisible: { all: true },
-    };
-    const permissionsSettings = getProfilePermissionsSettings(permissions);
-
-    expect(permissions).toEqual({ isProfileVisible: { all: true } });
-    expect(permissionsSettings).not.toEqual({ isProfileVisible: { all: true } });
-  });
-
-  it('Should return permissions settings with defaults if all have not been passed', () => {
-    const permissions = {
-      isProfileVisible: { all: false },
-      isAboutVisible: { all: true, mentor: true, student: true },
-      isEducationVisible: { all: true, mentor: true, student: true },
-    };
-    const permissionsSettings = getProfilePermissionsSettings(permissions);
-
-    expect(permissionsSettings).toEqual({
-      isProfileVisible: { all: false },
-      isAboutVisible: { all: true, mentor: true, student: true },
-      isEducationVisible: { all: true, mentor: true, student: true },
-      isEnglishVisible: { all: false, student: false },
-      isEmailVisible: { all: false, student: true },
-      isTelegramVisible: { all: false, student: true },
-      isSkypeVisible: { all: false, student: true },
-      isPhoneVisible: { all: false, student: true },
-      isContactsNotesVisible: { all: false, student: true },
-      isLinkedInVisible: { all: false, mentor: false, student: false },
-      isPublicFeedbackVisible: { all: false, mentor: false, student: false },
-      isMentorStatsVisible: { all: false, mentor: false, student: false },
-      isStudentStatsVisible: { all: false, student: false },
     });
   });
 });
