@@ -130,7 +130,7 @@ const ProfilePage = () => {
 
   const cards = [
     profile?.generalInfo && (
-      <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />
+      <MainCard isAdmin={isAdmin} data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />
     ),
     <AboutCard
       key="about-card"

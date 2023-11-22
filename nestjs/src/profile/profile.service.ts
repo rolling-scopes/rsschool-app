@@ -13,6 +13,8 @@ import { Resume } from '@entities/resume';
 import { Discord } from '../../../common/models';
 import { omitBy, isUndefined } from 'lodash';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { nanoid } from 'nanoid';
+import { Certificate } from '@entities/certificate';
 
 @Injectable()
 export class ProfileService {
@@ -23,6 +25,8 @@ export class ProfileService {
     private notificationConnectionsRepository: Repository<NotificationUserConnection>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Certificate)
+    private certificateRepository: Repository<Certificate>,
     @InjectRepository(Resume)
     private resumeRepository: Repository<Resume>,
     @InjectRepository(ProfilePermissions)
@@ -264,6 +268,55 @@ export class ProfileService {
           enabled: true,
         });
       }
+    }
+  }
+
+  public async obfuscateProfile(githubId: string) {
+    const user = await this.userRepository.findOneOrFail({ where: { githubId }, relations: ['students'] });
+
+    await this.userRepository.update(user.id, {
+      obfuscated: true,
+      aboutMyself: null,
+      activist: false,
+      cityName: null,
+      contactsEmail: null,
+      contactsEpamEmail: null,
+      contactsLinkedIn: null,
+      contactsNotes: null,
+      contactsPhone: null,
+      contactsSkype: null,
+      contactsTelegram: null,
+      contactsWhatsApp: null,
+      countryName: null,
+      cvLink: null,
+      dateOfBirth: null,
+      discord: null,
+      educationHistory: [],
+      employmentHistory: [],
+      englishLevel: null,
+      epamApplicantId: null,
+      externalAccounts: [],
+      firstName: 'Removed',
+      firstNameNative: null,
+      githubId: `gdpr-${nanoid(10)}`.toLowerCase(),
+      languages: [],
+      lastName: 'Removed',
+      lastNameNative: null,
+      locationId: null,
+      locationName: null,
+      militaryService: null,
+      opportunitiesConsent: false,
+      primaryEmail: null,
+      providerUserId: null,
+      tshirtFashion: null,
+      tshirtSize: null,
+    });
+
+    await this.notificationConnectionsRepository.delete({ userId: user.id });
+    await this.resumeRepository.delete({ userId: user.id });
+
+    for (const student of user.students ?? []) {
+      await this.certificateRepository.delete({ studentId: student.id });
     }
   }
 }
