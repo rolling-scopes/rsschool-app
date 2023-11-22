@@ -35,7 +35,7 @@
       <template v-slot:header> {{ $t('memory.congrats') }} </template>
 
       <template v-slot:body>
-        <img :src="cardWinner" alt="winner" />
+        <img :src="cardWinner" alt="winner" style="width: 100%;" />
         <p>{{ $t('memory.win') }}</p>
         <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
         <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
