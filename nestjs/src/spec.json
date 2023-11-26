@@ -1584,17 +1584,6 @@
       }
     },
     "/profile/info": {
-      "post": {
-        "operationId": "updateProfileInfo",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileInfoDto" } } }
-        },
-        "responses": { "201": { "description": "" } },
-        "tags": ["profile"]
-      },
       "patch": {
         "operationId": "updateProfileInfoFlat",
         "summary": "",
@@ -3838,55 +3827,6 @@
           }
         }
       },
-      "PublicVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" } },
-        "required": ["all"]
-      },
-      "VisibilitySettings": {
-        "type": "object",
-        "properties": {
-          "all": { "type": "boolean" },
-          "mentor": { "type": "boolean" },
-          "student": { "type": "boolean" }
-        },
-        "required": ["all", "mentor", "student"]
-      },
-      "PartialStudentVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
-        "required": ["all", "student"]
-      },
-      "ContactsVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
-        "required": ["all", "student"]
-      },
-      "ConfigurableProfilePermissions": {
-        "type": "object",
-        "properties": {
-          "isProfileVisible": { "$ref": "#/components/schemas/PublicVisibilitySettings" },
-          "isAboutVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isEducationVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isEnglishVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" },
-          "isEmailVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isTelegramVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isSkypeVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isPhoneVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isContactsNotesVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isLinkedInVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isPublicFeedbackVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isMentorStatsVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isStudentStatsVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" }
-        }
-      },
-      "Location": {
-        "type": "object",
-        "properties": {
-          "cityName": { "type": "string", "nullable": true },
-          "countryName": { "type": "string", "nullable": true }
-        }
-      },
       "Education": {
         "type": "object",
         "properties": {
@@ -3895,40 +3835,6 @@
           "graduationYear": { "type": "number" }
         },
         "required": ["university", "faculty", "graduationYear"]
-      },
-      "GeneralInfo": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "githubId": { "type": "string" },
-          "aboutMyself": { "type": "string", "nullable": true },
-          "location": { "$ref": "#/components/schemas/Location" },
-          "educationHistory": {
-            "nullable": true,
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/Education" }
-          },
-          "englishLevel": { "type": "string", "nullable": true }
-        },
-        "required": ["name", "githubId", "location"]
-      },
-      "ProfileInfoDto": {
-        "type": "object",
-        "properties": {
-          "permissionsSettings": { "$ref": "#/components/schemas/ConfigurableProfilePermissions" },
-          "generalInfo": { "$ref": "#/components/schemas/GeneralInfo" },
-          "contacts": { "$ref": "#/components/schemas/ContactsDto" },
-          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
-          "isPermissionsSettingsChanged": { "type": "boolean" },
-          "isProfileSettingsChanged": { "type": "boolean" }
-        },
-        "required": [
-          "permissionsSettings",
-          "generalInfo",
-          "contacts",
-          "isPermissionsSettingsChanged",
-          "isProfileSettingsChanged"
-        ]
       },
       "UpdateProfileInfoDto": {
         "type": "object",

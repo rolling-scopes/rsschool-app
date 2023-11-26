@@ -490,91 +490,6 @@ export interface CommentMentorRegistryDto {
 /**
  * 
  * @export
- * @interface ConfigurableProfilePermissions
- */
-export interface ConfigurableProfilePermissions {
-    /**
-     * 
-     * @type {PublicVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isProfileVisible'?: PublicVisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isAboutVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEducationVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {PartialStudentVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEnglishVisible'?: PartialStudentVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEmailVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isTelegramVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isSkypeVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isPhoneVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isContactsNotesVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isLinkedInVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isPublicFeedbackVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isMentorStatsVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {PartialStudentVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isStudentStatsVisible'?: PartialStudentVisibilitySettings;
-}
-/**
- * 
- * @export
  * @interface ConsentDto
  */
 export interface ConsentDto {
@@ -645,25 +560,6 @@ export interface ContactsDto {
      * @memberof ContactsDto
      */
     'discord'?: string | null;
-}
-/**
- * 
- * @export
- * @interface ContactsVisibilitySettings
- */
-export interface ContactsVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ContactsVisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ContactsVisibilitySettings
-     */
-    'student': boolean;
 }
 /**
  * 
@@ -3001,49 +2897,6 @@ export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEn
 /**
  * 
  * @export
- * @interface GeneralInfo
- */
-export interface GeneralInfo {
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'githubId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'aboutMyself'?: string | null;
-    /**
-     * 
-     * @type {Location}
-     * @memberof GeneralInfo
-     */
-    'location': Location;
-    /**
-     * 
-     * @type {Array<Education>}
-     * @memberof GeneralInfo
-     */
-    'educationHistory'?: Array<Education> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'englishLevel'?: string | null;
-}
-/**
- * 
- * @export
  * @interface GiveConsentDto
  */
 export interface GiveConsentDto {
@@ -3363,25 +3216,6 @@ export interface LeaveCourseRequestDto {
      * @memberof LeaveCourseRequestDto
      */
     'comment'?: string;
-}
-/**
- * 
- * @export
- * @interface Location
- */
-export interface Location {
-    /**
-     * 
-     * @type {string}
-     * @memberof Location
-     */
-    'cityName'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Location
-     */
-    'countryName'?: string | null;
 }
 /**
  * 
@@ -4032,25 +3866,6 @@ export interface PaginationMetaDto {
 /**
  * 
  * @export
- * @interface PartialStudentVisibilitySettings
- */
-export interface PartialStudentVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PartialStudentVisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PartialStudentVisibilitySettings
-     */
-    'student': boolean;
-}
-/**
- * 
- * @export
  * @interface PersonDto
  */
 export interface PersonDto {
@@ -4271,49 +4086,6 @@ export interface ProfileDto {
 /**
  * 
  * @export
- * @interface ProfileInfoDto
- */
-export interface ProfileInfoDto {
-    /**
-     * 
-     * @type {ConfigurableProfilePermissions}
-     * @memberof ProfileInfoDto
-     */
-    'permissionsSettings': ConfigurableProfilePermissions;
-    /**
-     * 
-     * @type {GeneralInfo}
-     * @memberof ProfileInfoDto
-     */
-    'generalInfo': GeneralInfo;
-    /**
-     * 
-     * @type {ContactsDto}
-     * @memberof ProfileInfoDto
-     */
-    'contacts': ContactsDto;
-    /**
-     * 
-     * @type {Discord}
-     * @memberof ProfileInfoDto
-     */
-    'discord'?: Discord | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ProfileInfoDto
-     */
-    'isPermissionsSettingsChanged': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ProfileInfoDto
-     */
-    'isProfileSettingsChanged': boolean;
-}
-/**
- * 
- * @export
  * @interface PromptDto
  */
 export interface PromptDto {
@@ -4341,19 +4113,6 @@ export interface PromptDto {
      * @memberof PromptDto
      */
     'temperature': number;
-}
-/**
- * 
- * @export
- * @interface PublicVisibilitySettings
- */
-export interface PublicVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PublicVisibilitySettings
-     */
-    'all': boolean;
 }
 /**
  * 
@@ -6928,31 +6687,6 @@ export interface VisibilityDto {
      * @memberof VisibilityDto
      */
     'isHidden': boolean;
-}
-/**
- * 
- * @export
- * @interface VisibilitySettings
- */
-export interface VisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'mentor': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'student': boolean;
 }
 
 /**
@@ -13968,41 +13702,6 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {ProfileInfoDto} profileInfoDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateProfileInfo: async (profileInfoDto: ProfileInfoDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'profileInfoDto' is not null or undefined
-            assertParamExists('updateProfileInfo', 'profileInfoDto', profileInfoDto)
-            const localVarPath = `/profile/info`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(profileInfoDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {UpdateProfileInfoDto} updateProfileInfoDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14133,16 +13832,6 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {ProfileInfoDto} profileInfoDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfileInfo(profileInfoDto, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {UpdateProfileInfoDto} updateProfileInfoDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14215,15 +13904,6 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          */
         obfuscateProfile(username: string, options?: any): AxiosPromise<void> {
             return localVarFp.obfuscateProfile(username, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {ProfileInfoDto} profileInfoDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: any): AxiosPromise<void> {
-            return localVarFp.updateProfileInfo(profileInfoDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14306,17 +13986,6 @@ export class ProfileApi extends BaseAPI {
      */
     public obfuscateProfile(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).obfuscateProfile(username, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {ProfileInfoDto} profileInfoDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProfileApi
-     */
-    public updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig) {
-        return ProfileApiFp(this.configuration).updateProfileInfo(profileInfoDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
