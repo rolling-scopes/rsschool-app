@@ -146,7 +146,7 @@ export class RepositoryService {
     });
     const githubIds = mentors
       .map(m => m.githubId)
-      .concat(courseUsers.filter(u => u.isManager || u.isSupervisor).map(cu => cu.user?.githubId))
+      .concat(courseUsers.filter(u => u.isManager || u.isSupervisor || u.isDementor).map(cu => cu.user?.githubId))
       .filter(Boolean);
     for (const githubId of githubIds) {
       await this.addMentorToTeam(this.github, course, githubId);
