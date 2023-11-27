@@ -96,4 +96,11 @@ export default defineComponent({
     opacity: 1;
   }
 }
+
+@media (max-width: 420px) {
+  .home-catalog__wrapper {
+    width: 30rem;
+    height: 36rem;
+  }
+}
 </style>

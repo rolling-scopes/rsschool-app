@@ -147,4 +147,10 @@ export default defineComponent({
     grid-area: A;
   }
 }
+
+@media (max-width: 420px) {
+  .home__slider {
+    height: 14rem;
+  }
+}
 </style>
