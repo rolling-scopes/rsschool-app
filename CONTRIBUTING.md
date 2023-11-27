@@ -6,8 +6,8 @@
 
 - [Git 2.10+](https://git-scm.com/downloads)
 - [NodeJS LTS](https://nodejs.org/en/)
-- [Docker](https://docs.docker.com/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Podman](https://podman.io/docs/installation)
+- [podman-compose](https://github.com/containers/podman-compose)
 
 ### Steps
 
@@ -34,7 +34,7 @@
 
 5. The application requires a connection to a Postgres database. Here is how to get test database running locally:
 
-    Run a Postgres Database locally using Docker & Docker Compose
+    Run a Postgres Database locally using Podman & podman-compose
 
     ```command-line
     npm run db:up

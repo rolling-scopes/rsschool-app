@@ -43,7 +43,7 @@ function renderEndDate(value: string, row: CourseScheduleItemDto) {
     <Space wrap style={{ justifyContent: 'end' }}>
       <Typography.Text type="secondary">
         <CalendarOutlined />
-        &nbsp;Due to:
+        &nbsp;Due by:
       </Typography.Text>
       {date}
     </Space>

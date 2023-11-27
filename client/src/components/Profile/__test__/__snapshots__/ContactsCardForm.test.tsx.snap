@@ -3,13 +3,13 @@
 exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
 <div>
   <form
-    class="ant-form ant-form-horizontal css-dev-only-do-not-override-nnuwmp"
+    class="ant-form ant-form-horizontal css-dev-only-do-not-override-nllxry"
   >
     <div
-      class="ant-list ant-list-split css-dev-only-do-not-override-nnuwmp"
+      class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
     >
       <div
-        class="ant-spin-nested-loading css-dev-only-do-not-override-nnuwmp"
+        class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
       >
         <div
           class="ant-spin-container"
@@ -18,7 +18,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
             class="ant-list-empty-text"
           >
             <div
-              class="css-dev-only-do-not-override-nnuwmp ant-empty ant-empty-normal"
+              class="css-dev-only-do-not-override-nllxry ant-empty ant-empty-normal"
             >
               <div
                 class="ant-empty-image"
@@ -73,13 +73,13 @@ exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
 exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`] = `
 <div>
   <form
-    class="ant-form ant-form-horizontal css-dev-only-do-not-override-nnuwmp"
+    class="ant-form ant-form-horizontal css-dev-only-do-not-override-nllxry"
   >
     <div
-      class="ant-list ant-list-split css-dev-only-do-not-override-nnuwmp"
+      class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
     >
       <div
-        class="ant-spin-nested-loading css-dev-only-do-not-override-nnuwmp"
+        class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
       >
         <div
           class="ant-spin-container"
@@ -94,7 +94,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                 style="width: 100%;"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-nnuwmp"
+                  class="ant-typography css-dev-only-do-not-override-nllxry"
                   style="font-size: 18px; margin-bottom: 5px; display: inline-block;"
                 >
                   <strong>
@@ -103,13 +103,13 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                   </strong>
                 </span>
                 <div
-                  class="ant-form-item css-dev-only-do-not-override-nnuwmp"
+                  class="ant-form-item css-dev-only-do-not-override-nllxry"
                 >
                   <div
-                    class="ant-row ant-form-item-row css-dev-only-do-not-override-nnuwmp"
+                    class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
                   >
                     <div
-                      class="ant-col ant-form-item-control css-dev-only-do-not-override-nnuwmp"
+                      class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
                     >
                       <div
                         class="ant-form-item-control-input"
@@ -118,7 +118,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                           class="ant-form-item-control-input-content"
                         >
                           <input
-                            class="ant-input css-dev-only-do-not-override-nnuwmp"
+                            class="ant-input css-dev-only-do-not-override-nllxry"
                             id="epamEmail"
                             style="width: 100%;"
                             type="text"
@@ -138,7 +138,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                 style="width: 100%;"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-nnuwmp"
+                  class="ant-typography css-dev-only-do-not-override-nllxry"
                   style="font-size: 18px; margin-bottom: 5px; display: inline-block;"
                 >
                   <strong>
@@ -147,13 +147,13 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                   </strong>
                 </span>
                 <div
-                  class="ant-form-item css-dev-only-do-not-override-nnuwmp"
+                  class="ant-form-item css-dev-only-do-not-override-nllxry"
                 >
                   <div
-                    class="ant-row ant-form-item-row css-dev-only-do-not-override-nnuwmp"
+                    class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
                   >
                     <div
-                      class="ant-col ant-form-item-control css-dev-only-do-not-override-nnuwmp"
+                      class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
                     >
                       <div
                         class="ant-form-item-control-input"
@@ -162,7 +162,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`]
                           class="ant-form-item-control-input-content"
                         >
                           <input
-                            class="ant-input css-dev-only-do-not-override-nnuwmp"
+                            class="ant-input css-dev-only-do-not-override-nllxry"
                             id="email"
                             style="width: 100%;"
                             type="text"

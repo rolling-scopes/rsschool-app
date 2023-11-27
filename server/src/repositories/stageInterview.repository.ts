@@ -54,8 +54,8 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         status: it.isCompleted
           ? InterviewStatus.Completed
           : it.isCanceled
-          ? InterviewStatus.Canceled
-          : InterviewStatus.NotCompleted,
+            ? InterviewStatus.Canceled
+            : InterviewStatus.NotCompleted,
         student: {
           id: it.student.id,
           totalScore: it.student.totalScore,
@@ -254,8 +254,8 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         status: it.isCompleted
           ? InterviewStatus.Completed
           : it.isCanceled
-          ? InterviewStatus.Canceled
-          : InterviewStatus.NotCompleted,
+            ? InterviewStatus.Canceled
+            : InterviewStatus.NotCompleted,
         descriptionUrl: it.courseTask.task.descriptionUrl,
         startDate: it.courseTask.studentStartDate,
         endDate: it.courseTask.studentEndDate,
