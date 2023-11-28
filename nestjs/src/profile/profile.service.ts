@@ -170,32 +170,44 @@ export class ProfileService {
       languages,
     } = profileInfo;
 
+    if (contactsEmail && !isEmail(contactsEmail)) {
+      throw new BadRequestException('Email is invalid.');
+    }
+    if (contactsEpamEmail && !isEmail(contactsEpamEmail)) {
+      throw new BadRequestException('Epam email is invalid.');
+    }
+
     const [firstName, lastName] = name?.split(' ') ?? [];
-    const user = await this.userRepository.update(
-      { id: userId },
-      omitBy<QueryDeepPartialEntity<User>>(
-        {
-          firstName,
-          lastName: firstName ? lastName ?? '' : undefined,
-          countryName,
-          cityName,
-          educationHistory,
-          discord,
-          englishLevel,
-          aboutMyself,
-          contactsTelegram,
-          contactsPhone,
-          contactsEmail,
-          contactsNotes,
-          contactsSkype,
-          contactsWhatsApp,
-          contactsLinkedIn,
-          contactsEpamEmail,
-          languages,
-        },
-        isUndefined,
-      ),
-    );
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set(
+        omitBy<QueryDeepPartialEntity<User>>(
+          {
+            firstName,
+            lastName: firstName ? lastName ?? '' : undefined,
+            countryName,
+            cityName,
+            educationHistory,
+            discord,
+            englishLevel,
+            aboutMyself,
+            contactsTelegram,
+            contactsPhone,
+            contactsEmail,
+            contactsNotes,
+            contactsSkype,
+            contactsWhatsApp,
+            contactsLinkedIn,
+            contactsEpamEmail,
+            languages,
+          },
+          isUndefined,
+        ),
+      )
+      .returning('*')
+      .where('id = :id', { id: userId })
+      .execute();
 
     await Promise.all([this.updateEmailChannel(userId, user), this.updateDiscordChannel(userId, user)]);
   }
