@@ -35,7 +35,7 @@
       <template v-slot:header> {{ $t('memory.congrats') }} </template>
 
       <template v-slot:body>
-        <img :src="cardWinner" alt="winner" />
+        <img :src="cardWinner" alt="winner" class="modal-body__img" />
         <p>{{ $t('memory.win') }}</p>
         <p>{{ steps }} {{ $t('memory.steps', steps) }}</p>
         <p>{{ gameTime / millisecondsInSecond }} {{ $t('memory.time') }}</p>
@@ -468,5 +468,9 @@ export default defineComponent({
     transform: scale(1);
     box-shadow: 0 0 5px 5px rgba(255, 0, 0, 0);
   }
+}
+
+.modal-body__img {
+  width: 100%;
 }
 </style>
