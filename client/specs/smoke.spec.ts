@@ -5,7 +5,7 @@ const url = process.env.BASE_URL || 'http://localhost:3000';
 test.beforeEach(async ({ page }) => {
   await page.context().clearCookies();
   await page.goto(url);
-  await page.locator('.ant-btn-primary').click();
+  await page.getByRole('button', { name: /sign up with gitHub/i }).click();
   await page.waitForSelector('.profile');
 });
 

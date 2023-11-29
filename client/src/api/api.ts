@@ -15164,6 +15164,43 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentScore: async (courseId: number, githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getStudentScore', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('getStudentScore', 'githubId', githubId)
+            const localVarPath = `/course/{courseId}/students/score/{githubId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15191,6 +15228,17 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
          */
         async getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStudentScore(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreStudentDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentScore(courseId, githubId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -15221,6 +15269,16 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
         getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: any): AxiosPromise<ScoreDto> {
             return localVarFp.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentScore(courseId: number, githubId: string, options?: any): AxiosPromise<ScoreStudentDto> {
+            return localVarFp.getStudentScore(courseId, githubId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -15249,6 +15307,18 @@ export class StudentsScoreApi extends BaseAPI {
      */
     public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
         return StudentsScoreApiFp(this.configuration).getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsScoreApi
+     */
+    public getStudentScore(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return StudentsScoreApiFp(this.configuration).getStudentScore(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
