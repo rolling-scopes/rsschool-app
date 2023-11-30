@@ -986,15 +986,10 @@
         "operationId": "teamDistributionDeleteRegistry",
         "summary": "",
         "parameters": [
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["team distribution"]
       }
     },

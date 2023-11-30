@@ -16772,19 +16772,19 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamDistributionDeleteRegistry: async (id: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('teamDistributionDeleteRegistry', 'id', id)
+        teamDistributionDeleteRegistry: async (courseId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('teamDistributionDeleteRegistry', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('teamDistributionDeleteRegistry', 'id', id)
             const localVarPath = `/courses/{courseId}/team-distribution/{id}/registry`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -16979,13 +16979,13 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamDistributionDeleteRegistry(id: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.teamDistributionDeleteRegistry(id, courseId, options);
+        async teamDistributionDeleteRegistry(courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamDistributionDeleteRegistry(courseId, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -17096,13 +17096,13 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamDistributionDeleteRegistry(id: number, courseId: number, options?: any): AxiosPromise<TeamDistributionDto> {
-            return localVarFp.teamDistributionDeleteRegistry(id, courseId, options).then((request) => request(axios, basePath));
+        teamDistributionDeleteRegistry(courseId: number, id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.teamDistributionDeleteRegistry(courseId, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -17224,14 +17224,14 @@ export class TeamDistributionApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
      * @param {number} courseId 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamDistributionApi
      */
-    public teamDistributionDeleteRegistry(id: number, courseId: number, options?: AxiosRequestConfig) {
-        return TeamDistributionApiFp(this.configuration).teamDistributionDeleteRegistry(id, courseId, options).then((request) => request(this.axios, this.basePath));
+    public teamDistributionDeleteRegistry(courseId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).teamDistributionDeleteRegistry(courseId, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
