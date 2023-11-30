@@ -124,13 +124,13 @@ export class TeamDistributionController {
 
   @Delete('/:id/registry')
   @UseGuards(RoleGuard)
-  @ApiOkResponse({ type: TeamDistributionDto })
+  @ApiOkResponse()
   @ApiOperation({ operationId: 'teamDistributionDeleteRegistry' })
   @RequiredRoles([CourseRole.Student])
   public async deleteRegistry(
     @StudentId() studentId: number,
-    @Param('id', ParseIntPipe) id: number,
     @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     if (studentId) {
       await this.teamDistributionStudentService.deleteStudentFromTeamDistribution(studentId, id);
