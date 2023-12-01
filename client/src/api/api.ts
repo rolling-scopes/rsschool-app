@@ -4151,6 +4151,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'discipline': IdNameDto | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProfileCourseDto
+     */
+    'minStudentsPerMentor'?: number;
 }
 /**
  * 
