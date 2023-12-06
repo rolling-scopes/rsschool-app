@@ -38,6 +38,24 @@ type StudentsState = {
 
 const courseTasksApi = new CoursesTasksApi();
 
+function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFiltersModified {
+  const trimmedFiltersProps = structuredClone(filters);
+  const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[];
+
+  filtersKeys.forEach(key => {
+    const filterKey = filters[key];
+    if (filterKey && typeof filterKey !== 'boolean') {
+      key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
+      if (Array.isArray(filterKey)) {
+        trimmedFiltersProps[key] = filterKey.map(elem => elem.trim());
+      } else {
+        trimmedFiltersProps[key] = filterKey.trim();
+      }
+    }
+  });
+  return trimmedFiltersProps;
+}
+
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
@@ -159,24 +177,6 @@ export function ScoreTable(props: Props) {
 
   if (!loaded) {
     return null;
-  }
-
-  function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFiltersModified {
-    const trimmedFiltersProps = structuredClone(filters);
-    const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[];
-
-    filtersKeys.forEach(key => {
-      const filterKey = filters[key];
-      if (filterKey && typeof filterKey !== 'boolean') {
-        key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
-        if (typeof filterKey === 'object') {
-          trimmedFiltersProps[key] = filterKey.map(elem => elem.trim());
-        } else {
-          trimmedFiltersProps[key] = filterKey.trim();
-        }
-      }
-    });
-    return trimmedFiltersProps;
   }
 
   const handleChange: TableProps<ScoreStudentDto>['onChange'] = async (pagination, filters, sorter, { action }) => {
