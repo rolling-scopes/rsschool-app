@@ -160,23 +160,22 @@ export function ScoreTable(props: Props) {
   if (!loaded) {
     return null;
   }
-  
+
   function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFiltersModified {
     const trimmedFiltersProps = structuredClone(filters);
-    const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[]
+    const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[];
 
-    filtersKeys.forEach((key) => {
+    filtersKeys.forEach(key => {
       const filterKey = filters[key];
-      if(filterKey && typeof filterKey !== 'boolean') {
+      if (filterKey && typeof filterKey !== 'boolean') {
         key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
-        if(typeof filterKey === 'object') { 
-          trimmedFiltersProps[key] = filterKey.map( elem => elem.trim() );   
-        } 
-        else {
+        if (typeof filterKey === 'object') {
+          trimmedFiltersProps[key] = filterKey.map(elem => elem.trim());
+        } else {
           trimmedFiltersProps[key] = filterKey.trim();
         }
       }
-    })
+    });
     return trimmedFiltersProps;
   }
 
@@ -185,7 +184,7 @@ export function ScoreTable(props: Props) {
     // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
     // TODO: Remove this hack after fix in antd
     if (action === 'filter') {
-      recentlyAppliedFilters.current = filters;   
+      recentlyAppliedFilters.current = filters;
       setTimeout(() => (recentlyAppliedFilters.current = null), 50);
     }
     if (action === 'sort' && recentlyAppliedFilters.current) {
