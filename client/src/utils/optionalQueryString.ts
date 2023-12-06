@@ -1,3 +1,3 @@
-export function optionalQueryString(value: string | undefined) {
+export function optionalQueryString(value: string | string [] | undefined) {
   return value ? String(value) : undefined;
 }

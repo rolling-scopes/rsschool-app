@@ -1,8 +1,8 @@
 export type ScoreTableFilters = {
-  githubId?: string;
-  name?: string;
-  'mentor.githubId'?: string;
-  cityName?: string;
+  githubId?: string | string[];
+  name?: string | string[];
+  'mentor.githubId'?: string | string[];
+  cityName?: string | string[];
   activeOnly: boolean;
 };
 

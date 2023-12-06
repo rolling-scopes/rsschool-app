@@ -160,13 +160,32 @@ export function ScoreTable(props: Props) {
   if (!loaded) {
     return null;
   }
+  
+  function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFiltersModified {
+    const trimmedFiltersProps = structuredClone(filters);
+    const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[]
+
+    filtersKeys.forEach((key) => {
+      const filterKey = filters[key];
+      if(filterKey && typeof filterKey !== 'boolean') {
+        key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
+        if(typeof filterKey === 'object') { 
+          trimmedFiltersProps[key] = filterKey.map( elem => elem.trim() );   
+        } 
+        else {
+          trimmedFiltersProps[key] = filterKey.trim();
+        }
+      }
+    })
+    return trimmedFiltersProps;
+  }
 
   const handleChange: TableProps<ScoreStudentDto>['onChange'] = async (pagination, filters, sorter, { action }) => {
     // Dirty hack to prevent sort request with old filters on Enter key in filter modal search input
     // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
     // TODO: Remove this hack after fix in antd
     if (action === 'filter') {
-      recentlyAppliedFilters.current = filters;
+      recentlyAppliedFilters.current = filters;   
       setTimeout(() => (recentlyAppliedFilters.current = null), 50);
     }
     if (action === 'sort' && recentlyAppliedFilters.current) {
@@ -175,9 +194,10 @@ export function ScoreTable(props: Props) {
 
     try {
       props.onLoading(true);
+      const trimmedFiltersProps = trimFiltersProps(filters);
       const [studentCourseScore] = await Promise.all([
         courseService.getStudentCourseScore(props.session?.githubId as string),
-        getCourseScore(pagination, filters, sorter),
+        getCourseScore(pagination, trimmedFiltersProps, sorter),
       ]);
       setStudentScore(studentCourseScore);
     } finally {
