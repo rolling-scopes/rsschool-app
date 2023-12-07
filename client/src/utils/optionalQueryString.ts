@@ -1,9 +1,7 @@
-export function optionalQueryString(value: string | string[] | undefined) {
-  if (!value) {
-    return undefined;
-  } else if (Array.isArray(value)) {
+export function optionalQueryString(value: string[] | undefined) {
+  if (Array.isArray(value)) {
     return String(value[0]);
   }
 
-  return String(value);
+  return undefined;
 }

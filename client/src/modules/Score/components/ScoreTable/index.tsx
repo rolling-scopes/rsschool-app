@@ -48,8 +48,6 @@ function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFilters
       key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
       if (Array.isArray(filterKey)) {
         trimmedFiltersProps[key] = filterKey.map(elem => elem.trim());
-      } else {
-        trimmedFiltersProps[key] = filterKey.trim();
       }
     }
   });
