@@ -38,22 +38,6 @@ type StudentsState = {
 
 const courseTasksApi = new CoursesTasksApi();
 
-function trimFiltersProps(filters: ScoreTableFiltersModified): ScoreTableFiltersModified {
-  const trimmedFiltersProps = structuredClone(filters);
-  const filtersKeys = Object.keys(filters) as (keyof ScoreTableFiltersModified)[];
-
-  filtersKeys.forEach(key => {
-    const filterKey = filters[key];
-    if (filterKey && typeof filterKey !== 'boolean') {
-      key = key as Exclude<keyof ScoreTableFiltersModified, 'activeOnly'>;
-      if (Array.isArray(filterKey)) {
-        trimmedFiltersProps[key] = filterKey.map(elem => elem.trim());
-      }
-    }
-  });
-  return trimmedFiltersProps;
-}
-
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
@@ -191,10 +175,9 @@ export function ScoreTable(props: Props) {
 
     try {
       props.onLoading(true);
-      const trimmedFiltersProps = trimFiltersProps(filters);
       const [studentCourseScore] = await Promise.all([
         courseService.getStudentCourseScore(props.session?.githubId as string),
-        getCourseScore(pagination, trimmedFiltersProps, sorter),
+        getCourseScore(pagination, filters, sorter),
       ]);
       setStudentScore(studentCourseScore);
     } finally {
