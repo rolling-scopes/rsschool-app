@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { NextRouter } from 'next/router';
 import { Session } from 'components/withSession';
-import { ProfilePage } from '../pages/profile';
+import ProfilePage from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
 jest.mock('api', () => ({

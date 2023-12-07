@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
+export type ModalFormMode = 'create' | 'edit';
+
 export const useModalForm = <T,>() => {
-  const [mode, setMode] = useState<'create' | 'edit'>('create');
+  const [mode, setMode] = useState<ModalFormMode>('create');
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<T>();
 

@@ -21,7 +21,15 @@ import dayjs from 'dayjs';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto, CoursesApi, UpdateCourseDto } from 'api';
+import {
+  DiscordServersApi,
+  DiscordServerDto,
+  DisciplinesApi,
+  DisciplineDto,
+  CoursesApi,
+  UpdateCourseDto,
+  CreateCourseDto,
+} from 'api';
 import { Course, CourseRole } from 'services/models';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -87,7 +95,7 @@ function Page() {
           await courseApi.updateCourse(modalData!.id!, record);
         } else {
           if (values.courseId) {
-            await courseService.createCourseCopy(record, values.courseId);
+            await courseService.createCourseCopy(record as CreateCourseDto, values.courseId);
             setIsCopy(false);
           } else {
             await courseService.createCourse(record);
@@ -119,7 +127,7 @@ function Page() {
           <Col span={24}>
             {!isUpdate ? (
               <Checkbox checked={isCopy} value={isCopy} onChange={e => setIsCopy(e.target.checked)}>
-                I want to copy stages and events from other course
+                I want to copy tasks and events from other course
               </Checkbox>
             ) : (
               ''

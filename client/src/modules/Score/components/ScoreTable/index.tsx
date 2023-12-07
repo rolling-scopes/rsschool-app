@@ -17,6 +17,7 @@ import { CoursePageProps } from 'services/models';
 import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import useWindowDimensions from 'utils/useWindowDimensions';
+import { Summary } from './Summary';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
@@ -55,6 +56,8 @@ export function ScoreTable(props: Props) {
     filter: { activeOnly: true },
     order: { field: 'rank', order: 'ascend' },
   });
+  const [studentScore, setStudentScore] = useState<ScoreStudentDto | null>(null);
+
   const recentlyAppliedFilters = useRef<null | Record<string, FilterValue | null>>(null);
 
   const [notVisibleColumns = [], setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns');
@@ -66,13 +69,8 @@ export function ScoreTable(props: Props) {
     filters: ScoreTableFiltersModified,
     order: TableScoreOrder,
   ) => {
-    try {
-      props.onLoading(true);
-      const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
-      setStudents({ ...students, content: data.content, pagination: data.pagination });
-    } finally {
-      props.onLoading(false);
-    }
+    const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
+    setStudents({ ...students, content: data.content, pagination: data.pagination });
   };
 
   const loadInitialData = useCallback(async () => {
@@ -94,8 +92,9 @@ export function ScoreTable(props: Props) {
         filters = { ...filters, name } as ScoreTableFilters;
       }
 
-      const [courseScore, courseTasks] = await Promise.all([
+      const [courseScore, studentCourseScore, courseTasks] = await Promise.all([
         courseService.getCourseScore(students.pagination, filters, students.order),
+        courseService.getStudentCourseScore(props.session?.githubId as string),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
       const sortedTasks = courseTasks.data
@@ -105,6 +104,7 @@ export function ScoreTable(props: Props) {
           isVisible: !notVisibleColumns.includes(String(task.id)),
         }));
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
+      setStudentScore(studentCourseScore);
       setCourseTasks(sortedTasks);
       setColumns(
         getColumns({
@@ -161,7 +161,7 @@ export function ScoreTable(props: Props) {
     return null;
   }
 
-  const handleChange: TableProps<ScoreStudentDto>['onChange'] = (pagination, filters, sorter, { action }) => {
+  const handleChange: TableProps<ScoreStudentDto>['onChange'] = async (pagination, filters, sorter, { action }) => {
     // Dirty hack to prevent sort request with old filters on Enter key in filter modal search input
     // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
     // TODO: Remove this hack after fix in antd
@@ -172,21 +172,41 @@ export function ScoreTable(props: Props) {
     if (action === 'sort' && recentlyAppliedFilters.current) {
       filters = recentlyAppliedFilters.current;
     }
-    getCourseScore(pagination, filters, sorter);
+
+    try {
+      props.onLoading(true);
+      const [studentCourseScore] = await Promise.all([
+        courseService.getStudentCourseScore(props.session?.githubId as string),
+        getCourseScore(pagination, filters, sorter),
+      ]);
+      setStudentScore(studentCourseScore);
+    } finally {
+      props.onLoading(false);
+    }
   };
+
+  const visibleColumns = getVisibleColumns(columns);
+  const isSummaryShown = students.content.length > 0 && studentScore;
 
   return (
     <>
       <Table<ScoreStudentDto>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(95vh - 320px)' }}
+        scroll={{ x: getTableWidth(visibleColumns.length), y: 'calc(95vh - 320px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
+        summary={() =>
+          isSummaryShown && (
+            <Table.Summary fixed="top">
+              <Summary studentScore={studentScore} visibleColumns={visibleColumns} />
+            </Table.Summary>
+          )
+        }
         onChange={handleChange}
-        columns={getVisibleColumns(columns)}
+        columns={visibleColumns}
         rowSelection={{
           selectedRowKeys: state,
           onChange: (_, selectedRows) => {

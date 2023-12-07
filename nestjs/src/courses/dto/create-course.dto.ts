@@ -1,53 +1,80 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourseDto {
+  @IsString()
   @ApiProperty()
   name: string;
 
+  @IsString()
   @ApiProperty()
   startDate: string;
 
+  @IsString()
   @ApiProperty()
   endDate: string;
 
+  @IsString()
   @ApiProperty()
   fullName: string;
 
+  @IsString()
   @ApiProperty()
   alias: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ required: false })
-  registrationEndDate: string;
+  registrationEndDate?: string;
 
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty({ required: false })
-  completed: boolean;
+  completed?: boolean;
 
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty({ required: false })
-  planned: boolean;
+  planned?: boolean;
 
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty({ required: false })
-  inviteOnly: boolean;
+  inviteOnly?: boolean;
 
+  @IsString()
   @ApiProperty()
   description: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiProperty({ required: false })
-  disciplineId: number;
+  disciplineId?: number;
 
+  @IsNumber()
+  @IsOptional()
   @ApiProperty({ required: false })
-  discordServerId: number;
+  discordServerId?: number;
 
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty({ required: false })
-  usePrivateRepositories: boolean;
+  usePrivateRepositories?: boolean;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ required: false })
-  certificateIssuer: string;
+  certificateIssuer?: string;
 
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty({ required: false })
-  personalMentoring: boolean;
+  personalMentoring?: boolean;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ required: false })
-  logo: string;
+  logo?: string;
 
   @ApiProperty({ required: false })
   minStudentsPerMentor: number;

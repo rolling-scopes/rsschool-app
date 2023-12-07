@@ -115,6 +115,6 @@ const americaTimezones = [
   'America/Sao_Paulo',
 ];
 
-export const ALL_TIMEZONES = [...europeTimezones, ...asiaTimezones, ...americaTimezones];
+export const ALL_TIMEZONES = ['UTC', ...europeTimezones, ...asiaTimezones, ...americaTimezones];
 
 export const DEFAULT_TIMEZONE = 'Europe/Minsk';

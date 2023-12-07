@@ -34,7 +34,11 @@ export function registryRouter(logger?: ILogger) {
   });
 
   router.post('/mentor', async (ctx: Router.RouterContext) => {
-    const { githubId, id } = ctx.state!.user as IUserSession;
+    if (!ctx.state.user) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+    const { githubId, id } = ctx.state.user as IUserSession;
     await repository.register(githubId, ctx.request.body);
     await sendNotification({
       notificationId: 'mentorRegistrationApproval:submit',
@@ -44,7 +48,12 @@ export function registryRouter(logger?: ILogger) {
   });
 
   router.get('/mentor', async (ctx: Router.RouterContext) => {
-    const { id: userId } = ctx.state!.user as IUserSession;
+    if (!ctx.state.user) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+
+    const { id: userId } = ctx.state.user as IUserSession;
 
     const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
     if (mentorRegistry == null) {
@@ -81,7 +90,12 @@ export function registryRouter(logger?: ILogger) {
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const { githubId, id: userId } = ctx.state!.user as IUserSession;
+    if (!ctx.state.user) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+
+    const { githubId, id: userId } = ctx.state.user as IUserSession;
     const { courseId, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {

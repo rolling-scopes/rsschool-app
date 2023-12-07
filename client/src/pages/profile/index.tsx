@@ -1,12 +1,10 @@
-import * as React from 'react';
+import { useContext, useState } from 'react';
 import Masonry from 'react-masonry-css';
-import { NextRouter, withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Result, Spin, message } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
-import withSession, { Session } from 'components/withSession';
-import { StudentStats } from 'common/models/profile';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
@@ -17,34 +15,21 @@ import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import { MentorStatsCard } from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import LanguagesCard from 'components/Profile/LanguagesCard';
-import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { useAsync } from 'react-use';
+import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
 
-type Props = {
-  router: NextRouter;
-  session: Session;
+type ConnectionValue = {
+  value: string;
+  enabled: boolean;
+  lastLinkSentAt?: string;
 };
 
-type State = {
-  profile: ProfileInfo | null;
-  isProfileOwner: boolean;
-  isLoading: boolean;
-  isSaving: boolean;
-  connections: Partial<
-    Record<
-      NotificationChannel,
-      | {
-          value: string;
-          enabled: boolean;
-        }
-      | undefined
-    >
-  >;
-};
+type Connections = Partial<Record<NotificationChannel, ConnectionValue>>;
 
 export type ChangedPermissionsSettings = {
   permissionName: string;
@@ -52,51 +37,23 @@ export type ChangedPermissionsSettings = {
 };
 
 const profileApi = new ProfileApi();
+const userService = new UserService();
+const notificationsService = new NotificationsService();
 
-export class ProfilePage extends React.Component<Props, State> {
-  state: State = {
-    profile: null,
-    isProfileOwner: false,
-    isLoading: true,
-    isSaving: false,
-    connections: {},
-  };
+const ProfilePage = () => {
+  const router = useRouter();
+  const session = useContext(SessionContext);
+  const [profile, setProfile] = useState<ProfileInfo | null>(null);
+  const [isProfileOwner, setIsProfileOwner] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [connections, setConnections] = useState<Connections>({});
 
-  private userService = new UserService();
-  private notificationsService = new NotificationsService();
-
-  private hadStudentCoreJSInterview = (stats: StudentStats[]) =>
-    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
-
-  private getStudentCoreJSInterviews = (stats: StudentStats[]) =>
-    stats
-      .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
-      .map(({ tasks, courseFullName, courseName, locationName }) => ({
-        courseFullName,
-        courseName,
-        locationName,
-        interviews: tasks
-          .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer, name, interviewDate }) => ({
-            score,
-            comment,
-            interviewer,
-            answers: interviewFormAnswers,
-            name,
-            interviewDate,
-          })),
-      })) as CoreJsInterviewsData[];
-
-  private fetchData = async () => {
-    this.setState({ isLoading: true });
-
-    const { router, session } = this.props;
-
+  const fetchData = async () => {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const [profile, connections, { data }] = await Promise.all([
-        this.userService.getProfileInfo(githubId?.toLowerCase()),
-        this.notificationsService.getUserConnections().catch(() => []),
+        userService.getProfileInfo(githubId?.toLowerCase()),
+        notificationsService.getUserConnections().catch(() => ({})),
         profileApi.getProfile(githubId?.toLowerCase() ?? session.githubId),
       ]);
 
@@ -106,44 +63,38 @@ export class ProfilePage extends React.Component<Props, State> {
       };
 
       let isProfileOwner = false;
-      if (profile) {
-        const userId = this.props.session.githubId;
-        const profileId = profile.generalInfo!.githubId;
+      if (profile?.generalInfo) {
+        const userId = session.githubId;
+        const profileId = profile.generalInfo.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
       }
 
-      this.setState({
-        isLoading: false,
-        profile: updateProfile,
-        isProfileOwner,
-        connections: connections as State['connections'],
-      });
+      setProfile(updateProfile);
+      setIsProfileOwner(isProfileOwner);
+      setConnections(connections as Connections);
     } catch (e) {
-      this.setState({
-        isLoading: false,
-        profile: null,
-      });
+      setProfile(null);
     }
   };
 
-  private sendEmailConfirmationLink = async () => {
+  const sendEmailConfirmationLink = async () => {
     try {
-      await this.userService.sendEmailConfirmationLink();
+      await userService.sendEmailConfirmationLink();
     } catch (e) {
       message.error('Error has occurred. Please try again later');
     }
   };
 
-  private updateProfile = async (data: UpdateProfileInfoDto) => {
-    this.setState({ isSaving: true });
+  const updateProfile = async (data: UpdateProfileInfoDto) => {
+    setIsSaving(true);
     let isUpdated = false;
     try {
       await profileApi.updateProfileInfoFlat(data);
-      this.setState({ isSaving: false });
+      setIsSaving(false);
       message.success('Profile was successfully saved');
       isUpdated = true;
     } catch (error) {
-      this.setState({ isSaving: false });
+      setIsSaving(false);
       message.error('Error has occurred. Please check your connection and try again');
       isUpdated = false;
     }
@@ -151,166 +102,135 @@ export class ProfilePage extends React.Component<Props, State> {
     return isUpdated;
   };
 
-  authorizeDiscord = async () => {
-    this.setState({ isLoading: true });
-
-    const discord = await this.userService.getDiscordIds();
-
+  const authorizeDiscord = async () => {
+    const discord = await userService.getDiscordIds();
     if (discord) {
-      this.setState(({ profile, ...state }) => ({
-        ...state,
-        profile: {
-          ...profile,
-          publicCvUrl: profile?.publicCvUrl ?? null,
-          discord,
-        },
+      setProfile(profile => ({
+        ...profile,
+        publicCvUrl: profile?.publicCvUrl ?? null,
+        discord,
       }));
 
-      await this.updateProfile({ discord });
-      this.props.router.replace('/profile');
+      await updateProfile({ discord });
+      router.replace('/profile');
     }
-
-    this.setState({ isLoading: false });
   };
 
-  componentDidMount() {
-    // it's a dirty hack to fix an issue with empty query params
-    // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
-    //
-    // >> After hydration, Next.js will trigger an update to your application
-    // >> to provide the route parameters in the query object.
-    setTimeout(async () => {
-      await this.fetchData();
-      await this.authorizeDiscord();
-    }, 100);
-  }
+  const mainInfo: ProfileMainCardData = {
+    location: profile?.generalInfo?.location ?? null,
+    name: profile?.generalInfo?.name ?? '',
+    githubId: profile?.generalInfo?.githubId ?? null,
+    publicCvUrl: profile?.publicCvUrl ?? null,
+  };
+  const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
+  const languages = profile?.generalInfo?.languages ?? [];
 
-  render() {
-    const { profile, isProfileOwner, connections } = this.state;
+  const githubId = profile?.generalInfo?.githubId;
+  const isAdmin = session.isAdmin;
 
-    const mainInfo: ProfileMainCardData = {
-      location: profile?.generalInfo?.location ?? null,
-      name: profile?.generalInfo?.name ?? '',
-      githubId: profile?.generalInfo?.githubId ?? null,
-      publicCvUrl: profile?.publicCvUrl ?? null,
-    };
-    const aboutMyself = profile?.generalInfo?.aboutMyself ?? '';
-    const languages = profile?.generalInfo?.languages ?? [];
-
-    const githubId = profile?.generalInfo?.githubId;
-    const isAdmin = this.props.session.isAdmin;
-
-    const cards = [
-      profile?.generalInfo && (
-        <MainCard data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={this.updateProfile} />
-      ),
-      <AboutCard
-        key="about-card"
-        data={aboutMyself}
+  const cards = [
+    profile?.generalInfo && (
+      <MainCard isAdmin={isAdmin} data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />
+    ),
+    <AboutCard
+      key="about-card"
+      data={aboutMyself}
+      isEditingModeEnabled={isProfileOwner}
+      updateProfile={updateProfile}
+    />,
+    <LanguagesCard
+      key="languages-card"
+      data={languages as UpdateUserDtoLanguagesEnum[]}
+      isEditingModeEnabled={isProfileOwner}
+      updateProfile={updateProfile}
+    />,
+    profile?.generalInfo?.educationHistory !== undefined && (
+      <EducationCard
+        data={profile.generalInfo?.educationHistory || []}
         isEditingModeEnabled={isProfileOwner}
-        updateProfile={this.updateProfile}
-      />,
-      <LanguagesCard
-        key="languages-card"
-        data={languages as UpdateUserDtoLanguagesEnum[]}
+        updateProfile={updateProfile}
+      />
+    ),
+    profile?.contacts !== undefined && (
+      <ContactsCard
+        data={profile.contacts}
         isEditingModeEnabled={isProfileOwner}
-        updateProfile={this.updateProfile}
-      />,
-      profile?.generalInfo?.educationHistory !== undefined && (
-        <EducationCard
-          data={profile.generalInfo?.educationHistory || []}
-          isEditingModeEnabled={isProfileOwner}
-          updateProfile={this.updateProfile}
-        />
-      ),
-      profile?.contacts !== undefined && (
-        <ContactsCard
-          data={profile.contacts}
-          isEditingModeEnabled={isProfileOwner}
-          connections={connections}
-          sendConfirmationEmail={this.sendEmailConfirmationLink}
-          updateProfile={this.updateProfile}
-        />
-      ),
-      profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
-      profile?.studentStats?.length && (
-        <StudentStatsCard
-          username={this.props.session.githubId}
-          data={profile.studentStats}
-          isProfileOwner={isProfileOwner}
-        />
-      ),
-      profile?.mentorStats?.length && githubId && (
-        <MentorStatsCard isAdmin={isAdmin} githubId={githubId} data={profile.mentorStats} />
-      ),
-      profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
-        <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />
-      ),
-      profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
-    ].filter(Boolean) as JSX.Element[];
+        connections={connections}
+        sendConfirmationEmail={sendEmailConfirmationLink}
+        updateProfile={updateProfile}
+      />
+    ),
+    profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
+    profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
+    profile?.studentStats?.length && (
+      <StudentStatsCard username={session.githubId} data={profile.studentStats} isProfileOwner={isProfileOwner} />
+    ),
+    profile?.mentorStats?.length && githubId && (
+      <MentorStatsCard isAdmin={isAdmin} githubId={githubId} data={profile.mentorStats} />
+    ),
+    profile?.studentStats?.length && hadStudentCoreJSInterview(profile.studentStats) && (
+      <CoreJsIviewsCard data={getStudentCoreJSInterviews(profile.studentStats)} />
+    ),
+    profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
+  ].filter(Boolean) as JSX.Element[];
 
-    return (
-      <>
-        <LoadingScreen show={this.state.isLoading}>
-          <Header />
-          <Spin spinning={this.state.isSaving} delay={200}>
-            {this.state.profile ? (
-              <div style={{ padding: 10 }}>
-                <Masonry
-                  breakpointCols={{
-                    default: 4,
-                    1100: 3,
-                    700: 2,
-                    500: 1,
-                  }}
-                  className="masonry"
-                  columnClassName="masonry-column"
-                >
-                  {cards.map((card, idx) => (
-                    <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
-                      {card}
-                    </div>
-                  ))}
-                </Masonry>
-                <style jsx global>{`
-                  .masonry {
-                    display: flex;
-                    margin-left: -16px;
-                    width: auto;
-                  }
-                `}</style>
-                <style jsx global>{`
-                  .masonry-column {
-                    padding-left: 16px;
-                    background-clip: padding-box;
-                  }
-                `}</style>
-              </div>
-            ) : (
-              <>
-                <Result status={'403' as any} title="No access or user does not exist" />
-              </>
-            )}
-          </Spin>
-        </LoadingScreen>
-      </>
-    );
-  }
-}
+  const preloadData = useAsync(async () => {
+    await fetchData();
+    await authorizeDiscord();
+  });
 
-const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
-  return githubId === requestedGithubId;
+  return (
+    <LoadingScreen show={preloadData.loading}>
+      <Header />
+      <Spin spinning={isSaving} delay={200}>
+        {profile ? (
+          <div style={{ padding: 10 }}>
+            <Masonry
+              breakpointCols={{
+                default: 4,
+                1100: 3,
+                700: 2,
+                500: 1,
+              }}
+              className="masonry"
+              columnClassName="masonry-column"
+            >
+              {cards.map((card, idx) => (
+                <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
+                  {card}
+                </div>
+              ))}
+            </Masonry>
+            <style jsx global>{`
+              .masonry {
+                display: flex;
+                margin-left: -16px;
+                width: auto;
+              }
+            `}</style>
+            <style jsx global>{`
+              .masonry-column {
+                padding-left: 16px;
+                background-clip: padding-box;
+              }
+            `}</style>
+          </div>
+        ) : (
+          <Result status={'403'} title="No access or user does not exist" />
+        )}
+      </Spin>
+    </LoadingScreen>
+  );
 };
 
-function Page(props: Props) {
+function Page() {
   return (
     <SessionProvider>
       <ActiveCourseProvider>
-        <ProfilePage {...props} />
+        <ProfilePage />
       </ActiveCourseProvider>
     </SessionProvider>
   );
 }
 
-export default withGoogleMaps(withRouter(withSession(Page)));
+export default withGoogleMaps(Page);

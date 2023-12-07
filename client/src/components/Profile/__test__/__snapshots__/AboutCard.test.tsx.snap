@@ -3,7 +3,7 @@
 exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,7 +52,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
       class="ant-card-body"
     >
       <div
-        class="css-dev-only-do-not-override-nnuwmp ant-empty ant-empty-normal"
+        class="css-dev-only-do-not-override-nllxry ant-empty ant-empty-normal"
       >
         <div
           class="ant-empty-image"
@@ -104,7 +104,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 exports[`AboutCard Should render correctly if "data" is present 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nnuwmp"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
   >
     <div
       class="ant-card-head"
@@ -116,7 +116,7 @@ exports[`AboutCard Should render correctly if "data" is present 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nnuwmp"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -154,7 +154,7 @@ exports[`AboutCard Should render correctly if "data" is present 1`] = `
     >
       <div
         aria-label="Top contributor of Rolling Scopes"
-        class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-nnuwmp"
+        class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-nllxry"
       >
         Top contributor of Rolling Scopes
         <span

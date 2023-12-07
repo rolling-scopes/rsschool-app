@@ -1,4 +1,4 @@
-import { Row, Switch, Typography } from 'antd';
+import { Row, Space, Switch, Typography } from 'antd';
 import { CourseNoAccess } from 'modules/Course/components/CourseNoAccess';
 import { CoursePageLayout } from 'components/CoursePageLayout';
 import { ExportCsvButton } from 'modules/Score/components/ExportCsvButton';
@@ -34,11 +34,11 @@ export function ScorePage() {
     <CourseNoAccess />
   ) : (
     <CoursePageLayout showCourseName course={course} title="Score" githubId={session.githubId} loading={loading}>
-      <Row style={{ margin: '8px 0' }} justify="space-between">
-        <div>
-          <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+      <Row style={{ margin: '8px 0', gap: 8 }} justify="space-between">
+        <Space>
+          <Text>Active Students Only</Text>
           <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
-        </div>
+        </Space>
         <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
         <ExportCsvButton enabled={csvEnabled} onClick={handleExportCsv} />
       </Row>

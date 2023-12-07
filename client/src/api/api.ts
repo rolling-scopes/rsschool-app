@@ -490,91 +490,6 @@ export interface CommentMentorRegistryDto {
 /**
  * 
  * @export
- * @interface ConfigurableProfilePermissions
- */
-export interface ConfigurableProfilePermissions {
-    /**
-     * 
-     * @type {PublicVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isProfileVisible'?: PublicVisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isAboutVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEducationVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {PartialStudentVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEnglishVisible'?: PartialStudentVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isEmailVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isTelegramVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isSkypeVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isPhoneVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {ContactsVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isContactsNotesVisible'?: ContactsVisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isLinkedInVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isPublicFeedbackVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {VisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isMentorStatsVisible'?: VisibilitySettings;
-    /**
-     * 
-     * @type {PartialStudentVisibilitySettings}
-     * @memberof ConfigurableProfilePermissions
-     */
-    'isStudentStatsVisible'?: PartialStudentVisibilitySettings;
-}
-/**
- * 
- * @export
  * @interface ConsentDto
  */
 export interface ConsentDto {
@@ -645,25 +560,6 @@ export interface ContactsDto {
      * @memberof ContactsDto
      */
     'discord'?: string | null;
-}
-/**
- * 
- * @export
- * @interface ContactsVisibilitySettings
- */
-export interface ContactsVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ContactsVisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ContactsVisibilitySettings
-     */
-    'student': boolean;
 }
 /**
  * 
@@ -1512,6 +1408,109 @@ export interface CreateAlertDto {
      * @memberof CreateAlertDto
      */
     'courseId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface CreateCourseDto
+ */
+export interface CreateCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'fullName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'registrationEndDate'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'completed'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'planned'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'inviteOnly'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCourseDto
+     */
+    'disciplineId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCourseDto
+     */
+    'discordServerId'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'usePrivateRepositories'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'certificateIssuer'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateCourseDto
+     */
+    'personalMentoring'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'logo'?: string;
 }
 /**
  * 
@@ -2904,49 +2903,6 @@ export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEn
 /**
  * 
  * @export
- * @interface GeneralInfo
- */
-export interface GeneralInfo {
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'githubId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'aboutMyself'?: string | null;
-    /**
-     * 
-     * @type {Location}
-     * @memberof GeneralInfo
-     */
-    'location': Location;
-    /**
-     * 
-     * @type {Array<Education>}
-     * @memberof GeneralInfo
-     */
-    'educationHistory'?: Array<Education> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GeneralInfo
-     */
-    'englishLevel'?: string | null;
-}
-/**
- * 
- * @export
  * @interface GiveConsentDto
  */
 export interface GiveConsentDto {
@@ -3270,25 +3226,6 @@ export interface LeaveCourseRequestDto {
 /**
  * 
  * @export
- * @interface Location
- */
-export interface Location {
-    /**
-     * 
-     * @type {string}
-     * @memberof Location
-     */
-    'cityName'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Location
-     */
-    'countryName'?: string | null;
-}
-/**
- * 
- * @export
  * @interface MentorDashboardDto
  */
 export interface MentorDashboardDto {
@@ -3604,10 +3541,10 @@ export interface MentorRegistryDto {
     'englishMentoring': boolean;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof MentorRegistryDto
      */
-    'primaryEmail': string;
+    'primaryEmail': object;
     /**
      * 
      * @type {Array<string>}
@@ -3935,25 +3872,6 @@ export interface PaginationMetaDto {
 /**
  * 
  * @export
- * @interface PartialStudentVisibilitySettings
- */
-export interface PartialStudentVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PartialStudentVisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PartialStudentVisibilitySettings
-     */
-    'student': boolean;
-}
-/**
- * 
- * @export
  * @interface PersonDto
  */
 export interface PersonDto {
@@ -4180,49 +4098,6 @@ export interface ProfileDto {
 /**
  * 
  * @export
- * @interface ProfileInfoDto
- */
-export interface ProfileInfoDto {
-    /**
-     * 
-     * @type {ConfigurableProfilePermissions}
-     * @memberof ProfileInfoDto
-     */
-    'permissionsSettings': ConfigurableProfilePermissions;
-    /**
-     * 
-     * @type {GeneralInfo}
-     * @memberof ProfileInfoDto
-     */
-    'generalInfo': GeneralInfo;
-    /**
-     * 
-     * @type {ContactsDto}
-     * @memberof ProfileInfoDto
-     */
-    'contacts': ContactsDto;
-    /**
-     * 
-     * @type {Discord}
-     * @memberof ProfileInfoDto
-     */
-    'discord'?: Discord | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ProfileInfoDto
-     */
-    'isPermissionsSettingsChanged': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ProfileInfoDto
-     */
-    'isProfileSettingsChanged': boolean;
-}
-/**
- * 
- * @export
  * @interface PromptDto
  */
 export interface PromptDto {
@@ -4250,19 +4125,6 @@ export interface PromptDto {
      * @memberof PromptDto
      */
     'temperature': number;
-}
-/**
- * 
- * @export
- * @interface PublicVisibilitySettings
- */
-export interface PublicVisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PublicVisibilitySettings
-     */
-    'all': boolean;
 }
 /**
  * 
@@ -6851,31 +6713,6 @@ export interface VisibilityDto {
      */
     'isHidden': boolean;
 }
-/**
- * 
- * @export
- * @interface VisibilitySettings
- */
-export interface VisibilitySettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'all': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'mentor': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilitySettings
-     */
-    'student': boolean;
-}
 
 /**
  * ActivityApi - axios parameter creator
@@ -8625,6 +8462,45 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyCourse: async (courseId: number, createCourseDto: CreateCourseDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('copyCourse', 'courseId', courseId)
+            // verify required parameter 'createCourseDto' is not null or undefined
+            assertParamExists('copyCourse', 'createCourseDto', createCourseDto)
+            const localVarPath = `/courses/{courseId}/copy`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createCourseDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8806,6 +8682,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copyCourse(courseId, createCourseDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8867,6 +8754,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} courseId 
+         * @param {CreateCourseDto} createCourseDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: any): AxiosPromise<CourseDto> {
+            return localVarFp.copyCourse(courseId, createCourseDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8920,6 +8817,18 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class CoursesApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CreateCourseDto} createCourseDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public copyCourse(courseId: number, createCourseDto: CreateCourseDto, options?: AxiosRequestConfig) {
+        return CoursesApiFp(this.configuration).copyCourse(courseId, createCourseDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 
@@ -13785,14 +13694,15 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProfileInfo: async (profileInfoDto: ProfileInfoDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'profileInfoDto' is not null or undefined
-            assertParamExists('updateProfileInfo', 'profileInfoDto', profileInfoDto)
-            const localVarPath = `/profile/info`;
+        obfuscateProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('obfuscateProfile', 'username', username)
+            const localVarPath = `/profile/{username}`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13800,18 +13710,15 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(profileInfoDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13940,12 +13847,12 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfileInfo(profileInfoDto, options);
+        async obfuscateProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.obfuscateProfile(username, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14016,12 +13923,12 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {ProfileInfoDto} profileInfoDto 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: any): AxiosPromise<void> {
-            return localVarFp.updateProfileInfo(profileInfoDto, options).then((request) => request(axios, basePath));
+        obfuscateProfile(username: string, options?: any): AxiosPromise<void> {
+            return localVarFp.obfuscateProfile(username, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14097,13 +14004,13 @@ export class ProfileApi extends BaseAPI {
 
     /**
      * 
-     * @param {ProfileInfoDto} profileInfoDto 
+     * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
-    public updateProfileInfo(profileInfoDto: ProfileInfoDto, options?: AxiosRequestConfig) {
-        return ProfileApiFp(this.configuration).updateProfileInfo(profileInfoDto, options).then((request) => request(this.axios, this.basePath));
+    public obfuscateProfile(username: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).obfuscateProfile(username, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15282,6 +15189,43 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentScore: async (courseId: number, githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getStudentScore', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('getStudentScore', 'githubId', githubId)
+            const localVarPath = `/course/{courseId}/students/score/{githubId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15309,6 +15253,17 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
          */
         async getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStudentScore(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreStudentDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentScore(courseId, githubId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -15339,6 +15294,16 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
         getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: any): AxiosPromise<ScoreDto> {
             return localVarFp.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentScore(courseId: number, githubId: string, options?: any): AxiosPromise<ScoreStudentDto> {
+            return localVarFp.getStudentScore(courseId, githubId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -15367,6 +15332,18 @@ export class StudentsScoreApi extends BaseAPI {
      */
     public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
         return StudentsScoreApiFp(this.configuration).getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsScoreApi
+     */
+    public getStudentScore(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return StudentsScoreApiFp(this.configuration).getStudentScore(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -16820,19 +16797,19 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamDistributionDeleteRegistry: async (id: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('teamDistributionDeleteRegistry', 'id', id)
+        teamDistributionDeleteRegistry: async (courseId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('teamDistributionDeleteRegistry', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('teamDistributionDeleteRegistry', 'id', id)
             const localVarPath = `/courses/{courseId}/team-distribution/{id}/registry`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -17027,13 +17004,13 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamDistributionDeleteRegistry(id: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TeamDistributionDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.teamDistributionDeleteRegistry(id, courseId, options);
+        async teamDistributionDeleteRegistry(courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamDistributionDeleteRegistry(courseId, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -17144,13 +17121,13 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {number} id 
          * @param {number} courseId 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamDistributionDeleteRegistry(id: number, courseId: number, options?: any): AxiosPromise<TeamDistributionDto> {
-            return localVarFp.teamDistributionDeleteRegistry(id, courseId, options).then((request) => request(axios, basePath));
+        teamDistributionDeleteRegistry(courseId: number, id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.teamDistributionDeleteRegistry(courseId, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -17272,14 +17249,14 @@ export class TeamDistributionApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
      * @param {number} courseId 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamDistributionApi
      */
-    public teamDistributionDeleteRegistry(id: number, courseId: number, options?: AxiosRequestConfig) {
-        return TeamDistributionApiFp(this.configuration).teamDistributionDeleteRegistry(id, courseId, options).then((request) => request(this.axios, this.basePath));
+    public teamDistributionDeleteRegistry(courseId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).teamDistributionDeleteRegistry(courseId, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
