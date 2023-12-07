@@ -2,12 +2,15 @@ import { Button, Form, FormInstance, Select } from 'antd';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { StudentSearch } from './StudentSearch';
 
+
 export type Options = {
   maxStudentsLimit: number;
   preferedStudentsLocation: PreferredStudentsLocation;
   students?: { value: number }[];
   preselectedStudents?: { id: number; githubId: string; name: string }[];
 };
+
+const STUDENTS_NUMBERS = [0, 1, 2, 3, 4];
 
 export function MentorOptions({
   course,
@@ -19,9 +22,10 @@ export function MentorOptions({
   form: FormInstance;
   mentorData: Options | null;
   handleSubmit?: (values: Options) => Promise<void>;
-  course: { id: number; name: string };
+  course: { id: number; name: string; minStudentsPerMentor?: number };
   showSubmitButton?: boolean;
 }) {
+
   return (
     <>
       <Form
@@ -37,11 +41,14 @@ export function MentorOptions({
           rules={[{ required: true, message: 'Please select students count' }]}
         >
           <Select style={{ width: 200 }} placeholder="Students count...">
-            <Select.Option value={2}>2</Select.Option>
-            <Select.Option value={3}>3</Select.Option>
-            <Select.Option value={4}>4</Select.Option>
-            <Select.Option value={5}>5</Select.Option>
-            <Select.Option value={6}>6</Select.Option>
+            {STUDENTS_NUMBERS.map(num => {
+              const studentsNumber = num + Number(course.minStudentsPerMentor);
+              return (
+                <Select.Option key={studentsNumber} value={studentsNumber}>
+                  {studentsNumber}
+                </Select.Option>
+              );
+            })}
           </Select>
         </Form.Item>
 

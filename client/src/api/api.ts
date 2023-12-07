@@ -841,6 +841,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'discipline': IdNameDto | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseDto
+     */
+    'minStudentsPerMentor'?: number;
 }
 /**
  * 
