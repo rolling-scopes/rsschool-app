@@ -10,7 +10,7 @@ export const getQueryParams = (
   for (const [key, value] of Object.entries(queryParams)) {
     if (!isNil(value)) {
       if (Array.isArray(value) && value[0] !== '') {
-        params = { ...params, [key]: value.map(elem => elem.trim()) };
+        params = { ...params, [key]: value[0].trim() };
       } else if (typeof value === 'string' && value !== '') {
         params = { ...params, [key]: value.trim() };
       }
