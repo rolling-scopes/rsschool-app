@@ -6,8 +6,9 @@ import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
 import { Location } from 'common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
-import { ProfileApi, UpdateProfileInfoDto } from 'api';
+import { UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';
+import ObfuscationModal from './ObfuscateConfirmationModal';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -18,8 +19,6 @@ type Props = {
   updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;
 };
 
-const profileApi = new ProfileApi();
-
 const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props) => {
   const { githubId, name, location, publicCvUrl } = data;
   const [isProfileSettingsVisible, setIsProfileSettingsVisible] = useState(false);
@@ -28,6 +27,7 @@ const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props)
   const [displayLocation, setDisplayLocation] = useState(location);
   const [nameInputValue, setNameInputValue] = useState(displayName);
   const [locationSelectValue, setLocationSelectValue] = useState(displayLocation);
+  const [isObfuscateModalVisible, setIsObfuscateModalVisible] = useState(false);
 
   const showProfileSettings = () => {
     setIsProfileSettingsVisible(true);
@@ -83,15 +83,13 @@ const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props)
     setIsSaveDisabled(!readyToUpdate);
   }, [nameInputValue, locationSelectValue, displayName, displayLocation]);
 
-  const obfuscateProfile = async () => {
-    if (githubId) {
-      await profileApi.obfuscateProfile(githubId);
-    }
-    window.location.reload();
-  };
-
   return (
     <>
+      <ObfuscationModal
+        open={isObfuscateModalVisible}
+        githubId={githubId}
+        setIsModalVisible={setIsObfuscateModalVisible}
+      />
       <Card style={{ position: 'relative' }}>
         {isEditingModeEnabled ? (
           <EditOutlined
@@ -131,7 +129,7 @@ const MainCard = ({ data, isAdmin, isEditingModeEnabled, updateProfile }: Props)
         ) : null}
         {isAdmin ? (
           <Paragraph style={{ textAlign: 'center', marginTop: 20 }}>
-            <Button danger onClick={obfuscateProfile}>
+            <Button danger onClick={() => setIsObfuscateModalVisible(true)}>
               Obfuscate
             </Button>
           </Paragraph>
