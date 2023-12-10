@@ -53,7 +53,7 @@ const ObfuscationModal = ({ githubId, setIsModalVisible, open }: Props) => {
             setInputValue(e.target.value);
             setIsInputValid(true);
           }}
-          status={!isInputValid ? 'error' : ''}
+          status={isInputValid ? '' : 'error'}
         />
         {!isInputValid && <Text type="danger">Nickname does not match. Please try again.</Text>}
       </Space>
