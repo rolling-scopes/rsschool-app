@@ -2,7 +2,6 @@ import { Button, Form, FormInstance, Select } from 'antd';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { StudentSearch } from './StudentSearch';
 
-
 export type Options = {
   maxStudentsLimit: number;
   preferedStudentsLocation: PreferredStudentsLocation;
@@ -25,7 +24,6 @@ export function MentorOptions({
   course: { id: number; name: string; minStudentsPerMentor?: number };
   showSubmitButton?: boolean;
 }) {
-
   return (
     <>
       <Form

@@ -111,5 +111,5 @@ export const migrations = [
   InterviewScore1686657350908,
   CourseUsersActivist1693930286280,
   AddMinStudentPerMentorColumnToCourse1699808604000,
-  Obfuscation1700391857109
+  Obfuscation1700391857109,
 ];
