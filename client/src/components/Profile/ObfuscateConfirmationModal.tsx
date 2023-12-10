@@ -17,10 +17,8 @@ const ObfuscationModal = ({ githubId, setIsModalVisible, open }: Props) => {
   const [isInputValid, setIsInputValid] = useState(true);
 
   const handleOk = async () => {
-    if (inputValue === githubId) {
-      if (githubId) {
-        await profileApi.obfuscateProfile(githubId);
-      }
+    if (githubId && inputValue === githubId) {
+      await profileApi.obfuscateProfile(githubId);
       window.location.reload();
     } else {
       setIsInputValid(false);
