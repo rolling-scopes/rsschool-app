@@ -1,6 +1,9 @@
 export function optionalQueryString(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
-    return value.join(',').trim();
+    const trimmedElements = value.map(elem => elem.trim()).join(',');
+    if (trimmedElements !== '') {
+      return trimmedElements;
+    }
   } else if (typeof value === 'string') {
     return String(value).trim();
   }
