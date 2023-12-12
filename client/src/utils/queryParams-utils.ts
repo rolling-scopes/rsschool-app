@@ -9,8 +9,8 @@ export const getQueryParams = (
   let params = { ...initialQueryParams };
   for (const [key, value] of Object.entries(queryParams)) {
     if (!isNil(value)) {
-      if (Array.isArray(value) && value[0] !== '') {
-        params = { ...params, [key]: value[0].trim() };
+      if (Array.isArray(value) && value.join(',') !== '') {
+        params = { ...params, [key]: value.join(',').trim() };
       } else if (typeof value === 'string' && value !== '') {
         params = { ...params, [key]: value.trim() };
       }
