@@ -108,6 +108,8 @@ export function ScoreTable(props: Props) {
       setCourseTasks(sortedTasks);
       setColumns(
         getColumns({
+          githubId,
+          name,
           cityName,
           mentor,
           handleSettings: () => setIsVisibleSettings(true),
