@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CoursesService } from 'src/courses/courses.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { paginate } from 'src/core/paginate';
 
 @Injectable()
 export class RegistryService {
@@ -50,7 +51,7 @@ export class RegistryService {
       .leftJoin('user.students', 'student')
       .leftJoin('student.certificate', 'certificate')
       .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
-      .orderBy('"mentorRegistry"."updatedDate"', 'DESC');
+      .orderBy('mentorRegistry.updatedDate', 'DESC');
   }
 
   public async findAllMentorRegistries() {
@@ -84,5 +85,24 @@ export class RegistryService {
       throw new BadRequestException('User not found');
     }
     await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
+  }
+
+  public async filterMentorRegistriesByGithubId({
+    githubId,
+    page,
+    limit,
+  }: {
+    githubId: string;
+    page: number;
+    limit: number;
+  }) {
+    const response = await paginate(
+      this.getPreparedMentorRegistriesQuery().where(`"user"."githubId" ILIKE '%${githubId}%'`),
+      {
+        page,
+        limit,
+      },
+    );
+    return response.items;
   }
 }

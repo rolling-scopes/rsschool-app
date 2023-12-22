@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseIntPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -79,5 +79,23 @@ export class RegistryController {
       );
       return data.map(el => new MentorRegistryDto(el));
     }
+  }
+
+  @Get('mentors/filter')
+  @ApiOperation({ operationId: 'filterMentorRegistries' })
+  @RequiredRoles([Role.Admin])
+  @ApiOkResponse({ type: [MentorRegistryDto] })
+  public async filterMentorRegistries(
+    @Req() req: CurrentRequest,
+    @Query('pageSize', ParseIntPipe) limit: number = 10,
+    @Query('current', ParseIntPipe) page: number = 1,
+    @Query('githubId') githubId: string,
+  ) {
+    const data = await this.registryService.filterMentorRegistriesByGithubId({
+      githubId,
+      page,
+      limit,
+    });
+    return data.map(el => new MentorRegistryDto(el));
   }
 }
