@@ -36,7 +36,7 @@ export interface CombinedFilter {
   preselectedCourses: number[];
   preferredCourses: number[];
   technicalMentoring: string[];
-
+  githubId: string[];
   filterTags?: string[];
 }
 
@@ -53,6 +53,7 @@ export const MentorRegistryTableContainer = ({
     preferredCourses: [],
     preselectedCourses: [],
     technicalMentoring: [],
+    githubId: [],
   });
 
   const renderPreselectedCourses = (courses: Course[]) => {
@@ -109,6 +110,10 @@ export const MentorRegistryTableContainer = ({
           : true) &&
         (combinedFilter.preferredCourses.length
           ? mentor.preferedCourses.some(value => combinedFilter.preferredCourses.includes(value))
+          : true) &&
+        (combinedFilter.githubId?.length
+          ? mentor.githubId.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase()) ||
+            mentor.name.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase())
           : true),
     );
   }, [combinedFilter, mentors]);
@@ -118,6 +123,7 @@ export const MentorRegistryTableContainer = ({
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
       technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
+      githubId: filters.githubId as string[],
     };
 
     const filterTag: string[] = [
@@ -171,7 +177,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
-    const { preferredCourses, preselectedCourses, technicalMentoring } = combinedFilter;
+    const { preferredCourses, preselectedCourses, technicalMentoring, githubId } = combinedFilter;
     const allColumns = [
       {
         key: MentorsRegistryColumnKey.Github,
@@ -189,6 +195,7 @@ export const MentorRegistryTableContainer = ({
         ...getColumnSearchProps(['githubId', 'name']),
         width: 200,
         fixed: 'left' as const,
+        filteredValue: githubId || null,
       },
       {
         key: MentorsRegistryColumnKey.Info,
@@ -196,6 +203,7 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Info,
         render: renderInfo,
         width: 100,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.PreferredCourses,
@@ -218,6 +226,7 @@ export const MentorRegistryTableContainer = ({
         render: (date: string) => formatDate(date),
         sorter: dateSorter('receivedDate'),
         width: 120,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Preselected,
@@ -237,6 +246,7 @@ export const MentorRegistryTableContainer = ({
         render: (date: string) => formatDate(date),
         sorter: dateSorter('sendDate'),
         width: 120,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Tech,
@@ -258,6 +268,7 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('cityName'),
         width: 150,
         ...getColumnSearchProps('cityName'),
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Languages,
@@ -265,18 +276,21 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Languages,
         render: tagsRenderer,
         width: 130,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.StudentsLimit,
         title: MentorsRegistryColumnName.StudentsLimit,
         dataIndex: MentorsRegistryColumnKey.StudentsLimit,
         width: 130,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.PreferredLocation,
         title: MentorsRegistryColumnName.PreferredLocation,
         dataIndex: MentorsRegistryColumnKey.PreferredLocation,
         sorter: stringSorter('githubId'),
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Actions,
@@ -292,6 +306,7 @@ export const MentorRegistryTableContainer = ({
         ),
         width: 140,
         fixed: 'right' as const,
+        filteredValue: null,
       },
     ];
 
@@ -337,7 +352,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [] });
+    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [] });
     setTagFilters([]);
   };
 
