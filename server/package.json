@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.9.0",
-    "@koa/cors": "3.0.0",
+    "@koa/cors": "5.0.0",
     "@koa/router": "8.0.8",
     "@vendia/serverless-express": "4.5.3",
     "axios": "1.6.2",
