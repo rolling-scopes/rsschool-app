@@ -50,4 +50,23 @@ export class MentorRegistryService {
     const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
     return response.data.data;
   }
+
+  public async filterMentorRegistries({
+    currentPage,
+    pageSize,
+    githubId,
+    preferedCourses,
+    preselectedCourses,
+    technicalMentoring,
+  }) {
+    const resp = await this.registryApi.filterMentorRegistries(
+      pageSize,
+      currentPage,
+      githubId,
+      preferedCourses,
+      preselectedCourses,
+      technicalMentoring,
+    );
+    return resp.data;
+  }
 }

@@ -13,6 +13,7 @@ import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
+import { MentorRegistryService } from 'services/mentorRegistry';
 
 interface ChildrenProp {
   tagFilters: string[];
@@ -40,6 +41,7 @@ export interface CombinedFilter {
   filterTags?: string[];
 }
 
+const mentorRegistryService = new MentorRegistryService();
 export const MentorRegistryTableContainer = ({
   children,
   mentors,
@@ -55,6 +57,8 @@ export const MentorRegistryTableContainer = ({
     technicalMentoring: [],
     githubId: [],
   });
+
+  const[loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
 
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
@@ -118,7 +122,19 @@ export const MentorRegistryTableContainer = ({
     );
   }, [combinedFilter, mentors]);
 
-  const handleTableChange = (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => {
+  const handleTableChange = async (
+    _: any,
+    filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
+  ) => {
+    const loadedFromServer = await mentorRegistryService.filterMentorRegistries({
+      pageSize: 30,
+      currentPage: 1,
+      githubId: filters.githubId?.length ? (filters.githubId[0] as string) : undefined,
+      preferedCourses: filters.preferedCourses?.length ? filters.preferedCourses.map(Number) : undefined,
+      preselectedCourses: filters.preselectedCourses?.length ? filters.preselectedCourses.map(Number) : undefined,
+      technicalMentoring: filters.technicalMentoring?.length ? (filters.technicalMentoring as string[]) : undefined,
+    });
+    setLoaded(loadedFromServer)
     const combinedFilter: CombinedFilter = {
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
@@ -193,6 +209,7 @@ export const MentorRegistryTableContainer = ({
         },
         sorter: stringSorter('githubId'),
         ...getColumnSearchProps(['githubId', 'name']),
+        onFilter: undefined,
         width: 200,
         fixed: 'left' as const,
         filteredValue: githubId || null,
@@ -268,6 +285,7 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('cityName'),
         width: 150,
         ...getColumnSearchProps('cityName'),
+        onFilter: undefined,
         filteredValue: null,
       },
       {
@@ -356,9 +374,12 @@ export const MentorRegistryTableContainer = ({
     setTagFilters([]);
   };
 
+  console.log('combined filter');
+  console.log(combinedFilter);
+
   return children({
     tagFilters,
-    filteredData,
+    filteredData: loaded || filteredData,
     columns: getColumns(combinedFilter, courses),
     handleTagClose,
     handleClearAllButtonClick,
