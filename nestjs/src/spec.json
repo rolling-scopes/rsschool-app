@@ -1767,6 +1767,46 @@
         "tags": ["registry"]
       }
     },
+    "/registry/mentors/filter": {
+      "get": {
+        "operationId": "filterMentorRegistries",
+        "summary": "",
+        "parameters": [
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "currentPage", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "preferedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "preselectedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "technicalMentoring",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["registry"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
