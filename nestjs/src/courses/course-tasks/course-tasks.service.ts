@@ -134,16 +134,16 @@ export class CourseTasksService {
 
   public getTasksPendingDeadline(
     courseId: number,
-    { deadlineWithinHours = 24 }: { deadlineWithinHours?: number } = {},
+    { deadlineWithinHours = 24, safeBuffer = 1 }: { deadlineWithinHours?: number; safeBuffer?: number } = {},
   ) {
-    const now = dayjs().toISOString();
+    const now = dayjs();
     const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
 
     const where: FindOptionsWhere<CourseTask> = {
       courseId,
       disabled: false,
-      studentStartDate: LessThanOrEqual(now),
-      studentEndDate: Between(now, endDate),
+      studentStartDate: LessThanOrEqual(now.toISOString()),
+      studentEndDate: Between(now.add(safeBuffer, 'hours').toISOString(), endDate),
     };
 
     return this.courseTaskRepository.find({
