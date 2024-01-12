@@ -87,22 +87,63 @@ export class RegistryService {
     await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
   }
 
-  public async filterMentorRegistriesByGithubId({
+  public async filterMentorRegistries({
     githubId,
     page,
     limit,
+    preselectedCourses,
+    preferedCourses,
+    technicalMentoring,
   }: {
-    githubId: string;
+    githubId?: string;
     page: number;
     limit: number;
+    preselectedCourses?: number[];
+    preferedCourses?: number[];
+    technicalMentoring?: string[];
   }) {
-    const response = await paginate(
-      this.getPreparedMentorRegistriesQuery().where(`"user"."githubId" ILIKE '%${githubId}%'`),
-      {
-        page,
-        limit,
-      },
-    );
+    console.log('here');
+    const req = this.getPreparedMentorRegistriesQuery();
+    if (githubId) {
+      req.andWhere(`"user"."githubId" ILIKE '%${githubId}%'`);
+    }
+    if (preselectedCourses && preselectedCourses.length) {
+      req
+        // .andWhere(`:preselectedCourses && mentorRegistry.preselecredCourses`, { preselectedCourses })
+        .andWhere(
+          `EXISTS (
+          SELECT
+          FROM unnest(string_to_array(mentorRegistry.preselectedCourses, ',')) course
+          WHERE course = ANY(:preselectedCourses)
+        )`,
+          { preselectedCourses },
+        );
+    }
+    if (preferedCourses && preferedCourses.length) {
+      req.andWhere(
+        `EXISTS (
+        SELECT
+        FROM unnest(string_to_array(mentorRegistry.preferedCourses, ',')) course
+        WHERE course = ANY(:preferedCourses)
+      )`,
+        { preferedCourses },
+      );
+    }
+    if (technicalMentoring && technicalMentoring.length) {
+      req.andWhere(
+        `EXISTS (
+        SELECT
+        FROM unnest(string_to_array(mentorRegistry.technicalMentoring, ',')) course
+        WHERE course = ANY(:technicalMentoring)
+      )`,
+        { technicalMentoring },
+      );
+    }
+
+    const response = await paginate(req, {
+      page,
+      limit,
+    });
     return response.items;
   }
 }

@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseIntPipe } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseArrayPipe } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
@@ -85,16 +85,27 @@ export class RegistryController {
   @ApiOperation({ operationId: 'filterMentorRegistries' })
   @RequiredRoles([Role.Admin])
   @ApiOkResponse({ type: [MentorRegistryDto] })
+  @ApiQuery({ name: 'pageSize', required: true, type: 'number' })
+  @ApiQuery({ name: 'currentPage', required: true, type: 'number' })
+  @ApiQuery({ name: 'githubId', required: false, type: 'string' })
+  @ApiQuery({ name: 'preferedCourses', required: false })
+  @ApiQuery({ name: 'preselectedCourses', required: false })
+  @ApiQuery({ name: 'technicalMentoring', required: false })
   public async filterMentorRegistries(
-    @Req() req: CurrentRequest,
-    @Query('pageSize', ParseIntPipe) limit: number = 10,
-    @Query('current', ParseIntPipe) page: number = 1,
-    @Query('githubId') githubId: string,
+    @Query('pageSize') pageSize: number,
+    @Query('currentPage') currentPage: number,
+    @Query('githubId') githubId?: string,
+    @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true })) preferedCourses?: number[],
+    @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
+    @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
   ) {
-    const data = await this.registryService.filterMentorRegistriesByGithubId({
+    const data = await this.registryService.filterMentorRegistries({
+      page: currentPage,
+      limit: pageSize,
       githubId,
-      page,
-      limit,
+      preferedCourses,
+      preselectedCourses,
+      technicalMentoring,
     });
     return data.map(el => new MentorRegistryDto(el));
   }
