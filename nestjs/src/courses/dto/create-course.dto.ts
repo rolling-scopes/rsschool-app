@@ -76,6 +76,8 @@ export class CreateCourseDto {
   @ApiProperty({ required: false })
   logo?: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiProperty({ required: false })
-  minStudentsPerMentor: number;
+  minStudentsPerMentor?: number;
 }
