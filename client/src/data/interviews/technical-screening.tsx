@@ -305,18 +305,13 @@ const theoryQuestions = [
     topic: 'JavaScript Fundamentals',
   },
   {
-    id: 'Strings',
-    title: 'String methods',
+    id: 'strings',
+    title: 'String methods & String templates',
     topic: 'JavaScript Fundamentals',
   },
   {
-    id: 'stringTemplates',
-    title: 'String templates',
-    topic: 'JavaScript Fundamentals',
-  },
-  {
-    id: 'ternaryOperator',
-    title: 'Ternary operator',
+    id: 'operators',
+    title: 'Ternary, Nullish Coalescing, Optional Chaining, and Logical Operators – Syntax and Use Cases',
     topic: 'JavaScript Fundamentals',
   },
   {
