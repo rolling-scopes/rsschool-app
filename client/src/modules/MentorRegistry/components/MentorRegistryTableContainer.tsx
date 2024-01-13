@@ -58,7 +58,7 @@ export const MentorRegistryTableContainer = ({
     githubId: [],
   });
 
-  const[loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
+  const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
 
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
@@ -134,7 +134,7 @@ export const MentorRegistryTableContainer = ({
       preselectedCourses: filters.preselectedCourses?.length ? filters.preselectedCourses.map(Number) : undefined,
       technicalMentoring: filters.technicalMentoring?.length ? (filters.technicalMentoring as string[]) : undefined,
     });
-    setLoaded(loadedFromServer)
+    setLoaded(loadedFromServer);
     const combinedFilter: CombinedFilter = {
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
@@ -373,9 +373,6 @@ export const MentorRegistryTableContainer = ({
     setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [] });
     setTagFilters([]);
   };
-
-  console.log('combined filter');
-  console.log(combinedFilter);
 
   return children({
     tagFilters,

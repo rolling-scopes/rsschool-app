@@ -14428,13 +14428,13 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
          * @param {number} pageSize 
          * @param {number} currentPage 
          * @param {string} [githubId] 
-         * @param {Array<string>} [preferedCourses] 
-         * @param {Array<string>} [preselectedCourses] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
          * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        filterMentorRegistries: async (pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<string>, preselectedCourses?: Array<string>, technicalMentoring?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        filterMentorRegistries: async (pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'pageSize' is not null or undefined
             assertParamExists('filterMentorRegistries', 'pageSize', pageSize)
             // verify required parameter 'currentPage' is not null or undefined
@@ -14562,13 +14562,13 @@ export const RegistryApiFp = function(configuration?: Configuration) {
          * @param {number} pageSize 
          * @param {number} currentPage 
          * @param {string} [githubId] 
-         * @param {Array<string>} [preferedCourses] 
-         * @param {Array<string>} [preselectedCourses] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
          * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<string>, preselectedCourses?: Array<string>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorRegistryDto>>> {
+        async filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorRegistryDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.filterMentorRegistries(pageSize, currentPage, githubId, preferedCourses, preselectedCourses, technicalMentoring, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14625,13 +14625,13 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          * @param {number} pageSize 
          * @param {number} currentPage 
          * @param {string} [githubId] 
-         * @param {Array<string>} [preferedCourses] 
-         * @param {Array<string>} [preselectedCourses] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
          * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<string>, preselectedCourses?: Array<string>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<Array<MentorRegistryDto>> {
+        filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<Array<MentorRegistryDto>> {
             return localVarFp.filterMentorRegistries(pageSize, currentPage, githubId, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14692,14 +14692,14 @@ export class RegistryApi extends BaseAPI {
      * @param {number} pageSize 
      * @param {number} currentPage 
      * @param {string} [githubId] 
-     * @param {Array<string>} [preferedCourses] 
-     * @param {Array<string>} [preselectedCourses] 
+     * @param {Array<number>} [preferedCourses] 
+     * @param {Array<number>} [preselectedCourses] 
      * @param {Array<string>} [technicalMentoring] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistryApi
      */
-    public filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<string>, preselectedCourses?: Array<string>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
+    public filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).filterMentorRegistries(pageSize, currentPage, githubId, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(this.axios, this.basePath));
     }
 

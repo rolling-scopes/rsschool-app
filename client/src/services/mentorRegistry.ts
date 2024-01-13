@@ -17,6 +17,15 @@ export interface MentorRegistry {
   updatedDate: Date;
 }
 
+export interface FilterMentorRegistriesDto {
+  currentPage: number;
+  pageSize: number;
+  githubId?: string;
+  preferedCourses?: number[];
+  preselectedCourses?: number[];
+  technicalMentoring?: string[];
+}
+
 export class MentorRegistryService {
   private axios: AxiosInstance;
   private registryApi: RegistryApi;
@@ -58,7 +67,7 @@ export class MentorRegistryService {
     preferedCourses,
     preselectedCourses,
     technicalMentoring,
-  }) {
+  }: FilterMentorRegistriesDto) {
     const resp = await this.registryApi.filterMentorRegistries(
       pageSize,
       currentPage,

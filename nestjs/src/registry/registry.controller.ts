@@ -88,9 +88,9 @@ export class RegistryController {
   @ApiQuery({ name: 'pageSize', required: true, type: 'number' })
   @ApiQuery({ name: 'currentPage', required: true, type: 'number' })
   @ApiQuery({ name: 'githubId', required: false, type: 'string' })
-  @ApiQuery({ name: 'preferedCourses', required: false })
-  @ApiQuery({ name: 'preselectedCourses', required: false })
-  @ApiQuery({ name: 'technicalMentoring', required: false })
+  @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
+  @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
+  @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
   public async filterMentorRegistries(
     @Query('pageSize') pageSize: number,
     @Query('currentPage') currentPage: number,

@@ -1779,13 +1779,13 @@
             "name": "preferedCourses",
             "required": false,
             "in": "query",
-            "schema": { "type": "array", "items": { "type": "string" } }
+            "schema": { "type": "array", "items": { "type": "number" } }
           },
           {
             "name": "preselectedCourses",
             "required": false,
             "in": "query",
-            "schema": { "type": "array", "items": { "type": "string" } }
+            "schema": { "type": "array", "items": { "type": "number" } }
           },
           {
             "name": "technicalMentoring",
