@@ -682,6 +682,23 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/students/countries": {
+      "get": {
+        "operationId": "getCourseStudentCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/StudentsCountriesStatsDto" } }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -3041,6 +3058,20 @@
         "type": "object",
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
+      },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "country": { "type": "string" }, "studentsCount": { "type": "number" } },
+        "required": ["country", "studentsCount"]
+      },
+      "StudentsCountriesStatsDto": {
+        "type": "object",
+        "properties": {
+          "studentsActiveCount": { "type": "number" },
+          "studentsTotalCount": { "type": "number" },
+          "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } }
+        },
+        "required": ["studentsActiveCount", "studentsTotalCount", "countries"]
       },
       "CrossCheckCriteriaDataDto": {
         "type": "object",
