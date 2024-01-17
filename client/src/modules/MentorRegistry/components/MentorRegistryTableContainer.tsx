@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dateSorter } from 'components/Table';
@@ -14,6 +14,7 @@ import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
 import { MentorRegistryService } from 'services/mentorRegistry';
+import { useAsync } from 'react-use';
 
 interface ChildrenProp {
   tagFilters: string[];
@@ -126,15 +127,6 @@ export const MentorRegistryTableContainer = ({
     _: any,
     filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
   ) => {
-    const loadedFromServer = await mentorRegistryService.filterMentorRegistries({
-      pageSize: 30,
-      currentPage: 1,
-      githubId: filters.githubId?.length ? (filters.githubId[0] as string) : undefined,
-      preferedCourses: filters.preferedCourses?.length ? filters.preferedCourses.map(Number) : undefined,
-      preselectedCourses: filters.preselectedCourses?.length ? filters.preselectedCourses.map(Number) : undefined,
-      technicalMentoring: filters.technicalMentoring?.length ? (filters.technicalMentoring as string[]) : undefined,
-    });
-    setLoaded(loadedFromServer);
     const combinedFilter: CombinedFilter = {
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
@@ -373,6 +365,18 @@ export const MentorRegistryTableContainer = ({
     setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [] });
     setTagFilters([]);
   };
+
+  useAsync(async ()=> {
+    const loadedFromServer = await mentorRegistryService.filterMentorRegistries({
+      pageSize: 30,
+      currentPage: 1,
+      githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
+      preferedCourses: combinedFilter.preferredCourses?.length ? combinedFilter.preferredCourses.map(Number) : undefined,
+      preselectedCourses: combinedFilter.preselectedCourses?.length ? combinedFilter.preselectedCourses.map(Number) : undefined,
+      technicalMentoring: combinedFilter.technicalMentoring?.length ? (combinedFilter.technicalMentoring as string[]) : undefined,
+    });
+    setLoaded(loadedFromServer);
+  },[JSON.stringify(combinedFilter)])
 
   return children({
     tagFilters,
