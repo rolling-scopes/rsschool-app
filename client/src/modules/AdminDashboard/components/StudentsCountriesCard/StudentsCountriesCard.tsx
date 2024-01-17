@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from 'antd';
 import { StudentsCountriesStatsDto } from 'api';
 import dynamic from 'next/dynamic';
@@ -13,7 +12,9 @@ export const StudentsCountriesCard = ({ studentsCountriesStats }: Props) => {
   const { countries, studentsActiveCount } = studentsCountriesStats;
   return (
     <Card title="Students Countries Stats">
-      <StudentsCountriesChart data={countries} studentsActiveCount={studentsActiveCount} />
+      <div style={{ height: 400, width: '100%' }}>
+        <StudentsCountriesChart data={countries} studentsActiveCount={studentsActiveCount} />
+      </div>
     </Card>
   );
 };
