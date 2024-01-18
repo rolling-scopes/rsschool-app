@@ -8,11 +8,10 @@ import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
-import { EndorsementDto } from './dto/endorsement.dto';
+import { EndorsementDataDto, EndorsementDto } from './dto/endorsement.dto';
 
 @Controller('profile')
 @ApiTags('profile')
-@UseGuards(DefaultGuard)
 export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
@@ -23,6 +22,7 @@ export class ProfileController {
   @Get(':username/courses')
   @ApiOperation({ operationId: 'getUserCourses' })
   @ApiOkResponse({ type: [ProfileCourseDto] })
+  @UseGuards(DefaultGuard)
   public async getCourses(
     @Req() req: CurrentRequest,
     @Param('username') username: string,
@@ -42,6 +42,7 @@ export class ProfileController {
   @Post('/user')
   @ApiOperation({ operationId: 'updateUser' })
   @ApiBody({ type: UpdateUserDto })
+  @UseGuards(DefaultGuard)
   public async updateUser(@Req() req: CurrentRequest, @Body() dto: UpdateUserDto) {
     const { user } = req;
 
@@ -51,6 +52,7 @@ export class ProfileController {
   @Patch('/info')
   @ApiOperation({ operationId: 'updateProfileInfoFlat' })
   @ApiBody({ type: UpdateProfileInfoDto })
+  @UseGuards(DefaultGuard)
   public async updateProfileFlatInfo(@Req() req: CurrentRequest, @Body() dto: UpdateProfileInfoDto) {
     const { user } = req;
 
@@ -60,6 +62,7 @@ export class ProfileController {
   @Get(':username')
   @ApiOperation({ operationId: 'getProfile' })
   @ApiResponse({ type: ProfileDto })
+  @UseGuards(DefaultGuard)
   public async getProfileInfo(@Param('username') githubId: string) {
     const profile = await this.profileService.getProfile(githubId);
 
@@ -87,10 +90,17 @@ export class ProfileController {
     return new EndorsementDto(endorsement);
   }
 
+  @Get(':username/endorsement-data')
+  @ApiOperation({ operationId: 'getEndorsementData' })
+  @ApiResponse({ type: EndorsementDto })
+  public async getEndorsementData(@Param('username') githubId: string) {
+    const data = await this.endormentService.getEndorsmentData(githubId);
+    return new EndorsementDataDto(data);
+  }
+
   @Delete(':username')
   @ApiOperation({ operationId: 'obfuscateProfile' })
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([Role.Admin])
   public async obfuscateProfile(@Param('username') githubId: string) {
     await this.profileService.obfuscateProfile(githubId);
   }
