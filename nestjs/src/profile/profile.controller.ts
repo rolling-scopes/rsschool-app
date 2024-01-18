@@ -92,7 +92,7 @@ export class ProfileController {
 
   @Get(':username/endorsement-data')
   @ApiOperation({ operationId: 'getEndorsementData' })
-  @ApiResponse({ type: EndorsementDto })
+  @ApiResponse({ type: EndorsementDataDto })
   @UseGuards(DefaultGuard)
   public async getEndorsementData(@Param('username') githubId: string) {
     const data = await this.endormentService.getEndorsmentData(githubId);

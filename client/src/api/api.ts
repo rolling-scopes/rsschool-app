@@ -2570,6 +2570,37 @@ export interface Education {
 /**
  * 
  * @export
+ * @interface EndorsementDataDto
+ */
+export interface EndorsementDataDto {
+    /**
+     * 
+     * @type {EndorsementUserDto}
+     * @memberof EndorsementDataDto
+     */
+    'user': EndorsementUserDto;
+    /**
+     * User\'s courses
+     * @type {Array<CourseDto>}
+     * @memberof EndorsementDataDto
+     */
+    'courses': Array<CourseDto>;
+    /**
+     * Number of students
+     * @type {number}
+     * @memberof EndorsementDataDto
+     */
+    'studentsCount': number;
+    /**
+     * Number of interviews
+     * @type {number}
+     * @memberof EndorsementDataDto
+     */
+    'interviewsCount': number;
+}
+/**
+ * 
+ * @export
  * @interface EndorsementDto
  */
 export interface EndorsementDto {
@@ -2585,6 +2616,37 @@ export interface EndorsementDto {
      * @memberof EndorsementDto
      */
     'data': object | null;
+}
+/**
+ * 
+ * @export
+ * @interface EndorsementUserDto
+ */
+export interface EndorsementUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof EndorsementUserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EndorsementUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EndorsementUserDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EndorsementUserDto
+     */
+    'lastName': string;
 }
 /**
  * 
@@ -13574,6 +13636,39 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getEndorsementData: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('getEndorsementData', 'username', username)
+            const localVarPath = `/profile/{username}/endorsement-data`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPersonalProfile: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('getPersonalProfile', 'username', username)
@@ -13796,6 +13891,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getEndorsementData(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EndorsementDataDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEndorsementData(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getPersonalProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonalProfileDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPersonalProfile(username, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -13875,6 +13980,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getEndorsementData(username: string, options?: any): AxiosPromise<EndorsementDataDto> {
+            return localVarFp.getEndorsementData(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPersonalProfile(username: string, options?: any): AxiosPromise<PersonalProfileDto> {
             return localVarFp.getPersonalProfile(username, options).then((request) => request(axios, basePath));
         },
@@ -13942,6 +14056,17 @@ export class ProfileApi extends BaseAPI {
      */
     public getEndorsement(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getEndorsement(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getEndorsementData(username: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getEndorsementData(username, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
