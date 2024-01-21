@@ -1674,6 +1674,20 @@
         "tags": ["profile"]
       }
     },
+    "/profile/{username}/endorsement-data": {
+      "get": {
+        "operationId": "getEndorsementData",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDataDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
     "/disciplines": {
       "post": {
         "operationId": "createDiscipline",
@@ -3920,6 +3934,30 @@
         "type": "object",
         "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
+      },
+      "EndorsementUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        },
+        "required": ["id", "githubId", "firstName", "lastName"]
+      },
+      "EndorsementDataDto": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/EndorsementUserDto" },
+          "courses": {
+            "description": "User's courses",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CourseDto" }
+          },
+          "studentsCount": { "type": "number", "description": "Number of students" },
+          "interviewsCount": { "type": "number", "description": "Number of interviews" }
+        },
+        "required": ["user", "courses", "studentsCount", "interviewsCount"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {
