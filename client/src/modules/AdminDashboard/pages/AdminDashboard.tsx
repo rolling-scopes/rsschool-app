@@ -1,45 +1,72 @@
-import { message } from 'antd';
-import { CourseStatsApi, StudentsCountriesStatsDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { useActiveCourseContext } from 'modules/Course/contexts';
-import { useState } from 'react';
 import Masonry from 'react-masonry-css';
-import { useAsync } from 'react-use';
 import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
+import { useCourseStats } from '../hooks';
+import { StudentsStatsCard } from '../components/StudentsStatsCard';
+import css from 'styled-jsx/css';
 
-const courseStatsApi = new CourseStatsApi();
+const gapSize = 24;
 
 function AdminDashboard() {
   const { course } = useActiveCourseContext();
-  const [studentsCountries, setStudentsCountries] = useState<StudentsCountriesStatsDto | null>(null);
+  const { loading, value: stats } = useCourseStats(course.id);
 
-  const loadData = async () => {
-    try {
-      const { data } = await courseStatsApi.getCourseStudentCountries(course.id);
-      setStudentsCountries(data);
-    } catch (error) {
-      message.error('Something went wrong, please try reloading the page later');
-    }
+  const masonryBreakPoints = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
   };
 
-  const { loading } = useAsync(loadData, [course.id]);
+  const cards = [
+    stats?.studentsCountries && {
+      title: 'studentsCountriesCard',
+      component: (
+        <StudentsCountriesCard
+          studentsCountriesStats={stats.studentsCountries}
+          studentsActiveCount={stats.studentsStats.studentsActiveCount}
+        />
+      ),
+    },
+    stats?.studentsStats && {
+      title: 'studentsStatsCard',
+      component: <StudentsStatsCard studentsStats={stats.studentsStats} />,
+    },
+  ].filter(Boolean);
 
   return (
-    <PageLayout loading={loading} title="RS Teams" background="#F0F2F5" showCourseName>
+    <PageLayout loading={loading} title="Dashboard" background="#F0F2F5" showCourseName>
       <Masonry
-        breakpointCols={{
-          default: 4,
-          1100: 3,
-          700: 2,
-          500: 1,
-        }}
-        className="masonry"
-        columnClassName="masonry-column"
+        breakpointCols={masonryBreakPoints}
+        className={masonryClassName}
+        columnClassName={masonryColumnClassName}
       >
-        {studentsCountries && <StudentsCountriesCard studentsCountriesStats={studentsCountries} />}
+        {cards.map(({ title, component }) => (
+          <div style={{ marginBottom: gapSize }} key={title}>
+            {component}
+          </div>
+        ))}
       </Masonry>
+      {masonryStyles}
+      {masonryColumnStyles}
     </PageLayout>
   );
 }
+
+const { className: masonryClassName, styles: masonryStyles } = css.resolve`
+  div {
+    display: flex;
+    margin-left: -${gapSize}px;
+    width: auto;
+    min-height: 85vh;
+  }
+`;
+const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
+  div {
+    padding-left: ${gapSize}px;
+    background-clip: padding-box;
+  }
+`;
 
 export default AdminDashboard;

@@ -2,8 +2,7 @@ import { Student } from '@entities/student';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { StudentsCountriesStatsDto } from './dto';
-import { validateOrReject } from 'class-validator';
+import { CountryStatDto } from './dto';
 
 @Injectable()
 export class CourseStatsService {
@@ -33,20 +32,10 @@ export class CourseStatsService {
       .addSelect('COUNT(student.id)', 'studentsCount')
       .groupBy('user.countryName')
       .orderBy('COUNT(student.id)', 'DESC')
-      .getRawMany();
+      .getRawMany<CountryStatDto>();
 
-    const { studentsActiveCount, studentsTotalCount } = await this.getById(courseId);
-
-    const response = new StudentsCountriesStatsDto();
-    response.studentsActiveCount = studentsActiveCount;
-    response.studentsTotalCount = studentsTotalCount;
-    response.countries = countries.map(country => ({
-      country: country.country,
-      studentsCount: Number(country.studentsCount),
-    }));
-
-    await validateOrReject(response);
-
-    return response;
+    return {
+      countries: countries.map(country => ({ country: country.country, studentsCount: Number(country.studentsCount) })),
+    };
   }
 }

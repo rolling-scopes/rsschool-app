@@ -3066,12 +3066,8 @@
       },
       "StudentsCountriesStatsDto": {
         "type": "object",
-        "properties": {
-          "studentsActiveCount": { "type": "number" },
-          "studentsTotalCount": { "type": "number" },
-          "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } }
-        },
-        "required": ["studentsActiveCount", "studentsTotalCount", "countries"]
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
       },
       "CrossCheckCriteriaDataDto": {
         "type": "object",

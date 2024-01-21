@@ -46,7 +46,7 @@ export class CourseStatsController {
   @ApiOperation({ operationId: 'getCourseStudentCountries' })
   @ApiOkResponse({ type: StudentsCountriesStatsDto })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin], true)
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin, CourseRole.Dementor], true)
   public async getStudentCountries(
     @Param('courseId', ParseIntPipe) courseId: number,
   ): Promise<StudentsCountriesStatsDto> {

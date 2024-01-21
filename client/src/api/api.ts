@@ -4965,18 +4965,6 @@ export interface StudentId {
 export interface StudentsCountriesStatsDto {
     /**
      * 
-     * @type {number}
-     * @memberof StudentsCountriesStatsDto
-     */
-    'studentsActiveCount': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof StudentsCountriesStatsDto
-     */
-    'studentsTotalCount': number;
-    /**
-     * 
      * @type {Array<CountryStatDto>}
      * @memberof StudentsCountriesStatsDto
      */
