@@ -16,7 +16,7 @@ export function useCourseStats(courseId: number) {
         studentsStats: studentsStats.data,
       };
     } catch (error) {
-      message.error('Something went wrong, please try reloading the page later');
+      message.error('Something went wrong, please try to reload the page later');
     }
   }, [courseId]);
 }
