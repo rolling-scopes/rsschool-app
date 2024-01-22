@@ -4,11 +4,11 @@ import { CourseRole } from 'services/models';
 
 function Page() {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
-      <ActiveCourseProvider>
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
         <AdminDashboard />
-      </ActiveCourseProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }
 

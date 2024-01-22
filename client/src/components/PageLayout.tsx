@@ -78,6 +78,7 @@ export function AdminPageLayout({
   showCourseName?: boolean;
   loading: boolean;
   courses: Course[];
+  background?: string;
   styles?: React.CSSProperties;
 }>) {
   return (

@@ -1,4 +1,4 @@
-import { PageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from 'components/PageLayout';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import Masonry from 'react-masonry-css';
 import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
@@ -9,7 +9,7 @@ import css from 'styled-jsx/css';
 const gapSize = 24;
 
 function AdminDashboard() {
-  const { course } = useActiveCourseContext();
+  const { course, courses } = useActiveCourseContext();
   const { loading, value: stats } = useCourseStats(course.id);
 
   const masonryBreakPoints = {
@@ -36,7 +36,13 @@ function AdminDashboard() {
   ].filter(Boolean);
 
   return (
-    <PageLayout loading={loading} title="Dashboard" background="#F0F2F5" showCourseName>
+    <AdminPageLayout
+      courses={courses}
+      styles={{ background: '#e5e5e5' }}
+      loading={loading}
+      title="Dashboard"
+      showCourseName
+    >
       <Masonry
         breakpointCols={masonryBreakPoints}
         className={masonryClassName}
@@ -50,7 +56,7 @@ function AdminDashboard() {
       </Masonry>
       {masonryStyles}
       {masonryColumnStyles}
-    </PageLayout>
+    </AdminPageLayout>
   );
 }
 
