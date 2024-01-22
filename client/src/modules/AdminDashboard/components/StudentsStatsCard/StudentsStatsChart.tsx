@@ -1,4 +1,4 @@
-import { Liquid } from '@ant-design/plots';
+import { Liquid, LiquidConfig } from '@ant-design/plots';
 import { CourseStatsDto } from 'api';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 
 function StudentsStatsChart({ studentsStats }: Props) {
   const percent = studentsStats.studentsActiveCount / studentsStats.studentsTotalCount;
-  const config = {
+  const config: LiquidConfig = {
     percent: percent,
     outline: {
       border: 4,
