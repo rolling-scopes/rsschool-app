@@ -191,7 +191,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
-    const { preferredCourses, preselectedCourses, technicalMentoring, githubId } = combinedFilter;
+    const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
     const allColumns = [
       {
         key: MentorsRegistryColumnKey.Github,
@@ -284,7 +284,7 @@ export const MentorRegistryTableContainer = ({
         width: 150,
         ...getColumnSearchProps('cityName'),
         onFilter: undefined,
-        filteredValue: null,
+        filteredValue: cityName || null,
       },
       {
         key: MentorsRegistryColumnKey.Languages,
