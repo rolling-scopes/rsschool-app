@@ -58,7 +58,7 @@ export const MentorRegistryTableContainer = ({
     preselectedCourses: [],
     technicalMentoring: [],
     githubId: [],
-    cityName: []
+    cityName: [],
   });
 
   const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
@@ -107,7 +107,6 @@ export const MentorRegistryTableContainer = ({
   };
 
   const filteredData = useMemo(() => {
-    console.log('filter')
     return mentors.filter(
       mentor =>
         (combinedFilter.technicalMentoring.length
@@ -122,6 +121,9 @@ export const MentorRegistryTableContainer = ({
         (combinedFilter.githubId?.length
           ? mentor.githubId.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase()) ||
             mentor.name.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase())
+          : true) &&
+        (combinedFilter.cityName?.length
+          ? mentor.cityName?.toLowerCase().includes(combinedFilter.cityName[0].toLocaleLowerCase())
           : true),
     );
   }, [combinedFilter, mentors]);
@@ -136,7 +138,6 @@ export const MentorRegistryTableContainer = ({
       technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
       githubId: filters.githubId?.map(discipline => discipline.toString()) ?? [],
       cityName: filters.cityName?.map(discipline => discipline.toString()) ?? [],
-
     };
 
     const filterTag: string[] = [
@@ -359,7 +360,7 @@ export const MentorRegistryTableContainer = ({
           }));
         }
         break;
-        //todo add here
+      //todo add here
       default:
         message.error('An error occurred. Please try again later.');
         break;
@@ -368,22 +369,34 @@ export const MentorRegistryTableContainer = ({
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [], cityName: [] });
+    setCombinedFilter({
+      preferredCourses: [],
+      technicalMentoring: [],
+      preselectedCourses: [],
+      githubId: [],
+      cityName: [],
+    });
     setTagFilters([]);
   };
 
-  useAsync(async ()=> {
+  useAsync(async () => {
     const loadedFromServer = await mentorRegistryService.filterMentorRegistries({
       pageSize: 30,
       currentPage: 1,
       githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
       cityName: combinedFilter.cityName?.length ? (combinedFilter.cityName[0] as string) : undefined,
-      preferedCourses: combinedFilter.preferredCourses?.length ? combinedFilter.preferredCourses.map(Number) : undefined,
-      preselectedCourses: combinedFilter.preselectedCourses?.length ? combinedFilter.preselectedCourses.map(Number) : undefined,
-      technicalMentoring: combinedFilter.technicalMentoring?.length ? (combinedFilter.technicalMentoring as string[]) : undefined,
+      preferedCourses: combinedFilter.preferredCourses?.length
+        ? combinedFilter.preferredCourses.map(Number)
+        : undefined,
+      preselectedCourses: combinedFilter.preselectedCourses?.length
+        ? combinedFilter.preselectedCourses.map(Number)
+        : undefined,
+      technicalMentoring: combinedFilter.technicalMentoring?.length
+        ? (combinedFilter.technicalMentoring as string[])
+        : undefined,
     });
     setLoaded(loadedFromServer);
-  },[JSON.stringify(combinedFilter)])
+  }, [JSON.stringify(combinedFilter)]);
 
   return children({
     tagFilters,
