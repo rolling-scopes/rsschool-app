@@ -39,6 +39,7 @@ export interface CombinedFilter {
   preferredCourses: number[];
   technicalMentoring: string[];
   githubId: string[];
+  cityName: string[];
   filterTags?: string[];
 }
 
@@ -57,6 +58,7 @@ export const MentorRegistryTableContainer = ({
     preselectedCourses: [],
     technicalMentoring: [],
     githubId: [],
+    cityName: []
   });
 
   const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
@@ -105,6 +107,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const filteredData = useMemo(() => {
+    console.log('filter')
     return mentors.filter(
       mentor =>
         (combinedFilter.technicalMentoring.length
@@ -131,7 +134,9 @@ export const MentorRegistryTableContainer = ({
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
       technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
-      githubId: filters.githubId as string[],
+      githubId: filters.githubId?.map(discipline => discipline.toString()) ?? [],
+      cityName: filters.cityName?.map(discipline => discipline.toString()) ?? [],
+
     };
 
     const filterTag: string[] = [
@@ -354,6 +359,7 @@ export const MentorRegistryTableContainer = ({
           }));
         }
         break;
+        //todo add here
       default:
         message.error('An error occurred. Please try again later.');
         break;
@@ -362,7 +368,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [] });
+    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [], githubId: [], cityName: [] });
     setTagFilters([]);
   };
 
@@ -371,6 +377,7 @@ export const MentorRegistryTableContainer = ({
       pageSize: 30,
       currentPage: 1,
       githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
+      cityName: combinedFilter.cityName?.length ? (combinedFilter.cityName[0] as string) : undefined,
       preferedCourses: combinedFilter.preferredCourses?.length ? combinedFilter.preferredCourses.map(Number) : undefined,
       preselectedCourses: combinedFilter.preselectedCourses?.length ? combinedFilter.preselectedCourses.map(Number) : undefined,
       technicalMentoring: combinedFilter.technicalMentoring?.length ? (combinedFilter.technicalMentoring as string[]) : undefined,

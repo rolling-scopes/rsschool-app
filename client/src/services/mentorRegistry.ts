@@ -21,6 +21,7 @@ export interface FilterMentorRegistriesDto {
   currentPage: number;
   pageSize: number;
   githubId?: string;
+  cityName?: string;
   preferedCourses?: number[];
   preselectedCourses?: number[];
   technicalMentoring?: string[];
@@ -64,6 +65,7 @@ export class MentorRegistryService {
     currentPage,
     pageSize,
     githubId,
+    cityName,
     preferedCourses,
     preselectedCourses,
     technicalMentoring,
@@ -72,6 +74,7 @@ export class MentorRegistryService {
       pageSize,
       currentPage,
       githubId,
+      cityName,
       preferedCourses,
       preselectedCourses,
       technicalMentoring,

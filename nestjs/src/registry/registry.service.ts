@@ -91,11 +91,13 @@ export class RegistryService {
     githubId,
     page,
     limit,
+    cityName,
     preselectedCourses,
     preferedCourses,
     technicalMentoring,
   }: {
     githubId?: string;
+    cityName?: string;
     page: number;
     limit: number;
     preselectedCourses?: number[];
@@ -107,17 +109,18 @@ export class RegistryService {
     if (githubId) {
       req.andWhere(`"user"."githubId" ILIKE '%${githubId}%'`);
     }
+    if (cityName) {
+      req.andWhere(`"user"."cityName" ILIKE '%${cityName}%'`);
+    }
     if (preselectedCourses && preselectedCourses.length) {
-      req
-        // .andWhere(`:preselectedCourses && mentorRegistry.preselecredCourses`, { preselectedCourses })
-        .andWhere(
-          `EXISTS (
+      req.andWhere(
+        `EXISTS (
           SELECT
           FROM unnest(string_to_array(mentorRegistry.preselectedCourses, ',')) course
           WHERE course = ANY(:preselectedCourses)
         )`,
-          { preselectedCourses },
-        );
+        { preselectedCourses },
+      );
     }
     if (preferedCourses && preferedCourses.length) {
       req.andWhere(

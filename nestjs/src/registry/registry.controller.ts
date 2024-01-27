@@ -88,6 +88,7 @@ export class RegistryController {
   @ApiQuery({ name: 'pageSize', required: true, type: 'number' })
   @ApiQuery({ name: 'currentPage', required: true, type: 'number' })
   @ApiQuery({ name: 'githubId', required: false, type: 'string' })
+  @ApiQuery({ name: 'cityName', required: false, type: 'string' })
   @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
   @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
   @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
@@ -95,6 +96,7 @@ export class RegistryController {
     @Query('pageSize') pageSize: number,
     @Query('currentPage') currentPage: number,
     @Query('githubId') githubId?: string,
+    @Query('cityName') cityName?: string,
     @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true })) preferedCourses?: number[],
     @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
     @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
@@ -103,6 +105,7 @@ export class RegistryController {
       page: currentPage,
       limit: pageSize,
       githubId,
+      cityName,
       preferedCourses,
       preselectedCourses,
       technicalMentoring,
