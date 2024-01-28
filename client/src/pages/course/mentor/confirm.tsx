@@ -10,7 +10,6 @@ import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
-import { mapMentorData } from 'utils/mentorOptions-utils';
 
 const { Link } = Typography;
 
@@ -32,6 +31,14 @@ function Page() {
     }
     return new CourseService(course.id);
   }, [course]);
+
+  const mapMentorData = (mentor: MentorResponse, course: Course | null): MentorResponse => {
+    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor;
+    if (courseMinStudentsPerMentorValue && courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit)) {
+      mentor.maxStudentsLimit = courseMinStudentsPerMentorValue;
+    }
+    return mentor;
+  };
 
   useAsync(async () => {
     try {

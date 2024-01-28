@@ -8887,7 +8887,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCourse(createCourseDto: CreateCourseDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async createCourse(createCourseDto: CreateCourseDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createCourse(createCourseDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -8968,7 +8968,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCourse(createCourseDto: CreateCourseDto, options?: any): AxiosPromise<void> {
+        createCourse(createCourseDto: CreateCourseDto, options?: any): AxiosPromise<CourseDto> {
             return localVarFp.createCourse(createCourseDto, options).then((request) => request(axios, basePath));
         },
         /**

@@ -42,6 +42,7 @@ export class CoursesController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([CourseRole.Manager, Role.Admin])
   @ApiBody({ type: CreateCourseDto })
+  @ApiOkResponse({ type: CourseDto })
   public async createCourse(@Req() req: CurrentRequest) {
     const dto = req.body as CreateCourseDto;
     const created = await this.courseService.create(dto);

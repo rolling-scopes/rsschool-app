@@ -187,7 +187,12 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
         },
-        "responses": { "201": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          }
+        },
         "tags": ["courses"]
       }
     },

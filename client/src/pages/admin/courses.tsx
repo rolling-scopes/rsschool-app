@@ -98,7 +98,7 @@ function Page() {
             await courseService.createCourseCopy(record as CreateCourseDto, values.courseId);
             setIsCopy(false);
           } else {
-            await courseService.createCourse(record);
+            await courseService.createCourse(record as CreateCourseDto);
           }
         }
         await loadData();
