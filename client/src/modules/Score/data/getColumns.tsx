@@ -8,6 +8,8 @@ import Link from 'next/link';
 
 type Props = {
   taskColumns: Record<string, any>[];
+  githubId?: string | string[];
+  name?: string | string[];
   cityName?: string | string[];
   mentor?: string | string[];
   handleSettings: () => void;
@@ -19,7 +21,7 @@ const getSearchProps = (key: string) => ({
 });
 
 export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
-  const { cityName, mentor, handleSettings, taskColumns } = props;
+  const { githubId, name, cityName, mentor, handleSettings, taskColumns } = props;
 
   return [
     {
@@ -37,6 +39,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       key: 'githubId',
       dataIndex: 'githubId',
       sorter: 'githubId',
+      defaultFilteredValue: githubId ? (isArray(githubId) ? githubId : [githubId]) : undefined,
       width: 150,
       render: (value: string) => (
         <div>
@@ -54,6 +57,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       dataIndex: 'name',
       width: 150,
       sorter: 'name',
+      defaultFilteredValue: name ? (isArray(name) ? name : [name]) : undefined,
       render: (value, record) => (
         <Link prefetch={false} href={`/profile?githubId=${record.githubId}`}>
           {value}

@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import isNil from 'lodash/isNil';
 import { CrossCheckCriteriaDataDto } from 'api';
+import { getCriteriaStatusColor } from 'modules/CrossCheck';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -16,6 +17,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
   const maxScore = subtaskData.max;
   const comment = subtaskData.textComment;
   const criteriaScore = subtaskData.point;
+  const backgroundColor = getCriteriaStatusColor(criteriaScore ?? 0, maxScore);
 
   const updateSubtaskData = ({ textComment, point }: { textComment?: string; point?: number | null }) => {
     const updatedEntry = {
@@ -35,7 +37,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
   }, [criteriaScore, comment, maxScore]);
 
   return (
-    <div style={{ border: '1px solid #F5F5F5', margin: '24px 0' }}>
+    <div style={{ border: '1px solid #F5F5F5', margin: '24px 0', backgroundColor }}>
       <div
         style={{
           background: '#FAFAFA',

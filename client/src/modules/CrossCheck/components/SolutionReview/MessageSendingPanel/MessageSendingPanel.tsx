@@ -99,7 +99,7 @@ function MessageSendingPanel(props: MessageSendingPanelProps) {
                       ref={inputRef}
                       rows={3}
                       showCount
-                      maxLength={512}
+                      maxLength={1024}
                       placeholder="Leave a message"
                       style={{ maxWidth: 512 }}
                     />

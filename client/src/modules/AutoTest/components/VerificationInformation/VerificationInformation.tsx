@@ -45,21 +45,12 @@ function VerificationInformation({
         )}
         {isTableVisible && (
           <Col flex="none">
-            <Button icon={<ReloadOutlined />} onClick={reload}>
-              Refresh
-            </Button>
-          </Col>
-        )}
-      </Row>
-      {isTableVisible && (
-        <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
-          <Col span={24}>
-            <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
-          </Col>
-          <Col>
-            <Space size={16}>
+            <Space wrap style={{ justifyContent: 'end' }}>
               <Button type="primary" onClick={startTask} disabled={!allowStartTask}>
                 Start task
+              </Button>
+              <Button icon={<ReloadOutlined />} onClick={reload}>
+                Refresh
               </Button>
               {isSelfEducationTask && (
                 <Tooltip
@@ -72,6 +63,13 @@ function VerificationInformation({
                 </Tooltip>
               )}
             </Space>
+          </Col>
+        )}
+      </Row>
+      {isTableVisible && (
+        <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
+          <Col span={24}>
+            <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
           </Col>
         </Row>
       )}
