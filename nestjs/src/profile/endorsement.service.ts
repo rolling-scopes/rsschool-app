@@ -1,7 +1,7 @@
 import { Course } from '@entities/course';
 import { Feedback, Mentor, Student, TaskInterviewResult, User } from '@entities/index';
 import { Prompt } from '@entities/prompt';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import OpenAI from 'openai';
@@ -55,23 +55,16 @@ export class EndorsementService {
     }
   }
 
-  async getEndorsementPrompt(githubId: string) {
+  async getEndorsmentData(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
     if (!user) {
-      this.logger.warn(`User not found for githubId: ${githubId}`);
-      return null;
+      throw new NotFoundException(`User with githubId ${githubId} not found`);
     }
 
-    const [prompt, mentors, feedbacks] = await Promise.all([
-      this.promptRepository.findOne({ where: { type: 'endorsement' } }),
+    const [mentors, feedbacks] = await Promise.all([
       this.mentorRepository.find({ where: { userId: user.id } }),
       this.feedbackRepository.find({ where: { toUserId: user.id } }),
     ]);
-
-    if (!prompt?.text || mentors.length === 0) {
-      this.logger.warn(`No prompt text of mentors found for githubId: ${githubId}`);
-      return null;
-    }
 
     const courses = await this.courseRepository.find({
       where: { id: In(mentors.map(m => m.courseId)) },
@@ -91,6 +84,20 @@ export class EndorsementService {
       interviewsCount,
       feedbacks,
     };
+    return data;
+  }
+
+  async getEndorsementPrompt(githubId: string) {
+    const [prompt, data] = await Promise.all([
+      this.promptRepository.findOne({ where: { type: 'endorsement' } }),
+      this.getEndorsmentData(githubId),
+    ]);
+
+    if (!prompt?.text || data.mentors.length === 0) {
+      this.logger.warn(`No prompt text or mentors found for githubId: ${githubId}`);
+      return null;
+    }
+
     return { text: compile(prompt.text)(data), temperature: prompt.temperature, data };
   }
 }

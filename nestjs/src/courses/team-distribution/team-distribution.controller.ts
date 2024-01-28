@@ -112,7 +112,7 @@ export class TeamDistributionController {
   @UseGuards(RoleGuard)
   @ApiOkResponse({ type: TeamDistributionDto })
   @ApiOperation({ operationId: 'submitScore' })
-  @RequiredRoles([CourseRole.Manager], true)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   public async submitScore(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,

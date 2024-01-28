@@ -682,6 +682,23 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/students/countries": {
+      "get": {
+        "operationId": "getCourseStudentCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/StudentsCountriesStatsDto" } }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -1652,6 +1669,20 @@
           "default": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
+    "/profile/{username}/endorsement-data": {
+      "get": {
+        "operationId": "getEndorsementData",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDataDto" } } }
           }
         },
         "tags": ["profile"]
@@ -3081,6 +3112,16 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "country": { "type": "string" }, "studentsCount": { "type": "number" } },
+        "required": ["country", "studentsCount"]
+      },
+      "StudentsCountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
       "CrossCheckCriteriaDataDto": {
         "type": "object",
         "properties": {
@@ -3932,6 +3973,30 @@
         "type": "object",
         "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
+      },
+      "EndorsementUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        },
+        "required": ["id", "githubId", "firstName", "lastName"]
+      },
+      "EndorsementDataDto": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/EndorsementUserDto" },
+          "courses": {
+            "description": "User's courses",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CourseDto" }
+          },
+          "studentsCount": { "type": "number", "description": "Number of students" },
+          "interviewsCount": { "type": "number", "description": "Number of interviews" }
+        },
+        "required": ["user", "courses", "studentsCount", "interviewsCount"]
       },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {
