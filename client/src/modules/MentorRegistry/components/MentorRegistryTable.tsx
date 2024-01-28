@@ -9,7 +9,7 @@ import { PaginationProps } from 'antd/lib';
 
 type Props = {
   onPaginationChange: PaginationProps['onChange'];
-  total:number;
+  total: number;
   currentPage: number;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
@@ -29,7 +29,7 @@ export function MentorRegistryTable(props: Props) {
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
-    onPaginationChange
+    onPaginationChange,
   } = props;
   const [form] = Form.useForm();
 

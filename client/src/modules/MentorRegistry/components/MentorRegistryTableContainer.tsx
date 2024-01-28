@@ -5,7 +5,13 @@ import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dat
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode, PAGINATION } from '../constants';
+import {
+  MentorsRegistryColumnKey,
+  MentorsRegistryColumnName,
+  TABS,
+  MentorRegistryTabsMode,
+  PAGINATION,
+} from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button, Dropdown, PaginationProps, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
@@ -194,10 +200,10 @@ export const MentorRegistryTableContainer = ({
       </Dropdown>
     );
   };
-  
-  const onPaginationChange: PaginationProps['onChange'] = (page) => {
-    setCurrentPage(page)
-  }
+
+  const onPaginationChange: PaginationProps['onChange'] = page => {
+    setCurrentPage(page);
+  };
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
     const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
@@ -390,7 +396,7 @@ export const MentorRegistryTableContainer = ({
 
   useAsync(async () => {
     try {
-      const {content, total} = await mentorRegistryService.filterMentorRegistries({
+      const { content, total } = await mentorRegistryService.filterMentorRegistries({
         pageSize: PAGINATION,
         currentPage,
         githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
@@ -406,10 +412,10 @@ export const MentorRegistryTableContainer = ({
           : undefined,
       });
       setLoaded(content);
-      setTotal(total)
+      setTotal(total);
     } catch (e) {
       setLoaded(filteredData);
-      setTotal(filteredData.length)
+      setTotal(filteredData.length);
     }
   }, [JSON.stringify(combinedFilter), currentPage]);
 
@@ -422,7 +428,7 @@ export const MentorRegistryTableContainer = ({
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
-    onPaginationChange
+    onPaginationChange,
   });
 };
 
