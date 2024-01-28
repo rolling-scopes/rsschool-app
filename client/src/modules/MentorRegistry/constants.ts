@@ -1,4 +1,4 @@
-export const PAGINATION = 200;
+export const PAGINATION = 4;
 
 export enum MentorsRegistryColumnKey {
   Github = 'githubId',

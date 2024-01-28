@@ -27,6 +27,11 @@ export interface FilterMentorRegistriesDto {
   technicalMentoring?: string[];
 }
 
+export interface FilterMentorRegistriesResponse {
+  content: FilterMentorRegistriesDto[];
+  total: number;
+}
+
 export class MentorRegistryService {
   private axios: AxiosInstance;
   private registryApi: RegistryApi;
@@ -79,6 +84,6 @@ export class MentorRegistryService {
       preselectedCourses,
       technicalMentoring,
     );
-    return resp.data;
+    return { content: resp.data.content, total: resp.data.total };
   }
 }

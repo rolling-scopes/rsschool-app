@@ -2761,6 +2761,25 @@ export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface FilterMentorRegistryResponse
+ */
+export interface FilterMentorRegistryResponse {
+    /**
+     * 
+     * @type {Array<MentorRegistryDto>}
+     * @memberof FilterMentorRegistryResponse
+     */
+    'content': Array<MentorRegistryDto>;
+    /**
+     * 
+     * @type {number}
+     * @memberof FilterMentorRegistryResponse
+     */
+    'total': number;
+}
+/**
+ * 
+ * @export
  * @interface FormDataDto
  */
 export interface FormDataDto {
@@ -14574,7 +14593,7 @@ export const RegistryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorRegistryDto>>> {
+        async filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FilterMentorRegistryResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.filterMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14638,7 +14657,7 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<Array<MentorRegistryDto>> {
+        filterMentorRegistries(pageSize: number, currentPage: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<FilterMentorRegistryResponse> {
             return localVarFp.filterMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
         },
         /**

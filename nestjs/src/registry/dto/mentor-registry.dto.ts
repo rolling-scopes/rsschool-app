@@ -78,3 +78,15 @@ export class MentorRegistryDto {
   @ApiProperty({ type: String, nullable: true })
   public comment: string | null;
 }
+
+export class FilterMentorRegistryResponse {
+  constructor(content: MentorRegistryDto[], total: number) {
+    this.content = content;
+    this.total = total;
+  }
+  @ApiProperty({ type: [MentorRegistryDto] })
+  content: MentorRegistryDto[];
+
+  @ApiProperty()
+  total: number;
+}

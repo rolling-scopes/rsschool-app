@@ -9,6 +9,7 @@ import { RegistryService } from './registry.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
+import { FilterMentorRegistryResponse } from './dto/mentor-registry.dto';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -84,7 +85,7 @@ export class RegistryController {
   @Get('mentors/filter')
   @ApiOperation({ operationId: 'filterMentorRegistries' })
   @RequiredRoles([Role.Admin])
-  @ApiOkResponse({ type: [MentorRegistryDto] })
+  @ApiOkResponse({ type: FilterMentorRegistryResponse })
   @ApiQuery({ name: 'pageSize', required: true, type: 'number' })
   @ApiQuery({ name: 'currentPage', required: true, type: 'number' })
   @ApiQuery({ name: 'githubId', required: false, type: 'string' })
@@ -110,6 +111,9 @@ export class RegistryController {
       preselectedCourses,
       technicalMentoring,
     });
-    return data.map(el => new MentorRegistryDto(el));
+    return {
+      total: data.total,
+      content: data.content.map(el => new MentorRegistryDto(el)),
+    };
   }
 }

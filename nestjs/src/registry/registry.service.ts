@@ -147,6 +147,10 @@ export class RegistryService {
       page,
       limit,
     });
-    return response.items;
+
+    return {
+      total: response.meta.total,
+      content: response.items,
+    };
   }
 }

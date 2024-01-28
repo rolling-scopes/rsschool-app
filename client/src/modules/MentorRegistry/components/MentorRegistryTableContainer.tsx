@@ -5,9 +5,9 @@ import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dat
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
+import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode, PAGINATION } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, Dropdown, Tooltip, message } from 'antd';
+import { Button, Dropdown, PaginationProps, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
@@ -17,6 +17,9 @@ import { MentorRegistryService } from 'services/mentorRegistry';
 import { useAsync } from 'react-use';
 
 interface ChildrenProp {
+  onPaginationChange: PaginationProps['onChange'];
+  currentPage: number;
+  total: number;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
   columns: ColumnType<MentorRegistryDto>[];
@@ -61,6 +64,8 @@ export const MentorRegistryTableContainer = ({
     cityName: [],
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
 
   const renderPreselectedCourses = (courses: Course[]) => {
@@ -189,6 +194,10 @@ export const MentorRegistryTableContainer = ({
       </Dropdown>
     );
   };
+  
+  const onPaginationChange: PaginationProps['onChange'] = (page) => {
+    setCurrentPage(page)
+  }
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
     const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
@@ -380,31 +389,40 @@ export const MentorRegistryTableContainer = ({
   };
 
   useAsync(async () => {
-    const loadedFromServer = await mentorRegistryService.filterMentorRegistries({
-      pageSize: 30,
-      currentPage: 1,
-      githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
-      cityName: combinedFilter.cityName?.length ? (combinedFilter.cityName[0] as string) : undefined,
-      preferedCourses: combinedFilter.preferredCourses?.length
-        ? combinedFilter.preferredCourses.map(Number)
-        : undefined,
-      preselectedCourses: combinedFilter.preselectedCourses?.length
-        ? combinedFilter.preselectedCourses.map(Number)
-        : undefined,
-      technicalMentoring: combinedFilter.technicalMentoring?.length
-        ? (combinedFilter.technicalMentoring as string[])
-        : undefined,
-    });
-    setLoaded(loadedFromServer);
-  }, [JSON.stringify(combinedFilter)]);
+    try {
+      const {content, total} = await mentorRegistryService.filterMentorRegistries({
+        pageSize: PAGINATION,
+        currentPage,
+        githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
+        cityName: combinedFilter.cityName?.length ? (combinedFilter.cityName[0] as string) : undefined,
+        preferedCourses: combinedFilter.preferredCourses?.length
+          ? combinedFilter.preferredCourses.map(Number)
+          : undefined,
+        preselectedCourses: combinedFilter.preselectedCourses?.length
+          ? combinedFilter.preselectedCourses.map(Number)
+          : undefined,
+        technicalMentoring: combinedFilter.technicalMentoring?.length
+          ? (combinedFilter.technicalMentoring as string[])
+          : undefined,
+      });
+      setLoaded(content);
+      setTotal(total)
+    } catch (e) {
+      setLoaded(filteredData);
+      setTotal(filteredData.length)
+    }
+  }, [JSON.stringify(combinedFilter), currentPage]);
 
   return children({
     tagFilters,
     filteredData: loaded || filteredData,
     columns: getColumns(combinedFilter, courses),
+    currentPage,
+    total,
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
+    onPaginationChange
   });
 };
 

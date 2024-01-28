@@ -1799,9 +1799,7 @@
           "200": {
             "description": "",
             "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
-              }
+              "application/json": { "schema": { "$ref": "#/components/schemas/FilterMentorRegistryResponse" } }
             }
           }
         },
@@ -3999,6 +3997,14 @@
           "contactsEpamEmail",
           "comment"
         ]
+      },
+      "FilterMentorRegistryResponse": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } },
+          "total": { "type": "number" }
+        },
+        "required": ["content", "total"]
       },
       "SaveCertificateDto": {
         "type": "object",
