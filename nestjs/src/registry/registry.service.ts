@@ -104,7 +104,6 @@ export class RegistryService {
     preferedCourses?: number[];
     technicalMentoring?: string[];
   }) {
-    console.log('here');
     const req = this.getPreparedMentorRegistriesQuery();
     if (githubId) {
       req.andWhere(`"user"."githubId" ILIKE '%${githubId}%'`);
