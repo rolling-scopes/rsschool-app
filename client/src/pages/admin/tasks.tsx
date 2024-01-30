@@ -5,7 +5,7 @@ import { TasksPage } from 'modules/Tasks/pages';
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser={true}>
         <TasksPage />
       </SessionProvider>
     </ActiveCourseProvider>

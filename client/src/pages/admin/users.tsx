@@ -79,7 +79,7 @@ function Page() {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser={true}>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>
