@@ -682,6 +682,36 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/mentors": {
+      "get": {
+        "operationId": "getCourseMentors",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseMentorsStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/mentors/countries": {
+      "get": {
+        "operationId": "getCourseMentorCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/stats/students/countries": {
       "get": {
         "operationId": "getCourseStudentCountries",
@@ -690,9 +720,7 @@
         "responses": {
           "200": {
             "description": "",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/StudentsCountriesStatsDto" } }
-            }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
           },
           "400": { "description": "" }
         },
@@ -3073,12 +3101,21 @@
         "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
         "required": ["studentsActiveCount", "studentsTotalCount"]
       },
+      "CourseMentorsStatsDto": {
+        "type": "object",
+        "properties": {
+          "mentorsActiveCount": { "type": "number" },
+          "mentorsTotalCount": { "type": "number" },
+          "epamMentorsCount": { "type": "number" }
+        },
+        "required": ["mentorsActiveCount", "mentorsTotalCount", "epamMentorsCount"]
+      },
       "CountryStatDto": {
         "type": "object",
-        "properties": { "country": { "type": "string" }, "studentsCount": { "type": "number" } },
-        "required": ["country", "studentsCount"]
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
       },
-      "StudentsCountriesStatsDto": {
+      "CountriesStatsDto": {
         "type": "object",
         "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
         "required": ["countries"]
