@@ -8,6 +8,7 @@ import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { useActiveCourseContext } from './ActiveCourseContext';
+import { hasRoleInAnyCourse } from 'domain/user';
 
 export const SessionContext = React.createContext<Session>({} as Session);
 
@@ -17,10 +18,11 @@ type Props = React.PropsWithChildren<{
   allowedRoles?: CourseRole[];
   course?: ProfileCourseDto;
   adminOnly?: boolean;
+  anyCoursePowerUser?: boolean;
 }>;
 
 export function SessionProvider(props: Props) {
-  const { allowedRoles } = props;
+  const { allowedRoles, anyCoursePowerUser } = props;
   const activeCourse = useActiveCourseContext().course;
   const course = props.course ?? activeCourse;
 
@@ -66,7 +68,10 @@ export function SessionProvider(props: Props) {
 
     if (!isAdmin) {
       const roles = courses?.[id]?.roles ?? [];
-      if (!allowedRoles.some(role => roles.includes(role))) {
+      const hasRoleInCurrentCourse = allowedRoles.some(role => roles.includes(role));
+      const isAnyCoursePowerUser = anyCoursePowerUser && allowedRoles.some(role => hasRoleInAnyCourse(session, role));
+
+      if (!hasRoleInCurrentCourse && !isAnyCoursePowerUser) {
         return (
           <Result
             status="warning"
