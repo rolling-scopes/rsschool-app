@@ -58,6 +58,13 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
               <ReactMarkdown rehypePlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </Typography.Text>
           </div>
+          {!text ? (
+            <Typography.Paragraph type="danger">Please leave a comment</Typography.Paragraph>
+          ) : text.length < 30 ? (
+            <Typography.Paragraph type="danger">Please leave a detailed comment</Typography.Paragraph>
+          ) : (
+            ''
+          )}
           <Button onClick={toggleView}>Write</Button> {link}
         </div>
       ) : (
