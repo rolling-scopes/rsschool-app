@@ -41,7 +41,7 @@ If the desired course is available in the list of courses <span style="color:gre
 
 To leave the course, click the "Leave course" button in <span style="color:green_apple">[your profile](https://app.rs.school/profile)</span>, in the "Student Statistics" section.
 The course remains in the list, but you will not be able to complete tasks and track statistics.
-**Attention!** Clicking the "Leave course" button excludes the student from the course. You can readmittance on your own by clicking on the "Back to Course" button.
+**Attention!** Clicking the "Leave course" button excludes the student from the course. You can re-enroll by clicking on the "Back to Course" button.
 
 #### My progress in the <span style="color:orange">`Total`</span> field on the Score page after passing the test has not been updated, what should I do?
 
