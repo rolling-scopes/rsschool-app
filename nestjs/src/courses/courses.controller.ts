@@ -40,11 +40,10 @@ export class CoursesController {
   @Post('/')
   @ApiOperation({ operationId: 'createCourse' })
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiBody({ type: CreateCourseDto })
   @ApiOkResponse({ type: CourseDto })
-  public async createCourse(@Req() req: CurrentRequest) {
-    const dto = req.body as CreateCourseDto;
+  public async createCourse(@Body() dto: CreateCourseDto) {
     const created = await this.courseService.create(dto);
     return new CourseDto(created);
   }
