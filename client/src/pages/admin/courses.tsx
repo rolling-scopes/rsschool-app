@@ -402,7 +402,7 @@ function getInitialValues(modalData: Partial<Course>) {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>
