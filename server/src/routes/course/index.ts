@@ -1,7 +1,5 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { Course } from '../../models';
-import { createPostRoute } from '../common';
 import {
   adminGuard,
   anyCourseMentorGuard,
