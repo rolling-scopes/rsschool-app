@@ -10,6 +10,7 @@ export enum ColumnName {
   Organizer = 'Organizer',
   Score = 'Score / Max',
   Weight = 'Weight',
+  Actions = 'Actions'
 }
 
 export enum ColumnKey {
@@ -21,6 +22,7 @@ export enum ColumnKey {
   Organizer = 'organizer',
   Score = 'score',
   Weight = 'scoreWeight',
+  Actions = 'actions'
 }
 
 export const COLUMNS: { key: ColumnKey; name: ColumnName }[] = [
@@ -72,6 +74,7 @@ export const CONFIGURABLE_COLUMNS = [
   ColumnKey.Organizer,
   ColumnKey.Score,
   ColumnKey.Weight,
+  ColumnKey.Actions
 ];
 
 export const DEADLINE_COLOR = '#ff0000';

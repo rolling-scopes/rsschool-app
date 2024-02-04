@@ -126,6 +126,17 @@ const getColumns = ({
       render: scoreRenderer,
       align: 'right',
     },
+    {
+      key: ColumnKey.Actions,
+      title: ColumnName.Actions,
+      align: 'center',
+      render: () => (
+        <div style={{display: 'flex'}}>
+          <button>delete</button>
+          <button>edit</button>
+        </div>
+      )
+    }
   ];
 };
 
