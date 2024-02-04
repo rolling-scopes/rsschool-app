@@ -9,7 +9,7 @@ export type Options = {
   preselectedStudents?: { id: number; githubId: string; name: string }[];
 };
 
-const STUDENTS_NUMBERS = [0, 1, 2, 3, 4];
+const STUDENTS_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 
 export function MentorOptions({
   course,
