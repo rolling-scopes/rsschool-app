@@ -241,7 +241,7 @@ function Page() {
           label="Minimum Students per Mentor"
           rules={[{ min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' }]}
         >
-          <InputNumber step={1} defaultValue={2}/>
+          <InputNumber step={1} defaultValue={2} />
         </Form.Item>
 
         <Form.Item name="state" label="State">
