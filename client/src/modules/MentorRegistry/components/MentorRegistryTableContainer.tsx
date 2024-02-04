@@ -399,8 +399,8 @@ export const MentorRegistryTableContainer = ({
       const { content, total } = await mentorRegistryService.filterMentorRegistries({
         pageSize: PAGINATION,
         currentPage,
-        githubId: combinedFilter.githubId?.length ? (combinedFilter.githubId[0] as string) : undefined,
-        cityName: combinedFilter.cityName?.length ? (combinedFilter.cityName[0] as string) : undefined,
+        githubId: combinedFilter.githubId?.[0] ?? undefined,
+        cityName: combinedFilter.githubId?.[0] ?? undefined,
         preferedCourses: combinedFilter.preferredCourses?.length
           ? combinedFilter.preferredCourses.map(Number)
           : undefined,
