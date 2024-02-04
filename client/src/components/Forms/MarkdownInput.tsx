@@ -11,7 +11,6 @@ type Props = {
 export default function MarkdownInput({ historicalCommentSelected }: Props) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [text, setText] = useState('');
-  const [comment, setComment] = useState<string | null>(null);
 
   useEffect(() => {
     if (historicalCommentSelected !== '') {
@@ -21,7 +20,6 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
 
   const toggleView = () => {
     setPreviewVisible(!previewVisible);
-    renderComment();
   };
 
   const resetText = () => {
@@ -30,13 +28,11 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
   };
 
   const renderComment = () => {
-    if (!text) {
-      setComment('Please leave a comment');
-    } else if (text.length < 30) {
-      setComment('Please leave a detailed comment');
-    } else {
-      setComment(null);
-    }
+    return (
+      <Typography.Paragraph type="danger">
+        {!text ? 'Please leave a comment' : 'Please leave a detailed comment'}
+      </Typography.Paragraph>
+    );
   };
 
   const link = (
@@ -70,7 +66,7 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
               <ReactMarkdown rehypePlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </Typography.Text>
           </div>
-          <Typography.Paragraph type="danger">{comment}</Typography.Paragraph>
+          {(!text || text?.length < 30) && renderComment()}
           <Button onClick={toggleView}>Write</Button> {link}
         </div>
       ) : (
