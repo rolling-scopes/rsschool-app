@@ -3971,12 +3971,19 @@
           "isStudentStatsVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" }
         }
       },
-      "Location": {
+      "ContactsInfoDto": {
         "type": "object",
         "properties": {
-          "cityName": { "type": "string", "nullable": true },
-          "countryName": { "type": "string", "nullable": true }
-        }
+          "phone": { "type": "string", "nullable": true },
+          "email": { "type": "string", "nullable": true },
+          "epamEmail": { "type": "string", "nullable": true },
+          "skype": { "type": "string", "nullable": true },
+          "whatsApp": { "type": "string", "nullable": true },
+          "telegram": { "type": "string", "nullable": true },
+          "notes": { "type": "string", "nullable": true },
+          "linkedIn": { "type": "string", "nullable": true }
+        },
+        "required": ["phone", "email", "epamEmail", "skype", "whatsApp", "telegram", "notes", "linkedIn"]
       },
       "Education": {
         "type": "object",
@@ -3987,28 +3994,45 @@
         },
         "required": ["university", "faculty", "graduationYear"]
       },
-      "GeneralInfo": {
+      "LocationInfoDto": {
+        "type": "object",
+        "properties": { "cityName": { "type": "string" }, "countryName": { "type": "string" } },
+        "required": ["cityName", "countryName"]
+      },
+      "GeneralInfoDto": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
           "githubId": { "type": "string" },
           "aboutMyself": { "type": "string", "nullable": true },
-          "location": { "$ref": "#/components/schemas/Location" },
           "educationHistory": {
             "nullable": true,
             "type": "array",
             "items": { "$ref": "#/components/schemas/Education" }
           },
-          "englishLevel": { "type": "string", "nullable": true }
+          "englishLevel": { "type": "string", "nullable": true },
+          "location": { "$ref": "#/components/schemas/LocationInfoDto" },
+          "languages": { "type": "array", "items": { "type": "string" } }
         },
-        "required": ["name", "githubId", "location"]
+        "required": ["name", "githubId", "location", "languages"]
+      },
+      "StudentInfoDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "isExpelled": { "type": "boolean" },
+          "totalScore": { "type": "number" },
+          "repoUrl": { "type": "string" }
+        },
+        "required": ["name", "githubId", "isExpelled", "totalScore"]
       },
       "MentorStatsDto": {
         "type": "object",
         "properties": {
           "courseLocationName": { "type": "string" },
           "courseName": { "type": "string" },
-          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentDto" } }
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentInfoDto" } }
         },
         "required": ["courseLocationName", "courseName"]
       },
@@ -4016,6 +4040,34 @@
         "type": "object",
         "properties": { "name": { "type": "string" }, "githubId": { "type": "string" } },
         "required": ["name", "githubId"]
+      },
+      "InterviewFormAnswerDto": {
+        "type": "object",
+        "properties": {
+          "questionId": { "type": "string" },
+          "questionText": { "type": "string" },
+          "answer": { "type": "boolean" }
+        },
+        "required": ["questionId", "questionText"]
+      },
+      "StudentTaskDetailDto": {
+        "type": "object",
+        "properties": {
+          "maxScore": { "type": "number" },
+          "scoreWeight": { "type": "number" },
+          "name": { "type": "string" },
+          "descriptionUri": { "type": "string" },
+          "taskGithubPrUris": { "type": "string" },
+          "score": { "type": "number" },
+          "comment": { "type": "string" },
+          "interviewDate": { "type": "string" },
+          "interviewer": { "$ref": "#/components/schemas/GithubIdName" },
+          "interviewFormAnswers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InterviewFormAnswerDto" }
+          }
+        },
+        "required": ["maxScore", "scoreWeight", "name", "descriptionUri", "taskGithubPrUris", "score", "comment"]
       },
       "StudentStatsDto": {
         "type": "object",
@@ -4032,7 +4084,7 @@
           "totalScore": { "type": "number" },
           "rank": { "type": "number" },
           "mentor": { "$ref": "#/components/schemas/GithubIdName" },
-          "tasks": { "type": "array", "items": { "type": "string" } }
+          "tasks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentTaskDetailDto" } }
         },
         "required": [
           "courseId",
@@ -4090,9 +4142,9 @@
         "type": "object",
         "properties": {
           "permissionsSettings": { "$ref": "#/components/schemas/ConfigurableProfilePermissions" },
-          "generalInfo": { "$ref": "#/components/schemas/GeneralInfo" },
-          "contacts": { "$ref": "#/components/schemas/ContactsDto" },
+          "contacts": { "$ref": "#/components/schemas/ContactsInfoDto" },
           "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
+          "generalInfo": { "$ref": "#/components/schemas/GeneralInfoDto" },
           "mentorStats": { "type": "array", "items": { "$ref": "#/components/schemas/MentorStatsDto" } },
           "studentStats": { "type": "array", "items": { "$ref": "#/components/schemas/StudentStatsDto" } },
           "publicFeedback": { "type": "array", "items": { "$ref": "#/components/schemas/PublicFeedbackDto" } },
@@ -4102,7 +4154,7 @@
           },
           "publicCvUrl": { "type": "string", "nullable": true }
         },
-        "required": ["permissionsSettings", "generalInfo", "contacts"]
+        "required": ["permissionsSettings", "contacts", "discord", "generalInfo"]
       },
       "UpdateProfileInfoDto": {
         "type": "object",

@@ -93,6 +93,7 @@ export class ProfileController {
   @Get(':username')
   @ApiOperation({ operationId: 'getProfile' })
   @ApiResponse({ type: ProfileWithCvDto })
+  @UseGuards(DefaultGuard)
   public async getProfile(@Param('username') githubId: string) {
     const profile = await this.profileService.getProfile(githubId);
 

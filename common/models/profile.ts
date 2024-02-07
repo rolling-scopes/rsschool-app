@@ -44,7 +44,8 @@ export interface GeneralInfo {
   aboutMyself?: string | null;
   location: Location;
   educationHistory?: any | null;
-  englishLevel?: EnglishLevel | null;
+  // TODO: String type is too abstract for englishLevel.
+  englishLevel?: EnglishLevel | null | string;
   languages: string[];
 }
 
@@ -144,6 +145,7 @@ export interface StageInterviewDetailedFeedback {
   // This type have to updated to refer to `InterviewFeedbackStepData`, when profile is migrated to nestjs
   feedback:
     | LegacyFeedback
+    | object
     | {
         steps: Record<
           string,

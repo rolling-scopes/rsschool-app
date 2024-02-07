@@ -51,25 +51,25 @@ const ProfilePage = () => {
   const fetchData = async () => {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
-      const [profile, connections, { data }] = await Promise.all([
+      const [profileInfo, connections, { data }] = await Promise.all([
         userService.getProfileInfo(githubId?.toLowerCase()),
         notificationsService.getUserConnections().catch(() => ({})),
         profileApi.getProfile(githubId?.toLowerCase() ?? session.githubId),
       ]);
 
-      const updateProfile = {
-        ...profile,
+      const profileInfoExtendedWithCv = {
+        ...profileInfo,
         ...data,
       };
 
       let isProfileOwner = false;
-      if (profile?.generalInfo) {
+      if (profileInfo?.generalInfo) {
         const userId = session.githubId;
-        const profileId = profile.generalInfo.githubId;
+        const profileId = profileInfo.generalInfo.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
       }
 
-      setProfile(updateProfile);
+      setProfile(profileInfoExtendedWithCv);
       setIsProfileOwner(isProfileOwner);
       setConnections(connections as Connections);
     } catch (e) {

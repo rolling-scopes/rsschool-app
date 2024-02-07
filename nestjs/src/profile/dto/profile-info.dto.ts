@@ -6,6 +6,8 @@ import { ConfigurableProfilePermissions } from './permissions.dto';
 import {
   Contacts,
   EnglishLevel,
+  GeneralInfo,
+  LegacyFeedback,
   MentorStats,
   PublicFeedback,
   StageInterviewDetailedFeedback,
@@ -24,16 +26,14 @@ class GithubIdName {
   githubId: string;
 }
 
-class Location {
+class LocationInfoDto {
+  @ApiProperty({ required: true, type: String })
   @IsString()
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
-  cityName: string | null;
+  cityName: string;
 
+  @ApiProperty({ required: true, type: String })
   @IsString()
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
-  countryName: string | null;
+  countryName: string;
 }
 
 export class Education {
@@ -64,15 +64,67 @@ export class Discord {
   discriminator: string;
 }
 
-class GeneralInfo extends GithubIdName {
+class ProgrammingTaskDto {
+  @ApiProperty({ required: true, type: String })
+  task: string;
+
+  @ApiProperty({ required: true, type: Number })
+  codeWritingLevel: number;
+
+  @ApiProperty({ required: true, type: Number })
+  resolved: number;
+
+  @ApiProperty({ required: true, type: String })
+  comment: string;
+}
+
+class SkillsDto {
+  @ApiProperty({ required: true, type: Number })
+  htmlCss: number;
+
+  @ApiProperty({ required: true, type: Number })
+  common: number;
+
+  @ApiProperty({ required: true, type: Number })
+  dataStructures: number;
+}
+
+class StepsDto {
+  @ApiProperty({ required: true })
+  steps: Record<
+    string,
+    {
+      isCompleted: boolean;
+      values?: Record<string, string[] | string | number>;
+    }
+  >;
+}
+
+class PartialFeedbackInfoDto {
+  @ApiProperty({ required: false, type: StepsDto })
+  @IsOptional()
+  steps?: StepsDto;
+}
+
+class LegacyFeedbackInfoDto implements LegacyFeedback {
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  english?: EnglishLevel;
+
+  @ApiProperty({ required: true, type: String })
+  comment: string;
+
+  @ApiProperty({ required: true, type: ProgrammingTaskDto })
+  programmingTask: ProgrammingTaskDto;
+
+  @ApiProperty({ required: true, type: SkillsDto })
+  skills: SkillsDto;
+}
+
+export class GeneralInfoBase extends GithubIdName {
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   aboutMyself?: string | null;
-
-  @ApiProperty({ type: Location })
-  @Type(() => Location)
-  @ValidateNested()
-  location: Location;
 
   @ApiProperty({ required: false, nullable: true, type: [Education] })
   @IsOptional()
@@ -80,55 +132,60 @@ class GeneralInfo extends GithubIdName {
   @IsArray()
   educationHistory?: Education[] | null;
 
+  // TODO: englishLevel should be of type enum, not String type.
+  // Currently generator produces enums with the same keys (A1 for both a1/a1+, etc) which is compile blocker for TS.
+  // Keywords: typescript-axios openapi enumPropertyNamingReplaceSpecialChar.
   @ApiProperty({ required: false, nullable: true, type: String })
   @IsOptional()
   @IsString()
   englishLevel?: EnglishLevel | null;
 }
 
-class ContactsDto implements Contacts {
-  @ApiProperty({ required: false, nullable: true, type: String })
+class GeneralInfoDto extends GeneralInfoBase implements GeneralInfo {
+  @ApiProperty({ required: true, type: LocationInfoDto })
+  location: LocationInfoDto;
+
+  @ApiProperty({ required: true, type: [String] })
   @IsOptional()
+  @IsArray()
+  languages: string[];
+}
+
+class ContactsInfoDto implements Contacts {
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   phone: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   email: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   epamEmail: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   skype: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   whatsApp: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   telegram: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   notes: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ required: true, nullable: true, type: String })
   @IsString()
   linkedIn: string | null;
 }
 
-class StudentDto extends GithubIdName implements Student {
+class StudentInfoDto extends GithubIdName implements Student {
   @ApiProperty({ required: true, type: Boolean })
   @IsBoolean()
   isExpelled: boolean;
@@ -152,10 +209,10 @@ class MentorStatsDto implements MentorStats {
   @IsString()
   courseName: string;
 
-  @ApiProperty({ required: false, type: [StudentDto] })
+  @ApiProperty({ required: false, type: [StudentInfoDto] })
   @IsOptional()
   @IsArray()
-  students?: StudentDto[];
+  students?: StudentInfoDto[];
 }
 
 class PublicFeedbackDto implements PublicFeedback {
@@ -232,8 +289,8 @@ export class StageInterviewDetailedFeedbackDto implements StageInterviewDetailed
   @ApiProperty({ required: true, type: GithubIdName })
   interviewer: GithubIdName;
 
-  @ApiProperty({ required: true })
-  feedback: StageInterviewDetailedFeedback['feedback'];
+  @ApiProperty({ required: true, type: Object })
+  feedback: LegacyFeedbackInfoDto | PartialFeedbackInfoDto;
 }
 
 export class StudentTaskDetailDto implements StudentTasksDetail {
@@ -275,7 +332,7 @@ export class StudentTaskDetailDto implements StudentTasksDetail {
   @ValidateNested()
   interviewer?: GithubIdName;
 
-  @ApiProperty({ required: false, type: InterviewFormAnswerDto })
+  @ApiProperty({ required: false, type: [InterviewFormAnswerDto] })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
@@ -332,35 +389,36 @@ class StudentStatsDto implements StudentStats {
   @ValidateNested()
   mentor: GithubIdName;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, type: [StudentTaskDetailDto] })
   @IsArray()
   @ValidateNested({ each: true })
   tasks: StudentTaskDetailDto[];
 }
 
-export class ProfileInfoBaseDto {
+export class ProfileInfoBase {
   @ApiProperty({ type: ConfigurableProfilePermissions })
   @ValidateNested()
   @Type(() => ConfigurableProfilePermissions)
   permissionsSettings: ConfigurableProfilePermissions;
 
-  @ApiProperty({ type: GeneralInfo })
+  @ApiProperty({ type: ContactsInfoDto })
   @ValidateNested()
-  @Type(() => GeneralInfo)
-  generalInfo: GeneralInfo;
+  @Type(() => ContactsInfoDto)
+  contacts: ContactsInfoDto;
 
-  @ApiProperty({ type: ContactsDto })
-  @ValidateNested()
-  @Type(() => ContactsDto)
-  contacts: ContactsDto;
-
-  @ApiProperty({ required: false, nullable: true, type: Discord })
+  @ApiProperty({ required: true, nullable: true, type: Discord })
   @Type(() => Discord)
-  @IsOptional()
   discord: Discord | null;
 }
 
-export class ProfileInfoExtendedDto extends ProfileInfoBaseDto implements ProfileWithCvDto {
+export class ProfileInfoDto extends ProfileInfoBase {
+  @ApiProperty({ type: GeneralInfoDto })
+  @ValidateNested()
+  @Type(() => GeneralInfoDto)
+  generalInfo: GeneralInfoDto;
+}
+
+export class ProfileInfoExtendedDto extends ProfileInfoDto implements ProfileWithCvDto {
   @ApiProperty({ required: false, type: [MentorStatsDto] })
   @IsOptional()
   @IsArray()

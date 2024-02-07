@@ -649,6 +649,61 @@ export interface ContactsDto {
 /**
  * 
  * @export
+ * @interface ContactsInfoDto
+ */
+export interface ContactsInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'phone': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'email': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'epamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'skype': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'whatsApp': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'telegram': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'notes': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'linkedIn': string | null;
+}
+/**
+ * 
+ * @export
  * @interface ContactsVisibilitySettings
  */
 export interface ContactsVisibilitySettings {
@@ -3120,45 +3175,51 @@ export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEn
 /**
  * 
  * @export
- * @interface GeneralInfo
+ * @interface GeneralInfoDto
  */
-export interface GeneralInfo {
+export interface GeneralInfoDto {
     /**
      * 
      * @type {string}
-     * @memberof GeneralInfo
+     * @memberof GeneralInfoDto
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralInfo
+     * @memberof GeneralInfoDto
      */
     'githubId': string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralInfo
+     * @memberof GeneralInfoDto
      */
     'aboutMyself'?: string | null;
     /**
      * 
-     * @type {Location}
-     * @memberof GeneralInfo
-     */
-    'location': Location;
-    /**
-     * 
      * @type {Array<Education>}
-     * @memberof GeneralInfo
+     * @memberof GeneralInfoDto
      */
     'educationHistory'?: Array<Education> | null;
     /**
      * 
      * @type {string}
-     * @memberof GeneralInfo
+     * @memberof GeneralInfoDto
      */
     'englishLevel'?: string | null;
+    /**
+     * 
+     * @type {LocationInfoDto}
+     * @memberof GeneralInfoDto
+     */
+    'location': LocationInfoDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GeneralInfoDto
+     */
+    'languages': Array<string>;
 }
 /**
  * 
@@ -3479,6 +3540,31 @@ export interface InterviewFeedbackDto {
 /**
  * 
  * @export
+ * @interface InterviewFormAnswerDto
+ */
+export interface InterviewFormAnswerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionText': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InterviewFormAnswerDto
+     */
+    'answer'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface JoinTeamDto
  */
 export interface JoinTeamDto {
@@ -3505,21 +3591,21 @@ export interface LeaveCourseRequestDto {
 /**
  * 
  * @export
- * @interface Location
+ * @interface LocationInfoDto
  */
-export interface Location {
+export interface LocationInfoDto {
     /**
      * 
      * @type {string}
-     * @memberof Location
+     * @memberof LocationInfoDto
      */
-    'cityName'?: string | null;
+    'cityName': string;
     /**
      * 
      * @type {string}
-     * @memberof Location
+     * @memberof LocationInfoDto
      */
-    'countryName'?: string | null;
+    'countryName': string;
 }
 /**
  * 
@@ -3882,10 +3968,10 @@ export interface MentorStatsDto {
     'courseName': string;
     /**
      * 
-     * @type {Array<StudentDto>}
+     * @type {Array<StudentInfoDto>}
      * @memberof MentorStatsDto
      */
-    'students'?: Array<StudentDto>;
+    'students'?: Array<StudentInfoDto>;
 }
 /**
  * 
@@ -4432,22 +4518,22 @@ export interface ProfileInfoExtendedDto {
     'permissionsSettings': ConfigurableProfilePermissions;
     /**
      * 
-     * @type {GeneralInfo}
+     * @type {ContactsInfoDto}
      * @memberof ProfileInfoExtendedDto
      */
-    'generalInfo': GeneralInfo;
-    /**
-     * 
-     * @type {ContactsDto}
-     * @memberof ProfileInfoExtendedDto
-     */
-    'contacts': ContactsDto;
+    'contacts': ContactsInfoDto;
     /**
      * 
      * @type {Discord}
      * @memberof ProfileInfoExtendedDto
      */
-    'discord'?: Discord | null;
+    'discord': Discord | null;
+    /**
+     * 
+     * @type {GeneralInfoDto}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'generalInfo': GeneralInfoDto;
     /**
      * 
      * @type {Array<MentorStatsDto>}
@@ -5461,6 +5547,43 @@ export interface StudentId {
 /**
  * 
  * @export
+ * @interface StudentInfoDto
+ */
+export interface StudentInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentInfoDto
+     */
+    'isExpelled': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentInfoDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'repoUrl'?: string;
+}
+/**
+ * 
+ * @export
  * @interface StudentStatsDto
  */
 export interface StudentStatsDto {
@@ -5538,10 +5661,77 @@ export interface StudentStatsDto {
     'mentor': GithubIdName;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<StudentTaskDetailDto>}
      * @memberof StudentStatsDto
      */
-    'tasks': Array<string>;
+    'tasks': Array<StudentTaskDetailDto>;
+}
+/**
+ * 
+ * @export
+ * @interface StudentTaskDetailDto
+ */
+export interface StudentTaskDetailDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'descriptionUri': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'taskGithubPrUris': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewDate'?: string;
+    /**
+     * 
+     * @type {GithubIdName}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewer'?: GithubIdName;
+    /**
+     * 
+     * @type {Array<InterviewFormAnswerDto>}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewFormAnswers'?: Array<InterviewFormAnswerDto>;
 }
 /**
  * 
