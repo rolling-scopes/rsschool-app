@@ -27,6 +27,14 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
     setText('');
   };
 
+  const renderComment = () => {
+    return (
+      <Typography.Paragraph type="danger">
+        {!text ? 'Please leave a comment' : 'Please leave a detailed comment'}
+      </Typography.Paragraph>
+    );
+  };
+
   const link = (
     <span style={{ marginLeft: '20px' }}>
       <a
@@ -58,6 +66,7 @@ export default function MarkdownInput({ historicalCommentSelected }: Props) {
               <ReactMarkdown rehypePlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </Typography.Text>
           </div>
+          {(!text || text?.length < 30) && renderComment()}
           <Button onClick={toggleView}>Write</Button> {link}
         </div>
       ) : (
