@@ -1,7 +1,7 @@
 import { Student } from '@entities/student';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CountryStatDto } from './dto';
 import { Mentor } from '@entities/index';
 
@@ -26,19 +26,23 @@ export class CourseStatsService {
   }
 
   public async getMentors(courseId: number) {
-    const [mentorsTotalCount, mentorsActiveCount, epamMentorsCount] = await Promise.all([
-      this.mentorRepository.count({ where: { courseId } }),
-      this.mentorRepository.count({ where: { courseId, isExpelled: false } }),
-      this.mentorRepository.count({
-        relations: ['user'],
-        where: { courseId, isExpelled: false, user: { contactsEpamEmail: Not(IsNull()) } },
-      }),
-    ]);
+    const queryBuilder = this.mentorRepository
+      .createQueryBuilder('mentor')
+      .leftJoinAndSelect('mentor.user', 'user')
+      .select('COUNT(*)', 'total_mentors')
+      .addSelect('COUNT(CASE WHEN mentor.isExpelled = false THEN 1 END)', 'active_mentors')
+      .addSelect(
+        "COUNT(DISTINCT CASE WHEN user.contactsEpamEmail IS NOT NULL AND user.contactsEpamEmail != '' THEN mentor.userId END)",
+        'mentors_with_email',
+      )
+      .where('mentor.courseId = :courseId', { courseId });
+
+    const result = await queryBuilder.getRawOne();
 
     return {
-      mentorsTotalCount,
-      mentorsActiveCount,
-      epamMentorsCount,
+      mentorsTotalCount: Number(result.total_mentors),
+      mentorsActiveCount: Number(result.active_mentors),
+      epamMentorsCount: Number(result.mentors_with_email),
     };
   }
 
