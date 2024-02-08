@@ -103,12 +103,6 @@ export class UserService {
   async getProfileInfo(githubId?: string) {
     const { data } = await this.profileApi.getProfileInfo(githubId);
     return data;
-
-    // old implementation for regression verification purposes (to be deleted along with koa-related code in the final commit of PR)
-    // const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
-    //   params: { githubId },
-    // });
-    // return response.data.data;
   }
 
   async sendEmailConfirmationLink() {
