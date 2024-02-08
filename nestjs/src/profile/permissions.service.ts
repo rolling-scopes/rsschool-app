@@ -19,7 +19,7 @@ import { defaultProfilePermissionsSettings } from '@entities/profilePermissions'
 
 type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursesupervisor' | 'coursemanager' | 'all';
 
-interface Relations {
+export interface Relations {
   student: string;
   mentors: string[];
   interviewers: string[];
