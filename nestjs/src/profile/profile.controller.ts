@@ -1,21 +1,36 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  NotFoundException,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
-import { CurrentRequest } from '../auth/auth.service';
-import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
-import { ProfileDto } from './dto/profile.dto';
-import { ProfileService } from './profile.service';
-import { PersonalProfileDto } from './dto/personal-profile.dto';
+import { CurrentRequest } from 'src/auth/auth.service';
 import { EndorsementService } from './endorsement.service';
-import { EndorsementDataDto, EndorsementDto } from './dto/endorsement.dto';
+import { ProfileService } from './profile.service';
+import { ProfileInfoService } from './profile-info.service';
+import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, ProfileInfoExtendedDto } from './dto';
+import { ProfileWithCvDto } from './dto/profile.dto';
+import { PersonalProfileDto } from './dto/personal-profile.dto';
+import { EndorsementDto, EndorsementDataDto } from './dto/endorsement.dto';
 
 @Controller('profile')
 @ApiTags('profile')
 export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
-    private readonly endormentService: EndorsementService,
+    private readonly profileInfoService: ProfileInfoService,
+    private readonly endorsementService: EndorsementService,
     private readonly coursesService: CoursesService,
   ) {}
 
@@ -49,6 +64,22 @@ export class ProfileController {
     await this.profileService.updateUser(user.id, dto);
   }
 
+  @Get('/info')
+  @ApiQuery({ name: 'githubId', required: false })
+  @ApiOperation({ operationId: 'getProfileInfo' })
+  @ApiResponse({ type: ProfileInfoExtendedDto })
+  @UseGuards(DefaultGuard)
+  public async getProfileInfo(@Req() req: CurrentRequest, @Query('githubId') githubId?: string) {
+    const { githubId: requestorGithubId } = req.user;
+    const requestedGithubId = githubId ?? requestorGithubId;
+
+    if (!requestorGithubId && !requestedGithubId) {
+      throw new NotFoundException(`profile doesn't exist`);
+    }
+
+    return this.profileInfoService.getProfileInfo(requestedGithubId, requestorGithubId, req.user);
+  }
+
   @Patch('/info')
   @ApiOperation({ operationId: 'updateProfileInfoFlat' })
   @ApiBody({ type: UpdateProfileInfoDto })
@@ -56,17 +87,16 @@ export class ProfileController {
   public async updateProfileFlatInfo(@Req() req: CurrentRequest, @Body() dto: UpdateProfileInfoDto) {
     const { user } = req;
 
-    await this.profileService.updateProfileFlat(user.id, dto);
+    await this.profileInfoService.updateProfileFlat(user.id, dto);
   }
 
   @Get(':username')
   @ApiOperation({ operationId: 'getProfile' })
-  @ApiResponse({ type: ProfileDto })
-  @UseGuards(DefaultGuard)
-  public async getProfileInfo(@Param('username') githubId: string) {
+  @ApiResponse({ type: ProfileWithCvDto })
+  public async getProfile(@Param('username') githubId: string) {
     const profile = await this.profileService.getProfile(githubId);
 
-    return new ProfileDto(profile);
+    return new ProfileWithCvDto(profile);
   }
 
   @Get(':username/personal')
@@ -86,7 +116,7 @@ export class ProfileController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
   public async getEndorsement(@Param('username') githubId: string) {
-    const endorsement = await this.endormentService.getEndorsement(githubId);
+    const endorsement = await this.endorsementService.getEndorsement(githubId);
     return new EndorsementDto(endorsement);
   }
 
@@ -95,7 +125,7 @@ export class ProfileController {
   @ApiResponse({ type: EndorsementDataDto })
   @UseGuards(DefaultGuard)
   public async getEndorsementData(@Param('username') githubId: string) {
-    const data = await this.endormentService.getEndorsmentData(githubId);
+    const data = await this.endorsementService.getEndorsementData(githubId);
     return new EndorsementDataDto(data);
   }
 

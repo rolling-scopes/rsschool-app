@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
+import { ProfileApi, ProfileWithCvDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -101,6 +101,10 @@ export class UserService {
   }
 
   async getProfileInfo(githubId?: string) {
+    const { data } = await this.profileApi.getProfileInfo(githubId);
+    return data;
+
+    // old implementation for regression verification purposes (to be deleted along with koa-related code in the final commit of PR)
     const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
     });
@@ -226,7 +230,7 @@ export type ProfileInfo = {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
-} & ProfileDto;
+} & ProfileWithCvDto;
 
 export type ProfileMainCardData = {
   location: Location | null;

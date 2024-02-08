@@ -1,14 +1,21 @@
 import { In, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StageInterviewFeedbackJson } from '@common/models';
-import { CourseTask } from '@entities/courseTask';
-import { StageInterview } from '@entities/stageInterview';
-import { TaskInterviewStudent } from '@entities/taskInterviewStudent';
 import { UsersService } from 'src/users/users.service';
-import { StageInterviewStudent, Student } from '@entities/index';
-import { AvailableStudentDto } from './dto/available-student.dto';
+import { StageInterviewFeedbackJson, StageInterviewDetailedFeedback } from '@common/models';
+import { CourseTask } from '@entities/courseTask';
+import {
+  Course,
+  Mentor,
+  StageInterview,
+  StageInterviewFeedback,
+  StageInterviewStudent,
+  Student,
+  TaskInterviewStudent,
+  User,
+} from '@entities/index';
 import { TaskType } from '@entities/task';
+import { AvailableStudentDto } from './dto/available-student.dto';
 
 @Injectable()
 export class InterviewsService {
@@ -19,6 +26,8 @@ export class InterviewsService {
     readonly taskInterviewStudentRepository: Repository<TaskInterviewStudent>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+    @InjectRepository(StageInterview)
+    readonly stageInterviewRepository: Repository<StageInterview>,
     readonly userService: UsersService,
   ) {}
 
@@ -184,4 +193,118 @@ export class InterviewsService {
   private isGoodCandidate(stageInterviews: StageInterview[]) {
     return stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
   }
+
+  async getStageInterviewFeedback(githubId: string): Promise<StageInterviewDetailedFeedback[]> {
+    const data = await this.stageInterviewRepository
+      .createQueryBuilder('stageInterview')
+      .select('"stageInterview"."decision" AS "decision"')
+      .addSelect('"stageInterview"."isGoodCandidate" AS "isGoodCandidate"')
+      .addSelect('"stageInterview"."score" AS "interviewScore"')
+      .addSelect('"course"."name" AS "courseName"')
+      .addSelect('"course"."fullName" AS "courseFullName"')
+      .addSelect('"stageInterviewFeedback"."json" AS "interviewResultJson"')
+      .addSelect('"stageInterviewFeedback"."updatedDate" AS "interviewFeedbackDate"')
+      .addSelect('"stageInterviewFeedback"."version" AS "feedbackVersion"')
+      .addSelect('"userMentor"."firstName" AS "interviewerFirstName"')
+      .addSelect('"userMentor"."lastName" AS "interviewerLastName"')
+      .addSelect('"userMentor"."githubId" AS "interviewerGithubId"')
+      .addSelect('"courseTask"."maxScore" AS "maxScore"')
+      .leftJoin(Student, 'student', '"student"."id" = "stageInterview"."studentId"')
+      .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
+      .leftJoin(Course, 'course', '"course"."id" = "stageInterview"."courseId"')
+      .leftJoin(
+        StageInterviewFeedback,
+        'stageInterviewFeedback',
+        '"stageInterview"."id" = "stageInterviewFeedback"."stageInterviewId"',
+      )
+      .leftJoin(CourseTask, 'courseTask', '"courseTask"."id" = "stageInterview"."courseTaskId"')
+      .leftJoin(Mentor, 'mentor', '"mentor"."id" = "stageInterview"."mentorId"')
+      .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
+      .where('"user"."githubId" = :githubId', { githubId })
+      .andWhere('"stageInterview"."isCompleted" = true')
+      .orderBy('"course"."updatedDate"', 'ASC')
+      .getRawMany();
+
+    return data
+      .map((feedbackData: FeedbackData) => {
+        const {
+          feedbackVersion,
+          decision,
+          interviewFeedbackDate,
+          interviewerFirstName,
+          courseFullName,
+          courseName,
+          interviewerLastName,
+          interviewerGithubId,
+          isGoodCandidate,
+          interviewScore,
+          interviewResultJson,
+          maxScore,
+        } = feedbackData;
+        const feedbackTemplate = JSON.parse(interviewResultJson) as any;
+
+        const { score, feedback } = !feedbackVersion
+          ? InterviewsService.parseLegacyFeedback(feedbackTemplate)
+          : {
+              feedback: feedbackTemplate,
+              score: interviewScore ?? 0,
+            };
+
+        return {
+          version: feedbackVersion ?? 0,
+          date: interviewFeedbackDate,
+          decision,
+          isGoodCandidate,
+          courseName,
+          courseFullName,
+          feedback,
+          score,
+          interviewer: {
+            name:
+              this.userService.getFullName({ firstName: interviewerFirstName, lastName: interviewerLastName }) ||
+              interviewerGithubId,
+            githubId: interviewerGithubId,
+          },
+          maxScore,
+        };
+      })
+      .filter(Boolean);
+  }
+
+  /**
+   * @deprecated - should be removed once Artsiom A. makes migration of the legacy feedback format
+   */
+  private static parseLegacyFeedback(interviewResult: StageInterviewFeedbackJson) {
+    const { english, programmingTask, resume } = interviewResult;
+    const { rating, htmlCss, common, dataStructures } = InterviewsService.getInterviewRatings(interviewResult);
+
+    return {
+      score: rating,
+      feedback: {
+        english: english.levelMentorOpinion ? english.levelMentorOpinion : english.levelStudentOpinion,
+        programmingTask,
+        comment: resume.comment,
+        skills: {
+          htmlCss,
+          common,
+          dataStructures,
+        },
+      },
+    };
+  }
 }
+
+type FeedbackData = {
+  decision: string;
+  isGoodCandidate: boolean;
+  courseName: string;
+  courseFullName: string;
+  interviewResultJson: any;
+  interviewFeedbackDate: string;
+  interviewerFirstName: string;
+  interviewerLastName: string;
+  interviewerGithubId: string;
+  feedbackVersion: null | number;
+  interviewScore: null | number;
+  maxScore: number;
+};

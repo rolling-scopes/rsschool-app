@@ -41,4 +41,8 @@ export class DisciplinesService {
   public async delete(id: number): Promise<void> {
     await this.repository.softDelete(id);
   }
+
+  public async getByNames(disciplineNames: string[]) {
+    return this.repository.find({ where: { name: In(disciplineNames) } });
+  }
 }

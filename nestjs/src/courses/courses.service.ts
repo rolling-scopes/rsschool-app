@@ -47,4 +47,8 @@ export class CoursesService {
       relations,
     });
   }
+
+  public async getByDisciplineIds(disciplinesIds: number[] = []) {
+    return this.repository.find({ where: { disciplineId: In(disciplinesIds) } });
+  }
 }

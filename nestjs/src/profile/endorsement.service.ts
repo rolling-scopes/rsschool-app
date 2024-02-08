@@ -55,7 +55,7 @@ export class EndorsementService {
     }
   }
 
-  async getEndorsmentData(githubId: string) {
+  async getEndorsementData(githubId: string) {
     const user = await this.userRepository.findOne({ where: { githubId } });
     if (!user) {
       throw new NotFoundException(`User with githubId ${githubId} not found`);
@@ -90,7 +90,7 @@ export class EndorsementService {
   async getEndorsementPrompt(githubId: string) {
     const [prompt, data] = await Promise.all([
       this.promptRepository.findOne({ where: { type: 'endorsement' } }),
-      this.getEndorsmentData(githubId),
+      this.getEndorsementData(githubId),
     ]);
 
     if (!prompt?.text || data.mentors.length === 0) {
