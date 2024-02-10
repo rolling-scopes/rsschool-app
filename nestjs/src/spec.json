@@ -1784,27 +1784,9 @@
       "get": {
         "operationId": "getMentorRegistries",
         "summary": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
-              }
-            }
-          }
-        },
-        "tags": ["registry"]
-      }
-    },
-    "/registry/mentors/filter": {
-      "get": {
-        "operationId": "filterMentorRegistries",
-        "summary": "",
         "parameters": [
-          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
-          { "name": "currentPage", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "currentPage", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "cityName", "required": false, "in": "query", "schema": { "type": "string" } },
           {

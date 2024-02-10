@@ -10,6 +10,7 @@ import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
 import { FilterMentorRegistryResponse } from './dto/mentor-registry.dto';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './constants';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -61,11 +62,46 @@ export class RegistryController {
   @Get('mentors')
   @ApiOperation({ operationId: 'getMentorRegistries' })
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
-  @ApiOkResponse({ type: [MentorRegistryDto] })
-  public async getMentorRegistries(@Req() req: CurrentRequest) {
-    if (req.user.isAdmin) {
+  @ApiOkResponse({ type: FilterMentorRegistryResponse })
+  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
+  @ApiQuery({ name: 'currentPage', required: false, type: 'number' })
+  @ApiQuery({ name: 'githubId', required: false, type: 'string' })
+  @ApiQuery({ name: 'cityName', required: false, type: 'string' })
+  @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
+  @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
+  @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
+  public async filterMentorRegistries(
+    @Req() req: CurrentRequest,
+    @Query('pageSize') pageSize?: number,
+    @Query('currentPage') currentPage?: number,
+    @Query('githubId') githubId?: string,
+    @Query('cityName') cityName?: string,
+    @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true })) preferedCourses?: number[],
+    @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
+    @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
+  ) {
+    console.log('query');
+    console.log(req.query);
+    if (req.user.isAdmin && !req.query) {
       const data = await this.registryService.findAllMentorRegistries();
-      return data.map(el => new MentorRegistryDto(el));
+      return {
+        total: data.length,
+        content: data.map(el => new MentorRegistryDto(el)),
+      };
+    } else if (req.user.isAdmin && req.query) {
+      const data = await this.registryService.filterMentorRegistries({
+        page: currentPage || DEFAULT_PAGE_NUMBER,
+        limit: pageSize || DEFAULT_PAGE_SIZE,
+        githubId,
+        cityName,
+        preferedCourses,
+        preselectedCourses,
+        technicalMentoring,
+      });
+      return {
+        total: data.total,
+        content: data.content.map(el => new MentorRegistryDto(el)),
+      };
     } else {
       const coursesIds = Object.entries(req.user.courses)
         .filter(([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor))
@@ -78,42 +114,10 @@ export class RegistryController {
         coursesIds,
         disciplineNames,
       );
-      return data.map(el => new MentorRegistryDto(el));
+      return {
+        total: data.length,
+        content: data.map(el => new MentorRegistryDto(el)),
+      };
     }
-  }
-
-  @Get('mentors/filter')
-  @ApiOperation({ operationId: 'filterMentorRegistries' })
-  @RequiredRoles([Role.Admin])
-  @ApiOkResponse({ type: FilterMentorRegistryResponse })
-  @ApiQuery({ name: 'pageSize', required: true, type: 'number' })
-  @ApiQuery({ name: 'currentPage', required: true, type: 'number' })
-  @ApiQuery({ name: 'githubId', required: false, type: 'string' })
-  @ApiQuery({ name: 'cityName', required: false, type: 'string' })
-  @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
-  @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
-  @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
-  public async filterMentorRegistries(
-    @Query('pageSize') pageSize: number,
-    @Query('currentPage') currentPage: number,
-    @Query('githubId') githubId?: string,
-    @Query('cityName') cityName?: string,
-    @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true })) preferedCourses?: number[],
-    @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
-    @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
-  ) {
-    const data = await this.registryService.filterMentorRegistries({
-      page: currentPage,
-      limit: pageSize,
-      githubId,
-      cityName,
-      preferedCourses,
-      preselectedCourses,
-      technicalMentoring,
-    });
-    return {
-      total: data.total,
-      content: data.content.map(el => new MentorRegistryDto(el)),
-    };
   }
 }

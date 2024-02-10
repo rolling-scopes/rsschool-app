@@ -65,9 +65,10 @@ function Page() {
   const loadData = withLoading(async () => {
     const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
-    setAllData(allData);
+    console.log(allData.content)
+    setAllData(allData.content);
     setCourses(courses);
-    updateData(showAll, allData);
+    updateData(showAll, allData.content);
     setDisciplines(disciplines);
   });
 

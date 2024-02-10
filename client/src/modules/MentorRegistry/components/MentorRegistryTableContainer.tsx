@@ -139,6 +139,8 @@ export const MentorRegistryTableContainer = ({
     );
   }, [combinedFilter, mentors]);
 
+  console.log("mentors", mentors)
+  console.log("filteredData", filteredData)
   const handleTableChange = async (
     _: any,
     filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
@@ -396,7 +398,7 @@ export const MentorRegistryTableContainer = ({
 
   useAsync(async () => {
     try {
-      const { content, total } = await mentorRegistryService.filterMentorRegistries({
+      const { content, total } = await mentorRegistryService.getMentors({
         pageSize: PAGINATION,
         currentPage,
         githubId: combinedFilter.githubId?.[0] ?? undefined,

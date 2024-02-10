@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { RegistryApi } from 'api';
+import { MentorRegistryDto, RegistryApi } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
@@ -17,7 +17,7 @@ export interface MentorRegistry {
   updatedDate: Date;
 }
 
-export interface FilterMentorRegistriesDto {
+export interface GetMentorRegistriesDto {
   currentPage: number;
   pageSize: number;
   githubId?: string;
@@ -27,9 +27,19 @@ export interface FilterMentorRegistriesDto {
   technicalMentoring?: string[];
 }
 
-export interface FilterMentorRegistriesResponse {
-  content: FilterMentorRegistriesDto[];
+export interface GetMentorRegistriesResponse {
+  content: MentorRegistryDto[];
   total: number;
+}
+
+export interface GetMentorRegistriesOptions {
+  currentPage?: number;
+  pageSize?: number;
+  githubId?: string;
+  cityName?: string;
+  preferedCourses?: number[];
+  preselectedCourses?: number[];
+  technicalMentoring?: string[];
 }
 
 export class MentorRegistryService {
@@ -41,9 +51,22 @@ export class MentorRegistryService {
     this.registryApi = new RegistryApi();
   }
 
-  public async getMentors() {
-    const response = await this.registryApi.getMentorRegistries();
-    return response.data;
+  public async getMentors(options?: GetMentorRegistriesDto): Promise<GetMentorRegistriesResponse> {
+    if (!options) {
+      const response = await this.registryApi.getMentorRegistries();
+      return response.data;
+    } else {
+      const response = await this.registryApi.getMentorRegistries(
+        options.pageSize,
+        options.currentPage,
+        options.githubId,
+        options.cityName,
+        options.preferedCourses,
+        options.preselectedCourses,
+        options.technicalMentoring,
+      );
+      return response.data;
+    }
   }
 
   public async updateMentor(githubId: string, data: any) {
@@ -64,26 +87,5 @@ export class MentorRegistryService {
   public async getMentor() {
     const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
     return response.data.data;
-  }
-
-  public async filterMentorRegistries({
-    currentPage,
-    pageSize,
-    githubId,
-    cityName,
-    preferedCourses,
-    preselectedCourses,
-    technicalMentoring,
-  }: FilterMentorRegistriesDto) {
-    const resp = await this.registryApi.filterMentorRegistries(
-      pageSize,
-      currentPage,
-      githubId,
-      cityName,
-      preferedCourses,
-      preselectedCourses,
-      technicalMentoring,
-    );
-    return { content: resp.data.content, total: resp.data.total };
   }
 }
