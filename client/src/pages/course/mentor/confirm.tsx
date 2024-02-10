@@ -32,6 +32,14 @@ function Page() {
     return new CourseService(course.id);
   }, [course]);
 
+  const mapMentorData = (mentor: MentorResponse, course: Course | null): MentorResponse => {
+    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor;
+    if (courseMinStudentsPerMentorValue && courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit)) {
+      mentor.maxStudentsLimit = courseMinStudentsPerMentorValue;
+    }
+    return mentor;
+  };
+
   useAsync(async () => {
     try {
       setLoading(true);
@@ -44,8 +52,9 @@ function Page() {
       const course = courses.find(c => c.alias.toLowerCase() === courseAlias) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
-      const preferredCourse = course?.id ? mentor.preferredCourses?.includes(course?.id) : null;
-      const preselectedCourses = course?.id ? mentor.preselectedCourses?.includes(course?.id) : null;
+      const mappedMentorData = mapMentorData(mentor, course);
+      const preferredCourse = course?.id ? mappedMentorData.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mappedMentorData.preselectedCourses?.includes(course?.id) : null;
       setIsPreferredCourse(preferredCourse);
       if (preselectedCourses === false) {
         setNoAccess(true);

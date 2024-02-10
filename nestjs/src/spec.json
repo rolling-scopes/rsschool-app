@@ -178,6 +178,22 @@
           }
         },
         "tags": ["courses"]
+      },
+      "post": {
+        "operationId": "createCourse",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          }
+        },
+        "tags": ["courses"]
       }
     },
     "/courses/{courseId}": {
@@ -2603,7 +2619,8 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "minStudentsPerMentor": { "type": "number" }
         },
         "required": [
           "id",
@@ -2629,8 +2646,32 @@
           "usePrivateRepositories",
           "personalMentoring",
           "logo",
-          "discipline"
+          "discipline",
+          "minStudentsPerMentor"
         ]
+      },
+      "CreateCourseDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "fullName": { "type": "string" },
+          "alias": { "type": "string" },
+          "registrationEndDate": { "type": "string" },
+          "completed": { "type": "boolean" },
+          "planned": { "type": "boolean" },
+          "inviteOnly": { "type": "boolean" },
+          "description": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "discordServerId": { "type": "number" },
+          "usePrivateRepositories": { "type": "boolean" },
+          "certificateIssuer": { "type": "string" },
+          "personalMentoring": { "type": "boolean" },
+          "logo": { "type": "string" },
+          "minStudentsPerMentor": { "type": "number" }
+        },
+        "required": ["name", "startDate", "endDate", "fullName", "alias", "description"]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -2652,33 +2693,12 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "disciplineId": { "type": "number" }
+          "disciplineId": { "type": "number" },
+          "minStudentsPerMentor": { "type": "number" }
         },
         "required": ["name", "fullName", "alias"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
-      "CreateCourseDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "startDate": { "type": "string" },
-          "endDate": { "type": "string" },
-          "fullName": { "type": "string" },
-          "alias": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
-          "completed": { "type": "boolean" },
-          "planned": { "type": "boolean" },
-          "inviteOnly": { "type": "boolean" },
-          "description": { "type": "string" },
-          "disciplineId": { "type": "number" },
-          "discordServerId": { "type": "number" },
-          "usePrivateRepositories": { "type": "boolean" },
-          "certificateIssuer": { "type": "string" },
-          "personalMentoring": { "type": "boolean" },
-          "logo": { "type": "string" }
-        },
-        "required": ["name", "startDate", "endDate", "fullName", "alias", "description"]
-      },
       "StudentDto": {
         "type": "object",
         "properties": {
@@ -3833,7 +3853,8 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "minStudentsPerMentor": { "type": "number" }
         },
         "required": [
           "id",
@@ -3859,7 +3880,8 @@
           "usePrivateRepositories",
           "personalMentoring",
           "logo",
-          "discipline"
+          "discipline",
+          "minStudentsPerMentor"
         ]
       },
       "UpdateUserDto": {
