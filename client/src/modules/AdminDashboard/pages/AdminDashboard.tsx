@@ -5,6 +5,7 @@ import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
 import { useCourseStats } from '../hooks';
 import { StudentsStatsCard } from '../components/StudentsStatsCard';
 import css from 'styled-jsx/css';
+import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
 
 const gapSize = 24;
 
@@ -33,6 +34,16 @@ function AdminDashboard() {
       title: 'studentsStatsCard',
       component: <StudentsStatsCard studentsStats={stats.studentsStats} />,
     },
+    stats?.mentorsCountries &&
+      stats.mentorsStats.mentorsActiveCount && {
+        title: 'mentorsCountriesCard',
+        component: (
+          <MentorsCountriesCard
+            countriesStats={stats.mentorsCountries}
+            activeCount={stats.mentorsStats.mentorsActiveCount}
+          />
+        ),
+      },
   ].filter(Boolean);
 
   return (
