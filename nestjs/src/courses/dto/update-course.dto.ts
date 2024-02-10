@@ -90,5 +90,5 @@ export class UpdateCourseDto {
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional()
-  minStudentsPerMentor: number;
+  minStudentsPerMentor?: number;
 }
