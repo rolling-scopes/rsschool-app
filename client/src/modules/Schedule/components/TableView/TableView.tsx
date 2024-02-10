@@ -1,4 +1,4 @@
-import { Col, Form, Row, Table, message } from 'antd';
+import { Button, Col, Form, Row, Table, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -41,16 +41,18 @@ const getColumns = ({
   combinedFilter,
   filteredInfo,
   currentTabKey,
+  isManager,
 }: {
   combinedFilter: CombinedFilter;
   timezone: string;
   tagColors: Record<string, string>;
   filteredInfo: Record<string, FilterValue | null>;
   currentTabKey: string;
+  isManager: boolean;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   const { types, statuses } = combinedFilter;
-  return [
+  const columns: ColumnsType<CourseScheduleItemDto> = [
     {
       key: ColumnKey.Status,
       title: ColumnName.Status,
@@ -126,18 +128,21 @@ const getColumns = ({
       render: scoreRenderer,
       align: 'right',
     },
-    {
+  ];
+  if (isManager) {
+    columns.push({
       key: ColumnKey.Actions,
       title: ColumnName.Actions,
       align: 'center',
       render: () => (
-        <div style={{display: 'flex'}}>
-          <button>delete</button>
-          <button>edit</button>
+        <div style={{ display: 'flex', gap: 5, justifyContent: 'center' }}>
+          <Button>Delete</Button>
+          <Button>Edit</Button>
         </div>
-      )
-    }
-  ];
+      ),
+    });
+  }
+  return columns;
 };
 
 export interface TableViewProps {
@@ -145,6 +150,7 @@ export interface TableViewProps {
   data: CourseScheduleItemDto[];
   statusFilter?: string;
   mobileView?: boolean;
+  isManager: boolean;
 }
 
 export type CombinedFilter = {
@@ -163,7 +169,7 @@ export type FilterTag = {
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
-export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileView }: TableViewProps) {
+export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileView, isManager }: TableViewProps) {
   const [form] = Form.useForm();
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
   const [combinedFilter = { types: [], statuses: [], tags: [] }, setCombinedFilter] = useLocalStorage<CombinedFilter>(
@@ -195,6 +201,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileVi
         combinedFilter,
         filteredInfo,
         currentTabKey: statusFilter,
+        isManager,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;

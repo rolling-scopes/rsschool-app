@@ -104,7 +104,13 @@ export function SchedulePage() {
           )}
         </StatusTabs>
 
-        <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />
+        <TableView
+          settings={settings}
+          data={data}
+          statusFilter={selectedTab}
+          mobileView={mobileView}
+          isManager={isManager}
+        />
 
         {courseTask ? (
           <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
