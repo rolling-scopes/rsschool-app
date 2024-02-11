@@ -20,7 +20,7 @@ export const EpamMentorsStatsCard = ({ mentorsStats }: Props) => {
         <MentorsStatsChart
           count={mentorsStats.epamMentorsCount}
           total={mentorsStats.mentorsActiveCount}
-          color="purple"
+          color="Purple"
         />
       </div>
     </Card>

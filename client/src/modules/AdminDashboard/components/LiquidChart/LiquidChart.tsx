@@ -7,7 +7,7 @@ type Props = {
   color?: keyof typeof Colors;
 };
 
-function LiquidChart({ count, total, color = Colors.blue }: Props) {
+function LiquidChart({ count, total, color = 'Blue' }: Props) {
   const percent = count / total;
   const config: LiquidConfig = {
     percent: percent,
