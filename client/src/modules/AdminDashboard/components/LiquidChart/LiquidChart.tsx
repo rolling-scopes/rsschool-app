@@ -1,12 +1,14 @@
 import { Liquid, LiquidConfig } from '@ant-design/plots';
-import { CourseStatsDto } from 'api';
+import { Colors } from '../data';
 
 type Props = {
-  studentsStats: CourseStatsDto;
+  count: number;
+  total: number;
+  color?: keyof typeof Colors;
 };
 
-function StudentsStatsChart({ studentsStats }: Props) {
-  const percent = studentsStats.studentsActiveCount / studentsStats.studentsTotalCount;
+function LiquidChart({ count, total, color = 'blue' }: Props) {
+  const percent = count / total;
   const config: LiquidConfig = {
     percent: percent,
     outline: {
@@ -16,8 +18,9 @@ function StudentsStatsChart({ studentsStats }: Props) {
     wave: {
       length: 128,
     },
+    color: () => Colors[color],
   };
   return <Liquid {...config} />;
 }
 
-export default StudentsStatsChart;
+export default LiquidChart;

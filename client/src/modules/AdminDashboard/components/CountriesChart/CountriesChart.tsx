@@ -2,10 +2,7 @@ import { Bar, BarConfig } from '@ant-design/plots';
 import { Flex, Image, Typography } from 'antd';
 import { CountryStatDto } from 'api';
 import { useCallback, useMemo } from 'react';
-
-export enum Colors {
-  purple = '#9c80f7',
-}
+import { Colors } from '../data';
 
 type Props = {
   data: CountryStatDto[];
@@ -24,7 +21,7 @@ type Datum = Parameters<typeof Bar>[0]['data'][number];
 
 const { Text } = Typography;
 
-function CountriesChart({ data, activeCount, xAxisTitle, color }: Props) {
+function CountriesChart({ data, activeCount, xAxisTitle, color = 'blue' }: Props) {
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
       const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
@@ -49,7 +46,7 @@ function CountriesChart({ data, activeCount, xAxisTitle, color }: Props) {
       scrollbar: { type: 'vertical' },
       //Why this affects the size of the chart, I don't know. Do not delete.
       seriesField: 'type',
-      color: () => color || '#1890ff',
+      color: () => Colors[color],
     }),
     [data, tooltipFormatter],
   );
