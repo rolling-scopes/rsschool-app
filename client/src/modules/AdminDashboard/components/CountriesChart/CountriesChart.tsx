@@ -21,7 +21,7 @@ type Datum = Parameters<typeof Bar>[0]['data'][number];
 
 const { Text } = Typography;
 
-function CountriesChart({ data, activeCount, xAxisTitle, color = 'blue' }: Props) {
+function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.blue }: Props) {
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
       const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
