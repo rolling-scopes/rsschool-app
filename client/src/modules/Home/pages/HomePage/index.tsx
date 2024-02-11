@@ -3,7 +3,7 @@ import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
-import { isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
+import { isAdmin, isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { CourseSelector } from 'modules/Home/components/CourseSelector';
@@ -30,7 +30,10 @@ export function HomePage() {
   const plannedCourses = (courses || []).filter(course => course.planned && !course.inviteOnly);
   const wasMentor = isAnyMentor(session);
   const hasRegistryBanner =
-    wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => session.courses[course.id] == null);
+    !isAdmin(session) &&
+    wasMentor &&
+    plannedCourses.length > 0 &&
+    plannedCourses.every(course => session.courses[course.id] == null);
 
   const isPowerUser = isAnyCoursePowerUser(session) || isAnyCourseDementor(session);
   const [allCourses, setAllCourses] = useState<Course[]>([]);

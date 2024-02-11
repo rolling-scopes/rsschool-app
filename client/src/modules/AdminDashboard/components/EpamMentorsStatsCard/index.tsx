@@ -1,0 +1,1 @@
+export { EpamMentorsStatsCard } from './EpamMentorsStatsCard';

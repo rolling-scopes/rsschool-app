@@ -86,4 +86,9 @@ export class UpdateCourseDto {
   @IsOptional()
   @ApiPropertyOptional()
   disciplineId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional()
+  minStudentsPerMentor?: number;
 }
