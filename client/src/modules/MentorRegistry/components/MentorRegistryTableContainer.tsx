@@ -400,7 +400,7 @@ export const MentorRegistryTableContainer = ({
         pageSize: PAGINATION,
         currentPage,
         githubId: combinedFilter.githubId?.[0] ?? undefined,
-        cityName: combinedFilter.githubId?.[0] ?? undefined,
+        cityName: combinedFilter.cityName?.[0] ?? undefined,
         preferedCourses: combinedFilter.preferredCourses?.length
           ? combinedFilter.preferredCourses.map(Number)
           : undefined,
