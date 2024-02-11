@@ -105,4 +105,7 @@ export class Course {
 
   @Column({ nullable: true })
   disciplineId: number | null;
+
+  @Column({ default: 2, nullable: true })
+  minStudentsPerMentor: number;
 }

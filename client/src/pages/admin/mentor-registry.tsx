@@ -270,7 +270,7 @@ function filterData(data: MentorRegistryDto[], showAll: boolean) {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]} anyCoursePowerUser>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>

@@ -2,10 +2,13 @@ import { Bar, BarConfig } from '@ant-design/plots';
 import { Flex, Image, Typography } from 'antd';
 import { CountryStatDto } from 'api';
 import { useCallback, useMemo } from 'react';
+import { Colors } from '../data';
 
 type Props = {
   data: CountryStatDto[];
-  studentsActiveCount: number;
+  activeCount: number;
+  xAxisTitle: string;
+  color?: keyof typeof Colors;
 };
 
 /*
@@ -18,29 +21,32 @@ type Datum = Parameters<typeof Bar>[0]['data'][number];
 
 const { Text } = Typography;
 
-function StudentsCountriesChart({ data, studentsActiveCount }: Props) {
+function CountriesChart({ data, activeCount, xAxisTitle, color = 'Blue' }: Props) {
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
-      const percentage = studentsActiveCount ? Math.ceil((datum.studentsCount / studentsActiveCount) * 100) : 0;
+      const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
       return {
-        name: 'Number of Students',
-        value: `${datum.studentsCount} (${percentage}%)`,
+        name: xAxisTitle,
+        value: `${datum.count} (${percentage}%)`,
       };
     },
-    [studentsActiveCount],
+    [activeCount],
   );
 
   const config: BarConfig = useMemo(
     () => ({
       data,
-      yField: 'country',
-      xField: 'studentsCount',
+      yField: 'countryName',
+      xField: 'count',
       yAxis: {
         label: { autoRotate: false },
       },
       tooltip: { formatter: tooltipFormatter },
-      xAxis: { title: { text: 'Number of Students' } },
+      xAxis: { title: { text: xAxisTitle } },
       scrollbar: { type: 'vertical' },
+      //Why this affects the size of the chart, I don't know. Do not delete.
+      seriesField: 'type',
+      color: () => Colors[color],
     }),
     [data, tooltipFormatter],
   );
@@ -57,4 +63,4 @@ function StudentsCountriesChart({ data, studentsActiveCount }: Props) {
   return <Bar {...config} />;
 }
 
-export default StudentsCountriesChart;
+export default CountriesChart;

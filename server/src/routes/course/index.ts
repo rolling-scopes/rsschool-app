@@ -1,7 +1,5 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { Course } from '../../models';
-import { createPostRoute } from '../common';
 import {
   adminGuard,
   anyCourseMentorGuard,
@@ -276,12 +274,4 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
 function addScheduleApi(router: Router<any, any>, logger: ILogger) {
   router.get('/schedule/csv/:timeZone', courseSupervisorGuard, getScheduleAsCsv(logger));
   router.post('/schedule/csv/:timeZone', courseSupervisorGuard, setScheduleFromCsv(logger));
-}
-
-export function courseCrudRoute(logger: ILogger) {
-  const router = new Router<any, any>({ prefix: '/course' });
-
-  router.post('/', adminGuard, createPostRoute(Course, logger));
-
-  return router;
 }

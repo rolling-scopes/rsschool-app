@@ -4,14 +4,14 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CountryStatDto {
   @IsString()
   @ApiProperty()
-  public country: string;
+  public countryName: string;
 
   @IsInt()
   @ApiProperty()
-  public studentsCount: number;
+  public count: number;
 }
 
-export class StudentsCountriesStatsDto {
+export class CountriesStatsDto {
   @IsArray()
   @ValidateNested({ each: true })
   @ApiProperty({ type: [CountryStatDto] })

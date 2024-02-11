@@ -37,6 +37,17 @@ export class CoursesController {
     return data.map(it => new CourseDto(it));
   }
 
+  @Post('/')
+  @ApiOperation({ operationId: 'createCourse' })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  @ApiBody({ type: CreateCourseDto })
+  @ApiOkResponse({ type: CourseDto })
+  public async createCourse(@Body() dto: CreateCourseDto) {
+    const created = await this.courseService.create(dto);
+    return new CourseDto(created);
+  }
+
   @Get('/:courseId')
   @ApiOperation({ operationId: 'getCourse' })
   @ApiForbiddenResponse()

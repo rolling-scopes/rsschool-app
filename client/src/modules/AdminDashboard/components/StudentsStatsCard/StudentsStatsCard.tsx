@@ -8,7 +8,7 @@ type Props = {
 
 const { Text } = Typography;
 
-const StudentsStatsChart = dynamic(() => import('./StudentsStatsChart'), { ssr: false });
+const StudentsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), { ssr: false });
 
 export const StudentsStatsCard = ({ studentsStats }: Props) => {
   return (
@@ -17,7 +17,7 @@ export const StudentsStatsCard = ({ studentsStats }: Props) => {
         Active Students: {studentsStats.studentsActiveCount} / {studentsStats.studentsTotalCount}
       </Text>
       <div style={{ height: 200, width: '100%' }}>
-        <StudentsStatsChart studentsStats={studentsStats} />
+        <StudentsStatsChart count={studentsStats.studentsActiveCount} total={studentsStats.studentsTotalCount} />
       </div>
     </Card>
   );
