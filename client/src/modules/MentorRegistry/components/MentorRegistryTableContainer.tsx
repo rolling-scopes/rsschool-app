@@ -139,8 +139,6 @@ export const MentorRegistryTableContainer = ({
     );
   }, [combinedFilter, mentors]);
 
-  console.log("mentors", mentors)
-  console.log("filteredData", filteredData)
   const handleTableChange = async (
     _: any,
     filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
