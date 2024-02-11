@@ -396,7 +396,7 @@ export const MentorRegistryTableContainer = ({
 
   useAsync(async () => {
     try {
-      const { content, total } = await mentorRegistryService.getMentors({
+      const { mentors, total } = await mentorRegistryService.getMentors({
         pageSize: PAGINATION,
         currentPage,
         githubId: combinedFilter.githubId?.[0] ?? undefined,
@@ -411,7 +411,7 @@ export const MentorRegistryTableContainer = ({
           ? (combinedFilter.technicalMentoring as string[])
           : undefined,
       });
-      setLoaded(content);
+      setLoaded(mentors);
       setTotal(total);
     } catch (e) {
       setLoaded(filteredData);
