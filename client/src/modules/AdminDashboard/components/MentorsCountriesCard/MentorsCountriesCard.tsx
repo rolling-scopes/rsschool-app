@@ -14,7 +14,7 @@ export const MentorsCountriesCard = ({ countriesStats, activeCount }: Props) => 
   return (
     <Card title="Mentors Countries Stats">
       <div style={{ height: 400, width: '100%' }}>
-        <CountriesChart data={countries} activeCount={activeCount} xAxisTitle={'Number of Students'} color={'purple'} />
+        <CountriesChart data={countries} activeCount={activeCount} xAxisTitle={'Number of Students'} color={'Purple'} />
       </div>
     </Card>
   );

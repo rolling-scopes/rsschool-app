@@ -6,6 +6,7 @@ import { useCourseStats } from '../hooks';
 import { StudentsStatsCard } from '../components/StudentsStatsCard';
 import css from 'styled-jsx/css';
 import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
+import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
 
 const gapSize = 24;
 
@@ -44,6 +45,10 @@ function AdminDashboard() {
           />
         ),
       },
+    stats?.mentorsStats.epamMentorsCount && {
+      title: 'mentorsStatsCard',
+      component: <EpamMentorsStatsCard mentorsStats={stats.mentorsStats} />,
+    },
   ].filter(Boolean);
 
   return (
