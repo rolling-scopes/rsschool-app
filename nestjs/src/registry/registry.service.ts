@@ -106,10 +106,10 @@ export class RegistryService {
   }) {
     const req = this.getPreparedMentorRegistriesQuery();
     if (githubId) {
-      req.andWhere(`"user"."githubId" ILIKE '%${githubId}%'`);
+      req.andWhere(`"user"."githubId" ILIKE :githubId`, { githubId });
     }
     if (cityName) {
-      req.andWhere(`"user"."cityName" ILIKE '%${cityName}%'`);
+      req.andWhere(`"user"."cityName" ILIKE :cityName`, { cityName });
     }
     if (preselectedCourses && preselectedCourses.length) {
       req.andWhere(
