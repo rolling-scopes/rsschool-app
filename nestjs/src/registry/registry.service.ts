@@ -149,7 +149,7 @@ export class RegistryService {
 
     return {
       total: response.meta.total,
-      content: response.items,
+      mentors: response.items,
     };
   }
 }

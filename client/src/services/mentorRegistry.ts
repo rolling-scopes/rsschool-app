@@ -28,7 +28,7 @@ export interface GetMentorRegistriesDto {
 }
 
 export interface GetMentorRegistriesResponse {
-  content: MentorRegistryDto[];
+  mentors: MentorRegistryDto[];
   total: number;
 }
 

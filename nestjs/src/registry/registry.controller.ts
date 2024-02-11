@@ -70,7 +70,7 @@ export class RegistryController {
   @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
   @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
   @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
-  public async filterMentorRegistries(
+  public async getMentorRegistries(
     @Req() req: CurrentRequest,
     @Query('pageSize') pageSize?: number,
     @Query('currentPage') currentPage?: number,
@@ -80,13 +80,11 @@ export class RegistryController {
     @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
     @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
   ) {
-    console.log('query');
-    console.log(req.query);
     if (req.user.isAdmin && !req.query) {
       const data = await this.registryService.findAllMentorRegistries();
       return {
         total: data.length,
-        content: data.map(el => new MentorRegistryDto(el)),
+        mentors: data.map(el => new MentorRegistryDto(el)),
       };
     } else if (req.user.isAdmin && req.query) {
       const data = await this.registryService.filterMentorRegistries({
@@ -100,7 +98,7 @@ export class RegistryController {
       });
       return {
         total: data.total,
-        content: data.content.map(el => new MentorRegistryDto(el)),
+        mentors: data.mentors.map(el => new MentorRegistryDto(el)),
       };
     } else {
       const coursesIds = Object.entries(req.user.courses)
@@ -116,7 +114,7 @@ export class RegistryController {
       );
       return {
         total: data.length,
-        content: data.map(el => new MentorRegistryDto(el)),
+        mentors: data.map(el => new MentorRegistryDto(el)),
       };
     }
   }

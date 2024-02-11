@@ -2850,7 +2850,7 @@ export interface FilterMentorRegistryResponse {
      * @type {Array<MentorRegistryDto>}
      * @memberof FilterMentorRegistryResponse
      */
-    'content': Array<MentorRegistryDto>;
+    'mentors': Array<MentorRegistryDto>;
     /**
      * 
      * @type {number}

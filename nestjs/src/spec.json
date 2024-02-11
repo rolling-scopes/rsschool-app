@@ -4048,10 +4048,10 @@
       "FilterMentorRegistryResponse": {
         "type": "object",
         "properties": {
-          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } },
+          "mentors": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } },
           "total": { "type": "number" }
         },
-        "required": ["content", "total"]
+        "required": ["mentors", "total"]
       },
       "SaveCertificateDto": {
         "type": "object",

@@ -80,12 +80,12 @@ export class MentorRegistryDto {
 }
 
 export class FilterMentorRegistryResponse {
-  constructor(content: MentorRegistryDto[], total: number) {
-    this.content = content;
+  constructor(mentors: MentorRegistryDto[], total: number) {
+    this.mentors = mentors;
     this.total = total;
   }
   @ApiProperty({ type: [MentorRegistryDto] })
-  content: MentorRegistryDto[];
+  mentors: MentorRegistryDto[];
 
   @ApiProperty()
   total: number;
