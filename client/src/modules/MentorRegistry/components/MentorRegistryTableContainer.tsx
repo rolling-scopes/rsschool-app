@@ -370,7 +370,6 @@ export const MentorRegistryTableContainer = ({
           }));
         }
         break;
-      //todo add here
       default:
         message.error('An error occurred. Please try again later.');
         break;
