@@ -7,7 +7,7 @@ import { useMemo, useState, useContext } from 'react';
 import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager, isCourseSupervisor } from 'domain/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 function Page() {
@@ -22,6 +22,7 @@ function Page() {
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
+  const courseSupervisorRole = useMemo(() => isCourseSupervisor(session, courseId), [course, session]);
 
   const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
 
@@ -104,7 +105,7 @@ function Page() {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (courseManagerRole) {
+              if (courseManagerRole || courseSupervisorRole) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel
