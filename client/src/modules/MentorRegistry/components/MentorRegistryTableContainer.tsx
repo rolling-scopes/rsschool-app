@@ -408,6 +408,7 @@ export const MentorRegistryTableContainer = ({
       setLoaded(mentors);
       setTotal(total);
     } catch (e) {
+      message.error('An error occurred. No filters have been applied.');
       setLoaded(filteredData);
       setTotal(filteredData.length);
     }
