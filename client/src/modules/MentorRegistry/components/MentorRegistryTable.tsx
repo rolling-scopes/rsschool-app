@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Table } from 'antd';
+import { Form, Table, TablePaginationConfig } from 'antd';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
@@ -16,7 +16,10 @@ type Props = {
   columns: ColumnType<MentorRegistryDto>[];
   handleTagClose: (tag: string) => void;
   handleClearAllButtonClick: () => void;
-  handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
+  handleTableChange: (
+    _: TablePaginationConfig,
+    filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
+  ) => void;
 };
 
 export function MentorRegistryTable(props: Props) {
