@@ -9,10 +9,10 @@ export { getServerSideProps };
 
 export default function (props: PageProps) {
   return (
-    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
-      <ActiveCourseProvider>
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
         {props.type === stageInterviewType ? <Feedback {...props} /> : <InterviewFeedback {...props} />}
-      </ActiveCourseProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }

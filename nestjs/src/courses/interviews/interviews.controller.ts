@@ -24,7 +24,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
@@ -85,7 +85,7 @@ export class InterviewsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getAvailableStudents' })
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
   public async getAvailableStudents(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,
@@ -112,7 +112,7 @@ export class InterviewsController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getInterviewFeedback' })
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
   public async getInterviewFeedback(
     @Param('courseId', ParseIntPipe) _: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,
