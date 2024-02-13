@@ -35,7 +35,7 @@ export class CourseStatsController {
     if (!this.courseAccessService.canAccessCourse(req.user, courseId)) {
       throw new ForbiddenException();
     }
-    const data = await this.courseStatsService.getById(courseId);
+    const data = await this.courseStatsService.getStudents(courseId);
     return new CourseStatsDto(data);
   }
 

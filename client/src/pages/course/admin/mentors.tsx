@@ -158,41 +158,18 @@ function Page() {
 
   return (
     <AdminPageLayout loading={loading} title="Course Mentors" showCourseName courses={courses}>
-      <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            maxWidth: 280,
-            flex: 'auto',
-            border: '1px rgba(0, 0, 0, 0.06) dashed',
-            padding: '10px',
-            marginRight: '20px',
-          }}
-        >
-          <Statistic title="Total Count" value={stats?.recordCount} />
-          <Table
-            pagination={false}
-            size="small"
-            rowKey="name"
-            dataSource={stats?.countries ?? []}
-            columns={[
-              { title: 'Country', dataIndex: 'name', width: 200 },
-              { title: 'Count', dataIndex: 'totalCount' },
-            ]}
-          />
-        </div>
-        <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
-          <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
-          <Table
-            pagination={false}
-            size="small"
-            rowKey="studentsGroupName"
-            dataSource={stats?.students ?? []}
-            columns={[
-              { title: 'Group of students', dataIndex: 'studentsGroupName' },
-              { title: 'Count', dataIndex: 'totalCount' },
-            ]}
-          />
-        </div>
+      <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
+        <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
+        <Table
+          pagination={false}
+          size="small"
+          rowKey="studentsGroupName"
+          dataSource={stats?.students ?? []}
+          columns={[
+            { title: 'Group of students', dataIndex: 'studentsGroupName' },
+            { title: 'Count', dataIndex: 'totalCount' },
+          ]}
+        />
       </div>
       <Divider dashed />
       <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>

@@ -4,10 +4,10 @@ import { Colors } from '../data';
 type Props = {
   count: number;
   total: number;
-  color?: keyof typeof Colors;
+  color?: Colors;
 };
 
-function LiquidChart({ count, total, color = 'Blue' }: Props) {
+function LiquidChart({ count, total, color = Colors.Blue }: Props) {
   const percent = count / total;
   const config: LiquidConfig = {
     percent: percent,
@@ -18,7 +18,7 @@ function LiquidChart({ count, total, color = 'Blue' }: Props) {
     wave: {
       length: 128,
     },
-    color: () => Colors[color],
+    color: () => color,
   };
   return <Liquid {...config} />;
 }

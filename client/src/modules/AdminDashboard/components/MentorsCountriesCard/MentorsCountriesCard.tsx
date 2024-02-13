@@ -1,6 +1,7 @@
 import { Card } from 'antd';
 import { CountriesStatsDto } from 'api';
 import dynamic from 'next/dynamic';
+import { Colors } from '../data';
 
 type Props = {
   countriesStats: CountriesStatsDto;
@@ -12,9 +13,14 @@ const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'),
 export const MentorsCountriesCard = ({ countriesStats, activeCount }: Props) => {
   const { countries } = countriesStats;
   return (
-    <Card title="Mentors Countries Stats">
-      <div style={{ height: 400, width: '100%' }}>
-        <CountriesChart data={countries} activeCount={activeCount} xAxisTitle={'Number of Students'} color={'Purple'} />
+    <Card title="Mentors Countries">
+      <div style={{ height: 350, width: '100%' }}>
+        <CountriesChart
+          data={countries}
+          activeCount={activeCount}
+          xAxisTitle={'Number of Students'}
+          color={Colors.Purple}
+        />
       </div>
     </Card>
   );

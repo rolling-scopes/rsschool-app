@@ -8,7 +8,7 @@ type Props = {
   data: CountryStatDto[];
   activeCount: number;
   xAxisTitle: string;
-  color?: keyof typeof Colors;
+  color?: Colors;
 };
 
 /*
@@ -21,7 +21,7 @@ type Datum = Parameters<typeof Bar>[0]['data'][number];
 
 const { Text } = Typography;
 
-function CountriesChart({ data, activeCount, xAxisTitle, color = 'Blue' }: Props) {
+function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: Props) {
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
       const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
@@ -46,7 +46,7 @@ function CountriesChart({ data, activeCount, xAxisTitle, color = 'Blue' }: Props
       scrollbar: { type: 'vertical' },
       //Why this affects the size of the chart, I don't know. Do not delete.
       seriesField: 'type',
-      color: () => Colors[color],
+      color: () => color,
     }),
     [data, tooltipFormatter],
   );

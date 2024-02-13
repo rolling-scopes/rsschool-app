@@ -3118,8 +3118,12 @@
       },
       "CourseStatsDto": {
         "type": "object",
-        "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
-        "required": ["studentsActiveCount", "studentsTotalCount"]
+        "properties": {
+          "studentsActiveCount": { "type": "number" },
+          "studentsTotalCount": { "type": "number" },
+          "studentsWithMentorCount": { "type": "number" }
+        },
+        "required": ["studentsActiveCount", "studentsTotalCount", "studentsWithMentorCount"]
       },
       "CourseMentorsStatsDto": {
         "type": "object",
