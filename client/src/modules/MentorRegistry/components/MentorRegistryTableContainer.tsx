@@ -333,7 +333,6 @@ export const MentorRegistryTableContainer = ({
         ),
         width: 140,
         fixed: 'right' as const,
-        filteredValue: null,
       },
     ];
 
