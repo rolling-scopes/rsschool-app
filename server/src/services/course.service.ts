@@ -412,7 +412,15 @@ export async function getStudentScore(studentId: number) {
     .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .leftJoin('student.stageInterviews', 'si')
     .leftJoin('si.stageInterviewFeedbacks', 'sif')
-    .addSelect(['sif.stageInterviewId', 'sif.json', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
+    .addSelect([
+      'sif.stageInterviewId',
+      'sif.json',
+      'si.isCompleted',
+      'si.id',
+      'si.courseTaskId',
+      'si.score',
+      'sif.version',
+    ])
     .where('student.id = :studentId', { studentId })
     .getOne();
 
@@ -434,8 +442,13 @@ export async function getStudentScore(studentId: number) {
 
   // we have a case when technical screening score are set as task result.
   if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+    const feedbackVersion = stageInterviews[0].stageInterviewFeedbacks[0]?.version;
+    const score = !feedbackVersion
+      ? Math.floor(getStageInterviewRating(stageInterviews) ?? 0)
+      : stageInterviews[0].score;
+
     results.push({
-      score: Math.floor(getStageInterviewRating(stageInterviews) ?? 0),
+      score,
       courseTaskId: stageInterviews[0].courseTaskId,
     });
   }
