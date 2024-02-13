@@ -201,10 +201,6 @@ export const MentorRegistryTableContainer = ({
     );
   };
 
-  const onPaginationChange: PaginationProps['onChange'] = page => {
-    setCurrentPage(page);
-  };
-
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
     const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
     const allColumns = [
@@ -428,7 +424,7 @@ export const MentorRegistryTableContainer = ({
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
-    onPaginationChange,
+    setCurrentPage,
   });
 };
 

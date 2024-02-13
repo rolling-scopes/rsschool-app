@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Form, Table, TablePaginationConfig } from 'antd';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
 import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
 import { ColumnType } from 'antd/lib/table';
-import { PaginationProps } from 'antd/lib';
 
 type Props = {
-  onPaginationChange: PaginationProps['onChange'];
+  setCurrentPage: Dispatch<SetStateAction<number>>;
   total: number;
   currentPage: number;
   tagFilters: string[];
@@ -32,7 +31,7 @@ export function MentorRegistryTable(props: Props) {
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
-    onPaginationChange,
+    setCurrentPage,
   } = props;
   const [form] = Form.useForm();
 
@@ -45,7 +44,7 @@ export function MentorRegistryTable(props: Props) {
         onClearAllButtonClick={handleClearAllButtonClick}
       />
       <Table<MentorRegistryDto>
-        pagination={{ pageSize: PAGINATION, current: currentPage, onChange: onPaginationChange, total }}
+        pagination={{ pageSize: PAGINATION, current: currentPage, onChange: setCurrentPage, total }}
         size="large"
         rowKey="id"
         dataSource={filteredData}
