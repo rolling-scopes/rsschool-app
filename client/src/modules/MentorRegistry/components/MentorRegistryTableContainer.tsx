@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dateSorter } from 'components/Table';
@@ -13,7 +13,7 @@ import {
   PAGINATION,
 } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, Dropdown, PaginationProps, Tooltip, message } from 'antd';
+import { Button, Dropdown, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
@@ -23,7 +23,7 @@ import { MentorRegistryService } from 'services/mentorRegistry';
 import { useAsync } from 'react-use';
 
 interface ChildrenProp {
-  onPaginationChange: PaginationProps['onChange'];
+  setCurrentPage: Dispatch<SetStateAction<number>>;
   currentPage: number;
   total: number;
   tagFilters: string[];
