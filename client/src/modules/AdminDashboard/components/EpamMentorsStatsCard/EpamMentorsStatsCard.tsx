@@ -1,6 +1,7 @@
 import { Card, Typography } from 'antd';
 import { CourseMentorsStatsDto } from 'api';
 import dynamic from 'next/dynamic';
+import { Colors } from '../data';
 
 type Props = {
   mentorsStats: CourseMentorsStatsDto;
@@ -16,11 +17,11 @@ export const EpamMentorsStatsCard = ({ mentorsStats }: Props) => {
       <Text strong>
         Epam Mentors: {mentorsStats.epamMentorsCount} / {mentorsStats.mentorsActiveCount}
       </Text>
-      <div style={{ height: 200, width: '100%' }}>
+      <div style={{ height: 180, width: '100%' }}>
         <MentorsStatsChart
           count={mentorsStats.epamMentorsCount}
           total={mentorsStats.mentorsActiveCount}
-          color="Purple"
+          color={Colors.Purple}
         />
       </div>
     </Card>

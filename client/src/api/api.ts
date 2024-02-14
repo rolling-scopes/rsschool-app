@@ -1049,6 +1049,12 @@ export interface CourseStatsDto {
      * @memberof CourseStatsDto
      */
     'studentsTotalCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'studentsWithMentorCount': number;
 }
 /**
  * 

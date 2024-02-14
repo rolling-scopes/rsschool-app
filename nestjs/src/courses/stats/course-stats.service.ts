@@ -14,14 +14,27 @@ export class CourseStatsService {
     private readonly mentorRepository: Repository<Mentor>,
   ) {}
 
-  public async getById(courseId: number) {
-    const [studentsTotalCount, studentsActiveCount] = await Promise.all([
-      this.studentRepository.count({ where: { courseId } }),
-      this.studentRepository.count({ where: { courseId, isExpelled: false, isFailed: false } }),
-    ]);
+  public async getStudents(courseId: number) {
+    const queryBuilder = this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoinAndSelect('student.user', 'user')
+      .select('COUNT(*)', 'total_students')
+      .addSelect(
+        'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false THEN 1 END)',
+        'active_students',
+      )
+      .addSelect(
+        'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false AND student.mentorId IS NOT NULL THEN 1 END)',
+        'students_with_mentor',
+      )
+      .where('student.courseId = :courseId', { courseId });
+
+    const result = await queryBuilder.getRawOne();
+
     return {
-      studentsActiveCount,
-      studentsTotalCount,
+      studentsTotalCount: Number(result.total_students),
+      studentsActiveCount: Number(result.active_students),
+      studentsWithMentorCount: Number(result.students_with_mentor),
     };
   }
 

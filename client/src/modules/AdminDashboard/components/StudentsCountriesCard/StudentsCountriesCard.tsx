@@ -12,8 +12,8 @@ const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'),
 export const StudentsCountriesCard = ({ studentsCountriesStats, studentsActiveCount }: Props) => {
   const { countries } = studentsCountriesStats;
   return (
-    <Card title="Students Countries Stats">
-      <div style={{ height: 400, width: '100%' }}>
+    <Card title="Students Countries">
+      <div style={{ height: 350, width: '100%' }}>
         <CountriesChart data={countries} activeCount={studentsActiveCount} xAxisTitle={'Number of Students'} />
       </div>
     </Card>
