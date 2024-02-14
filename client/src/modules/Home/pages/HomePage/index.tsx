@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Flex, Image, Layout, List, Modal, Row, Typography } from 'antd';
+import { Alert, Button, Col, Layout, List, Row } from 'antd';
 import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
@@ -27,12 +27,6 @@ const alertService = new AlertsApi();
 export function HomePage() {
   const { courses = [], setCourse, course } = useActiveCourseContext();
   const session = useContext(SessionContext);
-
-  // Dima's birthday modal
-  // TODO: remove after 14.02.2023
-  const isDima = useMemo(() => session?.githubId === 'dzmitry-varabei', [session]);
-  const [isModalVisible, setIsModalVisible] = useState(isDima);
-
   const plannedCourses = (courses || []).filter(course => course.planned && !course.inviteOnly);
   const wasMentor = isAnyMentor(session);
   const hasRegistryBanner =
@@ -79,42 +73,6 @@ export function HomePage() {
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>
       <Header />
-      {/*will remove after 14.02.2023*/}
-      {isModalVisible && (
-        <Modal
-          title="Happy Birthday, Dima!"
-          open={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          onOk={() => setIsModalVisible(false)}
-        >
-          <Flex align="center" vertical gap={'small'}>
-            <Typography.Text strong>🎉 Поздравляем С Днём Рождения, Дима! 🎉</Typography.Text>
-            <Typography.Text>От команды разработчиков RS App и всех в Rolling Scopes Community,</Typography.Text>
-            <Typography.Text>
-              Сегодня мы отмечаем не просто день, а эпоху – <br />
-              Эру Димы, величайшего менеджера и лидера!
-            </Typography.Text>
-            <Typography.Text>
-              Ты как гуру JavaScript в мире управления, <br />
-              С тобой каждый баг превращается в feature, <br />
-              Каждый дедлайн – в новое приключение, <br />И каждое совещание – в комедийное шоу!
-            </Typography.Text>
-            <Typography.Text>
-              Ты не просто руководишь – ты вдохновляешь, <br />
-              Не просто планируешь – ты создаёшь искусство, <br />
-              Не просто общаешься – а заставляешь нас смеяться, <br />И делаешь каждый рабочий день чем-то особенным.
-            </Typography.Text>
-            <Typography.Text>
-              Сегодня мы отмечаем не только твой день рождения, <br />
-              Но и день, когда RS App и Rolling Scopes получили своего героя. <br />
-              С днём рождения, Дима! Оставайся всегда таким же крутым, <br />И пусть каждый твой код коммит будет без
-              конфликтов!
-            </Typography.Text>
-            <Typography.Text strong>С уважением и лучшими пожеланиями, Команда RS App 🎉🎈🎂</Typography.Text>
-            <Image src={`/static/images/dima.jpg`} alt={'dima'} width={300} height={300} />
-          </Flex>
-        </Modal>
-      )}
       <Layout style={{ background: '#fff' }}>
         {isPowerUser && <AdminSider courses={courses} activeCourse={course} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
