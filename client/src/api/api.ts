@@ -886,6 +886,18 @@ export interface CourseScheduleItemDto {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof CourseScheduleItemDto
+     */
+    'taskId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseScheduleItemDto
+     */
+    'eventId': number | null;
+    /**
+     * 
      * @type {string}
      * @memberof CourseScheduleItemDto
      */

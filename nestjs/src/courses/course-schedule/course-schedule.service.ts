@@ -24,6 +24,8 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     tag: CourseScheduleItemTag;
     descriptionUrl?: string;
     type: CourseScheduleDataSource;
+    taskId: number | null;
+    eventId: number | null;
   };
 
 export enum CourseScheduleDataSource {
@@ -105,7 +107,8 @@ export class CourseScheduleService {
 
     const schedule = courseTasks
       .reduce<CourseScheduleItem[]>((acc, courseTask) => {
-        const { id, courseId, studentStartDate, studentEndDate, maxScore, scoreWeight, crossCheckEndDate } = courseTask;
+        const { id, taskId, courseId, studentStartDate, studentEndDate, maxScore, scoreWeight, crossCheckEndDate } =
+          courseTask;
         const { name } = courseTask.task;
 
         const isCrossCheckTask = courseTask.checker === Checker.CrossCheck;
@@ -125,6 +128,8 @@ export class CourseScheduleService {
         } else {
           const scheduleItem = {
             id,
+            taskId,
+            eventId: null,
             name,
             courseId,
             startDate: studentStartDate,
@@ -147,11 +152,13 @@ export class CourseScheduleService {
       }, [])
       .concat(
         courseEvents.map(courseEvent => {
-          const { courseId, dateTime, endTime, id } = courseEvent;
+          const { courseId, eventId, dateTime, endTime, id } = courseEvent;
           const { name } = courseEvent.event;
           const tag = this.getCourseEventTag(courseEvent);
           return {
             id,
+            eventId,
+            taskId: null,
             name,
             courseId,
             startDate: dateTime,
@@ -187,6 +194,8 @@ export class CourseScheduleService {
 
     const submitItem = {
       id: crossCheckTask.id,
+      taskId: crossCheckTask.taskId,
+      eventId: null,
       name: crossCheckTask.task.name,
       courseId: crossCheckTask.courseId,
       startDate: crossCheckTask.studentStartDate,
@@ -207,6 +216,8 @@ export class CourseScheduleService {
 
     const reviewItem = {
       id: crossCheckTask.id,
+      taskId: crossCheckTask.task.id,
+      eventId: null,
       name: crossCheckTask.task.name,
       courseId: crossCheckTask.courseId,
       startDate: crossCheckTask.studentEndDate,

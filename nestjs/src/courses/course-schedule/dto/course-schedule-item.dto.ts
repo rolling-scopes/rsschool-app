@@ -11,6 +11,8 @@ import {
 export class CourseScheduleItemDto {
   constructor(item: CourseScheduleItem) {
     this.id = item.id;
+    this.taskId = item.taskId;
+    this.eventId = item.eventId;
     this.name = item.name;
     this.startDate = (item.startDate as Date)?.toISOString();
     this.endDate = (item.endDate as Date)?.toISOString();
@@ -32,6 +34,12 @@ export class CourseScheduleItemDto {
 
   @ApiProperty()
   id: number;
+
+  @ApiProperty({ nullable: true, type: Number })
+  taskId: number | null;
+
+  @ApiProperty({ nullable: true, type: Number })
+  eventId: number | null;
 
   @ApiProperty({ enum: CourseScheduleItemStatus })
   status: CourseScheduleItemStatus;
