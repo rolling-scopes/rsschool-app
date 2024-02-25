@@ -123,3 +123,13 @@ export const CHECKER_TYPES = {
 
 export const ALL_TAB_KEY = 'all';
 export const ALL_TAB_LABEL = 'All';
+
+export enum ScheduleItems {
+  task = "task",
+  event = "event"
+}
+
+export enum ScheduleItemsActions {
+  update = "update",
+  delete = "delete"
+}

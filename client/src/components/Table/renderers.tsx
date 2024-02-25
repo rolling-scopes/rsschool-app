@@ -4,13 +4,14 @@ import GithubOutlined from '@ant-design/icons/GithubOutlined';
 import MinusCircleOutlined from '@ant-design/icons/MinusCircleOutlined';
 import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
-import { Tag, Tooltip, Typography } from 'antd';
+import { Button, Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
 import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum, TaskDto } from 'api';
 import { CrossCheckStatus } from 'services/course';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { ScheduleItems, ScheduleItemsActions } from 'modules/Schedule/constants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -187,6 +188,30 @@ export const renderTask = (name: string, item: CourseScheduleItemDto) => {
     </Link>
   );
 };
+
+export const getActionRenderer =
+  (handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void) =>
+  item => {
+    const isTask = !!item.scoreWeight;
+    return (
+      <div style={{ display: 'flex', gap: 5, justifyContent: 'center' }}>
+        <Button
+          onClick={() =>
+            handleOpenModal(ScheduleItemsActions.delete, isTask ? ScheduleItems.task : ScheduleItems.event, item)
+          }
+        >
+          Delete
+        </Button>
+        <Button
+          onClick={() =>
+            handleOpenModal(ScheduleItemsActions.update, isTask ? ScheduleItems.task : ScheduleItems.event, item)
+          }
+        >
+          Edit
+        </Button>
+      </div>
+    );
+  };
 
 export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
   const now = dayjs();

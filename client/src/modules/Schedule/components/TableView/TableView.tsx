@@ -1,10 +1,11 @@
-import { Button, Col, Form, Row, Table, message } from 'antd';
+import { Col, Form, Row, Table, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseScheduleItemDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import {
   coloredDateRenderer,
   dateSorter,
+  getActionRenderer,
   getColumnSearchProps,
   renderTask,
   scoreRenderer,
@@ -18,6 +19,8 @@ import {
   CONFIGURABLE_COLUMNS,
   LocalStorageKeys,
   SCHEDULE_STATUSES,
+  ScheduleItems,
+  ScheduleItemsActions,
   TAG_NAME_MAP,
   TAGS,
 } from 'modules/Schedule/constants';
@@ -42,6 +45,7 @@ const getColumns = ({
   filteredInfo,
   currentTabKey,
   isManager,
+  handleOpenModal,
 }: {
   combinedFilter: CombinedFilter;
   timezone: string;
@@ -49,6 +53,7 @@ const getColumns = ({
   filteredInfo: Record<string, FilterValue | null>;
   currentTabKey: string;
   isManager: boolean;
+  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   const { types, statuses } = combinedFilter;
@@ -134,12 +139,7 @@ const getColumns = ({
       key: ColumnKey.Actions,
       title: ColumnName.Actions,
       align: 'center',
-      render: () => (
-        <div style={{ display: 'flex', gap: 5, justifyContent: 'center' }}>
-          <Button>Delete</Button>
-          <Button>Edit</Button>
-        </div>
-      ),
+      render: getActionRenderer(handleOpenModal)
     });
   }
   return columns;
@@ -151,6 +151,7 @@ export interface TableViewProps {
   statusFilter?: string;
   mobileView?: boolean;
   isManager: boolean;
+  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void;
 }
 
 export type CombinedFilter = {
@@ -169,7 +170,14 @@ export type FilterTag = {
 const hasStatusFilter = (statusFilter?: string, itemStatus?: string) =>
   Array.isArray(statusFilter) || statusFilter === ALL_TAB_KEY || itemStatus === statusFilter;
 
-export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileView, isManager }: TableViewProps) {
+export function TableView({
+  data,
+  settings,
+  statusFilter = ALL_TAB_KEY,
+  mobileView,
+  isManager,
+  handleOpenModal,
+}: TableViewProps) {
   const [form] = Form.useForm();
   const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | string[] | null>>({});
   const [combinedFilter = { types: [], statuses: [], tags: [] }, setCombinedFilter] = useLocalStorage<CombinedFilter>(
@@ -202,6 +210,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileVi
         filteredInfo,
         currentTabKey: statusFilter,
         isManager,
+        handleOpenModal,
       }).filter(column => {
         const key = (column.key as ColumnKey) ?? ColumnKey.Name;
         return CONFIGURABLE_COLUMNS.includes(key) ? !settings.columnsHidden.includes(key) : true;

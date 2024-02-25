@@ -20,7 +20,7 @@ import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
 import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
-import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, LocalStorageKeys, ScheduleItemsActions, ScheduleItems } from 'modules/Schedule/constants';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
@@ -40,6 +40,14 @@ export function SchedulePage() {
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const settings = useScheduleSettings();
+
+  const handleOpenModal = (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => {
+    if(itemType === ScheduleItems.task){
+      setCourseTask(data)
+    } else if(itemType === ScheduleItems.event){
+      setCourseEvent(data)
+    }
+  };
 
   const handleSubmit = async (record: CreateCourseTaskDto) => {
     await courseTaskApi.createCourseTask(course.id, record);
@@ -110,6 +118,7 @@ export function SchedulePage() {
           statusFilter={selectedTab}
           mobileView={mobileView}
           isManager={isManager}
+          handleOpenModal={handleOpenModal}
         />
 
         {courseTask ? (
