@@ -15,8 +15,12 @@ export function StudentMentorModal(props: Props) {
     props.onOk(values.studentGithubId, values.mentorGithubId);
   };
 
+  if (!props.visible) {
+    return null;
+  }
+
   return (
-    <ModalForm title="Student/Mentor" data={props.visible ? {} : null} submit={handleSubmit} cancel={props.onCancel}>
+    <ModalForm title="Student/Mentor" data={{}} submit={handleSubmit} cancel={props.onCancel}>
       <Row gutter={24}>
         <Col span={24}>
           <Form.Item

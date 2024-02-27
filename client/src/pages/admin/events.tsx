@@ -73,55 +73,57 @@ function Page() {
     [modalAction, modalData],
   );
 
-  const renderModal = useCallback(() => {
-    return (
-      <ModalForm
-        data={modalData}
-        title="Event"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
-      >
-        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="type" label="Event Type" rules={[{ required: true, message: 'Please select a type' }]}>
-          <Select>
-            {EVENT_TYPES.map(({ name, id }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          required
-          name="disciplineId"
-          label="Discipline"
-          rules={[{ required: true, message: 'Please select a discipline' }]}
+  const renderModal = useCallback(
+    () =>
+      modalData ? (
+        <ModalForm
+          data={modalData}
+          title="Event"
+          submit={handleModalSubmit}
+          cancel={() => setModalData(null)}
+          getInitialValues={getInitialValues}
         >
-          <Select>
-            {disciplines.map(({ id, name }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="type" label="Event Type" rules={[{ required: true, message: 'Please select a type' }]}>
+            <Select>
+              {EVENT_TYPES.map(({ name, id }) => (
+                <Select.Option key={id} value={id}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            required
+            name="disciplineId"
+            label="Discipline"
+            rules={[{ required: true, message: 'Please select a discipline' }]}
+          >
+            <Select>
+              {disciplines.map(({ id, name }) => (
+                <Select.Option key={id} value={id}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item
-          name="descriptionUrl"
-          label="Description URL"
-          rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item name="description" label="Description">
-          <Input.TextArea />
-        </Form.Item>
-      </ModalForm>
-    );
-  }, [modalData]);
+          <Form.Item
+            name="descriptionUrl"
+            label="Description URL"
+            rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea />
+          </Form.Item>
+        </ModalForm>
+      ) : null,
+    [modalData],
+  );
 
   return (
     <AdminPageLayout title="Manage Events" loading={loading} courses={courses}>

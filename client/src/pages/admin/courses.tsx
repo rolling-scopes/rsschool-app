@@ -112,7 +112,10 @@ function Page() {
     [modalAction, modalData, modalLoading],
   );
 
-  const renderModal = useCallback(() => {
+  const renderModal = () => {
+    if (modalData == null) {
+      return;
+    }
     const isUpdate = modalAction === 'update';
     return (
       <ModalForm
@@ -241,12 +244,12 @@ function Page() {
           label="Minimum Students per Mentor"
           rules={[{ min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' }]}
         >
-          <InputNumber step={1} defaultValue={2} />
+          <InputNumber step={1} />
         </Form.Item>
 
         <Form.Item name="state" label="State">
           <Radio.Group>
-            <Radio value={null}>Active</Radio>
+            <Radio value="active">Active</Radio>
             <Radio value="planned">Planned</Radio>
             <Radio value="completed">Completed</Radio>
           </Radio.Group>
@@ -265,7 +268,7 @@ function Page() {
         </Form.Item>
       </ModalForm>
     );
-  }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
+  };
 
   return (
     <AdminPageLayout title="Manage Courses" loading={loading} courses={allCourses}>
@@ -386,8 +389,9 @@ function getColumns(handleEditItem: any) {
 function getInitialValues(modalData: Partial<Course>) {
   return {
     ...modalData,
+    minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
     inviteOnly: !!modalData.inviteOnly,
-    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : null,
+    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
     registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
     range:
       modalData.startDate && modalData.endDate

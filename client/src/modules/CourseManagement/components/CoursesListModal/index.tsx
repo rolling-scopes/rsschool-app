@@ -40,6 +40,10 @@ export function CoursesListModal(props: Props) {
     [courses],
   );
 
+  if (!props.data) {
+    return null;
+  }
+
   return (
     <ModalForm
       data={props.data}
