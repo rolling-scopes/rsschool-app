@@ -128,8 +128,9 @@ export const MentorRegistryTableContainer = ({
       ),
       ...combinedFilter.preferredCourses.map(
         preferredCourse =>
-          `${MentorsRegistryColumnName.PreferredCourses}: ${courses.find(course => course.id === preferredCourse)
-            ?.name}`,
+          `${MentorsRegistryColumnName.PreferredCourses}: ${
+            courses.find(course => course.id === preferredCourse)?.name
+          }`,
       ),
     ];
 

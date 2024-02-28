@@ -87,6 +87,10 @@ export function CourseTaskModal(props: Props) {
     form.setFieldsValue({ type: task?.type });
   };
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <ModalForm
       loading={loading}
