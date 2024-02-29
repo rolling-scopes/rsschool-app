@@ -82,7 +82,10 @@ function Page() {
     loadData();
   };
 
-  const renderUserModal = (modalData: Partial<CourseUser>) => {
+  const renderUserModal = (modalData: Partial<CourseUser> | null) => {
+    if (!modalData) {
+      return null;
+    }
     return (
       <ModalForm
         getInitialValues={getInitialValues}
@@ -199,7 +202,7 @@ function Page() {
         dataSource={courseUsers}
         columns={getColumns(handleEditItem)}
       />
-      {renderUserModal(userModalData!)}
+      {renderUserModal(userModalData)}
       <GroupModal modalData={groupModalData!} />
     </AdminPageLayout>
   );

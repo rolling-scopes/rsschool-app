@@ -1,22 +1,21 @@
 import { ButtonProps, Form, Modal, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import * as React from 'react';
+import React from 'react';
 
-type Props = {
-  data: any;
+type Props<T> = React.PropsWithChildren<{
+  data: T;
   title?: string;
   submit: (arg: any) => void;
   cancel: (arg: any) => void;
   onChange?: (values: any) => void;
   getInitialValues?: (arg: any) => any;
-  children: any;
   loading?: boolean;
   okText?: string;
   form?: FormInstance;
   okButtonProps?: ButtonProps;
-};
+}>;
 
-export function ModalForm(props: Props) {
+export function ModalForm<T extends object>(props: Props<T>) {
   const antForm = Form.useForm()[0];
   const form = props.form || antForm;
 
