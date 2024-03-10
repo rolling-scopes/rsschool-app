@@ -3193,6 +3193,7 @@
           "comment": { "type": "string" },
           "url": { "type": "string" },
           "reviewedDate": { "type": "string" },
+          "privateRepository": { "type": "string" },
           "submittedDate": { "type": "string" },
           "historicalScores": { "type": "array", "items": { "$ref": "#/components/schemas/HistoricalScoreDto" } },
           "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
@@ -3206,6 +3207,7 @@
           "comment",
           "url",
           "reviewedDate",
+          "privateRepository",
           "submittedDate",
           "historicalScores",
           "messages"
