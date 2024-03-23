@@ -3121,9 +3121,15 @@
         "properties": {
           "studentsActiveCount": { "type": "number" },
           "studentsTotalCount": { "type": "number" },
-          "studentsWithMentorCount": { "type": "number" }
+          "studentsWithMentorCount": { "type": "number" },
+          "studentsWithCertificateCount": { "type": "number" }
         },
-        "required": ["studentsActiveCount", "studentsTotalCount", "studentsWithMentorCount"]
+        "required": [
+          "studentsActiveCount",
+          "studentsTotalCount",
+          "studentsWithMentorCount",
+          "studentsWithCertificateCount"
+        ]
       },
       "CourseMentorsStatsDto": {
         "type": "object",

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CountryStatDto } from './dto';
-import { Mentor } from '@entities/index';
+import { Certificate, Mentor } from '@entities/index';
 
 @Injectable()
 export class CourseStatsService {
@@ -18,6 +18,7 @@ export class CourseStatsService {
     const queryBuilder = this.studentRepository
       .createQueryBuilder('student')
       .leftJoinAndSelect('student.user', 'user')
+      .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
       .select('COUNT(*)', 'total_students')
       .addSelect(
         'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false THEN 1 END)',
@@ -27,6 +28,10 @@ export class CourseStatsService {
         'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false AND student.mentorId IS NOT NULL THEN 1 END)',
         'students_with_mentor',
       )
+      .addSelect(
+        'COUNT(DISTINCT CASE WHEN certificate.publicId IS NOT NULL THEN student.id END)',
+        'students_with_certificate',
+      )
       .where('student.courseId = :courseId', { courseId });
 
     const result = await queryBuilder.getRawOne();
@@ -35,6 +40,7 @@ export class CourseStatsService {
       studentsTotalCount: Number(result.total_students),
       studentsActiveCount: Number(result.active_students),
       studentsWithMentorCount: Number(result.students_with_mentor),
+      studentsWithCertificateCount: Number(result.students_with_certificate),
     };
   }
 

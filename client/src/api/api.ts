@@ -1055,6 +1055,12 @@ export interface CourseStatsDto {
      * @memberof CourseStatsDto
      */
     'studentsWithMentorCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'studentsWithCertificateCount': number;
 }
 /**
  * 
