@@ -1042,13 +1042,13 @@ export interface CourseStatsDto {
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsActiveCount': number;
+    'activeStudentsCount': number;
     /**
      * 
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsTotalCount': number;
+    'totalStudents': number;
     /**
      * 
      * @type {number}
@@ -1060,7 +1060,7 @@ export interface CourseStatsDto {
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsWithCertificateCount': number;
+    'certifiedStudentsCount': number;
 }
 /**
  * 

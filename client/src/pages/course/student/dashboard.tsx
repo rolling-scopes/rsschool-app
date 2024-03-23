@@ -88,7 +88,7 @@ function Page() {
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
-      setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
+      setTotalStudentsCount(courseStats?.data.activeStudentsCount || 0);
       setAvailableReviews(availableReviews ?? []);
 
       setTasksByStatus(

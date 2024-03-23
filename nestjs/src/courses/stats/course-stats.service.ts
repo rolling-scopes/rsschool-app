@@ -37,10 +37,10 @@ export class CourseStatsService {
     const result = await queryBuilder.getRawOne();
 
     return {
-      studentsTotalCount: Number(result.total_students),
-      studentsActiveCount: Number(result.active_students),
+      totalStudents: Number(result.total_students),
+      activeStudentsCount: Number(result.active_students),
       studentsWithMentorCount: Number(result.students_with_mentor),
-      studentsWithCertificateCount: Number(result.students_with_certificate),
+      certifiedStudentsCount: Number(result.students_with_certificate),
     };
   }
 
@@ -65,15 +65,13 @@ export class CourseStatsService {
     };
   }
 
-  public async getStudentCounts(
-    courseId: number,
-  ): Promise<{ studentsActiveCount: number; studentsTotalCount: number }> {
-    const studentsTotalCount = await this.studentRepository.count({ where: { courseId } });
-    const studentsActiveCount = await this.studentRepository.count({
+  public async getStudentCounts(courseId: number): Promise<{ activeStudentsCount: number; totalStudents: number }> {
+    const totalStudents = await this.studentRepository.count({ where: { courseId } });
+    const activeStudentsCount = await this.studentRepository.count({
       where: { courseId, isExpelled: false, isFailed: false },
     });
 
-    return { studentsActiveCount, studentsTotalCount };
+    return { activeStudentsCount, totalStudents };
   }
 
   public async getMentorCountries(courseId: number): Promise<{ countries: CountryStatDto[] }> {

@@ -15,12 +15,12 @@ export const StudentsWithCertificateCard = ({ studentsStats }: Props) => {
   return (
     <Card title="Students With Certificate">
       <Text strong>
-        Students With Certificate: {studentsStats.studentsWithCertificateCount} / {studentsStats.studentsActiveCount}
+        Students With Certificate: {studentsStats.certifiedStudentsCount} / {studentsStats.activeStudentsCount}
       </Text>
       <div style={{ height: 180, width: '100%' }}>
         <MentorsStatsChart
-          count={studentsStats.studentsWithCertificateCount}
-          total={studentsStats.studentsActiveCount}
+          count={studentsStats.certifiedStudentsCount}
+          total={studentsStats.activeStudentsCount}
           color={Colors.Lime}
         />
       </div>

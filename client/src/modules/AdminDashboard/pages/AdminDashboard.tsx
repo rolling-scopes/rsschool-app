@@ -29,7 +29,7 @@ function AdminDashboard() {
       component: (
         <StudentsCountriesCard
           studentsCountriesStats={stats.studentsCountries}
-          studentsActiveCount={stats.studentsStats.studentsActiveCount}
+          activeStudentsCount={stats.studentsStats.activeStudentsCount}
         />
       ),
     },
@@ -55,7 +55,7 @@ function AdminDashboard() {
       title: 'studentsWithMentorStatsCard',
       component: <StudentsWithMentorsCard studentsStats={stats.studentsStats} />,
     },
-    stats?.studentsStats.studentsWithCertificateCount && {
+    stats?.studentsStats.certifiedStudentsCount && {
       title: 'studentsWithCertificateStatsCard',
       component: <StudentsWithCertificateCard studentsStats={stats.studentsStats} />,
     },

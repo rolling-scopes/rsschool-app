@@ -2,26 +2,26 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CourseStatsDto {
   constructor(stats: {
-    studentsActiveCount: number;
-    studentsTotalCount: number;
+    activeStudentsCount: number;
+    totalStudents: number;
     studentsWithMentorCount: number;
-    studentsWithCertificateCount: number;
+    certifiedStudentsCount: number;
   }) {
-    this.studentsActiveCount = stats.studentsActiveCount;
-    this.studentsTotalCount = stats.studentsTotalCount;
+    this.activeStudentsCount = stats.activeStudentsCount;
+    this.totalStudents = stats.totalStudents;
     this.studentsWithMentorCount = stats.studentsWithMentorCount;
-    this.studentsWithCertificateCount = stats.studentsWithCertificateCount;
+    this.certifiedStudentsCount = stats.certifiedStudentsCount;
   }
 
   @ApiProperty()
-  studentsActiveCount: number;
+  activeStudentsCount: number;
 
   @ApiProperty()
-  studentsTotalCount: number;
+  totalStudents: number;
 
   @ApiProperty()
   studentsWithMentorCount: number;
 
   @ApiProperty()
-  studentsWithCertificateCount: number;
+  certifiedStudentsCount: number;
 }
