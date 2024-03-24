@@ -18,5 +18,6 @@ import { DisciplinesModule } from 'src/disciplines';
   ],
   controllers: [RegistryController],
   providers: [RegistryService],
+  exports: [RegistryService],
 })
 export class RegistryModule {}

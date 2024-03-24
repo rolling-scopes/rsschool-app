@@ -1657,6 +1657,18 @@
       }
     },
     "/profile/info": {
+      "get": {
+        "operationId": "getProfileInfo",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileInfoExtendedDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      },
       "patch": {
         "operationId": "updateProfileInfoFlat",
         "summary": "",
@@ -1677,7 +1689,7 @@
         "responses": {
           "default": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileDto" } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileWithCvDto" } } }
           }
         },
         "tags": ["profile"]
@@ -1730,6 +1742,57 @@
           }
         },
         "tags": ["profile"]
+      }
+    },
+    "/registry/mentor/{githubId}": {
+      "put": {
+        "operationId": "approveMentor",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApproveMentorDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
+      },
+      "delete": {
+        "operationId": "cancelMentorRegistry",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
+      }
+    },
+    "/registry/mentor/{githubId}/comment": {
+      "put": {
+        "operationId": "commentMentorRegistry",
+        "summary": "",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CommentMentorRegistryDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["registry"]
+      }
+    },
+    "/registry/mentors": {
+      "get": {
+        "operationId": "getMentorRegistries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["registry"]
       }
     },
     "/disciplines": {
@@ -1789,57 +1852,6 @@
           }
         },
         "tags": ["disciplines"]
-      }
-    },
-    "/registry/mentor/{githubId}": {
-      "put": {
-        "operationId": "approveMentor",
-        "summary": "",
-        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApproveMentorDto" } } }
-        },
-        "responses": { "200": { "description": "" } },
-        "tags": ["registry"]
-      },
-      "delete": {
-        "operationId": "cancelMentorRegistry",
-        "summary": "",
-        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
-        "responses": { "200": { "description": "" } },
-        "tags": ["registry"]
-      }
-    },
-    "/registry/mentor/{githubId}/comment": {
-      "put": {
-        "operationId": "commentMentorRegistry",
-        "summary": "",
-        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CommentMentorRegistryDto" } } }
-        },
-        "responses": { "200": { "description": "" } },
-        "tags": ["registry"]
-      }
-    },
-    "/registry/mentors": {
-      "get": {
-        "operationId": "getMentorRegistries",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
-              }
-            }
-          }
-        },
-        "tags": ["registry"]
       }
     },
     "/certificate/{publicId}": {
@@ -3946,6 +3958,62 @@
           }
         }
       },
+      "PublicVisibilitySettings": {
+        "type": "object",
+        "properties": { "all": { "type": "boolean" } },
+        "required": ["all"]
+      },
+      "VisibilitySettings": {
+        "type": "object",
+        "properties": {
+          "all": { "type": "boolean" },
+          "mentor": { "type": "boolean" },
+          "student": { "type": "boolean" }
+        },
+        "required": ["all", "mentor", "student"]
+      },
+      "PartialStudentVisibilitySettings": {
+        "type": "object",
+        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
+        "required": ["all", "student"]
+      },
+      "ContactsVisibilitySettings": {
+        "type": "object",
+        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
+        "required": ["all", "student"]
+      },
+      "ConfigurableProfilePermissions": {
+        "type": "object",
+        "properties": {
+          "isProfileVisible": { "$ref": "#/components/schemas/PublicVisibilitySettings" },
+          "isAboutVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
+          "isEducationVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
+          "isEnglishVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" },
+          "isEmailVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
+          "isTelegramVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
+          "isSkypeVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
+          "isPhoneVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
+          "isContactsNotesVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
+          "isLinkedInVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
+          "isPublicFeedbackVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
+          "isMentorStatsVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
+          "isStudentStatsVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" }
+        }
+      },
+      "ContactsInfoDto": {
+        "type": "object",
+        "properties": {
+          "phone": { "type": "string", "nullable": true },
+          "email": { "type": "string", "nullable": true },
+          "epamEmail": { "type": "string", "nullable": true },
+          "skype": { "type": "string", "nullable": true },
+          "whatsApp": { "type": "string", "nullable": true },
+          "telegram": { "type": "string", "nullable": true },
+          "notes": { "type": "string", "nullable": true },
+          "linkedIn": { "type": "string", "nullable": true }
+        },
+        "required": ["phone", "email", "epamEmail", "skype", "whatsApp", "telegram", "notes", "linkedIn"]
+      },
       "Education": {
         "type": "object",
         "properties": {
@@ -3954,6 +4022,168 @@
           "graduationYear": { "type": "number" }
         },
         "required": ["university", "faculty", "graduationYear"]
+      },
+      "LocationInfoDto": {
+        "type": "object",
+        "properties": { "cityName": { "type": "string" }, "countryName": { "type": "string" } },
+        "required": ["cityName", "countryName"]
+      },
+      "GeneralInfoDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "aboutMyself": { "type": "string", "nullable": true },
+          "educationHistory": {
+            "nullable": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Education" }
+          },
+          "englishLevel": { "type": "string", "nullable": true },
+          "location": { "$ref": "#/components/schemas/LocationInfoDto" },
+          "languages": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["name", "githubId", "location", "languages"]
+      },
+      "StudentInfoDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "isExpelled": { "type": "boolean" },
+          "totalScore": { "type": "number" },
+          "repoUrl": { "type": "string" }
+        },
+        "required": ["name", "githubId", "isExpelled", "totalScore"]
+      },
+      "MentorStatsDto": {
+        "type": "object",
+        "properties": {
+          "courseLocationName": { "type": "string" },
+          "courseName": { "type": "string" },
+          "students": { "type": "array", "items": { "$ref": "#/components/schemas/StudentInfoDto" } }
+        },
+        "required": ["courseLocationName", "courseName"]
+      },
+      "GithubIdName": {
+        "type": "object",
+        "properties": { "name": { "type": "string" }, "githubId": { "type": "string" } },
+        "required": ["name", "githubId"]
+      },
+      "InterviewFormAnswerDto": {
+        "type": "object",
+        "properties": {
+          "questionId": { "type": "string" },
+          "questionText": { "type": "string" },
+          "answer": { "type": "boolean" }
+        },
+        "required": ["questionId", "questionText"]
+      },
+      "StudentTaskDetailDto": {
+        "type": "object",
+        "properties": {
+          "maxScore": { "type": "number" },
+          "scoreWeight": { "type": "number" },
+          "name": { "type": "string" },
+          "descriptionUri": { "type": "string" },
+          "taskGithubPrUris": { "type": "string" },
+          "score": { "type": "number" },
+          "comment": { "type": "string" },
+          "interviewDate": { "type": "string" },
+          "interviewer": { "$ref": "#/components/schemas/GithubIdName" },
+          "interviewFormAnswers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InterviewFormAnswerDto" }
+          }
+        },
+        "required": ["maxScore", "scoreWeight", "name", "descriptionUri", "taskGithubPrUris", "score", "comment"]
+      },
+      "StudentStatsDto": {
+        "type": "object",
+        "properties": {
+          "courseId": { "type": "number" },
+          "courseName": { "type": "string" },
+          "locationName": { "type": "string" },
+          "courseFullName": { "type": "string" },
+          "isExpelled": { "type": "boolean" },
+          "isSelfExpelled": { "type": "boolean" },
+          "expellingReason": { "type": "string" },
+          "certificateId": { "type": "string" },
+          "isCourseCompleted": { "type": "boolean" },
+          "totalScore": { "type": "number" },
+          "rank": { "type": "number" },
+          "mentor": { "$ref": "#/components/schemas/GithubIdName" },
+          "tasks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentTaskDetailDto" } }
+        },
+        "required": [
+          "courseId",
+          "courseName",
+          "locationName",
+          "courseFullName",
+          "isExpelled",
+          "isSelfExpelled",
+          "certificateId",
+          "isCourseCompleted",
+          "totalScore",
+          "rank",
+          "mentor",
+          "tasks"
+        ]
+      },
+      "PublicFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "feedbackDate": { "type": "string" },
+          "badgeId": { "type": "string" },
+          "comment": { "type": "string" },
+          "fromUser": { "$ref": "#/components/schemas/GithubIdName" }
+        },
+        "required": ["feedbackDate", "badgeId", "comment", "fromUser"]
+      },
+      "StageInterviewDetailedFeedbackDto": {
+        "type": "object",
+        "properties": {
+          "decision": { "type": "string" },
+          "isGoodCandidate": { "type": "boolean" },
+          "courseName": { "type": "string" },
+          "courseFullName": { "type": "string" },
+          "score": { "type": "number" },
+          "maxScore": { "type": "number" },
+          "date": { "type": "string" },
+          "version": { "type": "number" },
+          "interviewer": { "$ref": "#/components/schemas/GithubIdName" },
+          "feedback": { "type": "object" }
+        },
+        "required": [
+          "decision",
+          "isGoodCandidate",
+          "courseName",
+          "courseFullName",
+          "score",
+          "maxScore",
+          "date",
+          "version",
+          "interviewer",
+          "feedback"
+        ]
+      },
+      "ProfileInfoExtendedDto": {
+        "type": "object",
+        "properties": {
+          "permissionsSettings": { "$ref": "#/components/schemas/ConfigurableProfilePermissions" },
+          "contacts": { "$ref": "#/components/schemas/ContactsInfoDto" },
+          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
+          "generalInfo": { "$ref": "#/components/schemas/GeneralInfoDto" },
+          "mentorStats": { "type": "array", "items": { "$ref": "#/components/schemas/MentorStatsDto" } },
+          "studentStats": { "type": "array", "items": { "$ref": "#/components/schemas/StudentStatsDto" } },
+          "publicFeedback": { "type": "array", "items": { "$ref": "#/components/schemas/PublicFeedbackDto" } },
+          "stageInterviewFeedback": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StageInterviewDetailedFeedbackDto" }
+          },
+          "publicCvUrl": { "type": "string", "nullable": true }
+        },
+        "required": ["permissionsSettings", "contacts", "discord", "generalInfo"]
       },
       "UpdateProfileInfoDto": {
         "type": "object",
@@ -3981,7 +4211,7 @@
           "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
         }
       },
-      "ProfileDto": {
+      "ProfileWithCvDto": {
         "type": "object",
         "properties": { "publicCvUrl": { "type": "string", "nullable": true } },
         "required": ["publicCvUrl"]
@@ -4025,18 +4255,6 @@
         },
         "required": ["user", "courses", "studentsCount", "interviewsCount"]
       },
-      "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
-      "DisciplineDto": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "id": { "type": "number" },
-          "createdDate": { "type": "string" },
-          "updatedDate": { "type": "string" }
-        },
-        "required": ["name", "id", "createdDate", "updatedDate"]
-      },
-      "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "ApproveMentorDto": {
         "type": "object",
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },
@@ -4090,6 +4308,18 @@
           "comment"
         ]
       },
+      "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "DisciplineDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "id": { "type": "number" },
+          "createdDate": { "type": "string" },
+          "updatedDate": { "type": "string" }
+        },
+        "required": ["name", "id", "createdDate", "updatedDate"]
+      },
+      "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "SaveCertificateDto": {
         "type": "object",
         "properties": {

@@ -490,6 +490,91 @@ export interface CommentMentorRegistryDto {
 /**
  * 
  * @export
+ * @interface ConfigurableProfilePermissions
+ */
+export interface ConfigurableProfilePermissions {
+    /**
+     * 
+     * @type {PublicVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isProfileVisible'?: PublicVisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isAboutVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEducationVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {PartialStudentVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEnglishVisible'?: PartialStudentVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isEmailVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isTelegramVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isSkypeVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isPhoneVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {ContactsVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isContactsNotesVisible'?: ContactsVisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isLinkedInVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isPublicFeedbackVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {VisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isMentorStatsVisible'?: VisibilitySettings;
+    /**
+     * 
+     * @type {PartialStudentVisibilitySettings}
+     * @memberof ConfigurableProfilePermissions
+     */
+    'isStudentStatsVisible'?: PartialStudentVisibilitySettings;
+}
+/**
+ * 
+ * @export
  * @interface ConsentDto
  */
 export interface ConsentDto {
@@ -560,6 +645,80 @@ export interface ContactsDto {
      * @memberof ContactsDto
      */
     'discord'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface ContactsInfoDto
+ */
+export interface ContactsInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'phone': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'email': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'epamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'skype': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'whatsApp': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'telegram': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'notes': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactsInfoDto
+     */
+    'linkedIn': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface ContactsVisibilitySettings
+ */
+export interface ContactsVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ContactsVisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ContactsVisibilitySettings
+     */
+    'student': boolean;
 }
 /**
  * 
@@ -3046,6 +3205,74 @@ export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEn
 /**
  * 
  * @export
+ * @interface GeneralInfoDto
+ */
+export interface GeneralInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfoDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfoDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfoDto
+     */
+    'aboutMyself'?: string | null;
+    /**
+     * 
+     * @type {Array<Education>}
+     * @memberof GeneralInfoDto
+     */
+    'educationHistory'?: Array<Education> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GeneralInfoDto
+     */
+    'englishLevel'?: string | null;
+    /**
+     * 
+     * @type {LocationInfoDto}
+     * @memberof GeneralInfoDto
+     */
+    'location': LocationInfoDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GeneralInfoDto
+     */
+    'languages': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface GithubIdName
+ */
+export interface GithubIdName {
+    /**
+     * 
+     * @type {string}
+     * @memberof GithubIdName
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GithubIdName
+     */
+    'githubId': string;
+}
+/**
+ * 
+ * @export
  * @interface GiveConsentDto
  */
 export interface GiveConsentDto {
@@ -3343,6 +3570,31 @@ export interface InterviewFeedbackDto {
 /**
  * 
  * @export
+ * @interface InterviewFormAnswerDto
+ */
+export interface InterviewFormAnswerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionText': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InterviewFormAnswerDto
+     */
+    'answer'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface JoinTeamDto
  */
 export interface JoinTeamDto {
@@ -3365,6 +3617,25 @@ export interface LeaveCourseRequestDto {
      * @memberof LeaveCourseRequestDto
      */
     'comment'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LocationInfoDto
+ */
+export interface LocationInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof LocationInfoDto
+     */
+    'cityName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LocationInfoDto
+     */
+    'countryName': string;
 }
 /**
  * 
@@ -3710,6 +3981,31 @@ export interface MentorRegistryDto {
 /**
  * 
  * @export
+ * @interface MentorStatsDto
+ */
+export interface MentorStatsDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStatsDto
+     */
+    'courseLocationName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStatsDto
+     */
+    'courseName': string;
+    /**
+     * 
+     * @type {Array<StudentInfoDto>}
+     * @memberof MentorStatsDto
+     */
+    'students'?: Array<StudentInfoDto>;
+}
+/**
+ * 
+ * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -4015,6 +4311,25 @@ export interface PaginationMetaDto {
 /**
  * 
  * @export
+ * @interface PartialStudentVisibilitySettings
+ */
+export interface PartialStudentVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PartialStudentVisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PartialStudentVisibilitySettings
+     */
+    'student': boolean;
+}
+/**
+ * 
+ * @export
  * @interface PersonDto
  */
 export interface PersonDto {
@@ -4228,13 +4543,74 @@ export interface ProfileCourseDto {
 /**
  * 
  * @export
- * @interface ProfileDto
+ * @interface ProfileInfoExtendedDto
  */
-export interface ProfileDto {
+export interface ProfileInfoExtendedDto {
+    /**
+     * 
+     * @type {ConfigurableProfilePermissions}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'permissionsSettings': ConfigurableProfilePermissions;
+    /**
+     * 
+     * @type {ContactsInfoDto}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'contacts': ContactsInfoDto;
+    /**
+     * 
+     * @type {Discord}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'discord': Discord | null;
+    /**
+     * 
+     * @type {GeneralInfoDto}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'generalInfo': GeneralInfoDto;
+    /**
+     * 
+     * @type {Array<MentorStatsDto>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'mentorStats'?: Array<MentorStatsDto>;
+    /**
+     * 
+     * @type {Array<StudentStatsDto>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'studentStats'?: Array<StudentStatsDto>;
+    /**
+     * 
+     * @type {Array<PublicFeedbackDto>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'publicFeedback'?: Array<PublicFeedbackDto>;
+    /**
+     * 
+     * @type {Array<StageInterviewDetailedFeedbackDto>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'stageInterviewFeedback'?: Array<StageInterviewDetailedFeedbackDto>;
     /**
      * 
      * @type {string}
-     * @memberof ProfileDto
+     * @memberof ProfileInfoExtendedDto
+     */
+    'publicCvUrl'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface ProfileWithCvDto
+ */
+export interface ProfileWithCvDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileWithCvDto
      */
     'publicCvUrl': string | null;
 }
@@ -4268,6 +4644,50 @@ export interface PromptDto {
      * @memberof PromptDto
      */
     'temperature': number;
+}
+/**
+ * 
+ * @export
+ * @interface PublicFeedbackDto
+ */
+export interface PublicFeedbackDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicFeedbackDto
+     */
+    'feedbackDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicFeedbackDto
+     */
+    'badgeId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicFeedbackDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {GithubIdName}
+     * @memberof PublicFeedbackDto
+     */
+    'fromUser': GithubIdName;
+}
+/**
+ * 
+ * @export
+ * @interface PublicVisibilitySettings
+ */
+export interface PublicVisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PublicVisibilitySettings
+     */
+    'all': boolean;
 }
 /**
  * 
@@ -4902,6 +5322,73 @@ export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface StageInterviewDetailedFeedbackDto
+ */
+export interface StageInterviewDetailedFeedbackDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'decision': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'isGoodCandidate': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'courseName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'courseFullName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'date': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'version': number;
+    /**
+     * 
+     * @type {GithubIdName}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'interviewer': GithubIdName;
+    /**
+     * 
+     * @type {object}
+     * @memberof StageInterviewDetailedFeedbackDto
+     */
+    'feedback': object;
+}
+/**
+ * 
+ * @export
  * @interface StatusDto
  */
 export interface StatusDto {
@@ -5092,6 +5579,195 @@ export interface StudentId {
      * @memberof StudentId
      */
     'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface StudentInfoDto
+ */
+export interface StudentInfoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentInfoDto
+     */
+    'isExpelled': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentInfoDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentInfoDto
+     */
+    'repoUrl'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface StudentStatsDto
+ */
+export interface StudentStatsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentStatsDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentStatsDto
+     */
+    'courseName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentStatsDto
+     */
+    'locationName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentStatsDto
+     */
+    'courseFullName': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentStatsDto
+     */
+    'isExpelled': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentStatsDto
+     */
+    'isSelfExpelled': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentStatsDto
+     */
+    'expellingReason'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentStatsDto
+     */
+    'certificateId': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentStatsDto
+     */
+    'isCourseCompleted': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentStatsDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentStatsDto
+     */
+    'rank': number;
+    /**
+     * 
+     * @type {GithubIdName}
+     * @memberof StudentStatsDto
+     */
+    'mentor': GithubIdName;
+    /**
+     * 
+     * @type {Array<StudentTaskDetailDto>}
+     * @memberof StudentStatsDto
+     */
+    'tasks': Array<StudentTaskDetailDto>;
+}
+/**
+ * 
+ * @export
+ * @interface StudentTaskDetailDto
+ */
+export interface StudentTaskDetailDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'descriptionUri': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'taskGithubPrUris': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskDetailDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'comment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewDate'?: string;
+    /**
+     * 
+     * @type {GithubIdName}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewer'?: GithubIdName;
+    /**
+     * 
+     * @type {Array<InterviewFormAnswerDto>}
+     * @memberof StudentTaskDetailDto
+     */
+    'interviewFormAnswers'?: Array<InterviewFormAnswerDto>;
 }
 /**
  * 
@@ -6848,6 +7524,31 @@ export interface VisibilityDto {
      * @memberof VisibilityDto
      */
     'isHidden': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VisibilitySettings
+ */
+export interface VisibilitySettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'all': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'mentor': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilitySettings
+     */
+    'student': boolean;
 }
 
 /**
@@ -14084,6 +14785,40 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProfileInfo: async (githubId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/profile/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (githubId !== undefined) {
+                localVarQueryParameter['githubId'] = githubId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14264,8 +14999,18 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileDto>> {
+        async getProfile(username: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileWithCvDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProfileInfo(githubId?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileInfoExtendedDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProfileInfo(githubId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14351,8 +15096,17 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProfile(username: string, options?: any): AxiosPromise<ProfileDto> {
+        getProfile(username: string, options?: any): AxiosPromise<ProfileWithCvDto> {
             return localVarFp.getProfile(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProfileInfo(githubId?: string, options?: any): AxiosPromise<ProfileInfoExtendedDto> {
+            return localVarFp.getProfileInfo(githubId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14442,6 +15196,17 @@ export class ProfileApi extends BaseAPI {
      */
     public getProfile(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getProfile(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [githubId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getProfileInfo(githubId?: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getProfileInfo(githubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

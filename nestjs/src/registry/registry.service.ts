@@ -1,10 +1,12 @@
-import { User } from '@entities/user';
-import { MentorRegistry } from '@entities/mentorRegistry';
+import { uniqBy } from 'lodash';
+import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoursesService } from 'src/courses/courses.service';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { DisciplinesService } from 'src/disciplines/disciplines.service';
+import { User } from '@entities/user';
+import { MentorRegistry } from '@entities/mentorRegistry';
 
 @Injectable()
 export class RegistryService {
@@ -13,6 +15,7 @@ export class RegistryService {
     private mentorsRegistryRepository: Repository<MentorRegistry>,
     private usersService: UsersService,
     private coursesService: CoursesService,
+    private disciplinesService: DisciplinesService,
   ) {}
 
   public async approveMentor(githubId: string, preselectedCourses: string[]): Promise<User> {
@@ -84,5 +87,24 @@ export class RegistryService {
       throw new BadRequestException('User not found');
     }
     await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
+  }
+
+  public async getMentorsFromRegistryCourseIds(githubId: string) {
+    const result = await this.mentorsRegistryRepository
+      .createQueryBuilder('mentorRegistry')
+      .select(['mentorRegistry.preferedCourses', 'mentorRegistry.technicalMentoring'])
+      .leftJoin('mentorRegistry.user', 'user')
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('"mentorRegistry".canceled = false')
+      .getOne();
+
+    const disciplines = await this.disciplinesService.getByNames(result?.technicalMentoring ?? []);
+    const disciplinesIds = disciplines.map(({ id }) => id);
+    const coursesByDiscipline = (await this.coursesService.getByDisciplineIds(disciplinesIds)) ?? [];
+    const preferredCourses = result?.preferedCourses?.map(courseId => ({ courseId: Number(courseId) })) ?? [];
+    const courseIdsByDisciplines = coursesByDiscipline.map(({ id }) => ({ courseId: id }));
+    const courseIds = uniqBy(preferredCourses.concat(courseIdsByDisciplines), ({ courseId }) => courseId);
+
+    return courseIds;
   }
 }

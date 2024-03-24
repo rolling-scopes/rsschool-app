@@ -146,6 +146,6 @@ import { CourseMentorsController, CourseMentorsService } from './course-mentors'
     TaskVerificationsService,
     CourseMentorsService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
+  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, InterviewsService],
 })
 export class CoursesModule {}
