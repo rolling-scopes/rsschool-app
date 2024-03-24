@@ -4,17 +4,17 @@ import dynamic from 'next/dynamic';
 
 type Props = {
   studentsCountriesStats: CountriesStatsDto;
-  studentsActiveCount: number;
+  activeStudentsCount: number;
 };
 
 const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), { ssr: false });
 
-export const StudentsCountriesCard = ({ studentsCountriesStats, studentsActiveCount }: Props) => {
+export const StudentsCountriesCard = ({ studentsCountriesStats, activeStudentsCount }: Props) => {
   const { countries } = studentsCountriesStats;
   return (
     <Card title="Students Countries">
       <div style={{ height: 350, width: '100%' }}>
-        <CountriesChart data={countries} activeCount={studentsActiveCount} xAxisTitle={'Number of Students'} />
+        <CountriesChart data={countries} activeCount={activeStudentsCount} xAxisTitle={'Number of Students'} />
       </div>
     </Card>
   );

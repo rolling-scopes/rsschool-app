@@ -11,17 +11,17 @@ const { Text } = Typography;
 
 const MentorsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), { ssr: false });
 
-export const StudentsWithMentorsCard = ({ studentsStats }: Props) => {
+export const StudentsWithCertificateCard = ({ studentsStats }: Props) => {
   return (
-    <Card title="Students With Mentor">
+    <Card title="Students With Certificate">
       <Text strong>
-        Students With Mentor: {studentsStats.studentsWithMentorCount} / {studentsStats.totalStudents}
+        Students With Certificate: {studentsStats.certifiedStudentsCount} / {studentsStats.activeStudentsCount}
       </Text>
       <div style={{ height: 180, width: '100%' }}>
         <MentorsStatsChart
-          count={studentsStats.studentsWithMentorCount}
-          total={studentsStats.totalStudents}
-          color={Colors.Gold}
+          count={studentsStats.certifiedStudentsCount}
+          total={studentsStats.activeStudentsCount}
+          color={Colors.Lime}
         />
       </div>
     </Card>

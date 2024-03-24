@@ -3,4 +3,5 @@ export enum Colors {
   Gold = '#faad14',
   Blue = '#1677ff',
   Volcano = '#fa541c',
+  Lime = '#a0d911',
 }

@@ -1042,19 +1042,25 @@ export interface CourseStatsDto {
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsActiveCount': number;
+    'activeStudentsCount': number;
     /**
      * 
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsTotalCount': number;
+    'totalStudents': number;
     /**
      * 
      * @type {number}
      * @memberof CourseStatsDto
      */
     'studentsWithMentorCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'certifiedStudentsCount': number;
 }
 /**
  * 

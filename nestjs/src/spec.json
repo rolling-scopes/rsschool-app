@@ -3119,11 +3119,12 @@
       "CourseStatsDto": {
         "type": "object",
         "properties": {
-          "studentsActiveCount": { "type": "number" },
-          "studentsTotalCount": { "type": "number" },
-          "studentsWithMentorCount": { "type": "number" }
+          "activeStudentsCount": { "type": "number" },
+          "totalStudents": { "type": "number" },
+          "studentsWithMentorCount": { "type": "number" },
+          "certifiedStudentsCount": { "type": "number" }
         },
-        "required": ["studentsActiveCount", "studentsTotalCount", "studentsWithMentorCount"]
+        "required": ["activeStudentsCount", "totalStudents", "studentsWithMentorCount", "certifiedStudentsCount"]
       },
       "CourseMentorsStatsDto": {
         "type": "object",
