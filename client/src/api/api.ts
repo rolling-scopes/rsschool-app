@@ -2910,6 +2910,25 @@ export type FeedbackSoftSkillIdEnum = typeof FeedbackSoftSkillIdEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface FilterMentorRegistryResponse
+ */
+export interface FilterMentorRegistryResponse {
+    /**
+     * 
+     * @type {Array<MentorRegistryDto>}
+     * @memberof FilterMentorRegistryResponse
+     */
+    'mentors': Array<MentorRegistryDto>;
+    /**
+     * 
+     * @type {number}
+     * @memberof FilterMentorRegistryResponse
+     */
+    'total': number;
+}
+/**
+ * 
+ * @export
  * @interface FormDataDto
  */
 export interface FormDataDto {
@@ -14903,10 +14922,17 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {number} [pageSize] 
+         * @param {number} [currentPage] 
+         * @param {string} [githubId] 
+         * @param {string} [cityName] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
+         * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorRegistries: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMentorRegistries: async (pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/registry/mentors`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14918,6 +14944,34 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (currentPage !== undefined) {
+                localVarQueryParameter['currentPage'] = currentPage;
+            }
+
+            if (githubId !== undefined) {
+                localVarQueryParameter['githubId'] = githubId;
+            }
+
+            if (cityName !== undefined) {
+                localVarQueryParameter['cityName'] = cityName;
+            }
+
+            if (preferedCourses) {
+                localVarQueryParameter['preferedCourses'] = preferedCourses;
+            }
+
+            if (preselectedCourses) {
+                localVarQueryParameter['preselectedCourses'] = preselectedCourses;
+            }
+
+            if (technicalMentoring) {
+                localVarQueryParameter['technicalMentoring'] = technicalMentoring;
+            }
 
 
     
@@ -14974,11 +15028,18 @@ export const RegistryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [pageSize] 
+         * @param {number} [currentPage] 
+         * @param {string} [githubId] 
+         * @param {string} [cityName] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
+         * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMentorRegistries(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorRegistryDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistries(options);
+        async getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FilterMentorRegistryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -15022,11 +15083,18 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {number} [pageSize] 
+         * @param {number} [currentPage] 
+         * @param {string} [githubId] 
+         * @param {string} [cityName] 
+         * @param {Array<number>} [preferedCourses] 
+         * @param {Array<number>} [preselectedCourses] 
+         * @param {Array<string>} [technicalMentoring] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorRegistries(options?: any): AxiosPromise<Array<MentorRegistryDto>> {
-            return localVarFp.getMentorRegistries(options).then((request) => request(axios, basePath));
+        getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<FilterMentorRegistryResponse> {
+            return localVarFp.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15075,12 +15143,19 @@ export class RegistryApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [pageSize] 
+     * @param {number} [currentPage] 
+     * @param {string} [githubId] 
+     * @param {string} [cityName] 
+     * @param {Array<number>} [preferedCourses] 
+     * @param {Array<number>} [preselectedCourses] 
+     * @param {Array<string>} [technicalMentoring] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistryApi
      */
-    public getMentorRegistries(options?: AxiosRequestConfig) {
-        return RegistryApiFp(this.configuration).getMentorRegistries(options).then((request) => request(this.axios, this.basePath));
+    public getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

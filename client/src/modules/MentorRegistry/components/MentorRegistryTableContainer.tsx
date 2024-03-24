@@ -1,11 +1,17 @@
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dateSorter } from 'components/Table';
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
+import {
+  MentorsRegistryColumnKey,
+  MentorsRegistryColumnName,
+  TABS,
+  MentorRegistryTabsMode,
+  PAGINATION,
+} from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button, Dropdown, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
@@ -13,8 +19,13 @@ import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
+import { MentorRegistryService } from 'services/mentorRegistry';
+import { useAsync } from 'react-use';
 
 interface ChildrenProp {
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
+  total: number;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
   columns: ColumnType<MentorRegistryDto>[];
@@ -36,10 +47,12 @@ export interface CombinedFilter {
   preselectedCourses: number[];
   preferredCourses: number[];
   technicalMentoring: string[];
-
+  githubId: string[];
+  cityName: string[];
   filterTags?: string[];
 }
 
+const mentorRegistryService = new MentorRegistryService();
 export const MentorRegistryTableContainer = ({
   children,
   mentors,
@@ -53,7 +66,13 @@ export const MentorRegistryTableContainer = ({
     preferredCourses: [],
     preselectedCourses: [],
     technicalMentoring: [],
+    githubId: [],
+    cityName: [],
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
 
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
@@ -109,15 +128,27 @@ export const MentorRegistryTableContainer = ({
           : true) &&
         (combinedFilter.preferredCourses.length
           ? mentor.preferedCourses.some(value => combinedFilter.preferredCourses.includes(value))
+          : true) &&
+        (combinedFilter.githubId?.length
+          ? mentor.githubId.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase()) ||
+            mentor.name.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase())
+          : true) &&
+        (combinedFilter.cityName?.length
+          ? mentor.cityName?.toLowerCase().includes(combinedFilter.cityName[0].toLocaleLowerCase())
           : true),
     );
   }, [combinedFilter, mentors]);
 
-  const handleTableChange = (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => {
+  const handleTableChange = async (
+    _: any,
+    filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
+  ) => {
     const combinedFilter: CombinedFilter = {
       preferredCourses: filters.preferedCourses?.map(course => Number(course)) ?? [],
       preselectedCourses: filters.preselectedCourses?.map(course => Number(course)) ?? [],
       technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
+      githubId: filters.githubId?.map(discipline => discipline.toString()) ?? [],
+      cityName: filters.cityName?.map(discipline => discipline.toString()) ?? [],
     };
 
     const filterTag: string[] = [
@@ -172,7 +203,7 @@ export const MentorRegistryTableContainer = ({
   };
 
   const getColumns = (combinedFilter: CombinedFilter, allCourses: Course[]): ColumnType<MentorRegistryDto>[] => {
-    const { preferredCourses, preselectedCourses, technicalMentoring } = combinedFilter;
+    const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
     const allColumns = [
       {
         key: MentorsRegistryColumnKey.Github,
@@ -188,8 +219,10 @@ export const MentorRegistryTableContainer = ({
         },
         sorter: stringSorter('githubId'),
         ...getColumnSearchProps(['githubId', 'name']),
+        onFilter: undefined,
         width: 200,
         fixed: 'left' as const,
+        filteredValue: githubId || null,
       },
       {
         key: MentorsRegistryColumnKey.Info,
@@ -197,6 +230,7 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Info,
         render: renderInfo,
         width: 100,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.PreferredCourses,
@@ -219,6 +253,7 @@ export const MentorRegistryTableContainer = ({
         render: (date: string) => formatDate(date),
         sorter: dateSorter('receivedDate'),
         width: 120,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Preselected,
@@ -238,6 +273,7 @@ export const MentorRegistryTableContainer = ({
         render: (date: string) => formatDate(date),
         sorter: dateSorter('sendDate'),
         width: 120,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Tech,
@@ -259,6 +295,8 @@ export const MentorRegistryTableContainer = ({
         sorter: stringSorter('cityName'),
         width: 150,
         ...getColumnSearchProps('cityName'),
+        onFilter: undefined,
+        filteredValue: cityName || null,
       },
       {
         key: MentorsRegistryColumnKey.Languages,
@@ -266,18 +304,21 @@ export const MentorRegistryTableContainer = ({
         dataIndex: MentorsRegistryColumnKey.Languages,
         render: tagsRenderer,
         width: 130,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.StudentsLimit,
         title: MentorsRegistryColumnName.StudentsLimit,
         dataIndex: MentorsRegistryColumnKey.StudentsLimit,
         width: 130,
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.PreferredLocation,
         title: MentorsRegistryColumnName.PreferredLocation,
         dataIndex: MentorsRegistryColumnKey.PreferredLocation,
         sorter: stringSorter('githubId'),
+        filteredValue: null,
       },
       {
         key: MentorsRegistryColumnKey.Actions,
@@ -338,17 +379,52 @@ export const MentorRegistryTableContainer = ({
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({ preferredCourses: [], technicalMentoring: [], preselectedCourses: [] });
+    setCombinedFilter({
+      preferredCourses: [],
+      technicalMentoring: [],
+      preselectedCourses: [],
+      githubId: [],
+      cityName: [],
+    });
     setTagFilters([]);
   };
 
+  useAsync(async () => {
+    try {
+      const { mentors, total } = await mentorRegistryService.getMentors({
+        pageSize: PAGINATION,
+        currentPage,
+        githubId: combinedFilter.githubId?.[0] ?? undefined,
+        cityName: combinedFilter.cityName?.[0] ?? undefined,
+        preferedCourses: combinedFilter.preferredCourses?.length
+          ? combinedFilter.preferredCourses.map(Number)
+          : undefined,
+        preselectedCourses: combinedFilter.preselectedCourses?.length
+          ? combinedFilter.preselectedCourses.map(Number)
+          : undefined,
+        technicalMentoring: combinedFilter.technicalMentoring?.length
+          ? (combinedFilter.technicalMentoring as string[])
+          : undefined,
+      });
+      setLoaded(mentors);
+      setTotal(total);
+    } catch (e) {
+      message.error('An error occurred. No filters have been applied.');
+      setLoaded(filteredData);
+      setTotal(filteredData.length);
+    }
+  }, [JSON.stringify(combinedFilter), currentPage]);
+
   return children({
     tagFilters,
-    filteredData,
+    filteredData: loaded || filteredData,
     columns: getColumns(combinedFilter, courses),
+    currentPage,
+    total,
     handleTagClose,
     handleClearAllButtonClick,
     handleTableChange,
+    setCurrentPage,
   });
 };
 
