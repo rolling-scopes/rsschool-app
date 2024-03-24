@@ -1,6 +1,5 @@
 import { Event } from '@entities/event';
 import { ApiProperty } from '@nestjs/swagger';
-import { IdNameDto } from 'src/core/dto';
 import { EventType } from 'src/courses/course-events/dto/course-event.dto';
 
 export class EventDto {
@@ -10,7 +9,7 @@ export class EventDto {
     this.descriptionUrl = event.descriptionUrl;
     this.description = event.description;
     this.type = event.type as EventType;
-    this.discipline = event.discipline ? new IdNameDto(event.discipline) : null;
+    this.disciplineId = event.disciplineId || null;
   }
 
   @ApiProperty()
@@ -28,6 +27,6 @@ export class EventDto {
   @ApiProperty({ enum: EventType })
   public type: EventType;
 
-  @ApiProperty({ type: IdNameDto, nullable: true })
-  public discipline: IdNameDto | null;
+  @ApiProperty({ type: Number, nullable: true })
+  public disciplineId: number | null;
 }

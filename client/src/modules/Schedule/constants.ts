@@ -131,5 +131,6 @@ export enum ScheduleItems {
 
 export enum ScheduleItemsActions {
   update = "update",
-  delete = "delete"
+  delete = "delete",
+  create = "create"
 }

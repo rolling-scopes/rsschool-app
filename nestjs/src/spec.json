@@ -3303,6 +3303,33 @@
         "properties": { "id": { "type": "number" }, "courseTaskId": { "type": "number" }, "url": { "type": "string" } },
         "required": ["id", "courseTaskId", "url"]
       },
+      "EventDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "descriptionUrl": { "type": "string", "nullable": true },
+          "description": { "type": "string", "nullable": true },
+          "type": {
+            "type": "string",
+            "enum": [
+              "lecture_online",
+              "lecture_offline",
+              "lecture_mixed",
+              "lecture_self_study",
+              "warmup",
+              "info",
+              "workshop",
+              "meetup",
+              "cross_check_deadline",
+              "webinar",
+              "special"
+            ]
+          },
+          "disciplineId": { "type": "number", "nullable": true }
+        },
+        "required": ["id", "name", "descriptionUrl", "description", "type", "disciplineId"]
+      },
       "CourseScheduleItemDto": {
         "type": "object",
         "properties": {
@@ -3311,6 +3338,7 @@
           "id": { "type": "number" },
           "taskId": { "type": "number", "nullable": true },
           "eventId": { "type": "number", "nullable": true },
+          "event": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/EventDto" }] },
           "status": { "type": "string", "enum": ["done", "available", "archived", "future", "missed", "review"] },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
@@ -3331,6 +3359,7 @@
           "id",
           "taskId",
           "eventId",
+          "event",
           "status",
           "startDate",
           "endDate",
@@ -4461,33 +4490,6 @@
         "type": "object",
         "properties": { "countryName": { "type": "string" } },
         "required": ["countryName"]
-      },
-      "EventDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "descriptionUrl": { "type": "string", "nullable": true },
-          "description": { "type": "string", "nullable": true },
-          "type": {
-            "type": "string",
-            "enum": [
-              "lecture_online",
-              "lecture_offline",
-              "lecture_mixed",
-              "lecture_self_study",
-              "warmup",
-              "info",
-              "workshop",
-              "meetup",
-              "cross_check_deadline",
-              "webinar",
-              "special"
-            ]
-          },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
-        },
-        "required": ["id", "name", "descriptionUrl", "description", "type", "discipline"]
       },
       "CreateEventDto": {
         "type": "object",

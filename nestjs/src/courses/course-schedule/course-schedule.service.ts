@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
 import * as dayjs from 'dayjs';
+import { EventDto } from 'src/events/dto/event.dto';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -26,6 +27,7 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     type: CourseScheduleDataSource;
     taskId: number | null;
     eventId: number | null;
+    event: EventDto | null;
   };
 
 export enum CourseScheduleDataSource {
@@ -130,6 +132,7 @@ export class CourseScheduleService {
             id,
             taskId,
             eventId: null,
+            event: null,
             name,
             courseId,
             startDate: studentStartDate,
@@ -158,6 +161,7 @@ export class CourseScheduleService {
           return {
             id,
             eventId,
+            event: courseEvent.event,
             taskId: null,
             name,
             courseId,

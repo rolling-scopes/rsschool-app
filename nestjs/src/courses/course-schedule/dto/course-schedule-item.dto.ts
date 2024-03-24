@@ -6,6 +6,7 @@ import {
   CourseScheduleItemStatus,
   CourseScheduleItemTag,
 } from '../course-schedule.service';
+import { EventDto } from 'src/events/dto';
 
 @ApiResponse({})
 export class CourseScheduleItemDto {
@@ -13,6 +14,7 @@ export class CourseScheduleItemDto {
     this.id = item.id;
     this.taskId = item.taskId;
     this.eventId = item.eventId;
+    this.event = item.event;
     this.name = item.name;
     this.startDate = (item.startDate as Date)?.toISOString();
     this.endDate = (item.endDate as Date)?.toISOString();
@@ -40,6 +42,9 @@ export class CourseScheduleItemDto {
 
   @ApiProperty({ nullable: true, type: Number })
   eventId: number | null;
+
+  @ApiProperty({ nullable: true, type: EventDto })
+  event: EventDto | null;
 
   @ApiProperty({ enum: CourseScheduleItemStatus })
   status: CourseScheduleItemStatus;

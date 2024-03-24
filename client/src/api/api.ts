@@ -898,6 +898,12 @@ export interface CourseScheduleItemDto {
     'eventId': number | null;
     /**
      * 
+     * @type {EventDto}
+     * @memberof CourseScheduleItemDto
+     */
+    'event': EventDto | null;
+    /**
+     * 
      * @type {string}
      * @memberof CourseScheduleItemDto
      */
@@ -2717,10 +2723,10 @@ export interface EventDto {
     'type': EventDtoTypeEnum;
     /**
      * 
-     * @type {IdNameDto}
+     * @type {number}
      * @memberof EventDto
      */
-    'discipline': IdNameDto | null;
+    'disciplineId': number | null;
 }
 
 export const EventDtoTypeEnum = {

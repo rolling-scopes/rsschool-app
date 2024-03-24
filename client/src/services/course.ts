@@ -84,8 +84,8 @@ export interface CourseEvent {
   event: EventDto;
   date?: string;
   time?: string;
-  dateTime: string;
-  endTime?: string;
+  startDate: string;
+  endDate: string;
   place: string;
   comment: string;
   eventId: number;

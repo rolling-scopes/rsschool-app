@@ -39,20 +39,24 @@ export function SchedulePage() {
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
+  const [modalAction, setModalAction] = useState(ScheduleItemsActions.update);
   const settings = useScheduleSettings();
 
   const handleOpenModal = (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => {
-    if(itemType === ScheduleItems.task){
-      setCourseTask(data)
-    } else if(itemType === ScheduleItems.event){
-      setCourseEvent(data)
+    if (itemType === ScheduleItems.task) {
+      setCourseTask(data);
+    } else if (itemType === ScheduleItems.event) {
+      setCourseEvent(data);
     }
+    setModalAction(action);
   };
 
   const handleSubmit = async (record: CreateCourseTaskDto) => {
-    await courseTaskApi.createCourseTask(course.id, record);
-    setCourseTask(null);
-    refreshData();
+    if (modalAction === ScheduleItemsActions.create) {
+      await courseTaskApi.createCourseTask(course.id, record);
+      setCourseTask(null);
+      refreshData();
+    }
   };
 
   const handleEventSubmit = () => {
@@ -67,10 +71,12 @@ export function SchedulePage() {
   };
 
   const handleCreateCourseTask = () => {
+    setModalAction(ScheduleItemsActions.create);
     setCourseTask({});
   };
 
   const handleCreateCourseEvent = () => {
+    setModalAction(ScheduleItemsActions.create);
     setCourseEvent({});
   };
 
