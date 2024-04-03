@@ -775,6 +775,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'minStudentsPerMentor': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseDto
+     */
+    'certificateThreshold': number;
 }
 /**
  * 
@@ -1586,6 +1592,12 @@ export interface CreateCourseDto {
      * @memberof CreateCourseDto
      */
     'minStudentsPerMentor'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCourseDto
+     */
+    'certificateThreshold': number;
 }
 /**
  * 
@@ -4224,6 +4236,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'minStudentsPerMentor': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProfileCourseDto
+     */
+    'certificateThreshold': number;
 }
 /**
  * 
@@ -5803,6 +5821,12 @@ export interface UpdateCourseDto {
      * @memberof UpdateCourseDto
      */
     'minStudentsPerMentor'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCourseDto
+     */
+    'certificateThreshold': number;
 }
 /**
  * 

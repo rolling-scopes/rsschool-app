@@ -239,13 +239,37 @@ function Page() {
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="minStudentsPerMentor"
-          label="Minimum Students per Mentor"
-          rules={[{ min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' }]}
-        >
-          <InputNumber step={1} />
-        </Form.Item>
+        <Row>
+          <Col span={12}>
+            <Form.Item
+              name="minStudentsPerMentor"
+              label="Minimum Students per Mentor"
+              rules={[
+                { min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' },
+              ]}
+            >
+              <InputNumber step={1} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="certificateThreshold"
+              label="Certificate Threshold"
+              tooltip="Minimum score percentage required for students to qualify for a certificate."
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input the certificate threshold.',
+                  type: 'integer',
+                  min: 1,
+                  max: 100,
+                },
+              ]}
+            >
+              <InputNumber step={5} min={1} max={100} addonAfter="%" />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item name="state" label="State">
           <Radio.Group>
@@ -310,6 +334,7 @@ function createRecord(values: any) {
     personalMentoring: values.personalMentoring,
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
+    certificateThreshold: values.certificateThreshold,
   };
   return record;
 }
@@ -390,6 +415,7 @@ function getInitialValues(modalData: Partial<Course>) {
   return {
     ...modalData,
     minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
+    certificateThreshold: modalData.certificateThreshold ?? 70,
     inviteOnly: !!modalData.inviteOnly,
     state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
     registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,

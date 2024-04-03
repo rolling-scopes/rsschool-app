@@ -15,12 +15,12 @@ export const StudentsWithMentorsCard = ({ studentsStats }: Props) => {
   return (
     <Card title="Students With Mentor">
       <Text strong>
-        Students With Mentor: {studentsStats.studentsWithMentorCount} / {studentsStats.totalStudents}
+        Students With Mentor: {studentsStats.studentsWithMentorCount} / {studentsStats.activeStudentsCount}
       </Text>
       <div style={{ height: 180, width: '100%' }}>
         <MentorsStatsChart
           count={studentsStats.studentsWithMentorCount}
-          total={studentsStats.totalStudents}
+          total={studentsStats.activeStudentsCount}
           color={Colors.Gold}
         />
       </div>

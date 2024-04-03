@@ -80,4 +80,8 @@ export class CreateCourseDto {
   @IsOptional()
   @ApiProperty({ required: false })
   minStudentsPerMentor?: number;
+
+  @IsNumber()
+  @ApiProperty({ required: true })
+  certificateThreshold: number;
 }
