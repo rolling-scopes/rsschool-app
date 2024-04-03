@@ -3,12 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { Repository } from 'typeorm';
+import { StageInterview } from '@entities/index';
 
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+
+    @InjectRepository(StageInterview)
+    readonly stageInterviewRepository: Repository<StageInterview>,
   ) {}
 
   public getById(id: number) {
@@ -17,6 +21,7 @@ export class StudentsService {
 
   public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
     const student = await this.studentRepository.findOneBy({ id: studentId });
+    const stageInterviews = await this.stageInterviewRepository.find({ where: { studentId } });
     if (student == null) {
       return false;
     }
@@ -34,6 +39,10 @@ export class StudentsService {
     }
 
     if (courseInfo?.roles.includes(CourseRole.Supervisor)) {
+      return true;
+    }
+
+    if (stageInterviews.some(interview => interview.mentorId === currentMentorId)) {
       return true;
     }
 

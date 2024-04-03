@@ -1042,13 +1042,25 @@ export interface CourseStatsDto {
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsActiveCount': number;
+    'activeStudentsCount': number;
     /**
      * 
      * @type {number}
      * @memberof CourseStatsDto
      */
-    'studentsTotalCount': number;
+    'totalStudents': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'studentsWithMentorCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'certifiedStudentsCount': number;
 }
 /**
  * 
@@ -2425,6 +2437,12 @@ export interface CrossCheckPairDto {
      * @memberof CrossCheckPairDto
      */
     'reviewedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CrossCheckPairDto
+     */
+    'privateRepository': string;
     /**
      * 
      * @type {string}

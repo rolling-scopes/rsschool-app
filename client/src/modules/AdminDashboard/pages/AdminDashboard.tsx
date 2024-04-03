@@ -7,6 +7,8 @@ import { StudentsStatsCard } from '../components/StudentsStatsCard';
 import css from 'styled-jsx/css';
 import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
 import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
+import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
+import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
 
 const gapSize = 24;
 
@@ -27,7 +29,7 @@ function AdminDashboard() {
       component: (
         <StudentsCountriesCard
           studentsCountriesStats={stats.studentsCountries}
-          studentsActiveCount={stats.studentsStats.studentsActiveCount}
+          activeStudentsCount={stats.studentsStats.activeStudentsCount}
         />
       ),
     },
@@ -48,6 +50,14 @@ function AdminDashboard() {
     stats?.mentorsStats.epamMentorsCount && {
       title: 'mentorsStatsCard',
       component: <EpamMentorsStatsCard mentorsStats={stats.mentorsStats} />,
+    },
+    stats?.studentsStats.studentsWithMentorCount && {
+      title: 'studentsWithMentorStatsCard',
+      component: <StudentsWithMentorsCard studentsStats={stats.studentsStats} />,
+    },
+    stats?.studentsStats.certifiedStudentsCount && {
+      title: 'studentsWithCertificateStatsCard',
+      component: <StudentsWithCertificateCard studentsStats={stats.studentsStats} />,
     },
   ].filter(Boolean);
 

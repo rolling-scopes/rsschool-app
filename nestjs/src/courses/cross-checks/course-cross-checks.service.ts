@@ -24,6 +24,7 @@ export type CrossCheckPair = {
   comment: string;
   student: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
   checker: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
+  privateRepository?: string;
   historicalScores: null | ScoreRecord[];
   messages: null | CrossCheckMessage[];
   url: string;
@@ -128,6 +129,7 @@ export class CourseCrossCheckService {
         'tsr."courseTaskId" = tsc."courseTaskId" AND tsr."studentId" = tsc."studentId" AND tsr."checkerId" = tsc."checkerId"',
       )
       .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate', 'tsr.historicalScores', 'tsr.messages'])
+      .addSelect(['st.repository'])
       .addSelect(['stu.githubId', 'stu.id', 'stu.firstName', 'stu.lastName'])
       .addSelect(['chu.githubId', 'chu.id', 'chu.firstName', 'chu.lastName'])
       .addSelect(['ts.url', 'ts.updatedDate'])
@@ -178,6 +180,7 @@ export class CourseCrossCheckService {
           id: e.tsc_courseTaskId,
         },
         url: e.ts_url,
+        privateRepository: e.st_repository,
         score: e.tsr_score,
         comment: e.tsr_comment,
         submittedDate: e.ts_updatedDate,

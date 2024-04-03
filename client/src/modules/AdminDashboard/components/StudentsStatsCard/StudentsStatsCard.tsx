@@ -12,12 +12,12 @@ const StudentsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
 
 export const StudentsStatsCard = ({ studentsStats }: Props) => {
   return (
-    <Card title="Active Students Stats">
+    <Card title="Active Students">
       <Text strong>
-        Active Students: {studentsStats.studentsActiveCount} / {studentsStats.studentsTotalCount}
+        Active Students: {studentsStats.activeStudentsCount} / {studentsStats.totalStudents}
       </Text>
-      <div style={{ height: 200, width: '100%' }}>
-        <StudentsStatsChart count={studentsStats.studentsActiveCount} total={studentsStats.studentsTotalCount} />
+      <div style={{ height: 180, width: '100%' }}>
+        <StudentsStatsChart count={studentsStats.activeStudentsCount} total={studentsStats.totalStudents} />
       </div>
     </Card>
   );

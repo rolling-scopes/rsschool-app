@@ -73,42 +73,43 @@ function Page() {
   );
 
   const renderModal = useCallback(
-    () => (
-      <ModalForm
-        data={modalData}
-        title="Discord Server"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
-        loading={modalLoading}
-      >
-        <Row gutter={24}>
-          <Col span={24}>
-            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter server name' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item
-              name="gratitudeUrl"
-              label="Gratitude URL"
-              rules={[{ required: true, message: 'Please enter gratitude URL' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item
-              name="mentorsChatUrl"
-              label="Mentors chat URL"
-              rules={[{ required: true, message: `Please enter mentors chat URL` }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-      </ModalForm>
-    ),
+    () =>
+      modalData ? (
+        <ModalForm
+          data={modalData}
+          title="Discord Server"
+          submit={handleModalSubmit}
+          cancel={() => setModalData(null)}
+          getInitialValues={getInitialValues}
+          loading={modalLoading}
+        >
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter server name' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                name="gratitudeUrl"
+                label="Gratitude URL"
+                rules={[{ required: true, message: 'Please enter gratitude URL' }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                name="mentorsChatUrl"
+                label="Mentors chat URL"
+                rules={[{ required: true, message: `Please enter mentors chat URL` }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </ModalForm>
+      ) : null,
     [modalData, handleModalSubmit],
   );
 

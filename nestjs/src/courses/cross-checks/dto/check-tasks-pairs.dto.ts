@@ -8,6 +8,7 @@ import {
   ScoreRecord,
 } from '@entities/taskSolutionResult';
 import { CrossCheckCriteriaDataDto } from './cross-check-criteria-data.dto';
+import { IsOptional } from 'class-validator';
 
 export class HistoricalScoreDto {
   constructor(historicalScore: ScoreRecord) {
@@ -75,6 +76,7 @@ export class CrossCheckPairDto {
     this.task = new IdNameDto(pair.courseTask);
     this.id = pair.id;
     this.reviewedDate = pair.reviewedDate;
+    this.privateRepository = pair.privateRepository;
     this.score = pair.score;
     this.student = new PersonDto(pair.student);
     this.submittedDate = pair.submittedDate;
@@ -106,6 +108,10 @@ export class CrossCheckPairDto {
 
   @ApiProperty()
   public reviewedDate: string;
+
+  @ApiProperty()
+  @IsOptional()
+  public privateRepository?: string;
 
   @ApiProperty()
   public submittedDate: string;

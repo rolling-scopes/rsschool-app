@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CountryStatDto } from './dto';
-import { Mentor } from '@entities/index';
+import { Certificate, Mentor } from '@entities/index';
 
 @Injectable()
 export class CourseStatsService {
@@ -14,14 +14,33 @@ export class CourseStatsService {
     private readonly mentorRepository: Repository<Mentor>,
   ) {}
 
-  public async getById(courseId: number) {
-    const [studentsTotalCount, studentsActiveCount] = await Promise.all([
-      this.studentRepository.count({ where: { courseId } }),
-      this.studentRepository.count({ where: { courseId, isExpelled: false, isFailed: false } }),
-    ]);
+  public async getStudents(courseId: number) {
+    const queryBuilder = this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoinAndSelect('student.user', 'user')
+      .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
+      .select('COUNT(*)', 'total_students')
+      .addSelect(
+        'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false THEN 1 END)',
+        'active_students',
+      )
+      .addSelect(
+        'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false AND student.mentorId IS NOT NULL THEN 1 END)',
+        'students_with_mentor',
+      )
+      .addSelect(
+        'COUNT(DISTINCT CASE WHEN certificate.publicId IS NOT NULL THEN student.id END)',
+        'students_with_certificate',
+      )
+      .where('student.courseId = :courseId', { courseId });
+
+    const result = await queryBuilder.getRawOne();
+
     return {
-      studentsActiveCount,
-      studentsTotalCount,
+      totalStudents: Number(result.total_students),
+      activeStudentsCount: Number(result.active_students),
+      studentsWithMentorCount: Number(result.students_with_mentor),
+      certifiedStudentsCount: Number(result.students_with_certificate),
     };
   }
 
@@ -46,15 +65,13 @@ export class CourseStatsService {
     };
   }
 
-  public async getStudentCounts(
-    courseId: number,
-  ): Promise<{ studentsActiveCount: number; studentsTotalCount: number }> {
-    const studentsTotalCount = await this.studentRepository.count({ where: { courseId } });
-    const studentsActiveCount = await this.studentRepository.count({
+  public async getStudentCounts(courseId: number): Promise<{ activeStudentsCount: number; totalStudents: number }> {
+    const totalStudents = await this.studentRepository.count({ where: { courseId } });
+    const activeStudentsCount = await this.studentRepository.count({
       where: { courseId, isExpelled: false, isFailed: false },
     });
 
-    return { studentsActiveCount, studentsTotalCount };
+    return { activeStudentsCount, totalStudents };
   }
 
   public async getMentorCountries(courseId: number): Promise<{ countries: CountryStatDto[] }> {
