@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { DisciplinesApi, EventsApi } from 'api';
+import { CourseScheduleItemDto, DisciplinesApi, EventsApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';

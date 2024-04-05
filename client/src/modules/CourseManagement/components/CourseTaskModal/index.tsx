@@ -1,5 +1,12 @@
 import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
-import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum, TaskDto, TasksApi } from 'api';
+import {
+  CourseScheduleItemDto,
+  CourseTaskDto,
+  CreateCourseTaskDto,
+  CreateCourseTaskDtoCheckerEnum,
+  TaskDto,
+  TasksApi,
+} from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
@@ -21,14 +28,15 @@ const { Option } = Select;
 type Props = {
   onCancel: () => void;
   onSubmit: (record: CreateCourseTaskDto) => void;
-  data: Partial<CourseTaskDto> | null;
+  data: Partial<CourseTaskDto> | CourseScheduleItemDto | null;
+  isSchedulePage?: boolean;
 };
 
 const userService = new UserService();
 const taskApi = new TasksApi();
 
 export function CourseTaskModal(props: Props) {
-  const { data } = props;
+  const { data, isSchedulePage } = props;
   const [changes, setChanges] = useState({} as Record<string, any>);
   const [form] = Form.useForm();
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
@@ -242,19 +250,20 @@ function createRecord(values: any): CreateCourseTaskDto {
   return data;
 }
 
-function getInitialValues(modalData: Partial<CourseTaskDetails>) {
-  const data = {
-    ...modalData,
-    timeZone: 'UTC',
-    taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
-    maxScore: modalData.maxScore || 100,
-    scoreWeight: modalData.scoreWeight ?? 1,
-    crossCheckEndDate: modalData.crossCheckEndDate ? dayjs.utc(modalData.crossCheckEndDate) : null,
-    range:
-      modalData.studentStartDate && modalData.studentEndDate
-        ? [dayjs.utc(modalData.studentStartDate), dayjs.utc(modalData.studentEndDate)]
-        : [dayjs().utc().hour(0).minute(0).second(0).utc(), dayjs().utc().hour(23).minute(59).second(59)],
-    checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
+const getInitialValues = (modalData: Partial<CourseTaskDetails> | CourseScheduleItemDto) => {
+    const data = {
+      ...modalData,
+      timeZone: 'UTC',
+      taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
+      maxScore: modalData.maxScore || 100,
+      scoreWeight: modalData.scoreWeight ?? 1,
+      crossCheckEndDate: modalData.crossCheckEndDate ? dayjs.utc(modalData.crossCheckEndDate) : null,
+      range:
+        modalData.studentStartDate && modalData.studentEndDate
+          ? [dayjs.utc(modalData.studentStartDate), dayjs.utc(modalData.studentEndDate)]
+          : [dayjs().utc().hour(0).minute(0).second(0).utc(), dayjs().utc().hour(23).minute(59).second(59)],
+      checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
+      type:  'taskType' in modalData ? modalData.taskType : modalData.type,
+    };
+    return data;
   };
-  return data;
-}

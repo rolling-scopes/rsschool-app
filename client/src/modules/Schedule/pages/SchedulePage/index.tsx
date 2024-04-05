@@ -1,7 +1,7 @@
 import { Alert } from 'antd';
 import {
   CourseDto,
-  CourseEventDto,
+  CourseScheduleItemDto,
   CoursesScheduleApi,
   CoursesScheduleIcalApi,
   CoursesTasksApi,
@@ -34,15 +34,15 @@ export function SchedulePage() {
   const mobileView = useMedia('(max-width: 768px)');
 
   const [cipher, setCipher] = useState('');
-  const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
-  const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
+  const [courseTask, setCourseTask] = useState<null | CourseScheduleItemDto>(null);
+  const [courseEvent, setCourseEvent] = useState<CourseScheduleItemDto | null>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
   const [modalAction, setModalAction] = useState(ScheduleItemsActions.update);
   const settings = useScheduleSettings();
 
-  const handleOpenModal = (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => {
+  const handleOpenModal = (action: ScheduleItemsActions, itemType: ScheduleItems, data: CourseScheduleItemDto) => {
     if (itemType === ScheduleItems.task) {
       setCourseTask(data);
     } else if (itemType === ScheduleItems.event) {
@@ -72,12 +72,12 @@ export function SchedulePage() {
 
   const handleCreateCourseTask = () => {
     setModalAction(ScheduleItemsActions.create);
-    setCourseTask({});
+    setCourseTask(null);
   };
 
   const handleCreateCourseEvent = () => {
     setModalAction(ScheduleItemsActions.create);
-    setCourseEvent({});
+    setCourseEvent(null);
   };
 
   const {
@@ -128,7 +128,12 @@ export function SchedulePage() {
         />
 
         {courseTask ? (
-          <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
+          <CourseTaskModal
+            data={courseTask}
+            onSubmit={handleSubmit}
+            onCancel={() => setCourseTask(null)}
+            isSchedulePage
+          />
         ) : null}
         {courseEvent && (
           <CourseEventModal

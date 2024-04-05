@@ -962,6 +962,36 @@ export interface CourseScheduleItemDto {
      * @memberof CourseScheduleItemDto
      */
     'type': CourseScheduleItemDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'taskType': CourseScheduleItemDtoTaskTypeEnum;
+    /**
+     * 
+     * @type {PersonDto}
+     * @memberof CourseScheduleItemDto
+     */
+    'taskOwner': PersonDto | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'studentStartDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'studentEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseScheduleItemDto
+     */
+    'checker': CourseScheduleItemDtoCheckerEnum;
 }
 
 export const CourseScheduleItemDtoStatusEnum = {
@@ -991,6 +1021,21 @@ export const CourseScheduleItemDtoTypeEnum = {
 } as const;
 
 export type CourseScheduleItemDtoTypeEnum = typeof CourseScheduleItemDtoTypeEnum[keyof typeof CourseScheduleItemDtoTypeEnum];
+export const CourseScheduleItemDtoTaskTypeEnum = {
+    CourseTask: 'courseTask',
+    CourseEvent: 'courseEvent'
+} as const;
+
+export type CourseScheduleItemDtoTaskTypeEnum = typeof CourseScheduleItemDtoTaskTypeEnum[keyof typeof CourseScheduleItemDtoTaskTypeEnum];
+export const CourseScheduleItemDtoCheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CourseScheduleItemDtoCheckerEnum = typeof CourseScheduleItemDtoCheckerEnum[keyof typeof CourseScheduleItemDtoCheckerEnum];
 
 /**
  * 

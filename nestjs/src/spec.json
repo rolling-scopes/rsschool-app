@@ -3351,7 +3351,16 @@
             "type": "string",
             "enum": ["lecture", "coding", "self-study", "interview", "cross-check-submit", "cross-check-review", "test"]
           },
-          "type": { "type": "string", "enum": ["courseTask", "courseEvent"] }
+          "type": { "type": "string", "enum": ["courseTask", "courseEvent"] },
+          "taskType": { "type": "string", "enum": ["courseTask", "courseEvent"], "nullable": true },
+          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "studentStartDate": { "type": "string", "nullable": true },
+          "studentEndDate": { "type": "string", "nullable": true },
+          "checker": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"]
+          }
         },
         "required": [
           "score",
@@ -3369,7 +3378,12 @@
           "scoreWeight",
           "descriptionUrl",
           "tag",
-          "type"
+          "type",
+          "taskType",
+          "taskOwner",
+          "studentStartDate",
+          "studentEndDate",
+          "checker"
         ]
       },
       "CourseCopyFromDto": {

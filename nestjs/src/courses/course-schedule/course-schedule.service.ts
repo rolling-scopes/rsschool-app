@@ -13,6 +13,7 @@ import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
 import * as dayjs from 'dayjs';
 import { EventDto } from 'src/events/dto/event.dto';
+import { TaskType } from '@entities/task';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -20,7 +21,7 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     endDate: Date;
     name: string;
     organizer?: PersonDto;
-    score?: number;
+    score: string | null;
     status: CourseScheduleItemStatus;
     tag: CourseScheduleItemTag;
     descriptionUrl?: string;
@@ -28,6 +29,11 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
     taskId: number | null;
     eventId: number | null;
     event: EventDto | null;
+    taskType: TaskType | null;
+    taskOwner: PersonDto | null;
+    studentStartDate: string | null;
+    studentEndDate: string | null;
+    checker: Checker | null;
   };
 
 export enum CourseScheduleDataSource {
@@ -146,6 +152,11 @@ export class CourseScheduleService {
             descriptionUrl: courseTask.task.descriptionUrl,
             organizer: courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null,
             type: CourseScheduleDataSource.CourseTask,
+            taskType: courseTask.type,
+            taskOwner: courseTask.taskOwner,
+            studentStartDate: courseTask.studentStartDate,
+            studentEndDate: courseTask.studentEndDate,
+            checker: courseTask.checker
           } as CourseScheduleItem;
 
           acc.push(scheduleItem);
@@ -172,6 +183,12 @@ export class CourseScheduleService {
             descriptionUrl: courseEvent.event.descriptionUrl,
             organizer: new PersonDto(courseEvent.organizer),
             type: CourseScheduleDataSource.CourseEvent,
+            taskType: null,
+            score: null,
+            taskOwner: null,
+            studentStartDate: null,
+            studentEndDate: null,
+            checker: null,
           } as CourseScheduleItem;
         }),
       )

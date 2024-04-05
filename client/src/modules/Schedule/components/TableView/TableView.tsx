@@ -53,7 +53,7 @@ const getColumns = ({
   filteredInfo: Record<string, FilterValue | null>;
   currentTabKey: string;
   isManager: boolean;
-  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void;
+  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: CourseScheduleItemDto) => void;
 }): ColumnsType<CourseScheduleItemDto> => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   const { types, statuses } = combinedFilter;
@@ -151,7 +151,7 @@ export interface TableViewProps {
   statusFilter?: string;
   mobileView?: boolean;
   isManager: boolean;
-  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void;
+  handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: CourseScheduleItemDto) => void;
 }
 
 export type CombinedFilter = {

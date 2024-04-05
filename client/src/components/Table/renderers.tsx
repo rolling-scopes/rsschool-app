@@ -190,7 +190,7 @@ export const renderTask = (name: string, item: CourseScheduleItemDto) => {
 };
 
 export const getActionRenderer =
-  (handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: Record<string, unknown>) => void) =>
+  (handleOpenModal: (action: ScheduleItemsActions, itemType: ScheduleItems, data: CourseScheduleItemDto) => void) =>
   item => {
     const isTask = !!item.scoreWeight;
     return (

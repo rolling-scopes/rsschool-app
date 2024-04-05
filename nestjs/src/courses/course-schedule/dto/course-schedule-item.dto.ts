@@ -7,6 +7,8 @@ import {
   CourseScheduleItemTag,
 } from '../course-schedule.service';
 import { EventDto } from 'src/events/dto';
+import { TaskType } from '@entities/task';
+import { Checker } from '@entities/courseTask';
 
 @ApiResponse({})
 export class CourseScheduleItemDto {
@@ -26,10 +28,14 @@ export class CourseScheduleItemDto {
     this.tag = item.tag ?? null;
     this.descriptionUrl = item.descriptionUrl ?? null;
     this.type = item.type;
+    this.taskType = item.taskType;
+    this.studentStartDate = item.studentStartDate;
+    this.studentEndDate = item.studentEndDate;
+    this.checker = item.checker;
   }
 
   @ApiProperty({ type: Number, nullable: true })
-  score: number | null;
+  score: string | null;
 
   @ApiProperty()
   name: string;
@@ -75,4 +81,19 @@ export class CourseScheduleItemDto {
 
   @ApiProperty({ enum: CourseScheduleDataSource })
   type: CourseScheduleDataSource;
+
+  @ApiProperty({ enum: CourseScheduleDataSource, nullable: true })
+  taskType: TaskType | null;
+
+  @ApiProperty({ nullable: true, type: PersonDto })
+  taskOwner: PersonDto | null;
+
+  @ApiProperty({ nullable: true, type: String })
+  studentStartDate: string | null;
+
+  @ApiProperty({ nullable: true, type: String })
+  studentEndDate: string | null;
+
+  @ApiProperty({ nullable: true, enum: Checker, type: Checker })
+  checker: Checker | null;
 }
