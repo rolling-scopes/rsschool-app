@@ -2620,7 +2620,8 @@
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
-          "minStudentsPerMentor": { "type": "number" }
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
         "required": [
           "id",
@@ -2647,7 +2648,8 @@
           "personalMentoring",
           "logo",
           "discipline",
-          "minStudentsPerMentor"
+          "minStudentsPerMentor",
+          "certificateThreshold"
         ]
       },
       "CreateCourseDto": {
@@ -2669,9 +2671,10 @@
           "certificateIssuer": { "type": "string" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "minStudentsPerMentor": { "type": "number" }
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
-        "required": ["name", "startDate", "endDate", "fullName", "alias", "description"]
+        "required": ["name", "startDate", "endDate", "fullName", "alias", "description", "certificateThreshold"]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -2694,9 +2697,10 @@
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
           "disciplineId": { "type": "number" },
-          "minStudentsPerMentor": { "type": "number" }
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
-        "required": ["name", "fullName", "alias"]
+        "required": ["name", "fullName", "alias", "certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
       "StudentDto": {
@@ -3861,7 +3865,8 @@
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
-          "minStudentsPerMentor": { "type": "number" }
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
         "required": [
           "id",
@@ -3888,7 +3893,8 @@
           "personalMentoring",
           "logo",
           "discipline",
-          "minStudentsPerMentor"
+          "minStudentsPerMentor",
+          "certificateThreshold"
         ]
       },
       "UpdateUserDto": {
