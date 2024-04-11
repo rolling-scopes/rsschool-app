@@ -11,15 +11,15 @@ const { Text } = Typography;
 
 const LiquidChart = dynamic(() => import('../LiquidChart/LiquidChart'), { ssr: false });
 
-export const StudentsWithCertificateCard = ({ studentsStats }: Props) => {
+export const StudentsEligibleForCertificationCard = ({ studentsStats }: Props) => {
   return (
-    <Card title="Students With Certificate">
+    <Card title="Eligible for Certification">
       <Text strong>
-        Students With Certificate: {studentsStats.certifiedStudentsCount} / {studentsStats.activeStudentsCount}
+        Eligible for Certification: {studentsStats.eligibleForCertificationCount} / {studentsStats.activeStudentsCount}
       </Text>
       <div style={{ height: 180, width: '100%' }}>
         <LiquidChart
-          count={studentsStats.certifiedStudentsCount}
+          count={studentsStats.eligibleForCertificationCount}
           total={studentsStats.activeStudentsCount}
           color={Colors.Lime}
         />

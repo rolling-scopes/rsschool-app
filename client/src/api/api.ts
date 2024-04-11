@@ -1067,6 +1067,12 @@ export interface CourseStatsDto {
      * @memberof CourseStatsDto
      */
     'certifiedStudentsCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseStatsDto
+     */
+    'eligibleForCertificationCount': number;
 }
 /**
  * 
