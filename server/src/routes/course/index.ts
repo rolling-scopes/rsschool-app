@@ -25,7 +25,6 @@ import {
   postMentor,
   restoreExpelledMentor,
 } from './mentor';
-import * as mentors from './mentors';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
 import {
@@ -149,11 +148,6 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
-
-  const mentorsLogger = logger.child({ module: 'course/mentors' });
-  router.get('/mentors', courseSupervisorGuard, mentors.getMentors(mentorsLogger));
-  router.post('/mentors', adminGuard, mentors.createMentors(mentorsLogger));
-  router.post('/mentors/students', courseSupervisorGuard, mentors.assignStudents(mentorsLogger));
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));

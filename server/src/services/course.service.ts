@@ -316,22 +316,6 @@ export async function getCrossStudentsByMentor(courseId: number, githubId: strin
   return students;
 }
 
-export async function getMentors(courseId: number): Promise<MentorDetails[]> {
-  const records = await mentorQuery()
-    .innerJoin('mentor.user', 'user')
-    .addSelect(getPrimaryUserFields())
-    .innerJoin('mentor.course', 'course')
-    .leftJoin('mentor.students', 'students')
-    .addSelect(['students.id'])
-    .leftJoinAndSelect('mentor.stageInterviews', 'stageInterviews')
-    .where(`course.id = :courseId`, { courseId })
-    .orderBy('mentor.createdDate')
-    .getMany();
-
-  const mentors = records.map(convertToMentorDetails);
-  return mentors;
-}
-
 export async function getMentorsWithStudents(courseId: number): Promise<MentorDetails[]> {
   const records = await mentorQuery()
     .innerJoin('mentor.user', 'user')
