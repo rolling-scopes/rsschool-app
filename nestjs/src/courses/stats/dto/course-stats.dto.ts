@@ -6,11 +6,13 @@ export class CourseStatsDto {
     totalStudents: number;
     studentsWithMentorCount: number;
     certifiedStudentsCount: number;
+    eligibleForCertificationCount: number;
   }) {
     this.activeStudentsCount = stats.activeStudentsCount;
     this.totalStudents = stats.totalStudents;
     this.studentsWithMentorCount = stats.studentsWithMentorCount;
     this.certifiedStudentsCount = stats.certifiedStudentsCount;
+    this.eligibleForCertificationCount = stats.eligibleForCertificationCount;
   }
 
   @ApiProperty()
@@ -24,4 +26,7 @@ export class CourseStatsDto {
 
   @ApiProperty()
   certifiedStudentsCount: number;
+
+  @ApiProperty()
+  eligibleForCertificationCount: number;
 }

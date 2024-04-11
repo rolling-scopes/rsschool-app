@@ -14,11 +14,24 @@ export class CourseStatsService {
     private readonly mentorRepository: Repository<Mentor>,
   ) {}
 
+  private async getMaxScore(courseId: number): Promise<number> {
+    const { maxScore } = await this.studentRepository
+      .createQueryBuilder('student')
+      .select('MAX(student.totalScore)', 'maxScore')
+      .where('student.courseId = :courseId', { courseId })
+      .getRawOne();
+
+    return Number(maxScore);
+  }
+
   public async getStudents(courseId: number) {
+    const maxScore = await this.getMaxScore(courseId);
+
     const queryBuilder = this.studentRepository
       .createQueryBuilder('student')
       .leftJoinAndSelect('student.user', 'user')
       .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
+      .leftJoin('student.course', 'course')
       .select('COUNT(*)', 'total_students')
       .addSelect(
         'COUNT(CASE WHEN student.isExpelled = false AND student.isFailed = false THEN 1 END)',
@@ -32,6 +45,10 @@ export class CourseStatsService {
         'COUNT(DISTINCT CASE WHEN certificate.publicId IS NOT NULL THEN student.id END)',
         'students_with_certificate',
       )
+      .addSelect(
+        `COUNT(CASE WHEN student.totalScore >= (${maxScore} * course.certificateThreshold / 100) THEN 1 END)`,
+        'eligible_for_certification',
+      )
       .where('student.courseId = :courseId', { courseId });
 
     const result = await queryBuilder.getRawOne();
@@ -41,6 +58,7 @@ export class CourseStatsService {
       activeStudentsCount: Number(result.active_students),
       studentsWithMentorCount: Number(result.students_with_mentor),
       certifiedStudentsCount: Number(result.students_with_certificate),
+      eligibleForCertificationCount: Number(result.eligible_for_certification),
     };
   }
 

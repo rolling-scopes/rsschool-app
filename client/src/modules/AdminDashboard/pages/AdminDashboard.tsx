@@ -9,6 +9,7 @@ import { MentorsCountriesCard } from '../components/MentorsCountriesCard/Mentors
 import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
 import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
 import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
+import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 
 const gapSize = 24;
 
@@ -33,7 +34,7 @@ function AdminDashboard() {
         />
       ),
     },
-    stats?.studentsStats && {
+    stats?.studentsStats.totalStudents && {
       title: 'studentsStatsCard',
       component: <StudentsStatsCard studentsStats={stats.studentsStats} />,
     },
@@ -59,6 +60,11 @@ function AdminDashboard() {
       title: 'studentsWithCertificateStatsCard',
       component: <StudentsWithCertificateCard studentsStats={stats.studentsStats} />,
     },
+    !stats?.studentsStats.certifiedStudentsCount &&
+      stats?.studentsStats.eligibleForCertificationCount && {
+        title: 'StudentsEligibleForCertificationCard',
+        component: <StudentsEligibleForCertificationCard studentsStats={stats.studentsStats} />,
+      },
   ].filter(Boolean);
 
   return (
