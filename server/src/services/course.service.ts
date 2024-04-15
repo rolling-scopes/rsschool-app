@@ -41,6 +41,7 @@ export const getContactsUserFields = (modelName = 'user') => [
   `${modelName}.contactsTelegram`,
   `${modelName}.contactsLinkedIn`,
   `${modelName}.contactsSkype`,
+  `${modelName}.contactsEpamEmail`,
 ];
 
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | null> {
