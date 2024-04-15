@@ -150,32 +150,27 @@ export class CourseStatsService {
     });
     const resultRepository = this.getResultRepositoryByTaskType(courseTask.task.type);
 
-    const performanceStats = await resultRepository
+    const ranges = [
+      { key: 'minimalAchievement', minScore: 0, maxScore: 0.2 },
+      { key: 'lowAchievement', minScore: 0.2, maxScore: 0.5 },
+      { key: 'moderateAchievement', minScore: 0.5, maxScore: 0.7 },
+      { key: 'highAchievement', minScore: 0.7, maxScore: 0.9 },
+      { key: 'exceptionalAchievement', minScore: 0.9, maxScore: 1.0 },
+    ];
+
+    const query = await resultRepository
       .createQueryBuilder('result')
       .select('COUNT(CASE WHEN result.score > 0 THEN 1 END)', 'totalAchievement')
-      .addSelect(
-        `COUNT(CASE WHEN result.score > 0 AND result.score / CAST(${courseTask.maxScore} AS float) < 0.2 THEN 1 END)`,
-        'minimalAchievement',
-      )
-      .addSelect(
-        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= 0.2 AND result.score / CAST(${courseTask.maxScore} AS float) < 0.5 THEN 1 END)`,
-        'lowAchievement',
-      )
-      .addSelect(
-        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= 0.5 AND result.score / CAST(${courseTask.maxScore} AS float) < 0.7 THEN 1 END)`,
-        'moderateAchievement',
-      )
-      .addSelect(
-        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= 0.7 AND result.score / CAST(${courseTask.maxScore} AS float) < 0.9 THEN 1 END)`,
-        'highAchievement',
-      )
-      .addSelect(
-        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= 0.9 AND result.score / CAST(${courseTask.maxScore} AS float) < 1.0 THEN 1 END)`,
-        'exceptionalAchievement',
-      )
-      .addSelect(`COUNT(CASE WHEN result.score = ${courseTask.maxScore} THEN 1 END)`, 'perfectScores')
-      .where('result.courseTaskId = :courseTaskId', { courseTaskId })
-      .getRawOne();
+      .addSelect(`COUNT(CASE WHEN result.score = ${courseTask.maxScore} THEN 1 END)`, 'perfectScores');
+
+    ranges.forEach(({ key, minScore, maxScore }) => {
+      query.addSelect(
+        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= ${minScore} AND result.score / CAST(${courseTask.maxScore} AS float) < ${maxScore} THEN 1 END)`,
+        key,
+      );
+    });
+
+    const performanceStats = await query.where('result.courseTaskId = :courseTaskId', { courseTaskId }).getRawOne();
 
     return {
       totalAchievement: Number(performanceStats.totalAchievement),
