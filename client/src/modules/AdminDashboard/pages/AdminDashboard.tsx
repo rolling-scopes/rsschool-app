@@ -10,6 +10,7 @@ import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
 import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
 import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
+import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 
 const gapSize = 24;
 
@@ -65,6 +66,10 @@ function AdminDashboard() {
         title: 'StudentsEligibleForCertificationCard',
         component: <StudentsEligibleForCertificationCard studentsStats={stats.studentsStats} />,
       },
+    stats?.courseTasks && {
+      title: 'taskPerformanceCard',
+      component: <TaskPerformanceCard tasks={stats.courseTasks} />,
+    },
   ].filter(Boolean);
 
   return (

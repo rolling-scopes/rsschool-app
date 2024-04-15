@@ -14,7 +14,7 @@ import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '..
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
 import { CourseStatsService } from './course-stats.service';
-import { CourseStatsDto, CountriesStatsDto, CourseMentorsStatsDto } from './dto';
+import { CourseStatsDto, CountriesStatsDto, CourseMentorsStatsDto, TaskPerformanceStatsDto } from './dto';
 import { CourseRole } from '@entities/index';
 
 @Controller('courses/:courseId/stats')
@@ -76,5 +76,21 @@ export class CourseStatsController {
   public async getStudentCountries(@Param('courseId', ParseIntPipe) courseId: number): Promise<CountriesStatsDto> {
     const data = await this.courseStatsService.getStudentCountries(courseId);
     return data;
+  }
+
+  @Get('/task/:taskId/performance')
+  @CacheTTL(ONE_HOUR_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
+  @UseGuards(RoleGuard)
+  @ApiOperation({ operationId: 'getTaskPerformance' })
+  @ApiOkResponse({ type: TaskPerformanceStatsDto })
+  @ApiBadRequestResponse()
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin, CourseRole.Dementor], true)
+  public async getTaskPerformance(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('taskId', ParseIntPipe) taskId: number,
+  ) {
+    const stats = await this.courseStatsService.getTaskPerformance(taskId);
+    return new TaskPerformanceStatsDto(stats);
   }
 }
