@@ -1,5 +1,5 @@
 import { Liquid, LiquidConfig } from '@ant-design/plots';
-import { Colors } from '../data';
+import { Colors } from '../../data';
 
 type Props = {
   count: number;

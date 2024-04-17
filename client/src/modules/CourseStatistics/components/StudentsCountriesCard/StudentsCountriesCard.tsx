@@ -7,7 +7,9 @@ type Props = {
   activeStudentsCount: number;
 };
 
-const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), { ssr: false });
+const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), {
+  ssr: false,
+});
 
 export const StudentsCountriesCard = ({ studentsCountriesStats, activeStudentsCount }: Props) => {
   const { countries } = studentsCountriesStats;

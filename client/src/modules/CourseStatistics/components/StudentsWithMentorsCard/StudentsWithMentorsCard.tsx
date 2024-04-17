@@ -1,7 +1,7 @@
 import { Card, Typography } from 'antd';
 import { CourseStatsDto } from 'api';
 import dynamic from 'next/dynamic';
-import { Colors } from '../data';
+import { Colors } from '../../data';
 
 type Props = {
   studentsStats: CourseStatsDto;
@@ -9,7 +9,9 @@ type Props = {
 
 const { Text } = Typography;
 
-const LiquidChart = dynamic(() => import('../LiquidChart/LiquidChart'), { ssr: false });
+const LiquidChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
+  ssr: false,
+});
 
 export const StudentsWithMentorsCard = ({ studentsStats }: Props) => {
   return (
