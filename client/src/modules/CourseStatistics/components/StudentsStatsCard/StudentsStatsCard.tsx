@@ -8,7 +8,9 @@ type Props = {
 
 const { Text } = Typography;
 
-const StudentsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), { ssr: false });
+const StudentsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
+  ssr: false,
+});
 
 export const StudentsStatsCard = ({ studentsStats }: Props) => {
   return (

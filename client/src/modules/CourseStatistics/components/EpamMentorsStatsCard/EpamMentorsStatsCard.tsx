@@ -1,7 +1,7 @@
 import { Card, Typography } from 'antd';
 import { CourseMentorsStatsDto } from 'api';
 import dynamic from 'next/dynamic';
-import { Colors } from '../data';
+import { Colors } from '../../data';
 
 type Props = {
   mentorsStats: CourseMentorsStatsDto;

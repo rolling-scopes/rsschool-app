@@ -5,7 +5,7 @@ import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { Colors } from '../data';
+import { Colors } from '../../data';
 
 const courseStatsApi = new CourseStatsApi();
 

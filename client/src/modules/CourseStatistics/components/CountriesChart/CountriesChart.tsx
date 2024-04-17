@@ -2,7 +2,7 @@ import { Bar, BarConfig } from '@ant-design/plots';
 import { Flex, Image, Typography } from 'antd';
 import { CountryStatDto } from 'api';
 import { useCallback, useMemo } from 'react';
-import { Colors } from '../data';
+import { Colors } from '../../data';
 
 type Props = {
   data: CountryStatDto[];
