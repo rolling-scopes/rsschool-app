@@ -20,7 +20,7 @@ export const MentorsCountriesCard = ({ countriesStats, activeCount }: Props) => 
         <CountriesChart
           data={countries}
           activeCount={activeCount}
-          xAxisTitle={'Number of Students'}
+          xAxisTitle={'Number of Mentors'}
           color={Colors.Purple}
         />
       </div>

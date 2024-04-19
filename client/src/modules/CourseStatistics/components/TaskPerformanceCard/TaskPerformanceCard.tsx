@@ -1,11 +1,12 @@
 import { Datum } from '@antv/g2plot';
-import { Card, Flex, Form, Image, Select, Typography } from 'antd';
+import { Card, Flex, Form, Image, Select, Space, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Colors } from '../../data';
+import { PieConfig } from '@ant-design/plots';
 
 const courseStatsApi = new CourseStatsApi();
 
@@ -57,8 +58,42 @@ export const TaskPerformanceCard = ({ tasks }: Props) => {
   );
 };
 
-function getChartConfig() {
+function getPerformanceDescriptionByType(type: string) {
+  switch (type) {
+    case 'Minimal':
+      return 'Number of students scoring between 1% and 20% of the maximum points';
+    case 'Low':
+      return 'Number of students scoring between 21% and 50% of the maximum points';
+    case 'Moderate':
+      return 'Number of students scoring between 51% and 70% of the maximum points';
+    case 'High':
+      return 'Number of students scoring between 71% and 90% of the maximum points';
+    case 'Exceptional':
+      return 'Number of students scoring between 91% and 99% of the maximum points';
+    case 'Perfect':
+      return 'Number of students achieving a perfect score of 100%';
+    default:
+      return 'Unknown score category';
+  }
+}
+
+function getChartConfig(): Partial<PieConfig> {
   return {
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <Space direction="vertical" style={{ margin: 8 }}>
+            <Text strong>{title}</Text>
+            {items.map(({ name, value }) => (
+              <Text key={name}>
+                {getPerformanceDescriptionByType(name)}: <Text strong>{value}</Text>
+              </Text>
+            ))}
+          </Space>
+        );
+      },
+      showDelay: 32,
+    },
     color: ({ type }: Datum) => {
       switch (type) {
         case 'Minimal':
