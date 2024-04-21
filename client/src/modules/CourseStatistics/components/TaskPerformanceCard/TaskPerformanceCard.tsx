@@ -1,5 +1,5 @@
 import { Datum } from '@antv/g2plot';
-import { Card, Flex, Form, Image, Select, Space, Typography } from 'antd';
+import { Card, Flex, Form, Image, Select, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
