@@ -80,16 +80,15 @@ function getPerformanceDescriptionByType(type: string) {
 function getChartConfig(): Partial<PieConfig> {
   return {
     tooltip: {
-      customContent: (title, items) => {
+      customContent: (_, items) => {
         return (
-          <Space direction="vertical" style={{ margin: 8 }}>
-            <Text strong>{title}</Text>
+          <>
             {items.map(({ name, value }) => (
               <Text key={name}>
                 {getPerformanceDescriptionByType(name)}: <Text strong>{value}</Text>
               </Text>
             ))}
-          </Space>
+          </>
         );
       },
       showDelay: 32,
