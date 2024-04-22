@@ -1400,6 +1400,18 @@
         "tags": ["course mentors"]
       }
     },
+    "/courses/{courseId}/students/{studentId}/summary": {
+      "get": {
+        "operationId": "getStudentSummary",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "400": { "description": "" }, "403": { "description": "" } },
+        "tags": ["students"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
