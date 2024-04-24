@@ -5,7 +5,8 @@ import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { Colors } from '../../data';
+import { Colors, StudentPerformanceDescription, StudentPerformanceType } from '../../data';
+import { PieConfig } from '@ant-design/plots';
 
 const courseStatsApi = new CourseStatsApi();
 
@@ -57,21 +58,54 @@ export const TaskPerformanceCard = ({ tasks }: Props) => {
   );
 };
 
-function getChartConfig() {
+function getPerformanceDescriptionByType(type: string) {
+  switch (type) {
+    case StudentPerformanceType.Minimal:
+      return StudentPerformanceDescription.Minimal;
+    case StudentPerformanceType.Low:
+      return StudentPerformanceDescription.Low;
+    case StudentPerformanceType.Moderate:
+      return StudentPerformanceDescription.Moderate;
+    case StudentPerformanceType.High:
+      return StudentPerformanceDescription.High;
+    case StudentPerformanceType.Exceptional:
+      return StudentPerformanceDescription.Exceptional;
+    case StudentPerformanceType.Perfect:
+      return StudentPerformanceDescription.PerfectScore;
+    default:
+      return StudentPerformanceDescription.Unknown;
+  }
+}
+
+function getChartConfig(): Partial<PieConfig> {
   return {
+    tooltip: {
+      customContent: (_, items) => {
+        return (
+          <>
+            {items.map(({ name, value }) => (
+              <Text key={name}>
+                {getPerformanceDescriptionByType(name)}: <Text strong>{value}</Text>
+              </Text>
+            ))}
+          </>
+        );
+      },
+      showDelay: 32,
+    },
     color: ({ type }: Datum) => {
       switch (type) {
-        case 'Minimal':
+        case StudentPerformanceType.Minimal:
           return Colors.Volcano;
-        case 'Low':
+        case StudentPerformanceType.Low:
           return Colors.Orange;
-        case 'Moderate':
+        case StudentPerformanceType.Moderate:
           return Colors.Blue;
-        case 'High':
+        case StudentPerformanceType.High:
           return Colors.Lime;
-        case 'Exceptional':
+        case StudentPerformanceType.Exceptional:
           return Colors.Purple;
-        case 'Perfect':
+        case StudentPerformanceType.Perfect:
           return Colors.Magenta;
         default:
           return Colors.Gray;
@@ -82,11 +116,11 @@ function getChartConfig() {
 
 function getChartData(taskPerformanceStats: TaskPerformanceStatsDto) {
   return [
-    { type: 'Minimal', value: taskPerformanceStats.minimalAchievement },
-    { type: 'Low', value: taskPerformanceStats.lowAchievement },
-    { type: 'Moderate', value: taskPerformanceStats.moderateAchievement },
-    { type: 'High', value: taskPerformanceStats.highAchievement },
-    { type: 'Exceptional', value: taskPerformanceStats.exceptionalAchievement },
-    { type: 'Perfect', value: taskPerformanceStats.perfectScores },
+    { type: StudentPerformanceType.Minimal, value: taskPerformanceStats.minimalAchievement },
+    { type: StudentPerformanceType.Low, value: taskPerformanceStats.lowAchievement },
+    { type: StudentPerformanceType.Moderate, value: taskPerformanceStats.moderateAchievement },
+    { type: StudentPerformanceType.High, value: taskPerformanceStats.highAchievement },
+    { type: StudentPerformanceType.Exceptional, value: taskPerformanceStats.exceptionalAchievement },
+    { type: StudentPerformanceType.Perfect, value: taskPerformanceStats.perfectScores },
   ].filter(({ value }) => value > 0);
 }
