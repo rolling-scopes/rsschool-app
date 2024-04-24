@@ -116,11 +116,11 @@ function getChartConfig(): Partial<PieConfig> {
 
 function getChartData(taskPerformanceStats: TaskPerformanceStatsDto) {
   return [
-    { type: 'Minimal', value: taskPerformanceStats.minimalAchievement },
-    { type: 'Low', value: taskPerformanceStats.lowAchievement },
-    { type: 'Moderate', value: taskPerformanceStats.moderateAchievement },
-    { type: 'High', value: taskPerformanceStats.highAchievement },
-    { type: 'Exceptional', value: taskPerformanceStats.exceptionalAchievement },
-    { type: 'Perfect', value: taskPerformanceStats.perfectScores },
+    { type: StudentPerformanceType.Minimal, value: taskPerformanceStats.minimalAchievement },
+    { type: StudentPerformanceType.Low, value: taskPerformanceStats.lowAchievement },
+    { type: StudentPerformanceType.Moderate, value: taskPerformanceStats.moderateAchievement },
+    { type: StudentPerformanceType.High, value: taskPerformanceStats.highAchievement },
+    { type: StudentPerformanceType.Exceptional, value: taskPerformanceStats.exceptionalAchievement },
+    { type: StudentPerformanceType.Perfect, value: taskPerformanceStats.perfectScores },
   ].filter(({ value }) => value > 0);
 }
