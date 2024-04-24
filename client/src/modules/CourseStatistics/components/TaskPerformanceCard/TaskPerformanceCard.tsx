@@ -5,7 +5,7 @@ import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { Colors } from '../../data';
+import { Colors, StudentPerformanceDescription, StudentPerformanceType } from '../../data';
 import { PieConfig } from '@ant-design/plots';
 
 const courseStatsApi = new CourseStatsApi();
@@ -60,20 +60,20 @@ export const TaskPerformanceCard = ({ tasks }: Props) => {
 
 function getPerformanceDescriptionByType(type: string) {
   switch (type) {
-    case 'Minimal':
-      return 'Number of students scoring between 1% and 20% of the maximum points';
-    case 'Low':
-      return 'Number of students scoring between 21% and 50% of the maximum points';
-    case 'Moderate':
-      return 'Number of students scoring between 51% and 70% of the maximum points';
-    case 'High':
-      return 'Number of students scoring between 71% and 90% of the maximum points';
-    case 'Exceptional':
-      return 'Number of students scoring between 91% and 99% of the maximum points';
-    case 'Perfect':
-      return 'Number of students achieving a perfect score of 100%';
+    case StudentPerformanceType.Minimal:
+      return StudentPerformanceDescription.Minimal;
+    case StudentPerformanceType.Low:
+      return StudentPerformanceDescription.Low;
+    case StudentPerformanceType.Moderate:
+      return StudentPerformanceDescription.Moderate;
+    case StudentPerformanceType.High:
+      return StudentPerformanceDescription.High;
+    case StudentPerformanceType.Exceptional:
+      return StudentPerformanceDescription.Exceptional;
+    case StudentPerformanceType.Perfect:
+      return StudentPerformanceDescription.PerfectScore;
     default:
-      return 'Unknown score category';
+      return StudentPerformanceDescription.Unknown;
   }
 }
 
@@ -95,17 +95,17 @@ function getChartConfig(): Partial<PieConfig> {
     },
     color: ({ type }: Datum) => {
       switch (type) {
-        case 'Minimal':
+        case StudentPerformanceType.Minimal:
           return Colors.Volcano;
-        case 'Low':
+        case StudentPerformanceType.Low:
           return Colors.Orange;
-        case 'Moderate':
+        case StudentPerformanceType.Moderate:
           return Colors.Blue;
-        case 'High':
+        case StudentPerformanceType.High:
           return Colors.Lime;
-        case 'Exceptional':
+        case StudentPerformanceType.Exceptional:
           return Colors.Purple;
-        case 'Perfect':
+        case StudentPerformanceType.Perfect:
           return Colors.Magenta;
         default:
           return Colors.Gray;
