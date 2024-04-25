@@ -10,7 +10,7 @@ export class CertificateMetadataDto {
     this.name = `${user.firstName} ${user.lastName}`;
     this.issueDate = certificate.issueDate.toISOString().split('T')[0] as string;
     this.issuer = 'RS School';
-    this.courseTrainers = course.certificateIssuer;
+    this.courseTrainers = course.certificateIssuer ?? 'Dzmitry Varabei';
     this.courseFullName = course.fullName;
     this.courseDiscipline = course.discipline?.name ?? 'N/A';
   }
