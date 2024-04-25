@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Certificate } from '@entities/certificate';
@@ -9,6 +9,8 @@ import { SaveCertificateDto } from './dto/save-certificate-dto';
 import { ConfigService } from 'src/config';
 import { Student } from '@entities/student';
 import { Course } from '@entities/course';
+import { User } from '@entities/user';
+import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
 
 @Injectable()
 export class CertificationsService {
@@ -19,6 +21,8 @@ export class CertificationsService {
     private certificateRepository: Repository<Certificate>,
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private readonly configService: ConfigService,
   ) {
     this.s3 = new S3({
@@ -31,7 +35,24 @@ export class CertificationsService {
   }
 
   public async getByPublicId(publicId: string) {
-    return await this.certificateRepository.findOne({ where: { publicId } });
+    return this.certificateRepository.findOne({
+      where: { publicId },
+      relations: ['student'],
+    });
+  }
+
+  public async getCertificateMetadata(certificate: Certificate): Promise<CertificateMetadataDto> {
+    const user = await this.userRepository.findOneByOrFail({ id: certificate.studentId });
+    const course = await this.courseRepository.findOne({
+      where: { id: certificate.student.courseId },
+      relations: ['discipline'],
+    });
+
+    if (!course) {
+      throw new HttpException('Course not found', 404);
+    }
+
+    return new CertificateMetadataDto(certificate, course, user);
   }
 
   public async getFileStream(bucket: string, key: string) {

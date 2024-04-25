@@ -8,10 +8,11 @@ import { ConfigModule } from '../config';
 import { CoursesModule } from '../courses/courses.module';
 import { CertificatesController } from './certificates.controller';
 import { CertificationsService } from './certificates.service';
+import { User } from '@entities/user';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Certificate, Student, Course]),
+    TypeOrmModule.forFeature([Certificate, Student, Course, User]),
     ConfigModule,
     UsersNotificationsModule,
     CoursesModule,
