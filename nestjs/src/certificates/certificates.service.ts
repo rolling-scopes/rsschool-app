@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Certificate } from '@entities/certificate';
@@ -42,14 +42,16 @@ export class CertificationsService {
   }
 
   public async getCertificateMetadata(certificate: Certificate): Promise<CertificateMetadataDto> {
-    const user = await this.userRepository.findOneByOrFail({ id: certificate.studentId });
-    const course = await this.courseRepository.findOne({
-      where: { id: certificate.student.courseId },
-      relations: ['discipline'],
-    });
+    const [user, course] = await Promise.all([
+      this.userRepository.findOneByOrFail({ id: certificate.student.userId }),
+      this.courseRepository.findOne({
+        where: { id: certificate.student.courseId },
+        relations: ['discipline'],
+      }),
+    ]);
 
     if (!course) {
-      throw new HttpException('Course not found', 404);
+      throw new NotFoundException('Course not found');
     }
 
     return new CertificateMetadataDto(certificate, course, user);
