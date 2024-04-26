@@ -424,7 +424,11 @@ export const BadgeDtoIdEnum = {
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
     RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team'
+    JuryTeam: 'Jury_Team',
+    Mentor: 'Mentor',
+    Contributor: 'Contributor',
+    Coordinator: 'Coordinator',
+    Thanks: 'Thanks'
 } as const;
 
 export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
@@ -3136,7 +3140,11 @@ export const GratitudeDtoBadgeIdEnum = {
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
     RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team'
+    JuryTeam: 'Jury_Team',
+    Mentor: 'Mentor',
+    Contributor: 'Contributor',
+    Coordinator: 'Coordinator',
+    Thanks: 'Thanks'
 } as const;
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
