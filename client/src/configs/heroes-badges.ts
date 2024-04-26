@@ -59,6 +59,26 @@ const heroesBadges: Record<string, { name: string; pictureId: number; url: strin
     pictureId: 36,
     url: 'JuryTeam.svg',
   },
+  Mentor: {
+    name: 'Mentor',
+    pictureId: 37,
+    url: 'Mentor.svg',
+  },
+  Coordinator: {
+    name: 'Coordinator',
+    pictureId: 38,
+    url: 'Coordinator.svg',
+  },
+  Contributor: {
+    name: 'Contributor',
+    pictureId: 40,
+    url: 'Contributor.svg',
+  },
+  Thanks: {
+    name: 'Thanks',
+    pictureId: 41,
+    url: 'Thanks.svg',
+  },
 };
 
 export default heroesBadges;

@@ -13,6 +13,10 @@ export enum Badge {
   JobOffer = 'Job_Offer',
   RSActivist = 'RS_activist',
   JuryTeam = 'Jury_Team',
+  Mentor = 'Mentor',
+  Contributor = 'Contributor',
+  Coordinator = 'Coordinator',
+  Thanks = 'Thanks',
 }
 
 export class BadgeDto {

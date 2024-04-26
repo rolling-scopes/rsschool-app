@@ -4247,7 +4247,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           },
           "comment": { "type": "string" },
@@ -4551,7 +4555,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           }
         },
