@@ -29,7 +29,6 @@ export class StudentSummaryDto {
   @ApiProperty()
   isActive: boolean;
 
-
   @ApiProperty({ type: MentorStudentSummaryDto, nullable: true })
   mentor: MentorStudentSummaryDto | null;
 
