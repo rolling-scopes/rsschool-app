@@ -79,7 +79,6 @@ export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) =>
 export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
 
-  console.log(ctx.params)
   const student = await courseService.getStudentByGithubId(courseId, githubId);
   if (student == null) {
     setResponse(ctx, OK, null);

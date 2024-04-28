@@ -1400,15 +1400,22 @@
         "tags": ["course mentors"]
       }
     },
-    "/courses/{courseId}/students/{studentId}/summary": {
+    "/courses/{courseId}/students/{githubId}/summary": {
       "get": {
         "operationId": "getStudentSummary",
         "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "string" } }
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
         ],
-        "responses": { "400": { "description": "" }, "403": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentSummaryDto" } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
         "tags": ["students"]
       }
     },
@@ -3749,6 +3756,51 @@
         "type": "object",
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
+      },
+      "MentorStudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "isActive": { "type": "boolean" },
+          "cityName": { "type": "string" },
+          "countryName": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "string" } },
+          "contactsEmail": { "type": "string", "nullable": true },
+          "contactsPhone": { "type": "string", "nullable": true },
+          "contactsSkype": { "type": "string", "nullable": true },
+          "contactsTelegram": { "type": "string", "nullable": true },
+          "contactsNotes": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "name",
+          "isActive",
+          "cityName",
+          "countryName",
+          "students",
+          "contactsEmail",
+          "contactsPhone",
+          "contactsSkype",
+          "contactsTelegram",
+          "contactsNotes",
+          "contactsWhatsApp"
+        ]
+      },
+      "StudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "totalScore": { "type": "number" },
+          "results": { "type": "array", "items": { "type": "string" } },
+          "isActive": { "type": "boolean" },
+          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }] },
+          "rank": { "type": "number" },
+          "repository": { "type": "string", "nullable": true }
+        },
+        "required": ["totalScore", "results", "isActive", "mentor", "rank", "repository"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

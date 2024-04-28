@@ -1,22 +1,25 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../../auth';
-// import { StudentsService } from '../students';
 import { StudentSummaryDto } from './dto/student-summary.dto';
+import { CourseStudentsService } from './course-students.service';
 
 @Controller('courses/:courseId/students')
 @ApiTags('students')
 @UseGuards(DefaultGuard)
 export class CourseStudentsController {
-//   constructor(private studentsService: StudentsService) {}
+  constructor(private courseStudentService: CourseStudentsService) {}
 
-  @Get(':studentId/summary')
+  @Get(':githubId/summary')
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
+  @ApiOkResponse({
+    type: StudentSummaryDto,
+  })
   @ApiOperation({ operationId: 'getStudentSummary' })
   public async getStudentSummary(
     @Param('courseId') courseId: number,
-    @Param('studentId') githubId: string,
+    @Param('githubId') githubId: string,
     @Req() req: CurrentRequest,
   ) {
     let studentGithubId;
@@ -25,33 +28,21 @@ export class CourseStudentsController {
     } else {
       studentGithubId = githubId;
     }
+
+    const student = await this.courseStudentService.getStudentByGithubId(courseId, studentGithubId);
+
+    const [score, mentor] = await Promise.all([
+      this.courseStudentService.getStudentScore(student?.id || 0),
+      student?.mentorId ? await this.courseStudentService.getMentorWithContacts(student.mentorId) : null,
+    ]);
+
     return new StudentSummaryDto({
-      totalScore: 0,
-      rank: 5,
-      results: [
-        {
-          score: 50,
-          courseTaskId: 719,
-        },
-      ],
-      isActive: true,
-      mentor: {
-        isActive: true,
-        name: 'dmitry romaniuk',
-        id: 1273,
-        githubId: studentGithubId,
-        students: [],
-        cityName: 'Minsk',
-        countryName: 'Belarus',
-        contactsEmail: 'hello@example.com',
-        contactsSkype: null,
-        contactsWhatsApp: null,
-        contactsTelegram: 'pavel_durov',
-        contactsNotes: 'do not call me',
-        contactsPhone: null,
-      },
-      repository: null,
-      discord: 'eleven'
+      totalScore: score?.totalScore,
+      results: score?.results,
+      rank: score?.rank,
+      isActive: !student?.isExpelled && !student?.isFailed,
+      mentor,
+      repository: student?.repository || null,
     });
   }
 }
