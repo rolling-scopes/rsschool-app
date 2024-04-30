@@ -10,12 +10,11 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
 import { CourseStatsService } from './course-stats.service';
-import { CourseStatsDto, CountriesStatsDto, CourseMentorsStatsDto } from './dto';
-import { CourseRole } from '@entities/index';
+import { CourseStatsDto, CountriesStatsDto, CourseMentorsStatsDto, TaskPerformanceStatsDto } from './dto';
 
 @Controller('courses/:courseId/stats')
 @ApiTags('course stats')
@@ -42,11 +41,10 @@ export class CourseStatsController {
   @Get('/mentors')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
-  @UseGuards(RoleGuard)
+  @UseGuards(DefaultGuard, CourseGuard)
   @ApiOperation({ operationId: 'getCourseMentors' })
   @ApiOkResponse({ type: CourseMentorsStatsDto })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin, CourseRole.Dementor], true)
   public async getMentors(@Param('courseId', ParseIntPipe) courseId: number) {
     const data = await this.courseStatsService.getMentors(courseId);
     return new CourseMentorsStatsDto(data);
@@ -55,11 +53,10 @@ export class CourseStatsController {
   @Get('/mentors/countries')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
-  @UseGuards(RoleGuard)
+  @UseGuards(DefaultGuard, CourseGuard)
   @ApiOperation({ operationId: 'getCourseMentorCountries' })
   @ApiOkResponse({ type: CountriesStatsDto })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin, CourseRole.Dementor], true)
   public async getMentorCountries(@Param('courseId', ParseIntPipe) courseId: number): Promise<CountriesStatsDto> {
     const data = await this.courseStatsService.getMentorCountries(courseId);
     return data;
@@ -68,13 +65,27 @@ export class CourseStatsController {
   @Get('/students/countries')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
-  @UseGuards(RoleGuard)
+  @UseGuards(DefaultGuard, CourseGuard)
   @ApiOperation({ operationId: 'getCourseStudentCountries' })
   @ApiOkResponse({ type: CountriesStatsDto })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, Role.Admin, CourseRole.Dementor], true)
   public async getStudentCountries(@Param('courseId', ParseIntPipe) courseId: number): Promise<CountriesStatsDto> {
     const data = await this.courseStatsService.getStudentCountries(courseId);
     return data;
+  }
+
+  @Get('/task/:taskId/performance')
+  @CacheTTL(ONE_HOUR_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
+  @UseGuards(DefaultGuard, CourseGuard)
+  @ApiOperation({ operationId: 'getTaskPerformance' })
+  @ApiOkResponse({ type: TaskPerformanceStatsDto })
+  @ApiBadRequestResponse()
+  public async getTaskPerformance(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('taskId', ParseIntPipe) taskId: number,
+  ) {
+    const stats = await this.courseStatsService.getTaskPerformance(taskId);
+    return new TaskPerformanceStatsDto(stats);
   }
 }

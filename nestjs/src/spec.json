@@ -743,6 +743,24 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/task/{taskId}/performance": {
+      "get": {
+        "operationId": "getTaskPerformance",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskPerformanceStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -3175,6 +3193,42 @@
         "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
         "required": ["countries"]
       },
+      "TaskPerformanceStatsDto": {
+        "type": "object",
+        "properties": {
+          "totalAchievement": { "type": "number", "description": "Total number of students who submitted the task" },
+          "minimalAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 1% and 20% of the maximum points"
+          },
+          "lowAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 21% and 50% of the maximum points"
+          },
+          "moderateAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 51% and 70% of the maximum points"
+          },
+          "highAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 71% and 90% of the maximum points"
+          },
+          "exceptionalAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 91% and 99% of the maximum points"
+          },
+          "perfectScores": { "type": "number", "description": "Number of students achieving a perfect score of 100%" }
+        },
+        "required": [
+          "totalAchievement",
+          "minimalAchievement",
+          "lowAchievement",
+          "moderateAchievement",
+          "highAchievement",
+          "exceptionalAchievement",
+          "perfectScores"
+        ]
+      },
       "CrossCheckCriteriaDataDto": {
         "type": "object",
         "properties": {
@@ -4257,7 +4311,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           },
           "comment": { "type": "string" },
@@ -4561,7 +4619,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           }
         },

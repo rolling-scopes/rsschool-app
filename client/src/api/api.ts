@@ -424,7 +424,11 @@ export const BadgeDtoIdEnum = {
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
     RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team'
+    JuryTeam: 'Jury_Team',
+    Mentor: 'Mentor',
+    Contributor: 'Contributor',
+    Coordinator: 'Coordinator',
+    Thanks: 'Thanks'
 } as const;
 
 export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
@@ -3136,7 +3140,11 @@ export const GratitudeDtoBadgeIdEnum = {
     TopPerformer: 'Top_performer',
     JobOffer: 'Job_Offer',
     RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team'
+    JuryTeam: 'Jury_Team',
+    Mentor: 'Mentor',
+    Contributor: 'Contributor',
+    Coordinator: 'Coordinator',
+    Thanks: 'Thanks'
 } as const;
 
 export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
@@ -5399,6 +5407,55 @@ export const TaskDtoTypeEnum = {
 
 export type TaskDtoTypeEnum = typeof TaskDtoTypeEnum[keyof typeof TaskDtoTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface TaskPerformanceStatsDto
+ */
+export interface TaskPerformanceStatsDto {
+    /**
+     * Total number of students who submitted the task
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'totalAchievement': number;
+    /**
+     * Number of students scoring between 1% and 20% of the maximum points
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'minimalAchievement': number;
+    /**
+     * Number of students scoring between 21% and 50% of the maximum points
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'lowAchievement': number;
+    /**
+     * Number of students scoring between 51% and 70% of the maximum points
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'moderateAchievement': number;
+    /**
+     * Number of students scoring between 71% and 90% of the maximum points
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'highAchievement': number;
+    /**
+     * Number of students scoring between 91% and 99% of the maximum points
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'exceptionalAchievement': number;
+    /**
+     * Number of students achieving a perfect score of 100%
+     * @type {number}
+     * @memberof TaskPerformanceStatsDto
+     */
+    'perfectScores': number;
+}
 /**
  * 
  * @export
@@ -8345,6 +8402,43 @@ export const CourseStatsApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTaskPerformance: async (courseId: number, taskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getTaskPerformance', 'courseId', courseId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getTaskPerformance', 'taskId', taskId)
+            const localVarPath = `/courses/{courseId}/stats/task/{taskId}/performance`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8395,6 +8489,17 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseStudentCountries(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTaskPerformance(courseId: number, taskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskPerformanceStatsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskPerformance(courseId, taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -8440,6 +8545,16 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
          */
         getCourseStudentCountries(courseId: number, options?: any): AxiosPromise<CountriesStatsDto> {
             return localVarFp.getCourseStudentCountries(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTaskPerformance(courseId: number, taskId: number, options?: any): AxiosPromise<TaskPerformanceStatsDto> {
+            return localVarFp.getTaskPerformance(courseId, taskId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8493,6 +8608,18 @@ export class CourseStatsApi extends BaseAPI {
      */
     public getCourseStudentCountries(courseId: number, options?: AxiosRequestConfig) {
         return CourseStatsApiFp(this.configuration).getCourseStudentCountries(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} taskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseStatsApi
+     */
+    public getTaskPerformance(courseId: number, taskId: number, options?: AxiosRequestConfig) {
+        return CourseStatsApiFp(this.configuration).getTaskPerformance(courseId, taskId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

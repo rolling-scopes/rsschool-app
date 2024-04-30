@@ -144,12 +144,6 @@ export function getAdminMenuItems(session: Session): MenuItemsRenderData[] {
 
 const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
   {
-    name: 'Dashboard',
-    key: 'courseDashboard',
-    getUrl: (course: Course) => `/course/admin/dashboard?course=${course.alias}`,
-    courseAccess: some(isCourseManager, isCourseSupervisor, isDementor),
-  },
-  {
     name: 'Course Events',
     key: 'courseEvents',
     getUrl: (course: Course) => `/course/admin/events?course=${course.alias}`,

@@ -138,6 +138,12 @@ const links: LinkData[] = [
     access: some(isCourseManager, isActiveStudent, isDementor),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
+  {
+    name: 'Course Statistics',
+    icon: <AppstoreOutlined />,
+    getUrl: (course: Course) => `/course/stats?course=${course.alias}`,
+    access: anyAccess,
+  },
 ];
 
 export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {

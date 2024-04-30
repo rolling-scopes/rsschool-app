@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CountryStatDto } from './dto';
-import { Certificate, Mentor } from '@entities/index';
+import { Certificate, CourseTask, Mentor, StageInterview, TaskInterviewResult, TaskResult } from '@entities/index';
+import { TaskType } from '@entities/task';
 
 @Injectable()
 export class CourseStatsService {
@@ -12,6 +13,14 @@ export class CourseStatsService {
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Mentor)
     private readonly mentorRepository: Repository<Mentor>,
+    @InjectRepository(CourseTask)
+    readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(TaskResult)
+    readonly taskResultRepository: Repository<TaskResult>,
+    @InjectRepository(TaskInterviewResult)
+    readonly taskInterviewResultRepository: Repository<TaskInterviewResult>,
+    @InjectRepository(StageInterview)
+    readonly stageInterviewRepository: Repository<StageInterview>,
   ) {}
 
   private async getMaxScore(courseId: number): Promise<number> {
@@ -120,6 +129,57 @@ export class CourseStatsService {
         countryName: country.countryName,
         count: Number(country.count),
       })),
+    };
+  }
+
+  private getResultRepositoryByTaskType(taskType: TaskType) {
+    switch (taskType) {
+      case 'interview':
+        return this.taskInterviewResultRepository;
+      case 'stage-interview':
+        return this.stageInterviewRepository;
+      default:
+        return this.taskResultRepository;
+    }
+  }
+
+  public async getTaskPerformance(courseTaskId: number) {
+    const courseTask = await this.courseTaskRepository.findOneOrFail({
+      where: { id: courseTaskId },
+      relations: ['task'],
+    });
+    const resultRepository = this.getResultRepositoryByTaskType(courseTask.task.type);
+
+    const ranges = [
+      { key: 'minimalAchievement', minScore: 0, maxScore: 0.2 },
+      { key: 'lowAchievement', minScore: 0.2, maxScore: 0.5 },
+      { key: 'moderateAchievement', minScore: 0.5, maxScore: 0.7 },
+      { key: 'highAchievement', minScore: 0.7, maxScore: 0.9 },
+      { key: 'exceptionalAchievement', minScore: 0.9, maxScore: 1.0 },
+    ];
+
+    const query = await resultRepository
+      .createQueryBuilder('result')
+      .select('COUNT(CASE WHEN result.score > 0 THEN 1 END)', 'totalAchievement')
+      .addSelect(`COUNT(CASE WHEN result.score = ${courseTask.maxScore} THEN 1 END)`, 'perfectScores');
+
+    ranges.forEach(({ key, minScore, maxScore }) => {
+      query.addSelect(
+        `COUNT(CASE WHEN result.score / CAST(${courseTask.maxScore} AS float) >= ${minScore} AND result.score / CAST(${courseTask.maxScore} AS float) < ${maxScore} THEN 1 END)`,
+        key,
+      );
+    });
+
+    const performanceStats = await query.where('result.courseTaskId = :courseTaskId', { courseTaskId }).getRawOne();
+
+    return {
+      totalAchievement: Number(performanceStats.totalAchievement),
+      minimalAchievement: Number(performanceStats.minimalAchievement),
+      lowAchievement: Number(performanceStats.lowAchievement),
+      moderateAchievement: Number(performanceStats.moderateAchievement),
+      highAchievement: Number(performanceStats.highAchievement),
+      exceptionalAchievement: Number(performanceStats.exceptionalAchievement),
+      perfectScores: Number(performanceStats.perfectScores),
     };
   }
 }

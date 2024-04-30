@@ -211,4 +211,8 @@ const gratitudeBadge: GratitudeBadge[] = [
   { id: Badge.JobOffer, name: 'Job Offer', roles: [CourseRole.Manager, CourseRole.Supervisor] },
   { id: Badge.RSActivist, name: 'RS activist', roles: [CourseRole.Manager, CourseRole.Supervisor] },
   { id: Badge.JuryTeam, name: 'Jury team', roles: [CourseRole.Manager, CourseRole.Supervisor] },
+  { id: Badge.Mentor, name: 'Mentor', roles: [CourseRole.Manager] },
+  { id: Badge.Contributor, name: 'Contributor', roles: [CourseRole.Manager] },
+  { id: Badge.Coordinator, name: 'Coordinator', roles: [CourseRole.Manager] },
+  { id: Badge.Thanks, name: 'Thanks', roles: [CourseRole.Manager] },
 ];
