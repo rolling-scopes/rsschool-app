@@ -16,7 +16,7 @@ import {
   CriteriaDto,
   CrossCheckMessageDto,
   CrossCheckCriteriaDataDto,
-  StudentsApi
+  StudentsApi,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
@@ -529,7 +529,7 @@ export class CourseService {
   }
 
   async getStudentSummary(githubId: string | 'me') {
-    const result = await studentsApi.getStudentSummary(this.courseId, githubId)
+    const result = await studentsApi.getStudentSummary(this.courseId, githubId);
     return result.data as unknown as StudentSummary;
   }
 
