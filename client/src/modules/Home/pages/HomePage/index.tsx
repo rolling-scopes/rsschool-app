@@ -69,7 +69,6 @@ export function HomePage() {
   };
 
   const { courseTasks, studentSummary } = useStudentSummary(session, course);
-  console.log(studentSummary)
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#fff' }}>

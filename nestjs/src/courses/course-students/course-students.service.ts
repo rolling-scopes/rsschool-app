@@ -39,9 +39,6 @@ export class CourseStudentsService {
     return record;
   }
 
-  public async getStudentSummary(courseId: number, studentId: number) {
-    console.log('summary', { studentId, courseId });
-  }
   public async getStudentScore(studentId: number) {
     const student = await this.studentRepository
       .createQueryBuilder('student')
