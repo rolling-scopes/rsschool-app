@@ -22,12 +22,7 @@ export class CourseStudentsController {
     @Param('githubId') githubId: string,
     @Req() req: CurrentRequest,
   ) {
-    let studentGithubId;
-    if (githubId === 'me') {
-      studentGithubId = req.user.githubId;
-    } else {
-      studentGithubId = githubId;
-    }
+    const studentGithubId = githubId === 'me' ? req.user.githubId : githubId;
 
     const student = await this.courseStudentService.getStudentByGithubId(courseId, studentGithubId);
 
