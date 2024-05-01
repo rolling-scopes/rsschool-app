@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
@@ -31,8 +31,11 @@ export class CourseStudentsController {
 
     const student = await this.courseStudentService.getStudentByGithubId(courseId, studentGithubId);
 
+    if (student === null) {
+      throw new NotFoundException(`Student with GitHub id ${studentGithubId} not found`);
+    }
     const [score, mentor] = await Promise.all([
-      this.courseStudentService.getStudentScore(student?.id || 0),
+      this.courseStudentService.getStudentScore(student?.id),
       student?.mentorId ? await this.courseStudentService.getMentorWithContacts(student.mentorId) : null,
     ]);
 
