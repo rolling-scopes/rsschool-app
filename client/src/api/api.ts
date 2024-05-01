@@ -4432,6 +4432,25 @@ export interface PutInterviewFeedbackDto {
 /**
  * 
  * @export
+ * @interface ResultDto
+ */
+export interface ResultDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ResultDto
+     */
+    'score'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResultDto
+     */
+    'courseTaskId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface ResumeCourseDto
  */
 export interface ResumeCourseDto {
@@ -5224,10 +5243,10 @@ export interface StudentSummaryDto {
     'totalScore': number;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<ResultDto>}
      * @memberof StudentSummaryDto
      */
-    'results': Array<string>;
+    'results': Array<ResultDto>;
     /**
      * 
      * @type {boolean}

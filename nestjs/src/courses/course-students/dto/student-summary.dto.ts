@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Mentor, MentorStudentSummaryDto } from './mentor-student-summary.dto';
+import { ResultDto } from './result.dto';
 
 export interface StudentSummary {
   totalScore?: number;
-  results?: { score?: number; courseTaskId?: number }[];
+  results?: Array<ResultDto>;
   isActive: boolean;
   mentor: Mentor | null;
   rank?: number;
@@ -23,8 +24,8 @@ export class StudentSummaryDto {
   @ApiProperty()
   totalScore: number;
 
-  @ApiProperty({ type: Array<{ score?: number; courseTaskId?: number }> })
-  results: { score?: number; courseTaskId?: number }[];
+  @ApiProperty({ type: ResultDto, isArray: true })
+  results: Array<ResultDto>;
 
   @ApiProperty()
   isActive: boolean;

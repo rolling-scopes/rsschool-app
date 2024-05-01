@@ -530,7 +530,7 @@ export class CourseService {
 
   async getStudentSummary(githubId: string | 'me') {
     const result = await studentsApi.getStudentSummary(this.courseId, githubId);
-    return result.data as unknown as StudentSummary;
+    return result.data as StudentSummary;
   }
 
   async getStudentScore(githubId: string) {
@@ -660,7 +660,6 @@ export interface StudentSummary {
   totalScore: number;
   results: { score: number; courseTaskId: number }[];
   isActive: boolean;
-  discord: string;
   mentor:
     | (MentorBasic & {
         contactsEmail?: string;

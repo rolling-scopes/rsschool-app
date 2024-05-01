@@ -3811,6 +3811,10 @@
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
       },
+      "ResultDto": {
+        "type": "object",
+        "properties": { "score": { "type": "number" }, "courseTaskId": { "type": "number" } }
+      },
       "MentorStudentSummaryDto": {
         "type": "object",
         "properties": {
@@ -3848,7 +3852,7 @@
         "type": "object",
         "properties": {
           "totalScore": { "type": "number" },
-          "results": { "type": "array", "items": { "type": "string" } },
+          "results": { "type": "array", "items": { "$ref": "#/components/schemas/ResultDto" } },
           "isActive": { "type": "boolean" },
           "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }] },
           "rank": { "type": "number" },
