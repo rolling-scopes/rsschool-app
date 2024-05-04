@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseArrayPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseArrayPipe, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -12,6 +12,7 @@ import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
 import { FilterMentorRegistryResponse } from './dto/mentor-registry.dto';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './constants';
 import { CourseInfo } from '@entities/session';
+import { InviteMentorsDto } from './dto/invite-mentors.dto';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -120,5 +121,12 @@ export class RegistryController {
     const disciplineIds = uniq(courses.map(course => course.disciplineId).filter(Boolean)) as number[];
     const disciplines = await this.disciplinesService.getByIds(disciplineIds);
     return disciplines.map(discipline => discipline.name);
+  }
+
+  @Post('mentors/invite')
+  @ApiOperation({ operationId: 'inviteMentors' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  public async inviteMentors(@Body() body: InviteMentorsDto) {
+    await this.registryService.sendInvitationsToMentors(body);
   }
 }
