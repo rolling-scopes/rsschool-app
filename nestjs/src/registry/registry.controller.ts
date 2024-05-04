@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -9,6 +9,7 @@ import { RegistryService } from './registry.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
+import { InviteMentorsDto } from './dto/invite-mentors.dto';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -79,5 +80,12 @@ export class RegistryController {
       );
       return data.map(el => new MentorRegistryDto(el));
     }
+  }
+
+  @Post('mentors/invite')
+  @ApiOperation({ operationId: 'inviteMentors' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  public async inviteMentors(@Body() body: InviteMentorsDto) {
+    await this.registryService.sendInvitationsToMentors(body);
   }
 }

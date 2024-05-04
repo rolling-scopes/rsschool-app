@@ -66,7 +66,7 @@ export class NotificationsService {
   }
 
   /**
-   * Messages to users regarless on user subscription status to specific channel
+   * Messages to users regardless on user subscription status to specific channel
    */
   public async sendMessage(notification: {
     notificationId: NotificationId;
@@ -74,12 +74,13 @@ export class NotificationsService {
     data: object;
     channelId: NotificationChannelId;
     channelValue: string;
+    noEscape?: boolean;
   }) {
-    const { userId, data, notificationId, channelId, channelValue } = notification;
+    const { userId, data, notificationId, channelId, channelValue, noEscape } = notification;
     const channelSettings = await this.getChannelSettings(channelId, notificationId);
 
     const message = channelSettings
-      ? this.buildChannelMessage({ ...channelSettings, externalId: channelValue }, data)
+      ? this.buildChannelMessage({ ...channelSettings, externalId: channelValue, noEscape }, data)
       : null;
 
     if (!message) {
@@ -111,11 +112,14 @@ export class NotificationsService {
     });
   }
 
-  public buildChannelMessage(channel: NotificationChannelSettings & { externalId?: string }, data: object) {
-    const { channelId, externalId, template } = channel;
+  public buildChannelMessage(
+    channel: NotificationChannelSettings & { externalId?: string; noEscape?: boolean },
+    data: object,
+  ) {
+    const { channelId, externalId, template, noEscape } = channel;
     if (!externalId || !template) return;
 
-    const body = compile(channel.template.body)(data);
+    const body = compile(channel.template.body, { noEscape })(data);
     const channelMessage = {
       channelId,
       to: externalId,

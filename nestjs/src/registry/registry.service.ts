@@ -1,18 +1,23 @@
 import { User } from '@entities/user';
 import { MentorRegistry } from '@entities/mentorRegistry';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoursesService } from 'src/courses/courses.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { InviteMentorsDto } from './dto/invite-mentors.dto';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class RegistryService {
+  private readonly logger = new Logger('registry');
+
   constructor(
     @InjectRepository(MentorRegistry)
     private mentorsRegistryRepository: Repository<MentorRegistry>,
     private usersService: UsersService,
     private coursesService: CoursesService,
+    private notificationsService: NotificationsService,
   ) {}
 
   public async approveMentor(githubId: string, preselectedCourses: string[]): Promise<User> {
@@ -84,5 +89,41 @@ export class RegistryService {
       throw new BadRequestException('User not found');
     }
     await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
+  }
+
+  public async sendInvitationsToMentors(data: InviteMentorsDto) {
+    const { text } = data;
+    data;
+    // const recipients = [];
+    this.notificationsService;
+    this.logger;
+
+    Promise.resolve().then(async () => {
+      await this.notificationsService.sendMessage({
+        notificationId: 'mentorsInvitation',
+        userId: 11563,
+        data: {
+          text,
+        },
+        channelId: 'email',
+        channelValue: 'alekseenkoart@gmail.com',
+        noEscape: true,
+      });
+    });
+    // for (const [userId, courses] of recipients) {
+    //   try {
+    //     await this.notificationsService.sendMessage({
+    //       notificationId: 'mentorsInvitation',
+    //       userId,
+    //       data: {
+    //         text,
+    //       },
+    //       channelId: 'email',
+    //       channelValue: email,
+    //     });
+    //   } catch (e) {
+    //     this.logger.log({ message: (e as Error).message, userId });
+    //   }
+    // }
   }
 }
