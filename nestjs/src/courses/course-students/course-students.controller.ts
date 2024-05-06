@@ -40,7 +40,7 @@ export class CourseStudentsController {
       rank: score?.rank,
       isActive: !student?.isExpelled && !student?.isFailed,
       mentor,
-      repository: student?.repository || null,
+      repository: student?.repository ?? null,
     });
   }
 }
