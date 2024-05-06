@@ -4,7 +4,7 @@ import { StageInterview, StageInterviewFeedback, Mentor, Student } from '@entiti
 
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskResult } from '@entities/taskResult';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
@@ -19,20 +19,15 @@ export class CourseStudentsService {
     readonly mentorRepository: Repository<Mentor>,
   ) {}
 
-  studentQuery() {
-    return this.studentRepository.createQueryBuilder('student');
-  }
-
-  mentorQuery() {
-    return this.mentorRepository.createQueryBuilder('mentor');
-  }
-
   async getStudentByGithubId(courseId: number, githubId: string): Promise<Student | null> {
-    const record = await this.studentQuery()
-      .innerJoin('student.user', 'user')
-      .where('user.githubId = :githubId', { githubId })
-      .andWhere('student.courseId = :courseId', { courseId })
-      .getOne();
+    const record = await this.studentRepository.findOne({
+      where: {
+        courseId,
+        user: { githubId },
+      },
+      relations: ['user'],
+    });
+
     if (record == null) {
       return null;
     }
@@ -97,10 +92,17 @@ export class CourseStudentsService {
   }
 
   async getMentorWithContacts(mentorId: number): Promise<MentorWithContacts> {
-    const record = (await this.mentorQuery()
-      .innerJoinAndSelect('mentor.user', 'user')
-      .where('mentor.id = :mentorId', { mentorId })
-      .getOne())!;
+    const record = await this.mentorRepository.findOne({
+      relations: ['user'],
+      where: {
+        id: mentorId,
+      },
+    });
+
+    if (!record) {
+      throw new NotFoundException(`Mentor not found ${mentorId}`);
+    }
+
     const mentor = convertToMentorBasic(record);
     const user = record.user as User;
     const mentorWithContacts: MentorWithContacts = {
