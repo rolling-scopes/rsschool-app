@@ -1,5 +1,4 @@
 import { User } from '@entities/user';
-import { MentorBasic, StageInterviewFeedbackJson } from '@common/models';
 import { StageInterview, StageInterviewFeedback, Mentor, Student } from '@entities/index';
 
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
@@ -8,6 +7,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
+import { MentorBasic, StageInterviewFeedbackJson } from './types';
 
 @Injectable()
 export class CourseStudentsService {
