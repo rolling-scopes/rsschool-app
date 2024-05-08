@@ -55,7 +55,7 @@ export class CourseStatsService {
         'students_with_certificate',
       )
       .addSelect(
-        `COUNT(CASE WHEN student.totalScore >= (${maxScore} * course.certificateThreshold / 100) THEN 1 END)`,
+        `COUNT(CASE WHEN student.isExpelled = false AND student.totalScore >= (${maxScore} * course.certificateThreshold / 100) THEN 1 END)`,
         'eligible_for_certification',
       )
       .where('student.courseId = :courseId', { courseId });
