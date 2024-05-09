@@ -91,4 +91,8 @@ export class UpdateCourseDto {
   @IsOptional()
   @ApiPropertyOptional()
   minStudentsPerMentor?: number;
+
+  @IsNumber()
+  @ApiProperty({ required: true })
+  certificateThreshold: number;
 }

@@ -117,9 +117,13 @@ function Page() {
   );
 
   const renderModal = useCallback(() => {
+    const data = modalData?.record;
+    if (!data) {
+      return null;
+    }
     return (
       <ModalForm
-        data={modalData?.record}
+        data={data}
         title="Record"
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}

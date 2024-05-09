@@ -108,4 +108,7 @@ export class Course {
 
   @Column({ default: 2, nullable: true })
   minStudentsPerMentor: number;
+
+  @Column({ default: 70 })
+  certificateThreshold: number;
 }

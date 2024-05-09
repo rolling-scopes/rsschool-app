@@ -89,7 +89,7 @@ async function getStageInterviewData({
     { data: student },
     { data: tasks },
     {
-      data: { studentsActiveCount },
+      data: { activeStudentsCount },
     },
     { data: interviewFeedback },
   ] = await Promise.all([
@@ -107,7 +107,7 @@ async function getStageInterviewData({
     student,
     courseSummary: {
       totalScore: getTasksTotalScore(tasks),
-      studentsCount: studentsActiveCount,
+      studentsCount: activeStudentsCount,
     },
     interviewFeedback,
     type: stageInterviewType,

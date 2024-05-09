@@ -1,6 +1,6 @@
 import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
-import { CourseMentorsApi, MentorDetailsDto } from 'api';
+import { CourseMentorsApi, CourseStatsApi, MentorDetailsDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
@@ -14,12 +14,12 @@ import { relativeDays } from 'services/formatter';
 import { CourseRole } from 'services/models';
 
 type Stats = {
-  recordCount: number;
-  countries: { name: string; totalCount: number }[];
   students: { studentsGroupName: string; totalCount: number }[];
+  recordCount: number;
 };
 
 const courseMentorsApi = new CourseMentorsApi();
+const courseStatsApi = new CourseStatsApi();
 
 function getItems(mentor: MentorDetailsDto, session: Session): MenuProps['items'] {
   return [
@@ -63,8 +63,10 @@ function Page() {
 
   useAsync(async () => {
     setLoading(true);
-    const { data: records } = await courseMentorsApi.getMentorsDetails(courseId);
-    const countries: Record<string, { totalCount: number }> = {};
+    const [{ data: mentorsStats }, { data: records }] = await Promise.all([
+      courseStatsApi.getCourseMentors(courseId),
+      courseMentorsApi.getMentorsDetails(courseId),
+    ]);
 
     const studentsGroupCount = records.reduce(
       (acc, { studentsCount, maxStudentsLimit }) => {
@@ -75,21 +77,10 @@ function Page() {
       [0, 0],
     );
 
-    for (const record of records) {
-      const { countryName } = record;
-      if (!countries[countryName]) {
-        countries[countryName] = { totalCount: 0 };
-      }
-      countries[countryName].totalCount++;
-    }
     setLoading(false);
     setMentors(records);
     setStats({
-      recordCount: records.length,
-      countries: Object.keys(countries).map(k => ({
-        name: k,
-        totalCount: countries[k].totalCount,
-      })),
+      recordCount: mentorsStats.mentorsActiveCount,
       students: studentsValueName.map((valueName, idx) => ({
         studentsGroupName: valueName,
         totalCount: studentsGroupCount[idx],
@@ -158,41 +149,19 @@ function Page() {
 
   return (
     <AdminPageLayout loading={loading} title="Course Mentors" showCourseName courses={courses}>
-      <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            maxWidth: 280,
-            flex: 'auto',
-            border: '1px rgba(0, 0, 0, 0.06) dashed',
-            padding: '10px',
-            marginRight: '20px',
-          }}
-        >
-          <Statistic title="Total Count" value={stats?.recordCount} />
-          <Table
-            pagination={false}
-            size="small"
-            rowKey="name"
-            dataSource={stats?.countries ?? []}
-            columns={[
-              { title: 'Country', dataIndex: 'name', width: 200 },
-              { title: 'Count', dataIndex: 'totalCount' },
-            ]}
-          />
-        </div>
-        <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
-          <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
-          <Table
-            pagination={false}
-            size="small"
-            rowKey="studentsGroupName"
-            dataSource={stats?.students ?? []}
-            columns={[
-              { title: 'Group of students', dataIndex: 'studentsGroupName' },
-              { title: 'Count', dataIndex: 'totalCount' },
-            ]}
-          />
-        </div>
+      <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
+        <Statistic title="Active Mentors" value={stats?.recordCount} />
+        <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
+        <Table
+          pagination={false}
+          size="small"
+          rowKey="studentsGroupName"
+          dataSource={stats?.students ?? []}
+          columns={[
+            { title: 'Group of students', dataIndex: 'studentsGroupName' },
+            { title: 'Count', dataIndex: 'totalCount' },
+          ]}
+        />
       </div>
       <Divider dashed />
       <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>

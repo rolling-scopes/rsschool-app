@@ -112,7 +112,10 @@ function Page() {
     [modalAction, modalData, modalLoading],
   );
 
-  const renderModal = useCallback(() => {
+  const renderModal = () => {
+    if (modalData == null) {
+      return;
+    }
     const isUpdate = modalAction === 'update';
     return (
       <ModalForm
@@ -236,17 +239,41 @@ function Page() {
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="minStudentsPerMentor"
-          label="Minimum Students per Mentor"
-          rules={[{ min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' }]}
-        >
-          <InputNumber step={1} defaultValue={2} />
-        </Form.Item>
+        <Row>
+          <Col span={12}>
+            <Form.Item
+              name="minStudentsPerMentor"
+              label="Minimum Students per Mentor"
+              rules={[
+                { min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' },
+              ]}
+            >
+              <InputNumber step={1} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="certificateThreshold"
+              label="Certificate Threshold"
+              tooltip="Minimum score percentage required for students to qualify for a certificate."
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input the certificate threshold.',
+                  type: 'integer',
+                  min: 1,
+                  max: 100,
+                },
+              ]}
+            >
+              <InputNumber step={5} min={1} max={100} addonAfter="%" />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item name="state" label="State">
           <Radio.Group>
-            <Radio value={null}>Active</Radio>
+            <Radio value="active">Active</Radio>
             <Radio value="planned">Planned</Radio>
             <Radio value="completed">Completed</Radio>
           </Radio.Group>
@@ -265,7 +292,7 @@ function Page() {
         </Form.Item>
       </ModalForm>
     );
-  }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
+  };
 
   return (
     <AdminPageLayout title="Manage Courses" loading={loading} courses={allCourses}>
@@ -307,6 +334,7 @@ function createRecord(values: any) {
     personalMentoring: values.personalMentoring,
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
+    certificateThreshold: values.certificateThreshold,
   };
   return record;
 }
@@ -386,8 +414,10 @@ function getColumns(handleEditItem: any) {
 function getInitialValues(modalData: Partial<Course>) {
   return {
     ...modalData,
+    minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
+    certificateThreshold: modalData.certificateThreshold ?? 70,
     inviteOnly: !!modalData.inviteOnly,
-    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : null,
+    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
     registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
     range:
       modalData.startDate && modalData.endDate

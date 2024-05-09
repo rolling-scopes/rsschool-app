@@ -1,9 +1,10 @@
 import { CrossCheckPairDto } from 'api';
+import { GithubFilled } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table/interface';
 import { omit } from 'lodash';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { Button } from 'antd';
+import { Button, Flex } from 'antd';
 
 export const fields = {
   task: 'task',
@@ -28,6 +29,15 @@ const renderGithubLink = (value: string) =>
         {value}
       </a>
     </div>
+  ) : null;
+
+const renderPrivateRepositoryLink = (value?: string) =>
+  value ? (
+    <Flex>
+      <a target="_blank" href={value}>
+        <GithubFilled /> Private Repository
+      </a>
+    </Flex>
   ) : null;
 
 export const getCrossCheckPairsColumns = (
@@ -72,6 +82,13 @@ export const getCrossCheckPairsColumns = (
     sorter: true,
     sorterField: 'url',
     ...getColumnSearchProps('url'),
+  },
+  {
+    title: 'Private Repository',
+    dataIndex: 'privateRepository',
+    key: 'privateRepository',
+    width: 150,
+    render: value => renderPrivateRepositoryLink(value),
   },
   {
     title: 'Score',

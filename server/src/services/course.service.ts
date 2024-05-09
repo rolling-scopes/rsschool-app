@@ -41,6 +41,7 @@ export const getContactsUserFields = (modelName = 'user') => [
   `${modelName}.contactsTelegram`,
   `${modelName}.contactsLinkedIn`,
   `${modelName}.contactsSkype`,
+  `${modelName}.contactsEpamEmail`,
 ];
 
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | null> {
@@ -316,22 +317,6 @@ export async function getCrossStudentsByMentor(courseId: number, githubId: strin
   return students;
 }
 
-export async function getMentors(courseId: number): Promise<MentorDetails[]> {
-  const records = await mentorQuery()
-    .innerJoin('mentor.user', 'user')
-    .addSelect(getPrimaryUserFields())
-    .innerJoin('mentor.course', 'course')
-    .leftJoin('mentor.students', 'students')
-    .addSelect(['students.id'])
-    .leftJoinAndSelect('mentor.stageInterviews', 'stageInterviews')
-    .where(`course.id = :courseId`, { courseId })
-    .orderBy('mentor.createdDate')
-    .getMany();
-
-  const mentors = records.map(convertToMentorDetails);
-  return mentors;
-}
-
 export async function getMentorsWithStudents(courseId: number): Promise<MentorDetails[]> {
   const records = await mentorQuery()
     .innerJoin('mentor.user', 'user')
@@ -412,7 +397,15 @@ export async function getStudentScore(studentId: number) {
     .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .leftJoin('student.stageInterviews', 'si')
     .leftJoin('si.stageInterviewFeedbacks', 'sif')
-    .addSelect(['sif.stageInterviewId', 'sif.json', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
+    .addSelect([
+      'sif.stageInterviewId',
+      'sif.json',
+      'si.isCompleted',
+      'si.id',
+      'si.courseTaskId',
+      'si.score',
+      'sif.version',
+    ])
     .where('student.id = :studentId', { studentId })
     .getOne();
 
@@ -434,8 +427,13 @@ export async function getStudentScore(studentId: number) {
 
   // we have a case when technical screening score are set as task result.
   if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+    const feedbackVersion = stageInterviews[0].stageInterviewFeedbacks[0]?.version;
+    const score = !feedbackVersion
+      ? Math.floor(getStageInterviewRating(stageInterviews) ?? 0)
+      : stageInterviews[0].score;
+
     results.push({
-      score: Math.floor(getStageInterviewRating(stageInterviews) ?? 0),
+      score,
       courseTaskId: stageInterviews[0].courseTaskId,
     });
   }
