@@ -6,6 +6,7 @@ import { CoursesService } from 'src/courses/courses.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { paginate } from 'src/core/paginate';
+import { FilterMentorRegistriesDto } from './dto/filter-mentor-registries.dto';
 
 @Injectable()
 export class RegistryService {
@@ -89,21 +90,13 @@ export class RegistryService {
 
   public async filterMentorRegistries({
     githubId,
-    page,
-    limit,
+    currentPage,
+    pageSize,
     cityName,
     preselectedCourses,
     preferedCourses,
     technicalMentoring,
-  }: {
-    githubId?: string;
-    cityName?: string;
-    page: number;
-    limit: number;
-    preselectedCourses?: number[];
-    preferedCourses?: number[];
-    technicalMentoring?: string[];
-  }) {
+  }: FilterMentorRegistriesDto) {
     const req = this.getPreparedMentorRegistriesQuery();
     if (githubId) {
       req.andWhere(`"user"."githubId" ILIKE :githubId`, { githubId: `%${githubId}%` });
@@ -143,8 +136,8 @@ export class RegistryService {
     }
 
     const response = await paginate(req, {
-      page,
-      limit,
+      page: currentPage,
+      limit: pageSize,
     });
 
     return {

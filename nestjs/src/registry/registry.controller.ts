@@ -88,8 +88,8 @@ export class RegistryController {
       };
     } else if (req.user.isAdmin && req.query) {
       const data = await this.registryService.filterMentorRegistries({
-        page: currentPage || DEFAULT_PAGE_NUMBER,
-        limit: pageSize || DEFAULT_PAGE_SIZE,
+        currentPage: currentPage || DEFAULT_PAGE_NUMBER,
+        pageSize: pageSize || DEFAULT_PAGE_SIZE,
         githubId,
         cityName,
         preferedCourses,

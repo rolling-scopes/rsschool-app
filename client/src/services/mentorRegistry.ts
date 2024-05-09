@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { MentorRegistryDto, RegistryApi } from 'api';
+import { FilterMentorRegistryResponse, RegistryApi } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { FilterMentorRegistriesDto } from "../../../nestjs/src/registry/dto/filter-mentor-registries.dto"
 
 export type MentorResponse = {
   preselectedCourses: number[];
@@ -17,31 +18,6 @@ export interface MentorRegistry {
   updatedDate: Date;
 }
 
-export interface GetMentorRegistriesDto {
-  currentPage: number;
-  pageSize: number;
-  githubId?: string;
-  cityName?: string;
-  preferedCourses?: number[];
-  preselectedCourses?: number[];
-  technicalMentoring?: string[];
-}
-
-export interface GetMentorRegistriesResponse {
-  mentors: MentorRegistryDto[];
-  total: number;
-}
-
-export interface GetMentorRegistriesOptions {
-  currentPage?: number;
-  pageSize?: number;
-  githubId?: string;
-  cityName?: string;
-  preferedCourses?: number[];
-  preselectedCourses?: number[];
-  technicalMentoring?: string[];
-}
-
 export class MentorRegistryService {
   private axios: AxiosInstance;
   private registryApi: RegistryApi;
@@ -51,7 +27,7 @@ export class MentorRegistryService {
     this.registryApi = new RegistryApi();
   }
 
-  public async getMentors(options?: GetMentorRegistriesDto): Promise<GetMentorRegistriesResponse> {
+  public async getMentors(options?: FilterMentorRegistriesDto): Promise<FilterMentorRegistryResponse> {
     if (!options) {
       const response = await this.registryApi.getMentorRegistries();
       return response.data;
