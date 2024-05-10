@@ -1,12 +1,11 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
-import dynamic from 'next/dynamic';
 import * as React from 'react';
 import css from 'styled-jsx/css';
 
 const { Meta } = Card;
 
-function LoginPage() {
+export default function LoginPage() {
   return (
     <main>
       <div className="login-form">
@@ -67,9 +66,8 @@ const styles = css`
   }
 
   .login-card-img {
-    width: 100px;
+    width: 100px !important;
+    height: 83.32px;
     margin: 30px auto 20px;
   }
 `;
-
-export default dynamic(async () => LoginPage, { ssr: false });
