@@ -1,11 +1,12 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 import css from 'styled-jsx/css';
 
 const { Meta } = Card;
 
-export default function LoginPage() {
+function LoginPage() {
   return (
     <main>
       <div className="login-form">
@@ -70,3 +71,5 @@ const styles = css`
     margin: 30px auto 20px;
   }
 `;
+
+export default dynamic(async () => LoginPage, { ssr: false });
