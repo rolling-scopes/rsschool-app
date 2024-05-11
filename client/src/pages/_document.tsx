@@ -6,7 +6,7 @@ export default class extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="shortcut icon" href="https://rs.school/favicon.ico" />
+          <link rel="shortcut icon" href="/static/images/favicon.ico" />
         </Head>
         <body>
           <Main />
