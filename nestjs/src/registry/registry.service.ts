@@ -104,7 +104,7 @@ export class RegistryService {
     if (cityName) {
       req.andWhere(`"user"."cityName" ILIKE :cityName`, { cityName: `%${cityName}%` });
     }
-    if (preselectedCourses && preselectedCourses.length) {
+    if (preselectedCourses?.length) {
       req.andWhere(
         `EXISTS (
           SELECT
@@ -114,7 +114,7 @@ export class RegistryService {
         { preselectedCourses },
       );
     }
-    if (preferedCourses && preferedCourses.length) {
+    if (preferedCourses?.length) {
       req.andWhere(
         `EXISTS (
         SELECT
@@ -124,7 +124,7 @@ export class RegistryService {
         { preferedCourses },
       );
     }
-    if (technicalMentoring && technicalMentoring.length) {
+    if (technicalMentoring?.length) {
       req.andWhere(
         `EXISTS (
         SELECT
