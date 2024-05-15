@@ -131,7 +131,7 @@ export class RegistryService {
         { preferedCourses },
       );
     }
-    if (technicalMentoring && technicalMentoring.length) {
+    if (technicalMentoring?.length) {
       req.andWhere(
         `EXISTS (
         SELECT
