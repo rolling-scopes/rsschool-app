@@ -111,7 +111,7 @@ export class RegistryService {
     if (cityName) {
       req.andWhere(`"user"."cityName" ILIKE :cityName`, { cityName: `%${cityName}%` });
     }
-    if (preselectedCourses && preselectedCourses.length) {
+    if (preselectedCourses?.length) {
       req.andWhere(
         `EXISTS (
           SELECT
