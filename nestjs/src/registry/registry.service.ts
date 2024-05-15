@@ -121,7 +121,7 @@ export class RegistryService {
         { preselectedCourses },
       );
     }
-    if (preferedCourses && preferedCourses.length) {
+    if (preferedCourses?.length) {
       req.andWhere(
         `EXISTS (
         SELECT
