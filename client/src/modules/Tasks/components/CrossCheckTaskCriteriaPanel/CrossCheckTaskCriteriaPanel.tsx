@@ -1,4 +1,4 @@
-import { Divider, Form } from 'antd';
+import { Divider, Flex, Form } from 'antd';
 import { CriteriaDto } from 'api';
 import {
   addKeyAndIndex,
@@ -7,6 +7,7 @@ import {
   EditableTable,
   ExportJSONButton,
 } from 'modules/CrossCheck';
+import { DeleteAllCrossCheckCriteriaButton } from 'modules/CrossCheck/DeleteAllCrossCheckCriteriaButton';
 import { LABELS } from 'modules/Tasks/constants';
 
 type Props = {
@@ -35,7 +36,10 @@ export function CrossCheckTaskCriteriaPanel({ dataCriteria, setDataCriteria }: P
         <>
           <Divider />
           <EditableTable dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
-          <ExportJSONButton dataCriteria={dataCriteria} />
+          <Flex gap={'10px'} justify={'flex-end'}>
+            <DeleteAllCrossCheckCriteriaButton/>
+            <ExportJSONButton dataCriteria={dataCriteria} />
+          </Flex>
         </>
       ) : null}
     </>
