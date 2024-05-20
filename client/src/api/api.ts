@@ -16303,6 +16303,39 @@ export const TasksCriteriaApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        deleteAllTaskCriteria: async (taskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('deleteAllTaskCriteria', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}/criteria`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getTaskCriteria: async (taskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getTaskCriteria', 'taskId', taskId)
@@ -16396,6 +16429,16 @@ export const TasksCriteriaApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async deleteAllTaskCriteria(taskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCriteriaDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAllTaskCriteria(taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getTaskCriteria(taskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCriteriaDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskCriteria(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -16437,6 +16480,15 @@ export const TasksCriteriaApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        deleteAllTaskCriteria(taskId: number, options?: any): AxiosPromise<TaskCriteriaDto> {
+            return localVarFp.deleteAllTaskCriteria(taskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getTaskCriteria(taskId: number, options?: any): AxiosPromise<TaskCriteriaDto> {
             return localVarFp.getTaskCriteria(taskId, options).then((request) => request(axios, basePath));
         },
@@ -16470,6 +16522,17 @@ export class TasksCriteriaApi extends BaseAPI {
      */
     public createTaskCriteria(taskId: number, taskCriteriaDto: TaskCriteriaDto, options?: AxiosRequestConfig) {
         return TasksCriteriaApiFp(this.configuration).createTaskCriteria(taskId, taskCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} taskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksCriteriaApi
+     */
+    public deleteAllTaskCriteria(taskId: number, options?: AxiosRequestConfig) {
+        return TasksCriteriaApiFp(this.configuration).deleteAllTaskCriteria(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
