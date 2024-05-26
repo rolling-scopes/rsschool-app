@@ -37,7 +37,7 @@ export function CrossCheckTaskCriteriaPanel({ dataCriteria, setDataCriteria }: P
           <Divider />
           <EditableTable dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />
           <Flex gap={'10px'} justify={'flex-end'}>
-            <DeleteAllCrossCheckCriteriaButton/>
+            <DeleteAllCrossCheckCriteriaButton setDataCriteria={setDataCriteria} />
             <ExportJSONButton dataCriteria={dataCriteria} />
           </Flex>
         </>
