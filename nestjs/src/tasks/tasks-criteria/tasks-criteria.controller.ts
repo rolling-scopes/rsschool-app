@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, UseGuards, Post, Delete } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, UseGuards, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { TasksCriteriaService } from './tasks-criteria.service';
@@ -36,15 +36,6 @@ export class TasksCriteriaController {
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   async update(@Param('taskId') taskId: number, @Body() taskCriteriaDto: TaskCriteriaDto) {
     const data = await this.taskCriteriaService.updateCriteria(taskId, taskCriteriaDto);
-    return data;
-  }
-
-  @Delete()
-  @ApiOperation({ operationId: 'deleteAllTaskCriteria' })
-  @ApiOkResponse({ type: TaskCriteriaDto })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
-  async deleteAll(@Param('taskId') taskId: number) {
-    const data = await this.taskCriteriaService.updateCriteria(taskId, { criteria: [] });
     return data;
   }
 }

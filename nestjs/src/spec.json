@@ -2424,18 +2424,6 @@
           }
         },
         "tags": ["tasks-criteria"]
-      },
-      "delete": {
-        "operationId": "deleteAllTaskCriteria",
-        "summary": "",
-        "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
-          }
-        },
-        "tags": ["tasks-criteria"]
       }
     },
     "/prompts": {
