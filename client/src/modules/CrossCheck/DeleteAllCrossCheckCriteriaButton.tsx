@@ -7,7 +7,7 @@ interface Props {
 }
 export function DeleteAllCrossCheckCriteriaButton({ setDataCriteria }: Props) {
   const deleteAllCrossCheckCriteria = () => {
-    setDataCriteria([])
+    setDataCriteria([]);
   };
   return (
     <div style={{ textAlign: 'right' }}>
