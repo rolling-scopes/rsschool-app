@@ -291,6 +291,122 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface AutoTestTaskDto
+ */
+export interface AutoTestTaskDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'type': AutoTestTaskDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AutoTestTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'githubRepoName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'sourceGithubRepoUrl': string;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof AutoTestTaskDto
+     */
+    'discipline': IdNameDto;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AutoTestTaskDto
+     */
+    'githubPrRequired': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AutoTestTaskDto
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AutoTestTaskDto
+     */
+    'skills': Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof AutoTestTaskDto
+     */
+    'attributes': object;
+    /**
+     * 
+     * @type {Array<UsedCourseDto>}
+     * @memberof AutoTestTaskDto
+     */
+    'courses': Array<UsedCourseDto>;
+}
+
+export const AutoTestTaskDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type AutoTestTaskDtoTypeEnum = typeof AutoTestTaskDtoTypeEnum[keyof typeof AutoTestTaskDtoTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface AvailableReviewStatsDto
  */
 export interface AvailableReviewStatsDto {
@@ -7732,6 +7848,100 @@ export class AuthApi extends BaseAPI {
      */
     public githubLogout(options?: AxiosRequestConfig) {
         return AuthApiFp(this.configuration).githubLogout(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AutoTestsApi - axios parameter creator
+ * @export
+ */
+export const AutoTestsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRSSchoolAppTests: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auto-test`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AutoTestsApi - functional programming interface
+ * @export
+ */
+export const AutoTestsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AutoTestsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllRSSchoolAppTests(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AutoTestTaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllRSSchoolAppTests(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AutoTestsApi - factory interface
+ * @export
+ */
+export const AutoTestsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AutoTestsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRSSchoolAppTests(options?: any): AxiosPromise<Array<AutoTestTaskDto>> {
+            return localVarFp.getAllRSSchoolAppTests(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AutoTestsApi - object-oriented interface
+ * @export
+ * @class AutoTestsApi
+ * @extends {BaseAPI}
+ */
+export class AutoTestsApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AutoTestsApi
+     */
+    public getAllRSSchoolAppTests(options?: AxiosRequestConfig) {
+        return AutoTestsApiFp(this.configuration).getAllRSSchoolAppTests(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

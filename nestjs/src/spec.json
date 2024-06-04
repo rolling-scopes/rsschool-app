@@ -2484,6 +2484,24 @@
         },
         "tags": ["prompts"]
       }
+    },
+    "/auto-test": {
+      "get": {
+        "operationId": "getAllRSSchoolAppTests",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/AutoTestTaskDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["auto-tests"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -4808,6 +4826,60 @@
           "text": { "type": "string" }
         },
         "required": ["temperature", "type", "text"]
+      },
+      "AutoTestTaskDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "jstask",
+              "kotlintask",
+              "objctask",
+              "htmltask",
+              "ipynb",
+              "selfeducation",
+              "codewars",
+              "test",
+              "codejam",
+              "interview",
+              "stage-interview",
+              "cv:html",
+              "cv:markdown"
+            ]
+          },
+          "name": { "type": "string" },
+          "id": { "type": "number" },
+          "descriptionUrl": { "type": "string" },
+          "description": { "type": "string" },
+          "githubRepoName": { "type": "string" },
+          "sourceGithubRepoUrl": { "type": "string" },
+          "discipline": { "$ref": "#/components/schemas/IdNameDto" },
+          "githubPrRequired": { "type": "boolean" },
+          "createdDate": { "type": "string" },
+          "updatedDate": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "attributes": { "type": "object" },
+          "courses": { "type": "array", "items": { "$ref": "#/components/schemas/UsedCourseDto" } }
+        },
+        "required": [
+          "type",
+          "name",
+          "id",
+          "descriptionUrl",
+          "description",
+          "githubRepoName",
+          "sourceGithubRepoUrl",
+          "discipline",
+          "githubPrRequired",
+          "createdDate",
+          "updatedDate",
+          "tags",
+          "skills",
+          "attributes",
+          "courses"
+        ]
       }
     }
   }
