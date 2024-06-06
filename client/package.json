@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@ant-design/compatible": "5.1.2",
+    "@ant-design/cssinjs": "^1.20.0",
     "@ant-design/plots": "1.2.5",
     "@sentry/nextjs": "7.81.0",
     "antd": "5.11.2",

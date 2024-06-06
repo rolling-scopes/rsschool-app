@@ -66,7 +66,8 @@ const styles = css`
   }
 
   .login-card-img {
-    width: 100px;
+    width: 100px !important;
+    height: 83.32px;
     margin: 30px auto 20px;
   }
 `;
