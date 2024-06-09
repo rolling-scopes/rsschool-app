@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
