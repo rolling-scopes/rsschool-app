@@ -4860,7 +4860,7 @@
           "updatedDate": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "skills": { "type": "array", "items": { "type": "string" } },
-          "attributes": { "type": "object" },
+          "attributes": { "type": "object", "properties": {} },
           "courses": { "type": "array", "items": { "$ref": "#/components/schemas/UsedCourseDto" } }
         },
         "required": [
