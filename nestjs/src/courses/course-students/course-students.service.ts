@@ -124,7 +124,7 @@ const getStageInterviewRating = (stageInterviews: StageInterview[]) => {
     .map(({ stageInterviewFeedbacks, score }: StageInterview) =>
       stageInterviewFeedbacks.map((feedback: StageInterviewFeedback) => ({
         date: feedback.updatedDate,
-        // interviews in new template should have score precalculated
+        // interviews in new template should have precalculated score
         rating: score ?? getInterviewRatings(JSON.parse(feedback.json) as StageInterviewFeedbackJson).rating,
       })),
     )
