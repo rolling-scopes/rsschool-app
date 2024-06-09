@@ -155,13 +155,13 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
-  const { user } = mentor;
+  const { user, isExpelled, id, students } = mentor;
   return {
-    isActive: !mentor.isExpelled,
+    isActive: !isExpelled,
     name: createName(user),
-    id: mentor.id,
+    id: id,
     githubId: user.githubId,
-    students: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
+    students: students ? students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
   };
