@@ -131,7 +131,7 @@ const getStageInterviewRating = (stageInterviews: StageInterview[]) => {
     .reduce((acc, cur) => acc.concat(cur), [])
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  return lastInterview && lastInterview.rating !== undefined ? lastInterview.rating : null;
+  return lastInterview?.rating ?? null;
 };
 
 export function getInterviewRatings({ skills, programmingTask, resume }: StageInterviewFeedbackJson) {
