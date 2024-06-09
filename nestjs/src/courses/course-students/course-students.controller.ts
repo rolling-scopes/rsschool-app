@@ -1,6 +1,6 @@
 import { Controller, Get, NotFoundException, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from '../../auth';
+import { DefaultGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
 
@@ -17,17 +17,11 @@ export class CourseStudentsController {
     type: StudentSummaryDto,
   })
   @ApiOperation({ operationId: 'getStudentSummary' })
-  public async getStudentSummary(
-    @Param('courseId') courseId: number,
-    @Param('githubId') githubId: string,
-    @Req() req: CurrentRequest,
-  ) {
-    const studentGithubId = githubId === 'me' ? req.user.githubId : githubId;
-
-    const student = await this.courseStudentService.getStudentByGithubId(courseId, studentGithubId);
+  public async getStudentSummary(@Param('courseId') courseId: number, @Param('githubId') githubId: string) {
+    const student = await this.courseStudentService.getStudentByGithubId(courseId, githubId);
 
     if (student === null) {
-      throw new NotFoundException(`Student with GitHub id ${studentGithubId} not found`);
+      throw new NotFoundException(`Student with GitHub id ${githubId} not found`);
     }
     const [score, mentor] = await Promise.all([
       this.courseStudentService.getStudentScore(student?.id),
