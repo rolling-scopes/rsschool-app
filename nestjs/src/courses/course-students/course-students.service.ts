@@ -7,7 +7,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
-import { MentorBasic, StageInterviewFeedbackJson } from './types';
+import { MentorBasic, StageInterviewFeedbackJson } from '@common/models';
 
 @Injectable()
 export class CourseStudentsService {
