@@ -16,7 +16,7 @@ export interface MentorContact {
 }
 
 interface Props {
-  mentor: MentorStudentSummaryDto
+  mentor: MentorStudentSummaryDto;
 }
 
 function MentorInfo({ mentor }: Props) {
