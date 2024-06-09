@@ -155,7 +155,7 @@ export function getInterviewRatings({ skills, programmingTask, resume }: StageIn
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
-  const user = (mentor.user as User)!;
+  const { user } = mentor;
   return {
     isActive: !mentor.isExpelled,
     name: createName(user),
