@@ -529,7 +529,7 @@ export class CourseService {
     return result.data;
   }
 
-  async getStudentSummary(githubId: string | 'me') {
+  async getStudentSummary(githubId: string) {
     const result = await studentsApi.getStudentSummary(this.courseId, githubId);
     return result.data as StudentSummaryDto;
   }
