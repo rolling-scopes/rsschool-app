@@ -1,9 +1,9 @@
 import { Col, Row, Space, Typography } from 'antd';
 import React from 'react';
-import { MentorBasic } from 'common/models';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import EnvironmentFilled from '@ant-design/icons/EnvironmentFilled';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { MentorStudentSummaryDto } from 'api';
 
 const { Text, Link } = Typography;
 
@@ -15,10 +15,8 @@ export interface MentorContact {
   contactsNotes?: string;
 }
 
-type Contact = { name: string; value: string | undefined };
-
 interface Props {
-  mentor: MentorBasic & MentorContact;
+  mentor: MentorStudentSummaryDto
 }
 
 function MentorInfo({ mentor }: Props) {
@@ -42,7 +40,7 @@ function MentorInfo({ mentor }: Props) {
     { name: 'Notes', value: contactsNotes },
   ];
 
-  const filledContacts = contacts.filter(({ value }: Contact) => value);
+  const filledContacts = contacts.filter(({ value }) => value);
 
   return (
     <div style={{ marginBottom: 16 }}>
