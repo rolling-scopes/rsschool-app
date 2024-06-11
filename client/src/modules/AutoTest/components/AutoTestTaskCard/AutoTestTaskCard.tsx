@@ -6,10 +6,11 @@ import { AutoTestTaskDto } from 'api';
 const { Paragraph } = Typography;
 
 export interface AutoTestTaskCardProps {
-  courseTask: AutoTestTaskDto
+  courseTask: AutoTestTaskDto;
+  handleSelectTask: (task: AutoTestTaskDto) => void;
 }
 
-function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
+function AutoTestTaskCard({ courseTask, handleSelectTask }: AutoTestTaskCardProps) {
   const columns = [
     {
       label: 'Max attempts number',
@@ -47,7 +48,9 @@ function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Button type="primary">Preview Task</Button>
+          <Button type="primary" onClick={() => handleSelectTask(courseTask)}>
+            Preview Task
+          </Button>
         </Col>
       </Row>
       <Divider />
