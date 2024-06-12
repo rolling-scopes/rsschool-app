@@ -8,6 +8,7 @@ import { Brackets, Repository } from 'typeorm';
 import { paginate } from 'src/core/paginate';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { Student } from '@entities/student';
 
 @Injectable()
 export class RegistryService {
@@ -16,6 +17,8 @@ export class RegistryService {
   constructor(
     @InjectRepository(MentorRegistry)
     private mentorsRegistryRepository: Repository<MentorRegistry>,
+    @InjectRepository(Student)
+    readonly studentRepository: Repository<Student>,
     private usersService: UsersService,
     private coursesService: CoursesService,
     private notificationsService: NotificationsService,
@@ -171,38 +174,65 @@ export class RegistryService {
   }
 
   public async sendInvitationsToMentors(data: InviteMentorsDto) {
-    const { text } = data;
-    data;
-    // const recipients = [];
-    this.notificationsService;
-    this.logger;
+    const { text, disciplines, isMentor } = data;
 
-    Promise.resolve().then(async () => {
-      await this.notificationsService.sendMessage({
-        notificationId: 'mentorsInvitation',
-        userId: 11563,
-        data: {
-          text,
+    const query = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.course', 'course')
+      .innerJoin('course.discipline', 'discipline')
+      .innerJoin(
+        'notification_user_connection',
+        'notification',
+        'notification.userId = student.userId and notification.channelId = :channelId and notification.enabled = :enabled',
+        {
+          channelId: 'email',
+          enabled: true,
         },
-        channelId: 'email',
-        channelValue: 'alekseenkoart@gmail.com',
-        noEscape: true,
-      });
-    });
-    // for (const [userId, courses] of recipients) {
-    //   try {
-    //     await this.notificationsService.sendMessage({
-    //       notificationId: 'mentorsInvitation',
-    //       userId,
-    //       data: {
-    //         text,
-    //       },
-    //       channelId: 'email',
-    //       channelValue: email,
-    //     });
-    //   } catch (e) {
-    //     this.logger.log({ message: (e as Error).message, userId });
-    //   }
-    // }
+      )
+      .innerJoin('student.certificate', 'certificate')
+      .where('discipline.id IN (:...ids)', { ids: disciplines })
+      .select(['student.userId', 'notification.externalId'])
+      .distinct(true);
+
+    if (isMentor) {
+      query.innerJoin('mentor', 'mentor', 'mentor.userId = student.userId');
+    }
+
+    const users = await query.getRawMany();
+
+    Promise.resolve().then(
+      () =>
+        new Promise(async () => {
+          this.logger.log({ message: 'processing invitations...' });
+
+          const batchSize = 10;
+
+          for (let i = 0; i < users.length; i += batchSize) {
+            const batch = users.slice(i, i + batchSize);
+
+            const promises = batch.map(async user => {
+              const userId = user.student_userId;
+              const email = user.notification_externalId;
+
+              try {
+                await this.notificationsService.sendMessage({
+                  notificationId: 'mentorsInvitation',
+                  userId,
+                  data: {
+                    text,
+                  },
+                  channelId: 'email',
+                  channelValue: email,
+                  noEscape: true,
+                });
+              } catch (e) {
+                this.logger.log({ message: (e as Error).message, userId });
+              }
+            });
+
+            await Promise.all(promises);
+          }
+        }),
+    );
   }
 }

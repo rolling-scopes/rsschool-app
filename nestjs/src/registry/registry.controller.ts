@@ -125,7 +125,7 @@ export class RegistryController {
 
   @Post('mentors/invite')
   @ApiOperation({ operationId: 'inviteMentors' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @RequiredRoles([Role.Admin])
   public async inviteMentors(@Body() body: InviteMentorsDto) {
     await this.registryService.sendInvitationsToMentors(body);
   }
