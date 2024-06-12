@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, useEffect } from 'react';
+import { useCallback, useState, useMemo, useEffect, useContext } from 'react';
 import { useAsync } from 'react-use';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
@@ -18,7 +18,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { CoursesService } from 'services/courses';
 import dynamic from 'next/dynamic';
 
@@ -47,6 +47,7 @@ const disciplinesApi = new DisciplinesApi();
 
 function Page() {
   const [loading, withLoading] = useLoading(false);
+  const session = useContext(SessionContext);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -205,9 +206,11 @@ function Page() {
           <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
             Export CSV
           </Button>
-          <Button type="primary" onClick={() => setModalData({ mode: ModalDataMode.BatchInvite })}>
-            Invite mentors
-          </Button>
+          {session.isAdmin && (
+            <Button type="primary" onClick={() => setModalData({ mode: ModalDataMode.BatchInvite })}>
+              Invite mentors
+            </Button>
+          )}
         </Space>
         <style jsx>{styles}</style>
       </Row>
@@ -261,9 +264,7 @@ function Page() {
           }}
         />
       )}
-      {modalData?.mode === ModalDataMode.BatchInvite && (
-        <InviteMentorsModal courses={courses} onCancel={onCancelModal} />
-      )}
+      {modalData?.mode === ModalDataMode.BatchInvite && <InviteMentorsModal onCancel={onCancelModal} />}
       {contextHolder}
     </AdminPageLayout>
   );
