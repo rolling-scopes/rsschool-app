@@ -1,6 +1,7 @@
 import { Col, ColProps, Descriptions, Modal, Row, Switch, Tag, Typography, Divider, List, Checkbox } from 'antd';
 import { AutoTestTaskDto, AutoTestsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useEffect, useState } from 'react';
@@ -48,28 +49,39 @@ function Page() {
       <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={'80vw'} title={selectedTask?.name}>
         <Descriptions column={1}>
           <Descriptions.Item label="ID">{selectedTask?.id}</Descriptions.Item>
-          <Descriptions.Item label="Type">{selectedTask?.type}</Descriptions.Item>
-          <Descriptions.Item label="Description URL">
-            <a href={selectedTask?.descriptionUrl}>{selectedTask?.descriptionUrl}</a>
-          </Descriptions.Item>
-          <Descriptions.Item label="Discipline">{selectedTask?.discipline?.name}</Descriptions.Item>
-          <Descriptions.Item label="Courses">
-            {selectedTask?.courses.map(course => (
-              <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
-                <Typography.Text>{course.name}</Typography.Text>
-              </Tag>
-            ))}
-          </Descriptions.Item>
+          {selectedTask?.type && (
+            <Descriptions.Item label="Type">{TASK_TYPES_MAP[selectedTask?.type]}</Descriptions.Item>
+          )}
+          {selectedTask?.descriptionUrl && (
+            <Descriptions.Item label="Description URL">
+              <a href={selectedTask?.descriptionUrl}>{selectedTask?.descriptionUrl}</a>
+            </Descriptions.Item>
+          )}
+          {selectedTask?.discipline?.name && (
+            <Descriptions.Item label="Discipline">{selectedTask?.discipline?.name}</Descriptions.Item>
+          )}
+          {selectedTask?.courses?.length && (
+            <Descriptions.Item label="Courses">
+              {selectedTask?.courses.map(course => (
+                <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
+                  <Typography.Text>{course.name}</Typography.Text>
+                </Tag>
+              ))}
+            </Descriptions.Item>
+          )}
+
           <Descriptions.Item label="GitHub PR Required">
             <Switch checked={selectedTask?.githubPrRequired} disabled />
           </Descriptions.Item>
-          <Descriptions.Item label="Tags">
-            {selectedTask?.tags.map(tag => (
-              <Tag color="blue" key={tag}>
-                {tag}
-              </Tag>
-            ))}
-          </Descriptions.Item>
+          {selectedTask?.tags && (
+            <Descriptions.Item label="Tags">
+              {selectedTask?.tags.map(tag => (
+                <Tag color="blue" key={tag}>
+                  {tag}
+                </Tag>
+              ))}
+            </Descriptions.Item>
+          )}
         </Descriptions>
 
         {selectedTask?.attributes?.public?.questions && (

@@ -1,6 +1,5 @@
-import { Button, Card, Col, Divider, Row, Typography } from 'antd';
+import { Button, Card, Col, Divider, Row, Typography, Switch } from 'antd';
 import { TaskCardColumn } from '..';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { AutoTestTaskDto } from 'api';
 
 const { Paragraph } = Typography;
@@ -22,11 +21,7 @@ function AutoTestTaskCard({ courseTask, handleSelectTask }: AutoTestTaskCardProp
     },
     {
       label: 'Strict attempts mode',
-      value: courseTask.attributes?.public?.strictAttemptsMode ? (
-        <CheckCircleOutlined style={{ fontSize: 24 }} />
-      ) : (
-        <CloseCircleOutlined style={{ fontSize: 24 }} />
-      ),
+      value: <Switch checked={courseTask.attributes?.public?.strictAttemptsMode} />,
     },
     {
       label: 'Threshold percentage',
