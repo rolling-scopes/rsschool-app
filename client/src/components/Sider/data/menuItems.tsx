@@ -144,7 +144,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     icon: <ExclamationCircleOutlined />,
     href: '/admin/auto-test',
     access: session => isAdmin(session),
-  }
+  },
 ];
 
 export function getAdminMenuItems(session: Session): MenuItemsRenderData[] {

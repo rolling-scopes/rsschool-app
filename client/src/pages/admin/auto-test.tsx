@@ -1,4 +1,17 @@
-import { Col, ColProps, Descriptions, Modal, Row, Switch, Tag, Typography, Divider, List, Checkbox, message } from 'antd';
+import {
+  Col,
+  ColProps,
+  Descriptions,
+  Modal,
+  Row,
+  Switch,
+  Tag,
+  Typography,
+  Divider,
+  List,
+  Checkbox,
+  message,
+} from 'antd';
 import { AutoTestTaskDto, AutoTestsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
@@ -39,14 +52,14 @@ function Page() {
 
   useAsync(async () => {
     try {
-      setIsLoading(true)
-      const resp = await api.getAllRSSchoolAppTests()
+      setIsLoading(true);
+      const resp = await api.getAllRSSchoolAppTests();
       setTests(resp.data);
-      setIsLoading(false)
-    } catch(e) {
+      setIsLoading(false);
+    } catch (e) {
       message.error('Something went wrong. Please try again later.');
     }
-  })
+  });
 
   return (
     <AdminPageLayout title="Manage Discord Servers" loading={isLoading} courses={courses}>
