@@ -1,10 +1,11 @@
-import { Col, ColProps, Descriptions, Modal, Row, Switch, Tag, Typography, Divider, List, Checkbox } from 'antd';
+import { Col, ColProps, Descriptions, Modal, Row, Switch, Tag, Typography, Divider, List, Checkbox, message } from 'antd';
 import { AutoTestTaskDto, AutoTestsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
 import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseRole } from 'services/models';
 
 const RESPONSIVE_COLUMNS: ColProps = {
@@ -15,11 +16,14 @@ const RESPONSIVE_COLUMNS: ColProps = {
   xxl: 6,
 };
 
+const api = new AutoTestsApi();
+
 function Page() {
   const { courses } = useActiveCourseContext();
   const [tests, setTests] = useState<AutoTestTaskDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<AutoTestTaskDto>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -33,12 +37,19 @@ function Page() {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    const api = new AutoTestsApi();
-    api.getAllRSSchoolAppTests().then(tests => setTests(tests.data));
-  }, []);
+  useAsync(async () => {
+    try {
+      setIsLoading(true)
+      const resp = await api.getAllRSSchoolAppTests()
+      setTests(resp.data);
+      setIsLoading(false)
+    } catch(e) {
+      message.error('Something went wrong. Please try again later.');
+    }
+  })
+
   return (
-    <AdminPageLayout title="Manage Discord Servers" loading={false} courses={courses}>
+    <AdminPageLayout title="Manage Discord Servers" loading={isLoading} courses={courses}>
       <Row gutter={[24, 24]} style={{ padding: '0 16px', marginRight: 0 }}>
         {tests.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
