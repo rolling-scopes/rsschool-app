@@ -74,8 +74,8 @@ export class AutoTestTaskDto {
   @ApiProperty()
   public skills: string[];
 
-  @ApiProperty({ type: 'object', additionalProperties: { type: 'any' } })
-  public attributes: Record<string, any>;
+  @ApiProperty({ type: 'object', additionalProperties: { type: 'unknown' } })
+  public attributes: Record<string, unknown>;
 
   @ApiProperty({ type: [UsedCourseDto] })
   public courses: UsedCourseDto[];
