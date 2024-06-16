@@ -1418,6 +1418,24 @@
         "tags": ["course mentors"]
       }
     },
+    "/course/{courseId}/mentor-reviews": {
+      "get": {
+        "operationId": "getMentorReviews",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewsDto" } } }
+          }
+        },
+        "tags": ["mentor-reviews"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -3791,6 +3809,41 @@
         "type": "object",
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
+      },
+      "MentorReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "taskName": { "type": "string" },
+          "solutionUrl": { "type": "string" },
+          "submittedAt": { "format": "date-time", "type": "string" },
+          "checker": { "type": "string" },
+          "score": { "type": "number" },
+          "maxScore": { "type": "number" },
+          "student": { "type": "string" },
+          "reviewedAt": { "format": "date-time", "type": "string" },
+          "taskDescriptionUrl": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "taskName",
+          "solutionUrl",
+          "submittedAt",
+          "checker",
+          "score",
+          "maxScore",
+          "student",
+          "reviewedAt",
+          "taskDescriptionUrl"
+        ]
+      },
+      "MentorReviewsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorReviewDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
