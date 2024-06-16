@@ -3,7 +3,7 @@
 exports[`EducationCard Should render correctly if "data" has element with "null" value 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`EducationCard Should render correctly if "data" has element with "null"
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -69,10 +69,10 @@ exports[`EducationCard Should render correctly if "data" has element with "null"
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-spin-container"
@@ -99,7 +99,7 @@ exports[`EducationCard Should render correctly if "data" has element with "null"
 exports[`EducationCard Should render correctly if "data" is empty 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
   >
     <div
       class="ant-card-head"
@@ -111,7 +111,7 @@ exports[`EducationCard Should render correctly if "data" is empty 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -145,7 +145,7 @@ exports[`EducationCard Should render correctly if "data" is empty 1`] = `
       class="ant-card-body"
     >
       <div
-        class="css-dev-only-do-not-override-nllxry ant-empty ant-empty-normal"
+        class="css-dev-only-do-not-override-1v2lwm6 ant-empty ant-empty-normal"
       >
         <div
           class="ant-empty-image"
@@ -197,7 +197,7 @@ exports[`EducationCard Should render correctly if "data" is empty 1`] = `
 exports[`EducationCard Should render correctly if editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
   >
     <div
       class="ant-card-head"
@@ -209,7 +209,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -243,10 +243,10 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-spin-container"
@@ -259,7 +259,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
               >
                 <p>
                   <span
-                    class="ant-typography css-dev-only-do-not-override-nllxry"
+                    class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                   >
                     <strong>
                       2002
@@ -281,7 +281,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
 exports[`EducationCard Should render correctly if editing mode is enabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
   >
     <div
       class="ant-card-head"
@@ -293,7 +293,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -327,10 +327,10 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-spin-container"
@@ -343,7 +343,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               >
                 <p>
                   <span
-                    class="ant-typography css-dev-only-do-not-override-nllxry"
+                    class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                   >
                     <strong>
                       2002

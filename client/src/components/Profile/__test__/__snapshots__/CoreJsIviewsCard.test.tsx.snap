@@ -3,7 +3,7 @@
 exports[`CoreJSIviewsCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-nllxry"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`CoreJSIviewsCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-nllxry"
+            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,10 +52,10 @@ exports[`CoreJSIviewsCard should render correctly 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-nllxry"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-nllxry"
+          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-spin-container"
@@ -74,7 +74,7 @@ exports[`CoreJSIviewsCard should render correctly 1`] = `
                     style="margin-bottom: 5px;"
                   >
                     <span
-                      class="ant-typography css-dev-only-do-not-override-nllxry"
+                      class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                     >
                       <strong>
                         rs-2019
@@ -92,7 +92,7 @@ exports[`CoreJSIviewsCard should render correctly 1`] = `
                   >
                     Score: 
                     <span
-                      class="ant-typography css-dev-only-do-not-override-nllxry"
+                      class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                     >
                       <mark>
                         4
@@ -111,7 +111,7 @@ exports[`CoreJSIviewsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-nllxry ant-btn-dashed"
+                  class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-dashed"
                   data-testid="profile-corejs-iview-button"
                   type="button"
                 >

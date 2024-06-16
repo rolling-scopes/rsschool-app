@@ -6,13 +6,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="ant-form-item css-dev-only-do-not-override-nllxry"
+        class="ant-form-item css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1v2lwm6"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-nllxry"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1v2lwm6"
           >
             <label
               class=""
@@ -22,7 +22,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1v2lwm6"
           >
             <div
               class="ant-form-item-control-input"
@@ -31,7 +31,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                 class="ant-form-item-control-input-content"
               >
                 <div
-                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-nllxry ant-select-single ant-select-show-arrow"
+                  class="ant-select ant-select-in-form-item css-dev-only-do-not-override-1v2lwm6 ant-select-single ant-select-show-arrow"
                 >
                   <div
                     class="ant-select-selector"
@@ -95,13 +95,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
         </div>
       </div>
       <div
-        class="ant-form-item css-dev-only-do-not-override-nllxry"
+        class="ant-form-item css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1v2lwm6"
         >
           <div
-            class="ant-col ant-form-item-label css-dev-only-do-not-override-nllxry"
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1v2lwm6"
           >
             <label
               class=""
@@ -111,7 +111,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
             </label>
           </div>
           <div
-            class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1v2lwm6"
           >
             <div
               class="ant-form-item-control-input"
@@ -120,7 +120,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
                 class="ant-form-item-control-input-content"
               >
                 <textarea
-                  class="ant-input css-dev-only-do-not-override-nllxry"
+                  class="ant-input css-dev-only-do-not-override-1v2lwm6"
                   placeholder="Add description"
                   rows="3"
                   style="max-width: 1200px;"
@@ -134,7 +134,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
         style="text-align: right;"
       >
         <button
-          class="ant-btn css-dev-only-do-not-override-nllxry ant-btn-primary"
+          class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-primary"
           disabled=""
           type="button"
         >
@@ -147,13 +147,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
   </body>,
   "container": <div>
     <div
-      class="ant-form-item css-dev-only-do-not-override-nllxry"
+      class="ant-form-item css-dev-only-do-not-override-1v2lwm6"
     >
       <div
-        class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-col ant-form-item-label css-dev-only-do-not-override-nllxry"
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-1v2lwm6"
         >
           <label
             class=""
@@ -163,7 +163,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
           </label>
         </div>
         <div
-          class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-form-item-control-input"
@@ -172,7 +172,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
               class="ant-form-item-control-input-content"
             >
               <div
-                class="ant-select ant-select-in-form-item css-dev-only-do-not-override-nllxry ant-select-single ant-select-show-arrow"
+                class="ant-select ant-select-in-form-item css-dev-only-do-not-override-1v2lwm6 ant-select-single ant-select-show-arrow"
               >
                 <div
                   class="ant-select-selector"
@@ -236,13 +236,13 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
       </div>
     </div>
     <div
-      class="ant-form-item css-dev-only-do-not-override-nllxry"
+      class="ant-form-item css-dev-only-do-not-override-1v2lwm6"
     >
       <div
-        class="ant-row ant-form-item-row css-dev-only-do-not-override-nllxry"
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-1v2lwm6"
       >
         <div
-          class="ant-col ant-form-item-label css-dev-only-do-not-override-nllxry"
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-1v2lwm6"
         >
           <label
             class=""
@@ -252,7 +252,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
           </label>
         </div>
         <div
-          class="ant-col ant-form-item-control css-dev-only-do-not-override-nllxry"
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-1v2lwm6"
         >
           <div
             class="ant-form-item-control-input"
@@ -261,7 +261,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
               class="ant-form-item-control-input-content"
             >
               <textarea
-                class="ant-input css-dev-only-do-not-override-nllxry"
+                class="ant-input css-dev-only-do-not-override-1v2lwm6"
                 placeholder="Add description"
                 rows="3"
                 style="max-width: 1200px;"
@@ -275,7 +275,7 @@ exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
       style="text-align: right;"
     >
       <button
-        class="ant-btn css-dev-only-do-not-override-nllxry ant-btn-primary"
+        class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-primary"
         disabled=""
         type="button"
       >
