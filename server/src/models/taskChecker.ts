@@ -1,12 +1,4 @@
-import {
-  Entity,
-  CreateDateColumn,
-  ManyToOne,
-  Column,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, CreateDateColumn, ManyToOne, Column, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Mentor } from './mentor';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
@@ -34,7 +26,6 @@ export class TaskChecker {
   studentId: number;
 
   @ManyToOne(_ => Mentor)
-  @JoinColumn({ name: 'mentorId' })
   mentor: Mentor;
 
   @Column()
