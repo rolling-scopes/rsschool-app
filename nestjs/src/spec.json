@@ -3813,16 +3813,16 @@
       "MentorReviewDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "number" },
-          "taskName": { "type": "string" },
-          "solutionUrl": { "type": "string" },
-          "submittedAt": { "format": "date-time", "type": "string" },
-          "checker": { "type": "string" },
-          "score": { "type": "number" },
-          "maxScore": { "type": "number" },
-          "student": { "type": "string" },
-          "reviewedAt": { "format": "date-time", "type": "string" },
-          "taskDescriptionUrl": { "type": "string" }
+          "id": { "type": "number", "description": "Task solution id" },
+          "taskName": { "type": "string", "description": "Task name" },
+          "solutionUrl": { "type": "string", "description": "Task solution url" },
+          "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
+          "checker": { "type": "string", "description": "Checker github id" },
+          "score": { "type": "number", "description": "Task solution score" },
+          "maxScore": { "type": "number", "description": "Task max score" },
+          "student": { "type": "string", "description": "Student github id" },
+          "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
+          "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
         },
         "required": [
           "id",

@@ -3740,61 +3740,61 @@ export interface MentorRegistryDto {
  */
 export interface MentorReviewDto {
     /**
-     * 
+     * Task solution id
      * @type {number}
      * @memberof MentorReviewDto
      */
     'id': number;
     /**
-     * 
+     * Task name
      * @type {string}
      * @memberof MentorReviewDto
      */
     'taskName': string;
     /**
-     * 
+     * Task solution url
      * @type {string}
      * @memberof MentorReviewDto
      */
     'solutionUrl': string;
     /**
-     * 
+     * Task solution submission date
      * @type {string}
      * @memberof MentorReviewDto
      */
     'submittedAt': string;
     /**
-     * 
+     * Checker github id
      * @type {string}
      * @memberof MentorReviewDto
      */
     'checker': string;
     /**
-     * 
+     * Task solution score
      * @type {number}
      * @memberof MentorReviewDto
      */
     'score': number;
     /**
-     * 
+     * Task max score
      * @type {number}
      * @memberof MentorReviewDto
      */
     'maxScore': number;
     /**
-     * 
+     * Student github id
      * @type {string}
      * @memberof MentorReviewDto
      */
     'student': string;
     /**
-     * 
+     * Task solution review date
      * @type {string}
      * @memberof MentorReviewDto
      */
     'reviewedAt': string;
     /**
-     * 
+     * Task description url
      * @type {string}
      * @memberof MentorReviewDto
      */
