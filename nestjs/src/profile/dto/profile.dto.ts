@@ -1,7 +1,7 @@
 import { Resume } from '@entities/resume';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ProfileDto {
+export class ProfileWithCvDto {
   constructor(profile: { resume: Resume | null }) {
     this.publicCvUrl = profile.resume?.uuid ? `/cv/${profile.resume.uuid}` : null;
   }
