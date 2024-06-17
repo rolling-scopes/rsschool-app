@@ -65,6 +65,8 @@ import { CourseUsersService } from './course-users/course-users.service';
 import { CloudApiModule } from 'src/cloud-api/cloud-api.module';
 import { SelfEducationService } from './task-verifications/self-education.service';
 import { CourseMentorsController, CourseMentorsService } from './course-mentors';
+import { CourseStudentsController } from './course-students/course-students.controller';
+import { CourseStudentsService } from './course-students/course-students.service';
 
 @Module({
   imports: [
@@ -118,6 +120,7 @@ import { CourseMentorsController, CourseMentorsService } from './course-mentors'
     TaskVerificationsController,
     CourseUsersController,
     CourseMentorsController,
+    CourseStudentsController,
   ],
   providers: [
     CourseTasksService,
@@ -145,6 +148,7 @@ import { CourseMentorsController, CourseMentorsService } from './course-mentors'
     SelfEducationService,
     TaskVerificationsService,
     CourseMentorsService,
+    CourseStudentsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })

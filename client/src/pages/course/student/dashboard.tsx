@@ -8,7 +8,7 @@ import omitBy from 'lodash/omitBy';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PageLayout } from 'components/PageLayout';
 
-import { CourseService, StudentSummary } from 'services/course';
+import { CourseService } from 'services/course';
 import { UserService } from 'services/user';
 import {
   MainStatsCard,
@@ -29,6 +29,7 @@ import {
   CourseScheduleItemDtoStatusEnum,
   AvailableReviewStatsDto,
   CourseScheduleItemDtoTypeEnum,
+  StudentSummaryDto,
 } from 'api';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
@@ -44,7 +45,7 @@ function Page() {
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const userService = useMemo(() => new UserService(), []);
 
-  const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
+  const [studentSummary, setStudentSummary] = useState<StudentSummaryDto>();
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseScheduleItemDto[]);
