@@ -4,9 +4,12 @@ import { AutoTestTaskDto } from 'api';
 
 const { Paragraph } = Typography;
 
+export interface AutoTestTask extends AutoTestTaskDto {
+  attributes: Record<string, any>;
+}
 export interface AutoTestTaskCardProps {
-  courseTask: AutoTestTaskDto;
-  handleSelectTask: (task: AutoTestTaskDto) => void;
+  courseTask: AutoTestTask;
+  handleSelectTask: (task: AutoTestTask) => void;
 }
 
 function AutoTestTaskCard({ courseTask, handleSelectTask }: AutoTestTaskCardProps) {

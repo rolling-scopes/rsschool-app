@@ -374,10 +374,10 @@ export interface AutoTestTaskDto {
     'skills': Array<string>;
     /**
      * 
-     * @type {{ [key: string]: Unknown; }}
+     * @type {object}
      * @memberof AutoTestTaskDto
      */
-    'attributes': { [key: string]: Unknown; };
+    'attributes': object;
     /**
      * 
      * @type {Array<UsedCourseDto>}

@@ -15,7 +15,7 @@ import {
 import { AutoTestTaskDto, AutoTestsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
-import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
+import AutoTestTaskCard, { AutoTestTask } from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -33,9 +33,9 @@ const api = new AutoTestsApi();
 
 function Page() {
   const { courses } = useActiveCourseContext();
-  const [tests, setTests] = useState<AutoTestTaskDto[]>([]);
+  const [tests, setTests] = useState<AutoTestTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<AutoTestTaskDto>();
+  const [selectedTask, setSelectedTask] = useState<AutoTestTask>();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOk = () => {
