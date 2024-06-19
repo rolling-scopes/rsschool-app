@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=client --docker
@@ -122,7 +122,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=server --docker
@@ -185,7 +185,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=server --scope=nestjs --docker
