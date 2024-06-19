@@ -178,11 +178,11 @@ export const scoreRenderer = (item: CourseScheduleItemDto) => {
   );
 };
 
-export const renderTask = (name: string, item: CourseScheduleItemDto) => {
-  if (!item.descriptionUrl) return name;
+export const renderTask = (name: string, descriptionUrl: string | null) => {
+  if (!descriptionUrl) return name;
 
   return (
-    <Link target="_blank" href={item.descriptionUrl}>
+    <Link target="_blank" href={descriptionUrl}>
       {name}
     </Link>
   );

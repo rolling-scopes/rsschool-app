@@ -16,7 +16,7 @@ export function getAvailableTasksColumns(): ColumnType<CourseScheduleItemDto>[] 
     {
       key: AvailableTasksColumnKey.Name,
       dataIndex: 'name',
-      render: renderTask,
+      render: (name, item) => renderTask(name, item.descriptionUrl),
     },
     {
       key: AvailableTasksColumnKey.Type,
