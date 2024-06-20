@@ -45,10 +45,9 @@ export function MentorRegistryTable(props: Props) {
       />
       <Table<MentorRegistryDto>
         pagination={{ pageSize: PAGINATION, current: currentPage, onChange: setCurrentPage, total }}
-        size="large"
         rowKey="id"
         dataSource={filteredData}
-        scroll={{ x: tableWidth, y: 'calc(95vh - 290px)' }}
+        scroll={{ x: tableWidth, y: 'calc(95vh - 340px)' }}
         columns={columns}
         onChange={handleTableChange}
       />
