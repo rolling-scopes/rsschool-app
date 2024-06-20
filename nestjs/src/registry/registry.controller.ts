@@ -11,6 +11,7 @@ import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
 import { FilterMentorRegistryResponse } from './dto/mentor-registry.dto';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './constants';
+import { CourseInfo } from '@entities/session';
 
 @Controller('registry')
 @ApiTags('registry')
@@ -86,7 +87,7 @@ export class RegistryController {
         total: data.length,
         mentors: data.map(el => new MentorRegistryDto(el)),
       };
-    } else if (req.user.isAdmin && req.query) {
+    } else {
       const data = await this.registryService.filterMentorRegistries({
         page: currentPage || DEFAULT_PAGE_NUMBER,
         limit: pageSize || DEFAULT_PAGE_SIZE,
@@ -95,27 +96,29 @@ export class RegistryController {
         preferedCourses,
         preselectedCourses,
         technicalMentoring,
+        coursesIds: req.user.isAdmin
+          ? undefined
+          : Object.entries(req.user.courses)
+              .filter(
+                ([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor),
+              )
+              .map(([key]) => Number(key)),
+        disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
       });
       return {
         total: data.total,
         mentors: data.mentors.map(el => new MentorRegistryDto(el)),
       };
-    } else {
-      const coursesIds = Object.entries(req.user.courses)
-        .filter(([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor))
-        .map(([key]) => Number(key));
-      const courses = await this.coursesService.getByIds(coursesIds);
-      const disciplineIds = uniq(courses.map(course => course.disciplineId).filter(Boolean)) as number[];
-      const disciplines = await this.disciplinesService.getByIds(disciplineIds);
-      const disciplineNames = disciplines.map(discipline => discipline.name);
-      const data = await this.registryService.findMentorRegistriesByCourseIdsAndDisciplines(
-        coursesIds,
-        disciplineNames,
-      );
-      return {
-        total: data.length,
-        mentors: data.map(el => new MentorRegistryDto(el)),
-      };
     }
+  }
+
+  private async getDisciplineNamesByCourseIds(userCourses: Record<number, CourseInfo>): Promise<string[]> {
+    const coursesIds = Object.entries(userCourses)
+      .filter(([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor))
+      .map(([key]) => Number(key));
+    const courses = await this.coursesService.getByIds(coursesIds);
+    const disciplineIds = uniq(courses.map(course => course.disciplineId).filter(Boolean)) as number[];
+    const disciplines = await this.disciplinesService.getByIds(disciplineIds);
+    return disciplines.map(discipline => discipline.name);
   }
 }
