@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [master]
     paths-ignore:
-      - 'tools/bumblebee/**'
+      - '*tools/bumblebee/**'
 
 concurrency:
   group: pr_${{ github.head_ref }}
