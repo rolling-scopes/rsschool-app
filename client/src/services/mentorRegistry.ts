@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { RegistryApi } from 'api';
+import { MentorRegistryDto, RegistryApi } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
@@ -17,6 +17,31 @@ export interface MentorRegistry {
   updatedDate: Date;
 }
 
+export interface GetMentorRegistriesDto {
+  currentPage: number;
+  pageSize: number;
+  githubId?: string;
+  cityName?: string;
+  preferedCourses?: number[];
+  preselectedCourses?: number[];
+  technicalMentoring?: string[];
+}
+
+export interface GetMentorRegistriesResponse {
+  mentors: MentorRegistryDto[];
+  total: number;
+}
+
+export interface GetMentorRegistriesOptions {
+  currentPage?: number;
+  pageSize?: number;
+  githubId?: string;
+  cityName?: string;
+  preferedCourses?: number[];
+  preselectedCourses?: number[];
+  technicalMentoring?: string[];
+}
+
 export class MentorRegistryService {
   private axios: AxiosInstance;
   private registryApi: RegistryApi;
@@ -26,9 +51,22 @@ export class MentorRegistryService {
     this.registryApi = new RegistryApi();
   }
 
-  public async getMentors() {
-    const response = await this.registryApi.getMentorRegistries();
-    return response.data;
+  public async getMentors(options?: GetMentorRegistriesDto): Promise<GetMentorRegistriesResponse> {
+    if (!options) {
+      const response = await this.registryApi.getMentorRegistries();
+      return response.data;
+    } else {
+      const response = await this.registryApi.getMentorRegistries(
+        options.pageSize,
+        options.currentPage,
+        options.githubId,
+        options.cityName,
+        options.preferedCourses,
+        options.preselectedCourses,
+        options.technicalMentoring,
+      );
+      return response.data;
+    }
   }
 
   public async updateMentor(githubId: string, data: any) {
