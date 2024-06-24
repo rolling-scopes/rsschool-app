@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
-import { urlWithIpPattern } from 'services/validators';
+import { privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
@@ -28,12 +28,19 @@ const createGithubInUrlRule = (githubId: string): Rule => {
   };
 };
 
-const createUrlRule = (): Rule => {
-  return {
-    required: true,
-    pattern: urlWithIpPattern,
-    message: 'Please provide a valid link (must start with `http://` or `https://`)',
-  };
+const validUrlRule: Rule = {
+  required: true,
+  pattern: urlWithIpPattern,
+  message: 'Please provide a valid link (must start with `http://` or `https://`)',
+};
+
+const notPrivateRsRepoRule: Rule = {
+  validator: (_, value) => {
+    if (privateRsRepoPattern.test(value)) {
+      return Promise.reject("Please provide another link. Students can't see Pull Requests of private RS School repos");
+    }
+    return Promise.resolve();
+  },
 };
 
 export function CrossCheckSubmit() {
@@ -188,9 +195,11 @@ export function CrossCheckSubmit() {
                 <Form.Item
                   name="url"
                   label="Solution URL"
-                  rules={[createUrlRule()].concat(
-                    task.validations?.githubIdInUrl ? [createGithubInUrlRule(session.githubId)] : [],
-                  )}
+                  rules={[
+                    validUrlRule,
+                    notPrivateRsRepoRule,
+                    ...(task.validations?.githubIdInUrl ? [createGithubInUrlRule(session.githubId)] : []),
+                  ]}
                 >
                   <Input placeholder="link in the form of https://www.google.com" />
                 </Form.Item>
