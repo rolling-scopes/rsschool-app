@@ -743,6 +743,21 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/students/certificates/countries": {
+      "get": {
+        "operationId": "getCourseStudentCertificatesCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/stats/task/{taskId}/performance": {
       "get": {
         "operationId": "getTaskPerformance",
