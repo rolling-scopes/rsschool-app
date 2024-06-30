@@ -6,7 +6,10 @@ import { useLoading } from 'components/useLoading';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
+import type { PageProps } from './getServerSideProps';
 import MentorReviewsTable from '../components/ReviewsTable';
+import { FilterValue } from 'antd/es/table/interface';
+import { ColumnKey } from '../components/ReviewsTable/renderers';
 
 const { Text } = Typography;
 
@@ -17,7 +20,7 @@ type ReviewsState = {
   pagination: IPaginationInfo;
 };
 
-export const MentorTasksReview = () => {
+export const MentorTasksReview = ({ tasks }: PageProps) => {
   const { courses, course } = useActiveCourseContext();
 
   const [reviews, setReviews] = useState<ReviewsState>({
@@ -26,18 +29,21 @@ export const MentorTasksReview = () => {
   });
   const [loading, withLoading] = useLoading(false);
 
-  const getMentorReviews = withLoading(async (pagination: TablePaginationConfig) => {
-    try {
-      const { data } = await mentorReviewsApi.getMentorReviews(
-        String(pagination.current),
-        String(pagination.pageSize),
-        course.id,
-      );
-      setReviews({ ...reviews, ...data });
-    } catch (error) {
-      message.error('Failed to load mentor reviews. Please try later.');
-    }
-  });
+  const getMentorReviews = withLoading(
+    async (pagination: TablePaginationConfig, filters?: Record<ColumnKey, FilterValue | null>) => {
+      try {
+        const { data } = await mentorReviewsApi.getMentorReviews(
+          String(pagination.current),
+          String(pagination.pageSize),
+          filters?.taskName ? filters.taskName.toString() : '',
+          course.id,
+        );
+        setReviews({ ...reviews, ...data });
+      } catch (error) {
+        message.error('Failed to load mentor reviews. Please try later.');
+      }
+    },
+  );
 
   useAsync(async () => await getMentorReviews(reviews.pagination), [course]);
 
@@ -50,7 +56,12 @@ export const MentorTasksReview = () => {
         </Space>
         <Text type="secondary">You can assign a checker for the student’s task</Text>
       </Space>
-      <MentorReviewsTable content={reviews.content} pagination={reviews.pagination} handleChange={getMentorReviews} />
+      <MentorReviewsTable
+        content={reviews.content}
+        pagination={reviews.pagination}
+        handleChange={getMentorReviews}
+        tasks={tasks}
+      />
     </AdminPageLayout>
   );
 };
