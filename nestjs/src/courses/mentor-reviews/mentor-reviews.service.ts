@@ -64,7 +64,7 @@ export class MentorReviewsService {
       .addOrderBy('taskSolution.id', 'ASC');
 
     if (tasks) {
-      const taskIds = tasks.split(',').map(id => parseInt(id, 10));
+      const taskIds = tasks.split(',').map(id => parseInt(id));
       query.andWhere('courseTask.id IN (:...taskIds)', { taskIds });
     }
     return query;
