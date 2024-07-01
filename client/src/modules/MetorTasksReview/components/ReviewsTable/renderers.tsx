@@ -1,9 +1,9 @@
 import { ColumnsType } from 'antd/lib/table';
-import { MentorReviewDto } from 'api';
+import { CourseTaskDto, MentorReviewDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { dateTimeRenderer, renderTask, stringTrimRenderer } from 'components/Table';
 
-enum ColumnKey {
+export enum ColumnKey {
   TaskName = 'taskName',
   Student = 'student',
   SubmittedDate = 'submittedAt',
@@ -23,13 +23,14 @@ enum ColumnName {
   Score = 'Score',
 }
 
-export const getColumns = (): ColumnsType<MentorReviewDto> => [
+export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto> => [
   {
     key: ColumnKey.TaskName,
     title: ColumnName.TaskName,
     dataIndex: ColumnKey.TaskName,
     width: '15%',
     render: (taskName, review) => renderTask(taskName, review.taskDescriptionUrl),
+    filters: tasks.map(task => ({ text: task.name, value: task.id })),
   },
   {
     key: ColumnKey.Student,
