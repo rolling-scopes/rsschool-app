@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Modal } from 'antd';
+import { Button, Checkbox, Form, Modal, Row, Col } from 'antd';
 import { Store } from 'rc-field-form/lib/interface';
 import type { CourseTaskDto } from 'api';
 
@@ -31,10 +31,9 @@ export function SettingsModal(props: Props) {
 
   const fillAllFields = (value: boolean) => {
     const newValues: Record<string, boolean | undefined> = {};
-    courseTasks.reduce((acc, curr) => {
-      acc[curr.id] = value;
-      return acc;
-    }, newValues);
+    courseTasks.forEach(task => {
+      newValues[task.id] = value;
+    });
     form.setFieldsValue(newValues);
   };
 
@@ -59,34 +58,16 @@ export function SettingsModal(props: Props) {
         </Button>,
       ]}
     >
-      <Form
-        size="small"
-        layout="horizontal"
-        form={form}
-        initialValues={initialValues}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          overflowY: 'scroll',
-          maxHeight: '60vh',
-          gap: '12px',
-          maxWidth: '472px',
-        }}
-      >
-        {courseTasks.map(el => (
-          <Form.Item
-            key={el.id}
-            name={el.id}
-            label={el.name}
-            labelAlign="left"
-            style={{ marginBottom: '0', overflow: 'hidden' }}
-            valuePropName="checked"
-            labelCol={{ span: 21 }}
-            wrapperCol={{ span: 1 }}
-          >
-            <Checkbox />
-          </Form.Item>
-        ))}
+      <Form form={form} initialValues={initialValues} layout="vertical">
+        <Row gutter={[16, 0]} style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
+          {courseTasks.map(courseTask => (
+            <Col span={12} key={courseTask.id}>
+              <Form.Item name={courseTask.id} valuePropName="checked" style={{ marginBottom: 4 }}>
+                <Checkbox>{courseTask.name}</Checkbox>
+              </Form.Item>
+            </Col>
+          ))}
+        </Row>
       </Form>
     </Modal>
   );
