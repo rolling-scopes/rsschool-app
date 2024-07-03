@@ -164,6 +164,7 @@ export class CourseMentorsService {
 
       mentors.push({
         ...mentorDetails,
+        contactsEmail: user.contactsEmail ?? '',
         contactsEpamEmail: user.contactsEpamEmail ?? '',
         studentsCount: activeStudents.length,
         screenings: {
