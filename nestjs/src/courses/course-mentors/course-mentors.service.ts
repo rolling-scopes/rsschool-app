@@ -82,7 +82,7 @@ export class CourseMentorsService {
       .createQueryBuilder('mentor')
       .innerJoin('mentor.user', 'user')
       .addSelect(UsersService.getPrimaryUserFields())
-      .addSelect(['user.contactsEpamEmail'])
+      .addSelect(['user.contactsEpamEmail', 'user.contactsEmail'])
       .leftJoin('mentor.students', 's')
       .leftJoin('mentor.stageInterviews', 'si')
       .leftJoin('mentor.taskChecker', 'tc')
