@@ -28,5 +28,5 @@ export class EmploymentRecordDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => LocationDto)
-  officeLocation?: LocationDto;
+  location?: LocationDto;
 }

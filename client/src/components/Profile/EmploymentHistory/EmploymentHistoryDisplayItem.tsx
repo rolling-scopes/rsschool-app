@@ -21,7 +21,7 @@ const getWorkingPeriod = (dateFrom: Dayjs, dateTo: Dayjs, toPresent: boolean): s
 const EmploymentHistoryDisplayItem = ({
   employmentRecord,
 }: {
-  employmentRecord: Omit<EmploymentRecordFormItem, 'officeLocation'>;
+  employmentRecord: Omit<EmploymentRecordFormItem, 'location'>;
 }) => {
   const { title, dateFrom, dateTo, toPresent, companyName } = employmentRecord;
 

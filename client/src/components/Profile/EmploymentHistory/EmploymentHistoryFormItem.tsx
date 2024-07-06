@@ -15,11 +15,11 @@ type EmploymentHistoryFormItemPros = {
 };
 
 const EmploymentHistoryFormItem = ({ name, restField, remove, form }: EmploymentHistoryFormItemPros) => {
-  const { title, dateFrom, dateTo, toPresent, companyName, officeLocation } =
+  const { title, dateFrom, dateTo, toPresent, companyName, location } =
     form.getFieldValue(['employmentHistory', name]) ?? {};
   const [isToPresent, setToPresent] = useState<boolean>(toPresent);
   const [isDateToRequired, setIsDateToRequired] = useState<boolean>(!toPresent);
-  const [locationSelectValue, setLocationSelectValue] = useState(officeLocation);
+  const [locationSelectValue, setLocationSelectValue] = useState(location);
 
   const handleLocationChange = (value: Location | null) => {
     setLocationSelectValue(value);
@@ -101,7 +101,7 @@ const EmploymentHistoryFormItem = ({ name, restField, remove, form }: Employment
         >
           <DatePicker disabled={isToPresent} />
         </Form.Item>
-        <Form.Item {...restField} name={[name, 'officeLocation']} label="Office location">
+        <Form.Item {...restField} name={[name, 'location']} label="Office location">
           <LocationSelect style={{ flex: 1 }} onChange={handleLocationChange} location={locationSelectValue} />
         </Form.Item>
         <Button size="small" type="dashed" onClick={() => remove(name)}>

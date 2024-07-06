@@ -27,7 +27,7 @@ const defaultEmploymentRecord: EmploymentRecordDto = {
   dateTo: '',
   toPresent: false,
   companyName: '',
-  officeLocation: undefined,
+  location: undefined,
 };
 
 const employmentRecordFormItemToDto = (employment: EmploymentRecordFormItem): EmploymentRecordDto => ({

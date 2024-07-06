@@ -1715,31 +1715,15 @@
       }
     },
     "/profile/info": {
-      "post": {
-        "operationId": "updateProfileInfo",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileInfoDto" } } }
-        },
-        "responses": { "201": { "description": "" } },
-        "tags": ["profile"]
-      },
       "patch": {
         "operationId": "updateProfileInfoFlat",
         "summary": "",
         "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EmploymentRecordDto" } }
-              }
-            }
-          }
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateProfileInfoDto" } } }
         },
+        "responses": { "200": { "description": "" } },
         "tags": ["profile"]
       }
     },
@@ -4161,7 +4145,7 @@
           "dateFrom": { "type": "string" },
           "companyName": { "type": "string" },
           "toPresent": { "type": "boolean" },
-          "officeLocation": { "$ref": "#/components/schemas/LocationDto" }
+          "location": { "$ref": "#/components/schemas/LocationDto" }
         },
         "required": ["title", "dateTo", "dateFrom", "companyName", "toPresent"]
       },
