@@ -99,7 +99,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
             maxTagCount={1}
             filterOption={filterOption}
             showSearch
-            placeholder="Please select a event"
+            placeholder="Select an event"
             onChange={onEventChange}
           >
             {events.map(event => (
@@ -110,7 +110,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
       )}
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
-        <Select>{entityTypes}</Select>
+        <Select placeholder="Choose event type">{entityTypes}</Select>
       </Form.Item>
       <Form.Item
         required
@@ -118,7 +118,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         label="Discipline"
         rules={[{ required: true, message: 'Please select a discipline' }]}
       >
-        <Select>
+        <Select placeholder="Select a discipline">
           {disciplines.map(({ id, name }) => (
             <Select.Option key={id} value={id}>
               {name}
@@ -127,7 +127,7 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         </Select>
       </Form.Item>
       <Form.Item name="special" label="Special">
-        <Select mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>
+        <Select placeholder="Add tags" mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>
           {SPECIAL_ENTITY_TAGS.map((tag: string) => (
             <Option key={tag} value={tag}>
               {tag}
@@ -136,10 +136,9 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
         </Select>
       </Form.Item>
       <Form.Item name="timeZone" label="TimeZone">
-        <Select placeholder="Please select a timezone">
+        <Select placeholder="Choose a timezone">
           {TIMEZONES.map(tz => (
             <Option key={tz} value={tz}>
-              {/* there is no 'Europe / Kyiv' time zone at the moment */}
               {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
             </Option>
           ))}
@@ -151,15 +150,24 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
           <Form.Item
             name="dateTime"
             label="Date and Time"
-            rules={[{ required: true, message: 'Please enter date and time' }]}
+            rules={[{ required: true, message: 'Please enter start date and time' }]}
           >
-            <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+            <DatePicker
+              format="YYYY-MM-DD HH:mm"
+              showTime={{ format: 'HH:mm' }}
+              placeholder="Select start date & time"
+            />
           </Form.Item>
         </Col>
-        <Form.Item name="endTime" label="End Date and Time">
-          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
-        </Form.Item>
-        <Col span={12}></Col>
+        <Col span={12}>
+          <Form.Item
+            name="endTime"
+            label="End Date and Time"
+            rules={[{ required: true, message: 'Please enter end date and time' }]}
+          >
+            <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} placeholder="Select end date & time" />
+          </Form.Item>
+        </Col>
       </Row>
 
       <Form.Item
@@ -176,22 +184,22 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
           },
         ]}
       >
-        <Input />
+        <Input placeholder="Enter description URL" />
       </Form.Item>
 
       <Form.Item name={['taskOwner', 'id']} label="Task Owner">
         <UserSearch
-          placeholder="Please select a task owner"
+          placeholder="Select a task owner"
           defaultValues={data?.organizer ? [data.organizer] : []}
           searchFn={loadUsers}
         />
       </Form.Item>
       <Form.Item name="description" label="Description">
-        <TextArea />
+        <TextArea placeholder="Add a brief description" />
       </Form.Item>
 
       <Form.Item name="place" label="Place">
-        <Input />
+        <Input placeholder="Enter event location" />
       </Form.Item>
     </ModalForm>
   );

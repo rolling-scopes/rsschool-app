@@ -67,7 +67,7 @@ const getColumns = ({
       key: ColumnKey.Name,
       title: ColumnName.Name,
       dataIndex: 'name',
-      render: renderTask,
+      render: (name, item) => renderTask(name, item.descriptionUrl),
       filteredValue: filteredInfo.name || null,
       ...getColumnSearchProps('name'),
     },
@@ -279,7 +279,7 @@ export function TableView({ data, settings, statusFilter = ALL_TAB_KEY, mobileVi
   ) : (
     <>
       {filteredData.map(item => (
-        <MobileItemCard item={item} key={generateUniqueRowKey(item)} />
+        <MobileItemCard item={item} key={generateUniqueRowKey(item)} timezone={settings.timezone} />
       ))}
     </>
   );

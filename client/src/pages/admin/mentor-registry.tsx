@@ -65,9 +65,9 @@ function Page() {
   const loadData = withLoading(async () => {
     const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
-    setAllData(allData);
+    setAllData(allData.mentors);
     setCourses(courses);
-    updateData(showAll, allData);
+    updateData(showAll, allData.mentors);
     setDisciplines(disciplines);
   });
 
@@ -117,9 +117,13 @@ function Page() {
   );
 
   const renderModal = useCallback(() => {
+    const data = modalData?.record;
+    if (!data) {
+      return null;
+    }
     return (
       <ModalForm
-        data={modalData?.record}
+        data={data}
         title="Record"
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}
@@ -270,7 +274,7 @@ function filterData(data: MentorRegistryDto[], showAll: boolean) {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]} anyCoursePowerUser>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>

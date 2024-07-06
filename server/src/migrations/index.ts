@@ -52,6 +52,9 @@ import { Temperature1691520611773 } from './1691520611773-Temperature';
 import { Temperature1691524327332 } from './1691524327332-Temperature';
 import { InterviewScore1686657350908 } from './1686657350908-InterviewScore';
 import { CourseUsersActivist1693930286280 } from './1693930286280-CourseUsersActivist';
+import { AddMinStudentPerMentorColumnToCourse1699808604000 } from './1699808604000-AddMinStudentPerMentorColumnToCourse';
+import { Obfuscation1700391857109 } from './1700391857109-Obfuscation';
+import { Course1712137476312 } from './1712137476312-Course';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -108,4 +111,7 @@ export const migrations = [
   Temperature1691524327332,
   InterviewScore1686657350908,
   CourseUsersActivist1693930286280,
+  AddMinStudentPerMentorColumnToCourse1699808604000,
+  Obfuscation1700391857109,
+  Course1712137476312,
 ];

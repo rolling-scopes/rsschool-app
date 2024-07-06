@@ -9,13 +9,17 @@ export const getQueryParams = (
   let params = { ...initialQueryParams };
   for (const [key, value] of Object.entries(queryParams)) {
     if (!isNil(value)) {
-      if (Array.isArray(value) && value[0] !== '') {
-        params = { ...params, [key]: value[0] };
+      if (Array.isArray(value)) {
+        const trimmedElements = value.map(elem => elem.trim()).join(',');
+        if (trimmedElements !== '') {
+          params = { ...params, [key]: trimmedElements };
+        }
       } else if (typeof value === 'string' && value !== '') {
-        params = { ...params, [key]: value };
+        params = { ...params, [key]: value.trim() };
       }
     }
   }
+
   return params;
 };
 

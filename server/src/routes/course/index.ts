@@ -1,7 +1,5 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { Course } from '../../models';
-import { createPostRoute } from '../common';
 import {
   adminGuard,
   anyCourseMentorGuard,
@@ -27,7 +25,6 @@ import {
   postMentor,
   restoreExpelledMentor,
 } from './mentor';
-import * as mentors from './mentors';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
 import {
@@ -70,7 +67,6 @@ import {
   updateStudentStatus,
 } from './student';
 import * as tasks from './tasks';
-import { postCopyCourse } from './template';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
@@ -78,7 +74,6 @@ export function courseRoute(logger: ILogger) {
   router.post('/certificates', courseManagerGuard, postCertificates(logger));
   router.post('/repositories', courseManagerGuard, createRepositories(logger));
   router.put('/repositories', courseManagerGuard, updateRepositories(logger));
-  router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
@@ -153,11 +148,6 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
-
-  const mentorsLogger = logger.child({ module: 'course/mentors' });
-  router.get('/mentors', courseSupervisorGuard, mentors.getMentors(mentorsLogger));
-  router.post('/mentors', adminGuard, mentors.createMentors(mentorsLogger));
-  router.post('/mentors/students', courseSupervisorGuard, mentors.assignStudents(mentorsLogger));
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
@@ -278,12 +268,4 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
 function addScheduleApi(router: Router<any, any>, logger: ILogger) {
   router.get('/schedule/csv/:timeZone', courseSupervisorGuard, getScheduleAsCsv(logger));
   router.post('/schedule/csv/:timeZone', courseSupervisorGuard, setScheduleFromCsv(logger));
-}
-
-export function courseCrudRoute(logger: ILogger) {
-  const router = new Router<any, any>({ prefix: '/course' });
-
-  router.post('/', adminGuard, createPostRoute(Course, logger));
-
-  return router;
 }

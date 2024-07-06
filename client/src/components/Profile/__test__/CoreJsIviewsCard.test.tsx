@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import CoreJsIviewsCard, { CoreJsInterviewsData } from '../CoreJsIviewsCard';
 
 describe('CoreJSIviewsCard', () => {
@@ -43,7 +43,11 @@ describe('CoreJSIviewsCard', () => {
     render(<CoreJsIviewsCard data={data} />);
 
     const btn = await screen.findByTestId('profile-corejs-iview-button');
-    btn.click();
+
+    act(() => {
+      btn.click();
+    });
+
     const modal = await screen.findByTestId('profile-corejs-iviews-modal-table');
     expect(modal).toBeInTheDocument();
   });

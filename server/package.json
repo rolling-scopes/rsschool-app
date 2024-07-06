@@ -14,12 +14,11 @@
     "typeorm:migration:generate": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate -d src/dataSource.ts"
   },
   "dependencies": {
-    "@apalchys/pino-cloudwatch": "0.8.0",
+    "@apalchys/pino-cloudwatch": "0.9.0",
     "@koa/cors": "3.0.0",
     "@koa/router": "8.0.8",
     "@vendia/serverless-express": "4.5.3",
-    "aws-sdk": "2.1354.0",
-    "axios": "1.5.0",
+    "axios": "1.6.2",
     "dotenv": "10.0.0",
     "http-status-codes": "2.1.4",
     "ics": "2.31.0",
@@ -43,10 +42,9 @@
     "pg": "8.11.3",
     "pino-multi-stream": "4.2.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.3.14"
+    "typeorm": "0.3.16"
   },
   "devDependencies": {
-    "@types/jest": "29.5.4",
     "@types/json2csv": "5.0.3",
     "@types/jsonwebtoken": "8.5.8",
     "@types/koa": "2.11.3",
@@ -64,12 +62,8 @@
     "@types/passport-github2": "1.2.5",
     "@types/pg": "8.6.4",
     "@types/pino-multi-stream": "3.1.2",
-    "@typescript-eslint/eslint-plugin": "6.6.0",
-    "@typescript-eslint/parser": "6.6.0",
     "cross-env": "7.0.3",
-    "eslint": "8.48.0",
-    "eslint-config-turbo": "1.10.13",
-    "jest": "29.6.4",
+    "eslint-config-turbo": "1.10.16",
     "jest-junit": "16.0.0",
     "pino-pretty": "7.5.1",
     "ts-jest": "29.1.1",

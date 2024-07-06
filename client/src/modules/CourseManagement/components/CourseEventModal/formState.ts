@@ -16,8 +16,8 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
   const record = {
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
-    dateTime: values.dateTime ? dayjs.tz(values.dateTime, values.timeZone).utc().format() : undefined,
-    endTime: values.endTime ? dayjs.tz(values.endTime, values.timeZone).utc().format() : undefined,
+    dateTime: values.dateTime ? dayjs(values.dateTime).tz(values.timeZone, true).utc().format() : undefined,
+    endTime: values.endTime ? dayjs(values.endTime).tz(values.timeZone, true).utc().format() : undefined,
     place: values.place || null,
     organizer: values.taskOwner?.id ? { id: values.taskOwner?.id } : undefined,
   };
@@ -83,8 +83,8 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
     type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
-    dateTime: modalData.dateTime ? dayjs.utc(modalData.dateTime) : null,
-    endTime: modalData.endTime ? dayjs.utc(modalData.endTime) : null,
+    dateTime: dayjs.utc(modalData.dateTime ?? undefined),
+    endTime: dayjs.utc(modalData.endTime ?? undefined),
     organizerId: modalData.organizer ? modalData.organizer.id : undefined,
     special: modalData.special ? modalData.special.split(',') : [],
     timeZone,

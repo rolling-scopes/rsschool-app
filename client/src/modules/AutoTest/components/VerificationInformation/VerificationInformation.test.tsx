@@ -6,9 +6,11 @@ import VerificationInformation, { VerificationInformationProps } from './Verific
 function renderVerificationInformation({
   type,
   studentEndDate = '2022-10-10 12:00',
+  isTableVisible = true,
 }: {
   type: CourseTaskDetailedDtoTypeEnum;
   studentEndDate?: string;
+  isTableVisible?: boolean;
 }) {
   const courseTask = {
     name: 'Course Task',
@@ -26,10 +28,11 @@ function renderVerificationInformation({
 
   const props: VerificationInformationProps = {
     courseTask,
-    isTableVisible: true,
+    isTableVisible,
     loading: false,
     reload: jest.fn(),
     startTask: jest.fn(),
+    showAnswers: jest.fn(),
   };
 
   return render(<VerificationInformation {...props} />);
@@ -62,5 +65,23 @@ describe('VerificationInformation', () => {
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });
     expect(answersButton).toBeInTheDocument();
+  });
+
+  it('should render start and refresh buttons if table is visible', () => {
+    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Jstask, isTableVisible: true });
+
+    const startTaskButton = screen.getByRole('button', { name: /start task/i });
+    const refreshButton = screen.getByRole('button', { name: /refresh/i });
+    expect(startTaskButton).toBeInTheDocument();
+    expect(refreshButton).toBeInTheDocument();
+  });
+
+  it('should not render start and refresh buttons if table is not visible', () => {
+    renderVerificationInformation({ type: CourseTaskDetailedDtoTypeEnum.Jstask, isTableVisible: false });
+
+    const startTaskButton = screen.queryByRole('button', { name: /start task/i });
+    const refreshButton = screen.queryByRole('button', { name: /refresh/i });
+    expect(startTaskButton).not.toBeInTheDocument();
+    expect(refreshButton).not.toBeInTheDocument();
   });
 });

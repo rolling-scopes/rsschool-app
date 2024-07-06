@@ -157,4 +157,15 @@ export default defineComponent({
     height: 10rem;
   }
 }
+
+@media (max-width: 360px) {
+  .memory__aside {
+    width: 10rem;
+  }
+
+  .memory__btn img {
+    width: 10rem;
+    height: 10rem;
+  }
+}
 </style>

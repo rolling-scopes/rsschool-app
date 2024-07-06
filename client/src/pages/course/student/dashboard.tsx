@@ -79,9 +79,7 @@ function Page() {
         coursesTasksApi.getAvailableCrossCheckReviewStats(courseId),
       ]);
 
-      const nextEvents = scheduleItems
-        .filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available)
-        .sort((a, b) => a.startDate.localeCompare(b.startDate));
+      const nextEvents = scheduleItems.filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available);
 
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(currentCourse => currentCourse.courseId === course.id)?.tasks ?? [];
@@ -90,7 +88,7 @@ function Page() {
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
-      setTotalStudentsCount(courseStats?.data.studentsActiveCount || 0);
+      setTotalStudentsCount(courseStats?.data.activeStudentsCount || 0);
       setAvailableReviews(availableReviews ?? []);
 
       setTasksByStatus(

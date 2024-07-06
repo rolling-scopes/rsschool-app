@@ -16,7 +16,7 @@ export function getAvailableTasksColumns(): ColumnType<CourseScheduleItemDto>[] 
     {
       key: AvailableTasksColumnKey.Name,
       dataIndex: 'name',
-      render: renderTask,
+      render: (name, item) => renderTask(name, item.descriptionUrl),
     },
     {
       key: AvailableTasksColumnKey.Type,
@@ -43,7 +43,7 @@ function renderEndDate(value: string, row: CourseScheduleItemDto) {
     <Space wrap style={{ justifyContent: 'end' }}>
       <Typography.Text type="secondary">
         <CalendarOutlined />
-        &nbsp;Due to:
+        &nbsp;Due by:
       </Typography.Text>
       {date}
     </Space>

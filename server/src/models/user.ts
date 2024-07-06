@@ -52,8 +52,8 @@ export interface ExternalAccount {
 export class User {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column({ nullable: true })
-  primaryEmail?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  primaryEmail?: string | null;
 
   @Column({ name: 'githubId', unique: true })
   @Index({ unique: true })
@@ -61,7 +61,7 @@ export class User {
 
   @Column({ nullable: true, type: 'varchar', length: 64 })
   @Index()
-  providerUserId?: string;
+  providerUserId?: string | null;
 
   @Column({ nullable: true, type: 'varchar', length: 32 })
   provider?: string;
@@ -78,26 +78,26 @@ export class User {
   @UpdateDateColumn()
   updatedDate?: number;
 
-  @Column({ nullable: true })
-  firstNameNative?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  firstNameNative?: string | null;
 
-  @Column({ nullable: true })
-  lastNameNative?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  lastNameNative?: string | null;
 
-  @Column({ nullable: true })
-  tshirtSize?: TshirtSize;
+  @Column({ nullable: true, type: 'varchar' })
+  tshirtSize?: TshirtSize | null;
 
-  @Column({ nullable: true })
-  tshirtFashion?: TshirtFashion;
+  @Column({ nullable: true, type: 'varchar' })
+  tshirtFashion?: TshirtFashion | null;
 
   @Column({ nullable: true, type: 'date' })
-  dateOfBirth?: string;
+  dateOfBirth?: string | null;
 
-  @Column({ nullable: true })
-  locationName?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  locationName?: string | null;
 
-  @Column({ nullable: true })
-  locationId?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  locationId?: string | null;
 
   @Column({ default: false })
   opportunitiesConsent: boolean;
@@ -197,6 +197,9 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: false })
+  obfuscated: boolean;
 
   @OneToOne(() => ProfilePermissions, profilePermissions => profilePermissions.user)
   @JoinColumn()

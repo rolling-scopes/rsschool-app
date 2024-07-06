@@ -16,18 +16,35 @@ export class CertificatesController {
     private studentsService: StudentsService,
   ) {}
 
+  /**
+   * /certificate/abc - returns certificate in PDF format
+   * /certificate/abc.json - returns certificate metadata in JSON format
+   */
   @Get('/:publicId')
   @ApiOperation({ operationId: 'getCertificate' })
   public async getCertificate(@Param('publicId') publicId: string, @Res() res: Response) {
-    const certificate = await this.certificatesService.getByPublicId(publicId);
-    if (!certificate) throw new NotFoundException('not found');
+    const normalizedPublicId = publicId.endsWith('.json') ? publicId.slice(0, -5) : publicId;
+    const responseType = publicId.endsWith('.json') ? 'json' : 'pdf';
+
+    const certificate = await this.certificatesService.getByPublicId(normalizedPublicId);
+    if (!certificate) throw new NotFoundException();
 
     try {
-      const stream = await this.certificatesService.getFileStream(certificate.s3Bucket, certificate.s3Key);
-      res.set('Content-Type', 'application/pdf');
-      stream.pipe(res);
+      switch (responseType) {
+        case 'json': {
+          const metadata = await this.certificatesService.getCertificateMetadata(certificate);
+          res.json(metadata);
+          break;
+        }
+        case 'pdf': {
+          const stream = await this.certificatesService.getFileStream(certificate.s3Bucket, certificate.s3Key);
+          res.set('Content-Type', 'application/pdf');
+          stream.pipe(res);
+          break;
+        }
+      }
     } catch {
-      throw new NotFoundException('not found');
+      throw new NotFoundException();
     }
   }
 

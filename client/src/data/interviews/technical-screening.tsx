@@ -224,7 +224,18 @@ export const introduction: Step = {
 
 const theoryQuestions = [
   {
-    id: 'sorting',
+    id: 'html',
+    title:
+      'Position and display attribute values, tags, weight of selectors, pseudo-classes and elements, box model, relative and absolute values, em vs rem, semantic, semantic tags, etc.',
+    topic: 'HTML/CSS',
+  },
+  {
+    id: 'oop',
+    title: 'OOP (Encapsulation, Polymorphism, and Inheritance)',
+    topic: 'Computer Science',
+  },
+  {
+    id: 'algorithms',
     title: 'Sorting and search algorithms (Binary search, Bubble sort, Quick sort, etc.)',
     topic: 'Computer Science',
   },
@@ -237,17 +248,6 @@ const theoryQuestions = [
     id: 'binaryNumbers',
     title: 'Binary number',
     topic: 'Computer Science',
-  },
-  {
-    id: 'oop',
-    title: 'OOP (Encapsulation, Polymorphism, and Inheritance)',
-    topic: 'Computer Science',
-  },
-  {
-    id: 'html',
-    title:
-      'Position and display attribute values, tags, weight of selectors, pseudo-classes and elements, box model, relative and absolute values, em vs rem, semantic, semantic tags, etc.',
-    topic: 'HTML/CSS',
   },
   {
     id: 'array',
@@ -289,6 +289,51 @@ const theoryQuestions = [
     title: 'Difference between list and array, or between stack and queue.',
     topic: 'Data structures',
   },
+  {
+    id: 'dataTypes',
+    title: 'Understanding data types - from primitives to objects',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'variables',
+    title: 'Variables',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'numbers',
+    title: 'Number & Math methods',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'strings',
+    title: 'String methods & String templates',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'operators',
+    title: 'Ternary, Nullish Coalescing, Optional Chaining, and Logical Operators – Syntax and Use Cases',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'switchCase',
+    title: 'Switch case - examples where it can be useful',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'loops',
+    title: 'Loops - for, while, do while',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'typesConversion',
+    title: 'Be able to discover cases of implicit data types conversion into boolean, string, number',
+    topic: 'JavaScript Fundamentals',
+  },
+  {
+    id: 'strictComparison',
+    title: 'Strict comparison',
+    topic: 'JavaScript Fundamentals',
+  },
 ];
 
 const theory: Step = {
@@ -301,7 +346,7 @@ const theory: Step = {
         Ask student some questions from the self-study course. You can use the list of recommended questions or add your
         own.
       </div>
-      <TimeForStep minutes="15-30" />
+      <TimeForStep minutes="30-45" />
     </>
   ),
   items: [
@@ -325,7 +370,7 @@ const theory: Step = {
 const practiceQuestions = [
   {
     id: '1',
-    title: `Given an integer array arr and a filtering function fn, return a new array with a fewer or equal number of elements. 
+    title: `Given an integer array arr and a filtering function fn, return a new array with a fewer or equal number of elements.
   The returned array should only contain elements where fn(arr[i], i) evaluated to a truthy value.`,
   },
   {

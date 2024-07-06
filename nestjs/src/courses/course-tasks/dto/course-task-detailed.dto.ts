@@ -4,12 +4,19 @@ import { CourseTaskDto } from './course-task.dto';
 
 @ApiResponse({})
 export class CourseTaskDetailedDto extends CourseTaskDto {
-  constructor(courseTask: CourseTask & { resultsCount?: number; interviewResultsCount?: number }) {
+  constructor(
+    courseTask: CourseTask & {
+      resultsCount?: number;
+      interviewResultsCount?: number;
+      stageInterviewResultsCount?: number;
+    },
+  ) {
     super(courseTask);
     this.publicAttributes = courseTask.task?.attributes?.['public'] ?? {};
     this.githubRepoName = courseTask.task.githubRepoName;
     this.sourceGithubRepoUrl = courseTask.task.sourceGithubRepoUrl;
-    this.resultsCount = courseTask.resultsCount || courseTask.interviewResultsCount || 0;
+    this.resultsCount =
+      courseTask.resultsCount || courseTask.interviewResultsCount || courseTask.stageInterviewResultsCount || 0;
   }
 
   @ApiProperty()

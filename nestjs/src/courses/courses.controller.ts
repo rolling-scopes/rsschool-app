@@ -16,6 +16,8 @@ import { CourseGuard } from '../auth/course.guard';
 import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto, LeaveCourseRequestDto, UpdateCourseDto } from './dto';
+import { CourseScheduleService } from './course-schedule/course-schedule.service';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Controller('courses')
 @ApiTags('courses')
@@ -23,6 +25,7 @@ export class CoursesController {
   constructor(
     private courseService: CoursesService,
     private courseAccessService: CourseAccessService,
+    private courseScheduleService: CourseScheduleService,
   ) {}
 
   @Get('/')
@@ -32,6 +35,17 @@ export class CoursesController {
   public async getCourses() {
     const data = await this.courseService.getAll();
     return data.map(it => new CourseDto(it));
+  }
+
+  @Post('/')
+  @ApiOperation({ operationId: 'createCourse' })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  @ApiBody({ type: CreateCourseDto })
+  @ApiOkResponse({ type: CourseDto })
+  public async createCourse(@Body() dto: CreateCourseDto) {
+    const created = await this.courseService.create(dto);
+    return new CourseDto(created);
   }
 
   @Get('/:courseId')
@@ -87,5 +101,20 @@ export class CoursesController {
     if (studentId) {
       await this.courseAccessService.rejoinAsStudent(courseId, studentId);
     }
+  }
+
+  @Post('/:courseId/copy')
+  @ApiOkResponse({ type: CourseDto })
+  @ApiOperation({ operationId: 'copyCourse' })
+  @ApiBody({ type: CreateCourseDto, required: true })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  public async copyCourse(@Param('courseId') courseId: number, @Body() body: CreateCourseDto) {
+    const created = await this.courseService.create(body);
+    if (created.id) {
+      await this.courseScheduleService.copyFromTo(courseId, created.id);
+    }
+    const course = await this.courseService.getById(created.id);
+    return new CourseDto(course);
   }
 }

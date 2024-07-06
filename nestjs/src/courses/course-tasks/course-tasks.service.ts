@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskSolution } from '@entities/taskSolution';
+import { StageInterview } from '@entities/index';
 
 export enum Status {
   Started = 'started',
@@ -32,9 +33,9 @@ export class CourseTasksService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
-  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false) {
+  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false, checker?: Checker) {
     return this.courseTaskRepository.find({
-      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status) },
+      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status), checker: checker },
       relations: ['task', 'taskOwner'],
       order: {
         studentEndDate: 'ASC',
@@ -73,11 +74,18 @@ export class CourseTasksService {
         .select('ct.id', 'id')
         .addSelect('COUNT(r.id)', 'resultsCount')
         .addSelect('COUNT(i.id)', 'interviewResultsCount')
+        .addSelect('COUNT(CASE WHEN si.score > 0 THEN 1 END)', 'stageInterviewResultsCount')
         .leftJoin(TaskResult, 'r', 'r.courseTaskId = ct.id')
         .leftJoin(TaskInterviewResult, 'i', 'i.courseTaskId = ct.id')
+        .leftJoin(StageInterview, 'si', 'si.courseTaskId = ct.id')
         .where('ct.courseId = :courseId', { courseId })
         .groupBy('ct.id')
-        .getRawMany<{ id: number; resultsCount: number; interviewResultsCount: number }>(),
+        .getRawMany<{
+          id: number;
+          resultsCount: number;
+          interviewResultsCount: number;
+          stageInterviewResultsCount: number;
+        }>(),
     ]);
     return courseTasks.map(courseTask => {
       const result = courseTaskResults.find(({ id }) => id === courseTask.id);
@@ -85,6 +93,7 @@ export class CourseTasksService {
         ...courseTask,
         resultsCount: Number(result?.resultsCount || 0),
         interviewResultsCount: Number(result?.interviewResultsCount || 0),
+        stageInterviewResultsCount: Number(result?.stageInterviewResultsCount ?? 0),
       };
     });
   }
@@ -134,16 +143,16 @@ export class CourseTasksService {
 
   public getTasksPendingDeadline(
     courseId: number,
-    { deadlineWithinHours = 24 }: { deadlineWithinHours?: number } = {},
+    { deadlineWithinHours = 24, safeBuffer = 1 }: { deadlineWithinHours?: number; safeBuffer?: number } = {},
   ) {
-    const now = dayjs().toISOString();
+    const now = dayjs();
     const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
 
     const where: FindOptionsWhere<CourseTask> = {
       courseId,
       disabled: false,
-      studentStartDate: LessThanOrEqual(now),
-      studentEndDate: Between(now, endDate),
+      studentStartDate: LessThanOrEqual(now.toISOString()),
+      studentEndDate: Between(now.add(safeBuffer, 'hours').toISOString(), endDate),
     };
 
     return this.courseTaskRepository.find({

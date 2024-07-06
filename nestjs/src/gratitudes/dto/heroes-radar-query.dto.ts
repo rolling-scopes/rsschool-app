@@ -1,8 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional } from 'class-validator';
+import { IsBoolean, IsDate, IsInt, IsOptional, IsString } from 'class-validator';
+import * as dayjs from 'dayjs';
 
 export class HeroesRadarQueryDto {
+  @ApiProperty()
+  @IsInt()
+  @Type(() => Number)
+  public current: number;
+
+  @ApiProperty()
+  @IsInt()
+  @Type(() => Number)
+  public pageSize: number;
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
@@ -22,13 +33,20 @@ export class HeroesRadarQueryDto {
   @IsBoolean()
   notActivist?: boolean;
 
-  @ApiProperty()
-  @IsInt()
-  @Type(() => Number)
-  public current: number;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  countryName?: string;
 
-  @ApiProperty()
-  @IsInt()
-  @Type(() => Number)
-  public pageSize: number;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  startDate?: Date;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDate()
+  @Transform(({ value }) => dayjs(value).utc().endOf('day').toDate(), { toClassOnly: true })
+  endDate?: Date;
 }

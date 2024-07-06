@@ -15,7 +15,7 @@
     "title": "Home",
     "more": "Read more",
     "about": {
-      "project": "Our project is a depository of sloths. View all existing stickers, download the necessary ones or chill a bit - why not? Feel a sloth!",
+      "project": "Our project is a depository of sloths. View all existing stickers, download the necessary ones or chill a bit - why not? Feel like a sloth a bit!",
       "team": "We are a team of beginner frontend developers. We welcome you to our project, which we completed as part of the final task of the JS/FE2022Q1 Rolling Scopes School course!"
     }
   },
@@ -132,7 +132,7 @@
   "btn": {
     "close": "Close",
     "reset": "Reset filters",
-    "show": "Detail info",
+    "show": "Detailed info",
     "yes": "Yes",
     "no": "No",
     "copy": "Copy",

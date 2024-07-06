@@ -30,6 +30,7 @@ const taskApi = new TasksApi();
 export function CourseTaskModal(props: Props) {
   const { data } = props;
   const [changes, setChanges] = useState({} as Record<string, any>);
+  const [form] = Form.useForm();
   const [isInvalidCrossCheckEndDate, setIsInvalidCrossCheckEndDate] = useState<boolean>(false);
 
   const { loading, value: tasksResponse } = useAsync(() => taskApi.getTasks(), []);
@@ -67,29 +68,42 @@ export function CourseTaskModal(props: Props) {
     props.onCancel();
   };
 
+  const findTaskById = useCallback((id: number) => tasks.find(t => t.id === id), [tasks]);
+
   const filterOption = useCallback(
     (input: string, option?: { value: number }): boolean => {
-      if (!input) {
+      if (!input || !option) {
         return false;
       }
-      const task = tasks.find(t => t.id === option?.value);
+      const task = findTaskById(option.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
   );
+
+  const onTaskChange = (taskId: number) => {
+    const task = findTaskById(taskId);
+
+    form.setFieldsValue({ type: task?.type });
+  };
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <ModalForm
       loading={loading}
       getInitialValues={getInitialValues}
       data={data}
+      form={form}
       onChange={values => setChanges({ checker: values.checker })}
       title="Course Task"
       submit={handleModalSubmit}
       cancel={handleModalCancel}
     >
       <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-        <Select filterOption={filterOption} showSearch placeholder="Please select a task">
+        <Select filterOption={filterOption} showSearch placeholder="Please select a task" onChange={onTaskChange}>
           {tasks.map((task: TaskDto) => (
             <Option key={task.id} value={task.id}>
               {task.name} {tagsRenderer(task.tags)}
@@ -102,9 +116,9 @@ export function CourseTaskModal(props: Props) {
           <Form.Item name="type" label="Task Type">
             <Select placeholder="Please select type">
               {TASK_TYPES.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
+                <Option key={id} value={id}>
                   {name}
-                </Select.Option>
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -136,7 +150,9 @@ export function CourseTaskModal(props: Props) {
             rules={[{ required: true, type: 'array', message: 'Please enter start and end date' }]}
           >
             <DatePicker.RangePicker
-              showTime={{ format: 'HH:mm', defaultValue: [dayjs().hour(0).minute(0), dayjs().hour(23).minute(59)] }}
+              showTime={{
+                format: 'HH:mm',
+              }}
             />
           </Form.Item>
         </Col>
@@ -216,7 +232,7 @@ function createRecord(values: any): CreateCourseTaskDto {
   const data = {
     studentStartDate: startDate.utc().format(),
     studentEndDate: endDate.utc().format(),
-    crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).format() : undefined,
+    crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).second(59).format() : undefined,
     taskId: values.taskId,
     taskOwnerId: values.taskOwner?.id,
     checker: values.checker,
@@ -240,11 +256,8 @@ function getInitialValues(modalData: Partial<CourseTaskDetails>) {
     crossCheckEndDate: modalData.crossCheckEndDate ? dayjs.utc(modalData.crossCheckEndDate) : null,
     range:
       modalData.studentStartDate && modalData.studentEndDate
-        ? [
-            modalData.studentStartDate ? dayjs.utc(modalData.studentStartDate) : null,
-            modalData.studentEndDate ? dayjs.utc(modalData.studentEndDate) : null,
-          ]
-        : null,
+        ? [dayjs.utc(modalData.studentStartDate), dayjs.utc(modalData.studentEndDate)]
+        : [dayjs().utc().hour(0).minute(0).second(0).utc(), dayjs().utc().hour(23).minute(59).second(59)],
     checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
   };
   return data;

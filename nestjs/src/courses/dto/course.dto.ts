@@ -25,6 +25,8 @@ export class CourseDto {
     this.personalMentoring = course.personalMentoring;
     this.logo = course.logo;
     this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
+    this.minStudentsPerMentor = course.minStudentsPerMentor;
+    this.certificateThreshold = course.certificateThreshold;
   }
 
   @ApiProperty()
@@ -98,4 +100,10 @@ export class CourseDto {
 
   @ApiProperty({ nullable: true, type: IdNameDto })
   discipline: IdNameDto | null;
+
+  @ApiProperty()
+  minStudentsPerMentor: number;
+
+  @ApiProperty()
+  certificateThreshold: number;
 }

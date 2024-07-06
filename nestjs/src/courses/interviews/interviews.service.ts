@@ -78,7 +78,6 @@ export class InterviewsService {
       .where('is.courseId = :courseId', { courseId })
       .andWhere('is.courseTaskId = :courseTaskId', { courseTaskId })
       .andWhere('student.isExpelled = false')
-      .andWhere('student.isExpelled = false')
       .andWhere('taskChecker.id IS NULL')
       .orderBy('student.totalScore', 'DESC')
       .getMany();

@@ -17,7 +17,7 @@ export class MentorRegistryDto {
     this.courses = mentorRegistry.user.mentors?.map(m => m.courseId);
     this.sendDate = mentorRegistry.sendDate ?? mentorRegistry.updatedDate;
     this.hasCertificate = mentorRegistry.user.students?.some(s => s.certificate?.id);
-    this.primaryEmail = mentorRegistry.user.primaryEmail;
+    this.primaryEmail = mentorRegistry.user.primaryEmail ?? null;
     this.languagesMentoring = mentorRegistry.languagesMentoring;
     this.contactsEpamEmail = mentorRegistry.user.contactsEpamEmail;
     this.receivedDate = mentorRegistry.createdDate;
@@ -67,7 +67,7 @@ export class MentorRegistryDto {
   public englishMentoring: boolean;
 
   @ApiProperty()
-  public primaryEmail?: string;
+  public primaryEmail: string | null;
 
   @ApiProperty({ type: [String] })
   public languagesMentoring: string[];
@@ -77,4 +77,16 @@ export class MentorRegistryDto {
 
   @ApiProperty({ type: String, nullable: true })
   public comment: string | null;
+}
+
+export class FilterMentorRegistryResponse {
+  constructor(mentors: MentorRegistryDto[], total: number) {
+    this.mentors = mentors;
+    this.total = total;
+  }
+  @ApiProperty({ type: [MentorRegistryDto] })
+  mentors: MentorRegistryDto[];
+
+  @ApiProperty()
+  total: number;
 }

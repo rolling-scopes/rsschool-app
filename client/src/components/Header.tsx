@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Button, Dropdown, Menu, Space } from 'antd';
+import type { MenuProps } from 'antd';
 import {
   EyeOutlined,
   LogoutOutlined,
@@ -14,17 +15,20 @@ import { SolidarityUkraine } from './SolidarityUkraine';
 import { SessionContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
+import css from 'styled-jsx/css';
 
 type Props = {
   showCourseName?: boolean;
   title?: string;
 };
 
+type MenuItem = Required<MenuProps>['items'][number];
+
 const MENU_ITEMS = [
   {
     link: '/profile',
     icon: <EyeOutlined />,
-    title: 'View',
+    title: 'Profile',
   },
   {
     link: '/profile/notifications',
@@ -51,26 +55,29 @@ const MENU_ITEMS = [
 
 export function Header({ title, showCourseName }: Props) {
   const { asPath: currentRoute } = useRouter();
-  const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
 
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const courseLinks = useMemo(() => getNavigationItems(session, course ?? null), [course]);
 
-  const menu = (
-    <Menu>
-      {MENU_ITEMS.map(({ link, icon, title, target }, id, arr) => (
-        <Fragment key={id}>
-          {id === arr.length - 1 ? <Menu.Divider /> : null}
-          <Menu.Item key={id} style={currentRoute === link ? menuActiveItemStyle : undefined}>
-            <Button type="link" target={target} href={link} style={{ textAlign: 'left', width: '100%' }}>
-              {icon} {title}
-            </Button>
-          </Menu.Item>
-        </Fragment>
-      ))}
-    </Menu>
-  );
+  const menuItems = useMemo((): MenuProps['items'] => {
+    const items = MENU_ITEMS.map(({ title, link, target, icon }) => {
+      const isActive = currentRoute === link;
+
+      return {
+        key: title,
+        label: (
+          <Button type="link" target={target} href={link} className={isActive ? 'menu-item-active' : undefined}>
+            {icon} {title}
+          </Button>
+        ),
+      };
+    });
+
+    const lastItem = items.pop() as MenuItem;
+
+    return [...items, { type: 'divider' }, lastItem];
+  }, [currentRoute]);
 
   return (
     <Space
@@ -104,25 +111,31 @@ export function Header({ title, showCourseName }: Props) {
         </div>
         <div className="profile">
           {session.githubId && (
-            <Dropdown overlay={menu} trigger={['click']}>
+            <Dropdown menu={{ items: menuItems }} trigger={['click']}>
               <Button type="link">
                 <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
           )}
         </div>
-        <style jsx>{`
-          @media all and (max-width: 768px) {
-            .title {
-              width: 100%;
-              order: 3;
-              text-align: center;
-              margin-top: 16px;
-            }
-          }
-        `}</style>
+        <style jsx>{styles}</style>
       </nav>
       <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />
     </Space>
   );
 }
+
+const styles = css`
+  :global(li:has(.menu-item-active)) {
+    background-color: #e0f2ff;
+  }
+
+  @media all and (max-width: 768px) {
+    .title {
+      width: 100%;
+      order: 3;
+      text-align: center;
+      margin-top: 16px;
+    }
+  }
+`;

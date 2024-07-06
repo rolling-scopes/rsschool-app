@@ -178,6 +178,22 @@
           }
         },
         "tags": ["courses"]
+      },
+      "post": {
+        "operationId": "createCourse",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          }
+        },
+        "tags": ["courses"]
       }
     },
     "/courses/{courseId}": {
@@ -231,6 +247,24 @@
         "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "201": { "description": "" } },
+        "tags": ["courses"]
+      }
+    },
+    "/courses/{courseId}/copy": {
+      "post": {
+        "operationId": "copyCourse",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          }
+        },
         "tags": ["courses"]
       }
     },
@@ -348,6 +382,12 @@
             "required": false,
             "in": "query",
             "schema": { "enum": ["started", "inprogress", "finished"], "type": "string" }
+          },
+          {
+            "name": "checker",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"], "type": "string" }
           }
         ],
         "responses": {
@@ -664,6 +704,84 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/stats/mentors": {
+      "get": {
+        "operationId": "getCourseMentors",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseMentorsStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/mentors/countries": {
+      "get": {
+        "operationId": "getCourseMentorCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/students/countries": {
+      "get": {
+        "operationId": "getCourseStudentCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/students/certificates/countries": {
+      "get": {
+        "operationId": "getCourseStudentCertificatesCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/task/{taskId}/performance": {
+      "get": {
+        "operationId": "getTaskPerformance",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskPerformanceStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -783,6 +901,23 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreDto" } } }
+          }
+        },
+        "tags": ["students score"]
+      }
+    },
+    "/course/{courseId}/students/score/{githubId}": {
+      "get": {
+        "operationId": "getStudentScore",
+        "summary": "",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreStudentDto" } } }
           }
         },
         "tags": ["students score"]
@@ -951,15 +1086,10 @@
         "operationId": "teamDistributionDeleteRegistry",
         "summary": "",
         "parameters": [
-          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
-          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["team distribution"]
       }
     },
@@ -1309,6 +1439,25 @@
         "tags": ["course mentors"]
       }
     },
+    "/course/{courseId}/mentor-reviews": {
+      "get": {
+        "operationId": "getMentorReviews",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "tasks", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewsDto" } } }
+          }
+        },
+        "tags": ["mentor-reviews"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -1581,11 +1730,16 @@
         "operationId": "updateProfileInfoFlat",
         "summary": "",
         "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateProfileInfoDto" } } }
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EmploymentRecordDto" } }
+              }
+            }
+          }
         },
-        "responses": { "200": { "description": "" } },
         "tags": ["profile"]
       }
     },
@@ -1619,6 +1773,13 @@
           }
         },
         "tags": ["profile"]
+      },
+      "delete": {
+        "operationId": "obfuscateProfile",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["profile"]
       }
     },
     "/profile/{username}/personal": {
@@ -1644,6 +1805,20 @@
           "default": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDto" } } }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
+    "/profile/{username}/endorsement-data": {
+      "get": {
+        "operationId": "getEndorsementData",
+        "summary": "",
+        "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDataDto" } } }
           }
         },
         "tags": ["profile"]
@@ -1745,14 +1920,35 @@
       "get": {
         "operationId": "getMentorRegistries",
         "summary": "",
-        "parameters": [],
+        "parameters": [
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "currentPage", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "cityName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "preferedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "number" } }
+          },
+          {
+            "name": "preselectedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "number" } }
+          },
+          {
+            "name": "technicalMentoring",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
-              }
+              "application/json": { "schema": { "$ref": "#/components/schemas/FilterMentorRegistryResponse" } }
             }
           }
         },
@@ -2100,15 +2296,64 @@
         "operationId": "getHeroesRadar",
         "summary": "",
         "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
-          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
-          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } }
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
         ],
         "responses": {
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HeroesRadarDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "tags": ["gratitudes"]
+      }
+    },
+    "/gratitudes/heroes/radar/csv": {
+      "get": {
+        "operationId": "getHeroesRadarCsv",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "notActivist", "required": false, "in": "query", "schema": { "type": "boolean" } },
+          { "name": "countryName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "tags": ["gratitudes"]
+      }
+    },
+    "/gratitudes/heroes/countries": {
+      "get": {
+        "operationId": "getHeroesCountries",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CountryDto" } }
+              }
+            }
           }
         },
         "tags": ["gratitudes"]
@@ -2487,7 +2732,9 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
         "required": [
           "id",
@@ -2513,8 +2760,34 @@
           "usePrivateRepositories",
           "personalMentoring",
           "logo",
-          "discipline"
+          "discipline",
+          "minStudentsPerMentor",
+          "certificateThreshold"
         ]
+      },
+      "CreateCourseDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "fullName": { "type": "string" },
+          "alias": { "type": "string" },
+          "registrationEndDate": { "type": "string" },
+          "completed": { "type": "boolean" },
+          "planned": { "type": "boolean" },
+          "inviteOnly": { "type": "boolean" },
+          "description": { "type": "string" },
+          "disciplineId": { "type": "number" },
+          "discordServerId": { "type": "number" },
+          "usePrivateRepositories": { "type": "boolean" },
+          "certificateIssuer": { "type": "string" },
+          "personalMentoring": { "type": "boolean" },
+          "logo": { "type": "string" },
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
+        },
+        "required": ["name", "startDate", "endDate", "fullName", "alias", "description", "certificateThreshold"]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -2536,9 +2809,11 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "disciplineId": { "type": "number" }
+          "disciplineId": { "type": "number" },
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
-        "required": ["name", "fullName", "alias"]
+        "required": ["name", "fullName", "alias", "certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
       "StudentDto": {
@@ -2960,8 +3235,75 @@
       },
       "CourseStatsDto": {
         "type": "object",
-        "properties": { "studentsActiveCount": { "type": "number" }, "studentsTotalCount": { "type": "number" } },
-        "required": ["studentsActiveCount", "studentsTotalCount"]
+        "properties": {
+          "activeStudentsCount": { "type": "number" },
+          "totalStudents": { "type": "number" },
+          "studentsWithMentorCount": { "type": "number" },
+          "certifiedStudentsCount": { "type": "number" },
+          "eligibleForCertificationCount": { "type": "number" }
+        },
+        "required": [
+          "activeStudentsCount",
+          "totalStudents",
+          "studentsWithMentorCount",
+          "certifiedStudentsCount",
+          "eligibleForCertificationCount"
+        ]
+      },
+      "CourseMentorsStatsDto": {
+        "type": "object",
+        "properties": {
+          "mentorsActiveCount": { "type": "number" },
+          "mentorsTotalCount": { "type": "number" },
+          "epamMentorsCount": { "type": "number" }
+        },
+        "required": ["mentorsActiveCount", "mentorsTotalCount", "epamMentorsCount"]
+      },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
+      "TaskPerformanceStatsDto": {
+        "type": "object",
+        "properties": {
+          "totalAchievement": { "type": "number", "description": "Total number of students who submitted the task" },
+          "minimalAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 1% and 20% of the maximum points"
+          },
+          "lowAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 21% and 50% of the maximum points"
+          },
+          "moderateAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 51% and 70% of the maximum points"
+          },
+          "highAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 71% and 90% of the maximum points"
+          },
+          "exceptionalAchievement": {
+            "type": "number",
+            "description": "Number of students scoring between 91% and 99% of the maximum points"
+          },
+          "perfectScores": { "type": "number", "description": "Number of students achieving a perfect score of 100%" }
+        },
+        "required": [
+          "totalAchievement",
+          "minimalAchievement",
+          "lowAchievement",
+          "moderateAchievement",
+          "highAchievement",
+          "exceptionalAchievement",
+          "perfectScores"
+        ]
       },
       "CrossCheckCriteriaDataDto": {
         "type": "object",
@@ -3012,6 +3354,7 @@
           "comment": { "type": "string" },
           "url": { "type": "string" },
           "reviewedDate": { "type": "string" },
+          "privateRepository": { "type": "string" },
           "submittedDate": { "type": "string" },
           "historicalScores": { "type": "array", "items": { "$ref": "#/components/schemas/HistoricalScoreDto" } },
           "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
@@ -3025,6 +3368,7 @@
           "comment",
           "url",
           "reviewedDate",
+          "privateRepository",
           "submittedDate",
           "historicalScores",
           "messages"
@@ -3543,6 +3887,41 @@
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
       },
+      "MentorReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "Task solution id" },
+          "taskName": { "type": "string", "description": "Task name" },
+          "solutionUrl": { "type": "string", "description": "Task solution url" },
+          "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
+          "checker": { "type": "string", "description": "Checker github id" },
+          "score": { "type": "number", "description": "Task solution score" },
+          "maxScore": { "type": "number", "description": "Task max score" },
+          "student": { "type": "string", "description": "Student github id" },
+          "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
+          "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
+        },
+        "required": [
+          "id",
+          "taskName",
+          "solutionUrl",
+          "submittedAt",
+          "checker",
+          "score",
+          "maxScore",
+          "student",
+          "reviewedAt",
+          "taskDescriptionUrl"
+        ]
+      },
+      "MentorReviewsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorReviewDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",
@@ -3676,7 +4055,9 @@
           "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "minStudentsPerMentor": { "type": "number" },
+          "certificateThreshold": { "type": "number" }
         },
         "required": [
           "id",
@@ -3702,7 +4083,9 @@
           "usePrivateRepositories",
           "personalMentoring",
           "logo",
-          "discipline"
+          "discipline",
+          "minStudentsPerMentor",
+          "certificateThreshold"
         ]
       },
       "UpdateUserDto": {
@@ -3760,55 +4143,6 @@
           }
         }
       },
-      "PublicVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" } },
-        "required": ["all"]
-      },
-      "VisibilitySettings": {
-        "type": "object",
-        "properties": {
-          "all": { "type": "boolean" },
-          "mentor": { "type": "boolean" },
-          "student": { "type": "boolean" }
-        },
-        "required": ["all", "mentor", "student"]
-      },
-      "PartialStudentVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
-        "required": ["all", "student"]
-      },
-      "ContactsVisibilitySettings": {
-        "type": "object",
-        "properties": { "all": { "type": "boolean" }, "student": { "type": "boolean" } },
-        "required": ["all", "student"]
-      },
-      "ConfigurableProfilePermissions": {
-        "type": "object",
-        "properties": {
-          "isProfileVisible": { "$ref": "#/components/schemas/PublicVisibilitySettings" },
-          "isAboutVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isEducationVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isEnglishVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" },
-          "isEmailVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isTelegramVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isSkypeVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isPhoneVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isContactsNotesVisible": { "$ref": "#/components/schemas/ContactsVisibilitySettings" },
-          "isLinkedInVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isPublicFeedbackVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isMentorStatsVisible": { "$ref": "#/components/schemas/VisibilitySettings" },
-          "isStudentStatsVisible": { "$ref": "#/components/schemas/PartialStudentVisibilitySettings" }
-        }
-      },
-      "Location": {
-        "type": "object",
-        "properties": {
-          "cityName": { "type": "string", "nullable": true },
-          "countryName": { "type": "string", "nullable": true }
-        }
-      },
       "Education": {
         "type": "object",
         "properties": {
@@ -3817,40 +4151,6 @@
           "graduationYear": { "type": "number" }
         },
         "required": ["university", "faculty", "graduationYear"]
-      },
-      "GeneralInfo": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "githubId": { "type": "string" },
-          "aboutMyself": { "type": "string", "nullable": true },
-          "location": { "$ref": "#/components/schemas/Location" },
-          "educationHistory": {
-            "nullable": true,
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/Education" }
-          },
-          "englishLevel": { "type": "string", "nullable": true }
-        },
-        "required": ["name", "githubId", "location"]
-      },
-      "ProfileInfoDto": {
-        "type": "object",
-        "properties": {
-          "permissionsSettings": { "$ref": "#/components/schemas/ConfigurableProfilePermissions" },
-          "generalInfo": { "$ref": "#/components/schemas/GeneralInfo" },
-          "contacts": { "$ref": "#/components/schemas/ContactsDto" },
-          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
-          "isPermissionsSettingsChanged": { "type": "boolean" },
-          "isProfileSettingsChanged": { "type": "boolean" }
-        },
-        "required": [
-          "permissionsSettings",
-          "generalInfo",
-          "contacts",
-          "isPermissionsSettingsChanged",
-          "isProfileSettingsChanged"
-        ]
       },
       "LocationDto": { "type": "object", "properties": {} },
       "EmploymentRecordDto": {
@@ -3916,6 +4216,30 @@
         "properties": { "summary": { "type": "string" }, "data": { "type": "object", "nullable": true } },
         "required": ["summary", "data"]
       },
+      "EndorsementUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        },
+        "required": ["id", "githubId", "firstName", "lastName"]
+      },
+      "EndorsementDataDto": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/EndorsementUserDto" },
+          "courses": {
+            "description": "User's courses",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CourseDto" }
+          },
+          "studentsCount": { "type": "number", "description": "Number of students" },
+          "interviewsCount": { "type": "number", "description": "Number of interviews" }
+        },
+        "required": ["user", "courses", "studentsCount", "interviewsCount"]
+      },
       "CreateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "DisciplineDto": {
         "type": "object",
@@ -3955,7 +4279,7 @@
           "receivedDate": { "format": "date-time", "type": "string" },
           "hasCertificate": { "type": "boolean" },
           "englishMentoring": { "type": "boolean" },
-          "primaryEmail": { "type": "string" },
+          "primaryEmail": { "type": "object" },
           "languagesMentoring": { "type": "array", "items": { "type": "string" } },
           "contactsEpamEmail": { "type": "string", "nullable": true },
           "comment": { "type": "string", "nullable": true }
@@ -3980,6 +4304,14 @@
           "contactsEpamEmail",
           "comment"
         ]
+      },
+      "FilterMentorRegistryResponse": {
+        "type": "object",
+        "properties": {
+          "mentors": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } },
+          "total": { "type": "number" }
+        },
+        "required": ["mentors", "total"]
       },
       "SaveCertificateDto": {
         "type": "object",
@@ -4071,7 +4403,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           },
           "comment": { "type": "string" },
@@ -4375,7 +4711,11 @@
               "Top_performer",
               "Job_Offer",
               "RS_activist",
-              "Jury_Team"
+              "Jury_Team",
+              "Mentor",
+              "Contributor",
+              "Coordinator",
+              "Thanks"
             ]
           }
         },
@@ -4383,8 +4723,13 @@
       },
       "HeroesRadarBadgeDto": {
         "type": "object",
-        "properties": { "id": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["id", "count"]
+        "properties": {
+          "id": { "type": "string" },
+          "badgeId": { "type": "string" },
+          "comment": { "type": "string" },
+          "date": { "type": "string" }
+        },
+        "required": ["id", "badgeId", "comment", "date"]
       },
       "HeroRadarDto": {
         "type": "object",
@@ -4404,6 +4749,11 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "CountryDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" } },
+        "required": ["countryName"]
       },
       "EventDto": {
         "type": "object",

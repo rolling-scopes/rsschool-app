@@ -90,40 +90,41 @@ function Page() {
   );
 
   const renderModal = useCallback(
-    () => (
-      <ModalForm
-        data={modalData}
-        title="User Group"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
-        loading={modalLoading}
-      >
-        <Row gutter={24}>
-          <Col span={24}>
-            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter user group name' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item name="users" label="Users" rules={[{ required: true, message: 'Please select users' }]}>
-              <UserSearch mode="multiple" searchFn={loadUsers} defaultValues={modalData?.users} />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item name="roles" label="Roles" rules={[{ required: true, message: `Please select permissions` }]}>
-              <Select mode="tags">
-                {roles.map(role => (
-                  <Select.Option key={role} value={role}>
-                    {role}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-      </ModalForm>
-    ),
+    () =>
+      modalData ? (
+        <ModalForm
+          data={modalData}
+          title="User Group"
+          submit={handleModalSubmit}
+          cancel={() => setModalData(null)}
+          getInitialValues={getInitialValues}
+          loading={modalLoading}
+        >
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter user group name' }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="users" label="Users" rules={[{ required: true, message: 'Please select users' }]}>
+                <UserSearch mode="multiple" searchFn={loadUsers} defaultValues={modalData?.users} />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="roles" label="Roles" rules={[{ required: true, message: `Please select permissions` }]}>
+                <Select mode="tags">
+                  {roles.map(role => (
+                    <Select.Option key={role} value={role}>
+                      {role}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        </ModalForm>
+      ) : null,
     [modalData, handleModalSubmit],
   );
 

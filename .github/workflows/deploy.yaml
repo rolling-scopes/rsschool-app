@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=client --docker
@@ -106,7 +106,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -122,7 +122,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=server --docker
@@ -169,7 +169,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -185,7 +185,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Install turbo
-        run: npm install turbo --global
+        run: npm install turbo@1 --global
 
       - name: Generate a isolated subworkspace for Client
         run: turbo prune --scope=server --scope=nestjs --docker

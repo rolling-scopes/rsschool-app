@@ -7,7 +7,7 @@ import { DEFAULT_CACHE_TTL } from 'src/constants';
 
 import { ScoreQueryDto, OrderDirection, OrderField } from './dto/score-query.dto';
 import { ScoreService } from './score.service';
-import { ScoreDto } from './dto/score.dto';
+import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 
 @Controller('course/:courseId/students/score')
 @ApiTags('students score')
@@ -35,5 +35,14 @@ export class ScoreController {
     });
 
     return score;
+  }
+
+  @Get('/:githubId')
+  @UseGuards(DefaultGuard, CourseGuard)
+  @ApiOperation({ operationId: 'getStudentScore' })
+  @ApiOkResponse({ type: ScoreStudentDto })
+  public async getStudentScore(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    const studentScore = await this.scoreService.getStudentScore({ githubId, courseId });
+    return studentScore;
   }
 }

@@ -95,4 +95,16 @@ export default defineComponent({
     gap: 1.5rem;
   }
 }
+
+@media (max-width: 420px) {
+  .home {
+    grid-template-columns: 30rem;
+    gap: 1rem;
+  }
+
+  .home__menu {
+    grid-template-columns: repeat(2, 15rem);
+    gap: 1rem;
+  }
+}
 </style>

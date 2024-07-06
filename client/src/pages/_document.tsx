@@ -1,25 +1,13 @@
 import * as React from 'react';
-import Document, { Head, Html, Main, NextScript } from 'next/document';
-import Script from 'next/script';
+import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 
-const enableAnalytics = process.env.NODE_ENV === 'production';
-
-export default class extends Document {
+class AppDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <link rel="shortcut icon" href="https://rs.school/favicon.ico" />
-
-          {enableAnalytics && <Script async src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ" />}
-          {enableAnalytics && <script dangerouslySetInnerHTML={{ __html: gaJsCode }} />}
-          {enableAnalytics && (
-            <script
-              defer
-              src="https://static.cloudflareinsights.com/beacon.min.js"
-              data-cf-beacon={'{"token": "e607238d732c4713b01b851ed3df61c2"}'}
-            />
-          )}
+          <link rel="shortcut icon" href="/static/images/favicon.ico" />
         </Head>
         <body>
           <Main />
@@ -30,10 +18,29 @@ export default class extends Document {
   }
 }
 
-const gaJsCode = `
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+AppDocument.getInitialProps = async (ctx: DocumentContext) => {
+  const cache = createCache();
+  const originalRenderPage = ctx.renderPage;
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: App => props => (
+        <StyleProvider cache={cache}>
+          <App {...props} />
+        </StyleProvider>
+      ),
+    });
 
-  gtag('config', 'G-WJLHZ9CCXJ');
-`;
+  const initialProps = await Document.getInitialProps(ctx);
+  const style = extractStyle(cache, true);
+  return {
+    ...initialProps,
+    styles: (
+      <>
+        {initialProps.styles}
+        <style dangerouslySetInnerHTML={{ __html: style }} />
+      </>
+    ),
+  };
+};
+
+export default AppDocument;

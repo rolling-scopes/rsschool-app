@@ -9,6 +9,8 @@ export type Options = {
   preselectedStudents?: { id: number; githubId: string; name: string }[];
 };
 
+const STUDENTS_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
+
 export function MentorOptions({
   course,
   mentorData,
@@ -19,7 +21,7 @@ export function MentorOptions({
   form: FormInstance;
   mentorData: Options | null;
   handleSubmit?: (values: Options) => Promise<void>;
-  course: { id: number; name: string };
+  course: { id: number; name: string; minStudentsPerMentor?: number };
   showSubmitButton?: boolean;
 }) {
   return (
@@ -37,11 +39,14 @@ export function MentorOptions({
           rules={[{ required: true, message: 'Please select students count' }]}
         >
           <Select style={{ width: 200 }} placeholder="Students count...">
-            <Select.Option value={2}>2</Select.Option>
-            <Select.Option value={3}>3</Select.Option>
-            <Select.Option value={4}>4</Select.Option>
-            <Select.Option value={5}>5</Select.Option>
-            <Select.Option value={6}>6</Select.Option>
+            {STUDENTS_NUMBERS.map(num => {
+              const studentsNumber = num + Number(course.minStudentsPerMentor);
+              return (
+                <Select.Option key={studentsNumber} value={studentsNumber}>
+                  {studentsNumber}
+                </Select.Option>
+              );
+            })}
           </Select>
         </Form.Item>
 

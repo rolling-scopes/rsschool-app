@@ -6,6 +6,7 @@ import {
   Form,
   Image,
   Input,
+  InputNumber,
   Layout,
   message,
   Radio,
@@ -20,7 +21,15 @@ import dayjs from 'dayjs';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServersApi, DiscordServerDto, DisciplinesApi, DisciplineDto, CoursesApi, UpdateCourseDto } from 'api';
+import {
+  DiscordServersApi,
+  DiscordServerDto,
+  DisciplinesApi,
+  DisciplineDto,
+  CoursesApi,
+  UpdateCourseDto,
+  CreateCourseDto,
+} from 'api';
 import { Course, CourseRole } from 'services/models';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -86,10 +95,10 @@ function Page() {
           await courseApi.updateCourse(modalData!.id!, record);
         } else {
           if (values.courseId) {
-            await courseService.createCourseCopy(record, values.courseId);
+            await courseService.createCourseCopy(record as CreateCourseDto, values.courseId);
             setIsCopy(false);
           } else {
-            await courseService.createCourse(record);
+            await courseService.createCourse(record as CreateCourseDto);
           }
         }
         await loadData();
@@ -103,7 +112,10 @@ function Page() {
     [modalAction, modalData, modalLoading],
   );
 
-  const renderModal = useCallback(() => {
+  const renderModal = () => {
+    if (modalData == null) {
+      return;
+    }
     const isUpdate = modalAction === 'update';
     return (
       <ModalForm
@@ -118,7 +130,7 @@ function Page() {
           <Col span={24}>
             {!isUpdate ? (
               <Checkbox checked={isCopy} value={isCopy} onChange={e => setIsCopy(e.target.checked)}>
-                I want to copy stages and events from other course
+                I want to copy tasks and events from other course
               </Checkbox>
             ) : (
               ''
@@ -227,9 +239,41 @@ function Page() {
           </Select>
         </Form.Item>
 
+        <Row>
+          <Col span={12}>
+            <Form.Item
+              name="minStudentsPerMentor"
+              label="Minimum Students per Mentor"
+              rules={[
+                { min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' },
+              ]}
+            >
+              <InputNumber step={1} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="certificateThreshold"
+              label="Certificate Threshold"
+              tooltip="Minimum score percentage required for students to qualify for a certificate."
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input the certificate threshold.',
+                  type: 'integer',
+                  min: 1,
+                  max: 100,
+                },
+              ]}
+            >
+              <InputNumber step={5} min={1} max={100} addonAfter="%" />
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Form.Item name="state" label="State">
           <Radio.Group>
-            <Radio value={null}>Active</Radio>
+            <Radio value="active">Active</Radio>
             <Radio value="planned">Planned</Radio>
             <Radio value="completed">Completed</Radio>
           </Radio.Group>
@@ -248,7 +292,7 @@ function Page() {
         </Form.Item>
       </ModalForm>
     );
-  }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
+  };
 
   return (
     <AdminPageLayout title="Manage Courses" loading={loading} courses={allCourses}>
@@ -289,6 +333,8 @@ function createRecord(values: any) {
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
     logo: values.logo,
+    minStudentsPerMentor: values.minStudentsPerMentor,
+    certificateThreshold: values.certificateThreshold,
   };
   return record;
 }
@@ -368,8 +414,10 @@ function getColumns(handleEditItem: any) {
 function getInitialValues(modalData: Partial<Course>) {
   return {
     ...modalData,
+    minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
+    certificateThreshold: modalData.certificateThreshold ?? 70,
     inviteOnly: !!modalData.inviteOnly,
-    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : null,
+    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
     registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
     range:
       modalData.startDate && modalData.endDate
@@ -384,7 +432,7 @@ function getInitialValues(modalData: Partial<Course>) {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>
