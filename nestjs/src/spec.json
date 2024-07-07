@@ -2487,7 +2487,7 @@
     },
     "/auto-test": {
       "get": {
-        "operationId": "getAllRSSchoolAppTests",
+        "operationId": "getAllMinimizedRSSchoolAppTests",
         "summary": "",
         "parameters": [],
         "responses": {
@@ -2495,9 +2495,23 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/AutoTestTaskDto" } }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MinimizedAutoTestTaskDto" } }
               }
             }
+          }
+        },
+        "tags": ["auto-tests"]
+      }
+    },
+    "/auto-test/{id}": {
+      "get": {
+        "operationId": "getRSSchoolAppTest",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AutoTestTaskDto" } } }
           }
         },
         "tags": ["auto-tests"]
@@ -4826,6 +4840,25 @@
           "text": { "type": "string" }
         },
         "required": ["temperature", "type", "text"]
+      },
+      "MinimizedAutoTestTaskDto": {
+        "type": "object",
+        "properties": {
+          "maxAttemptsNumber": { "type": "number" },
+          "numberOfQuestions": { "type": "number" },
+          "name": { "type": "string" },
+          "id": { "type": "number" },
+          "strictAttemptsMode": { "type": "boolean" },
+          "thresholdPercentage": { "type": "number" }
+        },
+        "required": [
+          "maxAttemptsNumber",
+          "numberOfQuestions",
+          "name",
+          "id",
+          "strictAttemptsMode",
+          "thresholdPercentage"
+        ]
       },
       "AutoTestTaskDto": {
         "type": "object",

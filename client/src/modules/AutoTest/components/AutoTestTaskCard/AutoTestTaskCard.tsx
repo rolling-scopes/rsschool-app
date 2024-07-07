@@ -1,34 +1,31 @@
 import { Button, Card, Col, Divider, Row, Typography, Switch } from 'antd';
 import { TaskCardColumn } from '..';
-import { AutoTestTaskDto } from 'api';
+import { MinimizedAutoTestTaskDto } from 'api';
+import Link from 'next/link';
 
 const { Paragraph } = Typography;
 
-export interface AutoTestTask extends AutoTestTaskDto {
-  attributes: Record<string, any>;
-}
 export interface AutoTestTaskCardProps {
-  courseTask: AutoTestTask;
-  handleSelectTask: (task: AutoTestTask) => void;
+  courseTask: MinimizedAutoTestTaskDto
 }
 
-function AutoTestTaskCard({ courseTask, handleSelectTask }: AutoTestTaskCardProps) {
+function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
   const columns = [
     {
       label: 'Max attempts number',
-      value: courseTask.attributes?.public?.maxAttemptsNumber ?? <>&ndash;</>,
+      value: courseTask.maxAttemptsNumber ?? <>&ndash;</>,
     },
     {
       label: 'Number of Questions',
-      value: courseTask.attributes?.public?.numberOfQuestions ?? <>&ndash;</>,
+      value: courseTask.numberOfQuestions ?? <>&ndash;</>,
     },
     {
       label: 'Strict attempts mode',
-      value: <Switch checked={courseTask.attributes?.public?.strictAttemptsMode} />,
+      value: <Switch checked={courseTask.strictAttemptsMode} />,
     },
     {
       label: 'Threshold percentage',
-      value: courseTask.attributes?.public?.tresholdPercentage ?? <>&ndash;</>,
+      value: courseTask.thresholdPercentage ?? <>&ndash;</>,
     },
   ];
 
@@ -46,9 +43,9 @@ function AutoTestTaskCard({ courseTask, handleSelectTask }: AutoTestTaskCardProp
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Button type="primary" onClick={() => handleSelectTask(courseTask)}>
-            Preview Task
-          </Button>
+          <Link href={'/admin/auto-test-task?taskId=' + courseTask.id}>
+            <Button type="primary">Preview Task</Button>
+          </Link>
         </Col>
       </Row>
       <Divider />

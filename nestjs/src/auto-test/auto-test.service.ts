@@ -9,8 +9,25 @@ export class AutoTestService {
 
   public async getAll() {
     return this.repository.find({
+      select: ['id', 'name', 'attributes'],
       where: {
         type: TaskType.SelfEducation,
+      },
+      relations: {
+        discipline: true,
+        courseTasks: { course: true },
+      },
+      order: {
+        updatedDate: 'DESC',
+      },
+    });
+  }
+
+  public async getOne(id: number) {
+    return this.repository.findOne({
+      where: {
+        type: TaskType.SelfEducation,
+        id,
       },
       relations: {
         discipline: true,
