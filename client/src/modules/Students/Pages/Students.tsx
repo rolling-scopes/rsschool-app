@@ -40,7 +40,7 @@ export const Students = ({ courses }: PageProps) => {
         );
         setStudents({ ...students, ...data });
       } catch (error) {
-        message.error('Failed to load mentor reviews. Please try later.');
+        message.error('Failed to load students list. Please try again.');
       }
     },
   );

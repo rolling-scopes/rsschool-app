@@ -5,19 +5,19 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { getColumnSearchProps } from 'components/Table';
 
 export enum ColumnKey {
-  student = 'student',
-  onGoingCourses = 'onGoingCourses',
-  previousCourses = 'previousCourses',
-  country = 'country',
-  city = 'city',
+  Student = 'student',
+  OnGoingCourses = 'onGoingCourses',
+  PreviousCourses = 'previousCourses',
+  Country = 'country',
+  City = 'city',
 }
 
 enum ColumnName {
-  student = 'student',
-  onGoingCourses = 'Ongoing Courses',
-  previousCourses = 'Previous Courses',
-  country = 'Country',
-  city = 'City',
+  Student = 'Student',
+  OnGoingCourses = 'Ongoing Courses',
+  PreviousCourses = 'Previous Courses',
+  Country = 'Country',
+  City = 'City',
 }
 
 const getSearchProps = (key: string) => ({
@@ -60,36 +60,36 @@ const coursesRenderer = (courses: UserStudentCourseDto[]) => {
 
 export const getColumns = (courses: CourseDto[]): ColumnsType<UserStudentDto> => [
   {
-    key: ColumnKey.student,
-    title: ColumnName.student,
-    dataIndex: ColumnKey.student,
+    key: ColumnKey.Student,
+    title: ColumnName.Student,
+    dataIndex: ColumnKey.Student,
     width: 200,
     render: (_v, record) => <GithubUserLink value={record.githubId} fullName={record.fullName} />,
-    ...getSearchProps(ColumnKey.student),
+    ...getSearchProps(ColumnKey.Student),
   },
   {
-    title: ColumnName.onGoingCourses,
-    dataIndex: ColumnKey.onGoingCourses,
+    title: ColumnName.OnGoingCourses,
+    dataIndex: ColumnKey.OnGoingCourses,
     width: 400,
     render: coursesRenderer,
     filters: courses.filter(course => !course.completed).map(course => ({ text: course.alias, value: course.id })),
   },
   {
-    title: ColumnName.previousCourses,
-    dataIndex: ColumnKey.previousCourses,
+    title: ColumnName.PreviousCourses,
+    dataIndex: ColumnKey.PreviousCourses,
     render: coursesRenderer,
     filters: courses.filter(course => course.completed).map(course => ({ text: course.alias, value: course.id })),
   },
   {
-    title: ColumnName.country,
-    dataIndex: ColumnKey.country,
+    title: ColumnName.Country,
+    dataIndex: ColumnKey.Country,
     width: 200,
-    ...getSearchProps(ColumnKey.country),
+    ...getSearchProps(ColumnKey.Country),
   },
   {
-    title: ColumnName.city,
-    dataIndex: ColumnKey.city,
+    title: ColumnName.City,
+    dataIndex: ColumnKey.City,
     width: 200,
-    ...getSearchProps(ColumnKey.city),
+    ...getSearchProps(ColumnKey.City),
   },
 ];

@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     };
 
     return {
-      props: props,
+      props,
     };
   } catch (e) {
     return notAuthorizedResponse;

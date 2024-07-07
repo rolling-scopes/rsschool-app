@@ -16,7 +16,7 @@ export function GithubUserLink({ value, isUserIconHidden = false, fullName }: Pr
             <GithubAvatar githubId={value} size={24} />{' '}
           </>
         )}
-        {fullName ?? value}
+        {fullName || value}
       </a>{' '}
       <a target="_blank" className="link-user-github" href={`https://github.com/${value}`}>
         <GithubFilled />

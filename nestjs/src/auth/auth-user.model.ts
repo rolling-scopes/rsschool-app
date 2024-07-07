@@ -57,7 +57,7 @@ export class AuthUser {
     this.isAdmin = admin;
     this.isHirer = hirer;
     this.githubId = user.githubId;
-    this.appRoles = [admin ? Role.Admin : Role.User, this.isHirer ? Role.Hirer : null].filter(Boolean);
+    this.appRoles = [this.isAdmin ? Role.Admin : Role.User, this.isHirer ? Role.Hirer : null].filter(Boolean);
     this.roles = roles;
     this.courses = coursesInfo;
     return this;
