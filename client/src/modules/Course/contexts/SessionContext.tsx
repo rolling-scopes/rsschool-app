@@ -10,18 +10,6 @@ import { useAsync } from 'react-use';
 import { useActiveCourseContext } from './ActiveCourseContext';
 import { hasRoleInAnyCourse } from 'domain/user';
 
-const AccessDeniedWarning = () => (
-  <Result
-    status="warning"
-    title="You don't have required role to access this page"
-    extra={
-      <Button type="primary" key="console" onClick={() => window.history.back()}>
-        Go Back
-      </Button>
-    }
-  />
-);
-
 export const SessionContext = React.createContext<Session>({} as Session);
 
 let sessionCache: Session | undefined;
