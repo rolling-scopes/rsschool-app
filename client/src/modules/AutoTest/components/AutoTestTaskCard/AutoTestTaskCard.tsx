@@ -6,7 +6,7 @@ import Link from 'next/link';
 const { Paragraph } = Typography;
 
 export interface AutoTestTaskCardProps {
-  courseTask: MinimizedAutoTestTaskDto
+  courseTask: MinimizedAutoTestTaskDto;
 }
 
 function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
