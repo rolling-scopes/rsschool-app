@@ -4,9 +4,10 @@ import { GithubAvatar } from './GithubAvatar';
 type Props = {
   value: string;
   isUserIconHidden?: boolean;
+  fullName?: string;
 };
 
-export function GithubUserLink({ value, isUserIconHidden = false }: Props) {
+export function GithubUserLink({ value, isUserIconHidden = false, fullName }: Props) {
   return (
     <div className="link-user">
       <a target="_blank" className="link-user-profile" href={`/profile?githubId=${value}`}>
@@ -15,7 +16,7 @@ export function GithubUserLink({ value, isUserIconHidden = false }: Props) {
             <GithubAvatar githubId={value} size={24} />{' '}
           </>
         )}
-        {value}
+        {fullName || value}
       </a>{' '}
       <a target="_blank" className="link-user-github" href={`https://github.com/${value}`}>
         <GithubFilled />

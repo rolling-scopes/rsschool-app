@@ -19,7 +19,20 @@ type Props = React.PropsWithChildren<{
   course?: ProfileCourseDto;
   adminOnly?: boolean;
   anyCoursePowerUser?: boolean;
+  hirerOnly?: boolean;
 }>;
+
+const AccessDeniedWarning = () => (
+  <Result
+    status="warning"
+    title="You don't have required role to access this page"
+    extra={
+      <Button type="primary" key="console" onClick={() => window.history.back()}>
+        Go Back
+      </Button>
+    }
+  />
+);
 
 export function SessionProvider(props: Props) {
   const { allowedRoles, anyCoursePowerUser } = props;
@@ -49,17 +62,11 @@ export function SessionProvider(props: Props) {
   }, [error]);
 
   if (session && props.adminOnly && !session.isAdmin) {
-    return (
-      <Result
-        status="warning"
-        title="You don't have required role to access this page"
-        extra={
-          <Button type="primary" key="console" onClick={() => window.history.back()}>
-            Go Back
-          </Button>
-        }
-      />
-    );
+    return <AccessDeniedWarning />;
+  }
+
+  if (session && props.hirerOnly && !session.isHirer && !session.isAdmin) {
+    return <AccessDeniedWarning />;
   }
 
   if (session && allowedRoles && course) {
@@ -72,17 +79,7 @@ export function SessionProvider(props: Props) {
       const isAnyCoursePowerUser = anyCoursePowerUser && allowedRoles.some(role => hasRoleInAnyCourse(session, role));
 
       if (!hasRoleInCurrentCourse && !isAnyCoursePowerUser) {
-        return (
-          <Result
-            status="warning"
-            title="You don't have required role to access this page"
-            extra={
-              <Button type="primary" key="console" onClick={() => window.history.back()}>
-                Go Back
-              </Button>
-            }
-          />
-        );
+        return <AccessDeniedWarning />;
       }
     }
   }

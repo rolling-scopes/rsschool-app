@@ -268,6 +268,28 @@
         "tags": ["courses"]
       }
     },
+    "/students": {
+      "get": {
+        "operationId": "getUserStudents",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "student", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "country", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "city", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "ongoingCourses", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "previousCourses", "required": false, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserStudentsDto" } } }
+          }
+        },
+        "tags": ["students"]
+      }
+    },
     "/students/{studentId}": {
       "get": {
         "operationId": "getStudent",
@@ -2782,6 +2804,55 @@
         "required": ["name", "fullName", "alias", "certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
+      "UserStudentCourseDto": {
+        "type": "object",
+        "properties": {
+          "alias": { "type": "string" },
+          "name": { "type": "string" },
+          "hasCertificate": { "type": "boolean" }
+        },
+        "required": ["alias", "name", "hasCertificate"]
+      },
+      "UserStudentDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "User id" },
+          "githubId": { "type": "string", "description": "User github id" },
+          "fullName": { "type": "string", "description": "User full name" },
+          "country": { "type": "object", "description": "User country" },
+          "city": { "type": "object", "description": "User city" },
+          "onGoingCourses": {
+            "description": "User on going courses",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserStudentCourseDto" }
+          },
+          "previousCourses": {
+            "description": "User previous courses",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserStudentCourseDto" }
+          }
+        },
+        "required": ["id", "githubId", "fullName", "country", "city", "onGoingCourses", "previousCourses"]
+      },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "itemCount": { "type": "number" },
+          "total": { "type": "number" },
+          "current": { "type": "number" },
+          "pageSize": { "type": "number" },
+          "totalPages": { "type": "number" }
+        },
+        "required": ["itemCount", "total", "current", "pageSize", "totalPages"]
+      },
+      "UserStudentsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/UserStudentDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
       "StudentDto": {
         "type": "object",
         "properties": {
@@ -3467,17 +3538,6 @@
           "isActive",
           "contacts"
         ]
-      },
-      "PaginationMetaDto": {
-        "type": "object",
-        "properties": {
-          "itemCount": { "type": "number" },
-          "total": { "type": "number" },
-          "current": { "type": "number" },
-          "pageSize": { "type": "number" },
-          "totalPages": { "type": "number" }
-        },
-        "required": ["itemCount", "total", "current", "pageSize", "totalPages"]
       },
       "ScoreDto": {
         "type": "object",

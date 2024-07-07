@@ -1,7 +1,7 @@
-import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from '../../auth';
-import { StudentDto } from './dto';
+import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { StudentDto, UserStudentsDto, UserStudentsQueryDto } from './dto';
 import { StudentsService } from './students.service';
 
 @Controller('students')
@@ -9,6 +9,17 @@ import { StudentsService } from './students.service';
 @UseGuards(DefaultGuard)
 export class StudentsController {
   constructor(private studentsService: StudentsService) {}
+
+  @Get('/')
+  @ApiOperation({ operationId: 'getUserStudents' })
+  @ApiOkResponse({ type: UserStudentsDto })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, Role.Hirer])
+  public async getUserStudents(@Query() query: UserStudentsQueryDto) {
+    const usersWithoutStudents = await this.studentsService.findUserStudents(query);
+
+    return new UserStudentsDto(usersWithoutStudents);
+  }
 
   @Get(':studentId')
   @ApiOkResponse({ type: StudentDto })
