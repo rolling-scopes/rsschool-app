@@ -9,6 +9,7 @@ import ProfileFilled from '@ant-design/icons/ProfileFilled';
 import TeamOutlined from '@ant-design/icons/TeamOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
+import QqOutlined from '@ant-design/icons/QqOutlined';
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
@@ -135,6 +136,13 @@ const adminMenuItems: AdminMenuItemsData[] = [
     icon: <FileTextOutlined />,
     href: '/admin/prompts',
     access: session => isAdmin(session),
+  },
+  {
+    name: 'Students',
+    key: 'students',
+    icon: <QqOutlined />,
+    href: '/admin/students',
+    access: session => isAdmin(session) || isHirer(session),
   },
 ];
 

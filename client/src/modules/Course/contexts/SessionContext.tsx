@@ -10,6 +10,18 @@ import { useAsync } from 'react-use';
 import { useActiveCourseContext } from './ActiveCourseContext';
 import { hasRoleInAnyCourse } from 'domain/user';
 
+const AccessDeniedWarning = () => (
+  <Result
+    status="warning"
+    title="You don't have required role to access this page"
+    extra={
+      <Button type="primary" key="console" onClick={() => window.history.back()}>
+        Go Back
+      </Button>
+    }
+  />
+);
+
 export const SessionContext = React.createContext<Session>({} as Session);
 
 let sessionCache: Session | undefined;
@@ -19,6 +31,7 @@ type Props = React.PropsWithChildren<{
   course?: ProfileCourseDto;
   adminOnly?: boolean;
   anyCoursePowerUser?: boolean;
+  hirerOnly?: boolean;
 }>;
 
 export function SessionProvider(props: Props) {
@@ -49,6 +62,20 @@ export function SessionProvider(props: Props) {
   }, [error]);
 
   if (session && props.adminOnly && !session.isAdmin) {
+    return (
+      <Result
+        status="warning"
+        title="You don't have required role to access this page"
+        extra={
+          <Button type="primary" key="console" onClick={() => window.history.back()}>
+            Go Back
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (session && props.hirerOnly && !session.isHirer && !session.isAdmin) {
     return (
       <Result
         status="warning"

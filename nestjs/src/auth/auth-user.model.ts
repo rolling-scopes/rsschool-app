@@ -6,6 +6,7 @@ import type { AuthDetails } from './auth.service';
 export enum Role {
   Admin = 'admin',
   User = 'user',
+  Hirer = 'hirer',
 }
 
 export { CourseRole };
@@ -56,7 +57,7 @@ export class AuthUser {
     this.isAdmin = admin;
     this.isHirer = hirer;
     this.githubId = user.githubId;
-    this.appRoles = [admin ? Role.Admin : Role.User];
+    this.appRoles = [admin ? Role.Admin : Role.User, this.isHirer ? Role.Hirer : null].filter(Boolean);
     this.roles = roles;
     this.courses = coursesInfo;
     return this;
