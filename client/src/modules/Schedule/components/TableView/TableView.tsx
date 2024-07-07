@@ -67,7 +67,7 @@ const getColumns = ({
       key: ColumnKey.Name,
       title: ColumnName.Name,
       dataIndex: 'name',
-      render: renderTask,
+      render: (name, item) => renderTask(name, item.descriptionUrl),
       filteredValue: filteredInfo.name || null,
       ...getColumnSearchProps('name'),
     },

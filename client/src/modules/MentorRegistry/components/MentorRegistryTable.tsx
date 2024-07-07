@@ -1,5 +1,5 @@
-import React from 'react';
-import { Form, Table } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Form, Table, TablePaginationConfig } from 'antd';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
@@ -7,16 +7,32 @@ import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
 import { ColumnType } from 'antd/lib/table';
 
 type Props = {
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  total: number;
+  currentPage: number;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
   columns: ColumnType<MentorRegistryDto>[];
   handleTagClose: (tag: string) => void;
   handleClearAllButtonClick: () => void;
-  handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
+  handleTableChange: (
+    _: TablePaginationConfig,
+    filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
+  ) => void;
 };
 
 export function MentorRegistryTable(props: Props) {
-  const { tagFilters, filteredData, columns, handleTagClose, handleClearAllButtonClick, handleTableChange } = props;
+  const {
+    currentPage,
+    total,
+    tagFilters,
+    filteredData,
+    columns,
+    handleTagClose,
+    handleClearAllButtonClick,
+    handleTableChange,
+    setCurrentPage,
+  } = props;
   const [form] = Form.useForm();
 
   const tableWidth = 2000;
@@ -28,11 +44,10 @@ export function MentorRegistryTable(props: Props) {
         onClearAllButtonClick={handleClearAllButtonClick}
       />
       <Table<MentorRegistryDto>
-        pagination={{ pageSize: PAGINATION }}
-        size="large"
+        pagination={{ pageSize: PAGINATION, current: currentPage, onChange: setCurrentPage, total }}
         rowKey="id"
         dataSource={filteredData}
-        scroll={{ x: tableWidth, y: 'calc(95vh - 290px)' }}
+        scroll={{ x: tableWidth, y: 'calc(95vh - 340px)' }}
         columns={columns}
         onChange={handleTableChange}
       />

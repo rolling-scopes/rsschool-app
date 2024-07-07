@@ -109,6 +109,27 @@ export class CourseStatsService {
     return this.getCountries(courseId, this.studentRepository);
   }
 
+  public async getStudentsWithCertificatesCountries(courseId: number): Promise<{ countries: CountryStatDto[] }> {
+    const countries = await this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoin('student.user', 'user')
+      .leftJoin(Certificate, 'certificate', 'certificate.studentId = student.id')
+      .select('user.countryName', 'countryName')
+      .addSelect('COUNT(DISTINCT student.id)', 'count')
+      .where('student.courseId = :courseId', { courseId })
+      .andWhere('certificate.publicId IS NOT NULL')
+      .groupBy('user.countryName')
+      .orderBy('COUNT(DISTINCT student.id)', 'DESC')
+      .getRawMany<CountryStatDto>();
+
+    return {
+      countries: countries.map(country => ({
+        countryName: country.countryName,
+        count: Number(country.count),
+      })),
+    };
+  }
+
   private async getCountries(
     courseId: number,
     repository: Repository<Mentor | Student>,

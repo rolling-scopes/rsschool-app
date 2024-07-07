@@ -382,6 +382,12 @@
             "required": false,
             "in": "query",
             "schema": { "enum": ["started", "inprogress", "finished"], "type": "string" }
+          },
+          {
+            "name": "checker",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"], "type": "string" }
           }
         ],
         "responses": {
@@ -731,6 +737,21 @@
     "/courses/{courseId}/stats/students/countries": {
       "get": {
         "operationId": "getCourseStudentCountries",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CountriesStatsDto" } } }
+          },
+          "400": { "description": "" }
+        },
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/students/certificates/countries": {
+      "get": {
+        "operationId": "getCourseStudentCertificatesCountries",
         "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
@@ -1418,6 +1439,25 @@
         "tags": ["course mentors"]
       }
     },
+    "/course/{courseId}/mentor-reviews": {
+      "get": {
+        "operationId": "getMentorReviews",
+        "summary": "",
+        "parameters": [
+          { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "tasks", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewsDto" } } }
+          }
+        },
+        "tags": ["mentor-reviews"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -1846,14 +1886,35 @@
       "get": {
         "operationId": "getMentorRegistries",
         "summary": "",
-        "parameters": [],
+        "parameters": [
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "currentPage", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "cityName", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "preferedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "number" } }
+          },
+          {
+            "name": "preselectedCourses",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "number" } }
+          },
+          {
+            "name": "technicalMentoring",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } }
-              }
+              "application/json": { "schema": { "$ref": "#/components/schemas/FilterMentorRegistryResponse" } }
             }
           }
         },
@@ -3824,6 +3885,41 @@
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
       },
+      "MentorReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "Task solution id" },
+          "taskName": { "type": "string", "description": "Task name" },
+          "solutionUrl": { "type": "string", "description": "Task solution url" },
+          "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
+          "checker": { "type": "string", "description": "Checker github id" },
+          "score": { "type": "number", "description": "Task solution score" },
+          "maxScore": { "type": "number", "description": "Task max score" },
+          "student": { "type": "string", "description": "Student github id" },
+          "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
+          "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
+        },
+        "required": [
+          "id",
+          "taskName",
+          "solutionUrl",
+          "submittedAt",
+          "checker",
+          "score",
+          "maxScore",
+          "student",
+          "reviewedAt",
+          "taskDescriptionUrl"
+        ]
+      },
+      "MentorReviewsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorReviewDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",
@@ -4188,6 +4284,14 @@
           "contactsEpamEmail",
           "comment"
         ]
+      },
+      "FilterMentorRegistryResponse": {
+        "type": "object",
+        "properties": {
+          "mentors": { "type": "array", "items": { "$ref": "#/components/schemas/MentorRegistryDto" } },
+          "total": { "type": "number" }
+        },
+        "required": ["mentors", "total"]
       },
       "SaveCertificateDto": {
         "type": "object",

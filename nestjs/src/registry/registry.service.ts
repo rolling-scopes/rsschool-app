@@ -4,7 +4,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoursesService } from 'src/courses/courses.service';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
+import { paginate } from 'src/core/paginate';
 
 @Injectable()
 export class RegistryService {
@@ -50,21 +51,11 @@ export class RegistryService {
       .leftJoin('user.students', 'student')
       .leftJoin('student.certificate', 'certificate')
       .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
-      .orderBy('"mentorRegistry"."updatedDate"', 'DESC');
+      .orderBy('mentorRegistry.updatedDate', 'DESC');
   }
 
   public async findAllMentorRegistries() {
     const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
-      .andWhere('mentorRegistry.canceled = false')
-      .getMany();
-    return mentorRegistries;
-  }
-
-  public async findMentorRegistriesByCourseIdsAndDisciplines(coursesIds: number[], disciplines: string[]) {
-    const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
-      .where(`string_to_array(mentorRegistry.preferedCourses, ',') && :ids`, { ids: coursesIds })
-      .andWhere('mentorRegistry.canceled = false')
-      .orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplines`, { disciplines })
       .andWhere('mentorRegistry.canceled = false')
       .getMany();
     return mentorRegistries;
@@ -84,5 +75,93 @@ export class RegistryService {
       throw new BadRequestException('User not found');
     }
     await this.mentorsRegistryRepository.update({ userId: user.id }, { comment: comment ?? undefined });
+  }
+
+  public async filterMentorRegistries({
+    githubId,
+    page,
+    limit,
+    cityName,
+    preselectedCourses,
+    preferedCourses,
+    technicalMentoring,
+    coursesIds,
+    disciplineNames,
+  }: {
+    githubId?: string;
+    cityName?: string;
+    page: number;
+    limit: number;
+    preselectedCourses?: number[];
+    preferedCourses?: number[];
+    technicalMentoring?: string[];
+    coursesIds?: number[];
+    disciplineNames?: string[];
+  }) {
+    const req = this.getPreparedMentorRegistriesQuery();
+
+    if (githubId) {
+      req.andWhere(`"user"."githubId" ILIKE :githubId`, { githubId: `%${githubId}%` });
+    }
+    if (cityName) {
+      req.andWhere(`"user"."cityName" ILIKE :cityName`, { cityName: `%${cityName}%` });
+    }
+    if (preselectedCourses?.length) {
+      req.andWhere(
+        `EXISTS (
+        SELECT
+        FROM unnest(string_to_array(mentorRegistry.preselectedCourses, ',')) course
+        WHERE course = ANY(:preselectedCourses)
+      )`,
+        { preselectedCourses },
+      );
+    }
+    if (preferedCourses?.length) {
+      req.andWhere(
+        `EXISTS (
+        SELECT
+        FROM unnest(string_to_array(mentorRegistry.preferedCourses, ',')) course
+        WHERE course = ANY(:preferedCourses)
+      )`,
+        { preferedCourses },
+      );
+    }
+    if (technicalMentoring?.length) {
+      req.andWhere(
+        `EXISTS (
+        SELECT
+        FROM unnest(string_to_array(mentorRegistry.technicalMentoring, ',')) course
+        WHERE course = ANY(:technicalMentoring)
+      )`,
+        { technicalMentoring },
+      );
+    }
+
+    if (coursesIds?.length || disciplineNames?.length) {
+      req.andWhere(
+        new Brackets(qb => {
+          if (coursesIds?.length) {
+            qb.where(`string_to_array(mentorRegistry.preferedCourses, ',') && :coursesIds`, { coursesIds }).andWhere(
+              'mentorRegistry.canceled = false',
+            );
+          }
+          if (disciplineNames?.length) {
+            qb.orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplineNames`, {
+              disciplineNames,
+            }).andWhere('mentorRegistry.canceled = false');
+          }
+        }),
+      );
+    }
+
+    const response = await paginate(req, {
+      page,
+      limit,
+    });
+
+    return {
+      total: response.meta.total,
+      mentors: response.items,
+    };
   }
 }

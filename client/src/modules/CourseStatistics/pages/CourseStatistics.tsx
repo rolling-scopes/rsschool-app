@@ -11,6 +11,7 @@ import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
 import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
+import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
 
 const gapSize = 24;
 
@@ -70,6 +71,16 @@ function CourseStatistic() {
       title: 'taskPerformanceCard',
       component: <TaskPerformanceCard tasks={stats.courseTasks} />,
     },
+    stats?.studentsCertificatesCountries &&
+      stats.studentsStats.certifiedStudentsCount && {
+        title: 'studentsCertificatesCountriesCard',
+        component: (
+          <StudentsCertificatesCountriesCard
+            studentsCertificatesCountriesStats={stats.studentsCertificatesCountries}
+            certificatesCount={stats.studentsStats.certifiedStudentsCount}
+          />
+        ),
+      },
   ].filter(Boolean);
 
   return (

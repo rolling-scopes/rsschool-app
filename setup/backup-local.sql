@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.8 (Debian 12.8-1.pgdg110+1)
--- Dumped by pg_dump version 13.9
+-- Dumped from database version 15.5 (Debian 15.5-1.pgdg120+1)
+-- Dumped by pg_dump version 15.7 (Ubuntu 15.7-1.pgdg22.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -209,7 +209,9 @@ CREATE TABLE public.course (
     "usePrivateRepositories" boolean DEFAULT true NOT NULL,
     "personalMentoring" boolean DEFAULT true NOT NULL,
     logo character varying,
-    "disciplineId" integer
+    "disciplineId" integer,
+    "minStudentsPerMentor" integer DEFAULT 2,
+    "certificateThreshold" integer DEFAULT 70
 );
 
 
@@ -390,7 +392,8 @@ CREATE TABLE public.course_user (
     "isManager" boolean DEFAULT false NOT NULL,
     "isJuryActivist" boolean DEFAULT false NOT NULL,
     "isSupervisor" boolean DEFAULT false NOT NULL,
-    "isDementor" boolean DEFAULT false NOT NULL
+    "isDementor" boolean DEFAULT false NOT NULL,
+    "isActivist" boolean DEFAULT false NOT NULL
 );
 
 
@@ -821,7 +824,10 @@ CREATE TABLE public.mentor_registry (
     "technicalMentoring" text DEFAULT ''::text NOT NULL,
     "preselectedCourses" text DEFAULT ''::text NOT NULL,
     canceled boolean DEFAULT false NOT NULL,
-    "languagesMentoring" text DEFAULT ''::text NOT NULL
+    "languagesMentoring" text DEFAULT ''::text NOT NULL,
+    comment character varying,
+    "receivedDate" timestamp without time zone,
+    "sendDate" timestamp without time zone
 );
 
 
@@ -1050,6 +1056,44 @@ ALTER SEQUENCE public.profile_permissions_id_seq OWNED BY public.profile_permiss
 
 
 --
+-- Name: prompt; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.prompt (
+    id integer NOT NULL,
+    "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
+    type character varying(256) NOT NULL,
+    text character varying NOT NULL,
+    temperature double precision NOT NULL
+);
+
+
+ALTER TABLE public.prompt OWNER TO rs_master;
+
+--
+-- Name: prompt_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
+--
+
+CREATE SEQUENCE public.prompt_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.prompt_id_seq OWNER TO rs_master;
+
+--
+-- Name: prompt_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
+--
+
+ALTER SEQUENCE public.prompt_id_seq OWNED BY public.prompt.id;
+
+
+--
 -- Name: registry; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1241,7 +1285,8 @@ CREATE TABLE public.stage_interview (
     "isGoodCandidate" boolean,
     "courseId" integer,
     "courseTaskId" integer,
-    "isCanceled" boolean DEFAULT false NOT NULL
+    "isCanceled" boolean DEFAULT false NOT NULL,
+    score integer
 );
 
 
@@ -1256,7 +1301,8 @@ CREATE TABLE public.stage_interview_feedback (
     "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
     "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
     "stageInterviewId" integer NOT NULL,
-    json character varying NOT NULL
+    json character varying NOT NULL,
+    version integer
 );
 
 
@@ -2083,7 +2129,9 @@ CREATE TABLE public."user" (
     discord json,
     "providerUserId" character varying(64),
     provider character varying(32),
-    "contactsWhatsApp" character varying
+    "contactsWhatsApp" character varying,
+    languages text[] DEFAULT '{}'::text[] NOT NULL,
+    obfuscated boolean DEFAULT false NOT NULL
 );
 
 
@@ -2297,6 +2345,13 @@ ALTER TABLE ONLY public.profile_permissions ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: prompt id; Type: DEFAULT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.prompt ALTER COLUMN id SET DEFAULT nextval('public.prompt_id_seq'::regclass);
+
+
+--
 -- Name: registry id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -2492,10 +2547,10 @@ COPY public.consent (id, "createdDate", "updatedDate", "channelValue", "channelT
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId") FROM stdin;
-11	2019-08-27 07:36:13.565873	2020-03-13 15:39:41.477995	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	\N	f	2019-09-09 07:35:20.981+00	2020-01-31 07:35:20.981+00	Rolling Scopes School 2019 Q3	\N	f	\N	\N	t	t	\N	\N
-13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N
-23	2020-02-25 09:28:08.842897	2021-07-28 20:44:30.259905	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	\N	f	2021-05-31 21:00:00+00	2023-06-30 21:00:00+00	TEST COURSE	\N	t	2	\N	t	t	\N	\N
+COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId", "minStudentsPerMentor", "certificateThreshold") FROM stdin;
+11	2019-08-27 07:36:13.565873	2020-03-13 15:39:41.477995	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	\N	f	2019-09-09 07:35:20.981+00	2020-01-31 07:35:20.981+00	Rolling Scopes School 2019 Q3	\N	f	\N	\N	t	t	\N	\N	2	70
+13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N	2	70
+23	2020-02-25 09:28:08.842897	2021-07-28 20:44:30.259905	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	\N	f	2021-05-31 21:00:00+00	2023-06-30 21:00:00+00	TEST COURSE	\N	t	2	\N	t	t	\N	\N	2	70
 \.
 
 
@@ -2743,6 +2798,7 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 980	2021-06-23 09:56:42.176771	2021-07-09 06:19:59.834533	\N	\N	205	698	1	crossCheck	2084	2021-07-08 00:00:00+00	2021-07-15 23:59:00+00	23	4	jstask	f	\N	\N	\N	initial	\N
 725	2020-02-19 15:18:06.945	2023-01-31 20:06:50.347384	\N	\N	100	473	0.05	mentor	2084	2021-02-28 23:59:00+00	2021-03-17 23:59:00+00	23	\N	jstask	f	\N	\N	\N	initial	\N
 821	2021-02-28 09:07:38.664142	2023-01-31 20:16:09.773572	\N	\N	100	593	0.2	crossCheck	2084	2021-02-28 10:00:00+00	2021-03-09 23:59:00+00	23	4	htmltask	f	2023-01-18 23:59:00+00	\N	{}	initial	\N
+432	2024-06-19 18:49:00.876624	2024-06-19 18:49:00.876624	\N	\N	10	499	1	mentor	11569	2024-06-19 00:00:00+00	2027-07-16 23:59:59+00	23	\N	interview	f	\N	\N	\N	initial	\N
 \.
 
 
@@ -2750,12 +2806,12 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 -- Data for Name: course_user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId", "isManager", "isJuryActivist", "isSupervisor", "isDementor") FROM stdin;
-121	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2098	f	f	f	t
-122	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2103	f	f	f	t
-123	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	5481	f	f	f	t
-125	2023-02-03 07:46:43.309521	2023-02-03 08:05:32.461954	13	2098	f	f	f	t
-124	2023-02-03 07:46:36.33884	2023-02-03 08:36:06.162812	13	11569	f	f	f	t
+COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId", "isManager", "isJuryActivist", "isSupervisor", "isDementor", "isActivist") FROM stdin;
+121	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2098	f	f	f	t	f
+122	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	2103	f	f	f	t	f
+123	2023-02-02 14:54:28.484043	2023-02-02 14:54:28.484043	23	5481	f	f	f	t	f
+125	2023-02-03 07:46:43.309521	2023-02-03 08:05:32.461954	13	2098	f	f	f	t	f
+124	2023-02-03 07:46:36.33884	2023-02-03 08:36:06.162812	13	11569	f	f	f	t	f
 \.
 
 
@@ -3078,6 +3134,7 @@ COPY public.history (id, "createdDate", "updatedDate", event, "entityId", operat
 3	2023-01-31 20:08:42.169821	2023-01-31 20:08:42.169821	course_task	846	update	{"studentStartDate":"2021-02-28 23:59+00:00","studentEndDate":"2021-03-19 23:59+00:00","taskId":473,"taskOwnerId":2084,"checker":"mentor","scoreWeight":0.05,"maxScore":100,"type":"jstask","courseId":23,"id":846}	{"id":846,"createdDate":"2021-03-16T04:33:39.267Z","updatedDate":"2021-03-22T19:29:25.192Z","taskId":625,"courseId":23,"studentStartDate":"2021-03-16T04:32:00.000Z","studentEndDate":"2021-03-23T01:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":50,"scoreWeight":1,"checker":"crossCheck","taskOwnerId":2084,"pairsCount":4,"type":"jstask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
 4	2023-01-31 20:09:55.297027	2023-01-31 20:09:55.297027	course_task	766	update	{"studentStartDate":"2020-12-25 21:59+00:00","studentEndDate":"2021-03-10 23:59+00:00","taskId":595,"taskOwnerId":2084,"checker":"auto-test","scoreWeight":0.1,"maxScore":100,"type":"selfeducation","courseId":23,"id":766}	{"id":766,"createdDate":"2020-12-26T18:38:03.970Z","updatedDate":"2021-03-06T09:02:07.383Z","taskId":595,"courseId":23,"studentStartDate":"2020-12-25T21:59:00.000Z","studentEndDate":"2021-03-08T23:59:00.000Z","crossCheckEndDate":null,"mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.1,"checker":"auto-test","taskOwnerId":2084,"pairsCount":null,"type":"selfeducation","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":null}
 5	2023-01-31 20:16:09.766741	2023-01-31 20:16:09.766741	course_task	821	update	{"studentStartDate":"2021-02-28T10:00:00Z","studentEndDate":"2021-03-09T23:59:00Z","crossCheckEndDate":"2023-01-18T23:59:00Z","taskId":593,"taskOwnerId":2084,"checker":"crossCheck","scoreWeight":0.2,"maxScore":100,"type":"htmltask","pairsCount":4,"submitText":null,"validations":{},"courseId":23,"id":821}	{"id":821,"createdDate":"2021-02-28T09:07:38.664Z","updatedDate":"2023-01-31T20:05:46.644Z","taskId":593,"courseId":23,"studentStartDate":"2021-02-28T10:00:00.000Z","studentEndDate":"2021-03-09T23:59:00.000Z","crossCheckEndDate":"2023-01-17T22:05:00.000Z","mentorStartDate":null,"mentorEndDate":null,"maxScore":100,"scoreWeight":0.2,"checker":"crossCheck","taskOwnerId":2084,"pairsCount":4,"type":"htmltask","disabled":false,"crossCheckStatus":"initial","submitText":null,"validations":{}}
+6	2024-06-19 18:49:00.884833	2024-06-19 18:49:00.884833	course_task	432	insert	{"studentStartDate":"2024-06-19T00:00:00Z","studentEndDate":"2027-07-16T23:59:59Z","taskId":499,"taskOwnerId":11569,"checker":"mentor","scoreWeight":1,"maxScore":10,"type":"interview","courseId":23,"id":432,"createdDate":"2024-06-19T18:49:00.876Z","updatedDate":"2024-06-19T18:49:00.876Z","disabled":false,"crossCheckStatus":"initial"}	\N
 \.
 
 
@@ -3126,6 +3183,7 @@ COPY public.mentor (id, "createdDate", "updatedDate", "maxStudentsLimit", "cours
 1273	2020-04-06 15:39:40.768722	2020-04-06 15:39:40.768722	\N	23	2612	\N	f
 1274	2020-04-06 15:39:46.991811	2020-04-06 15:39:46.991811	\N	23	2084	\N	f
 1275	2020-04-06 15:39:51.547456	2020-04-06 15:39:51.547456	\N	23	2032	\N	f
+1276	2024-06-19 18:50:36.764741	2024-06-19 18:50:36.764741	2	23	11569	any	f
 \.
 
 
@@ -3133,7 +3191,8 @@ COPY public.mentor (id, "createdDate", "updatedDate", "maxStudentsLimit", "cours
 -- Data for Name: mentor_registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.mentor_registry (id, "userId", "preferedCourses", "maxStudentsLimit", "englishMentoring", "preferedStudentsLocation", "createdDate", "updatedDate", "technicalMentoring", "preselectedCourses", canceled, "languagesMentoring") FROM stdin;
+COPY public.mentor_registry (id, "userId", "preferedCourses", "maxStudentsLimit", "englishMentoring", "preferedStudentsLocation", "createdDate", "updatedDate", "technicalMentoring", "preselectedCourses", canceled, "languagesMentoring", comment, "receivedDate", "sendDate") FROM stdin;
+290	11569	13	2	f	any	2024-06-19 18:50:08.844455	2024-06-19 18:50:27.412364	JavaScript,NodeJs	23	f	AR	\N	\N	2024-06-19 18:50:27.41
 \.
 
 
@@ -3189,6 +3248,16 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 45	1674377676805	TeamDistributionStudent1674377676805
 46	1675245424426	UserGroup1675245424426
 47	1675345245770	Course1675345245770
+48	1676139987317	User1676139987317
+49	1685197747051	MentorRegistry1685197747051
+50	1686657350908	InterviewScore1686657350908
+51	1687009744110	Prompt1687009744110
+52	1691520611773	Temperature1691520611773
+53	1691524327332	Temperature1691524327332
+54	1693930286280	CourseUsersActivist1693930286280
+55	1699808604000	AddMinStudentPerMentorColumnToCourse1699808604000
+56	1700391857109	Obfuscation1700391857109
+57	1712137476312	Course1712137476312
 \.
 
 
@@ -3254,6 +3323,14 @@ COPY public.profile_permissions (id, "createdDate", "updatedDate", "userId", "is
 
 
 --
+-- Data for Name: prompt; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.prompt (id, "createdDate", "updatedDate", type, text, temperature) FROM stdin;
+\.
+
+
+--
 -- Data for Name: registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -3293,10 +3370,11 @@ COPY public.stage (id, "createdDate", "updatedDate", name, "courseId", status, "
 -- Data for Name: stage_interview; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "mentorId", "stageId", "isCompleted", decision, "isGoodCandidate", "courseId", "courseTaskId", "isCanceled") FROM stdin;
-10687	2020-04-07 20:27:20.124459	2020-04-07 20:27:20.124459	14327	1266	\N	f	\N	\N	13	408	f
-10689	2020-04-07 20:28:00.755084	2020-04-07 21:07:08.374015	14329	1266	\N	t	noButGoodCandidate	t	13	408	f
-10688	2020-04-07 20:27:41.249823	2023-02-03 07:48:18.719106	14329	1266	\N	f	\N	\N	13	408	t
+COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "mentorId", "stageId", "isCompleted", decision, "isGoodCandidate", "courseId", "courseTaskId", "isCanceled", score) FROM stdin;
+10687	2020-04-07 20:27:20.124459	2020-04-07 20:27:20.124459	14327	1266	\N	f	\N	\N	13	408	f	\N
+10689	2020-04-07 20:28:00.755084	2020-04-07 21:07:08.374015	14329	1266	\N	t	noButGoodCandidate	t	13	408	f	\N
+10688	2020-04-07 20:27:41.249823	2023-02-03 07:48:18.719106	14329	1266	\N	f	\N	\N	13	408	t	\N
+10690	2024-06-19 18:51:41.305547	2024-06-19 18:51:41.305547	14337	1276	\N	f	\N	\N	23	719	f	\N
 \.
 
 
@@ -3304,8 +3382,8 @@ COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "men
 -- Data for Name: stage_interview_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageInterviewId", json) FROM stdin;
-1234	2020-04-07 21:07:08.363918	2020-04-07 21:07:08.363918	10689	{"skills":{"htmlCss":{"level":3},"dataStructures":{"array":3,"stack":4},"common":{"binaryNumber":4,"sortingAndSearchAlgorithms":3}},"programmingTask":{"resolved":1,"codeWritingLevel":3},"english":{"levelStudentOpinion":9,"levelMentorOpinion":8},"resume":{"verdict":"noButGoodCandidate","comment":"test"}}
+COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageInterviewId", json, version) FROM stdin;
+1234	2020-04-07 21:07:08.363918	2020-04-07 21:07:08.363918	10689	{"skills":{"htmlCss":{"level":3},"dataStructures":{"array":3,"stack":4},"common":{"binaryNumber":4,"sortingAndSearchAlgorithms":3}},"programmingTask":{"resolved":1,"codeWritingLevel":3},"english":{"levelStudentOpinion":9,"levelMentorOpinion":8},"resume":{"verdict":"noButGoodCandidate","comment":"test"}}	\N
 \.
 
 
@@ -3780,6 +3858,7 @@ COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", desc
 735	2021-07-26 04:57:34.397304	2021-07-27 07:39:38.807563	Test JS Basics [RU]	https://ru.code-basics.com/languages/javascript	\N	manual	f	f	f	\N	\N	selfeducation	stage0	{}		\N	\N	\N
 736	2021-07-27 20:49:41.263593	2021-07-27 20:49:41.263593	rs.ios.crosscheck.task9	https://github.com/rolling-scopes-school/rs.ios.stage-task9	\N	manual	f	f	f	\N	\N	objctask	stage3	{}		\N	\N	\N
 498	2022-03-27 11:50:14.892444	2022-03-27 11:50:14.892444	test	https://example.com		\N	\N	f	f	\N	\N	Kotlin task		{}		\N	\N	\N
+499	2024-06-19 18:48:13.436646	2024-06-19 18:48:13.553689	core-js-2-interview	https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md		\N	f	f	f			interview	interview	{"template":"corejs2"}		1	499	\N
 \.
 
 
@@ -3796,6 +3875,7 @@ COPY public.task_artefact (id, "createdDate", "updatedDate", "courseTaskId", "st
 --
 
 COPY public.task_checker (id, "createdDate", "updatedDate", "courseTaskId", "studentId", "mentorId") FROM stdin;
+4149	2024-06-19 18:50:57.699696	2024-06-19 18:50:57.699696	432	14338	1276
 \.
 
 
@@ -3804,6 +3884,7 @@ COPY public.task_checker (id, "createdDate", "updatedDate", "courseTaskId", "stu
 --
 
 COPY public.task_criteria ("taskId", "createdDate", "updatedDate", criteria) FROM stdin;
+499	2024-06-19 18:48:13.538796	2024-06-19 18:48:13.538796	[]
 \.
 
 
@@ -3930,37 +4011,37 @@ COPY public.typeorm_metadata (type, database, schema, "table", name, value) FROM
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "updatedDate", "firstNameNative", "lastNameNative", "tshirtSize", "tshirtFashion", "dateOfBirth", "locationName", "locationId", "educationHistory", "employmentHistory", "contactsEpamEmail", "contactsPhone", "contactsEmail", "externalAccounts", "epamApplicantId", activist, "englishLevel", "lastActivityTime", "isActive", "primaryEmail", "contactsTelegram", "contactsSkype", "contactsNotes", "aboutMyself", "contactsLinkedIn", "profilePermissionsId", "countryName", "cityName", "opportunitiesConsent", "cvLink", "militaryService", discord, "providerUserId", provider, "contactsWhatsApp") FROM stdin;
-11563	apalchys			2020-04-06 15:12:34.19737	2020-04-06 15:15:02.729722	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	f	\N	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	f	\N	\N	\N	11563	github	\N
-2693	viktoriyavorozhun	\N	\N	2019-04-24 13:42:45.500139	2019-10-18 08:07:58.858658	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2693	github	\N
-2098	yauhenkavalchuk	\N	\N	2019-04-17 11:41:21.396686	2019-11-12 11:22:33.350237	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567594678450	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2098	github	\N
-2103	shastel	\N	\N	2019-04-17 11:41:21.396686	2020-03-28 19:57:33.715031	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566996696787	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2103	github	\N
-5481	alreadybored	\N	\N	2019-09-09 17:27:41.909149	2020-03-22 14:10:37.252351	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568050061907	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	5481	github	\N
-2115	rootthelure	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:21.551616	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2115	github	\N
-2480	pavelrazuvalau	\N	\N	2019-04-17 11:41:21.396686	2019-11-05 16:52:28.602784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567072599465	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2480	github	\N
-2612	dmitryromaniuk	\N	\N	2019-04-24 13:42:44.206396	2019-12-26 08:27:30.060107	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2612	github	\N
-10031	artem-bagritsevich	\N	\N	2020-02-11 08:38:35.202688	2020-03-05 11:50:05.118784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581410315197	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10031	github	\N
-2032	mikhama	\N	\N	2019-04-17 11:41:21.396686	2020-02-24 09:36:43.272628	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567578141812	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2032	github	\N
-1328	davojta	\N	\N	2019-04-17 11:41:21.396686	2019-09-07 04:28:42.419938	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567830522415	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1328	github	\N
-3961	sergeyshalyapin	\N	\N	2019-05-15 14:49:46.402468	2020-02-12 08:17:55.231843	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3961	github	\N
-4476	abramenal	\N	\N	2019-09-02 12:28:32.979516	2020-03-01 21:13:30.351302	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1567427312977	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4476	github	\N
-10130	sixtyxi	\N	\N	2020-02-13 11:35:19.12045	2020-02-13 11:35:19.12045	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581593719117	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10130	github	\N
-7485	rootical	\N	\N	2019-12-19 12:07:57.161662	2020-03-05 18:51:41.896803	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1576757277159	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	7485	github	\N
-606	irinainina	\N	\N	2019-04-17 11:41:21.396686	2019-08-28 17:19:48.460791	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567012788456	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	606	github	\N
-2595	anik188	\N	\N	2019-04-24 13:42:43.967659	2020-03-06 15:43:33.384469	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	t	a1	1567423260809	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2595	github	\N
-6776	ksenia-mahilnaya	\N	\N	2019-09-17 11:16:55.976071	2019-09-17 12:19:51.740451	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568719015974	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	6776	github	\N
-1090	pulya10c	\N	\N	2019-04-17 11:41:21.396686	2019-09-13 10:21:35.108464	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567492440483	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1090	github	\N
-4428	egngron	\N	\N	2019-08-06 12:06:24.920343	2019-08-06 12:06:24.920343	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4428	github	\N
-4749	studentluffi	\N	\N	2019-09-09 10:09:09.275849	2019-09-09 10:09:28.91177	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568023749273	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4749	github	\N
-587	sijioth	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:03.059291	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	587	github	\N
-2084	dzmitry-varabei	\N	\N	2019-04-17 11:41:21.396686	2019-09-05 10:13:27.273815	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567678407268	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2084	github	\N
-2444	toshabely	\N	\N	2019-04-17 11:41:21.396686	2019-08-22 11:56:20.531337	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2444	github	\N
-2277	anv21	\N	\N	2019-04-17 11:41:21.396686	2020-01-18 11:47:48.686227	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567683807154	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2277	github	\N
-3493	humanamburu	\N	\N	2019-04-25 06:42:53.208093	2019-09-24 11:22:04.181665	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3493	github	\N
-2549	kvtofan	\N	\N	2019-04-17 11:41:21.396686	2019-09-24 14:56:49.229102	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1563521151921	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2549	github	\N
-2089	yuliahope	\N	\N	2019-04-17 11:41:21.396686	2019-08-29 11:15:32.412097	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566418583423	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2089	github	\N
-677	amoebiusss	Test 1	Last Name	2019-04-17 11:41:21.396686	2020-04-06 15:30:27.059612	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1568012639853	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	677	github	\N
-11569	valerydluski	name	last name	2020-04-06 15:12:34.19737	2023-02-03 08:38:45.621748	\N	\N	\N	\N	\N	Minsk	12158	[]	[]	example_mail@epam.com	+325155534711	hello@example.com	[]	\N	f	b2	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	t	\N	\N	\N	12341	github	\N
+COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "updatedDate", "firstNameNative", "lastNameNative", "tshirtSize", "tshirtFashion", "dateOfBirth", "locationName", "locationId", "educationHistory", "employmentHistory", "contactsEpamEmail", "contactsPhone", "contactsEmail", "externalAccounts", "epamApplicantId", activist, "englishLevel", "lastActivityTime", "isActive", "primaryEmail", "contactsTelegram", "contactsSkype", "contactsNotes", "aboutMyself", "contactsLinkedIn", "profilePermissionsId", "countryName", "cityName", "opportunitiesConsent", "cvLink", "militaryService", discord, "providerUserId", provider, "contactsWhatsApp", languages, obfuscated) FROM stdin;
+11563	apalchys			2020-04-06 15:12:34.19737	2020-04-06 15:15:02.729722	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	f	\N	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	f	\N	\N	\N	11563	github	\N	{}	f
+2693	viktoriyavorozhun	\N	\N	2019-04-24 13:42:45.500139	2019-10-18 08:07:58.858658	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2693	github	\N	{}	f
+2098	yauhenkavalchuk	\N	\N	2019-04-17 11:41:21.396686	2019-11-12 11:22:33.350237	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567594678450	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2098	github	\N	{}	f
+2103	shastel	\N	\N	2019-04-17 11:41:21.396686	2020-03-28 19:57:33.715031	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566996696787	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2103	github	\N	{}	f
+5481	alreadybored	\N	\N	2019-09-09 17:27:41.909149	2020-03-22 14:10:37.252351	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568050061907	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	5481	github	\N	{}	f
+2115	rootthelure	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:21.551616	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2115	github	\N	{}	f
+2480	pavelrazuvalau	\N	\N	2019-04-17 11:41:21.396686	2019-11-05 16:52:28.602784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567072599465	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2480	github	\N	{}	f
+2612	dmitryromaniuk	\N	\N	2019-04-24 13:42:44.206396	2019-12-26 08:27:30.060107	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2612	github	\N	{}	f
+10031	artem-bagritsevich	\N	\N	2020-02-11 08:38:35.202688	2020-03-05 11:50:05.118784	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581410315197	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10031	github	\N	{}	f
+2032	mikhama	\N	\N	2019-04-17 11:41:21.396686	2020-02-24 09:36:43.272628	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567578141812	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2032	github	\N	{}	f
+1328	davojta	\N	\N	2019-04-17 11:41:21.396686	2019-09-07 04:28:42.419938	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567830522415	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1328	github	\N	{}	f
+3961	sergeyshalyapin	\N	\N	2019-05-15 14:49:46.402468	2020-02-12 08:17:55.231843	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3961	github	\N	{}	f
+4476	abramenal	\N	\N	2019-09-02 12:28:32.979516	2020-03-01 21:13:30.351302	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1567427312977	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4476	github	\N	{}	f
+10130	sixtyxi	\N	\N	2020-02-13 11:35:19.12045	2020-02-13 11:35:19.12045	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1581593719117	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	10130	github	\N	{}	f
+7485	rootical	\N	\N	2019-12-19 12:07:57.161662	2020-03-05 18:51:41.896803	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1576757277159	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	7485	github	\N	{}	f
+606	irinainina	\N	\N	2019-04-17 11:41:21.396686	2019-08-28 17:19:48.460791	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567012788456	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	606	github	\N	{}	f
+2595	anik188	\N	\N	2019-04-24 13:42:43.967659	2020-03-06 15:43:33.384469	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	t	a1	1567423260809	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2595	github	\N	{}	f
+6776	ksenia-mahilnaya	\N	\N	2019-09-17 11:16:55.976071	2019-09-17 12:19:51.740451	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568719015974	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	6776	github	\N	{}	f
+1090	pulya10c	\N	\N	2019-04-17 11:41:21.396686	2019-09-13 10:21:35.108464	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567492440483	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	1090	github	\N	{}	f
+4428	egngron	\N	\N	2019-08-06 12:06:24.920343	2019-08-06 12:06:24.920343	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4428	github	\N	{}	f
+4749	studentluffi	\N	\N	2019-09-09 10:09:09.275849	2019-09-09 10:09:28.91177	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	f	a1	1568023749273	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	4749	github	\N	{}	f
+587	sijioth	\N	\N	2019-04-17 11:41:21.396686	2019-06-10 14:20:03.059291	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	587	github	\N	{}	f
+2084	dzmitry-varabei	\N	\N	2019-04-17 11:41:21.396686	2019-09-05 10:13:27.273815	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567678407268	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2084	github	\N	{}	f
+2444	toshabely	\N	\N	2019-04-17 11:41:21.396686	2019-08-22 11:56:20.531337	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2444	github	\N	{}	f
+2277	anv21	\N	\N	2019-04-17 11:41:21.396686	2020-01-18 11:47:48.686227	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567683807154	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2277	github	\N	{}	f
+3493	humanamburu	\N	\N	2019-04-25 06:42:53.208093	2019-09-24 11:22:04.181665	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	3493	github	\N	{}	f
+2549	kvtofan	\N	\N	2019-04-17 11:41:21.396686	2019-09-24 14:56:49.229102	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1563521151921	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2549	github	\N	{}	f
+2089	yuliahope	\N	\N	2019-04-17 11:41:21.396686	2019-08-29 11:15:32.412097	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1566418583423	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2089	github	\N	{}	f
+677	amoebiusss	Test 1	Last Name	2019-04-17 11:41:21.396686	2020-04-06 15:30:27.059612	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1568012639853	f	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	677	github	\N	{}	f
+11569	valerydluski	name	last name	2020-04-06 15:12:34.19737	2024-06-19 18:50:08.847974	\N	\N	\N	\N	\N	Minsk	12158	[]	[]	example_mail@epam.com	+325155534711	hello@example.com	[]	\N	f	b2	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	t	\N	\N	\N	12341	github	\N	{AR}	f
 \.
 
 
@@ -4019,7 +4100,7 @@ SELECT pg_catalog.setval('public.course_manager_id_seq', 30, true);
 -- Name: course_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.course_task_id_seq', 431, true);
+SELECT pg_catalog.setval('public.course_task_id_seq', 432, true);
 
 
 --
@@ -4068,7 +4149,7 @@ SELECT pg_catalog.setval('public.feedback_id_seq', 615, true);
 -- Name: history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.history_id_seq', 5, true);
+SELECT pg_catalog.setval('public.history_id_seq', 6, true);
 
 
 --
@@ -4089,21 +4170,21 @@ SELECT pg_catalog.setval('public.interview_question_id_seq', 1, false);
 -- Name: mentor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.mentor_id_seq', 1275, true);
+SELECT pg_catalog.setval('public.mentor_id_seq', 1276, true);
 
 
 --
 -- Name: mentor_registry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
+SELECT pg_catalog.setval('public.mentor_registry_id_seq', 290, true);
 
 
 --
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 47, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 57, true);
 
 
 --
@@ -4118,6 +4199,13 @@ SELECT pg_catalog.setval('public.private_feedback_id_seq', 65, true);
 --
 
 SELECT pg_catalog.setval('public.profile_permissions_id_seq', 115, true);
+
+
+--
+-- Name: prompt_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
+--
+
+SELECT pg_catalog.setval('public.prompt_id_seq', 1, false);
 
 
 --
@@ -4159,7 +4247,7 @@ SELECT pg_catalog.setval('public.stage_interview_feedback_id_seq', 1234, true);
 -- Name: stage_interview_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.stage_interview_id_seq', 10689, true);
+SELECT pg_catalog.setval('public.stage_interview_id_seq', 10690, true);
 
 
 --
@@ -4194,14 +4282,14 @@ SELECT pg_catalog.setval('public.task_artefact_id_seq', 226, true);
 -- Name: task_checker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.task_checker_id_seq', 4148, true);
+SELECT pg_catalog.setval('public.task_checker_id_seq', 4149, true);
 
 
 --
 -- Name: task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.task_id_seq', 498, true);
+SELECT pg_catalog.setval('public.task_id_seq', 499, true);
 
 
 --
@@ -4697,6 +4785,14 @@ ALTER TABLE ONLY public.student_team_distribution_team_distribution
 
 
 --
+-- Name: prompt PK_d8e3aa07a95560a445ad50fb931; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.prompt
+    ADD CONSTRAINT "PK_d8e3aa07a95560a445ad50fb931" PRIMARY KEY (id);
+
+
+--
 -- Name: task_interview_student PK_e01dbf882c881571c02d3e59bf2; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4814,6 +4910,14 @@ ALTER TABLE ONLY public.mentor
 
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT "UQ_8a167196d86062fa6abf6f0d546" UNIQUE (alias);
+
+
+--
+-- Name: prompt UQ_8b52c9f9bf5ffaba2f772c65456; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.prompt
+    ADD CONSTRAINT "UQ_8b52c9f9bf5ffaba2f772c65456" UNIQUE (type);
 
 
 --

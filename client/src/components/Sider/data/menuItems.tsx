@@ -200,6 +200,12 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     getUrl: (course: Course) => `/course/admin/interviews?course=${course.alias}`,
     courseAccess: isCourseManager,
   },
+  {
+    name: 'Mentor Tasks Review',
+    key: 'mentorTasksReview',
+    getUrl: (course: Course) => `/course/admin/mentor-tasks-review?course=${course.alias}`,
+    courseAccess: some(isCourseManager, isDementor),
+  },
 ];
 
 export function getCourseManagementMenuItems(session: Session, activeCourse: Course | null): MenuItemsRenderData[] {
