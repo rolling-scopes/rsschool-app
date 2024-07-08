@@ -7177,6 +7177,99 @@ export interface UserNotificationsDto {
 /**
  * 
  * @export
+ * @interface UserStudentCourseDto
+ */
+export interface UserStudentCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserStudentCourseDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserStudentCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserStudentCourseDto
+     */
+    'hasCertificate': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UserStudentDto
+ */
+export interface UserStudentDto {
+    /**
+     * User id
+     * @type {number}
+     * @memberof UserStudentDto
+     */
+    'id': number;
+    /**
+     * User github id
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'githubId': string;
+    /**
+     * User full name
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'fullName': string;
+    /**
+     * User country
+     * @type {object}
+     * @memberof UserStudentDto
+     */
+    'country': object;
+    /**
+     * User city
+     * @type {object}
+     * @memberof UserStudentDto
+     */
+    'city': object;
+    /**
+     * User on going courses
+     * @type {Array<UserStudentCourseDto>}
+     * @memberof UserStudentDto
+     */
+    'onGoingCourses': Array<UserStudentCourseDto>;
+    /**
+     * User previous courses
+     * @type {Array<UserStudentCourseDto>}
+     * @memberof UserStudentDto
+     */
+    'previousCourses': Array<UserStudentCourseDto>;
+}
+/**
+ * 
+ * @export
+ * @interface UserStudentsDto
+ */
+export interface UserStudentsDto {
+    /**
+     * 
+     * @type {Array<UserStudentDto>}
+     * @memberof UserStudentsDto
+     */
+    'content': Array<UserStudentDto>;
+    /**
+     * 
+     * @type {PaginationMetaDto}
+     * @memberof UserStudentsDto
+     */
+    'pagination': PaginationMetaDto;
+}
+/**
+ * 
+ * @export
  * @interface Validations
  */
 export interface Validations {
@@ -16063,6 +16156,74 @@ export const StudentsApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {string} [student] 
+         * @param {string} [country] 
+         * @param {string} [city] 
+         * @param {string} [ongoingCourses] 
+         * @param {string} [previousCourses] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserStudents: async (current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'current' is not null or undefined
+            assertParamExists('getUserStudents', 'current', current)
+            // verify required parameter 'pageSize' is not null or undefined
+            assertParamExists('getUserStudents', 'pageSize', pageSize)
+            const localVarPath = `/students`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (student !== undefined) {
+                localVarQueryParameter['student'] = student;
+            }
+
+            if (country !== undefined) {
+                localVarQueryParameter['country'] = country;
+            }
+
+            if (city !== undefined) {
+                localVarQueryParameter['city'] = city;
+            }
+
+            if (ongoingCourses !== undefined) {
+                localVarQueryParameter['ongoingCourses'] = ongoingCourses;
+            }
+
+            if (previousCourses !== undefined) {
+                localVarQueryParameter['previousCourses'] = previousCourses;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -16081,6 +16242,22 @@ export const StudentsApiFp = function(configuration?: Configuration) {
          */
         async getStudent(studentId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStudent(studentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {string} [student] 
+         * @param {string} [country] 
+         * @param {string} [city] 
+         * @param {string} [ongoingCourses] 
+         * @param {string} [previousCourses] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserStudentsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -16102,6 +16279,21 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
         getStudent(studentId: number, options?: any): AxiosPromise<StudentDto> {
             return localVarFp.getStudent(studentId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {string} [student] 
+         * @param {string} [country] 
+         * @param {string} [city] 
+         * @param {string} [ongoingCourses] 
+         * @param {string} [previousCourses] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: any): AxiosPromise<UserStudentsDto> {
+            return localVarFp.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -16121,6 +16313,23 @@ export class StudentsApi extends BaseAPI {
      */
     public getStudent(studentId: number, options?: AxiosRequestConfig) {
         return StudentsApiFp(this.configuration).getStudent(studentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} current 
+     * @param {string} pageSize 
+     * @param {string} [student] 
+     * @param {string} [country] 
+     * @param {string} [city] 
+     * @param {string} [ongoingCourses] 
+     * @param {string} [previousCourses] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
