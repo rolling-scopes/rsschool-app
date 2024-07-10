@@ -27,7 +27,7 @@ function Page() {
       if (!taskId) {
         throw new Error();
       }
-      const { data } = await api.getRSSchoolAppTest(Number(taskId));
+      const { data } = await api.getAutoTest(Number(taskId));
       if (data) {
         setSelectedTask(data);
       } else {

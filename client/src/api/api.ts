@@ -552,6 +552,49 @@ export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
 /**
  * 
  * @export
+ * @interface BasicAutoTestTaskDto
+ */
+export interface BasicAutoTestTaskDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'maxAttemptsNumber': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'numberOfQuestions': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'strictAttemptsMode': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'thresholdPercentage': object | null;
+}
+/**
+ * 
+ * @export
  * @interface ChannelSettings
  */
 export interface ChannelSettings {
@@ -4020,49 +4063,6 @@ export interface MentorStudentDto {
      * @memberof MentorStudentDto
      */
     'repoUrl': string | null;
-}
-/**
- * 
- * @export
- * @interface MinimizedAutoTestTaskDto
- */
-export interface MinimizedAutoTestTaskDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'maxAttemptsNumber': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'numberOfQuestions': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'strictAttemptsMode': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof MinimizedAutoTestTaskDto
-     */
-    'thresholdPercentage': number;
 }
 /**
  * 
@@ -8185,11 +8185,15 @@ export const AutoTestsApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllMinimizedRSSchoolAppTests: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/auto-test`;
+        getAutoTest: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getAutoTest', 'id', id)
+            const localVarPath = `/auto-test/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8214,15 +8218,11 @@ export const AutoTestsApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRSSchoolAppTest: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getRSSchoolAppTest', 'id', id)
-            const localVarPath = `/auto-test/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getBasicAutoTests: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auto-test`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8257,21 +8257,21 @@ export const AutoTestsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllMinimizedRSSchoolAppTests(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MinimizedAutoTestTaskDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllMinimizedRSSchoolAppTests(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRSSchoolAppTest(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AutoTestTaskDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRSSchoolAppTest(id, options);
+        async getAutoTest(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AutoTestTaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAutoTest(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBasicAutoTests(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicAutoTestTaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBasicAutoTests(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -8286,20 +8286,20 @@ export const AutoTestsApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllMinimizedRSSchoolAppTests(options?: any): AxiosPromise<Array<MinimizedAutoTestTaskDto>> {
-            return localVarFp.getAllMinimizedRSSchoolAppTests(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRSSchoolAppTest(id: number, options?: any): AxiosPromise<AutoTestTaskDto> {
-            return localVarFp.getRSSchoolAppTest(id, options).then((request) => request(axios, basePath));
+        getAutoTest(id: number, options?: any): AxiosPromise<AutoTestTaskDto> {
+            return localVarFp.getAutoTest(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBasicAutoTests(options?: any): AxiosPromise<Array<BasicAutoTestTaskDto>> {
+            return localVarFp.getBasicAutoTests(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8313,23 +8313,23 @@ export const AutoTestsApiFactory = function (configuration?: Configuration, base
 export class AutoTestsApi extends BaseAPI {
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AutoTestsApi
-     */
-    public getAllMinimizedRSSchoolAppTests(options?: AxiosRequestConfig) {
-        return AutoTestsApiFp(this.configuration).getAllMinimizedRSSchoolAppTests(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AutoTestsApi
      */
-    public getRSSchoolAppTest(id: number, options?: AxiosRequestConfig) {
-        return AutoTestsApiFp(this.configuration).getRSSchoolAppTest(id, options).then((request) => request(this.axios, this.basePath));
+    public getAutoTest(id: number, options?: AxiosRequestConfig) {
+        return AutoTestsApiFp(this.configuration).getAutoTest(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AutoTestsApi
+     */
+    public getBasicAutoTests(options?: AxiosRequestConfig) {
+        return AutoTestsApiFp(this.configuration).getBasicAutoTests(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

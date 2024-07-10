@@ -1,5 +1,5 @@
 import { Col, ColProps, Row, message } from 'antd';
-import { AutoTestsApi, MinimizedAutoTestTaskDto } from 'api';
+import { AutoTestsApi, BasicAutoTestTaskDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
@@ -19,13 +19,13 @@ const api = new AutoTestsApi();
 
 function Page() {
   const { courses } = useActiveCourseContext();
-  const [tests, setTests] = useState<MinimizedAutoTestTaskDto[]>([]);
+  const [tests, setTests] = useState<BasicAutoTestTaskDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useAsync(async () => {
     try {
       setIsLoading(true);
-      const resp = await api.getAllMinimizedRSSchoolAppTests();
+      const resp = await api.getBasicAutoTests();
       setTests(resp.data);
       setIsLoading(false);
     } catch (e) {
