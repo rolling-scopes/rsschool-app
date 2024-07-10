@@ -8,9 +8,17 @@ type Props = {
   handleChange: TableProps<UserStudentDto>['onChange'];
   loading: boolean;
   courses: CourseDto[];
+  setActiveStudent: (student: UserStudentDto | null) => void;
 };
 
-export default function StudentsTable({ content, pagination, handleChange, loading, courses }: Props) {
+export default function StudentsTable({
+  content,
+  pagination,
+  handleChange,
+  loading,
+  courses,
+  setActiveStudent,
+}: Props) {
   return (
     <Table<UserStudentDto>
       showHeader
@@ -20,6 +28,11 @@ export default function StudentsTable({ content, pagination, handleChange, loadi
       onChange={handleChange}
       rowKey="id"
       pagination={pagination}
+      onRow={record => {
+        return {
+          onClick: () => setActiveStudent(record),
+        };
+      }}
       loading={loading}
       bordered
       /**
