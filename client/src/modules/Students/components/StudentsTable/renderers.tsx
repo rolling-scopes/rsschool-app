@@ -83,6 +83,7 @@ export const getColumns = (courses: CourseDto[]): ColumnsType<UserStudentDto> =>
     key: ColumnKey.PreviousCourses,
     dataIndex: ColumnKey.PreviousCourses,
     render: coursesRenderer,
+    width: 400,
     filters: courses.filter(course => course.completed).map(course => ({ text: course.alias, value: course.id })),
     filterSearch: true,
   },
