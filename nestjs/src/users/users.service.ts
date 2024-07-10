@@ -69,4 +69,14 @@ export class UsersService {
       `${modelName}.discord`,
     ];
   }
+
+  public static getUserContactsFields(modelName = 'user') {
+    return [
+      `${modelName}.contactsEmail`,
+      `${modelName}.contactsTelegram`,
+      `${modelName}.contactsLinkedIn`,
+      `${modelName}.contactsSkype`,
+      `${modelName}.contactsPhone`,
+    ];
+  }
 }
