@@ -6,14 +6,14 @@ export class BasicAutoTestTaskDto {
     this.id = task.id;
     this.name = task.name;
     this.maxAttemptsNumber = isNaN(task?.attributes?.public?.maxAttemptsNumber)
-      ? 0
+      ? null
       : Number(task?.attributes?.public?.maxAttemptsNumber);
     this.numberOfQuestions = isNaN(task?.attributes?.public?.numberOfQuestions)
-      ? 0
+      ? null
       : Number(task?.attributes?.public?.numberOfQuestions);
     this.strictAttemptsMode = !!task?.attributes?.public?.strictAttemptsMode;
     this.thresholdPercentage = isNaN(task?.attributes?.public?.tresholdPercentage)
-      ? 0
+      ? null
       : Number(task?.attributes?.public?.tresholdPercentage);
   }
 
@@ -23,15 +23,15 @@ export class BasicAutoTestTaskDto {
   @ApiProperty()
   public name: string;
 
-  @ApiProperty()
-  public maxAttemptsNumber: number;
+  @ApiProperty({nullable: true})
+  public maxAttemptsNumber: number | null;
 
-  @ApiProperty()
-  public numberOfQuestions: number;
+  @ApiProperty({nullable: true})
+  public numberOfQuestions: number | null;
 
-  @ApiProperty()
-  public strictAttemptsMode: boolean;
+  @ApiProperty({nullable: true})
+  public strictAttemptsMode: boolean | null;
 
-  @ApiProperty()
-  public thresholdPercentage: number;
+  @ApiProperty({nullable: true})
+  public thresholdPercentage: number | null;
 }
