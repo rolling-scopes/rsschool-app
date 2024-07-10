@@ -1,4 +1,4 @@
-import { Space, Tag, Tooltip } from 'antd';
+import { Flex, Space, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseDto, UserStudentCourseDto, UserStudentDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -10,6 +10,7 @@ export enum ColumnKey {
   PreviousCourses = 'previousCourses',
   Country = 'country',
   City = 'city',
+  Languages = 'languages',
 }
 
 enum ColumnName {
@@ -18,6 +19,7 @@ enum ColumnName {
   PreviousCourses = 'Previous Courses',
   Country = 'Country',
   City = 'City',
+  Languages = 'Languages',
 }
 
 const getSearchProps = (key: string) => ({
@@ -63,33 +65,53 @@ export const getColumns = (courses: CourseDto[]): ColumnsType<UserStudentDto> =>
     key: ColumnKey.Student,
     title: ColumnName.Student,
     dataIndex: ColumnKey.Student,
-    width: 200,
+    width: 225,
     render: (_v, record) => <GithubUserLink value={record.githubId} fullName={record.fullName} />,
     ...getSearchProps(ColumnKey.Student),
   },
   {
     title: ColumnName.OnGoingCourses,
+    key: ColumnKey.OnGoingCourses,
     dataIndex: ColumnKey.OnGoingCourses,
     width: 400,
     render: coursesRenderer,
     filters: courses.filter(course => !course.completed).map(course => ({ text: course.alias, value: course.id })),
+    filterSearch: true,
   },
   {
     title: ColumnName.PreviousCourses,
+    key: ColumnKey.PreviousCourses,
     dataIndex: ColumnKey.PreviousCourses,
     render: coursesRenderer,
+    width: 400,
     filters: courses.filter(course => course.completed).map(course => ({ text: course.alias, value: course.id })),
+    filterSearch: true,
   },
   {
     title: ColumnName.Country,
+    key: ColumnKey.Country,
     dataIndex: ColumnKey.Country,
     width: 200,
     ...getSearchProps(ColumnKey.Country),
   },
   {
     title: ColumnName.City,
+    key: ColumnKey.City,
     dataIndex: ColumnKey.City,
     width: 200,
     ...getSearchProps(ColumnKey.City),
+  },
+  {
+    title: ColumnName.Languages,
+    dataIndex: ColumnKey.Languages,
+    key: ColumnKey.Languages,
+    width: 150,
+    render: (languages: string[]) => (
+      <Flex wrap="wrap">
+        {languages.map(language => (
+          <Tag key={language}>{language}</Tag>
+        ))}
+      </Flex>
+    ),
   },
 ];

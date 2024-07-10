@@ -7039,6 +7039,48 @@ export interface UserStudentCourseDto {
      * @memberof UserStudentCourseDto
      */
     'hasCertificate': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserStudentCourseDto
+     */
+    'completed': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserStudentCourseDto
+     */
+    'studentIsExpelled': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserStudentCourseDto
+     */
+    'certificateId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserStudentCourseDto
+     */
+    'mentorGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserStudentCourseDto
+     */
+    'mentorFullName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserStudentCourseDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserStudentCourseDto
+     */
+    'rank': number;
 }
 /**
  * 
@@ -7077,6 +7119,42 @@ export interface UserStudentDto {
      */
     'city': object;
     /**
+     * User email
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'contactsEmail': string;
+    /**
+     * User telegram
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'contactsTelegram': string;
+    /**
+     * User linkedIn
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'contactsLinkedIn': string;
+    /**
+     * User skype
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'contactsSkype': string;
+    /**
+     * User phone
+     * @type {string}
+     * @memberof UserStudentDto
+     */
+    'contactsPhone': string;
+    /**
+     * User discord
+     * @type {Discord}
+     * @memberof UserStudentDto
+     */
+    'discord': Discord;
+    /**
      * User on going courses
      * @type {Array<UserStudentCourseDto>}
      * @memberof UserStudentDto
@@ -7088,6 +7166,12 @@ export interface UserStudentDto {
      * @memberof UserStudentDto
      */
     'previousCourses': Array<UserStudentCourseDto>;
+    /**
+     * User languages
+     * @type {Array<string>}
+     * @memberof UserStudentDto
+     */
+    'languages': Array<string>;
 }
 /**
  * 

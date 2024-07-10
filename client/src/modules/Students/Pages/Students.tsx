@@ -1,4 +1,4 @@
-import { TablePaginationConfig, message } from 'antd';
+import { Drawer, TablePaginationConfig, message } from 'antd';
 import { FilterValue } from 'antd/es/table/interface';
 import { StudentsApi, UserStudentDto } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
@@ -9,6 +9,7 @@ import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';
 import { ColumnKey } from '../components/StudentsTable/renderers';
 import { PageProps } from './getServerSideProps';
+import { StudentInfo } from '../components/StudentInfo';
 
 const studentsApi = new StudentsApi();
 
@@ -22,6 +23,7 @@ export const Students = ({ courses }: PageProps) => {
     content: [],
     pagination: { current: 1, pageSize: 20 },
   });
+  const [activeStudent, setActiveStudent] = useState<UserStudentDto | null>(null);
 
   const [loading, withLoading] = useLoading(false);
 
@@ -55,7 +57,11 @@ export const Students = ({ courses }: PageProps) => {
         content={students.content}
         pagination={students.pagination}
         courses={courses}
+        setActiveStudent={setActiveStudent}
       />
+      <Drawer mask={false} title="Student Details" onClose={() => setActiveStudent(null)} open={!!activeStudent}>
+        {activeStudent && <StudentInfo student={activeStudent} />}
+      </Drawer>
     </AdminPageLayout>
   );
 };

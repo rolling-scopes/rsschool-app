@@ -2804,14 +2804,41 @@
         "required": ["name", "fullName", "alias", "certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
+      "Discord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "discriminator": { "type": "string" }
+        },
+        "required": ["id", "username", "discriminator"]
+      },
       "UserStudentCourseDto": {
         "type": "object",
         "properties": {
           "alias": { "type": "string" },
           "name": { "type": "string" },
-          "hasCertificate": { "type": "boolean" }
+          "hasCertificate": { "type": "boolean" },
+          "completed": { "type": "boolean" },
+          "studentIsExpelled": { "type": "boolean" },
+          "certificateId": { "type": "string" },
+          "mentorGithubId": { "type": "string" },
+          "mentorFullName": { "type": "string" },
+          "totalScore": { "type": "number" },
+          "rank": { "type": "number" }
         },
-        "required": ["alias", "name", "hasCertificate"]
+        "required": [
+          "alias",
+          "name",
+          "hasCertificate",
+          "completed",
+          "studentIsExpelled",
+          "certificateId",
+          "mentorGithubId",
+          "mentorFullName",
+          "totalScore",
+          "rank"
+        ]
       },
       "UserStudentDto": {
         "type": "object",
@@ -2821,6 +2848,12 @@
           "fullName": { "type": "string", "description": "User full name" },
           "country": { "type": "object", "description": "User country" },
           "city": { "type": "object", "description": "User city" },
+          "contactsEmail": { "type": "string", "description": "User email" },
+          "contactsTelegram": { "type": "string", "description": "User telegram" },
+          "contactsLinkedIn": { "type": "string", "description": "User linkedIn" },
+          "contactsSkype": { "type": "string", "description": "User skype" },
+          "contactsPhone": { "type": "string", "description": "User phone" },
+          "discord": { "description": "User discord", "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
           "onGoingCourses": {
             "description": "User on going courses",
             "type": "array",
@@ -2830,9 +2863,25 @@
             "description": "User previous courses",
             "type": "array",
             "items": { "$ref": "#/components/schemas/UserStudentCourseDto" }
-          }
+          },
+          "languages": { "description": "User languages", "type": "array", "items": { "type": "string" } }
         },
-        "required": ["id", "githubId", "fullName", "country", "city", "onGoingCourses", "previousCourses"]
+        "required": [
+          "id",
+          "githubId",
+          "fullName",
+          "country",
+          "city",
+          "contactsEmail",
+          "contactsTelegram",
+          "contactsLinkedIn",
+          "contactsSkype",
+          "contactsPhone",
+          "discord",
+          "onGoingCourses",
+          "previousCourses",
+          "languages"
+        ]
       },
       "PaginationMetaDto": {
         "type": "object",
@@ -3438,15 +3487,6 @@
           "completedChecksCount": { "type": "number" }
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
-      },
-      "Discord": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "username": { "type": "string" },
-          "discriminator": { "type": "string" }
-        },
-        "required": ["id", "username", "discriminator"]
       },
       "CrossCheckAuthorDto": {
         "type": "object",
