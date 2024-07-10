@@ -82,10 +82,9 @@ export function StudentInfo(props: Props) {
         <Panel header="Courses" key="courses">
           <List
             itemLayout="horizontal"
-            dataSource={[
-              ...student.previousCourses.sort(course => (course.hasCertificate ? -1 : 1)),
-              ...student.onGoingCourses,
-            ]}
+            dataSource={[...student.previousCourses, ...student.onGoingCourses].sort(course =>
+              course.hasCertificate ? -1 : 1,
+            )}
             renderItem={course => <CourseItem course={course} />}
           />
         </Panel>

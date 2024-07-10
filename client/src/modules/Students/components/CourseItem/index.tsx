@@ -1,4 +1,4 @@
-import { List, Space, Typography } from 'antd';
+import { Flex, List, Space, Typography } from 'antd';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { UserStudentCourseDto } from 'api';
 
@@ -13,7 +13,7 @@ export const CourseItem = ({ course }: Props) => {
 
   return (
     <List.Item>
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Flex vertical gap={4}>
         <Text strong>{name}</Text>
         {certificateId && (
           <Paragraph>
@@ -28,9 +28,11 @@ export const CourseItem = ({ course }: Props) => {
             Mentor: <Link href={`/profile?githubId=${mentorGithubId}`}>{mentorFullName}</Link>
           </Paragraph>
         )}
-        {rank && <Paragraph>Position: {rank}</Paragraph>}
-        <Paragraph>Score: {totalScore}</Paragraph>
-      </Space>
+        <Space wrap>
+          {rank && <Paragraph>Position: {rank}</Paragraph>}
+          <Paragraph>Score: {totalScore}</Paragraph>
+        </Space>
+      </Flex>
     </List.Item>
   );
 };
