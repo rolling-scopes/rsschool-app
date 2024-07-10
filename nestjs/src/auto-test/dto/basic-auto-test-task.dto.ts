@@ -23,15 +23,15 @@ export class BasicAutoTestTaskDto {
   @ApiProperty()
   public name: string;
 
-  @ApiProperty({nullable: true})
+  @ApiProperty({ nullable: true })
   public maxAttemptsNumber: number | null;
 
-  @ApiProperty({nullable: true})
+  @ApiProperty({ nullable: true })
   public numberOfQuestions: number | null;
 
-  @ApiProperty({nullable: true})
+  @ApiProperty({ nullable: true })
   public strictAttemptsMode: boolean | null;
 
-  @ApiProperty({nullable: true})
+  @ApiProperty({ nullable: true })
   public thresholdPercentage: number | null;
 }
