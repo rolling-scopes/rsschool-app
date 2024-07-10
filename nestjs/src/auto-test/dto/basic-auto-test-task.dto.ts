@@ -1,14 +1,20 @@
 import { Task } from '@entities/task';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class MinimizedAutoTestTaskDto {
+export class BasicAutoTestTaskDto {
   constructor(task: Task) {
     this.id = task.id;
     this.name = task.name;
-    this.maxAttemptsNumber = Number(task?.attributes?.public?.maxAttemptsNumber);
-    this.numberOfQuestions = Number(task?.attributes?.public?.numberOfQuestions);
+    this.maxAttemptsNumber = isNaN(task?.attributes?.public?.maxAttemptsNumber)
+      ? 0
+      : Number(task?.attributes?.public?.maxAttemptsNumber);
+    this.numberOfQuestions = isNaN(task?.attributes?.public?.numberOfQuestions)
+      ? 0
+      : Number(task?.attributes?.public?.numberOfQuestions);
     this.strictAttemptsMode = !!task?.attributes?.public?.strictAttemptsMode;
-    this.thresholdPercentage = Number(task?.attributes?.public?.tresholdPercentage);
+    this.thresholdPercentage = isNaN(task?.attributes?.public?.tresholdPercentage)
+      ? 0
+      : Number(task?.attributes?.public?.tresholdPercentage);
   }
 
   @ApiProperty()
