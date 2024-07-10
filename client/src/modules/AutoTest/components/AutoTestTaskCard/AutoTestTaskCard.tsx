@@ -1,31 +1,31 @@
 import { Button, Card, Col, Divider, Row, Typography, Switch } from 'antd';
 import { TaskCardColumn } from '..';
-import { MinimizedAutoTestTaskDto } from 'api';
+import { BasicAutoTestTaskDto } from 'api';
 import Link from 'next/link';
 
 const { Paragraph } = Typography;
 
 export interface AutoTestTaskCardProps {
-  courseTask: MinimizedAutoTestTaskDto;
+  courseTask: BasicAutoTestTaskDto;
 }
 
 function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
   const columns = [
     {
       label: 'Max attempts number',
-      value: courseTask.maxAttemptsNumber ?? <>&ndash;</>,
+      value: courseTask.maxAttemptsNumber ? <>{courseTask.maxAttemptsNumber}</> : <>&ndash;</>,
     },
     {
       label: 'Number of Questions',
-      value: courseTask.numberOfQuestions ?? <>&ndash;</>,
+      value: courseTask.numberOfQuestions ? <>{courseTask.numberOfQuestions}</> : <>&ndash;</>,
     },
     {
       label: 'Strict attempts mode',
-      value: <Switch checked={courseTask.strictAttemptsMode} />,
+      value: <Switch checked={!!courseTask.strictAttemptsMode} />,
     },
     {
       label: 'Threshold percentage',
-      value: courseTask.thresholdPercentage ?? <>&ndash;</>,
+      value: courseTask.thresholdPercentage ? <>{courseTask.thresholdPercentage}</> : <>&ndash;</>,
     },
   ];
 
