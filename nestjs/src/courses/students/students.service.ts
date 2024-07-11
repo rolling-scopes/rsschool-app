@@ -6,6 +6,7 @@ import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
 import { StageInterview, User } from '@entities/index';
 import { paginate } from 'src/core/paginate';
 import { UserStudentsQueryDto } from './dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class StudentsService {
@@ -55,6 +56,8 @@ export class StudentsService {
       .innerJoin('user.students', 'student')
       .innerJoin('student.course', 'course')
       .leftJoin('student.certificate', 'certificate')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mentorUser')
       .select(this.getSelectUserStudentFields())
       .where('user.id IN (' + subQuery.getQuery() + ')')
       .setParameters(subQuery.getParameters())
@@ -65,18 +68,21 @@ export class StudentsService {
 
   private getSelectUserStudentFields(): string[] {
     return [
-      'user.id',
-      'user.githubId',
-      'user.firstName',
-      'user.lastName',
-      'user.countryName',
-      'user.cityName',
+      ...UsersService.getPrimaryUserFields('user'),
+      ...UsersService.getUserContactsFields('user'),
+      'user.languages',
       'student.id',
       'student.courseId',
+      'student.isExpelled',
+      'student.totalScore',
+      'student.rank',
       'course.alias',
       'course.name',
       'course.completed',
       'certificate.publicId',
+      'mentorUser.githubId',
+      'mentorUser.firstName',
+      'mentorUser.lastName',
     ];
   }
 
