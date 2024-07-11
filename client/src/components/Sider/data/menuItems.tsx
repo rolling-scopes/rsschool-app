@@ -9,6 +9,7 @@ import ProfileFilled from '@ant-design/icons/ProfileFilled';
 import TeamOutlined from '@ant-design/icons/TeamOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
+import QqOutlined from '@ant-design/icons/QqOutlined';
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
@@ -136,6 +137,13 @@ const adminMenuItems: AdminMenuItemsData[] = [
     href: '/admin/prompts',
     access: session => isAdmin(session),
   },
+  {
+    name: 'Students',
+    key: 'students',
+    icon: <QqOutlined />,
+    href: '/admin/students',
+    access: session => isAdmin(session) || isHirer(session),
+  },
 ];
 
 export function getAdminMenuItems(session: Session): MenuItemsRenderData[] {
@@ -190,6 +198,12 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     key: 'coreJsInterviews',
     getUrl: (course: Course) => `/course/admin/interviews?course=${course.alias}`,
     courseAccess: isCourseManager,
+  },
+  {
+    name: 'Mentor Tasks Review',
+    key: 'mentorTasksReview',
+    getUrl: (course: Course) => `/course/admin/mentor-tasks-review?course=${course.alias}`,
+    courseAccess: some(isCourseManager, isDementor),
   },
 ];
 

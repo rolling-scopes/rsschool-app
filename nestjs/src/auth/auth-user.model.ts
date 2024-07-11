@@ -6,6 +6,7 @@ import type { AuthDetails } from './auth.service';
 export enum Role {
   Admin = 'admin',
   User = 'user',
+  Hirer = 'hirer',
 }
 
 export { CourseRole };
@@ -56,7 +57,11 @@ export class AuthUser {
     this.isAdmin = admin;
     this.isHirer = hirer;
     this.githubId = user.githubId;
-    this.appRoles = [admin ? Role.Admin : Role.User];
+    this.appRoles = [this.isAdmin ? Role.Admin : Role.User];
+    //fix openapi generator issue
+    if (this.isHirer) {
+      this.appRoles.push(Role.Hirer);
+    }
     this.roles = roles;
     this.courses = coursesInfo;
     return this;

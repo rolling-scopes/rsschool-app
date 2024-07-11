@@ -74,6 +74,20 @@ export class CourseStatsController {
     return data;
   }
 
+  @Get('/students/certificates/countries')
+  @CacheTTL(ONE_HOUR_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
+  @UseGuards(DefaultGuard, CourseGuard)
+  @ApiOperation({ operationId: 'getCourseStudentCertificatesCountries' })
+  @ApiOkResponse({ type: CountriesStatsDto })
+  @ApiBadRequestResponse()
+  public async getStudentsWithCertificatesCountries(
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ): Promise<CountriesStatsDto> {
+    const data = await this.courseStatsService.getStudentsWithCertificatesCountries(courseId);
+    return data;
+  }
+
   @Get('/task/:taskId/performance')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)

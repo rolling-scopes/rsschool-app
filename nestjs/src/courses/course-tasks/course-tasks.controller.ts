@@ -1,4 +1,4 @@
-import { CourseTask } from '@entities/courseTask';
+import { Checker, CourseTask } from '@entities/courseTask';
 import {
   BadRequestException,
   Body,
@@ -39,14 +39,16 @@ export class CourseTasksController {
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getCourseTasks' })
   @ApiQuery({ name: 'status', enum: ['started', 'inprogress', 'finished'], required: false })
+  @ApiQuery({ name: 'checker', enum: Checker, required: false })
   @UseGuards(CourseGuard)
   public async getAll(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Query('status') status?: Status,
+    @Query('checker') checker?: Checker,
   ): Promise<CourseTaskDto[]> {
     const isStudent = !!req.user.courses[courseId]?.studentId;
-    const data = await this.courseTasksService.getAll(courseId, status, isStudent);
+    const data = await this.courseTasksService.getAll(courseId, status, isStudent, checker);
     return data.map(item => new CourseTaskDto(item));
   }
 

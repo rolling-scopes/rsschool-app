@@ -64,7 +64,7 @@ function MentorInfo({ mentor }: Props) {
           </span>
         </Col>
       </Row>
-      {filledContacts?.length &&
+      {filledContacts?.length > 0 &&
         filledContacts.map(({ name, value }, idx) => (
           <Row key={idx} justify="center" gutter={8} style={{ marginBottom: 8 }}>
             <Col>

@@ -33,9 +33,9 @@ export class CourseTasksService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
-  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false) {
+  public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false, checker?: Checker) {
     return this.courseTaskRepository.find({
-      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status) },
+      where: { courseId, disabled: false, ...this.getFindConditionForStatus(status), checker: checker },
       relations: ['task', 'taskOwner'],
       order: {
         studentEndDate: 'ASC',
