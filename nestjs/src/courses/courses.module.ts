@@ -151,7 +151,7 @@ import { MentorReviewsController, MentorReviewsService } from './mentor-reviews'
     TaskVerificationsService,
     CourseMentorsService,
     CourseStudentsService,
-    MentorReviewsService
+    MentorReviewsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
 })
