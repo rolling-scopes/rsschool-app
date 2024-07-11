@@ -16196,6 +16196,33 @@ export const StudentsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStudent(studentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStudentSummary(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentSummaryDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentSummary(courseId, githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {string} [student] 
+         * @param {string} [country] 
+         * @param {string} [city] 
+         * @param {string} [ongoingCourses] 
+         * @param {string} [previousCourses] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserStudentsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -16214,6 +16241,31 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
          */
         getStudent(studentId: number, options?: any): AxiosPromise<StudentDto> {
             return localVarFp.getStudent(studentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentSummary(courseId: number, githubId: string, options?: any): AxiosPromise<StudentSummaryDto> {
+            return localVarFp.getStudentSummary(courseId, githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} current 
+         * @param {string} pageSize 
+         * @param {string} [student] 
+         * @param {string} [country] 
+         * @param {string} [city] 
+         * @param {string} [ongoingCourses] 
+         * @param {string} [previousCourses] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: any): AxiosPromise<UserStudentsDto> {
+            return localVarFp.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -16234,6 +16286,35 @@ export class StudentsApi extends BaseAPI {
      */
     public getStudent(studentId: number, options?: AxiosRequestConfig) {
         return StudentsApiFp(this.configuration).getStudent(studentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public getStudentSummary(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).getStudentSummary(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} current 
+     * @param {string} pageSize 
+     * @param {string} [student] 
+     * @param {string} [country] 
+     * @param {string} [city] 
+     * @param {string} [ongoingCourses] 
+     * @param {string} [previousCourses] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

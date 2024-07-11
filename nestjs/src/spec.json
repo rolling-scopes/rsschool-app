@@ -3972,6 +3972,90 @@
         "properties": { "id": { "type": "number" }, "githubId": { "type": "string" }, "name": { "type": "string" } },
         "required": ["id", "githubId", "name"]
       },
+      "ResultDto": {
+        "type": "object",
+        "properties": { "score": { "type": "number" }, "courseTaskId": { "type": "number" } }
+      },
+      "MentorStudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "isActive": { "type": "boolean" },
+          "cityName": { "type": "string" },
+          "countryName": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "string" } },
+          "contactsEmail": { "type": "string", "nullable": true },
+          "contactsPhone": { "type": "string", "nullable": true },
+          "contactsSkype": { "type": "string", "nullable": true },
+          "contactsTelegram": { "type": "string", "nullable": true },
+          "contactsNotes": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "name",
+          "isActive",
+          "cityName",
+          "countryName",
+          "students",
+          "contactsEmail",
+          "contactsPhone",
+          "contactsSkype",
+          "contactsTelegram",
+          "contactsNotes",
+          "contactsWhatsApp"
+        ]
+      },
+      "StudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "totalScore": { "type": "number" },
+          "results": { "type": "array", "items": { "$ref": "#/components/schemas/ResultDto" } },
+          "isActive": { "type": "boolean" },
+          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }] },
+          "rank": { "type": "number" },
+          "repository": { "type": "string", "nullable": true }
+        },
+        "required": ["totalScore", "results", "isActive", "mentor", "rank", "repository"]
+      },
+      "MentorReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "Task solution id" },
+          "taskName": { "type": "string", "description": "Task name" },
+          "solutionUrl": { "type": "string", "description": "Task solution url" },
+          "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
+          "checker": { "type": "string", "description": "Checker github id" },
+          "score": { "type": "number", "description": "Task solution score" },
+          "maxScore": { "type": "number", "description": "Task max score" },
+          "student": { "type": "string", "description": "Student github id" },
+          "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
+          "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
+        },
+        "required": [
+          "id",
+          "taskName",
+          "solutionUrl",
+          "submittedAt",
+          "checker",
+          "score",
+          "maxScore",
+          "student",
+          "reviewedAt",
+          "taskDescriptionUrl"
+        ]
+      },
+      "MentorReviewsDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/MentorReviewDto" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
+        },
+        "required": ["content", "pagination"]
+      },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
         "type": "object",
