@@ -61,6 +61,7 @@ function getColumns(
       ],
       onFilter: (value, record) =>
         value ? record.courses.some(({ name }) => name === `${value}`) : record.courses.length === 0,
+      filterSearch: true,
     },
     {
       title: ColumnName.DescriptionURL,
