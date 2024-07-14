@@ -59,7 +59,7 @@ export class MentorsController {
   @ApiBadRequestResponse()
   @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
   public async getMentorStudents(@Param('mentorId', ParseIntPipe) mentorId: number, @Req() req: CurrentRequest) {
-    const items = await this.mentorsService.getStudents(mentorId);
+    const items = await this.mentorsService.getStudents(mentorId, req.user.id);
     return items.map(item => new MentorStudentDto(item));
   }
 

@@ -22,7 +22,7 @@ export function Students() {
   const { id: courseId, alias, completed } = course;
   const mentorId = getMentorId(session, courseId);
 
-  const [students, loading] = useMentorStudents(mentorId);
+  const { students, loading } = useMentorStudents(mentorId);
 
   return (
     <PageLayoutSimple title="Your students" loading={loading}>
@@ -52,15 +52,13 @@ export function Students() {
                 </>
               }
               actions={[
-                !feedback ? (
-                  <Link href={routes.getStudentFeedbackRoute(alias, student.id)} legacyBehavior>
-                    <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
-                      {feedback ? `Edit Feedback` : `Give Feedback`}
-                    </Button>
-                  </Link>
-                ) : null,
+                <Link key="feedback" href={routes.getStudentFeedbackRoute(alias, student.id)}>
+                  <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
+                    {feedback ? `Edit Feedback` : `Give Feedback`}
+                  </Button>
+                </Link>,
                 student.active ? (
-                  <Link href={routes.getExpelRoute(alias)} legacyBehavior>
+                  <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
                     <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
                       Expel
                     </Button>
