@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dateSorter } from 'components/Table';
