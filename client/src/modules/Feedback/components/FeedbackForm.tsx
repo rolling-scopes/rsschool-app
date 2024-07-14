@@ -151,10 +151,10 @@ export const FeedbackForm = ({ studentId, onSubmit, students }: FeedbackFormProp
         </Radio.Group>
       </Form.Item>
       <Form.Item name="recommendationComment" rules={[{ required: true, message: 'Required' }]} label="What was good">
-        <TextArea rows={7} allowClear showCount={false} count={false} />
+        <TextArea rows={7} allowClear />
       </Form.Item>
       <Form.Item name="suggestions" label="What could be improved">
-        <TextArea rows={3} allowClear showCount={false} count={false} />
+        <TextArea rows={3} allowClear />
       </Form.Item>
       <Typography.Title level={5}>English</Typography.Title>
       <Form.Item label="Approximate English level" name="englishLevel">
