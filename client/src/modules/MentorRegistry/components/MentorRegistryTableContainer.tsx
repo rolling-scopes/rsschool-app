@@ -5,13 +5,7 @@ import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dat
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
-import {
-  MentorsRegistryColumnKey,
-  MentorsRegistryColumnName,
-  TABS,
-  MentorRegistryTabsMode,
-  PAGINATION,
-} from '../constants';
+import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button, Dropdown, Tooltip, message } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
@@ -19,8 +13,6 @@ import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { useAsync } from 'react-use';
 
 interface ChildrenProp {
   setCurrentPage: Dispatch<SetStateAction<number>>;
@@ -41,6 +33,13 @@ interface Props {
   handleModalDataChange: (mode: ModalDataMode, record: MentorRegistryDto) => void;
   children: (props: ChildrenProp) => JSX.Element;
   disciplines: DisciplineDto[];
+  tagFilters: string[];
+  setTagFilters: Dispatch<SetStateAction<string[]>>;
+  combinedFilter: CombinedFilter;
+  setCombinedFilter: Dispatch<SetStateAction<CombinedFilter>>;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
+  total: number;
 }
 
 export interface CombinedFilter {
@@ -52,7 +51,6 @@ export interface CombinedFilter {
   filterTags?: string[];
 }
 
-const mentorRegistryService = new MentorRegistryService();
 export const MentorRegistryTableContainer = ({
   children,
   mentors,
@@ -60,20 +58,14 @@ export const MentorRegistryTableContainer = ({
   activeTab,
   handleModalDataChange,
   disciplines,
+  tagFilters,
+  setTagFilters,
+  combinedFilter,
+  setCombinedFilter,
+  setCurrentPage,
+  currentPage,
+  total,
 }: Props) => {
-  const [tagFilters, setTagFilters] = useState<string[]>([]);
-  const [combinedFilter, setCombinedFilter] = useState<CombinedFilter>({
-    preferredCourses: [],
-    preselectedCourses: [],
-    technicalMentoring: [],
-    githubId: [],
-    cityName: [],
-  });
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [loaded, setLoaded] = useState<MentorRegistryDto[] | null>(null);
-
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
       return values
@@ -116,28 +108,6 @@ export const MentorRegistryTableContainer = ({
       </div>
     );
   };
-
-  const filteredData = useMemo(() => {
-    return mentors.filter(
-      mentor =>
-        (combinedFilter.technicalMentoring.length
-          ? mentor.technicalMentoring.some(value => combinedFilter.technicalMentoring.includes(value))
-          : true) &&
-        (combinedFilter.preselectedCourses.length
-          ? mentor.preselectedCourses.some(value => combinedFilter.preselectedCourses.includes(value))
-          : true) &&
-        (combinedFilter.preferredCourses.length
-          ? mentor.preferedCourses.some(value => combinedFilter.preferredCourses.includes(value))
-          : true) &&
-        (combinedFilter.githubId?.length
-          ? mentor.githubId.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase()) ||
-            mentor.name.toLowerCase().includes(combinedFilter.githubId[0].toLocaleLowerCase())
-          : true) &&
-        (combinedFilter.cityName?.length
-          ? mentor.cityName?.toLowerCase().includes(combinedFilter.cityName[0].toLocaleLowerCase())
-          : true),
-    );
-  }, [combinedFilter, mentors]);
 
   const handleTableChange = async (
     _: any,
@@ -389,35 +359,9 @@ export const MentorRegistryTableContainer = ({
     setTagFilters([]);
   };
 
-  useAsync(async () => {
-    try {
-      const { mentors, total } = await mentorRegistryService.getMentors({
-        pageSize: PAGINATION,
-        currentPage,
-        githubId: combinedFilter.githubId?.[0] ?? undefined,
-        cityName: combinedFilter.cityName?.[0] ?? undefined,
-        preferedCourses: combinedFilter.preferredCourses?.length
-          ? combinedFilter.preferredCourses.map(Number)
-          : undefined,
-        preselectedCourses: combinedFilter.preselectedCourses?.length
-          ? combinedFilter.preselectedCourses.map(Number)
-          : undefined,
-        technicalMentoring: combinedFilter.technicalMentoring?.length
-          ? (combinedFilter.technicalMentoring as string[])
-          : undefined,
-      });
-      setLoaded(mentors);
-      setTotal(total);
-    } catch (e) {
-      message.error('An error occurred. No filters have been applied.');
-      setLoaded(filteredData);
-      setTotal(filteredData.length);
-    }
-  }, [JSON.stringify(combinedFilter), currentPage]);
-
   return children({
     tagFilters,
-    filteredData: loaded || filteredData,
+    filteredData: mentors,
     columns: getColumns(combinedFilter, courses),
     currentPage,
     total,
