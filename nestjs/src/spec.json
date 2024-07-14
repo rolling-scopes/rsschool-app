@@ -2949,7 +2949,6 @@
         },
         "required": ["maxStudentsLimit", "preferedStudentsLocation", "students"]
       },
-      "StudentFeedback": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "MentorStudentDto": {
         "type": "object",
         "properties": {
@@ -2961,7 +2960,7 @@
           "countryName": { "type": "string", "nullable": true },
           "totalScore": { "type": "number" },
           "rank": { "type": "number" },
-          "feedbacks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentFeedback" } },
+          "feedbacks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentFeedbackDto" } },
           "repoUrl": { "type": "string", "nullable": true }
         },
         "required": [

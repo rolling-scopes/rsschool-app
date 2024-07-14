@@ -1,14 +1,30 @@
-import { MentorsApi } from 'api';
-import { useMemo } from 'react';
-import { useAsync } from 'react-use';
+import { message } from 'antd';
+import { MentorsApi, MentorStudentDto } from 'api';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 export function useMentorStudents(mentorId: number | null) {
   const service = useMemo(() => new MentorsApi(), []);
 
-  const { value: students, loading } = useAsync(async () => {
-    const { data = [] } = mentorId ? await service.getMentorStudents(mentorId) : { data: [] };
-    return data;
-  }, []);
+  const [students, setStudents] = useState<MentorStudentDto[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  return [students, loading] as const;
+  const fetchStudents = useCallback(async () => {
+    if (mentorId) {
+      setLoading(true);
+      try {
+        const { data = [] } = await service.getMentorStudents(mentorId);
+        setStudents(data);
+      } catch (error) {
+        message.error('Failed to fetch students');
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [mentorId, service]);
+
+  useEffect(() => {
+    fetchStudents();
+  }, [fetchStudents]);
+
+  return { students, loading, reload: fetchStudents };
 }
