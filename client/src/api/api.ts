@@ -3894,10 +3894,10 @@ export interface MentorStudentDto {
     'rank': number;
     /**
      * 
-     * @type {Array<StudentFeedback>}
+     * @type {Array<StudentFeedbackDto>}
      * @memberof MentorStudentDto
      */
-    'feedbacks': Array<StudentFeedback>;
+    'feedbacks': Array<StudentFeedbackDto>;
     /**
      * 
      * @type {string}
@@ -5207,19 +5207,6 @@ export interface StudentDto {
      * @memberof StudentDto
      */
     'rank': number;
-}
-/**
- * 
- * @export
- * @interface StudentFeedback
- */
-export interface StudentFeedback {
-    /**
-     * 
-     * @type {number}
-     * @memberof StudentFeedback
-     */
-    'id': number;
 }
 /**
  * 

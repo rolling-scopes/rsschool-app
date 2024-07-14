@@ -90,11 +90,13 @@ export class MentorsService {
     });
   }
 
-  public getStudents(mentorId: number) {
-    return this.studentRepository.find({
-      where: { mentorId },
-      relations: ['user', 'feedbacks'],
-    });
+  public getStudents(mentorId: number, userId: number) {
+    return this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoinAndSelect('student.user', 'user')
+      .leftJoinAndSelect('student.feedbacks', 'feedback', 'feedback.auhtorId = :userId', { userId })
+      .where('student.mentorId = :mentorId', { mentorId })
+      .getMany();
   }
 
   public async getCourseStudentsCount(mentorId: number, courseId: number) {
