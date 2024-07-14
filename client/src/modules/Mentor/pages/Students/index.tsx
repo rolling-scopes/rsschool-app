@@ -52,13 +52,13 @@ export function Students() {
                 </>
               }
               actions={[
-                <Link href={routes.getStudentFeedbackRoute(alias, student.id)}>
+                <Link key="feedback" href={routes.getStudentFeedbackRoute(alias, student.id)}>
                   <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
                     {feedback ? `Edit Feedback` : `Give Feedback`}
                   </Button>
                 </Link>,
                 student.active ? (
-                  <Link href={routes.getExpelRoute(alias)} legacyBehavior>
+                  <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
                     <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
                       Expel
                     </Button>
