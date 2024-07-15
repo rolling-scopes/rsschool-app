@@ -1,10 +1,10 @@
 import { Card, Col, Row, Statistic, Typography } from 'antd';
+import { StudentSummaryDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import * as React from 'react';
-import { StudentSummary } from 'services/course';
 
 type Props = {
-  summary: StudentSummary;
+  summary: StudentSummaryDto;
   courseTasks: { id: number }[];
 };
 
@@ -19,7 +19,7 @@ export function HomeSummary({ summary, courseTasks }: Props) {
     contactsNotes,
     contactsWhatsApp,
   } = summary.mentor ?? {};
-  const tasksCount = summary.results.filter(r => r.score > 0).length;
+  const tasksCount = summary.results.filter(r => Number(r.score) > 0).length;
   const totalTaskCount = courseTasks.length;
 
   const contacts = [

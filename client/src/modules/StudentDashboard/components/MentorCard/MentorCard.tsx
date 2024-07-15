@@ -1,11 +1,11 @@
 import { Col, Typography, Row } from 'antd';
-import { MentorBasic } from 'common/models';
 import CommonCard from '../CommonDashboardCard';
-import { MentorContact, MentorInfo } from '../MentorInfo';
+import { MentorInfo } from '../MentorInfo';
 import { SubmitTaskSolution } from '../SubmitTaskSolution';
+import { MentorStudentSummaryDto } from 'api';
 
 export type MentorCardProps = {
-  mentor?: (MentorBasic & MentorContact) | null;
+  mentor?: MentorStudentSummaryDto | null;
   courseId: number;
 };
 

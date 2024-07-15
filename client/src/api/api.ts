@@ -3547,6 +3547,37 @@ export interface InterviewFeedbackDto {
 /**
  * 
  * @export
+ * @interface InviteMentorsDto
+ */
+export interface InviteMentorsDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InviteMentorsDto
+     */
+    'preselectedCourses': Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InviteMentorsDto
+     */
+    'certificate': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InviteMentorsDto
+     */
+    'mentor': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof InviteMentorsDto
+     */
+    'text': string;
+}
+/**
+ * 
+ * @export
  * @interface JoinTeamDto
  */
 export interface JoinTeamDto {
@@ -4053,16 +4084,101 @@ export interface MentorStudentDto {
     'rank': number;
     /**
      * 
-     * @type {Array<StudentFeedback>}
+     * @type {Array<StudentFeedbackDto>}
      * @memberof MentorStudentDto
      */
-    'feedbacks': Array<StudentFeedback>;
+    'feedbacks': Array<StudentFeedbackDto>;
     /**
      * 
      * @type {string}
      * @memberof MentorStudentDto
      */
     'repoUrl': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface MentorStudentSummaryDto
+ */
+export interface MentorStudentSummaryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorStudentSummaryDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MentorStudentSummaryDto
+     */
+    'isActive': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'cityName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'countryName': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MentorStudentSummaryDto
+     */
+    'students': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsPhone': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsSkype': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsTelegram': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsNotes': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MentorStudentSummaryDto
+     */
+    'contactsWhatsApp': string | null;
 }
 /**
  * 
@@ -4607,6 +4723,25 @@ export interface PutInterviewFeedbackDto {
      * @memberof PutInterviewFeedbackDto
      */
     'score'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ResultDto
+ */
+export interface ResultDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ResultDto
+     */
+    'score'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResultDto
+     */
+    'courseTaskId'?: number;
 }
 /**
  * 
@@ -5266,19 +5401,6 @@ export interface StudentDto {
 /**
  * 
  * @export
- * @interface StudentFeedback
- */
-export interface StudentFeedback {
-    /**
-     * 
-     * @type {number}
-     * @memberof StudentFeedback
-     */
-    'id': number;
-}
-/**
- * 
- * @export
  * @interface StudentFeedbackContentDto
  */
 export interface StudentFeedbackContentDto {
@@ -5388,6 +5510,49 @@ export interface StudentId {
      * @memberof StudentId
      */
     'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface StudentSummaryDto
+ */
+export interface StudentSummaryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentSummaryDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {Array<ResultDto>}
+     * @memberof StudentSummaryDto
+     */
+    'results': Array<ResultDto>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentSummaryDto
+     */
+    'isActive': boolean;
+    /**
+     * 
+     * @type {MentorStudentSummaryDto}
+     * @memberof StudentSummaryDto
+     */
+    'mentor': MentorStudentSummaryDto | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentSummaryDto
+     */
+    'rank': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentSummaryDto
+     */
+    'repository': string | null;
 }
 /**
  * 
@@ -15922,6 +16087,41 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteMentors: async (inviteMentorsDto: InviteMentorsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'inviteMentorsDto' is not null or undefined
+            assertParamExists('inviteMentors', 'inviteMentorsDto', inviteMentorsDto)
+            const localVarPath = `/registry/mentors/invite`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(inviteMentorsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15980,6 +16180,16 @@ export const RegistryApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.inviteMentors(inviteMentorsDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -16033,6 +16243,15 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          */
         getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<FilterMentorRegistryResponse> {
             return localVarFp.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: any): AxiosPromise<void> {
+            return localVarFp.inviteMentors(inviteMentorsDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -16094,6 +16313,17 @@ export class RegistryApi extends BaseAPI {
      */
     public getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InviteMentorsDto} inviteMentorsDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).inviteMentors(inviteMentorsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -16242,6 +16472,43 @@ export const StudentsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentSummary: async (courseId: number, githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getStudentSummary', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('getStudentSummary', 'githubId', githubId)
+            const localVarPath = `/courses/{courseId}/students/{githubId}/summary`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} [student] 
@@ -16330,6 +16597,17 @@ export const StudentsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStudentSummary(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentSummaryDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentSummary(courseId, githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} [student] 
@@ -16365,6 +16643,16 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStudentSummary(courseId: number, githubId: string, options?: any): AxiosPromise<StudentSummaryDto> {
+            return localVarFp.getStudentSummary(courseId, githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} [student] 
@@ -16397,6 +16685,18 @@ export class StudentsApi extends BaseAPI {
      */
     public getStudent(studentId: number, options?: AxiosRequestConfig) {
         return StudentsApiFp(this.configuration).getStudent(studentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public getStudentSummary(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).getStudentSummary(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

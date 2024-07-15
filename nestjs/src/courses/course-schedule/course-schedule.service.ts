@@ -304,7 +304,11 @@ export class CourseScheduleService {
         ...(technicalScreeningResults
           .find(task => task.courseTaskId === courseTaskId)
           ?.stageInterviewFeedbacks.map(feedback => JSON.parse(feedback.json))
-          .map((json: any) => json?.resume?.score ?? 0) ?? []),
+          .map((json: any) => {
+            const resumeScore = json?.resume?.score;
+            const decisionScore = json?.steps?.decision?.values?.finalScore;
+            return resumeScore ?? decisionScore ?? 0;
+          }) ?? []),
       );
     const currentScore = isFinite(scoreRaw) ? scoreRaw : null;
     return currentScore;

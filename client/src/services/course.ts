@@ -16,6 +16,8 @@ import {
   CriteriaDto,
   CrossCheckMessageDto,
   CrossCheckCriteriaDataDto,
+  StudentsApi,
+  StudentSummaryDto,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
@@ -140,6 +142,7 @@ export type SearchStudent = UserBasic & { mentor: UserBasic | null };
 const courseTasksApi = new CoursesTasksApi();
 const courseEventsApi = new CoursesEventsApi();
 const studentsScoreApi = new StudentsScoreApi();
+const studentsApi = new StudentsApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -526,9 +529,9 @@ export class CourseService {
     return result.data;
   }
 
-  async getStudentSummary(githubId: string | 'me') {
-    const result = await this.axios.get(`/student/${githubId}/summary`);
-    return result.data.data as StudentSummary;
+  async getStudentSummary(githubId: string) {
+    const result = await studentsApi.getStudentSummary(this.courseId, githubId);
+    return result.data as StudentSummaryDto;
   }
 
   async getStudentScore(githubId: string) {
@@ -658,7 +661,6 @@ export interface StudentSummary {
   totalScore: number;
   results: { score: number; courseTaskId: number }[];
   isActive: boolean;
-  discord: string;
   mentor:
     | (MentorBasic & {
         contactsEmail?: string;
