@@ -144,7 +144,7 @@ const adminMenuItems: AdminMenuItemsData[] = [
     key: 'auto-test',
     icon: <ExclamationCircleOutlined />,
     href: '/admin/auto-test',
-    access: session => isAdmin(session),
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   {
     name: 'Students',
