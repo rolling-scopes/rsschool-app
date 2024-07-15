@@ -53,13 +53,15 @@ function Page() {
             )}
             {selectedTask?.descriptionUrl && (
               <Descriptions.Item label="Description URL">
-                <a href={selectedTask?.descriptionUrl}>{selectedTask?.descriptionUrl}</a>
+                <a href={selectedTask?.descriptionUrl} target="_blank">
+                  {selectedTask?.descriptionUrl}
+                </a>
               </Descriptions.Item>
             )}
             {selectedTask?.discipline?.name && (
               <Descriptions.Item label="Discipline">{selectedTask?.discipline?.name}</Descriptions.Item>
             )}
-            {selectedTask?.courses?.length && (
+            {selectedTask?.courses?.length && selectedTask?.courses?.length > 0 && (
               <Descriptions.Item label="Courses">
                 {selectedTask?.courses.map(course => (
                   <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
@@ -130,7 +132,7 @@ function Page() {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]} adminOnly>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>

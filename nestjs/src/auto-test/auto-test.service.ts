@@ -23,7 +23,7 @@ export class AutoTestService {
     });
   }
 
-  public async getOne(id: number) {
+  public async findById(id: number) {
     return this.repository.findOne({
       where: {
         type: TaskType.SelfEducation,

@@ -48,7 +48,7 @@ function Page() {
 export default function () {
   return (
     <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]} adminOnly>
+      <SessionProvider allowedRoles={[CourseRole.Manager]}>
         <Page />
       </SessionProvider>
     </ActiveCourseProvider>

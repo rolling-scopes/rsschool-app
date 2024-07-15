@@ -24,7 +24,7 @@ export class AutoTestController {
   @ApiOperation({ operationId: 'getAutoTest' })
   @ApiOkResponse({ type: AutoTestTaskDto })
   async getAutoTestTask(@Param('id', ParseIntPipe) id: number) {
-    const task = await this.service.getOne(id);
+    const task = await this.service.findById(id);
     if (!task) {
       throw new NotFoundException("Couldn't find task with id = " + id);
     }
