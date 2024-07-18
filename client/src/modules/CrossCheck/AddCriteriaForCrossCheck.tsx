@@ -22,21 +22,21 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   };
 
   const onFinish = () => {
-    let criteriaDetails;
-    type.toLowerCase() === TaskType.Title
-      ? (criteriaDetails = {
-          key: DEFAULT_KEY,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        })
-      : (criteriaDetails = {
-          key: DEFAULT_KEY,
-          max: type.toLowerCase() === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        });
+    const criteriaDetails =
+      type === TaskType.Title
+        ? {
+            key: DEFAULT_KEY,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          }
+        : {
+            key: DEFAULT_KEY,
+            max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          };
     clearInputs();
     onCreate(criteriaDetails);
     message.success('Criteria added!');
@@ -55,13 +55,15 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   }
 
   const isDisabled: boolean = useMemo(() => {
-    if (type.toLocaleLowerCase() === TaskType.Title) {
-      return text ? false : true;
+    if (type === TaskType.Title) {
+      return !text;
     }
-    if (type.toLocaleLowerCase() === TaskType.Penalty) {
-      return text && maxPenalty ? false : true;
+
+    if (type === TaskType.Penalty) {
+      return !text || !maxPenalty;
     }
-    return text && max ? false : true;
+
+    return !text || !max;
   }, [type, max, maxPenalty, text]);
 
   return (
@@ -70,11 +72,11 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
         <CriteriaTypeSelect onChange={changeType} />
       </Item>
 
-      {type.toLowerCase() === TaskType.Subtask ? (
+      {type === TaskType.Subtask ? (
         <Item label="Add Max Score">
           <InputNumber value={max} min={0} step={1} onChange={changeMax} />
         </Item>
-      ) : type.toLowerCase() === TaskType.Penalty ? (
+      ) : type === TaskType.Penalty ? (
         <Item label="Add Max Penalty">
           <InputNumber value={maxPenalty} step={1} onChange={changeMaxPenalty} />
         </Item>
