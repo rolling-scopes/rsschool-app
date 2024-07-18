@@ -2,12 +2,11 @@ import { Form } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
-import { InputType, TaskType } from './constants';
+import { EditableCrossCheckTableColumnsDataIndex, TaskType } from './constants';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
-  dataIndex: string;
-  inputType: InputType;
+  dataIndex: EditableCrossCheckTableColumnsDataIndex;
   record: CriteriaDto;
   index: number;
   children: React.ReactNode;
@@ -18,7 +17,6 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
-  inputType,
   children,
   type,
   points,
@@ -34,7 +32,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
     >
       {editing ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
-          <EditableCriteriaInput inputType={inputType} type={type} />
+          <EditableCriteriaInput dataIndex={dataIndex} type={type} />
         </Form.Item>
       ) : (
         children

@@ -1,20 +1,20 @@
 import { Input, InputNumber } from 'antd';
 import { FC } from 'react';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
-import { InputType, TaskType } from './constants';
+import { EditableCrossCheckTableColumnsDataIndex, TaskType } from './constants';
 
 interface EditableCriteriaInputProps {
-  inputType: InputType;
+  dataIndex: EditableCrossCheckTableColumnsDataIndex;
   type: TaskType;
 }
 
-export const EditableCriteriaInput: FC<EditableCriteriaInputProps> = ({ inputType, type }) => {
-  switch (inputType) {
-    case InputType.Max:
+export const EditableCriteriaInput: FC<EditableCriteriaInputProps> = ({ dataIndex, type }) => {
+  switch (dataIndex) {
+    case EditableCrossCheckTableColumnsDataIndex.Max:
       return type !== TaskType.Title ? <InputNumber style={{ width: 65 }} /> : null;
-    case InputType.Text:
+    case EditableCrossCheckTableColumnsDataIndex.Type:
       return <CriteriaTypeSelect defaultValue={type} />;
-    case InputType.Description:
+    case EditableCrossCheckTableColumnsDataIndex.Text:
       return <Input.TextArea rows={3} />;
     default:
       return null;

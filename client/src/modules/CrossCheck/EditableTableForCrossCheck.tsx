@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { CriteriaDto } from 'api';
 import { CriteriaActions } from './CriteriaActions';
+import { EditableCrossCheckTableColumnsDataIndex } from './constants';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
@@ -52,31 +53,31 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   const columns = [
     {
       title: 'Sort',
-      dataIndex: 'sort',
+      dataIndex: EditableCrossCheckTableColumnsDataIndex.Sort,
       width: '7%',
       className: 'drag-visible',
     },
     {
       title: 'Type',
-      dataIndex: 'type',
+      dataIndex: EditableCrossCheckTableColumnsDataIndex.Type,
       width: '12.5%',
       editable: true,
     },
     {
       title: 'Max',
-      dataIndex: 'max',
+      dataIndex: EditableCrossCheckTableColumnsDataIndex.Max,
       width: '9%',
       editable: true,
     },
     {
       title: 'Text',
-      dataIndex: 'text',
+      dataIndex: EditableCrossCheckTableColumnsDataIndex.Text,
       width: '55%',
       editable: true,
     },
     {
       title: 'Actions',
-      dataIndex: 'actions',
+      dataIndex: EditableCrossCheckTableColumnsDataIndex.Actions,
       width: '16.5%',
       render: (_: any, record: CriteriaDto) => (
         <CriteriaActions
@@ -101,7 +102,6 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       ...col,
       onCell: (record: CriteriaDto) => ({
         record,
-        inputType: col.dataIndex === 'max' ? 'max' : col.dataIndex === 'type' ? 'text' : 'description',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
