@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
-import { TaskType } from '../CrossCheckCriteriaForm';
 import { CrossCheckCriteriaDataDto } from 'api';
 import { getCriteriaStatusColor } from 'modules/CrossCheck';
+import { TaskType } from '../../constants';
 
 const { Text, Title } = Typography;
 

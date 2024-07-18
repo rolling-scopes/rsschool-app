@@ -1,9 +1,9 @@
 import { Select } from 'antd';
-import { TaskType } from './components/CrossCheckCriteriaForm';
 import { FC } from 'react';
 import { CrossCheckCriteriaType } from 'services/course';
+import { TaskType } from './constants';
 
-const options = Object.keys(TaskType);
+const options = Object.entries(TaskType).map(([label, value]) => ({ label, value }));
 
 interface CriteriaTypeSelectProps {
   onChange?: (value: CrossCheckCriteriaType) => void;
@@ -11,9 +11,9 @@ interface CriteriaTypeSelectProps {
 
 export const CriteriaTypeSelect: FC<CriteriaTypeSelectProps> = ({ onChange }) => (
   <Select placeholder="Select type" onChange={onChange}>
-    {options.map(option => (
-      <Select.Option data-testid={option} value={option} key={option}>
-        {option}
+    {options.map(({ label, value }) => (
+      <Select.Option data-testid={label} value={value} key={label}>
+        {label}
       </Select.Option>
     ))}
   </Select>

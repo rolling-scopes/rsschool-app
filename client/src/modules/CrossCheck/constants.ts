@@ -24,3 +24,9 @@ export enum InputType {
   Type = 'type',
   Description = 'description',
 }
+
+export enum TaskType {
+  Title = 'title',
+  Subtask = 'subtask',
+  Penalty = 'penalty',
+}

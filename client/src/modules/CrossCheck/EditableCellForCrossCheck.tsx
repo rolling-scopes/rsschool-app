@@ -1,9 +1,8 @@
 import { Form } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
-import { TaskType } from './components/CrossCheckCriteriaForm';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
-import { InputType } from './constants';
+import { InputType, TaskType } from './constants';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;

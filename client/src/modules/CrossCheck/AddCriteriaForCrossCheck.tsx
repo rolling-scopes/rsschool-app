@@ -1,8 +1,8 @@
 import { Button, Form, InputNumber, Input, message } from 'antd';
-import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
-import React, { useMemo, useState } from 'react';
+import React, { ChangeEventHandler, useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
+import { TaskType } from './constants';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -19,9 +19,10 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setMax(0);
     setMaxPenalty(0);
     setText('');
+    setType('title');
   };
 
-  const onFinish = () => {
+  const onSave = () => {
     const criteriaDetails =
       type === TaskType.Title
         ? {
@@ -37,9 +38,9 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
             type: type,
             index: DEFAULT_INDEX,
           };
-    clearInputs();
     onCreate(criteriaDetails);
-    message.success('Criteria added!');
+    clearInputs();
+    message.success('Criteria added.');
   };
 
   function changeMax(value: number | null) {
@@ -54,16 +55,20 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setType(value);
   }
 
-  const isDisabled: boolean = useMemo(() => {
+  const changeText: ChangeEventHandler<HTMLTextAreaElement> = event => {
+    setText(event.target.value);
+  };
+
+  const canSave: boolean = useMemo(() => {
     if (type === TaskType.Title) {
-      return !text;
+      return !!text;
     }
 
     if (type === TaskType.Penalty) {
-      return !text || !maxPenalty;
+      return !!(text && maxPenalty);
     }
 
-    return !text || !max;
+    return !!(text && max);
   }, [type, max, maxPenalty, text]);
 
   return (
@@ -88,12 +93,12 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
           style={{ maxWidth: 1200 }}
           placeholder="Add description"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={changeText}
         ></TextArea>
       </Item>
 
       <div style={{ textAlign: 'right' }}>
-        <Button type="primary" onClick={onFinish} disabled={isDisabled}>
+        <Button type="primary" onClick={onSave} disabled={!canSave}>
           Add New Criteria
         </Button>
       </div>

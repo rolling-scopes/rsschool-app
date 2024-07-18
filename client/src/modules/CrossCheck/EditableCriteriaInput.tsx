@@ -1,8 +1,7 @@
 import { Input, InputNumber } from 'antd';
 import { FC } from 'react';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
-import { InputType } from './constants';
-import { TaskType } from './components/CrossCheckCriteriaForm';
+import { InputType, TaskType } from './constants';
 
 interface EditableCriteriaInputProps {
   inputType: InputType;
