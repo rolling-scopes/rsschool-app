@@ -3,7 +3,7 @@ import { CriteriaDto } from '../../api';
 import { Popconfirm, Typography, Space } from 'antd';
 
 interface CriteriaActionsProps {
-  editable: boolean;
+  editing: boolean;
   record: CriteriaDto;
   editingKey: string;
   save: (key: string) => void;
@@ -13,7 +13,7 @@ interface CriteriaActionsProps {
 }
 
 export const CriteriaActions: FC<CriteriaActionsProps> = ({
-  editable,
+  editing,
   cancel,
   remove,
   edit,
@@ -21,7 +21,7 @@ export const CriteriaActions: FC<CriteriaActionsProps> = ({
   record,
   editingKey,
 }) =>
-  editable ? (
+  editing ? (
     <Space direction="horizontal">
       <Typography.Link onClick={() => save(record.key)}>Save</Typography.Link>
       <Typography.Link type="secondary" onClick={cancel}>

@@ -80,7 +80,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       width: '16.5%',
       render: (_: any, record: CriteriaDto) => (
         <CriteriaActions
-          editable={isEditing(record)}
+          editing={isEditing(record)}
           record={record}
           editingKey={editingKey}
           cancel={cancel}
