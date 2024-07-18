@@ -9,15 +9,11 @@ interface EditableCriteriaInputProps {
 }
 
 export const EditableCriteriaInput: FC<EditableCriteriaInputProps> = ({ inputType, type }) => {
-  if (type === TaskType.Title) {
-    return null;
-  }
-
   switch (inputType) {
     case InputType.Max:
-      return <InputNumber style={{ width: 65 }} />;
-    case InputType.Type:
-      return <CriteriaTypeSelect />;
+      return type !== TaskType.Title ? <InputNumber style={{ width: 65 }} /> : null;
+    case InputType.Text:
+      return <CriteriaTypeSelect defaultValue={type} />;
     case InputType.Description:
       return <Input.TextArea rows={3} />;
     default:

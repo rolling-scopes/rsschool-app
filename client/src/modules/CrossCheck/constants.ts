@@ -21,7 +21,7 @@ export const ROLE_TAG_COLOR = {
 
 export enum InputType {
   Max = 'max',
-  Type = 'type',
+  Text = 'text',
   Description = 'description',
 }
 
