@@ -1,11 +1,11 @@
-import { Button, Form, InputNumber, Select, Input, message } from 'antd';
+import { Button, Form, InputNumber, Input, message } from 'antd';
 import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import React, { useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
+import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 
 const { Item } = Form;
 const { TextArea } = Input;
-const { Option } = Select;
 
 export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck) => {
   const [type, setType] = useState<CrossCheckCriteriaType>('title');
@@ -67,15 +67,7 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   return (
     <>
       <Item label="Criteria Type">
-        <Select placeholder="Select type" onChange={changeType}>
-          <Option data-testid="Title" value="Title">
-            Title
-          </Option>
-          <Option data-testid="Subtask" value="Subtask">
-            Subtask
-          </Option>
-          <Option value="Penalty">Penalty</Option>
-        </Select>
+        <CriteriaTypeSelect onChange={changeType} />
       </Item>
 
       {type.toLowerCase() === TaskType.Subtask ? (

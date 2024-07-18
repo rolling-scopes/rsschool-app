@@ -18,3 +18,9 @@ export const ROLE_TAG_COLOR = {
   [CrossCheckMessageDtoRoleEnum.Reviewer]: 'processing',
   [CrossCheckMessageDtoRoleEnum.Student]: 'success',
 };
+
+export enum InputType {
+  Max = 'max',
+  Type = 'type',
+  Description = 'description',
+}

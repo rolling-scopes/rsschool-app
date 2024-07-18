@@ -1,6 +1,6 @@
 import { Form, Table, Typography, Popconfirm } from 'antd';
 import React, { useState } from 'react';
-import { SaveOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SaveOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { CriteriaDto } from 'api';
 
@@ -45,6 +45,10 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     }
   };
 
+  const cancel = () => {
+    setEditingKey('');
+  };
+
   const columns = [
     {
       title: 'Sort',
@@ -78,8 +82,11 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <Typography.Link onClick={() => save(record.key)} style={{ marginLeft: 8 }}>
+            <Typography.Link onClick={() => save(record.key)} style={{ marginLeft: 8, marginRight: 5 }}>
               <SaveOutlined />
+            </Typography.Link>
+            <Typography.Link onClick={cancel} type='secondary'>
+              <CloseCircleOutlined />
             </Typography.Link>
           </span>
         ) : (
@@ -88,7 +95,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
               <EditOutlined />
             </Typography.Link>
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <Typography.Link>
+              <Typography.Link type='danger'>
                 <DeleteOutlined />
               </Typography.Link>
             </Popconfirm>
@@ -102,6 +109,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     if (!col.editable) {
       return col;
     }
+    
     return {
       ...col,
       onCell: (record: CriteriaDto) => ({
