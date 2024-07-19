@@ -1,7 +1,7 @@
 import { Form, Table } from 'antd';
 import React, { useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
-import { CriteriaDto } from 'api';
+import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { CriteriaActions } from './CriteriaActions';
 import { EditableCrossCheckTableColumnsDataIndex } from './constants';
 
@@ -48,9 +48,10 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
 
   const cancel = () => {
     setEditingKey('');
+    // does not work after fix of changeTaskType
   };
 
-  const change = async (value: string) => {
+  const changeTaskType = async (value: string) => {
     const row = (await form.validateFields()) as CriteriaDto;
 
     const newData = [...dataCriteria];
@@ -60,14 +61,12 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       const item = newData[index];
       newData.splice(index, 1, {
         ...item,
-        ...row,
+        type: value as CriteriaDtoTypeEnum,
       });
       setDataCriteria(newData);
-      setEditingKey('');
     } else {
       newData.push(row);
       setDataCriteria(newData);
-      setEditingKey('');
     }
   };
 
@@ -122,7 +121,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         editing: isEditing(record),
         type: record.type,
         points: record.max,
-        onSelectChange: change,
+        onSelectChange: changeTaskType,
       }),
     };
   });
