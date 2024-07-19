@@ -31,7 +31,6 @@ export class CoursesController {
   @Get('/')
   @ApiOperation({ operationId: 'getCourses' })
   @ApiOkResponse({ type: [CourseDto] })
-  @UseGuards(DefaultGuard)
   public async getCourses() {
     const data = await this.courseService.getAll();
     return data.map(it => new CourseDto(it));
