@@ -50,35 +50,50 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     setEditingKey('');
   };
 
+  const change = async (value: string) => {
+    const row = (await form.validateFields()) as CriteriaDto;
+
+    const newData = [...dataCriteria];
+    const index = newData.findIndex(item => editingKey === item.key);
+
+    if (index > -1) {
+      const item = newData[index];
+      newData.splice(index, 1, {
+        ...item,
+        ...row,
+      });
+      setDataCriteria(newData);
+      setEditingKey('');
+    } else {
+      newData.push(row);
+      setDataCriteria(newData);
+      setEditingKey('');
+    }
+  };
+
   const columns = [
-    {
-      title: 'Sort',
-      dataIndex: EditableCrossCheckTableColumnsDataIndex.Sort,
-      width: '7%',
-      className: 'drag-visible',
-    },
     {
       title: 'Type',
       dataIndex: EditableCrossCheckTableColumnsDataIndex.Type,
-      width: '12.5%',
+      width: '18%',
       editable: true,
     },
     {
       title: 'Max',
       dataIndex: EditableCrossCheckTableColumnsDataIndex.Max,
-      width: '9%',
+      width: '10%',
       editable: true,
     },
     {
       title: 'Text',
       dataIndex: EditableCrossCheckTableColumnsDataIndex.Text,
-      width: '55%',
+      width: '52%',
       editable: true,
     },
     {
       title: 'Actions',
       dataIndex: EditableCrossCheckTableColumnsDataIndex.Actions,
-      width: '16.5%',
+      width: '20%%',
       render: (_: any, record: CriteriaDto) => (
         <CriteriaActions
           editing={isEditing(record)}
@@ -107,6 +122,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         editing: isEditing(record),
         type: record.type,
         points: record.max,
+        onSelectChange: change,
       }),
     };
   });

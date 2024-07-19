@@ -12,6 +12,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   type: TaskType;
   points: number | undefined;
+  onSelectChange: (value: string) => void;
 }
 
 export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
@@ -20,6 +21,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   children,
   type,
   points,
+  onSelectChange,
   ...restProps
 }) => {
   const isPointsEqualZero = points === 0;
@@ -32,7 +34,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
     >
       {editing ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
-          <EditableCriteriaInput dataIndex={dataIndex} type={type} />
+          <EditableCriteriaInput dataIndex={dataIndex} type={type} onSelectChange={onSelectChange} />
         </Form.Item>
       ) : (
         children
