@@ -239,7 +239,7 @@ export const emailTemplate = `<!DOCTYPE html>
                     valign="top"
                     align="center"
                   >
-                    <p>© The Rolling Scopes 2022</p>
+                    <p>© The Rolling Scopes 2024</p>
                     <a
                       href="https://app.rs.school/profile/notifications"
                       style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center"

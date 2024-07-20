@@ -7,6 +7,8 @@ import { UsersNotificationsModule } from 'src/users-notifications/users-notifica
 import { RegistryController } from './registry.controller';
 import { RegistryService } from './registry.service';
 import { DisciplinesModule } from 'src/disciplines';
+import { NotificationsModule } from 'src/notifications/notifications.module';
+import { Student } from '@entities/student';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { DisciplinesModule } from 'src/disciplines';
     UsersNotificationsModule,
     CoursesModule,
     DisciplinesModule,
+    NotificationsModule,
+    TypeOrmModule.forFeature([Student]),
   ],
   controllers: [RegistryController],
   providers: [RegistryService],
