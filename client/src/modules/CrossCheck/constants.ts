@@ -26,7 +26,6 @@ export enum EditableTableColumnsDataIndex {
   Actions = 'actions',
 }
 
-// TODO: double check and get rid of in favor of CriteriaDtoTypeEnum
 export enum TaskType {
   Title = 'title',
   Subtask = 'subtask',
