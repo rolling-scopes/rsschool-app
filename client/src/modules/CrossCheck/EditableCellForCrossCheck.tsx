@@ -7,7 +7,7 @@ import { EditableTableColumnsDataIndex } from './constants';
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: EditableTableColumnsDataIndex;
-  record?: CriteriaDto;
+  record: CriteriaDto;
   index: number;
   children: React.ReactNode;
   onSelectChange: (value: string) => void;
@@ -26,7 +26,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   return (
     <td {...props} title={hasMax ? '' : 'Check points for this line'} style={{ color: hasMax ? 'black' : 'red' }}>
       {editing ? (
-        <Form.Item name={dataIndex} style={{ margin: 0 }}>
+        <Form.Item name={[record.key, dataIndex]} style={{ margin: 0 }}>
           <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} type={record?.type} />
         </Form.Item>
       ) : (

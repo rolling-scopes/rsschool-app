@@ -20,7 +20,6 @@ export const ROLE_TAG_COLOR = {
 };
 
 export enum EditableTableColumnsDataIndex {
-  Sort = 'sort',
   Type = 'type',
   Max = 'max',
   Text = 'text',
