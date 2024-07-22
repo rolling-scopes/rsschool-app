@@ -1,4 +1,3 @@
-import { Form } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
@@ -26,9 +25,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   return (
     <td {...props} title={hasMax ? '' : 'Check points for this line'} style={{ color: hasMax ? 'black' : 'red' }}>
       {editing ? (
-        <Form.Item name={[record.key, dataIndex]} style={{ margin: 0 }}>
-          <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} type={record?.type} />
-        </Form.Item>
+        <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} type={record?.type} />
       ) : (
         children
       )}

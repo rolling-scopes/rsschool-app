@@ -15,12 +15,9 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   const [editingKey, setEditingKey] = useState('');
   const [originData, setOriginData] = useState<CriteriaDto[]>([]);
 
-  console.log('dataCriteria', dataCriteria);
-
   const isEditing = (record: CriteriaDto) => record.key === editingKey;
 
-  const edit = (record: Partial<CriteriaDto> & { key: string }) => {
-    console.log('record', record);
+  const edit = (record: CriteriaDto) => {
     setOriginData(dataCriteria);
     form.setFieldsValue(record);
     setEditingKey(record.key);
@@ -31,20 +28,16 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const save = async (key: string) => {
-    const formData = form.getFieldsValue() as CriteriaDto;
-    console.log(formData)
-
-    const newData = dataCriteria.map(criteria => {
-
-      return (criteria.key === key ? { ...criteria, ...formData } : criteria);
-    });
+    const formData = await form.validateFields();
+    const newData = dataCriteria.map(criteria => (criteria.key === key ? { ...criteria, ...formData } : criteria));
 
     setDataCriteria(newData);
     setEditingKey('');
   };
 
   const cancel = () => {
-    setDataCriteria(originData);
+    const criterions = Object.values(originData);
+    setDataCriteria(criterions);
     setEditingKey('');
   };
 
