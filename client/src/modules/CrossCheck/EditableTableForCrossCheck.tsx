@@ -32,7 +32,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
 
     const newData = [...dataCriteria];
     const index = newData.findIndex(item => key === item.key);
-
+    
     if (index > -1) {
       const item = newData[index];
       newData.splice(index, 1, {
@@ -95,7 +95,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     {
       title: 'Actions',
       dataIndex: EditableTableColumnsDataIndex.Actions,
-      width: '20%%',
+      width: '20%',
       render: (_: any, record: CriteriaDto) => (
         <CriteriaActions
           editing={isEditing(record)}
@@ -122,8 +122,6 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-        type: record.type,
-        points: record.max,
         onSelectChange: changeTaskType,
       }),
     };

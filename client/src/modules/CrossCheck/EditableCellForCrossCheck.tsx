@@ -2,16 +2,14 @@ import { Form } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
-import { EditableTableColumnsDataIndex, TaskType } from './constants';
+import { EditableTableColumnsDataIndex } from './constants';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: EditableTableColumnsDataIndex;
-  record: CriteriaDto;
+  record?: CriteriaDto;
   index: number;
   children: React.ReactNode;
-  type: TaskType;
-  points: number | undefined;
   onSelectChange: (value: string) => void;
 }
 
@@ -19,22 +17,17 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
   children,
-  type,
-  points,
+  record,
   onSelectChange,
-  ...restProps
+  ...props
 }) => {
-  const isPointsEqualZero = points === 0;
+  const hasMax = record?.max !== 0;
 
   return (
-    <td
-      {...restProps}
-      title={isPointsEqualZero ? 'Check points for this line' : ''}
-      style={{ color: isPointsEqualZero ? 'red' : 'black' }}
-    >
+    <td {...props} title={hasMax ? '' : 'Check points for this line'} style={{ color: hasMax ? 'black' : 'red' }}>
       {editing ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
-          <EditableCriteriaInput dataIndex={dataIndex} type={type} onSelectChange={onSelectChange} />
+          <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} record={record} />
         </Form.Item>
       ) : (
         children
