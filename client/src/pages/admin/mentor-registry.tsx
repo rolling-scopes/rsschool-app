@@ -89,7 +89,7 @@ function Page() {
           ? combinedFilter.preselectedCourses.map(Number)
           : undefined,
         technicalMentoring: combinedFilter.technicalMentoring?.length
-          ? (combinedFilter.technicalMentoring as string[])
+          ? combinedFilter.technicalMentoring
           : undefined,
       }),
       coursesService.getCourses(),
