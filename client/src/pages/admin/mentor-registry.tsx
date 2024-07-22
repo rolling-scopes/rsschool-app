@@ -1,7 +1,7 @@
-import { useCallback, useState, useMemo, useEffect } from 'react';
+import { useCallback, useState, useMemo, useEffect, useContext } from 'react';
 import { useAsync } from 'react-use';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
-import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typography } from 'antd';
+import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
@@ -11,15 +11,23 @@ import { ModalForm } from 'components/Forms';
 import { MentorRegistryResendModal } from 'modules/MentorRegistry/components/MentorRegistryResendModal';
 import { MentorRegistryDeleteModal } from 'modules/MentorRegistry/components/MentorRegistryDeleteModal';
 import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
-import { MentorRegistryTableContainer } from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
-import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
+import {
+  CombinedFilter,
+  MentorRegistryTableContainer,
+} from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
+import { MentorRegistryTabsMode, PAGINATION } from 'modules/MentorRegistry/constants';
 import { useLoading } from 'components/useLoading';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { CoursesService } from 'services/courses';
+import dynamic from 'next/dynamic';
+
+const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
+  ssr: false,
+});
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -28,6 +36,7 @@ export enum ModalDataMode {
   Resend = 'resend',
   Delete = 'delete',
   Comment = 'comment',
+  BatchInvite = 'batchInvite',
 }
 
 type ModalData = Partial<{
@@ -41,6 +50,7 @@ const disciplinesApi = new DisciplinesApi();
 
 function Page() {
   const [loading, withLoading] = useLoading(false);
+  const session = useContext(SessionContext);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -54,6 +64,16 @@ function Page() {
   const [activeTab, setActiveTab] = useState<MentorRegistryTabsMode>(MentorRegistryTabsMode.New);
   const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [tagFilters, setTagFilters] = useState<string[]>([]);
+  const [combinedFilter, setCombinedFilter] = useState<CombinedFilter>({
+    preferredCourses: [],
+    preselectedCourses: [],
+    technicalMentoring: [],
+    githubId: [],
+    cityName: [],
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const updateData = (showAll: boolean, allData: MentorRegistryDto[]) => {
     setShowAll(showAll);
@@ -63,9 +83,25 @@ function Page() {
   };
 
   const loadData = withLoading(async () => {
-    const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
+    const [allData, courses] = await Promise.all([
+      mentorRegistryService.getMentors({
+        pageSize: PAGINATION,
+        currentPage,
+        githubId: combinedFilter.githubId?.[0] ?? undefined,
+        cityName: combinedFilter.cityName?.[0] ?? undefined,
+        preferedCourses: combinedFilter.preferredCourses?.length
+          ? combinedFilter.preferredCourses.map(Number)
+          : undefined,
+        preselectedCourses: combinedFilter.preselectedCourses?.length
+          ? combinedFilter.preselectedCourses.map(Number)
+          : undefined,
+        technicalMentoring: combinedFilter.technicalMentoring?.length ? combinedFilter.technicalMentoring : undefined,
+      }),
+      coursesService.getCourses(),
+    ]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
     setAllData(allData.mentors);
+    setTotal(allData.total);
     setCourses(courses);
     updateData(showAll, allData.mentors);
     setDisciplines(disciplines);
@@ -90,7 +126,7 @@ function Page() {
     }
   });
 
-  useAsync(loadData, []);
+  useAsync(loadData, [combinedFilter, currentPage]);
 
   const openNotificationWithIcon = (type: NotificationType) => {
     api[type]({
@@ -195,13 +231,16 @@ function Page() {
     <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
       <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
         <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
-        <Button
-          icon={<FileExcelOutlined />}
-          style={{ alignSelf: 'center' }}
-          onClick={() => (window.location.href = `/api/registry/mentors/csv`)}
-        >
-          Export CSV
-        </Button>
+        <Space style={{ alignSelf: 'center' }}>
+          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
+            Export CSV
+          </Button>
+          {session.isAdmin && (
+            <Button type="primary" onClick={() => setModalData({ mode: ModalDataMode.BatchInvite })}>
+              Invite mentors
+            </Button>
+          )}
+        </Space>
         <style jsx>{styles}</style>
       </Row>
       <Col style={{ background: '#f0f2f5', padding: 24 }}>
@@ -221,6 +260,13 @@ function Page() {
           activeTab={activeTab}
           disciplines={disciplines}
           handleModalDataChange={handleModalDataChange}
+          tagFilters={tagFilters}
+          setTagFilters={setTagFilters}
+          combinedFilter={combinedFilter}
+          setCombinedFilter={setCombinedFilter}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          total={total}
         >
           {mentorRegistryProps => <MentorRegistryTable {...mentorRegistryProps} />}
         </MentorRegistryTableContainer>
@@ -254,6 +300,7 @@ function Page() {
           }}
         />
       )}
+      {modalData?.mode === ModalDataMode.BatchInvite && <InviteMentorsModal onCancel={onCancelModal} />}
       {contextHolder}
     </AdminPageLayout>
   );

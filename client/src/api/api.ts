@@ -3388,6 +3388,37 @@ export interface InterviewFeedbackDto {
 /**
  * 
  * @export
+ * @interface InviteMentorsDto
+ */
+export interface InviteMentorsDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InviteMentorsDto
+     */
+    'preselectedCourses': Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InviteMentorsDto
+     */
+    'certificate': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InviteMentorsDto
+     */
+    'mentor': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof InviteMentorsDto
+     */
+    'text': string;
+}
+/**
+ * 
+ * @export
  * @interface JoinTeamDto
  */
 export interface JoinTeamDto {
@@ -15750,6 +15781,41 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteMentors: async (inviteMentorsDto: InviteMentorsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'inviteMentorsDto' is not null or undefined
+            assertParamExists('inviteMentors', 'inviteMentorsDto', inviteMentorsDto)
+            const localVarPath = `/registry/mentors/invite`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(inviteMentorsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15808,6 +15874,16 @@ export const RegistryApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.inviteMentors(inviteMentorsDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -15861,6 +15937,15 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          */
         getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<FilterMentorRegistryResponse> {
             return localVarFp.getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InviteMentorsDto} inviteMentorsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: any): AxiosPromise<void> {
+            return localVarFp.inviteMentors(inviteMentorsDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15922,6 +16007,17 @@ export class RegistryApi extends BaseAPI {
      */
     public getMentorRegistries(pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).getMentorRegistries(pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InviteMentorsDto} inviteMentorsDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).inviteMentors(inviteMentorsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

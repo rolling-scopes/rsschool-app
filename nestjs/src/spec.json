@@ -1963,6 +1963,19 @@
         "tags": ["registry"]
       }
     },
+    "/registry/mentors/invite": {
+      "post": {
+        "operationId": "inviteMentors",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InviteMentorsDto" } } }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["registry"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
@@ -4428,6 +4441,16 @@
           "total": { "type": "number" }
         },
         "required": ["mentors", "total"]
+      },
+      "InviteMentorsDto": {
+        "type": "object",
+        "properties": {
+          "preselectedCourses": { "type": "array", "items": { "type": "string" } },
+          "certificate": { "type": "boolean" },
+          "mentor": { "type": "boolean" },
+          "text": { "type": "string" }
+        },
+        "required": ["preselectedCourses", "certificate", "mentor", "text"]
       },
       "SaveCertificateDto": {
         "type": "object",
