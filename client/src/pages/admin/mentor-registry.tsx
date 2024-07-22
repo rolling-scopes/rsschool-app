@@ -88,9 +88,7 @@ function Page() {
         preselectedCourses: combinedFilter.preselectedCourses?.length
           ? combinedFilter.preselectedCourses.map(Number)
           : undefined,
-        technicalMentoring: combinedFilter.technicalMentoring?.length
-          ? combinedFilter.technicalMentoring
-          : undefined,
+        technicalMentoring: combinedFilter.technicalMentoring?.length ? combinedFilter.technicalMentoring : undefined,
       }),
       coursesService.getCourses(),
     ]);
