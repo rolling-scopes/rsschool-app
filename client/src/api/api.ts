@@ -13359,17 +13359,20 @@ export const MentorReviewsApiAxiosParamCreator = function (configuration?: Confi
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} tasks 
+         * @param {string} student 
          * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorReviews: async (current: string, pageSize: string, tasks: string, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMentorReviews: async (current: string, pageSize: string, tasks: string, student: string, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'current' is not null or undefined
             assertParamExists('getMentorReviews', 'current', current)
             // verify required parameter 'pageSize' is not null or undefined
             assertParamExists('getMentorReviews', 'pageSize', pageSize)
             // verify required parameter 'tasks' is not null or undefined
             assertParamExists('getMentorReviews', 'tasks', tasks)
+            // verify required parameter 'student' is not null or undefined
+            assertParamExists('getMentorReviews', 'student', student)
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getMentorReviews', 'courseId', courseId)
             const localVarPath = `/course/{courseId}/mentor-reviews`
@@ -13395,6 +13398,10 @@ export const MentorReviewsApiAxiosParamCreator = function (configuration?: Confi
 
             if (tasks !== undefined) {
                 localVarQueryParameter['tasks'] = tasks;
+            }
+
+            if (student !== undefined) {
+                localVarQueryParameter['student'] = student;
             }
 
 
@@ -13423,12 +13430,13 @@ export const MentorReviewsApiFp = function(configuration?: Configuration) {
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} tasks 
+         * @param {string} student 
          * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMentorReviews(current: string, pageSize: string, tasks: string, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MentorReviewsDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorReviews(current, pageSize, tasks, courseId, options);
+        async getMentorReviews(current: string, pageSize: string, tasks: string, student: string, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MentorReviewsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorReviews(current, pageSize, tasks, student, courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -13446,12 +13454,13 @@ export const MentorReviewsApiFactory = function (configuration?: Configuration, 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {string} tasks 
+         * @param {string} student 
          * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorReviews(current: string, pageSize: string, tasks: string, courseId: number, options?: any): AxiosPromise<MentorReviewsDto> {
-            return localVarFp.getMentorReviews(current, pageSize, tasks, courseId, options).then((request) => request(axios, basePath));
+        getMentorReviews(current: string, pageSize: string, tasks: string, student: string, courseId: number, options?: any): AxiosPromise<MentorReviewsDto> {
+            return localVarFp.getMentorReviews(current, pageSize, tasks, student, courseId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -13468,13 +13477,14 @@ export class MentorReviewsApi extends BaseAPI {
      * @param {string} current 
      * @param {string} pageSize 
      * @param {string} tasks 
+     * @param {string} student 
      * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MentorReviewsApi
      */
-    public getMentorReviews(current: string, pageSize: string, tasks: string, courseId: number, options?: AxiosRequestConfig) {
-        return MentorReviewsApiFp(this.configuration).getMentorReviews(current, pageSize, tasks, courseId, options).then((request) => request(this.axios, this.basePath));
+    public getMentorReviews(current: string, pageSize: string, tasks: string, student: string, courseId: number, options?: AxiosRequestConfig) {
+        return MentorReviewsApiFp(this.configuration).getMentorReviews(current, pageSize, tasks, student, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
