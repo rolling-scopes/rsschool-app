@@ -1,7 +1,7 @@
-import { useCallback, useState, useMemo, useEffect } from 'react';
+import { useCallback, useState, useMemo, useEffect, useContext } from 'react';
 import { useAsync } from 'react-use';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
-import { Alert, Button, Col, Form, message, notification, Row, Select, Tabs, Typography } from 'antd';
+import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
@@ -21,8 +21,13 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import css from 'styled-jsx/css';
 import { CommentModal } from 'components/CommentModal';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { CoursesService } from 'services/courses';
+import dynamic from 'next/dynamic';
+
+const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
+  ssr: false,
+});
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -31,6 +36,7 @@ export enum ModalDataMode {
   Resend = 'resend',
   Delete = 'delete',
   Comment = 'comment',
+  BatchInvite = 'batchInvite',
 }
 
 type ModalData = Partial<{
@@ -44,6 +50,7 @@ const disciplinesApi = new DisciplinesApi();
 
 function Page() {
   const [loading, withLoading] = useLoading(false);
+  const session = useContext(SessionContext);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -224,13 +231,16 @@ function Page() {
     <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
       <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
         <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
-        <Button
-          icon={<FileExcelOutlined />}
-          style={{ alignSelf: 'center' }}
-          onClick={() => (window.location.href = `/api/registry/mentors/csv`)}
-        >
-          Export CSV
-        </Button>
+        <Space style={{ alignSelf: 'center' }}>
+          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
+            Export CSV
+          </Button>
+          {session.isAdmin && (
+            <Button type="primary" onClick={() => setModalData({ mode: ModalDataMode.BatchInvite })}>
+              Invite mentors
+            </Button>
+          )}
+        </Space>
         <style jsx>{styles}</style>
       </Row>
       <Col style={{ background: '#f0f2f5', padding: 24 }}>
@@ -290,6 +300,7 @@ function Page() {
           }}
         />
       )}
+      {modalData?.mode === ModalDataMode.BatchInvite && <InviteMentorsModal onCancel={onCancelModal} />}
       {contextHolder}
     </AdminPageLayout>
   );

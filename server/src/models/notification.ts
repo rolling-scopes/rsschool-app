@@ -26,7 +26,8 @@ export type NotificationId =
   | 'interviewerAssigned'
   | 'emailConfirmation'
   | 'mentor:assigned'
-  | 'messages';
+  | 'messages'
+  | 'mentorsInvitation';
 
 @Entity()
 export class Notification {

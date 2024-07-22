@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { MentorRegistryDto, RegistryApi } from 'api';
+import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
@@ -87,5 +87,9 @@ export class MentorRegistryService {
   public async getMentor() {
     const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
     return response.data.data;
+  }
+
+  public async inviteMentors(data: InviteMentorsDto) {
+    await this.registryApi.inviteMentors(data);
   }
 }
