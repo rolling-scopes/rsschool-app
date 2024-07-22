@@ -19,7 +19,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
 
   const edit = (record: Partial<CriteriaDto> & { key: React.Key }) => {
     setOriginData(dataCriteria);
-    form.setFieldsValue({ type: '', text: '', ...record });
+    form.setFieldsValue(record);
     setEditingKey(record.key);
   };
 
@@ -28,24 +28,12 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const save = async (key: React.Key) => {
-    const row = (await form.validateFields()) as CriteriaDto;
+    const formData = form.getFieldsValue() as CriteriaDto;
 
-    const newData = [...dataCriteria];
-    const index = newData.findIndex(item => key === item.key);
-    
-    if (index > -1) {
-      const item = newData[index];
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-      setDataCriteria(newData);
-      setEditingKey('');
-    } else {
-      newData.push(row);
-      setDataCriteria(newData);
-      setEditingKey('');
-    }
+    const newData = dataCriteria.map(criteria => (criteria.key === key ? { ...criteria, ...formData } : criteria));
+
+    setDataCriteria(newData);
+    setEditingKey('');
   };
 
   const cancel = () => {
@@ -54,23 +42,16 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const changeTaskType = async (value: string) => {
-    const row = (await form.validateFields()) as CriteriaDto;
-
-    const newData = [...dataCriteria];
-    const index = newData.findIndex(item => editingKey === item.key);
-
-    if (index > -1) {
-      const item = newData[index];
-      newData.splice(index, 1, {
-        ...item,
-        type: value as CriteriaDtoTypeEnum,
-        max: value === CriteriaDtoTypeEnum.Title ? undefined : item.max,
-      });
-      setDataCriteria(newData);
-    } else {
-      newData.push(row);
-      setDataCriteria(newData);
-    }
+    const newData = dataCriteria.map(criteria =>
+      criteria.key === editingKey
+        ? {
+            ...criteria,
+            type: value as CriteriaDtoTypeEnum,
+            max: value === CriteriaDtoTypeEnum.Title ? undefined : criteria.max,
+          }
+        : criteria,
+    );
+    setDataCriteria(newData);
   };
 
   const columns = [

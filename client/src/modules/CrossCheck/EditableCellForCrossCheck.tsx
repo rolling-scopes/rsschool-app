@@ -27,7 +27,7 @@ export const EditableCellForCrossCheck: React.FC<EditableCellProps> = ({
     <td {...props} title={hasMax ? '' : 'Check points for this line'} style={{ color: hasMax ? 'black' : 'red' }}>
       {editing ? (
         <Form.Item name={dataIndex} style={{ margin: 0 }}>
-          <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} record={record} />
+          <EditableCriteriaInput dataIndex={dataIndex} onSelectChange={onSelectChange} type={record?.type} />
         </Form.Item>
       ) : (
         children
