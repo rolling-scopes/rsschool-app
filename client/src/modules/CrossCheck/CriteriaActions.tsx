@@ -41,7 +41,9 @@ export const CriteriaActions: FC<CriteriaActionsProps> = ({
         }}
         onConfirm={() => remove(record.key)}
       >
-        <Typography.Link type="danger">Delete</Typography.Link>
+        <Typography.Link disabled={!!editingKey} type="danger">
+          Delete
+        </Typography.Link>
       </Popconfirm>
     </Space>
   );

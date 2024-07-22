@@ -2,11 +2,11 @@ import { Form } from 'antd';
 import { CriteriaDto } from 'api';
 import React from 'react';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
-import { EditableCrossCheckTableColumnsDataIndex, TaskType } from './constants';
+import { EditableTableColumnsDataIndex, TaskType } from './constants';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
-  dataIndex: EditableCrossCheckTableColumnsDataIndex;
+  dataIndex: EditableTableColumnsDataIndex;
   record: CriteriaDto;
   index: number;
   children: React.ReactNode;

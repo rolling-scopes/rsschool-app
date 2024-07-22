@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { CriteriaActions } from './CriteriaActions';
-import { EditableCrossCheckTableColumnsDataIndex } from './constants';
+import { EditableTableColumnsDataIndex } from './constants';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
@@ -13,10 +13,12 @@ interface IEditableTableProps {
 export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableProps) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
+  const [originData, setOriginData] = useState<CriteriaDto[]>([]);
 
   const isEditing = (record: CriteriaDto) => record.key === editingKey;
 
   const edit = (record: Partial<CriteriaDto> & { key: React.Key }) => {
+    setOriginData(dataCriteria);
     form.setFieldsValue({ type: '', text: '', ...record });
     setEditingKey(record.key);
   };
@@ -47,8 +49,8 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const cancel = () => {
+    setDataCriteria(originData);
     setEditingKey('');
-    // does not work after fix of changeTaskType
   };
 
   const changeTaskType = async (value: string) => {
@@ -62,6 +64,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       newData.splice(index, 1, {
         ...item,
         type: value as CriteriaDtoTypeEnum,
+        max: value === CriteriaDtoTypeEnum.Title ? undefined : item.max,
       });
       setDataCriteria(newData);
     } else {
@@ -73,25 +76,25 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   const columns = [
     {
       title: 'Type',
-      dataIndex: EditableCrossCheckTableColumnsDataIndex.Type,
+      dataIndex: EditableTableColumnsDataIndex.Type,
       width: '18%',
       editable: true,
     },
     {
       title: 'Max',
-      dataIndex: EditableCrossCheckTableColumnsDataIndex.Max,
+      dataIndex: EditableTableColumnsDataIndex.Max,
       width: '10%',
       editable: true,
     },
     {
       title: 'Text',
-      dataIndex: EditableCrossCheckTableColumnsDataIndex.Text,
+      dataIndex: EditableTableColumnsDataIndex.Text,
       width: '52%',
       editable: true,
     },
     {
       title: 'Actions',
-      dataIndex: EditableCrossCheckTableColumnsDataIndex.Actions,
+      dataIndex: EditableTableColumnsDataIndex.Actions,
       width: '20%%',
       render: (_: any, record: CriteriaDto) => (
         <CriteriaActions

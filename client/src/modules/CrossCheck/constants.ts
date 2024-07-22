@@ -19,7 +19,7 @@ export const ROLE_TAG_COLOR = {
   [CrossCheckMessageDtoRoleEnum.Student]: 'success',
 };
 
-export enum EditableCrossCheckTableColumnsDataIndex {
+export enum EditableTableColumnsDataIndex {
   Sort = 'sort',
   Type = 'type',
   Max = 'max',
