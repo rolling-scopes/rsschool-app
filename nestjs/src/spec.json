@@ -1488,6 +1488,7 @@
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "tasks", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "student", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {

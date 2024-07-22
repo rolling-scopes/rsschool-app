@@ -36,6 +36,7 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
           String(pagination.current),
           String(pagination.pageSize),
           filters?.taskName ? filters.taskName.toString() : '',
+          filters?.student ? filters.student.toString() : '',
           course.id,
         );
         setReviews({ ...reviews, ...data });

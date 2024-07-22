@@ -14,4 +14,9 @@ export class MentorReviewsQueryDto {
   @IsString()
   @IsOptional()
   public tasks: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  public student: string;
 }
