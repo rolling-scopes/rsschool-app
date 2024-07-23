@@ -36,8 +36,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
   };
 
   const cancel = () => {
-    const criterions = Object.values(originData);
-    setDataCriteria(criterions);
+    setDataCriteria(originData);
     setEditingKey('');
   };
 
