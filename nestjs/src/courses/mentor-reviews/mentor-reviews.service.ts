@@ -13,7 +13,7 @@ export class MentorReviewsService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
-  private buildMentorReviewsQuery({ courseId, tasks }: { courseId: number; tasks: string }) {
+  private buildMentorReviewsQuery({ courseId, tasks, student }: { courseId: number; tasks: string; student: string }) {
     const query = this.taskSolutionRepository
       .createQueryBuilder('taskSolution')
       .innerJoin('taskSolution.courseTask', 'courseTask')
@@ -67,11 +67,16 @@ export class MentorReviewsService {
       const taskIds = tasks.split(',').map(id => parseInt(id));
       query.andWhere('courseTask.id IN (:...taskIds)', { taskIds });
     }
+
+    if (student) {
+      query.andWhere('studentUser.githubId ILIKE :student', { student: `%${student}%` });
+    }
+
     return query;
   }
 
-  public async getMentorReviews(courseId: number, page: number, limit: number, tasks: string) {
-    const query = this.buildMentorReviewsQuery({ courseId, tasks });
+  public async getMentorReviews(courseId: number, page: number, limit: number, tasks: string, student: string) {
+    const query = this.buildMentorReviewsQuery({ courseId, tasks, student: student });
     const data = await paginate(query, { page, limit });
 
     return data;

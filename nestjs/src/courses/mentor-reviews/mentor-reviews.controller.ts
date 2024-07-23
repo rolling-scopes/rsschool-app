@@ -17,7 +17,8 @@ export class MentorReviewsController {
   public async getScore(@Query() query: MentorReviewsQueryDto, @Param('courseId', ParseIntPipe) courseId: number) {
     const page = parseInt(query.current);
     const limit = parseInt(query.pageSize);
-    const mentorReviews = await this.mentorReviewsService.getMentorReviews(courseId, page, limit, query.tasks);
+    const { student, tasks } = query;
+    const mentorReviews = await this.mentorReviewsService.getMentorReviews(courseId, page, limit, tasks, student);
 
     return new MentorReviewsDto(mentorReviews);
   }
