@@ -10,7 +10,6 @@ import { TaskType } from '../constants';
 
 const { Text, Title } = Typography;
 
-
 export interface CriteriaFormProps {
   maxScore: number | undefined;
   score: number;
