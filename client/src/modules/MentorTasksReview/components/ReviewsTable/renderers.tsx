@@ -50,6 +50,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     title: ColumnName.SubmittedDate,
     dataIndex: ColumnKey.SubmittedDate,
     width: '15%',
+    sorter: true,
     render: (_v, review) => dateTimeRenderer(review.submittedAt),
   },
   {
@@ -75,6 +76,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     title: ColumnName.ReviewedDate,
     dataIndex: ColumnKey.ReviewedDate,
     width: '15%',
+    sorter: true,
     render: (_v, review) => dateTimeRenderer(review.reviewedAt),
   },
   {

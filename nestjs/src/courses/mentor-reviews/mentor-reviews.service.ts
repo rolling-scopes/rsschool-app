@@ -13,7 +13,19 @@ export class MentorReviewsService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
   ) {}
 
-  private buildMentorReviewsQuery({ courseId, tasks, student }: { courseId: number; tasks: string; student: string }) {
+  private buildMentorReviewsQuery({
+    courseId,
+    tasks,
+    student,
+    sortField,
+    sortOrder,
+  }: {
+    courseId: number;
+    tasks?: string;
+    student?: string;
+    sortField?: string;
+    sortOrder?: 'ASC' | 'DESC';
+  }) {
     const query = this.taskSolutionRepository
       .createQueryBuilder('taskSolution')
       .innerJoin('taskSolution.courseTask', 'courseTask')
@@ -60,8 +72,7 @@ export class MentorReviewsService {
         'studentMentor.id',
         'studentMentorUser.githubId',
         'lastChecker.githubId',
-      ])
-      .addOrderBy('taskSolution.id', 'ASC');
+      ]);
 
     if (tasks) {
       const taskIds = tasks.split(',').map(id => parseInt(id));
@@ -72,11 +83,31 @@ export class MentorReviewsService {
       query.andWhere('studentUser.githubId ILIKE :student', { student: `%${student}%` });
     }
 
+    if (sortField && sortOrder) {
+      if (sortField === 'submittedAt') {
+        query.addOrderBy('taskSolution.createdDate', sortOrder);
+      }
+
+      if (sortField === 'reviewedAt') {
+        query.addOrderBy('taskResult.updatedDate', sortOrder);
+      }
+    } else {
+      query.addOrderBy('taskSolution.id', 'ASC');
+    }
+
     return query;
   }
 
-  public async getMentorReviews(courseId: number, page: number, limit: number, tasks: string, student: string) {
-    const query = this.buildMentorReviewsQuery({ courseId, tasks, student: student });
+  public async getMentorReviews(
+    courseId: number,
+    page: number,
+    limit: number,
+    tasks?: string,
+    student?: string,
+    sortField?: string,
+    sortOrder?: 'ASC' | 'DESC',
+  ) {
+    const query = this.buildMentorReviewsQuery({ courseId, tasks, student: student, sortField, sortOrder });
     const data = await paginate(query, { page, limit });
 
     return data;

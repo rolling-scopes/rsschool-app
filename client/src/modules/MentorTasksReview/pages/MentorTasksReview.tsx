@@ -10,6 +10,8 @@ import type { PageProps } from './getServerSideProps';
 import MentorReviewsTable from '../components/ReviewsTable';
 import { FilterValue } from 'antd/es/table/interface';
 import { ColumnKey } from '../components/ReviewsTable/renderers';
+import { SorterResult } from 'antd/lib/table/interface';
+import { sorterMap } from './constants';
 
 const { Text } = Typography;
 
@@ -30,14 +32,24 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
   const [loading, withLoading] = useLoading(false);
 
   const getMentorReviews = withLoading(
-    async (pagination: TablePaginationConfig, filters?: Record<ColumnKey, FilterValue | null>) => {
+    async (
+      pagination: TablePaginationConfig,
+      filters?: Record<ColumnKey, FilterValue | null>,
+      sorter?: SorterResult<MentorReviewDto> | SorterResult<MentorReviewDto>[],
+    ) => {
+      const sort =
+        sorter && !Array.isArray(sorter) && sorter.order
+          ? [sorter.field?.toString(), sorterMap[sorter.order]]
+          : [undefined, undefined];
+
       try {
         const { data } = await mentorReviewsApi.getMentorReviews(
           String(pagination.current),
           String(pagination.pageSize),
-          filters?.taskName ? filters.taskName.toString() : '',
-          filters?.student ? filters.student.toString() : '',
           course.id,
+          filters?.taskName?.toString(),
+          filters?.student?.toString(),
+          ...sort,
         );
         setReviews({ ...reviews, ...data });
       } catch (error) {

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 export class MentorReviewsQueryDto {
@@ -10,13 +10,23 @@ export class MentorReviewsQueryDto {
   @IsString()
   public pageSize: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   public tasks: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   public student: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  public sortField: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  public sortOrder: 'ASC' | 'DESC';
 }
