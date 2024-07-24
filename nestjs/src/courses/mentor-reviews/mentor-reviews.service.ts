@@ -85,15 +85,15 @@ export class MentorReviewsService {
 
     if (sortField && sortOrder) {
       if (sortField === 'submittedAt') {
-        query.addOrderBy('taskSolution.createdDate', sortOrder);
+        query.orderBy('taskSolution.createdDate', sortOrder);
       }
 
       if (sortField === 'reviewedAt') {
-        query.addOrderBy('taskResult.updatedDate', sortOrder);
+        query.orderBy('taskResult.updatedDate', sortOrder);
       }
-    } else {
-      query.addOrderBy('taskSolution.id', 'ASC');
     }
+
+    query.addOrderBy('taskSolution.id', 'ASC');
 
     return query;
   }
