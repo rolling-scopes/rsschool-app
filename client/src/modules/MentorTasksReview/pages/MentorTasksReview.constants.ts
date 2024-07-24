@@ -1,4 +1,4 @@
-export const sorterMap = {
+export const sortDirectionMap = {
   ascend: 'ASC',
   descend: 'DESC',
 };

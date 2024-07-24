@@ -11,7 +11,7 @@ import MentorReviewsTable from '../components/ReviewsTable';
 import { FilterValue } from 'antd/es/table/interface';
 import { ColumnKey } from '../components/ReviewsTable/renderers';
 import { SorterResult } from 'antd/lib/table/interface';
-import { sorterMap } from './constants';
+import { sortDirectionMap } from './MentorTasksReview.constants';
 
 const { Text } = Typography;
 
@@ -37,9 +37,9 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
       filters?: Record<ColumnKey, FilterValue | null>,
       sorter?: SorterResult<MentorReviewDto> | SorterResult<MentorReviewDto>[],
     ) => {
-      const sort =
+      const sortValues =
         sorter && !Array.isArray(sorter) && sorter.order
-          ? [sorter.field?.toString(), sorterMap[sorter.order]]
+          ? [sorter.field?.toString(), sortDirectionMap[sorter.order]]
           : [undefined, undefined];
 
       try {
@@ -49,7 +49,7 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
           course.id,
           filters?.taskName?.toString(),
           filters?.student?.toString(),
-          ...sort,
+          ...sortValues,
         );
         setReviews({ ...reviews, ...data });
       } catch (error) {
