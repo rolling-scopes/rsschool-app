@@ -18,3 +18,16 @@ export const ROLE_TAG_COLOR = {
   [CrossCheckMessageDtoRoleEnum.Reviewer]: 'processing',
   [CrossCheckMessageDtoRoleEnum.Student]: 'success',
 };
+
+export enum EditableTableColumnsDataIndex {
+  Type = 'type',
+  Max = 'max',
+  Text = 'text',
+  Actions = 'actions',
+}
+
+export enum TaskType {
+  Title = 'title',
+  Subtask = 'subtask',
+  Penalty = 'penalty',
+}
