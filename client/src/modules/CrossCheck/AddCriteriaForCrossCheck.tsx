@@ -1,11 +1,11 @@
-import { Button, Form, InputNumber, Select, Input, message } from 'antd';
-import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
-import React, { useMemo, useState } from 'react';
+import { Button, Form, InputNumber, Input, message } from 'antd';
+import React, { ChangeEventHandler, useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
+import { CriteriaTypeSelect } from './CriteriaTypeSelect';
+import { TaskType } from './constants';
 
 const { Item } = Form;
 const { TextArea } = Input;
-const { Option } = Select;
 
 export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck) => {
   const [type, setType] = useState<CrossCheckCriteriaType>('title');
@@ -19,27 +19,28 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setMax(0);
     setMaxPenalty(0);
     setText('');
+    setType('title');
   };
 
-  const onFinish = () => {
-    let criteriaDetails;
-    type.toLowerCase() === TaskType.Title
-      ? (criteriaDetails = {
-          key: DEFAULT_KEY,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        })
-      : (criteriaDetails = {
-          key: DEFAULT_KEY,
-          max: type.toLowerCase() === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        });
-    clearInputs();
+  const onSave = () => {
+    const criteriaDetails =
+      type === TaskType.Title
+        ? {
+            key: DEFAULT_KEY,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          }
+        : {
+            key: DEFAULT_KEY,
+            max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          };
     onCreate(criteriaDetails);
-    message.success('Criteria added!');
+    clearInputs();
+    message.success('Criteria added.');
   };
 
   function changeMax(value: number | null) {
@@ -54,39 +55,39 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setType(value);
   }
 
-  const isDisabled: boolean = useMemo(() => {
-    if (type.toLocaleLowerCase() === TaskType.Title) {
-      return text ? false : true;
+  const changeText: ChangeEventHandler<HTMLTextAreaElement> = event => {
+    setText(event.target.value);
+  };
+
+  const canSave: boolean = useMemo(() => {
+    if (type === TaskType.Title) {
+      return !!text;
     }
-    if (type.toLocaleLowerCase() === TaskType.Penalty) {
-      return text && maxPenalty ? false : true;
+
+    if (type === TaskType.Penalty) {
+      return !!(text && maxPenalty);
     }
-    return text && max ? false : true;
+
+    return !!(text && max);
   }, [type, max, maxPenalty, text]);
 
   return (
     <>
       <Item label="Criteria Type">
-        <Select placeholder="Select type" onChange={changeType}>
-          <Option data-testid="Title" value="Title">
-            Title
-          </Option>
-          <Option data-testid="Subtask" value="Subtask">
-            Subtask
-          </Option>
-          <Option value="Penalty">Penalty</Option>
-        </Select>
+        <CriteriaTypeSelect onChange={changeType} />
       </Item>
 
-      {type.toLowerCase() === TaskType.Subtask ? (
+      {type === TaskType.Subtask && (
         <Item label="Add Max Score">
           <InputNumber value={max} min={0} step={1} onChange={changeMax} />
         </Item>
-      ) : type.toLowerCase() === TaskType.Penalty ? (
+      )}
+
+      {type === TaskType.Penalty && (
         <Item label="Add Max Penalty">
           <InputNumber value={maxPenalty} step={1} onChange={changeMaxPenalty} />
         </Item>
-      ) : null}
+      )}
 
       <Item label="Add Text">
         <TextArea
@@ -94,12 +95,12 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
           style={{ maxWidth: 1200 }}
           placeholder="Add description"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={changeText}
         ></TextArea>
       </Item>
 
       <div style={{ textAlign: 'right' }}>
-        <Button type="primary" onClick={onFinish} disabled={isDisabled}>
+        <Button type="primary" onClick={onSave} disabled={!canSave}>
           Add New Criteria
         </Button>
       </div>
