@@ -29,6 +29,7 @@ import { CloudApiModule } from './cloud-api/cloud-api.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
+import { AutoTestModule } from './auto-test/auto-test.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { PromptsModule } from './prompts/prompts.module';
     EventsModule,
     TasksModule,
     PromptsModule,
+    AutoTestModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

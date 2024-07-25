@@ -9,7 +9,9 @@ import ProfileFilled from '@ant-design/icons/ProfileFilled';
 import TeamOutlined from '@ant-design/icons/TeamOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
+import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlined';
 import QqOutlined from '@ant-design/icons/QqOutlined';
+
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 import { Session } from 'components/withSession';
 import {
@@ -136,6 +138,13 @@ const adminMenuItems: AdminMenuItemsData[] = [
     icon: <FileTextOutlined />,
     href: '/admin/prompts',
     access: session => isAdmin(session),
+  },
+  {
+    name: 'Auto tests',
+    key: 'auto-test',
+    icon: <ExclamationCircleOutlined />,
+    href: '/admin/auto-test',
+    access: session => isAdmin(session) || isAnyCourseManager(session),
   },
   {
     name: 'Students',
