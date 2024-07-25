@@ -14,7 +14,7 @@ import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
 import { CourseRole } from 'services/models';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
-import { CrossCheckCriteriaForm, TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
+import { CrossCheckCriteriaForm } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState, useContext } from 'react';
@@ -22,6 +22,7 @@ import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService, CrossCheckStatus } from 'services/course';
 import { getQueryString } from 'utils/queryParams-utils';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { TaskType } from 'modules/CrossCheck/constants';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',

@@ -1,8 +1,9 @@
-import { Form, Table, Typography, Popconfirm } from 'antd';
+import { Form, Table } from 'antd';
 import React, { useState } from 'react';
-import { SaveOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
-import { CriteriaDto } from 'api';
+import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
+import { CriteriaActions } from './CriteriaActions';
+import { EditableTableColumnsDataIndex } from './constants';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
@@ -12,89 +13,80 @@ interface IEditableTableProps {
 export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableProps) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
+  const [originData, setOriginData] = useState<CriteriaDto[]>([]);
 
   const isEditing = (record: CriteriaDto) => record.key === editingKey;
 
-  const edit = (record: Partial<CriteriaDto> & { key: React.Key }) => {
-    form.setFieldsValue({ type: '', text: '', ...record });
+  const edit = (record: CriteriaDto) => {
+    setOriginData(dataCriteria);
+    form.setFieldsValue(record);
     setEditingKey(record.key);
   };
 
-  const handleDelete = (key: React.Key) => {
-    const newData = [...dataCriteria];
-    setDataCriteria(newData.filter(item => item.key !== key));
+  const remove = (key: string) => {
+    setDataCriteria(dataCriteria.filter(item => item.key !== key));
   };
 
-  const save = async (key: React.Key) => {
-    const row = (await form.validateFields()) as CriteriaDto;
+  const save = async (key: string) => {
+    const formData = await form.validateFields();
+    const newData = dataCriteria.map(criteria => (criteria.key === key ? { ...criteria, ...formData } : criteria));
 
-    const newData = [...dataCriteria];
-    const index = newData.findIndex(item => key === item.key);
-    if (index > -1) {
-      const item = newData[index];
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-      setDataCriteria(newData);
-      setEditingKey('');
-    } else {
-      newData.push(row);
-      setDataCriteria(newData);
-      setEditingKey('');
-    }
+    setDataCriteria(newData);
+    setEditingKey('');
+  };
+
+  const cancel = () => {
+    setDataCriteria(originData);
+    setEditingKey('');
+  };
+
+  const changeTaskType = async (value: string) => {
+    const newData = dataCriteria.map(criteria =>
+      criteria.key === editingKey
+        ? {
+            ...criteria,
+            type: value as CriteriaDtoTypeEnum,
+            max: value === CriteriaDtoTypeEnum.Title ? undefined : criteria.max,
+          }
+        : criteria,
+    );
+    setDataCriteria(newData);
   };
 
   const columns = [
     {
-      title: 'Sort',
-      dataIndex: 'sort',
-      width: '7%',
-      className: 'drag-visible',
-    },
-    {
       title: 'Type',
-      dataIndex: 'type',
-      width: '12.5%',
+      dataIndex: EditableTableColumnsDataIndex.Type,
+      width: '18%',
       editable: true,
     },
     {
       title: 'Max',
-      dataIndex: 'max',
-      width: '9%',
+      dataIndex: EditableTableColumnsDataIndex.Max,
+      width: '10%',
       editable: true,
     },
     {
       title: 'Text',
-      dataIndex: 'text',
-      width: '55%',
+      dataIndex: EditableTableColumnsDataIndex.Text,
+      width: '52%',
       editable: true,
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
-      width: '10%',
-      render: (_: any, record: CriteriaDto) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link onClick={() => save(record.key)} style={{ marginLeft: 8 }}>
-              <SaveOutlined />
-            </Typography.Link>
-          </span>
-        ) : (
-          <span>
-            <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)} style={{ marginRight: 5 }}>
-              <EditOutlined />
-            </Typography.Link>
-            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-              <Typography.Link>
-                <DeleteOutlined />
-              </Typography.Link>
-            </Popconfirm>
-          </span>
-        );
-      },
+      title: 'Actions',
+      dataIndex: EditableTableColumnsDataIndex.Actions,
+      width: '20%',
+      render: (_: any, record: CriteriaDto) => (
+        <CriteriaActions
+          editing={isEditing(record)}
+          record={record}
+          editingKey={editingKey}
+          cancel={cancel}
+          edit={edit}
+          remove={remove}
+          save={save}
+        />
+      ),
     },
   ];
 
@@ -102,16 +94,15 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
     if (!col.editable) {
       return col;
     }
+
     return {
       ...col,
       onCell: (record: CriteriaDto) => ({
         record,
-        inputType: col.dataIndex === 'max' ? 'max' : col.dataIndex === 'type' ? 'text' : 'description',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-        type: record.type,
-        points: record.max,
+        onSelectChange: changeTaskType,
       }),
     };
   });

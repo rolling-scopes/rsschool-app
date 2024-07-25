@@ -1,7 +1,12 @@
 import { ColumnsType } from 'antd/lib/table';
 import { CourseTaskDto, MentorReviewDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
-import { dateTimeRenderer, renderTask, stringTrimRenderer } from 'components/Table';
+import { dateTimeRenderer, getColumnSearchProps, renderTask, stringTrimRenderer } from 'components/Table';
+
+const getSearchProps = (key: string) => ({
+  ...getColumnSearchProps(key),
+  onFilter: undefined,
+});
 
 export enum ColumnKey {
   TaskName = 'taskName',
@@ -38,12 +43,14 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     dataIndex: ColumnKey.Student,
     width: '15%',
     render: (_v, review) => <GithubUserLink value={review.student} />,
+    ...getSearchProps(ColumnKey.Student),
   },
   {
     key: ColumnKey.SubmittedDate,
     title: ColumnName.SubmittedDate,
     dataIndex: ColumnKey.SubmittedDate,
     width: '15%',
+    sorter: true,
     render: (_v, review) => dateTimeRenderer(review.submittedAt),
   },
   {
@@ -69,6 +76,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     title: ColumnName.ReviewedDate,
     dataIndex: ColumnKey.ReviewedDate,
     width: '15%',
+    sorter: true,
     render: (_v, review) => dateTimeRenderer(review.reviewedAt),
   },
   {

@@ -3,8 +3,8 @@ import { UploadOutlined } from '@ant-design/icons';
 import React from 'react';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { CriteriaDto } from 'api';
-import { TaskType } from './components/CrossCheckCriteriaForm';
 import { CrossCheckCriteriaType } from 'services/course';
+import { TaskType } from './constants';
 
 interface IUploadCriteriaJSON {
   onLoad: (data: CriteriaDto[]) => void;
