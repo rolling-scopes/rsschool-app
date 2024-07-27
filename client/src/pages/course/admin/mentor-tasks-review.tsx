@@ -1,6 +1,6 @@
 import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
-import { MentorTasksReview } from 'modules/MetorTasksReview/pages/MentorTasksReview';
-import { getServerSideProps, PageProps } from 'modules/MetorTasksReview/pages/getServerSideProps';
+import { MentorTasksReview } from 'modules/MentorTasksReview/pages/MentorTasksReview';
+import { getServerSideProps, PageProps } from 'modules/MentorTasksReview/pages/getServerSideProps';
 import { CourseRole } from 'services/models';
 
 export { getServerSideProps };

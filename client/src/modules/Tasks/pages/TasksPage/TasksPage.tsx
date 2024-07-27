@@ -5,9 +5,9 @@ import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, Tas
 import { AdminPageLayout } from 'components/PageLayout';
 import { useModalForm } from 'hooks';
 import { useActiveCourseContext } from 'modules/Course/contexts';
-import { TaskType } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';
 import { FormValues } from 'modules/Tasks/types';
+import { TaskType } from 'modules/CrossCheck/constants';
 
 const { Content } = Layout;
 

@@ -2,8 +2,8 @@ import FileOutlined from '@ant-design/icons/FileOutlined';
 import { Button } from 'antd';
 import { CriteriaDto } from 'api';
 import omit from 'lodash/omit';
-import { TaskType } from './components/CrossCheckCriteriaForm';
 import { CriteriaJSONType } from './UploadCriteriaJSON';
+import { TaskType } from './constants';
 
 interface Props {
   dataCriteria: CriteriaDto[];

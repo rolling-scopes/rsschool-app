@@ -1487,7 +1487,10 @@
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
-          { "name": "tasks", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "tasks", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "student", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "sortField", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "sortOrder", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
@@ -4444,12 +4447,11 @@
       "InviteMentorsDto": {
         "type": "object",
         "properties": {
-          "preselectedCourses": { "type": "array", "items": { "type": "string" } },
-          "certificate": { "type": "boolean" },
-          "mentor": { "type": "boolean" },
+          "disciplines": { "type": "array", "items": { "type": "string" } },
+          "isMentor": { "type": "boolean" },
           "text": { "type": "string" }
         },
-        "required": ["preselectedCourses", "certificate", "mentor", "text"]
+        "required": ["disciplines", "isMentor", "text"]
       },
       "SaveCertificateDto": {
         "type": "object",
