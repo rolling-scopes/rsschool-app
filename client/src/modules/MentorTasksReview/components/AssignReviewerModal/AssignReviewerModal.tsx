@@ -11,7 +11,7 @@ const mentorReviewsApi = new MentorReviewsApi();
 
 export interface AssignReviewerModalProps {
   review: MentorReviewDto | null;
-  onClose: (d: MentorReviewDto | null) => void;
+  onClose: () => void;
   onSubmit: () => void;
 }
 
@@ -40,7 +40,6 @@ function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalP
       if (mentorId) {
         await assignReviewer(course.id, taskId, mentorId, studentId);
         setSubmitted(true);
-        onClose(null);
         onSubmit();
       }
     } catch (e: any) {
@@ -52,7 +51,7 @@ function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalP
   const handleClose = () => {
     setErrorText('');
     setSubmitted(false);
-    onClose(null);
+    onClose();
   };
 
   return (
