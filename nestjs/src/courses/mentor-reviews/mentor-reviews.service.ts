@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -118,19 +118,26 @@ export class MentorReviewsService {
     return data;
   }
 
+  private async findTaskCheckerRecord(courseTaskId: number, studentId: number) {
+    return await this.taskCheckerRepository.findOne({
+      where: { studentId, courseTaskId },
+      select: {
+        id: true,
+      },
+    });
+  }
+
   public async assignReviewer({ courseTaskId, mentorId, studentId }: MentorReviewAssignDto) {
-    if (courseTaskId && studentId) {
-      const checker: Partial<TaskChecker> = {
-        courseTaskId,
-        studentId,
-        mentorId,
-      };
+    const taskCheckerRecord = await this.findTaskCheckerRecord(courseTaskId, studentId);
 
-      console.log(checker);
-
-      return await this.taskCheckerRepository.insert(checker);
+    if (taskCheckerRecord) {
+      return await this.taskCheckerRepository.update(taskCheckerRecord.id, { courseTaskId, mentorId, studentId });
     }
 
-    throw new NotFoundException();
+    return await this.taskCheckerRepository.insert({
+      courseTaskId,
+      studentId,
+      mentorId,
+    });
   }
 }
