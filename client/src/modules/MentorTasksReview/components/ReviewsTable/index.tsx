@@ -8,14 +8,15 @@ type Props = {
   content: MentorReviewDto[];
   pagination: false | TablePaginationConfig;
   handleChange?: TableProps<MentorReviewDto>['onChange'];
+  handleReviewerAssigned: () => void;
   loading?: boolean;
   tasks: CourseTaskDto[];
 };
 
-export default function MentorReviewsTable({ content, pagination, handleChange, loading, tasks }: Props) {
+export default function MentorReviewsTable({ content, pagination, handleChange, handleReviewerAssigned, loading, tasks }: Props) {
   const [modalData, setModalData] = useState<MentorReviewDto | null>(null);
 
-  const handleAssignReviewer = (review: MentorReviewDto) => setModalData(review);
+  const handleClick = (review: MentorReviewDto) => setModalData(review);
 
   return (
     <>
@@ -23,13 +24,13 @@ export default function MentorReviewsTable({ content, pagination, handleChange, 
         showHeader
         dataSource={content}
         size="small"
-        columns={getColumns(tasks, handleAssignReviewer)}
+        columns={getColumns(tasks, handleClick)}
         onChange={handleChange}
         rowKey="id"
         pagination={pagination}
         loading={loading}
       />
-      <AssignReviewerModal review={modalData} onClose={setModalData}  />
+      <AssignReviewerModal review={modalData} onClose={setModalData} onSubmit={handleReviewerAssigned} />
     </>
   );
 }

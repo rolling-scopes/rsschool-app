@@ -12,7 +12,7 @@ const mentorReviewsApi = new MentorReviewsApi();
 export interface AssignReviewerModalProps {
   review: MentorReviewDto | null;
   onClose: (d: MentorReviewDto | null) => void;
-  // onSubmit: () => void;
+  onSubmit: () => void;
 }
 
 const { Link } = Typography;
@@ -20,7 +20,7 @@ const { Link } = Typography;
 const MODAL_TITLE = 'Assign Reviewer for';
 const SUCCESS_MESSAGE = 'Reviewer has been successfully assigned';
 
-function AssignReviewerModal({ review, onClose }: AssignReviewerModalProps) {
+function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalProps) {
   const { course } = useActiveCourseContext();
   const [loading, withLoading] = useLoading(false);
 
@@ -41,7 +41,7 @@ function AssignReviewerModal({ review, onClose }: AssignReviewerModalProps) {
         await assignReviewer(course.id, taskId, mentorId, studentId);
         setSubmitted(true);
         onClose(null);
-        // onSubmit();
+        onSubmit();
       }
     } catch (e: any) {
       const error = e.response?.data?.message ?? e.message;

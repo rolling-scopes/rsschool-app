@@ -33,7 +33,7 @@ enum ColumnName {
 
 export const getColumns = (
   tasks: CourseTaskDto[],
-  handleAssignReviewer: (review: MentorReviewDto) => void,
+  handleClick: (review: MentorReviewDto) => void,
 ): ColumnsType<MentorReviewDto> => [
   {
     key: ColumnKey.TaskName,
@@ -104,7 +104,7 @@ export const getColumns = (
     dataIndex: ColumnKey.Actions,
     width: '12.5%',
     render: (_v, review) => (
-      <Button type="link" onClick={() => handleAssignReviewer(review)}>
+      <Button type="link" onClick={() => handleClick(review)} disabled={!!review.score}>
         Assign Reviewer
       </Button>
     ),

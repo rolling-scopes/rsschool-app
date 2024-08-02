@@ -22,9 +22,11 @@ export class MentorReviewDto {
   }
 
   private getChecker(taskSolution: TaskSolution) {
-    return taskSolution.student.taskResults?.at(0)?.score !== undefined
-      ? taskSolution.student.taskResults.at(0)?.lastChecker?.githubId
-      : taskSolution.student.taskChecker?.at(0)?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
+    if (taskSolution.student.taskResults?.at(0)?.score !== undefined) {
+      return taskSolution.student.taskResults.at(0)?.lastChecker?.githubId;
+    }
+
+    return taskSolution.student.taskChecker?.at(0)?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
   }
 
   @ApiProperty({ description: 'Task solution id' })
