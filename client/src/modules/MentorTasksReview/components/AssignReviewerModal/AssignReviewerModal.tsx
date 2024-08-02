@@ -1,13 +1,16 @@
 import { Col, Form, Row, Typography } from 'antd';
 import React, { useState } from 'react';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
-import { MentorReviewDto } from 'api';
+import { MentorReviewDto, MentorReviewsApi } from 'api';
 import isEmpty from 'lodash/isEmpty';
 import { MentorSearch } from 'components/MentorSearch';
+import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useLoading } from 'components/useLoading';
+
+const mentorReviewsApi = new MentorReviewsApi();
 
 export interface AssignReviewerModalProps {
   review: MentorReviewDto | null;
-  courseId: number;
   onClose: (d: MentorReviewDto | null) => void;
   // onSubmit: () => void;
 }
@@ -17,34 +20,37 @@ const { Link } = Typography;
 const MODAL_TITLE = 'Assign Reviewer for';
 const SUCCESS_MESSAGE = 'Reviewer has been successfully assigned';
 
-function AssignReviewerModal({ review, courseId, onClose }: AssignReviewerModalProps) {
-  const { solutionUrl, taskDescriptionUrl, taskName, student } = review || {};
+function AssignReviewerModal({ review, onClose }: AssignReviewerModalProps) {
+  const { course } = useActiveCourseContext();
+  const [loading, withLoading] = useLoading(false);
 
-  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  // const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const courseId = course.id;
+  const { solutionUrl, taskDescriptionUrl, taskName, student, taskId, studentId } = review || {};
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  const assignReviewer = withLoading(async (courseId, courseTaskId, mentorId, studentId) => {
+    await mentorReviewsApi.assignReviewer(courseId, { courseTaskId, mentorId, studentId });
+  });
 
+  const handleSubmit = async (values: any) => {
+    const { mentorId } = values;
     try {
-      if (student) {
+      if (mentorId) {
+        await assignReviewer(course.id, taskId, mentorId, studentId);
         setSubmitted(true);
+        onClose(null);
         // onSubmit();
       }
     } catch (e: any) {
       const error = e.response?.data?.message ?? e.message;
       setErrorText(error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleClose = () => {
     setErrorText('');
-    setLoading(false);
     setSubmitted(false);
     onClose(null);
   };
@@ -63,18 +69,18 @@ function AssignReviewerModal({ review, courseId, onClose }: AssignReviewerModalP
     >
       <Row>
         <Col span={18} offset={3}>
-          <Form.Item label="Task Name" name="task">
+          <Form.Item label="Task Name">
             <Link href={taskDescriptionUrl} target="_blank">
               {taskName}
             </Link>
           </Form.Item>
-          <Form.Item label="Submitted Link" name="prUrl">
+          <Form.Item label="Submitted Link">
             <Link href={solutionUrl} target="_blank">
               {solutionUrl}
             </Link>
           </Form.Item>
-          <Form.Item name="githubId" rules={[{ required: true, message: 'Please select  mentor' }]} label="Mentor">
-            <MentorSearch keyField="githubId" courseId={courseId} />
+          <Form.Item name="mentorId" rules={[{ required: true, message: 'Please select  mentor' }]} label="Mentor">
+            <MentorSearch keyField="id" courseId={courseId} />
           </Form.Item>
         </Col>
       </Row>

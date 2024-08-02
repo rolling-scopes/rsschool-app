@@ -7,12 +7,14 @@ export class MentorReviewDto {
   constructor(taskSolution: TaskSolution) {
     this.id = taskSolution.id;
     this.taskName = taskSolution.courseTask.task.name;
+    this.taskId = taskSolution.courseTask.id;
     this.solutionUrl = taskSolution.url;
     this.submittedAt = new Date(taskSolution.createdDate);
     this.checker = this.getChecker(taskSolution);
     this.score = taskSolution.student.taskResults?.at(0)?.score;
     this.maxScore = taskSolution.courseTask.maxScore;
     this.student = taskSolution.student.user.githubId;
+    this.studentId = taskSolution.student.id;
     this.reviewedAt = taskSolution.student.taskResults?.at(0)?.updatedDate
       ? new Date(taskSolution.student.taskResults.at(0)!.updatedDate)
       : undefined;
@@ -28,8 +30,11 @@ export class MentorReviewDto {
   @ApiProperty({ description: 'Task solution id' })
   id: number;
 
-  @ApiProperty({ description: 'Task name' })
+  @ApiProperty({ description: 'Course task name' })
   taskName: string;
+
+  @ApiProperty({ description: 'Course task id' })
+  taskId: number;
 
   @ApiProperty({ description: 'Task solution url' })
   solutionUrl: string;
@@ -48,6 +53,9 @@ export class MentorReviewDto {
 
   @ApiProperty({ description: 'Student github id' })
   student: string;
+
+  @ApiProperty({ description: 'Student id' })
+  studentId: number;
 
   @ApiProperty({ description: 'Task solution review date' })
   reviewedAt?: Date;
