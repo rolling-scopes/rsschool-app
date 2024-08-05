@@ -8,6 +8,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
+import EmploymentCard from 'components/Profile/EmploymentCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
@@ -67,6 +68,11 @@ const ProfilePage = () => {
         const userId = session.githubId;
         const profileId = profile.generalInfo.githubId;
         isProfileOwner = checkIsProfileOwner(userId, profileId);
+      }
+
+      if (isProfileOwner) {
+        const { data } = await profileApi.getEmployment();
+        updateProfile.employmentHistory = data;
       }
 
       setProfile(updateProfile);
@@ -144,6 +150,13 @@ const ProfilePage = () => {
       isEditingModeEnabled={isProfileOwner}
       updateProfile={updateProfile}
     />,
+      profile?.employmentHistory !== undefined && (
+        <EmploymentCard
+          data={profile?.employmentHistory || []}
+          isEditingModeEnabled={isProfileOwner}
+          updateProfile={updateProfile}
+        />
+      ),
     profile?.generalInfo?.educationHistory !== undefined && (
       <EducationCard
         data={profile.generalInfo?.educationHistory || []}

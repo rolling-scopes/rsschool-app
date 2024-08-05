@@ -2679,6 +2679,49 @@ export interface Education {
 /**
  * 
  * @export
+ * @interface EmploymentRecordDto
+ */
+export interface EmploymentRecordDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof EmploymentRecordDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EmploymentRecordDto
+     */
+    'dateTo': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EmploymentRecordDto
+     */
+    'dateFrom': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EmploymentRecordDto
+     */
+    'companyName': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EmploymentRecordDto
+     */
+    'toPresent': boolean;
+    /**
+     * 
+     * @type {object}
+     * @memberof EmploymentRecordDto
+     */
+    'location'?: object;
+}
+/**
+ * 
+ * @export
  * @interface EndorsementDataDto
  */
 export interface EndorsementDataDto {
@@ -6591,6 +6634,12 @@ export interface UpdateProfileInfoDto {
      * @memberof UpdateProfileInfoDto
      */
     'educationHistory'?: Array<Education> | null;
+    /**
+     * 
+     * @type {Array<EmploymentRecordDto>}
+     * @memberof UpdateProfileInfoDto
+     */
+    'employmentHistory'?: Array<EmploymentRecordDto> | null;
     /**
      * 
      * @type {string}
@@ -14883,6 +14932,35 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEmployment: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/profile/employment`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15161,6 +15239,15 @@ export const ProfileApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getEmployment(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EmploymentRecordDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEmployment(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15251,6 +15338,14 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEmployment(options?: any): AxiosPromise<Array<EmploymentRecordDto>> {
+            return localVarFp.getEmployment(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15331,6 +15426,16 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class ProfileApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getEmployment(options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getEmployment(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} username 

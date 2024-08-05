@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
+import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum, EmploymentRecordDto } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -226,6 +226,7 @@ export type ProfileInfo = {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
   discord: Discord | null;
+  employmentHistory?: EmploymentRecordDto[];
 } & ProfileDto;
 
 export type ProfileMainCardData = {

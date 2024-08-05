@@ -1782,6 +1782,24 @@
         "tags": ["profile"]
       }
     },
+    "/profile/employment": {
+      "get": {
+        "operationId": "getEmployment",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EmploymentRecordDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["profile"]
+      }
+    },
     "/profile/{username}": {
       "get": {
         "operationId": "getProfile",
@@ -4325,6 +4343,19 @@
         },
         "required": ["university", "faculty", "graduationYear"]
       },
+      "LocationDto": { "type": "object", "properties": {} },
+      "EmploymentRecordDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "dateTo": { "type": "string" },
+          "dateFrom": { "type": "string" },
+          "companyName": { "type": "string" },
+          "toPresent": { "type": "boolean" },
+          "location": { "$ref": "#/components/schemas/LocationDto" }
+        },
+        "required": ["title", "dateTo", "dateFrom", "companyName", "toPresent"]
+      },
       "UpdateProfileInfoDto": {
         "type": "object",
         "properties": {
@@ -4337,6 +4368,11 @@
             "nullable": true,
             "type": "array",
             "items": { "$ref": "#/components/schemas/Education" }
+          },
+          "employmentHistory": {
+            "nullable": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/EmploymentRecordDto" }
           },
           "englishLevel": { "type": "string", "nullable": true },
           "languages": { "type": "array", "items": { "type": "string" } },
