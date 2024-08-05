@@ -11,6 +11,7 @@ type Props = {
   handleReviewerAssigned: () => void;
   loading?: boolean;
   tasks: CourseTaskDto[];
+  isManager: boolean;
 };
 
 export default function MentorReviewsTable({
@@ -20,6 +21,7 @@ export default function MentorReviewsTable({
   handleReviewerAssigned,
   loading,
   tasks,
+  isManager,
 }: Props) {
   const [modalData, setModalData] = useState<MentorReviewDto | null>(null);
 
@@ -32,7 +34,7 @@ export default function MentorReviewsTable({
         showHeader
         dataSource={content}
         size="small"
-        columns={getColumns(tasks, handleClick)}
+        columns={getColumns(tasks, handleClick, isManager)}
         onChange={handleChange}
         rowKey="id"
         pagination={pagination}
