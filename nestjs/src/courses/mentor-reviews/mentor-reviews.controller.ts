@@ -38,8 +38,8 @@ export class MentorReviewsController {
   @Post('/')
   @ApiOperation({ operationId: 'assignReviewer' })
   @ApiOkResponse({})
-  @RequiredRoles([CourseRole.Dementor, CourseRole.Manager, Role.Admin], true)
-  public async assignReviewer(@Param('courseId', ParseIntPipe) courseId: number, @Body() dto: MentorReviewAssignDto) {
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async assignReviewer(@Param('courseId', ParseIntPipe) _courseId: number, @Body() dto: MentorReviewAssignDto) {
     return await this.mentorReviewsService.assignReviewer(dto);
   }
 }
