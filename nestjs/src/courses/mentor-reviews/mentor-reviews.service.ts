@@ -5,12 +5,16 @@ import { Repository } from 'typeorm';
 import { TaskSolution } from '@entities/taskSolution';
 import { paginate } from 'src/core/paginate';
 import { Checker } from '@entities/courseTask';
+import { TaskChecker } from '../../../../server/src/models';
+import { MentorReviewAssignDto } from './dto/mentor-review-assign.dto';
 
 @Injectable()
 export class MentorReviewsService {
   constructor(
     @InjectRepository(TaskSolution)
     readonly taskSolutionRepository: Repository<TaskSolution>,
+    @InjectRepository(TaskChecker)
+    readonly taskCheckerRepository: Repository<TaskChecker>,
   ) {}
 
   private buildMentorReviewsQuery({
@@ -57,6 +61,7 @@ export class MentorReviewsService {
         'studentUser.githubId',
         'task.name',
         'task.descriptionUrl',
+        'courseTask.id',
         'courseTask.maxScore',
         'taskSolution.studentId',
         'taskSolution.url',
@@ -111,5 +116,28 @@ export class MentorReviewsService {
     const data = await paginate(query, { page, limit });
 
     return data;
+  }
+
+  private async findTaskCheckerRecord(courseTaskId: number, studentId: number) {
+    return await this.taskCheckerRepository.findOne({
+      where: { studentId, courseTaskId },
+      select: {
+        id: true,
+      },
+    });
+  }
+
+  public async assignReviewer({ courseTaskId, mentorId, studentId }: MentorReviewAssignDto) {
+    const taskCheckerRecord = await this.findTaskCheckerRecord(courseTaskId, studentId);
+
+    if (taskCheckerRecord) {
+      return await this.taskCheckerRepository.update(taskCheckerRecord.id, { courseTaskId, mentorId, studentId });
+    }
+
+    return await this.taskCheckerRepository.insert({
+      courseTaskId,
+      studentId,
+      mentorId,
+    });
   }
 }

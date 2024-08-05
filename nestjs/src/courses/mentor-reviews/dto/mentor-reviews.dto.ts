@@ -7,12 +7,14 @@ export class MentorReviewDto {
   constructor(taskSolution: TaskSolution) {
     this.id = taskSolution.id;
     this.taskName = taskSolution.courseTask.task.name;
+    this.taskId = taskSolution.courseTask.id;
     this.solutionUrl = taskSolution.url;
     this.submittedAt = new Date(taskSolution.createdDate);
     this.checker = this.getChecker(taskSolution);
     this.score = taskSolution.student.taskResults?.at(0)?.score;
     this.maxScore = taskSolution.courseTask.maxScore;
     this.student = taskSolution.student.user.githubId;
+    this.studentId = taskSolution.student.id;
     this.reviewedAt = taskSolution.student.taskResults?.at(0)?.updatedDate
       ? new Date(taskSolution.student.taskResults.at(0)!.updatedDate)
       : undefined;
@@ -20,16 +22,21 @@ export class MentorReviewDto {
   }
 
   private getChecker(taskSolution: TaskSolution) {
-    return taskSolution.student.taskResults?.at(0)?.score !== undefined
-      ? taskSolution.student.taskResults.at(0)?.lastChecker?.githubId
-      : taskSolution.student.taskChecker?.at(0)?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
+    if (taskSolution.student.taskResults?.at(0)?.score !== undefined) {
+      return taskSolution.student.taskResults.at(0)?.lastChecker?.githubId;
+    }
+
+    return taskSolution.student.taskChecker?.at(0)?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
   }
 
   @ApiProperty({ description: 'Task solution id' })
   id: number;
 
-  @ApiProperty({ description: 'Task name' })
+  @ApiProperty({ description: 'Course task name' })
   taskName: string;
+
+  @ApiProperty({ description: 'Course task id' })
+  taskId: number;
 
   @ApiProperty({ description: 'Task solution url' })
   solutionUrl: string;
@@ -48,6 +55,9 @@ export class MentorReviewDto {
 
   @ApiProperty({ description: 'Student github id' })
   student: string;
+
+  @ApiProperty({ description: 'Student id' })
+  studentId: number;
 
   @ApiProperty({ description: 'Task solution review date' })
   reviewedAt?: Date;

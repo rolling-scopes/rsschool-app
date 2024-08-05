@@ -1,3 +1,4 @@
+import Button from 'antd/lib/button';
 import { ColumnsType } from 'antd/lib/table';
 import { CourseTaskDto, MentorReviewDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -16,6 +17,7 @@ export enum ColumnKey {
   Checker = 'checker',
   ReviewedDate = 'reviewedAt',
   Score = 'score',
+  Actions = 'actions',
 }
 
 enum ColumnName {
@@ -26,9 +28,13 @@ enum ColumnName {
   Checker = 'Checker',
   ReviewedDate = 'Reviewed Date',
   Score = 'Score',
+  Actions = 'Actions',
 }
 
-export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto> => [
+export const getColumns = (
+  tasks: CourseTaskDto[],
+  handleClick: (review: MentorReviewDto) => void,
+): ColumnsType<MentorReviewDto> => [
   {
     key: ColumnKey.TaskName,
     title: ColumnName.TaskName,
@@ -41,7 +47,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     key: ColumnKey.Student,
     title: ColumnName.Student,
     dataIndex: ColumnKey.Student,
-    width: '15%',
+    width: '12.5%',
     render: (_v, review) => <GithubUserLink value={review.student} />,
     ...getSearchProps(ColumnKey.Student),
   },
@@ -49,7 +55,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     key: ColumnKey.SubmittedDate,
     title: ColumnName.SubmittedDate,
     dataIndex: ColumnKey.SubmittedDate,
-    width: '15%',
+    width: '12.5%',
     sorter: true,
     render: (_v, review) => dateTimeRenderer(review.submittedAt),
   },
@@ -57,7 +63,7 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     key: ColumnKey.SubmittedLink,
     title: ColumnName.SubmittedLink,
     dataIndex: ColumnKey.SubmittedLink,
-    width: '15%',
+    width: '12.5%',
     render: solutionUrl => (
       <a target="_blank" href={solutionUrl}>
         {stringTrimRenderer(solutionUrl)}
@@ -68,18 +74,19 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
     key: ColumnKey.Checker,
     title: ColumnName.Checker,
     dataIndex: ColumnKey.Checker,
-    width: '15%',
+    width: '12.5%',
     render: checker => (checker ? <GithubUserLink value={checker} /> : null),
   },
   {
     key: ColumnKey.ReviewedDate,
     title: ColumnName.ReviewedDate,
     dataIndex: ColumnKey.ReviewedDate,
-    width: '15%',
+    width: '12.5%',
     sorter: true,
     render: (_v, review) => dateTimeRenderer(review.reviewedAt),
   },
   {
+    align: 'right',
     key: ColumnKey.Score,
     title: ColumnName.Score,
     dataIndex: ColumnKey.Score,
@@ -88,6 +95,18 @@ export const getColumns = (tasks: CourseTaskDto[]): ColumnsType<MentorReviewDto>
       <>
         {review.score ?? 0} / {review.maxScore}
       </>
+    ),
+  },
+  {
+    align: 'center',
+    key: ColumnKey.Actions,
+    title: ColumnName.Actions,
+    dataIndex: ColumnKey.Actions,
+    width: '12.5%',
+    render: (_v, review) => (
+      <Button type="link" onClick={() => handleClick(review)} disabled={!!review.score}>
+        Assign Reviewer
+      </Button>
     ),
   },
 ];

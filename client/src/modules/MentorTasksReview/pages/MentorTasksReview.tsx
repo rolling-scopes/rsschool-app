@@ -58,6 +58,10 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
     },
   );
 
+  const handleReviewerAssigned = async () => {
+    await getMentorReviews(reviews.pagination);
+  };
+
   useAsync(async () => await getMentorReviews(reviews.pagination), [course]);
 
   return (
@@ -73,6 +77,7 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
         content={reviews.content}
         pagination={reviews.pagination}
         handleChange={getMentorReviews}
+        handleReviewerAssigned={handleReviewerAssigned}
         tasks={tasks}
       />
     </AdminPageLayout>
