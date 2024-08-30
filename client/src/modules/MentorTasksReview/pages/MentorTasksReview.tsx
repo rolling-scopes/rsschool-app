@@ -3,13 +3,16 @@ import { MentorReviewDto, MentorReviewsApi } from 'api';
 import { IPaginationInfo } from 'common/types/pagination';
 import { AdminPageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
-import { useActiveCourseContext } from 'modules/Course/contexts';
-import { useState } from 'react';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import type { PageProps } from './getServerSideProps';
 import MentorReviewsTable from '../components/ReviewsTable';
 import { FilterValue } from 'antd/es/table/interface';
 import { ColumnKey } from '../components/ReviewsTable/renderers';
+import { SorterResult } from 'antd/lib/table/interface';
+import { sortDirectionMap } from './MentorTasksReview.constants';
+import { isCourseManager } from 'domain/user';
 
 const { Text } = Typography;
 
@@ -22,6 +25,9 @@ type ReviewsState = {
 
 export const MentorTasksReview = ({ tasks }: PageProps) => {
   const { courses, course } = useActiveCourseContext();
+  const session = useContext(SessionContext);
+
+  const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
   const [reviews, setReviews] = useState<ReviewsState>({
     content: [],
@@ -30,13 +36,24 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
   const [loading, withLoading] = useLoading(false);
 
   const getMentorReviews = withLoading(
-    async (pagination: TablePaginationConfig, filters?: Record<ColumnKey, FilterValue | null>) => {
+    async (
+      pagination: TablePaginationConfig,
+      filters?: Record<ColumnKey, FilterValue | null>,
+      sorter?: SorterResult<MentorReviewDto> | SorterResult<MentorReviewDto>[],
+    ) => {
+      const sortValues =
+        sorter && !Array.isArray(sorter) && sorter.order
+          ? [sorter.field?.toString(), sortDirectionMap[sorter.order]]
+          : [undefined, undefined];
+
       try {
         const { data } = await mentorReviewsApi.getMentorReviews(
           String(pagination.current),
           String(pagination.pageSize),
-          filters?.taskName ? filters.taskName.toString() : '',
           course.id,
+          filters?.taskName?.toString(),
+          filters?.student?.toString(),
+          ...sortValues,
         );
         setReviews({ ...reviews, ...data });
       } catch (error) {
@@ -44,6 +61,10 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
       }
     },
   );
+
+  const handleReviewerAssigned = async () => {
+    await getMentorReviews(reviews.pagination);
+  };
 
   useAsync(async () => await getMentorReviews(reviews.pagination), [course]);
 
@@ -54,13 +75,15 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
           <Text strong>Submitted tasks</Text>
           <Text>{course.name}</Text>
         </Space>
-        <Text type="secondary">You can assign a checker for the student’s task</Text>
+        {isManager && <Text type="secondary">You can assign a checker for the student’s task</Text>}
       </Space>
       <MentorReviewsTable
         content={reviews.content}
         pagination={reviews.pagination}
         handleChange={getMentorReviews}
+        handleReviewerAssigned={handleReviewerAssigned}
         tasks={tasks}
+        isManager={isManager}
       />
     </AdminPageLayout>
   );

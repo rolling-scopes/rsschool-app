@@ -1,8 +1,9 @@
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { MentorReviewsService } from './mentor-reviews.service';
-import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MentorReviewsDto, MentorReviewsQueryDto } from './dto';
+import { MentorReviewAssignDto } from './dto/mentor-review-assign.dto';
 
 @Controller('course/:courseId/mentor-reviews')
 @ApiTags('mentor-reviews')
@@ -14,11 +15,31 @@ export class MentorReviewsController {
   @ApiOperation({ operationId: 'getMentorReviews' })
   @ApiOkResponse({ type: MentorReviewsDto })
   @RequiredRoles([CourseRole.Dementor, CourseRole.Manager, Role.Admin], true)
-  public async getScore(@Query() query: MentorReviewsQueryDto, @Param('courseId', ParseIntPipe) courseId: number) {
+  public async getMentorReviews(
+    @Query() query: MentorReviewsQueryDto,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
     const page = parseInt(query.current);
     const limit = parseInt(query.pageSize);
-    const mentorReviews = await this.mentorReviewsService.getMentorReviews(courseId, page, limit, query.tasks);
+    const { student, tasks, sortField, sortOrder } = query;
+    const mentorReviews = await this.mentorReviewsService.getMentorReviews(
+      courseId,
+      page,
+      limit,
+      tasks,
+      student,
+      sortField,
+      sortOrder,
+    );
 
     return new MentorReviewsDto(mentorReviews);
+  }
+
+  @Post('/')
+  @ApiOperation({ operationId: 'assignReviewer' })
+  @ApiOkResponse({})
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async assignReviewer(@Param('courseId', ParseIntPipe) _courseId: number, @Body() dto: MentorReviewAssignDto) {
+    return await this.mentorReviewsService.assignReviewer(dto);
   }
 }

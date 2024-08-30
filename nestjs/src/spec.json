@@ -1487,7 +1487,10 @@
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
-          { "name": "tasks", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "tasks", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "student", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "sortField", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "sortOrder", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
@@ -1496,6 +1499,17 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewsDto" } } }
           }
         },
+        "tags": ["mentor-reviews"]
+      },
+      "post": {
+        "operationId": "assignReviewer",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewAssignDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
         "tags": ["mentor-reviews"]
       }
     },
@@ -4069,25 +4083,29 @@
         "type": "object",
         "properties": {
           "id": { "type": "number", "description": "Task solution id" },
-          "taskName": { "type": "string", "description": "Task name" },
+          "taskName": { "type": "string", "description": "Course task name" },
+          "taskId": { "type": "number", "description": "Course task id" },
           "solutionUrl": { "type": "string", "description": "Task solution url" },
           "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
           "checker": { "type": "string", "description": "Checker github id" },
           "score": { "type": "number", "description": "Task solution score" },
           "maxScore": { "type": "number", "description": "Task max score" },
           "student": { "type": "string", "description": "Student github id" },
+          "studentId": { "type": "number", "description": "Student id" },
           "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
           "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
         },
         "required": [
           "id",
           "taskName",
+          "taskId",
           "solutionUrl",
           "submittedAt",
           "checker",
           "score",
           "maxScore",
           "student",
+          "studentId",
           "reviewedAt",
           "taskDescriptionUrl"
         ]
@@ -4099,6 +4117,15 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "MentorReviewAssignDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskId": { "type": "number" },
+          "mentorId": { "type": "number" },
+          "studentId": { "type": "number" }
+        },
+        "required": ["courseTaskId", "mentorId", "studentId"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {
@@ -4476,12 +4503,11 @@
       "InviteMentorsDto": {
         "type": "object",
         "properties": {
-          "preselectedCourses": { "type": "array", "items": { "type": "string" } },
-          "certificate": { "type": "boolean" },
-          "mentor": { "type": "boolean" },
+          "disciplines": { "type": "array", "items": { "type": "string" } },
+          "isMentor": { "type": "boolean" },
           "text": { "type": "string" }
         },
-        "required": ["preselectedCourses", "certificate", "mentor", "text"]
+        "required": ["disciplines", "isMentor", "text"]
       },
       "SaveCertificateDto": {
         "type": "object",

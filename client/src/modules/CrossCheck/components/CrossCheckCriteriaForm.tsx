@@ -6,14 +6,10 @@ import { SubtaskCriteria } from './criteria/SubtaskCriteria';
 import { TitleCriteria } from './criteria/TitleCriteria';
 import { PenaltyCriteria } from './criteria/PenaltyCriteria';
 import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from 'api';
+import { TaskType } from '../constants';
 
 const { Text, Title } = Typography;
 
-export enum TaskType {
-  Title = 'title',
-  Subtask = 'subtask',
-  Penalty = 'penalty',
-}
 export interface CriteriaFormProps {
   maxScore: number | undefined;
   score: number;
