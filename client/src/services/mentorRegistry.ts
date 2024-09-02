@@ -19,7 +19,7 @@ export interface MentorRegistry {
 }
 
 export interface GetMentorRegistriesDto {
-  status: MentorRegistryTabsMode,
+  status: MentorRegistryTabsMode;
   currentPage: number;
   pageSize: number;
   githubId?: string;

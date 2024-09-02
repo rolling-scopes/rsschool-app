@@ -96,7 +96,7 @@ export class RegistryService {
     technicalMentoring,
     coursesIds,
     disciplineNames,
-    status
+    status,
   }: {
     githubId?: string;
     cityName?: string;
@@ -164,8 +164,8 @@ export class RegistryService {
         }),
       );
     }
-    if(status === MentorRegistryTabsMode.New){
-      req.andWhere('mentorRegistry.preselectedCourses != mentorRegistry.preferedCourses')
+    if (status === MentorRegistryTabsMode.New) {
+      req.andWhere('mentorRegistry.preselectedCourses != mentorRegistry.preferedCourses');
     }
 
     const response = await paginate(req, {

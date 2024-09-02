@@ -19,7 +19,6 @@ export enum MentorRegistryTabsMode {
   All = 'all',
 }
 
-
 @Controller('registry')
 @ApiTags('registry')
 @UseGuards(DefaultGuard, RoleGuard)
@@ -113,7 +112,7 @@ export class RegistryController {
               )
               .map(([key]) => Number(key)),
         disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
-        status
+        status,
       });
       return {
         total: data.total,
