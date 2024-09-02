@@ -1500,6 +1500,17 @@
           }
         },
         "tags": ["mentor-reviews"]
+      },
+      "post": {
+        "operationId": "assignReviewer",
+        "summary": "",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewAssignDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["mentor-reviews"]
       }
     },
     "/users/notifications": {
@@ -4046,25 +4057,29 @@
         "type": "object",
         "properties": {
           "id": { "type": "number", "description": "Task solution id" },
-          "taskName": { "type": "string", "description": "Task name" },
+          "taskName": { "type": "string", "description": "Course task name" },
+          "taskId": { "type": "number", "description": "Course task id" },
           "solutionUrl": { "type": "string", "description": "Task solution url" },
           "submittedAt": { "format": "date-time", "type": "string", "description": "Task solution submission date" },
           "checker": { "type": "string", "description": "Checker github id" },
           "score": { "type": "number", "description": "Task solution score" },
           "maxScore": { "type": "number", "description": "Task max score" },
           "student": { "type": "string", "description": "Student github id" },
+          "studentId": { "type": "number", "description": "Student id" },
           "reviewedAt": { "format": "date-time", "type": "string", "description": "Task solution review date" },
           "taskDescriptionUrl": { "type": "string", "description": "Task description url" }
         },
         "required": [
           "id",
           "taskName",
+          "taskId",
           "solutionUrl",
           "submittedAt",
           "checker",
           "score",
           "maxScore",
           "student",
+          "studentId",
           "reviewedAt",
           "taskDescriptionUrl"
         ]
@@ -4076,6 +4091,15 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "MentorReviewAssignDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskId": { "type": "number" },
+          "mentorId": { "type": "number" },
+          "studentId": { "type": "number" }
+        },
+        "required": ["courseTaskId", "mentorId", "studentId"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

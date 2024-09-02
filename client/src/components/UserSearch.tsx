@@ -47,7 +47,7 @@ export function UserSearch(props: UserProps) {
       {...otherProps}
       defaultValue={undefined}
       defaultActiveFirstOption={false}
-      showArrow={defaultValues ? Boolean(defaultValues.length) : false}
+      suffixIcon={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
       onSearch={handleSearch}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}

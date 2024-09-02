@@ -3780,6 +3780,31 @@ export interface MentorRegistryDto {
 /**
  * 
  * @export
+ * @interface MentorReviewAssignDto
+ */
+export interface MentorReviewAssignDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorReviewAssignDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorReviewAssignDto
+     */
+    'mentorId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MentorReviewAssignDto
+     */
+    'studentId': number;
+}
+/**
+ * 
+ * @export
  * @interface MentorReviewDto
  */
 export interface MentorReviewDto {
@@ -3790,11 +3815,17 @@ export interface MentorReviewDto {
      */
     'id': number;
     /**
-     * Task name
+     * Course task name
      * @type {string}
      * @memberof MentorReviewDto
      */
     'taskName': string;
+    /**
+     * Course task id
+     * @type {number}
+     * @memberof MentorReviewDto
+     */
+    'taskId': number;
     /**
      * Task solution url
      * @type {string}
@@ -3831,6 +3862,12 @@ export interface MentorReviewDto {
      * @memberof MentorReviewDto
      */
     'student': string;
+    /**
+     * Student id
+     * @type {number}
+     * @memberof MentorReviewDto
+     */
+    'studentId': number;
     /**
      * Task solution review date
      * @type {string}
@@ -13381,6 +13418,45 @@ export const MentorReviewsApiAxiosParamCreator = function (configuration?: Confi
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {MentorReviewAssignDto} mentorReviewAssignDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        assignReviewer: async (courseId: number, mentorReviewAssignDto: MentorReviewAssignDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('assignReviewer', 'courseId', courseId)
+            // verify required parameter 'mentorReviewAssignDto' is not null or undefined
+            assertParamExists('assignReviewer', 'mentorReviewAssignDto', mentorReviewAssignDto)
+            const localVarPath = `/course/{courseId}/mentor-reviews`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(mentorReviewAssignDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -13458,6 +13534,17 @@ export const MentorReviewsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {MentorReviewAssignDto} mentorReviewAssignDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async assignReviewer(courseId: number, mentorReviewAssignDto: MentorReviewAssignDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.assignReviewer(courseId, mentorReviewAssignDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -13484,6 +13571,16 @@ export const MentorReviewsApiFactory = function (configuration?: Configuration, 
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {MentorReviewAssignDto} mentorReviewAssignDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        assignReviewer(courseId: number, mentorReviewAssignDto: MentorReviewAssignDto, options?: any): AxiosPromise<void> {
+            return localVarFp.assignReviewer(courseId, mentorReviewAssignDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -13507,6 +13604,18 @@ export const MentorReviewsApiFactory = function (configuration?: Configuration, 
  * @extends {BaseAPI}
  */
 export class MentorReviewsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {MentorReviewAssignDto} mentorReviewAssignDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MentorReviewsApi
+     */
+    public assignReviewer(courseId: number, mentorReviewAssignDto: MentorReviewAssignDto, options?: AxiosRequestConfig) {
+        return MentorReviewsApiFp(this.configuration).assignReviewer(courseId, mentorReviewAssignDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} current 

@@ -155,7 +155,7 @@ export class MentorsService {
   }
 
   private getStatus(mentorId: number, resultScore: number) {
-    // resultScore = 0 should be considered as result
+    // resultScore = 0 should be considered as a result
     const hasScore = resultScore !== null;
     if (!mentorId && !hasScore) {
       return SolutionItemStatus.RandomTask;
@@ -169,10 +169,7 @@ export class MentorsService {
     return solutions.map(solution => new MentorDashboardDto(solution));
   }
 
-  private async getRandomSolution(
-    mentorId: number,
-    courseId: number,
-  ): Promise<{ courseTaskId: number; studentId: number }> {
+  private async getRandomSolution(courseId: number): Promise<{ courseTaskId: number; studentId: number }> {
     const task = await this.taskSolutionRepository
       .createQueryBuilder('ts')
       .leftJoin(TaskResult, 'tr', 'tr."studentId" = ts."studentId" AND tr."courseTaskId" = ts."courseTaskId"')
@@ -196,7 +193,7 @@ export class MentorsService {
   }
 
   public async getRandomTask(mentorId: number, courseId: number) {
-    const { courseTaskId, studentId } = await this.getRandomSolution(mentorId, courseId);
+    const { courseTaskId, studentId } = await this.getRandomSolution(courseId);
 
     if (courseTaskId && studentId) {
       const checker: Partial<TaskChecker> = {
