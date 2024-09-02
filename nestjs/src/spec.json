@@ -1931,6 +1931,12 @@
         "operationId": "getMentorRegistries",
         "summary": "",
         "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["new", "all"], "type": "string" }
+          },
           { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "currentPage", "required": false, "in": "query", "schema": { "type": "number" } },
           { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },

@@ -17,13 +17,14 @@ import css from 'styled-jsx/css';
 interface ChildrenProp {
   setCurrentPage: Dispatch<SetStateAction<number>>;
   currentPage: number;
-  total: number;
+  total: Record<MentorRegistryTabsMode, number>;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
   columns: ColumnType<MentorRegistryDto>[];
   handleTagClose: (tag: string) => void;
   handleClearAllButtonClick: () => void;
   handleTableChange: (_: any, filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>) => void;
+  activeTab: MentorRegistryTabsMode;
 }
 
 interface Props {
@@ -39,7 +40,7 @@ interface Props {
   setCombinedFilter: Dispatch<SetStateAction<CombinedFilter>>;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   currentPage: number;
-  total: number;
+  total: Record<MentorRegistryTabsMode, number>;
 }
 
 export interface CombinedFilter {
@@ -49,6 +50,7 @@ export interface CombinedFilter {
   githubId: string[];
   cityName: string[];
   filterTags?: string[];
+  status: MentorRegistryTabsMode;
 }
 
 export const MentorRegistryTableContainer = ({
@@ -119,6 +121,7 @@ export const MentorRegistryTableContainer = ({
       technicalMentoring: filters.technicalMentoring?.map(discipline => discipline.toString()) ?? [],
       githubId: filters.githubId?.map(discipline => discipline.toString()) ?? [],
       cityName: filters.cityName?.map(discipline => discipline.toString()) ?? [],
+      status: activeTab,
     };
 
     const filterTag: string[] = [
@@ -349,13 +352,14 @@ export const MentorRegistryTableContainer = ({
   };
 
   const handleClearAllButtonClick = () => {
-    setCombinedFilter({
+    setCombinedFilter(prev => ({
       preferredCourses: [],
       technicalMentoring: [],
       preselectedCourses: [],
       githubId: [],
       cityName: [],
-    });
+      status: prev.status,
+    }));
     setTagFilters([]);
   };
 
@@ -369,6 +373,7 @@ export const MentorRegistryTableContainer = ({
     handleClearAllButtonClick,
     handleTableChange,
     setCurrentPage,
+    activeTab,
   });
 };
 

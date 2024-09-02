@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, useEffect, useContext } from 'react';
+import { useCallback, useState, useMemo, useContext } from 'react';
 import { useAsync } from 'react-use';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
@@ -56,7 +56,6 @@ function Page() {
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
-  const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState<MentorRegistryDto[]>([]);
   const [allData, setAllData] = useState<MentorRegistryDto[]>([]);
   const [maxStudents, setMaxStudents] = useState(0);
@@ -71,20 +70,18 @@ function Page() {
     technicalMentoring: [],
     githubId: [],
     cityName: [],
+    status: MentorRegistryTabsMode.New,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(0);
-
-  const updateData = (showAll: boolean, allData: MentorRegistryDto[]) => {
-    setShowAll(showAll);
-    const data = filterData(allData, showAll);
-    setData(data);
-    setMaxStudents(data.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
-  };
+  const [total, setTotal] = useState({
+    [MentorRegistryTabsMode.New]: 0,
+    [MentorRegistryTabsMode.All]: 0,
+  });
 
   const loadData = withLoading(async () => {
     const [allData, courses] = await Promise.all([
       mentorRegistryService.getMentors({
+        status: activeTab,
         pageSize: PAGINATION,
         currentPage,
         githubId: combinedFilter.githubId?.[0] ?? undefined,
@@ -101,9 +98,10 @@ function Page() {
     ]);
     const { data: disciplines } = await disciplinesApi.getDisciplines();
     setAllData(allData.mentors);
-    setTotal(allData.total);
+    setData(allData.mentors);
+    setTotal(total => ({ ...total, [activeTab]: allData.total }));
+    setMaxStudents(allData.mentors.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
     setCourses(courses);
-    updateData(showAll, allData.mentors);
     setDisciplines(disciplines);
   });
 
@@ -126,7 +124,7 @@ function Page() {
     }
   });
 
-  useAsync(loadData, [combinedFilter, currentPage]);
+  useAsync(loadData, [combinedFilter, currentPage, activeTab]);
 
   const openNotificationWithIcon = (type: NotificationType) => {
     api[type]({
@@ -201,20 +199,24 @@ function Page() {
 
   const tabs = useMemo(() => {
     const tabs = [
-      { key: MentorRegistryTabsMode.New, label: 'New applications', count: filterData(allData, false).length },
-      { key: MentorRegistryTabsMode.All, label: 'All Mentors', count: allData.length },
+      { key: MentorRegistryTabsMode.New, label: 'New applications', count: Number(total[MentorRegistryTabsMode.New]) },
+      { key: MentorRegistryTabsMode.All, label: 'All Mentors', count: Number(total[MentorRegistryTabsMode.All]) },
     ];
     return tabs.map(el => tabRenderer(el, activeTab));
   }, [activeTab, allData]);
 
-  useEffect(() => {
-    activeTab === MentorRegistryTabsMode.New ? updateData(false, allData) : updateData(true, allData);
-  }, [activeTab, allData]);
-
   const handleTabChange = useCallback(() => {
-    activeTab === MentorRegistryTabsMode.New
-      ? setActiveTab(MentorRegistryTabsMode.All)
-      : setActiveTab(MentorRegistryTabsMode.New);
+    if (activeTab === MentorRegistryTabsMode.New) {
+      setActiveTab(MentorRegistryTabsMode.All);
+      setAllData([]);
+      setData([]);
+      setCurrentPage(1);
+    } else {
+      setActiveTab(MentorRegistryTabsMode.New);
+      setAllData([]);
+      setData([]);
+      setCurrentPage(1);
+    }
   }, [activeTab]);
 
   const handleModalDataChange = (mode: ModalDataMode, record: MentorRegistryDto) => {
@@ -303,18 +305,6 @@ function Page() {
       {modalData?.mode === ModalDataMode.BatchInvite && <InviteMentorsModal onCancel={onCancelModal} />}
       {contextHolder}
     </AdminPageLayout>
-  );
-}
-
-function filterData(data: MentorRegistryDto[], showAll: boolean) {
-  if (showAll) {
-    return data;
-  }
-  return data.filter(
-    it =>
-      it.courses.length === 0 ||
-      !it.preselectedCourses.length ||
-      !it.preselectedCourses.every(c => it.courses.includes(c)),
   );
 }
 
