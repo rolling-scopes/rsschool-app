@@ -25,13 +25,7 @@ export class CertificationsService {
     private userRepository: Repository<User>,
     private readonly configService: ConfigService,
   ) {
-    this.s3 = new S3({
-      region: 'eu-central-1',
-      credentials: {
-        secretAccessKey: this.configService.awsServices.secretAccessKey,
-        accessKeyId: this.configService.awsServices.accessKeyId,
-      },
-    });
+    this.s3 = new S3(this.configService.awsClient);
   }
 
   public async getByPublicId(publicId: string) {

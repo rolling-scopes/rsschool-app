@@ -16,15 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # - name: Restore next cache
-      #   uses: actions/cache@v2
+      #   uses: actions/cache@v4
       #   env:
       #     cache-name: cache-next
       #   with:
@@ -34,7 +34,7 @@ jobs:
       #       ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-npm
         with:
@@ -104,15 +104,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Restore npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-npm
         with:
@@ -167,15 +167,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Restore npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-npm
         with:
@@ -237,7 +237,7 @@ jobs:
       url: https://app.rs.school
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
