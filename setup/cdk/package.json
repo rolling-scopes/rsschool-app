@@ -6,6 +6,6 @@
     "aws-cdk": "2.110.0",
     "aws-cdk-lib": "2.110.0",
     "constructs": "^10",
-    "ts-node": "^10.9.1"
+    "ts-node": "10.9.2"
   }
 }
