@@ -291,6 +291,122 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface AutoTestTaskDto
+ */
+export interface AutoTestTaskDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'type': AutoTestTaskDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AutoTestTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'githubRepoName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'sourceGithubRepoUrl': string;
+    /**
+     * 
+     * @type {IdNameDto}
+     * @memberof AutoTestTaskDto
+     */
+    'discipline': IdNameDto;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AutoTestTaskDto
+     */
+    'githubPrRequired': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutoTestTaskDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AutoTestTaskDto
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AutoTestTaskDto
+     */
+    'skills': Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof AutoTestTaskDto
+     */
+    'attributes': object;
+    /**
+     * 
+     * @type {Array<UsedCourseDto>}
+     * @memberof AutoTestTaskDto
+     */
+    'courses': Array<UsedCourseDto>;
+}
+
+export const AutoTestTaskDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type AutoTestTaskDtoTypeEnum = typeof AutoTestTaskDtoTypeEnum[keyof typeof AutoTestTaskDtoTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface AvailableReviewStatsDto
  */
 export interface AvailableReviewStatsDto {
@@ -433,6 +549,49 @@ export const BadgeDtoIdEnum = {
 
 export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
 
+/**
+ * 
+ * @export
+ * @interface BasicAutoTestTaskDto
+ */
+export interface BasicAutoTestTaskDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'maxAttemptsNumber': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'numberOfQuestions': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'strictAttemptsMode': object | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasicAutoTestTaskDto
+     */
+    'thresholdPercentage': object | null;
+}
 /**
  * 
  * @export
@@ -8210,6 +8369,163 @@ export class AuthApi extends BaseAPI {
      */
     public githubLogout(options?: AxiosRequestConfig) {
         return AuthApiFp(this.configuration).githubLogout(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AutoTestsApi - axios parameter creator
+ * @export
+ */
+export const AutoTestsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAutoTest: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getAutoTest', 'id', id)
+            const localVarPath = `/auto-test/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBasicAutoTests: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auto-test`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AutoTestsApi - functional programming interface
+ * @export
+ */
+export const AutoTestsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AutoTestsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAutoTest(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AutoTestTaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAutoTest(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBasicAutoTests(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BasicAutoTestTaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBasicAutoTests(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AutoTestsApi - factory interface
+ * @export
+ */
+export const AutoTestsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AutoTestsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAutoTest(id: number, options?: any): AxiosPromise<AutoTestTaskDto> {
+            return localVarFp.getAutoTest(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBasicAutoTests(options?: any): AxiosPromise<Array<BasicAutoTestTaskDto>> {
+            return localVarFp.getBasicAutoTests(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AutoTestsApi - object-oriented interface
+ * @export
+ * @class AutoTestsApi
+ * @extends {BaseAPI}
+ */
+export class AutoTestsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AutoTestsApi
+     */
+    public getAutoTest(id: number, options?: AxiosRequestConfig) {
+        return AutoTestsApiFp(this.configuration).getAutoTest(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AutoTestsApi
+     */
+    public getBasicAutoTests(options?: AxiosRequestConfig) {
+        return AutoTestsApiFp(this.configuration).getBasicAutoTests(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
