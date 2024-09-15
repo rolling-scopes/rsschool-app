@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
+import { AwsCredentialIdentity } from '@smithy/types';
 
 type AuthConfig = {
   github: {
@@ -30,9 +31,11 @@ type UsersConfig = {
 type AWSServices = {
   restApiUrl: string;
   restApiKey: string;
+};
+
+type AwsClient = {
+  credentials: AwsCredentialIdentity;
   region: string;
-  secretAccessKey: string;
-  accessKeyId: string;
 };
 
 type Secure = {
@@ -44,10 +47,16 @@ export class ConfigService {
   public readonly auth: AuthConfig;
   public readonly users: UsersConfig;
   public readonly awsServices: AWSServices;
+  public readonly awsClient: AwsClient;
   public readonly host: string;
   public readonly isDev = process.env.NODE_ENV !== 'production';
   public readonly secure: Secure;
   public readonly openai: { apiKey: string };
+  public readonly env: 'prod' | 'staging' | 'local';
+
+  public readonly buckets: {
+    cdn: string;
+  };
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -71,12 +80,17 @@ export class ConfigService {
       apiKey: conf.get('RSSHCOOL_OPENAI_API_KEY') || '',
     };
 
+    this.awsClient = {
+      region: conf.get('RSSHCOOL_AWS_REGION') ?? '',
+      credentials: {
+        accessKeyId: conf.get('RSSHCOOL_AWS_ACCESS_KEY_ID') ?? '',
+        secretAccessKey: conf.get('RSSHCOOL_AWS_SECRET_ACCESS_KEY') || '',
+      },
+    };
+
     this.awsServices = {
-      restApiUrl: process.env.RSSHCOOL_AWS_REST_API_URL || '',
-      restApiKey: process.env.RSSHCOOL_AWS_REST_API_KEY || '',
-      region: process.env.RSSHCOOL_AWS_REGION || '',
-      secretAccessKey: process.env.RSSHCOOL_AWS_SECRET_ACCESS_KEY || '',
-      accessKeyId: process.env.RSSHCOOL_AWS_ACCESS_KEY_ID || '',
+      restApiUrl: conf.get('RSSHCOOL_AWS_REST_API_URL') || '',
+      restApiKey: conf.get('RSSHCOOL_AWS_REST_API_KEY') || '',
     };
 
     this.users = {
@@ -93,5 +107,9 @@ export class ConfigService {
     };
 
     this.host = conf.get('RSSHCOOL_HOST') ?? '';
+
+    this.buckets = { cdn: 'cdn.rs.school' };
+
+    this.env = conf.get('RS_ENV') === 'staging' ? 'staging' : this.isDev ? 'local' : 'prod';
   }
 }
