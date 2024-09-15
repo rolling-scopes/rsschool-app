@@ -68,6 +68,7 @@ import { CourseMentorsController, CourseMentorsService } from './course-mentors'
 import { CourseStudentsController } from './course-students/course-students.controller';
 import { CourseStudentsService } from './course-students/course-students.service';
 import { MentorReviewsController, MentorReviewsService } from './mentor-reviews';
+import { ConfigModule } from '../config';
 
 @Module({
   imports: [
@@ -100,6 +101,7 @@ import { MentorReviewsController, MentorReviewsService } from './mentor-reviews'
     UsersModule,
     UsersNotificationsModule,
     CloudApiModule,
+    ConfigModule,
   ],
   controllers: [
     FeedbacksController,
